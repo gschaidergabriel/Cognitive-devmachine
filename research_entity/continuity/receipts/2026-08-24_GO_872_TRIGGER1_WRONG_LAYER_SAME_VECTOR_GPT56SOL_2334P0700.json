@@ -1,0 +1,75 @@
+{
+  "schema": "CLAY_GO_872_TRIGGER1_WRONG_LAYER_SAME_VECTOR_SOURCE_DELTA/v1",
+  "recorded_at": "2026-08-24T23:34:00+07:00",
+  "authority_epoch": "8.72",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol / ChatGPT",
+  "canonical_base_at_branch_creation": "7931d55709168af0fc42f84b541ca5fa53976183",
+  "branch": "go872/trigger1-wrong-layer-same-vector-20260824-2334-gpt56sol",
+  "observation": {
+    "source_file": "tools/trigger1_local_qwen06_intermediate_execute.py",
+    "prior_wrong_layer_behavior": "wrong-layer request selected self.directions[wrong_layer], changing intervention site and derived direction together",
+    "declared_promotion_contract": "same selected vector at a different predeclared layer",
+    "confound": "layer/site specificity was not isolated because vector identity also changed",
+    "second_boundary_issue": "the prior protocol admitted wrong_layer_delta <= 0, so a tie could satisfy wrong-layer localization"
+  },
+  "counterhypothesis": "a positive selected-layer effect may reflect a direction-specific difference between independently derived layer vectors rather than causal specificity of the selected intervention site",
+  "external_design_check": {
+    "classification": "DESIGN_PRIOR_ONLY_NOT_CLAY_TRUTH",
+    "principle": "activation-patching/localization methods hold intervention information fixed while varying the activation location so location is the manipulated variable"
+  },
+  "delta": {
+    "executor": [
+      "separate vector_source_layer from intervention layer",
+      "wrong-layer holdout injects the exact selected-layer direction at a distinct layer",
+      "record selected/wrong direction and applied-vector hashes",
+      "record wrong_layer_specificity_margin = selected_plus_delta - wrong_layer_plus_delta"
+    ],
+    "deterministic_protocol": [
+      "require distinct wrong layer",
+      "require wrong-layer vector_source_layer equals selected layer",
+      "require exact applied-vector hash equality",
+      "require strictly positive wrong-layer specificity margin; ties fail"
+    ],
+    "promotion_bridge": [
+      "re-check raw-row same-vector and strict-margin evidence independently of verdict flags",
+      "require protocol same-vector completeness and strict-margin fields"
+    ],
+    "tests": [
+      "reject vector-source-layer mismatch",
+      "reject applied-vector hash mismatch",
+      "reject wrong-layer tie",
+      "bridge independently rejects hash mismatch and tie"
+    ]
+  },
+  "go_tracks": {
+    "track_a": "ENTITYOS_EXECUTABLE_CONVERGENCE: stronger fail-closed model-specific causal promotion boundary",
+    "track_b": "HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT: causal provenance now separates vector-source identity from intervention-site identity",
+    "track_c": "GLOBAL_JSPACE_GWT_PROTOTYPE_AND_FREE_ONLY_LOCAL_08B_READINESS: removes a wrong-layer localization confound before any model-specific J-Space promotion"
+  },
+  "coordination": {
+    "overlap_check": "no open PR found implementing exact same-selected-vector wrong-layer control; #1263 remains retained donor lane",
+    "shared_reproducible_macrocycle_identity": false,
+    "available_user_trigger_metadata_precision": "minute",
+    "atomic_unusual_experiment_status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_experiments_executed": 0
+  },
+  "execution": {
+    "model_execution": false,
+    "provider_execution": false,
+    "paid_execution": false,
+    "external_effect": false,
+    "scope": "SOURCE_AND_DETERMINISTIC_REGRESSION_DELTA_ONLY_PENDING_EXACT_BRANCH_TEST_OBSERVATION"
+  },
+  "credits": {
+    "whole_entityos_hcu": 0,
+    "hcu_full": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "provider_runtime": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "observe exact branch deterministic protocol/bridge tests; fuse only if green/current/nonduplicate; defer any Qwen intervention to a future macrocycle with a reproducible canonical atomic lease"
+}

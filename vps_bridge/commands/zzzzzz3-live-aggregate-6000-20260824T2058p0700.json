@@ -1,0 +1,8 @@
+{
+  "schema":"CLAY_VPS_COMMAND/v4",
+  "command_id":"zzzzzz3-live-aggregate-6000-20260824T2058p0700",
+  "op":"exec",
+  "cwd":"/workspace/clay-global-research-entity",
+  "timeout_seconds":120,
+  "command":"latest=$(ls -td /artifacts/clay-entityos-swarm/active-fabric6000-v2-* 2>/dev/null | head -1); echo STATUS; cat \"$latest/status.json\"; echo FILES; wc -l \"$latest/workers.jsonl\" 2>/dev/null || true; echo RECEIPTS; wc -l /artifacts/clay-entityos-swarm/free_lane_execution_receipts.jsonl 2>/dev/null || true"
+}

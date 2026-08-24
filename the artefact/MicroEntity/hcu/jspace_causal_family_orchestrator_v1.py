@@ -6,9 +6,16 @@ causal-family identity gate and future real local model backends. It does not ex
 provider, grant model/J-Space runtime credit, or decide that a causal effect exists.
 
 The orchestrator fixes the required condition order, binds every invocation to a
-predeclared input/intervention plan, rejects callback relabeling, and then delegates exact
-model/runtime/loader/activation/trace identity closure to
+predeclared input/intervention plan, rejects callback relabeling or consumed-input drift,
+and then delegates exact model/runtime/loader/activation/trace identity closure to
 ``validate_causal_family_identity``.
+
+``model_input_sha256`` is the exact content identity already exposed by the canonical
+``VerifiedModelExecution.input_sha256`` / executor-I/O evidence path. It is not a new input
+authority. The v2 plan requires the intervention target, sham, and off-target controls to
+consume the exact corrupted-baseline model input. A backend that needs a different input
+transformation must use a future explicitly versioned plan rather than silently changing
+bytes under a stable ``input_variant_id`` label.
 
 A successful return means only:
 ``CAUSAL_FAMILY_ORCHESTRATED_IDENTITY_COMPLETE_NOT_JSPACE_CAUSAL_PASS``.
@@ -38,8 +45,8 @@ except ImportError:
         validate_causal_family_identity,
     )
 
-SCHEMA = "ENTITYOS_HCU_JSPACE_CAUSAL_FAMILY_ORCHESTRATOR/v1"
-PLAN_SCHEMA = "ENTITYOS_HCU_JSPACE_CAUSAL_FAMILY_PLAN/v1"
+SCHEMA = "ENTITYOS_HCU_JSPACE_CAUSAL_FAMILY_ORCHESTRATOR/v2"
+PLAN_SCHEMA = "ENTITYOS_HCU_JSPACE_CAUSAL_FAMILY_PLAN/v2"
 EVIDENCE_CLASS = "CAUSAL_FAMILY_ORCHESTRATED_IDENTITY_COMPLETE_NOT_JSPACE_CAUSAL_PASS"
 BASELINE_CONDITIONS = frozenset({"BASELINE_CLEAN", "BASELINE_CORRUPTED"})
 INTERVENTION_CONDITIONS = frozenset({"INTERVENTION_TARGET", "SHAM_CONTROL", "OFF_TARGET_CONTROL"})
@@ -54,6 +61,7 @@ class CausalFamilyOrchestratorError(ValueError):
 class CausalTrialSpec:
     condition: str
     input_variant_id: str
+    model_input_sha256: str
     intervention_sha256: str | None
 
 
@@ -81,7 +89,8 @@ class CausalFamilyExecutor(Protocol):
     """Future local/model backend boundary.
 
     Implementations may perform real local model work only under then-current execution
-    authority. They must return the exact observed identity for the requested trial.
+    authority. They must return the exact observed identity for the requested trial,
+    including the exact model input content digest observed by the canonical executor path.
     """
 
     def run_causal_trial(self, spec: CausalTrialSpec, *, family_id: str, generation: int) -> CausalTrialIdentity: ...
@@ -141,20 +150,43 @@ def validate_causal_family_plan(plan: CausalFamilyPlan) -> tuple[CausalTrialSpec
         if spec.condition in by_condition:
             raise CausalFamilyOrchestratorError("condition:DUPLICATE_CONTROL_FORBIDDEN")
         input_variant_id = _text(spec.input_variant_id, "input_variant_id")
+        model_input_sha256 = _sha(spec.model_input_sha256, "model_input_sha256")
         intervention = spec.intervention_sha256
         if spec.condition in BASELINE_CONDITIONS:
             if intervention is not None:
                 raise CausalFamilyOrchestratorError(f"{spec.condition}:BASELINE_INTERVENTION_MUST_BE_NONE")
         else:
             intervention = _sha(intervention, "intervention_sha256")
-        by_condition[spec.condition] = CausalTrialSpec(spec.condition, input_variant_id, intervention)
+        by_condition[spec.condition] = CausalTrialSpec(
+            spec.condition,
+            input_variant_id,
+            model_input_sha256,
+            intervention,
+        )
 
     if set(by_condition) != set(REQUIRED_CONDITIONS):
         raise CausalFamilyOrchestratorError("condition:FAMILY_INCOMPLETE")
 
-    intervention_ids = [by_condition[name].intervention_sha256 for name in REQUIRED_CONDITIONS if name in INTERVENTION_CONDITIONS]
+    intervention_ids = [
+        by_condition[name].intervention_sha256
+        for name in REQUIRED_CONDITIONS
+        if name in INTERVENTION_CONDITIONS
+    ]
     if len(intervention_ids) != len(set(intervention_ids)):
         raise CausalFamilyOrchestratorError("intervention_sha256:CROSS_CONTROL_REUSE_FORBIDDEN")
+
+    clean = by_condition["BASELINE_CLEAN"]
+    corrupted = by_condition["BASELINE_CORRUPTED"]
+    if clean.input_variant_id == corrupted.input_variant_id:
+        raise CausalFamilyOrchestratorError("input_variant_id:BASELINE_VARIANT_COLLISION_FORBIDDEN")
+    if clean.model_input_sha256 == corrupted.model_input_sha256:
+        raise CausalFamilyOrchestratorError("model_input_sha256:BASELINE_CONTENT_COLLISION_FORBIDDEN")
+    for condition in INTERVENTION_CONDITIONS:
+        control = by_condition[condition]
+        if control.input_variant_id != corrupted.input_variant_id:
+            raise CausalFamilyOrchestratorError(f"{condition}:CORRUPTED_BASE_INPUT_VARIANT_REQUIRED")
+        if control.model_input_sha256 != corrupted.model_input_sha256:
+            raise CausalFamilyOrchestratorError(f"{condition}:CORRUPTED_BASE_MODEL_INPUT_REQUIRED")
 
     # Keep the family id observed by canonicalization so whitespace aliases cannot create
     # distinct-looking plans at the executor boundary.
@@ -199,6 +231,8 @@ def run_causal_family(executor: CausalFamilyExecutor, plan: CausalFamilyPlan) ->
             raise CausalFamilyOrchestratorError(f"{spec.condition}:EXECUTOR_GENERATION_MISMATCH")
         if trial.input_variant_id != spec.input_variant_id:
             raise CausalFamilyOrchestratorError(f"{spec.condition}:EXECUTOR_INPUT_VARIANT_MISMATCH")
+        if trial.model_input_sha256 != spec.model_input_sha256:
+            raise CausalFamilyOrchestratorError(f"{spec.condition}:EXECUTOR_MODEL_INPUT_IDENTITY_MISMATCH")
         if trial.intervention_sha256 != spec.intervention_sha256:
             raise CausalFamilyOrchestratorError(f"{spec.condition}:EXECUTOR_INTERVENTION_IDENTITY_MISMATCH")
         observed.append(trial)

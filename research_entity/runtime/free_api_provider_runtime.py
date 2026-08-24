@@ -911,12 +911,6 @@ def _execute_chat_locked(
                             cooldown_seconds = 0
                             retryable = False
                         elif status == PAYMENT_REQUIRED_STATUS:
-                            (
-                                payment_latch_active,
-                                payment_latch_publication_failed,
-                            ) = _publish_payment_latch(
-                                latches, _payment_latch_key(selected, env)
-                            )
                             outcome = "payment_required_hard_stop"
                             cooldown_seconds = 0
                             retryable = False
@@ -947,6 +941,17 @@ def _execute_chat_locked(
                 raise
         if response_context_error is not None:
             raise response_context_error
+        if response_classified and status == PAYMENT_REQUIRED_STATUS:
+            # Foreign response cleanup runs after the suite and can mutate
+            # caller-owned or process-local latch state. Publish only after
+            # leaving that context so cleanup cannot erase an acknowledged
+            # payment hard stop while its receipt still claims it is active.
+            (
+                payment_latch_active,
+                payment_latch_publication_failed,
+            ) = _publish_payment_latch(
+                latches, _payment_latch_key(selected, env)
+            )
         if response_too_large:
             raise ProviderResponseTooLarge
         if status == 200:

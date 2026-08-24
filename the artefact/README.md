@@ -30,11 +30,13 @@ The retained runtime lane is repository-qualified PR `gschaidergabriel/clay-glob
 - `32752823987` — queued;
 - `32753831629` — queued.
 
+Current GitHub self-hosted-runner documentation narrows this state: when no online idle runner matches a job's required labels/groups, GitHub leaves the job queued until a matching runner becomes available. Therefore these runs are classified as `QUEUED_SELFHOSTED_RUNNER_AVAILABILITY_OR_ROUTING_UNRESOLVED`, not as EntityOS/HCU semantic failure. The append-only research receipt is `research_entity/research/receipts/GO_2026-08-25_SELFHOSTED_QUEUE_EVIDENCE_BOUNDARY_V1.md`.
+
 No `CLAY_GO873_DISTILLERY_SELFHOSTED_REGRESSION_RECEIPT/v1` was found in canonical repository search. Therefore exact-current runner execution, deterministic regression completion, and the persistent live Forge -> Distillery witness remain unobserved. No new run was launched: current FREE_ONLY authority does not permit assuming GitHub Actions monetary provenance.
 
 Research Entity Identity Guard run `32753831612` remains completed/failure. Its job `97516690619` reports **zero materialized steps**, while canonical workflow source explicitly defines checkout, Python setup, and the identity validation command. Combined with the unavailable job log, this narrows the observed boundary to **pre-step / workflow-runner infrastructure uncertainty**: there is still no evidence that `tools/research_identity_guard_check.py` executed, so the red run must not be interpreted as a semantic identity-guard failure.
 
-**Track A delta:** refreshed exact repository/runtime evidence and narrowed the red Identity Guard classification without weakening the invariant. Runtime credit remains unchanged.
+**Track A delta:** refreshed exact repository/runtime evidence, persisted the self-hosted queue classification, and narrowed the red Identity Guard classification without weakening either product invariant. Runtime credit remains unchanged.
 
 ### Track B — HCU + Typed Entry Fabric co-development
 
@@ -55,6 +57,7 @@ No J-Space/model intervention, provider call, paid execution, or training run wa
 - Forge/Distillery replay + concurrency: source/regression/component evidence only;
 - exact-current Distillery terminal regression receipt: **unobserved**;
 - persistent live Forge -> Distillery positive-token witness: **unobserved**;
+- queued self-hosted runs: **runner availability/routing unresolved; no semantic product failure inferred**;
 - Research Entity Identity Guard semantic failure: **unobserved; current red run is pre-step/infrastructure-uncertain**;
 - provider runtime credit: **0**;
 - whole EntityOS/HCU runtime credit: **0**;
@@ -67,12 +70,13 @@ A source file, workflow, queued run, deployment, token count, model consensus, o
 
 ## Highest-information next gates
 
-1. Observe a repository-bound terminal exact-current Distillery regression receipt and require replay/concurrency/rebuild/live-semantic scoped steps to succeed.
-2. Observe the persistent live Forge -> Distillery witness: one evidence-qualified ACCEPT -> exactly one persistent packet -> `accepted_dataset_tokens > 0` -> semantic replay -> exactly +0 packets/+0 tokens.
-3. Require changed measured evidence under the same stable replay identity to fail closed in executable live evidence.
-4. For the Research Entity Identity Guard, first obtain a run where steps actually materialize; only then classify the validator result. Do not weaken the invariant to make CI green.
-5. Continue one canonical Typed Entry -> verified loader consumption -> actual model execution -> InferenceReceipt -> model-specific J-Space causal trace through retained HCU donor lane #1263.
-6. Run the local Qwen3-0.6B six-control discriminator only after reproducible macrocycle identity and successful canonical atomic lease.
+1. Observe/repair the authorized VPS bridge/self-hosted runner health and routing labels; capture a real roundtrip receipt before interpreting queued runtime requests.
+2. Observe a repository-bound terminal exact-current Distillery regression receipt and require replay/concurrency/rebuild/live-semantic scoped steps to succeed.
+3. Observe the persistent live Forge -> Distillery witness: one evidence-qualified ACCEPT -> exactly one persistent packet -> `accepted_dataset_tokens > 0` -> semantic replay -> exactly +0 packets/+0 tokens.
+4. Require changed measured evidence under the same stable replay identity to fail closed in executable live evidence.
+5. For the Research Entity Identity Guard, first obtain a run where steps actually materialize; only then classify the validator result. Do not weaken the invariant to make CI green.
+6. Continue one canonical Typed Entry -> verified loader consumption -> actual model execution -> InferenceReceipt -> model-specific J-Space causal trace through retained HCU donor lane #1263.
+7. Run the local Qwen3-0.6B six-control discriminator only after reproducible macrocycle identity and successful canonical atomic lease.
 
 ## Evidence discipline and reentry
 

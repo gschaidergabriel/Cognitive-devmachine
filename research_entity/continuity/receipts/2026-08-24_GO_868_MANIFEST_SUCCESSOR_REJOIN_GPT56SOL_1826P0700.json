@@ -1,0 +1,76 @@
+{
+  "schema": "CLAY_GO_RECEIPT/v1",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "authority_epoch": "8.68",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "base_main_sha": "f39c744df42cfa06ea79c9cc2b03b35bc758bdd0",
+  "reentry": {
+    "initial_main_observed": "35111436aad7b1fdb35046f630268e7d914e5c8e",
+    "intermediate_main_observed": "6426d1ff7d8b03129d0e73c4127e0e63a678fa17",
+    "successor_main_observed": "f39c744df42cfa06ea79c9cc2b03b35bc758bdd0",
+    "parallel_resolution": "PROGRAM_STATE and artefact README advanced independently to supervisor 8.68 before final fusion; duplicate branch edits were not promoted",
+    "remaining_nonduplicate_defect": "the artefact/manifest.json remained bound to supervisor 8.65 and obsolete blanket VPS/self-hosted prohibition"
+  },
+  "finding": "The artefact manifest remained a stale current-facing authority island after supervisor 8.68 and after parallel workers had already synchronized PROGRAM_STATE/README. Its 8.65 execution policy contradicted active dual-machine owner authority by globally forbidding VPS testing instead of allowing guarded zero-cost clay-direct-dev sandbox execution while separately quarantining external LLM-provider traffic.",
+  "counterhypothesis": "Because README and PROGRAM_STATE are now current, a stale manifest can safely remain historical-looking metadata.",
+  "counterhypothesis_result": "REJECTED",
+  "reason": "The manifest is explicitly in the boot/current authority stack and encodes execution/provider gates; stale semantics can misroute workers and validators even when prose surfaces are current.",
+  "coordination": {
+    "provider_control_overlapping_open_prs_observed": [1421, 1422, 1423, 1424, 1427],
+    "duplicate_provider_implementation_created": false,
+    "retained_hcu_donor": "gschaidergabriel/clay-global-research-entity#1263",
+    "retained_hcu_donor_live_head_observed": "2badebe78db868c56ef39f0a32d198282cffcd88",
+    "unusual_experiment": "NONE",
+    "atomic_lease_consumed": false,
+    "classification": "ORDINARY_AUTHORITY_FUSION_AND_SOURCE_REPAIR"
+  },
+  "delta": {
+    "the artefact/manifest.json": [
+      "authority_correction -> SUPERVISOR_STEERING_8_68.json",
+      "active supervisor epoch -> 8.68",
+      "guarded normal-user local and clay-direct-dev VPS sandbox execution admitted under current owner authority",
+      "obsolete blanket VPS/self-hosted prohibition removed",
+      "FREE_PROVIDER_ADMISSION.json bound as sole typed external-provider admission authority",
+      "Groq/Mistral/NVIDIA/OpenRouter all represented as UNKNOWN_NOT_ADMITTED",
+      "historical Groq/NVIDIA/OpenRouter traffic preserved as unadmitted breach evidence without proven monetary spend",
+      "external LLM-provider traffic quarantined until executable FREE_SWARM_ADMISSION_BOUNDARY_RECEIPT/v1",
+      "provider/whole-HCU/J-Space/training credit remains zero"
+    ]
+  },
+  "go_tracks": {
+    "track_a": {
+      "name": "ENTITYOS_EXECUTABLE_CONVERGENCE",
+      "status": "ADVANCED",
+      "delta": "remaining current-facing artefact manifest authority island rejoined to 8.68"
+    },
+    "track_b": {
+      "name": "HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT",
+      "status": "HCU_NO_CHANGE_WITH_REASON",
+      "reason": "Provider admission implementation already has overlapping successor lanes; a new HCU/Entry implementation would duplicate active work. The highest nonduplicate HCU discriminator remains exact execution of the retained donor InferenceReceipt/v4 rejection-boundary set.",
+      "next_discriminator": "execute exact live PR1263 rejection-boundary tests on an authorized zero-cost normal-user local or clay-direct-dev surface with source/resource/secret/result binding"
+    },
+    "track_c": {
+      "name": "GLOBAL_JSPACE_GWT_PROTOTYPE_AND_FREE_ONLY_LOCAL_08B_READINESS",
+      "status": "TRAINING_READINESS_NO_CHANGE_WITH_REASON",
+      "reason": "No model-specific J-Space runtime evidence was created and this ChatGPT organ exposes no authorized local/clay-direct-dev execution bridge.",
+      "next_discriminator": "after exact donor rejection-boundary PASS, run actual local model invocation -> canonical ModelExecution -> InferenceReceipt/v4 -> model-specific J-Space/GWT intervention/control trace, then continue JSPACE_VECTOR_CONTROL_ABI/v1 and leak-resistant dataset readiness"
+    }
+  },
+  "credits": {
+    "whole_entityos_hcu": 0,
+    "hcu_full": 0,
+    "jspace_model": 0,
+    "training": 0,
+    "provider_runtime": 0,
+    "whole_product_pass": false
+  },
+  "writes": {
+    "branch": "gpt56sol/go-868-manifest-rejoin-successor-20260824-1826",
+    "manifest_commit": "3eb41d70d5de0a6e4c0692df76dc67683bd48e61"
+  },
+  "next_exact_action": "re-enter current main before merge; if manifest remains stale and no successor duplicates the same fix, merge the manifest-only authority rejoin, then execute the exact-source FREE provider admission boundary and retained donor InferenceReceipt/v4 gates on an actually exposed authorized zero-cost execution surface"
+}

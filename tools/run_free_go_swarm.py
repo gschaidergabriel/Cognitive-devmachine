@@ -2,7 +2,8 @@
 """24h FREE_ONLY Mini Entity `go` swarm controller.
 
 Pure stdlib, OpenAI-compatible HTTP endpoints. It consumes only API keys provided
-through environment variables and requires an explicit FREE_ONLY attestation.
+through environment variables and requires both a global FREE_ONLY kill-switch
+and typed provider admission from the current EntityOS/HCU control plane.
 It never upgrades billing, never retries HTTP 402, and treats HTTP 429 as a
 provider-wide cooldown rather than rotating keys to evade a rate limit.
 """
@@ -25,6 +26,11 @@ import time
 from typing import Any
 import urllib.error
 import urllib.request
+
+TOOLS_DIR = Path(__file__).resolve().parent
+if str(TOOLS_DIR) not in sys.path:
+    sys.path.insert(0, str(TOOLS_DIR))
+from free_swarm_provider_admission import ProviderAdmissionError, provider_is_explicit_free
 
 ROOT = Path(__file__).resolve().parents[1]
 PROTOCOL_PATH = ROOT / "research_entity/claycode/CLAYCODE_ALL_WORKERS_EXECUTION_DIRECTIVE.md"
@@ -120,7 +126,19 @@ def unique(values: list[str]) -> list[str]:
     return out
 
 
-def collect_keys(spec: ProviderSpec) -> list[str]:
+def provider_network_admitted(spec: ProviderSpec, endpoint: str | None = None) -> bool:
+    """Secret-blind typed gate. UNKNOWN/PAID/SUBSCRIPTION/invalid always fail closed."""
+    try:
+        return provider_is_explicit_free(spec.name, endpoint or spec.endpoint, root=ROOT)
+    except ProviderAdmissionError as exc:
+        print(f"Skipping {spec.name}: typed FREE admission rejected ({exc})", file=sys.stderr)
+        return False
+
+
+def collect_keys(spec: ProviderSpec, *, endpoint: str | None = None) -> list[str]:
+    """Read provider credential environment only after typed FREE admission."""
+    if not provider_network_admitted(spec, endpoint):
+        return []
     keys = split_values(os.getenv(spec.keys_list_env))
     for name in spec.key_envs:
         if os.getenv(name):
@@ -194,6 +212,8 @@ def parse_retry_after(headers: dict[str, str], fallback: float) -> float:
 
 def request_chat(spec: ProviderSpec, key: str, model: str, prompt: str,
                  max_tokens: int, timeout: float) -> tuple[int, dict[str, str], dict[str, Any] | str]:
+    if not provider_network_admitted(spec, spec.endpoint):
+        raise ProviderAdmissionError(f"PROVIDER_NETWORK_NOT_ADMITTED:{spec.name}")
     body: dict[str, Any] = {
         "model": model, "messages": [{"role": "user", "content": prompt}],
         "max_tokens": max_tokens, "temperature": 0.7, "stream": False,
@@ -486,7 +506,7 @@ async def status_loop(runtimes: list[ProviderRuntime], sink: JsonlSink,
 
 async def run(args: argparse.Namespace) -> int:
     if not truthy(os.getenv("CLAY_FREE_ONLY_ATTESTED")):
-        print("Refusing to start: set CLAY_FREE_ONLY_ATTESTED=1 only after confirming every configured key is restricted to free/included usage and cannot create billable overage.", file=sys.stderr)
+        print("Refusing to start: CLAY_FREE_ONLY_ATTESTED=1 is only a global kill-switch; every provider also requires current typed cost_class=FREE admission before keys or network.", file=sys.stderr)
         return 3
 
     protocol = load_protocol()
@@ -495,11 +515,11 @@ async def run(args: argparse.Namespace) -> int:
     sink = JsonlSink(output_dir)
     runtimes: list[ProviderRuntime] = []
     for spec in PROVIDERS:
+        if not truthy(os.getenv(spec.attestation_env)):
+            print(f"Skipping {spec.name}: compatibility kill-switch {spec.attestation_env}=1 not set", file=sys.stderr)
+            continue
         keys = collect_keys(spec)
         if not keys:
-            continue
-        if not truthy(os.getenv(spec.attestation_env)):
-            print(f"Skipping {spec.name}: {spec.attestation_env}=1 not set", file=sys.stderr)
             continue
         models = split_values(os.getenv(spec.models_env)) or list(spec.default_models)
         cap_env = f"CLAY_{spec.name.upper()}_MAX_CONCURRENCY"
@@ -509,7 +529,7 @@ async def run(args: argparse.Namespace) -> int:
             cap = spec.default_max_concurrency
         runtimes.append(ProviderRuntime(spec, keys, unique(models), cap))
     if not runtimes:
-        print("No FREE_ONLY-attested provider keys are configured. Nothing to run.", file=sys.stderr)
+        print("No provider passed current typed FREE admission plus compatibility kill-switch with a configured key. Nothing to run.", file=sys.stderr)
         return 4
 
     duration_s = max(1.0, args.hours * 3600.0)
@@ -522,14 +542,16 @@ async def run(args: argparse.Namespace) -> int:
         except NotImplementedError:
             pass
 
-    manifest = {"schema": "CLAY_FREE_GO_SWARM_RUN/v1", "run_id": run_id,
+    manifest = {"schema": "CLAY_FREE_GO_SWARM_RUN/v2", "run_id": run_id,
         "started_at": dt.datetime.now(dt.timezone.utc).isoformat(), "duration_hours": args.hours,
         "deadline_monotonic_seconds": duration_s, "free_only": True,
         "repo_head": git_text("rev-parse", "HEAD"),
         "protocol_sha256": hashlib.sha256(protocol.encode("utf-8")).hexdigest(),
         "providers": {rt.spec.name: {"key_fingerprints": [key_fingerprint(k) for k in rt.keys],
             "models": rt.models, "max_concurrency": rt.max_concurrency} for rt in runtimes},
-        "invariants": ["NO_SECRETS_IN_LOGS", "FREE_ONLY_ATTESTATION_REQUIRED",
+        "invariants": ["NO_SECRETS_IN_LOGS", "GLOBAL_FREE_ONLY_KILL_SWITCH_REQUIRED",
+            "TYPED_PROVIDER_FREE_ADMISSION_BEFORE_SECRET_LOOKUP_AND_PROVIDER_NETWORK",
+            "ENV_ATTESTATION_ALONE_NEVER_MINTS_PROVIDER_ADMISSION",
             "HTTP_402_HARD_STOP_KEY", "HTTP_429_PROVIDER_WIDE_COOLDOWN_NO_KEY_ROTATION_BYPASS",
             "AIMD_CONCURRENCY", "GRF_CLAYCODE_PROTOCOL_INJECTED_AT_TOP_OF_EVERY_WORKER_PROMPT",
             "MODEL_OUTPUT_IS_CANDIDATE_NOT_CANONICAL_TRUTH_OR_EFFECT_AUTHORITY"]}

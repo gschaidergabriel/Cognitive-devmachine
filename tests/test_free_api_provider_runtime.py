@@ -142,6 +142,36 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
         self.assertIsNone(caught.exception.__cause__)
         self.assertFalse(called)
 
+    def test_oversized_zero_cost_attestation_is_rejected_before_parsing(self):
+        parser_calls = []
+        original_parser = MOD._attested_zero_cost_providers
+
+        def tracking_parser(environ):
+            parser_calls.append("parse")
+            return original_parser(environ)
+
+        MOD._attested_zero_cost_providers = tracking_parser
+        try:
+            with self.assertRaisesRegex(
+                ValueError, "runtime_environment_could_not_be_snapshotted"
+            ):
+                MOD.route(
+                    {
+                        "FRANK_ZERO_COST_ATTESTED_PROVIDERS":
+                            "nvidia," * 200,
+                    }
+                )
+            self.assertEqual(parser_calls, [])
+
+            self.assertIsNone(
+                MOD.route(
+                    {"FRANK_ZERO_COST_ATTESTED_PROVIDERS": "x" * 1_024}
+                )["selected"]
+            )
+            self.assertEqual(parser_calls, ["parse"])
+        finally:
+            MOD._attested_zero_cost_providers = original_parser
+
     def test_text_request_rejects_active_string_subclasses(self):
         leaked_text = "request-string-method-must-not-run"
 

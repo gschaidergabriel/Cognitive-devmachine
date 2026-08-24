@@ -1,3 +1,4 @@
+import builtins
 import importlib.util
 import http.client
 import json
@@ -2677,6 +2678,36 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
         )
         self.assertTrue(nvidia_row["eligible"])
         self.assertIn(target_key, latches)
+
+    def test_inventory_snapshots_latches_before_element_validation(self):
+        env = {"NVIDIA_API_KEY": "secret"}
+        latches = {"historical-a", "historical-b"}
+        mutation_count = 0
+
+        def mutate_during_any(iterable):
+            nonlocal mutation_count
+            iterator = iter(iterable)
+            first = next(iterator, False)
+            if mutation_count == 0:
+                mutation_count += 1
+                latches.add("published-during-validation")
+            return bool(first) or builtins.any(iterator)
+
+        MOD.any = mutate_during_any
+        try:
+            rows = MOD.inventory(env, payment_latches=latches)
+        finally:
+            del MOD.any
+
+        nvidia_row = next(
+            row for row in rows if row["provider_id"] == "nvidia"
+        )
+        self.assertEqual(mutation_count, 1)
+        self.assertTrue(nvidia_row["eligible"])
+        self.assertFalse(
+            nvidia_row["payment_blocked_current_budget_epoch"]
+        )
+        self.assertIn("published-during-validation", latches)
 
     def test_active_payment_latch_element_is_rejected_before_execution(self):
         leaked_text = "payment-latch-element-equality-must-not-run"

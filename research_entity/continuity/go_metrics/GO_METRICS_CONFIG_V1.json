@@ -1,0 +1,113 @@
+{
+  "anti_goodhart": {
+    "confidence_is_not_optimization_target": true,
+    "counter_metric_required": true,
+    "evidence_lineage_collapse": true,
+    "holdout_or_shadow_eval_required_when_practical": true,
+    "latency_cannot_skip_verification": true,
+    "missingness_penalty": true,
+    "random_high_score_audits": true,
+    "raw_measurements_append_only": true,
+    "score_can_decrease": true,
+    "token_efficiency_cannot_skip_required_evidence": true
+  },
+  "architecture": "HCU",
+  "capability_information_latency": {
+    "formula": "performance_index / max(p95_information_latency_seconds, measurement_floor_seconds)",
+    "measurement_floor_seconds": 0.001,
+    "name": "CILR",
+    "performance_and_latency_must_remain_visible": true,
+    "unbounded_upward": true
+  },
+  "code_quality": {
+    "min_evidence_coverage": 0.6,
+    "name": "CQS",
+    "weights": {
+      "benchmark_non_regression": 0.15,
+      "cross_mode_reuse": 0.05,
+      "functional_correctness": 0.3,
+      "maintainability_complexity": 0.1,
+      "negative_fail_closed": 0.15,
+      "provenance_causal_identity": 0.05,
+      "reproducibility": 0.1,
+      "static_build_checks": 0.1
+    }
+  },
+  "date": "2026-08-24",
+  "go_protocol": "governance/CLAY_GO_COLLECTIVE_RECURSIVE_IMPROVEMENT_METRICS_2026-08-24.md",
+  "hcu_confidence": {
+    "aggregation": "LINEAGE_COLLAPSED_ROBUST_MILESTONE_AGGREGATION_THEN_WEIGHTED_GEOMETRIC_MEAN",
+    "calibration": [
+      "BRIER_SCORE",
+      "LOG_LOSS",
+      "RELIABILITY_DIAGRAM_WHEN_N_SUFFICIENT"
+    ],
+    "event": "HCU_TARGET_100_GO",
+    "event_definition": "Reach current exact HCU runtime-acceptance target within the next 100 canonical go macrocycles without abandoning the core EntityOS+HCU authority architecture.",
+    "initial_research_baseline": {
+      "classification": "UNCALIBRATED_MODEL_FORECAST_NOT_FACT",
+      "forecast_probability": 0.4305,
+      "milestone_probabilities": {
+        "authority_truth_effect_invariants": 0.9,
+        "canonical_local_model_execution": 0.4,
+        "dataset_training_readiness": 0.35,
+        "engine_loader_consumed_identity": 0.45,
+        "grid10_inference_receipt_closure": 0.55,
+        "integration_independent_reproducibility": 0.4,
+        "jspace_causal_intervention_controls": 0.25,
+        "jspace_model_specific_observation": 0.45,
+        "performance_latency_scale": 0.2,
+        "provider_runtime_effect_boundaries": 0.35,
+        "recovery_replay_fail_closed": 0.55,
+        "typed_entry_causal_identity": 0.75
+      },
+      "note": "Seed forecast for calibration bootstrap only. It is not canonical fact or completion percentage and must be replaced by lineage-collapsed worker forecasts plus resolved-outcome calibration.",
+      "observed_authority_epoch": "8.69",
+      "wide_uncertainty_interval": [
+        0.2,
+        0.65
+      ]
+    },
+    "milestones": [
+      "authority_truth_effect_invariants",
+      "typed_entry_causal_identity",
+      "provider_runtime_effect_boundaries",
+      "engine_loader_consumed_identity",
+      "grid10_inference_receipt_closure",
+      "canonical_local_model_execution",
+      "jspace_model_specific_observation",
+      "jspace_causal_intervention_controls",
+      "dataset_training_readiness",
+      "recovery_replay_fail_closed",
+      "performance_latency_scale",
+      "integration_independent_reproducibility"
+    ],
+    "name": "HAAC"
+  },
+  "innovation": {
+    "name": "VIS",
+    "self_certification_allowed": false,
+    "weights": {
+      "falsifiability_causal_discriminability": 0.15,
+      "measured_useful_effect": 0.3,
+      "nonduplicate_mechanism_novelty": 0.35,
+      "transferability_reuse": 0.2
+    }
+  },
+  "metric_change_shadow_macrocycles": 3,
+  "metric_weight_freeze_macrocycles": 10,
+  "product": "EntityOS",
+  "program": "ENTITYOS_HCU",
+  "rolling": {
+    "ewma_alpha": 0.1,
+    "long_window": 20,
+    "short_window": 5
+  },
+  "schema": "CLAY_GO_COLLECTIVE_METRICS_CONFIG/v1",
+  "selection_policy": "PARETO_WITH_HARD_GATES_NO_SINGLE_SCALAR",
+  "token_quality": {
+    "formula": "1000 * sum(max(0,relative_improvement_fraction)*code_quality_fraction*reproducibility_factor*independence_factor) / total_tokens",
+    "name": "TQE",
+    "requires_exact_token_usage": true
+  }
+}

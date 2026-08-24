@@ -17,7 +17,7 @@ ROOT = Path(__file__).resolve().parents[1]
 CLAIMS_ROOT = ROOT / "research_entity/continuity/go_experiment_claims"
 CLAIM_SCHEMA = "clay-go-experiment-claim/v1"
 RID_RE = re.compile(r"^rid_[0-9a-f]{64}$")
-TS_RE = re.compile(r"^ts_[0-9]{20}Z__p_[0-9a-f]{64}$")
+TS_RE = re.compile(r"^ts_[0-9]{8}T[0-9]{12}Z__p_[0-9a-f]{64}$")
 
 
 def canonical_trigger_key(value: str) -> bool:

@@ -10,7 +10,9 @@ import threading
 # FastProviderRuntime inherits transient-error isolation and its shard prompt wraps
 # the stable cache-friendly prefix. Model-health routing is installed on the v2
 # scheduler before v3 captures/wraps ``next_key_model`` with the exact economic
-# route gate. The post-v3 observer wraps that gate; it never replaces it.
+# route gate. The post-v3 observer wraps that gate; it never replaces it. The
+# two-stage patch wrapper is installed last so both Stage-1 and Stage-2 requests
+# traverse the same observed exact FREE route authority.
 import run_free_go_swarm as base
 import run_24h_entityos_swarm as opt
 import free_swarm_accelerator_v2 as accelerator
@@ -21,7 +23,9 @@ import free_swarm_model_health_v1 as model_health
 model_health.install_scheduler(fabric_v2)
 
 import run_6000_free_swarm_v3 as fabric
+import free_swarm_two_stage_patch_v1 as two_stage_patch
 model_health.bind_request_observer(fabric)
+two_stage_patch.install(fabric)
 
 
 def main() -> int:

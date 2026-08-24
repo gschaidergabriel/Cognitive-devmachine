@@ -233,6 +233,7 @@ def build_direct_candidate(result: dict[str, Any], intermediate: dict[str, Any])
             "method": "CALIBRATION_ONLY_INTERMEDIATE_RESIDUAL_CONTRAST",
             "uses_output_head_weights": False,
             "uses_holdout_data": False,
+            "uses_evaluation_output_labels": False,
             "derivation_family_id": derivation_family_id,
             "derivation_receipt_sha256": derivation_receipt_sha,
         },

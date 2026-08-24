@@ -17,8 +17,8 @@ The trigger is **not provider-bound**. An exact loopback-only local API runtime 
 
 Use the first executable path and pivot automatically when a dependency blocks it:
 
-1. **LOCAL_LLAMA_CPP_QWEN3_06B_CVEC_API** — Qwen3-0.6B on loopback `llama-server` with native control-vector consumption. This is the preferred full mechanism path.
-2. **LOCAL_PYTORCH_QWEN3_06B_ACTIVATION_HOOK_API** — exact Qwen3-0.6B runtime with a loopback API and runtime-observed hidden-state hook. This is the fast fallback when native cvec materialization is temporarily unavailable.
+1. **LOCAL_PYTORCH_QWEN3_06B_ACTIVATION_HOOK_API** — exact Qwen3-0.6B revision with a loopback API and runtime-observed hidden-state hook. This is the shortest already-implemented full causal path and therefore the default first attempt.
+2. **LOCAL_LLAMA_CPP_QWEN3_06B_CVEC_API** — Qwen3-0.6B GGUF on loopback `llama-server` with native control-vector consumption. Use it as native-cvec replication/strengthening or when the PyTorch path is locally unavailable.
 3. **EXACT_FREE_HOSTED_OUTPUT_LOGIT_VECTOR** — component discriminator only; useful but not sufficient for hidden-state/J-Space completion.
 4. **FREE_EXTERNAL_INTERNAL_VECTOR_API** — optional independent replication if an admitted provider exposes a genuine internal-vector surface.
 

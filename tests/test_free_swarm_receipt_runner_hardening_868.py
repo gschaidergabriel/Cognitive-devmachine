@@ -19,15 +19,19 @@ class FreeSwarmReceiptRunnerHardening868Tests(unittest.TestCase):
         self.assertIn(hardened.INHERITED_ENV_TEST_MODULE, base.TEST_MODULES)
         self.assertIn(hardened.ROOT / hardened.INHERITED_ENV_TEST_REL, base.TEST_PATHS)
 
-    def test_bootstrap_trips_dns_and_connect_ex_paths(self) -> None:
+    def test_bootstrap_trips_dns_connect_and_datagram_paths(self) -> None:
         text = base._bootstrap_text()
         required = (
             'socket.socket.connect = guarded_connect',
             'socket.socket.connect_ex = guarded_connect_ex',
             'socket.create_connection = guarded_create_connection',
             'socket.getaddrinfo = guarded_getaddrinfo',
+            'socket.socket.sendto = guarded_sendto',
+            'socket.socket.sendmsg = guarded_sendmsg',
             'record("socket.connect_ex", address)',
             'record("socket.getaddrinfo", target)',
+            'record("socket.sendto", target)',
+            'record("socket.sendmsg", target)',
         )
         for marker in required:
             with self.subTest(marker=marker):

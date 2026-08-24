@@ -32,20 +32,43 @@ PRIVATE_STORES = [
 ]
 NAME_RE = re.compile(r"^[A-Z][A-Z0-9_]*$")
 
-# Credential-name -> canonical typed provider identity.  Keep this deliberately
+# Credential-name -> canonical typed provider identity. Keep this deliberately
 # narrow: non-LLM tool credentials are not silently reclassified as LLM providers.
+# Providers absent from the canonical admission allowlist intentionally fail closed.
 PROVIDER_SECRET_NAMES = {
     "GROQ_API_KEY": "groq",
+    "GROQ_API_KEYS": "groq",
     "MISTRAL_API_KEY": "mistral",
+    "MISTRAL_API_KEYS": "mistral",
     "NVIDIA_API_KEY": "nvidia",
+    "NVIDIA_API_KEYS": "nvidia",
     "NVIDIA_NIM_API_KEY": "nvidia",
     "NGC_API_KEY": "nvidia",
     "OPENROUTER_API_KEY": "openrouter",
+    "HF_TOKEN": "huggingface",
+    "HUGGINGFACE_API_KEY": "huggingface",
+    "TOGETHER_API_KEY": "together",
 }
+PROVIDER_SECRET_PREFIXES = (
+    ("GROQ_API_KEY_", "groq"),
+    ("MISTRAL_API_KEY_", "mistral"),
+    ("NVIDIA_API_KEY_", "nvidia"),
+    ("NGC_API_KEY_", "nvidia"),
+)
 
 
 class SecretError(RuntimeError):
     pass
+
+
+def _provider_for_secret(name: str) -> str | None:
+    provider = PROVIDER_SECRET_NAMES.get(name)
+    if provider is not None:
+        return provider
+    for prefix, candidate in PROVIDER_SECRET_PREFIXES:
+        if name.startswith(prefix):
+            return candidate
+    return None
 
 
 def _provider_secret_is_admitted(name: str) -> bool:
@@ -54,7 +77,7 @@ def _provider_secret_is_admitted(name: str) -> bool:
     Import is intentionally lazy so generic non-provider secret use stays independent
     of the EntityOS/HCU admission module. Any admission-resolution failure is a denial.
     """
-    provider = PROVIDER_SECRET_NAMES.get(name)
+    provider = _provider_for_secret(name)
     if provider is None:
         return True
     try:
@@ -97,7 +120,7 @@ def _repo_secrets() -> tuple[dict[str, str], dict[str, str]]:
 def get_secret(name: str, *, required: bool = True) -> str | None:
     if not NAME_RE.fullmatch(name):
         raise SecretError(f"Invalid credential name: {name!r}")
-    provider = PROVIDER_SECRET_NAMES.get(name)
+    provider = _provider_for_secret(name)
     if provider is not None and not _provider_secret_is_admitted(name):
         if required:
             raise SecretError(f"Provider credential denied before lookup by typed FREE admission: {provider}")
@@ -117,7 +140,7 @@ def get_secret(name: str, *, required: bool = True) -> str | None:
 def secret_source(name: str) -> str | None:
     if not NAME_RE.fullmatch(name):
         raise SecretError(f"Invalid credential name: {name!r}")
-    if name in PROVIDER_SECRET_NAMES and not _provider_secret_is_admitted(name):
+    if _provider_for_secret(name) is not None and not _provider_secret_is_admitted(name):
         return None
     if os.environ.get(name):
         return "process_environment"
@@ -131,7 +154,7 @@ def status(names: Iterable[str]) -> dict[str, dict[str, object]]:
     result: dict[str, dict[str, object]] = {}
     for name in names:
         source = secret_source(name)
-        provider = PROVIDER_SECRET_NAMES.get(name)
+        provider = _provider_for_secret(name)
         result[name] = {
             "configured": source is not None,
             "source": source,

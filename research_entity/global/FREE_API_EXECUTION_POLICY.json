@@ -156,6 +156,17 @@
     "internal_measurement": "A deterministic mutation after the first live-set element was consumed previously raised RuntimeError: Set changed size during iteration and suppressed capability inventory. After repair, validation completes against the bounded copy while the publication remains visible only to later inventories.",
     "counterhypothesis": "Validating every element of the live exact set before copying is equivalent to validating the copy; falsified because a concurrent publication can resize the live iterator between those operations."
   },
+  "execution_latch_validation_snapshot": {
+    "checked_at": "2026-08-25",
+    "claim": "Authenticated execution retains caller-owned exact-set storage only as the later latch publication target. Pre-route cardinality and element validation iterate a bounded copy, and route derives its state from a separate bounded snapshot, so a concurrent publication cannot resize the execution preflight iterator.",
+    "sources": [
+      "https://docs.python.org/3/library/stdtypes.html#set.copy",
+      "https://cwe.mitre.org/data/definitions/362.html"
+    ],
+    "executable_evidence": "test_execute_snapshots_latches_before_element_validation",
+    "internal_measurement": "A deterministic publication during the execution preflight previously raised RuntimeError: Set changed size during iteration before opener access. After repair, the same mutation affects only the caller-owned source, validation completes on its copy, route snapshots the later state, and the valid request succeeds.",
+    "counterhypothesis": "Inventory-only snapshot validation is sufficient because execute immediately calls route; falsified because execute performed a separate live-set element scan before route could establish its safe snapshot."
+  },
   "post_network_payment_latch_publication": {
     "checked_at": "2026-08-24",
     "claim": "A received HTTP 402 remains mandatory execution evidence even if caller-owned latch storage changes after authorization. Publication validates bounded snapshots before and after mutation, reports payment_latch_publication_failed when state cannot be safely committed, and receipt construction never performs live-container membership afterward.",

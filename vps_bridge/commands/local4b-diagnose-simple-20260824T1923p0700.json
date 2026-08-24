@@ -1,0 +1,8 @@
+{
+  "schema":"CLAY_VPS_COMMAND/v4",
+  "command_id":"local4b-diagnose-simple-20260824T1923p0700",
+  "op":"exec",
+  "cwd":"/workspace/clay-global-research-entity",
+  "timeout_seconds":180,
+  "command":"echo HEALTH; curl -sS --max-time 2 http://127.0.0.1:8088/health || true; echo; echo BOOTLOG; tail -120 /artifacts/clay-entityos-swarm/local-model-bootstrap.log 2>/dev/null || true; echo MODELLOG; tail -120 /artifacts/clay-entityos-swarm/local-model.log 2>/dev/null || true; echo STATE; cat /artifacts/clay-entityos-swarm/local-model.json 2>/dev/null || true; echo FILES; find /cache -maxdepth 7 -type f -name llama-server -o -name '*.gguf' 2>/dev/null | head -40; echo PROCS; ps -eo pid,etime,%cpu,%mem,args | grep -E '[c]make|[g]make|[l]lama-server|[l]ocal_research_model_server' | head -40"
+}

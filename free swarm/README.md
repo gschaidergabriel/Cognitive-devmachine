@@ -1,8 +1,60 @@
 # Free Swarm — Messdashboard der Clay Research Entity
 
+<!-- EVIDENCE_FORGE_AUTO:BEGIN -->
+## AUTO — Evidence Forge / dritter autonomer Swarm
+Aktualisiert: `2026-08-24T11:58:01.149321+00:00`
+
+Zweck: **Aktivität → ausführbarer Patch/Test → reproduzierbare Architektur-Evidenz**. Der Forge nutzt primär andere Kapazitäten als die LLM-Swarms: OpenAlex, Crossref, Semantic Scholar, Hugging Face Hub, GitHub, lokale Disposable-Clones und — innerhalb eines harten Free-Credit-Budgets — parallele E2B-Sandboxes.
+
+| Kennzahl | Wert |
+|---|---:|
+| Discovery-Queries | 142 |
+| Discovery-Hits | 705 |
+| Forge-Evaluierungen | 0 |
+| evident akzeptierte Forge-Deltas | 0 |
+| akzeptierte Deltas pro 1 Mio. Free-Swarm-Tokens | 0.000 |
+| E2B-Reproduktionsjobs | 0 |
+| E2B-PASS | 0 |
+| E2B kumulierte Sandbox-Sekunden | 0.0 |
+| gemessener Forge-Peak parallel | 0 |
+| Forge SQLite | 389,120 Byte |
+
+### Candidate-Zustände
+| Zustand | Anzahl |
+|---|---:|
+| — | 0 |
+
+### Zusätzliche Tool-Quellen
+| Tool/Quelle | Hits |
+|---|---:|
+| `crossref` | 700 |
+| `openalex` | 5 |
+
+### Zentral beobachtete Provider-/Tool-Limits
+| Provider/Tool | Max inflight | aktiv | Requests | 200 | 429 | Fehler |
+|---|---:|---:|---:|---:|---:|---:|
+| `arxiv` | 1 | 0 | 4 | 2 | 0 | 0 |
+| `crossref` | 1 | 0 | 142 | 140 | 2 | 0 |
+| `exa` | 2 | 0 | 2 | 2 | 0 | 0 |
+| `github` | 1 | 0 | 146 | 126 | 0 | 20 |
+| `groq` | 12 | 0 | 66 | 44 | 22 | 0 |
+| `huggingface_hub` | 4 | 0 | 142 | 142 | 0 | 0 |
+| `nvidia` | 12 | 0 | 186 | 117 | 0 | 69 |
+| `openalex` | 2 | 0 | 142 | 5 | 0 | 137 |
+| `openrouter` | 3 | 0 | 21 | 18 | 2 | 0 |
+| `semantic_scholar` | 1 | 0 | 83 | 2 | 81 | 59 |
+| `tavily` | 2 | 0 | 6 | 6 | 0 | 0 |
+
+### Produktivitätsdiagnose
+- Free-Swarm-Tokenzähler sind **kumuliert über die vorhandenen Worker-Artefakte**, nicht 'aktuell aktive Credentials'. Dadurch ist die frühere Null-Baseline kein Widerspruch mehr, sondern eine historische Startmessung.
+- Distillery Entity-Dataset-Yield: **0.000%**.
+- Forge Architecture-Conversion: **0.000 akzeptierte Deltas / 1 Mio. Free-Swarm-Tokens**.
+- Ein Forge-Delta zählt erst als `accepted`, wenn Patch/Test in einem Disposable-Clone mindestens zweimal reproduziert, negative/static checks bestanden und ein positiver Baseline-Unterschied oder Benchmarkvorteil gemessen wurde.
+<!-- EVIDENCE_FORGE_AUTO:END -->
+
 <!-- RESEARCH_DISTILLERY_AUTO:BEGIN -->
 ## AUTO — Research Distillery / kumuliertes Wissens-Dataset
-Aktualisiert: `2026-08-24T11:49:49.671460+00:00`
+Aktualisiert: `2026-08-24T11:58:11.839363+00:00`
 
 **1. wichtigste Quote — Entity-Dataset-Yield:** `0 / 11,621 = 0.000%`  
 Kompressionsfaktor Quelltokens : akzeptierte Dataset-Tokens: **UNKNOWN**.
@@ -54,7 +106,7 @@ GO-Worker emittieren `OPEN_RESEARCH_QUESTIONS_JSON`; die Distillery zerlegt Frag
 
 <!-- SYSTEM_ANALYSIS_AUTO:BEGIN -->
 ## AUTO — Gesamtsystem, GO-Fluss, Script-Auswertung und Sonnet-Vergleich
-Aktualisiert: `2026-08-24T11:49:50.032740+00:00`
+Aktualisiert: `2026-08-24T11:58:11.998939+00:00`
 
 ### 1. Wichtigster Effizienzindikator — was geht im Durchschnitt wieder an `go`?
 **Source → GO Pass-through: 0.000%.** Definition: `accepted dataset-token yield × average distinct accepted-packet coverage delivered to GO macrocycles`.
@@ -93,16 +145,16 @@ Bei 0 akzeptierten Dataset-Tokens ist Source→GO exakt 0%; fehlende Reinjection
 - truth/effect/capability boundaries and falsification
 
 **Top offene Forschungsfragen aus der laufenden Queue:**
-- Are there more peripheral scripts violating the FREE_ONLY policy?
-- How can downstream safeguards be strengthened to mitigate such script flaws?
-- How can the HCU architecture be refactored to better integrate with the EntityOS product?
-- What are the key factors contributing to the lack of convergence between the existing implementation and the desired EntityOS product?
-- Can the Global J-Space/GWT prototype be improved to better support the EntityOS product?
-- How do real-world LLM providers implement cost-class admission boundaries?
-- What are the minimal syscalls required to verify FREE_ONLY compliance?
-- Can admission failures be reliably detected before any side effects?
-- Does the current supervisor enforce the admission boundary before any secret file read or network I/O in the actual runtime environment?
-- Can a dry‑run test that blocks secret access and network calls reliably verify compliance with the FREE_ONLY provider admission rule?
+- What are the potential risks and consequences of the FREE_SWARM_ADMISSION_BOUNDARY_RECEIPT/v1 execution failure?
+- Why are unadmitted providers being executed despite the typed admission system?
+- What indirect paths might be allowing unadmitted provider execution?
+- How can the admission boundary receipt be made more robust against bypass attempts?
+- What additional runtime checks can enforce FREE_ONLY provider access?
+- Wie kann die Zuverlässigkeit und Skalierbarkeit des EntityOS/HCU-Systems unter verschiedenen Anliegen-Strategien bewertet werden?
+- Welche Rolle spielen externe Provider bei der Skalierbarkeit und Zuverlässigkeit des Systems?
+- Wie können A/B-Tests und Ablationsstudien designed werden, um die Effektivität des EntityOS/HCU-Systems zu bewerten?
+- Wie kann die kanonische typisierte Anbieterzulassung verbessert werden, um unzulässigen externen Anbieterverkehr zu verhindern?
+- Welche Rolle spielen geheime Schlüssel und Netzwerkkommunikation bei der Anbieterzulassung?
 
 ### 5. Fortschritts-Funnel
 | Stufe | Wert |
@@ -134,7 +186,7 @@ Preisannahme: **Claude Sonnet 5 introductory through 2026-08-31: $2/M input + $1
 | Free-Swarm Usage | 2,605,050 input + 582,885 output | **$11.04** |
 | Distillery Modellarbeit | 460 input + 1,455 output | **$0.0155** |
 | zusammen, gemessener LLM-Tokenmix | — | **$11.05** |
-| persistenter Repo-Korpus, Output-only Proxy | 11,794,295 Proxy-Tokens | **$117.94** |
+| persistenter Repo-Korpus, Output-only Proxy | 11,798,131 Proxy-Tokens | **$117.98** |
 
 **Nominal vermiedene Sonnet-Kosten, falls diese Calls tatsächlich $0 kosteten: $11.05. Verifiziert gespart: UNKNOWN.** Die aktuelle typed Authority verbietet die nachträgliche FREE-Klassifikation historischer Provider-Traffic; der Korpuswert ist ebenfalls nur ein Neu-Erzeugungsproxy.
 
@@ -147,7 +199,7 @@ Dieser komplette Block ist Pflichtbestandteil des Publishers. Kompakte Tabellen 
 
 <!-- FREE_SWARM_AUTO:BEGIN -->
 ## AUTO — Live-Auswertung
-Aktualisiert: `2026-08-24T11:49:48.764116+00:00`
+Aktualisiert: `2026-08-24T11:58:11.023677+00:00`
 
 | Kennzahl | Wert |
 |---|---:|
@@ -159,8 +211,8 @@ Aktualisiert: `2026-08-24T11:49:48.764116+00:00`
 | Free-Swarm Total-Tokens | 3187935 |
 | Usage-exakte Worker-Records | 414 |
 | Evident akzeptierte Architektur-Deltas | 0 |
-| Repo-Korpus-Proxy Tokens (4 Zeichen/Token) | 11794295 |
-| Sonnet-5 Output-only Äquivalent des Repo-Proxys | $117.94 |
+| Repo-Korpus-Proxy Tokens (4 Zeichen/Token) | 11798131 |
+| Sonnet-5 Output-only Äquivalent des Repo-Proxys | $117.98 |
 
 ### Modelle
 | Provider | Modell | Requests | Success | 429 | Input | Output | Total |
@@ -224,8 +276,8 @@ Innovativstes Modell: **NO EVIDENCE YET**
 | GPT/ChatGPT | 0 | UNKNOWN | UNKNOWN% |
 
 ### Research-Entity-Output / Sonnet-Kostenproxy
-API-exakte historische Gesamttokens aller früheren Organe bleiben **UNKNOWN**, solange keine vollständige historische Usage-Buchhaltung existiert. Der messbare persistente Repo-Korpus umfasst aktuell 9782 Textdateien / 47177180 Zeichen ≈ **11794295 Tokens** bei der ausdrücklich nur als Proxy verwendeten 4-Zeichen-Näherung.
-Hypothetische reine Output-Neuerzeugung dieses Proxy-Korpus mit Claude Sonnet 5: **$117.94** zum derzeit geltenden Output-Tarif von $10/M Tokens. Input-/Caching-/Toolkosten sind darin nicht enthalten.
+API-exakte historische Gesamttokens aller früheren Organe bleiben **UNKNOWN**, solange keine vollständige historische Usage-Buchhaltung existiert. Der messbare persistente Repo-Korpus umfasst aktuell 9784 Textdateien / 47192525 Zeichen ≈ **11798131 Tokens** bei der ausdrücklich nur als Proxy verwendeten 4-Zeichen-Näherung.
+Hypothetische reine Output-Neuerzeugung dieses Proxy-Korpus mit Claude Sonnet 5: **$117.98** zum derzeit geltenden Output-Tarif von $10/M Tokens. Input-/Caching-/Toolkosten sind darin nicht enthalten.
 <!-- FREE_SWARM_AUTO:END -->
 
 

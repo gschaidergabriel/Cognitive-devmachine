@@ -167,17 +167,21 @@
     "internal_measurement": "A deterministic publication during the execution preflight previously raised RuntimeError: Set changed size during iteration before opener access. After repair, the same mutation affects only the caller-owned source, validation completes on its copy, route snapshots the later state, and the valid request succeeds.",
     "counterhypothesis": "Inventory-only snapshot validation is sufficient because execute immediately calls route; falsified because execute performed a separate live-set element scan before route could establish its safe snapshot."
   },
-  "post_nonce_latch_reauthorization": {
+  "post_callback_latch_reauthorization": {
     "checked_at": "2026-08-25",
-    "claim": "An injected nonce factory is treated as executable caller code. After it returns a bounded passive nonce, FRANK re-evaluates payment-latch state from the same environment snapshot before constructing or opening the request. A newly active hard stop, exhausted latch capacity or changed provider selection fails closed before network access.",
+    "claim": "Injected nonce and monotonic-clock functions are treated as executable caller code. After the final such pre-network callback returns bounded passive data, FRANK re-evaluates payment-latch state from the same environment snapshot before constructing or opening the request. A newly active hard stop, exhausted latch capacity or changed provider selection fails closed before network access.",
     "sources": [
       "https://docs.python.org/3/reference/expressions.html#calls",
+      "https://docs.python.org/3/library/time.html#time.monotonic",
       "https://cwe.mitre.org/data/definitions/367.html",
       "https://www.rfc-editor.org/rfc/rfc9110.html#name-402-payment-required"
     ],
-    "executable_evidence": "test_nonce_callback_latch_change_is_rechecked_before_network",
-    "internal_measurement": "A deterministic nonce callback inserted the selected provider's current budget-epoch latch after initial routing. Before repair, the authenticated opener ran and returned success. After repair, a second bounded route snapshot observes the latch and raises payment_required_hard_stop_active with zero opener calls.",
-    "counterhypothesis": "The process execution lock makes the first route decision stable across nonce generation; falsified because the callback executes synchronously inside the locked thread and can directly mutate caller-owned latch storage without acquiring that lock."
+    "executable_evidence": [
+      "test_nonce_callback_latch_change_is_rechecked_before_network",
+      "test_clock_callback_latch_change_is_rechecked_before_network"
+    ],
+    "internal_measurement": "Deterministic nonce and monotonic-clock callbacks each inserted the selected provider's current budget-epoch latch after initial routing. Before repair, both authenticated opener paths ran and returned success. After repair, one bounded route snapshot following the last callback observes either mutation and raises payment_required_hard_stop_active with zero opener calls.",
+    "counterhypothesis": "Reauthorization immediately after nonce generation closes every caller-code boundary before network; falsified because the injected monotonic clock still executed afterward and could activate the same latch while leaving that reauthorization stale."
   },
   "post_network_payment_latch_publication": {
     "checked_at": "2026-08-24",

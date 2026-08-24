@@ -1,13 +1,17 @@
 #!/usr/bin/env python3
-"""Authority-bound executor sequence lanes for EntityOS/HCU.
+"""NONCURRENT compatibility-only authority-bound executor sequence lane wrapper.
 
-The lower-level ``executor_sequence_lane_binding_v1`` proves deterministic composition of
-Entry/GRID/input facts, but its Entry-carried ``stream_id`` is not stream authority.  This
-wrapper is the promotable boundary: it first requires independent external stream-authority
-evidence, then derives/revalidates the existing lane binding and binds both receipts together.
+Historical/research purpose only. The lower-level ``executor_sequence_lane_binding_v1`` proves
+deterministic composition of Entry/GRID/input facts, and this wrapper records an externally
+supplied stream-authority binding. It is retained for reproducibility and donor comparison.
 
-A bare ``ExecutorSequenceLaneBinding`` remains useful as source/mechanism evidence but MUST NOT
-by itself mint recurrent t->t+1, intervention, hidden-state, model-runtime, or training credit.
+CURRENT PROMOTION LAW: this module is NOT a promotable stream/lane authority because
+``expected_stream_authority_binding_sha256`` is caller-supplied at this API boundary. Current
+promotion must use ``executor_sequence_lane_authority_v1`` / ``HCU_AUTHORIZED_EXECUTOR_SEQUENCE_LANE/v2``,
+which reads the already externally admitted stream-authority decision from the caller's existing
+canonical MiniUnifiedDB and re-derives the exact lane parents. This compatibility module creates
+no canonical truth/state/effect/temporal authority and grants no recurrent t->t+1, intervention,
+hidden-state, model-runtime, or training credit.
 """
 from __future__ import annotations
 
@@ -49,6 +53,9 @@ except ImportError:
     from xeno_entry_fabric_v1 import EntryPacket
 
 AUTHORIZED_LANE_SCHEMA = "HCU_AUTHORIZED_EXECUTOR_SEQUENCE_LANE_BINDING/v1"
+PROMOTION_STATUS = "NONCURRENT_COMPATIBILITY_RESEARCH_ONLY"
+CURRENT_PROMOTION_SCHEMA = "HCU_AUTHORIZED_EXECUTOR_SEQUENCE_LANE/v2"
+CURRENT_PROMOTION_MODULE = "executor_sequence_lane_authority_v1.py"
 
 
 class AuthorizedExecutorSequenceLaneBindingError(ValueError):
@@ -118,7 +125,7 @@ def bind_authorized_executor_sequence_lane(
     *,
     expected_stream_authority_binding_sha256: str,
 ) -> AuthorizedExecutorSequenceLaneBinding:
-    """Build a promotable lane only after independent stream authority revalidation."""
+    """Reproduce the historical v1 compatibility binding; never use it for promotion."""
     try:
         validate_entry_stream_authority_binding(
             stream_authority,
@@ -170,6 +177,7 @@ def validate_authorized_executor_sequence_lane(
     *,
     expected_stream_authority_binding_sha256: str,
 ) -> None:
+    """Revalidate the historical v1 compatibility binding; no promotion credit follows."""
     _need(
         isinstance(binding, AuthorizedExecutorSequenceLaneBinding),
         "AUTHORIZED_EXECUTOR_SEQUENCE_LANE_BINDING_REQUIRED",
@@ -203,3 +211,15 @@ def validate_authorized_executor_sequence_lane(
         expected_stream_authority_binding_sha256=expected_stream_authority_binding_sha256,
     )
     _need(binding == expected_binding, "AUTHORIZED_EXECUTOR_SEQUENCE_LANE_SOURCE_MISMATCH")
+
+
+__all__ = [
+    "AUTHORIZED_LANE_SCHEMA",
+    "PROMOTION_STATUS",
+    "CURRENT_PROMOTION_SCHEMA",
+    "CURRENT_PROMOTION_MODULE",
+    "AuthorizedExecutorSequenceLaneBindingError",
+    "AuthorizedExecutorSequenceLaneBinding",
+    "bind_authorized_executor_sequence_lane",
+    "validate_authorized_executor_sequence_lane",
+]

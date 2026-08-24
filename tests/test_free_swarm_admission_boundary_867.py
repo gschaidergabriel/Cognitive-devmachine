@@ -24,7 +24,7 @@ SECRET_ENV_NAMES = {
     "GROQ_API_KEY", "GROQ_API_KEYS", "GROQ2_API_KEY", "GROQ3_API_KEY",
     "MISTRAL_API_KEY", "MISTRAL_API_KEYS", "MISTRAL2_API_KEY", "MISTRAL3_API_KEY",
     "NVIDIA_API_KEY", "NVIDIA_API_KEYS", "NVIDIA_NIM_API_KEY", "NGC_API_KEY",
-    "NVIDIA2_API_KEY", "NVIDIA3_API_KEY",
+    "NVIDIA2_API_KEY", "NVIDIA3_API_KEY", "OPENROUTER_API_KEY", "TAVILY_API_KEY", "EXA_API_KEY",
 }
 
 
@@ -46,16 +46,35 @@ def _authority(root: Path, epoch: str = "8.67") -> Path:
     return inbox
 
 
-def _admission(root: Path, cost_class: str, admitted: bool, epoch: str = "8.67") -> Path:
-    target = root / "admission.json"
-    providers = {
+def _provider_fixture(cost_class: str="UNKNOWN", admitted: bool=False) -> dict:
+    return {
         name: {
             "admitted": admitted,
             "cost_class": cost_class,
             "evidence_ref": f"test:{name}:{cost_class}",
         }
-        for name in ("groq", "mistral", "nvidia")
+        for name in sorted(admission_mod.ALLOWED_PROVIDERS)
     }
+
+
+def _admission(root: Path, cost_class: str, admitted: bool, epoch: str = "8.67") -> Path:
+    target = root / "admission.json"
+    target.write_text(json.dumps({
+        "schema": admission_mod.SCHEMA,
+        "authority_epoch": epoch,
+        "mode": "FREE_ONLY",
+        "product": "EntityOS",
+        "compute_architecture": "HCU",
+        "source": "ENTITYOS_HCU_CONTROL_PLANE",
+        "providers": _provider_fixture(cost_class, admitted),
+    }), encoding="utf-8")
+    return target
+
+
+def _mixed_admission(root: Path, epoch: str = "8.67") -> Path:
+    target = root / "admission.json"
+    providers=_provider_fixture()
+    providers["groq"]={"admitted": True, "cost_class": "FREE", "evidence_ref": "test:groq:free"}
     target.write_text(json.dumps({
         "schema": admission_mod.SCHEMA,
         "authority_epoch": epoch,
@@ -64,24 +83,6 @@ def _admission(root: Path, cost_class: str, admitted: bool, epoch: str = "8.67")
         "compute_architecture": "HCU",
         "source": "ENTITYOS_HCU_CONTROL_PLANE",
         "providers": providers,
-    }), encoding="utf-8")
-    return target
-
-
-def _mixed_admission(root: Path, epoch: str = "8.67") -> Path:
-    target = root / "admission.json"
-    target.write_text(json.dumps({
-        "schema": admission_mod.SCHEMA,
-        "authority_epoch": epoch,
-        "mode": "FREE_ONLY",
-        "product": "EntityOS",
-        "compute_architecture": "HCU",
-        "source": "ENTITYOS_HCU_CONTROL_PLANE",
-        "providers": {
-            "groq": {"admitted": True, "cost_class": "FREE", "evidence_ref": "test:groq:free"},
-            "mistral": {"admitted": False, "cost_class": "UNKNOWN", "evidence_ref": "test:mistral:unknown"},
-            "nvidia": {"admitted": False, "cost_class": "UNKNOWN", "evidence_ref": "test:nvidia:unknown"},
-        },
     }), encoding="utf-8")
     return target
 
@@ -208,16 +209,8 @@ class FreeProviderAdmissionBoundaryTests(unittest.TestCase):
             root = Path(td)
             adm = _admission(root, "UNKNOWN", False)
             inbox = _authority(root)
-            forged = {
-                "providers": {
-                    "groq": {"admitted": True, "cost_class": "FREE"},
-                }
-            }
-            env = TrapEnv({
-                "CLAY_FREE_ONLY_ATTESTED": "1",
-                "CLAY_GROQ_FREE_ATTESTED": "1",
-                "GROQ_API_KEY": "SECRET_TRIPWIRE",
-            })
+            forged = {"providers": {"groq": {"admitted": True, "cost_class": "FREE"}}}
+            env = TrapEnv({"CLAY_FREE_ONLY_ATTESTED": "1", "CLAY_GROQ_FREE_ATTESTED": "1", "GROQ_API_KEY": "SECRET_TRIPWIRE"})
             p_root, p_adm, p_inbox = self._patch_authority(root, adm, inbox)
             with p_root, p_adm, p_inbox, mock.patch.object(base.os, "environ", env):
                 self.assertEqual(base.collect_keys(base.PROVIDERS[0], forged), [])
@@ -228,34 +221,25 @@ class FreeProviderAdmissionBoundaryTests(unittest.TestCase):
             root = Path(td)
             adm = _mixed_admission(root)
             inbox = _authority(root)
-            env = TrapEnv({
-                "CLAY_FREE_ONLY_ATTESTED": "1",
-                "CLAY_GROQ_FREE_ATTESTED": "1",
-                "GROQ_API_KEY": "g_fake",
-                "NVIDIA_API_KEY": "n_blocked_secret",
-            })
+            env = TrapEnv({"CLAY_FREE_ONLY_ATTESTED": "1", "CLAY_GROQ_FREE_ATTESTED": "1", "GROQ_API_KEY": "g_fake", "NVIDIA_API_KEY": "n_blocked_secret", "OPENROUTER_API_KEY":"or_blocked", "TAVILY_API_KEY":"tv_blocked", "EXA_API_KEY":"exa_blocked"})
             p_root, p_adm, p_inbox = self._patch_authority(root, adm, inbox)
             with p_root, p_adm, p_inbox, mock.patch.object(base.os, "environ", env):
                 keys = base.collect_keys(base.PROVIDERS[0])
             self.assertEqual(keys, ["g_fake"])
-            self.assertNotIn("NVIDIA_API_KEY", env.secret_reads)
+            for blocked in ("NVIDIA_API_KEY","OPENROUTER_API_KEY","TAVILY_API_KEY","EXA_API_KEY"):
+                self.assertNotIn(blocked, env.secret_reads)
 
     def test_direct_request_chat_is_network_blind_without_canonical_free_admission(self) -> None:
         with tempfile.TemporaryDirectory() as td:
             root = Path(td)
             adm = _admission(root, "UNKNOWN", False)
             inbox = _authority(root)
-            env = {
-                "CLAY_FREE_ONLY_ATTESTED": "1",
-                "CLAY_GROQ_FREE_ATTESTED": "1",
-            }
+            env = {"CLAY_FREE_ONLY_ATTESTED": "1", "CLAY_GROQ_FREE_ATTESTED": "1"}
             network_attempts = 0
-
             def network_tripwire(*args, **kwargs):
                 nonlocal network_attempts
                 network_attempts += 1
                 raise AssertionError("provider socket reached")
-
             p_root, p_adm, p_inbox = self._patch_authority(root, adm, inbox)
             with p_root, p_adm, p_inbox, mock.patch.dict(os.environ, env, clear=True), \
                  mock.patch.object(base.urllib.request, "urlopen", side_effect=network_tripwire):
@@ -269,17 +253,18 @@ class FreeProviderAdmissionBoundaryTests(unittest.TestCase):
             adm = _admission(root, "UNKNOWN", False)
             inbox = _authority(root)
             p_root, p_adm, p_inbox = self._patch_authority(root, adm, inbox)
-            with p_root, p_adm, p_inbox, \
-                 mock.patch.dict(os.environ, {"CLAY_FREE_ONLY_ATTESTED": "1"}, clear=True), \
+            with p_root, p_adm, p_inbox, mock.patch.dict(os.environ, {"CLAY_FREE_ONLY_ATTESTED": "1"}, clear=True), \
                  mock.patch.object(base, "collect_keys", side_effect=AssertionError("secret collection called")), \
                  mock.patch.object(entityos_driver, "fetch_catalog", side_effect=AssertionError("network catalog called")):
                 report = entityos_driver.discover_and_export(0.1)
         self.assertTrue(report)
         self.assertTrue(all(v["source"] == "typed_admission_blocked" for v in report.values()))
 
-    def test_supervisor_sources_only_through_admission_gated_entrypoint(self) -> None:
+    def test_supervisor_sources_only_provider_specific_admitted_secret_files(self) -> None:
         text = (ROOT / "tools/run_24h_entityos_swarm_supervisor.sh").read_text(encoding="utf-8")
         self.assertNotIn("load_all_secret_sources", text)
+        for forbidden in ("/run/secrets/clay_provider.env","/artifacts/.clay_provider.env","/cache/clay_provider.env",'"$ROOT/.clay_provider.env"','"$ROOT/research_entity/private/API_TOKENS.env"'):
+            self.assertNotIn(forbidden,text)
         self.assertIn("typed_admission_compat_flags\nload_admitted_secret_sources", text)
         self.assertIn("provider_admitted groq", text)
         self.assertIn("run_research_distillery_entry.py", text)

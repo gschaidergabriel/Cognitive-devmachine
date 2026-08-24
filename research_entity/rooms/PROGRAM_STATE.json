@@ -1,5 +1,5 @@
 {
-  "schema_version": "8.65",
+  "schema_version": "8.66",
   "program_id": "entityos-hcu",
   "status": "ACTIVE",
   "stage": "ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP",
@@ -11,7 +11,9 @@
     "ENTITYOS_HCU_SCALEOUT_AND_NESTED_SIM_ACCEPTANCE",
     "ENTITYOS_EXACT_RUNTIME_ACCEPTANCE"
   ],
-  "authority_correction": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_65.json",
+  "owner_authority_pointer": "CLAY_EXECUTION_AUTHORITY.md",
+  "active_owner_authority": "governance/CLAY_DUAL_MACHINE_EXECUTION_AUTHORITY_2026-08-24.md",
+  "authority_correction": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_66.json",
   "canonical_repository": "gschaidergabriel/clay-global-research-entity",
   "canonical_branch": "main",
   "canonical_workspace": "the artefact/",
@@ -38,14 +40,22 @@
   },
   "execution_policy": {
     "free_only": true,
-    "isolated_sandbox_only": true,
+    "isolated_sandbox_only": false,
+    "authorized_zero_cost_local_normal_user_execution": true,
+    "authorized_clay_direct_dev_vps_sandbox_execution": true,
+    "dual_machine_coordination_allowed_when_useful": true,
+    "local_root_or_sudo_new_authority_implied": false,
+    "unrelated_vps_host_changes_allowed": false,
+    "sandbox_bridge_container_runtime_administration_allowed": true,
+    "new_external_production_effects_separately_gated": true,
     "vercel_hobby_bounded_included_tier_sandbox_admitted": true,
     "vercel_hobby_scope": "FIXED_HASH_BOUND_SHORT_CAPSULES_ONLY_WITH_FAIL_CLOSED_QUOTA_BILLING_UPGRADE_PLAN_FENCES",
     "remaining_monthly_sandbox_quota_directly_observed": false,
-    "current_sandbox_runtime_gate": "BLOCKED_QUOTA_UNOBSERVED_BEFORE_SANDBOX_CREATE",
-    "vps_testing_forbidden": true,
-    "self_hosted_vps_test_runners_forbidden": true,
+    "current_vercel_sandbox_runtime_gate": "BLOCKED_QUOTA_UNOBSERVED_BEFORE_SANDBOX_CREATE",
+    "vps_testing_forbidden": false,
+    "self_hosted_vps_test_runners_forbidden": false,
     "production_host_testing_forbidden": true,
+    "provider_network_execution": "ONLY_EXPLICIT_FREE_CLASSIFICATION_MAY_PASS_PROVIDER_ADMISSION",
     "together_general_inference_and_fallback_forbidden": true,
     "owner_paid_one_shot_directive_present_as_provenance": true,
     "owner_paid_one_shot_directive_file": "research_entity/claycode/OWNER_ONE_SHOT_08B_JSPACE_GWT_TRAINING_DIRECTIVE_2026-08-24.md",
@@ -112,8 +122,9 @@
     "Permanent duplicate reality is not required; WM_TEST and selective NESTED_SIM remain bounded experimental modes.",
     "Global J-Space remains an empirically instrumented coupling hypothesis; model-specific causal evidence is required.",
     "The Global J-Space/GWT prototype must produce exact observable traces before any training promotion.",
-    "Current autonomous execution is FREE_ONLY; paid, subscription and unknown provider lanes fail closed before credential/key lookup and network I/O.",
-    "Bounded Vercel Hobby included-tier Sandbox execution is admitted only for fixed hash-bound short capsules under fail-closed quota/billing/upgrade/plan fences.",
+    "Current autonomous execution is FREE_ONLY; paid, subscription and unknown-cost provider lanes fail closed before credential/key lookup and network I/O.",
+    "Supervisor 8.66 plus active owner authority permit zero-cost local normal-user Linux and clay-direct-dev VPS sandbox development/testing with exact evidence and resource guards.",
+    "Bounded Vercel Hobby included-tier Sandbox execution remains separately gated by direct quota/cost admission and exact-source requirements.",
     "The repository owner paid one-shot directive has zero execution/training credit in this supervisor mode and cannot trigger Together preflight or job creation.",
     "The one unusual-experiment budget is enforced by a canonical create-only atomic lease before intervention; no reproducible trigger identity means no new unusual experiment.",
     "No-ID experiment receipts remain macrocycle-identity unresolved and are not grouped post hoc by timing or commit proximity.",
@@ -122,8 +133,8 @@
     "Logical module count cannot be reported as simultaneous model/decode count.",
     "Real effects remain deterministic, journaled and gated."
   ],
-  "current_frontier": "Supervisor 8.65 now has exact-current retained executor evidence for gschaidergabriel/Dr.-Unterweger#810 at head bb7324d2a21ffc143c241c652a31524c5be4c9d8: Vercel deployment dpl_EN62ggtQnuEcjuvtJNathL3D9Tkf is READY and provider runtime logs show GET /api/hcu-runtime-admission-probe -> HTTP 200 at 2026-08-24T07:24:05Z. The successor repaired an impossible positive InferenceReceipt/v4 acceptance conjunction that required 21 PASS markers not produced by its fixed capsule; this is contract reconciliation, not proof that all corresponding semantic rejection boundaries are independently covered. Exact route source binds SUPERVISOR_STEERING_8_65 and FUNCTION_RUNTIME_BOOT_VERIFIED_NO_SANDBOX_CREATE, so current credit remains Function-runtime diagnostic at no-Sandbox scope only. The executor is bound to donor commit 511d568932bf47828679e3ca6ba05650f18d284d while the live retained donor was observed at 36f70c0a775ded531b0581d43a24815dee140304; no silent projection is allowed. Remaining included Vercel Sandbox quota is still not directly observed and Sandbox.create remains blocked. Next safe high-information gates are: determine which removed InferenceReceipt/v4 rejection boundaries are canonical and lack deterministic negative tests, or obtain a directly authoritative read-only remaining included Sandbox quota signal. Only after Sandbox admission and environment PASS may the chain proceed through verified loader consumption -> GRID10 -> real local model invocation -> ModelExecution -> InferenceReceipt -> Global J-Space/GWT -> causal dataset closure. Whole EntityOS/HCU, full HCU, J-Space model, training and whole-product credit remain zero.",
-  "go_contract": "Every go refreshes current main/newest owner and supervisor authority, advances the highest-information nonduplicate EntityOS blocker, HCU/Entry co-development and Global-J-Space/GWT free-only readiness; executes only on authorized isolated FREE surfaces; acquires the canonical atomic lease before any unusual intervention or records coordination-blocked; preserves canonical-state/provenance/generation/effect fences; and records bounded evidence without inflating source evidence into runtime PASS.",
+  "current_frontier": "Supervisor 8.66 supersedes 8.65 and reconciles active owner dual-machine authority. The retained donor gschaidergabriel/clay-global-research-entity#1263 was observed at head 0b205544fa262afeb714a697f29d3c891551c424 with direct InferenceReceipt/v4 rejection-boundary source tests that remain unexecuted at an exact admitted local/VPS runtime identity. The retained executor gschaidergabriel/Dr.-Unterweger#810 remains at bb7324d2a21ffc143c241c652a31524c5be4c9d8 with exact READY deployment dpl_EN62ggtQnuEcjuvtJNathL3D9Tkf and bounded no-Sandbox function-runtime diagnostic credit only. The highest-value executable discriminator is now to run donor 0b205 exact-source rejection-boundary tests on an exposed authorized zero-cost local normal-user or clay-direct-dev VPS sandbox surface, binding commit/tree, dirty state, Ubuntu/Python/sqlite identities, secret/resource fences, stdout/stderr, exit status, result digest and cleanup. Only after exact PASS may a successor executor rebind to donor 0b205 or later. Then advance actual local model invocation -> canonical ModelExecution -> InferenceReceipt/v4 -> model-specific Global J-Space/GWT intervention/control trace. Whole EntityOS/HCU, full HCU, J-Space model, training and whole-product credit remain zero.",
+  "go_contract": "Every go refreshes current main/newest owner and supervisor authority, checks overlapping work, advances the highest-information nonduplicate EntityOS blocker, HCU/Entry co-development and Global-J-Space/GWT free-only readiness; uses authorized zero-cost local or clay-direct-dev execution when that surface is actually exposed and materially useful; acquires the canonical atomic lease before any unusual intervention or records coordination-blocked; preserves canonical-state/provenance/generation/effect fences; and records bounded evidence without inflating component success into whole-product PASS.",
   "runtime_credit": {
     "component_runtime_credit": [
       "JSPACE_FAMILY_SPLIT_ONLY",
@@ -136,6 +147,7 @@
     "training_credit": 0,
     "whole_product_pass": false
   },
-  "latest_component_receipt": "research_entity/continuity/receipts/2026-08-24_GO_PR810_BB732_INFERENCE_V4_FENCE_REPAIR_RUNTIME_DIAGNOSTIC_GPT56SOL_1425.json",
+  "latest_component_receipt": "research_entity/continuity/receipts/2026-08-24_GO_866_INFERENCE_V4_ATTESTATION_JSPACE_REENTRY_GPT56SOL_1728P0700.json",
+  "all_worker_protocol": "research_entity/claycode/CLAYCODE_ALL_WORKERS_EXECUTION_DIRECTIVE_8_66.md",
   "legacy_scope": "Xeno/XCU are transitional compatibility/research aliases only. Mini Entity/MicroEntity, ClayVerse and Frank remain historical implementation or donor provenance unless explicitly re-admitted."
 }

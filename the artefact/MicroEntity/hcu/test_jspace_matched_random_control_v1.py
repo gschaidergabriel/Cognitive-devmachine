@@ -55,10 +55,20 @@ class JSpaceMatchedRandomControlTests(unittest.TestCase):
             MAX_RELATIVE_L2_ERROR,
         )
 
-    def test_zero_nonfinite_bad_dimension_and_bad_seed_fail_closed(self):
-        for source in ((0.0, 0.0), (float("nan"), 1.0), (1.0,), (1.0, float("inf"))):
+    def test_zero_nonfinite_bad_dimension_bad_seed_and_inexact_int_fail_closed(self):
+        for source in (
+            (0.0, 0.0),
+            (float("nan"), 1.0),
+            (1.0,),
+            (1.0, float("inf")),
+            (9_007_199_254_740_993, 1.0),
+        ):
             with self.subTest(source=source), self.assertRaises(MatchedRandomControlError):
                 derive_matched_random_direction(source, family_id="family:bad", seed=1)
+        with self.assertRaisesRegex(MatchedRandomControlError, "EXACT_BINARY64_REQUIRED"):
+            derive_matched_random_direction(
+                (9_007_199_254_740_993, 1.0), family_id="family:alias", seed=1
+            )
         for seed in (-1, True, 9_007_199_254_740_992):
             with self.subTest(seed=seed), self.assertRaises(MatchedRandomControlError):
                 derive_matched_random_direction((1.0, 2.0), family_id="family:bad-seed", seed=seed)

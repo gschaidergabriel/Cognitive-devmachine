@@ -6,6 +6,11 @@ This module is a derived verifier over the existing canonical MiniUnifiedDB tabl
 rows, commits evidence, or opens a competing state authority. Its purpose is to let downstream
 J-Space/training code prove that a claimed ModelInputControlAdmission already existed before
 validation rather than accidentally minting it by calling the admission path.
+
+All canonical reads are performed inside one SQLite read transaction so generation, parent,
+binding and invocation rows come from one database snapshot. The transaction is always rolled
+back after validation (including the success path) because this verifier is intentionally
+read-only and must never commit evidence.
 """
 from __future__ import annotations
 
@@ -73,7 +78,9 @@ def require_existing_model_input_control_admission(
     """Return the deterministic admission record only if all canonical rows already exist.
 
     The function is intentionally read-only. Missing control-admission rows are rejection,
-    never an invitation to call INSERT from inside a validator.
+    never an invitation to call INSERT from inside a validator. A single explicit read
+    transaction pins every canonical lookup to one SQLite snapshot and is rolled back before
+    returning so this verifier cannot accidentally commit evidence.
     """
     _need(isinstance(db, sqlite3.Connection), "SQLITE_CONNECTION_REQUIRED")
     _need(not db.in_transaction, "CALLER_TRANSACTION_FORBIDDEN")
@@ -81,6 +88,9 @@ def require_existing_model_input_control_admission(
     _need(isinstance(binding, ModelInputControlBinding), "MODEL_INPUT_CONTROL_BINDING_REQUIRED")
 
     try:
+        # BEGIN is intentionally deferred/read-only: the first canonical SELECT below fixes one
+        # SQLite snapshot for all subsequent parent/binding/invocation reads. We never COMMIT.
+        db.execute("BEGIN")
         live_generation = _current_generation(db)
         _need(live_generation == current_generation, "STALE_MODEL_INPUT_CONTROL_READ_GENERATION")
         _need(binding.generation == current_generation, "MODEL_INPUT_CONTROL_BINDING_GENERATION_MISMATCH")
@@ -160,6 +170,7 @@ def require_existing_model_input_control_admission(
         # A final field-set round trip makes accidental dataclass drift fail here instead of
         # silently changing the downstream closure identity.
         _need(set(asdict(admission)) == set(material) | {"admission_sha256"}, "MODEL_INPUT_CONTROL_ADMISSION_FIELD_SET_MISMATCH")
+        db.rollback()
         return admission
     except (
         ModelInputControlAdmissionReadError,
@@ -167,8 +178,12 @@ def require_existing_model_input_control_admission(
         ModelInputControlBindingError,
         sqlite3.Error,
     ):
+        if db.in_transaction:
+            db.rollback()
         raise
     except Exception as exc:
+        if db.in_transaction:
+            db.rollback()
         raise ModelInputControlAdmissionReadError(
             f"MODEL_INPUT_CONTROL_READ_REVALIDATION_FAILED:{exc}"
         ) from exc

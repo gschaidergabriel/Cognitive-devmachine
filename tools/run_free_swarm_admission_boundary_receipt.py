@@ -2,9 +2,9 @@
 """Emit an exact-source FREE Swarm admission-boundary execution receipt.
 
 Executes the canonical admission-boundary unittest modules in a sanitized child
-process. Provider credentials are not inherited. A Python socket tripwire blocks
-and records any unmocked Python network connection attempt. The canonical tests
-retain their own per-case secret/network tripwire assertions.
+process. Provider credentials are not inherited. A Python socket/DNS tripwire
+blocks and records any unmocked Python network connection or resolution attempt.
+The canonical tests retain their own per-case secret/network tripwire assertions.
 
 The suite also binds malformed canonical admission, caller-forged FREE payloads,
 and the shared ``rae_secret_loader`` primitive so direct/legacy callers cannot
@@ -173,11 +173,19 @@ def record(kind, target):
 def guarded_connect(self, address):
     return record("socket.connect", address)
 
+def guarded_connect_ex(self, address):
+    return record("socket.connect_ex", address)
+
 def guarded_create_connection(address, *args, **kwargs):
     return record("socket.create_connection", address)
 
+def guarded_getaddrinfo(host, port, *args, **kwargs):
+    return record("socket.getaddrinfo", (host, port))
+
 socket.socket.connect = guarded_connect
+socket.socket.connect_ex = guarded_connect_ex
 socket.create_connection = guarded_create_connection
+socket.getaddrinfo = guarded_getaddrinfo
 suite = unittest.defaultTestLoader.loadTestsFromNames(sys.argv[1:])
 result = unittest.TextTestRunner(verbosity=2).run(suite)
 raise SystemExit(0 if result.wasSuccessful() else 1)

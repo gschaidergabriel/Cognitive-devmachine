@@ -172,6 +172,32 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
         finally:
             MOD._attested_zero_cost_providers = original_parser
 
+    def test_capability_receipt_uses_one_environment_snapshot(self):
+        environment_reads = []
+        original_environment = MOD.os.environ
+
+        class ChangingEnvironment(dict):
+            def get(self, name, default=None):
+                if name == "NVIDIA_API_KEY":
+                    environment_reads.append(name)
+                    return "first-snapshot-key" if len(environment_reads) == 1 else None
+                return None
+
+        MOD.os.environ = ChangingEnvironment()
+        try:
+            capability_receipt = MOD.receipt()
+        finally:
+            MOD.os.environ = original_environment
+
+        configured = [
+            row["provider_id"]
+            for row in capability_receipt["inventory"]
+            if row["configured"]
+        ]
+        self.assertEqual(configured, ["nvidia"])
+        self.assertEqual(capability_receipt["route"]["selected"], "nvidia")
+        self.assertEqual(environment_reads, ["NVIDIA_API_KEY"])
+
     def test_text_request_rejects_active_string_subclasses(self):
         leaked_text = "request-string-method-must-not-run"
 

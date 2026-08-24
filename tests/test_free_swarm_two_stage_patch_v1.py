@@ -83,9 +83,40 @@ def test_bad_stage2_apply_check_falls_back_to_original_candidate(tmp_path,monkey
     assert '"event":"APPLY_CHECK_FAILED"' in (tmp_path/"artifacts/two_stage_patch/events.jsonl").read_text(encoding="utf-8")
 
 
+def test_stage2_provider_rate_limit_is_not_hidden_by_stage1_success(tmp_path,monkeypatch):
+    repo,commit,tree,_=_repo(tmp_path)
+    first=_payload(_delta(),2)
+    second_error={"error":{"message":"rate limited"}}
+    request=mock.Mock(side_effect=[(200,{},first),(429,{"retry-after":"7"},second_error)])
+    monkeypatch.setenv("CLAY_SWARM_ARTIFACT_ROOT",str(tmp_path/"artifacts"))
+    v3=_fake_v3(repo,commit,tree,request);two.install(v3)
+
+    status,headers,payload=v3.fabric.base.request_chat(SimpleNamespace(name="openrouter"),"key","model","stage1",1000,30)
+
+    assert request.call_count==2
+    assert status==429
+    assert headers["retry-after"]=="7"
+    assert payload["error"]["message"]=="rate limited"
+    assert payload["usage"]["total_tokens"]==2
+    assert '"event":"STAGE2_REQUEST_FAILED"' in (tmp_path/"artifacts/two_stage_patch/events.jsonl").read_text(encoding="utf-8")
+
+
 def test_unsafe_target_never_triggers_second_call(tmp_path,monkeypatch):
     repo,commit,tree,_=_repo(tmp_path)
     first=_payload(_delta(target="../secret.env"),2)
+    request=mock.Mock(return_value=(200,{},first))
+    monkeypatch.setenv("CLAY_SWARM_ARTIFACT_ROOT",str(tmp_path/"artifacts"))
+    v3=_fake_v3(repo,commit,tree,request);two.install(v3)
+
+    _,_,payload=v3.fabric.base.request_chat(SimpleNamespace(name="openrouter"),"key","model","stage1",1000,30)
+
+    assert request.call_count==1
+    assert two._extract_text(payload)==two._extract_text(first)
+
+
+def test_non_string_target_is_not_coerced_into_a_repository_path(tmp_path,monkeypatch):
+    repo,commit,tree,_=_repo(tmp_path)
+    first=_payload(_delta(target=123),2)
     request=mock.Mock(return_value=(200,{},first))
     monkeypatch.setenv("CLAY_SWARM_ARTIFACT_ROOT",str(tmp_path/"artifacts"))
     v3=_fake_v3(repo,commit,tree,request);two.install(v3)

@@ -1,0 +1,55 @@
+name: Trigger1 observable Qwen3-0.6B FREE vector run
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - 'research_entity/runtime/trigger1_exec_requests/*.json'
+
+permissions:
+  contents: read
+
+jobs:
+  execute-trigger1:
+    if: github.event.pull_request.user.login == 'gschaidergabriel'
+    runs-on: self-hosted
+    timeout-minutes: 12
+    steps:
+      - name: Checkout PR head
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Execute same bounded FREE experiment
+        id: experiment
+        shell: bash
+        env:
+          CLAY_FREE_PROVIDER_BUDGET_DB: /tmp/clay-trigger1-pr/provider_budget.sqlite3
+          CLAY_SWARM_ARTIFACT_ROOT: /tmp/clay-trigger1-pr/free-lane
+        run: |
+          set -u
+          mkdir -p /tmp/clay-trigger1-pr
+          set +e
+          python3 tools/free_swarm_exec_with_vault.py \
+            python3 tools/trigger1_openrouter_qwen06_logit_vector_execute.py \
+            --output /tmp/clay-trigger1-pr/experiment.json \
+            > /tmp/clay-trigger1-pr/stdout.log 2>&1
+          rc=$?
+          set -e
+          echo "experiment_rc=${rc}" >> "$GITHUB_OUTPUT"
+          if [ ! -s /tmp/clay-trigger1-pr/experiment.json ]; then
+            printf '{"schema":"CLAY_TRIGGER1_OPENROUTER_QWEN06_LOGIT_VECTOR_EXPERIMENT/v1","status":"BLOCKED_BEFORE_RESULT","process_exit_code":%s,"secret_exposed":false,"paid_fallback_attempt_count":0,"credit_scope":"NONE"}\n' "$rc" > /tmp/clay-trigger1-pr/experiment.json
+          fi
+          exit 0
+
+      - name: Upload sanitized experiment evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: trigger1-qwen06-logit-vector
+          path: |
+            /tmp/clay-trigger1-pr/experiment.json
+            /tmp/clay-trigger1-pr/free-lane/free_lane_execution_receipts.jsonl
+          if-no-files-found: warn
+          retention-days: 7

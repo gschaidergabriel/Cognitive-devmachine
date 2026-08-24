@@ -123,21 +123,30 @@ def _bump(con: sqlite3.Connection,key: str,n: int=1) -> None:
 def review_candidate(con: sqlite3.Connection, cid: str, reviewers: list[tuple[str,str,str]]):
     reviewers=[r for r in reviewers if r[1] not in LLM_PROVIDERS or provider_is_admitted_free(r[1])]
     accepted,agg=_ORIGINAL_REVIEW(con,cid,reviewers)
-    if accepted:
-        agg["panel_class"]="PREFERRED_NVIDIA_PLUS_MISTRAL"; return True,agg
+    requested_mistral=sum(
+        1 for lane,provider,model in reviewers
+        if provider=="mistral" or "mistral" in lane.lower() or "mistral" in model.lower()
+    )
+    if accepted and requested_mistral>=2:
+        agg=dict(agg or {}); agg["panel_class"]="PREFERRED_NVIDIA_PLUS_MISTRAL"; return True,agg
     rows=con.execute("SELECT lane,provider,model,intrinsic_consistency,grf_compatibility,project_fit,novelty,hard_contradiction FROM review_votes WHERE candidate_id=?",(cid,)).fetchall()
     latest={str(r[0]):r for r in rows}; votes=list(latest.values())
     if len(votes)<3:
         _bump(con,"review_underfilled"); con.commit()
-        agg["panel_class"]="UNDERFILLED"; agg["votes_observed"]=len(votes)
+        agg=dict(agg or {}); agg["panel_class"]="UNDERFILLED"; agg["votes_observed"]=len(votes)
         d.emit("review_underfilled",candidate=cid,votes=len(votes),required=3)
         return False,agg
     has_nvidia=any(str(r[0])=="nvidia_reviewer" for r in votes)
-    actual_mistral=sum(1 for r in votes if "mistral" in str(r[0]).lower() or "mistral" in str(r[2]).lower())
+    actual_mistral=sum(1 for r in votes if str(r[1])=="mistral" or "mistral" in str(r[0]).lower() or "mistral" in str(r[2]).lower())
     if not has_nvidia:
-        _bump(con,"review_underfilled_no_nvidia"); con.commit(); agg["panel_class"]="UNDERFILLED_NO_NVIDIA"; return False,agg
+        _bump(con,"review_underfilled_no_nvidia"); con.commit(); agg=dict(agg or {}); agg["panel_class"]="UNDERFILLED_NO_NVIDIA"; return False,agg
     def med(idx:int)->float:return float(statistics.median(float(r[idx] or 0.0) for r in votes))
-    provisional={"votes":len(votes),"intrinsic":med(3),"grf":med(4),"fit":med(5),"novelty":med(6),"hard":any(bool(r[7]) for r in votes),"lanes":[str(r[0]) for r in votes],"panel_class":"PREFERRED_NVIDIA_PLUS_MISTRAL" if actual_mistral>=2 else "PROVISIONAL_NON_MISTRAL_FALLBACK"}
+    provisional={
+        "votes":len(votes),"intrinsic":med(3),"grf":med(4),"fit":med(5),"novelty":med(6),
+        "hard":any(bool(r[7]) for r in votes),"lanes":[str(r[0]) for r in votes],
+        "panel_class":"PREFERRED_NVIDIA_PLUS_MISTRAL" if actual_mistral>=2 else "PROVISIONAL_NON_MISTRAL_FALLBACK",
+        "independence_class":"PREFERRED_PANEL" if actual_mistral>=2 else "GOODMAN_COLLAPSED_FREE_ROUTER_FALLBACK",
+    }
     thresholds=(0.72,0.65,0.55,0.45) if actual_mistral>=2 else (0.80,0.75,0.65,0.55)
     scores=(provisional["intrinsic"],provisional["grf"],provisional["fit"],provisional["novelty"])
     gaps=[max(0.0,t-s) for s,t in zip(scores,thresholds)]
@@ -145,7 +154,13 @@ def review_candidate(con: sqlite3.Connection, cid: str, reviewers: list[tuple[st
     provisional["thresholds"]={"intrinsic":thresholds[0],"grf":thresholds[1],"fit":thresholds[2],"novelty":thresholds[3]}
     provisional["score_gaps"]={"intrinsic":gaps[0],"grf":gaps[1],"fit":gaps[2],"novelty":gaps[3]}
     if ok:
-        con.execute("UPDATE candidates SET status=? WHERE id=?",("ACCEPTED" if actual_mistral>=2 else "PROVISIONAL_ACCEPTED",cid)); _bump(con,"review_pass"); con.commit(); return True,provisional
+        if actual_mistral>=2:
+            con.execute("UPDATE candidates SET status='ACCEPTED' WHERE id=?",(cid,)); _bump(con,"review_pass"); con.commit(); return True,provisional
+        con.execute("UPDATE candidates SET status='PROVISIONAL_ACCEPTED' WHERE id=?",(cid,))
+        _bump(con,"review_provisional_pass"); con.commit()
+        provisional["canonical_acceptance"]=False
+        d.emit("knowledge_provisional_accept",candidate=cid,review=provisional)
+        return False,provisional
     # Near miss = structurally sound, no hard contradiction, and total threshold gap small.
     if not provisional["hard"] and sum(gaps)<=0.22:
         _bump(con,"near_miss_candidates"); con.commit(); provisional["near_miss"]=True

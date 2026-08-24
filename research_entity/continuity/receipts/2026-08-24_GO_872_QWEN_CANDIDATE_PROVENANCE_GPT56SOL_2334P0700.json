@@ -1,0 +1,99 @@
+{
+  "schema": "CLAY_GO_RESEARCH_DELTA/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol / ChatGPT project organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority": {
+    "supervisor": "8.72",
+    "mode": "FREE_ONLY",
+    "canonical_repository": "gschaidergabriel/clay-global-research-entity",
+    "canonical_branch": "main",
+    "canonical_main_observed_after_reentry": "f5d22d319de2f001b81c650af233b6d2cd3a1774"
+  },
+  "coordination": {
+    "shared_immutable_request_id_exposed_to_this_organ": false,
+    "available_user_message_time_precision": "MINUTE_ONLY",
+    "unusual_experiment_status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_interventions_executed": 0,
+    "reason": "The canonical atomic unusual-experiment protocol requires a reproducible shared immutable macrocycle/request identity or sufficiently precise immutable message metadata; neither is exposed to this organ."
+  },
+  "observed_convergence": {
+    "current_causal_trigger1_entrypoint": "tools/trigger1_local_qwen06_midlayer_causal.sh",
+    "effective_causal_chain": [
+      "tools/trigger1_local_qwen06_intermediate.sh",
+      "tools/trigger1_local_qwen06_intermediate_execute.py",
+      "tools/trigger1_intermediate_promotion_bridge.py",
+      "tools/trigger1_jspace_promotion_gate.py"
+    ],
+    "scientific_controls": [
+      "BASELINE",
+      "+VECTOR",
+      "SIGN_FLIP",
+      "NULL_VECTOR",
+      "ORTHOGONAL_SAME_NORM",
+      "PERMUTED_SAME_NORM",
+      "counterbalanced label mapping",
+      "wrong-layer evidence",
+      "lesion/rescue"
+    ],
+    "canonical_source_identity_primitive": "tools/git_source_identity_v1.py",
+    "forge_distillery_terminal_job": {
+      "run_id": 32742535392,
+      "job_id": 97480167751,
+      "status_observed": "queued",
+      "runtime_credit_minted": false
+    }
+  },
+  "delta": {
+    "problem": "The retained legacy local-Qwen source-execution envelope rewrote the outer runtime receipt but promotion-candidate source_identity did not itself carry the exact executor or envelope bytes. This left candidate-level provenance dependent on an enclosing receipt.",
+    "counterhypothesis": "Adding another causal Qwen wrapper would close the provenance gap more directly.",
+    "counterhypothesis_rejected_reason": "Current main already has one stronger causal compatibility launcher plus intermediate promotion bridge. Adding a second causal mode would duplicate the semantic execution lane and violate convergence/second-authority discipline.",
+    "implementation": [
+      {
+        "commit": "00088faba2f3b937a2d3e1ee21623651813c34f4",
+        "path": "tools/trigger1_attested_local_qwen_api.py",
+        "effect": "Keeps only the two legacy fixed modes; upgrades binding schema to v2; binds envelope SHA-256 and executor SHA-256; copies canonical exact source identity plus executor/envelope digests into candidate source_identity."
+      },
+      {
+        "commit": "f5dc92242f27d19098be10b8e8963e733ac7a546",
+        "path": "tests/test_trigger1_source_execution_envelope.py",
+        "effect": "Extends regression contract to require canonical dirty-state/source identity fields and direct candidate binding of executor/envelope digests."
+      }
+    ],
+    "duplicate_lane_created": false
+  },
+  "verification": {
+    "source_reentry": "PASS_OBSERVED_ON_MAIN",
+    "updated_wrapper_blob_sha1": "b4910d306e2f714a07acf7c783037de33da9cb5f",
+    "updated_test_blob_sha1": "5641c70397f814cc560232806bb6a9830c362f6a",
+    "github_actions_test_run_for_commit": "UNOBSERVED_NO_PR_TRIGGERED_RUN_RETURNED",
+    "runtime_model_execution": "NOT_EXECUTED",
+    "evidence_scope": "SOURCE_AND_REGRESSION_CONTRACT_ONLY"
+  },
+  "three_tracks": {
+    "track_a_entityos_executable_convergence": {
+      "status": "ADVANCED_BY_CANONICAL_FUSION_OBSERVED",
+      "delta": "Current main routes the retained historical Trigger-1 workflow entrypoint into the strongest intermediate causal protocol and bridge while Forge-to-Distillery live runtime remains queued/unproven."
+    },
+    "track_b_hcu_and_typed_entry": {
+      "status": "ADVANCED_HCU_PROVENANCE_PRIMITIVE",
+      "delta": "Promotion candidates from retained legacy local-Qwen envelopes now carry exact canonical source identity plus executor/envelope byte identity directly, improving HCU evidence/provenance closure without a second state, effect, ingress or causal execution authority."
+    },
+    "track_c_global_jspace_gwt_training_readiness": {
+      "status": "ADVANCED_SOURCE_AND_EVIDENCE_READINESS",
+      "delta": "Candidate-level provenance is hardened while the sole stronger causal J-Space lane remains counterbalanced, wrong-layer and lesion/rescue gated. No model/J-Space/training runtime credit is minted without a lease-admitted exact-source run."
+    }
+  },
+  "credits_after_cycle": {
+    "whole_entityos_hcu_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_action": "Wait for no background work: on the next callable exact-current gate, first re-enter main. For Forge, require a terminal repository-bound witness with live Distillery promotion and replay-zero semantics. For Trigger-1, do not dispatch until a canonical atomic claim can be referenced reproducibly; then execute exactly one strongest-intermediate run and promote only its exact bounded evidence scope.",
+  "evidence_boundary": "This macrocycle performed source/control-plane/provenance work only. No new unusual experiment or model invocation was executed; source and regression-contract changes do not establish model-specific J-Space causality, full HCU, training or whole EntityOS acceptance."
+}

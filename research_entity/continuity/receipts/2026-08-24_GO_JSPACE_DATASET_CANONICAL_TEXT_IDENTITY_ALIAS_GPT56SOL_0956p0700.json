@@ -1,0 +1,94 @@
+{
+  "schema": "ENTITYOS_HCU_GO_JSPACE_DATASET_CANONICAL_TEXT_IDENTITY_ALIAS/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "persistent_research_entity": "Clay",
+  "temporary_worker": "GPT-5.6 Sol organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "authority": {
+    "canonical_main_observed_before_write": "9b995c8475ff5b12574225cc76cd242e9a7a64e1",
+    "schema": "8.63",
+    "mode": "FREE_ONLY",
+    "paid_fallback": "FORBIDDEN",
+    "together_inference_training_preflight_key_lookup": "FORBIDDEN",
+    "vps_self_hosted_production_testing": "FORBIDDEN"
+  },
+  "coordination": {
+    "upstream_shared_immutable_macrocycle_or_request_id_exposed": false,
+    "available_exact_user_message_time_precision": "MINUTE_ONLY",
+    "unusual_experiment_status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_experiments_run": 0,
+    "work_class": "ORDINARY_SOURCE_REVIEW_STATIC_SEMANTIC_REPRODUCTION_AND_FUSION"
+  },
+  "retained_lanes": {
+    "hcu_donor": "gschaidergabriel/clay-global-research-entity#1263",
+    "donor_live_head_observed_during_review": "a347a4f50d326f4b922a462c49aeaf60dccd000a",
+    "execution_controller": "gschaidergabriel/Dr.-Unterweger#810",
+    "executor_live_head_observed_late_cycle": "588315b63f4f4255f6e73bd604cbc1789cbe12c9"
+  },
+  "execution_reentry": {
+    "latest_executor_preview_observed": {
+      "deployment_id": "dpl_3brnpJBb1jq9mQE9yGuHx1ahVM6m",
+      "git_sha": "588315b63f4f4255f6e73bd604cbc1789cbe12c9",
+      "state": "BUILDING"
+    },
+    "latest_ready_quota_guard_preview_observed": {
+      "deployment_id": "dpl_EtVgJ96pobVv3zqh9jozAKHgfNWa",
+      "git_sha": "b7bd0076ccce593767c86ff0e026a09a8e88b67f",
+      "state": "READY",
+      "commit_message": "guard(hcu): fail closed on unobserved Sandbox quota"
+    },
+    "function_or_sandbox_invoked_by_this_organ": false,
+    "runtime_credit_change": 0,
+    "reason": "The live executor head moved beyond the READY quota-guard preview and the exact-head preview was still BUILDING at observation; no stale deployment was projected into runtime evidence."
+  },
+  "source_finding": {
+    "path": "the artefact/MicroEntity/hcu/jspace_dataset_admission_gate_v1.py",
+    "observed_blob_sha": "ceeb84c5a749049be2581302b7bab80e3dae9b72",
+    "observed_at_donor_head": "a347a4f50d326f4b922a462c49aeaf60dccd000a",
+    "classification": "SOURCE_INVARIANT_FAIL_OPEN_CANONICAL_TEXT_IDENTITY_ALIAS",
+    "mechanism": [
+      "_text rejects empty text but returns value.strip()",
+      "_sha256 delegates to _text before validating lowercase digest syntax",
+      "_sha256_ref delegates to _text before validating the sha256: reference",
+      "cell_id, role, basis_id, vector-control condition and other cross-bound identities are normalized through _text before equality",
+      "credit/status labels are uppercased before equality or enum checks"
+    ],
+    "static_semantic_reproduction": {
+      "transition_cell_id": " cell-02 ",
+      "prototype_cell_id": "cell-02",
+      "training_cell_id": "cell-02",
+      "normalized_cross_binding_result": "cell-02",
+      "sha_with_external_whitespace_is_trimmed_before_digest_syntax_check": true
+    },
+    "risk": "Byte-distinct identity claims can collapse to one normalized value at the serious J-Space dataset-admission boundary. Self-authenticating outer trace bytes do not remove this semantic alias if equality is performed only after normalization.",
+    "counterhypothesis": "Whitespace/case normalization is intentional semantic canonicalization and therefore safe.",
+    "counterhypothesis_rejection": "Current EntityOS/HCU identity law treats exact provenance/identity ambiguity as fail-closed and already uses exact RFC8785/JCS content identities for admitted evidence. Silent normalization at an identity boundary admits two distinct external spellings without an explicit canonicalization contract or rejection signal.",
+    "recommended_existing_lane_fix": "Keep the existing DatasetAdmission authority; separate permissive nonempty text parsing from canonical identity parsing, reject value != value.strip() for identity/hash/ref fields, require canonical enum spellings, and add whitespace/case alias regressions. Re-read the live donor head before patching because PR1263 is moving rapidly."
+  },
+  "fusion": {
+    "pr1263_comment_id": 5390217458,
+    "second_dataset_authority_created": false,
+    "source_file_modified_by_this_organ": false,
+    "reason_no_direct_source_write": "The retained donor head advanced repeatedly during inspection. Writing against a moving semantic file without re-fusing concurrent changes would risk overwriting or duplicating active donor work; the bounded finding was therefore returned to the single retained donor lane and persisted append-only on canonical main."
+  },
+  "go_tracks": {
+    "track_a_entityos_executable_convergence": "ADVANCED_BY_REENTRY: executor moved through an exact-head READY quota-fail-closed repair and then to a newer live head whose preview was BUILDING; no stale READY deployment was credited and no unauthorized invocation occurred.",
+    "track_b_hcu_typed_entry": "ADVANCED_BY_SOURCE_INVARIANT_DISCOVERY: identified a canonical-text identity alias at the retained J-Space DatasetAdmission boundary and fused the fix requirement into PR1263 without creating a second authority.",
+    "track_c_global_jspace_training_readiness": "ADVANCED_BY_TRAINING_DATA_BOUNDARY_HARDENING_REQUIREMENT: serious J-Space training data must reject byte-distinct identity spellings rather than silently normalize them before causal cross-binding."
+  },
+  "credits_after_cycle": {
+    "whole_entityos_hcu_runtime": 0,
+    "full_hcu_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "readme": {
+    "status": "NO_CHANGE_WITH_REASON",
+    "reason": "the artefact/README.md is a rapidly moving whole-system surface under active parallel writes; this append-only receipt and retained-lane comment preserve the exact bounded delta without overwriting fresher state."
+  },
+  "next_exact_gate": "Re-enter live PR1263 and verify whether canonical identity-text rejection plus alias regressions have been fused. Re-enter live PR810 and its exact-head preview; only execute if the then-current exact source and all FREE_ONLY cost/quota/no-charge fences are directly satisfied. Preserve zero runtime/model/training credit otherwise."
+}

@@ -26,6 +26,7 @@ try:
         SteerableExecutor,
         SteeringObservation,
         _check_receipt,
+        _score,
         applied_vector_sha256,
         search_activation_steering,
     )
@@ -45,6 +46,7 @@ except ImportError:
         SteerableExecutor,
         SteeringObservation,
         _check_receipt,
+        _score,
         applied_vector_sha256,
         search_activation_steering,
     )
@@ -310,8 +312,9 @@ def search_activation_steering_with_permuted_nulls(
     )
 
     seed_values = tuple(seeds)
+    base_trials = len(seed_values) * (1 + len(layer_ids) * len(alphas) + 1)
     extra_trials = len(permutation_seed_values) * len(seed_values)
-    if extra_trials > MAX_TRIALS:
+    if base_trials + extra_trials > MAX_TRIALS:
         raise ActivationSteeringError("PERMUTED_CONTROL_TRIAL_BUDGET_EXCEEDED")
 
     controls: list[PermutedNullObservation] = []
@@ -347,10 +350,7 @@ def search_activation_steering_with_permuted_nulls(
                 vector_sha256=control.applied_vector_sha256,
                 require_activation_change=True,
             )
-            score = float(score_fn(observation))
-            if not math.isfinite(score):
-                raise ActivationSteeringError("score:FINITE_NUMBER_REQUIRED")
-            scores.append(score)
+            scores.append(_score(score_fn(observation)))
 
         deltas = tuple(score - baseline for score, baseline in zip(scores, base.baseline_scores))
         controls.append(PermutedNullObservation(

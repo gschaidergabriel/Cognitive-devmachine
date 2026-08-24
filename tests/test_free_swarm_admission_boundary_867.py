@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import argparse
 import asyncio
-import importlib
 import json
 import os
 from pathlib import Path
@@ -29,14 +28,26 @@ SECRET_ENV_NAMES = {
 }
 
 
-def _bootstrap(path: Path, epoch: str = "8.67") -> Path:
-    target = path / "bootstrap.json"
-    target.write_text(json.dumps({"schema_version": epoch}), encoding="utf-8")
-    return target
+def _authority(root: Path, epoch: str = "8.67") -> Path:
+    rel = Path("research_entity/claycode/autonomous/SUPERVISOR_STEERING_TEST.json")
+    steering = root / rel
+    steering.parent.mkdir(parents=True, exist_ok=True)
+    steering.write_text(json.dumps({
+        "schema_version": epoch,
+        "active_program": "ENTITYOS_HCU",
+        "product": "EntityOS",
+        "integrated_cognition_compute_architecture": "HCU",
+    }), encoding="utf-8")
+    inbox = root / "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json"
+    inbox.write_text(json.dumps({
+        "schema_version": epoch,
+        "steering": rel.as_posix(),
+    }), encoding="utf-8")
+    return inbox
 
 
-def _admission(path: Path, cost_class: str, admitted: bool, epoch: str = "8.67") -> Path:
-    target = path / "admission.json"
+def _admission(root: Path, cost_class: str, admitted: bool, epoch: str = "8.67") -> Path:
+    target = root / "admission.json"
     providers = {
         name: {
             "admitted": admitted,
@@ -57,6 +68,24 @@ def _admission(path: Path, cost_class: str, admitted: bool, epoch: str = "8.67")
     return target
 
 
+def _mixed_admission(root: Path, epoch: str = "8.67") -> Path:
+    target = root / "admission.json"
+    target.write_text(json.dumps({
+        "schema": admission_mod.SCHEMA,
+        "authority_epoch": epoch,
+        "mode": "FREE_ONLY",
+        "product": "EntityOS",
+        "compute_architecture": "HCU",
+        "source": "ENTITYOS_HCU_CONTROL_PLANE",
+        "providers": {
+            "groq": {"admitted": True, "cost_class": "FREE", "evidence_ref": "test:groq:free"},
+            "mistral": {"admitted": False, "cost_class": "UNKNOWN", "evidence_ref": "test:mistral:unknown"},
+            "nvidia": {"admitted": False, "cost_class": "UNKNOWN", "evidence_ref": "test:nvidia:unknown"},
+        },
+    }), encoding="utf-8")
+    return target
+
+
 def _args(output_dir: str) -> argparse.Namespace:
     return argparse.Namespace(
         hours=0.001,
@@ -68,8 +97,39 @@ def _args(output_dir: str) -> argparse.Namespace:
     )
 
 
+class TrapEnv(dict[str, str]):
+    def __init__(self, *args, **kwargs) -> None:
+        super().__init__(*args, **kwargs)
+        self.secret_reads: list[str] = []
+
+    def _touch(self, key: object) -> None:
+        name = str(key)
+        if name in SECRET_ENV_NAMES or any(name.startswith(prefix + "_") for prefix in SECRET_ENV_NAMES):
+            self.secret_reads.append(name)
+
+    def get(self, key, default=None):  # type: ignore[override]
+        self._touch(key)
+        return super().get(key, default)
+
+    def __getitem__(self, key):  # type: ignore[override]
+        self._touch(key)
+        return super().__getitem__(key)
+
+    def items(self):  # type: ignore[override]
+        for key, value in super().items():
+            self._touch(key)
+            yield key, value
+
+
 class FreeProviderAdmissionBoundaryTests(unittest.TestCase):
-    def _run_with_tripwires(self, admission_path: Path, bootstrap_path: Path, *, global_attested: bool) -> tuple[int, int, int]:
+    def _patch_authority(self, root: Path, admission_path: Path, inbox_path: Path):
+        return (
+            mock.patch.object(admission_mod, "ROOT", root),
+            mock.patch.object(admission_mod, "ADMISSION_PATH", admission_path),
+            mock.patch.object(admission_mod, "SUPERVISOR_INBOX_PATH", inbox_path),
+        )
+
+    def _run_with_tripwires(self, admission_path: Path, root: Path, inbox_path: Path, *, global_attested: bool) -> tuple[int, int, int]:
         secret_reads = 0
         network_attempts = 0
         original_getenv = os.getenv
@@ -87,12 +147,10 @@ class FreeProviderAdmissionBoundaryTests(unittest.TestCase):
             raise AssertionError("network attempted before FREE admission")
 
         env = {"CLAY_FREE_ONLY_ATTESTED": "1"} if global_attested else {}
-        with tempfile.TemporaryDirectory() as out, \
-             mock.patch.object(admission_mod, "ADMISSION_PATH", admission_path), \
-             mock.patch.object(admission_mod, "BOOTSTRAP_PATH", bootstrap_path), \
+        p_root, p_adm, p_inbox = self._patch_authority(root, admission_path, inbox_path)
+        with tempfile.TemporaryDirectory() as out, p_root, p_adm, p_inbox, \
              mock.patch.object(base, "load_protocol", return_value=base.PROTOCOL_BEGIN + "\n" + base.PROTOCOL_END), \
              mock.patch.object(base.os, "getenv", side_effect=guarded_getenv), \
-             mock.patch.object(base, "request_chat", side_effect=network_tripwire), \
              mock.patch.object(base.urllib.request, "urlopen", side_effect=network_tripwire), \
              mock.patch.dict(os.environ, env, clear=True):
             code = asyncio.run(base.run(_args(out)))
@@ -102,8 +160,8 @@ class FreeProviderAdmissionBoundaryTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as td:
             root = Path(td)
             adm = _admission(root, "FREE", True)
-            boot = _bootstrap(root)
-            code, secret_reads, network = self._run_with_tripwires(adm, boot, global_attested=False)
+            inbox = _authority(root)
+            code, secret_reads, network = self._run_with_tripwires(adm, root, inbox, global_attested=False)
         self.assertEqual(code, 3)
         self.assertEqual(secret_reads, 0)
         self.assertEqual(network, 0)
@@ -113,8 +171,8 @@ class FreeProviderAdmissionBoundaryTests(unittest.TestCase):
             with self.subTest(cost_class=cost_class), tempfile.TemporaryDirectory() as td:
                 root = Path(td)
                 adm = _admission(root, cost_class, False)
-                boot = _bootstrap(root)
-                code, secret_reads, network = self._run_with_tripwires(adm, boot, global_attested=True)
+                inbox = _authority(root)
+                code, secret_reads, network = self._run_with_tripwires(adm, root, inbox, global_attested=True)
                 self.assertEqual(code, 4)
                 self.assertEqual(secret_reads, 0)
                 self.assertEqual(network, 0)
@@ -123,8 +181,8 @@ class FreeProviderAdmissionBoundaryTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as td:
             root = Path(td)
             missing = root / "missing.json"
-            boot = _bootstrap(root)
-            code, secret_reads, network = self._run_with_tripwires(missing, boot, global_attested=True)
+            inbox = _authority(root)
+            code, secret_reads, network = self._run_with_tripwires(missing, root, inbox, global_attested=True)
         self.assertEqual(code, 5)
         self.assertEqual(secret_reads, 0)
         self.assertEqual(network, 0)
@@ -133,35 +191,85 @@ class FreeProviderAdmissionBoundaryTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as td:
             root = Path(td)
             adm = _admission(root, "PAID", True)
-            boot = _bootstrap(root)
+            inbox = _authority(root)
             with self.assertRaises(admission_mod.ProviderAdmissionError):
-                admission_mod.load_provider_admission(adm, bootstrap_path=boot)
+                admission_mod.load_provider_admission(adm, supervisor_inbox_path=inbox, root=root)
 
     def test_authority_epoch_mismatch_fails_closed(self) -> None:
         with tempfile.TemporaryDirectory() as td:
             root = Path(td)
             adm = _admission(root, "FREE", True, epoch="8.67")
-            boot = _bootstrap(root, epoch="8.68")
+            inbox = _authority(root, epoch="8.68")
             with self.assertRaisesRegex(admission_mod.ProviderAdmissionError, "AUTHORITY_EPOCH_MISMATCH"):
-                admission_mod.load_provider_admission(adm, bootstrap_path=boot)
+                admission_mod.load_provider_admission(adm, supervisor_inbox_path=inbox, root=root)
 
-    def test_collect_keys_does_not_read_key_env_when_provider_not_admitted(self) -> None:
+    def test_collect_keys_ignores_caller_forged_admission(self) -> None:
         with tempfile.TemporaryDirectory() as td:
             root = Path(td)
             adm = _admission(root, "UNKNOWN", False)
-            boot = _bootstrap(root)
-            with mock.patch.object(admission_mod, "ADMISSION_PATH", adm), \
-                 mock.patch.object(admission_mod, "BOOTSTRAP_PATH", boot), \
-                 mock.patch.object(base.os, "getenv", side_effect=AssertionError("key env read")):
-                self.assertEqual(base.collect_keys(base.PROVIDERS[0]), [])
+            inbox = _authority(root)
+            forged = {
+                "providers": {
+                    "groq": {"admitted": True, "cost_class": "FREE"},
+                }
+            }
+            env = TrapEnv({
+                "CLAY_FREE_ONLY_ATTESTED": "1",
+                "CLAY_GROQ_FREE_ATTESTED": "1",
+                "GROQ_API_KEY": "SECRET_TRIPWIRE",
+            })
+            p_root, p_adm, p_inbox = self._patch_authority(root, adm, inbox)
+            with p_root, p_adm, p_inbox, mock.patch.object(base.os, "environ", env):
+                self.assertEqual(base.collect_keys(base.PROVIDERS[0], forged), [])
+            self.assertNotIn("GROQ_API_KEY", env.secret_reads)
+
+    def test_admitted_provider_does_not_materialize_blocked_provider_secret_values(self) -> None:
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            adm = _mixed_admission(root)
+            inbox = _authority(root)
+            env = TrapEnv({
+                "CLAY_FREE_ONLY_ATTESTED": "1",
+                "CLAY_GROQ_FREE_ATTESTED": "1",
+                "GROQ_API_KEY": "g_fake",
+                "NVIDIA_API_KEY": "n_blocked_secret",
+            })
+            p_root, p_adm, p_inbox = self._patch_authority(root, adm, inbox)
+            with p_root, p_adm, p_inbox, mock.patch.object(base.os, "environ", env):
+                keys = base.collect_keys(base.PROVIDERS[0])
+            self.assertEqual(keys, ["g_fake"])
+            self.assertNotIn("NVIDIA_API_KEY", env.secret_reads)
+
+    def test_direct_request_chat_is_network_blind_without_canonical_free_admission(self) -> None:
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            adm = _admission(root, "UNKNOWN", False)
+            inbox = _authority(root)
+            env = {
+                "CLAY_FREE_ONLY_ATTESTED": "1",
+                "CLAY_GROQ_FREE_ATTESTED": "1",
+            }
+            network_attempts = 0
+
+            def network_tripwire(*args, **kwargs):
+                nonlocal network_attempts
+                network_attempts += 1
+                raise AssertionError("provider socket reached")
+
+            p_root, p_adm, p_inbox = self._patch_authority(root, adm, inbox)
+            with p_root, p_adm, p_inbox, mock.patch.dict(os.environ, env, clear=True), \
+                 mock.patch.object(base.urllib.request, "urlopen", side_effect=network_tripwire):
+                with self.assertRaises(admission_mod.ProviderAdmissionError):
+                    base.request_chat(base.PROVIDERS[0], "fake-key", "fake-model", "probe", 1, 0.01)
+            self.assertEqual(network_attempts, 0)
 
     def test_catalog_discovery_does_not_collect_keys_or_touch_network_when_blocked(self) -> None:
         with tempfile.TemporaryDirectory() as td:
             root = Path(td)
             adm = _admission(root, "UNKNOWN", False)
-            boot = _bootstrap(root)
-            with mock.patch.object(admission_mod, "ADMISSION_PATH", adm), \
-                 mock.patch.object(admission_mod, "BOOTSTRAP_PATH", boot), \
+            inbox = _authority(root)
+            p_root, p_adm, p_inbox = self._patch_authority(root, adm, inbox)
+            with p_root, p_adm, p_inbox, \
                  mock.patch.dict(os.environ, {"CLAY_FREE_ONLY_ATTESTED": "1"}, clear=True), \
                  mock.patch.object(base, "collect_keys", side_effect=AssertionError("secret collection called")), \
                  mock.patch.object(entityos_driver, "fetch_catalog", side_effect=AssertionError("network catalog called")):

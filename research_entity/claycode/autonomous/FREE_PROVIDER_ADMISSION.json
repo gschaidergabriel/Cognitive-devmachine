@@ -1,28 +1,33 @@
 {
   "schema": "ENTITYOS_HCU_FREE_PROVIDER_ADMISSION/v1",
-  "authority_epoch": "8.67",
+  "authority_epoch": "8.68",
   "mode": "FREE_ONLY",
   "product": "EntityOS",
   "compute_architecture": "HCU",
   "source": "ENTITYOS_HCU_CONTROL_PLANE",
-  "default_policy": "FAIL_CLOSED_UNKNOWN_PAID_SUBSCRIPTION_BEFORE_SECRET_LOOKUP_AND_NETWORK_IO",
+  "default_policy": "FAIL_CLOSED_UNKNOWN_PAID_SUBSCRIPTION_OR_UNLISTED_BEFORE_SECRET_LOOKUP_AND_NETWORK_IO",
   "providers": {
     "groq": {
       "admitted": false,
       "cost_class": "UNKNOWN",
-      "evidence_ref": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_67.json#runtime_inventory"
+      "evidence_ref": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_68.json#executed_unadmitted_external_provider_control_breach"
     },
     "mistral": {
       "admitted": false,
       "cost_class": "UNKNOWN",
-      "evidence_ref": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_67.json#runtime_inventory"
+      "evidence_ref": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_68.json#typed_admission_state"
     },
     "nvidia": {
       "admitted": false,
       "cost_class": "UNKNOWN",
-      "evidence_ref": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_67.json#runtime_inventory"
+      "evidence_ref": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_68.json#executed_unadmitted_external_provider_control_breach"
+    },
+    "openrouter": {
+      "admitted": false,
+      "cost_class": "UNKNOWN",
+      "evidence_ref": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_68.json#executed_unadmitted_external_provider_control_breach"
     }
   },
   "runtime_provider_credit": 0,
-  "note": "Environment attestations, credential presence, HTTP 402/429 behavior, model catalogs and provider responses cannot self-admit a provider as FREE. A future control-plane update requires direct evidence that the specific execution class cannot create monetary spend or overage."
+  "note": "8.68 quarantine state. Groq/NVIDIA/OpenRouter historical traffic is preserved as unadmitted execution evidence and is not retroactively classified FREE. Mistral remains UNKNOWN. Environment attestations, credential presence, :free model suffixes, HTTP success/402/429 behavior, model catalogs and provider responses cannot self-admit a provider. A future positive admission requires direct evidence that the exact account/route execution class cannot create monetary charge or overage."
 }

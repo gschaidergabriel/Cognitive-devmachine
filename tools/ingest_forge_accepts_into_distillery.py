@@ -330,6 +330,11 @@ def ingest(forge_eval_path: Path, distillery_db: Path, *, limit: int = 0) -> dic
     con = sqlite3.connect(distillery_db, timeout=30)
     try:
         ensure_schema(con)
+        # Schema migration/DDL is independent of one admission batch. Commit it first,
+        # then acquire write intent before replay lookup so lookup, conflict
+        # classification, packet write, and token counters are one serialized unit.
+        con.commit()
+        con.execute("BEGIN IMMEDIATE")
         for line in forge_eval_path.read_text(encoding="utf-8", errors="replace").splitlines():
             if limit and summary["seen"] >= limit:
                 break

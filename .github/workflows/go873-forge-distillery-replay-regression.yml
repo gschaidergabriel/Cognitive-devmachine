@@ -1,0 +1,27 @@
+name: GO873 Forge Distillery replay-stable regression
+
+on:
+  pull_request:
+    paths:
+      - "tools/ingest_forge_accepts_into_distillery.py"
+      - "tools/forge_evidence_credit_871.py"
+      - "tests/test_forge_distillery_replay_identity_873.py"
+      - "tests/test_forge_distillery_live_bridge_871.py"
+      - ".github/workflows/go873-forge-distillery-replay-regression.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  replay-regression:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - name: Compile current replay bridge
+        run: python3 -m py_compile tools/ingest_forge_accepts_into_distillery.py tools/forge_evidence_credit_871.py
+      - name: Execute current 8.73 replay semantics
+        run: python3 -m unittest -v tests.test_forge_distillery_replay_identity_873
+      - name: Execute existing live bridge wiring regression
+        run: python3 -m unittest -v tests.test_forge_distillery_live_bridge_871

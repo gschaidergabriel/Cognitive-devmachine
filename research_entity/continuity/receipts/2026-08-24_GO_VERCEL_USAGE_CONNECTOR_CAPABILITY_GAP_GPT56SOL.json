@@ -1,0 +1,58 @@
+{
+  "schema": "ENTITYOS_HCU_GO_VERCEL_USAGE_CONNECTOR_CAPABILITY_GAP/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "persistent_research_entity": "Clay",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "authority_epoch": "8.65",
+  "mode": "FREE_ONLY",
+  "observed_main_before_discriminator": "beac5aab519ef031fed8cce37c0062407e651e8e",
+  "retained_lanes": {
+    "hcu_donor": "gschaidergabriel/clay-global-research-entity#1263",
+    "hcu_donor_head_observed": "6904f34387b084605dd5f2d5763482f9cdcf1b66",
+    "executor": "gschaidergabriel/Dr.-Unterweger#810",
+    "executor_head_observed": "2da99e0458809988190c129b04cae913d1f15d92"
+  },
+  "coordination": {
+    "shared_upstream_macrocycle_id_observed": false,
+    "reproducible_atomic_trigger_key_available": false,
+    "unusual_experiment_status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_interventions_executed": 0,
+    "work_class": "ORDINARY_READ_ONLY_CONNECTED_TOOL_CAPABILITY_DISCOVERY"
+  },
+  "observation": {
+    "installed_vercel_tool_count_inspected": 24,
+    "general_account_billing_usage_read_tool_exposed": false,
+    "remaining_sandbox_quota_read_tool_exposed": false,
+    "generic_raw_vercel_api_read_tool_exposed": false,
+    "usage_named_tools": "Only Agent Runs observability tools expose a usage field; they do not report account billing or Sandbox allowance.",
+    "billing_or_sandbox_tool_search": "Only Vercel documentation search matched billing/sandbox; no account-authoritative billing/quota read action was exposed.",
+    "installable_plugin_search": "No installable plugin matched Vercel usage/billing/quota.",
+    "official_documentation_signal": "Vercel documents the read-only `vercel usage` CLI for current-period billing usage and a generic `vercel api [endpoint]` CLI surface, but neither capability is exposed by the currently connected Vercel tool set.",
+    "credential_or_provider_preflight_attempted": false,
+    "paid_or_upgrade_path_attempted": false,
+    "sandbox_create_attempted": false
+  },
+  "hypothesis": "A currently connected or immediately installable Vercel tool can directly provide account-authoritative current billing/Sandbox allowance evidence and open the FREE_ONLY Sandbox gate.",
+  "counterhypothesis": "The current connector/tool ecosystem exposes deployment/runtime/documentation data but no account-authoritative general usage or remaining Sandbox allowance read, so the gate cannot be opened without adding a new admitted read-only capability.",
+  "discriminator_result": "COUNTERHYPOTHESIS_SUPPORTED_ON_CURRENT_TOOL_AND_PLUGIN_SURFACES",
+  "authority_consequence": "Do not infer remaining Sandbox quota from Hobby plan identity, deployment READY state, Agent Run token usage, documentation, or historical Sandbox runs. Sandbox.create remains fail-closed.",
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED: the remaining FREE_ONLY runtime blocker is now implementation-specific: the connected Vercel integration lacks an account-authoritative general usage/quota read capability, and no immediately installable plugin supplies it.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "HCU_NO_CHANGE_WITH_REASON: supervisor 8.65 requires direct quota authority before Sandbox.create; the fixed Python/sqlite3/_sqlite3 environment probe remains inadmissible, so additional source-guard work would violate the runtime-first priority without executable counterevidence.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "TRAINING_READINESS_NO_CHANGE_WITH_REASON: model-specific loader, ModelExecution, InferenceReceipt and J-Space/GWT causal evidence remain downstream of the blocked Sandbox environment gate; paid/provider training lanes remain forbidden."
+  },
+  "credits": {
+    "function_runtime_diagnostic_exact_source": "PASS_AT_DECLARED_NO_SANDBOX_SCOPE_FROM_PRIOR_ADMITTED_EVIDENCE",
+    "sandbox_environment_runtime": 0,
+    "whole_entityos_hcu_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Expose an admitted account-authoritative read-only Vercel billing/usage action equivalent in evidentiary scope to `vercel usage`, with no upgrade, billing mutation, charge path, new credential/key preflight, paid fallback or plan inference. Only if that action directly establishes sufficient included Sandbox allowance may the retained exact-head executor proceed to the fixed environment capability probe.",
+  "evidence_boundary": "This receipt proves only connector/plugin capability absence on the surfaces inspected plus the documented existence of a CLI usage capability. It does not prove remaining quota, Sandbox creation, HCU/model/J-Space execution or training."
+}

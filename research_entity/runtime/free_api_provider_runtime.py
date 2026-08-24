@@ -31,6 +31,10 @@ MAX_PROVIDER_RESPONSE_BYTES = 2_000_000
 MAX_PROVIDER_OUTPUT_TOKENS = 4_096
 MAX_BEARER_TOKEN_CHARACTERS = 8_192
 MAX_ATTEMPT_NONCE_CHARACTERS = 128
+MAX_ZERO_COST_ATTESTATION_CHARACTERS = 1_024
+MAX_BUDGET_EPOCH_CHARACTERS = 256
+MAX_PROVIDER_BASE_URL_CHARACTERS = 2_048
+MAX_LOCAL_TEST_FLAG_CHARACTERS = 1
 # Under the closed alternating schema, 54,792 minimal messages with a leading
 # system message occupy 1,999,970 bytes including separators and the smallest
 # valid model. The next valid cardinality already exceeds the transport cap.
@@ -101,6 +105,13 @@ RUNTIME_ENVIRONMENT_KEYS = frozenset(
     }
     | {key_name for spec in PROVIDERS for key_name in spec.key_names}
 )
+RUNTIME_POLICY_VALUE_MAX_CHARACTERS = {
+    "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": MAX_LOCAL_TEST_FLAG_CHARACTERS,
+    "FRANK_FREE_ONLY_BUDGET_EPOCH": MAX_BUDGET_EPOCH_CHARACTERS,
+    "FRANK_PROVIDER_BASE_URL": MAX_PROVIDER_BASE_URL_CHARACTERS,
+    "FRANK_ZERO_COST_ATTESTED_PROVIDERS":
+        MAX_ZERO_COST_ATTESTATION_CHARACTERS,
+}
 
 
 def _snapshot_runtime_environment(
@@ -117,6 +128,9 @@ def _snapshot_runtime_environment(
                 continue
             if type(value) is not str:
                 raise ValueError("runtime_environment_values_must_be_strings")
+            max_characters = RUNTIME_POLICY_VALUE_MAX_CHARACTERS.get(name)
+            if max_characters is not None and len(value) > max_characters:
+                raise ValueError("runtime_policy_value_too_large")
             snapshot[name] = value
     except Exception:
         # Environment adapters may include secret material in exception text.

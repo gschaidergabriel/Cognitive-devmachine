@@ -1,0 +1,40 @@
+{
+  "schema": "CLAY_BLOCKER_REPAIR_RECEIPT/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "other",
+  "authority_epoch_observed": "8.71",
+  "mode": "FREE_ONLY",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "canonical_main_at_branch_creation": "da6e7cf4f3c2024bda880a4edea7402a8147332b",
+  "branch": "gpt56sol/blocker-forge-writable-isolated-worktree-871-20260824",
+  "observed_blocker": {
+    "parallel_progress": "current main already contains safe Forge entrypoint and supervisor switching",
+    "remaining_execution_defect": "canonical safe bubblewrap prefix ro-binds the disposable Forge checkout",
+    "conversion_effect": "python py_compile and tests/builds that must write ordinary artifacts can fail by construction, suppressing Forge acceptance even when the candidate is otherwise executable"
+  },
+  "delta": {
+    "file": "tools/run_free_evidence_forge_safe_871.py",
+    "test": "tests/test_forge_disposable_worktree_871.py",
+    "properties": [
+      "model-authored commands are refused outside a child of FORGE_ROOT",
+      "only the exact disposable candidate worktree bind changes from --ro-bind to --bind",
+      "repo-root backend probes remain read-only",
+      "network unshare, no-shell command admission, minimal secret-free environment, and hidden host paths remain delegated to CLAY_FORGE_EXECUTION_ADMISSION/v1",
+      "source identity remains the canonical repo_head_at_prompt contract"
+    ]
+  },
+  "evidence": {
+    "scope": "SOURCE_INTEGRATION_ONLY_PENDING_EXACT_HEAD_EXECUTION",
+    "provider_call": "NONE",
+    "unusual_experiment": "NONE",
+    "whole_entityos_hcu_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "provider_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0
+  },
+  "counterhypothesis": "If accepted yield remains low after this fix, semantic patch quality or source/command admission—not filesystem writability—is the dominant limiter.",
+  "next_exact_gate": "Run focused disposable-worktree and existing Forge execution-admission regressions on exact head, then observe candidate-state transitions under the canonical safe supervisor without scaling token volume."
+}

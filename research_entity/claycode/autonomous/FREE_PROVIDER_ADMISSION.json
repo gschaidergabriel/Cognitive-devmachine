@@ -1,6 +1,6 @@
 {
   "schema": "ENTITYOS_HCU_FREE_PROVIDER_ADMISSION/v1",
-  "authority_epoch": "8.67",
+  "authority_epoch": "8.68",
   "mode": "FREE_ONLY",
   "product": "EntityOS",
   "compute_architecture": "HCU",
@@ -10,19 +10,25 @@
     "groq": {
       "admitted": false,
       "cost_class": "UNKNOWN",
-      "evidence_ref": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_67.json#runtime_inventory"
+      "evidence_ref": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_68.json#evidence.typed_admission_state"
     },
     "mistral": {
       "admitted": false,
       "cost_class": "UNKNOWN",
-      "evidence_ref": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_67.json#runtime_inventory"
+      "evidence_ref": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_68.json#evidence.typed_admission_state"
     },
     "nvidia": {
       "admitted": false,
       "cost_class": "UNKNOWN",
-      "evidence_ref": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_67.json#runtime_inventory"
+      "evidence_ref": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_68.json#evidence.typed_admission_state"
+    },
+    "openrouter": {
+      "admitted": false,
+      "cost_class": "UNKNOWN",
+      "evidence_ref": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_68.json#evidence.typed_admission_state"
     }
   },
   "runtime_provider_credit": 0,
-  "note": "Environment attestations, credential presence, HTTP 402/429 behavior, model catalogs and provider responses cannot self-admit a provider as FREE. A future control-plane update requires direct evidence that the specific execution class cannot create monetary spend or overage."
+  "execution_state": "EXTERNAL_LLM_PROVIDER_TRAFFIC_QUARANTINED_UNTIL_EXECUTABLE_TYPED_FREE_ADMISSION_PASS",
+  "note": "Groq, Mistral, NVIDIA and OpenRouter are all fail-closed at the current authority. Historical successful provider calls are unadmitted execution evidence and must not be relabeled FREE after the fact. Environment attestations, credential presence, :free route labels, HTTP success, 402/429 behavior, model catalogs and provider responses cannot self-admit a provider as FREE."
 }

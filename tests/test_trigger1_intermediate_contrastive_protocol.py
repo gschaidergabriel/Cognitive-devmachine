@@ -13,7 +13,19 @@ def load():
     m=importlib.util.module_from_spec(spec); spec.loader.exec_module(m); return m
 
 
-def holdout_rows(m, *, include_wrong=True, include_lesion=True, counterbalanced=True, nuisance_sign=1.0):
+def holdout_rows(
+    m,
+    *,
+    include_wrong=True,
+    include_lesion=True,
+    counterbalanced=True,
+    nuisance_sign=1.0,
+    wrong_effect=0.1,
+    same_selected_vector=True,
+    vector_source_layer=8,
+    lesion_delta=-0.2,
+    rescue_delta=0.5,
+):
     scores={
         'BASELINE':0.0,
         '+VECTOR':3.0,
@@ -24,6 +36,7 @@ def holdout_rows(m, *, include_wrong=True, include_lesion=True, counterbalanced=
     }
     mappings=[('A_POS','A','B'),('B_POS','B','A' if counterbalanced else 'C')]
     rows=[]
+    plus_effect=scores['+VECTOR']-scores['BASELINE']
     for label_map,pos,neg in mappings:
         for case in ['h1','h2']:
             for control in m.REQUIRED_CONTROLS:
@@ -32,9 +45,13 @@ def holdout_rows(m, *, include_wrong=True, include_lesion=True, counterbalanced=
                     'label_map_id':label_map,'positive_label':pos,'negative_label':neg,
                     'control':control,'target_score':scores[control],
                 }
-                if include_wrong: row['wrong_layer_delta']=-0.1
+                if include_wrong:
+                    row['wrong_layer_delta']=wrong_effect-plus_effect
+                    row['wrong_layer_vector_source_layer']=vector_source_layer
+                    row['wrong_layer_same_selected_vector']=same_selected_vector
                 if include_lesion:
-                    row['lesion_delta']=-0.2; row['rescue_delta']=0.5
+                    row['lesion_delta']=lesion_delta
+                    row['rescue_delta']=rescue_delta
                 rows.append(row)
     return rows
 
@@ -72,6 +89,9 @@ class ProtocolTests(unittest.TestCase):
         out=self.m.adjudicate_holdout(holdout_rows(self.m),selected_layer=8,selected_gain=2.0)
         self.assertTrue(out['pass']); self.assertTrue(out['counterbalanced_label_mapping'])
         self.assertTrue(out['wrong_layer_evidence_complete']); self.assertTrue(out['lesion_rescue_evidence_complete'])
+        self.assertTrue(out['wrong_layer_selected_vector_provenance'])
+        self.assertGreater(out['worst_wrong_layer_specificity_margin'],0)
+        self.assertGreaterEqual(out['min_rescue_vs_baseline'],0)
 
     def test_holdout_requires_label_remap(self):
         rows=holdout_rows(self.m)
@@ -87,9 +107,43 @@ class ProtocolTests(unittest.TestCase):
         out=self.m.adjudicate_holdout(holdout_rows(self.m,include_wrong=False),selected_layer=8,selected_gain=2.0)
         self.assertFalse(out['pass']); self.assertEqual('WRONG_LAYER_EVIDENCE_REQUIRED',out['classification'])
 
+    def test_wrong_layer_requires_same_selected_vector_receipt(self):
+        out=self.m.adjudicate_holdout(
+            holdout_rows(self.m,same_selected_vector=False),
+            selected_layer=8,selected_gain=2.0,
+        )
+        self.assertFalse(out['pass'])
+        self.assertEqual('WRONG_LAYER_SELECTED_VECTOR_PROVENANCE_REQUIRED',out['classification'])
+
+    def test_wrong_layer_requires_selected_vector_source_layer(self):
+        out=self.m.adjudicate_holdout(
+            holdout_rows(self.m,vector_source_layer=12),
+            selected_layer=8,selected_gain=2.0,
+        )
+        self.assertFalse(out['pass'])
+        self.assertEqual('WRONG_LAYER_SELECTED_VECTOR_PROVENANCE_REQUIRED',out['classification'])
+
+    def test_large_opposite_wrong_layer_effect_fails_absolute_specificity(self):
+        out=self.m.adjudicate_holdout(
+            holdout_rows(self.m,wrong_effect=-4.0),
+            selected_layer=8,selected_gain=2.0,
+        )
+        self.assertFalse(out['pass'])
+        self.assertFalse(out['wrong_layer_ok'])
+        self.assertLessEqual(out['worst_wrong_layer_specificity_margin'],0)
+
     def test_holdout_requires_lesion_rescue_evidence_for_every_case(self):
         out=self.m.adjudicate_holdout(holdout_rows(self.m,include_lesion=False),selected_layer=8,selected_gain=2.0)
         self.assertFalse(out['pass']); self.assertEqual('LESION_RESCUE_EVIDENCE_REQUIRED',out['classification'])
+
+    def test_rescue_must_recover_to_baseline_or_beyond(self):
+        out=self.m.adjudicate_holdout(
+            holdout_rows(self.m,lesion_delta=-5.0,rescue_delta=0.1),
+            selected_layer=8,selected_gain=2.0,
+        )
+        self.assertFalse(out['pass'])
+        self.assertFalse(out['lesion_rescue_ok'])
+        self.assertLess(out['min_rescue_vs_baseline'],0)
 
     def test_negative_same_norm_nuisance_is_penalized_by_magnitude(self):
         rows=holdout_rows(self.m,nuisance_sign=-1.0)

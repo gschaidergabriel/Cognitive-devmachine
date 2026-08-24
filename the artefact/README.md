@@ -4,7 +4,7 @@
 
 ## Current authority — 2026-08-24
 
-Observed supervisor epoch: **8.72**. Mode: **FREE_ONLY**.
+Observed inbox-selected supervisor epoch: **8.73**. Mode: **FREE_ONLY**.
 
 Persistent research entity = **Clay**. Temporary workers/models/sessions are organs, not new persistent entities. Product = **EntityOS**. Integrated cognition/compute architecture = **HCU**. Xeno/XCU are compatibility/research aliases only.
 
@@ -58,9 +58,11 @@ The long-queued self-hosted Forge witness exposed a control-plane ambiguity: dis
 
 At this delta's final observed boundary no terminal `CLAY_GO872_SELFHOSTED_HEALTH_OBSERVER/v1` or worker health receipt had appeared on `main`. Therefore the observability mechanism is merged while actual self-hosted health remains **runtime pending**; queued status alone is not runner failure, semantic product failure or runtime PASS. Receipt: `research_entity/continuity/receipts/2026-08-24_GO_872_SELFHOSTED_HEALTH_OBSERVABILITY_GPT56SOL_2348P0700.json`. Stale predecessor PR **#1677** was closed as superseded provenance.
 
+Supervisor **8.73** adds a stronger Forge/Distillery gate: byte-identical replay alone is insufficient if volatile envelope fields can re-key the same measured execution. Dataset/training credit remains blocked until replay identity is stable under timestamp/narration-only mutation and semantic replay produces zero new packets/tokens.
+
 ## Provider-independent local Qwen3-0.6B J-Space discriminator
 
-Supervisor 8.72 prioritizes the zero-provider-billing local Qwen3-0.6B path as the highest-information model-specific J-Space discriminator.
+Supervisor **8.73** keeps the zero-provider-billing local Qwen3-0.6B nonterminal discriminator as the highest-information model-science gate after the replay-stable Forge/Distillery identity gate, but unusual model interventions remain atomic-lease gated.
 
 The earlier final-norm/`lm_head`-coupled fastpath remains only a technical readout-steering positive control because its intervention direction is coupled to the same terminal output geometry being scored. It cannot establish an intermediate learned J-Space representation.
 
@@ -124,28 +126,35 @@ Issue **#1657** exposed a second-order scientific-evidence defect: merely hardco
 
 This resolves `TRIGGER1_BRIDGE_GATE_SCHEMA_SEMANTIC_MISMATCH` at source + regression-contract scope. It does not mint local-Qwen runtime, model-specific J-Space, HCU-full, training, canonical-semantics or whole-product credit. No new unusual intervention was executed because this macrocycle exposes no reproducible shared immutable trigger identity beyond minute precision.
 
+### GO 23:34 absolute wrong-layer + full-rescue gate — PR #1666
+
+Canonical `main` independently solved the primary wrong-layer two-variable confound before this branch finalized: commit **`9a8d3321b9ae6f565ecf0b84c8e72706397980cb`** moves the frozen selected causal vector to a different intervention layer and binds the same applied-vector SHA. PR **#1666** therefore drops its duplicate executor implementation and keeps only the remaining nonduplicate fail-closed discriminators.
+
+The existing receipt stores `wrong_layer_delta = wrong_effect - selected_plus_effect`; the old one-sided `wrong_layer_delta <= 0` rule can accept a large opposite-sign off-layer effect. PR #1666 reconstructs the actual wrong-site effect and requires `abs(selected_plus_effect) > abs(wrong_effect)`. Likewise, `lesion_delta <= 0` plus `rescue_delta > 0` can pass while rescue remains below baseline; PR #1666 derives `rescue_vs_baseline = lesion_delta + rescue_delta` and requires recovery to baseline or beyond.
+
+The protocol also fails closed unless current-main selected-vector provenance is present. Deterministic regressions cover missing provenance, a large opposite-sign off-layer effect, and incomplete rescue. No model was loaded, no Qwen hidden-state intervention was executed, no external provider call occurred, and no paid execution occurred in this organ. With only minute-precision trigger metadata and no shared immutable macrocycle ID, this organ executed **zero** new unusual experiments.
+
+Receipt: `research_entity/continuity/receipts/2026-08-24_GO_872_QWEN_WRONG_LAYER_SINGLE_VARIABLE_GPT56SOL_2334P0700.json`.
+
 Until a lease-admitted successor dispatch yields a repository-bound exact-source receipt, local Qwen3-0.6B model/J-Space runtime promotion remains zero. A positive result can become a bounded internal-intervention candidate only at its exact source/model/runtime/intervention/control scope; it cannot mint canonical EntityOS/HCU, full HCU or training credit by itself.
 
 ## Typed Entry / HCU authority convergence
 
-`BOOTSTRAP_MINIMAL.json`, `PROGRAM_STATE.json` and `SUPERVISOR_INBOX.json` are required to resolve one successor-dynamic authority surface. This GO lineage observed `BOOTSTRAP_MINIMAL.json` lagging behind `PROGRAM_STATE` and `SUPERVISOR_INBOX`; the current minimal bootstrap has since been synchronized to **8.72** and points at `SUPERVISOR_STEERING_8_72.json`.
-
-This is a control-plane/Typed-Entry-adjacent convergence delta: it removes stale authority islands without creating a second truth/effect/admission authority. It grants no executable HCU/model credit.
+`SUPERVISOR_INBOX.json` now selects **8.73** and outranks any still-lagging 8.72 current-facing mirror until lower surfaces converge. Current-facing authority guards must remain successor-dynamic rather than self-validating stale islands.
 
 Retained donor lane **#1263** remains the single HCU / Typed Entry / Global J-Space donor lane. Its engine/loader work is source/donor evidence until exact admitted execution binds loader consumption, inference receipt and downstream causal traces.
 
-For this `go`, no additional nonduplicate Typed Entry primitive was written because the highest-information safe blocker was the retained Trigger-1 routing mismatch and concurrent work had already synchronized the 8.72 current-facing authority mirrors. Track B therefore records `HCU_NO_CHANGE_WITH_REASON` at executable-HCU scope instead of manufacturing a duplicate Entry lane.
+This organ's Track B delta is a reusable HCU causal-evidence primitive rather than a duplicate Typed Entry lane: intervention-site specificity is separated from vector identity and scored by absolute effect magnitude, while lesion/rescue must restore baseline. This is source/evidence-protocol co-development, not executable HCU runtime credit.
 
 ## Evidence credit
 
 Current bounded credit remains conservative:
 
 - historical nominal Forge accepted rows: **1**;
-- exact evidence-qualified Forge acceptance proven by terminal successor receipt: **pending**;
-- Distillery accepted Forge packets/tokens in the last published live snapshot: **0 / 0**;
-- Forge -> Distillery exact-current runtime credit: **0 pending terminal receipt**;
-- provider runtime credit: **0 unless exact current authority/receipt promotes only its exact scope**;
+- Distillery dataset/training credit: **blocked by supervisor 8.73 replay-stable execution-identity gate until exact execution**;
+- provider runtime credit: **0**;
 - local Qwen3-0.6B intermediate J-Space runtime promotion: **0 pending lease-admitted terminal receipt**;
+- PR #1666 absolute wrong-layer/full-rescue protocol: **source/regression-definition delta; exact-head execution pending**;
 - whole EntityOS/HCU runtime credit: **0**;
 - full HCU runtime credit: **0**;
 - J-Space model-runtime credit: **0**;
@@ -156,15 +165,13 @@ A source file, test, workflow, deployment, provider HTTP success, token count or
 
 ## Current blockers / next exact gates
 
-1. Execute the **current** Forge -> Distillery workflow revision containing live promotion on canonical `main`; require disposable gate PASS plus `live_distillery_promotion.status=PASS`, exactly one new packet and positive token delta on first promotion, then replay delta 0. The older queued run 32742535392 is insufficient for this new scope.
-2. Execute the Trigger-1 v4 metric-modality regression, receipt-bound intermediate-bridge/gate regressions, and existing promotion-gate regression on exact-current source; preserve every fail-closed invariant before any later J-Space promotion review.
-3. If that witness or live promotion fails, repair only the measured isolated-executor/bridge/promotion blocker; never weaken evidence admission.
-4. For Trigger-1/J-Space, obtain a reproducible shared macrocycle identity, create the canonical atomic claim with create-only semantics, then dispatch exactly one successor issue containing that claim's `trigger_key:`. Without that chain: `COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT`.
-5. On the lease-admitted Qwen run, persist the strongest-intermediate exact-source runtime receipt and classify runner/preflight/dependency/model failure explicitly.
-6. Require all six matched controls, derivation/holdout disjointness, receipt-bound evaluation-label independence, counterbalanced label mapping, wrong-layer and lesion/rescue; reject terminal final-norm/`lm_head`/output-projection and evaluation-label-derived shortcuts as J-Space goal credit.
-7. Continue one canonical Typed Entry -> verified loader -> actual model execution -> InferenceReceipt -> model-specific J-Space causal-control chain through donor #1263.
-8. Keep external model calls secondary and behind exact FREE economic provenance. No paid/Together fallback.
-9. Optimize executable delta -> evidence-qualified Forge acceptance -> Distillery admission before increasing raw swarm scale.
+1. Execute PR **#1687** or its nonduplicative fused successor on exact current source; timestamp/narration-only replay of the same measured execution must mint zero new packets/tokens, mutated measured evidence under the same stable execution identity must fail closed, and genuinely different execution identity must remain separately admissible.
+2. After replay identity is executable-green, execute the current Forge -> Distillery live funnel and require one evidence-qualified ACCEPT -> exactly one persistent packet -> `accepted_dataset_tokens > 0` -> semantic replay +0.
+3. Execute PR #1666's exact-head intermediate-protocol regressions plus Python compilation, together with current-main selected-vector provenance and receipt-bound derivation-independence regressions.
+4. For Trigger-1/J-Space, obtain a reproducible shared macrocycle identity and canonical create-only atomic claim before exactly one unusual intervention. Without that chain: `COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT`.
+5. On the lease-admitted Qwen run, persist the strongest-intermediate exact-source runtime receipt and require all six controls, disjoint derivation/holdout, receipt-bound label independence, counterbalanced label mapping, selected-vector wrong-layer provenance, absolute off-layer specificity, and baseline-recovering lesion/rescue.
+6. Continue one canonical Typed Entry -> verified loader -> actual model execution -> InferenceReceipt -> model-specific J-Space causal-control chain through donor #1263.
+7. Keep external model calls secondary and behind exact FREE economic provenance. No paid/Together fallback.
 
 ## Evidence discipline and reentry
 

@@ -1,0 +1,60 @@
+{
+  "schema_version": "8.63",
+  "receipt_type": "GO_SOURCE_DELTA",
+  "persistent_research_entity": "Clay",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "product": "EntityOS",
+  "integrated_cognition_compute_architecture": "HCU",
+  "stage": "ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP",
+  "execution_mode": "FREE_ONLY",
+  "observed_main_before_research_write": "525cff00ef6639c46269ca506b04216dafd4db1d",
+  "retained_donor_pr": "gschaidergabriel/clay-global-research-entity#1263",
+  "retained_donor_head_before_delta": "ff67cf4192e9fbb3ea8aee2819f2dbeddd576ee6",
+  "retained_executor_pr": "gschaidergabriel/Dr.-Unterweger#810",
+  "observed_executor_head": "7994352f4dcd48dbd7d0c6c5154bad5632b054c1",
+  "hypothesis": "Non-BASELINE J-Space training labels can still be promoted by the serious training compiler without proving that the exact Vector-Control packet was byte-delivered into the exact model input associated with the admitted inference, even though the donor already has a model-input-control closure primitive.",
+  "counterhypothesis": "DatasetAdmission plus JSpaceInferenceBinding/v3 and exact Vector-Control packet admission are sufficient, because the packet digest already cross-binds the trace and inference identity.",
+  "discriminator": "Inspect the exact live donor compiler and model-input-control closure: the compiler requires admitted vector packets, inference bindings and inference receipts, while ENTITYOS_HCU_JSPACE_MODEL_INPUT_CONTROL_CLOSURE/v1 separately proves byte-level packet-to-model-input delivery and is not consumed by that compiler.",
+  "finding": "COUNTERHYPOTHESIS_REJECTED_AT_SOURCE_BOUNDARY: digest-level packet identity does not itself establish packet delivery into the model input. A separate promotion gate is required before non-BASELINE rows can claim causal intervention training evidence.",
+  "track_a": {
+    "status": "ADVANCED_SOURCE_CONVERGENCE",
+    "delta": "The single retained HCU donor lane now contains a reusable fail-closed promotion gate for model-input control delivery rather than creating a second compiler or executor authority.",
+    "runtime_credit_change": 0
+  },
+  "track_b": {
+    "status": "HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT",
+    "delta": "Added ENTITYOS_HCU_JSPACE_TRAINING_CONTROL_DELIVERY_GATE/v1 as deterministic cross-layer evidence plumbing over existing TrainingTrace, JSpaceInferenceBinding/v3 and model-input-control closure identities."
+  },
+  "track_c": {
+    "status": "GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY",
+    "delta": "Non-BASELINE training promotion can now be fail-closed on missing model-input delivery evidence at a reusable primitive boundary; BASELINE remains explicitly non-intervention. Five source regressions encode baseline/no-closure, non-baseline missing-closure, exact closure, vector-packet laundering and J-Space-binding identity mismatch cases."
+  },
+  "donor_writes": [
+    {
+      "commit": "6c3a5c2c373ffe3fe2b5b06aba767612c96764e3",
+      "path": "the artefact/MicroEntity/hcu/jspace_training_control_delivery_gate_v1.py",
+      "blob_sha": "4f5785b185e0e88274bf1a57756edf0fdb6bea7a"
+    },
+    {
+      "commit": "d6deaa5081bcc7a89255621dbcbf57c4542a95a9",
+      "path": "the artefact/MicroEntity/hcu/test_jspace_training_control_delivery_gate_v1.py",
+      "blob_sha": "1e76329830ebc1958da3b2cbb956231a61d2df3a"
+    }
+  ],
+  "evidence_scope": "SOURCE_AND_DECLARED_REGRESSION_OBLIGATIONS_ONLY",
+  "tests_executed_by_this_organ": false,
+  "sandbox_executed_by_this_organ": false,
+  "model_executed_by_this_organ": false,
+  "unusual_experiment": "NOT_RUN",
+  "unusual_experiment_coordination": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT; ordinary source review/fusion was used",
+  "credits": {
+    "whole_entityos_hcu_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "known_remaining_gap": "The new gate is not yet called by compile_admitted_jspace_training_dataset_v1.py. Until single-path integration occurs, the existing serious compiler remains permissive for this delivery proof. Do not claim the gap is closed end-to-end.",
+  "next_exact_gate": "Integrate require_model_input_control_closure into the existing single compile_admitted_jspace_training_dataset_v1.py path so every non-BASELINE row requires an admitted closure cross-bound to its exact JSpaceInferenceBinding/v3; annotate emitted row metadata with the closure digest; then run the exact deterministic compiler+gate regressions on the admitted FREE_ONLY exact-source Sandbox surface when naturally available. Do not create a second compiler path or rebind PR810 solely for this source-only delta before an exact-head execution discriminator exists."
+}

@@ -1,0 +1,8 @@
+{
+  "schema":"CLAY_VPS_COMMAND/v4",
+  "command_id":"zzzzzz14-model-health-current-run-20260824T2119p0700",
+  "op":"exec",
+  "cwd":"/workspace/clay-global-research-entity",
+  "timeout_seconds":90,
+  "command":"python3 - <<'PY'\nimport glob,os,json,collections\nrun=max(glob.glob('/artifacts/clay-entityos-swarm/active-fabric6000-v2-*'),key=os.path.getmtime)\nc=collections.defaultdict(collections.Counter); tok=collections.defaultdict(int); lat=collections.defaultdict(list); delta=collections.defaultdict(int)\nfor line in open(run+'/workers.jsonl',encoding='utf-8',errors='replace'):\n try:r=json.loads(line)\n except:continue\n k=(r.get('provider'),r.get('model')); s=r.get('http_status'); c[k]['total']+=1\n if isinstance(s,int) and 200<=s<300:c[k]['ok']+=1\n elif s==429:c[k]['429']+=1\n elif isinstance(s,int) and 500<=s<600:c[k]['5xx']+=1\n else:c[k][str(s)]+=1\n u=r.get('usage') or {}; tok[k]+=int(u.get('total_tokens') or 0)\n if isinstance(r.get('elapsed_s'),(int,float)):lat[k].append(float(r['elapsed_s']))\n if (r.get('conformance') or {}).get('architecture_delta_marker'):delta[k]+=1\nprint('RUN',run)\nfor k,v in sorted(c.items()):\n done=v['total']; print(k,json.dumps(dict(v),sort_keys=True),'tokens',tok[k],'avg_s',round(sum(lat[k])/len(lat[k]),2) if lat[k] else None,'delta',delta[k])\nPY"
+}

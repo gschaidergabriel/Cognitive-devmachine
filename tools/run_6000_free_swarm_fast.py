@@ -22,9 +22,15 @@ model_health.install_scheduler(fabric_v2)
 
 import run_6000_free_swarm_v3 as fabric
 model_health.bind_request_observer(fabric)
+import free_swarm_conversion_backpressure_872 as conversion_backpressure
 
 
 def main() -> int:
+    # Conversion before scale: while the exact evidence-qualified Forge ->
+    # Distillery boundary is still at zero accepted dataset yield, lower only the
+    # default/current throughput ceilings. This never raises an operator-provided
+    # lower limit and automatically releases once qualified packets + tokens exist.
+    conversion_backpressure.apply()
     workers=max(64,min(1024,int(os.getenv("CLAY_SWARM_HTTP_THREADS","512"))))
     try: threading.stack_size(1024*1024)
     except (ValueError,RuntimeError): pass

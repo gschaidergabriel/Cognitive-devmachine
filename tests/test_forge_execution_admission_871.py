@@ -118,24 +118,31 @@ class ForgeExecutionAdmission871(unittest.TestCase):
         self.assertEqual([], manifest["decisions"])
         self.assertFalse(manifest["all_commands_admitted"])
 
-    def test_execution_manifest_uses_worker_source_not_moving_checkout(self):
+    def test_execution_manifest_binds_worker_and_evaluation_identity(self):
         source_head = "1" * 40
         source_tree = "2" * 40
+        evaluation_head = "3" * 40
+        evaluation_tree = "4" * 40
         row = {"repo_head": source_head, "candidate_hash": "c" * 64}
         proposal = {"test_commands": ["pytest -q tests/test_x.py"]}
         moving = {
             "schema": f.POLICY_SCHEMA,
-            "source_head": "a" * 40,
-            "source_tree": "b" * 40,
+            "worker_source_head": source_head,
+            "worker_source_tree": source_tree,
+            "evaluation_head": evaluation_head,
             "all_commands_admitted": True,
-            "backend": {"admitted": False},
+            "decisions": [{"admitted": True}],
+            "backend": {"admitted": True},
+            "candidate_is_canonical_truth": False,
         }
 
         def git_text(_cwd, *args, **_kwargs):
             if args[:2] == ("cat-file", "-e"):
                 return 0, "", ""
-            if args[0] == "rev-parse" and args[1] == source_head + "^{tree}":
+            if args == ("rev-parse", source_head + "^{tree}"):
                 return 0, source_tree, ""
+            if args == ("rev-parse", evaluation_head + "^{tree}"):
+                return 0, evaluation_tree, ""
             raise AssertionError(args)
 
         with (
@@ -147,8 +154,39 @@ class ForgeExecutionAdmission871(unittest.TestCase):
         self.assertTrue(manifest["source_identity_admitted"])
         self.assertEqual(source_head, manifest["source_head"])
         self.assertEqual(source_tree, manifest["source_tree"])
-        self.assertEqual("a" * 40, manifest["evaluation_checkout_head"])
+        self.assertEqual(evaluation_head, manifest["evaluation_checkout_head"])
+        self.assertEqual(evaluation_tree, manifest["evaluation_checkout_tree"])
         self.assertEqual("EXACT_WORKER_PROMPT_HEAD", manifest["source_scope"])
+
+    def test_evaluation_head_drift_downgrades_nominal_accept(self):
+        row = {
+            "repo_head": "1" * 40,
+            "candidate_hash": "c" * 64,
+            "delta_id": "d1",
+            "provider": "test",
+            "model": "m",
+            "role": "HCU_CAUSAL",
+            "worker_sha": "w" * 64,
+            "proposal_json": json.dumps({"test_commands": ["pytest -q tests/test_x.py"]}),
+        }
+        manifest = {
+            "schema": f.POLICY_SCHEMA,
+            "source_head": "1" * 40,
+            "source_tree": "2" * 40,
+            "evaluation_checkout_head": "3" * 40,
+            "evaluation_checkout_tree": "4" * 40,
+            "source_identity_admitted": True,
+            "all_commands_admitted": True,
+            "backend": {"admitted": True},
+        }
+        nominal = {"status": "accepted", "evaluation_repo_head": "5" * 40}
+        with (
+            mock.patch.object(safe, "_source_bound_manifest", return_value=manifest),
+            mock.patch.object(safe, "_ORIGINAL_VALIDATE", return_value=nominal),
+        ):
+            got = safe.validate_candidate(None, row)
+        self.assertEqual("evaluation_identity_drift", got["status"])
+        self.assertEqual("EVALUATION_HEAD_CHANGED_AFTER_EXECUTION_ADMISSION", got["reason"])
 
     def test_unbound_worker_source_blocks_before_original_validation(self):
         row = {
@@ -163,8 +201,7 @@ class ForgeExecutionAdmission871(unittest.TestCase):
         }
         manifest = {
             "schema": f.POLICY_SCHEMA,
-            "source_head": "a" * 40,
-            "source_tree": "b" * 40,
+            "evaluation_head": "3" * 40,
             "all_commands_admitted": True,
             "backend": {"admitted": True},
         }

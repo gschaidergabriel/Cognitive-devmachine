@@ -1,0 +1,8 @@
+{
+  "schema":"CLAY_VPS_COMMAND/v4",
+  "command_id":"research-distillery-entry-inventory-20260824T1741",
+  "op":"exec",
+  "cwd":"/workspace/clay-global-research-entity",
+  "command":"set -e; export CLAY_FREE_ONLY_ATTESTED=1; python3 -m py_compile tools/run_research_distillery.py tools/run_research_distillery_entry.py tools/free_swarm_quota.py tools/run_24h_entityos_swarm.py; python3 tools/run_research_distillery_entry.py --inventory-only",
+  "timeout_seconds":300
+}

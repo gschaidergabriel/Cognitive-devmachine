@@ -848,6 +848,18 @@ def _execute_chat_locked(
     if len(attempt_nonce) > MAX_ATTEMPT_NONCE_CHARACTERS:
         raise ValueError("attempt_nonce_too_large")
 
+    # An injected nonce factory is executable caller code. It runs after the
+    # first authorization decision and can mutate caller-owned latch storage.
+    # Re-evaluate that state before request construction so a newly published
+    # payment hard stop or exhausted latch budget cannot be outrun.
+    post_nonce_route = route(env, payment_latches=latches)
+    if selected in post_nonce_route["payment_blocked_providers"]:
+        raise RuntimeError("payment_required_hard_stop_active")
+    if post_nonce_route["payment_latch_capacity_exhausted"]:
+        raise RuntimeError("payment_latch_capacity_exhausted")
+    if post_nonce_route["selected"] != selected:
+        raise RuntimeError("capability_state_changed_before_network")
+
     started = _passive_clock_value_or_none(now)
     if started is None:
         raise RuntimeError("monotonic_clock_unavailable")

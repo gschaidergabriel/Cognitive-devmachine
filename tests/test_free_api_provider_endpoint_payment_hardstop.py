@@ -97,11 +97,10 @@ class EndpointIdentityAndPaymentHardStopTests(unittest.TestCase):
         )
 
     def test_http_402_regular_and_exception_paths_latch_current_budget_epoch(self):
-        env = {
+        base_env = {
             "NVIDIA_API_KEY": "secret",
             "FRANK_PROVIDER_BASE_URL": "http://localhost:8765/v1",
             "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
-            "FRANK_FREE_ONLY_BUDGET_EPOCH": "test-epoch-a",
         }
         openers = (
             lambda *args, **kwargs: Response(status=402, body=b"{}"),
@@ -111,8 +110,12 @@ class EndpointIdentityAndPaymentHardStopTests(unittest.TestCase):
                 )
             ),
         )
-        for opener in openers:
+        for index, opener in enumerate(openers):
             with self.subTest(opener=repr(opener)):
+                env = {
+                    **base_env,
+                    "FRANK_FREE_ONLY_BUDGET_EPOCH": f"test-epoch-{index}",
+                }
                 latches = set()
                 result = MOD.execute_chat(
                     VALID_MESSAGES,

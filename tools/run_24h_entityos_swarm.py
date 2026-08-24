@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """EntityOS/HCU driver for the existing FREE_ONLY adaptive go swarm.
 
-The underlying controller owns credential collection, AIMD concurrency,
-provider-wide 429 cooldown, 402 hard-stop behavior and receipt logging. This
-driver adds live model discovery, EntityOS/HCU roles, and provider-specific
-request budgets derived from measured runtime limits.
+The underlying controller owns credential collection, typed provider admission,
+AIMD concurrency, provider-wide 429 cooldown, 402 hard-stop behavior and receipt
+logging. This driver adds live model discovery, EntityOS/HCU roles, and
+provider-specific request budgets derived from measured runtime limits.
 """
 from __future__ import annotations
 
@@ -69,7 +69,10 @@ def provider_bounded_request_chat(spec, key, model, prompt, max_tokens, timeout)
 base.request_chat = provider_bounded_request_chat
 
 
-def fetch_catalog(url: str, key: str, timeout: float) -> list[dict]:
+def fetch_catalog(spec: base.ProviderSpec, url: str, key: str, timeout: float) -> list[dict]:
+    # Direct/internal catalog calls receive the same typed endpoint gate as key collection.
+    if not base.provider_network_admitted(spec, url):
+        return []
     req = urllib.request.Request(url, headers={"Authorization": f"Bearer {key}", "Content-Type": "application/json"})
     try:
         with urllib.request.urlopen(req, timeout=timeout) as resp:
@@ -116,15 +119,18 @@ def choose_models(provider: str, rows: list[dict]) -> list[str]:
 def discover_and_export(timeout: float) -> dict[str, dict]:
     report: dict[str, dict] = {}
     for spec in base.PROVIDERS:
-        keys = base.collect_keys(spec)
         override = base.split_values(os.getenv(spec.models_env))
         if override:
-            report[spec.name] = {"source": "environment_override", "keys": len(keys), "models": override}
+            # No catalog network is needed. Chat-side key admission remains enforced later by base.run().
+            report[spec.name] = {"source": "environment_override", "models": override}
             continue
+
+        catalog_url = CATALOGS[spec.name]
+        keys = base.collect_keys(spec, endpoint=catalog_url)
         if not keys:
-            report[spec.name] = {"source": "no_keys", "keys": 0, "models": []}
+            report[spec.name] = {"source": "catalog_not_admitted_or_no_keys", "keys": 0, "models": []}
             continue
-        rows = fetch_catalog(CATALOGS[spec.name], keys[0], timeout)
+        rows = fetch_catalog(spec, catalog_url, keys[0], timeout)
         selected = choose_models(spec.name, rows)
         if selected:
             os.environ[spec.models_env] = ",".join(selected)
@@ -136,7 +142,7 @@ def discover_and_export(timeout: float) -> dict[str, dict]:
 
 async def main(args: argparse.Namespace) -> int:
     report = discover_and_export(args.timeout)
-    print(json.dumps({"schema": "CLAY_ENTITYOS_SWARM_DISCOVERY/v2", "providers": report}, ensure_ascii=False), flush=True)
+    print(json.dumps({"schema": "CLAY_ENTITYOS_SWARM_DISCOVERY/v3", "providers": report}, ensure_ascii=False), flush=True)
     if args.inventory_only:
         return 0
     out = args.output_dir or f"/artifacts/clay-entityos-swarm/{__import__('datetime').datetime.now(__import__('datetime').timezone.utc).strftime('%Y%m%dT%H%M%SZ')}"

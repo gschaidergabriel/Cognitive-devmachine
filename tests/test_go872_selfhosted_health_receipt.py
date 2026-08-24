@@ -24,7 +24,7 @@ class HealthReceiptTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as td:
             repo = Path(td)
             (repo / "tools").mkdir()
-            for name in ("trigger1_local_qwen06_midlayer_causal.sh", "trigger1_local_qwen06_midlayer_causal_execute.py", "run_go871_forge_distillery_runtime_gate.py"):
+            for name in (health.QWEN_CURRENT_LAUNCHER, health.QWEN_CURRENT_EXECUTOR, "run_go871_forge_distillery_runtime_gate.py"):
                 (repo / "tools" / name).write_text("x", encoding="utf-8")
             out = repo / "receipt.json"
             responses = [(0, "abc", ""), (0, "tree", ""), (0, " M dirty", "")]
@@ -36,6 +36,25 @@ class HealthReceiptTests(unittest.TestCase):
             self.assertFalse(payload["readiness"]["bridge_health_pass"])
             self.assertEqual(payload["credit"]["runtime_credit_minted"], 0)
             self.assertTrue(out.is_file())
+
+    def test_compat_midlayer_alone_cannot_make_current_qwen_ready(self):
+        with tempfile.TemporaryDirectory() as td:
+            repo = Path(td)
+            (repo / "tools").mkdir()
+            for name in (health.QWEN_COMPAT_MIDLAYER_LAUNCHER, health.QWEN_COMPAT_MIDLAYER_EXECUTOR, "run_go871_forge_distillery_runtime_gate.py"):
+                (repo / "tools" / name).write_text("x", encoding="utf-8")
+            out = repo / "receipt.json"
+            responses = [(0, "abc", ""), (0, "tree", ""), (0, "", "")]
+            with mock.patch.object(health, "run_text", side_effect=responses), \
+                 mock.patch.object(health, "available_kb", return_value=4_000_000), \
+                 mock.patch.object(health.shutil, "which", side_effect=lambda x: f"/usr/bin/{x}"), \
+                 mock.patch.dict(os.environ, {"RUNNER_OS": "Linux", "RUNNER_ARCH": "X64", "RUNNER_NAME": "runner"}, clear=False):
+                payload = health.build_receipt(repo, out)
+            self.assertTrue(payload["readiness"]["bridge_health_pass"])
+            self.assertFalse(payload["readiness"]["qwen_current_source_ready"])
+            self.assertFalse(payload["readiness"]["qwen_preflight_ready"])
+            self.assertTrue(payload["frontier_sources"]["qwen_compat_midlayer_launcher_present"])
+            self.assertTrue(payload["frontier_sources"]["qwen_compat_midlayer_executor_present"])
 
 
 if __name__ == "__main__":

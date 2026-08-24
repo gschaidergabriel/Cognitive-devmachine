@@ -15,13 +15,13 @@ also derived from admitted upstream causal ancestry, never from the caller-contr
 ``trace_family_id`` label alone. The DatasetAdmission call also receives the caller-owned
 registry of exact canonical Vector-Control packet preimages, so a shared digest label cannot
 be laundered into training rows without validation by the sole JSPACE_VECTOR_CONTROL_ABI/v1
-implementation. Non-BASELINE traces additionally require the exact admitted
-``ENTITYOS_HCU_JSPACE_MODEL_INPUT_CONTROL_CLOSURE/v1`` for their inference binding so a
-control label cannot be promoted as causal training evidence without byte-level packet
-arrival at the associated model input. InferenceReceipt parent validation delegates to the
-single reusable ``jspace_inference_parent_admission_v1`` guard; this compiler keeps only
-compatibility error translation, not a second validation implementation. It mints no truth,
-model authority, effect authority, runtime credit, or paid-training permission.
+implementation. Whenever a ModelInputControlClosure is supplied, this compiler now requires
+that closure to be re-derived from the existing canonical MiniUnifiedDB admission plus exact
+producer evidence before the ordinary delivery gate may use it. Non-BASELINE traces still
+require such a closure; BASELINE traces may omit one. InferenceReceipt parent validation
+delegates to the single reusable ``jspace_inference_parent_admission_v1`` guard; this compiler
+keeps only compatibility error translation, not a second validation implementation. It
+mints no truth, model authority, effect authority, runtime credit, or paid-training permission.
 """
 from __future__ import annotations
 
@@ -54,6 +54,11 @@ try:
         JSpaceTrainingControlDeliveryError,
         require_model_input_control_closure,
     )
+    from .jspace_training_control_source_revalidation_v1 import (
+        JSpaceTrainingControlSourceRevalidationError,
+        TrainingControlSourceContext,
+        require_source_revalidated_model_input_control_closure,
+    )
     from .jspace_training_trace_v1 import TRACE_SCHEMA as TRAINING_TRACE_SCHEMA
 except ImportError:
     from compile_jspace_bootstrap_dataset_v1 import compile_traces as compile_training_traces
@@ -79,6 +84,11 @@ except ImportError:
     from jspace_training_control_delivery_gate_v1 import (
         JSpaceTrainingControlDeliveryError,
         require_model_input_control_closure,
+    )
+    from jspace_training_control_source_revalidation_v1 import (
+        JSpaceTrainingControlSourceRevalidationError,
+        TrainingControlSourceContext,
+        require_source_revalidated_model_input_control_closure,
     )
     from jspace_training_trace_v1 import TRACE_SCHEMA as TRAINING_TRACE_SCHEMA
 
@@ -446,8 +456,9 @@ def compile_admitted_records(
     admitted_bases: Mapping[str, str],
     admitted_outcome_receipts: Mapping[str, Any] | None = None,
     admitted_model_input_control_closures: Mapping[str, JSpaceModelInputControlClosure] | None = None,
+    model_input_control_source_contexts: Mapping[str, TrainingControlSourceContext] | None = None,
 ) -> dict[str, list[dict[str, Any]]]:
-    """Compile only traces with external causal admission and control-delivery evidence."""
+    """Compile only traces with external causal admission and source-revalidated control evidence."""
     out = {"train": [], "validation": [], "holdout": []}
     seen: dict[str, tuple[str, str, str, str, str | None]] = {}
     admitted_grid_plans = _mapping(admitted_grid_plans, "admitted_grid_plans")
@@ -464,6 +475,13 @@ def compile_admitted_records(
         admitted_model_input_control_closures = _mapping(
             admitted_model_input_control_closures,
             "admitted_model_input_control_closures",
+        )
+    if model_input_control_source_contexts is None:
+        model_input_control_source_contexts = {}
+    else:
+        model_input_control_source_contexts = _mapping(
+            model_input_control_source_contexts,
+            "model_input_control_source_contexts",
         )
 
     for record in records:
@@ -494,6 +512,16 @@ def compile_admitted_records(
         model_input_control_closure = admitted_model_input_control_closures.get(
             inference_binding.binding_sha256
         )
+        try:
+            model_input_control_closure = require_source_revalidated_model_input_control_closure(
+                inference_binding,
+                model_input_control_closure,
+                model_input_control_source_contexts,
+            )
+        except JSpaceTrainingControlSourceRevalidationError as exc:
+            raise AdmittedTrainingDatasetError(
+                f"MODEL_INPUT_CONTROL_SOURCE_REVALIDATION_REJECTED:{exc}"
+            ) from exc
         evidence = validate_pipeline_evidence(
             training_trace,
             admission,

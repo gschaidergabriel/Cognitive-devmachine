@@ -1,0 +1,107 @@
+{
+  "schema": "ENTITYOS_HCU_GO_SUCCESSOR_RUNTIME_ADMISSION_RECEIPT/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "authority_epoch": "8.64",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "canonical_main_observed_before_write": "92f4e5e165cb3fc4f47c3c9c9e29a740a38faf70",
+  "coordination": {
+    "upstream_shared_immutable_macrocycle_id": null,
+    "atomic_unusual_experiment_lease": "NOT_ACQUIRED",
+    "classification": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_interventions_executed": 0,
+    "work_class": "ORDINARY_EXACT_HEAD_BUILD_AND_FUNCTION_RUNTIME_ACCEPTANCE"
+  },
+  "predecessor_counterevidence": {
+    "executor_commit": "4020096457e64034debb3d1394ee3c8cd2206729",
+    "deployment_id": "dpl_DoW8ACjFq3ZjBYRYMrPvJYN3HzFD",
+    "deployment_state": "ERROR",
+    "failure": "ENTITYOS_HCU_FREE_ONLY_SANDBOX_ADMISSION_MISSING",
+    "localized_cause": "exclusive executor guard still required supervisor/reason/runtime-gate markers from 8.63 while exact active admission source had moved to 8.64"
+  },
+  "successor_fix": {
+    "executor_repository": "gschaidergabriel/Dr.-Unterweger",
+    "executor_pr": 810,
+    "commit": "2da99e0458809988190c129b04cae913d1f15d92",
+    "commit_message": "fix(hcu): sync exclusive cost guard to supervisor 8.64",
+    "guard_file": "mcp/vercel-sandbox-mcp/scripts/guard-entityos-hcu-current-executor.mjs",
+    "guard_blob_sha": "ecbf5566da9bbff468b96c73dc8cbc2e8fd47dc5",
+    "bounded_delta": [
+      "SUPERVISOR_STEERING_8_63 -> SUPERVISOR_STEERING_8_64 in active Sandbox admission expectation",
+      "CURRENT_HOBBY_ZERO_MONETARY_COST_BOUNDARY_VERIFIED -> HOBBY_SURFACE_CLASS_ADMITTED_RUNTIME_BLOCKED_PENDING_DIRECT_INCLUDED_QUOTA_OBSERVATION",
+      "SUPERVISOR_8_63_REQUIRES_DIRECT_REMAINING_INCLUDED_QUOTA_OBSERVATION_BEFORE_SANDBOX_CREATE -> SUPERVISOR_8_64_REQUIRES_DIRECT_REMAINING_INCLUDED_QUOTA_OBSERVATION_BEFORE_SANDBOX_CREATE"
+    ],
+    "quota_gate_weakened": false,
+    "sandbox_execution_right_added": false,
+    "historical_rebind_authority_rewritten": false
+  },
+  "exact_successor_deployment": {
+    "deployment_id": "dpl_EHwJhL2hbLHMfw2pjB1Bb53H98Mm",
+    "url": "dr-unterweger-kz6470afe-gabriel-gschaiders-projects.vercel.app",
+    "git_sha": "2da99e0458809988190c129b04cae913d1f15d92",
+    "state": "READY",
+    "ready_state": "READY",
+    "deployment_git_sha_matches_successor": true,
+    "team_id": "team_hwPBWKuCJxkfVhCx3WLdcTRx",
+    "project_id": "prj_ifIgM9X7jqIQS8mNIGllImziePPG"
+  },
+  "exact_runtime_route_source": {
+    "path": "mcp/vercel-sandbox-mcp/api/sandbox-probe.js",
+    "blob_sha": "6630570d16a62f937a6512d682dfcb86ae8a4102",
+    "research_supervisor": "SUPERVISOR_STEERING_8_64",
+    "runtime_admission_case": "runtime-admission",
+    "runtime_admission_status": "FUNCTION_RUNTIME_BOOT_VERIFIED_NO_SANDBOX_CREATE",
+    "runtime_admission_branch_http_status": 200,
+    "runtime_admission_branch_precedes_sandbox_cost_gate": true,
+    "selftest_and_family_split_require_sandbox_execution_admitted": true,
+    "sandbox_create_only_occurs_after_cost_gate": true,
+    "active_cost_gate_remaining_quota_directly_observed": false,
+    "active_cost_gate_runtime_gate": "BLOCKED_QUOTA_UNOBSERVED"
+  },
+  "runtime_observation": {
+    "source": "Vercel exact-deployment runtime logs",
+    "timestamp_utc": "2026-08-24T04:01:43Z",
+    "request_path": "GET /api/sandbox-probe",
+    "http_status": 200,
+    "runtime_class": "serverless",
+    "deployment_id": "dpl_EHwJhL2hbLHMfw2pjB1Bb53H98Mm",
+    "cache": "MISS",
+    "response_body_observed": false,
+    "query_string_observed_in_runtime_log": false,
+    "classification": "EXACT_SUCCESSOR_FUNCTION_RUNTIME_BOOT_EVIDENCE_WITH_CONTROL_FLOW_INFERENCE",
+    "control_flow_inference": "Given the exact deployed source and the active cost gate remaining false, selftest/family-split cannot return 200 before Sandbox admission; unsupported input returns 400 and unauthorized preview returns 403. Therefore the observed GET 200 is consistent only with the pre-Sandbox runtime-admission branch at this exact source identity. Because the runtime log omits the query string and response body was not observed, this is classified as exact-source control-flow inference rather than direct response-payload evidence.",
+    "sandbox_create_observed": false,
+    "python_sqlite_environment_probe_observed": false,
+    "hcu_component_execution_observed": false,
+    "model_execution_observed": false,
+    "jspace_intervention_observed": false
+  },
+  "hypothesis": "The 8.64 successor guard synchronization repairs the concrete build blocker without weakening FREE_ONLY admission, allowing the current retained executor to reach a serverless runtime diagnostic while Sandbox execution remains correctly closed on unobserved remaining included quota.",
+  "counterhypothesis": "The previous ERROR reflected a deeper HCU/runtime incompatibility, or the successor READY/200 implies Sandbox/HCU execution authority has opened.",
+  "discriminator_result": "The successor exact deployment is READY after only the bounded active-guard sync and an exact-deployment serverless 200 is observed on the route whose pre-Sandbox runtime-admission branch is the only 200 path compatible with the still-false cost gate. This rejects the generic/deeper-build-failure hypothesis but does not open Sandbox authority or establish HCU/model/J-Space execution.",
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED: exact current-class successor repairs the measured 8.63->8.64 build-guard drift, deploys READY at exact SHA, and reaches Function runtime diagnostics while preserving the closed FREE_ONLY Sandbox gate",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "HCU_NO_CHANGE_WITH_REASON: executable counterevidence required only an executor guard expectation sync; no Sandbox/HCU/Typed Entry code executed and no semantic HCU guard relaxation is justified",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "TRAINING_READINESS_NO_CHANGE_WITH_REASON: no Python/sqlite Sandbox environment run, real model invocation, loader-consumption evidence, J-Space vector intervention, causal trace, or training execution occurred"
+  },
+  "credits": {
+    "exact_successor_build": "PASS",
+    "exact_successor_function_runtime_boot": "PASS_AT_DIAGNOSTIC_CONTROL_SCOPE",
+    "sandbox_environment_runtime": 0,
+    "whole_entityos_hcu_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": [
+    "Re-enter canonical Research main plus live PR1263 and PR810 heads before any new claim because both lanes are moving rapidly.",
+    "Obtain a directly observed authoritative remaining included Vercel Sandbox quota/entitlement signal without inferring it from Hobby plan identity and without paid/upgrade/fallback execution.",
+    "Only if FREE_ONLY admission genuinely opens, run the fixed selftest environment capability path and bind exact executor/deployment identity, Python version, sqlite3/_sqlite3 availability, source identity, secret fence, result digest and cleanup.",
+    "After environment PASS, proceed to canonical predecessor -> pre-invocation control -> real zero-cost local model invocation -> ModelExecution -> inference -> Global J-Space/GWT observation with admitted null/sign-flipped controls."
+  ],
+  "evidence_boundary": "This receipt establishes exact successor build recovery and Function-runtime diagnostic evidence only. It does not establish Sandbox execution, Python/SQLite capability, HCU component runtime, real model execution, J-Space causality, training benefit, canonical effect authority, or whole EntityOS/HCU acceptance."
+}

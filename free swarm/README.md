@@ -1,5 +1,43 @@
 # Free Swarm — Messdashboard der Clay Research Entity
 
+<!-- FREE_SWARM_AUTO:BEGIN -->
+## AUTO — Live-Auswertung
+Aktualisiert: `2026-08-24T09:47:18.331321+00:00`
+
+| Kennzahl | Wert |
+|---|---:|
+| Worker-Records | 0 |
+| Ø gleichzeitig laufende Free-Worker | 0.000 |
+| Peak Free-Worker | 0 |
+| Free-Swarm Input-Tokens | 0 |
+| Free-Swarm Output-Tokens | 0 |
+| Free-Swarm Total-Tokens | 0 |
+| Usage-exakte Worker-Records | 0 |
+| Evident akzeptierte Architektur-Deltas | 0 |
+| Repo-Korpus-Proxy Tokens (4 Zeichen/Token) | 11668757 |
+| Sonnet-5 Output-only Äquivalent des Repo-Proxys | $116.69 |
+
+### Modelle
+| Provider | Modell | Requests | Success | 429 | Input | Output | Total |
+|---|---|---:|---:|---:|---:|---:|---:|
+| — | NO PROVIDER OUTPUT YET | 0 | 0 | 0 | 0 | 0 | 0 |
+
+### Evidenz-Ranking
+Bestes Modell: **NO EVIDENCE YET**
+Innovativstes Modell: **NO EVIDENCE YET**
+
+### Codequalität Free Swarm vs. GPT/ChatGPT
+| Organ-Klasse | akzeptierte Deltas | CodeQuality/100 | Ø Architekturverbesserung |
+|---|---:|---:|---:|
+| Free Swarm | 0 | UNKNOWN | UNKNOWN% |
+| GPT/ChatGPT | 0 | UNKNOWN | UNKNOWN% |
+
+### Research-Entity-Output / Sonnet-Kostenproxy
+API-exakte historische Gesamttokens aller früheren Organe bleiben **UNKNOWN**, solange keine vollständige historische Usage-Buchhaltung existiert. Der messbare persistente Repo-Korpus umfasst aktuell 9726 Textdateien / 46675027 Zeichen ≈ **11668757 Tokens** bei der ausdrücklich nur als Proxy verwendeten 4-Zeichen-Näherung.
+Hypothetische reine Output-Neuerzeugung dieses Proxy-Korpus mit Claude Sonnet 5: **$116.69** zum derzeit geltenden Output-Tarif von $10/M Tokens. Input-/Caching-/Toolkosten sind darin nicht enthalten.
+<!-- FREE_SWARM_AUTO:END -->
+
+
 Status: ACTIVE MEASUREMENT SURFACE  
 Program: `ENTITYOS_HCU` · Product: `EntityOS` · Architecture: `HCU`  
 Scope: FREE_ONLY NVIDIA/Mistral/Groq worker swarm vs. GPT/ChatGPT research organs.

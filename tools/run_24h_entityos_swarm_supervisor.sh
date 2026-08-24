@@ -10,15 +10,20 @@ mkdir -p "$STATE_DIR"
 START="$(date +%s)"
 DEADLINE="$((START + 24*3600))"
 
-# Never inspect provider key values before typed cost-class admission. Unsetting
-# known provider variables is safe and prevents inherited credentials from
-# surviving into a blocked/unknown provider path.
-clear_provider_runtime_env() {
-  unset GROQ_API_KEY GROQ_API_KEYS GROQ2_API_KEY GROQ3_API_KEY || true
-  unset MISTRAL_API_KEY MISTRAL_API_KEYS MISTRAL2_API_KEY MISTRAL3_API_KEY || true
-  unset NVIDIA_API_KEY NVIDIA_API_KEYS NVIDIA_NIM_API_KEY NVIDIA2_API_KEY NVIDIA3_API_KEY NGC_API_KEY || true
+# Provider keys may already exist in the parent environment. Before typed
+# admission we neither inspect nor forward them to policy/dashboard subprocesses.
+# After admission, unadmitted provider variables are dropped without reading them.
+drop_unadmitted_provider_env() {
+  if ! provider_is_admitted groq; then
+    unset GROQ_API_KEY GROQ_API_KEYS GROQ2_API_KEY GROQ3_API_KEY || true
+  fi
+  if ! provider_is_admitted mistral; then
+    unset MISTRAL_API_KEY MISTRAL_API_KEYS MISTRAL2_API_KEY MISTRAL3_API_KEY || true
+  fi
+  if ! provider_is_admitted nvidia; then
+    unset NVIDIA_API_KEY NVIDIA_API_KEYS NVIDIA_NIM_API_KEY NVIDIA2_API_KEY NVIDIA3_API_KEY NGC_API_KEY || true
+  fi
   unset CLAY_FREE_ONLY_ATTESTED CLAY_GROQ_FREE_ATTESTED CLAY_MISTRAL_FREE_ATTESTED CLAY_NVIDIA_FREE_ATTESTED || true
-  unset CLAY_TYPED_FREE_PROVIDERS || true
 }
 
 load_secret_file() {
@@ -108,8 +113,13 @@ has_admitted_provider_key() {
 
 resolve_typed_admission() {
   local admitted
-  if ! admitted="$(python3 "$ADMISSION_TOOL" runtime-admitted-providers 2>/dev/null)"; then
-    return 1
+  # Run admission resolution in a clean environment so provider secrets are not
+  # even inherited by the pre-admission policy process.
+  if [[ -n "${CLAY_PROVIDER_ADMISSION_FILE:-}" ]]; then
+    admitted="$(env -i PATH="$PATH" CLAY_PROVIDER_ADMISSION_FILE="$CLAY_PROVIDER_ADMISSION_FILE" \
+      python3 "$ADMISSION_TOOL" runtime-admitted-providers 2>/dev/null)" || return 1
+  else
+    admitted="$(env -i PATH="$PATH" python3 "$ADMISSION_TOOL" runtime-admitted-providers 2>/dev/null)" || return 1
   fi
   [[ -n "$admitted" ]] || return 1
   export CLAY_TYPED_FREE_PROVIDERS="$(printf '%s\n' "$admitted" | tr '\n' ' ' | xargs)"
@@ -120,7 +130,7 @@ start_dashboard() {
   local evaluator="$ROOT/free swarm/evaluate.py"
   [[ -f "$evaluator" ]] || return 0
   if ! pgrep -f '[f]ree swarm/evaluate.py.*--watch' >/dev/null 2>&1; then
-    nohup python3 "$evaluator" \
+    env -i PATH="$PATH" HOME="${HOME:-/tmp}" nohup python3 "$evaluator" \
       --repo "$ROOT" --artifacts "$STATE_DIR" \
       --watch --hours 24 --interval-seconds 60 --publish --publish-min-seconds 900 \
       >"$STATE_DIR/dashboard.log" 2>&1 </dev/null &
@@ -130,7 +140,7 @@ start_dashboard() {
 
 write_blocked_state() {
   local reason="$1"
-  python3 - "$reason" > "$STATE_DIR/SUPERVISOR.json.tmp" <<'PY'
+  env -i PATH="$PATH" python3 - "$reason" > "$STATE_DIR/SUPERVISOR.json.tmp" <<'PY'
 import datetime,json,sys
 print(json.dumps({
   'schema':'CLAY_ENTITYOS_SWARM_SUPERVISOR/v4',
@@ -167,11 +177,10 @@ PY
   mv "$STATE_DIR/SUPERVISOR.json.tmp" "$STATE_DIR/SUPERVISOR.json"
 }
 
-clear_provider_runtime_env
 start_dashboard
 
 while (( $(date +%s) < DEADLINE )); do
-  clear_provider_runtime_env
+  unset CLAY_TYPED_FREE_PROVIDERS || true
 
   # This is the first provider-policy action. It reads only the non-secret
   # control-plane admission object and current supervisor authority.
@@ -181,7 +190,8 @@ while (( $(date +%s) < DEADLINE )); do
     continue
   fi
 
-  # Credential sources become reachable only after exact provider FREE admission.
+  # Only now can the parent environment be narrowed and admitted credentials read.
+  drop_unadmitted_provider_env
   load_admitted_secret_sources
   # shellcheck disable=SC2046
   eval "$(normalize_admitted_provider_pool)"

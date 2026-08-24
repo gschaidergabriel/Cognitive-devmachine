@@ -134,7 +134,11 @@ class FreeSwarmProviderAdmissionBoundaryTests(unittest.TestCase):
         wrapper = (ROOT / "tools/run_free_go_swarm.py").read_text(encoding="utf-8")
         driver = (ROOT / "tools/run_24h_entityos_swarm.py").read_text(encoding="utf-8")
         self.assertNotIn("load_all_secret_sources", shell)
+        self.assertNotIn("load_secret_file /run/secrets/clay_provider.env", shell)
+        self.assertNotIn("load_secret_file /artifacts/.clay_provider.env", shell)
+        self.assertIn('env -i PATH="$PATH"', shell)
         loop = shell[shell.index("while (( $(date +%s) < DEADLINE ))") :]
+        self.assertLess(loop.index("resolve_typed_admission"), loop.index("drop_unadmitted_provider_env"))
         self.assertLess(loop.index("resolve_typed_admission"), loop.index("load_admitted_secret_sources"))
         self.assertIn("with_provider_permit", wrapper)
         self.assertIn("activate_provider_admission()", driver)

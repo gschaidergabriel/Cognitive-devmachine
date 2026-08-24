@@ -1,0 +1,17 @@
+{
+  "schema": "CLAY_VPS_RECEIPT/v4",
+  "command_id": "diagnose-supervisor-pgrep-20260824T1847p0700",
+  "command_sha256": "5fc162d6052e3fbc6c3acad2753f5fe849300fd0c7bd63fe0b6eb0e88bf86dd0",
+  "started_at": "2026-08-24T11:42:47.976747+00:00",
+  "finished_at": "2026-08-24T11:42:48.156523+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "9e60bed840058c4f876875498ca193ec04dacc74a28368b18e495eb81844573a",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "PIDFILE=2886\n---PGREP---\n22574 bash -lc echo PIDFILE=$(cat /artifacts/clay-entityos-swarm/supervisor.pid 2>/dev/null || true); echo ---PGREP---; pgrep -af 'run_24h_entityos_swarm_supervisor.sh' || true; echo ---PS---; ps -eo pid,ppid,stat,etime,args | grep -E '[r]un_24h_entityos_swarm_supervisor.sh|^ *2886 ' || true; echo ---LOG---; tail -80 /artifacts/clay-entityos-swarm/supervisor-v8.log 2>/dev/null || true\n---PS---\n   2886       1 ZN      01:51:44 [python3] <defunct>\n  22574       0 SN         00:00 bash -lc echo PIDFILE=$(cat /artifacts/clay-entityos-swarm/supervisor.pid 2>/dev/null || true); echo ---PGREP---; pgrep -af 'run_24h_entityos_swarm_supervisor.sh' || true; echo ---PS---; ps -eo pid,ppid,stat,etime,args | grep -E '[r]un_24h_entityos_swarm_supervisor.sh|^ *2886 ' || true; echo ---LOG---; tail -80 /artifacts/clay-entityos-swarm/supervisor-v8.log 2>/dev/null || true\n---LOG---\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "ROOT_INSIDE_ROOTLESS_PODMAN_OR_EXPLICIT_REPO_CONTROL_OP",
+  "canonical_credit_minted": 0
+}

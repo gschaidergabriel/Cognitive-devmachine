@@ -1,0 +1,7 @@
+PIDFILE=2886
+---PGREP---
+22574 bash -lc echo PIDFILE=$(cat /artifacts/clay-entityos-swarm/supervisor.pid 2>/dev/null || true); echo ---PGREP---; pgrep -af 'run_24h_entityos_swarm_supervisor.sh' || true; echo ---PS---; ps -eo pid,ppid,stat,etime,args | grep -E '[r]un_24h_entityos_swarm_supervisor.sh|^ *2886 ' || true; echo ---LOG---; tail -80 /artifacts/clay-entityos-swarm/supervisor-v8.log 2>/dev/null || true
+---PS---
+   2886       1 ZN      01:51:44 [python3] <defunct>
+  22574       0 SN         00:00 bash -lc echo PIDFILE=$(cat /artifacts/clay-entityos-swarm/supervisor.pid 2>/dev/null || true); echo ---PGREP---; pgrep -af 'run_24h_entityos_swarm_supervisor.sh' || true; echo ---PS---; ps -eo pid,ppid,stat,etime,args | grep -E '[r]un_24h_entityos_swarm_supervisor.sh|^ *2886 ' || true; echo ---LOG---; tail -80 /artifacts/clay-entityos-swarm/supervisor-v8.log 2>/dev/null || true
+---LOG---

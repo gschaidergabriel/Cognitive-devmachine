@@ -1,6 +1,7 @@
 {
   "schema": "ENTITYOS_HCU_FREE_PROVIDER_ADMISSION/v1",
   "authority_epoch": "8.67",
+  "supervisor_steering": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_67.json",
   "mode": "FREE_ONLY",
   "product": "EntityOS",
   "compute_architecture": "HCU",
@@ -21,8 +22,23 @@
       "admitted": false,
       "cost_class": "UNKNOWN",
       "evidence_ref": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_67.json#runtime_inventory"
+    },
+    "openrouter": {
+      "admitted": false,
+      "cost_class": "UNKNOWN",
+      "evidence_ref": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_67.json#free_only_default_unknown"
+    },
+    "tavily": {
+      "admitted": false,
+      "cost_class": "UNKNOWN",
+      "evidence_ref": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_67.json#free_only_default_unknown"
+    },
+    "exa": {
+      "admitted": false,
+      "cost_class": "UNKNOWN",
+      "evidence_ref": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_67.json#free_only_default_unknown"
     }
   },
   "runtime_provider_credit": 0,
-  "note": "Environment attestations, credential presence, HTTP 402/429 behavior, model catalogs and provider responses cannot self-admit a provider as FREE. A future control-plane update requires direct evidence that the specific execution class cannot create monetary spend or overage."
+  "note": "Environment attestations, credential presence, HTTP 402/429 behavior, model catalogs and provider responses cannot self-admit a provider as FREE. OpenRouter/Tavily/Exa are included because the research distillery can read those credentials. A future control-plane update requires direct evidence that the specific execution class cannot create monetary spend or overage."
 }

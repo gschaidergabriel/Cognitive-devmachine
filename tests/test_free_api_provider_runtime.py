@@ -3,6 +3,7 @@ import http.client
 import json
 import ssl
 import sys
+import threading
 import unittest
 from pathlib import Path
 
@@ -2633,6 +2634,49 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
                 payment_latches=oversized,
             )
         self.assertEqual(opener_calls, [])
+
+    def test_inventory_snapshots_payment_latches_before_membership(self):
+        env = {"NVIDIA_API_KEY": "secret"}
+        latches = set()
+        target_key = MOD._payment_latch_key("nvidia", env)
+        membership_reached = threading.Event()
+        mutation_finished = threading.Event()
+        original_key = MOD._payment_latch_key
+        gate_used = False
+
+        def gated_key(provider_id, snapshot):
+            nonlocal gate_used
+            key = original_key(provider_id, snapshot)
+            if provider_id == "nvidia" and not gate_used:
+                gate_used = True
+                membership_reached.set()
+                self.assertTrue(mutation_finished.wait(2))
+            return key
+
+        def mutate_latches():
+            if membership_reached.wait(2):
+                latches.add(target_key)
+                mutation_finished.set()
+
+        mutator = threading.Thread(target=mutate_latches)
+        mutator.start()
+        MOD._payment_latch_key = gated_key
+        try:
+            rows = MOD.inventory(env, payment_latches=latches)
+        finally:
+            MOD._payment_latch_key = original_key
+            mutation_finished.set()
+            mutator.join(2)
+
+        self.assertFalse(mutator.is_alive())
+        nvidia_row = next(
+            row for row in rows if row["provider_id"] == "nvidia"
+        )
+        self.assertFalse(
+            nvidia_row["payment_blocked_current_budget_epoch"]
+        )
+        self.assertTrue(nvidia_row["eligible"])
+        self.assertIn(target_key, latches)
 
     def test_active_payment_latch_element_is_rejected_before_execution(self):
         leaked_text = "payment-latch-element-equality-must-not-run"

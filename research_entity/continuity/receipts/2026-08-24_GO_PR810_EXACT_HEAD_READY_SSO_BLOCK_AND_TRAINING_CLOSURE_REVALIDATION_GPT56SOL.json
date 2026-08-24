@@ -1,0 +1,110 @@
+{
+  "schema_version": "ENTITYOS_HCU_GO_RECEIPT/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "authority_epoch": "8.63",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "supervisor_mode": "FREE_ONLY",
+  "canonical_main_observed_before_write": "1638c428bacbd6ed1a25c3b42b92f9318ade1f54",
+  "bootstrap_basis": "000_CLAY_ENTITYOS_HCU_FAST_BOOTSTRAP_SOURCE_CURRENT_2026-08-24_GPT56SOL_DEEPWORK_MAX_QUALITY_RATE_RESILIENT(1).txt; cache only, refreshed GitHub authority outranks it",
+  "coordination": {
+    "upstream_macrocycle_id": null,
+    "user_message_timestamp_precision_available_to_this_organ": "MINUTE_ONLY",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "The canonical GO atomic-lease fallback requires at least immutable whole-second message precision when no shared request identifier is exposed. This organ has only minute precision for the exact user turn.",
+    "ordinary_work_class": "EXACT_SOURCE_ACCEPTANCE_REENTRY_PLUS_SOURCE_REVIEW_PLUS_FUSION",
+    "unusual_experiment_count_added": 0
+  },
+  "executor_reentry": {
+    "retained_executor_lane": "gschaidergabriel/Dr.-Unterweger#810",
+    "live_pr_head_observed": "81ce20e53e080af228b62f642eb29360ac9cecf0",
+    "deployment_id": "dpl_98ALxQrZppsRQUqSxCZZyKxTMpy2",
+    "deployment_state": "READY",
+    "deployment_git_sha": "81ce20e53e080af228b62f642eb29360ac9cecf0",
+    "exact_head_match": true,
+    "deployment_build_guard_evidence": {
+      "source_rebind_status": "SOURCE_REBOUND_READY",
+      "exact_blobs_checked": 17,
+      "contract_schema": "ENTITYOS_HCU_JSPACE_EXECUTOR_REBIND_CONTRACT/v4",
+      "manifest_schema": "ENTITYOS_HCU_JSPACE_V4_V3_REQUIRED_BLOBS/v3",
+      "retained_donor_commit": "511d568932bf47828679e3ca6ba05650f18d284d",
+      "promotion_guard": "SOURCE_REBOUND_READY_SUCCESSOR_DYNAMIC_17_BLOB_EXACT_14_RESULT_FENCE_PASS",
+      "permission_guard": "SOURCE_REBOUND_READY_SOURCE_VERIFY_PERMISSION_FENCE_PASS",
+      "executor_identity": "gschaidergabriel/Dr.-Unterweger#810",
+      "scope": "BUILD_AND_SOURCE_GUARD_ONLY_RUNTIME_CREDIT_ZERO"
+    },
+    "fixed_route": "/api/hcu-jspace-grid10-binding-capsule",
+    "route_source_observed": {
+      "fixed_command": "python3 -m unittest -v test_model_execution_admission_store_v1.py test_execution_store_inference_jspace_chain_v1.py test_jspace_inference_binding_revalidation_v3.py",
+      "expected_test_count": 14,
+      "source_verification_before_cost_gate": true,
+      "sandbox_create_after_source_and_free_only_gate": true,
+      "secret_fence_required": true,
+      "cleanup_required": true,
+      "whole_runtime_credit_hardcoded_false": true,
+      "jspace_model_runtime_credit_hardcoded_false": true,
+      "training_credit_hardcoded_false": true
+    },
+    "invocation_attempt": {
+      "classification": "DEPLOYMENT_AUTH_TRANSPORT_BLOCK_BEFORE_FUNCTION",
+      "http_status": 302,
+      "redirect_class": "VERCEL_SSO",
+      "function_result_observed": false,
+      "sandbox_create_observed": false,
+      "matching_runtime_logs_observed": 0,
+      "execution_credit": "NONE",
+      "note": "The protected preview redirected at Vercel SSO even through the connected protected-deployment access helper. No function result or matching runtime log was observed. This is auth/transport evidence, not a product negative result."
+    }
+  },
+  "hcu_donor_reentry": {
+    "retained_hcu_lane": "gschaidergabriel/clay-global-research-entity#1263",
+    "live_pr_head_observed": "16a24bc7fbe50155b76cf618d116b98791e6a581",
+    "finding": "A semantic closure revalidator now exists, but the serious J-Space training promotion path does not make that revalidation mandatory.",
+    "observed_chain": [
+      "jspace_model_input_control_closure_v1.validate_closure proves self-authenticating serialized identity only",
+      "jspace_model_input_control_closure_revalidation_v1.revalidate_closure_against_canonical_sources reconstructs from canonical MiniUnifiedDB admission plus producer evidence and rejects source mismatch",
+      "jspace_training_control_delivery_gate_v1.require_model_input_control_closure calls only validate_closure and trace/inference cross-binding",
+      "compile_admitted_jspace_training_dataset_v1 accepts caller-owned admitted_model_input_control_closures and forwards the selected closure into that weaker gate without canonical-source revalidation"
+    ],
+    "counterexample_class": "SELF_CONSISTENT_CONTROL_DELIVERY_CLOSURE_PROVENANCE_LAUNDERING",
+    "counterexample_design": "Keep trace/inference-facing fields equal, replace control_admission_sha256 and/or control_binding_sha256 with different valid non-placeholder digests, recompute closure_sha256 canonically, and insert the object into the caller-owned closure registry under the matching J-Space binding key. Current serious-training promotion has no canonical source preimage at that boundary to distinguish this from a closure reconstructed from observed delivery evidence.",
+    "recommended_repair": "Reuse revalidate_closure_against_canonical_sources at the serious training-promotion boundary with the existing canonical MiniUnifiedDB connection and exact control binding, consumed input bytes, GRID plan, admitted InferenceReceipt, JSpaceBinding and current generation; do not create a second store or authority.",
+    "durable_coordination": {
+      "pr1263_comment_id": 5390224496,
+      "status": "POSTED"
+    },
+    "verification_scope": "SOURCE_REVIEW_AND_COUNTEREXAMPLE_DESIGN_ONLY",
+    "runtime_execution": "NOT_RUN_FOR_NEWER_DONOR_HEAD",
+    "whole_product_or_training_credit": 0
+  },
+  "tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED_REENTRY: exact live PR810 head now has an exact-SHA READY Vercel deployment and its build-time 17-blob/14-result promotion guards PASS at source/build scope. Runtime function acceptance remains blocked by deployment SSO before invocation.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED_HCU_CAUSAL_EVIDENCE_BOUNDARY: identified and durably surfaced the missing mandatory semantic closure-revalidation edge between canonical observed control delivery and serious training promotion.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "ADVANCED_TRAINING_PROVENANCE_DISCRIMINATOR: designed a concrete self-consistent provenance-laundering counterexample and exact fail-closed repair path using the existing canonical closure revalidator; no paid lane entered."
+  },
+  "credits": {
+    "entityos_hcu_whole_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "negative_evidence": [
+    "READY deployment alone is not function invocation evidence.",
+    "Protected-deployment SSO redirect is auth/transport evidence, not a scientific or product negative result.",
+    "The current exact-head runtime capsule produced no observed function result in this macrocycle."
+  ],
+  "readme": {
+    "status": "NO_CHANGE_WITH_REASON",
+    "reason": "Canonical main and retained donor are moving under parallel work. Avoid a stale full-file README overwrite. This append-only receipt plus the retained-lane PR comment preserve the exact delta and next gates."
+  },
+  "next_exact_gates": [
+    "Obtain an authenticated invocation of the already READY exact-head PR810 fixed route without changing source, enabling paid fallback, or bypassing Vercel protection; require source verification, FREE_ONLY gate, exact 14-result fence, secret fence, exit 0 and cleanup before component credit.",
+    "In PR1263, add a deterministic forged-self-consistent closure regression at the serious training compiler boundary, then wire the existing canonical-source closure revalidator into that promotion path without introducing a second state/effect/training authority.",
+    "Only after exact admitted execution should the pinned executor be deliberately rebound to a newer immutable donor snapshot; never project newer donor semantics onto the pinned 511d5689 runtime candidate."
+  ],
+  "acceptance": "IN_PROGRESS"
+}

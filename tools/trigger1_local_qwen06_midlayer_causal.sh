@@ -4,10 +4,10 @@ set -Eeuo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT"
 
-# The retained Trigger-1 lane may download the pinned public Hugging Face checkpoint,
-# but it must not inherit external LLM-provider credentials or silently attach a
-# cached/stored Hugging Face token.  Public model download is transport only; it is
-# not provider inference and must remain credential-independent.
+# The retained compatibility entrypoint now executes the strongest intermediate
+# contrastive Trigger-1 experiment. It may download the pinned public Hugging Face
+# checkpoint, but it must not inherit external LLM-provider credentials or silently
+# attach a cached/stored Hugging Face token.
 unset \
   GROQ_API_KEY GROQ_API_KEYS GROQ2_API_KEY GROQ3_API_KEY \
   MISTRAL_API_KEY MISTRAL_API_KEYS MISTRAL2_API_KEY MISTRAL3_API_KEY \
@@ -26,9 +26,6 @@ export HF_HUB_DISABLE_IMPLICIT_TOKEN=1
 
 OUT_DIR="${1:?usage: trigger1_local_qwen06_midlayer_causal.sh OUTPUT_DIR}"
 mkdir -p "$OUT_DIR"
-# Redirect the hub token file lookup into this disposable run directory and ensure
-# the file is absent.  Together with HF_HUB_DISABLE_IMPLICIT_TOKEN this prevents a
-# normal-user cached login from becoming hidden execution provenance.
 export HF_TOKEN_PATH="$OUT_DIR/no-hf-token"
 rm -f "$HF_TOKEN_PATH"
 
@@ -79,13 +76,15 @@ if [[ "$AFTER_KB" -lt 3000000 ]]; then
   python3 - "$OUT_DIR/trigger1_local_activation_api_result.json" "$BEFORE_KB" "$AFTER_KB" <<'PY'
 import json, pathlib, sys
 pathlib.Path(sys.argv[1]).write_text(json.dumps({
-  'schema':'CLAY_TRIGGER1_LOCAL_QWEN06_MIDLAYER_CAUSAL_EXPERIMENT/v1',
+  'schema':'CLAY_TRIGGER1_LOCAL_QWEN06_INTERMEDIATE_CONTRASTIVE/v1',
   'status':'BLOCKED_INSUFFICIENT_FREE_DISK_AFTER_BOUNDED_CLEANUP',
   'available_kb_before':int(sys.argv[2]),
   'available_kb_after':int(sys.argv[3]),
   'current_output_preserved':True,
   'zero_provider_billing':True,
   'external_provider_credentials_read':False,
+  'provider_network_calls':0,
+  'credit_scope':'NONE',
   'next_action':'RECLAIM_ADDITIONAL_SANDBOX_CACHE_OR_STORAGE_WITHIN_OWNER_AUTHORITY'
 }, indent=2, sort_keys=True)+'\n', encoding='utf-8')
 PY
@@ -118,12 +117,14 @@ if ! has_runtime "$PYTHON"; then
   python3 - "$OUT_DIR/trigger1_local_activation_api_result.json" <<'PY'
 import json, pathlib,sys
 pathlib.Path(sys.argv[1]).write_text(json.dumps({
-  'schema':'CLAY_TRIGGER1_LOCAL_QWEN06_MIDLAYER_CAUSAL_EXPERIMENT/v1',
-  'status':'BLOCKED_LOCAL_MIDLAYER_FASTPATH',
+  'schema':'CLAY_TRIGGER1_LOCAL_QWEN06_INTERMEDIATE_CONTRASTIVE/v1',
+  'status':'BLOCKED_LOCAL_INTERMEDIATE',
   'reason':'PYTORCH_TRANSFORMERS_NORMAL_USER_RUNTIME_UNAVAILABLE_AFTER_BOOTSTRAP',
   'zero_provider_billing':True,
   'external_provider_credentials_read':False,
-  'next_action':'REPAIR_NOW_OR_ROUTE_AROUND_CURRENT_LOCAL_MIDLAYER_BLOCKER'
+  'provider_network_calls':0,
+  'credit_scope':'NONE',
+  'next_action':'REPAIR_NOW_OR_ROUTE_AROUND_CURRENT_LOCAL_INTERMEDIATE_BLOCKER'
 }, indent=2, sort_keys=True)+'\n', encoding='utf-8')
 PY
   exit 3

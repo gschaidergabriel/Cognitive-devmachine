@@ -1,10 +1,9 @@
 #!/usr/bin/env bash
 set -Eeuo pipefail
 
-# Host-side, narrowly scoped publisher for sandbox-generated Free Swarm metrics.
-# This is sandbox/bridge administration: it never executes research workloads
-# on the host and only pushes free swarm dashboard metrics to main.
-
+# Host-side narrowly scoped publisher. It executes no research workload on the
+# host; it only reads sandbox artifact mounts, regenerates dashboard files in a
+# dedicated checkout, and pushes those derived metrics to main.
 [[ ${EUID:-$(id -u)} -eq 0 ]] || { echo 'root required for one-time service install' >&2; exit 2; }
 
 BASE=/srv/claylab
@@ -41,7 +40,6 @@ set -Eeuo pipefail
 BASE=/srv/claylab
 PUB="$BASE/free-swarm-publisher"
 ART="$BASE/artifacts/clay-entityos-swarm"
-REPO=gschaidergabriel/clay-global-research-entity
 KEY="$BASE/.ssh/chatgpt_vps_ed25519"
 KNOWN="$BASE/.ssh/known_hosts"
 LOCK="$BASE/state/free-swarm-publisher/lock"
@@ -50,31 +48,34 @@ exec 9>"$LOCK"
 flock -n 9 || exit 0
 export GIT_SSH_COMMAND="ssh -i $KEY -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes -o UserKnownHostsFile=$KNOWN"
 
+render_all() {
+  [[ ! -f "$PUB/free swarm/merge_forge_evaluations.py" ]] || python3 "$PUB/free swarm/merge_forge_evaluations.py" --repo "$PUB" --artifacts "$ART" >/dev/null
+  python3 "$PUB/free swarm/evaluate.py" --repo "$PUB" --artifacts "$ART" >/dev/null
+  [[ ! -f "$PUB/free swarm/update_distillery_readme.py" ]] || python3 "$PUB/free swarm/update_distillery_readme.py" --repo "$PUB" --artifacts "$ART" >/dev/null
+  [[ ! -f "$PUB/free swarm/update_forge_readme.py" ]] || python3 "$PUB/free swarm/update_forge_readme.py" --repo "$PUB" --artifacts "$ART" >/dev/null
+}
+
+stage_all() {
+  git -C "$PUB" add -- "free swarm/README.md" "free swarm/LIVE_METRICS.json" "free swarm/architecture_delta_evaluations.jsonl"
+  [[ ! -f "$PUB/free swarm/DISTILLERY_LIVE.json" ]] || git -C "$PUB" add -- "free swarm/DISTILLERY_LIVE.json"
+  [[ ! -f "$PUB/free swarm/FORGE_LIVE.json" ]] || git -C "$PUB" add -- "free swarm/FORGE_LIVE.json"
+}
+
 refresh_once() {
   git -C "$PUB" fetch origin main --prune
   git -C "$PUB" checkout -B main origin/main
   git -C "$PUB" reset --hard origin/main
-  python3 "$PUB/free swarm/evaluate.py" --repo "$PUB" --artifacts "$ART" >/dev/null
-  if [[ -f "$PUB/free swarm/update_distillery_readme.py" ]]; then
-    python3 "$PUB/free swarm/update_distillery_readme.py" --repo "$PUB" --artifacts "$ART" >/dev/null
-  fi
-  git -C "$PUB" add -- "free swarm/README.md" "free swarm/LIVE_METRICS.json"
-  [[ ! -f "$PUB/free swarm/DISTILLERY_LIVE.json" ]] || git -C "$PUB" add -- "free swarm/DISTILLERY_LIVE.json"
-  if git -C "$PUB" diff --cached --quiet; then
-    return 0
-  fi
-  git -C "$PUB" commit -m "metrics: autonomous Free Swarm + distillery refresh"
+  render_all
+  stage_all
+  git -C "$PUB" diff --cached --quiet && return 0
+  git -C "$PUB" commit -m "metrics: autonomous Free Swarm + distillery + forge refresh"
   if ! git -C "$PUB" push origin HEAD:main; then
     git -C "$PUB" fetch origin main --prune
     git -C "$PUB" reset --hard origin/main
-    python3 "$PUB/free swarm/evaluate.py" --repo "$PUB" --artifacts "$ART" >/dev/null
-    if [[ -f "$PUB/free swarm/update_distillery_readme.py" ]]; then
-      python3 "$PUB/free swarm/update_distillery_readme.py" --repo "$PUB" --artifacts "$ART" >/dev/null
-    fi
-    git -C "$PUB" add -- "free swarm/README.md" "free swarm/LIVE_METRICS.json"
-    [[ ! -f "$PUB/free swarm/DISTILLERY_LIVE.json" ]] || git -C "$PUB" add -- "free swarm/DISTILLERY_LIVE.json"
+    render_all
+    stage_all
     git -C "$PUB" diff --cached --quiet && return 0
-    git -C "$PUB" commit -m "metrics: autonomous Free Swarm + distillery refresh"
+    git -C "$PUB" commit -m "metrics: autonomous Free Swarm + distillery + forge refresh"
     git -C "$PUB" push origin HEAD:main
   fi
 }
@@ -103,7 +104,6 @@ Environment=CLAY_FREE_SWARM_PUBLISH_SECONDS=900
 WantedBy=default.target
 EOF
 chown -R "$USER_NAME:$USER_NAME" "$UNIT_DIR"
-
 loginctl enable-linger "$USER_NAME" >/dev/null 2>&1 || true
 install -d -m 0700 -o "$USER_NAME" -g "$USER_NAME" "$RUNTIME"
 

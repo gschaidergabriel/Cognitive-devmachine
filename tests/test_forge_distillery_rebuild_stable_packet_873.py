@@ -43,11 +43,11 @@ def admission():
     }
 
 
-def accepted_row(*, evaluated_at: str, hypothesis: str, falsifier: str):
+def accepted_row(*, evaluated_at: str, hypothesis: str, falsifier: str, delta_id: str = "d-rebuild-1"):
     return {
         "schema": "CLAY_FORGE_DELTA_EVALUATION/v1",
         "record_type": "forge_evaluation",
-        "delta_id": "d-rebuild-1",
+        "delta_id": delta_id,
         "source_class": "free_swarm",
         "provider": "local_deterministic",
         "model": "none",
@@ -88,11 +88,17 @@ class RebuildStablePacket873Tests(unittest.TestCase):
             evaluated_at="2026-08-24T17:30:00+00:00",
             hypothesis="different narration",
             falsifier="different falsifier",
+            delta_id="d-rebuild-envelope-renamed",
         )
         packet_first = bridge.measured_packet(first)
         packet_replay = bridge.measured_packet(replay)
         self.assertNotIn("evaluated_at", packet_first)
+        self.assertNotIn("delta_id", packet_first)
         self.assertEqual(packet_first, packet_replay)
+        self.assertEqual(
+            bridge.execution_replay_identity(first),
+            bridge.execution_replay_identity(replay),
+        )
         self.assertEqual(
             bridge.measured_evidence_identity(first),
             bridge.measured_evidence_identity(replay),
@@ -109,6 +115,7 @@ class RebuildStablePacket873Tests(unittest.TestCase):
                 evaluated_at="2026-08-24T18:45:17+00:00",
                 hypothesis="different narration",
                 falsifier="different falsifier",
+                delta_id="d-rebuild-envelope-renamed",
             ),
         ]
         observed = []
@@ -140,6 +147,74 @@ class RebuildStablePacket873Tests(unittest.TestCase):
                     )
                 )
         self.assertEqual(observed[0], observed[1])
+
+    def test_same_execution_rekeyed_delta_id_is_duplicate_after_reopen(self):
+        with tempfile.TemporaryDirectory() as root:
+            root_path = Path(root)
+            eval_path = root_path / "eval.jsonl"
+            db_path = root_path / "distillery.sqlite3"
+            first = accepted_row(
+                evaluated_at="2026-08-24T16:30:00+00:00",
+                hypothesis="candidate narration one",
+                falsifier="candidate falsifier one",
+            )
+            eval_path.write_text(json.dumps(first) + "\n", encoding="utf-8")
+            first_result = bridge.ingest(eval_path, db_path)
+            token_count = first_result["accepted_dataset_tokens_counter"]
+
+            replay = accepted_row(
+                evaluated_at="2026-08-24T19:00:00+00:00",
+                hypothesis="renarrated candidate",
+                falsifier="renarrated falsifier",
+                delta_id="d-rebuild-envelope-renamed",
+            )
+            eval_path.write_text(json.dumps(replay) + "\n", encoding="utf-8")
+            replay_result = bridge.ingest(eval_path, db_path)
+
+            self.assertEqual(first_result["admitted"], 1)
+            self.assertEqual(replay_result["admitted"], 0)
+            self.assertEqual(replay_result["duplicates"], 1)
+            self.assertEqual(replay_result["forge_execution_packets_total"], 1)
+            self.assertEqual(replay_result["accepted_dataset_tokens_counter"], token_count)
+
+    def test_legacy_collision_cannot_be_evaded_by_delta_id_rekey(self):
+        row = accepted_row(
+            evaluated_at="2026-08-24T16:30:00+00:00",
+            hypothesis="candidate narration one",
+            falsifier="candidate falsifier one",
+            delta_id="d-rebuild-envelope-renamed",
+        )
+        with tempfile.TemporaryDirectory() as root:
+            root_path = Path(root)
+            eval_path = root_path / "eval.jsonl"
+            db_path = root_path / "distillery.sqlite3"
+            con = sqlite3.connect(db_path)
+            bridge.ensure_schema(con)
+            con.execute(
+                "INSERT INTO forge_execution_ingest("
+                "evaluation_sha256,packet_id,delta_id,worker_sha,source_repo_head,evaluation_repo_head,admitted_at,approx_tokens"
+                ") VALUES(?,?,?,?,?,?,?,?)",
+                (
+                    "9" * 64,
+                    "kf-legacy-existing",
+                    "different-legacy-envelope-id",
+                    row["worker_sha"],
+                    row["source_repo_head"],
+                    row["evaluation_repo_head"],
+                    "2026-08-24T00:00:00+00:00",
+                    123,
+                ),
+            )
+            con.commit()
+            con.close()
+
+            eval_path.write_text(json.dumps(row) + "\n", encoding="utf-8")
+            result = bridge.ingest(eval_path, db_path)
+            self.assertEqual(result["admitted"], 0)
+            self.assertEqual(result["duplicates"], 0)
+            self.assertEqual(result["rejected"].get("LEGACY_REPLAY_IDENTITY_UNRESOLVED"), 1)
+            self.assertEqual(result["forge_execution_packets_total"], 1)
+            self.assertEqual(result["knowledge_packets_total"], 0)
 
 
 if __name__ == "__main__":

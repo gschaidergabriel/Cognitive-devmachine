@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
 """Deterministically admit measured Forge ACCEPTED evaluations into Distillery.
 
-This bridge closes the executable-delta -> Forge -> Distillery conversion edge without
-promoting model-authored hypotheses to fact. Only measured fields from an exact-source
-Forge evaluation are admitted into packet_text. Proposal text remains metadata-only.
-
-The destination remains the existing Distillery SQLite database; this module does not
-create a second truth/effect authority and performs no network or external effect.
+This bridge closes executable-delta -> Forge -> Distillery without promoting
+model-authored hypotheses to fact. An ACCEPTED label alone is insufficient: the
+row must also carry a source-bound CLAY_FORGE_EXECUTION_ADMISSION/v1 manifest
+proving that every model-authored command was admitted and executed only through
+the isolated no-shell backend. The destination remains the existing Distillery DB.
 """
 from __future__ import annotations
 
@@ -27,6 +26,7 @@ DEFAULT_DISTILLERY_DB = Path(os.getenv("CLAY_RESEARCH_DISTILLERY_DB", str(ARTIFA
 HEX40 = re.compile(r"^[0-9a-f]{40}$")
 HEX64 = re.compile(r"^[0-9a-f]{64}$")
 HEX40_64 = re.compile(r"^[0-9a-f]{40,64}$")
+EXECUTION_ADMISSION_SCHEMA = "CLAY_FORGE_EXECUTION_ADMISSION/v1"
 
 
 def now_iso() -> str:
@@ -73,6 +73,42 @@ def _safe_target_blobs(value: Any) -> bool:
     return True
 
 
+def _execution_admission_reason(row: dict) -> tuple[bool, str]:
+    manifest = row.get("execution_admission")
+    if not isinstance(manifest, dict):
+        return False, "EXECUTION_ADMISSION_MISSING"
+    if manifest.get("schema") != EXECUTION_ADMISSION_SCHEMA:
+        return False, "EXECUTION_ADMISSION_WRONG_SCHEMA"
+    if manifest.get("source_scope") != "EXACT_WORKER_PROMPT_HEAD":
+        return False, "EXECUTION_ADMISSION_SOURCE_SCOPE_NOT_EXACT"
+    if manifest.get("source_identity_admitted") is not True:
+        return False, "EXECUTION_ADMISSION_SOURCE_NOT_ADMITTED"
+    if manifest.get("source_head") != row.get("source_repo_head"):
+        return False, "EXECUTION_ADMISSION_SOURCE_HEAD_MISMATCH"
+    eval_checkout = manifest.get("evaluation_checkout_head")
+    if not (isinstance(eval_checkout, str) and HEX40.fullmatch(eval_checkout)):
+        return False, "EXECUTION_ADMISSION_EVALUATION_HEAD_INVALID"
+    if eval_checkout != row.get("evaluation_repo_head"):
+        return False, "EXECUTION_ADMISSION_EVALUATION_HEAD_MISMATCH"
+    if manifest.get("all_commands_admitted") is not True:
+        return False, "EXECUTION_COMMAND_SET_NOT_ADMITTED"
+    decisions = manifest.get("decisions")
+    if not isinstance(decisions, list) or not decisions:
+        return False, "EXECUTION_COMMAND_DECISIONS_MISSING"
+    if any(not isinstance(d, dict) or d.get("admitted") is not True for d in decisions):
+        return False, "EXECUTION_COMMAND_DECISION_REJECTED"
+    backend = manifest.get("backend")
+    if not isinstance(backend, dict) or backend.get("admitted") is not True:
+        return False, "EXECUTION_BACKEND_NOT_ADMITTED"
+    if backend.get("network_namespace") != "ISOLATED":
+        return False, "EXECUTION_NETWORK_NOT_ISOLATED"
+    if backend.get("secret_environment_inherited") is not False:
+        return False, "EXECUTION_SECRET_ENVIRONMENT_NOT_CLEAN"
+    if backend.get("host_secret_paths_exposed") is not False:
+        return False, "EXECUTION_HOST_SECRET_PATHS_EXPOSED"
+    return True, "EXECUTION_ADMISSION_BOUND"
+
+
 def admission_reason(row: Any) -> tuple[bool, str]:
     if not isinstance(row, dict):
         return False, "NOT_OBJECT"
@@ -91,6 +127,9 @@ def admission_reason(row: Any) -> tuple[bool, str]:
         return False, "EVALUATION_HEAD_INVALID"
     if not (isinstance(worker_sha, str) and HEX64.fullmatch(worker_sha)):
         return False, "WORKER_SHA_INVALID"
+    execution_ok, execution_reason = _execution_admission_reason(row)
+    if not execution_ok:
+        return False, execution_reason
     if not _safe_target_blobs(row.get("target_blob_identities")):
         return False, "TARGET_BLOBS_INVALID"
     if not _int_at_least(row, "reproducible_runs", 2):
@@ -104,15 +143,11 @@ def admission_reason(row: Any) -> tuple[bool, str]:
         return False, "NO_POSITIVE_IMPROVEMENT"
     if not _int_at_least(row, "tests_passed", 1):
         return False, "NO_PASSING_TESTS"
-    return True, "ACCEPTED_EXACT_EXECUTION_EVIDENCE"
+    return True, "ACCEPTED_EXACT_ISOLATED_EXECUTION_EVIDENCE"
 
 
 def measured_packet(row: dict) -> dict:
-    """Return training text fields containing only measured Forge evidence.
-
-    proposal_hypothesis/falsifier are deliberately excluded. They remain candidate
-    narration and cannot be upgraded by being adjacent to an accepted evaluation.
-    """
+    execution_admission = row["execution_admission"]
     return {
         "schema": "CLAY_DISTILLERY_FORGE_EXECUTION_PACKET/v1",
         "evidence_class": "FORGE_MEASURED_EXECUTION",
@@ -122,6 +157,8 @@ def measured_packet(row: dict) -> dict:
         "worker_sha": row["worker_sha"],
         "source_repo_head": row["source_repo_head"],
         "evaluation_repo_head": row["evaluation_repo_head"],
+        "execution_admission_schema": execution_admission["schema"],
+        "execution_admission_sha256": digest_json(execution_admission),
         "target_blob_identities": row["target_blob_identities"],
         "metric": str(row.get("metric") or ""),
         "relative_improvement_pct": float(row["relative_improvement_pct"]),
@@ -176,8 +213,7 @@ def ensure_schema(con: sqlite3.Connection) -> None:
 
 def bump(con: sqlite3.Connection, key: str, delta: int) -> None:
     con.execute(
-        "INSERT INTO counters(key,value) VALUES(?,?) "
-        "ON CONFLICT(key) DO UPDATE SET value=value+excluded.value",
+        "INSERT INTO counters(key,value) VALUES(?,?) ON CONFLICT(key) DO UPDATE SET value=value+excluded.value",
         (key, int(delta)),
     )
 
@@ -198,6 +234,7 @@ def admit_one(con: sqlite3.Connection, row: dict) -> tuple[bool, str, str | None
     metadata = {
         "packet_class": "FORGE_EXECUTION_EVIDENCE",
         "forge_evaluation_sha256": eval_sha,
+        "execution_admission_sha256": packet["execution_admission_sha256"],
         "source_class": row.get("source_class"),
         "provider": row.get("provider"),
         "model": row.get("model"),
@@ -205,7 +242,7 @@ def admit_one(con: sqlite3.Connection, row: dict) -> tuple[bool, str, str | None
         "proposal_hypothesis_candidate_only": row.get("proposal_hypothesis"),
         "proposal_falsifier_candidate_only": row.get("falsifier"),
         "score_semantics": {
-            "intrinsic_score": "1.0 = exact accepted measured execution packet passed deterministic admission",
+            "intrinsic_score": "1.0 = exact accepted measured isolated-execution packet passed deterministic admission",
             "grf_score": "0.0 = not measured by Forge; unknown rather than promoted",
             "project_fit": "1.0 = executable EntityOS/HCU delta evidence",
             "novelty_score": "0.0 = not measured by Forge; unknown rather than promoted",
@@ -215,35 +252,14 @@ def admit_one(con: sqlite3.Connection, row: dict) -> tuple[bool, str, str | None
         "training_credit": 0,
     }
     con.execute(
-        "INSERT INTO knowledge_packets(id,question_id,root_problem,packet_text,metadata_json,intrinsic_score,grf_score,project_fit,novelty_score,approx_tokens,created_at) "
-        "VALUES(?,?,?,?,?,?,?,?,?,?,?)",
-        (
-            packet_id,
-            question_id,
-            "Measured executable delta evidence from Evidence Forge",
-            text,
-            canonical_json(metadata),
-            1.0,
-            0.0,
-            1.0,
-            0.0,
-            tok,
-            now_iso(),
-        ),
+        "INSERT INTO knowledge_packets(id,question_id,root_problem,packet_text,metadata_json,intrinsic_score,grf_score,project_fit,novelty_score,approx_tokens,created_at) VALUES(?,?,?,?,?,?,?,?,?,?,?)",
+        (packet_id, question_id, "Measured executable delta evidence from Evidence Forge", text,
+         canonical_json(metadata), 1.0, 0.0, 1.0, 0.0, tok, now_iso()),
     )
     con.execute(
-        "INSERT INTO forge_execution_ingest(evaluation_sha256,packet_id,delta_id,worker_sha,source_repo_head,evaluation_repo_head,admitted_at,approx_tokens) "
-        "VALUES(?,?,?,?,?,?,?,?)",
-        (
-            eval_sha,
-            packet_id,
-            str(row.get("delta_id") or ""),
-            row["worker_sha"],
-            row["source_repo_head"],
-            row["evaluation_repo_head"],
-            now_iso(),
-            tok,
-        ),
+        "INSERT INTO forge_execution_ingest(evaluation_sha256,packet_id,delta_id,worker_sha,source_repo_head,evaluation_repo_head,admitted_at,approx_tokens) VALUES(?,?,?,?,?,?,?,?)",
+        (eval_sha, packet_id, str(row.get("delta_id") or ""), row["worker_sha"], row["source_repo_head"],
+         row["evaluation_repo_head"], now_iso(), tok),
     )
     bump(con, "accepted_dataset_tokens", tok)
     bump(con, "accepted_packets", 1)

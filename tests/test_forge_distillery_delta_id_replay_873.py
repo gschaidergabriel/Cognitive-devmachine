@@ -28,6 +28,32 @@ class DeltaIdReplayIdentity873Tests(unittest.TestCase):
             encoding="utf-8",
         )
 
+    def insert_pre_v2_row(self, row):
+        con = sqlite3.connect(self.db)
+        bridge.ensure_schema(con)
+        con.execute(
+            "INSERT INTO forge_execution_ingest("
+            "evaluation_sha256,execution_replay_identity_sha256,"
+            "execution_replay_identity_schema,measured_evidence_sha256,packet_id,"
+            "delta_id,worker_sha,source_repo_head,evaluation_repo_head,admitted_at,approx_tokens"
+            ") VALUES(?,?,?,?,?,?,?,?,?,?,?)",
+            (
+                bridge.digest_json(row),
+                bridge.digest_json(bridge.execution_replay_identity_v1(row)),
+                None,
+                bridge.digest_json(bridge.measured_evidence_identity_v1(row)),
+                "kf-pre-v2-existing",
+                row["delta_id"],
+                row["worker_sha"],
+                row["source_repo_head"],
+                row["evaluation_repo_head"],
+                "2026-08-24T00:00:00+00:00",
+                123,
+            ),
+        )
+        con.commit()
+        con.close()
+
     def test_delta_id_only_replay_is_duplicate_and_token_stable(self):
         first_row = accepted_row()
         self.write(first_row)
@@ -60,8 +86,10 @@ class DeltaIdReplayIdentity873Tests(unittest.TestCase):
 
         con = sqlite3.connect(self.db)
         persisted_ids = [row[0] for row in con.execute("SELECT id FROM knowledge_packets ORDER BY id")]
+        schemas = [row[0] for row in con.execute("SELECT execution_replay_identity_schema FROM forge_execution_ingest")]
         con.close()
         self.assertEqual(persisted_ids, packet_ids)
+        self.assertEqual(schemas, [bridge.REPLAY_IDENTITY_V2])
 
     def test_delta_id_rekey_with_measurement_mutation_fails_closed(self):
         self.write(accepted_row())
@@ -81,6 +109,40 @@ class DeltaIdReplayIdentity873Tests(unittest.TestCase):
         self.assertEqual(second["rejected"].get("REPLAY_IDENTITY_CONFLICT"), 1)
         self.assertEqual(second["accepted_dataset_tokens_counter"], token_count)
         self.assertEqual(second["forge_execution_packets_total"], 1)
+
+    def test_pre_v2_delta_id_rekey_is_recovered_as_duplicate(self):
+        original = accepted_row()
+        self.insert_pre_v2_row(original)
+
+        replay = accepted_row(
+            delta_id="renamed-after-v2-upgrade",
+            evaluated_at="2026-08-24T16:33:00+00:00",
+            proposal_hypothesis="new envelope narration",
+        )
+        self.write(replay)
+        out = bridge.ingest(self.eval, self.db)
+
+        self.assertEqual(out["admitted"], 0)
+        self.assertEqual(out["duplicates"], 1)
+        self.assertEqual(out["rejected"].get("REPLAY_IDENTITY_CONFLICT", 0), 0)
+        self.assertEqual(out["forge_execution_packets_total"], 1)
+
+    def test_pre_v2_delta_id_rekey_with_measurement_mutation_conflicts(self):
+        original = accepted_row()
+        self.insert_pre_v2_row(original)
+
+        mutated = accepted_row(
+            delta_id="renamed-after-v2-upgrade",
+            evaluated_at="2026-08-24T16:33:01+00:00",
+            relative_improvement_pct=75.0,
+        )
+        self.write(mutated)
+        out = bridge.ingest(self.eval, self.db)
+
+        self.assertEqual(out["admitted"], 0)
+        self.assertEqual(out["duplicates"], 0)
+        self.assertEqual(out["rejected"].get("REPLAY_IDENTITY_CONFLICT"), 1)
+        self.assertEqual(out["forge_execution_packets_total"], 1)
 
     def test_legacy_collision_cannot_be_evaded_by_delta_id_rekey(self):
         row = accepted_row()

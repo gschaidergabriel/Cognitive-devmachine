@@ -235,24 +235,26 @@ class NetworkFence:
     def __init__(self) -> None:
         self.attempts = 0
         self._connect = socket.socket.connect
+        self._connect_ex = socket.socket.connect_ex
         self._create_connection = socket.create_connection
+        self._getaddrinfo = socket.getaddrinfo
 
-    def _blocked_connect(self, *args: Any, **kwargs: Any) -> Any:
-        self.attempts += 1
-        raise ProbeRejected("NETWORK_ATTEMPT_BLOCKED_OFFLINE_ONLY")
-
-    def _blocked_create_connection(self, *args: Any, **kwargs: Any) -> Any:
+    def _blocked_network(self, *args: Any, **kwargs: Any) -> Any:
         self.attempts += 1
         raise ProbeRejected("NETWORK_ATTEMPT_BLOCKED_OFFLINE_ONLY")
 
     def __enter__(self) -> "NetworkFence":
-        socket.socket.connect = self._blocked_connect  # type: ignore[assignment]
-        socket.create_connection = self._blocked_create_connection  # type: ignore[assignment]
+        socket.socket.connect = self._blocked_network  # type: ignore[assignment]
+        socket.socket.connect_ex = self._blocked_network  # type: ignore[assignment]
+        socket.create_connection = self._blocked_network  # type: ignore[assignment]
+        socket.getaddrinfo = self._blocked_network  # type: ignore[assignment]
         return self
 
     def __exit__(self, exc_type: Any, exc: Any, tb: Any) -> None:
         socket.socket.connect = self._connect  # type: ignore[assignment]
+        socket.socket.connect_ex = self._connect_ex  # type: ignore[assignment]
         socket.create_connection = self._create_connection  # type: ignore[assignment]
+        socket.getaddrinfo = self._getaddrinfo  # type: ignore[assignment]
 
 
 def resolve_layers(model: Any) -> Any:

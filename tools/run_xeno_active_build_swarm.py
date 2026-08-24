@@ -6,25 +6,24 @@ FREE fabric from architecture prose toward shippable Xeno patches, tests, benchm
 ~0.8B specialization, the two-slot core/prestage harness, dashboard, peer/GRID10,
 Global J-Space causal engineering, ClayCode migration, and measured recursive gains.
 
-Economic execution authority is inherited exclusively through the supervisor-8.70
-route/credential-gated v3 fabric. Xeno must never fall back to the older ungated v2
-scheduler merely because it exposes the same scheduler API. Xeno remains an
-implementation codename inside EntityOS/HCU.
+Economic execution authority is inherited exclusively through the current route/
+credential-gated v3 fabric. Worker cognition receives a separately synthesized live
+authority envelope from Supervisor Inbox -> exact steering -> typed provider admission,
+so stale worker-directive prose cannot override a newer supervisor epoch. Xeno remains
+an implementation codename inside EntityOS/HCU.
 """
 from __future__ import annotations
 
 import asyncio
+import hashlib
 import json
 import os
 from pathlib import Path
 from typing import Any
 
 import run_6000_free_swarm_v3 as economic
+import xeno_current_authority_protocol as live_authority
 
-# v3 owns the concrete FREE lane reservation + provider-call gates and then
-# delegates scheduling to this underlying v2 work-stealing module. Reuse that
-# exact module object so Xeno specialization cannot create a parallel scheduler
-# with an un-gated provider boundary.
 fabric = economic.fabric
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -53,36 +52,19 @@ XENO_ROLES = [
 ]
 
 XENO_SHARDS = [
-    "v1 executable end-to-end slice",
-    "Qwen3.5-0.8B exact model identity and loader",
-    "internal 0.8B ON/OFF without state reset",
-    "arbitrary external LLM CORE adapter",
-    "slot1/slot2 persistent secret-ref configuration",
-    "CORE/PRESTAGE role selection and swap",
-    "PRESTAGE ON/OFF bypass equivalence",
-    "dashboard harness controls and secret hygiene",
-    "XENO_PEER_LINK/v1 handshake and replay safety",
-    "GRID10 exact ten logical-cell scheduler",
-    "GRID10 partial-cell/peer failure recovery",
-    "JSPACE_VECTOR_CONTROL_ABI/v1 codec",
-    "Global J-Space causal lesion/sham/off-target/rescue",
-    "GWT competition/broadcast calibration",
-    "J-Space external-core compiled projection",
-    "J-Space cross-Xeno projection without latent-coordinate conflation",
-    "dataset compiler and family split",
-    "hard-negative generation",
-    "fine-tune integration seam and authority gate",
-    "post-train frozen eval and ablations",
-    "Typed Entry routing",
-    "UnifiedDB/recovery receipt binding",
-    "EffectGate boundary",
-    "ClayCode migration candidate",
-    "p50/p95 latency reduction",
-    "throughput and token-efficiency gain",
-    "RSS/quantization optimization",
-    "capability expansion without regression",
-    "recursive full-vector promotion gate",
-    "shipping/package/startup acceptance",
+    "v1 executable end-to-end slice", "Qwen3.5-0.8B exact model identity and loader",
+    "internal 0.8B ON/OFF without state reset", "arbitrary external LLM CORE adapter",
+    "slot1/slot2 persistent secret-ref configuration", "CORE/PRESTAGE role selection and swap",
+    "PRESTAGE ON/OFF bypass equivalence", "dashboard harness controls and secret hygiene",
+    "XENO_PEER_LINK/v1 handshake and replay safety", "GRID10 exact ten logical-cell scheduler",
+    "GRID10 partial-cell/peer failure recovery", "JSPACE_VECTOR_CONTROL_ABI/v1 codec",
+    "Global J-Space causal lesion/sham/off-target/rescue", "GWT competition/broadcast calibration",
+    "J-Space external-core compiled projection", "J-Space cross-Xeno projection without latent-coordinate conflation",
+    "dataset compiler and family split", "hard-negative generation", "fine-tune integration seam and authority gate",
+    "post-train frozen eval and ablations", "Typed Entry routing", "UnifiedDB/recovery receipt binding",
+    "EffectGate boundary", "ClayCode migration candidate", "p50/p95 latency reduction",
+    "throughput and token-efficiency gain", "RSS/quantization optimization", "capability expansion without regression",
+    "recursive full-vector promotion gate", "shipping/package/startup acceptance",
 ]
 
 _BASE_PREV = fabric._PREV_PROMPT
@@ -97,7 +79,6 @@ def _read_json(path: Path) -> dict[str, Any] | None:
 
 
 def _require_free_lane_binding() -> None:
-    """Fail closed if the 8.70 economic gate is bypassed or replaced after import."""
     if fabric.base.request_chat is not economic.gated_request_chat:
         raise RuntimeError("XENO_FREE_LANE_REQUEST_GATE_DRIFT")
     if fabric.FastProviderRuntime.next_key_model is not economic.gated_next_key_model:
@@ -109,11 +90,7 @@ def current_phase() -> dict[str, Any]:
     if marker and marker.get("schema") == "XENO_V1_ACCEPTANCE/v1" and marker.get("status") == "PASS":
         required = ("metrics_receipt_sha256", "model_identity_sha256", "integration_receipt_sha256")
         if all(isinstance(marker.get(k), str) and len(marker[k]) == 64 for k in required):
-            return {
-                "phase": "INFINITE_RECURSIVE_IMPROVEMENT",
-                "v1_acceptance": "BOUND_MARKER_PRESENT",
-                "accepted_version": marker.get("accepted_version", "xeno-v1"),
-            }
+            return {"phase": "INFINITE_RECURSIVE_IMPROVEMENT", "v1_acceptance": "BOUND_MARKER_PRESENT", "accepted_version": marker.get("accepted_version", "xeno-v1")}
     return {"phase": "XENO_V1_ACTIVE_BUILD", "v1_acceptance": "NOT_BOUND_ACCEPTED"}
 
 
@@ -129,7 +106,7 @@ v1_acceptance={phase['v1_acceptance']}
 - Every owner `go` executes this improvement objective until a newer explicit owner instruction supersedes it. Xeno v1 is a baseline, not a terminal product state.
 - Before v1: converge on a finished runnable Xeno with specialized ~0.8B core, switchable engine fabric, two-slot CORE/PRESTAGE harness, dashboard, Xeno peer-link, GRID10, Global J-Space/GWT, dataset/training integration and acceptance evidence.
 - After v1: continue measure -> patch -> test -> benchmark -> full-vector compare -> promote/reject across subsequent go cycles until superseded.
-- Every external FREE call must retain the supervisor-8.70 credential+route economic gate and FREE_LANE_EXECUTION_RECEIPT/v1. Provider-level FREE labels, key presence, model consensus or HTTP success cannot bypass that gate. Paid fallback stays zero.
+- Every external FREE call must retain the current credential+route economic gate and FREE_LANE_EXECUTION_RECEIPT/v1. Provider-level FREE labels, key presence, model consensus or HTTP success cannot bypass that gate. Paid fallback stays zero.
 - The internal ~0.8B engine must be independently switchable OFF; admitted external/local LLM profiles may be CORE without resetting canonical state.
 - Persist at most two external credential slots via opaque secret_ref only. Dashboard chooses CORE, optional distinct PRESTAGE, and PRESTAGE ON/OFF. Plaintext credentials never enter prompts, receipts, telemetry, source or ordinary profile state.
 - GRID10 means exactly ten logical cells at v1, not ten model copies. XENO_PEER_LINK/v1 must tolerate stale/duplicate/delayed packets, disconnect/reconnect and peer restart under deterministic admission/recovery fences.
@@ -151,10 +128,17 @@ def configure() -> None:
     _require_free_lane_binding()
     if not BUILD_DIRECTIVE.exists() or not BUILD_STATE.exists() or not HARNESS_CONTRACT.exists():
         raise RuntimeError("XENO_ACTIVE_BUILD_CONTROL_FILES_MISSING")
+    protocol = live_authority.build_protocol(ROOT)
+    if not protocol.startswith(fabric.base.PROTOCOL_BEGIN):
+        raise RuntimeError("XENO_LIVE_PROTOCOL_ABI_BEGIN_MISMATCH")
+    if live_authority.LIVE_MARKER not in protocol:
+        raise RuntimeError("XENO_LIVE_PROTOCOL_MARKER_MISSING")
+    fabric.base.load_protocol = lambda: protocol
     fabric.base.DEFAULT_ROLES = list(XENO_ROLES)
     fabric.FALLBACK_SHARDS = list(XENO_SHARDS)
     fabric._PREV_PROMPT = xeno_worker_prompt
     os.environ["CLAY_XENO_BUILD_MODE"] = "ACTIVE_INFINITE_RECURSIVE"
+    os.environ["CLAY_XENO_LIVE_PROTOCOL_SHA256"] = hashlib.sha256(protocol.encode("utf-8")).hexdigest()
 
 
 async def main() -> int:

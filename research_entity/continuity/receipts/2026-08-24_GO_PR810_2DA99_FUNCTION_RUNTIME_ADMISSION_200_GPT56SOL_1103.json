@@ -1,0 +1,77 @@
+{
+  "schema": "ENTITYOS_HCU_GO_EXACT_HEAD_FUNCTION_RUNTIME_ADMISSION_RECEIPT/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "authority_epoch": "8.64",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "canonical_main_last_observed_before_write": "18a4ef3acea2ca78de72bca87f595d7569a8e6e9",
+  "coordination": {
+    "upstream_shared_immutable_macrocycle_id": null,
+    "available_user_message_timestamp_precision": "MINUTE_ONLY",
+    "atomic_unusual_experiment_lease": "NOT_ACQUIRED",
+    "classification": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_interventions_executed": 0,
+    "work_class": "ORDINARY_EXACT_HEAD_FUNCTION_RUNTIME_DIAGNOSTIC"
+  },
+  "executor_repair": {
+    "identity": "gschaidergabriel/Dr.-Unterweger#810",
+    "exact_head": "2da99e0458809988190c129b04cae913d1f15d92",
+    "commit_message": "fix(hcu): sync exclusive cost guard to supervisor 8.64",
+    "changed_active_guard_expectations_only": true,
+    "active_admission_supervisor": "SUPERVISOR_STEERING_8_64",
+    "remaining_sandbox_quota_directly_observed": false,
+    "runtime_gate": "BLOCKED_QUOTA_UNOBSERVED"
+  },
+  "deployment": {
+    "id": "dpl_EHwJhL2hbLHMfw2pjB1Bb53H98Mm",
+    "git_sha": "2da99e0458809988190c129b04cae913d1f15d92",
+    "git_sha_matches_exact_head": true,
+    "state": "READY",
+    "build_guard": "EntityOSHCUCurrentExecutorGuard/v14",
+    "build_guard_result": "PASS",
+    "build_credit_scope": "SOURCE_AND_DEPLOYMENT_GUARD_ONLY"
+  },
+  "function_runtime_observation": {
+    "initiated_request": "GET /api/sandbox-probe?case=runtime-admission",
+    "vercel_runtime_log_time_utc": "2026-08-24T04:01:43Z",
+    "runtime_log_request_path": "/api/sandbox-probe",
+    "runtime_log_http_status": 200,
+    "runtime_log_source": "serverless",
+    "runtime_log_deployment": "dpl_EHwJhL2hbLHMfw2pjB1Bb53H98Mm",
+    "runtime_log_branch": "clay/fusion-vcr-native-20260817",
+    "response_body_transport": "NOT_EXPOSED_BECAUSE_PROTECTION_BYPASS_SHARE_URL_CREATION_RETURNED_429",
+    "source_discriminator": "At this exact source, default selftest and family-split proceed to the fail-closed Sandbox cost gate and cannot return 200 while remaining quota is unobserved; unsupported case returns 400; runtime-admission returns 200 before Sandbox cost admission and before Sandbox.create.",
+    "bounded_conclusion": "FUNCTION_RUNTIME_ADMISSION_PATH_EXECUTED_HTTP_200_AT_EXACT_2DA99E_DEPLOYMENT_WITH_NO_SANDBOX_CREATE_CREDIT"
+  },
+  "capability_boundary": {
+    "function_runtime_boot": "PASS_AT_EXACT_2DA99E_SNAPSHOT_ONLY",
+    "sandbox_module_or_sandbox_create_executed": false,
+    "python_sqlite3__sqlite3_selftest_executed": false,
+    "hcu_or_typed_entry_regression_executed": false,
+    "real_model_invocation_executed": false,
+    "jspace_gwt_causal_intervention_executed": false,
+    "direct_remaining_included_sandbox_quota_observed": false,
+    "paid_upgrade_or_fallback_attempted": false,
+    "together_or_provider_preflight_attempted": false
+  },
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED: stale active-admission build guard was repaired, exact matching deployment became READY, and the exact-head no-Sandbox runtime-admission Function path is now observed HTTP 200; next blocker is direct remaining included Sandbox quota before Sandbox.create",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "HCU_NO_CHANGE_WITH_REASON: the successful Function diagnostic returns before Sandbox.create and before Python/sqlite3/_sqlite3 or HCU/Typed Entry execution; no HCU semantic promotion is justified",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "TRAINING_READINESS_NO_CHANGE_WITH_REASON: no loader consumption, real model invocation, J-Space/GWT intervention, causal training trace, or training execution occurred"
+  },
+  "credits": {
+    "exact_head_build_guard": "PASS_AT_2DA99E_ONLY",
+    "exact_head_function_runtime_diagnostic": "PASS_AT_2DA99E_ONLY",
+    "sandbox_execution": 0,
+    "whole_entityos_hcu_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Directly observe authoritative remaining included Vercel Sandbox quota without paid transition. Re-enter current main, live PR810 head and matching deployment. Only if FREE_ONLY Sandbox admission opens, run the fixed exact-head selftest that binds Python/runtime identity plus sqlite3/_sqlite3 availability, exact source identity, secret fence, result digest and cleanup. After environment PASS, proceed to the retained real local model -> ModelExecution -> inference receipt -> Global J-Space/GWT causal path.",
+  "evidence_boundary": "Promotes only exact-head build/deployment convergence plus Function-runtime diagnostic execution. It grants no Sandbox execution, Python/SQLite capability, HCU/Typed Entry runtime, model/J-Space causality, training, canonical-state/effect semantics, or whole-product PASS."
+}

@@ -1,0 +1,8 @@
+{
+  "schema":"CLAY_LOCAL_COMMAND/v1",
+  "command_id":"local4b-diagnose-v3-20260824T1925",
+  "op":"exec",
+  "cwd":"/home/ai-core-node",
+  "timeout_seconds":180,
+  "command":"ssh -o BatchMode=yes -o ConnectTimeout=20 -J root@100.71.48.1 root@72.61.19.188 'cd /tmp; uid=$(id -u claylab); printf %s ZWNobyBIRUFMVEgKY3VybCAtc1MgLS1tYXgtdGltZSAyIGh0dHA6Ly8xMjcuMC4wLjE6ODA4OC9oZWFsdGggfHwgdHJ1ZQplY2hvCmVjaG8gQk9PVExPRwp0YWlsIC0xMDAgL2FydGlmYWN0cy9jbGF5LWVudGl0eW9zLXN3YXJtL2xvY2FsLW1vZGVsLWJvb3RzdHJhcC5sb2cgMj4vZGV2L251bGwgfHwgdHJ1ZQplY2hvIE1PREVMTE9HCnRhaWwgLTEwMCAvYXJ0aWZhY3RzL2NsYXktZW50aXR5b3Mtc3dhcm0vbG9jYWwtbW9kZWwubG9nIDI+L2Rldi9udWxsIHx8IHRydWUKZWNobyBTVEFURQpjYXQgL2FydGlmYWN0cy9jbGF5LWVudGl0eW9zLXN3YXJtL2xvY2FsLW1vZGVsLmpzb24gMj4vZGV2L251bGwgfHwgdHJ1ZQplY2hvIFBST0NTCnBzIC1lbyBwaWQsZXRpbWUsJWNwdSwlbWVtLGFyZ3MgfCBoZWFkIC04MAplY2hvIEZJTEVTCmZpbmQgL2NhY2hlIC1tYXhkZXB0aCA3IC10eXBlIGYgXCggLW5hbWUgJ2xsYW1hLXNlcnZlcicgLW8gLW5hbWUgJyouZ2d1ZicgXCkgLXByaW50ZiAnJXMgJXBcbicgMj4vZGV2L251bGwgfCBzb3J0IC1uciB8IGhlYWQgLTUwCg== | base64 -d | runuser -u claylab -- env HOME=/srv/claylab XDG_RUNTIME_DIR=/run/user/$uid podman exec -i clay-direct-dev bash'"
+}

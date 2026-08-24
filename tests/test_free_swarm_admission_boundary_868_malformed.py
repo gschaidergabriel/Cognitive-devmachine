@@ -26,6 +26,7 @@ SECRET_ENV_NAMES = {
     "NGC_API_KEY",
     "OPENROUTER_API_KEY",
 }
+CANONICAL_ADMISSION_REL = Path("research_entity/claycode/autonomous/FREE_PROVIDER_ADMISSION.json")
 
 
 def _authority(root: Path) -> Path:
@@ -82,7 +83,8 @@ class MalformedAdmissionBoundaryRegression(unittest.TestCase):
 
         with tempfile.TemporaryDirectory() as td, tempfile.TemporaryDirectory() as out:
             root = Path(td)
-            malformed = root / "admission.json"
+            malformed = root / CANONICAL_ADMISSION_REL
+            malformed.parent.mkdir(parents=True, exist_ok=True)
             malformed.write_text('{"schema":', encoding="utf-8")
             inbox = _authority(root)
 

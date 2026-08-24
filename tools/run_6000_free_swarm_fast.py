@@ -31,7 +31,7 @@ def main() -> int:
     # default/current throughput ceilings. This never raises an operator-provided
     # lower limit and automatically releases once qualified packets + tokens exist.
     conversion_backpressure.apply()
-    workers=max(64,min(1024,int(os.getenv("CLAY_SWARM_HTTP_THREADS","512"))))
+    workers=max(1,min(1024,int(os.getenv("CLAY_SWARM_HTTP_THREADS","512"))))
     try: threading.stack_size(1024*1024)
     except (ValueError,RuntimeError): pass
     loop=asyncio.new_event_loop(); asyncio.set_event_loop(loop)

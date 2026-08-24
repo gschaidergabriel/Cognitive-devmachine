@@ -1,0 +1,61 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "authority_epoch": "8.73",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "trigger": "go",
+  "organ": "GPT-5.6-Sol",
+  "base_main": "aee58aa5e69d0c1f24135b235d9d6334c357a68c",
+  "branch": "gpt56sol/go873-distillery-training-packet-rebuild-stable-20260825",
+  "finding": {
+    "classification": "SOURCE_OBSERVED_TRAINING_PACKET_REBUILD_NONDETERMINISM",
+    "statement": "Current main already excludes delta_id from stable replay identity and strips evaluated_at/delta_id from measured-evidence identity, but measured_packet() still serializes both fields into training-bearing packet_text. Therefore two clean Distillery rebuilds that first encounter semantically equivalent Forge evaluations with different envelope delta_id/evaluated_at can emit the same stable replay/measured identity while producing different packet_text bytes and potentially different accepted_dataset_tokens counts.",
+    "scope": "SOURCE_CONTRACT_AND_REBUILD_DETERMINISM_ONLY"
+  },
+  "hypothesis": "The training-bearing measured packet must use the same envelope-free preimage as measured-evidence identity. evaluated_at and delta_id should remain provenance metadata only, never training evidence.",
+  "counterhypothesis": "Stable replay/measured digests are sufficient even if training packet bytes retain volatile envelope fields.",
+  "counterhypothesis_disposition": "REJECTED_AT_SOURCE_LEVEL: packet_text and accepted token counts are dataset-facing outputs; allowing envelope-only fields to change those outputs makes clean rebuild results depend on which equivalent envelope is observed first.",
+  "delta": {
+    "source_commit": "74447b11b26c7afa965fee6275496514e1a75d41",
+    "test_commit": "ccc0c58d44e26990ea0c5af89947af5c94eb4dda",
+    "source": "tools/ingest_forge_accepts_into_distillery.py",
+    "test": "tests/test_forge_distillery_training_packet_rebuild_stable_873.py",
+    "changes": [
+      "remove evaluated_at from CLAY_DISTILLERY_FORGE_EXECUTION_PACKET/v2 packet_text",
+      "remove delta_id from CLAY_DISTILLERY_FORGE_EXECUTION_PACKET/v2 packet_text",
+      "make measured_evidence_identity wrap the exact same stable measured_packet preimage",
+      "retain evaluated_at and delta_id as explicit observation/provenance metadata",
+      "define fresh-rebuild equality over packet id, packet bytes, replay digest, measured digest and accepted token count"
+    ]
+  },
+  "coordination": {
+    "canonical_delta_id_identity_fix_on_main": "8835f7a7a45c3e4bb6d28d8c24f7b2f1e4552609",
+    "closed_prior_rebuild_pr": 1726,
+    "closed_prior_rebuild_pr_merged": false,
+    "duplicate_semantic_pr_created": false,
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_interventions_executed": 0
+  },
+  "go_tracks": {
+    "track_a": "ADVANCED_SOURCE_SCOPE: makes Forge-to-Distillery dataset materialization deterministic across clean rebuilds of envelope-equivalent evidence.",
+    "track_b": "ADVANCED: enforces the reusable typed causal boundary that observation/evaluation-envelope identity is provenance, not measured evidence.",
+    "track_c": "ADVANCED_DATASET_READINESS_SCOPE: prevents envelope volatility from changing future training bytes/token accounting while granting zero J-Space/model/training credit."
+  },
+  "execution": {
+    "exact_branch_head_regression_execution_observed": false,
+    "hosted_ci_credit": 0,
+    "provider_or_model_call": false,
+    "paid_or_together_execution": false,
+    "canonical_effect": false
+  },
+  "credit_boundary": {
+    "whole_entityos_hcu_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Run tests.test_forge_distillery_training_packet_rebuild_stable_873 together with current replay-identity and live-bridge regressions on the exact branch head using an explicitly admitted zero-cost execution surface. If green, re-enter current main and fuse only if no concurrent successor already closes rebuild-stable packet bytes. Runtime promotion remains separately gated on repository-bound live Forge->Distillery 1->1->positive-tokens and semantic replay +0 evidence."
+}

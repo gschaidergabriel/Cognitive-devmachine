@@ -1,8 +1,0 @@
-{
-  "schema":"CLAY_LOCAL_COMMAND/v1",
-  "command_id":"free-swarm-live-distribution-20260824T1942",
-  "op":"exec",
-  "cwd":"/home/ai-core-node",
-  "timeout_seconds":120,
-  "command":"ssh -o BatchMode=yes -o ConnectTimeout=20 -J root@100.71.48.1 root@72.61.19.188 'set -e; cd /tmp; uid=$(id -u claylab); runuser -u claylab -- env HOME=/srv/claylab XDG_RUNTIME_DIR=/run/user/$uid podman exec clay-direct-dev bash -lc \"echo ===PROCS===; ps -eo pid,etime,%cpu,%mem,args | grep -E \\\"[r]un_6000_free_swarm|[r]un_24h_entityos_swarm|[r]un_research_distillery|[r]un_free_evidence_forge|[f]ree swarm/evaluate.py\\\"; echo ===SUP6000===; cat /artifacts/clay-entityos-swarm/SUPERVISOR_6000.json 2>/dev/null || true; echo ===SUPOLD===; cat /artifacts/clay-entityos-swarm/SUPERVISOR.json 2>/dev/null || true; echo ===LATESTDIR===; latest=\\\$(ls -td /artifacts/clay-entityos-swarm/active-* 2>/dev/null | head -1 || true); echo \\\"LATEST=\\\$latest\\\"; if [ -n \\\"\\\$latest\\\" ]; then echo ===STATUS===; cat \\\"\\\$latest/status.json\\\" 2>/dev/null || true; echo ===WORKERS===; wc -l \\\"\\\$latest/workers.jsonl\\\" 2>/dev/null || true; fi; echo ===DISK===; df -h /workspace /cache /artifacts\"'"
-}

@@ -128,17 +128,19 @@
   },
   "passive_attempt_nonce_boundary": {
     "checked_at": "2026-08-24",
-    "claim": "An injected attempt nonce must be an exact built-in nonempty Unicode-scalar string before authenticated execution; string subclasses and lone UTF-16 surrogates are rejected before formatting or UTF-8 hashing so receipt identity cannot fail after a provider request has already run.",
+    "claim": "An injected attempt nonce must be an exact built-in nonempty Unicode-scalar string of at most 128 characters before authenticated execution; string subclasses, lone UTF-16 surrogates and unbounded identity material are rejected before formatting or UTF-8 hashing so receipt identity cannot fail or allocate without bound after a provider request has already run.",
     "sources": [
       "https://docs.python.org/3/library/functions.html#format",
       "https://docs.python.org/3/reference/datamodel.html#object.__format__",
-      "https://docs.python.org/3/howto/unicode.html"
+      "https://docs.python.org/3/howto/unicode.html",
+      "https://docs.python.org/3/library/secrets.html#secrets.token_hex"
     ],
     "executable_evidence": [
       "test_active_attempt_nonce_is_rejected_before_network",
-      "test_surrogate_attempt_nonce_is_rejected_before_network"
+      "test_surrogate_attempt_nonce_is_rejected_before_network",
+      "test_oversized_attempt_nonce_is_rejected_before_network"
     ],
-    "counterhypothesis": "Any exact built-in nonempty str is safe UTF-8 hash material; falsified locally because a lone surrogate passed the type boundary, reached authenticated execution, then raised UnicodeEncodeError during attempt-ID hashing and prevented the mandatory receipt."
+    "counterhypothesis": "Any exact built-in nonempty Unicode-scalar str is safe bounded hash material; falsified locally because a 129-character injected nonce reached authenticated execution and post-response identity processing even though the production nonce is the documented 32 hexadecimal characters from token_hex(16)."
   },
   "receipt_clock_domains": {
     "checked_at": "2026-08-14",
@@ -656,7 +658,7 @@
     "Execution receipt request IDs bind provider, endpoint host and serialized request digest and remain stable across retries; attempt IDs are unique per execution attempt.",
     "Attempt IDs include a fresh high-entropy nonce so equal-time concurrent attempts cannot alias; raw nonces are never serialized.",
     "Attempt-ID construction never decimal-formats injected clock values; request ID plus the fresh 128-bit nonce supply bounded identity material so extreme passive integers cannot suppress a post-execution receipt.",
-    "Attempt nonces are exact built-in nonempty Unicode-scalar strings before authenticated execution; polymorphic formatting or post-request UTF-8 encoding failure cannot suppress the mandatory receipt.",
+    "Attempt nonces are exact built-in nonempty Unicode-scalar strings of at most 128 characters before authenticated execution; polymorphic formatting, unbounded identity processing or post-request UTF-8 encoding failure cannot suppress the mandatory receipt.",
     "A response reaches VERIFIED only when choices is a non-empty list whose first message is an object with string content; malformed JSON shapes fail closed with a receipt.",
     "A choice explicitly finished because of length remains EXECUTED as provider_output_truncated, is nonretryable without a changed token budget, and cannot reach VERIFIED or DONE.",
     "A non-streaming text choice requires explicit finish_reason stop before VERIFIED or DONE; null, missing and unsupported finish reasons remain invalid_provider_response.",

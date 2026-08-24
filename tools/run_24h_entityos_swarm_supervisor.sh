@@ -22,18 +22,72 @@ typed_admission_compat_flags(){
   (( any )) && export CLAY_FREE_ONLY_ATTESTED=1 || true
 }
 
-load_secret_file(){ local f="$1"; [[ -r "$f" ]] || return 0; set +x; set -a; source "$f"; set +a; }
-all_llm_providers_admitted(){ provider_admitted groq && provider_admitted mistral && provider_admitted nvidia && provider_admitted openrouter; }
-
-load_admitted_secret_sources(){
-  if all_llm_providers_admitted; then
-    load_secret_file /run/secrets/clay_provider.env
-    load_secret_file /artifacts/.clay_provider.env
-    load_secret_file /cache/clay_provider.env
-    load_secret_file "$ROOT/.clay_provider.env"
-    load_secret_file "$ROOT/research_entity/private/API_TOKENS.env"
+unset_provider_family(){
+  local provider="$1"; shift
+  local name prefix
+  provider_admitted "$provider" && return 0
+  for name in "$@"; do unset "$name" || true; done
+  case "$provider" in
+    groq) prefix="GROQ_API_KEY_" ;;
+    mistral) prefix="MISTRAL_API_KEY_" ;;
+    nvidia) prefix="NVIDIA_API_KEY_" ;;
+    *) prefix="" ;;
+  esac
+  if [[ -n "$prefix" ]]; then
+    while IFS= read -r name; do
+      [[ "$name" == "$prefix"* ]] && unset "$name" || true
+    done < <(compgen -v)
   fi
-  provider_admitted groq && load_secret_file "$ROOT/research_entity/private/GROQ_API.env" || true
+}
+
+# Resolve canonical admission before touching provider-secret values. Blocked
+# credentials are removed by variable name only, so local model/distillery/forge
+# children cannot inherit an unadmitted provider capability accidentally.
+clear_unadmitted_provider_secret_env(){
+  unset_provider_family groq GROQ_API_KEY GROQ_API_KEYS GROQ2_API_KEY GROQ3_API_KEY
+  unset_provider_family mistral MISTRAL_API_KEY MISTRAL_API_KEYS MISTRAL2_API_KEY MISTRAL3_API_KEY
+  unset_provider_family nvidia NVIDIA_API_KEY NVIDIA_API_KEYS NVIDIA_NIM_API_KEY NGC_API_KEY NVIDIA2_API_KEY NVIDIA3_API_KEY
+  unset_provider_family openrouter OPENROUTER_API_KEY
+  unset TAVILY_API_KEY EXA_API_KEY || true
+}
+
+provider_secret_name_allowed(){
+  local provider="$1" name="$2"
+  case "$provider:$name" in
+    groq:GROQ_API_KEY|groq:GROQ_API_KEYS|groq:GROQ_API_KEY_*|groq:GROQ2_API_KEY|groq:GROQ3_API_KEY) return 0 ;;
+    mistral:MISTRAL_API_KEY|mistral:MISTRAL_API_KEYS|mistral:MISTRAL_API_KEY_*|mistral:MISTRAL2_API_KEY|mistral:MISTRAL3_API_KEY) return 0 ;;
+    nvidia:NVIDIA_API_KEY|nvidia:NVIDIA_API_KEYS|nvidia:NVIDIA_API_KEY_*|nvidia:NVIDIA2_API_KEY|nvidia:NVIDIA3_API_KEY|nvidia:NGC_API_KEY|nvidia:NVIDIA_NIM_API_KEY) return 0 ;;
+    openrouter:OPENROUTER_API_KEY) return 0 ;;
+    *) return 1 ;;
+  esac
+}
+
+# Secret files are provider-scoped data, never executable shell. The caller must
+# have already established typed FREE admission for the exact provider.
+load_provider_secret_file(){
+  local provider="$1" f="$2" raw name value
+  [[ -r "$f" ]] || return 0
+  while IFS= read -r raw || [[ -n "$raw" ]]; do
+    raw="${raw%$'\r'}"
+    [[ -z "$raw" || "$raw" == \#* ]] && continue
+    [[ "$raw" == export\ * ]] && raw="${raw#export }"
+    [[ "$raw" == *=* ]] || continue
+    name="${raw%%=*}"; value="${raw#*=}"
+    [[ "$name" =~ ^[A-Za-z_][A-Za-z0-9_]*$ ]] || continue
+    provider_secret_name_allowed "$provider" "$name" || continue
+    if [[ ${#value} -ge 2 ]]; then
+      if [[ "$value" == \"*\" && "$value" == *\" ]]; then value="${value:1:${#value}-2}";
+      elif [[ "$value" == \'*\' && "$value" == *\' ]]; then value="${value:1:${#value}-2}"; fi
+    fi
+    export "$name=$value"
+  done < "$f"
+}
+
+# Never open generic mixed-provider bundles: that would materialize secret values
+# for providers whose cost/admission class may still be blocked. Existing directly
+# inherited values survive only when that provider is canonically admitted.
+load_admitted_secret_sources(){
+  provider_admitted groq && load_provider_secret_file groq "$ROOT/research_entity/private/GROQ_API.env" || true
 }
 
 normalize_provider_pool(){
@@ -112,6 +166,7 @@ stop_unadmitted_go_swarm(){
 }
 
 while (( $(date +%s) < DEADLINE )); do
+  clear_unadmitted_provider_secret_env
   typed_admission_compat_flags
   load_admitted_secret_sources
   eval "$(normalize_provider_pool)"

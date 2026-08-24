@@ -1,9 +1,7 @@
 from __future__ import annotations
 
-import copy
 import importlib
 import json
-import os
 from pathlib import Path
 import subprocess
 import sys
@@ -34,7 +32,6 @@ class CanonicalAdmissionTests(unittest.TestCase):
         )
 
     def test_stale_supervisor_epoch_fails_closed(self):
-        canonical = json.loads(admission.ADMISSION_PATH.read_text(encoding="utf-8"))
         with tempfile.TemporaryDirectory() as td:
             inbox_path = Path(td) / "inbox.json"
             inbox_path.write_text(json.dumps({
@@ -53,14 +50,16 @@ class CanonicalAdmissionTests(unittest.TestCase):
             with self.assertRaisesRegex(admission.ProviderAdmissionError, "NONFREE_CANNOT_BE_ADMITTED"):
                 admission.load_provider_admission(path)
 
-    def test_free_record_can_only_pass_with_current_canonical_envelope(self):
+    def test_candidate_free_document_cannot_self_grant_runtime_authority(self):
         payload = json.loads(admission.ADMISSION_PATH.read_text(encoding="utf-8"))
         payload["providers"]["groq"].update({"cost_class": "FREE", "admitted": True})
         with tempfile.TemporaryDirectory() as td:
             path = Path(td) / "admission.json"
             path.write_text(json.dumps(payload), encoding="utf-8")
             loaded = admission.load_provider_admission(path)
-            self.assertTrue(admission.provider_is_admitted_free("groq", loaded))
+            self.assertEqual(loaded["providers"]["groq"]["cost_class"], "FREE")
+            self.assertTrue(loaded["providers"]["groq"]["admitted"])
+            self.assertFalse(admission.provider_is_admitted_free("groq", loaded))
             self.assertFalse(admission.provider_is_admitted_free("mistral", loaded))
 
 

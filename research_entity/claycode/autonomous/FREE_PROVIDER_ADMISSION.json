@@ -1,28 +1,36 @@
 {
   "schema": "ENTITYOS_HCU_FREE_PROVIDER_ADMISSION/v1",
-  "authority_epoch": "8.67",
+  "authority_epoch": "8.68",
+  "supervisor_steering": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_68.json",
   "mode": "FREE_ONLY",
   "product": "EntityOS",
   "compute_architecture": "HCU",
   "source": "ENTITYOS_HCU_CONTROL_PLANE",
-  "default_policy": "FAIL_CLOSED_UNKNOWN_PAID_SUBSCRIPTION_BEFORE_SECRET_LOOKUP_AND_NETWORK_IO",
+  "default_policy": "FAIL_CLOSED_UNKNOWN_PAID_SUBSCRIPTION_UNLISTED_BEFORE_SECRET_LOOKUP_AND_NETWORK_IO",
   "providers": {
     "groq": {
       "admitted": false,
       "cost_class": "UNKNOWN",
-      "evidence_ref": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_67.json#runtime_inventory"
+      "evidence_ref": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_68.json#evidence.typed_admission_state.groq"
     },
     "mistral": {
       "admitted": false,
       "cost_class": "UNKNOWN",
-      "evidence_ref": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_67.json#runtime_inventory"
+      "evidence_ref": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_68.json#evidence.typed_admission_state.mistral"
     },
     "nvidia": {
       "admitted": false,
       "cost_class": "UNKNOWN",
-      "evidence_ref": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_67.json#runtime_inventory"
+      "evidence_ref": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_68.json#evidence.typed_admission_state.nvidia"
+    },
+    "openrouter": {
+      "admitted": false,
+      "cost_class": "UNKNOWN",
+      "evidence_ref": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_68.json#evidence.typed_admission_state.openrouter"
     }
   },
+  "external_llm_provider_execution": "QUARANTINED_UNTIL_EXECUTABLE_TYPED_FREE_ADMISSION_PASS",
   "runtime_provider_credit": 0,
-  "note": "Environment attestations, credential presence, HTTP 402/429 behavior, model catalogs and provider responses cannot self-admit a provider as FREE. A future control-plane update requires direct evidence that the specific execution class cannot create monetary spend or overage."
+  "historical_unadmitted_execution_reclassified_as_free": false,
+  "note": "Environment attestations, credential presence, :free model suffixes, HTTP success, HTTP 402/429 behavior, token volume and provider responses cannot self-admit a provider as FREE. A future positive FREE classification requires direct evidence for the exact execution class that monetary charge and overage are impossible under the active account/route."
 }

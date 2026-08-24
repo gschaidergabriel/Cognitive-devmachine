@@ -11,6 +11,38 @@ bridge = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(bridge)
 
 
+def execution_admission(source_head="a" * 40, evaluation_head="c" * 40, **overrides):
+    manifest = {
+        "schema": "CLAY_FORGE_EXECUTION_ADMISSION/v1",
+        "source_scope": "EXACT_WORKER_PROMPT_HEAD",
+        "source_identity_admitted": True,
+        "source_head": source_head,
+        "source_tree": "e" * 40,
+        "evaluation_checkout_head": evaluation_head,
+        "all_commands_admitted": True,
+        "decisions": [
+            {
+                "admitted": True,
+                "reason": "ALLOWLISTED_PYTEST",
+                "argv": ["pytest", "-q", "tests/test_example.py"],
+                "execution_class": "TEST",
+            }
+        ],
+        "backend": {
+            "admitted": True,
+            "backend": "bubblewrap_unshare_all",
+            "reason": "OK",
+            "network_namespace": "ISOLATED",
+            "secret_environment_inherited": False,
+            "host_secret_paths_exposed": False,
+            "disposable_checkout_writable_only": True,
+        },
+        "candidate_is_canonical_truth": False,
+    }
+    manifest.update(overrides)
+    return manifest
+
+
 def accepted_row(**overrides):
     row = {
         "schema": "CLAY_FORGE_DELTA_EVALUATION/v1",
@@ -39,6 +71,7 @@ def accepted_row(**overrides):
         "requires_rebase_to_evaluation_head": True,
         "proposal_hypothesis": "candidate narration must not become measured packet text",
         "falsifier": "candidate falsifier also remains metadata-only",
+        "execution_admission": execution_admission(),
     }
     row.update(overrides)
     return row
@@ -57,7 +90,7 @@ class BridgeTests(unittest.TestCase):
     def write_rows(self, *rows):
         self.eval.write_text("\n".join(json.dumps(r) for r in rows) + "\n", encoding="utf-8")
 
-    def test_exact_accepted_evaluation_becomes_one_packet(self):
+    def test_exact_isolated_accepted_evaluation_becomes_one_packet(self):
         self.write_rows(accepted_row())
         out = bridge.ingest(self.eval, self.db)
         self.assertEqual(out["admitted"], 1)
@@ -70,6 +103,7 @@ class BridgeTests(unittest.TestCase):
         self.assertNotIn("candidate falsifier", packet_text)
         self.assertIn("proposal_hypothesis_candidate_only", meta)
         self.assertIn("EXECUTION_EVIDENCE_ONLY_NOT_JSPACE_CAUSAL_CREDIT", packet_text)
+        self.assertIn("execution_admission_sha256", packet_text)
 
     def test_idempotent_duplicate_does_not_double_count(self):
         self.write_rows(accepted_row())
@@ -79,6 +113,28 @@ class BridgeTests(unittest.TestCase):
         self.assertEqual(second["admitted"], 0)
         self.assertEqual(second["duplicates"], 1)
         self.assertEqual(first["accepted_dataset_tokens_counter"], second["accepted_dataset_tokens_counter"])
+
+    def test_legacy_accept_without_execution_admission_is_rejected(self):
+        row = accepted_row()
+        row.pop("execution_admission")
+        self.write_rows(row)
+        out = bridge.ingest(self.eval, self.db)
+        self.assertEqual(out["admitted"], 0)
+        self.assertEqual(out["rejected"].get("EXECUTION_ADMISSION_MISSING"), 1)
+
+    def test_nonisolated_network_backend_is_rejected(self):
+        manifest = execution_admission()
+        manifest["backend"]["network_namespace"] = "HOST"
+        self.write_rows(accepted_row(execution_admission=manifest))
+        out = bridge.ingest(self.eval, self.db)
+        self.assertEqual(out["admitted"], 0)
+        self.assertEqual(out["rejected"].get("EXECUTION_NETWORK_NOT_ISOLATED"), 1)
+
+    def test_execution_source_head_mismatch_is_rejected(self):
+        self.write_rows(accepted_row(execution_admission=execution_admission(source_head="f" * 40)))
+        out = bridge.ingest(self.eval, self.db)
+        self.assertEqual(out["admitted"], 0)
+        self.assertEqual(out["rejected"].get("EXECUTION_ADMISSION_SOURCE_HEAD_MISMATCH"), 1)
 
     def test_nonaccepted_is_rejected(self):
         self.write_rows(accepted_row(status="validated_not_better"))

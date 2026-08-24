@@ -146,6 +146,12 @@ def _positive_int(value: Any, field: str, maximum: int) -> int:
     return value
 
 
+def _layer_index(value: Any, field: str) -> int:
+    _need(not isinstance(value, bool) and isinstance(value, int), f"{field}:INTEGER_REQUIRED")
+    _need(1 <= value <= MAX_SAFE_INTEGER, f"{field}:OUT_OF_RANGE")
+    return value
+
+
 def _finite(value: Any, field: str) -> float:
     _need(not isinstance(value, bool) and isinstance(value, (int, float)), f"{field}:FINITE_NUMBER_REQUIRED")
     value = float(value)
@@ -216,8 +222,9 @@ def build_latent_basis_adapter(
     _need(len(axis_directions) <= MAX_AXES, "AXIS_COUNT_OUT_OF_RANGE")
     n_embd = _positive_int(n_embd, "n_embd", MAX_HIDDEN_SIZE)
     n_layer = _positive_int(n_layer, "n_layer", MAX_SAFE_INTEGER)
-    _need(n_layer >= 2 and isinstance(il_start, int) and isinstance(il_end, int), "LAYER_RANGE_INVALID")
-    _need(1 <= il_start <= il_end < n_layer, "LAYER_RANGE_INVALID")
+    il_start = _layer_index(il_start, "il_start")
+    il_end = _layer_index(il_end, "il_end")
+    _need(n_layer >= 2 and 1 <= il_start <= il_end < n_layer, "LAYER_RANGE_INVALID")
 
     calibration_dataset_sha = _sha(calibration_dataset_sha256, "calibration_dataset_sha256")
     calibration_split_sha = _sha(calibration_split_sha256, "calibration_split_sha256")
@@ -289,19 +296,40 @@ def build_latent_basis_adapter(
 def validate_latent_basis_adapter(adapter: LatentBasisAdapter) -> None:
     _need(isinstance(adapter, LatentBasisAdapter), "LATENT_BASIS_ADAPTER_REQUIRED")
     _need(adapter.schema == ADAPTER_SCHEMA, "LATENT_BASIS_ADAPTER_SCHEMA_UNSUPPORTED")
+
+    # The digest is only an integrity identifier. Revalidate every top-level field so a
+    # manually constructed/deserialized object cannot launder malformed metadata by
+    # recomputing a self-consistent adapter_sha256.
+    _text(adapter.source_jspace_basis_id, "source_jspace_basis_id", 256)
+    _sha(adapter.source_jspace_basis_sha256, "source_jspace_basis_sha256")
+    _text(adapter.local_basis_id, "local_basis_id", 256)
+    _sha(adapter.checkpoint_sha256, "checkpoint_sha256")
+    _sha(adapter.tokenizer_container_sha256, "tokenizer_container_sha256")
+    _commit(adapter.runtime_source_commit)
+    _sha(adapter.runtime_build_sha256, "runtime_build_sha256")
+    _text(adapter.role, "role", 256)
+    n_embd = _positive_int(adapter.n_embd, "n_embd", MAX_HIDDEN_SIZE)
+    n_layer = _positive_int(adapter.n_layer, "n_layer", MAX_SAFE_INTEGER)
+    il_start = _layer_index(adapter.il_start, "il_start")
+    il_end = _layer_index(adapter.il_end, "il_end")
+    _need(n_layer >= 2 and 1 <= il_start <= il_end < n_layer, "LAYER_RANGE_INVALID")
+    _sha(adapter.calibration_dataset_sha256, "calibration_dataset_sha256")
     calibration_split_sha = _sha(adapter.calibration_split_sha256, "calibration_split_sha256")
     holdout_split_sha = _sha(adapter.holdout_split_sha256, "holdout_split_sha256")
     _need(calibration_split_sha != holdout_split_sha, "CALIBRATION_HOLDOUT_SPLIT_ALIAS")
+    _need(isinstance(adapter.axes, tuple), "AXES_TUPLE_REQUIRED")
     _need(1 <= len(adapter.axes) <= MAX_AXES, "AXIS_COUNT_OUT_OF_RANGE")
+
     seen = set()
     for axis in adapter.axes:
         _need(isinstance(axis, LatentAxis), "LATENT_AXIS_REQUIRED")
-        _need(axis.axis_id not in seen, "AXIS_ID_DUPLICATE")
-        seen.add(axis.axis_id)
-        direction = _direction(axis.direction, adapter.n_embd, f"axis[{axis.axis_id}].direction")
-        family_sha = _sha(axis.calibration_family_sha256, f"axis[{axis.axis_id}].calibration_family_sha256")
-        expected = _canonical_sha(_axis_material(axis.axis_id, family_sha, direction), "LATENT_AXIS")
-        _need(_sha(axis.direction_sha256, f"axis[{axis.axis_id}].direction_sha256") == expected, "LATENT_AXIS_DIGEST_MISMATCH")
+        axis_id = _text(axis.axis_id, "axis.axis_id", 256)
+        _need(axis_id not in seen, "AXIS_ID_DUPLICATE")
+        seen.add(axis_id)
+        direction = _direction(axis.direction, n_embd, f"axis[{axis_id}].direction")
+        family_sha = _sha(axis.calibration_family_sha256, f"axis[{axis_id}].calibration_family_sha256")
+        expected = _canonical_sha(_axis_material(axis_id, family_sha, direction), "LATENT_AXIS")
+        _need(_sha(axis.direction_sha256, f"axis[{axis_id}].direction_sha256") == expected, "LATENT_AXIS_DIGEST_MISMATCH")
     expected_adapter = _canonical_sha(_adapter_material(adapter), "LATENT_BASIS_ADAPTER")
     _need(_sha(adapter.adapter_sha256, "adapter_sha256") == expected_adapter, "LATENT_BASIS_ADAPTER_DIGEST_MISMATCH")
 

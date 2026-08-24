@@ -16,6 +16,10 @@ from grid10_scheduler_v1 import (
     grid_plan_material,
     validate_grid_plan_identity,
 )
+from inference_receipt_v1 import (
+    SCHEMA as INFERENCE_RECEIPT_SCHEMA,
+    STATUS as INFERENCE_RECEIPT_STATUS,
+)
 from jspace_inference_binding_v1 import (
     JSpaceInferenceBinding,
     SCHEMA as JSPACE_BINDING_SCHEMA,
@@ -77,6 +81,7 @@ class PreInvocationControlAdmissionTests(unittest.TestCase):
             )"""
         )
         self.db.commit()
+        self.admitted_inference_receipts = {}
 
     def tearDown(self):
         self.db.close()
@@ -175,12 +180,62 @@ class PreInvocationControlAdmissionTests(unittest.TestCase):
         self.db.commit()
         return binding
 
+    def _inference_parent_record(self, binding):
+        record = {
+            "schema": INFERENCE_RECEIPT_SCHEMA,
+            "status": INFERENCE_RECEIPT_STATUS,
+            "hash_serialization_schema": CANONICALIZATION_SCHEMA,
+            "entry_binding_schema": ENTRY_BINDING_SCHEMA,
+            "entity_generation": binding.generation,
+            "entry_admission_sha256": binding.entry_admission_sha256,
+            "event_sha256": binding.entry_event_sha256,
+            "decision_sha256": binding.route_decision_sha256,
+            "router_policy_sha256": h(21),
+            "engine_identity_sha256": binding.engine_identity_sha256,
+            "resolved_engine_identity": binding.resolved_engine_identity,
+            "resolved_engine_class": binding.resolved_engine_class,
+            "resolved_engine_artifact_sha256": binding.resolved_engine_artifact_sha256,
+            "engine_admission_receipt_sha256": binding.engine_admission_receipt_sha256,
+            "engine_load_canonicalization_schema": CANONICALIZATION_SCHEMA,
+            "engine_load_loader_binding_sha256": binding.engine_load_loader_binding_sha256,
+            "engine_load_lease_sha256": binding.engine_load_lease_sha256,
+            "engine_load_consumption_receipt_sha256": binding.engine_load_consumption_receipt_sha256,
+            "engine_load_loader_id": binding.engine_load_loader_id,
+            "model_execution_canonicalization_schema": CANONICALIZATION_SCHEMA,
+            "model_execution_receipt_sha256": binding.model_execution_receipt_sha256,
+            "model_execution_observation_sha256": binding.model_execution_observation_sha256,
+            "model_execution_executor_id": binding.model_execution_executor_id,
+            "model_execution_invocation_id": binding.model_execution_invocation_id,
+            "grid_plan_sha256": binding.grid_plan_sha256,
+            "output_producing_cell_id": binding.output_producing_cell_id,
+            "model_execution_role": binding.model_execution_role,
+            "input_sha256": binding.input_sha256,
+            "input_size": binding.input_size,
+            "model_call_id": binding.model_call_id,
+            "output_ref": binding.output_ref,
+            "output_sha256": binding.output_sha256,
+            "output_size": binding.output_size,
+            "model_lanes": [binding.role],
+        }
+        record["receipt_sha256"] = hashlib.sha256(canonicalize(record)).hexdigest()
+        return record
+
+    def _admit_inference_parent(self, binding):
+        parent = self._inference_parent_record(binding)
+        binding = self._rehash_binding(
+            binding,
+            inference_receipt_sha256=parent["receipt_sha256"],
+        )
+        self.admitted_inference_receipts[parent["receipt_sha256"]] = parent
+        return binding
+
     def predecessor_binding(
         self,
         trace,
         *,
         invocation_id="invocation:episode-1:step-0",
         admit_canonical_parent=True,
+        admit_inference_parent=True,
     ):
         material = {
             "schema": JSPACE_BINDING_SCHEMA,
@@ -196,7 +251,7 @@ class PreInvocationControlAdmissionTests(unittest.TestCase):
             "cell_id": trace.cell_id,
             "role": trace.role,
             "vector_control_packet_sha256": trace.vector_control_packet_sha256,
-            "inference_receipt_schema": "HCU_INFERENCE_RECEIPT/v4",
+            "inference_receipt_schema": INFERENCE_RECEIPT_SCHEMA,
             "inference_receipt_sha256": h(10),
             "engine_identity_sha256": h(11),
             "resolved_engine_identity": "hcu_local_08b",
@@ -230,6 +285,8 @@ class PreInvocationControlAdmissionTests(unittest.TestCase):
         )
         if admit_canonical_parent:
             binding = self._admit_canonical_predecessor(binding)
+        if admit_inference_parent:
+            binding = self._admit_inference_parent(binding)
         return binding
 
     def controlled_plan(self):
@@ -294,17 +351,21 @@ class PreInvocationControlAdmissionTests(unittest.TestCase):
         input_binding, consumed = self.controlled_input(proto, plan)
         return proto, trace, predecessor_binding, plan, input_binding, consumed
 
-    def test_predecessor_is_committed_before_distinct_controlled_invocation_admission(self):
-        _, trace, predecessor_binding, plan, input_binding, consumed = self.sources()
-        preparation = prepare_preinvocation_control(
+    def prepare(self, trace, predecessor_binding, input_binding, consumed, plan):
+        return prepare_preinvocation_control(
             self.db,
             trace,
             predecessor_binding,
             input_binding,
             consumed,
             plan,
+            admitted_inference_receipts=self.admitted_inference_receipts,
             current_generation=GENERATION,
         )
+
+    def test_predecessor_is_committed_before_distinct_controlled_invocation_admission(self):
+        _, trace, predecessor_binding, plan, input_binding, consumed = self.sources()
+        preparation = self.prepare(trace, predecessor_binding, input_binding, consumed, plan)
         self.assertEqual(preparation.predecessor_training_trace_sha256, trace.trace_sha256)
         self.assertEqual(preparation.controlled_invocation_id, input_binding.invocation_id)
         self.assertNotEqual(
@@ -317,15 +378,7 @@ class PreInvocationControlAdmissionTests(unittest.TestCase):
             invocation_id=input_binding.invocation_id,
         )
         self.assertEqual(reread, preparation)
-        replay = prepare_preinvocation_control(
-            self.db,
-            trace,
-            predecessor_binding,
-            input_binding,
-            consumed,
-            plan,
-            current_generation=GENERATION,
-        )
+        replay = self.prepare(trace, predecessor_binding, input_binding, consumed, plan)
         self.assertEqual(replay, preparation)
         self.assertEqual(
             self.db.execute("SELECT COUNT(*) FROM hcu_preinvocation_control_preparations").fetchone()[0],
@@ -342,15 +395,54 @@ class PreInvocationControlAdmissionTests(unittest.TestCase):
             "PREDECESSOR_CANONICAL_EXECUTION_REJECTED:"
             "PREDECESSOR_MODEL_EXECUTION_OBSERVATION_NOT_UNIQUELY_ADMITTED",
         ):
-            prepare_preinvocation_control(
-                self.db,
-                trace,
-                predecessor_binding,
-                input_binding,
-                consumed,
-                plan,
-                current_generation=GENERATION,
-            )
+            self.prepare(trace, predecessor_binding, input_binding, consumed, plan)
+        self.assertIsNone(
+            self.db.execute(
+                "SELECT name FROM sqlite_master WHERE type='table' "
+                "AND name='hcu_preinvocation_control_preparations'"
+            ).fetchone()
+        )
+
+    def test_canonical_predecessor_without_admitted_inference_parent_fails_zero_write(self):
+        proto, trace = self.predecessor_trace()
+        predecessor_binding = self.predecessor_binding(trace, admit_inference_parent=False)
+        plan = self.controlled_plan()
+        input_binding, consumed = self.controlled_input(proto, plan)
+        with self.assertRaisesRegex(
+            PreInvocationControlAdmissionError,
+            "PREDECESSOR_INFERENCE_PARENT_REJECTED:INFERENCE_RECEIPT_PARENT_NOT_ADMITTED",
+        ):
+            self.prepare(trace, predecessor_binding, input_binding, consumed, plan)
+        self.assertIsNone(
+            self.db.execute(
+                "SELECT name FROM sqlite_master WHERE type='table' "
+                "AND name='hcu_preinvocation_control_preparations'"
+            ).fetchone()
+        )
+
+    def test_digest_valid_tampered_inference_parent_fails_before_write(self):
+        proto, trace = self.predecessor_trace()
+        predecessor_binding = self.predecessor_binding(trace)
+        plan = self.controlled_plan()
+        input_binding, consumed = self.controlled_input(proto, plan)
+
+        admitted = dict(self.admitted_inference_receipts[predecessor_binding.inference_receipt_sha256])
+        admitted.pop("receipt_sha256")
+        admitted["grid_plan_sha256"] = h(62)
+        tampered_sha = hashlib.sha256(canonicalize(admitted)).hexdigest()
+        admitted["receipt_sha256"] = tampered_sha
+        predecessor_binding = self._rehash_binding(
+            predecessor_binding,
+            inference_receipt_sha256=tampered_sha,
+        )
+        self.admitted_inference_receipts = {tampered_sha: admitted}
+
+        with self.assertRaisesRegex(
+            PreInvocationControlAdmissionError,
+            "PREDECESSOR_INFERENCE_PARENT_REJECTED:"
+            "INFERENCE_RECEIPT_PARENT_BINDING_MISMATCH:grid_plan_sha256",
+        ):
+            self.prepare(trace, predecessor_binding, input_binding, consumed, plan)
         self.assertIsNone(
             self.db.execute(
                 "SELECT name FROM sqlite_master WHERE type='table' "
@@ -370,15 +462,7 @@ class PreInvocationControlAdmissionTests(unittest.TestCase):
             PreInvocationControlAdmissionError,
             "SAME_INVOCATION_POSTHOC_CONTROL_FORBIDDEN",
         ):
-            prepare_preinvocation_control(
-                self.db,
-                trace,
-                predecessor_binding,
-                input_binding,
-                consumed,
-                plan,
-                current_generation=GENERATION,
-            )
+            self.prepare(trace, predecessor_binding, input_binding, consumed, plan)
 
     def test_existing_controlled_model_execution_admission_blocks_posthoc_preparation(self):
         _, trace, predecessor_binding, plan, input_binding, consumed = self.sources()
@@ -397,15 +481,7 @@ class PreInvocationControlAdmissionTests(unittest.TestCase):
             PreInvocationControlAdmissionError,
             "CONTROLLED_MODEL_EXECUTION_ALREADY_ADMITTED_POSTHOC_PREPARATION_FORBIDDEN",
         ):
-            prepare_preinvocation_control(
-                self.db,
-                trace,
-                predecessor_binding,
-                input_binding,
-                consumed,
-                plan,
-                current_generation=GENERATION,
-            )
+            self.prepare(trace, predecessor_binding, input_binding, consumed, plan)
         self.assertIsNone(
             self.db.execute(
                 "SELECT name FROM sqlite_master WHERE type='table' "
@@ -415,15 +491,7 @@ class PreInvocationControlAdmissionTests(unittest.TestCase):
 
     def test_same_controlled_invocation_cannot_be_rebound_to_different_predecessor(self):
         _, trace, predecessor_binding, plan, input_binding, consumed = self.sources()
-        first = prepare_preinvocation_control(
-            self.db,
-            trace,
-            predecessor_binding,
-            input_binding,
-            consumed,
-            plan,
-            current_generation=GENERATION,
-        )
+        first = self.prepare(trace, predecessor_binding, input_binding, consumed, plan)
         other_predecessor = self.predecessor_binding(
             trace,
             invocation_id="invocation:episode-0:other-predecessor",
@@ -432,15 +500,7 @@ class PreInvocationControlAdmissionTests(unittest.TestCase):
             PreInvocationControlAdmissionError,
             "PREINVOCATION_CONTROL_INVOCATION_REPLAY_DIVERGENCE",
         ):
-            prepare_preinvocation_control(
-                self.db,
-                trace,
-                other_predecessor,
-                input_binding,
-                consumed,
-                plan,
-                current_generation=GENERATION,
-            )
+            self.prepare(trace, other_predecessor, input_binding, consumed, plan)
         self.assertEqual(
             self.db.execute("SELECT COUNT(*) FROM hcu_preinvocation_control_preparations").fetchone()[0],
             1,
@@ -471,15 +531,7 @@ class PreInvocationControlAdmissionTests(unittest.TestCase):
             PreInvocationControlAdmissionError,
             "PREDECESSOR_CONTROL_PACKET_IDENTITY_MISMATCH",
         ):
-            prepare_preinvocation_control(
-                self.db,
-                trace,
-                predecessor_binding,
-                input_binding,
-                consumed,
-                plan,
-                current_generation=GENERATION,
-            )
+            self.prepare(trace, predecessor_binding, input_binding, consumed, plan)
 
 
 if __name__ == "__main__":

@@ -4,7 +4,9 @@ set -Eeuo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT"
 
-# Trigger-1 V2 non-terminal causal path: normal-user, zero-provider-billing, loopback-only.
+# Trigger-1 V3 non-terminal causal path: normal-user, zero-provider-billing, loopback-only.
+# Route the executable lane to the activation-derived mid-layer successor rather than
+# the older input-embedding or terminal output-head positive-control executors.
 # External LLM credentials are neither required nor consumed.
 unset \
   GROQ_API_KEY GROQ_API_KEYS GROQ2_API_KEY GROQ3_API_KEY \
@@ -55,7 +57,7 @@ if ! has_runtime "$PYTHON"; then
   python3 - "$OUT_DIR/trigger1_local_activation_api_result.json" <<'PY'
 import json, pathlib, sys
 pathlib.Path(sys.argv[1]).write_text(json.dumps({
-  'schema':'CLAY_TRIGGER1_LOCAL_QWEN06_INTERNAL_LAYER_API_EXPERIMENT/v1',
+  'schema':'CLAY_TRIGGER1_LOCAL_QWEN06_MIDLAYER_CAUSAL_EXPERIMENT/v1',
   'status':'BLOCKED_LOCAL_FASTPATH',
   'reason':'PYTORCH_TRANSFORMERS_NORMAL_USER_RUNTIME_UNAVAILABLE_AFTER_BOOTSTRAP',
   'zero_provider_billing':True,
@@ -66,6 +68,6 @@ PY
   exit 3
 fi
 
-exec "$PYTHON" "$ROOT/tools/trigger1_local_qwen06_internal_layer_api_execute.py" \
+exec "$PYTHON" "$ROOT/tools/trigger1_local_qwen06_midlayer_causal_execute.py" \
   --output-dir "$OUT_DIR" \
   --cache-dir "$HF_HOME"

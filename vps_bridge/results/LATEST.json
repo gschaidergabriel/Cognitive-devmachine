@@ -1,20 +1,17 @@
 {
   "schema": "CLAY_VPS_RECEIPT/v4",
-  "command_id": "research-distillery-entry-sync-20260824T1740",
-  "command_sha256": "8bb48ad4262aff6da1e237c8bb431ed776f6fcf511006c4d56b0bcb9cb5369f8",
-  "started_at": "2026-08-24T10:39:18.075231+00:00",
-  "finished_at": "2026-08-24T10:39:20.038894+00:00",
+  "command_id": "research-distillery-entry-inventory-20260824T1741",
+  "command_sha256": "ab9e63cf2cb7c4071f9fba26fd5df9b8660849e52716352cd60ddedfe8f885f5",
+  "started_at": "2026-08-24T10:39:37.558681+00:00",
+  "finished_at": "2026-08-24T10:39:37.936253+00:00",
   "status": "PASS",
   "exit_code": 0,
-  "op": "canonical_sync",
-  "stdout_sha256": "a27432c45c28daf8e57eac3f89b10f5912a28dbd4f91cebf488e816bbb5cb735",
+  "op": "exec",
+  "stdout_sha256": "b05a51ada68a3e5b58ba75e3f037c348ba414139a7db95f0421d325ce052b59e",
   "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-  "stdout_tail": "99a9bf6485b02a1b56252ce9eff66630790397ad\n",
+  "stdout_tail": "{\n  \"schema\": \"CLAY_RESEARCH_DISTILLERY_STATUS/v1\",\n  \"generated_at\": \"2026-08-24T10:39:37.900794+00:00\",\n  \"collected_source_tokens\": 0,\n  \"accepted_dataset_tokens\": 0,\n  \"dataset_yield\": 0.0,\n  \"compression_factor\": null,\n  \"collected_chunks\": 0,\n  \"accepted_packets\": 0,\n  \"rejected_candidates\": 0,\n  \"questions\": {\n    \"OPEN\": 10\n  },\n  \"source_metadata_rows\": {},\n  \"small_models\": [\n    \"nvidia/nemotron-3-nano-30b-a3b:free\",\n    \"nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free\",\n    \"nvidia/nemotron-3-super-120b-a12b:free\",\n    \"nvidia/nemotron-3-ultra-550b-a55b:free\",\n    \"nvidia/nemotron-nano-12b-v2-vl:free\",\n    \"nvidia/nemotron-nano-9b-v2:free\",\n    \"google/gemma-4-26b-a4b-it:free\",\n    \"google/gemma-4-31b-it:free\"\n  ],\n  \"reviewers\": [\n    {\n      \"lane\": \"nvidia_reviewer\",\n      \"provider\": \"nvidia\",\n      \"model\": \"nvidia/llama-3.3-nemotron-super-49b-v1\"\n    }\n  ],\n  \"model_input_tokens\": 0,\n  \"model_output_tokens\": 0,\n  \"shared_provider_budget\": {\n    \"schema\": \"CLAY_SHARED_PROVIDER_BUDGET/v1\",\n    \"generated_at\": \"2026-08-24T10:39:37.901100+00:00\",\n    \"providers\": {\n      \"openrouter\": {\n        \"max_inflight\": 3,\n        \"active_leases\": 0,\n        \"min_interval_s\": 0.5,\n        \"cooldown_seconds\": 0.0,\n        \"total_requests\": 1,\n        \"total_success\": 1,\n        \"total_429\": 0,\n        \"total_errors\": 0,\n        \"last_status\": \"200\",\n        \"last_observed_at\": \"2026-08-24T10:39:37.886103+00:00\"\n      }\n    }\n  },\n  \"db_bytes\": 90112\n}\n",
   "stderr_tail": "",
-  "meta": {
-    "head": "99a9bf6485b02a1b56252ce9eff66630790397ad",
-    "ref": "main"
-  },
+  "meta": {},
   "execution_boundary": "ROOT_INSIDE_ROOTLESS_PODMAN_OR_EXPLICIT_REPO_CONTROL_OP",
   "canonical_credit_minted": 0
 }

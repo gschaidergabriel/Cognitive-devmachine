@@ -1,0 +1,53 @@
+{
+  "schema": "CLAY_RESEARCH_DISTILLERY_STATUS/v1",
+  "generated_at": "2026-08-24T10:39:37.900794+00:00",
+  "collected_source_tokens": 0,
+  "accepted_dataset_tokens": 0,
+  "dataset_yield": 0.0,
+  "compression_factor": null,
+  "collected_chunks": 0,
+  "accepted_packets": 0,
+  "rejected_candidates": 0,
+  "questions": {
+    "OPEN": 10
+  },
+  "source_metadata_rows": {},
+  "small_models": [
+    "nvidia/nemotron-3-nano-30b-a3b:free",
+    "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
+    "nvidia/nemotron-3-super-120b-a12b:free",
+    "nvidia/nemotron-3-ultra-550b-a55b:free",
+    "nvidia/nemotron-nano-12b-v2-vl:free",
+    "nvidia/nemotron-nano-9b-v2:free",
+    "google/gemma-4-26b-a4b-it:free",
+    "google/gemma-4-31b-it:free"
+  ],
+  "reviewers": [
+    {
+      "lane": "nvidia_reviewer",
+      "provider": "nvidia",
+      "model": "nvidia/llama-3.3-nemotron-super-49b-v1"
+    }
+  ],
+  "model_input_tokens": 0,
+  "model_output_tokens": 0,
+  "shared_provider_budget": {
+    "schema": "CLAY_SHARED_PROVIDER_BUDGET/v1",
+    "generated_at": "2026-08-24T10:39:37.901100+00:00",
+    "providers": {
+      "openrouter": {
+        "max_inflight": 3,
+        "active_leases": 0,
+        "min_interval_s": 0.5,
+        "cooldown_seconds": 0.0,
+        "total_requests": 1,
+        "total_success": 1,
+        "total_429": 0,
+        "total_errors": 0,
+        "last_status": "200",
+        "last_observed_at": "2026-08-24T10:39:37.886103+00:00"
+      }
+    }
+  },
+  "db_bytes": 90112
+}

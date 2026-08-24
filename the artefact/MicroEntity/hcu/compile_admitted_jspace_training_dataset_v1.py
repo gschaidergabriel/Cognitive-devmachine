@@ -15,10 +15,13 @@ also derived from admitted upstream causal ancestry, never from the caller-contr
 ``trace_family_id`` label alone. The DatasetAdmission call also receives the caller-owned
 registry of exact canonical Vector-Control packet preimages, so a shared digest label cannot
 be laundered into training rows without validation by the sole JSPACE_VECTOR_CONTROL_ABI/v1
-implementation. InferenceReceipt parent validation delegates to the single reusable
-``jspace_inference_parent_admission_v1`` guard; this compiler keeps only compatibility error
-translation, not a second validation implementation. It mints no truth, model authority,
-effect authority, runtime credit, or paid-training permission.
+implementation. Non-BASELINE traces additionally require the exact admitted
+``ENTITYOS_HCU_JSPACE_MODEL_INPUT_CONTROL_CLOSURE/v1`` for their inference binding so a
+control label cannot be promoted as causal training evidence without byte-level packet
+arrival at the associated model input. InferenceReceipt parent validation delegates to the
+single reusable ``jspace_inference_parent_admission_v1`` guard; this compiler keeps only
+compatibility error translation, not a second validation implementation. It mints no truth,
+model authority, effect authority, runtime credit, or paid-training permission.
 """
 from __future__ import annotations
 
@@ -46,6 +49,11 @@ try:
         JSpaceInferenceParentAdmissionError,
         require_admitted_inference_receipt_parent,
     )
+    from .jspace_model_input_control_closure_v1 import JSpaceModelInputControlClosure
+    from .jspace_training_control_delivery_gate_v1 import (
+        JSpaceTrainingControlDeliveryError,
+        require_model_input_control_closure,
+    )
     from .jspace_training_trace_v1 import TRACE_SCHEMA as TRAINING_TRACE_SCHEMA
 except ImportError:
     from compile_jspace_bootstrap_dataset_v1 import compile_traces as compile_training_traces
@@ -67,6 +75,11 @@ except ImportError:
         JSpaceInferenceParentAdmissionError,
         require_admitted_inference_receipt_parent,
     )
+    from jspace_model_input_control_closure_v1 import JSpaceModelInputControlClosure
+    from jspace_training_control_delivery_gate_v1 import (
+        JSpaceTrainingControlDeliveryError,
+        require_model_input_control_closure,
+    )
     from jspace_training_trace_v1 import TRACE_SCHEMA as TRAINING_TRACE_SCHEMA
 
 PIPELINE_SCHEMA = "ENTITYOS_HCU_ADMITTED_JSPACE_TRAINING_PIPELINE/v1"
@@ -87,6 +100,7 @@ class PipelineEvidence:
     inference_receipt_sha256: str
     engine_load_consumption_receipt_sha256: str
     output_sha256: str
+    model_input_control_closure_sha256: str | None
     generation: int
     entry_event_sha256: str
     entry_admission_sha256: str
@@ -213,6 +227,8 @@ def validate_pipeline_evidence(
     training_trace: Mapping[str, Any],
     admission: DatasetAdmission,
     inference_binding: JSpaceInferenceBinding,
+    *,
+    model_input_control_closure: JSpaceModelInputControlClosure | None = None,
 ) -> PipelineEvidence:
     """Cross-bind one compiler input to its admission and inference-binding evidence."""
     training_trace = _mapping(training_trace, "training_trace")
@@ -297,6 +313,17 @@ def validate_pipeline_evidence(
         "VECTOR_CONTROL_PACKET_BINDING",
     )
 
+    try:
+        control_delivery_sha = require_model_input_control_closure(
+            training_trace,
+            inference_binding,
+            model_input_control_closure,
+        )
+    except JSpaceTrainingControlDeliveryError as exc:
+        raise AdmittedTrainingDatasetError(
+            f"MODEL_INPUT_CONTROL_DELIVERY_REJECTED:{exc}"
+        ) from exc
+
     declared_trace_family_id = _text(
         training_trace.get("trace_family_id"),
         "training_trace.trace_family_id",
@@ -335,6 +362,7 @@ def validate_pipeline_evidence(
             "inference_binding.engine_load_consumption_receipt_sha256",
         ),
         output_sha256=_sha256(inference_binding.output_sha256, "inference_binding.output_sha256"),
+        model_input_control_closure_sha256=control_delivery_sha,
         generation=generation,
         entry_event_sha256=causal["entry_event_sha256"],
         entry_admission_sha256=causal["entry_admission_sha256"],
@@ -364,6 +392,7 @@ def _annotate_rows(
         "inference_receipt_sha256": evidence.inference_receipt_sha256,
         "engine_load_consumption_receipt_sha256": evidence.engine_load_consumption_receipt_sha256,
         "model_output_sha256": evidence.output_sha256,
+        "model_input_control_closure_sha256": evidence.model_input_control_closure_sha256,
         "declared_trace_family_id": evidence.declared_trace_family_id,
         "causal_family_schema": CAUSAL_FAMILY_SCHEMA,
         "causal_family_sha256": evidence.causal_family_sha256,
@@ -394,12 +423,13 @@ def _annotate_rows(
     return out
 
 
-def _evidence_identity(evidence: PipelineEvidence) -> tuple[str, str, str, str]:
+def _evidence_identity(evidence: PipelineEvidence) -> tuple[str, str, str, str, str | None]:
     return (
         evidence.transition_trace_sha256,
         evidence.inference_binding_sha256,
         evidence.inference_receipt_sha256,
         evidence.causal_family_sha256,
+        evidence.model_input_control_closure_sha256,
     )
 
 
@@ -415,10 +445,11 @@ def compile_admitted_records(
     admitted_inference_receipts: Mapping[str, Any],
     admitted_bases: Mapping[str, str],
     admitted_outcome_receipts: Mapping[str, Any] | None = None,
+    admitted_model_input_control_closures: Mapping[str, JSpaceModelInputControlClosure] | None = None,
 ) -> dict[str, list[dict[str, Any]]]:
-    """Compile only traces with external basis, trace, GRID, vector, binding, and receipt admission."""
+    """Compile only traces with external causal admission and control-delivery evidence."""
     out = {"train": [], "validation": [], "holdout": []}
-    seen: dict[str, tuple[str, str, str, str]] = {}
+    seen: dict[str, tuple[str, str, str, str, str | None]] = {}
     admitted_grid_plans = _mapping(admitted_grid_plans, "admitted_grid_plans")
     admitted_vector_control_packets = _mapping(
         admitted_vector_control_packets,
@@ -427,6 +458,13 @@ def compile_admitted_records(
     admitted_inference_bindings = _mapping(admitted_inference_bindings, "admitted_inference_bindings")
     admitted_inference_receipts = _mapping(admitted_inference_receipts, "admitted_inference_receipts")
     admitted_bases = _mapping(admitted_bases, "admitted_bases")
+    if admitted_model_input_control_closures is None:
+        admitted_model_input_control_closures = {}
+    else:
+        admitted_model_input_control_closures = _mapping(
+            admitted_model_input_control_closures,
+            "admitted_model_input_control_closures",
+        )
 
     for record in records:
         if not isinstance(record, tuple) or len(record) != 2:
@@ -453,7 +491,15 @@ def compile_admitted_records(
         if not isinstance(inference_binding, JSpaceInferenceBinding):
             raise AdmittedTrainingDatasetError("INFERENCE_BINDING_NOT_ADMITTED_FOR_TRAINING_TRACE")
         _require_admitted_inference_receipt(inference_binding, admitted_inference_receipts)
-        evidence = validate_pipeline_evidence(training_trace, admission, inference_binding)
+        model_input_control_closure = admitted_model_input_control_closures.get(
+            inference_binding.binding_sha256
+        )
+        evidence = validate_pipeline_evidence(
+            training_trace,
+            admission,
+            inference_binding,
+            model_input_control_closure=model_input_control_closure,
+        )
         evidence_identity = _evidence_identity(evidence)
         previous_identity = seen.get(training_sha)
         if previous_identity is not None:

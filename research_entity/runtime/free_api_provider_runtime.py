@@ -342,8 +342,18 @@ def _enforce_pre_snapshot_message_bound(messages) -> None:
     """Reject structurally impossible requests before copying caller data."""
     # Only exact lists have passive built-in len behavior at this boundary.
     # Other types retain the existing fail-closed schema validation path.
-    if type(messages) is list and len(messages) > MAX_TEXT_CHAT_MESSAGES:
+    if type(messages) is not list:
+        return
+    if len(messages) > MAX_TEXT_CHAT_MESSAGES:
         raise ValueError("provider_request_too_large")
+    # Exact dict len is passive and the closed text schema permits exactly two
+    # members. Reject impossible wide objects before dict(message) duplicates
+    # caller-owned storage under the execution lock.
+    if any(
+        type(message) is dict and len(message) != len(TEXT_CHAT_MESSAGE_FIELDS)
+        for message in messages
+    ):
+        raise ValueError("message_fields_not_supported_by_text_adapter")
 
 
 def _transport_metadata_or_none(response, attribute):

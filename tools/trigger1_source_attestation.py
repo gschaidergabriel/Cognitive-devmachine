@@ -1,11 +1,18 @@
 #!/usr/bin/env python3
-"""Fail-closed Git source attestation for exact local Trigger-1 runtimes."""
+"""Fail-closed Git source attestation for exact local Trigger-1 runtimes.
+
+The Trigger-1 compatibility fields are preserved, but the canonical dirty-state binding
+is delegated to the reusable CLAY_GIT_SOURCE_IDENTITY/v1 primitive so tracked diff bytes
+and untracked file contents are cryptographically bound rather than only path/status shape.
+"""
 from __future__ import annotations
 
 import hashlib
 from pathlib import Path
 import subprocess
 from typing import Any
+
+from git_source_identity_v1 import source_identity
 
 
 def _git(root: Path, *args: str, strip: bool = True) -> str:
@@ -25,27 +32,21 @@ def _git(root: Path, *args: str, strip: bool = True) -> str:
     return proc.stdout.strip() if strip else proc.stdout
 
 
-def _git_sha(value: str, field: str) -> str:
-    if len(value) != 40:
-        raise RuntimeError(f"SOURCE_IDENTITY_INVALID_{field}")
-    try:
-        int(value, 16)
-    except ValueError as exc:
-        raise RuntimeError(f"SOURCE_IDENTITY_INVALID_{field}") from exc
-    return value
-
-
 def exact_source_identity(root: Path) -> dict[str, Any]:
-    """Bind HEAD, commit tree and the complete porcelain status payload."""
+    """Bind HEAD/tree plus compatibility status and byte-exact dirty-state identity."""
     resolved = root.resolve()
-    head = _git_sha(_git(resolved, "rev-parse", "HEAD"), "HEAD")
-    tree = _git_sha(_git(resolved, "rev-parse", "HEAD^{tree}"), "TREE")
+    exact = source_identity(resolved)
     status = _git(resolved, "status", "--porcelain=v1", "--untracked-files=all", strip=False)
     return {
-        "repo_head": head,
-        "repo_tree": tree,
-        "repo_dirty": bool(status),
+        "repo_head": exact["repo_head"],
+        "repo_tree": exact["repo_tree"],
+        "repo_dirty": bool(exact["dirty_state"]["dirty"]),
+        # Compatibility field retained for existing receipts/tests.
         "repo_status_sha256": hashlib.sha256(status.encode("utf-8")).hexdigest(),
+        # Strong fields: bind actual tracked diff bytes and untracked content identities.
+        "repo_dirty_state_sha256": exact["dirty_state_sha256"],
+        "source_identity_sha256": exact["source_identity_sha256"],
+        "source_identity_schema": exact["schema"],
     }
 
 

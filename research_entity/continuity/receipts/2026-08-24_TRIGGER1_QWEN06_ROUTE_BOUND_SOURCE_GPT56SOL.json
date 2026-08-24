@@ -1,0 +1,47 @@
+{
+  "schema": "CLAY_TRIGGER1_RESEARCH_DELTA_RECEIPT/v1",
+  "date": "2026-08-24",
+  "trigger": "1",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "authority_epoch": "8.71",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "canonical_main_at_rebase": "60e65e9743617a680d55a9285643f4de9ca31fc7",
+  "finding": "The canonical OpenRouter runtime-route validator existed but the real Qwen3-0.6B executor did not opt into router metadata or consume the validator, so a positive output-logit effect could not establish invariant routed runtime identity across matched controls.",
+  "delta": {
+    "successor_wrapper": "tools/trigger1_openrouter_qwen06_route_bound_execute.py",
+    "regression": "tests/test_trigger1_openrouter_qwen06_route_bound_execute.py",
+    "observable_pr_runner": ".github/workflows/trigger1-openrouter-pr-observable.yml",
+    "exec_request": "research_entity/runtime/trigger1_exec_requests/2026-08-24-qwen06-route-bound-gpt56sol.json"
+  },
+  "new_fail_closed_requirements": [
+    "X-OpenRouter-Metadata enabled",
+    "attempt == 1",
+    "exactly one selected route",
+    "requested == qwen/qwen3-0.6b-04-28:free",
+    "is_byok == false",
+    "empty material router pipeline",
+    "non-empty system_fingerprint",
+    "one invariant execution-runtime identity across calibration and holdout",
+    "one invariant selected route across the six-control holdout"
+  ],
+  "epistemic_boundary": "Router metadata and system_fingerprint improve routed runtime identity but do not attest exact model weight bytes or quantization. Output-logit intervention remains component-only and cannot mint hidden-state/cvec/J-Space/HCU/training credit.",
+  "verification": {
+    "local_logic_regressions": "8/8 PASS on source-equivalent prototype",
+    "exact_branch_runtime": "REQUESTED_THROUGH_OBSERVABLE_PR_RUNNER_NOT_YET_OBSERVED_AT_RECEIPT_WRITE",
+    "provider_credentials_read_by_this_chatgpt_tool_surface": false,
+    "direct_provider_network_io_by_this_chatgpt_tool_surface": false
+  },
+  "credits": {
+    "external_provider_trigger1_runtime": 0,
+    "output_logit_vector_control_runtime": 0,
+    "direct_free_api_hidden_state_vector_steering": 0,
+    "jspace_model_runtime": 0,
+    "hcu_full_runtime": 0,
+    "whole_entityos_hcu_runtime": 0,
+    "training": 0
+  },
+  "acceptance": "IN_PROGRESS"
+}

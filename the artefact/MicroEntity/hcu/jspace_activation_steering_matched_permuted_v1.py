@@ -59,6 +59,7 @@ except ImportError:
     )
 
 SCHEMA = "HCU_JSPACE_ACTIVATION_STEERING_MATCHED_PERMUTED_SEARCH/v1"
+EVIDENCE_CLASS = "STEERING_SEARCH_WITH_MATCHED_PERMUTED_NULL_ONLY_NOT_JSPACE_CAUSAL"
 PERMUTATION_DERIVATION_SCHEMA = "HCU_JSPACE_PERMUTED_NULL_DERIVATION/v1"
 MAX_PERMUTATION_ATTEMPTS = 128
 
@@ -91,6 +92,9 @@ class PermutedNullObservation:
 @dataclass(frozen=True)
 class MatchedPermutedSearchResult:
     schema: str
+    evidence_class: str
+    jspace_causal_credit: bool
+    remaining_causal_controls: tuple[str, ...]
     base: SearchResult
     permuted_controls: tuple[PermutedNullObservation, ...]
     max_permuted_mean_delta: float
@@ -278,7 +282,8 @@ def search_activation_steering_with_permuted_nulls(
     This is a deliberately conservative bounded discriminator: the target must
     beat the strongest observed permuted mean delta by ``min_permuted_gap``.
     Statistical/holdout promotion remains governed by the higher-level causal
-    steering acceptance protocol.
+    steering acceptance protocol. A matched PERMUTED pass remains search-level
+    evidence and does not satisfy the required corrupted/sham/off-target family.
     """
     min_permuted_gap = _finite_nonnegative(min_permuted_gap, "min_permuted_gap")
     permutation_seed_values = tuple(
@@ -367,6 +372,9 @@ def search_activation_steering_with_permuted_nulls(
     gap = base.best.mean_delta - max_permuted
     return MatchedPermutedSearchResult(
         schema=SCHEMA,
+        evidence_class=EVIDENCE_CLASS,
+        jspace_causal_credit=False,
+        remaining_causal_controls=base.missing_causal_controls,
         base=base,
         permuted_controls=tuple(controls),
         max_permuted_mean_delta=max_permuted,

@@ -1,0 +1,82 @@
+{
+  "schema": "CLAY_GO_RESEARCH_DELTA/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol / ChatGPT project organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority": {
+    "supervisor": "8.72",
+    "mode": "FREE_ONLY",
+    "canonical_repository": "gschaidergabriel/clay-global-research-entity",
+    "canonical_branch": "main",
+    "fusion_base": "f5d22d319de2f001b81c650af233b6d2cd3a1774",
+    "latest_main_observed_after_source_writes": "c88303bd95f801cf23c9d0d3c2c3a2bedd0586a2"
+  },
+  "coordination": {
+    "shared_immutable_request_id_exposed_to_this_organ": false,
+    "available_user_message_time_precision": "MINUTE_ONLY",
+    "unusual_experiment_status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_interventions_executed": 0,
+    "stale_authority_pr_1456_closed_unmerged": true,
+    "duplicate_authority_pr_1667_closed_unmerged_after_parallel_main_subsumed_delta": true,
+    "retained_successor_lane": 1680
+  },
+  "observed": {
+    "forge_distillery_runtime_request_pr": 1619,
+    "forge_distillery_run": 32742535392,
+    "forge_distillery_run_status": "queued",
+    "forge_runtime_credit_added": 0,
+    "issue_1657_original_label_independence_gap_resolved_on_current_main": true,
+    "current_bridge_requires_versioned_upstream_label_independence_receipt": true,
+    "current_bridge_recomputes_raw_selection_and_holdout_verdict": false,
+    "pr_1680_raw_recompute_delta_nonduplicate_at_fusion_time": true
+  },
+  "hypothesis": "A direct-steering promotion candidate should be derived only after deterministic recomputation of calibration selection and holdout adjudication from the recorded raw rows; stored PASS/selection mirrors are evidence inputs, not authority.",
+  "counterhypothesis": "Exact source identity plus a stored PASS verdict and selected layer/gain are sufficient because the executor already computed them deterministically.",
+  "counterhypothesis_rejection": "A stale or forged self-consistent result/candidate pair can preserve asserted PASS metadata while raw rows no longer justify it. Promotion must re-derive the deterministic decision at the boundary that grants candidate credit.",
+  "fusion_delta": [
+    "Preserve the current versioned upstream label-independence receipt and fail-closed family binding.",
+    "Recompute select_layer_gain(calibration_rows) and require exact equality with stored selection.",
+    "Recompute adjudicate_holdout(holdout_rows, frozen layer/gain) and require exact equality with the stored PASS verdict.",
+    "Bind intermediate candidate source/model/runtime/checkpoint/tokenizer/layer/gain/direction/family/verdict mirrors to recomputed result evidence.",
+    "Validate optional intermediate candidate self-hash.",
+    "Reject evaluation-label/token metadata smuggled into derivation source rows while label independence is claimed.",
+    "Expose raw_selection_recomputed=true and raw_holdout_verdict_recomputed=true in the direct candidate.",
+    "Add eight focused deterministic regressions covering positive path, raw-row tampering, stored-selection tampering, candidate verdict forgery, derivation label metadata smuggling, missing/true label-independence receipt, and derivation-family mismatch."
+  ],
+  "three_tracks": {
+    "track_a_entityos_executable_convergence": {
+      "status": "ADVANCED_FAIL_CLOSED_PROMOTION_RECOMPUTE",
+      "delta": "The strongest local-model promotion boundary no longer trusts stored selection/PASS mirrors as authority."
+    },
+    "track_b_hcu_and_typed_entry": {
+      "status": "ADVANCED_TYPED_EVIDENCE_REDERIVATION",
+      "delta": "Candidate promotion is re-derived from typed raw evidence without creating a second truth/effect path; candidate mirrors are checked against the same evidence family."
+    },
+    "track_c_global_jspace_gwt_training_readiness": {
+      "status": "ADVANCED_JSPACE_EVIDENCE_INTEGRITY",
+      "delta": "Label-independence proof and raw causal-protocol recomputation are fused at the J-Space promotion bridge before any owner-goal candidate can be emitted."
+    }
+  },
+  "source_validation": {
+    "exact_branch_test_execution_observed": false,
+    "test_pass_claimed": false,
+    "reason": "This organ has repository read/write access but no exposed authorized local/clay-direct-dev execution bridge; source and regression definitions are committed without fabricating runtime evidence."
+  },
+  "artefact_readme": {
+    "status": "NO_CHANGE_WITH_REASON",
+    "reason": "Canonical the artefact/README.md was updated repeatedly by concurrent current-main GO fusion during this same macrocycle; overwriting it from a moving branch would risk stale-current regression. Current-facing README already records Supervisor 8.72, strongest-intermediate Trigger-1 fusion, lease gating, zero credits and current runtime blockers."
+  },
+  "credits_after_cycle": {
+    "provider_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_action": "Successor-reenter current main and PR #1680; preserve newer main label-independence/authority changes, update the retained #1680 head only if this raw-recompute fusion remains nonduplicate, then observe exact-head CI if available. Do not launch a Qwen intervention without a canonical atomic lease.",
+  "evidence_boundary": "Source/regression/coordination evidence only. No model runtime, provider execution, J-Space model, training, HCU-full, canonical semantics or whole-product credit is minted."
+}

@@ -1,5 +1,5 @@
 {
-  "schema_version": "8.63",
+  "schema_version": "8.65",
   "entity_id": "frank-project-global-research-entity",
   "entity_display_name": "Clay",
   "identity": {
@@ -10,7 +10,7 @@
   "active_stage": "ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP",
   "product_endpoint": "EntityOS",
   "integrated_cognition_compute_architecture": "HCU",
-  "authority_correction": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_63.json",
+  "authority_correction": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_65.json",
   "compatibility_names": {
     "xeno": "TRANSITIONAL_IMPLEMENTATION_COMPATIBILITY_CODENAME_ONLY",
     "xcu": "TRANSITIONAL_RESEARCH_ALIAS_FOR_HCU_ONLY",
@@ -30,7 +30,9 @@
     "FACT_UNKNOWN + METHOD_PRESENT != FACT_PRESENT",
     "current autonomous supervisor is FREE_ONLY: paid, subscription and unknown provider lanes fail closed before credential lookup or network I/O",
     "unusual experiments require the canonical atomic lease before intervention; without a reproducible shared trigger identity the unusual-experiment path is coordination-blocked",
-    "retained donor and execution-controller PR identities are repository-qualified; unqualified PR numbers never select execution authority"
+    "retained donor and execution-controller PR identities are repository-qualified; unqualified PR numbers never select execution authority",
+    "function-runtime diagnostic evidence does not imply Sandbox, HCU, model, J-Space, training, or whole-product runtime credit",
+    "remaining included Sandbox quota must be directly observed by an account-authoritative read-only surface before Sandbox.create may be admitted"
   ],
   "go_required_tracks": [
     "ENTITYOS_EXECUTABLE_CONVERGENCE",
@@ -68,7 +70,7 @@
   "retained_hcu_donor_qualified": "gschaidergabriel/clay-global-research-entity#1263",
   "retained_execution_controller_qualified": "gschaidergabriel/Dr.-Unterweger#810",
   "unqualified_pr810_execution_selection": "FAIL_CLOSED",
-  "execution_surface": "AUTHORIZED_ISOLATED_FREE_SANDBOX_ONLY_IN_CURRENT_AUTONOMOUS_SUPERVISOR_MODE; VERCEL_HOBBY_INCLUDED_TIER_ADMITTED_ONLY_FOR_FIXED_HASH_BOUND_SHORT_CAPSULES_WITH_FAIL_CLOSED_BILLING_QUOTA_PLAN_FENCES",
+  "execution_surface": "AUTHORIZED_ISOLATED_FREE_SANDBOX_ONLY_IN_CURRENT_AUTONOMOUS_SUPERVISOR_MODE; VERCEL_HOBBY_SURFACE_CLASS_ONLY_UNTIL_DIRECT_REMAINING_INCLUDED_SANDBOX_QUOTA_IS_OBSERVED; FIXED_HASH_BOUND_SHORT_CAPSULES_WITH_FAIL_CLOSED_BILLING_QUOTA_PLAN_FENCES",
   "free_only": true,
   "paid_fallback": "FORBIDDEN",
   "together_api": "FORBIDDEN_IN_CURRENT_FREE_ONLY_SUPERVISOR_MODE; GENERAL_INFERENCE_FORBIDDEN; OWNER_PAID_ONE_SHOT_DIRECTIVE_QUARANTINED_WITH_ZERO_EXECUTION_CREDIT",
@@ -79,8 +81,8 @@
   "go_macrocycle_identity_contract": "research_entity/continuity/GO_MACROCYCLE_IDENTITY_CONTRACT.md",
   "go_unusual_experiment_atomic_lease_protocol": "research_entity/continuity/GO_EXPERIMENT_ATOMIC_LEASE_PROTOCOL.md",
   "go_unusual_experiment_claim_rule": "CREATE_ONLY_CANONICAL_CLAIM_BEFORE_INTERVENTION_OR_COORDINATION_BLOCKED",
-  "all_worker_protocol": "research_entity/claycode/CLAYCODE_ALL_WORKERS_EXECUTION_DIRECTIVE_8_63.md",
-  "legacy_all_worker_protocol": "research_entity/claycode/CLAYCODE_ALL_WORKERS_EXECUTION_DIRECTIVE.md",
+  "all_worker_protocol": "research_entity/claycode/CLAYCODE_ALL_WORKERS_EXECUTION_DIRECTIVE_8_65.md",
+  "legacy_all_worker_protocol": "research_entity/claycode/CLAYCODE_ALL_WORKERS_EXECUTION_DIRECTIVE_8_63.md",
   "go": "ENTITYOS_HCU_MAXIMUM_PRODUCT_CONVERGENCE_MACROCYCLE",
   "zero": "ENTITYOS_HCU_ZERO_JSPACE_FUNCTION_FABRIC_LENS",
   "go_transition_questions": [
@@ -92,11 +94,13 @@
     "Can the claim be falsified with executable evidence?"
   ],
   "current_frontier": [
-    "keep all remaining control-plane entry points synchronized to EntityOS + HCU + supervisor 8.63 FREE_ONLY plus atomic unusual-experiment lease law and repository-qualified retained-lane identities",
+    "keep all remaining control-plane entry points synchronized to EntityOS + HCU + supervisor 8.65 FREE_ONLY plus atomic unusual-experiment lease law and repository-qualified retained-lane identities",
     "retain gschaidergabriel/clay-global-research-entity#1263 as the single HCU donor lane",
     "retain gschaidergabriel/Dr.-Unterweger#810 as the single bounded execution-controller lane; unqualified PR810 selection fails closed",
-    "extend the single fixed hash-bound FREE Sandbox executor toward the exact-current J-Space inference-binding plus GRID10 plan/cell closure, resolving binding schema/version from the live retained executor contract rather than a frozen cache version string",
-    "continue the same single executor/capsule authority toward Typed Entry -> route -> VerifiedEngineAdmission -> verified actual-loader consumption -> GRID10/v2 -> actual model-executor observation -> canonical MiniUnifiedDB atomic invocation admission -> VerifiedModelExecution/v1 -> HCU_INFERENCE_RECEIPT/v4 -> Global J-Space/GWT -> TrainingTrace/v1 -> exact-current J-Space inference binding -> admitted causal dataset closure",
+    "preserve exact-head function-runtime diagnostic credit at gschaidergabriel/Dr.-Unterweger#810 head 2da99e0458809988190c129b04cae913d1f15d92 without inflating it into Sandbox/HCU/model/J-Space credit",
+    "obtain a directly authoritative read-only remaining included Vercel Sandbox quota signal without upgrade, billing mutation, paid fallback, plan inference, or provider credential preflight",
+    "only if FREE_ONLY Sandbox admission opens, run one fixed exact-source environment probe binding executor/deployment SHA, Python version, sqlite3/_sqlite3 availability, source identities, secret fence, result digest, exit status, and cleanup",
+    "only after environment PASS continue the same single executor/capsule authority through Typed Entry -> route -> VerifiedEngineAdmission -> verified actual-loader consumption -> GRID10/v2 -> actual model-executor observation -> canonical MiniUnifiedDB atomic invocation admission -> VerifiedModelExecution/v1 -> HCU_INFERENCE_RECEIPT/v4 -> Global J-Space/GWT -> TrainingTrace/v1 -> exact-current J-Space inference binding -> admitted causal dataset closure",
     "bind causal event identity plus resolved engine identity into one HCU route decision identity",
     "typed Entry Fabric for all new data",
     "10-cell shared-worker HCU baseline",
@@ -108,6 +112,7 @@
     "Hyperposition with evidence-based candidate reduction",
     "measured scale-out without conflating logical cells with simultaneous decodes",
     "strict EffectGate non-bypass and recovery/generation fencing",
+    "pause source-guard proliferation unless executable counterevidence requires a new guard; keep the known GRID full-preimage re-admission hardening deferred until reactivated by runtime evidence or newer priority",
     "do not preflight or launch the paid Together lane in current FREE_ONLY supervisor mode"
   ],
   "legacy_scope": "Xeno/XCU remain compatibility or research aliases only. Mini Entity/MicroEntity/ClayVerse/Frank remain historical implementation or donor provenance unless explicitly re-admitted."

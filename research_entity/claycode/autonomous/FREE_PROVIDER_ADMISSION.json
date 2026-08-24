@@ -1,34 +1,34 @@
 {
   "schema": "ENTITYOS_HCU_FREE_PROVIDER_ADMISSION/v1",
-  "authority_epoch": "8.68",
+  "authority_epoch": "8.69",
   "mode": "FREE_ONLY",
   "product": "EntityOS",
   "compute_architecture": "HCU",
   "source": "ENTITYOS_HCU_CONTROL_PLANE",
-  "default_policy": "FAIL_CLOSED_UNKNOWN_PAID_SUBSCRIPTION_BEFORE_SECRET_LOOKUP_AND_NETWORK_IO",
+  "default_policy": "OWNER_ATTESTED_FREE_CONTINGENTS_ONLY; NO_PAID_FALLBACK; HTTP_402_HARD_STOP; PROVIDER_WIDE_RATE_LIMITS_RESPECTED",
   "providers": {
     "groq": {
-      "admitted": false,
-      "cost_class": "UNKNOWN",
-      "evidence_ref": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_68.json#evidence.typed_admission_state"
+      "admitted": true,
+      "cost_class": "FREE",
+      "evidence_ref": "governance/CLAY_FREE_SWARM_OWNER_ADMISSION_2026-08-24.md#economic-boundary"
     },
     "mistral": {
-      "admitted": false,
-      "cost_class": "UNKNOWN",
-      "evidence_ref": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_68.json#evidence.typed_admission_state"
+      "admitted": true,
+      "cost_class": "FREE",
+      "evidence_ref": "governance/CLAY_FREE_SWARM_OWNER_ADMISSION_2026-08-24.md#economic-boundary"
     },
     "nvidia": {
-      "admitted": false,
-      "cost_class": "UNKNOWN",
-      "evidence_ref": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_68.json#evidence.typed_admission_state"
+      "admitted": true,
+      "cost_class": "FREE",
+      "evidence_ref": "governance/CLAY_FREE_SWARM_OWNER_ADMISSION_2026-08-24.md#economic-boundary"
     },
     "openrouter": {
-      "admitted": false,
-      "cost_class": "UNKNOWN",
-      "evidence_ref": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_68.json#evidence.typed_admission_state"
+      "admitted": true,
+      "cost_class": "FREE",
+      "evidence_ref": "governance/CLAY_FREE_SWARM_OWNER_ADMISSION_2026-08-24.md#economic-boundary"
     }
   },
   "runtime_provider_credit": 0,
-  "execution_state": "EXTERNAL_LLM_PROVIDER_TRAFFIC_QUARANTINED_UNTIL_EXECUTABLE_TYPED_FREE_ADMISSION_PASS",
-  "note": "Groq, Mistral, NVIDIA and OpenRouter are all fail-closed at the current authority. Historical successful provider calls are unadmitted execution evidence and must not be relabeled FREE after the fact. Environment attestations, credential presence, :free route labels, HTTP success, 402/429 behavior, model catalogs and provider responses cannot self-admit a provider as FREE."
+  "execution_state": "FREE_SWARM_PROVIDER_LANES_ADMITTED_FOR_OWNER_ATTESTED_FREE_CONTINGENTS_ONLY",
+  "note": "Owner explicitly authorized the available free contingents/free tokens for Groq, Mistral, NVIDIA and OpenRouter. Admission permits FREE_ONLY execution; it does not prove credential presence and does not mint product/HCU runtime credit. Paid fallback/upgrades/credit purchases remain forbidden. 402 hard-stops the affected credential/lane and 429 is handled as provider-wide cooldown without key-rotation bypass."
 }

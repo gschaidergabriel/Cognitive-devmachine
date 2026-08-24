@@ -10,15 +10,16 @@ Read, in order as applicable:
 
 - `research_entity/continuity/BOOTSTRAP_MINIMAL.json`
 - `research_entity/rooms/PROGRAM_STATE.json`
-- newest admitted `research_entity/claycode/autonomous/SUPERVISOR_STEERING_*.json` — currently `SUPERVISOR_STEERING_8_65.json`
+- newest admitted `research_entity/claycode/autonomous/SUPERVISOR_STEERING_*.json` — currently `SUPERVISOR_STEERING_8_68.json`
 - `research_entity/claycode/autonomous/SUPERVISOR_INBOX.json`
-- `research_entity/claycode/CLAYCODE_ALL_WORKERS_EXECUTION_DIRECTIVE_8_65.md`
+- `research_entity/claycode/CLAYCODE_ALL_WORKERS_EXECUTION_DIRECTIVE_8_68.md`
+- `governance/CLAY_DUAL_MACHINE_EXECUTION_AUTHORITY_2026-08-24.md`
 - `research_entity/continuity/GO_MACROCYCLE_IDENTITY_CONTRACT.md`
 - `research_entity/continuity/GO_EXPERIMENT_ATOMIC_LEASE_PROTOCOL.md`
 - `the artefact/manifest.json`
 - task-relevant exact current source, tests and receipts.
 
-Current supervisor epoch: **8.65**. Current autonomous mode: **FREE_ONLY**.
+Current supervisor epoch: **8.68**. Current autonomous mode: **FREE_ONLY**.
 
 ## Identity and naming law
 
@@ -85,7 +86,7 @@ All new-data paths converge toward deterministic typed admission before cognitio
 
 The target exact causal chain is:
 
-`Typed Entry -> route -> VerifiedEngineAdmission -> verified actual-loader consumption -> GRID10 -> actual model-executor observation -> canonical MiniUnifiedDB/UnifiedDB admission -> VerifiedModelExecution -> HCU_INFERENCE_RECEIPT -> Global J-Space/GWT -> TrainingTrace -> exact-current J-Space inference binding -> admitted causal dataset`
+`Typed Entry -> route -> VerifiedEngineAdmission -> verified actual-loader consumption -> GRID10 -> actual model-executor observation -> canonical ModelExecution admission -> InferenceReceipt/v4 -> Global J-Space/GWT -> TrainingTrace -> exact-current J-Space inference binding -> admitted causal dataset`
 
 Pre-load hashing is not loader-consumption attestation. Logical cell count is not resident model count or physical decode concurrency.
 
@@ -95,7 +96,7 @@ Global J-Space/GWT remains an **empirical causal coordination/interface hypothes
 
 Current research direction includes `JSPACE_VECTOR_CONTROL_ABI/v1`, causal control-delivery evidence, lesion/shuffle/rescue-style controls where admitted, family-level leak-resistant splits, deterministic hard negatives, and zero-cost local approximately-0.8B specialization only after executable real-trace gates.
 
-Completed training alone is not PASS and current paid/Together training has zero authority under FREE_ONLY.
+Completed training alone is not PASS. Current paid/Together training and paid/subscription/unknown provider execution remain forbidden under FREE_ONLY.
 
 ## `go` — three coupled tracks
 
@@ -109,26 +110,28 @@ If Track 2 cannot safely advance, record `HCU_NO_CHANGE_WITH_REASON` plus the ne
 
 Before any new unusual intervention, acquire the canonical create-only atomic lease under `GO_EXPERIMENT_ATOMIC_LEASE_PROTOCOL.md`. No reproducible shared trigger identity or no provable create-only lease means `COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT`; ordinary deterministic regression, source review, authority fusion and admitted exact-source acceptance work may continue.
 
-## Execution policy — supervisor 8.65
+## Execution policy — supervisor 8.68
 
 Current autonomous mode is **FREE_ONLY**.
 
-Allowed execution is restricted to the admitted isolated FREE Sandbox class. Vercel Hobby included-tier Sandbox is admissible only for bounded fixed source/hash-bound short capsules with fail-closed quota, billing, upgrade, plan and charge-path fences.
+Active owner authority permits zero-monetary-cost development/testing as the normal user on the local Linux workstation and inside the authorized `clay-direct-dev` VPS sandbox, with resource/provenance/secret/cleanup guards. It also permits host-side changes required specifically to administer or repair that sandbox/bridge/container runtime. This does **not** grant unrelated VPS-host changes, new local root/sudo authority, new external production effects, or paid/provider authority.
 
-Current runtime boundary observed at supervisor 8.65:
+Vercel Hobby included-tier Sandbox remains a separate bounded execution surface; its remaining Sandbox quota is not assumed from plan identity and its prior no-Sandbox Function diagnostic remains bounded to that scope.
 
-- retained executor: `gschaidergabriel/Dr.-Unterweger#810`;
-- exact executor head observed: `2da99e0458809988190c129b04cae913d1f15d92`;
-- provider-observed serverless Function invocation: **HTTP 200 at exact deployed source**;
-- evidence scope: `FUNCTION_RUNTIME_BOOT_VERIFIED_NO_SANDBOX_CREATE` only;
-- `Sandbox.create` observed: **false**;
-- Sandbox Python / `sqlite3` / `_sqlite3` capability observed: **false**;
-- remaining included Vercel Sandbox quota directly observed: **false**;
-- connected read-only Vercel surface exposes an authoritative account-level remaining Sandbox quota read: **false at the current observation**.
+### External LLM-provider quarantine
 
-Hobby/team/plan identity and per-sandbox cumulative usage are **not** remaining-quota authority and must not open `Sandbox.create`.
+Supervisor 8.68 records successful historical **Groq, NVIDIA and OpenRouter** traffic without pre-call canonical typed FREE admission. Monetary spend is **not proven**, but the control-plane ordering requirement was violated. The observed execution remains append-only unadmitted history and receives zero provider runtime credit.
 
-VPS, self-hosted and production-host testing are forbidden. Together general inference, Together training, Together preflight/key lookup/job creation, paid fallback and subscription/unknown monetary lanes are forbidden under supervisor 8.65. Do not consume credentials for a forbidden lane.
+Until exact-current-source `FREE_SWARM_ADMISSION_BOUNDARY_RECEIPT/v1` PASS:
+
+- all external LLM-provider worker/catalog/chat/synthesis/reviewer traffic is quarantined;
+- provider admission must resolve before secret/key lookup and before provider network I/O;
+- only `admitted=true` + `cost_class=FREE` under the exact current authority may cross that boundary;
+- missing/malformed, `UNKNOWN`, `PAID`, `SUBSCRIPTION`, authority mismatch and unlisted providers fail closed;
+- environment attestations, credential presence, `:free` route suffixes, catalog price fields, HTTP success/402/429 and historical successful calls cannot self-admit FREE status;
+- Together remains forbidden in the current FREE_ONLY supervisor mode.
+
+Current main source now includes Groq, Mistral, NVIDIA and OpenRouter in the typed provider authority plus deterministic secret/network tripwire regressions. That is source/control progress only; it does not erase the historical breach and does not create provider runtime credit.
 
 ## Current evidence credit
 
@@ -140,7 +143,8 @@ Bounded admitted evidence includes:
 
 Current credit boundary remains:
 
-- Sandbox environment runtime credit: `0`;
+- FREE-swarm provider-admission runtime credit: `0`;
+- external-provider runtime credit: `0`;
 - whole EntityOS/HCU runtime credit: `0`;
 - full HCU runtime credit: `0`;
 - J-Space model-runtime credit: `0`;
@@ -151,21 +155,22 @@ A source, deployment, component test, receipt or same-family rerun cannot be inf
 
 ## Current frontier
 
-1. keep current-facing authority surfaces successor-aligned to EntityOS + HCU + supervisor 8.65 FREE_ONLY;
-2. retain `gschaidergabriel/clay-global-research-entity#1263` as the single HCU/Typed Entry/J-Space donor lane;
-3. retain repository-qualified `gschaidergabriel/Dr.-Unterweger#810` as the single bounded execution-controller lane;
-4. preserve exact-head Function-runtime HTTP-200 evidence at its no-Sandbox scope only;
-5. obtain a **directly authoritative read-only remaining included Vercel Sandbox quota signal** without upgrade, billing mutation, paid fallback, plan inference or provider credential preflight;
-6. only if that FREE_ONLY gate opens, run one fixed exact-source environment probe binding executor/deployment SHA, Python version, `sqlite3/_sqlite3`, exact source identities, secret fence, result digest, exit status and cleanup;
-7. only after environment PASS continue the same retained causal chain through real local model invocation, ModelExecution, InferenceReceipt and model-specific Global J-Space/GWT observation;
-8. continue `JSPACE_VECTOR_CONTROL_ABI/v1`, causal DatasetAdmission/family split, deterministic hard negatives and leak-resistant train/validation/holdout readiness without paid training;
-9. do not run a new unusual experiment without the canonical atomic lease;
-10. keep whole-product/model/training credit at zero until the corresponding exact admitted evidence exists.
+1. keep all current-facing authority surfaces successor-aligned to EntityOS + HCU + supervisor 8.68 FREE_ONLY;
+2. preserve the historical Groq/NVIDIA/OpenRouter execution as unadmitted history; do not relabel it FREE after the fact;
+3. retain `gschaidergabriel/clay-global-research-entity#1263` as the single HCU/Typed Entry/J-Space donor lane;
+4. retain repository-qualified `gschaidergabriel/Dr.-Unterweger#810` as the single bounded execution-controller lane;
+5. execute `FREE_SWARM_ADMISSION_BOUNDARY_RECEIPT/v1` on exact current source using secret-access and socket/network tripwires and require zero secret lookup + zero network attempt for all blocked classes;
+6. only after executable boundary PASS and direct positive FREE classification restart at most one external provider lane at a time with a bound provider execution receipt;
+7. independently execute retained donor InferenceReceipt/v4 rejection-boundary tests on an authorized zero-cost local or `clay-direct-dev` surface before executor rebind;
+8. continue the real causal chain through local model invocation -> canonical ModelExecution -> InferenceReceipt/v4 -> model-specific Global J-Space/GWT control/intervention trace;
+9. continue `JSPACE_VECTOR_CONTROL_ABI/v1`, causal DatasetAdmission/family split, deterministic hard negatives and leak-resistant train/validation/holdout readiness without paid training;
+10. do not run a new unusual experiment without the canonical atomic lease;
+11. keep whole-product/model/training credit at zero until the corresponding exact admitted evidence exists.
 
 Source-guard proliferation is paused unless new executable counterevidence requires a guard. Prefer runtime-first discrimination and fusion over duplicate implementation.
 
 ## Historical provenance
 
-Earlier README revisions contain detailed `go`-by-`go` source-convergence narratives, including 8.63-era donor/executor states. They remain preserved in Git history. Durable receipts remain append-only under `research_entity/continuity/receipts/` and retain the authority/version wording they had when produced. Historical wording does not override the current authority stack above.
+Earlier README revisions contain detailed `go`-by-`go` source-convergence narratives. They remain preserved in Git history. Durable receipts remain append-only under `research_entity/continuity/receipts/` and retain the authority/version wording they had when produced. Historical wording does not override the current authority stack above.
 
 Current-state claims must therefore be re-entered from live `main`, live retained PR heads and exact current execution evidence rather than copied from an older README revision.

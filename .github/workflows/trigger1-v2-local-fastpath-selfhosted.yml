@@ -40,7 +40,7 @@ jobs:
           SOURCE_HEAD="$(git rev-parse HEAD)"
           SOURCE_TREE="$(git rev-parse 'HEAD^{tree}')"
           SOURCE_DIRTY=false
-          [[ -n "$(git status --porcelain=v1)" ]] && SOURCE_DIRTY=true
+          [[ -n "$(git status --porcelain=v1 --untracked-files=all)" ]] && SOURCE_DIRTY=true
           claim_main="$(python3 -c 'import json,sys;print(json.load(open(sys.argv[1]))["observed_canonical_main"])' "$lease_result")"
           python3 - "$lease_result" "$GITHUB_ENV" "$SOURCE_HEAD" "$SOURCE_TREE" "$SOURCE_DIRTY" <<'PY'
           import json, pathlib, sys
@@ -183,7 +183,7 @@ jobs:
           if [[ -s "$candidate" ]]; then
             python3 tools/trigger1_jspace_promotion_gate.py --candidate "$candidate" > "$gate"
           else
-            printf '%s\n' '{"schema":"CLAY_TRIGGER1_JSPACE_PROMOTION_GATE/v2","owner_trigger1_goal_credit_candidate":false,"mechanism_runtime_vector_credit_candidate":false,"failures":["NO_LOCAL_PROMOTION_CANDIDATE"]}' > "$gate"
+            printf '%s\n' '{"schema":"CLAY_TRIGGER1_JSPACE_PROMOTION_GATE/v4","owner_trigger1_goal_credit_candidate":false,"mechanism_runtime_vector_credit_candidate":false,"failures":["NO_LOCAL_PROMOTION_CANDIDATE"]}' > "$gate"
           fi
 
       - name: Persist sanitized exact-source result
@@ -217,6 +217,13 @@ jobs:
               'provider_credential_fence':fence,
               'source_claim_external_provider_credentials_read':result.get('external_provider_credentials_read'),
               'source_claim_promoted_without_fence':False,
+              'atomic_lease':{
+                  'trigger_key':os.environ.get('TRIGGER1_TRIGGER_KEY'),
+                  'claim_path':os.environ.get('TRIGGER1_CLAIM_PATH'),
+                  'claim_sha256':os.environ.get('TRIGGER1_CLAIM_SHA256'),
+                  'claimant_organ':os.environ.get('TRIGGER1_CLAIMANT_ORGAN'),
+                  'experiment_name':os.environ.get('TRIGGER1_EXPERIMENT_NAME'),
+              },
               'github_actions':{
                   'run_id':os.environ.get('GITHUB_RUN_ID'),
                   'run_attempt':os.environ.get('GITHUB_RUN_ATTEMPT'),
@@ -255,9 +262,10 @@ jobs:
           git fetch --quiet origin main
           if git cat-file -e "origin/main:${claim_result}" 2>/dev/null || [[ -e "$claim_result" ]]; then exit 0; fi
           python3 - "$claim_result" "$EXPERIMENT_DIR" "$EXPERIMENT_RC" "$runtime_receipt" <<'PY'
-          import json, os, pathlib, sys
+          import hashlib, json, os, pathlib, sys
           out=pathlib.Path(sys.argv[1]); exp=pathlib.Path(sys.argv[2]) if sys.argv[2] else None
           rc=int(sys.argv[3]) if sys.argv[3] else None
+          runtime_path=pathlib.Path(sys.argv[4])
           result={}; gate={}
           if exp:
               rp=exp/'trigger1_local_activation_api_result.json'; gp=exp/'promotion_gate.json'
@@ -276,6 +284,8 @@ jobs:
               classification='PASS'
           else:
               classification='FAIL'
+          runtime_receipt_present=runtime_path.is_file()
+          runtime_receipt_sha256=hashlib.sha256(runtime_path.read_bytes()).hexdigest() if runtime_receipt_present else None
           payload={
               'schema':'clay-go-experiment-result/v1',
               'trigger_key':os.environ['TRIGGER1_TRIGGER_KEY'],
@@ -298,6 +308,8 @@ jobs:
               'classification':classification,
               'whole_product_evidence_established':False,
               'runtime_receipt_path':sys.argv[4],
+              'runtime_receipt_present_in_checkout':runtime_receipt_present,
+              'runtime_receipt_sha256':runtime_receipt_sha256,
           }
           out.parent.mkdir(parents=True,exist_ok=True)
           out.write_text(json.dumps(payload,indent=2,sort_keys=True,ensure_ascii=False)+'\n',encoding='utf-8')

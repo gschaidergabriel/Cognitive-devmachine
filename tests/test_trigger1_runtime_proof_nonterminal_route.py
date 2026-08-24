@@ -28,7 +28,8 @@ class Trigger1RuntimeProofRouteTests(unittest.TestCase):
         self.assertIn("activation_only_basis", text)
         self.assertIn("NO_DOWNSTREAM_TRANSFORMER_COMPUTATION", text)
         self.assertIn('"terminal_output_projection_shortcut": False', text)
-        self.assertIn('"basis_source": "INTERNAL_CALIBRATION_ACTIVATIONS_ONLY"', text)
+        self.assertIn('"basis_constructed_without_output_head": True', text)
+        self.assertIn("mean internal activation(A)-0.5*(mean internal activation(B)+mean internal activation(C))", text)
 
 
 if __name__ == "__main__":

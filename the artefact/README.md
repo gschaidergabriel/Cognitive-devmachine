@@ -4,7 +4,7 @@
 
 ## Current authority — 2026-08-25 re-entry
 
-Newest inbox-selected supervisor: **8.73**. Mode: **FREE_ONLY**. Canonical `main` observed at macrocycle entry: `19576d876cf0843890116f8d525e8e283906abeb`; this surface was re-entered again after concurrent writes before the present update.
+Newest inbox-selected supervisor: **8.73**. Mode: **FREE_ONLY**. Canonical `main` observed during this macrocycle advanced from `19576d876cf0843890116f8d525e8e283906abeb` to `12cc97ba7ccb6ca4f436dc89472929a64c64edba`; this file update is bound to the latter current blob.
 
 Persistent research entity = **Clay**. Temporary workers/models/sessions are organs, not persistent entities. Product = **EntityOS**. Integrated cognition/compute architecture = **HCU**. Xeno/XCU remain compatibility/research aliases only.
 
@@ -36,13 +36,33 @@ No `CLAY_GO873_DISTILLERY_SELFHOSTED_REGRESSION_RECEIPT/v1` was found in canonic
 
 Research Entity Identity Guard run `32753831612` remains completed/failure. Its job `97516690619` reports **zero materialized steps**, while canonical workflow source explicitly defines checkout, Python setup, and the identity validation command. Combined with the unavailable job log, this narrows the observed boundary to **pre-step / workflow-runner infrastructure uncertainty**: there is still no evidence that `tools/research_identity_guard_check.py` executed, so the red run must not be interpreted as a semantic identity-guard failure.
 
-**Track A delta:** refreshed exact repository/runtime evidence, persisted the self-hosted queue classification, and narrowed the red Identity Guard classification without weakening either product invariant. Runtime credit remains unchanged.
+#### Newly re-entered replay-schema migration blocker
+
+Current `main@12cc97ba7ccb6ca4f436dc89472929a64c64edba` still has no `CLAY_FORGE_EXECUTION_REPLAY_IDENTITY/v2` symbol. The current delta-id-independent replay preimage is therefore still published under `CLAY_FORGE_EXECUTION_REPLAY_IDENTITY/v1`, while historical admitted v1 rows were created under an older preimage that included `delta_id`. The same issue applies to the aligned measured-evidence v1 identity. This is a schema/version migration ambiguity: a persisted digest must not silently change meaning across upgrades.
+
+Open PR `gschaidergabriel/clay-global-research-entity#1767` is the retained migration donor. It introduces explicit replay/measured identity **v2**, preserves historical v1 preimages, adds v2 digest columns/indexing, and fails closed as `LEGACY_REPLAY_IDENTITY_UNRESOLVED` when a pre-v2 row cannot be reconstructed exactly. Its deterministic reproducer reports the unsafe in-place-v1 transition can re-admit an envelope-renamed replay with a second packet/token increment, while the versioned-v2 candidate rejects the ambiguous overlap with zero token delta.
+
+PR #1767 is currently conflict-bearing against moving `main` because the canonical path separately absorbed the stronger `BEGIN IMMEDIATE` concurrency serialization after the donor was cut. Therefore the required nonduplicate fusion is precise: **version replay/measured identity as v2 without dropping the current serialized admission transaction**. Do not merge a stale donor wholesale and do not leave the changed replay preimage mislabeled as historical v1.
+
+Until exact-current v2 migration + concurrency semantics are fused and executable-green, Distillery promotion remains blocked at schema-migration scope even though same-process replay/concurrency component evidence is stronger.
+
+**Track A delta:** refreshed exact repository/runtime evidence, persisted the self-hosted queue boundary from the concurrent lane, and added the newly re-entered migration-safe replay identity blocker to the current-facing product surface. Runtime credit remains unchanged.
 
 ### Track B — HCU + Typed Entry Fabric co-development
 
-**HCU_NO_CHANGE_WITH_REASON:** the reusable replay/concurrency causal-admission primitive is already fused on `main`; creating another source lane would duplicate canonical work. The next high-information HCU/Typed-Entry gain requires executable evidence, not another identity abstraction.
+**ADVANCED.** The v1->v2 issue strengthens a reusable Typed Entry/HCU causal-identity invariant: whenever an identity preimage changes semantically, persisted digests require a new schema/version rather than reinterpretation in place. This composes with the already-fused concurrency rule that replay lookup, conflict classification, packet insertion, and token mutation occur inside one serialized admission transaction.
 
-Current invariant remains: volatile evaluation/transport envelope fields do not define measured execution identity; semantic replay mints +0 packet/+0 accepted dataset tokens; changed measured evidence under one stable replay identity fails closed; distinct execution identities remain independently admissible.
+Current invariant set:
+
+- volatile evaluation/transport envelope fields do not define measured execution identity;
+- semantic replay mints +0 packet/+0 accepted dataset tokens;
+- changed measured evidence under one stable replay identity fails closed;
+- distinct execution identities remain independently admissible;
+- identity-preimage changes require explicit schema/version succession;
+- ambiguous pre-version overlap remains UNKNOWN/fail-closed rather than guessed;
+- concurrent replay admission remains serialized before classification.
+
+No second truth store, admission authority, effect path, or persistent entity was introduced.
 
 ### Track C — Global J-Space/GWT + zero-cost ~0.8B readiness
 
@@ -50,11 +70,12 @@ Current invariant remains: volatile evaluation/transport envelope fields do not 
 
 `COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT`
 
-No J-Space/model intervention, provider call, paid execution, or training run was performed. A new source-only J-Space lane would duplicate retained donor lane #1263.
+No J-Space/model intervention, provider call, paid execution, or training run was performed. A new source-only J-Space lane would duplicate retained donor lane #1263. The replay-v2 migration blocker is nevertheless training-readiness relevant because schema migration must not inflate future accepted dataset tokens.
 
 ## Current evidence credit
 
 - Forge/Distillery replay + concurrency: source/regression/component evidence only;
+- replay-v2 migration safety: donor/component evidence only; exact-current fused execution pending;
 - exact-current Distillery terminal regression receipt: **unobserved**;
 - persistent live Forge -> Distillery positive-token witness: **unobserved**;
 - queued self-hosted runs: **runner availability/routing unresolved; no semantic product failure inferred**;
@@ -70,13 +91,14 @@ A source file, workflow, queued run, deployment, token count, model consensus, o
 
 ## Highest-information next gates
 
-1. Observe/repair the authorized VPS bridge/self-hosted runner health and routing labels; capture a real roundtrip receipt before interpreting queued runtime requests.
-2. Observe a repository-bound terminal exact-current Distillery regression receipt and require replay/concurrency/rebuild/live-semantic scoped steps to succeed.
-3. Observe the persistent live Forge -> Distillery witness: one evidence-qualified ACCEPT -> exactly one persistent packet -> `accepted_dataset_tokens > 0` -> semantic replay -> exactly +0 packets/+0 tokens.
-4. Require changed measured evidence under the same stable replay identity to fail closed in executable live evidence.
-5. For the Research Entity Identity Guard, first obtain a run where steps actually materialize; only then classify the validator result. Do not weaken the invariant to make CI green.
-6. Continue one canonical Typed Entry -> verified loader consumption -> actual model execution -> InferenceReceipt -> model-specific J-Space causal trace through retained HCU donor lane #1263.
-7. Run the local Qwen3-0.6B six-control discriminator only after reproducible macrocycle identity and successful canonical atomic lease.
+1. Fuse PR #1767's explicit v2 migration semantics onto exact-current `main` **without losing current `BEGIN IMMEDIATE` replay-admission serialization**.
+2. Execute the exact-source migration + concurrency regressions: pre-v2 ambiguous overlap -> fail closed +0; timestamp/narration/`delta_id` replay under v2 -> duplicate +0; changed measured evidence -> `REPLAY_IDENTITY_CONFLICT`; genuinely distinct execution -> separately admissible; concurrent equivalent replay -> one admission + one clean duplicate.
+3. Observe/repair the authorized VPS bridge/self-hosted runner health and routing labels; capture a real roundtrip receipt before interpreting queued runtime requests.
+4. Observe a repository-bound terminal exact-current Distillery regression receipt and require replay/concurrency/rebuild/migration/live-semantic scoped steps to succeed.
+5. Observe the persistent live Forge -> Distillery witness: one evidence-qualified ACCEPT -> exactly one persistent packet -> `accepted_dataset_tokens > 0` -> semantic replay -> exactly +0 packets/+0 tokens.
+6. For the Research Entity Identity Guard, first obtain a run where steps actually materialize; only then classify the validator result. Do not weaken the invariant to make CI green.
+7. Continue one canonical Typed Entry -> verified loader consumption -> actual model execution -> InferenceReceipt -> model-specific J-Space causal trace through retained HCU donor lane #1263.
+8. Run the local Qwen3-0.6B six-control discriminator only after reproducible macrocycle identity and successful canonical atomic lease.
 
 ## Evidence discipline and reentry
 

@@ -13,12 +13,15 @@ class FreeSwarmReceiptRunnerHardening868Tests(unittest.TestCase):
         self.assertIn(hardened.SELF_REL, base.SOURCE_PATHS)
         self.assertIn(hardened.TEST_REL, base.SOURCE_PATHS)
         self.assertIn(hardened.INHERITED_ENV_TEST_REL, base.SOURCE_PATHS)
+        self.assertIn(hardened.REQUIRED_CASES_TEST_REL, base.SOURCE_PATHS)
 
     def test_hardening_tests_are_in_execution_set(self) -> None:
         self.assertIn(hardened.TEST_MODULE, base.TEST_MODULES)
         self.assertIn(hardened.ROOT / hardened.TEST_REL, base.TEST_PATHS)
         self.assertIn(hardened.INHERITED_ENV_TEST_MODULE, base.TEST_MODULES)
         self.assertIn(hardened.ROOT / hardened.INHERITED_ENV_TEST_REL, base.TEST_PATHS)
+        self.assertIn(hardened.REQUIRED_CASES_TEST_MODULE, base.TEST_MODULES)
+        self.assertIn(hardened.ROOT / hardened.REQUIRED_CASES_TEST_REL, base.TEST_PATHS)
 
     def test_bootstrap_trips_dns_connect_and_datagram_paths(self) -> None:
         text = base._bootstrap_text()
@@ -62,12 +65,20 @@ class FreeSwarmReceiptRunnerHardening868Tests(unittest.TestCase):
         )
         self.assertTrue(base._CLAY_868_RECEIPT_HARDENING_INSTALLED)
 
+    def test_required_blocked_case_discovery_is_required_for_receipt_pass(self) -> None:
+        self.assertIn(
+            "tests.test_free_swarm_receipt_required_cases_868",
+            base.TEST_MODULES,
+        )
+        self.assertTrue(base._CLAY_868_RECEIPT_HARDENING_INSTALLED)
+
     def test_process_egress_receipt_metadata_is_fail_closed(self) -> None:
         self.assertTrue(base._CLAY_868_RECEIPT_HARDENING_INSTALLED)
         text = inspect.getsource(hardened._install_hardening)
         self.assertIn('"process_allowlist"', text)
         self.assertIn('"python_process_egress_attempt_count"', text)
         self.assertIn('"arbitrary_child_process_egress"', text)
+        self.assertIn('"required_case_discovery_test"', text)
 
     def test_source_binding_is_not_runtime_credit(self) -> None:
         self.assertTrue(base._CLAY_868_RECEIPT_HARDENING_INSTALLED)

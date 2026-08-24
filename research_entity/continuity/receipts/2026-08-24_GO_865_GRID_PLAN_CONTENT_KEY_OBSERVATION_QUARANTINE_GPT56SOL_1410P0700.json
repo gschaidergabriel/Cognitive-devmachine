@@ -1,0 +1,69 @@
+{
+  "schema": "ENTITYOS_HCU_GO_RECEIPT/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "persistent_research_entity": "Clay",
+  "authority_epoch": "8.65",
+  "mode": "FREE_ONLY",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "canonical_main_observed_before_receipt": "857f0b16f3cad4749598dbf49f00bf02e6359393",
+  "retained_hcu_donor": "gschaidergabriel/clay-global-research-entity#1263",
+  "retained_hcu_head_before_receipt": "81c93fa7c80e952123f74f954e57ed162076ba9d",
+  "retained_executor": "gschaidergabriel/Dr.-Unterweger#810",
+  "retained_executor_head": "2da99e0458809988190c129b04cae913d1f15d92",
+  "coordination": {
+    "upstream_shared_immutable_macrocycle_id": null,
+    "available_user_message_timestamp_precision": "MINUTE_ONLY",
+    "atomic_unusual_experiment_lease": "NOT_ACQUIRED",
+    "classification": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_interventions_executed": 0,
+    "work_class": "ORDINARY_SOURCE_REVIEW_AUTHORITY_REENTRY_AND_EVIDENCE_SCOPING"
+  },
+  "runtime_gate": {
+    "exact_executor_deployment": "dpl_EHwJhL2hbLHMfw2pjB1Bb53H98Mm",
+    "exact_executor_deployment_state": "READY",
+    "function_runtime_credit": "PRESERVED_NO_SANDBOX_DIAGNOSTIC_SCOPE_ONLY",
+    "vercel_team_plan_observed": "hobby",
+    "hobby_included_quota_vector_definition_known": true,
+    "remaining_included_sandbox_quota_vector_directly_observed": false,
+    "sandbox_create_admitted": false,
+    "sandbox_create_performed": false,
+    "runtime_credit_added": 0
+  },
+  "source_observation": {
+    "dataset_gate": "the artefact/MicroEntity/hcu/jspace_dataset_admission_gate_v1.py",
+    "scheduler": "the artefact/MicroEntity/hcu/grid10_scheduler_v1.py",
+    "finding": "DatasetAdmission currently accepts a reduced admitted_grid_plans mapping whose registry key and embedded plan_sha256 agree, but it does not re-derive that digest from the full scheduler-owned GridPlan canonical material.",
+    "producer_contract": "grid10_scheduler_v1 declares grid_plan_material/validate_grid_plan_identity as the sole downstream hash authority for ENTITYOS_HCU_GRID_PLAN/v2.",
+    "risk_class": "POTENTIAL_GRID_PLAN_REGISTRY_CONTENT_KEY_LAUNDERING_SOURCE_GAP",
+    "counterhypothesis": "The reduced grid-plan receipt may already be produced only by an upstream authority that guarantees the content key, making local full-preimage revalidation redundant.",
+    "adjudication": "Current DatasetAdmission type accepts generic caller-owned mappings and the reduced receipt carries no typed proof of producer-consistent construction, so the source-level ambiguity is real. However supervisor 8.65 explicitly pauses new source-guard proliferation unless executable counterevidence requires a guard; therefore the observation is preserved without activating a new guard."
+  },
+  "quarantined_attempt": {
+    "helper_commit": "3de4e080c5c3c2f2c63f1fa5d59981f3ccc06513",
+    "test_definition_commit": "2a0eec9232d050f61edfcf667b2c629ef006add9",
+    "workflow_runs_observed_for_test_definition_commit": 0,
+    "executed_test_evidence": false,
+    "helper_removed_commit": "84547d45c847b2bb80905ab7de2f7f6e91d8f701",
+    "test_removed_commit": "81c93fa7c80e952123f74f954e57ed162076ba9d",
+    "live_donor_source_guard_delta": "NONE",
+    "reason": "SUPERVISOR_8_65_RUNTIME_FIRST_SOURCE_GUARD_PAUSE_OUTRANKS_SOURCE_ONLY_HARDENING",
+    "historical_commits_are_runtime_credit": false
+  },
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED_BY_EXACT_REENTRY_AND_GATE_PRECISION: current 8.65 authority, retained executor head and exact READY deployment were refreshed; remaining included Sandbox quota is still not directly observable through the connected read-only surface, so Sandbox.create remains correctly blocked.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "HCU_NO_CHANGE_WITH_REASON: a plausible GRID plan ancestry content-key gap was identified, but supervisor 8.65 pauses new source guards without executable counterevidence. The attempted helper/test were removed from the live donor head rather than overriding runtime-first authority.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "TRAINING_READINESS_NO_CHANGE_WITH_REASON: the GRID plan ancestry observation is preserved as a future discriminator only. No admitted Sandbox environment, real local model execution, model-specific J-Space/GWT causal trace or training evidence was created."
+  },
+  "credits": {
+    "whole_entityos_hcu_runtime": 0,
+    "full_hcu_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Obtain an account-authoritative read-only remaining included Vercel Sandbox quota-vector signal without billing mutation, upgrade, plan inference, paid fallback, provider credential preflight or secret lookup. Only if FREE_ONLY Sandbox admission opens may the fixed exact-source environment probe run. Reconsider the GRID plan content-key observation only if executable counterevidence reaches that boundary or a newer supervisor explicitly re-admits source hardening.",
+  "acceptance": "IN_PROGRESS"
+}

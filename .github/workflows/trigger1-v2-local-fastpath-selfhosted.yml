@@ -1,0 +1,130 @@
+name: Trigger1 V2 local zero-cost vector fastpath
+
+on:
+  issues:
+    types: [opened]
+
+permissions:
+  contents: write
+  issues: read
+
+concurrency:
+  group: trigger1-v2-local-fastpath
+  cancel-in-progress: false
+
+jobs:
+  execute:
+    if: >-
+      github.repository == 'gschaidergabriel/clay-global-research-entity' &&
+      github.event.issue.title == '[CLAY-DISPATCH] Trigger1 V2 local vector fastpath' &&
+      github.event.issue.user.login == 'gschaidergabriel'
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 90
+    steps:
+      - name: Checkout exact current main
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: main
+          fetch-depth: 0
+          clean: true
+          persist-credentials: true
+
+      - name: Verify Trigger1 V2 promotion gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m unittest -v tests.test_trigger1_jspace_promotion_gate
+
+      - name: Execute provider-independent local hidden-state API path
+        id: experiment
+        shell: bash
+        env:
+          OMP_NUM_THREADS: '2'
+          MKL_NUM_THREADS: '2'
+          TOKENIZERS_PARALLELISM: 'false'
+          CLAY_TRIGGER1_LOCAL_CACHE: ${{ runner.temp }}/clay-trigger1-local-cache
+        run: |
+          set -u
+          out="${RUNNER_TEMP}/clay-trigger1-v2-${GITHUB_RUN_ID}"
+          mkdir -p "$out"
+          set +e
+          bash tools/trigger1_local_qwen06_activation_api.sh "$out" >"$out/launcher.log" 2>&1
+          rc=$?
+          set -e
+          echo "experiment_rc=$rc" >> "$GITHUB_OUTPUT"
+          echo "experiment_dir=$out" >> "$GITHUB_OUTPUT"
+          test -s "$out/trigger1_local_activation_api_result.json" || {
+            python3 - "$out/trigger1_local_activation_api_result.json" "$rc" <<'PY'
+          import json, pathlib, sys
+          pathlib.Path(sys.argv[1]).write_text(json.dumps({
+              'schema':'CLAY_TRIGGER1_LOCAL_QWEN06_ACTIVATION_API_EXPERIMENT/v1',
+              'status':'BLOCKED_BEFORE_RESULT',
+              'process_exit_code':int(sys.argv[2]),
+              'zero_provider_billing':True,
+              'external_provider_credentials_read':False,
+              'next_action':'REPAIR_NOW_OR_ROUTE_AROUND'
+          }, indent=2, sort_keys=True)+'\n', encoding='utf-8')
+          PY
+          }
+
+      - name: Adjudicate local candidate when present
+        id: gate
+        shell: bash
+        env:
+          EXPERIMENT_DIR: ${{ steps.experiment.outputs.experiment_dir }}
+        run: |
+          set -euo pipefail
+          candidate="$EXPERIMENT_DIR/trigger1_direct_steering_candidate.json"
+          gate="$EXPERIMENT_DIR/promotion_gate.json"
+          if [[ -s "$candidate" ]]; then
+            python3 tools/trigger1_jspace_promotion_gate.py --candidate "$candidate" > "$gate"
+          else
+            printf '%s\n' '{"schema":"CLAY_TRIGGER1_JSPACE_PROMOTION_GATE/v2","owner_trigger1_goal_credit_candidate":false,"mechanism_runtime_vector_credit_candidate":false,"failures":["NO_LOCAL_PROMOTION_CANDIDATE"]}' > "$gate"
+          fi
+
+      - name: Persist sanitized exact-source result
+        shell: bash
+        env:
+          EXPERIMENT_DIR: ${{ steps.experiment.outputs.experiment_dir }}
+          EXPERIMENT_RC: ${{ steps.experiment.outputs.experiment_rc }}
+        run: |
+          set -euo pipefail
+          issue="${{ github.event.issue.number }}"
+          run="${GITHUB_RUN_ID}"
+          outdir="research_entity/runtime/tool_results"
+          mkdir -p "$outdir"
+          target="$outdir/trigger1-v2-local-fastpath-issue${issue}-run${run}.json"
+          python3 - "$EXPERIMENT_DIR/trigger1_local_activation_api_result.json" "$EXPERIMENT_DIR/promotion_gate.json" "$target" "$EXPERIMENT_RC" <<'PY'
+          import json, os, pathlib, sys
+          result=json.loads(pathlib.Path(sys.argv[1]).read_text(encoding='utf-8'))
+          gate=json.loads(pathlib.Path(sys.argv[2]).read_text(encoding='utf-8'))
+          runtime=result.get('runtime_manifest') if isinstance(result.get('runtime_manifest'),dict) else {}
+          runtime.pop('python_executable',None)
+          result.pop('snapshot_path',None)
+          result['runtime_manifest']=runtime
+          payload={
+              'schema':'CLAY_TRIGGER1_V2_SELFHOSTED_RUNTIME_RECEIPT/v1',
+              'source_result':result,
+              'promotion_gate':gate,
+              'github_actions':{
+                  'run_id':os.environ.get('GITHUB_RUN_ID'),
+                  'run_attempt':os.environ.get('GITHUB_RUN_ATTEMPT'),
+                  'head_sha':os.environ.get('GITHUB_SHA'),
+                  'issue_number':int('${{ github.event.issue.number }}'),
+                  'process_exit_code':int(sys.argv[4]),
+                  'runner_environment':'SELF_HOSTED_LINUX_X64',
+              },
+              'external_provider_credentials_required':False,
+              'zero_provider_billing':True,
+          }
+          pathlib.Path(sys.argv[3]).write_text(json.dumps(payload,indent=2,sort_keys=True,ensure_ascii=False)+'\n',encoding='utf-8')
+          PY
+          git config user.name 'clay-trigger1-v2-runner'
+          git config user.email 'clay-trigger1-v2-runner@users.noreply.github.com'
+          git add "$target"
+          git commit -m "evidence(trigger1): persist V2 local vector run ${run} [skip ci]" || exit 0
+          for attempt in 1 2 3 4 5 6; do
+            git pull --rebase origin main && git push origin HEAD:main && exit 0
+            sleep $((attempt * 3))
+          done
+          exit 1

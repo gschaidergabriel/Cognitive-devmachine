@@ -1,0 +1,6 @@
+SUPERVISOR_ALREADY_RUNNING
+433 bash -lc set -euo pipefail; mkdir -p /artifacts/clay-entityos-swarm; chmod +x tools/run_24h_entityos_swarm_supervisor.sh tools/run_24h_swarm_autodiscover.sh tools/run_24h_entityos_swarm.py; if pgrep -f '[r]un_24h_entityos_swarm_supervisor.sh' >/dev/null; then echo SUPERVISOR_ALREADY_RUNNING; pgrep -af '[r]un_24h_entityos_swarm_supervisor.sh'; else nohup bash tools/run_24h_entityos_swarm_supervisor.sh >/artifacts/clay-entityos-swarm/supervisor.log 2>&1 </dev/null & echo $! >/artifacts/clay-entityos-swarm/supervisor.pid; sleep 2; kill -0 $(cat /artifacts/clay-entityos-swarm/supervisor.pid); echo SUPERVISOR_STARTED pid=$(cat /artifacts/clay-entityos-swarm/supervisor.pid); fi; echo '--- status ---'; cat /artifacts/clay-entityos-swarm/SUPERVISOR.json 2>/dev/null || true; echo '--- disk ---'; df -h /artifacts
+--- status ---
+--- disk ---
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/sda1       193G   35G  158G  19% /artifacts

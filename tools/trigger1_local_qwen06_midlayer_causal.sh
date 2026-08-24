@@ -27,6 +27,32 @@ export HF_HUB_DISABLE_IMPLICIT_TOKEN=1
 OUT_DIR="${1:?usage: trigger1_local_qwen06_midlayer_causal.sh OUTPUT_DIR}"
 mkdir -p "$OUT_DIR"
 
+# Defense in depth for GitHub Actions runs queued before the workflow-level atomic
+# lease gate existed. Historical issue-event runs keep their historical workflow
+# definition but may check out current main when a self-hosted runner eventually
+# starts. Never allow such a run to reach runtime setup or intervention unless the
+# current workflow gate already admitted the canonical create-only lease.
+if [[ "${GITHUB_ACTIONS:-}" == "true" && "${TRIGGER1_LEASE_ADMITTED:-}" != "true" ]]; then
+  python3 - "$OUT_DIR/trigger1_local_activation_api_result.json" <<'PY'
+import json, pathlib, sys
+obj={
+  'schema':'CLAY_TRIGGER1_LOCAL_QWEN06_INTERMEDIATE_CONTRASTIVE/v1',
+  'status':'BLOCKED_CANONICAL_ATOMIC_LEASE_NOT_ADMITTED',
+  'reason':'GITHUB_ACTIONS_TRIGGER1_REQUIRES_WORKFLOW_ATOMIC_LEASE_GATE',
+  'github_actions':True,
+  'unusual_experiment_executed':False,
+  'zero_provider_billing':True,
+  'external_provider_credentials_read':False,
+  'provider_network_calls':0,
+  'credit_scope':'NONE',
+  'compatibility_entrypoint':'trigger1_local_qwen06_midlayer_causal.sh',
+  'next_action':'DISPATCH_ONLY_WITH_CANONICAL_CREATE_ONLY_GO_LEASE'
+}
+pathlib.Path(sys.argv[1]).write_text(json.dumps(obj,indent=2,sort_keys=True)+'\n',encoding='utf-8')
+PY
+  exit 42
+fi
+
 canonical_path(){
   python3 - "$1" <<'PY'
 from pathlib import Path

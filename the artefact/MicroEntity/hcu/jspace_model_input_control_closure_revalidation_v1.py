@@ -3,13 +3,13 @@
 
 ``ENTITYOS_HCU_JSPACE_MODEL_INPUT_CONTROL_CLOSURE/v1`` is self-authenticating, but a
 self-consistent digest alone cannot prove that a deserialized closure was produced from the
-canonical source objects. This boundary re-derives the canonical ModelInputControlAdmission
-from the existing MiniUnifiedDB admission store, revalidates the supplied J-Space binding,
-and reconstructs the closure from the exact producer evidence before accepting equality.
+canonical source objects. This boundary requires the ModelInputControlAdmission to already
+exist in the canonical MiniUnifiedDB admission store, revalidates the supplied J-Space
+binding, and reconstructs the closure from exact producer evidence before accepting equality.
 
-No new database, truth/effect authority, inference path, J-Space authority, model runtime
-credit, or training credit is created here. The function is deterministic and idempotent over
-already-admitted evidence.
+Crucially, validation is read-only: missing control-admission evidence is rejection and is
+never minted by invoking the admission/write path. No new database, truth/effect authority,
+inference path, J-Space authority, model runtime credit, or training credit is created here.
 """
 from __future__ import annotations
 
@@ -27,9 +27,9 @@ try:
         close_model_input_control_into_jspace,
         validate_closure,
     )
-    from .model_input_control_admission_store_v1 import (
-        ModelInputControlAdmissionStoreError,
-        admit_model_input_control_binding,
+    from .model_input_control_admission_read_v1 import (
+        ModelInputControlAdmissionReadError,
+        require_existing_model_input_control_admission,
     )
     from .model_input_control_binding_v1 import ModelInputControlBinding
 except ImportError:
@@ -42,9 +42,9 @@ except ImportError:
         close_model_input_control_into_jspace,
         validate_closure,
     )
-    from model_input_control_admission_store_v1 import (
-        ModelInputControlAdmissionStoreError,
-        admit_model_input_control_binding,
+    from model_input_control_admission_read_v1 import (
+        ModelInputControlAdmissionReadError,
+        require_existing_model_input_control_admission,
     )
     from model_input_control_binding_v1 import ModelInputControlBinding
 
@@ -76,17 +76,11 @@ def revalidate_closure_against_canonical_sources(
     *,
     current_generation: int,
 ) -> JSpaceModelInputControlClosure:
-    """Re-derive one persisted closure from canonical admitted source evidence.
-
-    The existing admission store is deliberately reused rather than copied: exact replay is
-    idempotent, divergent replay fails closed, and the store re-reads the already-admitted
-    model-execution observation from the caller-supplied canonical MiniUnifiedDB connection.
-    The returned closure is the freshly reconstructed canonical record.
-    """
+    """Re-derive one persisted closure only from already-admitted canonical evidence."""
     try:
         validate_closure(closure)
         validate_binding(jspace_binding)
-        canonical_admission = admit_model_input_control_binding(
+        canonical_admission = require_existing_model_input_control_admission(
             db,
             control_binding,
             consumed_input_bytes,
@@ -104,7 +98,7 @@ def revalidate_closure_against_canonical_sources(
     except (
         JSpaceModelInputControlClosureError,
         JSpaceInferenceBindingError,
-        ModelInputControlAdmissionStoreError,
+        ModelInputControlAdmissionReadError,
     ) as exc:
         raise JSpaceModelInputControlClosureRevalidationError(
             f"CLOSURE_SOURCE_REVALIDATION_FAILED:{exc}"

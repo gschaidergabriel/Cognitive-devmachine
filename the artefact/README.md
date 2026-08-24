@@ -60,6 +60,18 @@ The stale `tests/test_trigger1_local_qwen_runtime_preflight_872.py` still refere
 
 This is source/control-plane hardening only. It grants zero model-runtime, J-Space-model, HCU-full, training, whole-product or canonical-semantics credit.
 
+### GO 23:33 active-output preservation delta
+
+The retained midlayer launcher had a second deterministic low-disk defect: when `available_kb < 4000000`, its bounded cleanup removed `RUNNER_TEMP/clay-trigger1-v2-*`, while the active self-hosted run itself stores evidence beneath that namespace. The launcher could therefore erase its own current output directory before persisting `disk_preflight.json` or a blocked result.
+
+PR **#1670** merged the repair as canonical `main` commit **`3363aaead6b66a29d40493557515aa2a34058303`**. The launcher now canonicalizes and binds the active `OUT_DIR`, excludes exactly that directory from stale-run cleanup, still removes stale Trigger-1 siblings, fails closed if output identity changes, and records `current_output_preserved=true` in low-disk evidence.
+
+The exact merged launcher/test blobs (`43615073745b90f20fc900d37c8ac40a001f1003`, `26f9f100cd78aa01876ad62cef0a9af0f67921a9`) were reconstructed byte-for-byte and exercised with a deterministic fake-`df` condition at **2,500,000 KiB available**: **1/1 regression PASS**. The current evidence directory and evidence-in-progress file survived; stale V2 and legacy-Qwen siblings were removed; the blocked receipt was persisted; no model was loaded, no external LLM provider was called, and no provider credential was read.
+
+This is **source + deterministic preflight regression evidence only**. It mints zero whole EntityOS/HCU, HCU-full, J-Space-model or training credit. This `go` had no reproducible shared macrocycle/request identity beyond minute precision, so it dispatched **zero** new unusual interventions. The next Trigger-1 action remains lease-gated; do not create a duplicate dispatch merely because the launcher is now repaired.
+
+Receipt: `research_entity/continuity/receipts/2026-08-24_GO_872_TRIGGER1_OUTPUTDIR_PRESERVATION_GPT56SOL_2333.json`.
+
 Until a lease-admitted successor dispatch yields a repository-bound exact-source receipt, local Qwen3-0.6B model/J-Space runtime promotion remains zero. A positive result can become a bounded internal-intervention candidate only at its exact source/model/runtime/intervention/control scope; it cannot mint canonical EntityOS/HCU, full HCU or training credit by itself.
 
 ## Typed Entry / HCU authority convergence

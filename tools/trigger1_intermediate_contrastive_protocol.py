@@ -11,6 +11,7 @@ Required stronger discriminator:
 - layer/gain selected only on calibration rows;
 - disjoint holdout;
 - six matched controls plus explicit wrong-layer and lesion/rescue evidence;
+- wrong-layer evidence reuses the exact selected vector at a different layer;
 - counterbalanced label-remap holdout families so output-token identity cannot explain transfer;
 - nuisance controls are scored by absolute effect magnitude, not only target-positive drift.
 """
@@ -41,6 +42,16 @@ def digest(value: Any) -> str:
     return hashlib.sha256(
         json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode()
     ).hexdigest()
+
+
+def _sha256(value: Any) -> bool:
+    if not isinstance(value, str) or len(value) != 64:
+        return False
+    try:
+        int(value, 16)
+    except ValueError:
+        return False
+    return True
 
 
 def _finite(x: Any, name: str) -> float:
@@ -233,6 +244,7 @@ def adjudicate_holdout(
     lesion_rescue_seen: set[tuple[str, str]] = set()
     wrong_layer_ok = True
     lesion_rescue_ok = True
+    wrong_layer_provenance_failures: list[dict[str, Any]] = []
 
     for r in frozen:
         key = (str(r["case_id"]), str(r["label_map_id"]))
@@ -245,6 +257,28 @@ def adjudicate_holdout(
             wrong_layer_ok = wrong_layer_ok and _finite(
                 r["wrong_layer_delta"], "wrong_layer_delta"
             ) <= 0
+            wrong_layer = r.get("wrong_layer")
+            vector_source_layer = r.get("wrong_layer_vector_source_layer")
+            same_selected_vector = r.get("wrong_layer_same_selected_vector")
+            receipt_sha = r.get("wrong_layer_receipt_sha256")
+            provenance_ok = bool(
+                isinstance(wrong_layer, int)
+                and not isinstance(wrong_layer, bool)
+                and wrong_layer != int(selected_layer)
+                and isinstance(vector_source_layer, int)
+                and not isinstance(vector_source_layer, bool)
+                and vector_source_layer == int(selected_layer)
+                and same_selected_vector is True
+                and _sha256(receipt_sha)
+            )
+            if not provenance_ok:
+                wrong_layer_provenance_failures.append({
+                    "case": key,
+                    "wrong_layer": wrong_layer,
+                    "wrong_layer_vector_source_layer": vector_source_layer,
+                    "wrong_layer_same_selected_vector": same_selected_vector,
+                    "wrong_layer_receipt_sha256": receipt_sha,
+                })
         if r.get("lesion_delta") is not None and r.get("rescue_delta") is not None:
             lesion_rescue_seen.add(key)
             lesion_rescue_ok = (
@@ -261,6 +295,12 @@ def adjudicate_holdout(
             "pass": False,
             "classification": "WRONG_LAYER_EVIDENCE_REQUIRED",
             "cases_missing_wrong_layer": sorted(case_keys - wrong_layer_seen),
+        }
+    if wrong_layer_provenance_failures:
+        return {
+            "pass": False,
+            "classification": "WRONG_LAYER_SELECTED_VECTOR_PROVENANCE_REQUIRED",
+            "wrong_layer_provenance_failures": wrong_layer_provenance_failures,
         }
     if lesion_rescue_seen != case_keys:
         return {
@@ -309,6 +349,7 @@ def adjudicate_holdout(
         "max_same_norm_nuisance_effect": max(nuisance_effects) if nuisance_effects else None,
         "max_null_drift": max(null_drifts) if null_drifts else None,
         "wrong_layer_evidence_complete": wrong_layer_seen == case_keys,
+        "wrong_layer_selected_vector_provenance": not wrong_layer_provenance_failures,
         "lesion_rescue_evidence_complete": lesion_rescue_seen == case_keys,
         "wrong_layer_ok": wrong_layer_ok,
         "lesion_rescue_ok": lesion_rescue_ok,

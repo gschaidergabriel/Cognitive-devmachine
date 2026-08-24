@@ -1,18 +1,19 @@
 #!/usr/bin/env python3
-"""Fail-closed bridge from the strongest intermediate Trigger-1 result to gate-v3.
+"""Fail-closed bridge from the strongest intermediate Trigger-1 result to the promotion gate.
 
 The intermediate executor owns the scientific discriminator: calibration-only residual
-contrast directions, six controls, counterbalanced label remaps, wrong-layer evidence,
-and lesion/rescue.  The global Trigger-1 promotion gate owns API/runtime/evidence-shape
-admission.  This bridge does not reinterpret a scientific negative.  It only emits the
-canonical direct-steering candidate when the intermediate protocol already passed and
-its result proves the gate-v3 scientific-independence fields.
+contrast directions, six controls, counterbalanced label remaps, same-selected-vector
+wrong-layer evidence, and lesion/rescue. The global Trigger-1 promotion gate owns
+API/runtime/evidence-shape admission. This bridge does not reinterpret a scientific
+negative. It only emits the canonical direct-steering candidate when the intermediate
+protocol already passed and its raw result independently proves the promotion fields.
 """
 from __future__ import annotations
 
 import argparse
 import hashlib
 import json
+import math
 from pathlib import Path
 from typing import Any
 
@@ -32,7 +33,7 @@ METRIC_DEFINITION = {
     "score": "logit(positive_label)-logit(negative_label)",
     "label_maps": [["A", "B"], ["B", "A"]],
     "required_controls": list(REQUIRED_CONTROLS),
-    "wrong_layer": "same selected vector at a different predeclared layer must not outperform selected-layer +VECTOR",
+    "wrong_layer": "exact selected vector at a distinct predeclared layer; selected-layer +VECTOR must strictly outperform wrong-layer +VECTOR",
     "lesion_rescue": "selected-direction lesion must not improve mapped score and rescue must improve over lesion",
 }
 
@@ -55,6 +56,15 @@ def _sha(value: Any) -> bool:
     except ValueError:
         return False
     return True
+
+
+def _positive_finite(value: Any) -> bool:
+    return (
+        isinstance(value, (int, float))
+        and not isinstance(value, bool)
+        and math.isfinite(float(value))
+        and float(value) > 0
+    )
 
 
 def _require(cond: bool, code: str) -> None:
@@ -143,12 +153,28 @@ def build_direct_candidate(result: dict[str, Any], intermediate: dict[str, Any])
     applied_shas = {row.get("applied_vector_sha256") for row in plus_rows}
     _require(len(applied_shas) == 1 and _sha(next(iter(applied_shas))), "EXACT_APPLIED_VECTOR_SHA256_REQUIRED")
     applied_vector_sha = next(iter(applied_shas))
+
+    # Independently verify the causal-site falsifier from raw rows. A PASS verdict
+    # alone is not sufficient evidence. Every holdout +VECTOR case must move the
+    # exact same selected vector to a distinct layer and the selected site must
+    # strictly outperform that relocated intervention.
+    for row in plus_rows:
+        wrong_layer = row.get("wrong_layer")
+        vector_source_layer = row.get("wrong_layer_vector_source_layer")
+        wrong_sha = row.get("wrong_layer_applied_vector_sha256")
+        margin = row.get("wrong_layer_specificity_margin")
+        _require(isinstance(wrong_layer, int) and wrong_layer != layer, "WRONG_LAYER_DISTINCT_SITE_REQUIRED")
+        _require(vector_source_layer == layer, "WRONG_LAYER_SELECTED_VECTOR_SOURCE_REQUIRED")
+        _require(_sha(wrong_sha) and wrong_sha == row.get("applied_vector_sha256"), "WRONG_LAYER_EXACT_SAME_VECTOR_REQUIRED")
+        _require(_positive_finite(margin), "WRONG_LAYER_STRICT_SPECIFICITY_MARGIN_REQUIRED")
+
     hold_receipts = [row.get("runtime_receipt_sha256") for row in holdout]
     _require(all(_sha(value) for value in hold_receipts), "HOLDOUT_RUNTIME_RECEIPTS_REQUIRED")
 
-    # The strongest protocol's PASS itself proves these controls were present for each case.
     _require(verdict.get("counterbalanced_label_mapping") is True, "PROTOCOL_COUNTERBALANCE_PASS_REQUIRED")
     _require(verdict.get("wrong_layer_evidence_complete") is True and verdict.get("wrong_layer_ok") is True, "PROTOCOL_WRONG_LAYER_PASS_REQUIRED")
+    _require(verdict.get("wrong_layer_same_vector_complete") is True and verdict.get("wrong_layer_same_vector_ok") is True, "PROTOCOL_WRONG_LAYER_SAME_VECTOR_PASS_REQUIRED")
+    _require(_positive_finite(verdict.get("min_wrong_layer_specificity_margin")), "PROTOCOL_WRONG_LAYER_STRICT_MARGIN_REQUIRED")
     _require(verdict.get("lesion_rescue_evidence_complete") is True and verdict.get("lesion_rescue_ok") is True, "PROTOCOL_LESION_RESCUE_PASS_REQUIRED")
 
     endpoint = result.get("api_endpoint")
@@ -179,6 +205,8 @@ def build_direct_candidate(result: dict[str, Any], intermediate: dict[str, Any])
         "required_controls": list(REQUIRED_CONTROLS),
         "counterbalanced_label_mapping": True,
         "wrong_layer": True,
+        "wrong_layer_same_selected_vector": True,
+        "wrong_layer_strict_specificity": True,
         "lesion_rescue": True,
     })
     local_runtime_receipt = digest({
@@ -214,10 +242,7 @@ def build_direct_candidate(result: dict[str, Any], intermediate: dict[str, Any])
             "layer_end": layer,
         },
         "controls": controls,
-        "calibration": {
-            "family_id": cal_family,
-            "seeds": cal_seeds,
-        },
+        "calibration": {"family_id": cal_family, "seeds": cal_seeds},
         "holdout": {
             "family_id": hold_family,
             "seeds": hold_seeds,
@@ -228,6 +253,8 @@ def build_direct_candidate(result: dict[str, Any], intermediate: dict[str, Any])
             "metric_definition_sha256": digest(METRIC_DEFINITION),
             "metric_uses_output_tokens": True,
             "label_mapping_counterbalanced": True,
+            "wrong_layer_same_selected_vector": True,
+            "min_wrong_layer_specificity_margin": verdict.get("min_wrong_layer_specificity_margin"),
         },
         "vector_derivation": {
             "method": "CALIBRATION_ONLY_INTERMEDIATE_RESIDUAL_CONTRAST",
@@ -257,6 +284,8 @@ def build_direct_candidate(result: dict[str, Any], intermediate: dict[str, Any])
             "classification": verdict.get("classification"),
             "counterbalanced_label_mapping": True,
             "wrong_layer": True,
+            "wrong_layer_same_selected_vector": True,
+            "wrong_layer_strict_specificity": True,
             "lesion_rescue": True,
         },
     }

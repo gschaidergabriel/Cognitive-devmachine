@@ -20,6 +20,8 @@ import subprocess
 import sys
 import uuid
 
+from trigger1_jspace_promotion_gate import scan_batch
+
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_ARTIFACT_ROOT = Path("/artifacts/clay-entityos-trigger1")
 DEFAULT_BUDGET_DB = Path("/artifacts/clay-entityos-swarm/provider_budget.sqlite3")
@@ -182,6 +184,7 @@ async def amain() -> int:
     ]
     results = await asyncio.gather(*tasks)
     finished = dt.datetime.now(dt.timezone.utc).isoformat()
+    promotion = scan_batch(batch_dir)
     final = {
         "schema": "CLAY_TRIGGER1_JSPACE_10X_FINAL/v1",
         "batch_id": batch_id,
@@ -190,7 +193,19 @@ async def amain() -> int:
         "successful_processes": sum(1 for r in results if r["exit_code"] == 0),
         "failed_processes": sum(1 for r in results if r["exit_code"] != 0),
         "results": results,
-        "direct_model_steering_credit": "MUST_BE_ADJUDICATED_FROM_LANE_EXECUTION_AND_CONTROL_RECEIPTS; PROCESS_EXIT_ZERO_IS_NOT_STEERING_PROOF",
+        "promotion_gate": promotion,
+        "mechanism_runtime_vector_credit_candidate": bool(
+            promotion["mechanism_runtime_vector_credit_candidate"]
+        ),
+        "direct_model_steering_credit": bool(
+            promotion["owner_trigger1_direct_free_api_model_credit_candidate"]
+        ),
+        "direct_model_steering_credit_rule": (
+            "Exact admitted FREE API-model runtime + runtime-observed internal vector intervention + "
+            "six matched controls + disjoint fixed-seed holdout. Process exit zero, hosted prompting, "
+            "model agreement, token volume, and local surrogate steering are insufficient."
+        ),
+        "canonical_credit_minted": False,
         "whole_entityos_hcu_credit": False,
     }
     (batch_dir / "batch_final.json").write_text(json.dumps(final, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")

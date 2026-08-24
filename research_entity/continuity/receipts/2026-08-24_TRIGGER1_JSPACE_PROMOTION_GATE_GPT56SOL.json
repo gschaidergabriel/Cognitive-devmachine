@@ -1,0 +1,120 @@
+{
+  "schema": "CLAY_TRIGGER1_RESEARCH_DELTA_RECEIPT/v1",
+  "date": "2026-08-24",
+  "trigger": "1",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "authority_epoch": "8.71",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "owner_directive": "research_entity/continuity/OWNER_DIRECTIVE_2026-08-24_TRIGGER1_JSPACE_FREE_RESEARCH.json",
+  "branch_base_main": "6f60181e17cba9bbe403dd594327a92bb557ee39",
+  "branch_head_before_receipt": "2a162c8939d16b004344ee85e3f559be47263e6c",
+  "runtime_execution": {
+    "trigger1_10x_vault_backed_batch_executed_by_this_organ": false,
+    "reason": "NO_EXPOSED_AUTHORIZED_LOCAL_NORMAL_USER_OR_CLAY_DIRECT_DEV_EXECUTION_BRIDGE_IN_CURRENT_TOOL_SET",
+    "provider_secret_lookup_performed": false,
+    "provider_network_model_execution_performed": false,
+    "together_used": false,
+    "paid_or_unknown_cost_execution": false,
+    "classification": "TOOL_SURFACE_UNAVAILABLE_NOT_PRODUCT_OR_SCIENTIFIC_NEGATIVE"
+  },
+  "source_research": {
+    "provider_public_runtime_surface": {
+      "classification": "NO_PUBLIC_DOCUMENTED_INTERNAL_ACTIVATION_OR_CVEC_INJECTION_SURFACE_OBSERVED",
+      "groq": {
+        "source": "https://console.groq.com/docs/api-reference",
+        "observed": "OpenAI-shaped chat completion request surface; documented logit_bias/logprobs are not supported by current models; no public hidden-state/control-vector injection field observed."
+      },
+      "nvidia": {
+        "source": "https://docs.api.nvidia.com/nim/reference/llm-apis",
+        "observed": "Hosted integrate.api.nvidia.com/v1/chat/completions surface; no public hidden-state/control-vector injection field observed in the hosted LLM request schema."
+      },
+      "mistral": {
+        "source": "https://docs.mistral.ai/api",
+        "observed": "Chat completion request surface with generation/tool/guardrail controls; no public hidden-state/control-vector injection field observed."
+      },
+      "openrouter": {
+        "source": "https://openrouter.ai/support",
+        "observed": "OpenAI-compatible completions/chat-completions routing surface; no public hidden-state/control-vector injection field observed."
+      },
+      "epistemic_boundary": "Absence from reviewed public request schemas is not proof that no private/research/internal provider intervention API exists. The Trigger-1 runtime_surface lane should keep searching for such a surface, but hosted prompting must remain zero direct-vector credit."
+    },
+    "instrumentable_local_surface": {
+      "llama_cpp_sources": [
+        "https://github.com/ggml-org/llama.cpp/blob/master/tools/cvector-generator/README.md",
+        "https://github.com/ggml-org/llama.cpp/blob/master/src/llama-adapter.cpp"
+      ],
+      "observed": "llama.cpp exposes scaled control vectors plus inclusive layer-range selection, and its adapter implementation applies F32 control-vector data to model-layer tensors.",
+      "classification": "MECHANISM_SURFACE_ONLY_UNTIL_EXACT_RUNTIME_EVIDENCE"
+    },
+    "steering_method_sources": [
+      {
+        "url": "https://arxiv.org/abs/2312.06681",
+        "finding": "Contrastive Activation Addition uses signed coefficients and direct forward-pass activation addition, supporting SIGN_FLIP as a directional causal control."
+      },
+      {
+        "url": "https://arxiv.org/abs/2410.04962",
+        "finding": "Activation magnitude/sign changes affect effectiveness and faithfulness; gain must be calibrated rather than assumed."
+      },
+      {
+        "url": "https://arxiv.org/abs/2606.08682",
+        "finding": "Activation-steering behavior and safety effects vary with magnitude and intervention layer; off-target behavior must be measured."
+      },
+      {
+        "url": "https://arxiv.org/abs/2608.11227",
+        "finding": "Steering side effects are structured and often asymmetric; strongest off-target/counterexample evidence is required before promotion."
+      }
+    ]
+  },
+  "ten_lane_research_state": {
+    "runtime_surface": "ADVANCED_SOURCE_DISCRIMINATOR: public hosted text APIs are not direct-vector evidence; llama.cpp/local activation hooks are actual intervention donors; literal FREE-API target remains unproven.",
+    "adapter_identity": "PRESERVED_EXISTING_GAP: exact packet/adapter/local-vector/native-applied-vector identity remains required at invocation scope.",
+    "layer_localization": "HARDENED: select only on calibration split and freeze before holdout; layer sensitivity is source-corroborated.",
+    "gain_calibration": "HARDENED: signed gain calibration only on calibration split; overly strong or non-faithful effects reject promotion.",
+    "sign_flip_control": "HARDENED_REQUIRED_CONTROL: positive vs negative direction must produce a directional gap on fixed seeds.",
+    "null_control": "HARDENED_REQUIRED_CONTROL: NULL_VECTOR drift must be bounded against BASELINE.",
+    "orthogonal_control": "HARDENED_REQUIRED_CONTROL_DESIGN: same-norm orthogonal control rejects generic perturbation-energy explanations.",
+    "permuted_control": "HARDENED_REQUIRED_CONTROL_DESIGN: same-norm coordinate permutation rejects coordinate-insensitive/norm-only explanations.",
+    "seed_holdout_reproduction": "HARDENED: calibration and holdout family IDs and seed sets must be disjoint; reproducible directional holdout effect plus strongest counterexample required.",
+    "receipt_chain_and_delta_forge": "IMPLEMENTED_SOURCE_DELTA: machine promotion gate now consumes exact runtime/control receipt digests and separates mechanism candidate from literal owner FREE-API-model candidate."
+  },
+  "delta": {
+    "promotion_gate": {
+      "path": "tools/trigger1_jspace_promotion_gate.py",
+      "git_blob_sha1": "861ed4f3ca98d34136dfefe25d21406710507647",
+      "sha256": "53af2adbc8e735f30498a123ea9a9a705c4047b0c45c65fef9e179875939bce7"
+    },
+    "regression": {
+      "path": "tests/test_trigger1_jspace_promotion_gate.py",
+      "git_blob_sha1": "370f15bda059b7898338c2d1fe86abcd992db278",
+      "sha256": "2d96ff233ad57e5fbc8ba2fbb70c4a827cb973ae0c943a097c3d8c898af4e779",
+      "exact_bytes_local_unittest": "7/7 PASS"
+    },
+    "aggregator_integration": {
+      "path": "tools/run_trigger1_jspace_10x.py",
+      "git_blob_sha1": "9cf08ccdd63a3f544af1c3ba1f74b289fb990fba",
+      "sha256": "83affde6990492404218b601afa71caec2b74892eba7f81c52b595aa55d40430",
+      "change": "Replace textual unadjudicated steering-credit placeholder with a fail-closed batch promotion scan and explicit boolean mechanism/API-target candidates."
+    }
+  },
+  "promotion_law": {
+    "hosted_prompt_completion_only": "ZERO_DIRECT_VECTOR_CREDIT",
+    "local_instrumented_activation_or_cvec_with_controls": "MECHANISM_RUNTIME_VECTOR_CREDIT_CANDIDATE_ONLY",
+    "literal_owner_trigger1_target": "REQUIRES_EXACT_ADMITTED_FREE_API_MODEL_RUNTIME_PLUS_RUNTIME_OBSERVED_INTERNAL_VECTOR_INTERVENTION_PLUS_SIX_CONTROLS_PLUS_DISJOINT_FIXED_SEED_HOLDOUT",
+    "canonical_credit_minted_by_gate": false
+  },
+  "credits_after": {
+    "external_provider_trigger1_runtime": 0,
+    "direct_free_api_model_vector_steering": 0,
+    "mechanism_runtime_vector_steering": 0,
+    "whole_entityos_hcu_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_action": "On the first exposed authorized zero-cost local normal-user or clay-direct-dev surface, re-enter current main and current supervisor; run the exact Trigger-1 branch regression; if fused, launch tools/trigger1_jspace_research.sh with the vault-backed FREE lanes. Keep public hosted prompt responses at zero direct-vector credit. In parallel, use the runtime_surface lane to search for a genuinely instrumentable admitted FREE provider runtime; otherwise run local llama.cpp/PyTorch intervention only for mechanism evidence and preserve the literal API-target credit at zero.",
+  "acceptance": "IN_PROGRESS"
+}

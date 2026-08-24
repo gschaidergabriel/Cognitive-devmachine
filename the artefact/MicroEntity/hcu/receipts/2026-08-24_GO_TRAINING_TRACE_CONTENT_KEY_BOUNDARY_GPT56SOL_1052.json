@@ -1,0 +1,91 @@
+{
+  "schema": "ENTITYOS_HCU_GO_TRAINING_TRACE_CONTENT_KEY_BOUNDARY/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "authority_epoch": "8.63",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "reentry": {
+    "canonical_main": "074980123c3b47295ea1ecc32d51b46203ba2347",
+    "retained_donor_pr": "gschaidergabriel/clay-global-research-entity#1263",
+    "retained_donor_head_before_receipt": "ba0ce949cf7176c921ac67760ea22c260b3337f3",
+    "retained_executor_pr": "gschaidergabriel/Dr.-Unterweger#810",
+    "retained_executor_head": "6a15601183f9bb61d445368e4d239e90a47b300c",
+    "exact_executor_deployment": "dpl_J2W13WSMy3ewWspjfNdn2wqM6rtN",
+    "exact_executor_deployment_state": "READY"
+  },
+  "coordination": {
+    "upstream_shared_macrocycle_id": null,
+    "available_user_message_timestamp_precision": "MINUTE_ONLY",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_experiments_run": 0,
+    "ordinary_work_class": "SOURCE_REVIEW_PLUS_EXISTING_ROUTE_REENTRY"
+  },
+  "runtime_reentry": {
+    "team_plan": "HOBBY",
+    "exact_head_ready": true,
+    "function_fetch": "VERCEL_DEPLOYMENT_PROTECTION_302_SSO_BEFORE_FUNCTION",
+    "share_link_retry": "302_SSO_BEFORE_FUNCTION",
+    "remaining_sandbox_quota_directly_observed": false,
+    "sandbox_create_performed": false,
+    "classification": "AUTH_TRANSPORT_NEGATIVE_EVIDENCE_NOT_PRODUCT_FAILURE",
+    "runtime_credit_change": 0
+  },
+  "source_observation": {
+    "dataset_gate_path": "the artefact/MicroEntity/hcu/jspace_dataset_admission_gate_v1.py",
+    "dataset_gate_blob": "2320d6beeec56aef1f3fd6e673df1bd7b9f597b2",
+    "family_split_path": "the artefact/MicroEntity/hcu/jspace_dataset_family_split_v1.py",
+    "family_split_blob": "8cda23510015f9d19e4de54b89c5172e36e62b55",
+    "training_trace_producer_path": "the artefact/MicroEntity/hcu/jspace_training_trace_v1.py",
+    "training_trace_producer_blob": "ef9b87f2983321dd99da57695d5f9432799fcbf2",
+    "serious_lower_compiler_path": "the artefact/MicroEntity/hcu/compile_jspace_bootstrap_dataset_v1.py",
+    "serious_lower_compiler_blob": "OBSERVED_AT_DONOR_HEAD_BA0CE949",
+    "dataset_gate_training_registry_behavior": "_registry_exact requires registry value equality with the supplied training trace but does not locally rederive the producer-consistent training trace content key before DatasetAdmission returns training_trace_sha256.",
+    "family_split_training_registry_behavior": "_exact_registry_trace repeats registry lookup plus value equality and _bind_admission compares the claimed trace SHA to the admission SHA, but neither step recomputes the TrainingTrace content key before partition output.",
+    "prototype_transition_contrast": "The same DatasetAdmission authority now locally rederives prototype and transition content identities before treating those registry keys as causal ancestry.",
+    "producer_hash_rule": "TrainingTrace/v1 removes trace_sha256 from material and hashes RFC8785/JCS canonical bytes.",
+    "serious_compiler_defense": "compile_jspace_bootstrap_dataset_v1._validate_trace independently recomputes trace_sha256 from producer-consistent material and rejects TRAINING_TRACE_DIGEST_MISMATCH before serious bootstrap rows are emitted."
+  },
+  "hypothesis": "DatasetAdmission and the standalone family-split component can accept a caller-claimed training_trace_sha256 as evidence ancestry when the registry key and supplied mapping are self-consistent but the key is not the producer-consistent TrainingTrace content hash.",
+  "counterhypothesis": "The gap is harmless for all training-relevant paths because the serious admitted compiler always reaches compile_jspace_bootstrap_dataset_v1._validate_trace before emitting any row.",
+  "adjudication": {
+    "status": "SOURCE_GAP_CONFIRMED_COMPONENT_SCOPE_ONLY",
+    "confirmed_scope": "DATASET_ADMISSION_EVIDENCE_IDENTITY_AND_STANDALONE_FAMILY_SPLIT_PARTITION_OUTPUT",
+    "not_established": [
+      "final serious admitted dataset laundering",
+      "model runtime causality",
+      "training benefit",
+      "whole EntityOS/HCU runtime failure"
+    ],
+    "reason": "The standalone family splitter is itself an admitted consumer of DatasetAdmission-style evidence and emits partitioned trace objects without producer-consistent TrainingTrace content-key revalidation, while the serious lower compiler separately closes this gap later."
+  },
+  "bounded_repair_design": {
+    "authority_location": "Keep the repair inside the existing DatasetAdmission/training-trace validation lineage; do not introduce a second serializer, registry, dataset authority or truth store.",
+    "preferred_rule": "Recreate the exact TrainingTrace/v1 producer material by excluding trace_sha256, require canonicalization_schema to equal the existing RFC8785/JCS authority, rederive SHA-256 with the existing canonicalize implementation, and reject key/content mismatch before DatasetAdmission returns.",
+    "family_split_rule": "Either require evidence produced by the repaired admission boundary in a non-forgeable typed path or independently invoke the same reusable TrainingTrace content-key validator before partition output; do not duplicate a private hash rule.",
+    "required_regressions": [
+      "valid exact training trace remains admitted",
+      "registry alias key with byte-identical supplied mapping but wrong claimed trace_sha256 fails closed",
+      "DatasetAdmission cannot return a non-content-addressed training_trace_sha256",
+      "standalone family split rejects a forged self-consistent trace/admission/registry triple",
+      "serious compile path remains unchanged and continues rejecting TRAINING_TRACE_DIGEST_MISMATCH",
+      "prototype/transition/outcome/vector/GRID causal fences remain discriminated"
+    ]
+  },
+  "tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED_EVIDENCE: exact retained executor head and exact READY Vercel deployment were reverified. Both connector-authenticated direct fetch and regenerated share-link retry were intercepted by Vercel protection with HTTP 302 before Function execution. No Sandbox.create or quota assumption occurred.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED_SOURCE_DISCRIMINATOR: isolated a remaining caller-owned TrainingTrace registry identity boundary in the single DatasetAdmission/family-split lineage and bounded the repair to existing canonicalization authority.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "ADVANCED_EVIDENCE_BOUNDARY: proved the standalone partition component lacks producer-consistent TrainingTrace key revalidation while confirming the serious lower compiler already rehashes before row emission, preventing an inflated final-dataset leakage claim."
+  },
+  "credits": {
+    "whole_entityos_hcu_runtime": 0,
+    "full_hcu_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_action": "On the single retained donor lane, implement one reusable producer-consistent TrainingTrace content-key verifier using the existing RFC8785/JCS canonicalizer, call it at DatasetAdmission before registry ancestry is accepted, ensure standalone family split cannot bypass it, add the listed deterministic regressions, and only then consider an explicit executor rebind. Runtime execution remains separately blocked until direct included Sandbox quota evidence and Function access are available under supervisor 8.63 FREE_ONLY."
+}

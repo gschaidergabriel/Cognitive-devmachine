@@ -40,7 +40,7 @@ def main() -> int:
     try: threading.stack_size(1024*1024)
     except (ValueError,RuntimeError): pass
     loop=asyncio.new_event_loop(); asyncio.set_event_loop(loop)
-    ex=concurrent.futures.ThreadPoolExecutor(max_workers=workers,thread_name="clay-free-http") if False else concurrent.futures.ThreadPoolExecutor(max_workers=workers,thread_name_prefix="clay-free-http")
+    ex=concurrent.futures.ThreadPoolExecutor(max_workers=workers,thread_name_prefix="clay-free-http")
     loop.set_default_executor(ex)
     try:
         return int(loop.run_until_complete(fabric.run(fabric.parse_args())))

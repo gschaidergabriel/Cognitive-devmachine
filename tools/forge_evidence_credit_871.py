@@ -83,6 +83,18 @@ def evidence_reason(row: Any) -> tuple[bool, str]:
         return False, "EXECUTION_SOURCE_IDENTITY_NOT_ADMITTED"
     if admission.get("source_head") != source_head:
         return False, "EXECUTION_SOURCE_HEAD_MISMATCH"
+
+    evaluation_checkout_head = admission.get("evaluation_checkout_head")
+    if not (isinstance(evaluation_checkout_head, str) and HEX40.fullmatch(evaluation_checkout_head)):
+        return False, "EXECUTION_EVALUATION_HEAD_UNBOUND"
+    if evaluation_checkout_head != evaluation_head:
+        return False, "EXECUTION_EVALUATION_HEAD_MISMATCH"
+
+    decisions = admission.get("decisions")
+    if not isinstance(decisions, list) or not decisions:
+        return False, "EXECUTION_COMMAND_DECISIONS_MISSING"
+    if any(not isinstance(decision, dict) or decision.get("admitted") is not True for decision in decisions):
+        return False, "EXECUTION_COMMAND_DECISION_REJECTED"
     if admission.get("all_commands_admitted") is not True:
         return False, "MODEL_COMMAND_SET_NOT_ADMITTED"
     if admission.get("candidate_is_canonical_truth") is not False:

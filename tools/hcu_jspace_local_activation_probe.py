@@ -1,18 +1,21 @@
 #!/usr/bin/env python3
 """Offline-only model-specific activation intervention probe for EntityOS/HCU.
 
-This executable source bridges HCU_JSPACE_LOCAL_INTERVENTION_BACKEND_GATE_V1.md to a
-minimal Hugging Face/PyTorch local experiment. It deliberately grants NO canonical,
-whole-HCU, J-Space-model, or training credit by itself. The emitted record is candidate
-runtime evidence that still requires canonical admission/review.
+This bridges HCU_JSPACE_LOCAL_INTERVENTION_BACKEND_GATE_V1.md to a minimal local
+Hugging Face/PyTorch experiment. It grants NO canonical, whole-HCU, J-Space-model,
+or training credit by itself. Its record is candidate runtime evidence requiring
+canonical admission/review.
 
-No model download is permitted: the model argument must be a local directory and
-Transformers/Hugging Face offline modes are forced before those libraries are imported.
+The intervention is unusual research. Execution therefore requires the canonical
+create-only `go` atomic claim for the exact experiment and claimant. A claim whose
+result already exists is rejected here rather than silently treated as a new run.
+
+No model download is permitted: --model must be a local directory and all Hugging
+Face/Transformers offline flags are forced before model libraries are imported.
 """
 from __future__ import annotations
 
 import argparse
-import contextlib
 import datetime as dt
 import hashlib
 import json
@@ -22,7 +25,7 @@ import platform
 import socket
 import subprocess
 import sys
-from typing import Any, Iterator
+from typing import Any
 
 # Fail closed before importing model libraries.
 os.environ["HF_HUB_OFFLINE"] = "1"
@@ -32,6 +35,7 @@ os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
 SCHEMA = "ENTITYOS_HCU_JSPACE_LOCAL_ACTIVATION_PROBE/v1"
 CLASSIFICATION = "LOCAL_MODEL_SPECIFIC_CAUSAL_CANDIDATE_EVIDENCE_ONLY"
+CLAIM_SCHEMA = "clay-go-experiment-claim/v1"
 
 
 class ProbeRejected(RuntimeError):
@@ -44,6 +48,133 @@ def sha256_file(path: Path) -> str:
         for chunk in iter(lambda: fh.read(8 * 1024 * 1024), b""):
             h.update(chunk)
     return h.hexdigest()
+
+
+def read_json(path: Path, label: str) -> dict[str, Any]:
+    try:
+        value = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        raise ProbeRejected(f"{label}_UNAVAILABLE_OR_INVALID:{type(exc).__name__}") from exc
+    if not isinstance(value, dict):
+        raise ProbeRejected(f"{label}_OBJECT_REQUIRED")
+    return value
+
+
+def git_root() -> Path:
+    try:
+        root = subprocess.check_output(
+            ["git", "rev-parse", "--show-toplevel"], stderr=subprocess.DEVNULL, text=True
+        ).strip()
+    except (OSError, subprocess.CalledProcessError) as exc:
+        raise ProbeRejected("CANONICAL_GIT_ROOT_REQUIRED") from exc
+    path = Path(root).resolve()
+    if not path.is_dir():
+        raise ProbeRejected("CANONICAL_GIT_ROOT_REQUIRED")
+    return path
+
+
+def git_head(root: Path) -> str:
+    try:
+        head = subprocess.check_output(
+            ["git", "-C", str(root), "rev-parse", "HEAD"],
+            stderr=subprocess.DEVNULL,
+            text=True,
+        ).strip()
+    except (OSError, subprocess.CalledProcessError) as exc:
+        raise ProbeRejected("CANONICAL_GIT_HEAD_REQUIRED") from exc
+    if len(head) != 40:
+        raise ProbeRejected("CANONICAL_GIT_HEAD_INVALID")
+    return head
+
+
+def resolve_current_authority(root: Path) -> dict[str, Any]:
+    inbox_path = root / "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json"
+    inbox = read_json(inbox_path, "SUPERVISOR_INBOX")
+    epoch = str(inbox.get("schema_version") or "").strip()
+    steering_ref = inbox.get("steering")
+    if not epoch or not isinstance(steering_ref, str) or not steering_ref.strip():
+        raise ProbeRejected("CURRENT_SUPERVISOR_POINTER_REQUIRED")
+    rel = Path(steering_ref)
+    if rel.is_absolute() or ".." in rel.parts:
+        raise ProbeRejected("CURRENT_SUPERVISOR_POINTER_INVALID")
+    steering_path = (root / rel).resolve()
+    try:
+        steering_path.relative_to(root)
+    except ValueError as exc:
+        raise ProbeRejected("CURRENT_SUPERVISOR_OUTSIDE_REPO") from exc
+    steering = read_json(steering_path, "SUPERVISOR_STEERING")
+    if str(steering.get("schema_version") or "").strip() != epoch:
+        raise ProbeRejected("SUPERVISOR_INBOX_STEERING_EPOCH_MISMATCH")
+    if (
+        steering.get("active_program") != "ENTITYOS_HCU"
+        or steering.get("product") != "EntityOS"
+        or steering.get("integrated_cognition_compute_architecture") != "HCU"
+    ):
+        raise ProbeRejected("SUPERVISOR_PRODUCT_AUTHORITY_MISMATCH")
+    free_only = steering.get("free_only")
+    if not isinstance(free_only, dict) or free_only.get("enabled") is not True:
+        raise ProbeRejected("FREE_ONLY_SUPERVISOR_REQUIRED_FOR_THIS_PROBE")
+    return {
+        "epoch": epoch,
+        "inbox_path": inbox_path.relative_to(root).as_posix(),
+        "inbox_sha256": sha256_file(inbox_path),
+        "steering_path": steering_path.relative_to(root).as_posix(),
+        "steering_sha256": sha256_file(steering_path),
+    }
+
+
+def validate_atomic_claim(
+    root: Path, claim_arg: str, claimant_organ: str, experiment_name: str
+) -> dict[str, Any]:
+    claim_path = Path(claim_arg).expanduser()
+    if not claim_path.is_absolute():
+        claim_path = root / claim_path
+    claim_path = claim_path.resolve()
+    claims_dir = (root / "research_entity/continuity/go_experiment_claims").resolve()
+    try:
+        claim_path.relative_to(claims_dir)
+    except ValueError as exc:
+        raise ProbeRejected("ATOMIC_CLAIM_MUST_BE_IN_CANONICAL_CLAIMS_DIRECTORY") from exc
+    if claim_path.name.endswith(".result.json"):
+        raise ProbeRejected("ATOMIC_CLAIM_RESULT_FILE_NOT_A_CLAIM")
+
+    claim = read_json(claim_path, "ATOMIC_CLAIM")
+    required = {
+        "schema": CLAIM_SCHEMA,
+        "trigger": "go",
+        "status": "CLAIMED",
+        "claimant_organ": claimant_organ,
+        "experiment_name": experiment_name,
+    }
+    for key, expected in required.items():
+        if claim.get(key) != expected:
+            raise ProbeRejected(f"ATOMIC_CLAIM_FIELD_MISMATCH:{key}")
+    trigger_key = str(claim.get("trigger_key") or "").strip()
+    if not trigger_key or claim_path.name != f"{trigger_key}.json":
+        raise ProbeRejected("ATOMIC_CLAIM_TRIGGER_KEY_PATH_MISMATCH")
+    if not str(claim.get("observed_canonical_main") or "").strip():
+        raise ProbeRejected("ATOMIC_CLAIM_OBSERVED_MAIN_REQUIRED")
+    if not str(claim.get("intervention_contract") or "").strip():
+        raise ProbeRejected("ATOMIC_CLAIM_INTERVENTION_CONTRACT_REQUIRED")
+
+    result_path = claims_dir / f"{trigger_key}.result.json"
+    if result_path.exists():
+        raise ProbeRejected("ATOMIC_CLAIM_RESULT_ALREADY_EXISTS_REPLICATION_REQUIRES_SEPARATE_CLASSIFICATION")
+
+    return {
+        "trigger_key": trigger_key,
+        "claim_path": claim_path.relative_to(root).as_posix(),
+        "claim_sha256": sha256_file(claim_path),
+        "claimant_organ": claimant_organ,
+        "experiment_name": experiment_name,
+        "claimed_at": claim.get("claimed_at"),
+        "claim_observed_canonical_main": claim.get("observed_canonical_main"),
+        "intervention_contract": claim.get("intervention_contract"),
+        "result_path_expected": result_path.relative_to(root).as_posix(),
+        "lease_file_validated": True,
+        "create_only_semantics_reverified_by_probe": False,
+        "note": "The probe validates the canonical claim record but cannot reconstruct GitHub create-only transaction history; canonical admission must retain that evidence boundary.",
+    }
 
 
 def tree_identity(root: Path) -> dict[str, Any]:
@@ -64,41 +195,43 @@ def tree_identity(root: Path) -> dict[str, Any]:
     return {"tree_sha256": combined.hexdigest(), "files": rows}
 
 
-def git_head() -> str | None:
-    try:
-        return subprocess.check_output(
-            ["git", "rev-parse", "HEAD"], stderr=subprocess.DEVNULL, text=True
-        ).strip() or None
-    except (OSError, subprocess.CalledProcessError):
-        return None
-
-
 def tensor_digest(tensor: Any) -> str:
-    data = tensor.detach().to(dtype=tensor.new_zeros((), dtype=None).dtype if False else None)
-    # Convert explicitly to float32 CPU bytes so device/dtype do not change digest encoding.
-    data = tensor.detach().to(dtype=__import__("torch").float32, device="cpu").contiguous()
+    import torch
+
+    # Canonical float32 CPU encoding makes the measurement digest device-independent.
+    data = tensor.detach().to(device="cpu", dtype=torch.float32).contiguous()
     return hashlib.sha256(data.numpy().tobytes(order="C")).hexdigest()
 
 
+def integer_tensor_digest(tensor: Any) -> str:
+    values = tensor.detach().to(device="cpu").reshape(-1).tolist()
+    payload = json.dumps([int(v) for v in values], separators=(",", ":")).encode("ascii")
+    return hashlib.sha256(payload).hexdigest()
+
+
 def in_memory_parameter_identity(model: Any) -> dict[str, Any]:
-    """Hash post-load parameter values. This is NOT loader-consumed source-byte attestation."""
+    """Hash canonicalized post-load parameter values, not claimed loader source bytes."""
+    import torch
+
     h = hashlib.sha256()
     count = 0
     elements = 0
     for name, param in model.named_parameters():
-        raw = param.detach().to(device="cpu").contiguous()
+        raw = param.detach()
+        canonical = raw.to(device="cpu", dtype=torch.float32).contiguous()
         h.update(name.encode("utf-8") + b"\0")
         h.update(str(tuple(raw.shape)).encode("ascii") + b"\0")
         h.update(str(raw.dtype).encode("ascii") + b"\0")
-        h.update(raw.view(__import__("torch").uint8).numpy().tobytes(order="C"))
+        h.update(canonical.numpy().tobytes(order="C"))
         count += 1
         elements += raw.numel()
     return {
-        "post_load_parameter_sha256": h.hexdigest(),
+        "post_load_parameter_value_sha256_float32_canonical": h.hexdigest(),
         "parameter_tensors": count,
         "parameter_elements": elements,
         "loader_consumption_attestation": False,
-        "note": "Post-load parameter values are observed; exact source-byte consumption by the loader is not proven.",
+        "field_classification": "OBSERVED_POST_LOAD_VALUE_IDENTITY_PARTIAL",
+        "note": "Post-load parameter values are observed; exact source-byte consumption by the loader and post-load mutation closure are not proven.",
     }
 
 
@@ -193,10 +326,29 @@ def main() -> int:
     parser.add_argument("--admission-id", required=True)
     parser.add_argument("--route-id", required=True)
     parser.add_argument("--inference-receipt-id", required=True)
+    parser.add_argument("--atomic-lease-claim", required=True)
+    parser.add_argument("--claimant-organ", required=True)
+    parser.add_argument("--experiment-name", required=True)
     parser.add_argument("--output")
     args = parser.parse_args()
 
+    ids = (
+        args.generation,
+        args.causal_event_id,
+        args.admission_id,
+        args.route_id,
+        args.inference_receipt_id,
+        args.claimant_organ,
+        args.experiment_name,
+    )
+    if any(not str(value).strip() for value in ids):
+        raise SystemExit("required causal/lease identifiers must be non-empty")
+
     observed_at = dt.datetime.now(dt.timezone.utc).isoformat()
+    root = git_root()
+    head = git_head(root)
+    authority = resolve_current_authority(root)
+    lease = validate_atomic_claim(root, args.atomic_lease_claim, args.claimant_organ, args.experiment_name)
     model_path = Path(args.model).expanduser().resolve()
     source_identity = tree_identity(model_path)
     network = NetworkFence()
@@ -205,13 +357,14 @@ def main() -> int:
         "schema": SCHEMA,
         "observed_at": observed_at,
         "classification": CLASSIFICATION,
-        "authority_epoch": "RESOLVE_FROM_CURRENT_CANONICAL_STATE_AT_ADMISSION",
         "program": "ENTITYOS_HCU",
         "product": "EntityOS",
         "architecture": "HCU",
         "mode": "FREE_ONLY_LOCAL_OFFLINE",
-        "source_git_head": git_head(),
+        "source_git_head": head,
         "probe_source_sha256": sha256_file(Path(__file__).resolve()),
+        "authority": authority,
+        "atomic_experiment_lease": lease,
         "causal_binding": {
             "generation": args.generation,
             "causal_event_id": args.causal_event_id,
@@ -241,7 +394,12 @@ def main() -> int:
                 torch.use_deterministic_algorithms(True, warn_only=True)
 
             if args.device == "auto":
-                device = "cuda" if torch.cuda.is_available() else "cpu"
+                if torch.cuda.is_available():
+                    device = "cuda"
+                elif hasattr(torch.backends, "mps") and torch.backends.mps.is_available():
+                    device = "mps"
+                else:
+                    device = "cpu"
             else:
                 device = args.device
 
@@ -287,26 +445,26 @@ def main() -> int:
                 label: str,
                 inputs: dict[str, Any],
                 *,
+                observation_position: int,
                 reference: Any | None = None,
-                intervention_position: int | None = None,
             ) -> tuple[dict[str, Any], Any]:
                 capture: dict[str, Any] = {}
 
                 def hook(_module: Any, _inputs: Any, output: Any) -> Any:
                     hidden = output_hidden(output)
-                    pos = patch_pos if intervention_position is None else intervention_position
-                    before = hidden[0, pos, :].detach().clone()
+                    before = hidden[0, observation_position, :].detach().clone()
                     capture["activation_before_sha256"] = tensor_digest(before)
                     capture["activation_shape"] = list(before.shape)
                     capture["activation_dtype"] = str(before.dtype)
-                    capture["activation_position"] = pos
                     capture["reference_vector"] = before
                     if reference is None:
                         capture["activation_after_sha256"] = capture["activation_before_sha256"]
                         return output
                     replacement = hidden.clone()
-                    replacement[:, pos, :] = reference.to(device=hidden.device, dtype=hidden.dtype)
-                    after = replacement[0, pos, :].detach().clone()
+                    replacement[:, observation_position, :] = reference.to(
+                        device=hidden.device, dtype=hidden.dtype
+                    )
+                    after = replacement[0, observation_position, :].detach().clone()
                     capture["activation_after_sha256"] = tensor_digest(after)
                     return replace_hidden(output, replacement)
 
@@ -317,52 +475,62 @@ def main() -> int:
                 finally:
                     handle.remove()
                 logits = result.logits[:, -1, :].detach()
+                execution_material = (
+                    f"{args.generation}|{args.causal_event_id}|{args.admission_id}|"
+                    f"{args.route_id}|{args.inference_receipt_id}|{label}"
+                )
                 record = {
                     "condition": label,
-                    "model_execution_id": hashlib.sha256(
-                        f"{args.causal_event_id}|{args.admission_id}|{args.route_id}|{label}".encode()
+                    "model_execution_id_derived_local": hashlib.sha256(
+                        execution_material.encode("utf-8")
                     ).hexdigest(),
-                    "jspace_trace_id": hashlib.sha256(
-                        f"{args.inference_receipt_id}|{layer_index}|{capture['activation_position']}|{label}".encode()
+                    "jspace_trace_id_derived_local": hashlib.sha256(
+                        f"{execution_material}|{layer_index}|{observation_position}".encode("utf-8")
                     ).hexdigest(),
+                    "derived_ids_are_canonical": False,
                     "layer": layer_index,
-                    "activation_site": f"decoder_layer:{layer_index}:position:{capture['activation_position']}",
+                    "activation_site": f"decoder_layer:{layer_index}:position:{observation_position}",
                     "activation_before_sha256": capture["activation_before_sha256"],
                     "activation_after_sha256": capture["activation_after_sha256"],
                     "activation_shape": capture["activation_shape"],
                     "activation_dtype": capture["activation_dtype"],
-                    "final_logits_sha256": tensor_digest(logits),
+                    "final_logits_sha256_float32": tensor_digest(logits),
                     "target_token_id": target_id,
                     "target_logit": float(logits[0, target_id].item()),
                     "off_target_token_id": off_target_id,
                     "off_target_logit": float(logits[0, off_target_id].item()),
-                    "field_classification": "OBSERVED_RUNTIME_MEASUREMENT",
+                    "field_classification": "OBSERVED_RUNTIME_MEASUREMENT_WITH_DERIVED_LOCAL_IDS",
                 }
                 return record, capture["reference_vector"]
 
             clean_record, clean_reference = run_condition(
-                "BASELINE_CLEAN", to_device(clean_inputs)
+                "BASELINE_CLEAN", to_device(clean_inputs), observation_position=patch_pos
             )
             corrupt_record, corrupt_reference = run_condition(
-                "BASELINE_CORRUPTED", to_device(corrupt_inputs)
+                "BASELINE_CORRUPTED", to_device(corrupt_inputs), observation_position=patch_pos
+            )
+            clean_off_record, clean_off_reference = run_condition(
+                "BASELINE_CLEAN_OFF_TARGET_REFERENCE",
+                to_device(clean_inputs),
+                observation_position=off_pos,
             )
             target_record, _ = run_condition(
                 "INTERVENTION_TARGET",
                 to_device(corrupt_inputs),
+                observation_position=patch_pos,
                 reference=clean_reference,
-                intervention_position=patch_pos,
             )
             sham_record, _ = run_condition(
                 "SHAM_CONTROL",
                 to_device(corrupt_inputs),
+                observation_position=patch_pos,
                 reference=corrupt_reference,
-                intervention_position=patch_pos,
             )
             off_record, _ = run_condition(
                 "OFF_TARGET_CONTROL",
                 to_device(corrupt_inputs),
-                reference=clean_reference,
-                intervention_position=off_pos,
+                observation_position=off_pos,
+                reference=clean_off_reference,
             )
 
             receipt.update(
@@ -381,11 +549,12 @@ def main() -> int:
                         "layer": layer_index,
                         "target_position": patch_pos,
                         "off_target_position": off_pos,
-                        "clean_token_ids_sha256": tensor_digest(clean_ids),
-                        "corrupted_token_ids_sha256": tensor_digest(corrupt_ids),
+                        "clean_token_ids_sha256": integer_tensor_digest(clean_ids),
+                        "corrupted_token_ids_sha256": integer_tensor_digest(corrupt_ids),
                         "conditions": [
                             clean_record,
                             corrupt_record,
+                            clean_off_record,
                             target_record,
                             sham_record,
                             off_record,
@@ -399,7 +568,7 @@ def main() -> int:
                     },
                     "promotion": {
                         "status": "UNASSESSED_CANDIDATE_ONLY",
-                        "reason": "No predeclared effect/off-target threshold or canonical admission is evaluated by this probe.",
+                        "reason": "No predeclared effect/off-target threshold, exact loader-consumption attestation, or canonical evidence admission is evaluated by this probe.",
                     },
                 }
             )

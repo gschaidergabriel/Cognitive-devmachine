@@ -49,7 +49,12 @@ def load_provider_admission(
     *,
     supervisor_inbox_path: Path | None = None,
 ) -> dict[str, Any]:
-    """Load canonical admission without touching any provider secret or network surface."""
+    """Validate an admission document against the active Supervisor binding.
+
+    Runtime authority still comes only from ADMISSION_PATH. Alternate paths exist solely
+    for deterministic candidate validation/tests and do not become authority merely by
+    passing this parser.
+    """
     target = path or ADMISSION_PATH
     supervisor_epoch, supervisor_steering = active_supervisor_binding(supervisor_inbox_path)
     payload = _read_json(target, "PROVIDER_ADMISSION")
@@ -94,23 +99,38 @@ def load_provider_admission(
     return payload
 
 
-def provider_is_admitted_free(provider: str, admission: dict[str, Any] | None = None) -> bool:
-    if provider not in ALLOWED_PROVIDERS:
-        return False
+def _record_is_admitted_free(payload: dict[str, Any], provider: str) -> bool:
     try:
-        payload = admission if admission is not None else load_provider_admission()
         record = payload["providers"][provider]
-    except (ProviderAdmissionError, KeyError, TypeError):
+    except (KeyError, TypeError):
         return False
     return record.get("admitted") is True and record.get("cost_class") == "FREE"
 
 
-def admitted_provider_names(admission: dict[str, Any] | None = None) -> tuple[str, ...]:
+def provider_is_admitted_free(provider: str, admission: dict[str, Any] | None = None) -> bool:
+    """Return current runtime authority only from the canonical repository document.
+
+    The optional historical argument is deliberately ignored for authority decisions so
+    a caller-supplied dict cannot self-grant provider execution.
+    """
+    del admission
+    if provider not in ALLOWED_PROVIDERS:
+        return False
     try:
-        payload = admission if admission is not None else load_provider_admission()
+        payload = load_provider_admission()
+    except ProviderAdmissionError:
+        return False
+    return _record_is_admitted_free(payload, provider)
+
+
+def admitted_provider_names(admission: dict[str, Any] | None = None) -> tuple[str, ...]:
+    """Return the canonical currently admitted provider set; caller data cannot grant it."""
+    del admission
+    try:
+        payload = load_provider_admission()
     except ProviderAdmissionError:
         return ()
-    return tuple(sorted(name for name in ALLOWED_PROVIDERS if provider_is_admitted_free(name, payload)))
+    return tuple(sorted(name for name in ALLOWED_PROVIDERS if _record_is_admitted_free(payload, name)))
 
 
 def admission_snapshot() -> dict[str, Any]:
@@ -128,7 +148,7 @@ def admission_snapshot() -> dict[str, Any]:
         "ok": True,
         "authority_epoch": payload["authority_epoch"],
         "supervisor_steering": payload["supervisor_steering"],
-        "admitted_free_providers": list(admitted_provider_names(payload)),
+        "admitted_free_providers": list(admitted_provider_names()),
         "providers": {
             name: {
                 "admitted": bool(payload["providers"][name]["admitted"]),

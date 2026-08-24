@@ -38,15 +38,25 @@
     },
     "groq": {
       "allowed_endpoint_host": "api.groq.com",
-      "evidence_kind": "CREDENTIAL_FINGERPRINT_PLUS_PROVIDER_RATE_HEADER_MATCH",
-      "source": "https://console.groq.com/docs/rate-limits",
+      "evidence_kind": "EXACT_CREDENTIAL_PROVIDER_SIDE_FREE_TIER_BINDING_PLUS_RATE_HEADER_CORROBORATION",
+      "sources": [
+        "https://console.groq.com/docs/billing-faqs",
+        "https://console.groq.com/docs/projects",
+        "https://console.groq.com/docs/rate-limits"
+      ],
+      "source": "https://console.groq.com/docs/billing-faqs",
+      "provider_statement": "Groq Free and Developer are economically distinct tiers. Developer is pay-as-you-go, while project rate limits can be customized downward beneath organization limits; therefore numeric rate-limit equality with the published Free table is not unique proof of Free-tier billing state.",
       "free_plan_models": {
         "openai/gpt-oss-120b": {"requests_per_day": 1000, "tokens_per_minute": 8000},
         "openai/gpt-oss-20b": {"requests_per_day": 1000, "tokens_per_minute": 8000},
         "qwen/qwen3.6-27b": {"requests_per_day": 1000, "tokens_per_minute": 8000}
       },
+      "credential_free_tier_bindings": {},
+      "max_binding_age_seconds": 86400,
       "credential_plan_needed": true,
-      "credential_plan_proof": "A historical or live response for the same credential fingerprint and exact model must expose x-ratelimit-limit-requests and x-ratelimit-limit-tokens matching the documented Free Plan limits."
+      "credential_plan_proof": "Require a fresh provider-side Free-tier observation bound to the exact credential fingerprint and provider account/project identity with pay-as-you-go disabled/not applicable. Matching Free-plan rate headers are corroborating quota evidence only and cannot independently admit a lane.",
+      "rate_headers_role": "CORROBORATING_QUOTA_ONLY_NOT_ECONOMIC_PROOF",
+      "default": "FAIL_CLOSED_UNTIL_EXACT_FREE_TIER_BINDING"
     },
     "mistral": {
       "allowed_endpoint_host": "api.mistral.ai",

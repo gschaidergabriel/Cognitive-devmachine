@@ -1,0 +1,37 @@
+{
+  "schema": "TRIGGER1_INTERMEDIATE_FULL_CONTROL_SOURCE_CONTRACT/v1",
+  "authority_epoch": "8.73",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "executor_path": "tools/trigger1_local_qwen06_intermediate_execute.py",
+  "executor_git_blob_sha1": "9fe03e61f579062d81a0244c8d8cf4e18d8ae348",
+  "direct_candidate_schema": "CLAY_TRIGGER1_JSPACE_DIRECT_STEERING_CANDIDATE/v1",
+  "full_control_evidence_schema": "JSPACE_VECTOR_CONTROL_EXPLICIT_EVIDENCE/v1",
+  "full_control_packet_schema": "JSPACE_VECTOR_CONTROL_ABI/v1",
+  "controlled_intervention": {
+    "control": "+VECTOR",
+    "intervention_operator": "ADD",
+    "token_position_policy": "LAST_INPUT_TOKEN_AT_SELECTED_LAYER_OUTPUT",
+    "activation_site_template": "model.model.layers[{selected_layer}]:output:last_token",
+    "source_semantics": "For +VECTOR control the executor adds the calibrated vector to hidden[:, -1, :] at the selected decoder-layer output. Lesion/rescue remain auxiliary causal controls and are not reclassified as the +VECTOR operator."
+  },
+  "target_metric": {
+    "schema": "TRIGGER1_COUNTERBALANCED_OUTPUT_METRIC/v1",
+    "score": "logit(positive_label)-logit(negative_label)",
+    "counterbalanced_label_maps_required": true
+  },
+  "off_target_metric": {
+    "schema": "TRIGGER1_WRONG_LAYER_LOCALIZATION_METRIC/v1",
+    "score": "wrong_layer_target_score-baseline_target_score-(selected_layer_plus_vector_target_score-baseline_target_score)",
+    "acceptance": "STRICTLY_NEGATIVE_PER_MATCHED_HOLDOUT_FAMILY",
+    "same_selected_vector_required": true,
+    "wrong_layer_must_differ": true
+  },
+  "gain_policy": {
+    "kind": "EXACT_FROZEN_SELECTED_GAIN_ONLY",
+    "note": "The full-control envelope must collapse to the calibration-selected gain; it must not infer an unmeasured continuous interval from the discrete calibration sweep."
+  },
+  "truth_status": "PREDECLARED_SOURCE_POLICY_ONLY",
+  "credit_scope": "SOURCE_CONTRACT_ONLY_NO_MODEL_RUNTIME_OR_CANONICAL_CREDIT"
+}

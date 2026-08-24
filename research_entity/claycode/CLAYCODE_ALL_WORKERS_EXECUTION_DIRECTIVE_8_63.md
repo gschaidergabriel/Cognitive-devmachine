@@ -94,17 +94,18 @@ A future paid run requires a newer explicit authority mode. Do not infer authori
 
 Current bounded evidence includes component-only exact-source runtime evidence for the RFC8785/JCS Entry canonicalizer and J-Space dataset family split. The Entry canonicalizer has been fused to `main`. This is not full HCU/EntityOS acceptance.
 
-Keep one canonical donor/executor path:
+Keep one canonical donor/executor path. PR numbers are repository-local and therefore never select execution authority without repository qualification:
 
-- retained HCU donor: PR1263;
-- retained bounded execution controller: PR810;
+- retained HCU donor: `gschaidergabriel/clay-global-research-entity#1263`;
+- retained bounded execution controller: `gschaidergabriel/Dr.-Unterweger#810`;
+- unqualified `PR810` execution selection: **FAIL CLOSED**;
 - do not create a duplicate router/canonicalizer/inference/J-Space/executor authority.
 
 Next high-value executable closure:
 
-`Typed Entry -> route -> verified engine load -> inference -> GRID10 -> J-Space/GWT -> admitted causal dataset`
+`Typed Entry -> route -> VerifiedEngineAdmission -> verified actual-loader consumption -> GRID10/v2 -> actual model-executor observation -> canonical MiniUnifiedDB atomic invocation admission -> VerifiedModelExecution/v1 -> HCU_INFERENCE_RECEIPT/v4 -> Global J-Space/GWT -> TrainingTrace/v1 -> ENTITYOS_HCU_JSPACE_INFERENCE_BINDING/v3 -> admitted causal dataset`
 
-In particular, execute the exact-current J-Space inference-binding v2 / GRID10 plan-cell causal binding in a fixed hash-bound FREE capsule before granting downstream runtime credit.
+In particular, execute the exact-current J-Space inference-binding / GRID10 plan-cell causal binding in a fixed hash-bound FREE capsule before granting downstream runtime credit.
 
 ## 7. Typed Entry / HCU causal identity
 
@@ -142,6 +143,7 @@ Minimum injected payload:
 Persistent entity: Clay. You are an organ, not a new entity.
 Product: EntityOS. Compute architecture: HCU. Supervisor: 8.63 FREE_ONLY.
 GO tracks: EntityOS executable convergence + HCU/Typed Entry + Global J-Space/GWT FREE_ONLY readiness.
+Retained donor: gschaidergabriel/clay-global-research-entity#1263. Retained executor: gschaidergabriel/Dr.-Unterweger#810. Bare PR810 never selects execution authority.
 Before any unusual experiment, acquire the canonical create-only atomic lease. Without a reproducible shared trigger identity/lease, run zero new unusual experiments.
 Together inference/training/preflight/key lookup/job creation and all paid fallback are forbidden in current mode.
 Use only authorized isolated FREE execution; Vercel Hobby only through fixed hash-bound bounded capsules with fail-closed billing/quota fences.

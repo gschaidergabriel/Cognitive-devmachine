@@ -1,0 +1,82 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "date": "2026-08-25",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol / ChatGPT project organ",
+  "authority_epoch": "8.73",
+  "program": "ENTITYOS_HCU",
+  "stage": "ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "execution_mode": "FREE_ONLY",
+  "observed_canonical_main_before_branch": "fc45471f0eb61da17191a9f4a5edae7e184a1346",
+  "branch": "gpt56sol/go873-distillery-delta-id-replay-20260825",
+  "authority_reentry": {
+    "supervisor_inbox_schema": "8.73",
+    "selected_steering": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_73.json",
+    "active_owner_authority": "governance/CLAY_DUAL_MACHINE_EXECUTION_AUTHORITY_2026-08-24.md"
+  },
+  "finding": {
+    "classification": "SOURCE_CONFIRMED_REPLAY_IDENTITY_ENVELOPE_ID_GAP",
+    "statement": "The fused replay-stable Forge execution identity still included delta_id, and measured-evidence identity inherited delta_id through measured_packet. The earlier PR #1687 head 14a5f0e defined a discriminator that explicitly classified delta_id as candidate/evaluation-envelope identity whose re-key alone must remain duplicate, but that test was absent from the later stronger fusion on main. Consequently a semantically identical measured execution could be re-emitted under a new delta_id and avoid the intended duplicate path.",
+    "goodhart_signal": "A high-information discriminator present in an earlier donor revision disappeared while the implementation remained keyed by the field it was meant to exclude. Green remaining tests therefore did not cover the stronger stated replay invariant."
+  },
+  "hypothesis": "Removing delta_id from replay identity and measured-evidence identity, while retaining it only as envelope provenance and conservatively excluding it from legacy disambiguation, restores replay stability without collapsing genuinely different measured executions.",
+  "counterhypothesis": "delta_id is itself an execution identity and must distinguish separately admissible measurements.",
+  "counterhypothesis_disposition": "NOT_SUPPORTED_BY_CURRENT_DONOR_SEMANTICS: the earlier explicit regression documented delta_id as candidate/evaluation-envelope identity, while supervisor 8.73 requires replay identity to bind measured execution evidence rather than volatile envelope identity. Distinct measured executions remain separated by source/provenance, worker, repo/evaluation heads, targets, execution admission and metric identity.",
+  "external_prior_art": {
+    "source": "CloudEvents specification",
+    "relevance": "Separates stable event identity from context metadata and allows duplicate resend to retain the same event id; used only as design corroboration, not canonical Clay authority."
+  },
+  "tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": {
+      "status": "ADVANCED_SOURCE_SCOPE",
+      "delta": "Forge-to-Distillery duplicate admission no longer treats a renamed delta_id envelope as a new execution identity; same measured execution remains one packet/token contribution."
+    },
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": {
+      "status": "ADVANCED",
+      "delta": "Strengthened the reusable causal identity primitive by separating candidate/evaluation envelope identity from measured execution identity and by making legacy ambiguity fail closed independent of delta_id."
+    },
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_FREE_ONLY_LOCAL_08B_READINESS": {
+      "status": "ADVANCED_AT_DATASET_SAFETY_SCOPE",
+      "delta": "Prevents a future J-Space training dataset from gaining duplicate packets/tokens solely because an evaluation envelope was re-keyed; no model/J-Space/training credit minted."
+    }
+  },
+  "writes": [
+    {
+      "commit": "64b4d1e3be0a5b6fc432fbc348e79347f26598a7",
+      "path": "tools/ingest_forge_accepts_into_distillery.py",
+      "delta": "Exclude delta_id from replay/measured identities and from legacy replay disambiguation; retain delta_id as envelope provenance."
+    },
+    {
+      "commit": "d8d724a039788e2c8df6c7a47e85637263daa16f",
+      "path": "tests/test_forge_distillery_delta_id_replay_873.py",
+      "delta": "Restore delta_id-only replay +0 discriminator, measurement-conflict discriminator and legacy delta_id-rekey fail-closed discriminator."
+    }
+  ],
+  "coordination": {
+    "open_overlap_search": "No open PR implementing delta_id replay stability was found; retained HCU donor #1263 is non-overlapping.",
+    "upstream_macrocycle_id": null,
+    "available_user_message_timestamp_precision": "MINUTE_ONLY",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_interventions_executed": 0
+  },
+  "execution_evidence": {
+    "exact_branch_regression_executed": false,
+    "reason": "No currently exposed execution tool provided the authority-required concrete zero-cost/quota provenance for an exact-source runtime surface. Vercel access in this session exposes documentation only; hosted/unknown-cost execution remains fail-closed. GitHub source writes and inspection are not runtime evidence.",
+    "scope": "SOURCE_PLUS_REGRESSION_DEFINITION_ONLY"
+  },
+  "artifact_readme": {
+    "status": "SYNC_PENDING",
+    "reason": "the artefact/README.md is a large rapidly moving current-facing surface; this branch records the exact bounded receipt and should re-enter latest main before editing that shared summary to avoid overwriting parallel deltas."
+  },
+  "credits": {
+    "whole_entityos_hcu_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "provider_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Execute tests.test_forge_distillery_replay_identity_873 plus tests.test_forge_distillery_delta_id_replay_873 on the exact branch head using an admitted zero-cost local/clay-direct-dev surface; require delta_id-only replay +0, mutated measurement conflict, and legacy re-key fail-closed. If green after current-main re-entry, fuse and extend the live Forge->Distillery witness to include delta_id/timestamp/narration semantic replay +0."
+}

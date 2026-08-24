@@ -1,17 +1,20 @@
 {
   "schema": "CLAY_VPS_RECEIPT/v4",
-  "command_id": "research-distillery-compile-inventory-20260824T1738",
-  "command_sha256": "ef51bae792a7fe0f46858947ef72636b09c75ee28a2b45ca9d26256962cf4140",
-  "started_at": "2026-08-24T10:38:24.345062+00:00",
-  "finished_at": "2026-08-24T10:38:24.668340+00:00",
-  "status": "FAIL",
-  "exit_code": 1,
-  "op": "exec",
-  "stdout_sha256": "85df89b07ca32c1bcd3b40a8c43e389da9adaf5ab4038d893dec29143c4424f0",
-  "stderr_sha256": "2c8561c8653988739ea7bdd42cf1d6a623b8c3efd9402ff28e9958d7c2edc216",
-  "stdout_tail": "COMPILE_PASS\n",
-  "stderr_tail": "Traceback (most recent call last):\n  File \"/workspace/clay-global-research-entity/tools/run_research_distillery.py\", line 893, in <module>\n    raise SystemExit(main())\n                     ^^^^^^\n  File \"/workspace/clay-global-research-entity/tools/run_research_distillery.py\", line 872, in main\n    con=connect(); seed(con)\n                   ^^^^^^^^^\n  File \"/workspace/clay-global-research-entity/tools/run_research_distillery.py\", line 247, in seed\n    add_question(con, q, priority=2.0)\n  File \"/workspace/clay-global-research-entity/tools/run_research_distillery.py\", line 236, in add_question\n    con.execute(\nsqlite3.OperationalError: 10 values for 9 columns\n",
-  "meta": {},
+  "command_id": "research-distillery-entry-sync-20260824T1740",
+  "command_sha256": "8bb48ad4262aff6da1e237c8bb431ed776f6fcf511006c4d56b0bcb9cb5369f8",
+  "started_at": "2026-08-24T10:39:18.075231+00:00",
+  "finished_at": "2026-08-24T10:39:20.038894+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "canonical_sync",
+  "stdout_sha256": "a27432c45c28daf8e57eac3f89b10f5912a28dbd4f91cebf488e816bbb5cb735",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "99a9bf6485b02a1b56252ce9eff66630790397ad\n",
+  "stderr_tail": "",
+  "meta": {
+    "head": "99a9bf6485b02a1b56252ce9eff66630790397ad",
+    "ref": "main"
+  },
   "execution_boundary": "ROOT_INSIDE_ROOTLESS_PODMAN_OR_EXPLICIT_REPO_CONTROL_OP",
   "canonical_credit_minted": 0
 }

@@ -1,17 +1,22 @@
 name: GO871 Forge Distillery exact runtime gate
 
 on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/go871-forge-distillery-runtime-gate.yml'
+  workflow_dispatch:
   pull_request:
     types: [opened, synchronize, reopened]
     paths:
       - 'research_entity/runtime/go871_forge_distillery_requests/*.json'
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   exact-runtime-gate:
-    if: github.event.pull_request.user.login == 'gschaidergabriel'
+    if: github.actor == 'gschaidergabriel'
     runs-on: self-hosted
     timeout-minutes: 12
     steps:
@@ -49,7 +54,7 @@ jobs:
         id: gate
         shell: bash
         env:
-          SOURCE_SHA: ${{ github.event.pull_request.base.sha }}
+          SOURCE_SHA: ${{ github.event.pull_request.base.sha || github.sha }}
         run: |
           set +e
           python3 tools/run_go871_forge_distillery_runtime_gate.py \
@@ -59,6 +64,38 @@ jobs:
           rc=$?
           echo "gate_rc=$rc" >> "$GITHUB_OUTPUT"
           exit 0
+
+      - name: Publish sanitized push result to main
+        if: always() && github.event_name != 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require('fs');
+            const p = '/tmp/clay-go871-forge-distillery/result.json';
+            let body;
+            if (fs.existsSync(p)) {
+              body = fs.readFileSync(p, 'utf8');
+            } else {
+              body = JSON.stringify({
+                schema:'CLAY_GO871_FORGE_DISTILLERY_RUNTIME_GATE/v1',
+                status:'WORKFLOW_RESULT_MISSING',
+                pass:false,
+                github_run_id:context.runId,
+                whole_product_credit:0,
+                jspace_credit:0,
+                training_credit:0
+              }, null, 2) + '\n';
+            }
+            const path = `research_entity/runtime/go871_forge_distillery_results/${context.runId}.json`;
+            await github.rest.repos.createOrUpdateFileContents({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              path,
+              message: `runtime: publish Forge-Distillery gate ${context.runId}`,
+              content: Buffer.from(body, 'utf8').toString('base64'),
+              branch: 'main'
+            });
 
       - name: Upload sanitized runtime evidence
         if: always()

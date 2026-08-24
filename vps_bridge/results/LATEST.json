@@ -1,17 +1,20 @@
 {
   "schema": "CLAY_VPS_RECEIPT/v4",
-  "command_id": "free-swarm-error-sample-20260824T1706",
-  "command_sha256": "de0f1411a151f6e7db86277d05d95a4904221f62f08e9bd9eb41c22a81c3c6be",
-  "started_at": "2026-08-24T09:49:06.127645+00:00",
-  "finished_at": "2026-08-24T09:49:06.319224+00:00",
+  "command_id": "free-swarm-sync-budget-fix-20260824T1710",
+  "command_sha256": "f5fa236729cc6da06c51cacc1b386dc32fb0c7ff77e90935569f46fc2b7a5b48",
+  "started_at": "2026-08-24T09:50:35.231325+00:00",
+  "finished_at": "2026-08-24T09:50:37.389152+00:00",
   "status": "PASS",
   "exit_code": 0,
-  "op": "exec",
-  "stdout_sha256": "f854e03a61d492347e81e44b299aef652ac18fb35c9aceacfcbf36288333811f",
+  "op": "canonical_sync",
+  "stdout_sha256": "02f2b966662f6a3e7bdf92d836d85f515331657625df98c9c11f0c2be6ea36de",
   "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-  "stdout_tail": "--- ('groq', 'openai/gpt-oss-120b', 413, 'NONRETRYABLE_REQUEST_ERROR')\n{\"error\": {\"message\": \"Request too large for model `openai/gpt-oss-120b` in organization `org_01kzdjaeb9eqabndpn2mgb5qft` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Requested 8245, please reduce your message size and try again. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing\", \"type\": \"tokens\", \"code\": \"rate_limit_exceeded\"}}\n--- ('nvidia', 'nvidia/nemotron-3-ultra-550b-a55b', 503, 'PROVIDER_TRANSIENT_ERROR')\n{\"error\": {\"message\": \"Service temporarily overloaded\", \"type\": \"Service Unavailable\", \"code\": 503}}\n--- ('groq', 'qwen/qwen3.6-27b', 413, 'NONRETRYABLE_REQUEST_ERROR')\n{\"error\": {\"message\": \"Request too large for model `qwen/qwen3.6-27b` in organization `org_01kzdjaeb9eqabndpn2mgb5qft` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Requested 8343, please reduce your message size and try again. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing\", \"type\": \"tokens\", \"code\": \"rate_limit_exceeded\"}}\n--- ('groq', 'openai/gpt-oss-20b', 413, 'NONRETRYABLE_REQUEST_ERROR')\n{\"error\": {\"message\": \"Request too large for model `openai/gpt-oss-20b` in organization `org_01kzdjaeb9eqabndpn2mgb5qft` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Requested 8247, please reduce your message size and try again. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing\", \"type\": \"tokens\", \"code\": \"rate_limit_exceeded\"}}\n--- ('nvidia', 'writer/palmyra-creative-122b', 404, 'MODEL_OR_ENDPOINT_UNAVAILABLE')\n{\"status\": 404, \"title\": \"Not Found\", \"detail\": \"Function '00bdd0a7-e38f-4423-9007-c4d8730a3f78': Not found for account 'lqEaewE7DO8HuEcPoSDzIGQS8easeRdrpi4xN5GmrV8'\"}\n--- ('nvidia', 'mistralai/mistral-large', 404, 'MODEL_OR_ENDPOINT_UNAVAILABLE')\n{\"status\": 404, \"title\": \"Not Found\", \"detail\": \"Function '767b5b9a-3f9d-4c1d-86e8-fa861988cee7': Not found for account 'lqEaewE7DO8HuEcPoSDzIGQS8easeRdrpi4xN5GmrV8'\"}\n--- ('nvidia', 'nvidia/llama-3.3-nemotron-super-49b-v1', 200, None)\nNone\n",
+  "stdout_tail": "80c00b0ca1f8fd8e6c00a13cceb2d8944f3d362b\n",
   "stderr_tail": "",
-  "meta": {},
+  "meta": {
+    "head": "80c00b0ca1f8fd8e6c00a13cceb2d8944f3d362b",
+    "ref": "main"
+  },
   "execution_boundary": "ROOT_INSIDE_ROOTLESS_PODMAN_OR_EXPLICIT_REPO_CONTROL_OP",
   "canonical_credit_minted": 0
 }

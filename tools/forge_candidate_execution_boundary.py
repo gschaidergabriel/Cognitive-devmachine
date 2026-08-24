@@ -27,7 +27,7 @@ MAX_TARGETS = 8
 MAX_TARGET_BYTES = 80_000
 MAX_CONTEXT_BYTES = 250_000
 MAX_COMMAND_TEXT = 2_000
-SHELL_META = (";", "|", "&&", "||", "`", "$(`, ">", "<", "\n", "\r")
+SHELL_META = (";", "|", "&&", "||", "`", "$(", ">", "<", "\n", "\r")
 SENSITIVE_SEGMENTS = {"private", "secrets", ".secrets"}
 SENSITIVE_SUFFIXES = {".env", ".pem", ".p12", ".pfx", ".key"}
 

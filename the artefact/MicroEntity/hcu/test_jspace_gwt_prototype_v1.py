@@ -97,7 +97,8 @@ def _competitors():
     )
 
 
-def _trace(*, control_condition="BASELINE", vector=None, trace_id="trace:test:1", role="critic", budget=None):
+def _trace(*, control_condition="BASELINE", vector=None, trace_id="trace:test:1", role="critic", budget=None,
+           max_slots=3, broadcast_threshold=50_000):
     packet, decision, plan, cell = _path()
     vector_packet = encode_vector(
         vector or (0.25, -0.5, 1.0, 0.125),
@@ -126,6 +127,8 @@ def _trace(*, control_condition="BASELINE", vector=None, trace_id="trace:test:1"
         expected_structured_model_output={"schema": "HCU_ROLE_OUTPUT/v1", "action": "ABSTAIN_OR_PROPOSE"},
         observed_downstream_outcome={"status": "OBSERVED", "accepted": False},
         credit_label="NEUTRAL",
+        max_slots=max_slots,
+        broadcast_threshold=broadcast_threshold,
     )
 
 
@@ -156,6 +159,12 @@ class JSpaceGWTPrototypeTests(unittest.TestCase):
         self.assertEqual(trace.falsifier_lesion_condition, "BASELINE")
         self.assertEqual(dict(trace.resource_budget)["wall_ms"], 2500)
         self.assertEqual(len(trace.trace_sha256), 64)
+
+    def test_transition_trace_v1_rejects_unpersisted_selector_parameters(self):
+        for kwargs in ({"max_slots": 1}, {"broadcast_threshold": 90_000}):
+            with self.subTest(kwargs=kwargs):
+                with self.assertRaisesRegex(JSpaceGWTError, "GWT_TRACE_V1_SELECTOR_PARAMETERS_FIXED"):
+                    _trace(**kwargs)
 
     def test_matched_budget_null_lesion_is_distinct_without_changing_causal_authority(self):
         baseline = _trace(trace_id="trace:baseline")

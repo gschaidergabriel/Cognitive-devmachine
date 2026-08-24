@@ -1,4 +1,4 @@
-name: Trigger1 V2 local zero-cost vector fastpath
+name: Trigger1 V2 internal-layer zero-cost vector fastpath
 
 on:
   issues:
@@ -16,7 +16,7 @@ jobs:
   execute:
     if: >-
       github.repository == 'gschaidergabriel/clay-global-research-entity' &&
-      github.event.issue.title == '[CLAY-DISPATCH] Trigger1 V2 local vector fastpath' &&
+      github.event.issue.title == '[CLAY-DISPATCH] Trigger1 V2 internal-layer vector fastpath' &&
       github.event.issue.user.login == 'gschaidergabriel'
     runs-on: [self-hosted, Linux, X64]
     timeout-minutes: 90
@@ -77,8 +77,9 @@ jobs:
         run: |
           set -euo pipefail
           python3 -m unittest -v tests.test_trigger1_jspace_promotion_gate
+          python3 -m unittest -v tests.test_trigger1_intermediate_promotion_bridge
 
-      - name: Execute fused nonterminal midlayer causal discriminator
+      - name: Execute fused internal-layer causal discriminator
         id: experiment
         shell: bash
         env:
@@ -183,7 +184,7 @@ jobs:
           if [[ -s "$candidate" ]]; then
             python3 tools/trigger1_jspace_promotion_gate.py --candidate "$candidate" > "$gate"
           else
-            printf '%s\n' '{"schema":"CLAY_TRIGGER1_JSPACE_PROMOTION_GATE/v2","owner_trigger1_goal_credit_candidate":false,"mechanism_runtime_vector_credit_candidate":false,"failures":["NO_LOCAL_PROMOTION_CANDIDATE"]}' > "$gate"
+            printf '%s\n' '{"schema":"CLAY_TRIGGER1_JSPACE_PROMOTION_GATE/v4","owner_trigger1_goal_credit_candidate":false,"mechanism_runtime_vector_credit_candidate":false,"failures":["NO_LOCAL_PROMOTION_CANDIDATE"]}' > "$gate"
           fi
 
       - name: Persist sanitized exact-source result

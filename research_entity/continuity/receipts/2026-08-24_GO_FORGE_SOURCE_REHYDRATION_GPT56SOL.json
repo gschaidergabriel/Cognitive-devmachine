@@ -1,0 +1,78 @@
+{
+  "schema": "ENTITYOS_HCU_GO_RECEIPT/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "authority_epoch": "8.71",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "reentry": {
+    "main_at_branch_creation": "6fc9c1fea5f5a3de289af1cf245108c703a302b1",
+    "main_reentered_after_pr": "968473111bca71936e3f668ff42e38cddb8ba905",
+    "supervisor_inbox": "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
+    "supervisor": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_71.json",
+    "pr": 1542,
+    "branch": "go/871-forge-execution-boundary-gpt56sol"
+  },
+  "coordination": {
+    "upstream_shared_macrocycle_id": null,
+    "atomic_unusual_experiment_lease": "UNAVAILABLE",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_experiments_run": 0,
+    "trigger_1_owner_directive_activated": false
+  },
+  "observed": {
+    "conversion_snapshot_source": "free swarm/SYSTEM_ANALYSIS_LIVE.json",
+    "successful_worker_outputs": 1001,
+    "machine_readable_deltas": 176,
+    "marked_forge_ready": 105,
+    "forge_evaluations": 104,
+    "forge_accepted_deltas": 0,
+    "forge_patch_rejected": 57,
+    "forge_needs_implementation": 47,
+    "forge_new": 71,
+    "distillery_accepted_dataset_tokens": 0,
+    "issue_1523": "candidate structural validity is not execution admission; current Forge model-authored shell execution boundary is insufficient",
+    "issue_1527": "one-shot patch generation occurs before exact target-file bytes are supplied; exact-source context ordering is the primary current discriminator"
+  },
+  "hypothesis": "Binding a candidate to exact committed target blobs before patch synthesis will reduce source-mismatch PATCH_REJECTED waste and make later apply-check/execution evidence causally attributable to one exact source identity.",
+  "counterhypothesis": "Proposal incompleteness or patch reasoning quality may remain the dominant bottleneck even after exact-source rehydration; apply-clean rate must be measured before promotion.",
+  "delta": {
+    "source_commit": "feae489dd2e90657bb1f57406e11597f788d5ede",
+    "test_definition_commit": "303a1ccd1585ed796e0574291c1020abecedc1ac",
+    "source_path": "tools/forge_source_rehydration.py",
+    "test_path": "tests/test_forge_source_rehydration.py",
+    "mechanism": [
+      "validate bounded relative target paths",
+      "bind exact Git commit and tree",
+      "resolve exact committed blob identity per target",
+      "read committed blob bytes rather than mutable worktree bytes",
+      "bind blob SHA plus full-content SHA-256 and size metadata",
+      "preserve bounded/truncated context state without silently treating it as patch-ready",
+      "emit EXECUTION_BLOCKED at this boundary",
+      "emit a patch-synthesis packet only for identity-stable complete source context"
+    ],
+    "model_authored_commands_executed": 0,
+    "provider_requests_by_this_organ": 0,
+    "paid_actions": 0
+  },
+  "tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED: source-blind proposal-to-patch intent now has a concrete exact-source rehydration primitive and PR1542; old combined PR1512 was closed as superseded donor provenance.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED: candidate identity is bound to commit/tree/blob provenance while execution authority remains explicitly absent.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "TRAINING_READINESS_NO_CHANGE_WITH_REASON: this go did not activate the distinct literal-trigger-1 vector experiment and performed no admitted model-specific J-Space intervention; the new lineage primitive can support future traces but grants zero J-Space/training credit."
+  },
+  "evidence_scope": "SOURCE_AND_TEST_DEFINITION_ONLY",
+  "tests_executed_by_this_organ_on_CANONICAL_ADMITTED_RUNTIME": 0,
+  "credits": {
+    "provider_runtime": 0,
+    "whole_entityos_hcu_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Wire forge_source_rehydration into candidate ingestion, synthesize patch only against CLAY_FORGE_PATCH_SYNTHESIS_PACKET/v1 exact target bytes, require git apply --check against the same commit/tree, and keep arbitrary functional tests EXECUTION_BLOCKED until a separately admitted isolated executor closes issue 1523.",
+  "acceptance": "IN_PROGRESS"
+}

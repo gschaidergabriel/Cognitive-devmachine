@@ -1,0 +1,16 @@
+{
+  "schema": "CLAY_GO871_FORGE_DISTILLERY_RUNTIME_REQUEST/v1",
+  "authority_epoch": "8.71",
+  "requested_source_sha": "4a35a94ced6cea74533cb2ab57c8c461ff70bd70",
+  "purpose": "EXACT_CURRENT_FORGE_TO_DISTILLERY_RUNTIME_WITNESS",
+  "provider_network_allowed": false,
+  "provider_secret_access_allowed": false,
+  "paid_fallback_allowed": false,
+  "requested_acceptance": [
+    "exactly_one_evidence_qualified_forge_accept",
+    "exactly_one_new_distillery_packet",
+    "accepted_dataset_tokens_gt_zero",
+    "identical_replay_adds_zero_packets_and_zero_tokens"
+  ],
+  "credit_scope": "FORGE_TO_DISTILLERY_CONVERSION_PATH_ONLY"
+}

@@ -22,10 +22,11 @@ while IFS= read -r name; do
   esac
 done < <(compgen -v)
 
-# V2 convergence law: first attempt the provider-independent exact local API path.
-# A provider credential, entitlement, rate limit, route identity or unsupported hosted
-# parameter can therefore never terminate Trigger-1 while local normal-user execution
-# remains possible.
+# V2 convergence law: first attempt the strongest provider-independent exact local
+# API path already retained by the repository. The historical terminal positive
+# control is still available through its compatibility executor, but it must not be
+# the canonical first attempt because terminal/readout steering cannot satisfy the
+# current Trigger-1 J-Space scientific-independence law.
 if [[ "${CLAY_TRIGGER1_LOCAL_FASTPATH:-1}" != "0" ]]; then
   if [[ -d /artifacts && -w /artifacts ]]; then
     TRIGGER1_ROOT="${CLAY_TRIGGER1_ARTIFACT_ROOT:-/artifacts/clay-entityos-trigger1}"
@@ -37,7 +38,7 @@ if [[ "${CLAY_TRIGGER1_LOCAL_FASTPATH:-1}" != "0" ]]; then
   mkdir -p "$LOCAL_DIR"
 
   set +e
-  bash "$ROOT/tools/trigger1_local_qwen06_activation_api.sh" "$LOCAL_DIR" \
+  bash "$ROOT/tools/trigger1_local_qwen06_midlayer_causal.sh" "$LOCAL_DIR" \
     >"$LOCAL_DIR/launcher.log" 2>&1
   local_rc=$?
   set -e

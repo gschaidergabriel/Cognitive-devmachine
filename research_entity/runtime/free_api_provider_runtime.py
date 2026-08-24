@@ -227,6 +227,25 @@ def _payment_latch_snapshot(
     return snapshot
 
 
+def _publish_payment_latch(payment_latches: set[str], latch_key: str) -> bool:
+    """Publish one latch without letting mutable caller state suppress a receipt."""
+    try:
+        before = _payment_latch_snapshot(payment_latches)
+        if latch_key in before:
+            return True
+        if len(before) >= MAX_PAYMENT_LATCH_ENTRIES:
+            return False
+        payment_latches.add(latch_key)
+        after = _payment_latch_snapshot(payment_latches)
+        return latch_key in after
+    except Exception:
+        # The provider response is already execution evidence.  Caller-owned
+        # state may have changed while the request was in flight, so latch
+        # publication failure must fail closed without suppressing the 402
+        # receipt.  Process-control BaseExceptions still propagate.
+        return False
+
+
 def inventory(
     environ: dict[str, str] | None = None,
     *,
@@ -827,6 +846,7 @@ def _execute_chat_locked(
     response_context_error = None
     retryable = False
     finished = None
+    payment_latch_active = False
 
     try:
         try:
@@ -866,7 +886,9 @@ def _execute_chat_locked(
                             cooldown_seconds = 0
                             retryable = False
                         elif status == PAYMENT_REQUIRED_STATUS:
-                            latches.add(_payment_latch_key(selected, env))
+                            payment_latch_active = _publish_payment_latch(
+                                latches, _payment_latch_key(selected, env)
+                            )
                             outcome = "payment_required_hard_stop"
                             cooldown_seconds = 0
                             retryable = False
@@ -945,7 +967,9 @@ def _execute_chat_locked(
         elif candidate_status == PAYMENT_REQUIRED_STATUS:
             status = candidate_status
             lifecycle.append("EXECUTED")
-            latches.add(_payment_latch_key(selected, env))
+            payment_latch_active = _publish_payment_latch(
+                latches, _payment_latch_key(selected, env)
+            )
             outcome = "payment_required_hard_stop"
             cooldown_seconds = 0
             retryable = False
@@ -1042,8 +1066,9 @@ def _execute_chat_locked(
         "lifecycle": lifecycle,
         "retryable": retryable,
         "cooldown_seconds": cooldown_seconds,
-        "payment_latch_active": (
-            _payment_latch_key(selected, env) in latches
+        "payment_latch_active": payment_latch_active,
+        "payment_latch_publication_failed": bool(
+            status == PAYMENT_REQUIRED_STATUS and not payment_latch_active
         ),
         "duration_ms": _bounded_duration_ms(started, finished),
         "secret_exposed": False,

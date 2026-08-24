@@ -4,20 +4,33 @@ set -Eeuo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT"
 
+# The retained Trigger-1 lane may download the pinned public Hugging Face checkpoint,
+# but it must not inherit external LLM-provider credentials or silently attach a
+# cached/stored Hugging Face token.  Public model download is transport only; it is
+# not provider inference and must remain credential-independent.
 unset \
   GROQ_API_KEY GROQ_API_KEYS GROQ2_API_KEY GROQ3_API_KEY \
   MISTRAL_API_KEY MISTRAL_API_KEYS MISTRAL2_API_KEY MISTRAL3_API_KEY \
   NVIDIA_API_KEY NVIDIA_API_KEYS NVIDIA_NIM_API_KEY NVIDIA2_API_KEY NVIDIA3_API_KEY NGC_API_KEY \
   OPENROUTER_API_KEY OPENROUTER_API_KEYS OPENROUTER2_API_KEY OPENROUTER3_API_KEY \
-  TOGETHER_API_KEY TOGETHER_API_KEYS OPENAI_API_KEY ANTHROPIC_API_KEY HF_TOKEN || true
+  TOGETHER_API_KEY TOGETHER_API_KEYS \
+  OPENAI_API_KEY OPENAI_API_KEYS \
+  ANTHROPIC_API_KEY ANTHROPIC_API_KEYS \
+  HF_TOKEN HUGGING_FACE_HUB_TOKEN HUGGINGFACE_HUB_TOKEN || true
 while IFS= read -r name; do
   case "$name" in
     GROQ*KEY*|MISTRAL*KEY*|NVIDIA*KEY*|NGC*KEY*|OPENROUTER*KEY*|TOGETHER*KEY*|OPENAI*KEY*|ANTHROPIC*KEY*) unset "$name" || true ;;
   esac
 done < <(compgen -v)
+export HF_HUB_DISABLE_IMPLICIT_TOKEN=1
 
 OUT_DIR="${1:?usage: trigger1_local_qwen06_midlayer_causal.sh OUTPUT_DIR}"
 mkdir -p "$OUT_DIR"
+# Redirect the hub token file lookup into this disposable run directory and ensure
+# the file is absent.  Together with HF_HUB_DISABLE_IMPLICIT_TOKEN this prevents a
+# normal-user cached login from becoming hidden execution provenance.
+export HF_TOKEN_PATH="$OUT_DIR/no-hf-token"
+rm -f "$HF_TOKEN_PATH"
 
 canonical_path(){
   python3 - "$1" <<'PY'
@@ -103,7 +116,7 @@ fi
 
 if ! has_runtime "$PYTHON"; then
   python3 - "$OUT_DIR/trigger1_local_activation_api_result.json" <<'PY'
-import json, pathlib, sys
+import json, pathlib,sys
 pathlib.Path(sys.argv[1]).write_text(json.dumps({
   'schema':'CLAY_TRIGGER1_LOCAL_QWEN06_MIDLAYER_CAUSAL_EXPERIMENT/v1',
   'status':'BLOCKED_LOCAL_MIDLAYER_FASTPATH',

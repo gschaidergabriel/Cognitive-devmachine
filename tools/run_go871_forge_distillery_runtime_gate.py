@@ -242,9 +242,10 @@ def main() -> int:
             return 2
 
         command = ["python3", "-m", "unittest", "-q", TEST]
+        static_command = ["python3", "-m", "py_compile", str(TARGET)]
         current_runs = [run_isolated(current, command) for _ in range(2)]
         ablated_runs = [run_isolated(ablated, command) for _ in range(2)]
-        static = run_isolated(current, ["python3", "-m", "py_compile", str(TARGET)])
+        static = run_isolated(current, static_command)
         current_pass = sum(x["rc"] == 0 for x in current_runs)
         ablated_pass = sum(x["rc"] == 0 for x in ablated_runs)
         improvement = 100.0 * (current_pass - ablated_pass) / 2.0
@@ -258,6 +259,24 @@ def main() -> int:
             "source_identity_admitted": True,
             "source_head": source_sha,
             "source_tree": tree,
+            "evaluation_checkout_head": source_sha,
+            "evaluation_checkout_tree": tree,
+            "evaluation_identity_admitted": True,
+            "evaluation_identity_reason": "EXACT_EVALUATION_CHECKOUT_BOUND",
+            "decisions": [
+                {
+                    "admitted": True,
+                    "reason": "FIXED_RUNTIME_WITNESS_COMMAND",
+                    "argv": command,
+                    "execution_class": "TEST",
+                },
+                {
+                    "admitted": True,
+                    "reason": "FIXED_RUNTIME_WITNESS_COMMAND",
+                    "argv": static_command,
+                    "execution_class": "STATIC",
+                },
+            ],
             "all_commands_admitted": True,
             "candidate_is_canonical_truth": False,
             "command": "python3 -m unittest -q " + TEST,
@@ -340,6 +359,8 @@ def main() -> int:
             "acceptance_witness": {
                 "nominal_without_execution_admission_rejected": nominal_rejected,
                 "exact_evidence_qualified_accept": int(qualified and evaluation["status"] == "accepted"),
+                "evaluation_checkout_bound": admission["evaluation_checkout_head"] == evaluation["evaluation_repo_head"],
+                "command_decisions_bound": len(admission["decisions"]) > 0 and all(d.get("admitted") is True for d in admission["decisions"]),
                 "first_new_distillery_packets": int(first.get("admitted") or 0),
                 "accepted_dataset_tokens_after_first": token1,
                 "replay_new_packets": int(replay.get("admitted") or 0),

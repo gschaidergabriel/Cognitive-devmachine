@@ -14,12 +14,21 @@ bridge = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(bridge)
 
 
-def execution_admission(source_head="a" * 40, **overrides):
+def execution_admission(source_head="a" * 40, evaluation_head="c" * 40, **overrides):
     obj = {
         "schema": "CLAY_FORGE_EXECUTION_ADMISSION/v1",
         "source_scope": "EXACT_WORKER_PROMPT_HEAD",
         "source_identity_admitted": True,
         "source_head": source_head,
+        "evaluation_checkout_head": evaluation_head,
+        "decisions": [
+            {
+                "admitted": True,
+                "reason": "ALLOWLISTED_PYTEST",
+                "argv": ["pytest", "-q", "tests/test_example.py"],
+                "execution_class": "TEST",
+            }
+        ],
         "all_commands_admitted": True,
         "candidate_is_canonical_truth": False,
         "backend": {
@@ -140,6 +149,26 @@ class BridgeTests(unittest.TestCase):
         out = bridge.ingest(self.eval, self.db)
         self.assertEqual(out["admitted"], 0)
         self.assertEqual(out["rejected"].get("EXECUTION_SOURCE_HEAD_MISMATCH"), 1)
+
+    def test_execution_evaluation_mismatch_is_rejected(self):
+        self.write_rows(accepted_row(execution_admission=execution_admission(evaluation_head="e" * 40)))
+        out = bridge.ingest(self.eval, self.db)
+        self.assertEqual(out["admitted"], 0)
+        self.assertEqual(out["rejected"].get("EXECUTION_EVALUATION_HEAD_MISMATCH"), 1)
+
+    def test_missing_command_decisions_are_rejected(self):
+        self.write_rows(accepted_row(execution_admission=execution_admission(decisions=[])))
+        out = bridge.ingest(self.eval, self.db)
+        self.assertEqual(out["admitted"], 0)
+        self.assertEqual(out["rejected"].get("EXECUTION_COMMAND_DECISIONS_MISSING"), 1)
+
+    def test_rejected_command_decision_is_rejected(self):
+        admission = execution_admission()
+        admission["decisions"][0]["admitted"] = False
+        self.write_rows(accepted_row(execution_admission=admission))
+        out = bridge.ingest(self.eval, self.db)
+        self.assertEqual(out["admitted"], 0)
+        self.assertEqual(out["rejected"].get("EXECUTION_COMMAND_DECISION_REJECTED"), 1)
 
     def test_nonaccepted_is_rejected(self):
         self.write_rows(accepted_row(status="validated_not_better"))

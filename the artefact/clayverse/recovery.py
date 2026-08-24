@@ -33,21 +33,60 @@ def _hash(value: object) -> str:
 
 
 def _assert_active_recovery_integrity(sql) -> None:
-    """Validate the active causal spine before recovery is allowed to mutate it."""
+    """Validate the active identity/causal spine before recovery may mutate it."""
+    global_row = sql.execute("SELECT value FROM meta WHERE key='entity_generation'").fetchone()
+    entity_generation = int(global_row[0]) if global_row else 1
     active_rows = sql.execute("SELECT * FROM active_turns ORDER BY started_at,session_id").fetchall()
     for active in active_rows:
+        session = sql.execute(
+            "SELECT user_id,generation FROM sessions WHERE session_id=?", (active["session_id"],)
+        ).fetchone()
+        if not session:
+            raise RecoveryIntegrityError(f"active turn without session: {active['session_id']}")
+        if session["user_id"] != active["user_id"]:
+            raise RecoveryIntegrityError("active turn session/user identity diverged before recovery")
+        if int(session["generation"]) != int(active["generation"]) or int(active["generation"]) != entity_generation:
+            raise RecoveryIntegrityError("active turn generation identity diverged before recovery")
+
+        observation = sql.execute(
+            "SELECT session_id,user_id FROM turns WHERE turn_id=?", (active["turn_id"],)
+        ).fetchone()
+        if not observation:
+            raise RecoveryIntegrityError(f"active turn observation missing: {active['turn_id']}")
+        if observation["session_id"] != active["session_id"] or observation["user_id"] != active["user_id"]:
+            raise RecoveryIntegrityError("active turn observation identity diverged before recovery")
+
         episode = sql.execute(
-            "SELECT episode_id FROM workspace_episodes WHERE episode_id=?", (active["episode_id"],)
+            "SELECT session_id,observation_turn_id FROM workspace_episodes WHERE episode_id=?", (active["episode_id"],)
         ).fetchone()
         if not episode:
             raise RecoveryIntegrityError(f"active turn without workspace episode: {active['episode_id']}")
+        if episode["session_id"] != active["session_id"] or episode["observation_turn_id"] != active["turn_id"]:
+            raise RecoveryIntegrityError("active turn workspace identity diverged before recovery")
 
         causal_rows = sql.execute(
-            "SELECT causal_id FROM causal_episodes WHERE episode_id=? ORDER BY ts,causal_id",
+            "SELECT causal_id,observation_turn_id,effect_id FROM causal_episodes WHERE episode_id=? ORDER BY ts,causal_id",
             (active["episode_id"],),
         ).fetchall()
-        if any(row["causal_id"] != active["causal_id"] for row in causal_rows):
-            raise RecoveryIntegrityError("active turn causal identity diverged before recovery")
+        for causal in causal_rows:
+            if causal["causal_id"] != active["causal_id"]:
+                raise RecoveryIntegrityError("active turn causal identity diverged before recovery")
+            if causal["observation_turn_id"] != active["turn_id"]:
+                raise RecoveryIntegrityError("active turn causal observation identity diverged before recovery")
+            if active["effect_id"] is not None and causal["effect_id"] != active["effect_id"]:
+                raise RecoveryIntegrityError("active turn effect identity diverged before recovery")
+            if causal["effect_id"] is not None:
+                effect = sql.execute(
+                    "SELECT episode_id,user_id,requested_generation FROM effects WHERE effect_id=?", (causal["effect_id"],)
+                ).fetchone()
+                if not effect:
+                    raise RecoveryIntegrityError("active causal row references missing effect")
+                if (
+                    effect["episode_id"] != active["episode_id"]
+                    or effect["user_id"] != active["user_id"]
+                    or int(effect["requested_generation"]) != int(active["generation"])
+                ):
+                    raise RecoveryIntegrityError("active causal effect identity diverged before recovery")
 
 
 def _decode_persisted_effect_outcome(raw: object) -> tuple[dict, str, bool]:

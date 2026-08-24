@@ -1,0 +1,55 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "recorded_at": "2026-08-23T17:14:00+07:00",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_main_observed_before_write": "5c061e30a389e291bad7a1f44611448c791bfbcb",
+  "classification": "SOURCE_CANDIDATE_UNEXECUTED",
+  "frontier": "restart recovery preflight could accept cross-bound active user/session/observation identity and then mutate canonical UnifiedDB",
+  "observed_defect": {
+    "source_blob_before": "b93530ecda1fc76b31a12a7043d876116e23cf6e",
+    "mechanism": "_assert_active_recovery_integrity validated workspace existence and causal_id consistency but did not bind active_turns.user_id/session_id/turn_id to the canonical session, observation turn and workspace observation identity",
+    "consequence": "a structurally valid but cross-bound active row could survive preflight; _append_recovery_turn would then persist a recovery system turn using the poisoned active user_id under another user's session because turns has independent session_id and user_id foreign keys rather than a composite ownership constraint",
+    "second_gap": "a causal row with the expected causal_id but a foreign observation_turn_id could also survive preflight and be terminalized as recovered"
+  },
+  "selected_repair": {
+    "recovery_blob": "ef5a6be602993f9a24fb6f96786fb95a0a4dc511",
+    "test_blob": "82989ce6456e0409fd47e57462825fea34ab2934",
+    "law": "before recover_pending or recovery mutation, bind active session/user/generation, source turn identity, workspace observation identity, causal observation identity and any already-bound causal effect identity; mismatches raise RecoveryIntegrityError",
+    "second_state_authority_created": false,
+    "effect_replay_added": false
+  },
+  "poison_regressions": [
+    "gabriel active session row poisoned to user_id=andreas must fail before recovery turn/workspace/generation mutation",
+    "expected active causal_id paired with an Andreas observation turn must fail before workspace closure or active-row deletion"
+  ],
+  "counterhypothesis": {
+    "claim": "SQLite foreign keys already prevent these identity crossbindings",
+    "status": "REJECTED_AT_SCHEMA_SCOPE",
+    "basis": "turns and active_turns independently reference valid sessions/users/turns/episodes but do not carry composite ownership constraints tying those foreign keys to the same canonical perspective"
+  },
+  "execution_evidence": {
+    "exact_branch_pytest_executed": false,
+    "oci_or_kata_execution": false,
+    "reason": "current connected Vercel surface exposes no Sandbox create/start/exec primitive; forbidden VPS/self-hosted/production fallback was not used",
+    "source_runtime_credit": 0,
+    "oci_runtime_credit": 0,
+    "whole_product_credit": 0
+  },
+  "unusual_experiment": {
+    "executed": false,
+    "valid_credit": 0,
+    "reason": "the same macrocycle had already consumed its unusual-intervention allowance before current owner-authority re-entry; this delta is deterministic source hardening only"
+  },
+  "next_gate": "execute exact branch focused recovery poison regressions plus adjacent restart/effect-replay/global-generation tests on an actually-started authorized isolated executor; then run broader exact-current suite before merge/promotion",
+  "acceptance": "IN_PROGRESS",
+  "security": {
+    "secret_exposed": false,
+    "vps_used": false,
+    "self_hosted_or_production_test_used": false,
+    "together_used": false,
+    "paid_or_training_execution": false
+  }
+}

@@ -1,0 +1,83 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "date_local": "2026-08-25",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol / ChatGPT project organ",
+  "authority_epoch": "8.73",
+  "program": "ENTITYOS_HCU",
+  "stage": "ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "execution_mode": "FREE_ONLY",
+  "observed_canonical_main_before_write": "fc45471f0eb61da17191a9f4a5edae7e184a1346",
+  "authority_reentry": {
+    "supervisor_inbox_schema": "8.73",
+    "selected_focus": "FORGE_DISTILLERY_REPLAY_STABLE_IDENTITY_RUNTIME_GATE",
+    "bootstrap_program_state_drift_observed": "BOOTSTRAP_MINIMAL_AND_PROGRAM_STATE_STILL_8_72_WHILE_SUPERVISOR_INBOX_SELECTS_8_73"
+  },
+  "observation": {
+    "current_main_replay_stable_identity_fused": true,
+    "current_admission_shape": "REPLAY_LOOKUP_SELECT_THEN_WRITE_WITHOUT_EXPLICIT_WRITE_INTENT_SERIALIZATION_BEFORE_LOOKUP",
+    "risk": "CONCURRENT_SAME_REPLAY_CAN_CLASSIFY_AS_SQLITE_UNIQUE_INTEGRITY_FAILURE_INSTEAD_OF_DECLARED_DUPLICATE_OR_REPLAY_IDENTITY_CONFLICT"
+  },
+  "hypothesis": "The partial unique replay-identity index prevents duplicate durable rows but does not by itself serialize replay classification; two writers can both observe no existing replay before one loses the later INSERT race.",
+  "counterhypothesis": "SQLite WAL plus the unique index may be sufficient because the losing writer could naturally re-observe the row and classify cleanly without an exception.",
+  "cheap_discriminator": {
+    "class": "DETERMINISTIC_SQLITE_DB_SEMANTICS_REPRODUCER_NOT_ENTITYOS_RUNTIME",
+    "current_shape_result": {
+      "writer_1": "IntegrityError: UNIQUE constraint failed: forge_execution_ingest.execution_replay_identity_sha256",
+      "writer_2": "INSERTED",
+      "durable_rows": 1
+    },
+    "serialized_write_intent_result": {
+      "writer_1": "INSERTED",
+      "writer_2": "DUPLICATE",
+      "durable_rows": 1,
+      "integrity_exception": false
+    },
+    "interpretation": "Counterhypothesis falsified at generic SQLite/WAL transaction-semantics scope. Duplicate minting was not observed; the gap is deterministic fail-closed availability/classification under concurrency."
+  },
+  "durable_coordination": {
+    "existing_issue": 1573,
+    "comment_id": 5399369402,
+    "new_duplicate_issue_created": false
+  },
+  "tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": {
+      "status": "ADVANCED_RESEARCH_GATE",
+      "delta": "Refined the replay-stable Forge-to-Distillery executable gate to require atomic concurrent replay classification, not only a unique replay index."
+    },
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": {
+      "status": "ADVANCED",
+      "delta": "Defined an atomic causal-admission invariant reusable at Typed Entry/HCU ingress boundaries: replay lookup, measured-evidence conflict classification, packet write and token counters must be serialized as one admission transaction."
+    },
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_FREE_ONLY_LOCAL_08B_READINESS": {
+      "status": "ADVANCED",
+      "delta": "Added dataset-ingress concurrency safety as a prerequisite so semantic replay under parallel ingestion cannot become ambiguous process failure or weaken future J-Space trace dataset accounting."
+    }
+  },
+  "proposed_successor_acceptance": [
+    "same replay identity concurrently => exactly one admission plus one clean DUPLICATE and accepted_dataset_tokens delta +0 for the replay",
+    "same replay identity with concurrently mutated measured evidence => exactly one admission plus one clean REPLAY_IDENTITY_CONFLICT and no token delta from the conflict",
+    "genuinely distinct execution identities remain separately admissible",
+    "process restart/reopen preserves the same replay classification semantics",
+    "live exact-current witness still closes one evidence-qualified ACCEPT -> exactly one persistent packet -> accepted_dataset_tokens > 0 -> semantic replay +0"
+  ],
+  "implementation_candidate": "Acquire SQLite write intent before replay lookup (for example BEGIN IMMEDIATE after schema setup/commit) or use an equivalently atomic design; preserve existing unique replay index as defense in depth and preserve measured-evidence conflict classification.",
+  "macrocycle_identity": {
+    "shared_immutable_macrocycle_id_available": false,
+    "unusual_experiment_status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_experiment_executed": false
+  },
+  "evidence_boundary": "SOURCE_INSPECTION_PLUS_GENERIC_DETERMINISTIC_SQLITE_TRANSACTION_SEMANTICS_ONLY_NOT_EXACT_ENTITYOS_RUNTIME",
+  "credits": {
+    "whole_entityos_hcu_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "provider_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Implement the atomic concurrent replay-admission transaction and deterministic two-writer regression on current main without creating a second ingestion authority; execute that regression on an admitted exact-current zero-cost surface, then run the repository-bound live Forge-to-Distillery 1->1->>0->semantic replay +0 witness.",
+  "epistemic_boundary": "FACT_UNKNOWN + METHOD_PRESENT != FACT_PRESENT"
+}

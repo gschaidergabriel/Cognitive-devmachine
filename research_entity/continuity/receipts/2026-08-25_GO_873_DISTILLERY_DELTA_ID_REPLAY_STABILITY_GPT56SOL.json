@@ -17,11 +17,11 @@
     "active_owner_authority": "governance/CLAY_DUAL_MACHINE_EXECUTION_AUTHORITY_2026-08-24.md"
   },
   "finding": {
-    "classification": "SOURCE_CONFIRMED_REPLAY_IDENTITY_ENVELOPE_ID_GAP",
-    "statement": "The fused replay-stable Forge execution identity still included delta_id, and measured-evidence identity inherited delta_id through measured_packet. The earlier PR #1687 head 14a5f0e defined a discriminator that explicitly classified delta_id as candidate/evaluation-envelope identity whose re-key alone must remain duplicate, but that test was absent from the later stronger fusion on main. Consequently a semantically identical measured execution could be re-emitted under a new delta_id and avoid the intended duplicate path.",
+    "classification": "SOURCE_CONFIRMED_REPLAY_IDENTITY_ENVELOPE_ID_GAP_PLUS_VERSION_MIGRATION_GAP",
+    "statement": "The fused replay-stable Forge execution identity still included delta_id, and measured-evidence identity inherited delta_id through measured_packet. Earlier PR #1687 head 14a5f0e explicitly classified delta_id as candidate/evaluation-envelope identity whose re-key alone must remain duplicate, but that discriminator was absent from the later stronger fusion on main. A second-order migration issue also follows from changing hash semantics in place: persisted v1 hashes must remain recognizable after delta_id is removed or the first post-upgrade semantic replay can evade the new hash.",
     "goodhart_signal": "A high-information discriminator present in an earlier donor revision disappeared while the implementation remained keyed by the field it was meant to exclude. Green remaining tests therefore did not cover the stronger stated replay invariant."
   },
-  "hypothesis": "Removing delta_id from replay identity and measured-evidence identity, while retaining it only as envelope provenance and conservatively excluding it from legacy disambiguation, restores replay stability without collapsing genuinely different measured executions.",
+  "hypothesis": "A versioned replay identity v2 that excludes delta_id, paired with explicit v1 compatibility matching against persisted historical delta_id/replay/measured hashes, restores semantic replay stability without rewriting append-only history or collapsing genuinely different measured executions.",
   "counterhypothesis": "delta_id is itself an execution identity and must distinguish separately admissible measurements.",
   "counterhypothesis_disposition": "NOT_SUPPORTED_BY_CURRENT_DONOR_SEMANTICS: the earlier explicit regression documented delta_id as candidate/evaluation-envelope identity, while supervisor 8.73 requires replay identity to bind measured execution evidence rather than volatile envelope identity. Distinct measured executions remain separated by source/provenance, worker, repo/evaluation heads, targets, execution admission and metric identity.",
   "external_prior_art": {
@@ -31,27 +31,27 @@
   "tracks": {
     "A_ENTITYOS_EXECUTABLE_CONVERGENCE": {
       "status": "ADVANCED_SOURCE_SCOPE",
-      "delta": "Forge-to-Distillery duplicate admission no longer treats a renamed delta_id envelope as a new execution identity; same measured execution remains one packet/token contribution."
+      "delta": "Forge-to-Distillery admission now defines a replay identity v2 that does not treat renamed delta_id envelopes as new measured executions, while retaining compatibility classification for already persisted v1 rows."
     },
     "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": {
       "status": "ADVANCED",
-      "delta": "Strengthened the reusable causal identity primitive by separating candidate/evaluation envelope identity from measured execution identity and by making legacy ambiguity fail closed independent of delta_id."
+      "delta": "Strengthened the reusable causal identity primitive with explicit identity-version migration, candidate/evaluation-envelope separation, v1 hash compatibility, and fail-closed handling for rows predating replay hashes."
     },
     "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_FREE_ONLY_LOCAL_08B_READINESS": {
       "status": "ADVANCED_AT_DATASET_SAFETY_SCOPE",
-      "delta": "Prevents a future J-Space training dataset from gaining duplicate packets/tokens solely because an evaluation envelope was re-keyed; no model/J-Space/training credit minted."
+      "delta": "Prevents future J-Space training data from gaining duplicate packets/tokens solely because an evaluation envelope was re-keyed, including across the v1->v2 identity transition; no model/J-Space/training credit minted."
     }
   },
   "writes": [
     {
-      "commit": "64b4d1e3be0a5b6fc432fbc348e79347f26598a7",
+      "commit": "2c8ec65563e304571112630e8ae602b13ef8b176",
       "path": "tools/ingest_forge_accepts_into_distillery.py",
-      "delta": "Exclude delta_id from replay/measured identities and from legacy replay disambiguation; retain delta_id as envelope provenance."
+      "delta": "Introduce replay identity v2 excluding delta_id, retain exact v1 replay/measured digest compatibility matching, tag new rows with identity schema, and keep pre-hash legacy rows fail closed."
     },
     {
-      "commit": "d8d724a039788e2c8df6c7a47e85637263daa16f",
+      "commit": "ba25a5c70812e10422203beaa57a6369749c71b4",
       "path": "tests/test_forge_distillery_delta_id_replay_873.py",
-      "delta": "Restore delta_id-only replay +0 discriminator, measurement-conflict discriminator and legacy delta_id-rekey fail-closed discriminator."
+      "delta": "Cover fresh-v2 delta_id replay +0, changed measurement conflict, pre-v2 delta_id-rekey duplicate recovery, pre-v2 measurement conflict, and pre-replay-hash legacy fail-closed behavior."
     }
   ],
   "coordination": {
@@ -78,5 +78,5 @@
     "training_credit": 0,
     "whole_product_pass": false
   },
-  "next_exact_gate": "Execute tests.test_forge_distillery_replay_identity_873 plus tests.test_forge_distillery_delta_id_replay_873 on the exact branch head using an admitted zero-cost local/clay-direct-dev surface; require delta_id-only replay +0, mutated measurement conflict, and legacy re-key fail-closed. If green after current-main re-entry, fuse and extend the live Forge->Distillery witness to include delta_id/timestamp/narration semantic replay +0."
+  "next_exact_gate": "Execute tests.test_forge_distillery_replay_identity_873 plus tests.test_forge_distillery_delta_id_replay_873 on the exact branch head using an admitted zero-cost local/clay-direct-dev surface; require fresh-v2 replay +0, pre-v2 replay recovery +0, measurement conflicts, and legacy fail-closed. If green after current-main re-entry, fuse and extend the live Forge->Distillery witness to include delta_id/timestamp/narration semantic replay +0 across upgrade boundaries."
 }

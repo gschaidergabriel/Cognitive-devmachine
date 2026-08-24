@@ -62,16 +62,21 @@ class ActivationSteeringSearchTests(unittest.TestCase):
             alphas=(-2.0, -1.0, 1.0, 2.0),
             seeds=(1, 2, 3),
             score_fn=score,
+            random_control_vectors=((0.0, 1.0),),
             min_delta=0.5,
             min_directional_gap=1.0,
+            min_random_specificity_gap=0.5,
         )
 
-    def test_finds_directional_layer_and_alpha_with_zero_control(self):
+    def test_finds_directional_layer_and_alpha_with_zero_and_random_controls(self):
         result = self._successful_search()
         self.assertTrue(result.success)
         self.assertEqual((result.best.layer_id, result.best.alpha), ("L3", 2.0))
         self.assertEqual(result.sign_control.alpha, -2.0)
         self.assertAlmostEqual(result.zero_control_mean_delta, 0.0)
+        self.assertEqual(len(result.random_direction_controls), 1)
+        self.assertAlmostEqual(result.random_control_max_abs_mean_delta, 0.0)
+        self.assertAlmostEqual(result.random_specificity_gap, 2.0)
 
     def test_success_is_explicitly_noncausal_under_current_jspace_gate(self):
         result = self._successful_search()
@@ -84,6 +89,85 @@ class ActivationSteeringSearchTests(unittest.TestCase):
         self.assertIn("SHAM_CONTROL", result.missing_causal_controls)
         self.assertIn("OFF_TARGET_CONTROL", result.missing_causal_controls)
 
+    def test_missing_random_control_fails_closed_to_search_success(self):
+        result = search_activation_steering(
+            SyntheticExecutor(),
+            "probe",
+            (1.0, 0.0),
+            vector_control_packet_sha256="1" * 64,
+            layer_ids=("L3",),
+            alphas=(-1.0, 1.0),
+            seeds=(1, 2),
+            score_fn=score,
+            min_delta=0.5,
+            min_directional_gap=1.0,
+        )
+        self.assertFalse(result.success)
+        self.assertEqual(result.random_direction_controls, ())
+        self.assertIsNone(result.random_control_max_abs_mean_delta)
+        self.assertIsNone(result.random_specificity_gap)
+
+    def test_equal_norm_random_control_rejects_generic_perturbation_gain(self):
+        class GenericPerturbationExecutor(SyntheticExecutor):
+            def run(self, prompt, *, layer_id, vector, alpha, seed):
+                observation = super().run(
+                    prompt, layer_id=layer_id, vector=vector, alpha=alpha, seed=seed
+                )
+                if layer_id is None or all(value == 0.0 for value in vector):
+                    return observation
+                # Any non-zero perturbation has the same effect, so apparent target
+                # steering is not direction-specific and must fail the random control.
+                base = 0.10 + seed * 0.001
+                generic_effect = alpha if layer_id == self.target_layer else 0.0
+                return SteeringObservation(
+                    f"{base + generic_effect:.9f}", observation.hook_receipt
+                )
+
+        result = search_activation_steering(
+            GenericPerturbationExecutor(),
+            "probe",
+            (1.0, 0.0),
+            vector_control_packet_sha256="1" * 64,
+            layer_ids=("L3",),
+            alphas=(-2.0, 2.0),
+            seeds=(1, 2, 3),
+            score_fn=score,
+            random_control_vectors=((0.0, 1.0),),
+            min_delta=0.5,
+            min_directional_gap=1.0,
+            min_random_specificity_gap=0.5,
+        )
+        self.assertFalse(result.success)
+        self.assertAlmostEqual(result.best.mean_delta, 2.0)
+        self.assertAlmostEqual(result.random_control_max_abs_mean_delta, 2.0)
+        self.assertAlmostEqual(result.random_specificity_gap, 0.0)
+
+    def test_rejects_random_control_with_wrong_norm_or_target_alias(self):
+        with self.assertRaisesRegex(ActivationSteeringError, "EQUAL_L2_NORM"):
+            search_activation_steering(
+                SyntheticExecutor(),
+                "probe",
+                (1.0, 0.0),
+                vector_control_packet_sha256="1" * 64,
+                layer_ids=("L3",),
+                alphas=(-1.0, 1.0),
+                seeds=(1,),
+                score_fn=score,
+                random_control_vectors=((0.0, 2.0),),
+            )
+        with self.assertRaisesRegex(ActivationSteeringError, "TARGET_OR_SIGN_ALIAS"):
+            search_activation_steering(
+                SyntheticExecutor(),
+                "probe",
+                (1.0, 0.0),
+                vector_control_packet_sha256="1" * 64,
+                layer_ids=("L3",),
+                alphas=(-1.0, 1.0),
+                seeds=(1,),
+                score_fn=score,
+                random_control_vectors=((-1.0, 0.0),),
+            )
+
     def test_rejects_missing_sign_pair(self):
         with self.assertRaisesRegex(ActivationSteeringError, "SIGN_PAIRED"):
             search_activation_steering(
@@ -95,6 +179,7 @@ class ActivationSteeringSearchTests(unittest.TestCase):
                 alphas=(1.0,),
                 seeds=(1,),
                 score_fn=score,
+                random_control_vectors=((0.0, 1.0),),
             )
 
     def test_rejects_forged_applied_vector_receipt(self):
@@ -129,6 +214,7 @@ class ActivationSteeringSearchTests(unittest.TestCase):
                 alphas=(-1.0, 1.0),
                 seeds=(1,),
                 score_fn=score,
+                random_control_vectors=((0.0, 1.0),),
             )
 
     def test_rejects_zero_vector_control_that_changes_activation(self):
@@ -163,6 +249,7 @@ class ActivationSteeringSearchTests(unittest.TestCase):
                 alphas=(-1.0, 1.0),
                 seeds=(1,),
                 score_fn=score,
+                random_control_vectors=((0.0, 1.0),),
                 min_delta=0.1,
                 min_directional_gap=0.1,
             )

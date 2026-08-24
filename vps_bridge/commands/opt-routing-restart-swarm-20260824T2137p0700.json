@@ -1,0 +1,8 @@
+{
+  "schema":"CLAY_VPS_COMMAND/v4",
+  "command_id":"opt-routing-restart-swarm-20260824T2137p0700",
+  "op":"exec",
+  "cwd":"/workspace/clay-global-research-entity",
+  "timeout_seconds":180,
+  "command":"set -e; old=$(pgrep -f '[r]un_6000_free_swarm_fast.py' | tr '\\n' ' ' || true); echo OLD=$old; for p in $old; do kill -TERM \"$p\" || true; done; for i in $(seq 1 30); do sleep 1; new=$(pgrep -f '[r]un_6000_free_swarm_fast.py' | tr '\\n' ' ' || true); if [ -n \"$new\" ] && [ \"$new\" != \"$old\" ]; then echo NEW=$new; latest=$(ls -td /artifacts/clay-entityos-swarm/active-fabric6000-v2-* 2>/dev/null | head -1); echo LATEST=$latest; cat \"$latest/status.json\" 2>/dev/null || true; echo SUP; cat /artifacts/clay-entityos-swarm/SUPERVISOR_6000.json 2>/dev/null || true; exit 0; fi; done; echo RESTART_TIMEOUT; pgrep -af '[r]un_6000_free_swarm' || true; tail -120 /artifacts/clay-entityos-swarm/supervisor6000.log 2>/dev/null || true; exit 2"
+}

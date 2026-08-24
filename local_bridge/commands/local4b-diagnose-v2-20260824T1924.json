@@ -1,0 +1,8 @@
+{
+  "schema":"CLAY_LOCAL_COMMAND/v1",
+  "command_id":"local4b-diagnose-v2-20260824T1924",
+  "op":"exec",
+  "cwd":"/home/ai-core-node",
+  "timeout_seconds":180,
+  "command":"ssh -o BatchMode=yes -o ConnectTimeout=20 -J root@100.71.48.1 root@72.61.19.188 'cd /tmp; uid=$(id -u claylab); runuser -u claylab -- env HOME=/srv/claylab XDG_RUNTIME_DIR=/run/user/$uid podman exec clay-direct-dev bash -lc \"echo HEALTH; curl -sS --max-time 2 http://127.0.0.1:8088/health || true; echo; echo BOOTLOG; tail -100 /artifacts/clay-entityos-swarm/local-model-bootstrap.log 2>/dev/null || true; echo MODELLOG; tail -100 /artifacts/clay-entityos-swarm/local-model.log 2>/dev/null || true; echo STATE; cat /artifacts/clay-entityos-swarm/local-model.json 2>/dev/null || true; echo PROCS; ps -eo pid,etime,%cpu,%mem,args | grep -E '[c]make|[g]make|[l]lama-server|[l]ocal_research_model_server' | head -40\"'"
+}

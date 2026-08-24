@@ -4,7 +4,8 @@ set -Eeuo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT"
 
-# Trigger-1 V2 primary fast path: normal-user, zero-provider-billing, loopback-only.
+# Trigger-1 V3 primary fast path: normal-user, zero-provider-billing, loopback-only,
+# with an anti-circular intermediate-residual intervention/readout separation.
 # Do not materialize or consume any external LLM provider credential here.
 unset \
   GROQ_API_KEY GROQ_API_KEYS GROQ2_API_KEY GROQ3_API_KEY \
@@ -66,6 +67,6 @@ PY
   exit 3
 fi
 
-exec "$PYTHON" "$ROOT/tools/trigger1_local_qwen06_activation_api_execute.py" \
+exec "$PYTHON" "$ROOT/tools/trigger1_local_qwen06_activation_api_execute_anticircular.py" \
   --output-dir "$OUT_DIR" \
   --cache-dir "$HF_HOME"

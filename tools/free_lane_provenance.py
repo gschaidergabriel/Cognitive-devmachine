@@ -90,6 +90,24 @@ def _groq_historical_free_match(
     return newest
 
 
+def _authority_snapshots() -> tuple[dict[str, Any], str, dict[str, Any], str] | None:
+    try:
+        admission, admission_digest = _json_snapshot(ADMISSION_PATH)
+        provenance, provenance_digest = _json_snapshot(PROVENANCE_PATH)
+    except (OSError, UnicodeDecodeError, json.JSONDecodeError, ValueError):
+        return None
+    if admission.get("schema") != ADMISSION_SCHEMA or admission.get("mode") != "FREE_ONLY":
+        return None
+    epoch = str(admission.get("authority_epoch") or "")
+    if not epoch:
+        return None
+    if provenance.get("schema") != PROVENANCE_SCHEMA or provenance.get("mode") != "FREE_ONLY":
+        return None
+    if str(provenance.get("authority_epoch") or "") != epoch:
+        return None
+    return admission, admission_digest, provenance, provenance_digest
+
+
 def _lane_evidence_from_provenance(
     prov: dict[str, Any],
     provider: str,
@@ -153,6 +171,73 @@ def _lane_evidence_from_provenance(
     return {"ok": False, "reason": "UNKNOWN_PROVIDER"}
 
 
+def route_secret_lookup_binding(
+    provider: str,
+    model_or_route: str,
+    endpoint: str,
+) -> dict[str, Any]:
+    """Authorize only the secret-lookup step for a potentially zero-cost route.
+
+    This is deliberately weaker than ``current_lane_binding``. It never grants a
+    provider request or runtime credit. It proves only that current typed authority
+    and economic provenance make it meaningful to read the named provider secret for
+    this exact endpoint+route. Credential-dependent providers must still pass the
+    post-lookup ``current_lane_binding`` before any provider network I/O.
+    """
+    snapshots = _authority_snapshots()
+    if snapshots is None:
+        return {"ok": False, "reason": "FREE_LANE_AUTHORITY_SNAPSHOT_INVALID"}
+    admission, admission_digest, provenance, provenance_digest = snapshots
+    epoch = str(admission.get("authority_epoch") or "")
+    provider_admission = ((admission.get("providers") or {}).get(provider) or {})
+    if provider_admission.get("admitted") is not True:
+        return {"ok": False, "reason": "PROVIDER_NOT_CURRENTLY_ADMITTED"}
+    if provider_admission.get("cost_class") != "FREE":
+        return {"ok": False, "reason": "PROVIDER_COST_CLASS_NOT_FREE"}
+
+    record = ((provenance.get("providers") or {}).get(provider) or {})
+    if not record:
+        return {"ok": False, "reason": "PROVIDER_NOT_IN_ECONOMIC_PROVENANCE"}
+    if _host(endpoint) != str(record.get("allowed_endpoint_host") or ""):
+        return {"ok": False, "reason": "ENDPOINT_NOT_ZERO_COST_BOUND"}
+
+    if provider == "openrouter":
+        route_ok = model_or_route in set(record.get("allowed_routes") or [])
+        reason = "OPENROUTER_ROUTE_NOT_EXPLICIT_ZERO_PRICE"
+    elif provider == "nvidia":
+        route_ok = bool(record.get("evidence_kind"))
+        reason = "NVIDIA_FREE_PROTOTYPING_SCOPE_NOT_BOUND"
+    elif provider == "groq":
+        route_ok = model_or_route in (record.get("free_plan_models") or {})
+        reason = "GROQ_MODEL_NOT_BOUND_TO_DOCUMENTED_FREE_LIMITS"
+    elif provider == "mistral":
+        route_ok = False
+        reason = "MISTRAL_PROVIDER_SIDE_FREE_MODE_NOT_BOUND"
+    else:
+        route_ok = False
+        reason = "UNKNOWN_PROVIDER"
+
+    if not route_ok:
+        return {
+            "ok": False,
+            "reason": reason,
+            "admission_epoch": epoch,
+            "admission_digest": admission_digest,
+            "economic_provenance_digest": provenance_digest,
+        }
+    return {
+        "ok": True,
+        "observed_at": dt.datetime.now(dt.timezone.utc).isoformat(),
+        "admission_epoch": epoch,
+        "admission_digest": admission_digest,
+        "economic_provenance_digest": provenance_digest,
+        "scope": "SECRET_LOOKUP_ONLY_NOT_PROVIDER_EXECUTION",
+        "provider": provider,
+        "model_or_route": model_or_route,
+        "endpoint_host": _host(endpoint),
+    }
+
+
 def lane_evidence(
     provider: str,
     credential_fingerprint: str,
@@ -183,21 +268,11 @@ def current_lane_binding(
     artifacts: Path = DEFAULT_ARTIFACTS,
 ) -> dict[str, Any]:
     """Return one exact pre-call authorization snapshot for a concrete lane."""
-    try:
-        admission, admission_digest = _json_snapshot(ADMISSION_PATH)
-        provenance, provenance_digest = _json_snapshot(PROVENANCE_PATH)
-    except (OSError, UnicodeDecodeError, json.JSONDecodeError, ValueError) as exc:
-        return {"ok": False, "reason": "FREE_LANE_AUTHORITY_SNAPSHOT_INVALID", "detail": type(exc).__name__}
-
-    if admission.get("schema") != ADMISSION_SCHEMA or admission.get("mode") != "FREE_ONLY":
-        return {"ok": False, "reason": "FREE_PROVIDER_ADMISSION_AUTHORITY_INVALID"}
+    snapshots = _authority_snapshots()
+    if snapshots is None:
+        return {"ok": False, "reason": "FREE_LANE_AUTHORITY_SNAPSHOT_INVALID"}
+    admission, admission_digest, provenance, provenance_digest = snapshots
     epoch = str(admission.get("authority_epoch") or "")
-    if not epoch:
-        return {"ok": False, "reason": "FREE_PROVIDER_ADMISSION_EPOCH_MISSING"}
-    if provenance.get("schema") != PROVENANCE_SCHEMA or provenance.get("mode") != "FREE_ONLY":
-        return {"ok": False, "reason": "ECONOMIC_PROVENANCE_AUTHORITY_INVALID"}
-    if str(provenance.get("authority_epoch") or "") != epoch:
-        return {"ok": False, "reason": "FREE_LANE_AUTHORITY_EPOCH_MISMATCH"}
 
     provider_admission = ((admission.get("providers") or {}).get(provider) or {})
     if provider_admission.get("admitted") is not True:

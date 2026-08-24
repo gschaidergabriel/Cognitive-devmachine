@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v4",
+  "command_id": "zz-launch-free6000-pool-20260824T2040p0700",
+  "op": "exec",
+  "cwd": "/workspace/clay-global-research-entity",
+  "timeout_seconds": 180,
+  "command": "set -euo pipefail; python3 -m py_compile tools/free_swarm_exec_with_vault.py tools/run_6000_free_swarm.py tools/run_6000_free_swarm_fast.py tools/run_6000_free_swarm_v3.py tools/free_lane_provenance.py; bash -n tools/run_6000_free_swarm_supervisor.sh; pkill -f run_6000_free_swarm_supervisor.sh || true; sleep 1; nohup python3 tools/free_swarm_exec_with_vault.py bash tools/run_6000_free_swarm_supervisor.sh >/artifacts/clay-entityos-swarm/supervisor6000.log 2>&1 </dev/null & echo SUPERVISOR_PID=$!; sleep 20; echo CREDENTIAL_POOL; cat /artifacts/clay-entityos-swarm/CREDENTIAL_POOL.json; echo SUPERVISOR; cat /artifacts/clay-entityos-swarm/SUPERVISOR_6000.json; echo PROCESSES; pgrep -af run_6000_free_swarm"
+}

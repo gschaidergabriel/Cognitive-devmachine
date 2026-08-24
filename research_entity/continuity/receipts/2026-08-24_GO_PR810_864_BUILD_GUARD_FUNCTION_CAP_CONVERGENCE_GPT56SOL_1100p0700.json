@@ -1,0 +1,98 @@
+{
+  "schema": "ENTITYOS_HCU_GO_EXECUTOR_BUILD_CONVERGENCE_RECEIPT/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "authority_epoch": "8.64",
+  "canonical_main_observed_before_write": "caec2df6fa7b141fc1bcbbf7f4434b7af9574683",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "coordination": {
+    "upstream_shared_immutable_macrocycle_id": null,
+    "available_user_message_timestamp_precision": "MINUTE_ONLY",
+    "atomic_unusual_experiment_lease": "NOT_ACQUIRED",
+    "classification": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_interventions_executed": 0,
+    "work_class": "ORDINARY_RUNTIME_FIRST_REENTRY_BUILD_FAILURE_DIAGNOSIS_AND_FUSION"
+  },
+  "retained_lanes_at_prewrite_reentry": {
+    "hcu_donor": "gschaidergabriel/clay-global-research-entity#1263",
+    "hcu_donor_head": "ed6c5ff41ef36c6799cace067888896667953bc9",
+    "executor": "gschaidergabriel/Dr.-Unterweger#810",
+    "executor_head": "cf40d46a5c9e6b533b9b1bf94645f45c402e422e",
+    "executor_state": "OPEN_DRAFT_SINGLE_RETAINED_EXECUTOR"
+  },
+  "observed_runtime_and_deployment_evidence": {
+    "immutable_function_level_pass_receipts_already_on_main": [
+      "research_entity/continuity/receipts/2026-08-24_GO_FUNCTION_LEVEL_412_QUOTA_GATE_GPT56SOL_1055p0700.json",
+      "research_entity/continuity/receipts/2026-08-24_GO_V3_GRID10_AUTHENTICATED_412_COUNTEREVIDENCE_GPT56SOL_1057p0700.json"
+    ],
+    "bounded_conclusion": "CONNECTED_AUTHENTICATED_REQUESTS_CAN_REACH_IMMUTABLE_EXECUTOR_FUNCTIONS_AND_FAIL_CLOSED_AT_FREE_ONLY_QUOTA_GATE_BEFORE_SANDBOX_CREATE",
+    "sandbox_execution_credit": 0,
+    "hcu_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0
+  },
+  "successor_executor_build_findings": [
+    {
+      "executor_sha": "036a6ea68040f338d2e050f60d628786d019896b",
+      "deployment_id": "dpl_3TijhFBAaVwfcQsZEXVUmQZvXsWg",
+      "result": "ERROR",
+      "error_code": "exceeded_serverless_functions_per_deployment",
+      "bounded_interpretation": "ADDING_A_SEPARATE_RUNTIME_DIAGNOSTIC_FUNCTION_EXCEEDED_THE_HOBBY_12_FUNCTION_LIMIT; THE_PROVIDER_SUGGESTED_PRO_UPGRADE_PATH_IS_FORBIDDEN_UNDER_FREE_ONLY"
+    },
+    {
+      "executor_sha": "91a0364ac0cc09e7f409a714f9523cad79d638c4",
+      "deployment_id": "dpl_13EJ6DF5E8t8GjQAYbEYdAbe3sG2",
+      "result": "ERROR",
+      "error_code": "BUILD_UTILS_SPAWN_1",
+      "exact_build_failure": "ENTITYOS_HCU_FREE_ONLY_SANDBOX_ADMISSION_MISSING: stale supervisor 8.63 admission markers required by guard after admission source moved to supervisor 8.64"
+    },
+    {
+      "executor_sha": "e4d171243ac356a118b1194a1148c8bbbd37e079",
+      "deployment_id": "dpl_G3EZmJ5bVWotkn5bHW16Vp2njVDS",
+      "result": "ERROR",
+      "error_code": "BUILD_UTILS_SPAWN_1",
+      "exact_build_failure": "SAME_STALE_8_63_MARKER_REQUIREMENT_IN_EXCLUSIVE_EXECUTOR_GUARD"
+    },
+    {
+      "executor_sha": "cf40d46a5c9e6b533b9b1bf94645f45c402e422e",
+      "deployment_id": "dpl_8JXcyNTueBnWF498RikXEUS4jYVs",
+      "result": "ERROR",
+      "error_code": "BUILD_UTILS_SPAWN_1",
+      "exact_build_failure": "SAME_STALE_8_63_MARKER_REQUIREMENT_IN_EXCLUSIVE_EXECUTOR_GUARD_AFTER_ONE_OLD_ROUTE_WAS_RETIRED_TO_RECOVER_HOBBY_FUNCTION_BUDGET"
+    }
+  ],
+  "source_convergence_observation": {
+    "runtime_probe_function_cap_strategy": "FOLD_DIAGNOSTIC_AND_SQLITE_PREPARATION_INTO_EXISTING_SANDBOX_PROBE_ROUTE_OR_RETIRE_AN_OBSOLETE_ROUTE; DO_NOT_PAY_FOR_PRO",
+    "observed_parallel_changes": [
+      "e4d171243ac356a118b1194a1148c8bbbd37e079 folded runtime-admission and sqlite3/_sqlite3 preparation into api/sandbox-probe.js",
+      "4020096457e64034debb3d1394ee3c8cd2206729 removed the standalone diagnostic route to stay inside Hobby function cap",
+      "10e8bb73c4aecf4e6bc058a921dc8cec55686ee5 reintroduced the standalone diagnostic route",
+      "cf40d46a5c9e6b533b9b1bf94645f45c402e422e retired the historical depth-poison deployment route to recover function budget"
+    ],
+    "coordination_finding": "THE_EXECUTOR_BRANCH_MOVED_MULTIPLE_TIMES_DURING_REENTRY; A_COMPETING_PATCH_FROM_THIS_ORGAN_WOULD_HAVE_HIGH_DUPLICATION_AND_RACE_RISK",
+    "highest_information_current_build_blocker": "EXCLUSIVE_EXECUTOR_BUILD_GUARD_STILL_REQUIRES_STALE_8_63_FREE_ONLY_ADMISSION_MARKERS_WHILE_CANONICAL_RUNTIME_ADMISSION_SOURCE_IS_8_64",
+    "required_repair_property": "SUCCESSOR_DYNAMIC_OR_EXACT_8_64_GUARD_EXPECTATION_WITHOUT_WEAKENING_THE_PRE_SANDBOX_QUOTA_FENCE"
+  },
+  "hypothesis": "The retained executor is currently prevented from reaching a fresh exact-head runtime diagnostic primarily by source/guard epoch drift plus Hobby function-count pressure, not by an observed HCU semantic regression.",
+  "counterhypothesis": "The repeated deployment ERROR states could be treated as HCU runtime failure or justify paid Pro upgrade/fallback.",
+  "discriminator_result": "REJECTED: build logs stop inside the exclusive JavaScript source guard before Sandbox.create or HCU execution, and the separate 13-function failure is an explicit Hobby deployment-cap error. Neither is HCU runtime evidence and neither authorizes payment.",
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED: exact fresh-head deployment blockers narrowed to stale 8.63 build-guard markers plus Hobby function-count convergence; immutable predecessor function-level 412 evidence remains valid but cannot be projected forward",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "HCU_NO_CHANGE_WITH_REASON: no admitted Sandbox/HCU execution occurred and supervisor 8.64 pauses source-only guard proliferation; executor infrastructure must converge first",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "TRAINING_READINESS_NO_CHANGE_WITH_REASON: no real model invocation, loader-consumption observation, J-Space/GWT causal intervention, trace promotion or training occurred"
+  },
+  "credits": {
+    "function_level_executor_evidence": "PASS_AT_DECLARED_IMMUTABLE_PREDECESSOR_SNAPSHOTS_ONLY",
+    "sandbox_environment_runtime": 0,
+    "whole_entityos_hcu_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Converge the single retained PR810 branch so the exclusive executor build guard accepts the canonical supervisor-8.64 FREE_ONLY admission markers without weakening the direct-quota-before-Sandbox.create invariant and the deployment remains at or below the Hobby 12-function cap; then require a fresh exact-live-head READY preview and invoke only the non-Sandbox runtime-admission probe. Sandbox selftest/sqlite capability may run only after direct included-quota admission opens.",
+  "evidence_boundary": "This receipt preserves build/deployment/runtime-admission evidence and coordination findings only. It creates no Sandbox, HCU, J-Space model, training, canonical-semantics or whole-product credit."
+}

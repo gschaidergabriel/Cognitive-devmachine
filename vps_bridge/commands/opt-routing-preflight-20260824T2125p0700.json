@@ -1,0 +1,8 @@
+{
+  "schema":"CLAY_VPS_COMMAND/v4",
+  "command_id":"opt-routing-preflight-20260824T2125p0700",
+  "op":"exec",
+  "cwd":"/workspace/clay-global-research-entity",
+  "timeout_seconds":120,
+  "command":"set -e; echo PRECHECK; git rev-parse HEAD; git status --short; echo RESOURCES; free -h; df -h /workspace /cache /artifacts; echo SWARM; pgrep -af '[r]un_6000_free_swarm_fast.py' || true; echo NETWORK; python3 - <<'PY'\nimport urllib.request\nr=urllib.request.urlopen('https://api.github.com',timeout=10)\nprint('HTTP',r.status)\nPY"
+}

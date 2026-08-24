@@ -3,7 +3,7 @@
 
 This coordination gate does not acquire a lease and does not run an intervention. It
 only verifies that the dispatch references an already-created canonical claim for the
-current Trigger1 V2 midlayer causal experiment.
+current fused Trigger1 V2 intermediate contrastive experiment.
 """
 from __future__ import annotations
 
@@ -24,7 +24,7 @@ LEGACY_MINUTE_RE = re.compile(
 )
 LEGACY_SECOND_RE = re.compile(r"^(\d{8}T\d{6})([+-])(\d{2})(\d{2})_([0-9a-f]{12,64})$")
 CLAIM_SCHEMA = "clay-go-experiment-claim/v1"
-EXPECTED_EXPERIMENT = "CLAY_TRIGGER1_LOCAL_QWEN06_MIDLAYER_CAUSAL_EXPERIMENT/v1"
+EXPECTED_EXPERIMENT = "CLAY_TRIGGER1_LOCAL_QWEN06_INTERMEDIATE_CONTRASTIVE/v1"
 
 
 def _nonempty(value: Any) -> bool:

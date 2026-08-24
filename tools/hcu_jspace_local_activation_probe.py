@@ -20,6 +20,7 @@ import json
 import os
 from pathlib import Path
 import platform
+import re
 import socket
 import subprocess
 import sys
@@ -34,6 +35,8 @@ SCHEMA = "ENTITYOS_HCU_JSPACE_LOCAL_ACTIVATION_PROBE/v2"
 CLAIM_SCHEMA = "clay-go-experiment-claim/v1"
 OBSERVATION_CLASS = "LOCAL_MODEL_SPECIFIC_OBSERVATION_CANDIDATE_EVIDENCE_ONLY"
 INTERVENTION_CLASS = "LOCAL_MODEL_SPECIFIC_CAUSAL_CANDIDATE_EVIDENCE_ONLY"
+RID_TRIGGER_KEY_RE = re.compile(r"^rid_[0-9a-f]{64}$")
+TS_TRIGGER_KEY_RE = re.compile(r"^ts_([0-9]{8}T[0-9]{12}Z)__p_([0-9a-f]{64})$")
 
 
 class ProbeRejected(RuntimeError):
@@ -121,6 +124,25 @@ def resolve_current_authority(root: Path) -> dict[str, Any]:
     }
 
 
+def validate_canonical_trigger_key(trigger_key: str) -> str:
+    """Validate the two canonical trigger-key encodings admitted by the lease protocol."""
+    if RID_TRIGGER_KEY_RE.fullmatch(trigger_key):
+        return "IMMUTABLE_REQUEST_ID"
+
+    match = TS_TRIGGER_KEY_RE.fullmatch(trigger_key)
+    if match is None:
+        raise ProbeRejected("ATOMIC_CLAIM_TRIGGER_KEY_NONCANONICAL")
+
+    timestamp = match.group(1)
+    try:
+        parsed = dt.datetime.strptime(timestamp, "%Y%m%dT%H%M%S%fZ")
+    except ValueError as exc:
+        raise ProbeRejected("ATOMIC_CLAIM_TRIGGER_KEY_TIMESTAMP_INVALID") from exc
+    if parsed.strftime("%Y%m%dT%H%M%S%fZ") != timestamp:
+        raise ProbeRejected("ATOMIC_CLAIM_TRIGGER_KEY_TIMESTAMP_NONCANONICAL")
+    return "TIMESTAMP_PLUS_PAYLOAD_DIGEST"
+
+
 def validate_atomic_claim(
     root: Path, claim_arg: str, claimant_organ: str, experiment_name: str
 ) -> dict[str, Any]:
@@ -150,6 +172,7 @@ def validate_atomic_claim(
     trigger_key = str(claim.get("trigger_key") or "").strip()
     if not trigger_key or claim_path.name != f"{trigger_key}.json":
         raise ProbeRejected("ATOMIC_CLAIM_TRIGGER_KEY_PATH_MISMATCH")
+    trigger_key_identity = validate_canonical_trigger_key(trigger_key)
     if not str(claim.get("observed_canonical_main") or "").strip():
         raise ProbeRejected("ATOMIC_CLAIM_OBSERVED_MAIN_REQUIRED")
     if not str(claim.get("intervention_contract") or "").strip():
@@ -160,6 +183,7 @@ def validate_atomic_claim(
         raise ProbeRejected("ATOMIC_CLAIM_RESULT_ALREADY_EXISTS_REPLICATION_REQUIRES_SEPARATE_CLASSIFICATION")
     return {
         "trigger_key": trigger_key,
+        "trigger_key_identity": trigger_key_identity,
         "claim_path": claim_path.relative_to(root).as_posix(),
         "claim_sha256": sha256_file(claim_path),
         "claimant_organ": claimant_organ,
@@ -170,7 +194,8 @@ def validate_atomic_claim(
         "result_path_expected": result_path.relative_to(root).as_posix(),
         "lease_file_validated": True,
         "create_only_semantics_reverified_by_probe": False,
-        "note": "The probe validates the canonical claim record but cannot reconstruct GitHub create-only transaction history; canonical admission must retain that evidence boundary.",
+        "semantic_duplicate_race_scan_reverified_by_probe": False,
+        "note": "The probe validates canonical lease-file structure and key encoding, but cannot reconstruct GitHub create-only transaction history or independently prove the semantic-duplicate race scan; canonical admission must retain those evidence boundaries.",
     }
 
 
@@ -345,7 +370,13 @@ def main() -> int:
     parser.add_argument("--output")
     args = parser.parse_args()
 
-    causal_values = (args.generation, args.causal_event_id, args.admission_id, args.route_id, args.inference_receipt_id)
+    causal_values = (
+        args.generation,
+        args.causal_event_id,
+        args.admission_id,
+        args.route_id,
+        args.inference_receipt_id,
+    )
     if any(not str(value).strip() for value in causal_values):
         raise SystemExit("required causal identifiers must be non-empty")
     if args.mode == "intervention":
@@ -505,7 +536,9 @@ def main() -> int:
                 )
                 record: dict[str, Any] = {
                     "condition": label,
-                    "model_execution_id_derived_local": hashlib.sha256(execution_material.encode("utf-8")).hexdigest(),
+                    "model_execution_id_derived_local": hashlib.sha256(
+                        execution_material.encode("utf-8")
+                    ).hexdigest(),
                     "jspace_trace_id_derived_local": hashlib.sha256(
                         f"{execution_material}|{layer_index}|{observation_position}".encode("utf-8")
                     ).hexdigest(),
@@ -585,10 +618,14 @@ def main() -> int:
                             off_record,
                         ],
                         "derived_metrics": {
-                            "target_patch_effect_on_target_logit": target_record["target_logit"] - corrupt_record["target_logit"],
-                            "sham_effect_on_target_logit": sham_record["target_logit"] - corrupt_record["target_logit"],
-                            "off_target_patch_effect_on_target_logit": off_record["target_logit"] - corrupt_record["target_logit"],
-                            "target_patch_effect_on_off_target_logit": target_record["off_target_logit"] - corrupt_record["off_target_logit"],
+                            "target_patch_effect_on_target_logit": target_record["target_logit"]
+                            - corrupt_record["target_logit"],
+                            "sham_effect_on_target_logit": sham_record["target_logit"]
+                            - corrupt_record["target_logit"],
+                            "off_target_patch_effect_on_target_logit": off_record["target_logit"]
+                            - corrupt_record["target_logit"],
+                            "target_patch_effect_on_off_target_logit": target_record["off_target_logit"]
+                            - corrupt_record["off_target_logit"],
                         },
                     }
                 )

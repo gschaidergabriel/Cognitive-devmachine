@@ -144,6 +144,15 @@ def validate_claim(*, issue_body: str, claims_root: Path, expected_experiment: s
     for sibling in claims_root.glob("*.json") if claims_root.is_dir() else []:
         if sibling == claim_path or sibling.name.endswith(".result.json"):
             continue
+
+        # Historical coordination was encoded in both filenames and payload fields.
+        # A damaged/non-JSON legacy file with an aliasing filename remains ambiguous
+        # evidence and must fail closed rather than silently reopening the budget.
+        filename_key = sibling.name[:-5]
+        if filename_key == trigger_key or _legacy_semantic_alias(filename_key, trigger_key):
+            duplicates.append(str(sibling))
+            continue
+
         try:
             candidate = json.loads(sibling.read_text(encoding="utf-8"))
         except Exception:

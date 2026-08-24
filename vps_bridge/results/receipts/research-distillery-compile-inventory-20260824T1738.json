@@ -1,0 +1,17 @@
+{
+  "schema": "CLAY_VPS_RECEIPT/v4",
+  "command_id": "research-distillery-compile-inventory-20260824T1738",
+  "command_sha256": "ef51bae792a7fe0f46858947ef72636b09c75ee28a2b45ca9d26256962cf4140",
+  "started_at": "2026-08-24T10:38:24.345062+00:00",
+  "finished_at": "2026-08-24T10:38:24.668340+00:00",
+  "status": "FAIL",
+  "exit_code": 1,
+  "op": "exec",
+  "stdout_sha256": "85df89b07ca32c1bcd3b40a8c43e389da9adaf5ab4038d893dec29143c4424f0",
+  "stderr_sha256": "2c8561c8653988739ea7bdd42cf1d6a623b8c3efd9402ff28e9958d7c2edc216",
+  "stdout_tail": "COMPILE_PASS\n",
+  "stderr_tail": "Traceback (most recent call last):\n  File \"/workspace/clay-global-research-entity/tools/run_research_distillery.py\", line 893, in <module>\n    raise SystemExit(main())\n                     ^^^^^^\n  File \"/workspace/clay-global-research-entity/tools/run_research_distillery.py\", line 872, in main\n    con=connect(); seed(con)\n                   ^^^^^^^^^\n  File \"/workspace/clay-global-research-entity/tools/run_research_distillery.py\", line 247, in seed\n    add_question(con, q, priority=2.0)\n  File \"/workspace/clay-global-research-entity/tools/run_research_distillery.py\", line 236, in add_question\n    con.execute(\nsqlite3.OperationalError: 10 values for 9 columns\n",
+  "meta": {},
+  "execution_boundary": "ROOT_INSIDE_ROOTLESS_PODMAN_OR_EXPLICIT_REPO_CONTROL_OP",
+  "canonical_credit_minted": 0
+}

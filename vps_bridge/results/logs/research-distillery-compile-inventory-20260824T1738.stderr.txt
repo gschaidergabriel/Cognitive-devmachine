@@ -1,0 +1,12 @@
+Traceback (most recent call last):
+  File "/workspace/clay-global-research-entity/tools/run_research_distillery.py", line 893, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "/workspace/clay-global-research-entity/tools/run_research_distillery.py", line 872, in main
+    con=connect(); seed(con)
+                   ^^^^^^^^^
+  File "/workspace/clay-global-research-entity/tools/run_research_distillery.py", line 247, in seed
+    add_question(con, q, priority=2.0)
+  File "/workspace/clay-global-research-entity/tools/run_research_distillery.py", line 236, in add_question
+    con.execute(
+sqlite3.OperationalError: 10 values for 9 columns

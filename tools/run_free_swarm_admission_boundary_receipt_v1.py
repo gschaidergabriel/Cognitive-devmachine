@@ -22,7 +22,6 @@ from pathlib import Path
 import platform
 import subprocess
 import sys
-import tempfile
 from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -44,6 +43,7 @@ TEST_PATHS = (
     "tests/test_free_provider_admission_forgery_868.py",
     "tests/test_free_swarm_admission_boundary_867.py",
     "tests/test_free_swarm_admission_boundary_868_malformed.py",
+    "tests/test_free_swarm_socket_tripwire_868.py",
     "tests/test_rae_secret_loader_provider_admission.py",
 )
 
@@ -61,6 +61,7 @@ REQUIRED_BOUNDARIES = (
     "blocked_direct_chat_network",
     "blocked_catalog_network",
     "blocked_openrouter_distillery_secret_and_network",
+    "socket_level_blocked_paths_have_zero_network_activity",
 )
 
 PROVIDER_SECRET_ENV_NAMES = frozenset(
@@ -244,7 +245,7 @@ def build_receipt() -> dict[str, Any]:
             "provider_network_requested_by_runner": False,
             "network_attempt_count": 0 if tests_pass else None,
             "network_attempt_count_classification": (
-                "DERIVED_FROM_EXECUTED_HASH_BOUND_ZERO_NETWORK_ASSERTIONS"
+                "DERIVED_FROM_EXECUTED_HASH_BOUND_ZERO_NETWORK_AND_SOCKET_TRIPWIRE_ASSERTIONS"
                 if tests_pass
                 else "UNRESOLVED_TEST_FAILURE"
             ),

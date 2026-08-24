@@ -56,6 +56,13 @@ def git(cwd: Path, *args: str, check: bool = True):
     return run(["git", "-C", str(cwd), *args], check=check)
 
 
+def safe_git(cwd: Path, *args: str, check: bool = True):
+    return run(
+        ["git", "-c", "core.hooksPath=/dev/null", "-C", str(cwd), *args],
+        check=check,
+    )
+
+
 def ensure_dirs() -> None:
     for p in (WORKTREES, CACHE, MODELS, TOOLS, LOGS, STATE):
         p.mkdir(parents=True, exist_ok=True)
@@ -78,7 +85,10 @@ def ensure_image() -> None:
     if cp.returncode == 0:
         return
     context = CONTROL / "vps_bridge"
-    run(["podman", "build", "-t", IMAGE, "-f", str(context / "Containerfile"), str(context)], capture=False)
+    run(
+        ["podman", "build", "-t", IMAGE, "-f", str(context / "Containerfile"), str(context)],
+        capture=False,
+    )
 
 
 def safe_task_id(value: object) -> str:
@@ -131,7 +141,7 @@ def parse_task(path: Path) -> dict:
     return task
 
 
-def resolve_base(base: str) -> str:
+def resolve_base_sha(base: str) -> str:
     git(REPO, "fetch", "origin", "--prune")
     if base.startswith("pr/"):
         n = base.split("/", 1)[1]
@@ -139,26 +149,28 @@ def resolve_base(base: str) -> str:
             raise ValueError("INVALID_PR_BASE")
         ref = f"refs/remotes/origin/pr/{n}"
         git(REPO, "fetch", "origin", f"+refs/pull/{n}/head:{ref}")
-        return ref
-    ref = f"refs/remotes/origin/{base}"
-    cp = git(REPO, "rev-parse", "--verify", ref, check=False)
-    if cp.returncode != 0:
-        git(REPO, "fetch", "origin", f"+refs/heads/{base}:{ref}")
-    return ref
+    else:
+        ref = f"refs/remotes/origin/{base}"
+        cp = git(REPO, "rev-parse", "--verify", ref, check=False)
+        if cp.returncode != 0:
+            git(REPO, "fetch", "origin", f"+refs/heads/{base}:{ref}")
+    return git(REPO, "rev-parse", ref).stdout.strip()
 
 
-def create_worktree(task: dict) -> tuple[Path, str]:
+def create_task_checkout(task: dict) -> tuple[Path, str, str]:
     task_id = task["task_id"]
     wt = (WORKTREES / task_id).resolve()
     if WORKTREES not in wt.parents:
         raise RuntimeError("WORKTREE_ESCAPE_REJECTED")
-    if wt.exists():
-        git(REPO, "worktree", "remove", "--force", str(wt), check=False)
-        shutil.rmtree(wt, ignore_errors=True)
-    base_ref = resolve_base(task["base_ref"])
+    shutil.rmtree(wt, ignore_errors=True)
+    base_sha = resolve_base_sha(task["base_ref"])
+    # A standalone local clone keeps .git inside the mounted directory so read-only
+    # git inspection works in the container. Host git metadata is never mounted.
+    run(["git", "clone", "--local", "--no-hardlinks", str(REPO), str(wt)], check=True)
     branch = f"vps-task/{task_id}"
-    git(REPO, "worktree", "add", "--force", "-B", branch, str(wt), base_ref)
-    return wt, branch
+    safe_git(wt, "checkout", "-B", branch, base_sha)
+    safe_git(wt, "remote", "set-url", "origin", REMOTE)
+    return wt, branch, base_sha
 
 
 def disk_guard(task: dict) -> dict:
@@ -197,6 +209,9 @@ def execute_container(task: dict, wt: Path) -> dict:
         "--cap-drop=all",
         "--security-opt", "no-new-privileges",
         "-v", f"{wt}:/workspace:rw",
+        # Overlay .git read-only. Tasks may inspect history/diffs but cannot install
+        # hooks, rewrite remotes, or mutate host-side git metadata.
+        "-v", f"{wt / '.git'}:/workspace/.git:ro",
         "-v", f"{CACHE}:/cache:rw",
         "-v", f"{MODELS}:/models:rw",
         "-v", f"{TOOLS}:/tools:rw",
@@ -206,7 +221,9 @@ def execute_container(task: dict, wt: Path) -> dict:
         "-e", "CLAY_CACHE=/cache",
         "-e", "CLAY_TOOLS=/tools",
     ]
-    if not task["network"]:
+    if task["network"]:
+        cmd += ["--network", "slirp4netns:allow_host_loopback=false"]
+    else:
         cmd += ["--network", "none"]
     cmd += [IMAGE, "bash", "-lc", task["command"]]
 
@@ -238,20 +255,41 @@ def execute_container(task: dict, wt: Path) -> dict:
     }
 
 
+def reject_oversize_commit_files(wt: Path, max_bytes: int = 100 * 1024 * 1024) -> list[dict]:
+    oversize = []
+    for p in wt.rglob("*"):
+        if not p.is_file() or ".git" in p.parts:
+            continue
+        try:
+            size = p.stat().st_size
+        except FileNotFoundError:
+            continue
+        if size > max_bytes:
+            oversize.append({"path": str(p.relative_to(wt)), "bytes": size})
+    return oversize
+
+
 def commit_task_changes(task: dict, wt: Path, branch: str, execution: dict) -> dict:
-    status = git(wt, "status", "--porcelain").stdout
+    # Reassert the exact remote after untrusted build commands.
+    safe_git(wt, "remote", "set-url", "origin", REMOTE)
+    status = safe_git(wt, "status", "--porcelain").stdout
     changed = bool(status.strip())
-    result = {"changed": changed, "status_porcelain": status[-12000:]}
-    should_commit = task["commit_changes"] and changed and (
+    oversize = reject_oversize_commit_files(wt)
+    result = {
+        "changed": changed,
+        "status_porcelain": status[-12000:],
+        "oversize_files_not_committed": oversize,
+    }
+    should_commit = task["commit_changes"] and changed and not oversize and (
         execution["exit_code"] == 0 or task["commit_on_failure"]
     )
     if not should_commit:
         result["committed"] = False
         return result
-    git(wt, "add", "-A")
-    git(wt, "commit", "-m", f"vps task: {task['task_id']}")
-    sha = git(wt, "rev-parse", "HEAD").stdout.strip()
-    git(wt, "push", "--force-with-lease", "-u", "origin", f"HEAD:refs/heads/{branch}")
+    safe_git(wt, "add", "-A")
+    safe_git(wt, "commit", "-m", f"vps task: {task['task_id']}")
+    sha = safe_git(wt, "rev-parse", "HEAD").stdout.strip()
+    safe_git(wt, "push", "--force-with-lease", "-u", "origin", f"HEAD:refs/heads/{branch}")
     result.update(committed=True, branch=branch, commit_sha=sha)
     return result
 
@@ -262,27 +300,26 @@ def push_outbox(task_id: str, result: dict) -> None:
     outdir.mkdir(parents=True, exist_ok=True)
     out = outdir / f"{task_id}.json"
     out.write_text(json.dumps(result, indent=2, sort_keys=True) + "\n")
-    git(CONTROL, "add", str(out.relative_to(CONTROL)))
-    cp = git(CONTROL, "diff", "--cached", "--quiet", check=False)
+    safe_git(CONTROL, "add", str(out.relative_to(CONTROL)))
+    cp = safe_git(CONTROL, "diff", "--cached", "--quiet", check=False)
     if cp.returncode == 0:
         return
-    git(CONTROL, "commit", "-m", f"vps bridge result: {task_id}")
+    safe_git(CONTROL, "commit", "-m", f"vps bridge result: {task_id}")
     for attempt in range(5):
-        cp = git(CONTROL, "push", "origin", BRANCH, check=False)
+        cp = safe_git(CONTROL, "push", "origin", BRANCH, check=False)
         if cp.returncode == 0:
             return
-        git(CONTROL, "pull", "--rebase", "origin", BRANCH, check=False)
+        safe_git(CONTROL, "pull", "--rebase", "origin", BRANCH, check=False)
         time.sleep(2 + attempt)
     raise RuntimeError("OUTBOX_PUSH_FAILED")
 
 
 def process(path: Path) -> None:
     task_id = path.stem
-    started_at = utcnow()
     base_result = {
         "schema": "CLAY_VPS_TASK_RESULT/v1",
         "task_id": task_id,
-        "started_at": started_at,
+        "started_at": utcnow(),
         "sandbox": {
             "engine": "rootless-podman",
             "image": IMAGE,
@@ -290,6 +327,7 @@ def process(path: Path) -> None:
             "host_credentials_mounted": False,
             "host_root_mounted": False,
             "container_socket_mounted": False,
+            "git_metadata_in_container": "READ_ONLY_TASK_LOCAL_CLONE",
         },
         "canonical_promotion_credit_minted": 0,
     }
@@ -304,12 +342,14 @@ def process(path: Path) -> None:
         base_result["disk_before"] = disk_guard(task)
         ensure_repo()
         ensure_image()
-        wt, branch = create_worktree(task)
-        base_result["resolved_base_sha"] = git(wt, "rev-parse", "HEAD").stdout.strip()
+        wt, branch, base_sha = create_task_checkout(task)
+        base_result["resolved_base_sha"] = base_sha
         execution = execute_container(task, wt)
         base_result["execution"] = execution
         base_result["git_result"] = commit_task_changes(task, wt, branch, execution)
-        base_result["status"] = "PASS" if execution["exit_code"] == 0 and not execution["timed_out"] else "FAIL"
+        base_result["status"] = (
+            "PASS" if execution["exit_code"] == 0 and not execution["timed_out"] else "FAIL"
+        )
     except Exception as exc:
         base_result["status"] = "BRIDGE_ERROR"
         base_result["bridge_error"] = f"{type(exc).__name__}:{exc}"
@@ -337,7 +377,8 @@ def loop() -> None:
                 process(path)
         except Exception:
             err = traceback.format_exc()
-            (LOGS / "bridge-loop-error.log").write_text(f"{utcnow()}\n{err}\n")
+            with (LOGS / "bridge-loop-error.log").open("a") as f:
+                f.write(f"{utcnow()}\n{err}\n")
         time.sleep(POLL_SECONDS)
 
 

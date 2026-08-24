@@ -60,4 +60,22 @@ PY
 fi
 
 export PYTHONPATH="$ROOT/tools${PYTHONPATH:+:$PYTHONPATH}"
-exec "$PYTHON" "$ROOT/tools/trigger1_local_qwen06_intermediate_execute.py" --output-dir "$OUT_DIR" --cache-dir "$HF_HOME"
+set +e
+"$PYTHON" "$ROOT/tools/trigger1_local_qwen06_intermediate_trace_execute.py" --output-dir "$OUT_DIR" --cache-dir "$HF_HOME"
+EXECUTOR_RC=$?
+set -e
+
+RESULT_PATH="$OUT_DIR/trigger1_intermediate_result.json"
+if [[ -f "$RESULT_PATH" ]]; then
+  set +e
+  "$PYTHON" "$ROOT/tools/jspace_trace_abi_v1.py" --result "$RESULT_PATH" --output-dir "$OUT_DIR"
+  TRACE_RC=$?
+  set -e
+  # Once a measured run reached PASS or SCIENTIFIC_NEGATIVE, trace normalization
+  # is part of the evidence contract and therefore fails closed.
+  if [[ "$TRACE_RC" -ne 0 && ( "$EXECUTOR_RC" -eq 0 || "$EXECUTOR_RC" -eq 2 ) ]]; then
+    exit "$TRACE_RC"
+  fi
+fi
+
+exit "$EXECUTOR_RC"

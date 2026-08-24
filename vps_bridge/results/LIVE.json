@@ -1,21 +1,21 @@
 {
   "schema": "CLAY_VPS_LIVE/v4",
-  "observed_at": "2026-08-24T09:39:03.683728+00:00",
+  "observed_at": "2026-08-24T09:41:23.943215+00:00",
   "sandbox": "clay-direct-dev",
   "host": {
     "uptime": {
       "rc": 0,
-      "out": " 09:39:03 up  4:45,  2 users,  load average: 0.07, 0.04, 0.05\n",
+      "out": " 09:41:23 up  4:47,  2 users,  load average: 0.15, 0.07, 0.06\n",
       "err": ""
     },
     "memory": {
       "rc": 0,
-      "out": "               total        used        free      shared  buff/cache   available\nMem:     16769044480  5540581376  7254917120     1626112  4329955328 11228463104\nSwap:              0           0           0\n",
+      "out": "               total        used        free      shared  buff/cache   available\nMem:     16769044480  5534236672  7260598272     1630208  4330622976 11234807808\nSwap:              0           0           0\n",
       "err": ""
     },
     "disk": {
       "rc": 0,
-      "out": "Filesystem        1B-blocks        Used    Available Use% Mounted on\n/dev/sda1      206900281344 37569851392 169313652736  19% /\n",
+      "out": "Filesystem        1B-blocks        Used    Available Use% Mounted on\n/dev/sda1      206900281344 37569998848 169313505280  19% /\n",
       "err": ""
     },
     "podman": {
@@ -24,7 +24,7 @@
       "err": "Error: cannot run top on container 877d9128ca5ac67d4b8c3cfd897f3da263c6cd747290a7b9909d119ddffd3ffc as it did not create a cgroup: this container does not have a cgroup\n"
     }
   },
-  "processes": "USER         PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND\nroot         460  0.0  0.0   4448  3628 ?        SN   09:21   0:00 bash tools/run_24h_entityos_swarm_supervisor.sh\nroot           1  0.0  0.0   2696  1680 ?        Ss   08:32   0:00 sleep infinity\nroot         739  0.0  0.0   2696  1756 ?        SN   09:38   0:00 sleep 60\nroot         740  0.0  0.0   4324  3644 ?        SN   09:39   0:00 bash -lc ps auxww --sort=-%cpu | head -80; echo '---'; free -h; echo '---'; df -h /workspace /cache\nroot         746  0.0  0.0   7888  4116 ?        RN   09:39   0:00 ps auxww --sort=-%cpu\nroot         747  0.0  0.0   2708  1668 ?        SN   09:39   0:00 head -80\n---\n               total        used        free      shared  buff/cache   available\nMem:            15Gi       5.2Gi       6.8Gi       1.6Mi       4.0Gi        10Gi\nSwap:             0B          0B          0B\n---\nFilesystem      Size  Used Avail Use% Mounted on\n/dev/sda1       193G   35G  158G  19% /workspace\n/dev/sda1       193G   35G  158G  19% /cache\n",
+  "processes": "USER         PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND\nroot         460  0.0  0.0   4448  3628 ?        SN   09:21   0:00 bash tools/run_24h_entityos_swarm_supervisor.sh\nroot           1  0.0  0.0   2696  1680 ?        Ss   08:32   0:00 sleep infinity\nroot         785  0.0  0.0   2696  1720 ?        SN   09:41   0:00 sleep 60\nroot         786  0.0  0.0   4324  3600 ?        SN   09:41   0:00 bash -lc ps auxww --sort=-%cpu | head -80; echo '---'; free -h; echo '---'; df -h /workspace /cache\nroot         792  0.0  0.0   7888  4228 ?        RN   09:41   0:00 ps auxww --sort=-%cpu\nroot         793  0.0  0.0   2708  1652 ?        SN   09:41   0:00 head -80\n---\n               total        used        free      shared  buff/cache   available\nMem:            15Gi       5.2Gi       6.8Gi       1.6Mi       4.0Gi        10Gi\nSwap:             0B          0B          0B\n---\nFilesystem      Size  Used Avail Use% Mounted on\n/dev/sda1       193G   35G  158G  19% /workspace\n/dev/sda1       193G   35G  158G  19% /cache\n",
   "workspace_git": {
     "head": "99c1e62ab514fb2234009702a49cab62dcf0b740",
     "status": "## main...origin/main\n M tools/run_24h_entityos_swarm.py\n M tools/run_24h_entityos_swarm_supervisor.sh\n M tools/run_24h_swarm_autodiscover.sh\n"

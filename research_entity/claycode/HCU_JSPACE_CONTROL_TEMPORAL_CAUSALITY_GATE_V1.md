@@ -1,7 +1,7 @@
 # HCU J-Space Control Temporal Causality Gate v1
 
 Status: **CURRENT RESEARCH / ACCEPTANCE GUARD**  
-Authority: subordinate to current owner/supervisor authority; does not replace `SUPERVISOR_STEERING_8_63.json`  
+Authority: subordinate to current owner/supervisor authority; current observed supervisor is `SUPERVISOR_STEERING_8_66.json`, with execution authority resolved through `CLAY_EXECUTION_AUTHORITY.md`  
 Product: **EntityOS**  
 Compute architecture: **HCU**  
 Mode: **FREE_ONLY**
@@ -115,10 +115,14 @@ This deterministic temporal regression is ordinary source/integration work. It d
 
 ## Current execution / coordination boundary
 
-Supervisor 8.63 remains `FREE_ONLY`. No Together preflight/training, paid provider fallback, VPS/self-hosted/production test, or upgrade path is authorized by this guard.
+Current observed supervisor 8.66 remains `FREE_ONLY`. The active owner authority at `CLAY_EXECUTION_AUTHORITY.md` -> `governance/CLAY_DUAL_MACHINE_EXECUTION_AUTHORITY_2026-08-24.md` authorizes zero-monetary-cost development/test execution inside `clay-direct-dev` and on the local workstation as the normal Linux development user, with the declared resource/evidence boundaries. Unrelated VPS-host changes, new local root/sudo authority, new external production effects, Together inference/training/preflight, paid fallback, and paid/subscription/unknown monetary provider execution remain fail-closed unless separately authorized.
+
+The retained Vercel controller's `Sandbox.create` quota gate is a separate provider-specific FREE_ONLY admission boundary. It must not be generalized back into the obsolete blanket prohibition on owner-authorized local/`clay-direct-dev` execution, and local/VPS success still does not by itself mint whole EntityOS/HCU or J-Space runtime credit.
 
 For the current `go`, no shared immutable macrocycle/request identity is exposed to this organ and the available user-message time is minute precision only. Therefore:
 
 `COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT`
 
-This guard is a deterministic research/architecture delta only.
+No local/VPS bridge tool is exposed to this ChatGPT organ in the current session, so bridge health and exact-source runtime execution remain unobserved here. That is tool-surface/infrastructure status, not product failure.
+
+This guard is a deterministic research/architecture delta only and does not itself grant execution authority beyond the current owner/supervisor stack.

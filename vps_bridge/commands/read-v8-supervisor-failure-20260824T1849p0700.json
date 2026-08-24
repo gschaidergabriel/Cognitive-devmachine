@@ -1,0 +1,8 @@
+{
+  "schema":"CLAY_VPS_COMMAND/v4",
+  "command_id":"read-v8-supervisor-failure-20260824T1849p0700",
+  "op":"exec",
+  "cwd":"/workspace/clay-global-research-entity",
+  "timeout_seconds":60,
+  "command":"echo ---LOG---; cat /artifacts/clay-entityos-swarm/supervisor-v8.log 2>/dev/null || true; echo ---PID---; cat /artifacts/clay-entityos-swarm/supervisor.pid 2>/dev/null || true; echo ---PS---; ps -eo pid,ppid,stat,args | grep -E '[r]un_24h_entityos_swarm_supervisor|[r]un_research_distillery|[r]un_free_evidence_forge|[f]ree swarm/evaluate.py' || true"
+}

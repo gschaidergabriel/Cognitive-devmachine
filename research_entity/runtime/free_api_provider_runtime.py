@@ -49,6 +49,7 @@ MAX_RECEIPT_DURATION_MS = MAX_PROVIDER_COOLDOWN_SECONDS * 1000
 EXECUTION_LOCK_TIMEOUT_SECONDS = 35
 TEXT_CHAT_ROLES = frozenset({"system", "user", "assistant"})
 TEXT_CHAT_MESSAGE_FIELDS = frozenset({"role", "content"})
+TEXT_RESPONSE_CHOICE_FIELDS = frozenset({"finish_reason", "message"})
 TEXT_RESPONSE_MESSAGE_FIELDS = frozenset({"role", "content"})
 BEARER_TOKEN_CHARACTERS = frozenset(
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~+/"
@@ -980,6 +981,10 @@ def _execute_chat_locked(
             choice = choices[0]
             if not isinstance(choice, dict):
                 raise ValueError("response_choice_must_be_object")
+            if set(choice) != TEXT_RESPONSE_CHOICE_FIELDS:
+                raise ValueError(
+                    "response_choice_fields_not_supported_by_text_adapter"
+                )
             finish_reason = choice.get("finish_reason")
             if finish_reason == "length":
                 raise ProviderOutputTruncated

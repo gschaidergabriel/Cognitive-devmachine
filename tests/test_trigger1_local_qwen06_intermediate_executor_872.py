@@ -73,6 +73,18 @@ class IntermediateExecutorSourceTests(unittest.TestCase):
         self.assertIn("rescue_delta", source)
         self.assertIn("holdout_used_for_direction_or_layer_gain_selection", source)
 
+    def test_source_binds_derivation_and_each_intervention_identity(self):
+        source = EXECUTOR.read_text(encoding="utf-8")
+        self.assertIn("positive_activation_rows_sha256", source)
+        self.assertIn("negative_activation_rows_sha256", source)
+        self.assertIn("intervention_sha256", source)
+        self.assertIn("applied_vector_sha256", source)
+        self.assertIn("auxiliary_control_receipts", source)
+        self.assertIn("baseline_receipt_sha256", source)
+        self.assertIn("wrong_layer_receipt_sha256", source)
+        self.assertIn("lesion_receipt_sha256", source)
+        self.assertIn("rescue_receipt_sha256", source)
+
 
 if __name__ == "__main__":
     unittest.main()

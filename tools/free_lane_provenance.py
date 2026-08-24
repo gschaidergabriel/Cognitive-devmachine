@@ -2,8 +2,8 @@
 """Route/credential-level FREE_ONLY economic provenance for the autonomous swarm.
 
 The provider admission file grants owner-authorized access to free contingents.
-This module is the narrower runtime gate required by supervisor epoch 8.70: a
-concrete credential fingerprint + endpoint + model/route must have zero-cost/free
+This module is the narrower runtime gate required by current supervisor authority:
+a concrete credential fingerprint + endpoint + model/route must have zero-cost/free
 provider-side evidence before an autonomous network call is allowed.
 """
 from __future__ import annotations
@@ -22,6 +22,7 @@ DEFAULT_ARTIFACTS = Path("/artifacts/clay-entityos-swarm")
 RECEIPT_SCHEMA = "FREE_LANE_EXECUTION_RECEIPT/v1"
 ADMISSION_SCHEMA = "ENTITYOS_HCU_FREE_PROVIDER_ADMISSION/v1"
 PROVENANCE_SCHEMA = "ENTITYOS_HCU_FREE_LANE_ECONOMIC_PROVENANCE/v1"
+NVIDIA_CREDENTIAL_FIELD = "allowed_credential_fingerprints"
 
 
 def _json_snapshot(path: Path) -> tuple[dict[str, Any], str]:
@@ -117,14 +118,14 @@ def _lane_evidence_from_provenance(
         }
 
     if provider == "nvidia":
-        # NVIDIA documents free hosted NIM prototyping for Developer Program
-        # members, but the public provider statement does not prove that an
-        # arbitrary credential belongs to that free entitlement.  A provider
-        # hostname plus an unbound fingerprint therefore cannot self-admit.
-        bound = record.get("admitted_credential_fingerprints")
-        if not isinstance(bound, list) or credential_fingerprint not in {
+        # Current authority requires the concrete NVIDIA Developer API credential,
+        # not merely a provider-global free-program statement. The canonical
+        # economic-provenance schema names that allow-list explicitly.
+        bound = record.get(NVIDIA_CREDENTIAL_FIELD)
+        allowed = {
             str(item).strip() for item in bound if str(item).strip()
-        }:
+        } if isinstance(bound, list) else set()
+        if credential_fingerprint not in allowed:
             return {
                 "ok": False,
                 "reason": "NVIDIA_CREDENTIAL_DEVELOPER_FREE_ENTITLEMENT_NOT_BOUND",
@@ -133,9 +134,11 @@ def _lane_evidence_from_provenance(
             "ok": True,
             "kind": record.get("evidence_kind"),
             "source": record.get("source"),
+            "sources": record.get("sources"),
             "endpoint_host": _host(endpoint),
             "scope": record.get("scope"),
             "credential_fingerprint": credential_fingerprint,
+            "credential_binding_observation": record.get("credential_binding_observation"),
             "assertion": "BOUND_CREDENTIAL_NVIDIA_DEVELOPER_FREE_NIM_PROTOTYPING_ONLY",
         }
 

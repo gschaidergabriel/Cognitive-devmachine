@@ -3,9 +3,14 @@
 
 This is a deterministic, provider-independent successor to the disposable runtime gate.
 It does not weaken Forge evidence admission and does not append a second Forge ledger.
-Instead it re-validates the nested evidence-qualified Forge evaluation from a PASS receipt
+Instead it re-validates the nested evidence-qualified Forge evaluation from a PASS witness
 and feeds exactly that one row through the existing Distillery admission code against the
 configured canonical Distillery SQLite database.
+
+The live effect is additionally bound to the GitHub Actions execution context that owns the
+canonical workflow: exact run id, event class, canonical-main source selection, source SHA
+and source tree. The promoter records the SHA-256 of the exact pre-publication gate bytes;
+the later repository publication must preserve and verify the same binding.
 
 The operation is idempotent by the existing evaluation digest. A first promotion must add
 exactly one packet and nonzero accepted-dataset tokens. An identical retry must add zero
@@ -14,13 +19,14 @@ same digest is already present with nonzero packet tokens and the retry remains 
 
 No provider/network I/O occurs here. This tool grants no whole-product, HCU, J-Space,
 canonical-semantics or training credit; it only closes the measured Forge->Distillery
-execution-evidence path at its exact source identity.
+execution-evidence path at its exact source and workflow identity.
 """
 from __future__ import annotations
 
 import argparse
 import hashlib
 import json
+import os
 from pathlib import Path
 import re
 import sqlite3
@@ -32,7 +38,10 @@ from forge_evidence_credit_871 import evidence_reason
 
 PASS_SCHEMA = "CLAY_FORGE_DISTILLERY_EXACT_CURRENT_RUNTIME_GATE/v2"
 PASS_STATUS = "PASS_EXACT_CURRENT_1_TO_1_TO_NONZERO_REPLAY_ZERO"
+CANONICAL_SOURCE_SELECTION = "CANONICAL_MAIN_AT_RUNNER_CHECKOUT_TIME"
+ALLOWED_WORKFLOW_EVENTS = {"push", "pull_request", "workflow_dispatch"}
 HEX40 = re.compile(r"^[0-9a-f]{40}$")
+RUN_ID = re.compile(r"^[1-9][0-9]*$")
 
 
 class PromotionError(RuntimeError):
@@ -96,6 +105,43 @@ def validate_gate_result(result: dict[str, Any], expected_source_sha: str) -> di
     return evaluation
 
 
+def validate_workflow_context(
+    result: dict[str, Any],
+    *,
+    expected_source_sha: str,
+    expected_source_tree: str,
+    github_run_id: str,
+    github_event_name: str,
+    source_selection: str,
+) -> dict[str, str]:
+    expected_source_sha = expected_source_sha.strip().lower()
+    expected_source_tree = expected_source_tree.strip().lower()
+    github_run_id = str(github_run_id).strip()
+    github_event_name = str(github_event_name).strip()
+    source_selection = str(source_selection).strip()
+
+    _require(bool(HEX40.fullmatch(expected_source_sha)), "EXPECTED_SOURCE_SHA_INVALID")
+    _require(bool(HEX40.fullmatch(expected_source_tree)), "EXPECTED_SOURCE_TREE_INVALID")
+    _require(bool(RUN_ID.fullmatch(github_run_id)), "GITHUB_RUN_ID_INVALID")
+    _require(github_event_name in ALLOWED_WORKFLOW_EVENTS, "GITHUB_EVENT_NOT_ALLOWED")
+    _require(source_selection == CANONICAL_SOURCE_SELECTION, "SOURCE_SELECTION_NOT_CANONICAL")
+    _require(result.get("source_sha") == expected_source_sha, "WORKFLOW_SOURCE_SHA_MISMATCH")
+    _require(result.get("source_tree") == expected_source_tree, "WORKFLOW_SOURCE_TREE_MISMATCH")
+    return {
+        "github_run_id": github_run_id,
+        "github_event_name": github_event_name,
+        "execution_source_sha": expected_source_sha,
+        "execution_source_tree": expected_source_tree,
+        "source_selection": source_selection,
+    }
+
+
+def validate_github_actions_environment(*, github_run_id: str, github_event_name: str) -> None:
+    _require(os.environ.get("GITHUB_ACTIONS") == "true", "GITHUB_ACTIONS_CONTEXT_REQUIRED")
+    _require(os.environ.get("GITHUB_RUN_ID") == str(github_run_id), "GITHUB_RUN_ID_ENV_MISMATCH")
+    _require(os.environ.get("GITHUB_EVENT_NAME") == str(github_event_name), "GITHUB_EVENT_ENV_MISMATCH")
+
+
 def inspect_db(db: Path, evaluation_sha256: str) -> dict[str, Any]:
     if not db.exists():
         return {
@@ -130,12 +176,29 @@ def inspect_db(db: Path, evaluation_sha256: str) -> dict[str, Any]:
         con.close()
 
 
-def promote(gate_result: Path, expected_source_sha: str, distillery_db: Path) -> dict[str, Any]:
+def promote(
+    gate_result: Path,
+    expected_source_sha: str,
+    distillery_db: Path,
+    *,
+    expected_source_tree: str,
+    github_run_id: str,
+    github_event_name: str,
+    source_selection: str,
+) -> dict[str, Any]:
     raw = gate_result.read_bytes()
     result = json.loads(raw.decode("utf-8"))
     if not isinstance(result, dict):
         raise PromotionError("GATE_RESULT_NOT_OBJECT")
     evaluation = validate_gate_result(result, expected_source_sha)
+    context = validate_workflow_context(
+        result,
+        expected_source_sha=expected_source_sha,
+        expected_source_tree=expected_source_tree,
+        github_run_id=github_run_id,
+        github_event_name=github_event_name,
+        source_selection=source_selection,
+    )
     evaluation_sha = bridge.digest_json(evaluation)
     before = inspect_db(distillery_db, evaluation_sha)
 
@@ -174,6 +237,7 @@ def promote(gate_result: Path, expected_source_sha: str, distillery_db: Path) ->
         "status": "PASS",
         "outcome": outcome,
         "source_sha": expected_source_sha,
+        **context,
         "gate_result_sha256": hashlib.sha256(raw).hexdigest(),
         "evaluation_sha256": evaluation_sha,
         "distillery_db": str(distillery_db),
@@ -198,12 +262,28 @@ def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--gate-result", type=Path, required=True)
     ap.add_argument("--expected-source-sha", required=True)
+    ap.add_argument("--expected-source-tree", required=True)
+    ap.add_argument("--github-run-id", required=True)
+    ap.add_argument("--github-event-name", required=True)
+    ap.add_argument("--source-selection", required=True)
     ap.add_argument("--distillery-db", type=Path, default=bridge.DEFAULT_DISTILLERY_DB)
     ap.add_argument("--output", type=Path, required=True)
     args = ap.parse_args()
     args.output.parent.mkdir(parents=True, exist_ok=True)
     try:
-        out = promote(args.gate_result, args.expected_source_sha.strip().lower(), args.distillery_db)
+        validate_github_actions_environment(
+            github_run_id=args.github_run_id,
+            github_event_name=args.github_event_name,
+        )
+        out = promote(
+            args.gate_result,
+            args.expected_source_sha.strip().lower(),
+            args.distillery_db,
+            expected_source_tree=args.expected_source_tree.strip().lower(),
+            github_run_id=args.github_run_id,
+            github_event_name=args.github_event_name,
+            source_selection=args.source_selection,
+        )
         rc = 0
     except Exception as exc:
         out = {
@@ -211,6 +291,11 @@ def main() -> int:
             "status": "BLOCKED",
             "reason": f"{type(exc).__name__}:{str(exc)[:1000]}",
             "source_sha": args.expected_source_sha.strip().lower(),
+            "github_run_id": str(args.github_run_id),
+            "github_event_name": str(args.github_event_name),
+            "execution_source_sha": args.expected_source_sha.strip().lower(),
+            "execution_source_tree": args.expected_source_tree.strip().lower(),
+            "source_selection": str(args.source_selection),
             "distillery_db": str(args.distillery_db),
             "network_used": False,
             "provider_calls": 0,

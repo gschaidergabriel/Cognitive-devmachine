@@ -10,6 +10,7 @@ START="$(date +%s)"
 DEADLINE="$((START + 24*3600))"
 ADMISSION_FILE="${CLAY_PROVIDER_ADMISSION_FILE:-$STATE_DIR/provider-admission.json}"
 ADMISSION_CHECKER="$ROOT/tools/free_provider_admission.py"
+SWARM_ENTRY="$ROOT/tools/run_24h_entityos_swarm_entry.py"
 export CLAY_PROVIDER_ADMISSION_FILE="$ADMISSION_FILE"
 
 load_secret_file() {
@@ -28,8 +29,15 @@ provider_in_csv() {
   esac
 }
 
+provider_still_admitted() {
+  local provider="$1"
+  python3 "$ADMISSION_CHECKER" "$ADMISSION_FILE" --provider "$provider" >/dev/null 2>&1
+}
+
 load_provider_secret_sources() {
   local provider="$1"
+  # Last deterministic control-plane check before touching this provider's secret files.
+  provider_still_admitted "$provider" || return 92
   case "$provider" in
     groq)
       load_secret_file /run/secrets/clay_provider_groq.env
@@ -182,7 +190,11 @@ while (( $(date +%s) < DEADLINE )); do
 
   unset_nonadmitted_provider_environment "$ADMITTED_PROVIDERS"
   derive_runtime_attestation_from_typed_admission "$ADMITTED_PROVIDERS"
-  load_admitted_provider_secret_sources "$ADMITTED_PROVIDERS"
+  if ! load_admitted_provider_secret_sources "$ADMITTED_PROVIDERS"; then
+    write_presecret_state "TYPED_PROVIDER_ADMISSION_CHANGED_BEFORE_SECRET_LOOKUP"
+    sleep 60
+    continue
+  fi
   # shellcheck disable=SC2046
   eval "$(normalize_provider_pool)"
 
@@ -222,16 +234,15 @@ print(json.dumps({
  'provider_credential_counts':counts,
  'dashboard_watch':True,
  'research_distillery':False,
- 'distillery_reason':'FENCED_UNTIL_ITS_OPENROUTER_AND_OTHER_PROVIDER_PATHS_HAVE_TYPED_FREE_ADMISSION'
+ 'distillery_reason':'FENCED_UNTIL_ITS_OPENROUTER_AND_OTHER_PROVIDER_PATHS_HAVE_TYPED_FREE_ADMISSION',
+ 'swarm_entry':'run_24h_entityos_swarm_entry.py'
 },indent=2))
 PY
   mv "$STATE_DIR/SUPERVISOR.json.tmp" "$STATE_DIR/SUPERVISOR.json"
 
-  # Revalidate the exact admitted set immediately before handing control to a process
-  # capable of provider network I/O. Any authority/admission drift returns to the loop.
   CURRENT_ADMITTED="$(typed_admitted_providers 2>/dev/null || true)"
   if [[ "$CURRENT_ADMITTED" == "$ADMITTED_PROVIDERS" ]] && has_provider_key; then
-    exec python3 "$ROOT/tools/run_24h_entityos_swarm.py" --hours "$HOURS" --output-dir "$STATE_DIR/active-$(date -u +%Y%m%dT%H%M%SZ)"
+    exec python3 "$SWARM_ENTRY" --hours "$HOURS" --output-dir "$STATE_DIR/active-$(date -u +%Y%m%dT%H%M%SZ)"
   fi
 
   sleep 60

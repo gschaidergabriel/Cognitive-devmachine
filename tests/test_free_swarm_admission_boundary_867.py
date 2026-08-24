@@ -28,7 +28,14 @@ SECRET_ENV_NAMES = {
     "NVIDIA2_API_KEY", "NVIDIA3_API_KEY", "OPENROUTER_API_KEY",
 }
 
-PROVIDERS=("groq","mistral","nvidia","openrouter")
+PROVIDERS = ("groq", "mistral", "nvidia", "openrouter")
+CANONICAL_ADMISSION_REL = Path("research_entity/claycode/autonomous/FREE_PROVIDER_ADMISSION.json")
+
+
+def _canonical_admission_path(root: Path) -> Path:
+    target = root / CANONICAL_ADMISSION_REL
+    target.parent.mkdir(parents=True, exist_ok=True)
+    return target
 
 
 def _authority(root: Path, epoch: str = "8.68") -> Path:
@@ -50,7 +57,7 @@ def _authority(root: Path, epoch: str = "8.68") -> Path:
 
 
 def _admission(root: Path, cost_class: str, admitted: bool, epoch: str = "8.68") -> Path:
-    target = root / "admission.json"
+    target = _canonical_admission_path(root)
     providers = {
         name: {
             "admitted": admitted,
@@ -72,7 +79,7 @@ def _admission(root: Path, cost_class: str, admitted: bool, epoch: str = "8.68")
 
 
 def _mixed_admission(root: Path, epoch: str = "8.68") -> Path:
-    target = root / "admission.json"
+    target = _canonical_admission_path(root)
     target.write_text(json.dumps({
         "schema": admission_mod.SCHEMA,
         "authority_epoch": epoch,
@@ -160,6 +167,12 @@ class FreeProviderAdmissionBoundaryTests(unittest.TestCase):
             code = asyncio.run(base.run(_args(out)))
         return code, secret_reads, network_attempts
 
+    def test_fixture_uses_same_canonical_path_as_production_loader(self) -> None:
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            adm = _admission(root, "UNKNOWN", False)
+        self.assertEqual(adm.relative_to(root), CANONICAL_ADMISSION_REL)
+
     def test_global_attestation_missing_has_zero_secret_and_network_access(self) -> None:
         with tempfile.TemporaryDirectory() as td:
             root = Path(td)
@@ -184,9 +197,20 @@ class FreeProviderAdmissionBoundaryTests(unittest.TestCase):
     def test_missing_provider_admission_file_fails_before_secret_or_network(self) -> None:
         with tempfile.TemporaryDirectory() as td:
             root = Path(td)
-            missing = root / "missing.json"
+            missing = _canonical_admission_path(root)
             inbox = _authority(root)
             code, secret_reads, network = self._run_with_tripwires(missing, root, inbox, global_attested=True)
+        self.assertEqual(code, 5)
+        self.assertEqual(secret_reads, 0)
+        self.assertEqual(network, 0)
+
+    def test_malformed_provider_admission_fails_before_secret_or_network(self) -> None:
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            malformed = _canonical_admission_path(root)
+            malformed.write_text("{not-json", encoding="utf-8")
+            inbox = _authority(root)
+            code, secret_reads, network = self._run_with_tripwires(malformed, root, inbox, global_attested=True)
         self.assertEqual(code, 5)
         self.assertEqual(secret_reads, 0)
         self.assertEqual(network, 0)
@@ -207,8 +231,35 @@ class FreeProviderAdmissionBoundaryTests(unittest.TestCase):
             with self.assertRaisesRegex(admission_mod.ProviderAdmissionError, "AUTHORITY_EPOCH_MISMATCH"):
                 admission_mod.load_provider_admission(adm, supervisor_inbox_path=inbox, root=root)
 
+    def test_authority_epoch_mismatch_has_zero_secret_and_network_access(self) -> None:
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            adm = _admission(root, "FREE", True, epoch="8.67")
+            inbox = _authority(root, epoch="8.68")
+            code, secret_reads, network = self._run_with_tripwires(adm, root, inbox, global_attested=True)
+        self.assertEqual(code, 5)
+        self.assertEqual(secret_reads, 0)
+        self.assertEqual(network, 0)
+
     def test_unlisted_provider_fails_closed(self) -> None:
         self.assertFalse(admission_mod.provider_is_admitted_free("unlisted-provider"))
+
+    def test_unlisted_provider_record_has_zero_secret_and_network_access(self) -> None:
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            adm = _admission(root, "FREE", True)
+            payload = json.loads(adm.read_text(encoding="utf-8"))
+            payload["providers"]["unlisted-provider"] = {
+                "admitted": True,
+                "cost_class": "FREE",
+                "evidence_ref": "test:unlisted:must-reject",
+            }
+            adm.write_text(json.dumps(payload), encoding="utf-8")
+            inbox = _authority(root)
+            code, secret_reads, network = self._run_with_tripwires(adm, root, inbox, global_attested=True)
+        self.assertEqual(code, 5)
+        self.assertEqual(secret_reads, 0)
+        self.assertEqual(network, 0)
 
     def test_openrouter_is_in_typed_authority_and_currently_blocked(self) -> None:
         self.assertIn("openrouter", admission_mod.ALLOWED_PROVIDERS)
@@ -284,8 +335,8 @@ class FreeProviderAdmissionBoundaryTests(unittest.TestCase):
         self.assertTrue(all(v["source"] == "typed_admission_blocked" for v in report.values()))
 
     def test_distillery_openrouter_secret_and_network_are_blind_when_unadmitted(self) -> None:
-        secret_reads=0
-        network_attempts=0
+        secret_reads = 0
+        network_attempts = 0
 
         def secret_tripwire(name: str) -> str:
             nonlocal secret_reads
@@ -301,7 +352,7 @@ class FreeProviderAdmissionBoundaryTests(unittest.TestCase):
              mock.patch.object(distillery_entry, "_ORIGINAL_REQUEST_JSON", side_effect=network_tripwire), \
              mock.patch.object(distillery_entry, "provider_is_admitted_free", return_value=False):
             self.assertEqual(distillery_entry.admitted_secret("OPENROUTER_API_KEY"), "")
-            status, headers, body = distillery_entry.admitted_request_json("openrouter","test","https://invalid.example")
+            status, headers, body = distillery_entry.admitted_request_json("openrouter", "test", "https://invalid.example")
         self.assertEqual(status, 412)
         self.assertEqual(secret_reads, 0)
         self.assertEqual(network_attempts, 0)

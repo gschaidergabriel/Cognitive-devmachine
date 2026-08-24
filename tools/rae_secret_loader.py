@@ -1,12 +1,19 @@
 #!/usr/bin/env python3
 """Credential loader for FRANK/RAE external tools.
 
-Lookup priority:
+Lookup priority for non-provider secrets:
 1. process environment
 2. designated private repository credential stores
 
+External LLM-provider credentials are different: the canonical EntityOS/HCU typed
+FREE provider admission must allow the provider *before* this module inspects the
+process environment or repository credential stores for that provider. This gives
+legacy/direct callers the same fail-closed pre-secret boundary as the guarded swarm
+and distillery entrypoints.
+
 The loader never prints secret values. Runtime secret managers can inject process
-environment variables and therefore automatically take priority over repo fallbacks.
+environment variables and therefore automatically take priority over repo fallbacks
+only after the provider has been admitted FREE.
 """
 from __future__ import annotations
 
@@ -25,9 +32,36 @@ PRIVATE_STORES = [
 ]
 NAME_RE = re.compile(r"^[A-Z][A-Z0-9_]*$")
 
+# Credential-name -> canonical typed provider identity.  Keep this deliberately
+# narrow: non-LLM tool credentials are not silently reclassified as LLM providers.
+PROVIDER_SECRET_NAMES = {
+    "GROQ_API_KEY": "groq",
+    "MISTRAL_API_KEY": "mistral",
+    "NVIDIA_API_KEY": "nvidia",
+    "NVIDIA_NIM_API_KEY": "nvidia",
+    "NGC_API_KEY": "nvidia",
+    "OPENROUTER_API_KEY": "openrouter",
+}
+
 
 class SecretError(RuntimeError):
     pass
+
+
+def _provider_secret_is_admitted(name: str) -> bool:
+    """Resolve admission without touching the credential value itself.
+
+    Import is intentionally lazy so generic non-provider secret use stays independent
+    of the EntityOS/HCU admission module. Any admission-resolution failure is a denial.
+    """
+    provider = PROVIDER_SECRET_NAMES.get(name)
+    if provider is None:
+        return True
+    try:
+        from free_provider_admission import provider_is_admitted_free
+        return bool(provider_is_admitted_free(provider))
+    except Exception:
+        return False
 
 
 def _parse_store(path: Path) -> dict[str, str]:
@@ -63,6 +97,11 @@ def _repo_secrets() -> tuple[dict[str, str], dict[str, str]]:
 def get_secret(name: str, *, required: bool = True) -> str | None:
     if not NAME_RE.fullmatch(name):
         raise SecretError(f"Invalid credential name: {name!r}")
+    provider = PROVIDER_SECRET_NAMES.get(name)
+    if provider is not None and not _provider_secret_is_admitted(name):
+        if required:
+            raise SecretError(f"Provider credential denied before lookup by typed FREE admission: {provider}")
+        return None
     env_value = os.environ.get(name)
     if env_value:
         return env_value
@@ -76,6 +115,10 @@ def get_secret(name: str, *, required: bool = True) -> str | None:
 
 
 def secret_source(name: str) -> str | None:
+    if not NAME_RE.fullmatch(name):
+        raise SecretError(f"Invalid credential name: {name!r}")
+    if name in PROVIDER_SECRET_NAMES and not _provider_secret_is_admitted(name):
+        return None
     if os.environ.get(name):
         return "process_environment"
     values, sources = _repo_secrets()
@@ -85,10 +128,18 @@ def secret_source(name: str) -> str | None:
 
 
 def status(names: Iterable[str]) -> dict[str, dict[str, object]]:
-    return {
-        name: {"configured": secret_source(name) is not None, "source": secret_source(name)}
-        for name in names
-    }
+    result: dict[str, dict[str, object]] = {}
+    for name in names:
+        source = secret_source(name)
+        provider = PROVIDER_SECRET_NAMES.get(name)
+        result[name] = {
+            "configured": source is not None,
+            "source": source,
+            "provider": provider,
+            "typed_free_admission_required": provider is not None,
+            "typed_free_admitted": _provider_secret_is_admitted(name) if provider is not None else None,
+        }
+    return result
 
 
 def main() -> None:

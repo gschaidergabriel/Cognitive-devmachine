@@ -1,5 +1,5 @@
 {
-  "schema_version": "8.67",
+  "schema_version": "8.68",
   "program_id": "entityos-hcu",
   "status": "ACTIVE",
   "stage": "ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP",
@@ -8,7 +8,7 @@
   "stage_order": ["ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP", "ENTITYOS_HCU_MULTIMODE_COMPUTE_INTEGRATION", "ENTITYOS_HCU_SCALEOUT_AND_NESTED_SIM_ACCEPTANCE", "ENTITYOS_EXACT_RUNTIME_ACCEPTANCE"],
   "owner_authority_pointer": "CLAY_EXECUTION_AUTHORITY.md",
   "active_owner_authority": "governance/CLAY_DUAL_MACHINE_EXECUTION_AUTHORITY_2026-08-24.md",
-  "authority_correction": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_67.json",
+  "authority_correction": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_68.json",
   "canonical_repository": "gschaidergabriel/clay-global-research-entity",
   "canonical_branch": "main",
   "canonical_workspace": "the artefact/",
@@ -46,7 +46,8 @@
     "external_provider_admission_rule": "TYPED_CONTROL_PLANE_ADMITTED_TRUE_AND_COST_CLASS_FREE_REQUIRED_BEFORE_PROVIDER_SECRET_LOOKUP_OR_PROVIDER_NETWORK_IO",
     "environment_attestation_is_authority": false,
     "unknown_paid_subscription_provider": "FAIL_CLOSED_BEFORE_SECRET_LOOKUP_AND_NETWORK_IO",
-    "current_provider_runtime_inventory": "ZERO_EXTERNAL_PROVIDER_WORKERS_PER_SUPERVISOR_8_67",
+    "current_provider_runtime_inventory": "HISTORICAL_UNADMITTED_EXTERNAL_PROVIDER_TRAFFIC_OBSERVED; ALL_CURRENT_EXTERNAL_LLM_PROVIDER_TRAFFIC_QUARANTINED_PER_SUPERVISOR_8_68",
+    "current_provider_runtime_credit": 0,
     "vercel_hobby_bounded_included_tier_sandbox_admitted": true,
     "remaining_monthly_sandbox_quota_directly_observed": false,
     "current_vercel_sandbox_runtime_gate": "BLOCKED_QUOTA_UNOBSERVED_BEFORE_SANDBOX_CREATE",
@@ -107,6 +108,8 @@
     "Global J-Space remains an empirical model-specific causal hypothesis.",
     "Current autonomous execution is FREE_ONLY.",
     "External LLM provider cost class must be admitted by typed EntityOS/HCU control-plane state before provider secret lookup or provider network I/O.",
+    "Historical successful unadmitted provider traffic remains append-only history and receives zero provider runtime credit.",
+    "All current external LLM-provider traffic is quarantined until FREE_SWARM_ADMISSION_BOUNDARY_RECEIPT/v1 passes at exact source.",
     "Environment FREE attestations and HTTP responses are not provider authority.",
     "Zero-cost local normal-user Linux and clay-direct-dev VPS sandbox development/testing remain authorized under active owner authority.",
     "Together and paid/subscription/unknown-cost provider execution remain forbidden.",
@@ -115,8 +118,8 @@
     "Logical module count cannot be reported as simultaneous model/decode count.",
     "Real effects remain deterministic, journaled and gated."
   ],
-  "current_frontier": "Supervisor 8.67 identifies a source-confirmed FREE_ONLY provider admission-ordering gap. Current source now contains canonical FREE_PROVIDER_ADMISSION.json, a fail-closed parser, Base controller gating before key lookup, EntityOS catalog gating before key/network, shell supervisor gating before secret-file sourcing, and tests/test_free_swarm_admission_boundary_867.py with secret/network negative tripwires. Canonical provider admission currently marks Groq, Mistral and NVIDIA UNKNOWN and not admitted, preserving zero-provider-worker runtime truth. No exact runtime test has yet been observed for this new boundary, so provider runtime credit remains zero. Next exact gate is FREE_SWARM_ADMISSION_BOUNDARY_RECEIPT/v1 on an exposed authorized zero-cost local or clay-direct-dev surface, proving secret_lookup_count=0 and network_attempt_count=0 for missing global compatibility attestation, missing/malformed provider admission, UNKNOWN, PAID, SUBSCRIPTION and authority mismatch. In parallel, donor 0b205 InferenceReceipt/v4 rejection-boundary tests still require exact execution before executor rebind. Whole EntityOS/HCU, full HCU, J-Space model, training and whole-product credit remain zero.",
-  "go_contract": "Every go refreshes current main/newest owner and supervisor authority; fixes the highest-information nonduplicate executable/control blocker; advances or explicitly no-changes HCU/Entry and Global-J-Space/GWT free-only readiness; uses authorized zero-cost local or clay-direct-dev execution only when actually exposed; requires canonical atomic lease before unusual intervention; and never inflates source/component evidence into broader runtime PASS.",
+  "current_frontier": "Supervisor 8.68 records an executed unadmitted external-provider control breach without proven monetary spend. Historical metrics show successful Groq, NVIDIA and OpenRouter traffic, but canonical typed provider authority did not establish FREE before those calls; provider runtime credit therefore remains zero and all current external LLM-provider worker/catalog/chat/synthesis/reviewer traffic is quarantined. Canonical FREE_PROVIDER_ADMISSION now covers Groq, Mistral, NVIDIA and OpenRouter and all remain UNKNOWN/not-admitted. Current source contains pre-secret/pre-network typed admission gates and deterministic tripwire tests. Next exact gate is FREE_SWARM_ADMISSION_BOUNDARY_RECEIPT/v1 on exact current source using an exposed authorized zero-cost local normal-user or clay-direct-dev surface, proving secret_lookup_count=0 and network_attempt_count=0 for missing/malformed admission, UNKNOWN, PAID, SUBSCRIPTION, authority mismatch and unlisted provider. Retained donor gschaidergabriel/clay-global-research-entity#1263 live head observed during this go is 2badebe78db868c56ef39f0a32d198282cffcd88; retained executor gschaidergabriel/Dr.-Unterweger#810 live head remains bb7324d2a21ffc143c241c652a31524c5be4c9d8. Continue zero-cost local HCU/J-Space causal instrumentation while provider network is quarantined; whole EntityOS/HCU, full HCU, J-Space model and training credit remain zero.",
+  "go_contract": "Every go refreshes current main/newest owner and supervisor authority; checks the clay-direct-dev bridge/sandbox first when an actual bridge tool is exposed; fixes the highest-information nonduplicate executable/control blocker; advances or explicitly no-changes HCU/Entry and Global-J-Space/GWT free-only readiness; uses authorized zero-cost local or clay-direct-dev execution only when actually exposed; requires canonical atomic lease before unusual intervention; and never inflates source/component evidence into broader runtime PASS.",
   "runtime_credit": {
     "component_runtime_credit": ["JSPACE_FAMILY_SPLIT_ONLY", "ENTRY_CANONICALIZATION_MANIFEST_BOUND_V2_ONLY", "FUNCTION_RUNTIME_DIAGNOSTIC_EXACT_EXECUTOR_NO_SANDBOX_SCOPE_ONLY"],
     "free_swarm_provider_admission_runtime_credit": 0,
@@ -128,6 +131,6 @@
     "whole_product_pass": false
   },
   "latest_component_receipt": "research_entity/continuity/receipts/2026-08-24_GO_866_INFERENCE_V4_ATTESTATION_JSPACE_REENTRY_GPT56SOL_1728P0700.json",
-  "all_worker_protocol": "research_entity/claycode/CLAYCODE_ALL_WORKERS_EXECUTION_DIRECTIVE_8_67.md",
+  "all_worker_protocol": "research_entity/claycode/CLAYCODE_ALL_WORKERS_EXECUTION_DIRECTIVE_8_68.md",
   "legacy_scope": "Xeno/XCU are transitional compatibility/research aliases only. Mini Entity/MicroEntity, ClayVerse and Frank remain historical implementation or donor provenance unless explicitly re-admitted."
 }

@@ -6,6 +6,7 @@ from pathlib import Path
 import sys
 import tempfile
 import unittest
+from unittest import mock
 
 ROOT = Path(__file__).resolve().parents[1]
 TOOLS = ROOT / "tools"
@@ -74,6 +75,13 @@ class ProviderAdmissionV1Tests(unittest.TestCase):
         admission_path.write_text(json.dumps(admission_payload), encoding="utf-8")
         return td, root, admission_path, inbox_path
 
+    def _patch_canonical_authority(self, root: Path, admission_path: Path, inbox_path: Path):
+        return (
+            mock.patch.object(admission, "ROOT", root),
+            mock.patch.object(admission, "ADMISSION_PATH", admission_path),
+            mock.patch.object(admission, "SUPERVISOR_INBOX_PATH", inbox_path),
+        )
+
     def test_current_supervisor_outranks_lagging_bootstrap_cache(self):
         td, root, admission_path, inbox_path = self.make_repo(
             provider_overrides={"groq": {"admitted": True, "cost_class": "FREE"}}
@@ -87,7 +95,33 @@ class ProviderAdmissionV1Tests(unittest.TestCase):
             payload = admission.load_provider_admission(
                 admission_path, supervisor_inbox_path=inbox_path, root=root
             )
-            self.assertTrue(admission.provider_is_admitted_free("groq", payload))
+            self.assertTrue(payload["providers"]["groq"]["admitted"])
+            p_root, p_admission, p_inbox = self._patch_canonical_authority(
+                root, admission_path, inbox_path
+            )
+            with p_root, p_admission, p_inbox:
+                self.assertTrue(admission.provider_is_admitted_free("groq"))
+        finally:
+            td.cleanup()
+
+    def test_caller_supplied_payload_cannot_self_admit(self):
+        td, root, admission_path, inbox_path = self.make_repo()
+        try:
+            forged = {
+                "providers": {
+                    "groq": {
+                        "admitted": True,
+                        "cost_class": "FREE",
+                        "evidence_ref": "caller:forged",
+                    }
+                }
+            }
+            p_root, p_admission, p_inbox = self._patch_canonical_authority(
+                root, admission_path, inbox_path
+            )
+            with p_root, p_admission, p_inbox:
+                self.assertFalse(admission.provider_is_admitted_free("groq", forged))
+                self.assertNotIn("groq", admission.admitted_provider_names(forged))
         finally:
             td.cleanup()
 

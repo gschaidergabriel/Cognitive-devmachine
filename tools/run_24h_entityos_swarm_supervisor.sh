@@ -4,45 +4,28 @@ set -Eeuo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT"
 export PYTHONPATH="$ROOT/tools${PYTHONPATH:+:$PYTHONPATH}"
-
 STATE_DIR="/artifacts/clay-entityos-swarm"
 mkdir -p "$STATE_DIR"
 START="$(date +%s)"
-DEADLINE="$((START + 24*3600))"
+DEADLINE="${CLAY_SWARM_DEADLINE_EPOCH:-$((START + 24*3600))}"
 ADMISSION_TOOL="$ROOT/tools/free_provider_admission.py"
 
-provider_admitted() {
-  local provider="$1"
-  python3 "$ADMISSION_TOOL" --provider "$provider" >/dev/null 2>&1
-}
+provider_admitted(){ python3 "$ADMISSION_TOOL" --provider "$1" >/dev/null 2>&1; }
 
-# Compatibility flags are derived only from canonical typed admission. Inherited
-# caller attestations are cleared so they cannot self-admit a provider.
-typed_admission_compat_flags() {
+typed_admission_compat_flags(){
   unset CLAY_FREE_ONLY_ATTESTED CLAY_GROQ_FREE_ATTESTED CLAY_MISTRAL_FREE_ATTESTED CLAY_NVIDIA_FREE_ATTESTED || true
   local any=0
   if provider_admitted groq; then export CLAY_GROQ_FREE_ATTESTED=1; any=1; fi
   if provider_admitted mistral; then export CLAY_MISTRAL_FREE_ATTESTED=1; any=1; fi
   if provider_admitted nvidia; then export CLAY_NVIDIA_FREE_ATTESTED=1; any=1; fi
-  if (( any )); then export CLAY_FREE_ONLY_ATTESTED=1; fi
+  if provider_admitted openrouter; then any=1; fi
+  (( any )) && export CLAY_FREE_ONLY_ATTESTED=1 || true
 }
 
-load_secret_file() {
-  local f="$1"
-  [[ -r "$f" ]] || return 0
-  set +x
-  # shellcheck disable=SC1090
-  set -a; source "$f"; set +a
-}
+load_secret_file(){ local f="$1"; [[ -r "$f" ]] || return 0; set +x; set -a; source "$f"; set +a; }
+all_llm_providers_admitted(){ provider_admitted groq && provider_admitted mistral && provider_admitted nvidia && provider_admitted openrouter; }
 
-all_llm_providers_admitted() {
-  provider_admitted groq && provider_admitted mistral && provider_admitted nvidia
-}
-
-# Mixed provider files cannot be inspected to learn which secrets they contain
-# without violating the boundary. Aggregate files are therefore read only when
-# every LLM provider they may contain is already canonically FREE-admitted.
-load_admitted_secret_sources() {
+load_admitted_secret_sources(){
   if all_llm_providers_admitted; then
     load_secret_file /run/secrets/clay_provider.env
     load_secret_file /artifacts/.clay_provider.env
@@ -50,119 +33,108 @@ load_admitted_secret_sources() {
     load_secret_file "$ROOT/.clay_provider.env"
     load_secret_file "$ROOT/research_entity/private/API_TOKENS.env"
   fi
-  if provider_admitted groq; then
-    load_secret_file "$ROOT/research_entity/private/GROQ_API.env"
-  fi
+  provider_admitted groq && load_secret_file "$ROOT/research_entity/private/GROQ_API.env" || true
 }
 
-normalize_provider_pool() {
-  python3 - <<'PY'
-import os, shlex
-from free_provider_admission import load_provider_admission, provider_is_admitted_free, ProviderAdmissionError
-try:
-    admission=load_provider_admission()
-except ProviderAdmissionError:
-    raise SystemExit(0)
+normalize_provider_pool(){
+python3 - <<'PY'
+import os,shlex
+from free_provider_admission import load_provider_admission,provider_is_admitted_free,ProviderAdmissionError
+try:a=load_provider_admission()
+except ProviderAdmissionError:raise SystemExit(0)
 families={
  'groq':('GROQ_API_KEYS',['GROQ_API_KEY','GROQ2_API_KEY','GROQ3_API_KEY']),
  'mistral':('MISTRAL_API_KEYS',['MISTRAL_API_KEY','MISTRAL2_API_KEY','MISTRAL3_API_KEY']),
- 'nvidia':('NVIDIA_API_KEYS',['NVIDIA_API_KEY','NVIDIA_NIM_API_KEY','NVIDIA2_API_KEY','NVIDIA3_API_KEY','NGC_API_KEY']),
-}
+ 'nvidia':('NVIDIA_API_KEYS',['NVIDIA_API_KEY','NVIDIA_NIM_API_KEY','NVIDIA2_API_KEY','NVIDIA3_API_KEY','NGC_API_KEY'])}
 for provider,(target,names) in families.items():
-    if not provider_is_admitted_free(provider, admission):
-        continue
-    vals=[]
-    for n in names:
-        v=os.getenv(n,'').strip()
-        if v and v not in vals: vals.append(v)
-    for v in [x.strip() for x in os.getenv(target,'').replace(';',',').split(',') if x.strip()]:
-        if v not in vals: vals.append(v)
-    if vals: print('export %s=%s' % (target, shlex.quote(','.join(vals))))
-if provider_is_admitted_free('nvidia', admission) and not os.getenv('NVIDIA_API_KEY') and os.getenv('NVIDIA_NIM_API_KEY'):
-    print('export NVIDIA_API_KEY='+shlex.quote(os.environ['NVIDIA_NIM_API_KEY']))
+ if not provider_is_admitted_free(provider,a):continue
+ vals=[]
+ for n in names:
+  v=os.getenv(n,'').strip()
+  if v and v not in vals:vals.append(v)
+ for v in [x.strip() for x in os.getenv(target,'').replace(';',',').split(',') if x.strip()]:
+  if v not in vals:vals.append(v)
+ if vals:print('export %s=%s'%(target,shlex.quote(','.join(vals))))
 PY
 }
 
-has_admitted_provider_key() {
-  if provider_admitted groq && [[ -n "${GROQ_API_KEY:-}${GROQ_API_KEYS:-}" ]]; then return 0; fi
-  if provider_admitted mistral && [[ -n "${MISTRAL_API_KEY:-}${MISTRAL_API_KEYS:-}" ]]; then return 0; fi
-  if provider_admitted nvidia && [[ -n "${NVIDIA_API_KEY:-}${NVIDIA_API_KEYS:-}${NGC_API_KEY:-}${NVIDIA_NIM_API_KEY:-}" ]]; then return 0; fi
+has_admitted_provider_key(){
+  provider_admitted groq && [[ -n "${GROQ_API_KEY:-}${GROQ_API_KEYS:-}" ]] && return 0
+  provider_admitted mistral && [[ -n "${MISTRAL_API_KEY:-}${MISTRAL_API_KEYS:-}" ]] && return 0
+  provider_admitted nvidia && [[ -n "${NVIDIA_API_KEY:-}${NVIDIA_API_KEYS:-}${NGC_API_KEY:-}${NVIDIA_NIM_API_KEY:-}" ]] && return 0
   return 1
 }
 
-start_dashboard() {
-  local evaluator="$ROOT/free swarm/evaluate.py"
-  [[ -f "$evaluator" ]] || return 0
-  if ! pgrep -f '[f]ree swarm/evaluate.py.*--watch' >/dev/null 2>&1; then
-    nohup python3 "$evaluator" \
-      --repo "$ROOT" --artifacts "$STATE_DIR" \
-      --watch --hours 24 --interval-seconds 60 --publish --publish-min-seconds 900 \
-      >"$STATE_DIR/dashboard.log" 2>&1 </dev/null &
-    echo "$!" > "$STATE_DIR/dashboard.pid"
-  fi
+start_local_model(){
+  curl -fsS --max-time 2 http://127.0.0.1:8088/health >/dev/null 2>&1 && return 0
+  pgrep -f '[l]ocal_research_model_server.sh' >/dev/null 2>&1 && return 0
+  [[ -x "$ROOT/tools/local_research_model_server.sh" ]] || chmod +x "$ROOT/tools/local_research_model_server.sh" 2>/dev/null || true
+  [[ -f "$ROOT/tools/local_research_model_server.sh" ]] || return 0
+  nohup bash "$ROOT/tools/local_research_model_server.sh" >"$STATE_DIR/local-model-bootstrap.log" 2>&1 </dev/null & echo $! >"$STATE_DIR/local-model-bootstrap.pid"
 }
 
-start_distillery() {
-  local runner="$ROOT/tools/run_research_distillery_entry.py"
-  [[ -f "$runner" ]] || return 0
-  if ! pgrep -f '[r]un_research_distillery_entry.py' >/dev/null 2>&1; then
-    nohup python3 "$runner" --hours 24 --sleep-seconds 3 \
-      >"$STATE_DIR/distillery.log" 2>&1 </dev/null &
-    echo "$!" > "$STATE_DIR/distillery.pid"
-  fi
+start_dashboard(){
+  local x="$ROOT/free swarm/evaluate.py"; [[ -f "$x" ]] || return 0
+  pgrep -f '[f]ree swarm/evaluate.py.*--watch' >/dev/null 2>&1 || {
+    nohup python3 "$x" --repo "$ROOT" --artifacts "$STATE_DIR" --watch --hours 24 --interval-seconds 60 >"$STATE_DIR/dashboard.log" 2>&1 </dev/null & echo $! >"$STATE_DIR/dashboard.pid"; }
 }
 
-typed_admission_compat_flags
-load_admitted_secret_sources
-# shellcheck disable=SC2046
-eval "$(normalize_provider_pool)"
-start_dashboard
-start_distillery
+start_distillery(){
+  local x="$ROOT/tools/run_research_distillery_local.py"; [[ -f "$x" ]] || x="$ROOT/tools/run_research_distillery_entry.py"
+  pgrep -f '[r]un_research_distillery_(local|entry).py' >/dev/null 2>&1 || {
+    nohup python3 "$x" --hours 24 --sleep-seconds 3 >"$STATE_DIR/distillery.log" 2>&1 </dev/null & echo $! >"$STATE_DIR/distillery.pid"; }
+}
+
+start_forge(){
+  local x="$ROOT/tools/run_free_evidence_forge.py"; [[ -f "$x" ]] || return 0
+  pgrep -f '[r]un_free_evidence_forge.py' >/dev/null 2>&1 || {
+    nohup python3 "$x" --hours 24 --sleep-seconds 20 --discovery-parallel 8 --local-parallel 4 --e2b-parallel 20 >"$STATE_DIR/forge.log" 2>&1 </dev/null & echo $! >"$STATE_DIR/forge.pid"; }
+}
+
+start_go_swarm_if_admitted(){
+  [[ "${CLAY_FREE_ONLY_ATTESTED:-}" == "1" ]] || return 0
+  has_admitted_provider_key || return 0
+  pgrep -f '[r]un_24h_entityos_swarm.py' >/dev/null 2>&1 && return 0
+  local now rem hours out
+  now=$(date +%s); rem=$((DEADLINE-now)); (( rem>0 )) || return 0
+  hours=$(python3 - <<PY
+print(max(0.01,$rem/3600.0))
+PY
+)
+  out="$STATE_DIR/active-$(date -u +%Y%m%dT%H%M%SZ)"
+  nohup python3 "$ROOT/tools/run_24h_entityos_swarm.py" --hours "$hours" --output-dir "$out" >"$STATE_DIR/swarm.log" 2>&1 </dev/null & echo $! >"$STATE_DIR/swarm.pid"
+}
+
+stop_unadmitted_go_swarm(){
+  if ! has_admitted_provider_key; then
+    pgrep -f '[r]un_24h_entityos_swarm.py' | while read -r pid; do kill "$pid" 2>/dev/null || true; done
+  fi
+}
 
 while (( $(date +%s) < DEADLINE )); do
   typed_admission_compat_flags
   load_admitted_secret_sources
-  # shellcheck disable=SC2046
   eval "$(normalize_provider_pool)"
+  start_local_model
+  start_dashboard
   start_distillery
-
-  NOW="$(date +%s)"
-  REMAINING="$((DEADLINE - NOW))"
-  HOURS="$(python3 - <<PY
-print(max(0.01, $REMAINING/3600.0))
-PY
-)"
-
-  python3 - <<PY > "$STATE_DIR/SUPERVISOR.json.tmp"
-import json,os,datetime
-from free_provider_admission import load_provider_admission, provider_is_admitted_free, ProviderAdmissionError
-split=lambda x:[v.strip() for v in os.getenv(x,'').replace(';',',').split(',') if v.strip()]
-def nset(*vals): return len(set(v for v in vals if v))
-try:
-    admission=load_provider_admission()
-    admitted={p:provider_is_admitted_free(p,admission) for p in ('groq','mistral','nvidia')}
-    epoch=admission.get('authority_epoch')
-except ProviderAdmissionError:
-    admitted={p:False for p in ('groq','mistral','nvidia')}; epoch=None
-providers={
- 'groq': bool(admitted['groq'] and (os.getenv('GROQ_API_KEY') or split('GROQ_API_KEYS'))),
- 'mistral': bool(admitted['mistral'] and (os.getenv('MISTRAL_API_KEY') or split('MISTRAL_API_KEYS'))),
- 'nvidia': bool(admitted['nvidia'] and (os.getenv('NVIDIA_API_KEY') or split('NVIDIA_API_KEYS') or os.getenv('NGC_API_KEY') or os.getenv('NVIDIA_NIM_API_KEY'))),
-}
-counts={
- 'groq': nset(*split('GROQ_API_KEYS'),os.getenv('GROQ_API_KEY')) if admitted['groq'] else 0,
- 'mistral': nset(*split('MISTRAL_API_KEYS'),os.getenv('MISTRAL_API_KEY')) if admitted['mistral'] else 0,
- 'nvidia': nset(*split('NVIDIA_API_KEYS'),os.getenv('NVIDIA_API_KEY'),os.getenv('NGC_API_KEY'),os.getenv('NVIDIA_NIM_API_KEY')) if admitted['nvidia'] else 0,
-}
-print(json.dumps({'schema':'CLAY_ENTITYOS_SWARM_SUPERVISOR/v6','observed_at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'repo_root':os.getcwd(),'remaining_seconds':$REMAINING,'typed_provider_admission_epoch':epoch,'providers_admitted_free':admitted,'provider_credentials_present_after_admission':providers,'provider_credential_counts_after_admission':counts,'dashboard_watch':True,'research_distillery':True,'distillery_entrypoint':'run_research_distillery_entry.py'},indent=2))
+  start_forge
+  stop_unadmitted_go_swarm
+  start_go_swarm_if_admitted
+  NOW=$(date +%s); REMAINING=$((DEADLINE-NOW))
+  python3 - <<PY >"$STATE_DIR/SUPERVISOR.json.tmp"
+import datetime,json,os,subprocess,urllib.request
+from free_provider_admission import admission_snapshot
+snap=admission_snapshot()
+def running(pattern):
+ p=subprocess.run(['pgrep','-f',pattern],stdout=subprocess.PIPE,stderr=subprocess.DEVNULL,text=True);return bool(p.stdout.strip())
+def local_health():
+ try:
+  with urllib.request.urlopen('http://127.0.0.1:8088/health',timeout=1.2) as r:return 200<=int(r.status)<300
+ except Exception:return False
+print(json.dumps({'schema':'CLAY_ENTITYOS_SWARM_SUPERVISOR/v8','observed_at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'repo_root':os.getcwd(),'remaining_seconds':$REMAINING,'provider_admission':snap,'go_swarm_running':running('run_24h_entityos_swarm.py'),'local_research_model_ready':local_health(),'distillery_running':running('run_research_distillery_(local|entry).py'),'forge_running':running('run_free_evidence_forge.py'),'dashboard_running':running('free swarm/evaluate.py.*--watch'),'policy':'EXTERNAL_LLM_SWARM_ONLY_WHEN_TYPED_FREE_ADMITTED; LOOPBACK_4B+PUBLIC_FORGE_CONTINUE_DURING_QUARANTINE'},indent=2))
 PY
   mv "$STATE_DIR/SUPERVISOR.json.tmp" "$STATE_DIR/SUPERVISOR.json"
-
-  if [[ "${CLAY_FREE_ONLY_ATTESTED:-}" == "1" ]] && has_admitted_provider_key; then
-    exec python3 "$ROOT/tools/run_24h_entityos_swarm.py" --hours "$HOURS" --output-dir "$STATE_DIR/active-$(date -u +%Y%m%dT%H%M%SZ)"
-  fi
-
-  sleep 60
+  sleep 30
 done
-
-printf '{"schema":"CLAY_ENTITYOS_SWARM_SUPERVISOR/v6","state":"EXPIRED_WITHOUT_CANONICALLY_FREE_ADMITTED_PROVIDER"}\n' > "$STATE_DIR/SUPERVISOR.json"
+printf '{"schema":"CLAY_ENTITYOS_SWARM_SUPERVISOR/v8","state":"EXPIRED"}\n' >"$STATE_DIR/SUPERVISOR.json"

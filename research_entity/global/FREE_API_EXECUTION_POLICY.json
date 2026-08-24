@@ -596,6 +596,16 @@
     "executable_evidence": "test_text_request_rejects_active_list_subclass_before_iteration",
     "counterhypothesis": "A list subclass is passive request data because isinstance(messages, list) succeeds; falsified locally because tuple(messages) invoked its overridden __iter__, whose LookupError and credential-like text escaped before routing."
   },
+  "wide_message_pre_snapshot_boundary": {
+    "checked_at": "2026-08-24",
+    "claim": "An exact built-in message dict whose cardinality differs from the closed two-field role/content schema is rejected with passive len checks before execution-lock acquisition and again immediately before snapshot copying. Structurally impossible wide objects are never duplicated by dict(message).",
+    "sources": [
+      "https://docs.python.org/3/library/functions.html#len",
+      "https://docs.python.org/3/library/functions.html#dict"
+    ],
+    "executable_evidence": "test_wide_message_object_is_rejected_before_execution_lock",
+    "counterhypothesis": "Snapshotting before schema validation is memory-safe because the outer message list is cardinality-bounded; falsified locally because one exact dict with 10002 fields was fully copied under the execution lock before its impossible field set was rejected."
+  },
   "response_context_cleanup_boundary": {
     "checked_at": "2026-08-20",
     "claim": "A valid non-200 HTTP status is classified and its safety effects are committed before response-context cleanup; an Exception raised by adapter __exit__ cannot downgrade an already classified HTTP 402 or remove its payment latch.",
@@ -653,6 +663,7 @@
     "Requests above the transport envelope are rejected before json.dumps can materialize the document; the preflight exactly counts the fixed request envelope, per-message objects, list separators and default ensure_ascii escape widths, while the serialized UTF-8 byte check remains defense in depth.",
     "Exact built-in message lists above 54792 entries are rejected before caller-data snapshotting and before the process execution lock because required role alternation, separators and envelope structure prove that no valid conversation of that cardinality can fit 2000000 bytes.",
     "The message-cardinality bound is rechecked at the snapshot boundary so mutation after early admission cannot turn a small caller-owned list into an oversized allocation under the execution lock.",
+    "Exact built-in message objects whose cardinality differs from the two-field role/content schema are rejected before lock acquisition and rechecked immediately before snapshot copying; wide caller dicts are never duplicated under the execution lock.",
     "Text-chat model, role and content values are exact built-in strings; polymorphic string subclasses fail closed before their methods, credential lookup, JSON serialization or network access can run.",
     "Text-chat messages and message objects are exact built-in list and dict containers with exact built-in string field names; polymorphic container subclasses fail closed before iteration or mapping behavior can run.",
     "The text-chat request contains at least one message; empty conversations are rejected before routing, credential use or network access.",

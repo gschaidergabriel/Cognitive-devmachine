@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
-"""Source-attested envelope for the two fixed local Trigger-1 Qwen runtimes.
+"""Source-attested envelope for fixed local Trigger-1 Qwen runtimes.
 
 The wrapper is intentionally not a generic command runner. It can execute only the
-terminal positive-control or the non-terminal intermediate Qwen discriminator. It
-requires the same clean Git identity before and after execution and, if a promotion
-candidate is emitted, replaces its local runtime receipt with a receipt that binds
-the original executor receipt to source, executor, Python and result identities.
+fixed terminal positive-control, the legacy non-terminal intermediate discriminator,
+or the stronger causal intermediate discriminator. It requires the same clean Git
+identity before and after execution. If a direct promotion candidate is emitted, it
+replaces the local runtime receipt with a receipt binding source, executor, Python,
+result identity, and (for the causal mode) the promotion bridge bytes.
 """
 from __future__ import annotations
 
@@ -23,8 +24,10 @@ ROOT = Path(__file__).resolve().parents[1]
 MODES = {
     "terminal": ROOT / "tools" / "trigger1_local_qwen06_activation_api_execute.py",
     "intermediate": ROOT / "tools" / "trigger1_local_qwen06_intermediate_api_execute.py",
+    "causal": ROOT / "tools" / "trigger1_local_qwen06_intermediate_execute.py",
 }
-BINDING_SCHEMA = "CLAY_TRIGGER1_LOCAL_QWEN_SOURCE_EXECUTION_BINDING/v1"
+CAUSAL_BRIDGE = ROOT / "tools" / "trigger1_intermediate_promotion_bridge.py"
+BINDING_SCHEMA = "CLAY_TRIGGER1_LOCAL_QWEN_SOURCE_EXECUTION_BINDING/v2"
 
 
 def canonical_sha(value: Any) -> str:
@@ -54,6 +57,8 @@ def bind_candidate(
     mode: str,
     source: dict[str, Any],
     executor: Path,
+    *,
+    bridge: Path | None = None,
 ) -> str:
     candidate = _load_object(candidate_path)
     result = _load_object(result_path)
@@ -79,8 +84,12 @@ def bind_candidate(
         "schema": BINDING_SCHEMA,
         "mode": mode,
         "source_identity": source,
+        "envelope_path": str(Path(__file__).resolve().relative_to(ROOT)),
+        "envelope_sha256": sha256_file(Path(__file__).resolve()),
         "executor_path": str(executor.relative_to(ROOT)),
         "executor_sha256": sha256_file(executor),
+        "bridge_path": str(bridge.relative_to(ROOT)) if bridge is not None else None,
+        "bridge_sha256": sha256_file(bridge) if bridge is not None else None,
         "python_executable": sys.executable,
         "python_executable_sha256": sha256_file(Path(sys.executable)),
         "candidate_pre_binding_sha256": sha256_file(candidate_path),
@@ -92,6 +101,9 @@ def bind_candidate(
     binding["binding_sha256"] = binding_sha
 
     identity.update(source)
+    identity["executor_sha256"] = binding["executor_sha256"]
+    if binding["bridge_sha256"] is not None:
+        identity["promotion_bridge_sha256"] = binding["bridge_sha256"]
     target["executor_local_runtime_receipt_sha256"] = original_runtime_receipt
     target["source_execution_binding_sha256"] = binding_sha
     target["local_runtime_execution_receipt_sha256"] = binding_sha
@@ -117,6 +129,29 @@ def bind_candidate(
     return binding_sha
 
 
+def _run_causal_bridge(out: Path, result_path: Path, intermediate_candidate: Path) -> tuple[int, Path]:
+    direct_candidate = out / "trigger1_direct_steering_candidate.json"
+    if direct_candidate.exists():
+        direct_candidate.unlink()
+    proc = subprocess.run(
+        [
+            sys.executable,
+            str(CAUSAL_BRIDGE),
+            "--result",
+            str(result_path),
+            "--candidate",
+            str(intermediate_candidate),
+            "--output",
+            str(direct_candidate),
+        ],
+        cwd=str(ROOT),
+        check=False,
+    )
+    if proc.returncode != 0 and direct_candidate.exists():
+        direct_candidate.unlink()
+    return int(proc.returncode), direct_candidate
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--mode", choices=sorted(MODES), required=True)
@@ -126,9 +161,13 @@ def main() -> int:
 
     out = Path(args.output_dir)
     out.mkdir(parents=True, exist_ok=True)
-    result_path = out / "trigger1_local_activation_api_result.json"
-    candidate_path = out / "trigger1_direct_steering_candidate.json"
     executor = MODES[args.mode]
+
+    causal = args.mode == "causal"
+    result_path = out / ("trigger1_intermediate_result.json" if causal else "trigger1_local_activation_api_result.json")
+    raw_candidate_path = out / ("trigger1_intermediate_candidate.json" if causal else "trigger1_direct_steering_candidate.json")
+    direct_candidate_path = out / "trigger1_direct_steering_candidate.json"
+    compatibility_result_path = out / "trigger1_local_activation_api_result.json"
 
     pre = require_clean_source(ROOT)
     proc = subprocess.run(
@@ -136,18 +175,53 @@ def main() -> int:
         cwd=str(ROOT),
         check=False,
     )
-    post = require_clean_source(ROOT)
-    if pre != post:
-        if candidate_path.exists():
-            candidate_path.unlink()
+    post_executor = require_clean_source(ROOT)
+    if pre != post_executor:
+        for path in {raw_candidate_path, direct_candidate_path}:
+            if path.exists():
+                path.unlink()
         raise RuntimeError("SOURCE_CHANGED_DURING_LOCAL_QWEN_EXECUTION")
 
-    if candidate_path.exists():
+    bridge_rc = 0
+    candidate_for_binding = raw_candidate_path
+    bridge_for_binding: Path | None = None
+    if causal:
+        if proc.returncode == 0 and not raw_candidate_path.is_file():
+            raise RuntimeError("CAUSAL_PASS_WITHOUT_INTERMEDIATE_CANDIDATE_FAIL_CLOSED")
+        if raw_candidate_path.is_file():
+            if not result_path.is_file():
+                raw_candidate_path.unlink()
+                raise RuntimeError("CAUSAL_CANDIDATE_WITHOUT_RESULT_FAIL_CLOSED")
+            bridge_rc, direct_candidate_path = _run_causal_bridge(out, result_path, raw_candidate_path)
+            candidate_for_binding = direct_candidate_path
+            bridge_for_binding = CAUSAL_BRIDGE
+        post_bridge = require_clean_source(ROOT)
+        if pre != post_bridge:
+            if direct_candidate_path.exists():
+                direct_candidate_path.unlink()
+            raise RuntimeError("SOURCE_CHANGED_DURING_CAUSAL_PROMOTION_BRIDGE")
+
+    if candidate_for_binding.exists():
         if not result_path.is_file():
-            candidate_path.unlink()
+            candidate_for_binding.unlink()
             raise RuntimeError("CANDIDATE_WITHOUT_RESULT_FAIL_CLOSED")
-        bind_candidate(candidate_path, result_path, args.mode, pre, executor)
-    return int(proc.returncode)
+        bind_candidate(
+            candidate_for_binding,
+            result_path,
+            args.mode,
+            pre,
+            executor,
+            bridge=bridge_for_binding,
+        )
+
+    if causal and result_path.is_file():
+        compatibility_result_path.write_bytes(result_path.read_bytes())
+
+    if proc.returncode != 0:
+        return int(proc.returncode)
+    if causal and bridge_rc != 0:
+        return int(bridge_rc)
+    return 0
 
 
 if __name__ == "__main__":

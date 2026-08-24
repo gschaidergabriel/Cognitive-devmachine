@@ -119,6 +119,7 @@ jobs:
         shell: bash
         env:
           SOURCE_SHA: ${{ steps.source.outputs.source_sha }}
+          SOURCE_TREE: ${{ steps.source.outputs.source_tree }}
           GUARD_RC: ${{ steps.promotion_guard.outputs.guard_rc }}
           GATE_RC: ${{ steps.gate.outputs.gate_rc }}
         run: |
@@ -138,6 +139,10 @@ jobs:
             python3 tools/promote_forge_distillery_runtime_gate.py \
               --gate-result /tmp/clay-go871-forge-distillery/result.json \
               --expected-source-sha "$SOURCE_SHA" \
+              --expected-source-tree "$SOURCE_TREE" \
+              --github-run-id "$GITHUB_RUN_ID" \
+              --github-event-name "$GITHUB_EVENT_NAME" \
+              --source-selection CANONICAL_MAIN_AT_RUNNER_CHECKOUT_TIME \
               --distillery-db /artifacts/clay-entityos-swarm/distillery/distillery.sqlite3 \
               --output "$OUT" > "$LOG" 2>&1
             rc=$?
@@ -155,30 +160,52 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const fs = require('fs');
+            const crypto = require('crypto');
             const p = '/tmp/clay-go871-forge-distillery/result.json';
             const promotionPath = '/tmp/clay-go871-forge-distillery/promotion.json';
+            const canonicalSelection = 'CANONICAL_MAIN_AT_RUNNER_CHECKOUT_TIME';
+            const expectedRunId = String(context.runId);
+            const expectedEvent = context.eventName;
+            const expectedSha = process.env.EXECUTION_SOURCE_SHA || null;
+            const expectedTree = process.env.EXECUTION_SOURCE_TREE || null;
             let body;
             if (fs.existsSync(p)) {
-              const parsed = JSON.parse(fs.readFileSync(p, 'utf8'));
-              parsed.github_run_id = String(context.runId);
-              parsed.github_event_name = context.eventName;
-              parsed.execution_source_sha = process.env.EXECUTION_SOURCE_SHA || null;
-              parsed.execution_source_tree = process.env.EXECUTION_SOURCE_TREE || null;
-              parsed.source_selection = 'CANONICAL_MAIN_AT_RUNNER_CHECKOUT_TIME';
-              parsed.live_distillery_promotion = fs.existsSync(promotionPath)
+              const raw = fs.readFileSync(p);
+              const prePublishGateSha256 = crypto.createHash('sha256').update(raw).digest('hex');
+              const parsed = JSON.parse(raw.toString('utf8'));
+              const promotion = fs.existsSync(promotionPath)
                 ? JSON.parse(fs.readFileSync(promotionPath, 'utf8'))
                 : null;
+              if (promotion && promotion.status === 'PASS') {
+                const mismatches = [];
+                if (promotion.github_run_id !== expectedRunId) mismatches.push('github_run_id');
+                if (promotion.github_event_name !== expectedEvent) mismatches.push('github_event_name');
+                if (promotion.execution_source_sha !== expectedSha) mismatches.push('execution_source_sha');
+                if (promotion.execution_source_tree !== expectedTree) mismatches.push('execution_source_tree');
+                if (promotion.source_selection !== canonicalSelection) mismatches.push('source_selection');
+                if (promotion.gate_result_sha256 !== prePublishGateSha256) mismatches.push('gate_result_sha256');
+                if (mismatches.length) {
+                  throw new Error(`LIVE_PROMOTION_CONTEXT_MISMATCH:${mismatches.join(',')}`);
+                }
+              }
+              parsed.github_run_id = expectedRunId;
+              parsed.github_event_name = expectedEvent;
+              parsed.execution_source_sha = expectedSha;
+              parsed.execution_source_tree = expectedTree;
+              parsed.source_selection = canonicalSelection;
+              parsed.pre_publish_gate_sha256 = prePublishGateSha256;
+              parsed.live_distillery_promotion = promotion;
               body = JSON.stringify(parsed, null, 2) + '\n';
             } else {
               body = JSON.stringify({
                 schema:'CLAY_FORGE_DISTILLERY_EXACT_CURRENT_RUNTIME_GATE/v2',
                 status:'WORKFLOW_RESULT_MISSING',
                 pass:false,
-                github_run_id:String(context.runId),
-                github_event_name:context.eventName,
-                execution_source_sha:process.env.EXECUTION_SOURCE_SHA || null,
-                execution_source_tree:process.env.EXECUTION_SOURCE_TREE || null,
-                source_selection:'CANONICAL_MAIN_AT_RUNNER_CHECKOUT_TIME',
+                github_run_id:expectedRunId,
+                github_event_name:expectedEvent,
+                execution_source_sha:expectedSha,
+                execution_source_tree:expectedTree,
+                source_selection:canonicalSelection,
                 live_distillery_promotion:fs.existsSync(promotionPath)
                   ? JSON.parse(fs.readFileSync(promotionPath, 'utf8'))
                   : null,

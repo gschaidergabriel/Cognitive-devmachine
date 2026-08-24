@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import copy
 import unittest
 
 from tools import trigger1_jspace_promotion_gate as gate

@@ -106,6 +106,18 @@ This closes a scientific-independence/evidence-typing bypass without weakening t
 
 Receipt: `research_entity/continuity/receipts/2026-08-24_GO_872_V4_METRIC_MODALITY_FAILCLOSED_GPT56SOL_2333P0700.json`.
 
+### GO 23:48 receipt-bound derivation-independence closure
+
+Issue **#1657** exposed a second-order scientific-evidence defect: merely hardcoding `uses_evaluation_output_labels=false` in the promotion bridge could become a stale false assertion if the upstream executor later changed. Current `main` now closes that gap at the evidence boundary rather than by trusting downstream metadata.
+
+`tools/trigger1_local_qwen06_intermediate_execute.py` emits versioned `TRIGGER1_VECTOR_DERIVATION_LABEL_INDEPENDENCE/v1` evidence after deriving the semantic approve/disapprove direction and before resolving evaluation output labels. The receipt binds the exact derivation input family and records both `evaluation_output_labels_resolved_before_derivation=false` and `uses_evaluation_output_labels=false`.
+
+`tools/trigger1_intermediate_promotion_bridge.py` fails closed unless that upstream receipt exists, has the expected schema, matches the derivation prompt-family digest, proves output-label resolution occurred after derivation, and proves evaluation output labels were not used. The direct candidate copies the proven value and binds a digest of the upstream independence receipt instead of manufacturing the fact downstream.
+
+`tests/test_trigger1_intermediate_bridge_gate_v4.py` locks the positive path plus missing-receipt, `true`, family-mismatch, and post-bridge field-removal negatives. The existing bridge/gate contract fixture was also synchronized to the receipt-bound ABI. Commits include `309f17274299bdf9ab6ff8de3c881c9a1d732cea`, `537f5f6a74957573117f3f0e16bab14c02fb62a8`, `e8609e69fe8cec39e5d14774cf325ac0ec016ddc`, and `0ad125d6504fcd2d0e06514b0dfb918054190620`.
+
+This resolves `TRIGGER1_BRIDGE_GATE_SCHEMA_SEMANTIC_MISMATCH` at source + regression-contract scope. It does not mint local-Qwen runtime, model-specific J-Space, HCU-full, training, canonical-semantics or whole-product credit. No new unusual intervention was executed because this macrocycle exposes no reproducible shared immutable trigger identity beyond minute precision.
+
 Until a lease-admitted successor dispatch yields a repository-bound exact-source receipt, local Qwen3-0.6B model/J-Space runtime promotion remains zero. A positive result can become a bounded internal-intervention candidate only at its exact source/model/runtime/intervention/control scope; it cannot mint canonical EntityOS/HCU, full HCU or training credit by itself.
 
 ## Typed Entry / HCU authority convergence
@@ -139,11 +151,11 @@ A source file, test, workflow, deployment, provider HTTP success, token count or
 ## Current blockers / next exact gates
 
 1. Execute the **current** Forge -> Distillery workflow revision containing live promotion on canonical `main`; require disposable gate PASS plus `live_distillery_promotion.status=PASS`, exactly one new packet and positive token delta on first promotion, then replay delta 0. The older queued run 32742535392 is insufficient for this new scope.
-2. Execute the new Trigger-1 v4 metric-modality regression plus the existing promotion-gate regression on exact-current source; preserve the fail-closed invariant before any later J-Space promotion review.
+2. Execute the Trigger-1 v4 metric-modality regression, receipt-bound intermediate-bridge/gate regressions, and existing promotion-gate regression on exact-current source; preserve every fail-closed invariant before any later J-Space promotion review.
 3. If that witness or live promotion fails, repair only the measured isolated-executor/bridge/promotion blocker; never weaken evidence admission.
 4. For Trigger-1/J-Space, obtain a reproducible shared macrocycle identity, create the canonical atomic claim with create-only semantics, then dispatch exactly one successor issue containing that claim's `trigger_key:`. Without that chain: `COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT`.
 5. On the lease-admitted Qwen run, persist the strongest-intermediate exact-source runtime receipt and classify runner/preflight/dependency/model failure explicitly.
-6. Require all six matched controls, derivation/holdout disjointness, counterbalanced label mapping, wrong-layer and lesion/rescue; reject terminal final-norm/`lm_head`/output-projection and evaluation-label-derived shortcuts as J-Space goal credit.
+6. Require all six matched controls, derivation/holdout disjointness, receipt-bound evaluation-label independence, counterbalanced label mapping, wrong-layer and lesion/rescue; reject terminal final-norm/`lm_head`/output-projection and evaluation-label-derived shortcuts as J-Space goal credit.
 7. Continue one canonical Typed Entry -> verified loader -> actual model execution -> InferenceReceipt -> model-specific J-Space causal-control chain through donor #1263.
 8. Keep external model calls secondary and behind exact FREE economic provenance. No paid/Together fallback.
 9. Optimize executable delta -> evidence-qualified Forge acceptance -> Distillery admission before increasing raw swarm scale.

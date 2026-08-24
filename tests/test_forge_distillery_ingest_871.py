@@ -12,6 +12,7 @@ spec.loader.exec_module(bridge)
 
 
 def accepted_row(**overrides):
+    source_head = "a" * 40
     row = {
         "schema": "CLAY_FORGE_DELTA_EVALUATION/v1",
         "delta_id": "d-1",
@@ -20,7 +21,7 @@ def accepted_row(**overrides):
         "model": "qwen/qwen3-0.6b-04-28:free",
         "role": "RUNTIME",
         "worker_sha": "b" * 64,
-        "source_repo_head": "a" * 40,
+        "source_repo_head": source_head,
         "evaluation_repo_head": "c" * 40,
         "source_scope": "EXACT_WORKER_PROMPT_HEAD",
         "evaluated_at": "2026-08-24T14:13:00+00:00",
@@ -39,6 +40,22 @@ def accepted_row(**overrides):
         "requires_rebase_to_evaluation_head": True,
         "proposal_hypothesis": "candidate narration must not become measured packet text",
         "falsifier": "candidate falsifier also remains metadata-only",
+        "execution_admission": {
+            "schema": "CLAY_FORGE_EXECUTION_ADMISSION/v1",
+            "source_scope": "EXACT_WORKER_PROMPT_HEAD",
+            "source_identity_admitted": True,
+            "source_head": source_head,
+            "source_tree": "e" * 40,
+            "all_commands_admitted": True,
+            "candidate_is_canonical_truth": False,
+            "backend": {
+                "admitted": True,
+                "backend": "bubblewrap_unshare_all",
+                "network_namespace": "ISOLATED",
+                "secret_environment_inherited": False,
+                "host_secret_paths_exposed": False,
+            },
+        },
     }
     row.update(overrides)
     return row
@@ -57,7 +74,7 @@ class BridgeTests(unittest.TestCase):
     def write_rows(self, *rows):
         self.eval.write_text("\n".join(json.dumps(r) for r in rows) + "\n", encoding="utf-8")
 
-    def test_exact_accepted_evaluation_becomes_one_packet(self):
+    def test_exact_evidence_qualified_accept_becomes_one_packet(self):
         self.write_rows(accepted_row())
         out = bridge.ingest(self.eval, self.db)
         self.assertEqual(out["admitted"], 1)
@@ -70,6 +87,23 @@ class BridgeTests(unittest.TestCase):
         self.assertNotIn("candidate falsifier", packet_text)
         self.assertIn("proposal_hypothesis_candidate_only", meta)
         self.assertIn("EXECUTION_EVIDENCE_ONLY_NOT_JSPACE_CAUSAL_CREDIT", packet_text)
+
+    def test_nominal_accept_without_execution_admission_fails_closed(self):
+        row = accepted_row()
+        row.pop("execution_admission")
+        self.write_rows(row)
+        out = bridge.ingest(self.eval, self.db)
+        self.assertEqual(out["admitted"], 0)
+        self.assertEqual(out["rejected"].get("EVIDENCE_EXECUTION_ADMISSION_MISSING"), 1)
+        self.assertEqual(out["accepted_dataset_tokens_counter"], 0)
+
+    def test_execution_source_head_mismatch_fails_closed(self):
+        row = accepted_row()
+        row["execution_admission"]["source_head"] = "f" * 40
+        self.write_rows(row)
+        out = bridge.ingest(self.eval, self.db)
+        self.assertEqual(out["admitted"], 0)
+        self.assertEqual(out["rejected"].get("EVIDENCE_EXECUTION_SOURCE_HEAD_MISMATCH"), 1)
 
     def test_idempotent_duplicate_does_not_double_count(self):
         self.write_rows(accepted_row())

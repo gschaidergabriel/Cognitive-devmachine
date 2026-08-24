@@ -44,6 +44,13 @@ def valid_candidate() -> dict:
             "layer_start": 10,
             "layer_end": 20,
         },
+        "vector_derivation": {
+            "method": "ACTIVATION_CONTRAST_MEAN",
+            "uses_output_head_weights": False,
+            "uses_holdout_data": False,
+            "derivation_family_id": "derivation-family",
+            "derivation_receipt_sha256": HEX64,
+        },
         "controls": controls,
         "calibration": {"family_id": "cal", "seeds": [1, 2]},
         "holdout": {
@@ -52,6 +59,9 @@ def valid_candidate() -> dict:
             "reproducible_directional_effect": True,
             "strongest_counterexample_recorded": True,
             "analysis_receipt_sha256": HEX64,
+            "evaluation_independent_of_vector_derivation": True,
+            "metric_definition_sha256": HEX64,
+            "metric_uses_output_tokens": False,
         },
         "transport": {"hosted_prompt_only": False},
         "target": {
@@ -88,6 +98,7 @@ class Trigger1PromotionGateTests(unittest.TestCase):
     def test_exact_instrumented_free_external_api_candidate_can_reach_both_candidate_verdicts(self):
         verdict = gate.adjudicate(valid_candidate())
         self.assertTrue(verdict["mechanism_runtime_vector_credit_candidate"])
+        self.assertTrue(verdict["scientifically_independent_vector_candidate"])
         self.assertTrue(verdict["owner_trigger1_goal_credit_candidate"])
         self.assertTrue(verdict["owner_trigger1_direct_free_api_model_credit_candidate"])
         self.assertFalse(verdict["canonical_credit_minted"])
@@ -95,6 +106,7 @@ class Trigger1PromotionGateTests(unittest.TestCase):
     def test_exact_zero_cost_loopback_api_cvec_candidate_can_reach_goal(self):
         verdict = gate.adjudicate(valid_local_api_candidate())
         self.assertTrue(verdict["mechanism_runtime_vector_credit_candidate"])
+        self.assertTrue(verdict["scientifically_independent_vector_candidate"])
         self.assertTrue(verdict["owner_trigger1_goal_credit_candidate"])
         self.assertEqual([], verdict["owner_target_failures"])
 
@@ -104,6 +116,7 @@ class Trigger1PromotionGateTests(unittest.TestCase):
         candidate["intervention"]["activation_site"] = "model.model.norm:output:last_token"
         verdict = gate.adjudicate(candidate)
         self.assertFalse(verdict["mechanism_runtime_vector_credit_candidate"])
+        self.assertFalse(verdict["scientifically_independent_vector_candidate"])
         self.assertFalse(verdict["owner_trigger1_goal_credit_candidate"])
         self.assertIn(
             "TERMINAL_OUTPUT_PROJECTION_SHORTCUT_NOT_JSPACE_CAUSAL_EVIDENCE",
@@ -119,6 +132,42 @@ class Trigger1PromotionGateTests(unittest.TestCase):
         self.assertIn(
             "TERMINAL_OUTPUT_PROJECTION_SHORTCUT_NOT_JSPACE_CAUSAL_EVIDENCE",
             verdict["failures"],
+        )
+
+    def test_output_head_derived_vector_is_mechanism_only(self):
+        candidate = valid_local_api_candidate()
+        candidate["vector_derivation"]["method"] = "LM_HEAD_READOUT_DIFFERENCE"
+        candidate["vector_derivation"]["uses_output_head_weights"] = True
+        verdict = gate.adjudicate(candidate)
+        self.assertTrue(verdict["mechanism_runtime_vector_credit_candidate"])
+        self.assertFalse(verdict["scientifically_independent_vector_candidate"])
+        self.assertFalse(verdict["owner_trigger1_goal_credit_candidate"])
+        self.assertIn(
+            "OUTPUT_HEAD_DERIVED_VECTOR_CANNOT_SATISFY_JSPACE_GOAL",
+            verdict["scientific_independence_failures"],
+        )
+
+    def test_vector_derivation_may_not_use_holdout(self):
+        candidate = valid_local_api_candidate()
+        candidate["vector_derivation"]["uses_holdout_data"] = True
+        verdict = gate.adjudicate(candidate)
+        self.assertTrue(verdict["mechanism_runtime_vector_credit_candidate"])
+        self.assertFalse(verdict["owner_trigger1_goal_credit_candidate"])
+        self.assertIn(
+            "VECTOR_DERIVATION_MUST_NOT_USE_HOLDOUT_DATA",
+            verdict["scientific_independence_failures"],
+        )
+
+    def test_token_metric_requires_counterbalanced_mapping(self):
+        candidate = valid_local_api_candidate()
+        candidate["holdout"]["metric_uses_output_tokens"] = True
+        candidate["holdout"]["label_mapping_counterbalanced"] = False
+        verdict = gate.adjudicate(candidate)
+        self.assertTrue(verdict["mechanism_runtime_vector_credit_candidate"])
+        self.assertFalse(verdict["owner_trigger1_goal_credit_candidate"])
+        self.assertIn(
+            "TOKEN_OUTPUT_METRIC_REQUIRES_COUNTERBALANCED_LABEL_MAPPING",
+            verdict["scientific_independence_failures"],
         )
 
     def test_hosted_prompt_only_fails_closed(self):
@@ -192,6 +241,7 @@ class Trigger1PromotionGateTests(unittest.TestCase):
             result = gate.scan_batch(Path(tmp))
         self.assertEqual(result["candidate_files_seen"], 1)
         self.assertTrue(result["mechanism_runtime_vector_credit_candidate"])
+        self.assertTrue(result["scientifically_independent_vector_candidate"])
         self.assertTrue(result["owner_trigger1_goal_credit_candidate"])
         self.assertTrue(result["owner_trigger1_direct_free_api_model_credit_candidate"])
 

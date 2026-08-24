@@ -1,0 +1,61 @@
+{
+  "schema": "CLAY_GO_RESEARCH_DELTA_RECEIPT/v1",
+  "authority_epoch": "8.72",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6-Sol",
+  "trigger": "go",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "source_base_main": "d78b1f67f1d99aedbc1ff4b3c37c19b758f71823",
+  "branch": "gpt56sol/go-872-trigger1-timestamp-semantics-20260824-2334-v2",
+  "superseded_duplicate_candidates": [1678, 1699],
+  "observed_parallel_fusion": "Canonical main independently absorbed the broader legacy timestamp/digest semantic-alias and damaged-legacy-filename race fences during this macrocycle. Those broader candidate lanes were closed instead of duplicated.",
+  "finding": "The remaining nonduplicate Trigger1 coordination gap is semantic timestamp validation: regex-shaped canonical timestamp keys can contain impossible calendar values, and regex-shaped legacy date/offset aliases can raise ValueError inside the race scan instead of producing a deterministic non-alias result.",
+  "counterhypothesis": "Regex shape is sufficient because canonical producers and historical filenames are always semantically valid.",
+  "adjudication": "Rejected. The pre-intervention atomic-lease gate is a fail-closed trust boundary and must not rely on upstream perfect calendar/offset formatting or intact historical inputs.",
+  "delta": [
+    "Calendar-validate canonical ts_<timestamp>__p_<sha256> keys before claim-path admission.",
+    "Map impossible canonical timestamp values to TRIGGER_KEY_NONCANONICAL.",
+    "Treat impossible legacy calendar/offset encodings deterministically as non-alias rather than allowing a parser exception to escape the migration/race scan.",
+    "Preserve the current CLAY_TRIGGER1_LOCAL_QWEN06_INTERMEDIATE_CONTRASTIVE/v1 experiment contract and all already-fused legacy/damaged-file fences."
+  ],
+  "exact_source_identity": {
+    "gate_git_blob_sha1": "c4d25aa79024245b0af9f18640495d875b1e8d94",
+    "test_git_blob_sha1": "22d327a29d830e980efb987216dc2b647e863e24",
+    "readme_git_blob_sha1": "0cf0d9276a20161b52b73a9e3148bd9e0a5cf82a"
+  },
+  "test_status": {
+    "focused_regression_definitions_written": true,
+    "exact_branch_head_execution_observed": false,
+    "reason": "No exact-head repository runner result was observed at receipt-write time; source/regression-definition evidence is not promoted to runtime evidence."
+  },
+  "coordination": {
+    "shared_immutable_request_or_turn_id_exposed": false,
+    "available_user_message_timestamp": "2026-08-24T23:34+07:00",
+    "available_user_message_timestamp_precision": "MINUTE_ONLY",
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_experiments_executed": 0
+  },
+  "go_tracks": {
+    "track_a": "ADVANCED_BY_HARDENING_THE_SINGLE_RETAINED_TRIGGER1_PRE_INTERVENTION_ATOMIC_LEASE_GATE",
+    "track_b": "HCU_NO_CHANGE_WITH_REASON: concurrent current-main work already advanced the retained HCU/J-Space routing and no second nonduplicate Typed Entry/HCU primitive was justified; this delta only hardens shared macrocycle/provenance admission semantics.",
+    "track_c": "ADVANCED_GLOBAL_JSPACE_GWT_EXECUTION_READINESS_BY_REMOVING_AMBIGUOUS_TIMESTAMP_PARSER_BEHAVIOR_WITH_ZERO_MODEL_INTERVENTIONS"
+  },
+  "credits": {
+    "provider_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "hcu_full": 0,
+    "jspace_model": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "provider_and_effect_safety": {
+    "provider_secret_lookup_performed": false,
+    "external_llm_provider_network_performed": false,
+    "paid_or_unknown_cost_execution_performed": false,
+    "new_production_effect_performed": false
+  },
+  "next_exact_gate": "Re-enter current main and overlapping PRs. If the timestamp-semantics delta remains nonduplicate, run the focused atomic-lease regressions on the exact PR head/current admitted execution surface and fuse narrowly. A future Qwen/J-Space intervention still requires an already-created reproducible canonical atomic claim for that exact user macrocycle."
+}

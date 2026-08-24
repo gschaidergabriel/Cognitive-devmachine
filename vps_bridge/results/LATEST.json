@@ -1,17 +1,20 @@
 {
   "schema": "CLAY_VPS_RECEIPT/v4",
-  "command_id": "free-swarm-postfix-live-20260824T1716",
-  "command_sha256": "f6c748b0014e9592a4c78f4d75e2f54ea5886e436a763cf178cc6a26940a6c71",
-  "started_at": "2026-08-24T09:52:14.940835+00:00",
-  "finished_at": "2026-08-24T09:52:17.102954+00:00",
+  "command_id": "research-distillery-sync-20260824T1727",
+  "command_sha256": "b319fa6cc0e013cecad8530d0f8270e9c9718a34aafbe05319fbc49faef4e80e",
+  "started_at": "2026-08-24T10:37:46.268456+00:00",
+  "finished_at": "2026-08-24T10:37:48.341270+00:00",
   "status": "PASS",
   "exit_code": 0,
-  "op": "exec",
-  "stdout_sha256": "0488a15b9c1680b340657f60938505dc20357e1dfe83af1cdd4c85836e4250db",
+  "op": "canonical_sync",
+  "stdout_sha256": "0b60526e51684e0a6fbfc958c3d96ca549807aa32205a2ff101006d6e58662ed",
   "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-  "stdout_tail": "RUN_DIR=/artifacts/clay-entityos-swarm/active-20260824T095103Z\nrecords 7\nproviders {'groq': 5, 'nvidia': 2}\nstatuses {'200': 4, '429': 2, '404': 1}\nsuccess_models {'openai/gpt-oss-120b': 2, 'nvidia/nemotron-3-ultra-550b-a55b': 1, 'openai/gpt-oss-20b': 1}\ninput_tokens 26636\noutput_tokens 4800\n--- status ---\n{\n  \"schema\": \"CLAY_FREE_GO_SWARM_STATUS/v1\",\n  \"updated_at\": \"2026-08-24T09:52:03.601658+00:00\",\n  \"remaining_seconds\": 86339,\n  \"providers\": {\n    \"groq\": {\n      \"keys_total\": 1,\n      \"keys_enabled\": 1,\n      \"models_enabled\": [\n        \"openai/gpt-oss-120b\",\n        \"qwen/qwen3.6-27b\",\n        \"openai/gpt-oss-20b\"\n      ],\n      \"target_concurrency\": 1,\n      \"max_concurrency\": 12,\n      \"active\": 1,\n      \"cooldown_seconds\": 0.0,\n      \"requests\": 3,\n      \"successes\": 1,\n      \"rate_limits\": 1,\n      \"errors\": 0\n    },\n    \"nvidia\": {\n      \"keys_total\": 1,\n      \"keys_enabled\": 1,\n      \"models_enabled\": [\n        \"nvidia/nemotron-3-ultra-550b-a55b\",\n        \"nvidia/llama-3.3-nemotron-super-49b-v1\",\n        \"nvidia/llama-3.1-nemotron-ultra-253b-v1\",\n        \"nvidia/nemotron-4-340b-instruct\",\n        \"nvidia/nemotron-3-super-120b-a12b\",\n        \"openai/gpt-oss-120b\",\n        \"nvidia/nemotron-3-nano-omni-30b-a3b-reasoning\",\n        \"ai21labs/jamba-1.5-large-instruct\",\n        \"mistralai/mistral-large-2-instruct\",\n        \"meta/llama-3.2-90b-vision-instruct\",\n        \"meta/llama-3.1-70b-instruct\",\n        \"meta/llama-3.3-70b-instruct\",\n        \"writer/palmyra-creative-122b\",\n        \"deepseek-ai/deepseek-v4-flash-0731\",\n        \"mistralai/mistral-large\",\n        \"nvidia/llama-3.1-nemotron-51b-instruct\",\n        \"nvidia/llama-3.3-nemotron-super-49b-v1.5\",\n        \"ibm/granite-34b-code-instruct\",\n        \"nvidia/nemotron-3-nano-30b-a3b\",\n        \"nvidia/nemotron-3.5-lightning-30b-a3b\",\n        \"nvidia/nemotron-nano-3-30b-a3b\",\n        \"mistralai/codestral-22b-instruct-v0.1\",\n        \"bigcode/starcoder2-15b\",\n        \"nv-mistralai/mistral-nemo-12b-instruct\",\n        \"nvidia/nemotron-nano-12b-v2-vl\",\n        \"meta/codellama-70b\",\n        \"meta/llama2-70b\",\n        \"nvidia/llama3-chatqa-1.5-70b\",\n        \"writer/palmyra-fin-70b-32k\",\n        \"writer/palmyra-med-70b\",\n        \"writer/palmyra-med-70b-32k\",\n        \"databricks/dbrx-instruct\",\n        \"microsoft/phi-3-vision-128k-instruct\",\n        \"microsoft/phi-3.5-moe-instruct\",\n        \"mistralai/mistral-nemotron\",\n        \"nvidia/nemotron-parse\",\n        \"google/gemma-4-31b-it\",\n        \"nvidia/ising-calibration-1.5-31b\",\n        \"meta/muse-glimmer-30b\",\n        \"mistralai/mixtral-8x22b-v0.1\",\n        \"nvidia/neva-22b\",\n        \"openai/gpt-oss-20b\",\n        \"google/gemma-3-12b-it\"\n      ],\n      \"target_concurrency\": 1,\n      \"max_concurrency\": 12,\n      \"active\": 1,\n      \"cooldown_seconds\": 0.0,\n      \"requests\": 3,\n      \"successes\": 1,\n      \"rate_limits\": 0,\n      \"errors\": 0\n    }\n  }\n}\n",
+  "stdout_tail": "21646016da98fbc361d70f7b1503130668a98cb2\n",
   "stderr_tail": "",
-  "meta": {},
+  "meta": {
+    "head": "21646016da98fbc361d70f7b1503130668a98cb2",
+    "ref": "main"
+  },
   "execution_boundary": "ROOT_INSIDE_ROOTLESS_PODMAN_OR_EXPLICIT_REPO_CONTROL_OP",
   "canonical_credit_minted": 0
 }

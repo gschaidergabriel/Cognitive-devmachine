@@ -79,6 +79,14 @@ A single owner-only issue dispatcher, `.github/workflows/trigger1-v2-local-fastp
 
 Source/regression evidence is not model runtime evidence. A positive midlayer result can become a model-specific internal-intervention promotion candidate only at its exact bound scope; it still does not mint canonical EntityOS/HCU, full J-Space-model or training credit by itself.
 
+## GO 8.72 lease-hardening delta — 2026-08-24 23:32 +07
+
+Re-entry found a coordination gap in the retained Trigger-1 owner-issue lane: current `main` can enter the unusual Qwen midlayer intervention after owner/title authentication without first proving the canonical one-experiment lease for the exact `go` macrocycle. Open PR #1656 attempts the repair but is successor-stale and its duplicate scan only catches exact string-equal `trigger_key` values.
+
+The successor branch `go-20260824-trigger1-lease-successor-gpt56sol-2332` rebases the repair onto current `main` and adds fail-closed migration/race detection for the historical alternate timestamp/timezone full-hash and shortened-hash claim encodings already present in the repository, plus shortened RID-hash legacy identities. It also binds source HEAD/tree, claim digest, claimant, experiment and claim-main ancestry before intervention; records the lease in the runtime receipt; creates a claim-result sidecar after execution/blocking; and aligns the no-candidate fallback with the current `CLAY_TRIGGER1_JSPACE_PROMOTION_GATE/v4` schema.
+
+Deterministic focused evidence: the original #1656 lease suite was reproduced at **7/7 PASS**; the successor exact test definition contains **11** focused cases, including legacy full-hash, short-hash, distinct-timestamp noncollision, existing-result and required-field failures. This is source/component evidence only. No Qwen model was loaded and no unusual intervention was executed in this `go` because no shared immutable request/turn identity or second-precision immutable user-message timestamp was exposed; coordination therefore remains `COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT` for this turn.
+
 ## Evidence credit
 
 Current bounded credit remains conservative:
@@ -102,14 +110,15 @@ A source file, test, workflow, deployment, provider HTTP success, token count or
 
 ## Current blockers / next exact gates
 
-1. Observe a terminal self-hosted runtime-reconciliation receipt on current authority and exact source identity.
-2. Observe the exact-current Forge -> Distillery successor witness: qualified Forge accept = 1 -> exactly one Distillery packet -> `accepted_dataset_tokens > 0` -> replay delta = 0.
-3. If the Forge witness fails, repair the **measured** isolated-executor/bridge blocker only; do not weaken evidence admission.
-4. Observe owner dispatch #1643 and persist the fused nonterminal midlayer Qwen3-0.6B exact-source runtime receipt; classify any preflight/dependency/runtime failure explicitly.
-5. Require all six matched controls plus disjoint holdout; require activation-derived nonterminal vector construction and reject final-norm/`lm_head`/output-projection shortcuts as mechanism credit.
-6. Reduce `PATCH_REJECTED` / `NEEDS_IMPLEMENTATION` by improving source-bound patch synthesis/repair and disposable-worktree execution, never by weakening acceptance.
-7. Continue one canonical Typed Entry -> verified loader -> actual model execution -> InferenceReceipt -> model-specific J-Space causal-control chain.
-8. Keep every external model call behind exact FREE economic provenance. No paid/Together fallback.
+1. Fuse the current-head Trigger-1 atomic-lease successor only after exact branch tests/diff are green/nonduplicate; retire #1656 as superseded rather than merging its stale branch wholesale.
+2. Observe a terminal self-hosted runtime-reconciliation receipt on current authority and exact source identity.
+3. Observe the exact-current Forge -> Distillery successor witness: qualified Forge accept = 1 -> exactly one Distillery packet -> `accepted_dataset_tokens > 0` -> replay delta = 0.
+4. If the Forge witness fails, repair the **measured** isolated-executor/bridge blocker only; do not weaken evidence admission.
+5. On a future `go` with a valid canonical atomic lease, dispatch the fused nonterminal midlayer Qwen3-0.6B exact-source runtime; classify any preflight/dependency/runtime failure explicitly and persist both runtime and claim-result receipts.
+6. Require all six matched controls plus disjoint holdout; require activation-derived nonterminal vector construction and reject final-norm/`lm_head`/output-projection shortcuts as mechanism credit.
+7. Reduce `PATCH_REJECTED` / `NEEDS_IMPLEMENTATION` by improving source-bound patch synthesis/repair and disposable-worktree execution, never by weakening acceptance.
+8. Continue one canonical Typed Entry -> verified loader -> actual model execution -> InferenceReceipt -> model-specific J-Space causal-control chain.
+9. Keep every external model call behind exact FREE economic provenance. No paid/Together fallback.
 
 ## Evidence discipline and reentry
 

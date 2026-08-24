@@ -64,6 +64,9 @@ def qualified_evaluation() -> dict:
         "target_blob_identities": {"tools/ingest_forge_accepts_into_distillery.py": TARGET_BLOB},
         "requires_rebase_to_evaluation_head": False,
         "execution_admission": admission,
+        "witness_producer": promotion.EXPECTED_PRODUCER,
+        "witness_external_provider_calls": 0,
+        "witness_paid_fallback_attempt_count": 0,
     }
 
 
@@ -76,7 +79,16 @@ def passing_gate(evaluation: dict | None = None) -> dict:
         "network_used": False,
         "provider_calls": 0,
         "paid_fallback_attempt_count": 0,
+        "forge_accept_origin_required": "REAL_SAFE_FORGE_VALIDATOR",
+        "forge_producer_accept_observed": True,
+        "forge_producer": {
+            "rc": 0,
+            "producer_path": "tools/run_go872_forge_single_candidate.py",
+            "safe_forge_path": "tools/run_free_evidence_forge_safe_871.py",
+            "artifact_root_scope": "WITNESS_OWNED_DISPOSABLE",
+        },
         "acceptance_witness": {
+            "safe_forge_producer_accept": 1,
             "nominal_without_execution_admission_rejected": True,
             "exact_evidence_qualified_accept": 1,
             "first_new_distillery_packets": 1,
@@ -112,10 +124,29 @@ class PromotionSourceGuards872(unittest.TestCase):
         with self.assertRaises(promotion.PromotionError):
             promotion.validate_gate_result(result, SOURCE)
 
+    def test_legacy_synthetic_v2_pass_shape_is_rejected(self):
+        result = passing_gate()
+        result["schema"] = "CLAY_FORGE_DISTILLERY_EXACT_CURRENT_RUNTIME_GATE/v2"
+        result["status"] = "PASS_EXACT_CURRENT_1_TO_1_TO_NONZERO_REPLAY_ZERO"
+        with self.assertRaisesRegex(promotion.PromotionError, "WRONG_GATE_SCHEMA"):
+            promotion.validate_gate_result(result, SOURCE)
+
+    def test_v3_without_real_safe_forge_origin_is_rejected(self):
+        result = passing_gate()
+        result.pop("forge_accept_origin_required")
+        with self.assertRaisesRegex(promotion.PromotionError, "FORGE_PRODUCER_ORIGIN_POLICY_MISSING"):
+            promotion.validate_gate_result(result, SOURCE)
+
     def test_nested_execution_admission_must_remain_evidence_qualified(self):
         evaluation = qualified_evaluation()
         evaluation["execution_admission"]["all_commands_admitted"] = False
         with self.assertRaises(promotion.PromotionError):
+            promotion.validate_gate_result(passing_gate(evaluation), SOURCE)
+
+    def test_nested_evaluation_producer_marker_must_match_real_safe_forge(self):
+        evaluation = qualified_evaluation()
+        evaluation["witness_producer"] = "synthetic.witness"
+        with self.assertRaisesRegex(promotion.PromotionError, "FORGE_EVALUATION_PRODUCER_MARKER_MISMATCH"):
             promotion.validate_gate_result(passing_gate(evaluation), SOURCE)
 
     def test_live_first_promotion_then_immediate_replay_is_idempotent(self):
@@ -129,6 +160,7 @@ class PromotionSourceGuards872(unittest.TestCase):
 
             self.assertEqual(out["status"], "PASS")
             self.assertEqual(out["outcome"], "PROMOTED_NEW_PACKET")
+            self.assertEqual(out["producer_origin"], "REAL_SAFE_FORGE_VALIDATOR")
             self.assertEqual(out["first"]["admitted"], 1)
             self.assertEqual(out["first"]["duplicates"], 0)
             self.assertGreater(out["first_token_delta"], 0)

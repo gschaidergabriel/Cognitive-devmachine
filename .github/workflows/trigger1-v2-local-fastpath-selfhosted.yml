@@ -42,7 +42,6 @@ jobs:
           OMP_NUM_THREADS: '2'
           MKL_NUM_THREADS: '2'
           TOKENIZERS_PARALLELISM: 'false'
-          CLAY_TRIGGER1_LOCAL_CACHE: ${{ env.HOME }}/.cache/clay-trigger1-local
         run: |
           set -u
           out="${RUNNER_TEMP}/clay-trigger1-v2-${GITHUB_RUN_ID}"

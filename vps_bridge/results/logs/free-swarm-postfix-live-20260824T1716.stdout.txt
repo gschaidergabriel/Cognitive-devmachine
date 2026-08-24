@@ -1,0 +1,89 @@
+RUN_DIR=/artifacts/clay-entityos-swarm/active-20260824T095103Z
+records 7
+providers {'groq': 5, 'nvidia': 2}
+statuses {'200': 4, '429': 2, '404': 1}
+success_models {'openai/gpt-oss-120b': 2, 'nvidia/nemotron-3-ultra-550b-a55b': 1, 'openai/gpt-oss-20b': 1}
+input_tokens 26636
+output_tokens 4800
+--- status ---
+{
+  "schema": "CLAY_FREE_GO_SWARM_STATUS/v1",
+  "updated_at": "2026-08-24T09:52:03.601658+00:00",
+  "remaining_seconds": 86339,
+  "providers": {
+    "groq": {
+      "keys_total": 1,
+      "keys_enabled": 1,
+      "models_enabled": [
+        "openai/gpt-oss-120b",
+        "qwen/qwen3.6-27b",
+        "openai/gpt-oss-20b"
+      ],
+      "target_concurrency": 1,
+      "max_concurrency": 12,
+      "active": 1,
+      "cooldown_seconds": 0.0,
+      "requests": 3,
+      "successes": 1,
+      "rate_limits": 1,
+      "errors": 0
+    },
+    "nvidia": {
+      "keys_total": 1,
+      "keys_enabled": 1,
+      "models_enabled": [
+        "nvidia/nemotron-3-ultra-550b-a55b",
+        "nvidia/llama-3.3-nemotron-super-49b-v1",
+        "nvidia/llama-3.1-nemotron-ultra-253b-v1",
+        "nvidia/nemotron-4-340b-instruct",
+        "nvidia/nemotron-3-super-120b-a12b",
+        "openai/gpt-oss-120b",
+        "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+        "ai21labs/jamba-1.5-large-instruct",
+        "mistralai/mistral-large-2-instruct",
+        "meta/llama-3.2-90b-vision-instruct",
+        "meta/llama-3.1-70b-instruct",
+        "meta/llama-3.3-70b-instruct",
+        "writer/palmyra-creative-122b",
+        "deepseek-ai/deepseek-v4-flash-0731",
+        "mistralai/mistral-large",
+        "nvidia/llama-3.1-nemotron-51b-instruct",
+        "nvidia/llama-3.3-nemotron-super-49b-v1.5",
+        "ibm/granite-34b-code-instruct",
+        "nvidia/nemotron-3-nano-30b-a3b",
+        "nvidia/nemotron-3.5-lightning-30b-a3b",
+        "nvidia/nemotron-nano-3-30b-a3b",
+        "mistralai/codestral-22b-instruct-v0.1",
+        "bigcode/starcoder2-15b",
+        "nv-mistralai/mistral-nemo-12b-instruct",
+        "nvidia/nemotron-nano-12b-v2-vl",
+        "meta/codellama-70b",
+        "meta/llama2-70b",
+        "nvidia/llama3-chatqa-1.5-70b",
+        "writer/palmyra-fin-70b-32k",
+        "writer/palmyra-med-70b",
+        "writer/palmyra-med-70b-32k",
+        "databricks/dbrx-instruct",
+        "microsoft/phi-3-vision-128k-instruct",
+        "microsoft/phi-3.5-moe-instruct",
+        "mistralai/mistral-nemotron",
+        "nvidia/nemotron-parse",
+        "google/gemma-4-31b-it",
+        "nvidia/ising-calibration-1.5-31b",
+        "meta/muse-glimmer-30b",
+        "mistralai/mixtral-8x22b-v0.1",
+        "nvidia/neva-22b",
+        "openai/gpt-oss-20b",
+        "google/gemma-3-12b-it"
+      ],
+      "target_concurrency": 1,
+      "max_concurrency": 12,
+      "active": 1,
+      "cooldown_seconds": 0.0,
+      "requests": 3,
+      "successes": 1,
+      "rate_limits": 0,
+      "errors": 0
+    }
+  }
+}

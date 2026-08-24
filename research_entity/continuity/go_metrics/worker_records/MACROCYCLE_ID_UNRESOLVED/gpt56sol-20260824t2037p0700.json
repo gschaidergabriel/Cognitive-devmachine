@@ -1,0 +1,87 @@
+{
+  "schema": "CLAY_GO_WORKER_METRICS/v1",
+  "macrocycle_id": "MACROCYCLE_ID_UNRESOLVED",
+  "macrocycle_grouping_forbidden": true,
+  "macrocycle_identity_reason": "No shared immutable request/macrocycle id is exposed. The available user-trigger timestamp has minute precision only and is not used as a canonical grouping identity.",
+  "worker_id": "gpt56sol-20260824t2037p0700",
+  "organ": "GPT-5.6 Sol",
+  "source_class": "chatgpt_project_worker",
+  "model": "GPT-5.6 Sol",
+  "provider": "OpenAI ChatGPT",
+  "trigger": "go",
+  "trigger_time_local_minute_only": "2026-08-24T20:37+07:00",
+  "authority_epoch_observed": "8.71",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "source_refs": {
+    "canonical_main_first_observed": "84ef0b95143c0091ee8fd4665093ea95f9e2cc4c",
+    "canonical_main_metrics_snapshot_observed": "ad93ef044a6e000c74cefa900597990a59bc3b30",
+    "supervisor_inbox": "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
+    "supervisor_steering": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_71.json",
+    "retained_hcu_pr": 1263,
+    "retained_hcu_head_observed_after_jspace_fusion": "d058dae1ac8f61c8c1336e7fca39860e10dd8329"
+  },
+  "evidence_lineage": [
+    "chatgpt:gpt56sol:go:source-review",
+    "github:current-main",
+    "github:retained-pr1263"
+  ],
+  "input_tokens": null,
+  "output_tokens": null,
+  "total_tokens": null,
+  "token_usage_status": "UNKNOWN_CHATGPT_USAGE_NOT_EXPOSED_TO_WORKER",
+  "emitted_delta_ids": [
+    "PR1484_DISTILLERY_INSERT_REPAIR",
+    "PR1263_JSPACE_CAUSAL_FAMILY_MODEL_INPUT_IDENTITY_V2_CONTRIBUTION",
+    "GO_COLLECTIVE_METRICS_8_71_JSON",
+    "GO_COLLECTIVE_METRICS_8_71_MD"
+  ],
+  "accepted_verified_delta_ids": [],
+  "accepted_delta_count": 0,
+  "verification": {
+    "distillery_source_present_on_current_main": true,
+    "distillery_local_sqlite_mechanism_check": "PASS_COMPONENT_MECHANISM_ONLY",
+    "pr1484_github_actions": "FAILED_BEFORE_VISIBLE_STEPS_ZERO_TEST_CREDIT",
+    "jspace_donor_source_test_definitions_converged": true,
+    "jspace_exact_head_workflow_runs_observed": 0,
+    "provider_runtime_credit": 0,
+    "hcu_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_runtime_credit": 0
+  },
+  "tests_passed": null,
+  "tests_failed": null,
+  "negative_tests_passed": null,
+  "negative_tests_failed": null,
+  "static_checks_passed": null,
+  "static_checks_failed": null,
+  "benchmark_non_regression": null,
+  "reproducible_runs": null,
+  "maintainability_score": null,
+  "provenance_score": null,
+  "cross_mode_reuse_score": null,
+  "innovation": {
+    "verified": false,
+    "status": "CANDIDATE_INNOVATION_ONLY",
+    "candidate": "Bind exact canonical ModelExecution input content into the retained five-condition J-Space family plan/trial/family identity and enforce corrupted-base topology before and after executor invocation.",
+    "measured_effect": null
+  },
+  "performance_index": null,
+  "evidence_emitted_at": null,
+  "first_downstream_consumed_at": null,
+  "information_latency_status": "UNKNOWN_ACK_NOT_INSTRUMENTED",
+  "hcu_forecast": {
+    "event": "HCU_TARGET_100_GO",
+    "forecast_probability": 0.4305,
+    "classification": "UNCALIBRATED_HELD_NO_RUNTIME_MILESTONE_RESOLUTION"
+  },
+  "anti_goodhart": {
+    "token_volume_as_progress_rejected": true,
+    "worker_count_as_independent_evidence_rejected": true,
+    "source_test_presence_as_execution_rejected": true,
+    "missing_scores_left_unknown": true
+  },
+  "next_bottleneck": "EXACT_CURRENT_SOURCE_EXECUTION_AND_ACCEPTED_DELTA_CONVERSION_BEFORE_MORE_TOKEN_OR_WORKER_SCALING"
+}

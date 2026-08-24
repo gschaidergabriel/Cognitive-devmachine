@@ -1,0 +1,8 @@
+{
+  "schema":"CLAY_VPS_COMMAND/v4",
+  "command_id":"zzzzzz8-postsync-status-20260824T2111p0700",
+  "op":"exec",
+  "cwd":"/workspace/clay-global-research-entity",
+  "timeout_seconds":90,
+  "command":"echo HEAD=$(git rev-parse HEAD); latest=$(ls -td /artifacts/clay-entityos-swarm/active-fabric6000-v2-* 2>/dev/null | head -1); echo LATEST=$latest; cat \"$latest/status.json\" 2>/dev/null || true; echo BINDING; cat /artifacts/clay-entityos-swarm/swarm6000.admission.binding 2>/dev/null || true; echo PROCS; pgrep -af run_6000_free_swarm || true"
+}

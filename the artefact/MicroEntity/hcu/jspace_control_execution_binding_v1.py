@@ -1,33 +1,51 @@
 #!/usr/bin/env python3
-"""Bind one exact J-Space control packet to one verified model execution.
+"""Bind exact J-Space control bytes to one canonically admitted verified model execution.
 
 This module closes a narrow source/evidence edge only:
 
     TrainingTrace / JSPACE_VECTOR_CONTROL_ABI packet
         -> exact executor-input byte binding
+        -> canonical MiniUnifiedDB model-execution admission
         -> HCU_VERIFIED_MODEL_EXECUTION/v1
 
 It deliberately does not assert t->t+1 ordering, hidden-state causality, model benefit,
 reward truth, canonical state, or EffectGate authority. In particular it avoids caller-
-supplied temporal/step labels: the execution identity comes from an already verified,
-externally admitted actual model-executor observation.
+supplied temporal/step labels: the execution identity comes from an already verified actual
+model-executor observation whose exact canonical bytes and invocation claim are read back
+from the existing canonical MiniUnifiedDB admission tables.
+
+The database argument is the already-authoritative MiniUnifiedDB sqlite connection. This
+module is read-only with respect to that database and creates no second state/effect authority.
+Source construction alone grants zero model/runtime/training credit.
 """
 from __future__ import annotations
 
 from dataclasses import asdict, dataclass
 import hashlib
+import json
+import sqlite3
 from typing import Any
 
 try:
     from .entry_canonicalization_v1 import CANONICALIZATION_SCHEMA, CanonicalizationError, canonicalize
     from .jspace_training_trace_v1 import TrainingTrace, validate_training_trace
     from .model_input_control_binding_v1 import ModelInputControlBinding, validate_model_input_control_binding
-    from .model_execution_receipt_v1 import VerifiedModelExecution, validate_verified_model_execution
+    from .model_execution_receipt_v1 import (
+        ACTUAL_MODEL_EXECUTOR_EVIDENCE_SOURCE,
+        OBSERVATION_SCHEMA,
+        VerifiedModelExecution,
+        validate_verified_model_execution,
+    )
 except ImportError:
     from entry_canonicalization_v1 import CANONICALIZATION_SCHEMA, CanonicalizationError, canonicalize
     from jspace_training_trace_v1 import TrainingTrace, validate_training_trace
     from model_input_control_binding_v1 import ModelInputControlBinding, validate_model_input_control_binding
-    from model_execution_receipt_v1 import VerifiedModelExecution, validate_verified_model_execution
+    from model_execution_receipt_v1 import (
+        ACTUAL_MODEL_EXECUTOR_EVIDENCE_SOURCE,
+        OBSERVATION_SCHEMA,
+        VerifiedModelExecution,
+        validate_verified_model_execution,
+    )
 
 BINDING_SCHEMA = "HCU_JSPACE_CONTROL_EXECUTION_BINDING/v1"
 
@@ -58,6 +76,7 @@ class JSpaceControlExecutionBinding:
     executor_input_size: int
     verified_model_execution_receipt_sha256: str
     verified_model_execution_observation_sha256: str
+    canonical_execution_admission_verified: bool
     binding_sha256: str
 
 
@@ -114,11 +133,114 @@ def _material(binding: JSpaceControlExecutionBinding) -> dict[str, Any]:
     return data
 
 
+def _canonical_execution_admission_record(
+    db: sqlite3.Connection,
+    verified_execution: VerifiedModelExecution,
+) -> dict[str, Any]:
+    """Read and verify the exact canonical MiniUnifiedDB observation/invocation admission.
+
+    A self-consistent ``VerifiedModelExecution`` alone is insufficient here: its source
+    observation must still exist byte-exact in the canonical admission store, at the live
+    generation, and the executor-scoped invocation must resolve uniquely to that observation.
+    """
+    if not isinstance(db, sqlite3.Connection):
+        raise JSpaceControlExecutionBindingError("CANONICAL_MINIUNIFIEDDB_CONNECTION_REQUIRED")
+    if db.in_transaction:
+        raise JSpaceControlExecutionBindingError("CANONICAL_EXECUTION_ADMISSION_READ_REQUIRES_STABLE_COMMITTED_VIEW")
+
+    try:
+        generation_row = db.execute("SELECT generation FROM entity_state WHERE id=1").fetchone()
+    except sqlite3.Error as exc:
+        raise JSpaceControlExecutionBindingError("CANONICAL_ENTITY_STATE_UNAVAILABLE") from exc
+    if generation_row is None:
+        raise JSpaceControlExecutionBindingError("CANONICAL_ENTITY_STATE_UNAVAILABLE")
+    live_generation = _generation(generation_row[0])
+    if live_generation != verified_execution.entity_generation:
+        raise JSpaceControlExecutionBindingError("STALE_CANONICAL_MODEL_EXECUTION_ADMISSION_GENERATION")
+
+    observation_sha256 = _sha256(
+        verified_execution.observation_sha256,
+        "verified_execution.observation_sha256",
+    )
+    try:
+        row = db.execute(
+            "SELECT observation_jcs,entity_generation,executor_id,invocation_id "
+            "FROM hcu_model_execution_observations WHERE observation_sha256=?",
+            (observation_sha256,),
+        ).fetchone()
+    except sqlite3.Error as exc:
+        raise JSpaceControlExecutionBindingError("CANONICAL_MODEL_EXECUTION_ADMISSION_TABLE_UNAVAILABLE") from exc
+    if row is None:
+        raise JSpaceControlExecutionBindingError("MODEL_EXECUTION_OBSERVATION_NOT_CANONICALLY_ADMITTED")
+
+    raw = bytes(row[0])
+    if hashlib.sha256(raw).hexdigest() != observation_sha256:
+        raise JSpaceControlExecutionBindingError("CANONICAL_MODEL_EXECUTION_OBSERVATION_SHA256_MISMATCH")
+    try:
+        record = json.loads(raw.decode("utf-8"))
+    except (UnicodeDecodeError, json.JSONDecodeError) as exc:
+        raise JSpaceControlExecutionBindingError("CANONICAL_MODEL_EXECUTION_OBSERVATION_JCS_INVALID") from exc
+    if not isinstance(record, dict):
+        raise JSpaceControlExecutionBindingError("CANONICAL_MODEL_EXECUTION_OBSERVATION_OBJECT_REQUIRED")
+    try:
+        recanonicalized = canonicalize(record)
+    except CanonicalizationError as exc:
+        raise JSpaceControlExecutionBindingError("CANONICAL_MODEL_EXECUTION_OBSERVATION_RECANONICALIZATION_FAILED") from exc
+    if recanonicalized != raw:
+        raise JSpaceControlExecutionBindingError("CANONICAL_MODEL_EXECUTION_OBSERVATION_JCS_MISMATCH")
+
+    expected_row_identity = (
+        verified_execution.entity_generation,
+        verified_execution.executor_id,
+        verified_execution.invocation_id,
+    )
+    if tuple(row[1:]) != expected_row_identity:
+        raise JSpaceControlExecutionBindingError("CANONICAL_MODEL_EXECUTION_OBSERVATION_ROW_IDENTITY_MISMATCH")
+
+    expected_record = {
+        "schema": OBSERVATION_SCHEMA,
+        "evidence_source": ACTUAL_MODEL_EXECUTOR_EVIDENCE_SOURCE,
+        "entity_generation": verified_execution.entity_generation,
+        "executor_id": verified_execution.executor_id,
+        "invocation_id": verified_execution.invocation_id,
+        "engine_load_consumption_receipt_sha256": verified_execution.engine_load_consumption_receipt_sha256,
+        "grid_plan_sha256": verified_execution.grid_plan_sha256,
+        "output_producing_cell_id": verified_execution.output_producing_cell_id,
+        "role": verified_execution.role,
+        "input_sha256": verified_execution.input_sha256,
+        "input_size": verified_execution.input_size,
+        "output_ref": verified_execution.output_ref,
+        "output_sha256": verified_execution.output_sha256,
+        "output_size": verified_execution.output_size,
+    }
+    if record != expected_record:
+        raise JSpaceControlExecutionBindingError("VERIFIED_EXECUTION_DOES_NOT_MATCH_CANONICAL_OBSERVATION")
+
+    try:
+        invocation_rows = db.execute(
+            "SELECT invocation_binding_key,entity_generation,observation_sha256 "
+            "FROM hcu_model_execution_invocations WHERE executor_id=? AND invocation_id=?",
+            (verified_execution.executor_id, verified_execution.invocation_id),
+        ).fetchall()
+    except sqlite3.Error as exc:
+        raise JSpaceControlExecutionBindingError("CANONICAL_MODEL_EXECUTION_INVOCATION_TABLE_UNAVAILABLE") from exc
+    if len(invocation_rows) != 1:
+        raise JSpaceControlExecutionBindingError("CANONICAL_MODEL_EXECUTION_INVOCATION_NOT_UNIQUE")
+    invocation_key, invocation_generation, admitted_observation_sha256 = invocation_rows[0]
+    _text(invocation_key, "canonical_invocation_binding_key", 64)
+    if invocation_generation != live_generation:
+        raise JSpaceControlExecutionBindingError("CANONICAL_MODEL_EXECUTION_INVOCATION_GENERATION_MISMATCH")
+    if admitted_observation_sha256 != observation_sha256:
+        raise JSpaceControlExecutionBindingError("CANONICAL_MODEL_EXECUTION_INVOCATION_OBSERVATION_MISMATCH")
+    return record
+
+
 def _validate_sources(
     trace: TrainingTrace,
     input_binding: ModelInputControlBinding,
     verified_execution: VerifiedModelExecution,
     consumed_input_bytes: bytes,
+    model_execution_db: sqlite3.Connection,
 ) -> None:
     try:
         validate_training_trace(trace)
@@ -132,6 +254,7 @@ def _validate_sources(
         validate_verified_model_execution(verified_execution)
     except Exception as exc:
         raise JSpaceControlExecutionBindingError(f"VERIFIED_MODEL_EXECUTION_REJECTED:{exc}") from exc
+    _canonical_execution_admission_record(model_execution_db, verified_execution)
 
     generation = _generation(trace.generation)
     if input_binding.generation != generation or verified_execution.entity_generation != generation:
@@ -183,9 +306,16 @@ def bind_control_packet_to_verified_execution(
     input_binding: ModelInputControlBinding,
     verified_execution: VerifiedModelExecution,
     consumed_input_bytes: bytes,
+    model_execution_db: sqlite3.Connection,
 ) -> JSpaceControlExecutionBinding:
-    """Bind trace-produced control bytes to one externally admitted actual model execution."""
-    _validate_sources(trace, input_binding, verified_execution, consumed_input_bytes)
+    """Bind exact trace control bytes to one canonically admitted model execution."""
+    _validate_sources(
+        trace,
+        input_binding,
+        verified_execution,
+        consumed_input_bytes,
+        model_execution_db,
+    )
 
     material = {
         "schema": BINDING_SCHEMA,
@@ -224,6 +354,7 @@ def bind_control_packet_to_verified_execution(
             verified_execution.observation_sha256,
             "verified_model_execution_observation_sha256",
         ),
+        "canonical_execution_admission_verified": True,
     }
     provisional = JSpaceControlExecutionBinding(**material, binding_sha256="1" * 64)
     return JSpaceControlExecutionBinding(
@@ -238,26 +369,36 @@ def validate_control_execution_binding(
     input_binding: ModelInputControlBinding,
     verified_execution: VerifiedModelExecution,
     consumed_input_bytes: bytes,
+    model_execution_db: sqlite3.Connection,
 ) -> None:
-    """Revalidate the persisted binding against all three exact upstream sources."""
+    """Revalidate the persisted binding against exact sources and canonical DB admission."""
     if not isinstance(binding, JSpaceControlExecutionBinding):
         raise JSpaceControlExecutionBindingError("JSPACE_CONTROL_EXECUTION_BINDING_REQUIRED")
     if binding.schema != BINDING_SCHEMA:
         raise JSpaceControlExecutionBindingError("JSPACE_CONTROL_EXECUTION_BINDING_SCHEMA_UNSUPPORTED")
     if binding.canonicalization_schema != CANONICALIZATION_SCHEMA:
         raise JSpaceControlExecutionBindingError("JSPACE_CONTROL_EXECUTION_CANONICALIZATION_SCHEMA_UNSUPPORTED")
+    if binding.canonical_execution_admission_verified is not True:
+        raise JSpaceControlExecutionBindingError("CANONICAL_EXECUTION_ADMISSION_VERIFICATION_REQUIRED")
 
     observed = _sha256(binding.binding_sha256, "binding_sha256")
     expected = _canonical_sha256(_material(binding), "JSPACE_CONTROL_EXECUTION_BINDING")
     if observed != expected:
         raise JSpaceControlExecutionBindingError("JSPACE_CONTROL_EXECUTION_BINDING_DIGEST_MISMATCH")
 
-    _validate_sources(trace, input_binding, verified_execution, consumed_input_bytes)
+    _validate_sources(
+        trace,
+        input_binding,
+        verified_execution,
+        consumed_input_bytes,
+        model_execution_db,
+    )
     expected_binding = bind_control_packet_to_verified_execution(
         trace,
         input_binding,
         verified_execution,
         consumed_input_bytes,
+        model_execution_db,
     )
     if binding != expected_binding:
         raise JSpaceControlExecutionBindingError("JSPACE_CONTROL_EXECUTION_SOURCE_REVALIDATION_MISMATCH")
@@ -269,6 +410,7 @@ def binding_dict(
     input_binding: ModelInputControlBinding,
     verified_execution: VerifiedModelExecution,
     consumed_input_bytes: bytes,
+    model_execution_db: sqlite3.Connection,
 ) -> dict[str, Any]:
     validate_control_execution_binding(
         binding,
@@ -276,6 +418,7 @@ def binding_dict(
         input_binding,
         verified_execution,
         consumed_input_bytes,
+        model_execution_db,
     )
     data = _material(binding)
     data["binding_sha256"] = binding.binding_sha256

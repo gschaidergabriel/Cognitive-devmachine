@@ -72,6 +72,8 @@ class ProtocolTests(unittest.TestCase):
         out=self.m.adjudicate_holdout(holdout_rows(self.m),selected_layer=8,selected_gain=2.0)
         self.assertTrue(out['pass']); self.assertTrue(out['counterbalanced_label_mapping'])
         self.assertTrue(out['wrong_layer_evidence_complete']); self.assertTrue(out['lesion_rescue_evidence_complete'])
+        self.assertEqual('ABSOLUTE_EFFECT_MAGNITUDE_SPECIFICITY',out['wrong_layer_metric'])
+        self.assertGreater(out['worst_wrong_layer_specificity_margin'],0)
 
     def test_holdout_requires_label_remap(self):
         rows=holdout_rows(self.m)
@@ -98,5 +100,18 @@ class ProtocolTests(unittest.TestCase):
         out=self.m.adjudicate_holdout(rows,selected_layer=8,selected_gain=2.0)
         self.assertFalse(out['pass'])
         self.assertLessEqual(out['worst_directional_specificity_margin'],0)
+
+    def test_large_opposite_sign_wrong_layer_effect_fails_magnitude_specificity(self):
+        rows=holdout_rows(self.m)
+        for row in rows:
+            if row['control']=='+VECTOR':
+                # selected +VECTOR effect is +3.0. Executor semantics are
+                # wrong_layer_delta = wrong_effect - selected_effect, so -13 means
+                # a wrong-layer effect of -10. The old signed <=0 gate accepted this.
+                row['wrong_layer_delta']=-13.0
+        out=self.m.adjudicate_holdout(rows,selected_layer=8,selected_gain=2.0)
+        self.assertFalse(out['pass'])
+        self.assertFalse(out['wrong_layer_ok'])
+        self.assertLessEqual(out['worst_wrong_layer_specificity_margin'],0)
 
 if __name__=='__main__': unittest.main()

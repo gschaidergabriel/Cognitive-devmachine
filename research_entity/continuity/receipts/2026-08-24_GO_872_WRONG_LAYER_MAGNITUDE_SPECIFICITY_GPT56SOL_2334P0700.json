@@ -1,0 +1,110 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "created_date": "2026-08-24",
+  "trigger": "go",
+  "trigger_time_local_minute_only": "2026-08-24T23:34+07:00",
+  "macrocycle_id": "MACROCYCLE_ID_UNRESOLVED",
+  "macrocycle_grouping_forbidden": true,
+  "coordination": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "No shared immutable request/macrocycle id is exposed to this organ; available user-turn time is minute precision only.",
+    "new_unusual_experiments_executed": 0
+  },
+  "authority": {
+    "persistent_entity": "Clay",
+    "product": "EntityOS",
+    "architecture": "HCU",
+    "supervisor": "8.72",
+    "mode": "FREE_ONLY",
+    "canonical_main_at_branch_start": "16fcc38e31188322c953474b6b9e9db4bf8a170f",
+    "canonical_main_at_first_successor_rebase": "edd1dbb652c6d47f55a5cb02a746264c23f20e06",
+    "canonical_main_at_second_successor_rebase": "c42269c3d266654c30cc046a9bcd882afc71dfe3",
+    "latest_main_reobserved_before_final_fusion": "c663a7592ba3af3e4184235fbc739cbf98f80818"
+  },
+  "source_delta": {
+    "branch": "gpt56sol/go872-wrong-layer-magnitude-20260824-2334",
+    "second_successor_source_commit": "4cf73f1305ba54fd5d2c99ae814cf5d7c14b6cef",
+    "protocol_blob": "7ad420ae4d349472910700c2d637579c6cc75737",
+    "regression_blob": "462cd45606433ad9abf1d010a873a7336dac916b",
+    "protocol_file": "tools/trigger1_intermediate_contrastive_protocol.py",
+    "test_file": "tests/test_trigger1_intermediate_contrastive_protocol.py",
+    "protocol_change": "TRIGGER1_INTERMEDIATE_CONTRASTIVE_PROTOCOL/v2 -> v3; wrong-layer specificity now compares absolute selected-layer and wrong-layer effect magnitudes, reconstructing the actual wrong-layer effect from the executor's existing relative-delta contract.",
+    "regression": "A selected +VECTOR effect of +3 and wrong-layer effect of -10 (encoded by existing executor as wrong_layer_delta=-13) must fail; the previous signed <=0 rule could accept it."
+  },
+  "finding": {
+    "observed_source_contract": "Executor stores wrong_layer_delta = wrong_layer_effect - selected_layer_plus_effect.",
+    "observed_adjudicator_before_delta": "Protocol v2 accepted wrong-layer evidence when wrong_layer_delta <= 0.",
+    "counterexample": "selected effect +3, wrong-layer effect -10 => wrong_layer_delta -13; old signed check passes despite a larger off-target magnitude.",
+    "interpretation": "Signed relative ordering is insufficient as a specificity falsifier when a large opposite-sign off-target effect is possible.",
+    "repair": "Require min(abs(selected_effect)-abs(wrong_layer_effect)) > 0 across all matched holdout cases."
+  },
+  "parallel_fusion_context": {
+    "selected_vector_wrong_layer_fix_commit": "9a8d3321b9ae6f565ecf0b84c8e72706397980cb",
+    "selected_vector_fix_relation": "COMPLEMENTARY_NOT_DUPLICATE",
+    "selected_vector_fix_delta": "Current main now forces the wrong-layer localization run to reuse the byte-identical selected-layer vector while changing only intervention layer.",
+    "remaining_gap": "The exact-current protocol still uses signed wrong_layer_delta <= 0, so a larger opposite-sign wrong-layer effect can still false-pass even after selected-vector identity is fixed.",
+    "latest_main_protocol_blob": "63ffdbb4712d23e51709aa251d384343910f8c2f"
+  },
+  "counterhypothesis": {
+    "claim": "Opposite-sign wrong-layer effects might be scientifically harmless because only target-direction improvement matters.",
+    "adjudication": "Rejected for causal-localization promotion scope: a larger intervention effect at the wrong layer is material off-target evidence even when its sign is reversed. The observation can remain useful as behavior evidence, but cannot satisfy layer-specific causal promotion."
+  },
+  "external_prior_art": [
+    {
+      "title": "Towards Best Practices of Activation Patching in Language Models: Metrics and Methods",
+      "authors": "Fred Zhang; Neel Nanda",
+      "year": 2023,
+      "arxiv": "2309.16042",
+      "use": "Design input: activation-patching conclusions can materially depend on metric/method choice; metric choice must not create a false localization result."
+    },
+    {
+      "title": "The Curse of Multiple Mediators: Hidden Interaction Effects in Activation Patching",
+      "year": 2026,
+      "arxiv": "2606.27510",
+      "use": "Design input: activation-patching causal effects can carry interaction structure; magnitude and sign are diagnostic rather than safely ignored."
+    },
+    {
+      "title": "TransformerLens activation patching documentation",
+      "use": "Design input: causal activation patching is an intervention on a specific internal activation whose downstream output effect is measured."
+    }
+  ],
+  "overlap_review": {
+    "retained_hcu_donor": "gschaidergabriel/clay-global-research-entity#1263",
+    "retained_execution_controller": "gschaidergabriel/Dr.-Unterweger#810",
+    "recent_open_prs_reviewed": true,
+    "focused_duplicate_found": false,
+    "note": "A parallel selected-vector wrong-layer provenance repair landed on main and is complementary. The magnitude-specificity gap remains directly observable in the current protocol source."
+  },
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED_SOURCE_FAIL_CLOSED_EVIDENCE_BOUNDARY",
+    "B_HCU_TYPED_ENTRY_CO_DEVELOPMENT": "ADVANCED_REUSABLE_CAUSAL_SPECIFICITY_ADJUDICATOR",
+    "C_GLOBAL_JSPACE_GWT_FREE_ONLY_READINESS": "ADVANCED_INTERMEDIATE_CAUSAL_PROMOTION_FALSIFIER"
+  },
+  "execution_evidence": {
+    "github_source_write_observed": true,
+    "regression_test_definition_written": true,
+    "source_equivalent_local_component_check": {
+      "python_compile": "PASS",
+      "focused_tests_passed": 6,
+      "focused_tests_failed": 0,
+      "scope": "SOURCE_EQUIVALENT_DETERMINISTIC_PROTOCOL_MECHANISM_ONLY",
+      "includes_opposite_sign_wrong_layer_counterexample": true
+    },
+    "exact_successor_branch_test_execution_observed": false,
+    "exact_model_qwen_runtime_executed": false,
+    "direct_local_or_vps_bridge_exposed_to_this_organ": false,
+    "provider_calls": 0,
+    "paid_calls": 0,
+    "together_calls": 0
+  },
+  "credits": {
+    "source_equivalent_protocol_mechanism": "PASS_BOUNDED",
+    "provider_runtime": 0,
+    "whole_entityos_hcu_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Fuse this magnitude-specificity patch with current main's selected-vector provenance fix, execute the exact current protocol regression plus intermediate bridge/promotion regressions on an authorized zero-cost deterministic surface, and only with a canonical atomic lease run the model-specific local Qwen intervention."
+}

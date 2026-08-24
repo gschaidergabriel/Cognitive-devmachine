@@ -12,7 +12,8 @@ Required stronger discriminator:
 - disjoint holdout;
 - six matched controls plus explicit wrong-layer and lesion/rescue evidence;
 - counterbalanced label-remap holdout families so output-token identity cannot explain transfer;
-- nuisance controls are scored by absolute effect magnitude, not only target-positive drift.
+- nuisance controls and wrong-layer specificity are scored by absolute effect magnitude,
+  not only target-positive drift or signed relative deltas.
 """
 from __future__ import annotations
 
@@ -21,7 +22,7 @@ import json
 import math
 from typing import Any, Iterable, Mapping, Sequence
 
-SCHEMA = "TRIGGER1_INTERMEDIATE_CONTRASTIVE_PROTOCOL/v2"
+SCHEMA = "TRIGGER1_INTERMEDIATE_CONTRASTIVE_PROTOCOL/v3"
 CREDIT_SCOPE = "INTERMEDIATE_REPRESENTATION_CAUSAL_CANDIDATE_ONLY"
 REQUIRED_CONTROLS = (
     "BASELINE",
@@ -230,8 +231,8 @@ def adjudicate_holdout(
 
     by_case: dict[tuple[str, str], dict[str, float]] = {}
     wrong_layer_seen: set[tuple[str, str]] = set()
+    wrong_layer_relative_delta: dict[tuple[str, str], float] = {}
     lesion_rescue_seen: set[tuple[str, str]] = set()
-    wrong_layer_ok = True
     lesion_rescue_ok = True
 
     for r in frozen:
@@ -242,9 +243,11 @@ def adjudicate_holdout(
             )
         if r.get("wrong_layer_delta") is not None:
             wrong_layer_seen.add(key)
-            wrong_layer_ok = wrong_layer_ok and _finite(
-                r["wrong_layer_delta"], "wrong_layer_delta"
-            ) <= 0
+            relative = _finite(r["wrong_layer_delta"], "wrong_layer_delta")
+            prior = wrong_layer_relative_delta.get(key)
+            if prior is not None and prior != relative:
+                return {"pass": False, "classification": "WRONG_LAYER_EVIDENCE_INCONSISTENT"}
+            wrong_layer_relative_delta[key] = relative
         if r.get("lesion_delta") is not None and r.get("rescue_delta") is not None:
             lesion_rescue_seen.add(key)
             lesion_rescue_ok = (
@@ -272,11 +275,13 @@ def adjudicate_holdout(
     margins = []
     null_drifts = []
     nuisance_effects = []
-    for vals in by_case.values():
+    wrong_layer_specificity_margins = []
+    for key, vals in by_case.items():
         if not all(k in vals for k in REQUIRED_CONTROLS):
             return {"pass": False, "classification": "INCOMPLETE_MATCHED_CONTROL_FAMILY"}
+        selected_effect = vals["+VECTOR"] - vals["BASELINE"]
         directional = min(
-            vals["+VECTOR"] - vals["BASELINE"],
+            selected_effect,
             vals["BASELINE"] - vals["SIGN_FLIP"],
         )
         nuisance = max(
@@ -287,6 +292,16 @@ def adjudicate_holdout(
         nuisance_effects.append(nuisance)
         null_drifts.append(abs(vals["NULL_VECTOR"] - vals["BASELINE"]))
 
+        # Executor contract: wrong_layer_delta = wrong_layer_effect - selected_layer_plus_effect.
+        # Reconstruct the actual wrong-layer effect and compare magnitudes. A large opposite-sign
+        # off-target effect must fail rather than passing merely because the signed delta is <= 0.
+        wrong_effect = wrong_layer_relative_delta[key] + selected_effect
+        wrong_layer_specificity_margins.append(abs(selected_effect) - abs(wrong_effect))
+
+    wrong_layer_ok = bool(
+        wrong_layer_specificity_margins
+        and min(wrong_layer_specificity_margins) > 0
+    )
     passed = bool(
         margins
         and min(margins) > 0
@@ -309,6 +324,12 @@ def adjudicate_holdout(
         "max_same_norm_nuisance_effect": max(nuisance_effects) if nuisance_effects else None,
         "max_null_drift": max(null_drifts) if null_drifts else None,
         "wrong_layer_evidence_complete": wrong_layer_seen == case_keys,
+        "wrong_layer_metric": "ABSOLUTE_EFFECT_MAGNITUDE_SPECIFICITY",
+        "worst_wrong_layer_specificity_margin": (
+            min(wrong_layer_specificity_margins)
+            if wrong_layer_specificity_margins
+            else None
+        ),
         "lesion_rescue_evidence_complete": lesion_rescue_seen == case_keys,
         "wrong_layer_ok": wrong_layer_ok,
         "lesion_rescue_ok": lesion_rescue_ok,

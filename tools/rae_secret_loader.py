@@ -7,8 +7,10 @@ Non-provider secret lookup priority:
 
 External LLM credentials are different: the successor-dynamic provider-call boundary
 must allow the provider before this module inspects environment or repository secret
-stores. This makes direct/legacy callers fail closed during runtime quarantine as well
-as when typed FREE admission is absent.
+stores. Repository fallback is deliberately selective by requested name; callers must
+never bulk-materialize a mixed credential store merely to resolve one allowed secret.
+This makes direct/legacy callers fail closed during runtime quarantine as well as when
+typed FREE admission is absent, without co-materializing unrelated provider values.
 """
 from __future__ import annotations
 
@@ -79,34 +81,46 @@ def _provider_secret_is_admitted(name: str) -> bool:
         return False
 
 
-def _parse_store(path: Path) -> dict[str, str]:
-    if not path.exists():
-        return {}
-    values: dict[str, str] = {}
-    for lineno, raw in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
-        line = raw.strip()
-        if not line or line.startswith("#"):
-            continue
-        if "=" not in line:
-            raise SecretError(f"Malformed credential-store line {lineno} in {path.name}")
-        name, value = line.split("=", 1)
-        name = name.strip()
-        if not NAME_RE.fullmatch(name):
-            raise SecretError(f"Invalid credential name on line {lineno} in {path.name}")
-        values[name] = value.strip()
-    return values
+def _lookup_repo_secret(name: str) -> tuple[str | None, str | None]:
+    """Resolve exactly one repository secret without building a store-wide value map.
 
-
-def _repo_secrets() -> tuple[dict[str, str], dict[str, str]]:
-    merged: dict[str, str] = {}
-    source: dict[str, str] = {}
+    Mixed ``*.env`` stores can contain credentials for providers whose current runtime
+    boundary is closed. A dictionary-style parser would materialize every value just to
+    answer one allowed lookup. This routine validates record names while retaining only
+    the value for ``name`` and checks conflicts only for that requested identity.
+    """
+    value_found: str | None = None
+    source_found: str | None = None
     for path in PRIVATE_STORES:
-        for name, value in _parse_store(path).items():
-            if name in merged and merged[name] != value:
-                raise SecretError(f"Credential {name} is defined with conflicting values in private stores")
-            merged[name] = value
-            source[name] = path.name
-    return merged, source
+        if not path.exists():
+            continue
+        try:
+            handle = path.open("r", encoding="utf-8")
+        except OSError as exc:
+            raise SecretError(f"Cannot open credential store {path.name}: {exc.__class__.__name__}") from exc
+        with handle:
+            for lineno, raw in enumerate(handle, 1):
+                line = raw.strip()
+                if not line or line.startswith("#"):
+                    continue
+                if "=" not in line:
+                    raise SecretError(f"Malformed credential-store line {lineno} in {path.name}")
+                candidate_name, _, remainder = line.partition("=")
+                candidate_name = candidate_name.strip()
+                if not NAME_RE.fullmatch(candidate_name):
+                    raise SecretError(f"Invalid credential name on line {lineno} in {path.name}")
+                if candidate_name != name:
+                    # Do not normalize, retain, index, or add an unrelated secret value
+                    # to a process-wide dictionary. The shared flat-file format still
+                    # requires line-level scanning; application-level value materialization
+                    # is limited to the exact already-authorized requested identity.
+                    continue
+                candidate_value = remainder.strip()
+                if value_found is not None and value_found != candidate_value:
+                    raise SecretError(f"Credential {name} is defined with conflicting values in private stores")
+                value_found = candidate_value
+                source_found = path.name
+    return value_found, source_found
 
 
 def get_secret(name: str, *, required: bool = True) -> str | None:
@@ -120,8 +134,7 @@ def get_secret(name: str, *, required: bool = True) -> str | None:
     env_value = os.environ.get(name)
     if env_value:
         return env_value
-    values, _ = _repo_secrets()
-    value = values.get(name)
+    value, _ = _lookup_repo_secret(name)
     if value:
         return value
     if required:
@@ -136,9 +149,9 @@ def secret_source(name: str) -> str | None:
         return None
     if os.environ.get(name):
         return "process_environment"
-    values, sources = _repo_secrets()
-    if values.get(name):
-        return f"private_repo_store:{sources[name]}"
+    value, source = _lookup_repo_secret(name)
+    if value and source:
+        return f"private_repo_store:{source}"
     return None
 
 

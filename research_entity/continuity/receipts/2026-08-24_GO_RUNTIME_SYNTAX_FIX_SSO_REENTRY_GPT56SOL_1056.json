@@ -1,0 +1,123 @@
+{
+  "schema": "ENTITYOS_HCU_GO_RUNTIME_REENTRY_RECEIPT/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "authority_epoch": "8.64",
+  "canonical_main_before_write": "666bfbd18b61bec5b45ecb828e42690746db497f",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "coordination": {
+    "upstream_shared_immutable_macrocycle_id": null,
+    "atomic_unusual_experiment_lease": "NOT_ACQUIRED",
+    "classification": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_interventions_executed": 0,
+    "reason": "No reproducible shared immutable request/macrocycle identity was available to this organ; only ordinary runtime re-entry, source inspection, and fixed protected-route probing were performed."
+  },
+  "authority": {
+    "supervisor": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_64.json",
+    "runtime_first": true,
+    "source_guard_proliferation": "PAUSED_UNLESS_EXECUTABLE_COUNTEREVIDENCE_REQUIRES_FIX",
+    "paid_fallback": "FORBIDDEN",
+    "together": "FORBIDDEN"
+  },
+  "retained_lanes": {
+    "hcu_donor": {
+      "repository": "gschaidergabriel/clay-global-research-entity",
+      "pr": 1263,
+      "live_head_observed": "ba0ce949cf7176c921ac67760ea22c260b3337f3",
+      "state": "OPEN_DRAFT_DONOR_ONLY"
+    },
+    "execution_controller": {
+      "repository": "gschaidergabriel/Dr.-Unterweger",
+      "pr": 810,
+      "predecessor_head_observed": "6a15601183f9bb61d445368e4d239e90a47b300c",
+      "successor_head_observed": "fb844d8bea0d6de3f304d3aa48114b735e0d0613",
+      "state": "OPEN_DRAFT_SINGLE_RETAINED_EXECUTOR"
+    }
+  },
+  "runtime_counterevidence": {
+    "predecessor_deployment": {
+      "deployment_id": "dpl_J2W13WSMy3ewWspjfNdn2wqM6rtN",
+      "git_sha": "6a15601183f9bb61d445368e4d239e90a47b300c",
+      "state": "READY",
+      "observations": [
+        {
+          "time_utc": "2026-08-24T03:53:58Z",
+          "method": "GET",
+          "route": "/api/hcu-jspace-binding-v2-capsule",
+          "http_status": 500,
+          "runtime_result": "NODE_ESM_LOAD_FAILURE",
+          "error": "SyntaxError: Unexpected end of input",
+          "sandbox_create_observed": false,
+          "credit": "NONE"
+        },
+        {
+          "time_utc": "2026-08-24T03:15:21Z",
+          "method": "GET",
+          "route": "/api/hcu-jspace-grid10-positive",
+          "http_status": 412,
+          "runtime_result": "FREE_ONLY_PRE_SANDBOX_GATE_REACHED",
+          "sandbox_create_observed": false,
+          "credit": "NONE"
+        }
+      ]
+    },
+    "source_localization": {
+      "file": "mcp/vercel-sandbox-mcp/api/hcu-jspace-binding-v2-capsule.js",
+      "predecessor_blob_sha": "c6d2382950522b47b8b28db6000d7f6040a7cfbd",
+      "observed_defect": "The default async handler ended after res.status(...).json(...) without the final closing brace, matching the runtime Unexpected end of input failure.",
+      "classification": "EXECUTABLE_COUNTEREVIDENCE_JUSTIFIED_SOURCE_FIX"
+    },
+    "parallel_convergence": {
+      "successor_commit": "fb844d8bea0d6de3f304d3aa48114b735e0d0613",
+      "commit_message": "fix(hcu): close J-Space binding v2 handler syntax",
+      "duplicate_patch_avoided": true,
+      "successor_deployment_id": "dpl_4dE6aHNYPqNZmrBd5U1WfboFX9Qk",
+      "successor_deployment_state": "READY",
+      "successor_deployment_git_sha": "fb844d8bea0d6de3f304d3aa48114b735e0d0613"
+    },
+    "successor_probe": {
+      "route": "/api/hcu-jspace-binding-v2-capsule",
+      "observed_http_status": 302,
+      "observed_result": "VERCEL_SSO_REDIRECT_BEFORE_FUNCTION_RESULT",
+      "function_result_observed": false,
+      "sandbox_create_observed": false,
+      "classification": "ACCESS_CONTROL_BLOCKER; NOT_PRODUCT_NEGATIVE; NOT_RUNTIME_PASS"
+    }
+  },
+  "free_only_gate": {
+    "team_id": "team_hwPBWKuCJxkfVhCx3WLdcTRx",
+    "team_plan": "hobby",
+    "project_id": "prj_ifIgM9X7jqIQS8mNIGllImziePPG",
+    "remaining_sandbox_quota_directly_observed": false,
+    "runtime_gate": "BLOCKED_QUOTA_UNOBSERVED",
+    "quota_assumption_performed": false,
+    "paid_upgrade_attempted": false,
+    "paid_fallback_attempted": false,
+    "together_preflight_attempted": false
+  },
+  "hypothesis": "The immediate executable defect at predecessor head was a route parse failure, not an HCU semantic failure. After the source fix, the next discriminators remain protected-preview access and direct included-quota observation before Sandbox creation.",
+  "counterhypothesis": "A READY successor deployment could be treated as proof that the fixed route now reaches the FREE_ONLY 412 gate or the Sandbox environment.",
+  "discriminator_result": "COUNTERHYPOTHESIS_NOT_ESTABLISHED: successor deployment is READY, but the observed protected GET returns Vercel SSO 302 before a function result; no Sandbox/environment execution is observed.",
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED: exact-head runtime counterevidence localized a concrete route syntax defect; a parallel worker fixed it; successor exact-head deployment is READY; blocker narrowed to protected access plus direct remaining-quota observation.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC": "HCU_NO_CHANGE_WITH_REASON: no admitted Sandbox/HCU execution occurred after the successor fix, and supervisor 8.64 pauses source-only churn without executable counterevidence.",
+    "C_GLOBAL_JSPACE_GWT_AND_FREE_LOCAL_08B_READINESS": "TRAINING_READINESS_NO_CHANGE_WITH_REASON: no real model execution, vector intervention, or J-Space/GWT runtime observation occurred; preserve source-only readiness and zero model/training credit."
+  },
+  "credits": {
+    "whole_entityos_hcu_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": [
+    "Obtain a directly observed admitted remaining included Vercel Sandbox quota signal without paid upgrade, paid fallback, Together preflight, or inference from Hobby plan identity.",
+    "Obtain protected-preview function access at the exact successor executor SHA and verify that the fixed route reaches the FREE_ONLY admission result rather than another source/runtime defect.",
+    "Only if the FREE_ONLY gate opens, run the exact environment capability probe binding Python version, sqlite3/_sqlite3 availability, executor/source identity, secret fence, result digest, and cleanup.",
+    "After environment PASS, prefer real model-executor plus null/sign-flipped J-Space causal observation over additional source consensus."
+  ],
+  "evidence_boundary": "This receipt records exact deployment/runtime/source/re-entry evidence and parallel-fix convergence only. It grants no Sandbox execution, full EntityOS/HCU runtime, J-Space model, or training credit."
+}

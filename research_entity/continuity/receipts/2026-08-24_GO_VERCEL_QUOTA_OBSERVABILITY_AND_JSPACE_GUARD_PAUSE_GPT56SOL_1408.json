@@ -1,0 +1,70 @@
+{
+  "schema": "ENTITYOS_HCU_GO_RECEIPT/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "authority_epoch": "8.65",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "reentry": {
+    "canonical_main": "d6ab172157a0f86f0a6514e82c6f64632e2a38ea",
+    "retained_hcu_lane": "gschaidergabriel/clay-global-research-entity#1263",
+    "retained_hcu_head_before_receipt": "6904f34387b084605dd5f2d5763482f9cdcf1b66",
+    "retained_executor_lane": "gschaidergabriel/Dr.-Unterweger#810",
+    "retained_executor_head": "2da99e0458809988190c129b04cae913d1f15d92",
+    "supervisor": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_65.json"
+  },
+  "coordination": {
+    "upstream_shared_macrocycle_id": null,
+    "available_user_message_timestamp_precision": "MINUTE_ONLY",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_experiments_run": 0,
+    "ordinary_work_class": "REENTRY_READ_ONLY_PROVIDER_OBSERVABILITY_PLUS_SOURCE_REVIEW"
+  },
+  "runtime_observation": {
+    "vercel_team_id": "team_hwPBWKuCJxkfVhCx3WLdcTRx",
+    "vercel_team_plan": "hobby",
+    "vercel_project_id": "prj_ifIgM9X7jqIQS8mNIGllImziePPG",
+    "latest_deployment_id_seen": "dpl_EHwJhL2hbLHMfw2pjB1Bb53H98Mm",
+    "latest_deployment_state_seen": "READY",
+    "remaining_sandbox_quota_directly_observed": false,
+    "sandbox_create_authorized": false,
+    "sandbox_create_performed": false,
+    "provider_connector_usage_or_billing_read_action_exposed": false,
+    "provider_docs_read_only_usage_surface": "vercel usage",
+    "provider_docs_note": "The connected Vercel tool surface available to this organ exposes project/deployment/log/documentation operations but no billing-usage action. Vercel documentation identifies the CLI command `vercel usage` as a read-only current-period billing usage view. Plan identity was therefore not promoted into remaining-quota evidence.",
+    "classification": "QUOTA_AUTHORITY_OBSERVABILITY_BLOCK_NOT_PRODUCT_FAILURE"
+  },
+  "hypothesis": "If a directly authoritative read-only Vercel usage surface exposes current Sandbox consumption/remaining included allowance without billing mutation, upgrade, paid fallback, plan inference, or provider credential preflight, FREE_ONLY Sandbox admission can be decided without weakening the gate.",
+  "counterhypothesis": "Team Hobby plan identity or deployment READY state is sufficient to infer remaining included Sandbox allowance.",
+  "adjudication": "REJECT_COUNTERHYPOTHESIS: current supervisor 8.65 explicitly forbids quota/plan inference from opening the Sandbox gate, and the connected read-only team/project responses did not contain remaining Sandbox allowance.",
+  "jspace_source_review": {
+    "donor_head": "6904f34387b084605dd5f2d5763482f9cdcf1b66",
+    "files": [
+      "the artefact/MicroEntity/hcu/jspace_vector_control_abi_v1.py",
+      "the artefact/MicroEntity/hcu/jspace_vector_control_v1.py"
+    ],
+    "finding": "The compatibility ABI path re-exports the sole canonical vector-control API and fail-closes the retired second wire. The canonical implementation already binds RFC8785/JCS packet identity plus generation, basis id/hash, role, dimension, control condition, bounded q8 values, canonical scale rational and packet digest before decode.",
+    "new_executable_counterevidence_requiring_guard": false,
+    "source_guard_delta": "NO_CHANGE_WITH_REASON",
+    "reason": "Supervisor 8.65 pauses source-guard proliferation unless executable counterevidence requires a new guard. This read-only inspection found no new discriminator that justifies another semantic guard before the blocked environment/runtime gate is resolved."
+  },
+  "tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED: narrowed the exact blocker from generic quota uncertainty to missing directly authoritative remaining-Sandbox-usage visibility on the currently connected Vercel action surface; confirmed team/project/deployment metadata without inferring quota or invoking Sandbox.create.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "HCU_NO_CHANGE_WITH_REASON: the inspected JSPACE_VECTOR_CONTROL_ABI/v1 path already has one canonical wire authority and relevant fail-closed identity fences; 8.65 explicitly pauses additional source guards absent executable counterevidence, while the environment gate is still closed.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "TRAINING_READINESS_NO_CHANGE_WITH_REASON: no model/J-Space runtime or new causal trace can be admitted before the FREE_ONLY Sandbox environment gate opens; current vector-control source review found no justified nonduplicate guard delta and paid training remains forbidden."
+  },
+  "credits": {
+    "function_runtime_diagnostic": "PASS_AT_DECLARED_NO_SANDBOX_SCOPE_FROM_PRIOR_8_65_EVIDENCE",
+    "sandbox_environment_runtime": 0,
+    "whole_entityos_hcu_runtime": 0,
+    "full_hcu_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Expose or use a directly authoritative read-only Vercel current-usage surface that reports Sandbox usage/remaining included allowance without upgrade, billing mutation, plan inference, paid fallback, or credential preflight. Only if that evidence admits FREE_ONLY execution may the fixed exact-head environment probe reach Sandbox.create; otherwise preserve the block and continue only nonduplicate deterministic/source work.",
+  "acceptance": "IN_PROGRESS"
+}

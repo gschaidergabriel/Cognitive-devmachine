@@ -1,5 +1,4 @@
 import datetime as dt
-import importlib.util
 import json
 from pathlib import Path
 import sys
@@ -20,7 +19,7 @@ import run_24h_entityos_swarm as entityos
 class FreeSwarmProviderAdmissionTests(unittest.TestCase):
     NOW = dt.datetime(2026, 8, 24, 10, 0, tzinfo=dt.timezone.utc)
 
-    def make_tree(self, cost_class="UNKNOWN", evidence_status="NOT_VERIFIED_FOR_CURRENT_ACCOUNT_AND_ENDPOINT_SCOPE", *, valid_until="2026-08-25T10:00:00Z", endpoint=None):
+    def make_tree(self, cost_class="UNKNOWN", evidence_status="NOT_VERIFIED_FOR_CURRENT_ACCOUNT_AND_ENDPOINT_SCOPE", *, valid_until="2026-08-25T10:00:00Z", endpoint=None, active=True):
         td = tempfile.TemporaryDirectory()
         root = Path(td.name)
         sup = root / "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json"
@@ -44,6 +43,7 @@ class FreeSwarmProviderAdmissionTests(unittest.TestCase):
             "mode": "FREE_ONLY",
             "product": "EntityOS",
             "compute_architecture": "HCU",
+            "status": admission.POSITIVE_CONTROL_STATUS if active else "FAIL_CLOSED_NO_PROVIDER_ADMITTED",
             "admission_boundary": admission.EXPECTED_BOUNDARY,
             "providers": {
                 "groq": {
@@ -72,6 +72,13 @@ class FreeSwarmProviderAdmissionTests(unittest.TestCase):
                 self.assertEqual(admission.admitted_provider_names(root=root, now=self.NOW), [])
                 self.assertEqual(admission.admitted_secret_sources(root=root, now=self.NOW), [])
 
+    def test_positive_record_cannot_activate_while_control_status_is_fail_closed(self):
+        td, root = self.make_tree(cost_class="FREE", evidence_status="VERIFIED_ZERO_MONETARY_COST", active=False)
+        self.addCleanup(td.cleanup)
+        self.assertFalse(admission.provider_is_explicit_free(
+            "groq", "https://api.groq.com/openai/v1/chat/completions", root=root, now=self.NOW))
+        self.assertEqual(admission.admitted_secret_sources(root=root, now=self.NOW), [])
+
     def test_exact_free_current_evidence_admits_exact_endpoint_only(self):
         td, root = self.make_tree(cost_class="FREE", evidence_status="VERIFIED_ZERO_MONETARY_COST")
         self.addCleanup(td.cleanup)
@@ -82,6 +89,14 @@ class FreeSwarmProviderAdmissionTests(unittest.TestCase):
         self.assertEqual(admission.admitted_provider_names(root=root, now=self.NOW), ["groq"])
         sources = admission.admitted_secret_sources(root=root, now=self.NOW)
         self.assertEqual(sources, [("groq", str(root / "research_entity/private/GROQ_API.env"))])
+
+    def test_free_record_without_canonical_chat_endpoint_cannot_unlock_secret_source(self):
+        td, root = self.make_tree(
+            cost_class="FREE", evidence_status="VERIFIED_ZERO_MONETARY_COST",
+            endpoint="https://api.groq.com/openai/v1/models")
+        self.addCleanup(td.cleanup)
+        self.assertEqual(admission.admitted_provider_names(root=root, now=self.NOW), [])
+        self.assertEqual(admission.admitted_secret_sources(root=root, now=self.NOW), [])
 
     def test_stale_free_evidence_returns_to_fail_closed(self):
         td, root = self.make_tree(

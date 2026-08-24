@@ -1,6 +1,6 @@
 {
   "schema": "ENTITYOS_HCU_FREE_PROVIDER_ADMISSION/v1",
-  "authority_epoch": "8.70",
+  "authority_epoch": "8.71",
   "mode": "FREE_ONLY",
   "product": "EntityOS",
   "compute_architecture": "HCU",
@@ -29,7 +29,7 @@
     }
   },
   "runtime_provider_credit": 0,
-  "execution_state": "OWNER_FREE_CONTINGENTS_ADMITTED_PROVIDER_LEVEL; EVERY_AUTONOMOUS_CALL_REQUIRES_FREE_LANE_EXECUTION_RECEIPT_V1_ROUTE_CREDENTIAL_PREFLIGHT",
+  "execution_state": "OWNER_FREE_CONTINGENTS_ADMITTED_PROVIDER_LEVEL; EVERY_AUTONOMOUS_CALL_REQUIRES_FREE_LANE_EXECUTION_RECEIPT_V1_ROUTE_CREDENTIAL_PREFLIGHT; NVIDIA_REQUIRES_EXACT_CREDENTIAL_ENTITLEMENT_BINDING",
   "route_level_gate": {
     "implementation": "tools/free_lane_provenance.py",
     "receipt_schema": "FREE_LANE_EXECUTION_RECEIPT/v1",
@@ -37,5 +37,5 @@
     "unknown_or_unbound_route": "FAIL_CLOSED",
     "paid_fallback_attempt_count": 0
   },
-  "note": "Epoch 8.70 preserves the owner's authorization of free contingents while narrowing autonomous execution to concrete credential+route lanes with provider-side zero-cost/free-entitlement evidence. Provider-level admission alone is not runtime cost proof. Mistral remains provider-level admitted but concrete calls fail closed until Free-mode/PAYG-disabled provider-side evidence is bound. Historical pre-binding traffic remains append-only and is not relabeled FREE."
+  "note": "Epoch 8.71 preserves the owner's authorization of free contingents and the 8.70 concrete credential+route gate while narrowing NVIDIA to exact credential-bound Developer Program/free hosted-NIM entitlement evidence. Provider-level admission alone is not runtime cost proof. Mistral remains provider-level admitted but concrete calls fail closed until Free-mode/PAYG-disabled provider-side evidence is bound. OpenRouter remains restricted to explicit zero-price routes and Groq remains credential/model evidence bound. Historical pre-binding traffic remains append-only and is not relabeled FREE."
 }

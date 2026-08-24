@@ -81,6 +81,37 @@ class JSpaceModelInputControlClosureRevalidationTests(unittest.TestCase):
             db.close()
         self.assertEqual(asdict(revalidated), asdict(closure))
 
+    def test_missing_canonical_control_admission_is_rejected_without_minting_rows(self):
+        plan, consumed, control_binding, inference, jspace_binding, closure = self.build_valid_closure()
+        db = open_db(self.fixture.db_path, plan.entity_generation)
+        try:
+            db.execute("DELETE FROM hcu_model_input_control_invocations")
+            db.execute("DELETE FROM hcu_model_input_control_bindings")
+            db.commit()
+            self.assertEqual(db.execute("SELECT COUNT(*) FROM hcu_model_input_control_invocations").fetchone()[0], 0)
+            self.assertEqual(db.execute("SELECT COUNT(*) FROM hcu_model_input_control_bindings").fetchone()[0], 0)
+
+            with self.assertRaisesRegex(
+                JSpaceModelInputControlClosureRevalidationError,
+                "CLOSURE_SOURCE_REVALIDATION_FAILED:MODEL_INPUT_CONTROL_BINDING_NOT_ADMITTED",
+            ):
+                revalidate_closure_against_canonical_sources(
+                    db,
+                    closure,
+                    control_binding,
+                    consumed,
+                    plan,
+                    inference,
+                    jspace_binding,
+                    current_generation=plan.entity_generation,
+                )
+
+            # Validation must be observational: absence remains absence.
+            self.assertEqual(db.execute("SELECT COUNT(*) FROM hcu_model_input_control_invocations").fetchone()[0], 0)
+            self.assertEqual(db.execute("SELECT COUNT(*) FROM hcu_model_input_control_bindings").fetchone()[0], 0)
+        finally:
+            db.close()
+
     def test_self_consistent_forged_packet_identity_is_rejected_by_source_revalidation(self):
         plan, consumed, control_binding, inference, jspace_binding, closure = self.build_valid_closure()
 

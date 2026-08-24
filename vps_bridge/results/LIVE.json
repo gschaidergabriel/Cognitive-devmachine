@@ -1,21 +1,21 @@
 {
   "schema": "CLAY_VPS_LIVE/v4",
-  "observed_at": "2026-08-24T08:33:01.483337+00:00",
+  "observed_at": "2026-08-24T09:16:43.316632+00:00",
   "sandbox": "clay-direct-dev",
   "host": {
     "uptime": {
       "rc": 0,
-      "out": " 08:33:00 up  3:39,  2 users,  load average: 0.27, 0.09, 0.02\n",
+      "out": " 09:16:42 up  4:23,  2 users,  load average: 0.07, 0.06, 0.04\n",
       "err": ""
     },
     "memory": {
       "rc": 0,
-      "out": "               total        used        free      shared  buff/cache   available\nMem:     16769044480  5637992448  7209791488     1576960  4277620736 11131052032\nSwap:              0           0           0\n",
+      "out": "               total        used        free      shared  buff/cache   available\nMem:     16769044480  5530701824  7291232256     1605632  4303499264 11238342656\nSwap:              0           0           0\n",
       "err": ""
     },
     "disk": {
       "rc": 0,
-      "out": "Filesystem        1B-blocks        Used    Available Use% Mounted on\n/dev/sda1      206900281344 37538361344 169345142784  19% /\n",
+      "out": "Filesystem        1B-blocks        Used    Available Use% Mounted on\n/dev/sda1      206900281344 37560606720 169322897408  19% /\n",
       "err": ""
     },
     "podman": {
@@ -24,7 +24,7 @@
       "err": "Error: cannot run top on container 877d9128ca5ac67d4b8c3cfd897f3da263c6cd747290a7b9909d119ddffd3ffc as it did not create a cgroup: this container does not have a cgroup\n"
     }
   },
-  "processes": "USER         PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND\nroot           1  0.4  0.0   2696  1680 ?        Ss   08:32   0:00 sleep infinity\nroot          15  0.0  0.0   4324  3480 ?        SN   08:33   0:00 bash -lc ps auxww --sort=-%cpu | head -80; echo '---'; free -h; echo '---'; df -h /workspace /cache\nroot          21  0.0  0.0   7888  4024 ?        RN   08:33   0:00 ps auxww --sort=-%cpu\nroot          22  0.0  0.0   2708  1652 ?        SN   08:33   0:00 head -80\n---\n               total        used        free      shared  buff/cache   available\nMem:            15Gi       5.2Gi       6.7Gi       1.5Mi       4.0Gi        10Gi\nSwap:             0B          0B          0B\n---\nFilesystem      Size  Used Avail Use% Mounted on\n/dev/sda1       193G   35G  158G  19% /workspace\n/dev/sda1       193G   35G  158G  19% /cache\n",
+  "processes": "USER         PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND\nroot           1  0.0  0.0   2696  1680 ?        Ss   08:32   0:00 sleep infinity\nroot         383  0.0  0.0   4324  3664 ?        SN   09:16   0:00 bash -lc ps auxww --sort=-%cpu | head -80; echo '---'; free -h; echo '---'; df -h /workspace /cache\nroot         389  0.0  0.0   7888  4116 ?        RN   09:16   0:00 ps auxww --sort=-%cpu\nroot         390  0.0  0.0   2708  1544 ?        SN   09:16   0:00 head -80\n---\n               total        used        free      shared  buff/cache   available\nMem:            15Gi       5.1Gi       6.8Gi       1.5Mi       4.0Gi        10Gi\nSwap:             0B          0B          0B\n---\nFilesystem      Size  Used Avail Use% Mounted on\n/dev/sda1       193G   35G  158G  19% /workspace\n/dev/sda1       193G   35G  158G  19% /cache\n",
   "workspace_git": {
     "head": "e2cd34374e42174709ea170c31736cd486b949a4",
     "status": "## main...origin/main [behind 13]\n"

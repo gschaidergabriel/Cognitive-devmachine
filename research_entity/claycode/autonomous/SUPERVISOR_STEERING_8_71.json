@@ -1,0 +1,85 @@
+{
+  "schema_version": "8.71",
+  "cycle": "go-20260824-free-lane-nvidia-credential-binding",
+  "active_program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "integrated_cognition_compute_architecture": "HCU",
+  "latest_repo_head_inspected_before_write": "fbec9b8abb13f9da3c38f00bb788b24f9ceb3632",
+  "finding": "Supervisor 8.70 route-level FREE provenance has materially improved: OpenRouter is restricted to explicit zero-price openrouter/free; Groq requires same-credential/model rate-header evidence; Mistral remains fail-closed; PR1468 additionally binds the exact admission/economic-provenance snapshots immediately before provider network I/O. However NVIDIA remains admitted from a provider-global Developer Program/NIM statement with credential_plan_needed=false. The runtime gate therefore accepts any credential fingerprint routed to integrate.api.nvidia.com without proving that the concrete credential belongs to a Developer Program/free hosted-NIM entitlement. This fails the per-credential/per-route economic binding required by 8.70. The latest metrics after the source fix show continued external traffic and 5,001,744 cumulative swarm tokens, but no repository-bound FREE_LANE_EXECUTION_RECEIPT/v1 runtime evidence for the exact PR1468 source; provider runtime credit remains zero.",
+  "classification": "NVIDIA_FREE_ENTITLEMENT_NOT_CREDENTIAL_BOUND_AND_EXACT_FIX_RUNTIME_UNPROVEN",
+  "evidence": {
+    "pre_call_binding_fix_commit": "3fdfcd705564c87d27b5ba9567755bf7f639cc0f",
+    "latest_metrics_commit": "fbec9b8abb13f9da3c38f00bb788b24f9ceb3632",
+    "free_lane_gate_path": "tools/free_lane_provenance.py",
+    "economic_provenance_path": "governance/FREE_LANE_ECONOMIC_PROVENANCE_2026-08-24.json",
+    "nvidia_current_behavior": "credential fingerprint is not checked against an account/member/free-entitlement observation; provider-global hosted-NIM statement is sufficient",
+    "official_nvidia_source": "https://developer.nvidia.com/nim",
+    "official_nvidia_semantics": "NVIDIA Developer Program membership enables NVIDIA-hosted NIM APIs for development/testing; the public statement proves the program exists, not that an arbitrary concrete credential is enrolled in it.",
+    "latest_free_swarm_tokens": 5001744,
+    "latest_machine_readable_delta_records": 68,
+    "latest_forge_accepted_deltas": 0,
+    "latest_distillery_accepted_dataset_tokens": 0,
+    "historical_unadmitted_execution_must_remain_append_only": true
+  },
+  "required_next_cycle": [
+    "Do not disable the owner's authorized NVIDIA free contingent globally. Narrow NVIDIA runtime admission so that the exact credential fingerprint is bound to observable NVIDIA Developer Program/free hosted-NIM entitlement evidence before autonomous FREE_ONLY network execution.",
+    "Add NVIDIA_CREDENTIAL_FREE_ENTITLEMENT_RECEIPT/v1 or extend FREE_LANE_EXECUTION_RECEIPT/v1 with credential-bound NVIDIA entitlement evidence. A provider-global documentation URL, successful HTTP response, key presence, or provider label is not sufficient.",
+    "Negative control: an arbitrary/new NVIDIA credential fingerprint with no bound entitlement receipt must fail closed before provider network I/O. If secret material must be read to derive the fingerprint, no model request may occur until entitlement is resolved; do not expose secrets in receipts.",
+    "Positive control: a credential fingerprint with provider-side Developer Program/free hosted-NIM entitlement evidence may call only the documented hosted prototyping endpoint and must emit FREE_LANE_EXECUTION_RECEIPT/v1 with the exact pre-call admission and economic-provenance digests.",
+    "Execute the current PR1468 boundary suite on the exact main source and capture a runtime/component receipt. Source tests or PR prose alone do not establish the pre-call revalidation boundary.",
+    "Do not award provider runtime credit from the post-fix dashboard request counters. The 13:28-to-13:43 metric interval straddles the source merge and does not prove which calls used the exact fixed bytes.",
+    "Keep Mistral fail-closed until provider-side Free-mode evidence is bound; keep OpenRouter restricted to explicit zero-price routes; keep Groq credential/model evidence fail-closed when the documented free-limit match is absent.",
+    "Together and every PAID/SUBSCRIPTION/UNKNOWN route remain forbidden; no paid fallback, upgrade, credit purchase or billing activation is authorized.",
+    "Continue Goodman ancestry collapse: 512 threads, 6000 logical workers, token volume and same-pipeline model agreement are one orchestration evidence family and cannot mint independent semantic credit.",
+    "Do not promote BASE work packages, Whole-EntityOS, Whole-HCU or canonical semantics from this provider-control work."
+  ],
+  "new_required_receipts": {
+    "NVIDIA_CREDENTIAL_FREE_ENTITLEMENT_RECEIPT/v1": {
+      "must_bind": [
+        "source_commit_and_tree",
+        "credential_fingerprint",
+        "provider=nvidia",
+        "endpoint_host=integrate.api.nvidia.com",
+        "provider_side_developer_program_or_free_hosted_nim_entitlement_evidence",
+        "entitlement_observed_at",
+        "entitlement_evidence_digest",
+        "typed_admission_epoch_and_digest"
+      ],
+      "pass_condition": "The concrete credential fingerprint, not merely NVIDIA as a provider, is demonstrably covered by the authorized free hosted-NIM prototyping entitlement before model network I/O."
+    },
+    "FREE_LANE_EXECUTION_RECEIPT/v1_CURRENT_SOURCE_RUN": {
+      "must_bind": [
+        "exact_current_source_commit_and_tree",
+        "pre_call_admission_digest",
+        "pre_call_economic_provenance_digest",
+        "pre_network_revalidation_result",
+        "provider",
+        "credential_fingerprint",
+        "model_or_route",
+        "request_id",
+        "usage",
+        "http_status",
+        "paid_fallback_attempt_count=0",
+        "result_digest"
+      ],
+      "pass_condition": "At least one admitted free lane is executed on the exact post-PR1468 source with stable pre-call authority and no paid fallback; rejected lanes demonstrate zero provider model network requests."
+    }
+  },
+  "free_only": {
+    "enabled": true,
+    "owner_authorized_free_contingents": ["groq", "mistral", "nvidia", "openrouter"],
+    "no_paid_fallback": true,
+    "together_forbidden": true,
+    "nvidia_provider_global_statement_is_not_credential_entitlement_proof": true,
+    "unknown_or_unlisted_route": "FAIL_CLOSED",
+    "provider_runtime_credit": 0
+  },
+  "promotion": {
+    "entityos_whole_runtime_pass": false,
+    "hcu_full_runtime_pass": false,
+    "canonical_semantics_promotion": false,
+    "base_work_package_promotion": false,
+    "provider_runtime_credit": 0,
+    "training_credit": 0
+  }
+}

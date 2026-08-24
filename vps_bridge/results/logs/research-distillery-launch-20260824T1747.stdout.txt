@@ -1,0 +1,115 @@
+SUPERVISOR_PID=13311
+--- processes ---
+root         931  1.4  0.1  35756 28964 ?        SN   09:47   0:48 python3 /workspace/clay-global-research-entity/free swarm/evaluate.py --repo /workspace/clay-global-research-entity --artifacts /artifacts/clay-entityos-swarm --watch --hours 24 --interval-seconds 60 --publish --publish-min-seconds 900
+root        2886  0.1  0.2 625476 33660 ?        SNl  09:51   0:04 python3 /workspace/clay-global-research-entity/tools/run_24h_entityos_swarm.py --hours 24.0 --output-dir /artifacts/clay-entityos-swarm/active-20260824T095103Z
+root       12460  0.0  0.0   4324  3440 ?        SN   10:43   0:00 bash -lc set -e; apt-get update -qq >/dev/null; DEBIAN_FRONTEND=noninteractive apt-get install -y -qq poppler-utils >/dev/null; pkill -f '[r]un_24h_entityos_swarm.py' 2>/dev/null || true; pkill -f '[r]un_research_distillery_entry.py' 2>/dev/null || true; pkill -f '[r]un_research_distillery.py' 2>/dev/null || true; sleep 2; nohup bash tools/run_24h_entityos_swarm_supervisor.sh >/artifacts/clay-entityos-swarm/supervisor-v5.log 2>&1 </dev/null & echo SUPERVISOR_PID=$!; sleep 25; echo '--- processes ---'; ps auxww | grep -E '[r]un_24h_entityos_swarm|[r]un_research_distillery|[f]ree swarm/evaluate.py' | head -20; echo '--- supervisor ---'; cat /artifacts/clay-entityos-swarm/SUPERVISOR.json 2>/dev/null || true; echo '--- distillery ---'; cat /artifacts/clay-entityos-swarm/distillery/STATUS.json 2>/dev/null || true; echo '--- distillery log ---'; tail -40 /artifacts/clay-entityos-swarm/distillery.log 2>/dev/null || true; echo '--- disk ---'; df -h /workspace /cache /artifacts
+root       13311  0.7  0.1 183988 32636 ?        SNl  10:44   0:00 python3 /workspace/clay-global-research-entity/tools/run_24h_entityos_swarm.py --hours 24.0 --output-dir /artifacts/clay-entityos-swarm/active-20260824T104408Z
+root       13321  1.0  0.2  38328 33088 ?        SN   10:44   0:00 python3 /workspace/clay-global-research-entity/tools/run_research_distillery_entry.py --hours 24 --sleep-seconds 3
+--- supervisor ---
+{
+  "schema": "CLAY_ENTITYOS_SWARM_SUPERVISOR/v5",
+  "observed_at": "2026-08-24T10:44:08.543939+00:00",
+  "repo_root": "/workspace/clay-global-research-entity",
+  "remaining_seconds": 86400,
+  "free_only_attested": true,
+  "provider_credentials_present": {
+    "groq": true,
+    "mistral": false,
+    "nvidia": true,
+    "openrouter": true,
+    "tavily": true,
+    "exa": true
+  },
+  "provider_credential_counts": {
+    "groq": 1,
+    "mistral": 0,
+    "nvidia": 1
+  },
+  "dashboard_watch": true,
+  "research_distillery": true,
+  "distillery_entrypoint": "run_research_distillery_entry.py"
+}
+--- distillery ---
+{
+  "schema": "CLAY_RESEARCH_DISTILLERY_STATUS/v1",
+  "generated_at": "2026-08-24T10:44:08.672139+00:00",
+  "collected_source_tokens": 0,
+  "accepted_dataset_tokens": 0,
+  "dataset_yield": 0.0,
+  "compression_factor": null,
+  "collected_chunks": 0,
+  "accepted_packets": 0,
+  "rejected_candidates": 0,
+  "questions": {
+    "OPEN": 10
+  },
+  "source_metadata_rows": {},
+  "small_models": [
+    "nvidia/nemotron-3-nano-30b-a3b:free",
+    "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
+    "nvidia/nemotron-3-super-120b-a12b:free",
+    "nvidia/nemotron-3-ultra-550b-a55b:free",
+    "nvidia/nemotron-nano-12b-v2-vl:free",
+    "nvidia/nemotron-nano-9b-v2:free",
+    "google/gemma-4-26b-a4b-it:free",
+    "google/gemma-4-31b-it:free"
+  ],
+  "reviewers": [
+    {
+      "lane": "nvidia_reviewer",
+      "provider": "nvidia",
+      "model": "nvidia/llama-3.3-nemotron-super-49b-v1"
+    }
+  ],
+  "model_input_tokens": 0,
+  "model_output_tokens": 0,
+  "shared_provider_budget": {
+    "schema": "CLAY_SHARED_PROVIDER_BUDGET/v1",
+    "generated_at": "2026-08-24T10:44:08.672567+00:00",
+    "providers": {
+      "groq": {
+        "max_inflight": 12,
+        "active_leases": 1,
+        "min_interval_s": 0.0,
+        "cooldown_seconds": 0.0,
+        "total_requests": 1,
+        "total_success": 0,
+        "total_429": 0,
+        "total_errors": 0,
+        "last_status": null,
+        "last_observed_at": "2026-08-24T10:44:08.659139+00:00"
+      },
+      "nvidia": {
+        "max_inflight": 12,
+        "active_leases": 0,
+        "min_interval_s": 0.0,
+        "cooldown_seconds": 0.0,
+        "total_requests": 6,
+        "total_success": 0,
+        "total_429": 0,
+        "total_errors": 6,
+        "last_status": "404",
+        "last_observed_at": "2026-08-24T10:43:38.554374+00:00"
+      },
+      "openrouter": {
+        "max_inflight": 3,
+        "active_leases": 0,
+        "min_interval_s": 0.5,
+        "cooldown_seconds": 0.0,
+        "total_requests": 2,
+        "total_success": 2,
+        "total_429": 0,
+        "total_errors": 0,
+        "last_status": "200",
+        "last_observed_at": "2026-08-24T10:44:08.652358+00:00"
+      }
+    }
+  },
+  "db_bytes": 90112
+}
+--- distillery log ---
+--- disk ---
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/sda1       193G   36G  158G  19% /workspace
+/dev/sda1       193G   36G  158G  19% /cache
+/dev/sda1       193G   36G  158G  19% /artifacts

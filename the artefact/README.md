@@ -34,6 +34,23 @@ The authorized VPS sandbox was preflighted before the current blocker-convergenc
 
 That runtime observation was source-bound to an earlier sandbox head. It remains bounded component evidence, not exact-newest-main runtime credit.
 
+## Self-hosted execution health gate — GO872
+
+A recurring observability gap was identified during the 2026-08-24 `go`: the repository already contains strong **local** self-hosted runner validation in `tools/claycode_bootstrap_andreas_self_hosted_runner.sh`, including exact runner identity, online state and scoped labels, but a new ChatGPT organ could not consume a current repository-bound health result before deciding whether pending Forge or Trigger-1 workflows were blocked by runner transport.
+
+The bounded repair on branch `gpt56sol/go872-selfhosted-health-20260824-2334` adds one reusable non-experimental health surface:
+
+- `tools/go872_selfhosted_health_receipt.py` emits `CLAY_GO872_SELFHOSTED_HEALTH_RECEIPT/v1`;
+- `.github/workflows/go872-selfhosted-health-worker.yml` runs the probe on `[self-hosted, Linux, X64]` and persists the sanitized exact-source result;
+- `.github/workflows/go872-selfhosted-health-observer.yml` runs on GitHub-hosted Ubuntu, dispatches the worker, observes whether the target run is merely accepted, actually claimed, or terminal, and persists `CLAY_GO872_SELFHOSTED_HEALTH_OBSERVER/v1` even when the self-hosted worker does not complete;
+- `tests/test_go872_selfhosted_health_receipt.py` locks secret-value exclusion, the inherited Trigger-1 disk threshold and fail-closed zero-credit behavior.
+
+The worker receipt binds source commit, source tree, dirty state, runner name/OS/arch, available disk, memory observation, Python/Bash/`bwrap` presence, current Qwen/Forge frontier source presence and **provider credential environment names only**. Secret values are never recorded. The Qwen disk gate reuses the existing `3,000,000 KiB` minimum from `tools/trigger1_local_qwen06_midlayer_causal.sh`; it does not invent a new model-storage threshold.
+
+The observer deliberately uses GitHub workflow-run state rather than treating dispatch acceptance as runner health. Its classifications distinguish dispatch rejection, unobserved target run, unclaimed queued/waiting state, claimed nonterminal state, completed success and completed non-success. This closes a reentry ambiguity without invoking a model, provider, EffectGate path or unusual experiment.
+
+**Evidence boundary:** until the branch is merged and the observer/worker produce repository-bound results, this is source + local unit-regression evidence only. Even a successful health receipt mints **zero** Forge→Distillery, model, J-Space, training, full-HCU or whole-EntityOS runtime credit; it only proves the measured runner/source/readiness scope.
+
 ## Forge -> Distillery conversion frontier
 
 The historical live ledger contained one nominal `accepted` row, but it predates the exact source/execution-admission contract. It therefore correctly minted **zero** Distillery packets/tokens.
@@ -90,6 +107,7 @@ Current bounded credit remains conservative:
 - exact current evidence-qualified Forge acceptance proven by terminal successor receipt: **pending**;
 - Distillery accepted Forge packets/tokens in the last published live snapshot: **0 / 0**;
 - Forge->Distillery exact-current runtime credit: **0 pending terminal receipt**;
+- self-hosted health observability: **source + local 3-test regression only until merged/executed**;
 - provider runtime credit: **0 unless exact current authority/receipt promotes only its exact scope**;
 - local Qwen3-0.6B hidden-state/runtime J-Space promotion: **0 pending terminal midlayer receipt**;
 - whole EntityOS/HCU runtime credit: **0**;
@@ -102,14 +120,15 @@ A source file, test, workflow, deployment, provider HTTP success, token count or
 
 ## Current blockers / next exact gates
 
-1. Observe a terminal self-hosted runtime-reconciliation receipt on current authority and exact source identity.
-2. Observe the exact-current Forge -> Distillery successor witness: qualified Forge accept = 1 -> exactly one Distillery packet -> `accepted_dataset_tokens > 0` -> replay delta = 0.
-3. If the Forge witness fails, repair the **measured** isolated-executor/bridge blocker only; do not weaken evidence admission.
-4. Observe owner dispatch #1643 and persist the fused nonterminal midlayer Qwen3-0.6B exact-source runtime receipt; classify any preflight/dependency/runtime failure explicitly.
-5. Require all six matched controls plus disjoint holdout; require activation-derived nonterminal vector construction and reject final-norm/`lm_head`/output-projection shortcuts as mechanism credit.
-6. Reduce `PATCH_REJECTED` / `NEEDS_IMPLEMENTATION` by improving source-bound patch synthesis/repair and disposable-worktree execution, never by weakening acceptance.
-7. Continue one canonical Typed Entry -> verified loader -> actual model execution -> InferenceReceipt -> model-specific J-Space causal-control chain.
-8. Keep every external model call behind exact FREE economic provenance. No paid/Together fallback.
+1. Merge and execute the GO872 health observer/worker; consume its repository-bound classification before interpreting missing self-hosted terminal results.
+2. Observe a terminal self-hosted runtime-reconciliation receipt on current authority and exact source identity.
+3. Observe the exact-current Forge -> Distillery successor witness: qualified Forge accept = 1 -> exactly one Distillery packet -> `accepted_dataset_tokens > 0` -> replay delta = 0.
+4. If the Forge witness fails, repair the **measured** isolated-executor/bridge blocker only; do not weaken evidence admission.
+5. Observe owner dispatch #1643 and persist the fused nonterminal midlayer Qwen3-0.6B exact-source runtime receipt; classify any preflight/dependency/runtime failure explicitly.
+6. Require all six matched controls plus disjoint holdout; require activation-derived nonterminal vector construction and reject final-norm/`lm_head`/output-projection shortcuts as mechanism credit.
+7. Reduce `PATCH_REJECTED` / `NEEDS_IMPLEMENTATION` by improving source-bound patch synthesis/repair and disposable-worktree execution, never by weakening acceptance.
+8. Continue one canonical Typed Entry -> verified loader -> actual model execution -> InferenceReceipt -> model-specific J-Space causal-control chain.
+9. Keep every external model call behind exact FREE economic provenance. No paid/Together fallback.
 
 ## Evidence discipline and reentry
 

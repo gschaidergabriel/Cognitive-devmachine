@@ -1,0 +1,67 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "authority_epoch": "8.73",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "trigger": "go",
+  "organ": "GPT-5.6-Sol",
+  "base_main": "5fbf7aa1a9a5bb4089166ac787f291122a192b3c",
+  "branch": "gpt56sol/go873-distillery-envelope-replay-identity-20260825",
+  "finding": {
+    "classification": "SOURCE_OBSERVED_REPLAY_IDENTITY_ENVELOPE_LEAK",
+    "statement": "Canonical main still included evaluated_at in the training-bearing measured packet and included delta_id in both the measured packet and CLAY_FORGE_EXECUTION_REPLAY_IDENTITY/v1. Because delta_id names the evaluation/candidate envelope rather than a new measured execution, re-keying the same measured execution could produce a distinct replay identity and packet/token admission. Across fresh rebuilds, timestamp-only envelopes could also alter packet bytes/token counts.",
+    "evidence_scope": "EXACT_SOURCE_INSPECTION_ONLY"
+  },
+  "hypothesis": "Replay identity and training-bearing measured evidence must exclude envelope-only observation/evaluation keys while retaining them as provenance metadata. The same measured execution with changed evaluated_at, delta_id, candidate hypothesis, or candidate falsifier must remain one replay event; changed measured evidence under that stable identity must fail closed.",
+  "counterhypothesis": "delta_id should remain replay-significant because a new evaluation identifier necessarily denotes a new measured execution.",
+  "counterhypothesis_disposition": "REJECTED_AT_CURRENT_CONTRACT_LEVEL: delta_id is assigned at evaluation/candidate-envelope scope and is not independently bound to new execution bytes or new measurement evidence. Treating it as replay-significant permits envelope re-keying to mint another dataset event.",
+  "delta": {
+    "source_commit": "a3c8f1eb4deb0e6a0aa3f7d55bd35f3be592b55b",
+    "test_commit": "f370c9f8a0d2338188f4931edc23fa692669a572",
+    "source": "tools/ingest_forge_accepts_into_distillery.py",
+    "test": "tests/test_forge_distillery_envelope_replay_identity_873.py",
+    "changes": [
+      "exclude evaluated_at from CLAY_DISTILLERY_FORGE_EXECUTION_PACKET/v2 packet_text",
+      "exclude delta_id from CLAY_DISTILLERY_FORGE_EXECUTION_PACKET/v2 packet_text",
+      "exclude delta_id from CLAY_FORGE_EXECUTION_REPLAY_IDENTITY/v1",
+      "derive measured evidence directly from the envelope-free measured packet",
+      "retain evaluated_at and delta_id as observation/provenance metadata only",
+      "define duplicate, conflict, and fresh-rebuild stability regressions"
+    ]
+  },
+  "regression_definition": {
+    "same_execution_changed_delta_id_timestamp_narration": "DUPLICATE_AND_ZERO_TOKEN_DELTA",
+    "same_execution_changed_measured_metric_with_changed_delta_id": "REPLAY_IDENTITY_CONFLICT",
+    "fresh_rebuild_equivalent_envelopes": "IDENTICAL_PACKET_ID_PACKET_TEXT_REPLAY_DIGEST_MEASURED_DIGEST_TOKEN_COUNT"
+  },
+  "coordination": {
+    "closed_predecessor_pr": 1726,
+    "predecessor_merged": false,
+    "red_ci_carrier_pr": 1724,
+    "overlap_search_result": "No open PR found that specifically closes delta_id envelope re-keying in Forge-to-Distillery replay identity.",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_interventions_executed": 0
+  },
+  "go_tracks": {
+    "track_a": "ADVANCED_SOURCE_SCOPE: strengthens executable Forge-to-Distillery convergence by preventing envelope re-keying from minting another dataset packet.",
+    "track_b": "ADVANCED: separates stable execution evidence identity from transport/evaluation envelope identity, a reusable Typed Entry causal-identity boundary.",
+    "track_c": "ADVANCED_DATASET_SAFETY_SCOPE: makes future training packet identity stable under envelope-only replay while granting zero J-Space/model/training credit."
+  },
+  "execution": {
+    "source_regressions_defined": true,
+    "exact_branch_head_regression_execution_observed": false,
+    "provider_or_model_call": false,
+    "paid_or_together_execution": false,
+    "canonical_effect": false
+  },
+  "credit_boundary": {
+    "whole_entityos_hcu_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Execute tests.test_forge_distillery_envelope_replay_identity_873 plus existing replay/live-bridge regressions on this exact branch head using an explicitly admitted zero-cost execution surface. If green, refresh current main and fuse only if no successor already closes the same semantics; then require repository-bound live promotion 1->1->positive tokens with semantic envelope replay +0 and measured-evidence mutation fail-closed."
+}

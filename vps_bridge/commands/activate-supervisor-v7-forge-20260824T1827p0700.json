@@ -1,0 +1,8 @@
+{
+  "schema":"CLAY_VPS_COMMAND/v4",
+  "command_id":"activate-supervisor-v7-forge-20260824T1827p0700",
+  "op":"exec",
+  "cwd":"/workspace/clay-global-research-entity",
+  "timeout_seconds":180,
+  "command":"set -e; python3 -m py_compile tools/run_24h_entityos_swarm.py tools/run_research_distillery.py tools/run_research_distillery_entry.py tools/run_free_evidence_forge.py tools/free_swarm_quota.py 'free swarm/update_forge_readme.py' 'free swarm/merge_forge_evaluations.py'; pgrep -f '[r]un_24h_entityos_swarm.py' | xargs -r kill; pgrep -f '[r]un_24h_entityos_swarm_supervisor.sh' | xargs -r kill || true; sleep 2; nohup bash tools/run_24h_entityos_swarm_supervisor.sh >/artifacts/clay-entityos-swarm/supervisor.log 2>&1 </dev/null & echo SUP_PID=$!; sleep 35; echo ---PS---; ps -eo pid,etime,%cpu,%mem,args | grep -E '[r]un_24h_entityos_swarm|[r]un_research_distillery|[r]un_free_evidence_forge|[f]ree swarm/evaluate.py' | head -30; echo ---SUPERVISOR---; cat /artifacts/clay-entityos-swarm/SUPERVISOR.json; echo ---FORGE---; cat /artifacts/clay-entityos-swarm/forge/STATUS.json 2>/dev/null || true; echo ---DISTILLERY---; cat /artifacts/clay-entityos-swarm/distillery/STATUS.json 2>/dev/null || true"
+}

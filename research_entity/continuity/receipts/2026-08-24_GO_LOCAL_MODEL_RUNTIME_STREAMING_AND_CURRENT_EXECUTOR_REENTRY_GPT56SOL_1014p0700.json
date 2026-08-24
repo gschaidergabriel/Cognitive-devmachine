@@ -1,0 +1,143 @@
+{
+  "schema": "CLAY_GO_ENTITYOS_HCU_CONVERGENCE_RECEIPT/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "supervisor": "SUPERVISOR_STEERING_8_63",
+  "mode": "FREE_ONLY",
+  "authority_reentry": {
+    "research_main_observed_before_receipt": "6737b837156b1a6ae74287f6c7488e08a7c68942",
+    "supervisor_schema": "8.63",
+    "supervisor_mode": "FREE_ONLY",
+    "whole_entityos_hcu_runtime_pass_before_receipt": false,
+    "jspace_model_runtime_credit_before_receipt": 0,
+    "training_credit_before_receipt": 0
+  },
+  "coordination": {
+    "upstream_shared_immutable_macrocycle_id": null,
+    "available_user_message_timestamp_precision": "MINUTE_ONLY",
+    "unusual_experiment_status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_experiments_executed_by_this_organ": 0,
+    "ordinary_work_performed": [
+      "source review",
+      "web research",
+      "deterministic regression authoring",
+      "authorized exact-source runtime acceptance gate check",
+      "fusion-safe append-only receipts"
+    ]
+  },
+  "track_a_executor_reentry": {
+    "executor_repository": "gschaidergabriel/Dr.-Unterweger",
+    "executor_pr": 810,
+    "live_head_observed": "6a15601183f9bb61d445368e4d239e90a47b300c",
+    "live_head_is_descendant_of_previously_invoked_fail_closed_head": true,
+    "previously_invoked_head": "b7bd0076ccce593767c86ff0e026a09a8e88b67f",
+    "previous_exact_function_observation": {
+      "deployment_id": "dpl_EtVgJ96pobVv3zqh9jozAKHgfNWa",
+      "http_status": 412,
+      "route_status": "FREE_ONLY_SANDBOX_COST_ADMISSION_REQUIRED",
+      "runtime_gate": "BLOCKED_QUOTA_UNOBSERVED",
+      "remaining_sandbox_quota_directly_observed": false,
+      "sandbox_create_performed": false,
+      "execution_credit": "NONE"
+    },
+    "current_exact_head_deployment": {
+      "deployment_id": "dpl_J2W13WSMy3ewWspjfNdn2wqM6rtN",
+      "state": "READY",
+      "git_sha": "6a15601183f9bb61d445368e4d239e90a47b300c",
+      "exact_head_match": true,
+      "normal_connector_fetch_http_status": 302,
+      "temporary_share_fetch_http_status": 302,
+      "function_observed_at_current_head": false,
+      "sandbox_create_observed_at_current_head": false,
+      "classification": "AUTH_SSO_BLOCKED_BEFORE_FUNCTION_OBSERVATION_CURRENT_HEAD"
+    },
+    "evidence_boundary": "The b7bd0076 412 observation proves the repaired quota gate only at that exact deployment/source identity. It is not projected to 6a156011. Current-head 302/SSO is infrastructure/auth evidence, not a product/runtime negative result."
+  },
+  "track_b_hcu_loader_readiness": {
+    "retained_donor_repository": "gschaidergabriel/clay-global-research-entity",
+    "retained_donor_pr": 1263,
+    "donor_live_head_observed": "41670d34a29152713ab932bc4dcc0220c2c99da8",
+    "our_latest_stream_test_commit_confirmed_ancestor_of_live_head": true,
+    "implemented_commits": {
+      "exact_qwen_gguf_candidate": "b5a08a0c232d8a94bc3cf09c867dbebb369a27d5",
+      "single_file_gguf_engine_admission_regression": "52c5ee8d262ec126b50e488e71b3e767b803c6dd",
+      "attested_llama_cpp_runtime_candidate": "7047ae9effbf36fee436f04ab2f116d72ea24e69",
+      "streaming_regular_file_to_sealed_memfd_producer": "601a9b61406fe61314ff63f4b8919f78885f61b8",
+      "streaming_loader_negative_regressions": "6f3017f233c3f05c4befcc1d5c5fde30499949f6"
+    },
+    "new_producer": {
+      "path": "the artefact/MicroEntity/hcu/loader_consumption_stream_v1.py",
+      "evidence_class": "SEALED_MEMFD_STREAMED_REGULAR_FILE_FD_PATH_CALLBACK/v1",
+      "source_requirements": [
+        "regular file",
+        "O_NOFOLLOW",
+        "stable device/inode/size/mtime_ns/ctime_ns across copy",
+        "caller-pinned exact source SHA-256",
+        "caller-pinned exact byte count"
+      ],
+      "delivery": "stream exact source bytes in bounded chunks into anonymous memfd, seal, re-hash, expose synchronous /proc/self/fd path to bound loader, then re-check seals and digest",
+      "memory_reason": "avoids requiring a large GGUF to exist first as one Python bytes object",
+      "credit_limit": "producer/source mechanism only; opaque loader full-byte consumption, model construction and inference remain unproven"
+    },
+    "regressions": {
+      "paths": [
+        "the artefact/MicroEntity/hcu/test_engine_admission_single_file_gguf_v1.py",
+        "the artefact/MicroEntity/hcu/test_loader_consumption_stream_v1.py"
+      ],
+      "executed_by_this_organ": false,
+      "classification": "SOURCE_TESTS_UNEXECUTED",
+      "reason": "No currently admitted execution surface was used for donor unit tests; no VPS/self-hosted/paid/Together runner was used and no local/static execution is inflated into EntityOS/HCU runtime evidence."
+    }
+  },
+  "track_c_local_model_jspace_readiness": {
+    "model_candidate": {
+      "repository": "Qwen/Qwen3-0.6B-GGUF",
+      "artifact": "Qwen3-0.6B-Q8_0.gguf",
+      "upstream_file_change_commit": "1eaf4d9657fe65ad10a51eab76a8db5b363bddaa",
+      "sha256": "9465e63a22add5354d9bb4b99e90117043c7124007664907259bd16d043bb031",
+      "byte_count": 639446688,
+      "status": "SOURCE_CANDIDATE_ONLY_NO_RUNTIME_CREDIT"
+    },
+    "runtime_distribution_candidate": {
+      "repository": "ggml-org/llama.cpp",
+      "tag": "b10566",
+      "source_repository_digest": "bb4caa7540188872173c44d161602d9271386413",
+      "asset": "llama-b10566-bin-ubuntu-x64.tar.gz",
+      "upstream_attested_asset_sha256": "0c34561d623299c113e46f9fdd97bff5b219b25554243a21a243aebc81253ea1",
+      "upstream_attestation_id": "42207505",
+      "status": "ATTESTED_DISTRIBUTION_CANDIDATE_ONLY_NO_LOCAL_RUNTIME_CREDIT"
+    },
+    "unresolved_before_model_credit": [
+      "explicit current authority for actual zero-cost local model execution surface",
+      "local materialization and re-hash of exact runtime archive",
+      "deterministic extracted executable/shared-library/build identity",
+      "local materialization and exact re-hash/byte-count verification of Qwen GGUF",
+      "actual path/fd-consuming loader binding identity",
+      "witnessed actual loader use",
+      "canonical physical-engine/loader-consumption admission",
+      "actual model-executor observation",
+      "canonical MiniUnifiedDB atomic ModelExecution admission",
+      "exact inference receipt and model-specific J-Space trace"
+    ]
+  },
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED_EVIDENCE_BOUNDARY: exact b7bd0076 Function invocation established a 412 pre-Sandbox quota fail-closed gate; current 6a156011 exact-head preview is READY but current invocation is SSO-blocked before Function observation, so no evidence is projected across SHAs.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED_SOURCE_LEVEL: one exact single-file GGUF EngineAdmission regression plus a large-file streaming sealed-memfd loader-consumption producer/negative regression set now exists in the retained donor lane.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "ADVANCED_SOURCE_READINESS_ONLY: exact Qwen3-0.6B Q8_0 model bytes and an upstream-attested llama.cpp Ubuntu-x64 distribution are pinned as non-promoted candidates; no real model execution, J-Space model causality or training occurred."
+  },
+  "credits": {
+    "whole_entityos_hcu_runtime_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "readme": {
+    "status": "NO_CHANGE_WITH_REASON",
+    "reason": "the artefact/README.md is a rapidly moving whole-system surface under parallel organs. This append-only current-authority receipt plus retained-donor commits records the bounded delta without overwriting fresher current-facing content."
+  },
+  "next_exact_gate": "Track A: obtain direct invocation-scoped remaining included Vercel Sandbox quota/no-charge authority plus current exact-head protected-route access; otherwise keep Sandbox blocked and do not infer current Function behavior from b7bd. Tracks B/C: run deterministic source regressions only on a currently admitted test surface; for real model credit require newer/current authority that explicitly admits the zero-cost local execution surface, then materialize and verify the pinned b10566 archive and Qwen GGUF, derive exact extracted runtime/build identity, witness an actual path/fd loader, and pass canonical loader/ModelExecution/inference/J-Space admission."
+}

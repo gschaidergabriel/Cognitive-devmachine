@@ -17,25 +17,29 @@
   },
   "successor_discriminator": {
     "canonical_lane_commit": "04f83334e6daf7334e74aeb354db1e74c400bbbf",
-    "launcher": "tools/trigger1_local_qwen06_intermediate_api.sh",
-    "executor": "tools/trigger1_local_qwen06_intermediate_api_execute.py",
+    "workflow": ".github/workflows/trigger1-v2-local-fastpath-selfhosted.yml",
+    "launcher": "tools/trigger1_local_qwen06_midlayer_causal.sh",
+    "executor": "tools/trigger1_local_qwen06_midlayer_causal_execute.py",
     "properties": [
       "nonterminal internal transformer intervention",
       "activation-derived contrastive vector independent of lm_head rows",
       "substantive downstream transformer computation",
-      "calibration-only layer/gain selection",
+      "calibration-only gain selection",
       "disjoint holdout",
       "BASELINE/+VECTOR/SIGN_FLIP/NULL_VECTOR/ORTHOGONAL_SAME_NORM/PERMUTED_SAME_NORM",
       "loopback-only API",
       "exact source/runtime/model/tokenizer/intervention identity binding",
-      "zero paid-provider dependency"
+      "zero paid-provider dependency",
+      "provider credential scrub plus fail-closed fence before execution"
     ]
   },
   "infrastructure_blocker_repair": {
     "classification": "SELF_HOSTED_LOW_DISK_PRECHECK",
-    "repair_commit": "90177bc3b359e8062226aabf39617c3f38f76a72",
-    "repair": "Canonical intermediate launcher now performs bounded cleanup of disposable Trigger-1 scratch/pip state, preserves the Hugging Face/model cache, records disk_preflight.json, and fails closed with a machine-readable residual low-disk blocker if headroom remains insufficient.",
-    "status": "MITIGATED_IN_SOURCE"
+    "canonical_launcher_commit": "7d9dbf1f50318809cbc7302b3575d5f37e538b2a",
+    "fusion_commit": "04f83334e6daf7334e74aeb354db1e74c400bbbf",
+    "additional_equivalent_alt_lane_hardening_commit": "90177bc3b359e8062226aabf39617c3f38f76a72",
+    "repair": "The fused canonical midlayer launcher performs bounded cleanup of disposable Trigger-1 scratch/incomplete venv/pip state, preserves the Hugging Face/model cache, records disk_preflight.json, and fails closed with a machine-readable residual low-disk blocker if headroom remains insufficient.",
+    "status": "MITIGATED_IN_CANONICAL_SOURCE"
   },
   "dispatch": {
     "latest_observed_issue": 1647,

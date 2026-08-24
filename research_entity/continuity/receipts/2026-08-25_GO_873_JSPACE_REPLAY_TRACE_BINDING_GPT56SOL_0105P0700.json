@@ -17,7 +17,7 @@
   "reentry": {
     "newly_landed_trace_schema": "research_entity/claycode/JSPACE_TRACE_ABI_V1.schema.json",
     "newly_landed_replay_contract": "research_entity/claycode/HCU_JSPACE_REPLAY_IDENTITY_BINDING_V1.md",
-    "supersedes_local_design": "Initial PR 1746 normalized traces but predated the explicit three-identity replay contract and is not merge-target authority."
+    "supersedes_local_design": "PR 1746 predated the explicit three-identity replay contract and was closed unmerged after PR 1763 was opened."
   },
   "observation": "The retained intermediate Qwen path has measured runtime receipt digests, but those digests include measured outputs. They therefore cannot alone be used as execution replay identity because changed measured evidence would also re-key the supposed replay identity and hide the mandated same-execution/different-measurement conflict.",
   "hypothesis": "Add a measurement-independent per-invocation model_execution_id, then derive distinct execution-replay, measured-evidence and observation-envelope identities while grouping matched controls with a separate control-family identity.",
@@ -62,18 +62,35 @@
     "delta": "Global J-Space/GWT readiness gains machine-readable replay-safe traces while explicitly blocking dataset/training admission until loader-consumption and off-target evidence are measured."
   },
   "verification": {
-    "environment": "local deterministic source/regression only; no model/provider execution",
+    "environment": "ChatGPT isolated local container; deterministic source/regression only; no model/provider execution",
     "commands": [
       "python3 -m py_compile tools/jspace_execution_identity_v1.py tools/jspace_trace_abi_v1.py tools/trigger1_local_qwen06_intermediate_trace_execute.py",
       "python3 -m pytest -q tests/test_jspace_trace_replay_binding_v1.py"
     ],
-    "local_result": "7 passed",
-    "hosted_exact_pr_head_result": "UNOBSERVED",
-    "scope": "SOURCE_AND_DETERMINISTIC_REGRESSION_ONLY"
+    "exact_git_blob_matches": {
+      "tools/jspace_execution_identity_v1.py": "4e035d374338024c604d7b03110362f325af3351",
+      "tools/jspace_trace_abi_v1.py": "a7ecc8ea4504c4fa5e701be3b2ab930c66d99389",
+      "tools/trigger1_local_qwen06_intermediate_trace_execute.py": "4f5745e1d7daeeeffbb366b3b22a464183c28b86",
+      "tests/test_jspace_trace_replay_binding_v1.py": "ad70128e3840358000f4a8e2196d611c8d9aa99a"
+    },
+    "local_result_on_exact_tested_blobs": "py_compile PASS; 7 passed",
+    "hosted_exact_pr_head_runs": [
+      {"run_id": 32761717124, "name": "Research Entity Identity Guard", "conclusion": "failure", "executed_steps": 0},
+      {"run_id": 32761716986, "name": "Research Entity Verify", "conclusion": "failure", "executed_steps": 0}
+    ],
+    "hosted_log_fetch": "BlobNotFound_404",
+    "hosted_failure_classification": "RUNNER_OR_WORKFLOW_INFRASTRUCTURE_NEGATIVE_EVIDENCE_NOT_SEMANTIC_PRODUCT_FAILURE",
+    "scope": "EXACT_BLOB_SOURCE_AND_DETERMINISTIC_REGRESSION_ONLY"
+  },
+  "coordination": {
+    "successor_pr": 1763,
+    "closed_superseded_pr": 1746,
+    "pr_base_moved_in_parallel": true,
+    "parallel_overlap_with_delta_files_at_reentry": false
   },
   "artifact_readme": {
-    "status": "SYNC_PENDING",
-    "reason": "Available connector writes replace whole files and the large README read is truncated; unsafe whole-file replacement was rejected to avoid unrelated data loss."
+    "status": "NO_CHANGE_WITH_REASON",
+    "reason": "The large README moved in parallel on main. Available connector writes replace the whole file and current reads are truncated; unsafe stale whole-file replacement was rejected to avoid clobbering newer content."
   },
   "credit_boundary": {
     "entityos_hcu_whole_runtime_credit": 0,
@@ -82,5 +99,5 @@
     "training_credit": 0,
     "whole_product_pass": false
   },
-  "next_exact_action": "Open the successor PR from exact-current main, observe exact-head CI if available, close PR 1746 as superseded, and fuse only if current-main overlap remains nonduplicate and the PR is mergeable. A future real local Qwen intervention remains atomic-lease gated."
+  "next_exact_action": "Re-enter current main and PR 1763. Because the branch diverged only through non-overlapping parallel files at the observed boundary, preserve it as the single successor implementation lane; fuse only after the current merge gate is clean. Any real local Qwen intervention remains atomic-lease gated."
 }

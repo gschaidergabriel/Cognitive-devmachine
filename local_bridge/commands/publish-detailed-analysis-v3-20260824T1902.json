@@ -1,0 +1,8 @@
+{
+  "schema":"CLAY_LOCAL_COMMAND/v1",
+  "command_id":"publish-detailed-analysis-v3-20260824T1902",
+  "op":"exec",
+  "cwd":"/home/ai-core-node",
+  "timeout_seconds":180,
+  "command":"ssh -o BatchMode=yes -o ConnectTimeout=20 -J root@100.71.48.1 root@72.61.19.188 'set -euo pipefail; uid=$(id -u claylab); runuser -u claylab -- env HOME=/srv/claylab XDG_RUNTIME_DIR=/run/user/$uid systemctl --user restart clay-free-swarm-publisher.service; sleep 12; runuser -u claylab -- env HOME=/srv/claylab XDG_RUNTIME_DIR=/run/user/$uid systemctl --user is-active clay-free-swarm-publisher.service; runuser -u claylab -- env HOME=/srv/claylab XDG_RUNTIME_DIR=/run/user/$uid journalctl --user -u clay-free-swarm-publisher.service -n 25 --no-pager | tail -25'"
+}

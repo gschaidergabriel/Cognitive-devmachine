@@ -1,0 +1,63 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "authority_epoch": "8.73",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "canonical_main_observed_before_successor": "8835f7a7a45c3e4bb6d28d8c24f7b2f1e4552609",
+  "finding": {
+    "classification": "SOURCE_CONFIRMED_REBUILD_STABILITY_GAP_SUCCESSOR_CURRENT_DELTA",
+    "statement": "Canonical main had already made Forge execution replay identity delta_id-stable, but training-bearing CLAY_DISTILLERY_FORGE_EXECUTION_PACKET/v2 still contained both delta_id and evaluated_at. Consequently two fresh rebuilds of the same measured execution could retain one replay/measured-evidence identity while producing different packet_text bytes and token counts.",
+    "counterhypothesis": "Keeping evaluated_at and delta_id in packet_text is harmless because replay identity already suppresses duplicate admission in one persistent database.",
+    "counterhypothesis_disposition": "REJECTED_AT_REBUILD_CONTRACT_LEVEL: fresh databases do not share prior duplicate state; training-bearing bytes must be a function of measured execution evidence rather than first-observed envelope metadata."
+  },
+  "delta": {
+    "source": "tools/ingest_forge_accepts_into_distillery.py",
+    "test": "tests/test_forge_distillery_rebuild_stable_packet_873.py",
+    "source_commit": "6c2f5510127650274b073b514addde32aee7832c",
+    "behavior": [
+      "exclude evaluated_at and delta_id from measured packet bytes",
+      "retain evaluated_at and delta_id as observation-only metadata",
+      "derive measured-evidence digest from the exact same replay-stable measured packet preimage",
+      "require equivalent fresh rebuilds to emit identical packet/replay/measured identities and token counts",
+      "require delta_id-only semantic replay after database reopen to be duplicate with zero token delta",
+      "retain conservative legacy replay collision fail-closed behavior"
+    ]
+  },
+  "verification": {
+    "exact_successor_head_semantic_test_execution_observed": false,
+    "noncanonical_source_equivalent_invariant_check": "PASS",
+    "noncanonical_check_scope": "envelope-only mutation leaves packet and replay identity stable; measured mutation leaves replay identity stable while changing measured evidence",
+    "container_checkout_attempt": "BLOCKED_NO_DNS_TO_GITHUB",
+    "github_hosted_prior_checks": "PRE_STEP_FAILURE_STEPS_NULL_NOT_SEMANTIC_TEST_RESULT",
+    "runtime_credit_minted": 0
+  },
+  "coordination": {
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "No shared immutable macrocycle/request identity exposed; available user message timestamp precision is minute-only.",
+    "unusual_interventions_executed": 0,
+    "stale_pr_1726_not_merged": true,
+    "successor_built_on_current_main": true
+  },
+  "go_tracks": {
+    "track_a": "ADVANCED: successor-current Forge-to-Distillery rebuild determinism delta prepared on canonical main",
+    "track_b": "ADVANCED: stable measured-execution identity is separated from volatile observation/evaluation envelope metadata",
+    "track_c": "ADVANCED_AT_DATASET_SAFETY_SCOPE: future training packet bytes cannot vary solely due timestamp/delta_id envelope drift; no model/J-Space/training credit"
+  },
+  "artefact_readme": {
+    "status": "NO_CHANGE_WITH_REASON",
+    "reason": "Canonical main moved repeatedly during this macrocycle and the connector exposes full-file replacement rather than an atomic append primitive; overwriting the large current README from a stale snapshot would risk authority regression. This append-only receipt preserves the exact delta for successor-safe README fusion."
+  },
+  "credits": {
+    "provider_runtime": 0,
+    "whole_entityos_hcu_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Obtain executed-step exact-successor regression evidence on an admitted zero-cost surface; then run/observe the live evidence-qualified ACCEPT -> exactly one packet -> positive accepted_dataset_tokens -> timestamp/narration/delta_id semantic replay +0 witness, with measured-evidence mutation failing closed."
+}

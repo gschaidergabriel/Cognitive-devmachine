@@ -7,6 +7,7 @@ on:
     paths:
       - '.github/workflows/go871-forge-distillery-runtime-gate.yml'
       - 'tools/run_go871_forge_distillery_runtime_gate.py'
+      - 'tools/run_go872_forge_single_candidate.py'
       - 'tools/promote_forge_distillery_runtime_gate.py'
       - 'tools/ingest_forge_accepts_into_distillery.py'
       - 'tools/forge_evidence_credit_871.py'
@@ -17,6 +18,8 @@ on:
       - 'tests/test_forge_execution_admission_871.py'
       - 'tests/test_forge_disposable_worktree_872.py'
       - 'tests/test_forge_distillery_promotion_872.py'
+      - 'tests/forge_runtime_witness_check_872.py'
+      - 'tests/fixtures/forge_runtime_witness_872.txt'
   workflow_dispatch:
   pull_request:
     types: [opened, synchronize, reopened]
@@ -126,13 +129,13 @@ jobs:
           OUT=/tmp/clay-go871-forge-distillery/promotion.json
           LOG=/tmp/clay-go871-forge-distillery/promotion.log
           if [[ "$GUARD_RC" != "0" ]]; then
-            printf '%s\n' '{"schema":"CLAY_FORGE_DISTILLERY_LIVE_PROMOTION/v1","status":"BLOCKED","reason":"SOURCE_GUARD_FAILED","network_used":false,"provider_calls":0,"paid_fallback_attempt_count":0}' > "$OUT"
+            printf '%s\n' '{"schema":"CLAY_FORGE_DISTILLERY_LIVE_PROMOTION/v2","status":"BLOCKED","reason":"SOURCE_GUARD_FAILED","network_used":false,"provider_calls":0,"paid_fallback_attempt_count":0}' > "$OUT"
             rc=4
           elif [[ "$GATE_RC" != "0" ]]; then
-            printf '%s\n' '{"schema":"CLAY_FORGE_DISTILLERY_LIVE_PROMOTION/v1","status":"BLOCKED","reason":"RUNTIME_GATE_NOT_PASS","network_used":false,"provider_calls":0,"paid_fallback_attempt_count":0}' > "$OUT"
+            printf '%s\n' '{"schema":"CLAY_FORGE_DISTILLERY_LIVE_PROMOTION/v2","status":"BLOCKED","reason":"RUNTIME_GATE_NOT_PASS","network_used":false,"provider_calls":0,"paid_fallback_attempt_count":0}' > "$OUT"
             rc=3
           elif [[ ! -d /artifacts/clay-entityos-swarm ]]; then
-            printf '%s\n' '{"schema":"CLAY_FORGE_DISTILLERY_LIVE_PROMOTION/v1","status":"BLOCKED","reason":"LIVE_ARTIFACT_ROOT_MISSING","network_used":false,"provider_calls":0,"paid_fallback_attempt_count":0}' > "$OUT"
+            printf '%s\n' '{"schema":"CLAY_FORGE_DISTILLERY_LIVE_PROMOTION/v2","status":"BLOCKED","reason":"LIVE_ARTIFACT_ROOT_MISSING","network_used":false,"provider_calls":0,"paid_fallback_attempt_count":0}' > "$OUT"
             rc=2
           else
             python3 tools/promote_forge_distillery_runtime_gate.py \
@@ -171,7 +174,7 @@ jobs:
               body = JSON.stringify(parsed, null, 2) + '\n';
             } else {
               body = JSON.stringify({
-                schema:'CLAY_FORGE_DISTILLERY_EXACT_CURRENT_RUNTIME_GATE/v2',
+                schema:'CLAY_FORGE_DISTILLERY_EXACT_CURRENT_RUNTIME_GATE/v3',
                 status:'WORKFLOW_RESULT_MISSING',
                 pass:false,
                 github_run_id:String(context.runId),

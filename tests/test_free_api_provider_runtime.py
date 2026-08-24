@@ -405,6 +405,32 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
 
         self.assertEqual(snapshot_calls, [])
 
+    def test_dense_alternating_overflow_is_rejected_before_execution_lock(self):
+        lock_calls = []
+        original_lock = MOD.PROCESS_EXECUTION_LOCK
+        user = {"role": "user", "content": "x"}
+        assistant = {"role": "assistant", "content": "x"}
+        # 54,793 is the first odd, system-free alternating conversation whose
+        # smallest closed-schema JSON representation exceeds 2,000,000 bytes.
+        messages = [user, assistant] * 27_396 + [user]
+
+        class TrackingLock:
+            def acquire(self, timeout):
+                lock_calls.append("acquire")
+                return True
+
+            def release(self):
+                lock_calls.append("release")
+
+        MOD.PROCESS_EXECUTION_LOCK = TrackingLock()
+        try:
+            with self.assertRaisesRegex(ValueError, "provider_request_too_large"):
+                MOD.execute_chat(messages, model="x", environ={})
+        finally:
+            MOD.PROCESS_EXECUTION_LOCK = original_lock
+
+        self.assertEqual(lock_calls, [])
+
     def test_message_count_mutation_is_rechecked_before_snapshot(self):
         snapshot_completed = []
         original_lock = MOD.PROCESS_EXECUTION_LOCK

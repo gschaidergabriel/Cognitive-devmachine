@@ -83,6 +83,10 @@ def install(core) -> None:
                     "proposal": ingress["proposal"],
                 }
 
+        # Sidecars must become durable before a typed worker row becomes visible.
+        # Serialize sidecars with this sink, then delegate the worker write to the
+        # previously installed append implementation so any earlier observer/wrapper
+        # semantics remain intact instead of being silently bypassed.
         async with self._lock:
             if candidate_record is not None:
                 append_line(self.path.parent / "architecture_deltas.jsonl", candidate_record)
@@ -100,7 +104,7 @@ def install(core) -> None:
                     },
                 )
 
-            append_line(self.path, enriched)
+        await original_append(self, enriched)
 
     core.base.JsonlSink.append = ingress_aware_append
     _INSTALLED = True

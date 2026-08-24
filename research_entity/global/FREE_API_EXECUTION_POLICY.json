@@ -156,6 +156,18 @@
     "internal_measurement": "A deterministic mutation after the first live-set element was consumed previously raised RuntimeError: Set changed size during iteration and suppressed capability inventory. After repair, validation completes against the bounded copy while the publication remains visible only to later inventories.",
     "counterhypothesis": "Validating every element of the live exact set before copying is equivalent to validating the copy; falsified because a concurrent publication can resize the live iterator between those operations."
   },
+  "post_network_payment_latch_publication": {
+    "checked_at": "2026-08-24",
+    "claim": "A received HTTP 402 remains mandatory execution evidence even if caller-owned latch storage changes after authorization. Publication validates bounded snapshots before and after mutation, reports payment_latch_publication_failed when state cannot be safely committed, and receipt construction never performs live-container membership afterward.",
+    "sources": [
+      "https://docs.python.org/3/library/stdtypes.html#set.copy",
+      "https://docs.python.org/3/library/stdtypes.html#set.add",
+      "https://cwe.mitre.org/data/definitions/362.html"
+    ],
+    "executable_evidence": "test_post_network_latch_corruption_cannot_suppress_402_receipt",
+    "internal_measurement": "On both ordinary-response and HTTPError paths, an opener inserted a hash-equal active string after preflight. Before repair its equality method raised during latch publication or final receipt membership and no receipt returned. After repair both paths return status 402 and payment_required_hard_stop, mark publication failure, and later routing rejects the corrupted storage before network.",
+    "counterhypothesis": "Pre-network exact-set and exact-string validation is sufficient for a caller-owned mutable latch throughout authenticated execution; falsified because the opener can mutate that shared set while the request is in flight."
+  },
   "passive_payment_latch_container_boundary": {
     "checked_at": "2026-08-24",
     "claim": "Every payment-latch storage path, including the process-global default and caller injection, must be an exact built-in set before capability inventory, routing or authenticated execution; set subclasses cannot execute overridden membership or mutation behavior around a received HTTP 402.",

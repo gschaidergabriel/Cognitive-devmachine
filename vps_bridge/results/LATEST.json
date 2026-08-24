@@ -1,17 +1,20 @@
 {
   "schema": "CLAY_VPS_RECEIPT/v4",
-  "command_id": "rerun-system-analysis-after-supervisor-fix-20260824T1854p0700",
-  "command_sha256": "0bbc2f1fa12c39ff6a36bd2d34415eec4ae3c8675f0d91f48ef26e75be95d46e",
-  "started_at": "2026-08-24T11:46:06.655627+00:00",
-  "finished_at": "2026-08-24T11:46:08.479086+00:00",
+  "command_id": "sync-detailed-analysis-v3-20260824T1900p0700",
+  "command_sha256": "ec8a0a88a1051edbab3fa883c3b7ea4d428ea3b13f39ba3f57d3027b957ae80a",
+  "started_at": "2026-08-24T11:48:53.368640+00:00",
+  "finished_at": "2026-08-24T11:48:55.176370+00:00",
   "status": "PASS",
   "exit_code": 0,
-  "op": "exec",
-  "stdout_sha256": "41ab10cec2294fff7f92d012f9e88ac4c04a5aa908840e85092c783c365b255f",
+  "op": "canonical_sync",
+  "stdout_sha256": "4fcb5c0e1b4502579e32be3f185726352c682211e8ad27fce3a6446b077f0b1f",
   "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-  "stdout_tail": "{\"state\": \"LIVE\", \"collected\": 11621, \"accepted\": 0, \"yield\": 0.0, \"near_miss\": 0, \"system_analysis_rc\": 0}\n{\"runtime\": {\"supervisor_schema\": \"CLAY_ENTITYOS_SWARM_SUPERVISOR/v8\", \"go_swarm\": \"STOPPED/QUARANTINED\", \"distillery\": \"RUNNING\", \"evidence_forge\": \"RUNNING\", \"dashboard\": \"RUNNING\", \"typed_provider_admission_ok\": true, \"admitted_free_providers\": [], \"policy\": \"EXTERNAL_LLM_SWARM_ONLY_WHEN_TYPED_FREE_ADMITTED; BLOCKED_PROVIDER_CREDENTIALS_CLEARED_BY_NAME_BEFORE_CHILD_START; LOOPBACK_4B+PUBLIC_FORGE_CONTINUE_DURING_QUARANTINE\"}, \"go_feedback\": {\"feedback_receipts\": 0, \"macrocycles_with_coverage\": 0, \"average_accepted_packet_reinjection_coverage\": null, \"source_to_go_pass_through\": 0.0, \"definition\": \"Distillery dataset yield \u00d7 average distinct accepted-packet coverage delivered to GO macrocycles\"}, \"conversion\": {\"successful_worker_outputs\": 414, \"architecture_delta_outputs\": 0, \"ready_for_forge_outputs\": 0, \"research_question_outputs\": 57, \"macrocycles_observed\": 31, \"delta_emission_rate\": 0.0, \"ready_for_forge_rate\": 0.0, \"avg_delta_emission_per_macrocycle\": 0.0, \"avg_ready_for_forge_per_macrocycle\": 0.0}, \"costs\": {\"free_swarm_sonnet5_equivalent_usd\": 11.03895, \"distillery_model_sonnet5_equivalent_usd\": 0.015470000000000001, \"measured_llm_token_mix_sonnet5_equivalent_usd\": 11.05442, \"repo_corpus_output_only_sonnet5_equivalent_usd\": 117.92699, \"verified_historical_savings_usd\": null, \"nominal_avoided_cost_if_measured_calls_were_zero_cost_usd\": 11.05442, \"saving_caveat\": \"Current typed authority classifies historical external provider traffic as unadmitted/UNKNOWN cost class; nominal avoided cost must not be called verified savings until billing/free evidence exists.\"}, \"forge\": {\"discovery_queries\": 135, \"discovery_hits\": 670, \"evaluations\": 0, \"accepted_deltas\": 0}, \"distillery\": {\"collected_source_tokens\": 11621, \"accepted_dataset_tokens\": 0, \"dataset_yield\": 0.0, \"accepted_packets\": 0, \"questions\": {\"CYCLIC\": 132, \"OPEN\": 21}}}\n",
+  "stdout_tail": "deb159bbbf09d1e0b975cef99ccfcc88509f7c4c\n",
   "stderr_tail": "",
-  "meta": {},
+  "meta": {
+    "head": "deb159bbbf09d1e0b975cef99ccfcc88509f7c4c",
+    "ref": "main"
+  },
   "execution_boundary": "ROOT_INSIDE_ROOTLESS_PODMAN_OR_EXPLICIT_REPO_CONTROL_OP",
   "canonical_credit_minted": 0
 }

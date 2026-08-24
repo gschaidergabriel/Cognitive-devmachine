@@ -11,7 +11,9 @@ holes before the required exact-source runtime execution:
 3. bind and execute the supervisor inherited-provider-environment fence regression,
    so the receipt cannot PASS without checking that the non-admitted credential
    clearing fence precedes every supervisor child-start path;
-4. fail closed on arbitrary child-process escape from the boundary-test process.
+4. execute a fail-closed discovery regression proving the supervisor-8.68 mandatory
+   blocked-case test methods remain present in the canonical receipt suite;
+5. fail closed on arbitrary child-process escape from the boundary-test process.
    The only admitted subprocess is ``bash -n`` against the exact supervisor shell
    source, because that syntax check is non-executing and is itself part of the
    canonical inherited-environment regression.
@@ -33,6 +35,8 @@ TEST_REL = "tests/test_free_swarm_receipt_runner_hardening_868.py"
 TEST_MODULE = "tests.test_free_swarm_receipt_runner_hardening_868"
 INHERITED_ENV_TEST_REL = "tests/test_go_868_inherited_provider_secret_fence.py"
 INHERITED_ENV_TEST_MODULE = "tests.test_go_868_inherited_provider_secret_fence"
+REQUIRED_CASES_TEST_REL = "tests/test_free_swarm_receipt_required_cases_868.py"
+REQUIRED_CASES_TEST_MODULE = "tests.test_free_swarm_receipt_required_cases_868"
 
 
 def _hardened_bootstrap_text() -> str:
@@ -137,11 +141,13 @@ def _install_hardening() -> None:
         *base.TEST_MODULES,
         TEST_MODULE,
         INHERITED_ENV_TEST_MODULE,
+        REQUIRED_CASES_TEST_MODULE,
     )))
     base.TEST_PATHS = tuple(dict.fromkeys((
         *base.TEST_PATHS,
         ROOT / TEST_REL,
         ROOT / INHERITED_ENV_TEST_REL,
+        ROOT / REQUIRED_CASES_TEST_REL,
     )))
     base.SOURCE_PATHS = tuple(dict.fromkeys((
         *base.SOURCE_PATHS,
@@ -149,6 +155,7 @@ def _install_hardening() -> None:
         SELF_REL,
         TEST_REL,
         INHERITED_ENV_TEST_REL,
+        REQUIRED_CASES_TEST_REL,
     )))
     base._bootstrap_text = _hardened_bootstrap_text
 
@@ -161,6 +168,7 @@ def _install_hardening() -> None:
         source["receipt_runner_hardening"] = {
             "authority_epoch": "8.68",
             "base_and_successor_manifest_bound": True,
+            "required_case_discovery_test": REQUIRED_CASES_TEST_REL,
             "bootstrap_tripwires": [
                 "socket.create_connection",
                 "socket.getaddrinfo",
@@ -194,6 +202,9 @@ def _install_hardening() -> None:
         fences["python_socket_network_attempts"] = socket_attempts
         fences["supervisor_inherited_provider_environment_fence"] = (
             "ENFORCED_BY_TEST_GO_868_INHERITED_PROVIDER_SECRET_FENCE"
+        )
+        fences["supervisor_868_required_blocked_cases"] = (
+            "ENFORCED_BY_TEST_FREE_SWARM_RECEIPT_REQUIRED_CASES_868"
         )
         fences["arbitrary_child_process_egress"] = (
             "FAIL_CLOSED_EXCEPT_EXACT_NONEXECUTING_BASH_N_SUPERVISOR_SYNTAX_CHECK"

@@ -1,12 +1,15 @@
 #!/usr/bin/env python3
 """Fail-closed evidence gate for Trigger-1 direct J-Space/vector-steering claims.
 
-Trigger-1 V2 is goal-bound rather than provider-bound. The full target may be met by
-an exact admitted FREE external API runtime or by an exact zero-provider-billing
-loopback API runtime, provided the same internal-vector, identity, matched-control
-and disjoint-holdout evidence is present.
+Trigger-1 V2 is goal-bound rather than provider-bound. A runtime-observed vector
+intervention can establish an actuator/mechanism candidate, but direct steering
+promotion additionally requires evidence that the vector construction is not
+algebraically coupled to the evaluation metric.
 
-Hosted prompt/completion traffic alone can never satisfy a positive verdict.
+This distinction is essential for output-head-derived sentinels: adding a vector
+constructed from the same lm_head contrast that is later scored can prove that the
+runtime consumed the intervention, but cannot by itself prove a discovered Global
+J-Space causal direction.
 """
 from __future__ import annotations
 
@@ -18,7 +21,8 @@ from typing import Any
 from urllib.parse import urlparse
 
 CANDIDATE_SCHEMA = "CLAY_TRIGGER1_JSPACE_DIRECT_STEERING_CANDIDATE/v1"
-VERDICT_SCHEMA = "CLAY_TRIGGER1_JSPACE_PROMOTION_GATE/v2"
+VERDICT_SCHEMA = "CLAY_TRIGGER1_JSPACE_PROMOTION_GATE/v3"
+METRIC_INDEPENDENCE_SCHEMA = "CLAY_TRIGGER1_METRIC_INDEPENDENCE/v1"
 REQUIRED_CONTROLS = (
     "BASELINE",
     "+VECTOR",
@@ -32,6 +36,11 @@ INSTRUMENTED_RUNTIME_CLASSES = {
     "LOCAL_LLAMA_CPP_CVEC_APPLIED",
     "PROVIDER_RUNTIME_INTERNAL_VECTOR_INTERVENTION",
     "OTHER_RUNTIME_OBSERVED_INTERNAL_INTERVENTION",
+}
+FORBIDDEN_METRIC_COUPLING_CLASSES = {
+    "OUTPUT_HEAD_TARGET_GRADIENT",
+    "EVALUATION_GRADIENT",
+    "DIRECT_LOGIT_OBJECTIVE_BASIS",
 }
 OWNER_API_TARGET_CLASS = "ZERO_COST_API_SERVED_MODEL_RUNTIME"
 LEGACY_OWNER_API_TARGET_CLASS = "EXACT_ADMITTED_FREE_API_MODEL_RUNTIME"
@@ -158,6 +167,42 @@ def _identity_evidence(candidate: dict[str, Any]) -> tuple[bool, list[str]]:
     return not failures, failures
 
 
+def _metric_independence_evidence(candidate: dict[str, Any]) -> tuple[bool, list[str]]:
+    """Require an independently constructed intervention for direct-steering promotion.
+
+    Runtime consumption remains valuable even when this fails. The guard only blocks
+    promotion from an actuator sentinel to a direct Global J-Space steering claim.
+    """
+    failures: list[str] = []
+    evidence = candidate.get("metric_independence")
+    if not isinstance(evidence, dict):
+        return False, ["METRIC_INDEPENDENCE_EVIDENCE_REQUIRED"]
+    if evidence.get("schema") != METRIC_INDEPENDENCE_SCHEMA:
+        failures.append("METRIC_INDEPENDENCE_SCHEMA_INVALID")
+    if evidence.get("independent") is not True:
+        failures.append("VECTOR_CONSTRUCTION_EVALUATION_INDEPENDENCE_REQUIRED")
+
+    vector_family = evidence.get("vector_estimation_family_id")
+    metric_family = evidence.get("evaluation_metric_family_id")
+    if not _nonempty(vector_family) or not _nonempty(metric_family):
+        failures.append("VECTOR_AND_METRIC_FAMILY_IDENTITIES_REQUIRED")
+    elif vector_family == metric_family:
+        failures.append("VECTOR_CONSTRUCTION_AND_EVALUATION_METRIC_MUST_DIFFER")
+
+    if not _sha256(evidence.get("proof_sha256")):
+        failures.append("METRIC_INDEPENDENCE_PROOF_SHA256_REQUIRED")
+    if evidence.get("uses_evaluation_head_weights") is not False:
+        failures.append("EVALUATION_HEAD_WEIGHTS_CANNOT_DEFINE_PROMOTED_VECTOR")
+    if evidence.get("uses_holdout_labels_for_vector_construction") is not False:
+        failures.append("HOLDOUT_LABELS_CANNOT_DEFINE_PROMOTED_VECTOR")
+
+    coupling_class = evidence.get("coupling_class")
+    if coupling_class in FORBIDDEN_METRIC_COUPLING_CLASSES:
+        failures.append(f"METRIC_COUPLED_ACTUATOR_SENTINEL_ONLY:{coupling_class}")
+
+    return not failures, failures
+
+
 def _owner_target_evidence(candidate: dict[str, Any]) -> tuple[bool, list[str]]:
     failures: list[str] = []
     target = candidate.get("target")
@@ -236,11 +281,15 @@ def adjudicate(candidate: dict[str, Any]) -> dict[str, Any]:
     )
 
     owner_target_ok, target_failures = _owner_target_evidence(candidate)
-    owner_target_pass = mechanism_pass and owner_target_ok
+    independence_ok, independence_failures = _metric_independence_evidence(candidate)
+    owner_target_failures = [*target_failures, *independence_failures]
+    owner_target_pass = mechanism_pass and owner_target_ok and independence_ok
 
     return {
         "schema": VERDICT_SCHEMA,
         "mechanism_runtime_vector_credit_candidate": bool(mechanism_pass),
+        "actuator_runtime_vector_credit_candidate": bool(mechanism_pass),
+        "metric_independence_established": bool(independence_ok),
         "owner_trigger1_goal_credit_candidate": bool(owner_target_pass),
         "owner_trigger1_direct_free_api_model_credit_candidate": bool(owner_target_pass),
         "canonical_credit_minted": False,
@@ -248,12 +297,31 @@ def adjudicate(candidate: dict[str, Any]) -> dict[str, Any]:
         "jspace_model_runtime_credit": False,
         "training_credit": False,
         "failures": sorted(set(failures)),
-        "owner_target_failures": sorted(set(target_failures)),
+        "owner_target_failures": sorted(set(owner_target_failures)),
         "evidence_boundary": (
-            "PASS means promotion-candidate evidence only. The runtime may be an admitted FREE external API "
-            "or an exact zero-provider-billing loopback API. Scientific requirements are identical: actual "
-            "internal-vector consumption, exact identities, six matched controls and disjoint holdout."
+            "Runtime-observed intervention plus matched controls can establish an actuator/mechanism candidate. "
+            "Direct Trigger-1 steering promotion additionally requires an independently estimated vector: the "
+            "evaluation head/labels/metric may not algebraically define the promoted vector. Output-head target "
+            "gradients are actuator sentinels only, even when their directional logit effect reproduces perfectly."
         ),
+    }
+
+
+def _invalid_verdict(reason: str) -> dict[str, Any]:
+    return {
+        "schema": VERDICT_SCHEMA,
+        "mechanism_runtime_vector_credit_candidate": False,
+        "actuator_runtime_vector_credit_candidate": False,
+        "metric_independence_established": False,
+        "owner_trigger1_goal_credit_candidate": False,
+        "owner_trigger1_direct_free_api_model_credit_candidate": False,
+        "canonical_credit_minted": False,
+        "whole_entityos_hcu_credit": False,
+        "jspace_model_runtime_credit": False,
+        "training_credit": False,
+        "failures": [reason],
+        "owner_target_failures": [],
+        "evidence_boundary": "Invalid candidate files fail closed.",
     }
 
 
@@ -261,33 +329,9 @@ def adjudicate_file(path: Path) -> dict[str, Any]:
     try:
         candidate = json.loads(path.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError) as exc:
-        return {
-            "schema": VERDICT_SCHEMA,
-            "mechanism_runtime_vector_credit_candidate": False,
-            "owner_trigger1_goal_credit_candidate": False,
-            "owner_trigger1_direct_free_api_model_credit_candidate": False,
-            "canonical_credit_minted": False,
-            "whole_entityos_hcu_credit": False,
-            "jspace_model_runtime_credit": False,
-            "training_credit": False,
-            "failures": [f"CANDIDATE_FILE_INVALID:{type(exc).__name__}"],
-            "owner_target_failures": [],
-            "evidence_boundary": "Invalid candidate files fail closed.",
-        }
+        return _invalid_verdict(f"CANDIDATE_FILE_INVALID:{type(exc).__name__}")
     if not isinstance(candidate, dict):
-        return {
-            "schema": VERDICT_SCHEMA,
-            "mechanism_runtime_vector_credit_candidate": False,
-            "owner_trigger1_goal_credit_candidate": False,
-            "owner_trigger1_direct_free_api_model_credit_candidate": False,
-            "canonical_credit_minted": False,
-            "whole_entityos_hcu_credit": False,
-            "jspace_model_runtime_credit": False,
-            "training_credit": False,
-            "failures": ["CANDIDATE_OBJECT_REQUIRED"],
-            "owner_target_failures": [],
-            "evidence_boundary": "Invalid candidate files fail closed.",
-        }
+        return _invalid_verdict("CANDIDATE_OBJECT_REQUIRED")
     verdict = adjudicate(candidate)
     verdict["candidate_path"] = str(path)
     verdict["candidate_sha256"] = hashlib.sha256(path.read_bytes()).hexdigest()
@@ -299,10 +343,16 @@ def scan_batch(batch_dir: Path) -> dict[str, Any]:
     verdicts = [adjudicate_file(path) for path in paths]
     goal = any(item.get("owner_trigger1_goal_credit_candidate") is True for item in verdicts)
     return {
-        "schema": "CLAY_TRIGGER1_JSPACE_BATCH_PROMOTION_SCAN/v2",
+        "schema": "CLAY_TRIGGER1_JSPACE_BATCH_PROMOTION_SCAN/v3",
         "candidate_files_seen": len(paths),
         "mechanism_runtime_vector_credit_candidate": any(
             item.get("mechanism_runtime_vector_credit_candidate") is True for item in verdicts
+        ),
+        "actuator_runtime_vector_credit_candidate": any(
+            item.get("actuator_runtime_vector_credit_candidate") is True for item in verdicts
+        ),
+        "metric_independence_established": any(
+            item.get("metric_independence_established") is True for item in verdicts
         ),
         "owner_trigger1_goal_credit_candidate": goal,
         "owner_trigger1_direct_free_api_model_credit_candidate": goal,

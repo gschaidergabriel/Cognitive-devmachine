@@ -4,9 +4,10 @@
 Pure stdlib, OpenAI-compatible HTTP endpoints. Provider credentials are read only
 after canonical typed provider admission establishes cost_class=FREE. Environment
 attestations remain secondary compatibility assertions and cannot self-admit a
-provider. The controller never upgrades billing, never retries HTTP 402, and
-treats HTTP 429 as a provider-wide cooldown rather than rotating keys to evade a
-rate limit.
+provider. Provider admission is revalidated immediately before provider network
+I/O. The controller never upgrades billing, never retries HTTP 402, and treats
+HTTP 429 as a provider-wide cooldown rather than rotating keys to evade a rate
+limit.
 """
 from __future__ import annotations
 
@@ -129,16 +130,25 @@ def unique(values: list[str]) -> list[str]:
 
 
 def collect_keys(spec: ProviderSpec, admission: dict[str, Any] | None = None) -> list[str]:
-    """Read provider key environment variables only after typed FREE admission."""
+    """Read only this provider's credential values after its typed FREE admission.
+
+    Iterating ``os.environ.items()`` materializes every environment value and can
+    therefore read another provider's blocked secret. Scan names first, then read
+    only suffix variables belonging to the already-admitted provider.
+    """
     if not provider_is_admitted_free(spec.name, admission):
         return []
     keys = split_values(os.getenv(spec.keys_list_env))
     for name in spec.key_envs:
-        if os.getenv(name):
-            keys.append(os.environ[name].strip())
+        value = os.getenv(name)
+        if value:
+            keys.append(value.strip())
     prefixes = tuple(name + "_" for name in spec.key_envs)
-    for env_name, value in os.environ.items():
-        if any(env_name.startswith(prefix) for prefix in prefixes) and value.strip():
+    for env_name in os.environ:
+        if not any(env_name.startswith(prefix) for prefix in prefixes):
+            continue
+        value = os.environ[env_name]
+        if value.strip():
             keys.append(value.strip())
     return unique(keys)
 
@@ -205,6 +215,14 @@ def parse_retry_after(headers: dict[str, str], fallback: float) -> float:
 
 def request_chat(spec: ProviderSpec, key: str, model: str, prompt: str,
                  max_tokens: int, timeout: float) -> tuple[int, dict[str, str], dict[str, Any] | str]:
+    """Revalidate typed FREE admission immediately before provider network I/O."""
+    try:
+        live_admission = load_provider_admission()
+    except ProviderAdmissionError as exc:
+        raise RuntimeError(f"PROVIDER_ADMISSION_INVALID_BEFORE_NETWORK:{spec.name}:{exc}") from exc
+    if not provider_is_admitted_free(spec.name, live_admission):
+        raise RuntimeError(f"PROVIDER_NOT_FREE_ADMITTED_BEFORE_NETWORK:{spec.name}")
+
     body: dict[str, Any] = {
         "model": model, "messages": [{"role": "user", "content": prompt}],
         "max_tokens": max_tokens, "temperature": 0.7, "stream": False,

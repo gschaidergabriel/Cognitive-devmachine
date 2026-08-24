@@ -17,8 +17,11 @@ echo '--- COMPILE ---'
 python3 -m py_compile \
   tools/free_swarm_exec_with_vault.py \
   tools/free_swarm_accelerator_v2.py \
+  tools/free_swarm_patch_pipeline.py \
   tools/run_6000_free_swarm.py \
   tools/run_6000_free_swarm_v3.py \
+  tools/run_6000_free_swarm_v4.py \
+  tools/run_6000_free_swarm_v5.py \
   tools/run_6000_free_swarm_fast.py \
   tools/run_24h_entityos_swarm.py \
   tools/run_free_go_swarm.py \

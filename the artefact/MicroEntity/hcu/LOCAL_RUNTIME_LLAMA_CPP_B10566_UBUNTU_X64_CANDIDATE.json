@@ -1,0 +1,75 @@
+{
+  "schema": "HCU_LOCAL_RUNTIME_CANDIDATE/v1",
+  "status": "ATTESTED_DISTRIBUTION_CANDIDATE_ONLY_NO_RUNTIME_CREDIT",
+  "date": "2026-08-24",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "supervisor": "SUPERVISOR_STEERING_8_63",
+  "mode": "FREE_ONLY",
+  "purpose": "Pin one exact upstream-attested zero-cost local llama.cpp runtime distribution candidate for the Qwen3-0.6B GGUF HCU lane. This does not claim the archive is locally present, extracted, executable, compatible with the eventual host, or used for model inference.",
+  "runtime_family": "llama.cpp",
+  "upstream": {
+    "repository": "ggml-org/llama.cpp",
+    "build_tag": "b10566",
+    "source_repository_digest": "bb4caa7540188872173c44d161602d9271386413",
+    "source_repository_ref": "refs/heads/master",
+    "build_runner_environment": "github-hosted",
+    "build_workflow": ".github/workflows/release.yml@refs/heads/master",
+    "attestation_id": "42207505",
+    "attestation_created": "2026-08-21T18:25:32Z",
+    "source_classification": "UPSTREAM_GITHUB_ATTESTATION_NOT_LOCAL_RUNTIME_EVIDENCE"
+  },
+  "distribution_candidate": {
+    "platform": "ubuntu-x64",
+    "acceleration": "CPU",
+    "asset": "llama-b10566-bin-ubuntu-x64.tar.gz",
+    "archive_sha256": "0c34561d623299c113e46f9fdd97bff5b219b25554243a21a243aebc81253ea1",
+    "archive_attested": true,
+    "local_archive_sha256_observed": null,
+    "local_extracted_binary_sha256": null,
+    "local_dependency_set_sha256": null,
+    "local_runtime_build_sha256": null,
+    "host_compatibility_observed": false,
+    "status": "BLOCKED_LOCAL_MATERIALIZATION_AND_EXTRACTED_RUNTIME_IDENTITY"
+  },
+  "model_pairing": {
+    "candidate_file": "LOCAL_08B_QWEN3_06B_Q8_GGUF_CANDIDATE.json",
+    "model_repository": "Qwen/Qwen3-0.6B-GGUF",
+    "model_artifact": "Qwen3-0.6B-Q8_0.gguf",
+    "model_sha256": "9465e63a22add5354d9bb4b99e90117043c7124007664907259bd16d043bb031",
+    "model_byte_count": 639446688,
+    "relationship": "SOURCE_LEVEL_RUNTIME_MODEL_CANDIDATE_PAIR_ONLY"
+  },
+  "loader_binding_target": {
+    "producer": "loader_consumption_witness_v1.py",
+    "interface": "SEALED_MEMFD_EXACT_FD_PATH_CALLBACK/v1",
+    "expected_model_argument_form": "synchronous /proc/self/fd/<fd> path while callback is alive",
+    "actual_extracted_llama_cli_sha256": null,
+    "actual_loader_binding_sha256": null,
+    "actual_process_execution_receipt": null,
+    "status": "BLOCKED_NO_LOCAL_RUNTIME_EXECUTION"
+  },
+  "promotion_requirements": [
+    "materialize this exact archive on an authorized zero-cost local surface",
+    "verify local archive SHA-256 equals the upstream attested archive SHA-256",
+    "extract with a deterministic manifest and hash the exact executable plus required shared libraries",
+    "derive one runtime/build identity from exact extracted bytes rather than from tag text",
+    "materialize and verify the exact Qwen3-0.6B-Q8_0 GGUF candidate",
+    "invoke the exact pathname/fd-consuming loader under loader-consumption witness",
+    "prove the callback completes any credited model load before its sealed memfd closes",
+    "admit loader consumption through the existing canonical registry/physical-engine lease",
+    "observe one actual model-executor request/result and atomically admit ModelExecution in canonical MiniUnifiedDB",
+    "bind the downstream inference receipt and J-Space trace to that exact execution identity"
+  ],
+  "credit_boundary": {
+    "upstream_attestation_credit": "SOURCE_DISTRIBUTION_IDENTITY_ONLY",
+    "local_runtime_credit": 0,
+    "loader_runtime_credit": 0,
+    "model_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "whole_product_pass": false
+  },
+  "epistemic_note": "An upstream build attestation authenticates the declared release subject/source relationship at upstream distribution scope. It does not prove local download integrity, extraction identity, loader consumption, host compatibility, inference, J-Space causality, or training benefit."
+}

@@ -1,10 +1,14 @@
 #!/usr/bin/env python3
-"""Launch exactly ten distinct Trigger-1 J-Space research experiments in parallel.
+"""Launch one atomically leased ten-lane Trigger-1 J-Space research batch.
 
 All children inherit the same FREE credential pool and the same cross-process
 provider-budget SQLite database. The shared quota gate remains authoritative;
 parallelism therefore increases research diversity without bypassing provider
 limits or rotating credentials around rate limits.
+
+The ten lanes are one bounded unusual-experiment contract, not ten independent
+`go` experiment budgets. No child is launched unless the exact user-triggered
+`go` already owns the canonical create-only atomic lease for this whole batch.
 """
 from __future__ import annotations
 
@@ -20,8 +24,15 @@ import sys
 import uuid
 
 ROOT = Path(__file__).resolve().parents[1]
+TOOLS = ROOT / "tools"
+if str(TOOLS) not in sys.path:
+    sys.path.insert(0, str(TOOLS))
+
+from go_experiment_lease_guard import validate_claim
+
 DEFAULT_ARTIFACT_ROOT = Path("/artifacts/clay-entityos-trigger1")
 DEFAULT_BUDGET_DB = Path("/artifacts/clay-entityos-swarm/provider_budget.sqlite3")
+LEASE_EXPERIMENT_NAME = "TRIGGER1_JSPACE_10X"
 
 EXPERIMENTS = (
     ("runtime_surface", "Find or implement the shortest actually instrumentable FREE model execution surface. Distinguish hosted text inference from real hidden-state/native-cvec intervention and produce an executable discriminator."),
@@ -54,7 +65,30 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("--timeout", type=float, default=float(os.getenv("CLAY_TRIGGER1_TIMEOUT", "150")))
     p.add_argument("--drain-seconds", type=float, default=float(os.getenv("CLAY_TRIGGER1_DRAIN_SECONDS", "180")))
     p.add_argument("--artifact-root", default=os.getenv("CLAY_TRIGGER1_ARTIFACT_ROOT", str(DEFAULT_ARTIFACT_ROOT)))
+    p.add_argument("--go-trigger-key", default=os.getenv("CLAY_GO_EXPERIMENT_TRIGGER_KEY", ""))
+    p.add_argument("--print-intervention-contract", action="store_true")
     return p.parse_args()
+
+
+def experiment_contract_sha256() -> str:
+    payload = json.dumps(EXPERIMENTS, ensure_ascii=False, separators=(",", ":"))
+    return hashlib.sha256(payload.encode("utf-8")).hexdigest()
+
+
+def intervention_contract(args: argparse.Namespace) -> dict:
+    return {
+        "launcher": "tools/run_trigger1_jspace_10x.py",
+        "experiment_name": LEASE_EXPERIMENT_NAME,
+        "experiment_contract_sha256": experiment_contract_sha256(),
+        "minutes": float(args.minutes),
+        "logical_workers_per_lane": int(args.logical_workers_per_lane),
+        "max_tokens_per_model_call": int(args.max_tokens),
+        "context_chars": int(args.context_chars),
+        "timeout_seconds": float(args.timeout),
+        "drain_seconds": float(args.drain_seconds),
+        "parallel_lanes": 10,
+        "free_only": True,
+    }
 
 
 async def run_child(batch_id: str, lane_index: int, name: str, focus: str, lane_id: str, args: argparse.Namespace, batch_dir: Path, common_env: dict[str, str]) -> dict:
@@ -96,13 +130,25 @@ async def amain() -> int:
     if args.minutes <= 0 or args.logical_workers_per_lane <= 0:
         raise SystemExit("minutes and logical-workers-per-lane must be positive")
 
+    exact_intervention = intervention_contract(args)
+    if args.print_intervention_contract:
+        print(json.dumps(exact_intervention, sort_keys=True, ensure_ascii=False))
+        return 0
+
+    lease = validate_claim(
+        trigger_key=str(args.go_trigger_key or ""),
+        experiment_name=LEASE_EXPERIMENT_NAME,
+        expected_intervention_contract=exact_intervention,
+    )
+    if not lease.get("ok"):
+        raise SystemExit(str(lease.get("reason") or "GO_EXPERIMENT_LEASE_REQUIRED"))
+
     head = git_text("rev-parse", "HEAD")
     tree = git_text("rev-parse", "HEAD^{tree}")
     started = dt.datetime.now(dt.timezone.utc).isoformat()
     nonce = uuid.uuid4().hex
-    contract_payload = json.dumps(EXPERIMENTS, ensure_ascii=False, separators=(",", ":"))
-    contract_sha = hashlib.sha256(contract_payload.encode("utf-8")).hexdigest()
-    batch_material = json.dumps({"started_at": started, "repo_head": head, "repo_tree": tree, "nonce": nonce, "contract_sha256": contract_sha}, sort_keys=True, separators=(",", ":"))
+    contract_sha = experiment_contract_sha256()
+    batch_material = json.dumps({"started_at": started, "repo_head": head, "repo_tree": tree, "nonce": nonce, "contract_sha256": contract_sha, "trigger_key": lease["trigger_key"]}, sort_keys=True, separators=(",", ":"))
     batch_digest = hashlib.sha256(batch_material.encode("utf-8")).hexdigest()
     batch_id = f"trigger1_{batch_digest}"
 
@@ -116,6 +162,7 @@ async def amain() -> int:
     common_env["CLAY_FREE_PROVIDER_BUDGET_DB"] = str(budget_db)
     common_env["CLAY_TRIGGER1_BATCH_ID"] = batch_id
     common_env["CLAY_TRIGGER1_RESEARCH_CONTINGENT"] = "OWNER_AUTHORIZED_FREE_ONLY"
+    common_env["CLAY_GO_EXPERIMENT_TRIGGER_KEY"] = lease["trigger_key"]
 
     lane_rows = []
     for idx, (name, focus) in enumerate(EXPERIMENTS):
@@ -132,6 +179,13 @@ async def amain() -> int:
         "repo_tree": tree,
         "contract_sha256": contract_sha,
         "parallel_experiments": 10,
+        "one_unusual_experiment_contract": True,
+        "go_experiment_trigger_key": lease["trigger_key"],
+        "go_experiment_claim_path": lease["claim_path"],
+        "go_experiment_claimant_organ": lease["claimant_organ"],
+        "go_experiment_claimed_at": lease["claimed_at"],
+        "go_experiment_observed_canonical_main": lease["observed_canonical_main"],
+        "intervention_contract": exact_intervention,
         "logical_workers_per_lane": args.logical_workers_per_lane,
         "configured_logical_workers_total": 10 * args.logical_workers_per_lane,
         "minutes": args.minutes,
@@ -147,9 +201,9 @@ async def amain() -> int:
     }
     (batch_dir / "batch_manifest.json").write_text(json.dumps(manifest, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
-    # Create all subprocesses as independent tasks before awaiting results: the
-    # experiment lanes therefore overlap in wall-clock time while sharing the one
-    # provider quota database.
+    # The ten subprocesses are matched controls/sub-studies of ONE already-leased
+    # unusual intervention contract. They may overlap in wall-clock time, but they
+    # do not mint ten independent `go` experiment budgets.
     tasks = [
         asyncio.create_task(run_child(batch_id, row["lane_index"], row["experiment_name"], row["focus"], row["experiment_id"], args, batch_dir, common_env))
         for row in lane_rows
@@ -161,6 +215,8 @@ async def amain() -> int:
         "batch_id": batch_id,
         "finished_at": finished,
         "parallel_experiments": 10,
+        "one_unusual_experiment_contract": True,
+        "go_experiment_trigger_key": lease["trigger_key"],
         "successful_processes": sum(1 for r in results if r["exit_code"] == 0),
         "failed_processes": sum(1 for r in results if r["exit_code"] != 0),
         "results": results,

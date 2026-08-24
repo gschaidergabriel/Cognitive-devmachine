@@ -1,0 +1,62 @@
+{
+  "schema": "ENTITYOS_HCU_GO_RESEARCH_RECEIPT/v1",
+  "timestamp_local": "2026-08-24T18:22:00+07:00",
+  "organ": "ChatGPT GPT-5.6 Sol",
+  "trigger": "go",
+  "authority_epoch": "8.68",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "retained_donor": "gschaidergabriel/clay-global-research-entity#1263",
+  "donor_head_after_delta": "c62aed185ecb83e205ab5fbc007a45a36fda9187",
+  "problem_observed": "The retained J-Space activation steering search could emit success=true after baseline, directional sign and zero-vector controls, while current supervisor-8.68 J-Space intervention law requires a clean/corrupted/target/sham/off-target causal family before model-specific causal promotion. A downstream consumer could therefore misread search success as causal credit unless the result carries an explicit evidence-class fence.",
+  "hypothesis": "A steering search result should remain useful for locating candidate layer/alpha coordinates while being mechanically incapable of self-promoting into J-Space causal credit.",
+  "counterhypothesis": "Existing prose that the module does not provide model hooks is sufficient to prevent downstream causal overclaiming.",
+  "discriminator": "Make the evidence boundary explicit in the returned data object and regression-test the positive-success case. If success=true can coexist only with jspace_causal_credit=false and an exact list of missing controls, prose-only ambiguity is removed without deleting the useful steering search.",
+  "delta": {
+    "source_path": "the artefact/MicroEntity/hcu/jspace_activation_steering_search_v1.py",
+    "source_blob_after": "184a5adf7d3741018abd54b19485b0107d8a3580",
+    "test_path": "the artefact/MicroEntity/hcu/test_jspace_activation_steering_search_v1.py",
+    "test_blob_after": "d4d9cd5c18008301168faa40b345c20af41d6e8b",
+    "evidence_class": "STEERING_SEARCH_ONLY_NOT_JSPACE_CAUSAL",
+    "jspace_causal_credit": false,
+    "required_causal_controls": [
+      "BASELINE_CLEAN",
+      "BASELINE_CORRUPTED",
+      "INTERVENTION_TARGET",
+      "SHAM_CONTROL",
+      "OFF_TARGET_CONTROL"
+    ],
+    "missing_causal_controls_for_v1_search": [
+      "BASELINE_CORRUPTED",
+      "SHAM_CONTROL",
+      "OFF_TARGET_CONTROL"
+    ]
+  },
+  "external_donor_corroboration": {
+    "transformerlens": "Activation patching uses clean versus corrupted runs and intervenes on intermediate activations to measure output recovery; this supports the need to distinguish causal intervention from generic steering search.",
+    "nnsight": "Trace contexts permit reading and modifying intermediate activations during a forward pass; this supports the current gate requirement that the actual backend expose intervention-capable internal state rather than only final completions.",
+    "huggingface_transformers": "output_hidden_states exposes per-layer hidden states for supported model outputs, providing an observation primitive but not by itself a causal intervention or loader-consumption attestation."
+  },
+  "diagnostics": {
+    "github_workflow_runs_for_exact_head": 0,
+    "canonical_local_or_clay_direct_dev_execution": "NOT_EXPOSED_TO_THIS_ORGAN",
+    "source_test_execution_credit": 0,
+    "reason": "No exact-source authorized local/clay-direct-dev executor was exposed; no GitHub workflow run existed for the exact donor head at observation time."
+  },
+  "go_tracks": {
+    "track_a": "ADVANCED_BY_FUSION: avoided duplicate current-surface repair after parallel main landed 8.68 authority sync; retained the single donor lane and hardened its product-facing evidence semantics.",
+    "track_b": "ADVANCED: reusable HCU/J-Space search result now carries explicit causal-credit and control-family boundary metadata.",
+    "track_c": "ADVANCED: positive steering-search success can no longer be represented as model-specific J-Space causal credit without the missing corrupted/sham/off-target family."
+  },
+  "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+  "credits_after_delta": {
+    "whole_entityos_hcu_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_action": "Implement or expose one actual zero-cost local intervention-capable backend on the retained path, then execute BASELINE_CLEAN + BASELINE_CORRUPTED + INTERVENTION_TARGET + SHAM_CONTROL + OFF_TARGET_CONTROL with exact checkpoint/tokenizer/runtime/loader/model-execution/activation-site/InferenceReceipt identities."
+}

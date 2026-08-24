@@ -145,7 +145,17 @@ def review_candidate(con: sqlite3.Connection, cid: str, reviewers: list[tuple[st
     provisional["thresholds"]={"intrinsic":thresholds[0],"grf":thresholds[1],"fit":thresholds[2],"novelty":thresholds[3]}
     provisional["score_gaps"]={"intrinsic":gaps[0],"grf":gaps[1],"fit":gaps[2],"novelty":gaps[3]}
     if ok:
-        con.execute("UPDATE candidates SET status=? WHERE id=?",("ACCEPTED" if actual_mistral>=2 else "PROVISIONAL_ACCEPTED",cid)); _bump(con,"review_pass"); con.commit(); return True,provisional
+        canonical=actual_mistral>=2
+        con.execute("UPDATE candidates SET status=? WHERE id=?",("ACCEPTED" if canonical else "PROVISIONAL_ACCEPTED",cid))
+        _bump(con,"review_pass")
+        provisional["canonical_dataset_commit_allowed"]=canonical
+        if not canonical:
+            _bump(con,"provisional_review_pass")
+            con.commit()
+            d.emit("knowledge_provisional_not_canonical",candidate=cid,review=provisional)
+            return False,provisional
+        con.commit()
+        return True,provisional
     # Near miss = structurally sound, no hard contradiction, and total threshold gap small.
     if not provisional["hard"] and sum(gaps)<=0.22:
         _bump(con,"near_miss_candidates"); con.commit(); provisional["near_miss"]=True

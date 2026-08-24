@@ -1,0 +1,66 @@
+{
+  "schema": "CLAY_GO_RESEARCH_DELTA_RECEIPT/v1",
+  "authority_epoch": "8.72",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6-Sol",
+  "trigger": "go",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "source_base_main": "96d0d6ca05c87042464a5c6e13bc33c965fd9399",
+  "branch": "gpt56sol/go-872-trigger1-lease-parser-failclosed-20260824-2334",
+  "superseded_candidates": [1678, 1699],
+  "observed_parallel_fusion": "Canonical main independently landed the core legacy timestamp/digest alias fence before this successor was finalized, so the prior broad candidate was closed rather than duplicated.",
+  "residual_gap": [
+    "Canonical ts_<stamp>__p_<sha256> syntax was regex-checked but the timestamp was not calendar-validated at parse time, permitting syntactically shaped impossible timestamps to reach claim admission.",
+    "Malformed/non-object legacy sibling claim files were skipped entirely even when their historical filename encoded the same legacy timestamp/payload lease identity."
+  ],
+  "counterhypothesis": "These cases are irrelevant because canonical claim creators and historical claim files are always well formed.",
+  "adjudication": "Rejected as an admission assumption. The pre-intervention coordination gate is the fail-closed boundary and should not depend on upstream perfect formatting or intact historical JSON when the path itself encodes the legacy identity.",
+  "delta": [
+    "Calendar-validate canonical timestamp trigger keys before admitting the claim path.",
+    "Recover candidate trigger identity from a legacy filename stem when sibling JSON is malformed, non-object, or lacks a usable trigger_key.",
+    "Handle invalid legacy date/offset forms deterministically without crashing the race scan.",
+    "Preserve unrelated malformed filenames as nonblocking negative controls."
+  ],
+  "exact_file_evidence": {
+    "source_git_blob_sha1": "8e2f023fdc05b9f7fbcdea8f12c7e3265ff26d22",
+    "test_git_blob_sha1": "74a371cbb6b4db4533bbd787ab9dd7c688529330",
+    "reconstructed_blob_identity_match": true,
+    "py_compile": "PASS",
+    "focused_unittest": {
+      "tests": 13,
+      "passed": 13,
+      "failed": 0
+    },
+    "execution_class": "NONCANONICAL_CHATGPT_CONTAINER_COMPONENT_MECHANISM_ONLY"
+  },
+  "coordination": {
+    "shared_immutable_request_or_turn_id_exposed": false,
+    "available_user_message_timestamp": "2026-08-24T23:34+07:00",
+    "available_user_message_timestamp_precision": "MINUTE_ONLY",
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_experiments_executed": 0
+  },
+  "go_tracks": {
+    "track_a": "ADVANCED_BY_HARDENING_THE_SINGLE_RETAINED_TRIGGER1_PRE_INTERVENTION_GATE",
+    "track_b": "HCU_NO_CHANGE_WITH_REASON: current parallel main already contains stronger active HCU/J-Space routing work; this cycle avoids a duplicate HCU or Typed Entry primitive and changes only shared macrocycle/provenance admission semantics.",
+    "track_c": "ADVANCED_AT_GLOBAL_JSPACE_GWT_EXECUTION_READINESS_BY_CLOSING_TWO_FAIL_CLOSED_COORDINATION_PARSER_GAPS_WITHOUT_RUNNING_THE_UNUSUAL_INTERVENTION"
+  },
+  "credits": {
+    "provider_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "hcu_full": 0,
+    "jspace_model": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "provider_and_effect_safety": {
+    "provider_secret_lookup_performed": false,
+    "external_llm_provider_network_performed": false,
+    "paid_or_unknown_cost_execution_performed": false,
+    "new_production_effect_performed": false
+  },
+  "next_exact_gate": "Re-enter current main, verify these two residual parser gaps remain nonduplicate, run exact-head focused Trigger1 lease and promotion regressions on an admitted current execution surface if available, then fuse narrowly. A future J-Space intervention still requires a reproducible canonical create-only atomic claim for that exact user macrocycle."
+}

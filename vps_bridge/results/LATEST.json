@@ -1,17 +1,20 @@
 {
   "schema": "CLAY_VPS_RECEIPT/v4",
-  "command_id": "opt-routing-backup-generated-before-sync-20260824T2134p0700",
-  "command_sha256": "7614f9c84bce9aa97bb06935e38920f00947b092fe4fc98d14387c6be1cd550f",
-  "started_at": "2026-08-24T14:34:11.686628+00:00",
-  "finished_at": "2026-08-24T14:34:11.862347+00:00",
+  "command_id": "opt-routing-canonical-sync-20260824T2135p0700",
+  "command_sha256": "8890ef1d238d716311532efb4b211a8af352f9609a30d1768c4c51cfb6af6f3e",
+  "started_at": "2026-08-24T14:34:46.393561+00:00",
+  "finished_at": "2026-08-24T14:34:48.789208+00:00",
   "status": "PASS",
   "exit_code": 0,
-  "op": "exec",
-  "stdout_sha256": "369d1aab87962c61d9bf8cd5d0fc6f5bbd4183c71f71a39612403397974a8df2",
+  "op": "canonical_sync",
+  "stdout_sha256": "edd29d3f03e57a972774e3290116fdb63bcb57af8b514510b39eb372102b00af",
   "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-  "stdout_tail": "BACKUP=/artifacts/clay-entityos-swarm/pre-sync-generated-20260824T1434Z\ntotal 64K\n-rw-r--r-- 1 root root 15K Aug 24 14:33 FABRIC_6000_LIVE.json\n-rw-rw-r-- 1 root root 15K Aug 24 14:33 LIVE_METRICS.json\n-rw-rw-r-- 1 root root 30K Aug 24 14:33 README.md\nSTATUS\n M \"free swarm/LIVE_METRICS.json\"\n M \"free swarm/README.md\"\n?? \"free swarm/FABRIC_6000_LIVE.json\"\n",
+  "stdout_tail": "bfd3526574b550bfde9944c343a92c020e9fe862\n",
   "stderr_tail": "",
-  "meta": {},
+  "meta": {
+    "head": "bfd3526574b550bfde9944c343a92c020e9fe862",
+    "ref": "main"
+  },
   "execution_boundary": "ROOT_INSIDE_ROOTLESS_PODMAN_OR_EXPLICIT_REPO_CONTROL_OP",
   "canonical_credit_minted": 0
 }

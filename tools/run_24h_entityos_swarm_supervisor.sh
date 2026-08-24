@@ -9,8 +9,19 @@ mkdir -p "$STATE_DIR"
 START="$(date +%s)"
 DEADLINE="${CLAY_SWARM_DEADLINE_EPOCH:-$((START + 24*3600))}"
 ADMISSION_TOOL="$ROOT/tools/free_provider_admission.py"
+SWARM_ADMISSION_BINDING_FILE="$STATE_DIR/swarm-admission-binding.sha256"
 
 provider_admitted(){ python3 "$ADMISSION_TOOL" --provider "$1" >/dev/null 2>&1; }
+
+# Bind a running external-provider swarm to the exact currently validated admission
+# snapshot. The admission tool reads canonical control-plane data only; no provider
+# secret or provider network surface is touched while deriving this digest.
+current_provider_admission_binding(){
+  local snapshot
+  snapshot="$(python3 "$ADMISSION_TOOL" --json 2>/dev/null)" || return 1
+  [[ -n "$snapshot" ]] || return 1
+  printf '%s' "$snapshot" | sha256sum | awk '{print $1}'
+}
 
 # Child processes inherit the supervisor environment. Remove credentials belonging
 # to any external LLM provider that is not canonically typed FREE-admitted before
@@ -120,24 +131,49 @@ start_go_swarm_if_admitted(){
   [[ "${CLAY_FREE_ONLY_ATTESTED:-}" == "1" ]] || return 0
   has_admitted_provider_key || return 0
   pgrep -f '[r]un_24h_entityos_swarm.py' >/dev/null 2>&1 && return 0
-  local now rem hours out
+  local now rem hours out admission_binding child_pid
+  admission_binding="$(current_provider_admission_binding)" || return 0
   now=$(date +%s); rem=$((DEADLINE-now)); (( rem>0 )) || return 0
   hours=$(python3 - <<PY
 print(max(0.01,$rem/3600.0))
 PY
 )
   out="$STATE_DIR/active-$(date -u +%Y%m%dT%H%M%SZ)"
-  nohup python3 "$ROOT/tools/run_24h_entityos_swarm.py" --hours "$hours" --output-dir "$out" >"$STATE_DIR/swarm.log" 2>&1 </dev/null & echo $! >"$STATE_DIR/swarm.pid"
+  nohup python3 "$ROOT/tools/run_24h_entityos_swarm.py" --hours "$hours" --output-dir "$out" >"$STATE_DIR/swarm.log" 2>&1 </dev/null &
+  child_pid=$!
+  printf '%s\n' "$child_pid" >"$STATE_DIR/swarm.pid"
+  printf '%s\n' "$admission_binding" >"${SWARM_ADMISSION_BINDING_FILE}.tmp"
+  mv "${SWARM_ADMISSION_BINDING_FILE}.tmp" "$SWARM_ADMISSION_BINDING_FILE"
 }
 
 stop_unadmitted_go_swarm(){
+  # A child inherits provider credentials at spawn and cannot be sanitized later by
+  # unsetting the supervisor's environment. Therefore any validated admission drift
+  # invalidates the child capability set, even when a different FREE provider remains
+  # admitted. Missing/invalid binding also fails closed and forces a clean restart.
+  local current_binding="" spawned_binding="" must_stop=0
+  if has_admitted_provider_key; then
+    current_binding="$(current_provider_admission_binding)" || must_stop=1
+    if (( ! must_stop )); then
+      if [[ -r "$SWARM_ADMISSION_BINDING_FILE" ]]; then
+        IFS= read -r spawned_binding < "$SWARM_ADMISSION_BINDING_FILE" || true
+        [[ -n "$spawned_binding" && "$spawned_binding" == "$current_binding" ]] || must_stop=1
+      else
+        must_stop=1
+      fi
+    fi
+  else
+    must_stop=1
+  fi
+
   # With `set -e -o pipefail`, a bare `pgrep | while` aborts the whole supervisor
   # when there is correctly nothing to stop. Process substitution plus `|| true`
   # makes the zero-match case a normal steady state instead of a supervisor crash.
-  if ! has_admitted_provider_key; then
+  if (( must_stop )); then
     while IFS= read -r pid; do
       [[ -n "$pid" ]] && kill "$pid" 2>/dev/null || true
     done < <(pgrep -f '[r]un_24h_entityos_swarm.py' || true)
+    rm -f "$SWARM_ADMISSION_BINDING_FILE" "${SWARM_ADMISSION_BINDING_FILE}.tmp"
   fi
 }
 
@@ -163,7 +199,7 @@ def local_health():
  try:
   with urllib.request.urlopen('http://127.0.0.1:8088/health',timeout=1.2) as r:return 200<=int(r.status)<300
  except Exception:return False
-print(json.dumps({'schema':'CLAY_ENTITYOS_SWARM_SUPERVISOR/v8','observed_at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'repo_root':os.getcwd(),'remaining_seconds':$REMAINING,'provider_admission':snap,'go_swarm_running':running('run_24h_entityos_swarm.py'),'local_research_model_ready':local_health(),'distillery_running':running('run_research_distillery_(local|entry).py'),'forge_running':running('run_free_evidence_forge.py'),'dashboard_running':running('free swarm/evaluate.py.*--watch'),'policy':'EXTERNAL_LLM_SWARM_ONLY_WHEN_TYPED_FREE_ADMITTED; BLOCKED_PROVIDER_CREDENTIALS_CLEARED_BY_NAME_BEFORE_CHILD_START; LOOPBACK_4B+PUBLIC_FORGE_CONTINUE_DURING_QUARANTINE'},indent=2))
+print(json.dumps({'schema':'CLAY_ENTITYOS_SWARM_SUPERVISOR/v8','observed_at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'repo_root':os.getcwd(),'remaining_seconds':$REMAINING,'provider_admission':snap,'go_swarm_running':running('run_24h_entityos_swarm.py'),'local_research_model_ready':local_health(),'distillery_running':running('run_research_distillery_(local|entry).py'),'forge_running':running('run_free_evidence_forge.py'),'dashboard_running':running('free swarm/evaluate.py.*--watch'),'policy':'EXTERNAL_LLM_SWARM_ONLY_WHEN_TYPED_FREE_ADMITTED; BLOCKED_PROVIDER_CREDENTIALS_CLEARED_BY_NAME_BEFORE_CHILD_START; RUNNING_SWARM_BOUND_TO_EXACT_VALIDATED_ADMISSION_AND_RESTARTED_ON_DRIFT; LOOPBACK_4B+PUBLIC_FORGE_CONTINUE_DURING_QUARANTINE'},indent=2))
 PY
   mv "$STATE_DIR/SUPERVISOR.json.tmp" "$STATE_DIR/SUPERVISOR.json"
   sleep 30

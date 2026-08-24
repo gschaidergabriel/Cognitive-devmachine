@@ -1,0 +1,64 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "date_local": "2026-08-25",
+  "trigger": "go",
+  "organ": "ChatGPT GPT-5.6 Sol",
+  "authority_epoch": "8.73",
+  "program": "ENTITYOS_HCU",
+  "stage": "ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "execution_mode": "FREE_ONLY",
+  "canonical_main_observed_before_write": "fc45471f0eb61da17191a9f4a5edae7e184a1346",
+  "authority_resolution": {
+    "supervisor_inbox_schema": "8.73",
+    "steering": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_73.json",
+    "bootstrap_cache_8_63_is_stale": true
+  },
+  "observed_gap": {
+    "classification": "SOURCE_OBSERVED_LIVE_PROMOTION_REPLAY_IDENTITY_GAP",
+    "bridge_state": "tools/ingest_forge_accepts_into_distillery.py already derives CLAY_FORGE_EXECUTION_REPLAY_IDENTITY/v1 and measured-evidence identity, makes packet identity replay-stable, and rejects measured conflicts",
+    "live_promoter_state": "tools/promote_forge_distillery_runtime_gate.py still validates and replays the exact same full evaluation row, inspects persisted state by evaluation_sha256, and therefore independently proves only byte-identical replay +0",
+    "consequence": "Supervisor 8.73 end-to-end semantic replay requirement is not yet closed at the live promotion boundary even though the lower bridge primitive is replay-stable"
+  },
+  "hypothesis": "Propagating replay-stable execution identity through the existing live promoter will close semantic replay idempotency without creating a second ingestion, truth, or effect authority.",
+  "counterhypothesis": "Lower-bridge replay stability is sufficient even if the live promotion witness itself only exercises identical bytes.",
+  "counterhypothesis_discriminator": "The live promotion receipt must itself prove one qualified accept -> one packet -> positive tokens -> timestamp/narration-only semantic replay +0, plus measured-evidence conflict rejection and restart persistence.",
+  "durable_coordination": {
+    "issue": 1741,
+    "issue_title": "[GO 8.73] Bind live Forge→Distillery promotion to replay-stable execution identity",
+    "existing_execution_carrier_pr": 1724,
+    "duplicate_execution_lane_created": false
+  },
+  "go_tracks": {
+    "track_a": "ADVANCED_BY_SOURCE_GAP_LOCALIZATION_AND_NON-DUPLICATIVE_EXECUTABLE_ACCEPTANCE_SPEC",
+    "track_b": "ADVANCED_BY_PROPAGATING_STABLE_CAUSAL_EXECUTION_IDENTITY_REQUIREMENT_THROUGH_DATASET_PROMOTION_BOUNDARY",
+    "track_c": "ADVANCED_AT_DATASET_SAFETY_SCOPE_BY_REQUIRING_SEMANTIC_REPLAY_ZERO_DELTA_BEFORE_FUTURE_JSPACE_TRAINING_DATA_CREDIT"
+  },
+  "runtime_observation": {
+    "pr1724_head": "d28ee9dcf6a90a14e2c19c8be93860442ce0c4d8",
+    "workflow_run": 32753936480,
+    "job": 97517023752,
+    "conclusion": "FAILURE_BEFORE_RECORDED_STEPS",
+    "recorded_steps": 0,
+    "job_log_available": false,
+    "classification": "RUNNER_OR_INFRASTRUCTURE_NEGATIVE_EVIDENCE_NOT_PRODUCT_LOGIC_NEGATIVE",
+    "rerun_attempted": false
+  },
+  "coordination": {
+    "upstream_macrocycle_id": null,
+    "user_turn_timestamp_precision_available_to_organ": "MINUTE_ONLY",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_interventions_executed": 0
+  },
+  "credits": {
+    "whole_entityos_hcu_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "provider_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_action": "Refresh current main, patch the existing tools/promote_forge_distillery_runtime_gate.py and existing promotion regression lane so the live witness uses replay-stable execution identity, timestamp/narration-only semantic replay +0, measured-evidence conflict rejection, and DB reopen/restart persistence; then execute on an admitted zero-cost surface without opening a duplicate runtime lane.",
+  "epistemic_boundary": "SOURCE_OBSERVED_GAP + IMPLEMENTATION_SPEC + RUNNER_NEGATIVE_EVIDENCE_ONLY; no new runtime/model/training credit"
+}

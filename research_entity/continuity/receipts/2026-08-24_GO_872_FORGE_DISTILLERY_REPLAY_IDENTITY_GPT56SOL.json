@@ -1,0 +1,64 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "authority_epoch": "8.72",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "trigger": "go",
+  "organ": "GPT-5.6-Sol",
+  "base_main_observed_before_rebase": "84a3f6946e636709e0ffa5cba539d371877a590e",
+  "branch": "gpt56sol/go872-forge-distillery-replay-identity-20260824",
+  "finding": {
+    "classification": "SOURCE_OBSERVED_NONVOLATILE_REPLAY_GAP",
+    "statement": "Forge-to-Distillery idempotence was keyed only by the SHA-256 of the full evaluation envelope. Volatile evaluated_at and candidate-only narration therefore changed the key even when the evidence-bearing execution identity and measured result were unchanged, permitting a semantically identical execution replay to mint another packet and dataset tokens.",
+    "existing_witness_limit": "The exact-current Forge-to-Distillery witness proves byte-identical replay +0 only; it does not discriminate a timestamp/narration-only replay of the same execution evidence."
+  },
+  "hypothesis": "A replay-stable execution-evidence identity separated from volatile observation metadata prevents nonsemantic duplicate dataset admission without collapsing genuinely different execution evidence.",
+  "counterhypothesis": "Full-evaluation SHA-256 is sufficient if all re-observations are guaranteed byte-identical.",
+  "counterhypothesis_disposition": "REJECTED_AT_SOURCE_CONTRACT_LEVEL: evaluated_at is intentionally volatile and candidate narration is explicitly non-measured metadata, so byte identity is not a stable causal-event invariant.",
+  "delta": {
+    "source": "tools/ingest_forge_accepts_into_distillery.py",
+    "test": "tests/test_forge_distillery_replay_identity_872.py",
+    "replay_identity_schema": "CLAY_FORGE_EXECUTION_REPLAY_IDENTITY/v1",
+    "measured_evidence_identity_schema": "CLAY_FORGE_MEASURED_EVIDENCE_IDENTITY/v1",
+    "database_migration": "ADDITIVE_NULLABLE_COLUMNS_PLUS_PARTIAL_UNIQUE_REPLAY_IDENTITY_INDEX",
+    "public_acceptance_semantics_preserved": "EVIDENCE_QUALIFIED_ONLY",
+    "new_replay_semantics": "STABLE_EXECUTION_IDENTITY_WITH_MEASURED_CONFLICT_REJECTION"
+  },
+  "fail_closed_behavior": [
+    "same stable execution identity + same measured evidence + changed timestamp/narration => DUPLICATE",
+    "same stable execution identity + changed measured evidence => REPLAY_IDENTITY_CONFLICT and zero new dataset credit",
+    "different execution identity => eligible for independent evidence-qualified admission",
+    "historical rows migrate additively without rewriting append-only history"
+  ],
+  "go_tracks": {
+    "track_a": "ADVANCED: strengthens executable Forge-to-Distillery conversion against replay token inflation",
+    "track_b": "ADVANCED: adds a reusable typed causal/evidence identity boundary separating stable execution provenance from volatile observation envelope metadata",
+    "track_c": "ADVANCED_AT_DATASET_SAFETY_SCOPE: prevents nonsemantic replay from inflating future training data while minting zero J-Space/model/training credit"
+  },
+  "coordination": {
+    "overlap_search": "No open PR matching Forge Distillery evaluation-SHA replay/causal-identity hardening was found before implementation.",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_interventions_executed": 0,
+    "retained_runtime_lane": "gschaidergabriel/clay-global-research-entity#1619",
+    "retained_hcu_donor": "gschaidergabriel/clay-global-research-entity#1263"
+  },
+  "runtime_observation": {
+    "forge_distillery_workflow_run": 32742535392,
+    "forge_distillery_job": 97480167751,
+    "observed_state": "QUEUED",
+    "terminal_result_observed": false,
+    "runtime_credit_granted": 0
+  },
+  "evidence_scope": "SOURCE_PLUS_REGRESSION_DEFINITION_ONLY_UNTIL_EXACT_HEAD_EXECUTION",
+  "network_or_provider_execution": false,
+  "paid_or_together_execution": false,
+  "canonical_truth_credit": 0,
+  "entityos_hcu_whole_runtime_credit": 0,
+  "hcu_full_runtime_credit": 0,
+  "jspace_model_runtime_credit": 0,
+  "training_credit": 0,
+  "whole_product_pass": false,
+  "next_exact_gate": "Execute the focused replay-identity regression plus existing Forge-Distillery ingest/live-bridge regressions on the exact branch head; then fuse only if current main remains nonduplicate. After fusion, strengthen the exact-current runtime witness from byte-identical replay to a timestamp/narration-mutated replay and require zero new packet/token delta."
+}

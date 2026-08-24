@@ -1,20 +1,17 @@
 {
   "schema": "CLAY_VPS_RECEIPT/v4",
-  "command_id": "opt-routing-canonical-sync-20260824T2135p0700",
-  "command_sha256": "8890ef1d238d716311532efb4b211a8af352f9609a30d1768c4c51cfb6af6f3e",
-  "started_at": "2026-08-24T14:34:46.393561+00:00",
-  "finished_at": "2026-08-24T14:34:48.789208+00:00",
+  "command_id": "opt-routing-test-synced-20260824T2136p0700",
+  "command_sha256": "525999c6e837460890fbdc32d8ec1e9cd856c972884613c595f55ef6dc76b5d1",
+  "started_at": "2026-08-24T14:35:25.572448+00:00",
+  "finished_at": "2026-08-24T14:35:26.040526+00:00",
   "status": "PASS",
   "exit_code": 0,
-  "op": "canonical_sync",
-  "stdout_sha256": "edd29d3f03e57a972774e3290116fdb63bcb57af8b514510b39eb372102b00af",
-  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-  "stdout_tail": "bfd3526574b550bfde9944c343a92c020e9fe862\n",
-  "stderr_tail": "",
-  "meta": {
-    "head": "bfd3526574b550bfde9944c343a92c020e9fe862",
-    "ref": "main"
-  },
+  "op": "exec",
+  "stdout_sha256": "65c4a1243fd3667c74747061902354f30bf60bc92604cf4d9652e5ba124689e2",
+  "stderr_sha256": "2cc9769c89a03ea5b81b9169ad5c402c1ab9bc726b531e6d2f520d4633f380c4",
+  "stdout_tail": "HEAD=bfd3526574b550bfde9944c343a92c020e9fe862\n M \"free swarm/LIVE_METRICS.json\"\n M \"free swarm/README.md\"\n M \"free swarm/SYSTEM_ANALYSIS_LIVE.json\"\n?? \"free swarm/FABRIC_6000_LIVE.json\"\nGATE_WRAPPER gated_next_key_model\nWEIGHTED_INNER next_key_model\nREQUEST_OBSERVER observed_request\nHEALTH_MODELS 21\nMODEL_HEALTH_BINDING_OK\n",
+  "stderr_tail": "test_exploration_weight_declines_with_trials (tests.test_free_swarm_model_health_v1.ModelHealthTests.test_exploration_weight_declines_with_trials) ... ok\ntest_repeated_5xx_cools_model_not_permanently_disables_it (tests.test_free_swarm_model_health_v1.ModelHealthTests.test_repeated_5xx_cools_model_not_permanently_disables_it) ... ok\ntest_success_prevents_historical_hard_error_from_false_disable (tests.test_free_swarm_model_health_v1.ModelHealthTests.test_success_prevents_historical_hard_error_from_false_disable) ... ok\ntest_three_deterministic_400s_quarantine_exact_model (tests.test_free_swarm_model_health_v1.ModelHealthTests.test_three_deterministic_400s_quarantine_exact_model) ... ok\ntest_weight_rewards_success_latency_and_delta_yield (tests.test_free_swarm_model_health_v1.ModelHealthTests.test_weight_rewards_success_latency_and_delta_yield) ... ok\n\n----------------------------------------------------------------------\nRan 5 tests in 0.001s\n\nOK\n",
+  "meta": {},
   "execution_boundary": "ROOT_INSIDE_ROOTLESS_PODMAN_OR_EXPLICIT_REPO_CONTROL_OP",
   "canonical_credit_minted": 0
 }

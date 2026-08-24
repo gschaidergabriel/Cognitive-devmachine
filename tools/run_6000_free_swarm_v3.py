@@ -35,6 +35,15 @@ _SOURCE = {
     "tree": fabric.base.git_text("rev-parse", "HEAD^{tree}"),
 }
 
+# run_24h_entityos_swarm is still a compatibility donor for the v2 fabric and
+# installs the older dual-machine directive as worker context during import.
+# The active 6000-worker FREE path must instead expose the current owner-admitted
+# FREE-swarm authority to build_state_context()/worker_prompt(). This changes
+# prompt context only; it grants no provider, spend, runtime, or canonical credit.
+fabric.base.OWNER_DIRECTIVE_PATH = (
+    fabric.ROOT / "governance/CLAY_FREE_SWARM_OWNER_ADMISSION_2026-08-24.md"
+)
+
 
 def route_safe_discover_and_export(timeout: float) -> dict[str, dict]:
     """Resolve candidate models without provider network I/O.

@@ -1,0 +1,22 @@
+FROM ubuntu:24.04
+
+ENV DEBIAN_FRONTEND=noninteractive \
+    PIP_DISABLE_PIP_VERSION_CHECK=1 \
+    PYTHONDONTWRITEBYTECODE=1
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    bash ca-certificates curl wget aria2 git git-lfs gh jq ripgrep fd-find \
+    python3 python3-venv python3-pip python3-dev pipx \
+    build-essential cmake ninja-build pkg-config clang gdb \
+    sqlite3 unzip zip xz-utils zstd tar file procps time bc \
+    nodejs npm rustc cargo \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN git lfs install --system || true
+
+COPY bin/webfetch /usr/local/bin/webfetch
+COPY bin/hffetch /usr/local/bin/hffetch
+RUN chmod 0755 /usr/local/bin/webfetch /usr/local/bin/hffetch
+
+WORKDIR /workspace
+CMD ["bash"]

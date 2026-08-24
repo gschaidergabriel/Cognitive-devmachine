@@ -67,7 +67,7 @@ Environment flags, credential presence, `:free` route suffixes, catalog pricing 
 ## Retained convergence lanes
 
 - HCU/Typed Entry/J-Space donor: `gschaidergabriel/clay-global-research-entity#1263`
-  - live head observed in final reentry of this `go`: `ca3c55708f040b450279ad94050af4b414fa954f`
+  - live head observed in final reentry of this `go`: `bc5919cf0f38641d62f56318113ad357700a8c01`
   - open draft, not merged;
   - donor/source lane only; no automatic runtime credit transfer.
 - bounded execution controller: `gschaidergabriel/Dr.-Unterweger#810`
@@ -98,6 +98,8 @@ Every exact `go` advances or explicitly no-changes:
 ### Current `go` delta
 
 **Track A — advanced:** the exact FREE-provider admission acceptance harness was repaired at the canonical path boundary. `tests/test_free_swarm_admission_boundary_867.py` previously wrote synthetic admission fixtures to `root/admission.json`, while the production `load_provider_admission()` resolves its default admission from `root/research_entity/claycode/autonomous/FREE_PROVIDER_ADMISSION.json`. That mismatch could make the intended acceptance discriminator exercise a missing production path rather than the supplied policy fixture. Commit `a30473990310a8be4d8072337f01eeb3939e9629` moves the fixtures onto the production-relative path and adds full startup tripwires for malformed admission, authority-epoch mismatch and an unlisted-provider record. A parallel 8.68 malformed-admission regression contained the same noncanonical fixture-path defect; commit `989e1d712d4aee4d6c1722c55923ca0c4093575f` repairs it too. These are source/test-fidelity deltas only; no runtime PASS is implied. The new J-Space backend selection also improves executable convergence by keeping the stable local inference service separate from the instrumentable causal research runtime rather than mixing incompatible evidence semantics in one service.
+
+The FREE Swarm acceptance runner was additionally hardened at its **outer** child-process network fence. Commit `d5e1f6238e6fb6ea90750710211e2c0f3e3f9c46` extends `tools/run_free_swarm_admission_boundary_receipt.py` from `socket.connect`/`socket.create_connection` coverage to `socket.getaddrinfo` and `socket.connect_ex` as well, closing DNS-resolution and alternate-connect blind spots in the receipt-level tripwire. A parallel successor wrapper, `tools/run_free_swarm_admission_boundary_receipt_hardened_868.py`, also binds the base runner, wrapper and dedicated hardening regression into the exact-source manifest; durable coordination is recorded by `research_entity/continuity/receipts/2026-08-24_GO_868_FREE_SWARM_RECEIPT_SELF_BINDING_GPT56SOL_1831P0700.json`. A disposable ChatGPT-container mechanism check demonstrated that synthetic `getaddrinfo()` and `connect_ex()` attempts are trapped, but this is **not** the authorized exact-source local/`clay-direct-dev` runtime PASS and grants zero provider/HCU/J-Space/training credit.
 
 **Track B — advanced at typed-admission/HCU interface-contract level:** the reusable Typed Entry/control-plane admission primitive is now exercised through the same canonical repository-relative authority path as production for the central blocked-provider discriminator. The J-Space backend selection adds explicit `LOCAL_INFERENCE_CAPABLE`, `JSPACE_OBSERVATION_CAPABLE`, and `JSPACE_INTERVENTION_CAPABLE` classes with exact causal identity and receipt requirements, without creating another provider authority, truth store, HCU implementation or effect path. HCU/full-runtime credit remains zero. Next discriminator: execute the exact current boundary suite on an authorized exposed local normal-user or `clay-direct-dev` bridge and separately execute the smallest observation-only named-activation probe.
 
@@ -132,8 +134,8 @@ A source file, source test, deployment, receipt, model agreement or same-family 
 
 1. keep all current-facing surfaces successor-aligned to 8.68;
 2. preserve historical unadmitted provider traffic append-only and keep external LLM-provider traffic quarantined;
-3. execute `FREE_SWARM_ADMISSION_BOUNDARY_RECEIPT/v1` on exact current source using an authorized exposed zero-cost local or `clay-direct-dev` bridge;
-4. prove zero secret lookup and zero network attempts for every blocked provider-admission case, now with test fixtures bound to the canonical production-relative admission path; strengthen the runtime capsule with an OS-level no-network fence where the authorized surface supports it;
+3. execute `python tools/run_free_swarm_admission_boundary_receipt_hardened_868.py --output <receipt-outside-checkout>.json` on exact current source using an authorized exposed zero-cost local or `clay-direct-dev` bridge;
+4. require zero secret lookup and zero network attempts for every blocked provider-admission case, with canonical production-relative policy fixtures, outer `getaddrinfo`/`connect_ex`/`connect`/`create_connection` tripwires, stable pre/post HEAD+manifest identity, and an OS-level no-network fence where the authorized surface supports it;
 5. execute live donor InferenceReceipt/v4 rejection-boundary tests before any executor rebind;
 6. verify `CLAY_LOCAL_RESEARCH_MODEL/v2` reaches `READY_IDENTITY_OBSERVED` with a process-bound server executable hash and non-null post-load GGUF hash on an authorized exposed local/VPS sandbox;
 7. keep loader-consumed bytes UNKNOWN until separately attested; do not promote the post-load hash into loader evidence;

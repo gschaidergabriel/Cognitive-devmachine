@@ -26,9 +26,19 @@
       "admitted": false,
       "cost_class": "UNKNOWN",
       "evidence_ref": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_68.json#evidence.typed_admission_state"
+    },
+    "tavily": {
+      "admitted": false,
+      "cost_class": "UNKNOWN",
+      "evidence_ref": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_68.json#free_only.unknown_or_unlisted_provider_fail_closed"
+    },
+    "exa": {
+      "admitted": false,
+      "cost_class": "UNKNOWN",
+      "evidence_ref": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_68.json#free_only.unknown_or_unlisted_provider_fail_closed"
     }
   },
   "runtime_provider_credit": 0,
   "execution_state": "EXTERNAL_LLM_PROVIDER_TRAFFIC_QUARANTINED_UNTIL_EXECUTABLE_TYPED_FREE_ADMISSION_PASS",
-  "note": "Groq, Mistral, NVIDIA and OpenRouter are all fail-closed at the current authority. Historical successful provider calls are unadmitted execution evidence and must not be relabeled FREE after the fact. Environment attestations, credential presence, :free route labels, HTTP success, 402/429 behavior, model catalogs and provider responses cannot self-admit a provider as FREE."
+  "note": "Groq, Mistral, NVIDIA, OpenRouter, Tavily and Exa are all fail-closed at the current authority. Historical successful provider calls are unadmitted execution evidence and must not be relabeled FREE after the fact. Environment attestations, credential presence, :free route labels, HTTP success, 402/429 behavior, zero-priced catalogs and provider responses cannot self-admit a provider as FREE."
 }

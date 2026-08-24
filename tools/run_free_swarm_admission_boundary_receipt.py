@@ -25,13 +25,20 @@ import tempfile
 from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
-TEST_MODULE = "tests.test_free_swarm_admission_boundary_867"
-TEST_PATH = ROOT / "tests/test_free_swarm_admission_boundary_867.py"
+TEST_MODULES = (
+    "tests.test_free_swarm_admission_boundary_867",
+    "tests.test_free_swarm_socket_tripwire_868",
+)
+TEST_PATHS = (
+    ROOT / "tests/test_free_swarm_admission_boundary_867.py",
+    ROOT / "tests/test_free_swarm_socket_tripwire_868.py",
+)
 INBOX_PATH = ROOT / "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json"
 ADMISSION_PATH = ROOT / "research_entity/claycode/autonomous/FREE_PROVIDER_ADMISSION.json"
 
 SOURCE_PATHS = (
     "tests/test_free_swarm_admission_boundary_867.py",
+    "tests/test_free_swarm_socket_tripwire_868.py",
     "tools/free_provider_admission.py",
     "tools/run_free_go_swarm.py",
     "tools/run_24h_entityos_swarm.py",
@@ -156,7 +163,7 @@ def guarded_create_connection(address, *args, **kwargs):
 
 socket.socket.connect = guarded_connect
 socket.create_connection = guarded_create_connection
-suite = unittest.defaultTestLoader.loadTestsFromName(sys.argv[1])
+suite = unittest.defaultTestLoader.loadTestsFromNames(sys.argv[1:])
 result = unittest.TextTestRunner(verbosity=2).run(suite)
 raise SystemExit(0 if result.wasSuccessful() else 1)
 '''
@@ -223,7 +230,7 @@ def main(argv: list[str] | None = None) -> int:
         network_log = temp / "network_tripwire.jsonl"
         bootstrap.write_text(_bootstrap_text(), encoding="utf-8")
         env = _safe_child_env(temp, network_log)
-        command = [sys.executable, str(bootstrap), TEST_MODULE]
+        command = [sys.executable, str(bootstrap), *TEST_MODULES]
         proc = subprocess.run(
             command,
             cwd=ROOT,
@@ -258,8 +265,8 @@ def main(argv: list[str] | None = None) -> int:
             "clean_tracked_tree": not dirty,
             "manifest": source_manifest,
             "manifest_sha256": source_manifest_sha256,
-            "test_module": TEST_MODULE,
-            "test_sha256": _sha256_file(TEST_PATH),
+            "test_modules": list(TEST_MODULES),
+            "test_sha256": {path.relative_to(ROOT).as_posix(): _sha256_file(path) for path in TEST_PATHS},
         },
         "execution": {
             "started_at": started.isoformat(),
@@ -268,7 +275,7 @@ def main(argv: list[str] | None = None) -> int:
             "python": sys.version.split()[0],
             "python_executable": sys.executable,
             "platform": platform.platform(),
-            "command": [sys.executable, "<temp>/boundary_bootstrap.py", TEST_MODULE],
+            "command": [sys.executable, "<temp>/boundary_bootstrap.py", *TEST_MODULES],
             "bootstrap_sha256": _sha256_bytes(_bootstrap_text().encode("utf-8")),
             "exit_code": proc.returncode,
             "tests_reported": test_count,

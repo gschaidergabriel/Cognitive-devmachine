@@ -1,0 +1,152 @@
+{
+  "schema": "CLAY_TRIGGER1_V2_BLOCKER_ELIMINATION_RECEIPT/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "1",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "mode": "ZERO_COST_ONLY",
+  "supervisor_reentered_after_delta": "8.72",
+  "canonical_main_observed_before_receipt": "f7613f1db86d3a1ca9b3015b4361922e0bb1f1ac",
+  "owner_request": "Change Trigger 1 and the available execution scope so complete achievement becomes faster and simpler and removable blockers no longer stop convergence.",
+  "authority_delta": {
+    "new_owner_directive": "research_entity/continuity/OWNER_DIRECTIVE_2026-08-24_TRIGGER1_CONVERGENCE_V2.json",
+    "directive_initial_commit": "5b18968afdf506d87943d81c3fa2f9698c6f61b4",
+    "directive_fastest_path_reorder_commit": "bbe76bd4c5252ffc772553420619810137dbf63a",
+    "contract": "research_entity/continuity/TRIGGER_ONE_JSPACE_STEERING_CONTRACT.md",
+    "contract_v2_commit": "8bf30a0cbadff6187895107b60215a69f0edcfd0",
+    "contract_fastest_path_reorder_commit": "2f0c27acad891bd35dd388a0bc8c8d506eb63d1a",
+    "semantic_change": "Trigger 1 is now goal-bound rather than external-provider-bound. An exact zero-provider-billing loopback API runtime can satisfy the owner target when the unchanged causal evidence gate passes."
+  },
+  "blockers_removed_from_critical_path": [
+    "external provider credential availability",
+    "external provider free-plan entitlement",
+    "external provider rate limits/cooldowns",
+    "hosted route fallback identity",
+    "hosted route provider/runtime variant identity",
+    "hosted logit_bias support",
+    "NVIDIA-specific entitlement closure",
+    "Mistral Free-mode closure",
+    "ChatGPT direct shell access"
+  ],
+  "blocker_policy": {
+    "classes": [
+      "REPAIR_NOW",
+      "ROUTE_AROUND",
+      "EXTERNAL_TRANSIENT",
+      "SCIENTIFIC_NEGATIVE",
+      "HARD_AUTHORITY_BOUNDARY"
+    ],
+    "same_blocker_repeated_without_new_information": "FORBIDDEN",
+    "blocked_work_slot": "REALLOCATE_TO_HIGHEST_INFORMATION_UNBLOCKED_DEPENDENCY",
+    "external_provider_problem": "NON_GATING_FOR_LOCAL_PRIMARY_PATH"
+  },
+  "fastest_primary_path": {
+    "class": "LOCAL_PYTORCH_QWEN3_06B_ACTIVATION_HOOK_API",
+    "model": "Qwen/Qwen3-0.6B",
+    "revision": "c1899de289a04d12100db370d81485cdf75e47ca",
+    "tokenizer_json_sha256": "aeb13307a71acd8fe81861d94ad54ab689df773318809eed3cbe794b4492dae4",
+    "executor": "tools/trigger1_local_qwen06_activation_api_execute.py",
+    "executor_commit": "da6e7cf4f3c2024bda880a4edea7402a8147332b",
+    "bootstrap": "tools/trigger1_local_qwen06_activation_api.sh",
+    "bootstrap_commit": "5bb4a954d0cd1460038b8d50ffd56fca1ca2b1dc",
+    "api": "loopback-only ThreadingHTTPServer /v1/jspace/logits",
+    "intervention_site": "model.model.norm output / last token",
+    "vector_construction": "normalized lm_head(A) - mean(lm_head(B), lm_head(C))",
+    "calibration_gains": [0.5, 2.0, 8.0, 32.0],
+    "calibration_seeds": [1701, 1702],
+    "holdout_seeds": [2718, 3141],
+    "controls": [
+      "BASELINE",
+      "+VECTOR",
+      "SIGN_FLIP",
+      "NULL_VECTOR",
+      "ORTHOGONAL_SAME_NORM",
+      "PERMUTED_SAME_NORM"
+    ],
+    "external_provider_credentials_required": false,
+    "provider_billing": 0
+  },
+  "secondary_native_path": {
+    "class": "LOCAL_LLAMA_CPP_QWEN3_06B_CVEC_API",
+    "role": "native-cvec replication/strengthening or fallback",
+    "current_source_evidence": "Retained donor PR #1263 contains the exact JSPACE_VECTOR_CONTROL_ABI/v1 -> llama_set_adapter_cvec bridge for the pinned Qwen3-0.6B GGUF candidate. It is no longer required before the first Trigger-1 completion."
+  },
+  "promotion_gate": {
+    "path": "tools/trigger1_jspace_promotion_gate.py",
+    "commit": "e2e2a44799be28ea4b1256d953faecee7f3fad01",
+    "schema": "CLAY_TRIGGER1_JSPACE_PROMOTION_GATE/v2",
+    "local_api_target": "ZERO_COST_API_SERVED_MODEL_RUNTIME / LOCAL_LOOPBACK_API",
+    "unchanged_scientific_requirements": [
+      "runtime-observed internal vector intervention",
+      "exact source/runtime/checkpoint/tokenizer/intervention identities",
+      "six matched-control runtime receipts",
+      "disjoint calibration and holdout",
+      "fixed seeds",
+      "reproducible directional holdout effect",
+      "strongest counterexample"
+    ],
+    "canonical_credit_minted_by_gate": false
+  },
+  "promotion_gate_regressions": {
+    "path": "tests/test_trigger1_jspace_promotion_gate.py",
+    "commit": "0486a15af2f015535885ef30463c7fb08ce046e6",
+    "defined_tests": 10,
+    "covers": [
+      "legacy FREE external API pass",
+      "zero-cost loopback hidden-state/cvec API pass",
+      "prompt-only rejection",
+      "local non-API mechanism-only rejection for final goal",
+      "zero-provider-billing requirement",
+      "loopback-endpoint requirement",
+      "calibration/holdout disjointness",
+      "orthogonal-control requirement",
+      "empty-batch zero credit",
+      "local candidate batch scan"
+    ],
+    "github_workflow_result_observed_for_definition_commit": false
+  },
+  "launcher_and_dynamic_slots": {
+    "launcher": "tools/trigger1_jspace_research.sh",
+    "launcher_commit": "ab63926d3779bb5dcbb25f7f18bf494aaa764ffc",
+    "behavior": "Attempt provider-independent local API fastpath first; if it does not meet the unchanged scientific gate, immediately continue into repair/research slots without asking the owner or waiting on external providers.",
+    "slot_runner": "tools/run_trigger1_jspace_10x.py",
+    "slot_runner_commit": "f8d8cf077d7c670eb9a33b35a6c56f7e27e92435",
+    "lane_prompt_commit": "fda80af0cd983b15a06ffe7d28456a7dac9b189c",
+    "work_slots": 10,
+    "fixed_hypotheses_required": false,
+    "dynamic_reallocation": true
+  },
+  "chatgpt_tool_surface_bypass": {
+    "reason": "This ChatGPT organ cannot create a direct local shell capability for itself.",
+    "replacement": "Owner-only self-hosted GitHub issue dispatch executes the exact current main local fastpath and commits a sanitized result receipt.",
+    "workflow": ".github/workflows/trigger1-v2-local-fastpath-selfhosted.yml",
+    "workflow_initial_commit": "3d946e3f0f82e08784e0af872c2aea011efcfd6b",
+    "persistent_cache_commit": "7bd389bd5d57a08a2462ad384f6cb5c757ca56df",
+    "dispatch_issue": 1589,
+    "dispatch_issue_state_at_receipt": "OPEN",
+    "result_path_pattern": "research_entity/runtime/tool_results/trigger1-v2-local-fastpath-issue1589-run*.json",
+    "terminal_result_observed_at_receipt": false
+  },
+  "supervisor_8_72_reentry": {
+    "finding": "Supervisor 8.72 independently recognizes the provider-independent local Qwen3-0.6B loopback hidden-state path as the highest-information FREE_ONLY HCU/J-Space discriminator.",
+    "frontier": "SOURCE_READY_RUNTIME_UNOBSERVED",
+    "nvidia_entitlement": "OPEN_SECONDARY_GATE",
+    "local_zero_provider_billing_qwen_path_authorized": true
+  },
+  "scientific_boundary": {
+    "claim": "Removable infrastructure/provider blockers have been removed from the critical path, not erased from reality.",
+    "remaining_terminal_outcomes": [
+      "PROMOTION_CANDIDATE_PASS",
+      "SCIENTIFIC_NEGATIVE_REQUIRING_NEW_VECTOR_LAYER_GAIN_HYPOTHESIS",
+      "GENUINELY_UNAVAILABLE_LOCAL_RUNTIME_CAPABILITY_AFTER_REPAIR_AND_ROUTE_AROUND"
+    ],
+    "whole_entityos_hcu_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_action": "Consume the repository-bound result of self-hosted dispatch issue 1589 when present. If PASS, run Trigger-1 promotion review. If blocked, apply REPAIR_NOW or ROUTE_AROUND immediately; do not reopen external-provider blockers as prerequisites for the local path.",
+  "acceptance": "TRIGGER1_V2_SOURCE_AND_DISPATCH_COMPLETE_RUNTIME_RESULT_PENDING"
+}

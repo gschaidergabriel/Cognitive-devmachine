@@ -1,0 +1,112 @@
+{
+  "schema": "ENTITYOS_HCU_GO_RECEIPT/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "authority_epoch": "8.68",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "reentry": {
+    "bootstrap_cache": "FAST_CACHE_ONLY_STALE_8_63",
+    "canonical_main_first_observed": "6426d1ff7d8b03129d0e73c4127e0e63a678fa17",
+    "canonical_main_after_parallel_fusion": "1cf1d921038aa1ebb77dc689d859f9bd82b4735d",
+    "supervisor": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_68.json",
+    "owner_authority": "governance/CLAY_DUAL_MACHINE_EXECUTION_AUTHORITY_2026-08-24.md",
+    "retained_hcu_donor": "gschaidergabriel/clay-global-research-entity#1263",
+    "retained_hcu_donor_head_before_receipt": "c6c74ea668cc095e5fc761b51b7d0e73c553ded0",
+    "retained_executor": "gschaidergabriel/Dr.-Unterweger#810",
+    "retained_executor_head_observed": "bb7324d2a21ffc143c241c652a31524c5be4c9d8"
+  },
+  "coordination": {
+    "provider_boundary_overlap": "PR1427 and related provider-admission lanes already exist; no competing provider guard lane was created",
+    "parallel_donor_activity_observed": true,
+    "parallel_donor_fusion_policy": "re-entered live PR1263 before each same-file write and used blob-SHA optimistic locking",
+    "shared_reproducible_macrocycle_identity_exposed": false,
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_experiments_run": 0,
+    "vps_bridge_health": "UNRESOLVED_NO_AUTHORIZED_LOCAL_OR_CLAY_DIRECT_DEV_BRIDGE_TOOL_EXPOSED_TO_THIS_CHAT",
+    "vps_bridge_health_classification": "INFRASTRUCTURE_TOOL_EXPOSURE_STATUS_NOT_PRODUCT_FAILURE"
+  },
+  "observed_gap": {
+    "component": "jspace_activation_steering_search_v1.py",
+    "base_search_controls": ["BASELINE", "SIGN_FLIP", "NULL_VECTOR"],
+    "gap": "The search harness could reject sign-insensitive and zero-vector artifacts but did not challenge a positive coordinate with an ABI-bound magnitude-matched PERMUTED null, even though the causal steering protocol names PERMUTED as an existing matched control.",
+    "counterhypothesis": "A sign-paired positive effect with a clean zero control is already sufficient evidence that the discovered direction is coordinate-specific.",
+    "falsifier": "A permutation-invariant executor can scale with signed alpha and therefore pass sign plus zero controls while producing the same effect for every coordinate permutation.",
+    "adjudication": "Source design strengthened: candidate success now additionally requires the target mean delta to beat the strongest counted ABI-bound PERMUTED null by a declared minimum gap. This remains steering-search evidence only."
+  },
+  "writes": [
+    {
+      "path": "the artefact/MicroEntity/hcu/jspace_activation_steering_matched_permuted_v1.py",
+      "git_blob": "ebbea3e7434b370f8b650a0ce5f2be62337110ca",
+      "sha256": "b843ead77b161a8ec4116b01ffe566aac41c585171a7984def7245b770d6b77b",
+      "purpose": "derive deterministic nontrivial PERMUTED controls through JSPACE_VECTOR_CONTROL_ABI/v1; preserve exact q8 multiset and scale; bind source packet, permutation identity, applied vector identity and hook receipts; compare at the same selected layer and alpha; enforce total trial budget"
+    },
+    {
+      "path": "the artefact/MicroEntity/hcu/test_jspace_activation_steering_matched_permuted_v1.py",
+      "git_blob": "1c96f98a5072426afef24b915fbfdcd64a649f1b",
+      "sha256": "080a1528b985277b773234ec0ed331c4d1e02b942b1feb7a5524aff7ed49c561",
+      "purpose": "regress deterministic q8-preserving permutation, directional positive control, permutation-invariant false positive rejection, noncausal credit fence and one-dimensional fail-close"
+    }
+  ],
+  "causal_credit_fence": {
+    "outer_evidence_class": "STEERING_SEARCH_WITH_MATCHED_PERMUTED_NULL_ONLY_NOT_JSPACE_CAUSAL",
+    "jspace_causal_credit": false,
+    "remaining_required_controls_inherited_from_current_base_search": [
+      "BASELINE_CORRUPTED",
+      "SHAM_CONTROL",
+      "OFF_TARGET_CONTROL"
+    ],
+    "rule": "Matched PERMUTED success cannot self-promote to model-specific J-Space causality, HCU runtime, training readiness PASS or canonical truth."
+  },
+  "evidence": {
+    "github_source_blobs_reobserved_on_live_donor_head": true,
+    "chatgpt_container_exact_blob_py_compile": "PASS",
+    "chatgpt_container_git_hash_object_matches_github_source_blob": true,
+    "chatgpt_container_git_hash_object_matches_github_test_blob": true,
+    "focused_unittest_executed_against_exact_private_repo_dependencies": false,
+    "focused_unittest_blocker": "The ChatGPT container could not resolve github.com and no authorized local normal-user or clay-direct-dev bridge was exposed; exact private dependency materialization was therefore unavailable.",
+    "github_workflow_run_observed_for_initial_written_head": false,
+    "runtime_scope": "SOURCE_AND_SYNTAX_ONLY_NO_MODEL_OR_JSPACE_RUNTIME_CREDIT"
+  },
+  "parallel_fusion": {
+    "track_a_main_delta": "Canonical main independently hardened FREE_SWARM_ADMISSION_BOUNDARY_RECEIPT exact-source provenance against untracked import shadows and mid-run source mutation; no duplicate patch was created here.",
+    "donor_causal_fence": "Parallel PR1263 work made base steering success explicitly noncausal under supervisor 8.68; this matched-PERMUTED extension preserves and repeats that fence at its outer result boundary."
+  },
+  "external_research_inputs": [
+    {
+      "source": "llama.cpp control-vector implementation/documentation",
+      "use": "corroborates practical scaled control-vector and layer-range steering mechanisms",
+      "claim_class": "EXTERNAL_DESIGN_INPUT_NOT_CLAY_RUNTIME_EVIDENCE"
+    },
+    {
+      "source": "The Rogue Scalpel: Activation Steering Compromises LLM Safety (2025)",
+      "use": "supports treating random or generic activation directions as a serious null/counterhypothesis rather than assuming every steering effect is semantically specific",
+      "claim_class": "EXTERNAL_RESEARCH_INPUT_NOT_MODEL_SPECIFIC_CLAY_EVIDENCE"
+    }
+  ],
+  "tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED_BY_PARALLEL_CANONICAL_MAIN: exact-source FREE provider admission receipt provenance was hardened; exact authorized runtime remains unexecuted because no local/clay-direct-dev bridge is exposed here.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED: retained HCU donor now has one reusable ABI-bound deterministic PERMUTED matched-control primitive without a second state, truth, effect or J-Space wire.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_FREE_ONLY_LOCAL_08B_READINESS": "ADVANCED_SOURCE_LEVEL: activation steering gains a magnitude-matched coordinate-permutation falsifier and explicit noncausal credit boundary; clean/corrupted/sham/off-target model-specific intervention execution remains open."
+  },
+  "credits": {
+    "free_swarm_provider_admission_runtime_credit": 0,
+    "external_provider_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "provider_activity_by_this_organ": {
+    "external_llm_provider_calls": 0,
+    "provider_secret_lookups": 0,
+    "together_calls_or_preflight": 0,
+    "paid_or_unknown_cost_actions": 0
+  },
+  "next_exact_action": "On an exposed authorized normal-user local or clay-direct-dev checkout, first execute current main tools/run_free_swarm_admission_boundary_receipt.py with exact pre/post source identity and zero blocked secret/network attempts; then execute the live PR1263 InferenceReceipt/v4 rejection-boundary suite plus this exact matched-PERMUTED focused regression, and only afterward bind one actual local model activation backend into the clean/corrupted/target/sham/off-target causal family.",
+  "acceptance": "IN_PROGRESS"
+}

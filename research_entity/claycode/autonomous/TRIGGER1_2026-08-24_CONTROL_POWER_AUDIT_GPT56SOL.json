@@ -1,0 +1,94 @@
+{
+  "schema": "CLAY_TRIGGER1_CONTROL_POWER_AUDIT/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6-Sol",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "trigger": "forschungsrun 1",
+  "current_main_observed_before_write": "e8e3a5ae689f66e36bf19eb54bc3fbf552b75449",
+  "authority_epoch": "8.72",
+  "mode": "FREE_ONLY",
+  "extends_pr": 1586,
+  "observed_executor": "tools/trigger1_local_qwen06_activation_api_execute.py",
+  "material_finding": {
+    "classification": "CURRENT_FINAL_NORM_CONTROL_FAMILY_IS_PARTLY_ALGEBRAICALLY_PREDETERMINED_FOR_THE_DECLARED_TARGET_SCORE",
+    "derivation": [
+      "Let d = W_A - 0.5*(W_B + W_C) and S(h) = logit_A - 0.5*(logit_B + logit_C). At the final normalized hidden state immediately before the linear LM head, gradient_h S = d.",
+      "The current positive steering vector is v = d / ||d||, so adding g*v gives Delta S = g * d dot v = g*||d||. The +VECTOR condition is therefore the steepest unit-norm ascent direction for this exact scalar readout objective at that site.",
+      "SIGN_FLIP gives Delta S = -g*||d|| by the same algebra. This is a useful directionality/instrumentation control but does not by itself show a discovered semantic representation.",
+      "The current ORTHOGONAL_SAME_NORM control is explicitly constructed orthogonal to plus. Since plus is collinear with d, d dot orthogonal_control = 0 up to numerical precision. At this final linear readout site its target-score null effect is therefore designed into the geometry rather than discovered empirically.",
+      "NULL_VECTOR similarly checks implementation drift, not semantic specificity.",
+      "PERMUTED_SAME_NORM is not matched on projection onto d. In a high-dimensional hidden space it can easily have a much smaller target projection than +VECTOR, so +VECTOR beating it does not isolate a semantic mechanism.",
+      "Consequently the current adjudication rule (+VECTOR above orthogonal/permuted nuisance controls) can be satisfied by readout geometry even if no upstream population-level or globally coordinating J-Space representation has been identified."
+    ],
+    "credit_boundary": {
+      "exact_local_vector_consumption_if_runtime_receipt_passes": "ELIGIBLE_COMPONENT_EVIDENCE",
+      "readout_adjacent_directional_control": "ELIGIBLE_COMPONENT_EVIDENCE",
+      "semantic_specificity": "NOT_ESTABLISHED_BY_CURRENT_CONTROL_POWER",
+      "global_jspace_representation": "NOT_ESTABLISHED",
+      "global_jspace_causal_coordination": "NOT_ESTABLISHED",
+      "hcu_full_runtime_credit": 0,
+      "jspace_model_runtime_credit": 0,
+      "training_credit": 0,
+      "whole_entityos_hcu_runtime_credit": 0
+    }
+  },
+  "counterhypothesis": {
+    "claim": "The current six controls remain valuable because they catch hook failure, sign mistakes, null drift, and gross direction non-specificity even if some expected score relations are algebraically constrained.",
+    "assessment": "SUPPORTED. Reclassify them as instrumentation/readout controls rather than sufficient semantic-J-Space controls; do not remove them."
+  },
+  "stronger_discriminator": {
+    "name": "INTERMEDIATE_REPRESENTATION_VECTOR_PLUS_PROJECTION_MATCHED_AND_LABEL_TRANSFER_CONTROLS",
+    "requirements": [
+      "Retain the final-norm LM-head-derived vector as READOUT_ALGEBRAIC_POSITIVE_CONTROL.",
+      "Derive the candidate J-Space vector only from calibration-set intermediate residual activations, e.g. contrastive positive-minus-negative activation means; do not use LM-head rows in its construction.",
+      "Freeze layer, vector, normalization and gain before disjoint holdout evaluation.",
+      "Add WRONG_LAYER and LAYER_SHUFFLE controls to test localization rather than mere injectability.",
+      "Add a readout-projection-matched nuisance direction where feasible: match the candidate control's projection onto the declared output readout while differing in residual-space semantics, so target-logit projection alone cannot win the specificity comparison.",
+      "Add LABEL_REMAP/CONCEPT_SWAP holdouts: preserve the underlying semantic contrast while changing A/B/C or equivalent response-token mapping, so a token-row construction cannot explain transfer.",
+      "Measure off-target vocabulary/task behavior and behavior-level transfer, not only the A-vs-B/C scalar score.",
+      "Add lesion/rescue: remove or project out the preregistered intermediate direction, then restore the same bound direction at the preregistered layer; require the predicted effect ordering on unseen holdout families.",
+      "Bind source tree, dirty state, Python/Torch/Transformers build, checkpoint/tokenizer consumed identity, vector-source activation receipts, intervention layer/site, gain, endpoint and every control invocation in the exact runtime receipt."
+    ],
+    "acceptance_logic": [
+      "The readout-algebraic control may pass without granting Global-J-Space credit.",
+      "A representation-derived intermediate vector must outperform appropriate nuisance controls on preregistered holdout behavior, not merely on the score used to construct or select it.",
+      "Semantic transfer must survive label remapping or an equivalent output-token change.",
+      "Wrong-layer/shuffle and lesion controls must reduce the effect in the preregistered direction; rescue must restore it.",
+      "Any failure preserves narrower direct vector-consumption evidence but blocks stronger J-Space promotion."
+    ],
+    "falsifier": "If a projection-matched nuisance or token-label remapping explains the same effect, or if the intermediate representation-derived vector lacks layer-specific lesion/rescue behavior, reject the stronger semantic/global J-Space hypothesis for this intervention family."
+  },
+  "primary_research_support": [
+    {
+      "source": "Turner et al., Steering Language Models With Activation Engineering",
+      "arxiv": "2308.10248",
+      "relevance": "Activation Addition constructs steering directions from intermediate activation contrasts and measures high-level behavioral steering rather than defining the direction from the final output-token readout."
+    },
+    {
+      "source": "Zou et al., Representation Engineering: A Top-Down Approach to AI Transparency",
+      "arxiv": "2310.01405",
+      "relevance": "Motivates population-level internal representations as the object of monitoring/manipulation for stronger representation claims."
+    },
+    {
+      "source": "Panickssery et al., Steering Llama 2 via Contrastive Activation Addition",
+      "arxiv": "2312.06681",
+      "relevance": "CAA averages differences in residual-stream activations across positive/negative examples, providing a concrete representation-derived alternative to LM-head-row steering."
+    },
+    {
+      "source": "Kramar et al., AtP*: An efficient and scalable method for localizing LLM behaviour to components",
+      "arxiv": "2403.00745",
+      "relevance": "Supports explicit causal localization/verification and warns against treating a single intervention effect as sufficient localization evidence."
+    }
+  ],
+  "execution": {
+    "new_unusual_experiment_run": false,
+    "provider_network_calls": 0,
+    "paid_fallback_attempts": 0,
+    "runtime_result_claimed": false,
+    "reason": "This delta is a source-and-control-design audit. Supervisor 8.72 exact local Qwen runtime evidence remains a separate executable gate."
+  },
+  "research_result": "MATERIAL_RESEARCH_DELTA_CREATED",
+  "canonical_credit_minted": false
+}

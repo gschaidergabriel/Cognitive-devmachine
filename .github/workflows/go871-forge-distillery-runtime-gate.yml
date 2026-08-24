@@ -1,10 +1,20 @@
-name: GO871 Forge Distillery exact runtime gate
+name: GO872 Forge Distillery exact-current runtime gate
 
+# Exact-current trigger after writable disposable Forge worktree fusion: 2026-08-24T21:52+07:00
 on:
   push:
     branches: [main]
     paths:
       - '.github/workflows/go871-forge-distillery-runtime-gate.yml'
+      - 'tools/run_go871_forge_distillery_runtime_gate.py'
+      - 'tools/ingest_forge_accepts_into_distillery.py'
+      - 'tools/forge_evidence_credit_871.py'
+      - 'tools/run_free_evidence_forge.py'
+      - 'tools/run_free_evidence_forge_safe_871.py'
+      - 'tools/forge_execution_admission_871.py'
+      - 'runtime_checks/test_forge_distillery_requires_execution_admission_871.py'
+      - 'tests/test_forge_execution_admission_871.py'
+      - 'tests/test_forge_disposable_worktree_872.py'
   workflow_dispatch:
   pull_request:
     types: [opened, synchronize, reopened]
@@ -20,7 +30,7 @@ jobs:
     runs-on: self-hosted
     timeout-minutes: 12
     steps:
-      - name: Checkout request head
+      - name: Checkout exact evidence source
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
@@ -39,7 +49,7 @@ jobs:
               p=subprocess.run(args,text=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE,check=False)
               return {'rc':p.returncode,'stdout':p.stdout.strip()[-1000:],'stderr':p.stderr.strip()[-1000:]}
           print(json.dumps({
-              'schema':'CLAY_GO871_SELFHOSTED_RUNTIME_PROBE/v1',
+              'schema':'CLAY_GO872_SELFHOSTED_RUNTIME_PROBE/v1',
               'live_repo_exists':(live/'.git').exists(),
               'live_head':cmd('git','-C',str(live),'rev-parse','HEAD') if (live/'.git').exists() else None,
               'live_status':cmd('git','-C',str(live),'status','--porcelain=v1') if (live/'.git').exists() else None,
@@ -50,7 +60,7 @@ jobs:
           },indent=2))
           PY
 
-      - name: Execute exact source Forge to Distillery witness
+      - name: Execute exact-current Forge to Distillery successor witness
         id: gate
         shell: bash
         env:
@@ -78,11 +88,12 @@ jobs:
               body = fs.readFileSync(p, 'utf8');
             } else {
               body = JSON.stringify({
-                schema:'CLAY_GO871_FORGE_DISTILLERY_RUNTIME_GATE/v1',
+                schema:'CLAY_FORGE_DISTILLERY_EXACT_CURRENT_RUNTIME_GATE/v2',
                 status:'WORKFLOW_RESULT_MISSING',
                 pass:false,
                 github_run_id:context.runId,
                 whole_product_credit:0,
+                hcu_full_credit:0,
                 jspace_credit:0,
                 training_credit:0
               }, null, 2) + '\n';
@@ -101,7 +112,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: go871-forge-distillery-runtime-gate
+          name: go872-forge-distillery-runtime-gate
           path: |
             /tmp/clay-go871-forge-distillery/result.json
             /tmp/clay-go871-forge-distillery/host_probe.json

@@ -22,12 +22,18 @@ EXPECTED_MODE = "FREE_ONLY"
 EXPECTED_PRODUCT = "EntityOS"
 EXPECTED_ARCHITECTURE = "HCU"
 EXPECTED_BOUNDARY = "BEFORE_SECRET_OR_KEY_LOOKUP_AND_BEFORE_NETWORK_IO"
+POSITIVE_CONTROL_STATUS = "ACTIVE_TYPED_FREE_ADMISSION"
 POSITIVE_EVIDENCE_STATUS = "VERIFIED_ZERO_MONETARY_COST"
 BLOCKED_COST_CLASSES = {"PAID", "SUBSCRIPTION", "UNKNOWN"}
 ENV_BY_PROVIDER = {
     "groq": "CLAY_GROQ_FREE_ATTESTED",
     "mistral": "CLAY_MISTRAL_FREE_ATTESTED",
     "nvidia": "CLAY_NVIDIA_FREE_ATTESTED",
+}
+PRIMARY_ENDPOINT_BY_PROVIDER = {
+    "groq": "https://api.groq.com/openai/v1/chat/completions",
+    "mistral": "https://api.mistral.ai/v1/chat/completions",
+    "nvidia": "https://integrate.api.nvidia.com/v1/chat/completions",
 }
 
 
@@ -99,11 +105,15 @@ def load_control(root: Path = ROOT) -> tuple[dict[str, Any], dict[str, Any]]:
     return admission, supervisor
 
 
-def _record_is_current_free(record: Any, now: dt.datetime) -> bool:
+def _record_is_current_free(provider: str, record: Any, now: dt.datetime) -> bool:
     if not isinstance(record, dict):
         return False
     cost_class = str(record.get("cost_class", "UNKNOWN")).upper()
     if cost_class != "FREE":
+        return False
+    endpoints = record.get("endpoints")
+    primary = PRIMARY_ENDPOINT_BY_PROVIDER.get(provider)
+    if not primary or not isinstance(endpoints, list) or primary not in endpoints:
         return False
     evidence = record.get("cost_evidence")
     if not isinstance(evidence, dict) or evidence.get("status") != POSITIVE_EVIDENCE_STATUS:
@@ -123,6 +133,10 @@ def _record_is_current_free(record: Any, now: dt.datetime) -> bool:
     return True
 
 
+def _control_allows_positive_admission(admission: dict[str, Any]) -> bool:
+    return admission.get("status") == POSITIVE_CONTROL_STATUS
+
+
 def provider_is_explicit_free(
     provider: str,
     endpoint: str,
@@ -131,12 +145,14 @@ def provider_is_explicit_free(
     now: dt.datetime | None = None,
 ) -> bool:
     admission, _supervisor = load_control(root)
+    if not _control_allows_positive_admission(admission):
+        return False
     providers = admission.get("providers")
     if not isinstance(providers, dict):
         return False
     record = providers.get(provider)
     moment = (now or dt.datetime.now(dt.timezone.utc)).astimezone(dt.timezone.utc)
-    if not _record_is_current_free(record, moment):
+    if not _record_is_current_free(provider, record, moment):
         return False
     endpoints = record.get("endpoints") if isinstance(record, dict) else None
     return isinstance(endpoints, list) and endpoint in endpoints
@@ -144,15 +160,19 @@ def provider_is_explicit_free(
 
 def admitted_provider_names(*, root: Path = ROOT, now: dt.datetime | None = None) -> list[str]:
     admission, _supervisor = load_control(root)
+    if not _control_allows_positive_admission(admission):
+        return []
     providers = admission.get("providers")
     if not isinstance(providers, dict):
         return []
     moment = (now or dt.datetime.now(dt.timezone.utc)).astimezone(dt.timezone.utc)
-    return sorted(name for name, record in providers.items() if name in ENV_BY_PROVIDER and _record_is_current_free(record, moment))
+    return sorted(name for name, record in providers.items() if name in ENV_BY_PROVIDER and _record_is_current_free(name, record, moment))
 
 
 def admitted_secret_sources(*, root: Path = ROOT, now: dt.datetime | None = None) -> list[tuple[str, str]]:
     admission, _supervisor = load_control(root)
+    if not _control_allows_positive_admission(admission):
+        return []
     providers = admission.get("providers")
     if not isinstance(providers, dict):
         return []
@@ -160,7 +180,7 @@ def admitted_secret_sources(*, root: Path = ROOT, now: dt.datetime | None = None
     out: list[tuple[str, str]] = []
     for name in sorted(ENV_BY_PROVIDER):
         record = providers.get(name)
-        if not _record_is_current_free(record, moment):
+        if not _record_is_current_free(name, record, moment):
             continue
         raw_sources = record.get("secret_sources", []) if isinstance(record, dict) else []
         if not isinstance(raw_sources, list):

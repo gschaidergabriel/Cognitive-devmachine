@@ -73,6 +73,8 @@ The current source provides:
 
 Earlier issue dispatches #1589/#1590 were opened before later low-disk receipt and persistent-cache fixes and were closed as superseded/duplicate. A single post-fix owner dispatch, **#1609**, now targets the repaired self-hosted Linux/X64 lane. The workflow persists only bounded sanitized evidence to current canonical source. **No J-Space/model/training promotion is claimed before an executable terminal receipt and promotion-gate result are observed.**
 
+This `go` also closed a small evidence-quality regression on the same lane. The low-disk fail-closed receipt had briefly lost the `avail_kb` argument to its `%s` formatter; the implementation was restored in parallel and `main` now also contains `tests/test_trigger1_local_qwen_runtime_preflight_872.py`, which locks both the source binding and valid JSON receipt shape. A source-equivalent local check was **2/2 PASS**. This is source/regression evidence only and mints no model, J-Space, training or whole-product credit.
+
 ## Evidence credit
 
 Current bounded credit remains conservative:

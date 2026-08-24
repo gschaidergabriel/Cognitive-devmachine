@@ -11,6 +11,7 @@ DEADLINE="${CLAY_SWARM_DEADLINE_EPOCH:-$((START + 24*3600))}"
 ADMISSION_TOOL="$ROOT/tools/free_provider_admission.py"
 LOGICAL_WORKERS="${CLAY_LOGICAL_WORKERS:-6000}"
 HTTP_THREADS="${CLAY_SWARM_HTTP_THREADS:-512}"
+ADMISSION_BINDING_FILE="$STATE_DIR/swarm6000.admission.binding"
 
 # Initial probes are deliberately above the old local 12-slot bottleneck for
 # empirically healthy NVIDIA, while 429-heavy lanes start lower and ramp by AIMD.
@@ -23,15 +24,49 @@ export OPENROUTER_SWARM_MODELS="${OPENROUTER_SWARM_MODELS:-openrouter/free}"
 provider_admitted(){ python3 "$ADMISSION_TOOL" --provider "$1" >/dev/null 2>&1; }
 load_secret_file(){ local f="$1"; [[ -r "$f" ]] || return 0; set +x; set -a; source "$f"; set +a; }
 
+all_llm_providers_admitted(){
+  provider_admitted groq &&
+  provider_admitted mistral &&
+  provider_admitted nvidia &&
+  provider_admitted openrouter
+}
+
+# A long-lived supervisor must not retain a provider capability after canonical
+# revocation. Operate on variable names only: blocked secret values are never
+# expanded merely to decide which variables must be removed.
+clear_unadmitted_provider_secret_env(){
+  local name
+  if ! provider_admitted groq; then
+    unset GROQ_API_KEY GROQ_API_KEYS GROQ2_API_KEY GROQ3_API_KEY || true
+    while IFS= read -r name; do case "$name" in GROQ_API_KEY_*) unset "$name" || true ;; esac; done < <(compgen -v)
+  fi
+  if ! provider_admitted mistral; then
+    unset MISTRAL_API_KEY MISTRAL_API_KEYS MISTRAL2_API_KEY MISTRAL3_API_KEY || true
+    while IFS= read -r name; do case "$name" in MISTRAL_API_KEY_*) unset "$name" || true ;; esac; done < <(compgen -v)
+  fi
+  if ! provider_admitted nvidia; then
+    unset NVIDIA_API_KEY NVIDIA_API_KEYS NVIDIA_NIM_API_KEY NVIDIA2_API_KEY NVIDIA3_API_KEY NGC_API_KEY || true
+    while IFS= read -r name; do case "$name" in NVIDIA_API_KEY_*) unset "$name" || true ;; esac; done < <(compgen -v)
+  fi
+  if ! provider_admitted openrouter; then
+    unset OPENROUTER_API_KEY OPENROUTER_API_KEYS OPENROUTER2_API_KEY OPENROUTER3_API_KEY || true
+    while IFS= read -r name; do case "$name" in OPENROUTER_API_KEY_*) unset "$name" || true ;; esac; done < <(compgen -v)
+  fi
+}
+
 load_admitted_secrets(){
-  if provider_admitted groq || provider_admitted mistral || provider_admitted nvidia || provider_admitted openrouter; then
+  # Shared bundles may contain credentials for multiple providers. They are
+  # therefore opened only when every provider represented by this supervisor is
+  # currently typed FREE-admitted. Provider-specific files remain individually
+  # admission-gated.
+  if all_llm_providers_admitted; then
     load_secret_file /run/secrets/clay_provider.env
     load_secret_file /artifacts/.clay_provider.env
     load_secret_file /cache/clay_provider.env
     load_secret_file "$ROOT/.clay_provider.env"
     load_secret_file "$ROOT/research_entity/private/API_TOKENS.env"
-    load_secret_file "$ROOT/research_entity/private/GROQ_API.env"
   fi
+  provider_admitted groq && load_secret_file "$ROOT/research_entity/private/GROQ_API.env" || true
 }
 
 compat_flags(){
@@ -62,6 +97,38 @@ for target,names in families.items():
   if v not in vals: vals.append(v)
  if vals: print('export %s=%s'%(target,shlex.quote(','.join(vals))))
 PY
+}
+
+# Bind each external-provider child to the exact current canonical admission
+# snapshot. The digest contains authority/admission metadata only, never secrets.
+admission_capability_digest(){
+python3 - <<'PY_INNER'
+import hashlib,json
+from free_provider_admission import admission_snapshot, load_provider_admission, ProviderAdmissionError
+snap=admission_snapshot()
+try:
+ admission=load_provider_admission()
+except ProviderAdmissionError:
+ admission=None
+material={
+ "snapshot":snap,
+ "validated_admission":admission,
+}
+raw=json.dumps(material,sort_keys=True,separators=(",",":"),ensure_ascii=False).encode("utf-8")
+prefix="OK" if bool(snap.get("ok")) and admission is not None else "INVALID"
+print(prefix+":"+hashlib.sha256(raw).hexdigest())
+PY_INNER
+}
+
+prepare_provider_environment(){
+  # Sanitize before any secret-file read, derive compatibility flags only from
+  # canonical admission, then sanitize once more after loading as defense in
+  # depth against stale inherited variables.
+  clear_unadmitted_provider_secret_env
+  compat_flags
+  load_admitted_secrets
+  clear_unadmitted_provider_secret_env
+  eval "$(normalize_provider_pool)"
 }
 
 raise_shared_quota_ceiling(){
@@ -108,9 +175,42 @@ stop_legacy_go_swarm(){
   while IFS= read -r pid; do [[ -n "$pid" ]] && kill "$pid" 2>/dev/null || true; done < <(pgrep -f '[r]un_24h_entityos_swarm.py' || true)
 }
 
+stop_6000(){
+  local pid
+  while IFS= read -r pid; do
+    [[ -n "$pid" ]] && kill "$pid" 2>/dev/null || true
+  done < <(pgrep -f '[r]un_6000_free_swarm_fast.py' || true)
+  rm -f "$STATE_DIR/swarm6000.pid"
+}
+
+reconcile_6000_admission(){
+  local current bound
+  current="$(admission_capability_digest)"
+  if pgrep -f '[r]un_6000_free_swarm_fast.py' >/dev/null 2>&1; then
+    bound="$(cat "$ADMISSION_BINDING_FILE" 2>/dev/null || true)"
+    if [[ -z "$bound" || "$bound" != "$current" || "$current" == INVALID:* ]]; then
+      stop_6000
+      rm -f "$ADMISSION_BINDING_FILE"
+    fi
+  elif [[ "$current" == INVALID:* ]]; then
+    rm -f "$ADMISSION_BINDING_FILE"
+  fi
+}
+
 start_6000(){
   pgrep -f '[r]un_6000_free_swarm_fast.py' >/dev/null 2>&1 && return 0
-  local now rem hours out
+  local before after post now rem hours out pid tmp
+  before="$(admission_capability_digest)"
+  [[ "$before" == OK:* ]] || return 0
+
+  # Rebuild the parent capability environment immediately before spawn. If
+  # canonical admission moves during preparation, abort this spawn and let the
+  # next reconciliation cycle retry from the new state.
+  prepare_provider_environment
+  after="$(admission_capability_digest)"
+  [[ "$after" == "$before" && "$after" == OK:* ]] || return 0
+  [[ "${CLAY_FREE_ONLY_ATTESTED:-}" == "1" ]] || return 0
+
   now=$(date +%s); rem=$((DEADLINE-now)); (( rem>0 )) || return 0
   hours=$(python3 - <<PY
 print(max(0.01,$rem/3600.0))
@@ -119,19 +219,31 @@ PY
   out="$STATE_DIR/active-fabric6000-v2-$(date -u +%Y%m%dT%H%M%SZ)"
   export CLAY_SWARM_HTTP_THREADS="$HTTP_THREADS"
   nohup python3 "$ROOT/tools/run_6000_free_swarm_fast.py" --logical-workers "$LOGICAL_WORKERS" --hours "$hours" --output-dir "$out" >"$STATE_DIR/swarm6000.log" 2>&1 </dev/null &
-  echo $! >"$STATE_DIR/swarm6000.pid"
+  pid=$!
+  echo "$pid" >"$STATE_DIR/swarm6000.pid"
+  tmp="$ADMISSION_BINDING_FILE.tmp"
+  printf '%s\n' "$after" >"$tmp"
+  mv "$tmp" "$ADMISSION_BINDING_FILE"
+
+  # Close the spawn race: current request_chat() independently revalidates
+  # admission before provider network I/O, and the supervisor also removes this
+  # child immediately if authority moved between spawn and binding publication.
+  post="$(admission_capability_digest)"
+  if [[ "$post" != "$after" || "$post" == INVALID:* ]]; then
+    kill "$pid" 2>/dev/null || true
+    rm -f "$STATE_DIR/swarm6000.pid" "$ADMISSION_BINDING_FILE"
+  fi
 }
 
 while (( $(date +%s) < DEADLINE )); do
-  compat_flags
-  load_admitted_secrets
-  eval "$(normalize_provider_pool)"
+  prepare_provider_environment
   raise_shared_quota_ceiling || true
   start_local_model
   start_dashboard
   start_distillery
   start_forge
   stop_legacy_go_swarm
+  reconcile_6000_admission
   start_6000
   refresh_root_results
 
@@ -155,23 +267,27 @@ def latest_fabric():
  try:return json.loads(xs[0].read_text())
  except Exception:return {}
 fabric=latest_fabric()
+try: admission_binding=Path('$ADMISSION_BINDING_FILE').read_text().strip()
+except OSError: admission_binding=None
 print(json.dumps({
- 'schema':'CLAY_6000_SWARM_SUPERVISOR/v2',
+ 'schema':'CLAY_6000_SWARM_SUPERVISOR/v3',
  'observed_at':datetime.datetime.now(datetime.timezone.utc).isoformat(),
  'remaining_seconds':$REMAINING,
  'logical_workers_requested':int('$LOGICAL_WORKERS'),
  'http_thread_pool':int('$HTTP_THREADS'),
  'provider_admission':admission_snapshot(),
+ 'fabric_admission_binding':admission_binding,
  'fabric_running':running('run_6000_free_swarm_fast.py'),
  'distillery_running':running('run_research_distillery_local.py'),
  'forge_running':running('run_free_evidence_forge.py'),
  'dashboard_running':running('free swarm/evaluate.py.*--watch'),
  'local_model_ready':health(),
  'fabric':fabric,
- 'shared_quota':snapshot()
+ 'shared_quota':snapshot(),
+ 'revocation_policy':'SANITIZE_LONG_LIVED_PARENT_AND_RESTART_CHILD_ON_EXACT_ADMISSION_BINDING_CHANGE; REQUEST_PATH_REVALIDATES_CURRENT_TYPED_ADMISSION_BEFORE_NETWORK'
 },indent=2))
 PY
   mv "$STATE_DIR/SUPERVISOR_6000.json.tmp" "$STATE_DIR/SUPERVISOR_6000.json"
   sleep 15
 done
-printf '{"schema":"CLAY_6000_SWARM_SUPERVISOR/v2","state":"EXPIRED"}\n' >"$STATE_DIR/SUPERVISOR_6000.json"
+printf '{"schema":"CLAY_6000_SWARM_SUPERVISOR/v3","state":"EXPIRED"}\n' >"$STATE_DIR/SUPERVISOR_6000.json"

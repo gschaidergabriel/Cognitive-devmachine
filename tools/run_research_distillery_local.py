@@ -19,10 +19,14 @@ import urllib.request
 
 TOOLS=Path(__file__).resolve().parent
 if str(TOOLS) not in sys.path:sys.path.insert(0,str(TOOLS))
+from local_loopback_endpoint import build_loopback_opener, validated_loopback_base
 import run_research_distillery as d
 import run_research_distillery_entry as e  # installs canonical external-provider gates first
 
-LOCAL_BASE=os.getenv("CLAY_LOCAL_RESEARCH_BASE","http://127.0.0.1:8088")
+# Fail closed during startup before any local-model socket can be opened.  Numeric
+# loopback + no ambient proxy + no redirect is the entire transport scope of this lane.
+LOCAL_BASE=validated_loopback_base(os.getenv("CLAY_LOCAL_RESEARCH_BASE","http://127.0.0.1:8088"))
+_LOCAL_OPENER=build_loopback_opener()
 LOCAL_LOGICAL_ID="local/Qwen3-4B-GGUF-Q4_K_M"
 _PREV_CHAT=d.chat
 _PREV_SMALL=d.select_small_models
@@ -36,13 +40,13 @@ os.environ.setdefault("CLAY_FREE_ONLY_ATTESTED","1")
 
 def local_health()->bool:
     try:
-        with urllib.request.urlopen(LOCAL_BASE+"/health",timeout=1.5) as r:return 200<=int(r.status)<300
+        with _LOCAL_OPENER.open(LOCAL_BASE+"/health",timeout=1.5) as r:return 200<=int(r.status)<300
     except Exception:return False
 
 
 def server_model_id()->str:
     try:
-        with urllib.request.urlopen(LOCAL_BASE+"/v1/models",timeout=2) as r:
+        with _LOCAL_OPENER.open(LOCAL_BASE+"/v1/models",timeout=2) as r:
             obj=json.loads(r.read().decode("utf-8",errors="replace"))
         data=obj.get("data") if isinstance(obj,dict) else None
         if isinstance(data,list) and data and isinstance(data[0],dict) and data[0].get("id"):return str(data[0]["id"])
@@ -57,7 +61,7 @@ def local_chat(model:str,prompt:str,max_tokens:int=700,temperature:float=0.3):
     payload={"model":server_model_id(),"messages":[{"role":"user","content":prompt}],"temperature":temperature,"max_tokens":max_tokens,"stream":False}
     req=urllib.request.Request(LOCAL_BASE+"/v1/chat/completions",data=json.dumps(payload).encode(),method="POST",headers={"Content-Type":"application/json","User-Agent":"clay-local-distillery/1"})
     try:
-        with urllib.request.urlopen(req,timeout=240) as r:
+        with _LOCAL_OPENER.open(req,timeout=240) as r:
             obj=json.loads(r.read().decode("utf-8",errors="replace"));status=int(r.status)
     except urllib.error.HTTPError as ex:return False,"",{},f"LOCAL_HTTP_{ex.code}"
     except Exception as ex:return False,"",{},f"LOCAL_{type(ex).__name__}"

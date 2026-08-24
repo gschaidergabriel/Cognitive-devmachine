@@ -1,0 +1,61 @@
+{
+  "schema": "ENTITYOS_HCU_GO_FREE_ONLY_SANDBOX_QUOTA_ATTESTATION_RECEIPT/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "authority_epoch": "8.63",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "canonical_main_observed_before_write": "9e4c21cb4834deab74d6374a70f31a18f1c08853",
+  "coordination": {
+    "shared_immutable_macrocycle_or_request_id_available_to_this_organ": false,
+    "exact_user_message_timestamp_precision_available": "MINUTE_ONLY",
+    "atomic_unusual_experiment_claim": "NOT_ATTEMPTED_NO_REPRODUCIBLE_TRIGGER_KEY",
+    "unusual_experiment_status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_experiments_run": 0
+  },
+  "observations": {
+    "retained_hcu_donor": "gschaidergabriel/clay-global-research-entity#1263",
+    "retained_hcu_donor_head_observed": "ff67cf4192e9fbb3ea8aee2819f2dbeddd576ee6",
+    "retained_executor": "gschaidergabriel/Dr.-Unterweger#810",
+    "retained_executor_head_observed": "7994352f4dcd48dbd7d0c6c5154bad5632b054c1",
+    "executor_pinned_donor_commit": "511d568932bf47828679e3ca6ba05650f18d284d",
+    "vercel_team_id": "team_hwPBWKuCJxkfVhCx3WLdcTRx",
+    "vercel_team_plan_observed": "hobby",
+    "vercel_project_id": "prj_ifIgM9X7jqIQS8mNIGllImziePPG",
+    "vercel_project_repository": "gschaidergabriel/Dr.-Unterweger",
+    "latest_deployment_observed_id": "dpl_26pNV41EYrvFuWKRBFCHUPjQN2Xk",
+    "latest_deployment_observed_git_sha": "aa80683e8b3cbc0eb9b0fced784820005b0d55d6",
+    "latest_deployment_observed_state": "ERROR",
+    "exact_current_executor_head_deployment_observed": false,
+    "remaining_sandbox_quota_directly_observed": false
+  },
+  "source_finding": {
+    "file": "gschaidergabriel/Dr.-Unterweger@mcp/vercel-sandbox-mcp/lib/free-only-sandbox-admission.js",
+    "head": "7994352f4dcd48dbd7d0c6c5154bad5632b054c1",
+    "observed_behavior": "sandboxExecutionAdmitted() currently reduces admission to a static SANDBOX_COST_ADMISSION.status === ADMITTED check.",
+    "counterevidence": "Supervisor 8.63 explicitly states that remaining Sandbox quota is not assumed from Hobby plan identity and that quota/billing/upgrade/plan/charge boundaries fail closed.",
+    "classification": "STATIC_ADMISSION_IS_NOT_DIRECT_REMAINING_QUOTA_ATTESTATION",
+    "runtime_action": "NO_SANDBOX_INVOCATION"
+  },
+  "hypothesis": "The retained executor can preserve FREE_ONLY authority only if Sandbox.create remains downstream of both exact source/deployment identity and a directly observed or equivalently fail-closed no-charge included-entitlement admission, rather than a stale static ADMITTED constant.",
+  "counterhypothesis": "Hobby plan identity alone is sufficient because provider enforcement will reject exhausted quota without monetary charge.",
+  "discriminator": "Directly observe a current Sandbox quota/entitlement surface or an authoritative equivalent proving no billed/upgrade/charge path before Sandbox.create; until then supervisor 8.63 wins and execution remains blocked.",
+  "tracks": {
+    "track_a_entityos_executable_convergence": "ADVANCED_FAIL_CLOSED_EXECUTOR_AUTHORITY: exact executor repository identity and exact-head deployment absence were reverified; unsafe runtime projection was prevented.",
+    "track_b_hcu_typed_entry": "ADVANCED_EVIDENCE_BOUNDARY: retained 17-blob Typed Entry->route->engine-load->GRID10->execution-store->inference->J-Space source closure remains single-lane and source-bound, but receives no new runtime credit while admission is unresolved.",
+    "track_c_global_jspace_gwt_training_readiness_free_only": "TRAINING_READINESS_NO_CHANGE_WITH_REASON: current J-Space/GWT v3/vector-control source closure remains available on the retained donor/executor path, but exact-current runtime and real local ~0.8B model execution evidence are still absent; no paid lane is allowed."
+  },
+  "credits_after_cycle": {
+    "whole_entityos_hcu_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_action": "Replace the retained executor static Sandbox admission with one fail-closed admission that binds exact runtime executor identity and directly observed current included-entitlement/quota-or-equivalent no-charge authority before Sandbox.create; then require a naturally available READY deployment at the exact new executor SHA before invoking the fixed 17-blob/14-result capsule.",
+  "together": "FORBIDDEN_NO_PREFLIGHT_NO_KEY_LOOKUP_NO_JOB_CREATION",
+  "paid_fallback": "FORBIDDEN"
+}

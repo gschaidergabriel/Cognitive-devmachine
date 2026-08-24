@@ -1,11 +1,13 @@
 from __future__ import annotations
 
 import json
+import os
 from pathlib import Path
 import sqlite3
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[1]
 TOOLS = ROOT / "tools"
@@ -15,6 +17,7 @@ if str(TOOLS) not in sys.path:
 import promote_forge_distillery_runtime_gate as promotion
 
 SOURCE = "1" * 40
+TREE = "2" * 40
 WORKER = "a" * 64
 TARGET_BLOB = "b" * 40
 
@@ -74,6 +77,7 @@ def passing_gate(evaluation: dict | None = None) -> dict:
         "pass": True,
         "status": promotion.PASS_STATUS,
         "source_sha": SOURCE,
+        "source_tree": TREE,
         "network_used": False,
         "provider_calls": 0,
         "paid_fallback_attempt_count": 0,
@@ -100,6 +104,17 @@ def passing_gate(evaluation: dict | None = None) -> dict:
     }
 
 
+def workflow_context(**overrides) -> dict:
+    ctx = {
+        "expected_source_tree": TREE,
+        "github_run_id": "12345",
+        "github_event_name": "push",
+        "source_selection": promotion.CANONICAL_SOURCE_SELECTION,
+    }
+    ctx.update(overrides)
+    return ctx
+
+
 class PromotionSourceGuards872(unittest.TestCase):
     def test_wrong_source_sha_is_rejected(self):
         result = passing_gate()
@@ -118,6 +133,32 @@ class PromotionSourceGuards872(unittest.TestCase):
         evaluation["execution_admission"]["all_commands_admitted"] = False
         with self.assertRaises(promotion.PromotionError):
             promotion.validate_gate_result(passing_gate(evaluation), SOURCE)
+
+    def test_workflow_source_tree_and_selection_are_fail_closed(self):
+        result = passing_gate()
+        with self.assertRaisesRegex(promotion.PromotionError, "WORKFLOW_SOURCE_TREE_MISMATCH"):
+            promotion.validate_workflow_context(
+                result,
+                expected_source_sha=SOURCE,
+                **workflow_context(expected_source_tree="3" * 40),
+            )
+        with self.assertRaisesRegex(promotion.PromotionError, "SOURCE_SELECTION_NOT_CANONICAL"):
+            promotion.validate_workflow_context(
+                result,
+                expected_source_sha=SOURCE,
+                **workflow_context(source_selection="CALLER_SELECTED"),
+            )
+
+    def test_github_actions_environment_must_match_run_and_event(self):
+        env = {
+            "GITHUB_ACTIONS": "true",
+            "GITHUB_RUN_ID": "12345",
+            "GITHUB_EVENT_NAME": "push",
+        }
+        with patch.dict(os.environ, env, clear=True):
+            promotion.validate_github_actions_environment(github_run_id="12345", github_event_name="push")
+            with self.assertRaisesRegex(promotion.PromotionError, "GITHUB_RUN_ID_ENV_MISMATCH"):
+                promotion.validate_github_actions_environment(github_run_id="99999", github_event_name="push")
 
     def test_inspect_db_preserves_counter_before_forge_schema_exists(self):
         with tempfile.TemporaryDirectory() as td:
@@ -142,10 +183,12 @@ class PromotionSourceGuards872(unittest.TestCase):
             db = root / "distillery.sqlite3"
             gate_path.write_text(json.dumps(passing_gate()) + "\n", encoding="utf-8")
 
-            out = promotion.promote(gate_path, SOURCE, db)
+            out = promotion.promote(gate_path, SOURCE, db, **workflow_context())
 
             self.assertEqual(out["status"], "PASS")
             self.assertEqual(out["outcome"], "PROMOTED_NEW_PACKET")
+            self.assertEqual(out["github_run_id"], "12345")
+            self.assertEqual(out["execution_source_tree"], TREE)
             self.assertEqual(out["first"]["admitted"], 1)
             self.assertEqual(out["first"]["duplicates"], 0)
             self.assertGreater(out["first_token_delta"], 0)
@@ -169,7 +212,7 @@ class PromotionSourceGuards872(unittest.TestCase):
             finally:
                 con.close()
 
-            out = promotion.promote(gate_path, SOURCE, db)
+            out = promotion.promote(gate_path, SOURCE, db, **workflow_context())
 
             self.assertEqual(out["before"]["accepted_dataset_tokens_counter"], 123)
             self.assertEqual(out["outcome"], "PROMOTED_NEW_PACKET")
@@ -184,8 +227,8 @@ class PromotionSourceGuards872(unittest.TestCase):
             db = root / "distillery.sqlite3"
             gate_path.write_text(json.dumps(passing_gate()) + "\n", encoding="utf-8")
 
-            first_process = promotion.promote(gate_path, SOURCE, db)
-            second_process = promotion.promote(gate_path, SOURCE, db)
+            first_process = promotion.promote(gate_path, SOURCE, db, **workflow_context())
+            second_process = promotion.promote(gate_path, SOURCE, db, **workflow_context())
 
             self.assertEqual(first_process["outcome"], "PROMOTED_NEW_PACKET")
             self.assertEqual(second_process["status"], "PASS")

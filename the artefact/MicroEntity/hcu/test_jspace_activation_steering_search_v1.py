@@ -3,7 +3,10 @@ import unittest
 
 from jspace_activation_steering_search_v1 import (
     ActivationSteeringError,
+    EVIDENCE_CLASS,
     HOOK_RECEIPT_SCHEMA,
+    MISSING_CAUSAL_CONTROLS,
+    REQUIRED_CAUSAL_CONTROLS,
     HookReceipt,
     SteeringObservation,
     applied_vector_sha256,
@@ -49,8 +52,8 @@ def score(observation):
 
 
 class ActivationSteeringSearchTests(unittest.TestCase):
-    def test_finds_directional_layer_and_alpha_with_zero_control(self):
-        result = search_activation_steering(
+    def _successful_search(self):
+        return search_activation_steering(
             SyntheticExecutor(),
             "probe",
             (1.0, 0.0),
@@ -62,10 +65,24 @@ class ActivationSteeringSearchTests(unittest.TestCase):
             min_delta=0.5,
             min_directional_gap=1.0,
         )
+
+    def test_finds_directional_layer_and_alpha_with_zero_control(self):
+        result = self._successful_search()
         self.assertTrue(result.success)
         self.assertEqual((result.best.layer_id, result.best.alpha), ("L3", 2.0))
         self.assertEqual(result.sign_control.alpha, -2.0)
         self.assertAlmostEqual(result.zero_control_mean_delta, 0.0)
+
+    def test_success_is_explicitly_noncausal_under_current_jspace_gate(self):
+        result = self._successful_search()
+        self.assertTrue(result.success)
+        self.assertEqual(result.evidence_class, EVIDENCE_CLASS)
+        self.assertFalse(result.jspace_causal_credit)
+        self.assertEqual(result.required_causal_controls, REQUIRED_CAUSAL_CONTROLS)
+        self.assertEqual(result.missing_causal_controls, MISSING_CAUSAL_CONTROLS)
+        self.assertIn("BASELINE_CORRUPTED", result.missing_causal_controls)
+        self.assertIn("SHAM_CONTROL", result.missing_causal_controls)
+        self.assertIn("OFF_TARGET_CONTROL", result.missing_causal_controls)
 
     def test_rejects_missing_sign_pair(self):
         with self.assertRaisesRegex(ActivationSteeringError, "SIGN_PAIRED"):

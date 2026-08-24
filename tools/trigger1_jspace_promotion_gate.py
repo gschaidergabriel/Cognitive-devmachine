@@ -7,6 +7,8 @@ loopback API runtime, provided the same internal-vector, identity, matched-contr
 and disjoint-holdout evidence is present.
 
 Hosted prompt/completion traffic alone can never satisfy a positive verdict.
+Exact local PyTorch candidates additionally require a clean repository-tree attestation
+so a dirty checkout cannot masquerade as exact-current source evidence.
 """
 from __future__ import annotations
 
@@ -18,7 +20,7 @@ from typing import Any
 from urllib.parse import urlparse
 
 CANDIDATE_SCHEMA = "CLAY_TRIGGER1_JSPACE_DIRECT_STEERING_CANDIDATE/v1"
-VERDICT_SCHEMA = "CLAY_TRIGGER1_JSPACE_PROMOTION_GATE/v2"
+VERDICT_SCHEMA = "CLAY_TRIGGER1_JSPACE_PROMOTION_GATE/v3"
 REQUIRED_CONTROLS = (
     "BASELINE",
     "+VECTOR",
@@ -41,6 +43,16 @@ EXTERNAL_API_SURFACE = "FREE_EXTERNAL_API"
 
 def _sha256(value: Any) -> bool:
     if not isinstance(value, str) or len(value) != 64:
+        return False
+    try:
+        int(value, 16)
+    except ValueError:
+        return False
+    return True
+
+
+def _git_sha(value: Any) -> bool:
+    if not isinstance(value, str) or len(value) != 40:
         return False
     try:
         int(value, 16)
@@ -123,14 +135,8 @@ def _identity_evidence(candidate: dict[str, Any]) -> tuple[bool, list[str]]:
         failures.append("INTERVENTION_IDENTITY_REQUIRED")
         intervention = {}
 
-    head = identity.get("repo_head")
-    if not isinstance(head, str) or len(head) != 40:
+    if not _git_sha(identity.get("repo_head")):
         failures.append("EXACT_REPO_HEAD_REQUIRED")
-    else:
-        try:
-            int(head, 16)
-        except ValueError:
-            failures.append("EXACT_REPO_HEAD_REQUIRED")
 
     for key in ("runtime_build_sha256", "checkpoint_sha256", "tokenizer_sha256"):
         if not _sha256(identity.get(key)):
@@ -155,6 +161,31 @@ def _identity_evidence(candidate: dict[str, Any]) -> tuple[bool, list[str]]:
         failures.append("INTERVENTION_GAIN_REQUIRED")
     if intervention.get("layer_start") is None or intervention.get("layer_end") is None:
         failures.append("INTERVENTION_LAYER_RANGE_REQUIRED")
+    return not failures, failures
+
+
+def _exact_local_pytorch_source_evidence(candidate: dict[str, Any]) -> tuple[bool, list[str]]:
+    """Bind exact local PyTorch runs to a clean checked-out tree.
+
+    This check is intentionally scoped to LOCAL_PYTORCH_ACTIVATION_INTERVENTION so
+    legacy external/free-API and llama.cpp candidates are not silently redefined by
+    this successor gate. The local Qwen executor must emit these fields before it can
+    reach a positive mechanism verdict.
+    """
+    if candidate.get("runtime_intervention_class") != "LOCAL_PYTORCH_ACTIVATION_INTERVENTION":
+        return True, []
+
+    identity = candidate.get("source_identity")
+    if not isinstance(identity, dict):
+        return False, ["LOCAL_PYTORCH_CLEAN_SOURCE_IDENTITY_REQUIRED"]
+
+    failures: list[str] = []
+    if not _git_sha(identity.get("repo_tree")):
+        failures.append("LOCAL_PYTORCH_EXACT_REPO_TREE_REQUIRED")
+    if identity.get("repo_dirty") is not False:
+        failures.append("LOCAL_PYTORCH_DIRTY_SOURCE_FAIL_CLOSED")
+    if not _sha256(identity.get("repo_status_sha256")):
+        failures.append("LOCAL_PYTORCH_REPO_STATUS_SHA256_REQUIRED")
     return not failures, failures
 
 
@@ -220,9 +251,11 @@ def adjudicate(candidate: dict[str, Any]) -> dict[str, Any]:
         failures.append("HOSTED_PROMPT_ONLY_CANNOT_PROVE_VECTOR_STEERING")
 
     identity_ok, identity_failures = _identity_evidence(candidate)
+    local_source_ok, local_source_failures = _exact_local_pytorch_source_evidence(candidate)
     controls_ok, control_failures = _control_receipts(candidate.get("controls"))
     split_ok, split_failures = _split_evidence(candidate)
     failures.extend(identity_failures)
+    failures.extend(local_source_failures)
     failures.extend(control_failures)
     failures.extend(split_failures)
 
@@ -231,6 +264,7 @@ def adjudicate(candidate: dict[str, Any]) -> dict[str, Any]:
         and runtime_class in INSTRUMENTED_RUNTIME_CLASSES
         and transport.get("hosted_prompt_only") is False
         and identity_ok
+        and local_source_ok
         and controls_ok
         and split_ok
     )
@@ -252,7 +286,9 @@ def adjudicate(candidate: dict[str, Any]) -> dict[str, Any]:
         "evidence_boundary": (
             "PASS means promotion-candidate evidence only. The runtime may be an admitted FREE external API "
             "or an exact zero-provider-billing loopback API. Scientific requirements are identical: actual "
-            "internal-vector consumption, exact identities, six matched controls and disjoint holdout."
+            "internal-vector consumption, exact identities, six matched controls and disjoint holdout. Exact "
+            "local PyTorch candidates additionally require a clean repo-tree/status attestation; dirty or "
+            "unattested source fails closed."
         ),
     }
 
@@ -299,7 +335,7 @@ def scan_batch(batch_dir: Path) -> dict[str, Any]:
     verdicts = [adjudicate_file(path) for path in paths]
     goal = any(item.get("owner_trigger1_goal_credit_candidate") is True for item in verdicts)
     return {
-        "schema": "CLAY_TRIGGER1_JSPACE_BATCH_PROMOTION_SCAN/v2",
+        "schema": "CLAY_TRIGGER1_JSPACE_BATCH_PROMOTION_SCAN/v3",
         "candidate_files_seen": len(paths),
         "mechanism_runtime_vector_credit_candidate": any(
             item.get("mechanism_runtime_vector_credit_candidate") is True for item in verdicts

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Require observed model-input delivery before causal J-Space training promotion.
+"""Gate J-Space training promotion at the observed-control evidence boundary.
 
 This is deterministic evidence plumbing only. It creates no model, state store, effect path,
 training authority, or runtime credit. The existing J-Space training pipeline already binds a
@@ -7,13 +7,22 @@ TrainingTrace to DatasetAdmission and ENTITYOS_HCU_JSPACE_INFERENCE_BINDING/v3. 
 also has ENTITYOS_HCU_JSPACE_MODEL_INPUT_CONTROL_CLOSURE/v1, which proves byte-level delivery
 of one exact Vector-Control packet into the exact model input associated with that inference.
 
-This gate closes the remaining promotion boundary: non-BASELINE traces may not be treated as
-causal intervention training evidence unless an externally admitted model-input-control
-closure cross-binds the same trace ancestry and inference identity. BASELINE traces may remain
-admissible without intervention-delivery evidence because they make no intervention claim.
+That closure is useful delivery/identity evidence, but it is not forward temporal-control
+evidence. In the current topology the J-Space packet named by a TrainingTrace is produced from
+the inference/J-Space step it describes, so same-invocation closure must not be promoted into a
+claim that the packet caused that invocation. The canonical temporal gate instead requires a
+producer/executor-owned predecessor packet from step t to control a distinct later invocation.
 
-Positive validation proves delivery/identity closure only. It does not prove hidden-state
-causal use, model benefit, truth, effects, whole-runtime acceptance, or training benefit.
+Therefore BASELINE traces may remain admissible without intervention-delivery evidence because
+they make no intervention claim. A supplied closure is still fully cross-validated. Non-BASELINE
+traces remain fail-closed even with a valid same-step closure until the canonical forward
+predecessor/successor edge is wired into this gate. This prevents temporally post-hoc evidence
+from leaking into causal intervention training rows while parallel work converges on the single
+executor/pre-invocation authority path.
+
+Positive validation here proves delivery/identity closure only. It does not prove temporal
+ordering, hidden-state causal use, model benefit, truth, effects, whole-runtime acceptance, or
+training benefit.
 """
 from __future__ import annotations
 
@@ -91,12 +100,13 @@ def require_model_input_control_closure(
     inference_binding: JSpaceInferenceBinding,
     closure: JSpaceModelInputControlClosure | None,
 ) -> str | None:
-    """Return the admitted closure digest or fail closed for non-baseline control traces.
+    """Validate delivery closure and fail closed on non-baseline temporal promotion.
 
     The caller remains responsible for validating the TrainingTrace, DatasetAdmission and
     JSpaceInferenceBinding through their existing single-authority validators before calling
-    this guard. This function validates the supplied closure itself and only performs the
-    cross-layer identity checks that are unique to intervention-delivery promotion.
+    this guard. This function validates the supplied closure itself and performs the cross-layer
+    identity checks unique to delivery evidence. Until a canonical forward temporal edge is
+    supplied by the existing executor/pre-invocation chain, non-baseline promotion is rejected.
     """
     training_trace = _mapping(training_trace, "training_trace")
     if not isinstance(inference_binding, JSpaceInferenceBinding):
@@ -219,4 +229,9 @@ def require_model_input_control_closure(
         _nonnegative_int(closure.input_size, "closure.input_size"),
     )
 
-    return _sha256(closure.closure_sha256, "closure.closure_sha256")
+    closure_sha256 = _sha256(closure.closure_sha256, "closure.closure_sha256")
+    if control_condition != BASELINE_CONTROL_CONDITION:
+        raise JSpaceTrainingControlDeliveryError(
+            "FORWARD_TEMPORAL_CONTROL_EDGE_REQUIRED_FOR_NON_BASELINE_TRAINING"
+        )
+    return closure_sha256

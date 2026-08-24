@@ -3,7 +3,8 @@
 
 Imports the v2 scheduler, but prevents reservation/network I/O for any concrete
 credential+route lacking provider-side zero-cost/free-entitlement evidence. Every
-executed provider request emits FREE_LANE_EXECUTION_RECEIPT/v1.
+provider-call boundary crossing emits FREE_LANE_EXECUTION_RECEIPT/v1, including
+transport exceptions whose provider-side outcome is unknown.
 
 The v2 scheduler historically performed authenticated provider model-catalog
 network discovery before the per-lane gate ran. Epoch 8.70 does not establish
@@ -152,6 +153,17 @@ def _request_id(headers: dict[str, str], payload: Any) -> str | None:
     return None
 
 
+def _transport_exception_digest(exc: Exception) -> str:
+    """Bind failure class without persisting exception text or secret-bearing details."""
+    material = {
+        "outcome": "UNKNOWN",
+        "transport_exception_class": type(exc).__name__,
+    }
+    return hashlib.sha256(
+        json.dumps(material, sort_keys=True, separators=(",", ":")).encode("utf-8")
+    ).hexdigest()
+
+
 def gated_request_chat(
     spec: fabric.base.ProviderSpec,
     key: str,
@@ -186,9 +198,33 @@ def gated_request_chat(
             "model": model,
         }
 
-    status, headers, payload = _ORIGINAL_REQUEST(
-        spec, key, model, prompt, max_tokens, timeout
-    )
+    try:
+        status, headers, payload = _ORIGINAL_REQUEST(
+            spec, key, model, prompt, max_tokens, timeout
+        )
+    except Exception as exc:
+        # Once the admitted provider-call boundary has been entered, a timeout,
+        # DNS/socket failure, reset, or similar transport exception cannot prove
+        # whether the provider observed or processed the request. Preserve this
+        # ambiguity as UNKNOWN. This boundary deliberately performs no replay.
+        stable_after_call = binding_still_current(binding)
+        with _RECEIPT_LOCK:
+            emit_execution_receipt(
+                provider=spec.name,
+                credential_fingerprint=fp,
+                model_or_route=model,
+                endpoint=spec.endpoint,
+                binding=binding,
+                request_id=None,
+                usage={},
+                http_status="TRANSPORT_EXCEPTION_UNKNOWN_OUTCOME",
+                result_digest=_transport_exception_digest(exc),
+                source_commit_and_tree=_SOURCE,
+                binding_stable_after_call=stable_after_call,
+                artifacts=fabric.ARTIFACT_ROOT,
+            )
+        raise
+
     stable_after_call = binding_still_current(binding)
     usage = fabric.base.usage_from(payload)
     digest = hashlib.sha256(

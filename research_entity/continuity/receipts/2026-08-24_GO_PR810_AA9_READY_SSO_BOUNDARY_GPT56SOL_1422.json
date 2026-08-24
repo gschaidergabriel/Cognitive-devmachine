@@ -1,0 +1,63 @@
+{
+  "schema": "ENTITYOS_HCU_GO_EXECUTOR_REENTRY_RECEIPT/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "persistent_entity": "Clay",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "authority_epoch": "8.65",
+  "mode": "FREE_ONLY",
+  "canonical_main_observed_before_write": "a181622029911efd8494e7612aae20a3f5e14825",
+  "retained_lanes": {
+    "hcu_donor": "gschaidergabriel/clay-global-research-entity#1263",
+    "hcu_donor_head_observed": "84547d45c847b2bb80905ab7de2f7f6e91d8f701",
+    "executor": "gschaidergabriel/Dr.-Unterweger#810",
+    "executor_head_observed": "aa9c9ea867b13a497cf7d7d8ed711486a4db0c90",
+    "executor_head_relation_to_old_runtime_evidence": "SUCCESSOR_HEAD_DOES_NOT_INHERIT_2DA99_RUNTIME_CREDIT"
+  },
+  "deployment_observation": {
+    "provider": "Vercel",
+    "project": "prj_ifIgM9X7jqIQS8mNIGllImziePPG",
+    "team": "team_hwPBWKuCJxkfVhCx3WLdcTRx",
+    "deployment_id": "dpl_5WvWvbJEHCaRk7i1F6aJqfePkb84",
+    "deployment_git_sha": "aa9c9ea867b13a497cf7d7d8ed711486a4db0c90",
+    "deployment_state": "READY",
+    "build_log_tail": "Build Completed in /vercel/output [23s]",
+    "build_error": false
+  },
+  "handler_access_observation": {
+    "route": "/api/hcu-runtime-admission-probe?probe=runtime",
+    "source_supervisor": "SUPERVISOR_STEERING_8_65",
+    "source_declared_sandbox_create_performed": false,
+    "connected_authenticated_fetch_status": 302,
+    "connected_authenticated_fetch_result": "VERCEL_SSO_REDIRECT_BEFORE_HANDLER_RESULT",
+    "handler_result_observed": false,
+    "sandbox_create_performed": false,
+    "remaining_included_sandbox_quota_directly_observed": false
+  },
+  "adjudication": {
+    "exact_current_head_deployable": true,
+    "exact_current_head_function_runtime_credit": 0,
+    "reason": "READY build plus SSO redirect is not handler invocation evidence; previous HTTP-200 function-runtime credit remains bound to old executor head 2da99e0458809988190c129b04cae913d1f15d92 only.",
+    "sandbox_environment_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "coordination": {
+    "shared_upstream_macrocycle_id_observed": false,
+    "immutable_user_message_timestamp_precision_available": "MINUTE_ONLY",
+    "unusual_experiment_status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_experiments_run": 0
+  },
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED: recovered exact-current PR810 deployability at aa9c9ea and isolated the next executor-side discriminator to authenticated handler access, while preserving the separate direct remaining-included-Sandbox-quota requirement before Sandbox.create.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "HCU_NO_CHANGE_WITH_REASON: no admitted Sandbox/HCU runtime path is open; supervisor 8.65 pauses redundant source-guard proliferation and requires direct remaining included quota before Sandbox.create.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "TRAINING_READINESS_NO_CHANGE_WITH_REASON: actual local-model/J-Space causal execution remains downstream of the blocked Sandbox environment gate; no paid/Together path or model-specific runtime evidence was created."
+  },
+  "next_exact_action": "Keep aa9c9ea exact-head deployment identity fixed while seeking a reproducible admitted handler-level access path and an authenticated read-only Vercel team Usage/allotment signal. Do not Sandbox.create unless current supervisor requirements are directly satisfied; do not inherit old 2da99 runtime credit into aa9c9ea.",
+  "acceptance": "IN_PROGRESS"
+}

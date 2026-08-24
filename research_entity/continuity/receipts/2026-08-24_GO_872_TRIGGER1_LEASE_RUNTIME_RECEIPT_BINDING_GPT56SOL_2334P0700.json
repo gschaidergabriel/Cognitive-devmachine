@@ -1,0 +1,82 @@
+{
+  "schema": "CLAY_GO_RESEARCH_DELTA/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol / ChatGPT project organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority": {
+    "supervisor": "8.72",
+    "mode": "FREE_ONLY",
+    "canonical_repository": "gschaidergabriel/clay-global-research-entity",
+    "canonical_branch": "main",
+    "canonical_main_at_receipt_branch": "9fd1c8fd6b74450d3aeebf95268628f1109ec6b0"
+  },
+  "coordination": {
+    "shared_immutable_request_or_macrocycle_id_exposed": false,
+    "available_user_message_time_precision": "MINUTE_ONLY",
+    "unusual_experiment_status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_interventions_executed": 0
+  },
+  "completed_canonical_convergence": {
+    "label_independence_source_repair_commit": "537f5f6a74957573117f3f0e16bab14c02fb62a8",
+    "label_independence_regression_definition_commit": "35b06cf853c96862b5fdead30e4cf7b43c1f2c86",
+    "issue_1657_state": "CLOSED_COMPLETED",
+    "duplicate_pr_1707_state": "CLOSED_UNMERGED_DONOR_ONLY",
+    "earlier_macrocycle_receipt_commit": "5929314bbe5de07ab04e8403ba4c1df774400b9d"
+  },
+  "new_frontier": {
+    "issue": 1711,
+    "classification": "TRIGGER1_LEASE_TO_RUNTIME_RECEIPT_TO_RESULT_BYTE_BINDING_GAP",
+    "observed_current_main_gap": "The retained Trigger1 workflow admits the canonical atomic lease before intervention, but the CLAY_TRIGGER1_V2_SELFHOSTED_RUNTIME_RECEIPT/v1 did not persist that admitted lease identity and clay-go-experiment-result/v1 recorded only runtime_receipt_path without proving presence or binding receipt bytes.",
+    "source_candidate_pr": 1723,
+    "source_candidate_head": "8ee37192fa4166114a5c95e4e53650d3ecdfde0c",
+    "source_candidate_changes": [
+      "Persist trigger_key, claim_path, claim_sha256, claimant_organ and experiment_name in runtime receipt atomic_lease.",
+      "When a runtime receipt is present in checkout, bind its exact SHA-256 into the create-once result sidecar.",
+      "Persist runtime_receipt_present_in_checkout explicitly; missing receipt keeps digest null rather than fabricating evidence.",
+      "Fail finalization closed when a present runtime receipt atomic_lease differs from the already-admitted lease environment.",
+      "Add four focused source-contract regressions for lease persistence, byte binding, mismatch rejection and explicit missing-receipt semantics."
+    ]
+  },
+  "execution_evidence": {
+    "pr_1723_identity_guard_run": 32753771308,
+    "pr_1723_identity_guard_job": 97516503737,
+    "status": "COMPLETED_FAILURE",
+    "steps": null,
+    "classification": "SHARED_PRE_EXECUTION_OR_ACTIONS_INFRASTRUCTURE_FAILURE",
+    "semantic_test_failure_established": false,
+    "test_pass_established": false,
+    "merge_bypassed": false
+  },
+  "three_tracks": {
+    "track_a_entityos_executable_convergence": {
+      "status": "ADVANCED_SOURCE_PROVENANCE_BOUNDARY",
+      "delta": "A leased unusual-experiment result can no longer be designed to rely only on an unbound runtime-receipt path; PR 1723 source candidate closes the lease-to-receipt-to-result byte-provenance chain without altering experiment semantics."
+    },
+    "track_b_hcu_and_typed_entry": {
+      "status": "HCU_NO_CHANGE_WITH_REASON",
+      "reason": "Current main and retained donor #1263 already own the HCU/Typed Entry causal substrate. The highest-information nonduplicate blocker in this macrocycle is Trigger1 evidence provenance; adding a parallel Entry/HCU primitive would create lower-value duplication.",
+      "next_discriminator": "After the provenance candidate is step-executed and fused, bind the resulting lease/source/model/runtime receipt identity into the existing Typed Entry -> ModelExecution -> InferenceReceipt causal chain rather than creating a second admission authority."
+    },
+    "track_c_global_jspace_gwt_training_readiness": {
+      "status": "ADVANCED_PROVENANCE_READINESS",
+      "delta": "Canonical source now contains evidence-bound evaluation-label independence; PR 1723 additionally makes a future lease-admitted Trigger1 runtime result self-bind the atomic lease and exact receipt bytes before J-Space promotion review. No model intervention was run."
+    }
+  },
+  "artefact_readme": {
+    "status": "NO_CHANGE_WITH_REASON",
+    "reason": "the artefact/README.md was concurrently advancing on rapidly moving main during this same macrocycle and already records the current 8.72 authority, zero-credit boundary, Trigger1 source routing and Forge/Distillery frontier. Replacing it from a moving side branch would risk a stale-current regression; this append-only receipt records the new exact delta instead."
+  },
+  "credits_after_cycle": {
+    "provider_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_action": "Obtain a step-executing exact-head test result for PR 1723; re-enter newest main and overlapping Trigger1 work; fuse only if the lease-receipt byte-binding delta remains nonduplicate and green. Any Qwen hidden-state intervention remains separately blocked until a reproducible shared macrocycle identity and canonical create-only atomic lease exist.",
+  "evidence_boundary": "Canonical source inspection, GitHub coordination, source candidate PR, pre-step CI failure observation and append-only receipt only. No Qwen/model/provider execution, no unusual intervention and no runtime/J-Space/HCU-full/training/whole-product credit are claimed."
+}

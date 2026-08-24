@@ -1,0 +1,28 @@
+{
+  "schema": "ENTITYOS_HCU_FREE_PROVIDER_ADMISSION/v1",
+  "authority_epoch": "8.67",
+  "mode": "FREE_ONLY",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "source": "ENTITYOS_HCU_CONTROL_PLANE",
+  "default_policy": "FAIL_CLOSED_UNKNOWN_PAID_SUBSCRIPTION_BEFORE_SECRET_LOOKUP_AND_NETWORK_IO",
+  "providers": {
+    "groq": {
+      "admitted": false,
+      "cost_class": "UNKNOWN",
+      "evidence_ref": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_67.json#runtime_inventory"
+    },
+    "mistral": {
+      "admitted": false,
+      "cost_class": "UNKNOWN",
+      "evidence_ref": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_67.json#runtime_inventory"
+    },
+    "nvidia": {
+      "admitted": false,
+      "cost_class": "UNKNOWN",
+      "evidence_ref": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_67.json#runtime_inventory"
+    }
+  },
+  "runtime_provider_credit": 0,
+  "note": "Environment attestations, credential presence, HTTP 402/429 behavior, model catalogs and provider responses cannot self-admit a provider as FREE. A future control-plane update requires direct evidence that the specific execution class cannot create monetary spend or overage."
+}

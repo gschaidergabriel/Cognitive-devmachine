@@ -3,8 +3,9 @@
 
 The compatibility filename is retained for existing workflows and receipts. Current
 authority is never selected by a hard-coded supervisor minor version. The guard
-requires pointer consensus across canonical current-facing surfaces, then validates
-the exact referenced supervisor and current FREE_ONLY execution/evidence boundaries.
+requires pointer consensus across canonical current-facing surfaces, validates the
+exact referenced supervisor, and preserves the full historical 4.1 -> 4.4 safety /
+provenance ancestry without reactivating historical product-selection authority.
 """
 from __future__ import annotations
 
@@ -69,6 +70,7 @@ def _authority_version_from_path(path: str) -> str:
 
 
 def _validate_legacy_safety_ancestry(errors: list[str], root: Path) -> None:
+    """Preserve every inherited safety/provenance fence without reviving old product law."""
     paths = {
         "c41": root / CONTROL41,
         "c42": root / CONTROL42,
@@ -79,6 +81,7 @@ def _validate_legacy_safety_ancestry(errors: list[str], root: Path) -> None:
         require(errors, path.is_file(), f"MISSING_LEGACY:{name}")
     if any(not path.is_file() for path in paths.values()):
         return
+
     try:
         c41 = load_json(paths["c41"])
         c42 = load_json(paths["c42"])
@@ -101,17 +104,33 @@ def _validate_legacy_safety_ancestry(errors: list[str], root: Path) -> None:
         cycle41.get("automatic_subscription_upgrade") is False,
         "CONTROL41_AUTO_UPGRADE_WEAKENED",
     )
+    require(errors, cycle41.get("vps_testing") == "FORBIDDEN", "CONTROL41_VPS_TEST_WEAKENED")
     rules41 = set(c41.get("authority_rules") or [])
     require(
         errors,
         "model_output_is_candidate_not_truth" in rules41,
         "CONTROL41_MODEL_TRUTH_FENCE_MISSING",
     )
+    require(
+        errors,
+        "autonomous_cycle_may_not_modify_FRANK_harness" in rules41,
+        "CONTROL41_FRANK_HARNESS_FENCE_MISSING",
+    )
 
     blob41 = git_blob_sha(paths["c41"])
     blob42 = git_blob_sha(paths["c42"])
     blob43 = git_blob_sha(paths["c43"])
 
+    require(
+        errors,
+        c42.get("schema_version") == "4.2-execution-boundary-addendum",
+        "CONTROL42_VERSION_MISMATCH",
+    )
+    require(
+        errors,
+        c42.get("status") == "ACTIVE" and c42.get("mode") == "FREE_ONLY",
+        "CONTROL42_FREE_ONLY_WEAKENED",
+    )
     require(errors, c42.get("base_control_path") == CONTROL41, "CONTROL42_BASE_PATH_MISMATCH")
     require(errors, c42.get("base_control_blob_sha") == blob41, "CONTROL42_BASE_BLOB_MISMATCH")
     hard42 = c42.get("preserved_hard_rules") or {}
@@ -121,7 +140,39 @@ def _validate_legacy_safety_ancestry(errors: list[str], root: Path) -> None:
         "CONTROL42_FREE_ONLY_FENCE_WEAKENED",
     )
     require(errors, hard42.get("together_forbidden") is True, "CONTROL42_TOGETHER_FENCE_WEAKENED")
+    require(
+        errors,
+        hard42.get("frank_harness_modification") == "FORBIDDEN",
+        "CONTROL42_FRANK_HARNESS_FENCE_WEAKENED",
+    )
+    routing42 = c42.get("execution_routing") or {}
+    require(
+        errors,
+        routing42.get("direct_vps_host_candidate_execution") == "FORBIDDEN",
+        "CONTROL42_DIRECT_VPS_FENCE_WEAKENED",
+    )
+    require(
+        errors,
+        routing42.get("persistent_self_hosted_candidate_execution") == "FORBIDDEN",
+        "CONTROL42_SELF_HOSTED_FENCE_WEAKENED",
+    )
+    require(
+        errors,
+        routing42.get("production_host_testing") == "FORBIDDEN",
+        "CONTROL42_PRODUCTION_TEST_FENCE_WEAKENED",
+    )
 
+    require(
+        errors,
+        c43.get("schema_version") == "4.3-program-authority-addendum",
+        "CONTROL43_VERSION_MISMATCH",
+    )
+    require(
+        errors,
+        c43.get("status") == "ACTIVE" and c43.get("mode") == "FREE_ONLY",
+        "CONTROL43_FREE_ONLY_WEAKENED",
+    )
+    require(errors, c43.get("base_control_path") == CONTROL41, "CONTROL43_BASE_PATH_MISMATCH")
     require(errors, c43.get("base_control_blob_sha") == blob41, "CONTROL43_BASE_BLOB_MISMATCH")
     require(
         errors,
@@ -144,7 +195,38 @@ def _validate_legacy_safety_ancestry(errors: list[str], root: Path) -> None:
         hard43.get("together_forbidden_under_current_control") is True,
         "CONTROL43_TOGETHER_FENCE_WEAKENED",
     )
+    require(
+        errors,
+        hard43.get("model_output_is_candidate_not_truth") is True,
+        "CONTROL43_MODEL_TRUTH_FENCE_WEAKENED",
+    )
+    require(
+        errors,
+        hard43.get("runtime_credit_requires_exact_admitted_execution") is True,
+        "CONTROL43_RUNTIME_EVIDENCE_WEAKENED",
+    )
+    require(
+        errors,
+        hard43.get("frank_harness_modification") == "FORBIDDEN",
+        "CONTROL43_FRANK_HARNESS_FENCE_WEAKENED",
+    )
 
+    require(
+        errors,
+        c44.get("schema_version") == "4.4-clayverse-product-authority-addendum",
+        "CONTROL44_VERSION_MISMATCH",
+    )
+    require(
+        errors,
+        c44.get("status") == "ACTIVE" and c44.get("mode") == "FREE_ONLY",
+        "CONTROL44_NOT_ACTIVE_FREE_ONLY",
+    )
+    require(errors, c44.get("base_control_path") == CONTROL41, "CONTROL44_BASE_PATH_MISMATCH")
+    require(
+        errors,
+        c44.get("execution_boundary_addendum_path") == CONTROL42,
+        "CONTROL44_EXEC_PATH_MISMATCH",
+    )
     require(
         errors,
         c44.get("prior_program_authority_addendum_path") == CONTROL43,
@@ -157,8 +239,27 @@ def _validate_legacy_safety_ancestry(errors: list[str], root: Path) -> None:
     )
     require(
         errors,
+        c44.get("composition_order")
+        == [
+            "4.1",
+            "4.2-execution-boundary-addendum",
+            "4.3-program-authority-addendum",
+            "4.4-clayverse-product-authority-addendum",
+        ],
+        "CONTROL44_COMPOSITION_ORDER_MISMATCH",
+    )
+    require(
+        errors,
         c44.get("effective_control_version") == LEGACY_EXPECTED_CONTROL,
         "CONTROL44_EFFECTIVE_VERSION_MISMATCH",
+    )
+    override44 = c44.get("program_identity_override") or {}
+    require(
+        errors,
+        override44.get("active_program") == "CLAYVERSE_SINGLE_CONTAINER"
+        and override44.get("target_stage") == "CLAYVERSE_ARTIFACT"
+        and override44.get("product_endpoint") == "ClayVerse",
+        "CONTROL44_HISTORICAL_PRODUCT_ANCESTRY_MISMATCH",
     )
     hard44 = c44.get("preserved_hard_rules") or {}
     require(
@@ -167,6 +268,22 @@ def _validate_legacy_safety_ancestry(errors: list[str], root: Path) -> None:
         "CONTROL44_FREE_ONLY_WEAKENED",
     )
     require(errors, hard44.get("together_forbidden") is True, "CONTROL44_TOGETHER_WEAKENED")
+    require(errors, hard44.get("vps_testing") is False, "CONTROL44_VPS_TEST_WEAKENED")
+    require(
+        errors,
+        hard44.get("runtime_credit_requires_exact_admitted_isolated_execution") is True,
+        "CONTROL44_RUNTIME_EVIDENCE_WEAKENED",
+    )
+    require(
+        errors,
+        hard44.get("model_output_is_candidate_not_truth") is True,
+        "CONTROL44_MODEL_TRUTH_FENCE_WEAKENED",
+    )
+    require(
+        errors,
+        hard44.get("frank_harness_modification") == "FORBIDDEN",
+        "CONTROL44_FRANK_HARNESS_FENCE_WEAKENED",
+    )
 
 
 def validate(root: Path) -> dict[str, Any]:
@@ -176,6 +293,7 @@ def validate(root: Path) -> dict[str, Any]:
         "bootstrap": root / "research_entity/continuity/BOOTSTRAP_MINIMAL.json",
         "program": root / "research_entity/rooms/PROGRAM_STATE.json",
         "inbox": root / "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
+        "footer": root / "research_entity/global/CLAY_STATUS_FOOTER_PROTOCOL.md",
         "manifest": root / "the artefact/manifest.json",
         "architecture": root / "the artefact/ARCHITECTURE.md",
         "readme": root / "the artefact/README.md",
@@ -215,6 +333,22 @@ def validate(root: Path) -> dict[str, Any]:
     require(errors, bootstrap.get("paid_fallback") == "FORBIDDEN", "BOOTSTRAP_PAID_FALLBACK_FENCE_MISSING")
     require(errors, "FORBIDDEN" in str(bootstrap.get("together_api", "")), "BOOTSTRAP_TOGETHER_FENCE_MISSING")
     require(errors, bootstrap.get("effect_authority") == "EffectGate+EffectJournal", "BOOTSTRAP_EFFECT_AUTHORITY_MISMATCH")
+    invariants = set(str(x) for x in bootstrap.get("mandatory_invariants") or [])
+    require(
+        errors,
+        "EntityOS is the sole current product/system identity" in invariants,
+        "BOOTSTRAP_ENTITYOS_INVARIANT_MISSING",
+    )
+    require(
+        errors,
+        "HCU is the sole current integrated cognition/compute architecture" in invariants,
+        "BOOTSTRAP_HCU_INVARIANT_MISSING",
+    )
+    require(
+        errors,
+        "FACT_UNKNOWN + METHOD_PRESENT != FACT_PRESENT" in invariants,
+        "BOOTSTRAP_EPISTEMIC_FENCE_MISSING",
+    )
     bootstrap_surface = str(bootstrap.get("execution_surface") or "")
     require(errors, "FREE_ONLY" in bootstrap_surface, "BOOTSTRAP_EXECUTION_FREE_ONLY_MISSING")
     require(
@@ -239,6 +373,9 @@ def validate(root: Path) -> dict[str, Any]:
         program.get("integrated_cognition_compute_architecture") == CURRENT_COMPUTE_ARCHITECTURE,
         "PROGRAM_COMPUTE_ARCHITECTURE_MISMATCH",
     )
+    pidentity = program.get("identity") or {}
+    require(errors, pidentity.get("persistent_research_entity") == "Clay", "PROGRAM_PERSISTENT_ENTITY_MISMATCH")
+    require(errors, pidentity.get("temporary_workers") == "ORGANS_NOT_ENTITIES", "PROGRAM_TEMP_WORKER_ROLE_MISMATCH")
     authority = program.get("authority") or {}
     require(errors, authority.get("external_effects") == "EffectGate+EffectJournal", "PROGRAM_EFFECT_AUTHORITY_MISMATCH")
     require(errors, authority.get("second_persistent_identity") == "FORBIDDEN", "PROGRAM_SECOND_IDENTITY_NOT_FORBIDDEN")
@@ -298,7 +435,15 @@ def validate(root: Path) -> dict[str, Any]:
         "MANIFEST_COMPUTE_ARCHITECTURE_MISMATCH",
     )
     require(errors, manifest.get("stage") == CURRENT_STAGE, "MANIFEST_STAGE_MISMATCH")
+    require(errors, manifest.get("canonical_workspace") == "the artefact/", "MANIFEST_WORKSPACE_MISMATCH")
     require(errors, manifest.get("effect_authority") == "EffectGate+EffectJournal", "MANIFEST_EFFECT_AUTHORITY_MISMATCH")
+    donor = manifest.get("legacy_donor") or {}
+    require(errors, donor.get("prior_product") == "ClayVerse", "MANIFEST_DONOR_PRODUCT_MISSING")
+    require(
+        errors,
+        donor.get("scope") == "HISTORICAL_DONOR_PROVENANCE_ONLY",
+        "MANIFEST_DONOR_SCOPE_MISMATCH",
+    )
     mexec = manifest.get("execution_policy") or {}
     require(
         errors,
@@ -382,23 +527,17 @@ def validate(root: Path) -> dict[str, Any]:
         require(errors, promotion.get("provider_runtime_credit") == 0, "SUPERVISOR_PROVIDER_RUNTIME_CREDIT_NONZERO")
         require(errors, promotion.get("training_credit") == 0, "SUPERVISOR_TRAINING_CREDIT_NONZERO")
 
-    repo_claude = paths["repo_claude"].read_text(encoding="utf-8")
-    require(errors, "SUPERVISOR_INBOX.json" in repo_claude, "ROOT_CLAUDE_DYNAMIC_SUPERVISOR_ROUTING_MISSING")
-    require(
-        errors,
-        re.search(r"AUTONOMOUS_SUPERVISOR\s*=\s*SUPERVISOR_STEERING_\d+_\d+", repo_claude) is None,
-        "ROOT_CLAUDE_FIXED_SUPERVISOR_PIN_FORBIDDEN",
-    )
-    require(
-        errors,
-        "resolve" in repo_claude.lower() and "steering" in repo_claude.lower(),
-        "ROOT_CLAUDE_DYNAMIC_RESOLUTION_TEXT_MISSING",
-    )
-
-    _validate_legacy_safety_ancestry(errors, root)
-
+    footer = paths["footer"].read_text(encoding="utf-8").upper()
     architecture = paths["architecture"].read_text(encoding="utf-8").upper()
     readme = paths["readme"].read_text(encoding="utf-8").upper()
+    repo_claude_raw = paths["repo_claude"].read_text(encoding="utf-8")
+    repo_claude = repo_claude_raw.upper()
+
+    require(errors, "PROGRAM: ENTITYOS + HCU" in footer, "FOOTER_PROGRAM_MISMATCH")
+    require(errors, "STAGE: ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP" in footer, "FOOTER_STAGE_MISMATCH")
+    require(errors, "PRODUCT: ENTITYOS" in footer, "FOOTER_PRODUCT_MISMATCH")
+    require(errors, "COMPUTE ARCHITECTURE: HCU" in footer, "FOOTER_COMPUTE_ARCHITECTURE_MISMATCH")
+
     require(errors, "ENTITYOS" in architecture[:3000] and "HCU" in architecture[:3000], "ARCHITECTURE_ENTITYOS_HCU_MISSING")
     require(
         errors,
@@ -406,6 +545,37 @@ def validate(root: Path) -> dict[str, Any]:
         "ARCHITECTURE_STALE_CLAYVERSE_PRODUCT_AUTHORITY",
     )
     require(errors, "ENTITYOS" in readme[:3000] and "HCU" in readme[:3000], "README_ENTITYOS_HCU_MISSING")
+
+    require(errors, "`PROGRAM=ENTITYOS_HCU`" in repo_claude[:5000], "ROOT_CLAUDE_PROGRAM_MISMATCH")
+    require(
+        errors,
+        "`STAGE=ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP`" in repo_claude[:5000],
+        "ROOT_CLAUDE_STAGE_MISMATCH",
+    )
+    require(errors, "`PRODUCT=ENTITYOS`" in repo_claude[:5000], "ROOT_CLAUDE_PRODUCT_MISMATCH")
+    require(errors, "`COMPUTE_ARCHITECTURE=HCU`" in repo_claude[:5000], "ROOT_CLAUDE_COMPUTE_ARCHITECTURE_MISMATCH")
+    require(
+        errors,
+        "SUPERVISOR_INBOX.JSON" in repo_claude,
+        "ROOT_CLAUDE_DYNAMIC_SUPERVISOR_ROUTING_MISSING",
+    )
+    require(
+        errors,
+        re.search(r"AUTONOMOUS_SUPERVISOR\s*=\s*SUPERVISOR_STEERING_\d+_\d+", repo_claude_raw) is None,
+        "ROOT_CLAUDE_FIXED_SUPERVISOR_PIN_FORBIDDEN",
+    )
+    require(
+        errors,
+        "RESOLVE" in repo_claude and "STEERING" in repo_claude,
+        "ROOT_CLAUDE_DYNAMIC_RESOLUTION_TEXT_MISSING",
+    )
+    require(
+        errors,
+        "`PROGRAM=CLAYVERSE_SINGLE_CONTAINER`" not in repo_claude[:5000],
+        "ROOT_CLAUDE_STALE_CLAYVERSE_PROGRAM_ACTIVE",
+    )
+
+    _validate_legacy_safety_ancestry(errors, root)
 
     return {
         "schema": CURRENT_SCHEMA,

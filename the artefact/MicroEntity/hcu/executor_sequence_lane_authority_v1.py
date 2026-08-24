@@ -2,12 +2,16 @@
 """Authority-bearing wrapper for deterministic executor sequence-lane bindings.
 
 ``executor_sequence_lane_binding_v1`` remains useful as an integrity/grouping primitive, but a
-hash-bound Entry stream label is not by itself control-plane stream authority.  This module is
-the promotion boundary: it requires an independently derived ``StreamAuthorityView`` before a
-cross-event lane may be represented as authorized.
+hash-bound Entry stream label is not by itself control-plane stream authority. This module is
+the promotion boundary: it derives the stream authority view itself from the existing canonical
+session/generation substrate rather than accepting a caller-constructed authority object.
+
+The first deliberately narrow authority class is HUMAN_PROMPT, where canonical session_id is
+the cross-event stream identity. Other source classes remain fail-closed until they have an
+independent deterministic transport/control-plane stream authority.
 
 Even an authorized lane does NOT assign t/t+1 positions, prove temporal adjacency, execute a
-model, establish hidden-state causality, or grant runtime/training credit.  Actual adjacency
+model, establish hidden-state causality, or grant runtime/training credit. Actual adjacency
 must later be atomically assigned/admitted at the real executor boundary in canonical state.
 """
 from __future__ import annotations
@@ -20,7 +24,7 @@ try:
     from .control_plane_stream_authority_v1 import (
         SCHEMA as STREAM_AUTHORITY_SCHEMA,
         StreamAuthorityError,
-        StreamAuthorityView,
+        snapshot_human_prompt_stream_authority,
         validate_entry_stream_authority,
     )
     from .entry_canonicalization_v1 import CANONICALIZATION_SCHEMA, CanonicalizationError, canonicalize
@@ -29,7 +33,6 @@ try:
         ExecutorSequenceLaneBinding,
         ExecutorSequenceLaneBindingError,
         bind_executor_sequence_lane,
-        validate_executor_sequence_lane_binding,
     )
     from .grid10_scheduler_v1 import GridPlan
     from .model_input_control_binding_v1 import ModelInputControlBinding
@@ -38,7 +41,7 @@ except ImportError:
     from control_plane_stream_authority_v1 import (
         SCHEMA as STREAM_AUTHORITY_SCHEMA,
         StreamAuthorityError,
-        StreamAuthorityView,
+        snapshot_human_prompt_stream_authority,
         validate_entry_stream_authority,
     )
     from entry_canonicalization_v1 import CANONICALIZATION_SCHEMA, CanonicalizationError, canonicalize
@@ -47,7 +50,6 @@ except ImportError:
         ExecutorSequenceLaneBinding,
         ExecutorSequenceLaneBindingError,
         bind_executor_sequence_lane,
-        validate_executor_sequence_lane_binding,
     )
     from grid10_scheduler_v1 import GridPlan
     from model_input_control_binding_v1 import ModelInputControlBinding
@@ -132,18 +134,46 @@ def _material(
     }
 
 
+def _derive_and_validate_authority(
+    packet: EntryPacket,
+    canonical_db: Any,
+    *,
+    user_id: str,
+    session_id: str,
+    trusted_source_id: str,
+) -> str:
+    """Read canonical session state inside promotion; caller cannot inject an authority view."""
+    try:
+        view = snapshot_human_prompt_stream_authority(
+            canonical_db,
+            user_id=user_id,
+            session_id=session_id,
+            trusted_source_id=trusted_source_id,
+        )
+        return validate_entry_stream_authority(packet, view)
+    except StreamAuthorityError as exc:
+        raise AuthorizedExecutorSequenceLaneError(f"STREAM_AUTHORITY_REJECTED:{exc}") from exc
+
+
 def authorize_executor_sequence_lane(
     packet: EntryPacket,
     grid_plan: GridPlan,
     input_binding: ModelInputControlBinding,
     consumed_input_bytes: bytes,
-    stream_authority: StreamAuthorityView,
+    *,
+    canonical_db: Any,
+    user_id: str,
+    session_id: str,
+    trusted_source_id: str,
 ) -> AuthorizedExecutorSequenceLane:
-    """Promote an integrity-bound lane only after independent stream authority validation."""
-    try:
-        authority_binding_sha256 = validate_entry_stream_authority(packet, stream_authority)
-    except StreamAuthorityError as exc:
-        raise AuthorizedExecutorSequenceLaneError(f"STREAM_AUTHORITY_REJECTED:{exc}") from exc
+    """Promote a lane only after fresh canonical stream-authority derivation and validation."""
+    authority_binding_sha256 = _derive_and_validate_authority(
+        packet,
+        canonical_db,
+        user_id=user_id,
+        session_id=session_id,
+        trusted_source_id=trusted_source_id,
+    )
     try:
         lane = bind_executor_sequence_lane(packet, grid_plan, input_binding, consumed_input_bytes)
     except ExecutorSequenceLaneBindingError as exc:
@@ -162,9 +192,13 @@ def validate_authorized_executor_sequence_lane(
     grid_plan: GridPlan,
     input_binding: ModelInputControlBinding,
     consumed_input_bytes: bytes,
-    stream_authority: StreamAuthorityView,
+    *,
+    canonical_db: Any,
+    user_id: str,
+    session_id: str,
+    trusted_source_id: str,
 ) -> str:
-    """Revalidate both the independent authority view and exact lane source parents."""
+    """Re-read canonical authority and re-derive exact lane parents; outer hash is insufficient."""
     if not isinstance(authorized, AuthorizedExecutorSequenceLane):
         raise AuthorizedExecutorSequenceLaneError("AUTHORIZED_EXECUTOR_SEQUENCE_LANE_REQUIRED")
     expected = authorize_executor_sequence_lane(
@@ -172,7 +206,10 @@ def validate_authorized_executor_sequence_lane(
         grid_plan,
         input_binding,
         consumed_input_bytes,
-        stream_authority,
+        canonical_db=canonical_db,
+        user_id=user_id,
+        session_id=session_id,
+        trusted_source_id=trusted_source_id,
     )
     if authorized != expected:
         raise AuthorizedExecutorSequenceLaneError(

@@ -1,0 +1,95 @@
+{
+  "schema": "ENTITYOS_HCU_GO_RECEIPT/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "authority_epoch": "8.65",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "reentry": {
+    "canonical_main_observed": "b3bd07c493436ca4b9d4064b7a34cf4e7da4218b",
+    "retained_donor_pr": "gschaidergabriel/clay-global-research-entity#1263",
+    "retained_donor_head_observed_before_receipt": "fe4d0b64fc629554d78420e00b36f120a0548055",
+    "retained_executor_pr": "gschaidergabriel/Dr.-Unterweger#810",
+    "executor_head_after_repairs_observed": "aa9c9ea867b13a497cf7d7d8ed711486a4db0c90"
+  },
+  "coordination": {
+    "upstream_shared_macrocycle_id": null,
+    "immutable_user_message_timestamp_precision_available": "MINUTE_ONLY",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_experiments_run": 0,
+    "duplicate_avoidance": "A parallel organ had already persisted the direct Sandbox quota-observability blocker; this organ did not duplicate that lane."
+  },
+  "observed_authority": {
+    "supervisor": "SUPERVISOR_STEERING_8_65",
+    "runtime_first": true,
+    "source_guard_proliferation": "PAUSED_UNLESS_EXECUTABLE_COUNTEREVIDENCE_REQUIRES_GUARD",
+    "remaining_sandbox_quota_directly_observed": false,
+    "sandbox_execution_admitted": false
+  },
+  "executable_counterevidence": {
+    "executor_head": "d46e3df1233d7fdaf5ce07a8189d47f73a03cb8f",
+    "deployment_id": "dpl_BXvzu9Pt6KMguP4jW2YndozusQm4",
+    "deployment_state": "ERROR",
+    "build_error": "ENTITYOS_HCU_FREE_ONLY_SANDBOX_ADMISSION_MISSING supervisor 8.64 markers after the central admission had moved to 8.65",
+    "classification": "SUCCESSOR_EXECUTOR_GUARD_DRIFT_NOT_HCU_RUNTIME_FAILURE"
+  },
+  "second_executable_counterevidence": {
+    "executor_head": "6303be2cc726f43195336288dfbd5de556752c03",
+    "deployment_id": "dpl_9CPfNYULfANWebZ8JKX8HaGKuej7",
+    "deployment_state": "ERROR",
+    "build_error": "The widened exclusive guard required inference-v4 negative markers not present in the deployed positive route source.",
+    "classification": "SOURCE_GUARD_PROLIFERATION_WITHOUT_MATCHING_PRODUCER_SOURCE"
+  },
+  "writes": [
+    {
+      "repo": "gschaidergabriel/Dr.-Unterweger",
+      "commit": "d548b29752ac9b706f2e8d22897cf315ac4c95fc",
+      "path": "mcp/vercel-sandbox-mcp/scripts/guard-entityos-hcu-current-executor.mjs",
+      "change": "Restored the previously working guard scope while preserving the two active supervisor-8.65 Sandbox admission markers. Historical 8.63 rebind-contract provenance was intentionally retained."
+    },
+    {
+      "repo": "gschaidergabriel/Dr.-Unterweger",
+      "commit": "aa9c9ea867b13a497cf7d7d8ed711486a4db0c90",
+      "path": "mcp/vercel-sandbox-mcp/api/sandbox-probe.js",
+      "change": "Aligned CURRENT_RESEARCH_SUPERVISOR from 8.64 to 8.65 without changing the fail-closed quota gate or Sandbox.create ordering."
+    }
+  ],
+  "verification": {
+    "guard_repair_deployment": {
+      "commit": "d548b29752ac9b706f2e8d22897cf315ac4c95fc",
+      "deployment_id": "dpl_Feod2aegRJdWNxHnMCTeTx656d7C",
+      "state": "READY",
+      "scope": "BUILD_AND_DEPLOYMENT_INTEGRATION_ONLY"
+    },
+    "sandbox_probe_alignment_deployment": {
+      "commit": "aa9c9ea867b13a497cf7d7d8ed711486a4db0c90",
+      "deployment_id": "dpl_5WvWvbJEHCaRk7i1F6aJqfePkb84",
+      "state_when_last_observed": "BUILDING",
+      "scope": "NO_RUNTIME_CREDIT_FROM_BUILDING_STATE"
+    },
+    "sandbox_create_performed": false,
+    "quota_assumption_performed": false,
+    "credential_preflight_performed": false,
+    "paid_fallback_performed": false
+  },
+  "tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED: repaired exact executable build integration on the single retained executor lane; the minimal supervisor-8.65 guard-scope restoration reached a READY deployment.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED: synchronized the fail-closed HCU execution-control admission surfaces to supervisor 8.65 without weakening quota, provenance, generation, or effect boundaries.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "TRAINING_READINESS_NO_CHANGE_WITH_REASON: direct remaining included Sandbox quota is still unobserved, so the admitted environment/model/J-Space runtime discriminator remains closed; source-only training guard churn would be lower-information."
+  },
+  "credits": {
+    "preexisting_exact_source_function_runtime_diagnostic": "PASS_AT_NO_SANDBOX_SCOPE_ON_2da99e0458809988190c129b04cae913d1f15d92",
+    "new_build_deployment_integration": "READY_ON_d548b29752ac9b706f2e8d22897cf315ac4c95fc",
+    "sandbox_environment_runtime": 0,
+    "whole_entityos_hcu_runtime": 0,
+    "full_hcu_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Obtain a directly authoritative read-only remaining included Vercel Sandbox quota signal. Only if it reports sufficient included quota may the exact then-current PR810 head run the fixed Python/sqlite3/_sqlite3 environment probe; otherwise remain fail-closed. Do not substitute plan identity, cumulative per-session usage, paid fallback, credential preflight, or READY deployment state.",
+  "acceptance": "IN_PROGRESS"
+}

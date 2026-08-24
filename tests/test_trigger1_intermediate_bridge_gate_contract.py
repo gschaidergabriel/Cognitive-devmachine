@@ -14,6 +14,7 @@ import trigger1_jspace_promotion_gate as gate
 
 HEX64 = "a" * 64
 ALT64 = "c" * 64
+WRONG64 = "d" * 64
 HEAD40 = "b" * 40
 
 
@@ -23,9 +24,9 @@ def passing_inputs() -> tuple[dict, dict]:
         {"prompt_sha256": "2" * 64, "seed": 1702},
     ]
     holdout = []
-    for label_map_id, positive_label, negative_label, prompt_sha in (
-        ("MAP_AB", "A", "B", "3" * 64),
-        ("MAP_BA", "B", "A", "4" * 64),
+    for label_map_id, positive_label, negative_label, prompt_sha, wrong_receipt in (
+        ("MAP_AB", "A", "B", "3" * 64, "7" * 64),
+        ("MAP_BA", "B", "A", "4" * 64, "8" * 64),
     ):
         for control in bridge.REQUIRED_CONTROLS:
             row = {
@@ -39,7 +40,15 @@ def passing_inputs() -> tuple[dict, dict]:
                 "hook_calls": 1,
             }
             if control == "+VECTOR":
-                row["applied_vector_sha256"] = ALT64
+                row.update(
+                    {
+                        "applied_vector_sha256": ALT64,
+                        "wrong_layer": 18,
+                        "wrong_layer_vector_source_layer": 12,
+                        "wrong_layer_same_selected_vector": True,
+                        "wrong_layer_receipt_sha256": wrong_receipt,
+                    }
+                )
             holdout.append(row)
 
     verdict = {
@@ -93,8 +102,12 @@ def passing_inputs() -> tuple[dict, dict]:
     return result, intermediate
 
 
+def plus_rows(result: dict) -> list[dict]:
+    return [row for row in result["holdout_rows"] if row["control"] == "+VECTOR"]
+
+
 class Trigger1IntermediateBridgeGateContractTests(unittest.TestCase):
-    def test_bridge_binds_label_independence_and_reaches_gate_v4_goal_candidate(self):
+    def test_bridge_binds_label_independence_wrong_layer_provenance_and_reaches_gate_v4(self):
         result, intermediate = passing_inputs()
         direct = bridge.build_direct_candidate(result, intermediate)
 
@@ -105,6 +118,11 @@ class Trigger1IntermediateBridgeGateContractTests(unittest.TestCase):
         )
         self.assertIs(True, direct["holdout"]["label_mapping_counterbalanced"])
         self.assertIs(True, direct["holdout"]["metric_uses_output_tokens"])
+        self.assertIs(True, direct["holdout"]["wrong_layer_same_selected_vector"])
+        self.assertEqual(
+            bridge.digest(["7" * 64, "8" * 64]),
+            direct["holdout"]["wrong_layer_receipt_family_sha256"],
+        )
 
         verdict = gate.adjudicate(direct)
         self.assertTrue(verdict["mechanism_runtime_vector_credit_candidate"])
@@ -115,6 +133,38 @@ class Trigger1IntermediateBridgeGateContractTests(unittest.TestCase):
         self.assertFalse(verdict["whole_entityos_hcu_credit"])
         self.assertFalse(verdict["jspace_model_runtime_credit"])
         self.assertFalse(verdict["training_credit"])
+
+    def test_missing_wrong_layer_same_vector_proof_blocks_even_with_pass_verdict(self):
+        result, intermediate = passing_inputs()
+        del plus_rows(result)[0]["wrong_layer_same_selected_vector"]
+        with self.assertRaisesRegex(bridge.BridgeError, "WRONG_LAYER_SAME_SELECTED_VECTOR_REQUIRED"):
+            bridge.build_direct_candidate(result, intermediate)
+
+    def test_false_wrong_layer_same_vector_proof_blocks_even_with_pass_verdict(self):
+        result, intermediate = passing_inputs()
+        plus_rows(result)[0]["wrong_layer_same_selected_vector"] = False
+        with self.assertRaisesRegex(bridge.BridgeError, "WRONG_LAYER_SAME_SELECTED_VECTOR_REQUIRED"):
+            bridge.build_direct_candidate(result, intermediate)
+
+    def test_wrong_layer_vector_source_must_equal_frozen_selected_layer(self):
+        result, intermediate = passing_inputs()
+        plus_rows(result)[0]["wrong_layer_vector_source_layer"] = 18
+        with self.assertRaisesRegex(
+            bridge.BridgeError, "WRONG_LAYER_VECTOR_SOURCE_MUST_EQUAL_SELECTED_LAYER"
+        ):
+            bridge.build_direct_candidate(result, intermediate)
+
+    def test_wrong_layer_intervention_site_must_differ_from_selected_layer(self):
+        result, intermediate = passing_inputs()
+        plus_rows(result)[0]["wrong_layer"] = 12
+        with self.assertRaisesRegex(bridge.BridgeError, "WRONG_LAYER_INTERVENTION_SITE_REQUIRED"):
+            bridge.build_direct_candidate(result, intermediate)
+
+    def test_wrong_layer_runtime_receipt_is_required(self):
+        result, intermediate = passing_inputs()
+        plus_rows(result)[0]["wrong_layer_receipt_sha256"] = WRONG64[:-1]
+        with self.assertRaisesRegex(bridge.BridgeError, "WRONG_LAYER_RUNTIME_RECEIPT_REQUIRED"):
+            bridge.build_direct_candidate(result, intermediate)
 
     def test_missing_label_independence_receipt_blocks_bridge(self):
         result, intermediate = passing_inputs()

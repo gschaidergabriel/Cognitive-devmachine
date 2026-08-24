@@ -9,24 +9,24 @@ if [[ ${EUID:-$(id -u)} -ne 0 ]]; then
   exit 2
 fi
 
-# Ubuntu's Podman may default to crun even when only runc is installed. Ensure a known OCI runtime
-# exists and pin rootless Podman/Buildah to runc so the build cannot fail on a missing crun binary.
+# We need an OCI runtime that supports rootless NoCgroups for the long-lived sandbox.
+# runc built the image successfully but rejects --cgroups=disabled on this host, so install/pin crun.
 apt-get update -y
-apt-get install -y runc
-RUNC_BIN="$(command -v runc || true)"
-if [[ -z "$RUNC_BIN" ]]; then
-  echo 'ERROR: runc unavailable after package install' >&2
+apt-get install -y crun runc
+CRUN_BIN="$(command -v crun || true)"
+if [[ -z "$CRUN_BIN" ]]; then
+  echo 'ERROR: crun unavailable after package install' >&2
   exit 3
 fi
 
-echo "OCI_RUNTIME=$RUNC_BIN"
+echo "OCI_RUNTIME=$CRUN_BIN"
 
 mkdir -p "$BASE/.config/containers"
 cat > "$BASE/.config/containers/containers.conf" <<EOF
 [engine]
 cgroup_manager = "cgroupfs"
 events_logger = "file"
-runtime = "runc"
+runtime = "crun"
 EOF
 chown -R claylab:claylab "$BASE/.config/containers"
 
@@ -43,18 +43,20 @@ cd "$BASE"
 echo '== Rootless Podman diagnostics =='
 as_clay podman info --debug | sed -n '1,220p' || true
 
-echo '== Rebuilding sandbox with runc + cgroupfs + chroot isolation =='
+echo '== Reusing/building sandbox image with crun + cgroupfs =='
 as_clay podman rm -f clay-direct-dev >/dev/null 2>&1 || true
 
-# chroot isolation avoids the systemd transient-scope path that fails under runuser.
-as_clay podman --cgroup-manager=cgroupfs --runtime="$RUNC_BIN" build \
-  --isolation=chroot \
-  --pull=missing \
-  -t localhost/clay-direct-dev:ubuntu24 \
-  -f "$BASE/git-bridge/Containerfile" \
-  "$BASE/git-bridge"
+# Reuse the already-successful image if present; otherwise build with chroot isolation.
+if ! as_clay podman image exists localhost/clay-direct-dev:ubuntu24; then
+  as_clay podman --cgroup-manager=cgroupfs --runtime="$CRUN_BIN" build \
+    --isolation=chroot \
+    --pull=missing \
+    -t localhost/clay-direct-dev:ubuntu24 \
+    -f "$BASE/git-bridge/Containerfile" \
+    "$BASE/git-bridge"
+fi
 
-as_clay podman --cgroup-manager=cgroupfs --runtime="$RUNC_BIN" run -d \
+as_clay podman --cgroup-manager=cgroupfs --runtime="$CRUN_BIN" run -d \
   --name clay-direct-dev \
   --cgroups=disabled \
   --pids-limit=4096 \
@@ -64,11 +66,9 @@ as_clay podman --cgroup-manager=cgroupfs --runtime="$RUNC_BIN" run -d \
   localhost/clay-direct-dev:ubuntu24
 
 echo '== Sandbox proof =='
-as_clay podman --cgroup-manager=cgroupfs --runtime="$RUNC_BIN" exec clay-direct-dev bash -lc \
+as_clay podman --cgroup-manager=cgroupfs --runtime="$CRUN_BIN" exec clay-direct-dev bash -lc \
   'set -e; id; touch /workspace/.bridge-rw-test; rm /workspace/.bridge-rw-test; curl -fsSI https://github.com >/dev/null; git --version; python3 --version; sqlite3 --version'
 
-# Start the already-installed bridge daemon. Prefer a real user systemd manager if available;
-# otherwise fall back to a supervised nohup process so the bridge is not blocked by D-Bus/systemd session state.
 echo '== Starting bridge daemon =='
 if as_clay systemctl --user daemon-reload >/dev/null 2>&1 && \
    as_clay systemctl --user enable --now clay-vps-git-bridge.service >/dev/null 2>&1 && \
@@ -82,7 +82,6 @@ else
   kill -0 "$(cat "$BASE/state/bridge-daemon.pid")"
 fi
 
-# Wait for return-channel proof.
 echo '== Waiting for LIVE.json on results branch =='
 OK=0
 for _ in $(seq 1 30); do

@@ -124,6 +124,16 @@
     "executable_evidence": "test_payment_latch_cardinality_is_bounded_before_network",
     "counterhypothesis": "Exact built-in sets and strings sufficiently bound passive latch state; falsified locally because 1025 historical entries passed full element validation and reached authenticated routing without any cardinality policy. The repaired boundary routes with 1023 entries, fails closed without an opener at exactly 1024, and structurally rejects 1025 before element iteration."
   },
+  "payment_latch_evidence_separation": {
+    "checked_at": "2026-08-24",
+    "claim": "Capability inventory reports payment_blocked_current_budget_epoch only when the exact provider and budget-epoch latch key exists. Storage-capacity exhaustion independently blocks eligibility as payment_latch_capacity_exhausted and cannot be represented as an observed HTTP 402 payment event.",
+    "sources": [
+      "https://www.rfc-editor.org/rfc/rfc9110.html#name-402-payment-required",
+      "https://opentelemetry.io/docs/specs/semconv/http/http-spans/"
+    ],
+    "executable_evidence": "test_payment_latch_cardinality_is_bounded_before_network",
+    "counterhypothesis": "Every fail-closed route caused by payment-latch storage can be labeled as a current-epoch payment hard stop; falsified locally because 1024 unrelated historical keys produced payment_blocked_current_budget_epoch true and payment_required_hard_stop_active without the current provider/epoch key or any received HTTP 402."
+  },
   "passive_payment_latch_container_boundary": {
     "checked_at": "2026-08-24",
     "claim": "Every payment-latch storage path, including the process-global default and caller injection, must be an exact built-in set before capability inventory, routing or authenticated execution; set subclasses cannot execute overridden membership or mutation behavior around a received HTTP 402.",

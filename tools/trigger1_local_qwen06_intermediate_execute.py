@@ -8,7 +8,10 @@ row is used to construct the candidate direction.
 
 Layer/gain are frozen on calibration before disjoint holdout. Holdout includes the
 six matched controls, label remapping, wrong-layer intervention, and lesion/rescue.
-No external provider credential is read and the API boundary is loopback-only.
+The wrong-layer control applies the exact selected-layer vector at a different
+intervention layer; intervention-site identity and direction-source identity are
+kept separate in every runtime receipt. No external provider credential is read
+and the API boundary is loopback-only.
 """
 from __future__ import annotations
 
@@ -145,6 +148,7 @@ class RuntimeState:
     def infer(self, payload: dict[str, Any]) -> dict[str, Any]:
         prompt = str(payload["prompt"])
         layer = int(payload["layer"])
+        direction_layer = int(payload.get("direction_layer", layer))
         gain = float(payload["gain"])
         control = str(payload["control"])
         seed = int(payload["seed"])
@@ -152,11 +156,12 @@ class RuntimeState:
         negative_label = str(payload.get("negative_label") or "B")
         mode = str(payload.get("mode") or "control")
         if layer not in self.directions: raise ValueError("UNKNOWN_LAYER")
+        if direction_layer not in self.directions: raise ValueError("UNKNOWN_DIRECTION_LAYER")
         if control not in REQUIRED_CONTROLS and mode == "control": raise ValueError("UNKNOWN_CONTROL")
         if positive_label not in self.token_ids or negative_label not in self.token_ids or positive_label == negative_label:
             raise ValueError("LABEL_MAP_INVALID")
 
-        direction = self.directions[layer]
+        direction = self.directions[direction_layer]
         family_py = control_vectors(direction.detach().float().cpu().tolist(), gain)
         vector = self.torch.tensor(family_py.get(control, family_py["BASELINE"]), dtype=self.torch.float32, device=self.device)
         applied_sha = tensor_sha(vector)
@@ -198,7 +203,7 @@ class RuntimeState:
         neg = float(logits[self.token_ids[negative_label]])
         material = {
             "invocation": self.invocations, "prompt_sha256": hashlib.sha256(prompt.encode()).hexdigest(),
-            "layer": layer, "gain": gain, "control": control, "mode": mode, "seed": seed,
+            "layer": layer, "direction_layer": direction_layer, "gain": gain, "control": control, "mode": mode, "seed": seed,
             "positive_label": positive_label, "negative_label": negative_label,
             "target_score": pos-neg, "hook_calls": hook_calls,
             "pre_activation_sha256": pre_sha, "post_activation_sha256": post_sha,
@@ -262,7 +267,8 @@ def main() -> int:
                     for control in REQUIRED_CONTROLS:
                         row=post(endpoint,{"prompt":full,"layer":layer,"gain":gain,"control":control,"seed":seed,"positive_label":pos_label,"negative_label":neg_label})
                         rows_case[control]=row
-                    wrong=post(endpoint,{"prompt":full,"layer":wrong_layer,"gain":gain,"control":"+VECTOR","seed":seed,"positive_label":pos_label,"negative_label":neg_label})
+                    # Causal specificity requires the SAME selected direction at a different intervention site.
+                    wrong=post(endpoint,{"prompt":full,"layer":wrong_layer,"direction_layer":layer,"gain":gain,"control":"+VECTOR","seed":seed,"positive_label":pos_label,"negative_label":neg_label})
                     lesion_row=post(endpoint,{"prompt":full,"layer":layer,"gain":gain,"control":"BASELINE","mode":"lesion","seed":seed,"positive_label":pos_label,"negative_label":neg_label})
                     rescue_row=post(endpoint,{"prompt":full,"layer":layer,"gain":gain,"control":"BASELINE","mode":"rescue","seed":seed,"positive_label":pos_label,"negative_label":neg_label})
                     plus_delta=rows_case["+VECTOR"]["target_score"]-rows_case["BASELINE"]["target_score"]
@@ -271,7 +277,17 @@ def main() -> int:
                     rescue_delta=rescue_row["target_score"]-lesion_row["target_score"]
                     for control,row in rows_case.items():
                         extra={}
-                        if control=="+VECTOR": extra={"wrong_layer":wrong_layer,"wrong_layer_delta":wrong_delta,"lesion_delta":lesion_delta,"rescue_delta":rescue_delta,"wrong_layer_receipt_sha256":wrong["runtime_receipt_sha256"],"lesion_receipt_sha256":lesion_row["runtime_receipt_sha256"],"rescue_receipt_sha256":rescue_row["runtime_receipt_sha256"]}
+                        if control=="+VECTOR": extra={
+                            "wrong_layer":wrong_layer,
+                            "wrong_layer_direction_layer":wrong["direction_layer"],
+                            "wrong_layer_delta":wrong_delta,
+                            "wrong_layer_applied_vector_sha256":wrong["applied_vector_sha256"],
+                            "lesion_delta":lesion_delta,
+                            "rescue_delta":rescue_delta,
+                            "wrong_layer_receipt_sha256":wrong["runtime_receipt_sha256"],
+                            "lesion_receipt_sha256":lesion_row["runtime_receipt_sha256"],
+                            "rescue_receipt_sha256":rescue_row["runtime_receipt_sha256"],
+                        }
                         holdout.append({**row,"split":"holdout","case_id":case_id,"label_map_id":label_map_id,**extra})
         verdict=adjudicate_holdout(holdout,selected_layer=int(selected.get("layer",-1)),selected_gain=float(selected.get("gain",-1))) if selected.get("selected") else {"pass":False,"classification":"NO_LAYER_GAIN_SELECTED"}
         server.shutdown(); server.server_close()
@@ -282,7 +298,7 @@ def main() -> int:
             "runtime_build_sha256":runtime_build_sha,"activation_source":"CALIBRATION_INTERMEDIATE_RESIDUAL_CONTRASTS_ONLY_NO_LM_HEAD_ROWS",
             "selected_layer":selected.get("layer"),"selected_gain":selected.get("gain"),"direction_sha256":derivation.get("directions",{}).get(str(selected.get("layer")),{}).get("direction_sha256"),
             "api_loopback_only":True,"zero_provider_billing":True,"external_provider_credentials_read":False,
-            "matched_controls":list(REQUIRED_CONTROLS),"label_remap":True,"wrong_layer":True,"lesion_rescue":True,
+            "matched_controls":list(REQUIRED_CONTROLS),"label_remap":True,"wrong_layer":True,"wrong_layer_same_selected_vector":True,"lesion_rescue":True,
             "calibration_family_sha256":digest(calibration),"holdout_family_sha256":digest(holdout),"verdict":verdict,
         }
         result={
@@ -292,6 +308,7 @@ def main() -> int:
             "device":str(device),"token_ids":token_ids,"candidate_layers":list(CANDIDATE_LAYERS),"calibration_gains":list(CALIBRATION_GAINS),
             "derivation":derivation,"calibration_rows":calibration,"selected":selected,"holdout_rows":holdout,"verdict":verdict,
             "api_endpoint":endpoint,"api_loopback_only":True,"zero_provider_billing":True,"external_provider_credentials_read":False,"provider_network_calls":0,
+            "wrong_layer_semantics":"SAME_SELECTED_DIRECTION_AT_DIFFERENT_INTERVENTION_LAYER",
             "credit_scope":CREDIT_SCOPE,"promotion_candidate_written":bool(verdict.get("pass")),
         }
         result["result_sha256"]=canonical_sha(result); result_path.write_text(json.dumps(result,indent=2,sort_keys=True,ensure_ascii=False)+"\n")

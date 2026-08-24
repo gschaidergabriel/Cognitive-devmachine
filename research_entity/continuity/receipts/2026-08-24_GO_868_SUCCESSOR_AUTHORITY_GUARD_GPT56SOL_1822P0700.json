@@ -1,0 +1,120 @@
+{
+  "schema": "ENTITYOS_HCU_GO_RECEIPT/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "authority_epoch": "8.68",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "reentry": {
+    "bootstrap_fast_cache_snapshot": "2026-08-24 supervisor 8.63 cache; explicitly noncanonical",
+    "canonical_main_initially_observed": "6426d1ff7d8b03129d0e73c4127e0e63a678fa17",
+    "canonical_main_reentered_after_parallel_motion": "0b897c8b87500ffe89f113be1162f784612b29bf",
+    "current_supervisor": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_68.json",
+    "active_owner_authority": "governance/CLAY_DUAL_MACHINE_EXECUTION_AUTHORITY_2026-08-24.md",
+    "provider_admission": "research_entity/claycode/autonomous/FREE_PROVIDER_ADMISSION.json",
+    "retained_hcu_donor": "gschaidergabriel/clay-global-research-entity#1263",
+    "retained_hcu_head_observed": "2badebe78db868c56ef39f0a32d198282cffcd88",
+    "retained_executor": "gschaidergabriel/Dr.-Unterweger#810",
+    "retained_executor_head_observed": "bb7324d2a21ffc143c241c652a31524c5be4c9d8"
+  },
+  "coordination": {
+    "upstream_shared_macrocycle_id": null,
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_experiments_run": 0,
+    "overlapping_provider_admission_prs_observed": [1421, 1422, 1423, 1424, 1427],
+    "existing_successor_authority_pr_reused": 1413,
+    "duplicate_provider_gate_pr_created": false,
+    "parallel_main_fusion": "PROGRAM_STATE_MANIFEST_AND_ARTEFACT_README_ADVANCED_TO_8_68_ON_MAIN_DURING_THIS_ORGAN_RUN; BRANCH_WAS_REBASED_AGAIN_AND_THESE_PARALLEL_SURFACES_WERE_PRESERVED_INSTEAD_OF_OVERWRITTEN"
+  },
+  "observed": {
+    "supervisor_classification": "EXECUTED_UNADMITTED_EXTERNAL_PROVIDER_CONTROL_BREACH_WITHOUT_PROVEN_SPEND",
+    "external_llm_provider_execution": "QUARANTINED",
+    "providers_currently_admitted_free": [],
+    "canonical_provider_allowlist": ["groq", "mistral", "nvidia", "openrouter"],
+    "local_normal_user_execution_authorized": true,
+    "clay_direct_dev_execution_authorized": true,
+    "local_or_vps_execution_bridge_exposed_to_this_organ": false,
+    "github_workflow_runs_for_exact_candidate_head_before_receipt": 0,
+    "provider_secret_lookup_performed_by_this_organ": false,
+    "provider_network_call_performed_by_this_organ": false,
+    "paid_or_subscription_execution_performed": false,
+    "together_used": false
+  },
+  "material_findings": [
+    "The canonical compatibility-named authority validator on main remained hard-coded to SUPERVISOR_STEERING_8_52.json after current authority advanced to 8.68.",
+    "Root CLAUDE.md remained pinned to supervisor 8.65 and still stated the obsolete blanket VPS/self-hosted testing prohibition even though active owner authority and 8.68 permit zero-cost local normal-user and clay-direct-dev VPS-sandbox development/testing.",
+    "Parallel main movement repaired PROGRAM_STATE, manifest and artefact README to 8.68 while this organ was working; retaining those newer canonical surfaces was higher-value than force-preserving this organ's earlier copies.",
+    "The remaining nonduplicate control-plane gap is successor-aware authority validation plus root routing-shim synchronization."
+  ],
+  "hypothesis": "A successor-dynamic validator that resolves supervisor and owner authority from canonical pointer consensus, then binds provider admission to the resolved epoch and allowlist, prevents self-consistent stale authority islands without hard-coding every supervisor successor.",
+  "counterhypothesis": "Updating the hard-coded supervisor constant and root prose on every authority bump is sufficient and simpler.",
+  "counterhypothesis_adjudication": "REJECTED_AS_DURABILITY_STRATEGY: main demonstrated repeated 8.52/8.65 drift while canonical authority advanced to 8.68; a static constant can pass only its own stale island and requires recurring manual edits.",
+  "bounded_delta": {
+    "pr": 1413,
+    "branch": "gpt56sol/successor-aware-authority-validator-20260824",
+    "base_rebound_to_main": "0b897c8b87500ffe89f113be1162f784612b29bf",
+    "root_claude_commit": "6d88d1b7e2ed732122bbb4d430c1a33231948813",
+    "validator_commit": "31960c3e5ae2689ebb14f24d6737733ccf3147f7",
+    "validator_blob": "924033f28b55e991713fd1f3485b1db3354928f7",
+    "regression_commit": "bfd7148552b4682707313b4bc99bbce22a8eb9de",
+    "regression_blob": "1b659458c1159f8a99ea43bb9d1812dd0e3c7ecc",
+    "validator_schema": "ENTITYOS_HCU_AUTHORITY_CONSISTENCY/v4",
+    "changes": [
+      "dynamic supervisor pointer consensus across Bootstrap, Program State, artefact manifest and Supervisor Inbox",
+      "safe path and filename/schema matching for supervisor successor selection",
+      "owner authority pointer consensus across current owner-bearing surfaces",
+      "current dual-machine zero-cost execution semantics with explicit no-root/no-unrelated-host boundaries",
+      "provider admission exact authority-epoch and allowlist binding",
+      "admitted=true requires cost_class=FREE",
+      "provider quarantine-state consistency",
+      "root README/CLAUDE stale blanket-VPS-ban detection",
+      "historical 4.1-4.4 safety/provenance ancestry retained without reactivating historical product/execution authority"
+    ],
+    "focused_regressions": [
+      "coherent 8.68 dual-machine authority",
+      "supervisor pointer split-brain",
+      "owner pointer split-brain",
+      "silent clay-direct-dev authority removal",
+      "obsolete blanket VPS ban",
+      "UNKNOWN provider self-admission",
+      "provider allowlist split",
+      "provider authority-epoch mismatch",
+      "quarantine-state mismatch"
+    ]
+  },
+  "execution_evidence": {
+    "exact_branch_test_execution_observed": false,
+    "reason": "NO_EXPOSED_OWNER_AUTHORIZED_LOCAL_OR_CLAY_DIRECT_DEV_BRIDGE_IN_THIS_CHATGPT_TOOLSET_AND_NO_GITHUB_WORKFLOW_RUN_FOR_EXACT_CANDIDATE_HEAD",
+    "container_raw_github_fetch_attempt": "FAILED_DNS_TRANSPORT; NOT_PRODUCT_EVIDENCE",
+    "classification": "SOURCE_AND_TEST_CANDIDATE_ONLY",
+    "not_product_failure": true
+  },
+  "external_solution_harvest": {
+    "status": "DESIGN_CORROBORATION_ONLY",
+    "principles": [
+      "Python unittest.mock documentation: patch where an object is looked up, supporting canonical lookup-path fidelity in admission tests.",
+      "Linux network namespaces isolate network devices, stacks, routes, firewall state and sockets, supporting an OS-level no-network fence in addition to Python socket tripwires where authorized.",
+      "OWASP authorization guidance recommends least privilege, deny by default, validation on every request and authorization checks in the correct location; this corroborates pre-secret/pre-network provider admission but does not create Clay authority."
+    ],
+    "promotion": "NONE"
+  },
+  "tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED: successor-dynamic authority guard and root routing shim repair are isolated on the reused PR1413 lane, rebased onto current main after parallel convergence.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED_AT_TYPED_PROVIDER_ADMISSION_CONTROL_BOUNDARY: the reusable admission primitive is bound by the validator to current supervisor epoch, current provider allowlist and FREE-before-secret/network semantics without creating a second authority.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_FREE_ONLY_LOCAL_08B_READINESS": "TRAINING_READINESS_NO_CHANGE_WITH_REASON: current main already advanced local J-Space intervention and post-load identity gates; no owner-authorized local/VPS execution bridge is exposed to this organ, so another source-only J-Space variant would be lower information than executing the existing causal gate."
+  },
+  "credits": {
+    "free_swarm_provider_admission_runtime": 0,
+    "external_provider_worker_runtime": 0,
+    "whole_entityos_hcu_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_action": "On an exposed owner-authorized zero-cost local normal-user or clay-direct-dev surface, bind exact then-current main/PR1413 head and execute the successor-authority regression suite plus exact-current FREE_SWARM_ADMISSION_BOUNDARY_RECEIPT/v1 secret/socket tripwires. Where supported, add an OS-level no-network namespace fence. In parallel execute exact live donor InferenceReceipt/v4 rejection tests and the smallest model-specific J-Space clean/corrupted/target/sham/off-target intervention family. Re-enter current main immediately before any merge or runtime-credit promotion.",
+  "acceptance": "IN_PROGRESS"
+}

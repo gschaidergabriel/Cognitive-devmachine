@@ -82,6 +82,7 @@ def pipeline_paths(root: Path) -> dict[str, Path]:
     tools = root / "tools"
     return {
         "pipeline": tools / "trigger1_midlayer_v3_pipeline.py",
+        "workflow_launcher": tools / "trigger1_local_qwen06_midlayer_causal.sh",
         "exact_source": tools / "trigger1_exact_source_envelope.py",
         "launcher": tools / "trigger1_local_qwen06_intermediate.sh",
         "executor": tools / "trigger1_local_qwen06_intermediate_execute.py",
@@ -167,8 +168,9 @@ def emit_compat_result(
 def run_pipeline(root: Path, out: Path) -> int:
     root = root.resolve()
     out = out.resolve()
+    # Never create an output path inside the repository merely to report the rejection;
+    # doing so would itself mutate the exact source identity we are protecting.
     if inside(out, root):
-        write_json(out / COMPAT_RESULT_NAME, blocked_compat("OUTPUT_DIR_MUST_BE_OUTSIDE_REPOSITORY", pipeline_rc=6))
         return 6
     out.mkdir(parents=True, exist_ok=True)
 

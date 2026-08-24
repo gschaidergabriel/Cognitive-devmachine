@@ -1,0 +1,48 @@
+{
+  "schema": "ENTITYOS_HCU_PROVIDER_REVOCATION_REBASE_RECEIPT/v1",
+  "authority_epoch": "8.70",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "organ": "GPT-5.6 Sol",
+  "canonical_main_before_rebase": "824b22fdbd24887d8fabb1f67b4249b248b9d716",
+  "rebased_source_head_before_this_receipt": "d65684b5b36991e66669394ffb7ef3a7268221cd",
+  "retained_pr": 1473,
+  "retained_branch": "gpt56sol/fix-provider-revocation-1463-870",
+  "fusion_method": "CURRENT_MAIN_TREE_PLUS_EXACT_EXISTING_PR_BLOBS",
+  "fused_blobs": {
+    "tools/run_6000_free_swarm_supervisor.sh": "b24ca92a0425a897d80247f10d5e6f76208b5aaf",
+    "tests/test_free_swarm_supervisor_revocation_870.py": "b3f6ef9105ece5444e1ec1bdab57f1b27510d5cb",
+    "research_entity/continuity/receipts/2026-08-24_GO_870_6000_PROVIDER_REVOCATION_GPT56SOL.json": "a7f2754ceffec353e00e690acd18f3250dbf1c96"
+  },
+  "current_main_counterevidence": "At canonical main 824b22fd, the 6000 supervisor still loads generic mixed-provider secret bundles when any provider is admitted and has no admission-binding reconciliation for a running 6000 child; therefore the PR remains nonduplicate despite concurrent rolling-restart work.",
+  "source_review": {
+    "fail_closed_parent_capability_sanitization": true,
+    "partial_admission_blocks_mixed_bundle_reopen": true,
+    "child_bound_to_validated_admission_digest": true,
+    "changed_or_invalid_binding_reconciles_child": true,
+    "spawn_preparation_rechecks_binding": true,
+    "post_spawn_binding_recheck": true,
+    "independent_request_path_pre_network_gate_retained": true
+  },
+  "execution_attempt": {
+    "surface": "CHATGPT_CONTAINER_GIT_CLONE",
+    "result": "BLOCKED_BEFORE_SOURCE_FETCH",
+    "error_class": "DNS_RESOLUTION_FAILURE_FOR_GITHUB_COM",
+    "semantic_test_credit": 0,
+    "product_runtime_credit": 0,
+    "classification": "INFRASTRUCTURE_TOOL_NETWORK_FAILURE_NOT_PRODUCT_FAILURE"
+  },
+  "unusual_experiment": {
+    "executed": false,
+    "reason": "NO_SHARED_REPRODUCIBLE_TRIGGER_ID_FOR_CANONICAL_ATOMIC_LEASE"
+  },
+  "credits": {
+    "provider_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "hcu_full": 0,
+    "jspace_model_runtime": 0,
+    "training": 0
+  },
+  "next_exact_gate": "Merge only as a bounded source/control-plane hardening delta if still current and nonduplicate; then execute the exact merged supervisor regression and one synthetic partial-revocation reconciliation fixture on an exposed authorized normal-user local or clay-direct-dev surface before any runtime promotion."
+}

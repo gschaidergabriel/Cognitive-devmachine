@@ -1,0 +1,59 @@
+{
+  "schema": "ENTITYOS_HCU_SUPERVISOR_STEERING/v1",
+  "authority_epoch": "8.66",
+  "date": "2026-08-24",
+  "mode": "FREE_ONLY",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "supersedes": "SUPERVISOR_STEERING_8_65.json",
+  "material_finding": "Current main now contains explicit ACTIVE USER AUTHORITY at CLAY_EXECUTION_AUTHORITY.md -> governance/CLAY_DUAL_MACHINE_EXECUTION_AUTHORITY_2026-08-24.md. That newer owner authority permits broad development/research inside the clay-direct-dev VPS sandbox and normal-user local workstation development, while the 8.65 control and retained PR descriptions still blanket-forbid VPS/self-hosted testing. The blanket prohibition is stale. Reconcile execution authority without inflating evidence: authorized local/VPS-sandbox executions may run under FREE_ONLY, but remain candidate/component evidence until admitted by canonical evidence rules; unrelated VPS-host changes, production effects, paid/subscription/unknown providers, Together, and new root/sudo authority remain fail-closed unless separately authorized.",
+  "authority_reconciliation": {
+    "root_pointer": "CLAY_EXECUTION_AUTHORITY.md",
+    "active_owner_authority": "governance/CLAY_DUAL_MACHINE_EXECUTION_AUTHORITY_2026-08-24.md",
+    "authority_main_head_observed": "c11cb0057825771dcaa03e09471be3b840776365",
+    "vps_sandbox": "AUTHORIZED_INSIDE_CLAY_DIRECT_DEV_WITH_PREFLIGHT_RESOURCE_GUARDS_AND_RECEIPTS",
+    "vps_host": "ONLY_SANDBOX_BRIDGE_CONTAINER_RUNTIME_ADMINISTRATION_IS_STANDING_AUTHORITY; UNRELATED_HOST_CHANGES_REQUIRE_FRESH_OWNER_AUTHORITY",
+    "local_workstation": "AUTHORIZED_AS_NORMAL_LINUX_DEVELOPMENT_USER; NEW_ROOT_OR_SUDO_AUTHORITY_NOT_IMPLIED",
+    "dual_machine_coordination": "AUTHORIZED_WHEN_MATERIALLY_USEFUL",
+    "deployment": "AUTHORIZED_INSIDE_SANDBOX_AND_ALREADY_AUTHORIZED_DEV_TEST_PROJECT_INFRA; NEW_EXTERNAL_PRODUCTION_EFFECTS_REMAIN_SEPARATELY_GATED",
+    "evidence_scope": "LOCAL_OR_VPS_SANDBOX_SUCCESS_DOES_NOT_BY_ITSELF_MINT_WHOLE_ENTITYOS_HCU_OR_CANONICAL_RUNTIME_CREDIT"
+  },
+  "current_exact_evidence": {
+    "retained_hcu_donor": "gschaidergabriel/clay-global-research-entity#1263",
+    "donor_head_observed": "0b205544fa262afeb714a697f29d3c891551c424",
+    "donor_new_inference_v4_rejection_tests": "SOURCE_TEST_ONLY_NOT_EXECUTED_IN_BOUND_EXECUTOR",
+    "retained_executor": "gschaidergabriel/Dr.-Unterweger#810",
+    "executor_head_observed": "bb7324d2a21ffc143c241c652a31524c5be4c9d8",
+    "exact_ready_deployment": "dpl_EN62ggtQnuEcjuvtJNathL3D9Tkf",
+    "function_runtime_credit": "PASS_AT_EXACT_NO_SANDBOX_DIAGNOSTIC_SCOPE_ONLY",
+    "sandbox_environment_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0
+  },
+  "free_only_gate": {
+    "paid_fallback": "FORBIDDEN",
+    "together": "FORBIDDEN",
+    "paid_subscription_unknown": "FAIL_CLOSED_BEFORE_SECRET_OR_KEY_LOOKUP_AND_BEFORE_NETWORK_IO",
+    "local_and_vps_sandbox_execution": "ALLOWED_WHEN_ZERO_MONETARY_COST_AND_WITHIN_OWNER_AUTHORITY_BOUNDARIES",
+    "provider_network_execution": "ONLY_EXPLICIT_FREE_CLASSIFICATION_MAY_PASS_PROVIDER_ADMISSION",
+    "no_paid_upgrade_or_credit_purchase": true
+  },
+  "runtime_first_gate": {
+    "source_guard_proliferation": "PAUSE_UNLESS_EXECUTABLE_COUNTEREVIDENCE_REQUIRES_A_GUARD",
+    "priority_1": "Re-enter current main, current retained donor head, current retained executor head, and the active dual-machine owner authority before action.",
+    "priority_2": "Use an authorized zero-cost local or clay-direct-dev VPS sandbox when materially useful to execute exact-source deterministic tests that were previously blocked by stale blanket VPS prohibition; bind source commit/tree, dirty state, Ubuntu/runtime identity, secrets fence, result digest, exit status, and cleanup.",
+    "priority_3": "Execute the current donor 0b205 InferenceReceipt/v4 rejection-boundary test set at exact identity before projecting it into the retained executor or claiming semantic closure.",
+    "priority_4": "Preserve bb7324/dpl_EN62 function-runtime credit at its exact no-Sandbox scope; do not project it to later heads or broader HCU/model/J-Space scope.",
+    "priority_5": "After exact environment/component PASS, advance the causal chain actual local model invocation -> canonical ModelExecution -> InferenceReceipt -> model-specific Global J-Space/GWT observation, still without whole-product promotion from same-family evidence."
+  },
+  "promotion_rules": {
+    "base_or_legacy_packages": "NO_NEW_PASS_FROM_MODEL_CONSENSUS_OR_SAME_FAMILY_RECEIPTS",
+    "canonical_semantics": "NO_PROMOTION_WITHOUT_EXECUTABLE_COUNTEREVIDENCE_AND_REVIEW",
+    "goodman": "COLLAPSE_SHARED_MODEL_FAMILY_PIPELINE_AND_ORCHESTRATION_ANCESTRY; EXECUTABLE_COUNTEREVIDENCE_OUTRANKS_CONSENSUS",
+    "runtime_claims": "SCOPE_TO_EXACT_SOURCE_EXECUTOR_BOUND_OBSERVATION",
+    "historical_receipts": "PRESERVE_APPEND_ONLY",
+    "whole_product_pass": false
+  }
+}

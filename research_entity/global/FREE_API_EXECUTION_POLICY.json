@@ -179,6 +179,20 @@
     "internal_measurement": "On both ordinary-response and HTTPError paths, an opener inserted a hash-equal active string after preflight. Before repair its equality method raised during latch publication or final receipt membership and no receipt returned. After repair both paths return status 402 and payment_required_hard_stop, mark publication failure, and later routing rejects the corrupted storage before network.",
     "counterhypothesis": "Pre-network exact-set and exact-string validation is sufficient for a caller-owned mutable latch throughout authenticated execution; falsified because the opener can mutate that shared set while the request is in flight."
   },
+  "failed_payment_latch_process_fallback": {
+    "checked_at": "2026-08-25",
+    "claim": "If a received HTTP 402 cannot be safely committed to caller-owned latch storage, FRANK retains the exact provider and budget-epoch key in bounded process-local fallback state. Inventories using external storage merge validated snapshots of both stores, so repairing or clearing the external container cannot authorize a same-process replay.",
+    "sources": [
+      "https://www.rfc-editor.org/rfc/rfc9110.html#name-402-payment-required",
+      "https://docs.python.org/3/library/stdtypes.html#set.add",
+      "https://docs.python.org/3/library/stdtypes.html#set.copy",
+      "https://cwe.mitre.org/data/definitions/362.html"
+    ],
+    "executable_evidence": "test_failed_latch_publication_uses_process_fallback",
+    "internal_measurement": "After a deterministic post-authorization corruption made the primary latch write fail, clearing that external set previously allowed a second authenticated request in the same budget epoch. The repaired runtime reports publication failure plus an active fallback latch and rejects attempt two before opener access.",
+    "uncertainty": "The fallback is process-local and does not survive restart. Durable UnifiedDB-backed publication and an accepted Ubuntu live receipt remain required before claiming restart-level enforcement.",
+    "counterhypothesis": "Failing closed only while malformed caller storage remains present is equivalent to a current-epoch hard stop; falsified because the caller could clear the malformed element and immediately regain routing eligibility."
+  },
   "passive_payment_latch_container_boundary": {
     "checked_at": "2026-08-24",
     "claim": "Every payment-latch storage path, including the process-global default and caller injection, must be an exact built-in set before capability inventory, routing or authenticated execution; set subclasses cannot execute overridden membership or mutation behavior around a received HTTP 402.",

@@ -83,6 +83,8 @@ Global J-Space/GWT remains an **empirical model-specific causal hypothesis**. Re
 
 Continue under FREE_ONLY with `JSPACE_VECTOR_CONTROL_ABI/v1`, real model-specific control/intervention traces, deterministic hard negatives, family-level leak-resistant splits and off-target regressions. Approximately-0.8B specialization remains zero-cost local work only after executable causal evidence is available. Completed training alone is not PASS.
 
+The current local Qwen3-4B/`llama.cpp` research server is useful as a provider-independent local inference surface, but a successful OpenAI-compatible completion is not sufficient for J-Space causality. `research_entity/claycode/HCU_JSPACE_LOCAL_INTERVENTION_BACKEND_GATE_V1.md` now requires exact model/tokenizer/runtime/loader identity plus named activation-site observation, controlled intervention, sham/off-target controls, output deltas and trace-to-InferenceReceipt binding before a local backend is `JSPACE_INTERVENTION_CAPABLE`.
+
 ## `go` — three coupled tracks
 
 Every exact `go` advances or explicitly no-changes:
@@ -93,11 +95,11 @@ Every exact `go` advances or explicitly no-changes:
 
 ### Current `go` delta
 
-**Track A — advanced:** current-facing authority drift was repaired by synchronizing `research_entity/rooms/PROGRAM_STATE.json` from 8.67 to supervisor 8.68 and updating this README from stale 8.65 wording. This removes an executable/reentry ambiguity where older surfaces still described zero external provider execution and obsolete execution restrictions.
+**Track A — advanced:** current-facing authority drift was repaired by synchronizing `research_entity/rooms/PROGRAM_STATE.json` from 8.67 to supervisor 8.68 and updating this README from stale 8.65 wording. The provider-admission source boundary was also hardened with `tests/test_free_swarm_admission_boundary_868_malformed.py`, which explicitly requires malformed canonical admission to terminate before any provider secret lookup or network attempt. These are source/current-facing deltas only; no runtime PASS is implied.
 
-**Track B — HCU_NO_CHANGE_WITH_REASON:** no new HCU/Typed Entry runtime credit was minted because an actual local/VPS bridge execution surface is not exposed to this ChatGPT organ in the current tool set. Static/source work already exists; duplicating it would be lower information than executing the exact boundary test. Next discriminator: run the current `FREE_SWARM_ADMISSION_BOUNDARY_RECEIPT/v1` or donor InferenceReceipt/v4 rejection-boundary test set on an authorized exposed local normal-user or `clay-direct-dev` bridge with exact source/environment/result identities.
+**Track B — HCU_NO_CHANGE_WITH_REASON:** no new HCU/Typed Entry runtime credit was minted because an actual local/VPS bridge execution surface is not exposed to this ChatGPT organ in the current tool set. Static/source work already exists; duplicating the donor implementation would be lower information than executing the exact boundary/rejection tests. Next discriminator: run the current `FREE_SWARM_ADMISSION_BOUNDARY_RECEIPT/v1` or donor InferenceReceipt/v4 rejection-boundary test set on an authorized exposed local normal-user or `clay-direct-dev` bridge with exact source/environment/result identities.
 
-**Track C — TRAINING_READINESS_NO_CHANGE_WITH_REASON:** no model-specific J-Space/GWT runtime or training-readiness promotion is justified without real local model invocation and bound causal intervention/control traces. Provider network remains quarantined and no exposed local/VPS execution bridge is available to this organ. Next discriminator: actual local model invocation -> canonical ModelExecution -> InferenceReceipt/v4 -> model-specific J-Space/GWT control/intervention trace, then family-split/hard-negative admission.
+**Track C — advanced at source/research-contract level only:** `HCU_JSPACE_LOCAL_INTERVENTION_BACKEND_GATE_V1.md` now distinguishes opaque local completion serving from an instrumentable causal backend and defines the minimum clean/corrupted/target/sham/off-target intervention family required for model-specific Global J-Space/GWT evidence. External donor research from activation-patching/tracing systems was fused only as a mechanism candidate. No J-Space model-runtime or training credit is granted. Next discriminator: execute one exact local clean/corrupted pair plus target and sham activation intervention with bound model/runtime/loader/InferenceReceipt identities.
 
 No new unusual experiment was performed. The current user trigger lacks an exposed shared immutable high-precision macrocycle identity sufficient to justify inventing a lease key, so unusual-intervention work remains fail-closed.
 
@@ -121,10 +123,12 @@ A source file, source test, deployment, receipt, model agreement or same-family 
 1. keep all current-facing surfaces successor-aligned to 8.68;
 2. preserve historical unadmitted provider traffic append-only and keep external LLM-provider traffic quarantined;
 3. execute `FREE_SWARM_ADMISSION_BOUNDARY_RECEIPT/v1` on exact current source using an authorized exposed zero-cost local or `clay-direct-dev` bridge;
-4. prove zero secret lookup and zero network attempts for every blocked provider-admission case;
+4. prove zero secret lookup and zero network attempts for every blocked provider-admission case, including malformed admission;
 5. execute live donor InferenceReceipt/v4 rejection-boundary tests before any executor rebind;
-6. only after exact component PASS continue real model invocation -> ModelExecution -> InferenceReceipt/v4 -> model-specific Global J-Space/GWT trace;
-7. continue J-Space vector-control ABI, deterministic hard negatives, leak-resistant family splits and zero-cost local approximately-0.8B readiness without paid/provider execution;
-8. preserve whole-product/model/training credit at zero until corresponding exact admitted evidence exists.
+6. treat the local Qwen3-4B/`llama.cpp` server as local-inference-only until the J-Space intervention backend gate is satisfied;
+7. execute the smallest model-specific causal family: clean, corrupted, target intervention, sham control and off-target control with exact activation-site and output identities;
+8. only after exact component PASS continue real model invocation -> ModelExecution -> InferenceReceipt/v4 -> model-specific Global J-Space/GWT trace;
+9. continue J-Space vector-control ABI, deterministic hard negatives, leak-resistant family splits and zero-cost local approximately-0.8B readiness without paid/provider execution;
+10. preserve whole-product/model/training credit at zero until corresponding exact admitted evidence exists.
 
 Historical README revisions and receipts remain Git provenance only and do not override current authority.

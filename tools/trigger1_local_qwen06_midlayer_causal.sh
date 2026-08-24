@@ -6,8 +6,8 @@ cd "$ROOT"
 
 # Compatibility entrypoint: the retained self-hosted workflow still calls this
 # historical filename. The effective scientific path is the strongest intermediate
-# residual protocol plus its fail-closed promotion bridge, not the superseded
-# evaluation-label-coupled midlayer executor.
+# residual protocol plus its fail-closed promotion bridge and full-control evidence
+# bridge, not the superseded evaluation-label-coupled midlayer executor.
 unset \
   OPENAI_API_KEY OPENAI_API_KEYS \
   ANTHROPIC_API_KEY ANTHROPIC_API_KEYS \
@@ -147,8 +147,9 @@ PY
 RESULT="$OUT_DIR/trigger1_intermediate_result.json"
 INTERMEDIATE="$OUT_DIR/trigger1_intermediate_candidate.json"
 DIRECT="$OUT_DIR/trigger1_direct_steering_candidate.json"
+FULL_CONTROL="$OUT_DIR/trigger1_full_vector_control_admission.json"
 if [[ "$source_stable" != true ]]; then
-  rm -f "$INTERMEDIATE" "$DIRECT"
+  rm -f "$INTERMEDIATE" "$DIRECT" "$FULL_CONTROL"
   rc=4
 elif [[ "$rc" -eq 0 && -s "$RESULT" && -s "$INTERMEDIATE" ]]; then
   set +e
@@ -159,8 +160,20 @@ elif [[ "$rc" -eq 0 && -s "$RESULT" && -s "$INTERMEDIATE" ]]; then
   bridge_rc=$?
   set -e
   if [[ "$bridge_rc" -ne 0 ]]; then
-    rm -f "$DIRECT"
+    rm -f "$DIRECT" "$FULL_CONTROL"
     rc=5
+  else
+    set +e
+    python3 tools/trigger1_full_vector_control_bridge.py \
+      --result "$RESULT" \
+      --direct-candidate "$DIRECT" \
+      --output "$FULL_CONTROL" >"$OUT_DIR/full_vector_control_bridge.log" 2>&1
+    full_control_rc=$?
+    set -e
+    if [[ "$full_control_rc" -ne 0 ]]; then
+      rm -f "$FULL_CONTROL"
+      rc=6
+    fi
   fi
 fi
 
@@ -189,9 +202,14 @@ obj['source_identity_stable_across_run']=(stable=='true')
 obj['compatibility_entrypoint']='trigger1_local_qwen06_midlayer_causal.sh'
 obj['effective_executor']='tools/trigger1_local_qwen06_intermediate_execute.py'
 obj['promotion_bridge']='tools/trigger1_intermediate_promotion_bridge.py'
+obj['full_control_bridge']='tools/trigger1_full_vector_control_bridge.py'
+obj['full_control_source_contract']='research_entity/claycode/TRIGGER1_INTERMEDIATE_FULL_CONTROL_SOURCE_CONTRACT_V1.json'
 obj['compatibility_process_exit_code']=int(rc)
 if stable!='true':
     obj['status']='BLOCKED_EXACT_SOURCE_CHANGED_DURING_RUN'
+    obj['credit_scope']='NONE'
+elif int(rc)==6:
+    obj['status']='BLOCKED_FULL_VECTOR_CONTROL_EVIDENCE_NOT_ADMITTED'
     obj['credit_scope']='NONE'
 obj.pop('result_sha256',None)
 raw=json.dumps(obj,sort_keys=True,separators=(',',':'),ensure_ascii=False).encode('utf-8')

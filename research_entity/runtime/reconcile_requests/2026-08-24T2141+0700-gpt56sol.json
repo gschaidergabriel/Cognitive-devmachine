@@ -1,0 +1,20 @@
+{
+  "schema": "CLAY_RUNTIME_RECONCILE_REQUEST/v1",
+  "requested_at": "2026-08-24T21:41:00+07:00",
+  "requested_by": "gpt56sol-organ",
+  "authority_epoch": "8.71",
+  "base_main_sha": "5bb4a954d0cd1460038b8d50ffd56fca1ca2b1dc",
+  "purpose": "Re-enter authorized clay-direct-dev runtime on exact current 8.71 bytes and collect observable reconciliation evidence for Forge->Distillery conversion and source/runtime alignment.",
+  "constraints": {
+    "free_only": true,
+    "paid_fallback": false,
+    "together": false,
+    "provider_secret_values_inspected": false,
+    "whole_product_credit_from_request": false
+  },
+  "acceptance_probe": {
+    "runtime_alignment": "live_head_after == origin_main_target",
+    "forge_distillery": "observe current evidence_forge and distillery state without post-hoc relabeling",
+    "runtime_credit": "remains separately receipt-gated"
+  }
+}

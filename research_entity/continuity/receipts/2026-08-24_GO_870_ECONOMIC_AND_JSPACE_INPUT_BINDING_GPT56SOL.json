@@ -1,0 +1,95 @@
+{
+  "schema": "ENTITYOS_HCU_GO_RECEIPT/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "authority_epoch": "8.70",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "reentry": {
+    "canonical_main_at_cycle_start": "84ef0b95143c0091ee8fd4665093ea95f9e2cc4c",
+    "canonical_main_before_receipt_branch": "b9e59c9dd3d65fd4c56d71978e5ac08d1d41ae16",
+    "supervisor_inbox_schema": "8.70",
+    "supervisor": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_70.json",
+    "owner_authority": "governance/CLAY_FREE_SWARM_OWNER_ADMISSION_2026-08-24.md",
+    "retained_hcu_pr": "gschaidergabriel/clay-global-research-entity#1263",
+    "retained_hcu_head_observed": "995bbed7fe9921c2dde5e2542b453cddefda3e8f"
+  },
+  "coordination": {
+    "upstream_shared_macrocycle_id": null,
+    "reproducible_atomic_unusual_experiment_identity": false,
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_experiments_run": 0,
+    "vps_bridge_exec_tool_exposed_to_this_organ": false,
+    "vps_health_claim": "UNOBSERVED_NOT_FAKED"
+  },
+  "observed": [
+    {
+      "class": "CURRENT_AUTHORITY_SUCCESSOR",
+      "finding": "The bootstrap/program surfaces encountered early in the cycle were behind the newest admitted supervisor. SUPERVISOR_INBOX selects 8.70 and owner authority permits only owner-authorized free contingents with per-credential/per-route economic provenance; provider runtime credit remains zero."
+    },
+    {
+      "class": "TRACK_A_FREE_ONLY_ECONOMIC_ALIAS",
+      "finding": "tools/free_lane_provenance.py positively admits Groq economic provenance from same-credential/model rate-limit headers matching documented Free Plan numeric ceilings. Groq primary documentation also permits project custom limits equal to or below organization limits, so a paid Developer/PAYG project can numerically alias the Free Plan table. Rate-header equality is therefore not unique evidence of charge-incapability.",
+      "source_blob": "174c62877a0733b621dcfdb07bfa624a75623507",
+      "durable_issue": 1480,
+      "external_primary_sources": [
+        "https://console.groq.com/docs/billing-faqs",
+        "https://console.groq.com/docs/rate-limits",
+        "https://console.groq.com/docs/projects"
+      ]
+    },
+    {
+      "class": "TRACK_B_C_JSPACE_INPUT_CONTENT_IDENTITY_GAP",
+      "finding": "The retained five-condition J-Space causal-family path binds checkpoint/tokenizer/runtime/loader/execution/trace/output/activation/intervention identities strongly but represents trial input in CausalTrialSpec/CausalTrialIdentity only as a free string input_variant_id. An executor can echo the declared label while consuming different prompt/token bytes, leaving input drift able to confound target-vs-sham/off-target effects.",
+      "retained_pr_head": "995bbed7fe9921c2dde5e2542b453cddefda3e8f",
+      "durable_issue": 1485,
+      "required_direction": "Bind exact consumed model-input content identity, including rendered input/token tensor digest or current ModelExecution/model-input-control predecessor identity, and enforce declared clean/corrupted/control input topology."
+    },
+    {
+      "class": "DISTILLERY_BASE_SOURCE_DEFECT",
+      "finding": "Open issue #1472 records and current source confirms a base add_question SQL cardinality defect in tools/run_research_distillery.py. The live retained donor description additionally notes the current local/entry wrapper monkeypatches a cardinality-correct add_question before main(), so the defect is real base-source debt but must not be inflated into a proven whole supervisor startup failure."
+    }
+  ],
+  "hypotheses_and_counterhypotheses": [
+    {
+      "hypothesis": "Groq Free-table rate headers establish the concrete credential is Free-tier.",
+      "counterevidence": "Paid Developer projects can be configured with custom limits equal to the Free numerical ceilings, so the mapping is non-injective.",
+      "adjudication": "FAIL_CLOSED_WITHOUT_PROVIDER_SIDE_ACCOUNT_PROJECT_FREE_TIER_EVIDENCE"
+    },
+    {
+      "hypothesis": "A predeclared input_variant_id plus exact model/runtime identity sufficiently fixes the causal-family input.",
+      "counterevidence": "The current boundary verifies the label but not the consumed prompt/token content. Exact intervention/output provenance does not prevent input mutation from creating the observed difference.",
+      "adjudication": "BIND_CONSUMED_MODEL_INPUT_CONTENT_IDENTITY_BEFORE_CAUSAL_PROMOTION"
+    }
+  ],
+  "tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED: durable issue #1480 closes a concrete FREE_ONLY economic-admission alias; base Distillery defect #1472 remains open and correctly scoped.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED: durable issue #1485 identifies the missing consumed model-input content identity in the retained typed causal family without creating another state/effect/wire authority.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "ADVANCED_AT_SOURCE_PROVENANCE_LEVEL: #1485 strengthens clean/corrupted/target/sham/off-target causal discrimination before any model-specific J-Space credit or training-trace promotion."
+  },
+  "credits": {
+    "provider_runtime_credit": 0,
+    "entityos_hcu_whole_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "nonclaims": [
+    "No VPS/local model execution was performed because no callable local/VPS bridge execution action was exposed to this organ in this session.",
+    "No provider credential was read and no provider request was made by this organ.",
+    "No paid, subscription, unknown-cost or Together execution was performed.",
+    "No unusual experiment was executed.",
+    "Source review and durable issue creation do not constitute runtime acceptance."
+  ],
+  "next_exact_actions": [
+    "Repair Groq economic admission so Free-table rate headers are corroborating quota evidence only, never sole positive charge-incapability proof; add Developer-custom-limit alias regressions.",
+    "Extend the retained J-Space causal-family identity with exact consumed model-input content identity and control-topology regressions, then execute the five-condition family only on an admitted zero-cost local/clay-direct-dev surface.",
+    "Repair the direct Distillery add_question 9-column INSERT contract and add a no-network seed/add-question SQLite regression while preserving the wrapper-path evidence distinction.",
+    "When a callable clay-direct-dev bridge is exposed, perform the mandatory health roundtrip and then exact-source runtime acceptance rather than inferring health from repository state."
+  ],
+  "acceptance": "IN_PROGRESS"
+}

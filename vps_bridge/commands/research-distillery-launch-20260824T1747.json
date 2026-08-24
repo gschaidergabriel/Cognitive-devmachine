@@ -1,0 +1,8 @@
+{
+  "schema":"CLAY_VPS_COMMAND/v4",
+  "command_id":"research-distillery-launch-20260824T1747",
+  "op":"exec",
+  "cwd":"/workspace/clay-global-research-entity",
+  "command":"set -e; apt-get update -qq >/dev/null; DEBIAN_FRONTEND=noninteractive apt-get install -y -qq poppler-utils >/dev/null; pkill -f '[r]un_24h_entityos_swarm.py' 2>/dev/null || true; pkill -f '[r]un_research_distillery_entry.py' 2>/dev/null || true; pkill -f '[r]un_research_distillery.py' 2>/dev/null || true; sleep 2; nohup bash tools/run_24h_entityos_swarm_supervisor.sh >/artifacts/clay-entityos-swarm/supervisor-v5.log 2>&1 </dev/null & echo SUPERVISOR_PID=$!; sleep 25; echo '--- processes ---'; ps auxww | grep -E '[r]un_24h_entityos_swarm|[r]un_research_distillery|[f]ree swarm/evaluate.py' | head -20; echo '--- supervisor ---'; cat /artifacts/clay-entityos-swarm/SUPERVISOR.json 2>/dev/null || true; echo '--- distillery ---'; cat /artifacts/clay-entityos-swarm/distillery/STATUS.json 2>/dev/null || true; echo '--- distillery log ---'; tail -40 /artifacts/clay-entityos-swarm/distillery.log 2>/dev/null || true; echo '--- disk ---'; df -h /workspace /cache /artifacts",
+  "timeout_seconds":600
+}

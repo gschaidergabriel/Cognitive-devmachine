@@ -3,7 +3,7 @@ import unittest
 from copy import deepcopy
 from dataclasses import replace
 
-from entry_canonicalization_v1 import canonicalize
+from entry_canonicalization_v1 import CANONICALIZATION_SCHEMA, canonicalize
 from jspace_dataset_admission_gate_v1 import (
     JSpaceDatasetAdmissionError,
     admit_for_training_dataset,
@@ -23,10 +23,16 @@ def prototype_sha(prototype):
     return hashlib.sha256(canonicalize(dict(prototype))).hexdigest()
 
 
+def transition_sha(transition):
+    material = deepcopy(dict(transition))
+    material.pop("trace_sha256", None)
+    material["canonicalization_schema"] = CANONICALIZATION_SCHEMA
+    return hashlib.sha256(canonicalize(material)).hexdigest()
+
+
 class GateTests(unittest.TestCase):
     def fixtures(self):
         training_sha = h("b")
-        transition_sha = h("c")
         control_packet = encode_vector(
             (0.25, -0.5, 1.0),
             basis_id="basis:7",
@@ -49,7 +55,6 @@ class GateTests(unittest.TestCase):
         prototype_digest = prototype_sha(prototype)
         transition = {
             "schema_version": "JSPACE_GWT_TRANSITION_TRACE/v1",
-            "trace_sha256": transition_sha,
             "generation": 7,
             "entry_event_sha256": h("1"),
             "entry_admission_sha256": h("2"),
@@ -64,6 +69,7 @@ class GateTests(unittest.TestCase):
             "falsifier_lesion_condition": "BASELINE",
             "credit_label": "UNKNOWN",
         }
+        transition["trace_sha256"] = transition_sha(transition)
         training = {
             "schema_version": "ENTITYOS_HCU_JSPACE_TRAINING_TRACE/v1",
             "trace_sha256": training_sha,
@@ -93,7 +99,7 @@ class GateTests(unittest.TestCase):
         }
         regs = {
             "admitted_training_traces": {training_sha: training},
-            "admitted_transition_traces": {transition_sha: transition},
+            "admitted_transition_traces": {transition["trace_sha256"]: transition},
             "admitted_prototype_traces": {prototype_digest: prototype},
             "admitted_grid_plans": {h("4"): grid_plan},
             "admitted_vector_control_packets": {control_packet_sha: control_packet},
@@ -112,6 +118,16 @@ class GateTests(unittest.TestCase):
             admitted_outcome_receipts=outcomes,
         )
 
+    def register_transition(self, regs, transition):
+        transition = deepcopy(transition)
+        old_sha = transition.get("trace_sha256")
+        transition["trace_sha256"] = transition_sha(transition)
+        regs = deepcopy(regs)
+        if old_sha is not None:
+            regs["admitted_transition_traces"].pop(old_sha, None)
+        regs["admitted_transition_traces"][transition["trace_sha256"]] = transition
+        return transition, regs
+
     def rebind_packet(self, prototype, transition, training, regs, packet):
         prototype = deepcopy(prototype)
         transition = deepcopy(transition)
@@ -121,10 +137,10 @@ class GateTests(unittest.TestCase):
         prototype["control_packet_identity_sha256"] = packet_sha
         rebound_prototype_sha = prototype_sha(prototype)
         transition["jspace_input_vector_ref"] = f"sha256:{packet_sha}"
+        transition, regs = self.register_transition(regs, transition)
         training["prototype_trace_sha256"] = rebound_prototype_sha
         training["vector_control_packet_sha256"] = packet_sha
         regs["admitted_prototype_traces"] = {rebound_prototype_sha: prototype}
-        regs["admitted_transition_traces"][transition["trace_sha256"]] = transition
         regs["admitted_training_traces"][training["trace_sha256"]] = training
         regs["admitted_vector_control_packets"] = {packet_sha: packet}
         return prototype, transition, training, regs
@@ -169,6 +185,28 @@ class GateTests(unittest.TestCase):
         poisoned["admitted_training_traces"][forged_training["trace_sha256"]] = forged_training
         with self.assertRaisesRegex(JSpaceDatasetAdmissionError, "PROTOTYPE_TRACE_IDENTITY_MISMATCH"):
             self.admit(transition=transition, training=forged_training, regs=poisoned)
+
+    def test_transition_registry_key_must_match_canonical_trace_material(self):
+        _, transition, training, regs = self.fixtures()
+        exact = transition["trace_sha256"]
+        first = "0" if exact[0] != "0" else "1"
+        forged_key = first + exact[1:]
+        forged_transition = deepcopy(transition)
+        forged_transition["trace_sha256"] = forged_key
+        poisoned = deepcopy(regs)
+        poisoned["admitted_transition_traces"] = {forged_key: forged_transition}
+        with self.assertRaisesRegex(JSpaceDatasetAdmissionError, "TRANSITION_TRACE_IDENTITY_MISMATCH"):
+            self.admit(transition=forged_transition, training=training, regs=poisoned)
+
+    def test_transition_declared_canonicalization_schema_must_match_selected_authority(self):
+        _, transition, training, regs = self.fixtures()
+        forged = deepcopy(transition)
+        forged["canonicalization_schema"] = "OTHER_CANONICALIZER/v1"
+        forged["trace_sha256"] = transition_sha(forged)
+        poisoned = deepcopy(regs)
+        poisoned["admitted_transition_traces"] = {forged["trace_sha256"]: forged}
+        with self.assertRaisesRegex(JSpaceDatasetAdmissionError, "TRANSITION_TRACE_CANONICALIZATION_SCHEMA_MISMATCH"):
+            self.admit(transition=forged, training=training, regs=poisoned)
 
     def test_shared_digest_without_packet_preimage_fails(self):
         _, transition, training, regs = self.fixtures()
@@ -276,9 +314,8 @@ class GateTests(unittest.TestCase):
         forged_transition = deepcopy(transition)
         forged_training = deepcopy(training)
         forged_transition["grid_plan_sha256"] = h("9")
+        forged_transition, regs = self.register_transition(regs, forged_transition)
         forged_training["grid_plan_sha256"] = h("9")
-        regs = deepcopy(regs)
-        regs["admitted_transition_traces"][forged_transition["trace_sha256"]] = forged_transition
         regs["admitted_training_traces"][forged_training["trace_sha256"]] = forged_training
         with self.assertRaisesRegex(JSpaceDatasetAdmissionError, "GRID_PLAN_NOT_ADMITTED"):
             self.admit(transition=forged_transition, training=forged_training, regs=regs)
@@ -321,11 +358,10 @@ class GateTests(unittest.TestCase):
         credited["credit_label"] = "POSITIVE"
         credited_transition = deepcopy(transition)
         credited_transition["credit_label"] = "POSITIVE"
+        credited_transition, regs = self.register_transition(regs, credited_transition)
         receipt = self.bound_outcome(credited, credited_transition)
         credited["outcome_receipt_sha256"] = h("6")
-        regs = deepcopy(regs)
         regs["admitted_training_traces"][credited["trace_sha256"]] = credited
-        regs["admitted_transition_traces"][credited_transition["trace_sha256"]] = credited_transition
         with self.assertRaisesRegex(JSpaceDatasetAdmissionError, "OUTCOME_RECEIPT_IDENTITY_MISMATCH"):
             self.admit(
                 transition=credited_transition,
@@ -340,15 +376,14 @@ class GateTests(unittest.TestCase):
         credited["credit_label"] = "POSITIVE"
         credited_transition = deepcopy(transition)
         credited_transition["credit_label"] = "POSITIVE"
+        credited_transition, regs = self.register_transition(regs, credited_transition)
         receipt = self.bound_outcome(credited, credited_transition)
         claimed = receipt_sha(receipt)
         altered = deepcopy(receipt)
         altered["evidence_note"] = "byte-distinct receipt"
         self.assertNotEqual(receipt_sha(altered), claimed)
         credited["outcome_receipt_sha256"] = claimed
-        regs = deepcopy(regs)
         regs["admitted_training_traces"][credited["trace_sha256"]] = credited
-        regs["admitted_transition_traces"][credited_transition["trace_sha256"]] = credited_transition
         with self.assertRaisesRegex(JSpaceDatasetAdmissionError, "OUTCOME_RECEIPT_IDENTITY_MISMATCH"):
             self.admit(
                 transition=credited_transition,
@@ -398,12 +433,11 @@ class GateTests(unittest.TestCase):
         credited["credit_label"] = "POSITIVE"
         credited_transition = deepcopy(transition)
         credited_transition["credit_label"] = "POSITIVE"
+        credited_transition, regs = self.register_transition(regs, credited_transition)
         exact = self.bound_outcome(credited, credited_transition)
         exact_sha = receipt_sha(exact)
         credited["outcome_receipt_sha256"] = exact_sha
-        regs = deepcopy(regs)
         regs["admitted_training_traces"][credited["trace_sha256"]] = credited
-        regs["admitted_transition_traces"][credited_transition["trace_sha256"]] = credited_transition
 
         with self.assertRaisesRegex(JSpaceDatasetAdmissionError, "OUTCOME_RECEIPT_NOT_ADMITTED"):
             self.admit(transition=credited_transition, training=credited, regs=regs, outcomes={})

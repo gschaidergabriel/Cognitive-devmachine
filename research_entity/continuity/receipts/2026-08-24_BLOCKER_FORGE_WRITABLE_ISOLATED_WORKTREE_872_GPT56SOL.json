@@ -1,0 +1,43 @@
+{
+  "schema": "CLAY_BLOCKER_REPAIR_RECEIPT/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "other",
+  "authority_epoch_observed": "8.72",
+  "mode": "FREE_ONLY",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "canonical_main_at_reentry": "30934024625a510531389f4dcb9c2a758a182f82",
+  "branch": "gpt56sol/forge-writable-worktree-872-reentry-20260824",
+  "source_donor": "PR1577",
+  "observed_blocker": {
+    "runtime_proof_state": "PENDING_SELF_HOSTED_RUNNER",
+    "source_defect": "safe Forge delegates model-authored commands to a bubblewrap namespace whose exact disposable candidate checkout is read-only",
+    "conversion_risk": "ordinary py_compile/tests/builds may require writes inside the disposable checkout and therefore fail before semantic candidate quality can be measured"
+  },
+  "delta": {
+    "file": "tools/run_free_evidence_forge_safe_871.py",
+    "test": "tests/test_forge_disposable_worktree_872.py",
+    "properties": [
+      "only a strict resolved child of FORGE_ROOT is eligible for writable execution",
+      "only the exact /work bind for that disposable child changes from --ro-bind to --bind",
+      "FORGE_ROOT itself and non-disposable paths remain read-only/refused",
+      "unknown donor bubblewrap layout fails closed instead of guessing",
+      "existing argv-only command admission, secret-free environment, network unshare and source binding remain delegated to the canonical executor"
+    ]
+  },
+  "evidence": {
+    "scope": "SOURCE_REENTRY_AND_REGRESSION_DEFINITION_ONLY_PENDING_EXACT_HEAD_EXECUTION",
+    "provider_call": "NONE",
+    "provider_credential_read": "NONE",
+    "paid_fallback": "NONE",
+    "unusual_experiment": "NONE",
+    "whole_entityos_hcu_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "provider_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0
+  },
+  "counterhypothesis": "If evidence-qualified Forge acceptance remains low after exact-current execution with a writable disposable checkout, filesystem writability was not the dominant limiter; inspect measured rejection classes before increasing token volume.",
+  "next_exact_gate": "Execute tests/test_forge_disposable_worktree_872.py plus the existing Forge execution-admission regressions on this exact head, then run the current Forge-to-Distillery runtime witness on the authorized zero-cost runner."
+}

@@ -24,6 +24,15 @@ PROVIDER_ENV_PREFIXES = (
     "OPENROUTER", "TOGETHER",
 )
 PROVIDER_ENV_EXACT = {"HF_TOKEN", "HUGGING_FACE_HUB_TOKEN", "HUGGINGFACE_HUB_TOKEN"}
+QWEN_EFFECTIVE_CHAIN = (
+    "tools/trigger1_local_qwen06_midlayer_causal.sh",
+    "tools/trigger1_local_qwen06_intermediate.sh",
+    "tools/trigger1_local_qwen06_intermediate_execute.py",
+    "tools/trigger1_intermediate_contrastive_protocol.py",
+    "tools/trigger1_intermediate_promotion_bridge.py",
+    "tools/trigger1_jspace_promotion_gate.py",
+    "tools/git_source_identity_v1.py",
+)
 
 
 def run_text(args: list[str], cwd: Path) -> tuple[int, str, str]:
@@ -65,14 +74,16 @@ def build_receipt(repo: Path, output: Path) -> dict[str, Any]:
     runner_os = os.environ.get("RUNNER_OS") or platform.system()
     runner_arch = os.environ.get("RUNNER_ARCH") or platform.machine()
     runner_name = os.environ.get("RUNNER_NAME") or "unknown"
-    qwen_launcher = repo / "tools" / "trigger1_local_qwen06_midlayer_causal.sh"
-    qwen_executor = repo / "tools" / "trigger1_local_qwen06_midlayer_causal_execute.py"
+
+    qwen_sources = {rel: (repo / rel) for rel in QWEN_EFFECTIVE_CHAIN}
+    qwen_source_presence = {rel: path.is_file() for rel, path in qwen_sources.items()}
+    qwen_source_ready = all(qwen_source_presence.values())
     forge_gate = repo / "tools" / "run_go871_forge_distillery_runtime_gate.py"
+
     git_ok = sha_rc == 0 and tree_rc == 0 and status_rc == 0 and bool(source_sha) and bool(source_tree)
     source_clean = status_rc == 0 and dirty_text == ""
     linux_x64 = runner_os.lower() == "linux" and runner_arch.lower() in {"x64", "x86_64", "amd64"}
     qwen_disk_ready = disk_kb >= QWEN_MIN_AVAILABLE_KB
-    qwen_source_ready = qwen_launcher.is_file() and qwen_executor.is_file()
     forge_source_ready = forge_gate.is_file()
     bwrap_path = shutil.which("bwrap")
     python_path = shutil.which("python3")
@@ -122,8 +133,9 @@ def build_receipt(repo: Path, output: Path) -> dict[str, Any]:
             "bwrap_present": bool(bwrap_path),
         },
         "frontier_sources": {
-            "qwen_launcher_present": qwen_launcher.is_file(),
-            "qwen_executor_present": qwen_executor.is_file(),
+            "qwen_effective_chain": list(QWEN_EFFECTIVE_CHAIN),
+            "qwen_effective_chain_presence": qwen_source_presence,
+            "qwen_effective_chain_complete": qwen_source_ready,
             "forge_gate_present": forge_gate.is_file(),
         },
         "credential_fence_observation": {
@@ -144,7 +156,7 @@ def build_receipt(repo: Path, output: Path) -> dict[str, Any]:
             "jspace_model_credit": 0,
             "training_credit": 0,
         },
-        "scope_guard": "This receipt proves only exact-source self-hosted health/readiness observations. It does not prove Forge->Distillery success, model execution, J-Space causality, training readiness, or whole-product PASS.",
+        "scope_guard": "This receipt proves only exact-source self-hosted health/readiness observations. Qwen readiness requires the complete effective strongest-intermediate launcher/executor/protocol/bridge/gate/source-attestation chain, not merely a historical executor file. It does not prove Forge->Distillery success, model execution, J-Space causality, training readiness, or whole-product PASS.",
     }
     output.write_text(json.dumps(payload, indent=2, sort_keys=True, ensure_ascii=False) + "\n", encoding="utf-8")
     return payload

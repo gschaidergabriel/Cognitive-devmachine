@@ -1,0 +1,56 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "authority_epoch": "8.73",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "trigger": "go",
+  "organ": "GPT-5.6-Sol",
+  "canonical_main_observed": "fc45471f0eb61da17191a9f4a5edae7e184a1346",
+  "finding": {
+    "classification": "SOURCE_CONFIRMED_REBUILD_NONDETERMINISM",
+    "statement": "Forge replay identity on current main is stable against observation-envelope mutation, but measured_packet still carries evaluated_at. Two fresh Distillery rebuilds can therefore emit different training-bearing packet bytes/token counts for the same stable measured execution when first observation timestamps differ.",
+    "consumer_search": "No separate measured_packet consumer was found; repository search resolves the helper to the canonical Forge-to-Distillery ingest path.",
+    "parallel_change_guard": "tools/ingest_forge_accepts_into_distillery.py has identical blob 316a2e63b329a2b1c7523c3a5b918349a12dd82f at PR1726 base cc2f4d57a6277e4a4452de9b4f0a7ccc17d4b9cf and current main fc45471f0eb61da17191a9f4a5edae7e184a1346."
+  },
+  "hypothesis": "Removing observation time from the training-bearing measured packet while retaining it as provenance metadata makes replay-equivalent fresh rebuilds byte/token stable without weakening execution identity or measured-evidence conflict detection.",
+  "counterhypothesis": "Removing evaluated_at from CLAY_DISTILLERY_FORGE_EXECUTION_PACKET/v2 could break a separate consumer that treats observation time as measured training evidence.",
+  "counterhypothesis_disposition": "NOT_SUPPORTED_BY_REPOSITORY_SEARCH; no separate measured_packet consumer was found. Runtime execution is still required before component promotion.",
+  "delta": {
+    "source_blob": "4c6db308a92c34f0a2e12f6735fbca658f7cb642",
+    "test_blob": "67d6f562d1caa5622ce729518358e3a430ac015d",
+    "source": "tools/ingest_forge_accepts_into_distillery.py",
+    "test": "tests/test_forge_distillery_rebuild_stable_packet_873.py",
+    "semantics": [
+      "evaluated_at removed from training-bearing measured_packet",
+      "forge_evaluated_at_observation_only retained in packet metadata",
+      "measured_evidence_identity wraps the same replay-stable measured_packet preimage",
+      "fresh replay-equivalent rebuilds are defined to require identical packet bytes, ids, digests and accepted token counts"
+    ]
+  },
+  "go_tracks": {
+    "track_a": "ADVANCED: Distillery training-packet rebuild determinism is strengthened on the canonical Forge-to-Distillery path.",
+    "track_b": "ADVANCED: separates stable measured evidence from volatile observation-envelope metadata without creating a second state/effect authority.",
+    "track_c": "ADVANCED_AT_DATASET_SAFETY_SCOPE: future J-Space/training data cannot vary solely because an equivalent execution was first observed at another timestamp; model/J-Space/training credit remains zero."
+  },
+  "coordination": {
+    "source_donor": "gschaidergabriel/clay-global-research-entity#1726",
+    "failed_runtime_carrier_observed": "gschaidergabriel/clay-global-research-entity#1724 run 32753936480 FAILURE",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_interventions_executed": 0
+  },
+  "evidence_scope": "SOURCE_PLUS_REGRESSION_DEFINITION_ONLY",
+  "exact_head_test_execution_observed": false,
+  "network_or_provider_execution": false,
+  "paid_or_together_execution": false,
+  "provider_runtime_credit": 0,
+  "entityos_hcu_whole_runtime_credit": 0,
+  "hcu_full_runtime_credit": 0,
+  "jspace_model_runtime_credit": 0,
+  "training_credit": 0,
+  "whole_product_pass": false,
+  "authority_surface_note": "SUPERVISOR_INBOX selects 8.73 while BOOTSTRAP_MINIMAL and PROGRAM_STATE remain at 8.72 on the observed main; do not downgrade authority. Synchronization remains a separate current-facing documentation/control-plane task.",
+  "artefact_readme": "SYNC_PENDING_CONCURRENT_CURRENT_FACING_DOC; do not overwrite the rapidly advancing README from a stale whole-file snapshot.",
+  "next_exact_gate": "Execute the focused rebuild-stability regression on an explicitly admitted zero-cost exact-current source surface; require observation timestamp/narration mutation to preserve packet bytes/tokens and require measured-evidence mutation to remain fail-closed."
+}

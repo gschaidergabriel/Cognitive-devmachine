@@ -1,0 +1,64 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "date": "2026-08-25",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol / ChatGPT project organ",
+  "authority_epoch": "8.73",
+  "program": "ENTITYOS_HCU",
+  "stage": "ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "execution_mode": "FREE_ONLY",
+  "observed_canonical_main_before_work": "fc45471f0eb61da17191a9f4a5edae7e184a1346",
+  "authority_reentry": {
+    "supervisor_inbox_schema": "8.73",
+    "selected_steering": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_73.json",
+    "active_owner_authority": "governance/CLAY_DUAL_MACHINE_EXECUTION_AUTHORITY_2026-08-24.md"
+  },
+  "finding": {
+    "classification": "SOURCE_CONFIRMED_REPLAY_IDENTITY_FUSION_REGRESSION",
+    "statement": "The stronger main fusion preserved timestamp/narration replay stability but accidentally reintroduced delta_id into CLAY_FORGE_EXECUTION_REPLAY_IDENTITY/v1 and left delta_id inside CLAY_FORGE_MEASURED_EVIDENCE_IDENTITY/v1. Because delta_id names the candidate/evaluation envelope rather than a new measured execution, renaming only delta_id changes both digests and can make the same measured execution independently admissible, permitting duplicate Distillery packets/tokens.",
+    "donor_evidence": "Closed PR #1687 explicitly excluded delta_id and included test_delta_id_only_replay_is_duplicate; that unique regression was not preserved in tests/test_forge_distillery_replay_identity_873.py when the stronger main fusion was created.",
+    "legacy_gap": "The main legacy replay fence also keyed on delta_id, so a renamed envelope could bypass the fail-closed LEGACY_REPLAY_IDENTITY_UNRESOLVED collision check."
+  },
+  "hypothesis": "Treating delta_id as volatile envelope identity while binding execution/provenance/targets/admission/metric prevents nonsemantic replay token inflation without collapsing genuinely distinct execution evidence.",
+  "counterhypothesis": "delta_id may safely distinguish independent measurements.",
+  "counterhypothesis_disposition": "REJECTED_AT_CURRENT_SOURCE_CONTRACT: the original replay-stable donor explicitly classifies delta_id as candidate/evaluation envelope identity, while measured execution identity is already bound by worker/source/evaluation heads, target blobs, execution admission, provider/model/role and metric.",
+  "delta": {
+    "branch": "gpt56sol/go873-delta-id-replay-regression-20260825",
+    "source_commit": "18587b5feeff113690d31144eaf68b5a86a8f2bf",
+    "test_commit": "bfb22603ca9eaea3898e9c4e70139cf1501be342",
+    "source": "tools/ingest_forge_accepts_into_distillery.py",
+    "test": "tests/test_forge_distillery_delta_id_replay_873.py",
+    "changes": [
+      "exclude delta_id from CLAY_FORGE_EXECUTION_REPLAY_IDENTITY/v1",
+      "exclude delta_id from CLAY_FORGE_MEASURED_EVIDENCE_IDENTITY/v1",
+      "make legacy replay collision conservative across delta_id renaming",
+      "restore explicit delta-id-only semantic replay +0 regression"
+    ]
+  },
+  "tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED: closes a duplicate-packet/token path in the canonical Forge-to-Distillery admission implementation.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED: sharpens the reusable causal identity boundary between execution evidence and transport/evaluation envelope identity.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_FREE_ONLY_LOCAL_08B_READINESS": "ADVANCED_AT_DATASET_SAFETY_SCOPE: prevents envelope-only rekeying from inflating future training evidence; J-Space/model/training credit remains zero."
+  },
+  "coordination": {
+    "open_overlap_search": "No open PR specifically implementing delta_id replay stability was found; PR #1724 is CI-only for the existing replay gate and still states the live semantic replay witness remains open.",
+    "retained_hcu_donor": "gschaidergabriel/clay-global-research-entity#1263",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_interventions_executed": 0
+  },
+  "evidence_scope": "SOURCE_PLUS_REGRESSION_DEFINITION_ONLY_UNTIL_EXACT_BRANCH_EXECUTION",
+  "network_or_provider_execution": false,
+  "paid_or_together_execution": false,
+  "credits": {
+    "whole_entityos_hcu_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "provider_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Execute the delta-id replay regression plus tests/test_forge_distillery_replay_identity_873.py on the exact branch head; require delta-id/timestamp/narration-only rekey to mint +0 packets/+0 tokens, measured-evidence mutation to fail closed, and genuinely different execution identity to remain separately admissible. Then fuse if current main remains nonduplicate and extend the live promotion witness to semantic replay rather than byte-identical replay.",
+  "epistemic_boundary": "FACT_UNKNOWN + METHOD_PRESENT != FACT_PRESENT"
+}

@@ -1,0 +1,60 @@
+{
+  "schema": "clay-research-receipt/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "forschungsrun 1 / Trigger-1",
+  "authority_epoch": "8.72",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "source_base": "349f3ee44a431a038b944ea12a24461464e4e25d",
+  "material_finding": {
+    "classification": "SCIENTIFIC_HARD_BLOCKER_READOUT_CIRCULARITY",
+    "observed_old_construction": "The local Qwen3-0.6B fastpath constructed its steering vector as lm_head(A)-mean(lm_head(B),lm_head(C)), normalized it, injected it at model.model.norm:output:last_token immediately before the LM head, and judged success using the corresponding A-vs-B/C output logits.",
+    "causal_problem": "A positive A-vs-B/C logit shift is therefore substantially algebraically coupled to the intervention construction and readout geometry. It can establish a direct readout actuator, but cannot by itself establish an upstream latent/J-Space causal mechanism.",
+    "counterhypothesis": "Final-norm output-embedding steering may still be a useful bounded actuator component. The repair does not deny that component behavior; it prevents such behavior from satisfying the stronger Trigger-1 causal promotion boundary."
+  },
+  "repair": {
+    "promotion_gate": "tools/trigger1_jspace_promotion_gate_anticircular_872.py",
+    "local_executor": "tools/trigger1_local_qwen06_activation_api_execute_anticircular.py",
+    "regression": "tests/test_trigger1_anticircularity_gate_872.py",
+    "entrypoints_rewired": [
+      "tools/trigger1_local_qwen06_activation_api.sh",
+      "tools/trigger1_jspace_research.sh"
+    ],
+    "invariants": [
+      "local PyTorch promotion fails closed if the vector is derived from output-embedding/lm_head rows",
+      "local PyTorch promotion fails closed for post-final-norm/readout-adjacent injection",
+      "local PyTorch promotion requires at least one downstream transformer layer before readout",
+      "local PyTorch promotion requires a vector-derivation receipt",
+      "new local Qwen probe is deterministic and weight-independent",
+      "gain/sign are selected on calibration only",
+      "six matched controls and disjoint holdout remain required",
+      "canonical, whole EntityOS/HCU, J-Space model and training credit remain zero"
+    ]
+  },
+  "component_evidence": {
+    "python_compile": "PASS",
+    "anti_circularity_regression": "4/4 PASS",
+    "scope": "SOURCE_EQUIVALENT_COMPONENT_LOGIC_ONLY",
+    "exact_project_qwen_runtime_executed_by_this_organ": false,
+    "provider_network_call_executed_by_this_organ": false,
+    "external_llm_credentials_read": false,
+    "unusual_experiment_executed": false
+  },
+  "coordination": {
+    "overlapping_open_pr_for_same_anti_circularity_boundary_found_before_write": false,
+    "runtime_reconciliation_request_pr": 1578,
+    "runtime_reconciliation_run_id_observed": 32740620389,
+    "runtime_reconciliation_state_when_checked": "QUEUED_NO_STEPS",
+    "interpretation": "Queued control-plane state is not runtime evidence."
+  },
+  "credits": {
+    "whole_entityos_hcu_runtime_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_action": "On an authorized zero-cost exact-current Ubuntu surface, execute the rewired local Qwen3-0.6B fastpath and require the v3 anti-circular promotion gate. Treat a scientific negative as valid evidence; do not restore the readout-circular construction to obtain a positive result."
+}

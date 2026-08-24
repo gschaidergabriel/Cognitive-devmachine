@@ -187,6 +187,29 @@ def bump(con: sqlite3.Connection, key: str, delta: int) -> None:
     )
 
 
+def unresolved_legacy_replay(con: sqlite3.Connection, row: dict) -> bool:
+    """Fail closed when a pre-migration row cannot be assigned the new identity.
+
+    Legacy rows do not retain provider/model/role, target bytes, admission digest or
+    metric, so their exact replay identity cannot be reconstructed from the database
+    alone. If an incoming evaluation matches every stable identity field that the old
+    table *does* retain, admitting it as fresh could inflate dataset credit. Such an
+    ambiguous replay is blocked until separately reconciled.
+    """
+    return con.execute(
+        "SELECT 1 FROM forge_execution_ingest "
+        "WHERE execution_replay_identity_sha256 IS NULL "
+        "AND COALESCE(delta_id,'')=? AND worker_sha=? "
+        "AND source_repo_head=? AND evaluation_repo_head=? LIMIT 1",
+        (
+            str(row.get("delta_id") or ""),
+            row["worker_sha"],
+            row["source_repo_head"],
+            row["evaluation_repo_head"],
+        ),
+    ).fetchone() is not None
+
+
 def admit_one(con: sqlite3.Connection, row: dict) -> tuple[bool, str, str | None]:
     ok, reason = admission_reason(row)
     if not ok:
@@ -207,6 +230,8 @@ def admit_one(con: sqlite3.Connection, row: dict) -> tuple[bool, str, str | None
         if existing_eval_sha == eval_sha or not existing_measured_sha or existing_measured_sha == measured_sha:
             return False, "DUPLICATE", None
         return False, "REPLAY_IDENTITY_CONFLICT", None
+    if unresolved_legacy_replay(con, row):
+        return False, "LEGACY_REPLAY_IDENTITY_UNRESOLVED", None
 
     packet = measured_packet(row)
     text = canonical_json(packet)

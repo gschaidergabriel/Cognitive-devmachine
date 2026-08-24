@@ -1,0 +1,81 @@
+{
+  "schema": "ENTITYOS_HCU_FREE_SWARM_PROVIDER_ADMISSION/v1",
+  "authority_epoch": "8.67",
+  "mode": "FREE_ONLY",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "status": "FAIL_CLOSED_NO_PROVIDER_ADMITTED",
+  "admission_boundary": "BEFORE_SECRET_OR_KEY_LOOKUP_AND_BEFORE_NETWORK_IO",
+  "default_cost_class": "UNKNOWN",
+  "positive_admission_requires": [
+    "cost_class=FREE",
+    "current_authority_epoch_match",
+    "exact_endpoint_scope",
+    "VERIFIED_ZERO_MONETARY_COST evidence",
+    "nonempty_primary_or_authoritative_sources",
+    "unexpired valid_until"
+  ],
+  "providers": {
+    "groq": {
+      "cost_class": "UNKNOWN",
+      "endpoints": [
+        "https://api.groq.com/openai/v1/chat/completions",
+        "https://api.groq.com/openai/v1/models"
+      ],
+      "cost_evidence": {
+        "status": "NOT_VERIFIED_FOR_CURRENT_ACCOUNT_AND_ENDPOINT_SCOPE",
+        "checked_at": null,
+        "valid_until": null,
+        "sources": [],
+        "scope": "CURRENT_CONNECTED_ACCOUNT_AND_DECLARED_ENDPOINTS"
+      },
+      "secret_sources": [
+        "research_entity/private/GROQ_API.env"
+      ]
+    },
+    "mistral": {
+      "cost_class": "UNKNOWN",
+      "endpoints": [
+        "https://api.mistral.ai/v1/chat/completions",
+        "https://api.mistral.ai/v1/models"
+      ],
+      "cost_evidence": {
+        "status": "NOT_VERIFIED_FOR_CURRENT_ACCOUNT_AND_ENDPOINT_SCOPE",
+        "checked_at": null,
+        "valid_until": null,
+        "sources": [],
+        "scope": "CURRENT_CONNECTED_ACCOUNT_AND_DECLARED_ENDPOINTS"
+      },
+      "secret_sources": []
+    },
+    "nvidia": {
+      "cost_class": "UNKNOWN",
+      "endpoints": [
+        "https://integrate.api.nvidia.com/v1/chat/completions",
+        "https://integrate.api.nvidia.com/v1/models"
+      ],
+      "cost_evidence": {
+        "status": "NOT_VERIFIED_FOR_CURRENT_ACCOUNT_AND_ENDPOINT_SCOPE",
+        "checked_at": null,
+        "valid_until": null,
+        "sources": [],
+        "scope": "CURRENT_CONNECTED_ACCOUNT_AND_DECLARED_ENDPOINTS"
+      },
+      "secret_sources": []
+    }
+  },
+  "credit_boundary": {
+    "provider_runtime_credit": 0,
+    "entityos_whole_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "notes": [
+    "This control-plane object does not classify any provider as FREE merely because a key exists or an environment attestation flag is set.",
+    "PAID, SUBSCRIPTION, UNKNOWN, malformed, stale, mismatched-endpoint, or authority-drifted records remain non-admitted before provider credential lookup and provider network I/O.",
+    "Secret source paths are metadata only and are emitted to the supervisor only after the same provider record has passed typed FREE admission.",
+    "Shared multi-provider secret files are intentionally not admitted by default because loading one could disclose credentials for a blocked provider before its provider-level admission."
+  ]
+}

@@ -320,7 +320,7 @@ def candidate_execution_manifest(row: Any, proposal: dict[str, Any], cwd: Path) 
         "evaluation_head": evaluation_head if evaluation_head != "UNKNOWN" else None,
         "source_identity_bound": source_identity_bound,
         "decisions": decisions,
-        "all_commands_admitted": all(bool(d["admitted"]) for d in decisions),
+        "all_commands_admitted": bool(decisions) and all(bool(d["admitted"]) for d in decisions),
         "backend": execution_backend_status(cwd),
         "candidate_is_canonical_truth": False,
     }

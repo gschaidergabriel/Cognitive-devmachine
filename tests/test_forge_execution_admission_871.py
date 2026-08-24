@@ -106,6 +106,18 @@ class ForgeExecutionAdmission871(unittest.TestCase):
         self.assertEqual(result["rc"], 126)
         self.assertIn("NO_ISOLATED_EXECUTOR", result["stderr"])
 
+    def test_empty_command_set_is_not_admitted(self):
+        row = {"repo_head": "1" * 40, "candidate_hash": "c" * 64}
+        proposal = {"test_commands": [], "negative_test_commands": []}
+        fake_git = mock.Mock(stdout="3" * 40)
+        with (
+            mock.patch.object(f.subprocess, "run", return_value=fake_git),
+            mock.patch.object(f, "execution_backend_status", return_value={"admitted": True}),
+        ):
+            manifest = f.candidate_execution_manifest(row, proposal, ROOT)
+        self.assertEqual([], manifest["decisions"])
+        self.assertFalse(manifest["all_commands_admitted"])
+
     def test_execution_manifest_uses_worker_source_not_moving_checkout(self):
         source_head = "1" * 40
         source_tree = "2" * 40

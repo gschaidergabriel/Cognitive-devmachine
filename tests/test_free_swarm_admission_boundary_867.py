@@ -23,12 +23,13 @@ import run_research_distillery_entry as distillery_entry
 
 SECRET_ENV_NAMES = {
     "GROQ_API_KEY", "GROQ_API_KEYS", "GROQ2_API_KEY", "GROQ3_API_KEY",
+    "HF_TOKEN",
     "MISTRAL_API_KEY", "MISTRAL_API_KEYS", "MISTRAL2_API_KEY", "MISTRAL3_API_KEY",
     "NVIDIA_API_KEY", "NVIDIA_API_KEYS", "NVIDIA_NIM_API_KEY", "NGC_API_KEY",
     "NVIDIA2_API_KEY", "NVIDIA3_API_KEY", "OPENROUTER_API_KEY",
 }
 
-PROVIDERS=("groq","mistral","nvidia","openrouter")
+PROVIDERS=("groq","huggingface","mistral","nvidia","openrouter")
 
 
 def _authority(root: Path, epoch: str = "8.68") -> Path:
@@ -82,6 +83,7 @@ def _mixed_admission(root: Path, epoch: str = "8.68") -> Path:
         "source": "ENTITYOS_HCU_CONTROL_PLANE",
         "providers": {
             "groq": {"admitted": True, "cost_class": "FREE", "evidence_ref": "test:groq:free"},
+            "huggingface": {"admitted": False, "cost_class": "UNKNOWN", "evidence_ref": "test:huggingface:unknown"},
             "mistral": {"admitted": False, "cost_class": "UNKNOWN", "evidence_ref": "test:mistral:unknown"},
             "nvidia": {"admitted": False, "cost_class": "UNKNOWN", "evidence_ref": "test:nvidia:unknown"},
             "openrouter": {"admitted": False, "cost_class": "UNKNOWN", "evidence_ref": "test:openrouter:unknown"},
@@ -214,6 +216,10 @@ class FreeProviderAdmissionBoundaryTests(unittest.TestCase):
         self.assertIn("openrouter", admission_mod.ALLOWED_PROVIDERS)
         self.assertFalse(admission_mod.provider_is_admitted_free("openrouter"))
 
+    def test_huggingface_is_in_typed_authority_and_currently_blocked(self) -> None:
+        self.assertIn("huggingface", admission_mod.ALLOWED_PROVIDERS)
+        self.assertFalse(admission_mod.provider_is_admitted_free("huggingface"))
+
     def test_collect_keys_ignores_caller_forged_admission(self) -> None:
         with tempfile.TemporaryDirectory() as td:
             root = Path(td)
@@ -239,6 +245,7 @@ class FreeProviderAdmissionBoundaryTests(unittest.TestCase):
                 "CLAY_FREE_ONLY_ATTESTED": "1",
                 "CLAY_GROQ_FREE_ATTESTED": "1",
                 "GROQ_API_KEY": "g_fake",
+                "HF_TOKEN": "hf_blocked_secret",
                 "NVIDIA_API_KEY": "n_blocked_secret",
                 "OPENROUTER_API_KEY": "or_blocked_secret",
             })
@@ -246,6 +253,7 @@ class FreeProviderAdmissionBoundaryTests(unittest.TestCase):
             with p_root, p_adm, p_inbox, mock.patch.object(base.os, "environ", env):
                 keys = base.collect_keys(base.PROVIDERS[0])
             self.assertEqual(keys, ["g_fake"])
+            self.assertNotIn("HF_TOKEN", env.secret_reads)
             self.assertNotIn("NVIDIA_API_KEY", env.secret_reads)
             self.assertNotIn("OPENROUTER_API_KEY", env.secret_reads)
 

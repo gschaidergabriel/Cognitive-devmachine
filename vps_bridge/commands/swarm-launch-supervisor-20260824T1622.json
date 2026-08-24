@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v4",
+  "command_id": "swarm-launch-supervisor-20260824T1622",
+  "op": "exec",
+  "cwd": "/workspace/clay-global-research-entity",
+  "timeout_seconds": 60,
+  "command": "set -euo pipefail; mkdir -p /artifacts/clay-entityos-swarm; PIDF=/artifacts/clay-entityos-swarm/supervisor.pid; if [[ -s $PIDF ]] && kill -0 $(cat $PIDF) 2>/dev/null; then echo SUPERVISOR_ALREADY_RUNNING pid=$(cat $PIDF); else nohup bash tools/run_24h_entityos_swarm_supervisor.sh >/artifacts/clay-entityos-swarm/supervisor.log 2>&1 </dev/null & P=$!; echo $P >$PIDF; sleep 2; kill -0 $P; echo SUPERVISOR_STARTED pid=$P; fi; echo '--- process ---'; ps -o pid,etime,cmd -p $(cat $PIDF); echo '--- status ---'; cat /artifacts/clay-entityos-swarm/SUPERVISOR.json 2>/dev/null || true; echo '--- log ---'; tail -n 20 /artifacts/clay-entityos-swarm/supervisor.log 2>/dev/null || true"
+}

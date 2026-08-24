@@ -1,0 +1,485 @@
+HEAD=e2048367e899e2b9acc39e3022f18e7d1b367247
+--- PREFLIGHT ---
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/sda1       193G   36G  157G  19% /workspace
+/dev/sda1       193G   36G  157G  19% /cache
+/dev/sda1       193G   36G  157G  19% /artifacts
+               total        used        free      shared  buff/cache   available
+Mem:            15Gi       5.5Gi       5.2Gi       1.8Mi       5.3Gi        10Gi
+Swap:             0B          0B          0B
+--- ADMISSION ---
+{"admitted_free_providers":["groq","mistral","nvidia","openrouter"],"authority_epoch":"8.71","ok":true,"providers":{"groq":{"admitted":true,"cost_class":"FREE","evidence_ref":"governance/FREE_LANE_ECONOMIC_PROVENANCE_2026-08-24.json#groq"},"mistral":{"admitted":true,"cost_class":"FREE","evidence_ref":"governance/FREE_LANE_ECONOMIC_PROVENANCE_2026-08-24.json#mistral"},"nvidia":{"admitted":true,"cost_class":"FREE","evidence_ref":"governance/FREE_LANE_ECONOMIC_PROVENANCE_2026-08-24.json#nvidia"},"openrouter":{"admitted":true,"cost_class":"FREE","evidence_ref":"governance/FREE_LANE_ECONOMIC_PROVENANCE_2026-08-24.json#openrouter"}},"schema":"ENTITYOS_HCU_FREE_PROVIDER_ADMISSION_STATUS/v1","steering":"research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_71.json"}
+--- COMPILE ---
+COMPILE_PASS
+--- STOP EXACT LEGACY/FABRIC PROCESSES ---
+TERM 192607 bash tools/run_6000_free_swarm_supervisor.sh
+TERM 195117 python3 /workspace/clay-global-research-entity/tools/run_6000_free_swarm_fast.py --logical-workers 6000
+--- START 6000 SUPERVISOR WITH ALL DISCOVERABLE FREE CREDENTIALS ---
+SUPERVISOR_PID=200450
+--- CREDENTIAL POOL ---
+{
+  "schema": "CLAY_FREE_SWARM_CREDENTIAL_POOL/v1",
+  "providers": {
+    "groq": {
+      "keys": 1,
+      "fingerprints": [
+        "af23fe2393"
+      ]
+    },
+    "mistral": {
+      "keys": 0,
+      "fingerprints": []
+    },
+    "nvidia": {
+      "keys": 1,
+      "fingerprints": [
+        "e498d9744e"
+      ]
+    },
+    "openrouter": {
+      "keys": 1,
+      "fingerprints": [
+        "36e87c9182"
+      ]
+    }
+  },
+  "secret_values_logged": false
+}
+--- PROCESSES ---
+  19807    02:31:50  1.4  0.3 python3 /workspace/clay-global-research-entity/free swarm/evaluate.py --repo /workspace/clay-global-research-entity --artifacts /artifacts/clay-entityos-swarm --watch --hours 24 --interval-seconds 60
+  19841    02:31:19  0.8  0.2 python3 /workspace/clay-global-research-entity/tools/run_research_distillery_local.py --hours 24 --sleep-seconds 3
+  19844    02:31:19  1.3  0.6 python3 /workspace/clay-global-research-entity/tools/run_free_evidence_forge.py --hours 24 --sleep-seconds 20 --discovery-parallel 8 --local-parallel 4 --e2b-parallel 20
+ 195117       04:27  2.1  0.5 python3 /workspace/clay-global-research-entity/tools/run_6000_free_swarm_fast.py --logical-workers 6000 --hours 23.923333333333332 --output-dir /artifacts/clay-entityos-swarm/active-fabric6000-v2-20260824T135526Z
+ 200450       00:02 17.0  0.0 bash tools/run_6000_free_swarm_supervisor.sh
+--- SUPERVISOR STATUS ---
+{
+  "schema": "CLAY_6000_SWARM_SUPERVISOR/v3",
+  "observed_at": "2026-08-24T13:59:53.287390+00:00",
+  "remaining_seconds": 86399,
+  "logical_workers_requested": 6000,
+  "http_thread_pool": 512,
+  "provider_admission": {
+    "schema": "ENTITYOS_HCU_FREE_PROVIDER_ADMISSION_STATUS/v1",
+    "ok": true,
+    "authority_epoch": "8.71",
+    "steering": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_71.json",
+    "admitted_free_providers": [
+      "groq",
+      "mistral",
+      "nvidia",
+      "openrouter"
+    ],
+    "providers": {
+      "groq": {
+        "admitted": true,
+        "cost_class": "FREE",
+        "evidence_ref": "governance/FREE_LANE_ECONOMIC_PROVENANCE_2026-08-24.json#groq"
+      },
+      "mistral": {
+        "admitted": true,
+        "cost_class": "FREE",
+        "evidence_ref": "governance/FREE_LANE_ECONOMIC_PROVENANCE_2026-08-24.json#mistral"
+      },
+      "nvidia": {
+        "admitted": true,
+        "cost_class": "FREE",
+        "evidence_ref": "governance/FREE_LANE_ECONOMIC_PROVENANCE_2026-08-24.json#nvidia"
+      },
+      "openrouter": {
+        "admitted": true,
+        "cost_class": "FREE",
+        "evidence_ref": "governance/FREE_LANE_ECONOMIC_PROVENANCE_2026-08-24.json#openrouter"
+      }
+    }
+  },
+  "fabric_admission_binding": "OK:b4070a2745a22fe15113824917420757d9884699c3e9e301ae57d4c986a5a2ca",
+  "fabric_running": true,
+  "distillery_running": true,
+  "forge_running": true,
+  "dashboard_running": true,
+  "local_model_ready": false,
+  "fabric": {
+    "schema": "CLAY_6000_FREE_SWARM_STATUS/v2",
+    "updated_at": "2026-08-24T13:59:46.689446+00:00",
+    "remaining_seconds": 85923,
+    "logical_workers_configured": 6000,
+    "logical_workers_waiting": 5966,
+    "logical_workers_inflight": 34,
+    "actual_model_calls_inflight": 34,
+    "actual_call_tasks_alive": 34,
+    "adaptive_provider_target_inflight": 35,
+    "provider_hard_ceiling_sum": 400,
+    "target_utilization": 0.9714285714285714,
+    "work_stealing": true,
+    "provider_assignments": {
+      "nvidia": 149,
+      "openrouter": 8,
+      "groq": 5
+    },
+    "role_assignments": {
+      "ARCHITECT": 14,
+      "FALSIFIER": 14,
+      "CLAYCODE_FORGE": 14,
+      "HCU_CAUSAL": 14,
+      "COGNITION": 14,
+      "MEMORY_JSPACE": 14,
+      "RUNTIME": 13,
+      "EXTERNAL_HARVEST": 13,
+      "EXPERIMENT_DESIGN": 13,
+      "SECURITY": 13,
+      "REVIEWER": 13,
+      "SYNTHESIZER": 13
+    },
+    "successful_calls": 101,
+    "providers": {
+      "groq": {
+        "keys_total": 1,
+        "keys_enabled": 1,
+        "models_enabled": [
+          "openai/gpt-oss-120b",
+          "qwen/qwen3.6-27b",
+          "openai/gpt-oss-20b"
+        ],
+        "target_concurrency": 1,
+        "max_concurrency": 128,
+        "active": 1,
+        "cooldown_seconds": 0.0,
+        "requests": 5,
+        "successes": 0,
+        "rate_limits": 0,
+        "errors": 4,
+        "accelerator": "v2",
+        "healthy_ramp_windows": 0
+      },
+      "nvidia": {
+        "keys_total": 1,
+        "keys_enabled": 1,
+        "models_enabled": [
+          "mistralai/mistral-nemotron",
+          "nvidia/nemotron-3-super-120b-a12b",
+          "nvidia/nemotron-3.5-lightning-30b-a3b",
+          "nvidia/nemotron-3-ultra-550b-a55b",
+          "nvidia/llama-3.3-nemotron-super-49b-v1",
+          "nvidia/ising-calibration-1.5-31b",
+          "openai/gpt-oss-20b",
+          "nvidia/nemotron-3-nano-30b-a3b",
+          "meta/muse-glimmer-30b",
+          "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+          "meta/llama-3.1-70b-instruct",
+          "meta/llama-3.3-70b-instruct",
+          "meta/llama-3.2-90b-vision-instruct",
+          "nvidia/nemotron-nano-12b-v2-vl",
+          "nvidia/llama-3.3-nemotron-super-49b-v1.5",
+          "deepseek-ai/deepseek-v4-flash-0731"
+        ],
+        "target_concurrency": 33,
+        "max_concurrency": 256,
+        "active": 33,
+        "cooldown_seconds": 0.0,
+        "requests": 149,
+        "successes": 101,
+        "rate_limits": 0,
+        "errors": 15,
+        "accelerator": "v2",
+        "healthy_ramp_windows": 0
+      },
+      "openrouter": {
+        "keys_total": 1,
+        "keys_enabled": 1,
+        "models_enabled": [
+          "openrouter/free"
+        ],
+        "target_concurrency": 1,
+        "max_concurrency": 16,
+        "active": 0,
+        "cooldown_seconds": 21.13,
+        "requests": 8,
+        "successes": 0,
+        "rate_limits": 8,
+        "errors": 0,
+        "accelerator": "v2",
+        "healthy_ramp_windows": 0
+      }
+    },
+    "shared_quota": {
+      "schema": "CLAY_SHARED_PROVIDER_BUDGET/v1",
+      "generated_at": "2026-08-24T13:59:46.690238+00:00",
+      "providers": {
+        "arxiv": {
+          "max_inflight": 1,
+          "active_leases": 0,
+          "min_interval_s": 3.1,
+          "cooldown_seconds": 0.0,
+          "total_requests": 4,
+          "total_success": 2,
+          "total_429": 0,
+          "total_errors": 0,
+          "last_status": "200",
+          "last_observed_at": "2026-08-24T10:45:36.625212+00:00"
+        },
+        "crossref": {
+          "max_inflight": 1,
+          "active_leases": 0,
+          "min_interval_s": 1.0,
+          "cooldown_seconds": 0.0,
+          "total_requests": 355,
+          "total_success": 351,
+          "total_429": 4,
+          "total_errors": 0,
+          "last_status": "200",
+          "last_observed_at": "2026-08-24T13:59:12.418851+00:00"
+        },
+        "exa": {
+          "max_inflight": 2,
+          "active_leases": 0,
+          "min_interval_s": 0.5,
+          "cooldown_seconds": 0.0,
+          "total_requests": 2,
+          "total_success": 2,
+          "total_429": 0,
+          "total_errors": 0,
+          "last_status": "200",
+          "last_observed_at": "2026-08-24T10:45:46.265750+00:00"
+        },
+        "github": {
+          "max_inflight": 1,
+          "active_leases": 0,
+          "min_interval_s": 1.0,
+          "cooldown_seconds": 0.0,
+          "total_requests": 359,
+          "total_success": 317,
+          "total_429": 0,
+          "total_errors": 42,
+          "last_status": "200",
+          "last_observed_at": "2026-08-24T13:59:12.199094+00:00"
+        },
+        "groq": {
+          "max_inflight": 128,
+          "active_leases": 0,
+          "min_interval_s": 0.0,
+          "cooldown_seconds": 1048.2321391105652,
+          "total_requests": 83,
+          "total_success": 54,
+          "total_429": 29,
+          "total_errors": 11,
+          "last_status": "GATE_TIMEOUT",
+          "last_observed_at": "2026-08-24T13:59:29.222483+00:00"
+        },
+        "huggingface_hub": {
+          "max_inflight": 4,
+          "active_leases": 0,
+          "min_interval_s": 0.25,
+          "cooldown_seconds": 0.0,
+          "total_requests": 355,
+          "total_success": 355,
+          "total_429": 0,
+          "total_errors": 0,
+          "last_status": "200",
+          "last_observed_at": "2026-08-24T13:59:11.354016+00:00"
+        },
+        "nvidia": {
+          "max_inflight": 256,
+          "active_leases": 33,
+          "min_interval_s": 0.0,
+          "cooldown_seconds": 0.0,
+          "total_requests": 920,
+          "total_success": 679,
+          "total_429": 1,
+          "total_errors": 207,
+          "last_status": "GATE_TIMEOUT",
+          "last_observed_at": "2026-08-24T13:59:45.173165+00:00"
+        },
+        "openalex": {
+          "max_inflight": 2,
+          "active_leases": 0,
+          "min_interval_s": 0.25,
+          "cooldown_seconds": 0.0,
+          "total_requests": 355,
+          "total_success": 9,
+          "total_429": 0,
+          "total_errors": 346,
+          "last_status": "400",
+          "last_observed_at": "2026-08-24T13:59:11.755055+00:00"
+        },
+        "openrouter": {
+          "max_inflight": 16,
+          "active_leases": 0,
+          "min_interval_s": 0.5,
+          "cooldown_seconds": 0.0,
+          "total_requests": 87,
+          "total_success": 70,
+          "total_429": 16,
+          "total_errors": 0,
+          "last_status": "429",
+          "last_observed_at": "2026-08-24T13:58:45.540434+00:00"
+        },
+        "semantic_scholar": {
+          "max_inflight": 1,
+          "active_leases": 0,
+          "min_interval_s": 1.0,
+          "cooldown_seconds": 0.0,
+          "total_requests": 233,
+          "total_success": 8,
+          "total_429": 225,
+          "total_errors": 122,
+          "last_status": "429",
+          "last_observed_at": "2026-08-24T13:59:21.327236+00:00"
+        },
+        "tavily": {
+          "max_inflight": 2,
+          "active_leases": 0,
+          "min_interval_s": 0.5,
+          "cooldown_seconds": 0.0,
+          "total_requests": 6,
+          "total_success": 6,
+          "total_429": 0,
+          "total_errors": 0,
+          "last_status": "200",
+          "last_observed_at": "2026-08-24T10:45:43.721169+00:00"
+        }
+      }
+    },
+    "meaning": "6000=logical research organs in one global queue; actual HTTP inference concurrency is work-stolen across every healthy admitted FREE provider"
+  },
+  "shared_quota": {
+    "schema": "CLAY_SHARED_PROVIDER_BUDGET/v1",
+    "generated_at": "2026-08-24T13:59:53.332036+00:00",
+    "providers": {
+      "arxiv": {
+        "max_inflight": 1,
+        "active_leases": 0,
+        "min_interval_s": 3.1,
+        "cooldown_seconds": 0.0,
+        "total_requests": 4,
+        "total_success": 2,
+        "total_429": 0,
+        "total_errors": 0,
+        "last_status": "200",
+        "last_observed_at": "2026-08-24T10:45:36.625212+00:00"
+      },
+      "crossref": {
+        "max_inflight": 1,
+        "active_leases": 0,
+        "min_interval_s": 1.0,
+        "cooldown_seconds": 0.0,
+        "total_requests": 358,
+        "total_success": 354,
+        "total_429": 4,
+        "total_errors": 0,
+        "last_status": "200",
+        "last_observed_at": "2026-08-24T13:59:51.170067+00:00"
+      },
+      "exa": {
+        "max_inflight": 2,
+        "active_leases": 0,
+        "min_interval_s": 0.5,
+        "cooldown_seconds": 0.0,
+        "total_requests": 2,
+        "total_success": 2,
+        "total_429": 0,
+        "total_errors": 0,
+        "last_status": "200",
+        "last_observed_at": "2026-08-24T10:45:46.265750+00:00"
+      },
+      "github": {
+        "max_inflight": 1,
+        "active_leases": 0,
+        "min_interval_s": 1.0,
+        "cooldown_seconds": 0.0,
+        "total_requests": 362,
+        "total_success": 320,
+        "total_429": 0,
+        "total_errors": 42,
+        "last_status": "200",
+        "last_observed_at": "2026-08-24T13:59:50.740390+00:00"
+      },
+      "groq": {
+        "max_inflight": 128,
+        "active_leases": 0,
+        "min_interval_s": 0.0,
+        "cooldown_seconds": 1041.5903038978577,
+        "total_requests": 83,
+        "total_success": 54,
+        "total_429": 29,
+        "total_errors": 11,
+        "last_status": "GATE_TIMEOUT",
+        "last_observed_at": "2026-08-24T13:59:29.222483+00:00"
+      },
+      "huggingface_hub": {
+        "max_inflight": 4,
+        "active_leases": 0,
+        "min_interval_s": 0.25,
+        "cooldown_seconds": 0.0,
+        "total_requests": 358,
+        "total_success": 358,
+        "total_429": 0,
+        "total_errors": 0,
+        "last_status": "200",
+        "last_observed_at": "2026-08-24T13:59:49.433988+00:00"
+      },
+      "nvidia": {
+        "max_inflight": 256,
+        "active_leases": 33,
+        "min_interval_s": 0.0,
+        "cooldown_seconds": 0.0,
+        "total_requests": 921,
+        "total_success": 680,
+        "total_429": 1,
+        "total_errors": 207,
+        "last_status": "200",
+        "last_observed_at": "2026-08-24T13:59:46.837841+00:00"
+      },
+      "openalex": {
+        "max_inflight": 2,
+        "active_leases": 0,
+        "min_interval_s": 0.25,
+        "cooldown_seconds": 0.0,
+        "total_requests": 358,
+        "total_success": 9,
+        "total_429": 0,
+        "total_errors": 349,
+        "last_status": "400",
+        "last_observed_at": "2026-08-24T13:59:49.693548+00:00"
+      },
+      "openrouter": {
+        "max_inflight": 16,
+        "active_leases": 0,
+        "min_interval_s": 0.5,
+        "cooldown_seconds": 0.0,
+        "total_requests": 87,
+        "total_success": 70,
+        "total_429": 16,
+        "total_errors": 0,
+        "last_status": "429",
+        "last_observed_at": "2026-08-24T13:58:45.540434+00:00"
+      },
+      "semantic_scholar": {
+        "max_inflight": 1,
+        "active_leases": 0,
+        "min_interval_s": 1.0,
+        "cooldown_seconds": 5.3349621295928955,
+        "total_requests": 234,
+        "total_success": 8,
+        "total_429": 226,
+        "total_errors": 122,
+        "last_status": "429",
+        "last_observed_at": "2026-08-24T13:59:48.667011+00:00"
+      },
+      "tavily": {
+        "max_inflight": 2,
+        "active_leases": 0,
+        "min_interval_s": 0.5,
+        "cooldown_seconds": 0.0,
+        "total_requests": 6,
+        "total_success": 6,
+        "total_429": 0,
+        "total_errors": 0,
+        "last_status": "200",
+        "last_observed_at": "2026-08-24T10:45:43.721169+00:00"
+      }
+    }
+  },
+  "revocation_policy": "SANITIZE_LONG_LIVED_PARENT_AND_RESTART_CHILD_ON_EXACT_ADMISSION_BINDING_CHANGE; REQUEST_PATH_REVALIDATES_CURRENT_TYPED_ADMISSION_BEFORE_NETWORK"
+}
+--- SWARM LOG ---
+{"schema": "CLAY_6000_SWARM_DISCOVERY/v2", "logical_workers": 6000, "scheduler": "GLOBAL_WORK_STEALING_V2", "providers": {"groq": {"source": "controller_fallback", "keys": 1, "catalog": 0, "models": ["openai/gpt-oss-120b", "qwen/qwen3.6-27b", "openai/gpt-oss-20b"]}, "mistral": {"source": "no_keys_after_free_admission", "keys": 0, "models": []}, "nvidia": {"source": "live_catalog_empirical_filter", "keys": 1, "catalog": 102, "models": ["mistralai/mistral-nemotron", "nvidia/nemotron-3-super-120b-a12b", "nvidia/nemotron-3.5-lightning-30b-a3b", "nvidia/nemotron-3-ultra-550b-a55b", "nvidia/llama-3.3-nemotron-super-49b-v1", "nvidia/ising-calibration-1.5-31b", "openai/gpt-oss-20b", "nvidia/nemotron-3-nano-30b-a3b", "meta/muse-glimmer-30b", "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning", "meta/llama-3.1-70b-instruct", "meta/llama-3.3-70b-instruct", "meta/llama-3.2-90b-vision-instruct", "nvidia/nemotron-nano-12b-v2-vl", "nvidia/llama-3.3-nemotron-super-49b-v1.5", "deepseek-ai/deepseek-v4-flash-0731"]}, "openrouter": {"source": "environment_override", "keys": 1, "models": ["openrouter/free"]}}}

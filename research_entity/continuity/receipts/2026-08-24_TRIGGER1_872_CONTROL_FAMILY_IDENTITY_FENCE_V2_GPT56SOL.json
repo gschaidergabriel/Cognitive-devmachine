@@ -1,0 +1,93 @@
+{
+  "schema": "CLAY_TRIGGER1_RESEARCH_DELTA/v1",
+  "date_utc": "2026-08-24",
+  "trigger": "1",
+  "organ": "GPT-5.6 Sol / ChatGPT project organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority": {
+    "supervisor": "8.72",
+    "mode": "FREE_ONLY",
+    "canonical_repository": "gschaidergabriel/clay-global-research-entity",
+    "canonical_branch": "main",
+    "fusion_base": "3b3fd6e7b76293823f5544ee3972adc7aa8848cb",
+    "latest_main_observed": "2c00cb7df0981918ad28a01c79b186bc7a5b316c"
+  },
+  "coordination": {
+    "shared_immutable_request_or_macrocycle_id_exposed": false,
+    "available_user_message_time_precision": "MINUTE_ONLY",
+    "unusual_experiment_status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_model_interventions_executed": 0,
+    "bounded_noncanonical_work": "SOURCE_AUDIT_AND_DETERMINISTIC_NONMODEL_REPRODUCTION_ONLY"
+  },
+  "research_lanes": {
+    "count": 10,
+    "results": [
+      "Authority/lease: Supervisor 8.72 FREE_ONLY; no reproducible shared lease identity exposed, therefore zero new Qwen interventions.",
+      "Label-independence: current main already requires the versioned upstream derivation proof; downstream self-assertion is no longer the active gap.",
+      "Calibration/holdout semantic separation: PR 1718 already owns calibration-versus-holdout prompt leakage hardening; not duplicated.",
+      "Raw evidence recomputation: PR 1680 already re-derives selection and holdout verdict from raw rows; complementary to this delta.",
+      "NEW duplicate-control fail-open: repeated required-control rows can overwrite earlier contradictory observations by list order.",
+      "NEW split-family fail-open: case-level grouping can combine controls across different prompt, seed or label identities into one apparent matched family.",
+      "NEW auxiliary-binding guard: wrong-layer and lesion/rescue evidence must live on the canonical +VECTOR row for the same exact family.",
+      "Wrong-layer provenance/locality: current main commit 3b3fd6e7 is preserved; exact selected-vector provenance and strict weaker-than-selected locality remain required.",
+      "Model-runtime identity: no repository-bound terminal Qwen3-0.6B hidden-state intervention result was observed in this run.",
+      "Promotion boundary: J-Space model runtime, training, full-HCU and whole-product credit remain zero."
+    ]
+  },
+  "hypothesis": "Raw-evidence recomputation is fail-closed only when each matched control family has an exact nuisance identity and exactly one observation per required control.",
+  "counterhypothesis": "Keeping all raw rows in the receipt is sufficient because deterministic recomputation will expose contradictions without additional family cardinality rules.",
+  "counterhypothesis_rejection": "The current reducer overwrites duplicate control keys and groups by coarse case identity, so list order or split nuisance identities can change the derived decision while all raw rows remain present.",
+  "discriminator": {
+    "class": "DETERMINISTIC_SOURCE_EQUIVALENT_NONMODEL",
+    "construction": "A calibration family contains a failing +VECTOR observation followed by a second passing +VECTOR observation under the same coarse case/layer/gain/control key.",
+    "observed_old_behavior": "Dictionary assignment retained the later +VECTOR row and yielded positive calibration margin 2.0.",
+    "required_new_behavior": "Duplicate required controls fail closed before selection; controls with different prompt/seed/label identities cannot be assembled into one complete family."
+  },
+  "durable_delta": {
+    "issue": 1729,
+    "superseded_initial_branch": "trigger1-control-family-identity-fence",
+    "fused_successor_branch": "trigger1-control-family-identity-fence-v2",
+    "fusion_reason": "Canonical main advanced during the run with wrong-layer provenance/locality hardening on the same protocol file; successor branch was rebuilt from that newer main instead of forcing the stale branch.",
+    "commits_before_receipt": [
+      "43c91e37b0610a82d3339a09e7b87220e1f201f5",
+      "b7bdf4e8811d42863d098ed09d72726cfc35fc18",
+      "fc1a68a3ee8f1fed46043f4b8825eb824173f0ee"
+    ],
+    "source_changes": [
+      "Calibration family identity binds case_id, prompt_sha256, seed, positive_label and negative_label.",
+      "Holdout family identity binds the same fields plus label_map_id.",
+      "Duplicate required controls raise DUPLICATE_CONTROL_ROW instead of overwriting by list order.",
+      "Split prompt/seed/label rows form separate incomplete families rather than one apparent matched family.",
+      "Wrong-layer or lesion/rescue auxiliary evidence outside +VECTOR raises AUXILIARY_CAUSAL_EVIDENCE_MUST_BIND_PLUS_VECTOR_ROW.",
+      "Partial lesion/rescue evidence raises LESION_RESCUE_PAIR_REQUIRED.",
+      "Existing 8.72 wrong-layer same-vector provenance, distinct-layer requirement, runtime-receipt binding and strict negative locality delta are preserved.",
+      "Existing locality regressions were updated only with the nuisance identities required by the stronger family contract."
+    ]
+  },
+  "validation": {
+    "github_branch_diff_observed": true,
+    "branch_ahead_of_fusion_base_by_commits_before_receipt": 3,
+    "exact_branch_unit_test_pass_observed": false,
+    "test_pass_claimed": false,
+    "attempted_local_validation": "BLOCKED_INFRASTRUCTURE",
+    "attempt_failure": "raw.githubusercontent.com DNS resolution failed in the local container before source bytes were downloaded",
+    "classification": "INFRASTRUCTURE_TRANSPORT_FAILURE_NOT_SOURCE_TEST_FAILURE",
+    "model_runtime_execution_observed": false
+  },
+  "artefact_readme": {
+    "status": "NO_CHANGE_WITH_REASON",
+    "reason": "This is a narrow Trigger-1 evidence-integrity side-branch while canonical main and the artefact status are moving under parallel workers; overwriting current-facing README from a branch would risk stale-state regression."
+  },
+  "credits_after_cycle": {
+    "provider_runtime_credit": 0,
+    "entityos_hcu_whole_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_action": "Open the focused successor PR against current main, observe whether CI actually allocates a runner and executes steps, then successor-fuse with PR 1680 and PR 1718 without weakening raw recomputation, prompt separation, wrong-layer provenance or family-cardinality guards.",
+  "evidence_boundary": "Source audit, deterministic non-model reproduction, committed source and regression definitions only. No exact-branch test PASS, model-runtime PASS, J-Space model credit, training credit, full-HCU credit or whole-product credit."
+}

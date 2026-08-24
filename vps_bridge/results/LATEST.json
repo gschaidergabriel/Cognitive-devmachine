@@ -1,17 +1,20 @@
 {
   "schema": "CLAY_VPS_RECEIPT/v4",
-  "command_id": "sync-restart-distillery-latest-20260824T1806p0700",
-  "command_sha256": "72d94130fbeb796d8072f10c1ce494e273b6e36efd092dd9f51e948972a416fd",
-  "started_at": "2026-08-24T11:05:44.233423+00:00",
-  "finished_at": "2026-08-24T11:05:44.673093+00:00",
-  "status": "FAIL",
-  "exit_code": 128,
-  "op": "exec",
-  "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-  "stderr_sha256": "dd4b8dda1eaa1103c76c5bf01d694dca0ca2a9d4d8c317fbfa82de5f16c6b00b",
-  "stdout_tail": "",
-  "stderr_tail": "Host key verification failed.\r\nfatal: Could not read from remote repository.\n\nPlease make sure you have the correct access rights\nand the repository exists.\n",
-  "meta": {},
+  "command_id": "sync-main-distillery-fixed-20260824T1810p0700",
+  "command_sha256": "b5d02f36413a0253356ab0fb97ae5cf0b6f1d5b1a38ea9842f72b18dbf0d90db",
+  "started_at": "2026-08-24T11:10:31.158773+00:00",
+  "finished_at": "2026-08-24T11:10:33.643268+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "canonical_sync",
+  "stdout_sha256": "f9877efe23fcebec6dcc11bb80a1023f1ca7724c61c9bbad1fb30521ee7726d6",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "dcc870ac192f81c74a94f02052c592921148fc4c\n",
+  "stderr_tail": "",
+  "meta": {
+    "head": "dcc870ac192f81c74a94f02052c592921148fc4c",
+    "ref": "main"
+  },
   "execution_boundary": "ROOT_INSIDE_ROOTLESS_PODMAN_OR_EXPLICIT_REPO_CONTROL_OP",
   "canonical_credit_minted": 0
 }

@@ -1,0 +1,8 @@
+{
+  "schema":"CLAY_VPS_COMMAND/v4",
+  "command_id":"free-swarm-restart-budget-fix-20260824T1711",
+  "op":"exec",
+  "cwd":"/workspace/clay-global-research-entity",
+  "timeout_seconds":180,
+  "command":"set -euo pipefail; python3 -m py_compile tools/run_24h_entityos_swarm.py; if [ -f /artifacts/clay-entityos-swarm/supervisor.pid ]; then old=$(cat /artifacts/clay-entityos-swarm/supervisor.pid 2>/dev/null || true); [ -z \"$old\" ] || kill \"$old\" 2>/dev/null || true; fi; sleep 2; nohup bash tools/run_24h_entityos_swarm_supervisor.sh >/artifacts/clay-entityos-swarm/supervisor.log 2>&1 </dev/null & echo $! >/artifacts/clay-entityos-swarm/supervisor.pid; sleep 12; echo PID=$(cat /artifacts/clay-entityos-swarm/supervisor.pid); ps -p $(cat /artifacts/clay-entityos-swarm/supervisor.pid) -o pid,etime,cmd || true; echo '--- supervisor ---'; cat /artifacts/clay-entityos-swarm/SUPERVISOR.json 2>/dev/null || true; echo '--- latest run ---'; d=$(find /artifacts/clay-entityos-swarm -maxdepth 1 -type d -name 'active-*' | sort | tail -1); echo $d; cat \"$d/status.json\" 2>/dev/null || true"
+}

@@ -1,0 +1,82 @@
+{
+  "schema": "ENTITYOS_HCU_GO_RECEIPT/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "authority_epoch": "8.68",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "reentry": {
+    "canonical_main_before_branch": "f737a97197b3465f407a6c59029cf5e8d32cc329",
+    "branch": "gpt56sol/go-868-local-model-identity-gate-20260824",
+    "supervisor": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_68.json",
+    "retained_hcu_pr": "gschaidergabriel/clay-global-research-entity#1263",
+    "retained_executor_pr": "gschaidergabriel/Dr.-Unterweger#810"
+  },
+  "coordination": {
+    "upstream_shared_macrocycle_id": null,
+    "reproducible_atomic_trigger_key_available": false,
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_experiments_run": 0,
+    "ordinary_work_class": "SOURCE_HARDENING_AND_DETERMINISTIC_REGRESSION"
+  },
+  "observed_gap": "The newly added zero-cost local Qwen research-model server admitted mutable runtime/model material inside its execution path: llama.cpp was shallow-cloned from a moving repository head and the GGUF was resolved through a mutable Hugging Face model selector. A successful loopback health response could also short-circuit identity verification. This cannot establish exact runtime/model identity or loader consumption and is too weak for HCU/J-Space causal attribution.",
+  "hypothesis": "Moving remote runtime/model resolution in the executable path can make two nominally identical local research runs consume different bytes while preserving the same high-level model label, weakening replay, ModelExecution binding and later J-Space training-trace attribution.",
+  "counterhypothesis": "Recording the resolved llama.cpp commit after cloning and using a stable-looking model name is sufficient provenance.",
+  "counterhypothesis_adjudication": "Rejected for executable credit. Post-resolution labels do not bind the bytes before execution, mutable model selectors do not identify the consumed GGUF, and a pre-existing healthy loopback process is not authenticated as the requested runtime/model identity. The repair therefore fails closed before execution unless both local runtime and GGUF bytes match explicit SHA-256 identities.",
+  "bounded_delta": {
+    "execution_path_remote_materialization_removed": true,
+    "llama_cpp_moving_head_clone_removed": true,
+    "huggingface_model_resolution_removed": true,
+    "runtime_binary_sha256_required": true,
+    "gguf_sha256_required": true,
+    "unverified_existing_server_health_reuse_rejected": true,
+    "loopback_only": true,
+    "provider_secret_lookup_in_execution_path": false,
+    "state_schema": "CLAY_LOCAL_RESEARCH_MODEL/v2",
+    "loader_consumption_evidence": "PENDING_RUNTIME_RECEIPT",
+    "runtime_credit_minted": 0
+  },
+  "deterministic_evidence": {
+    "environment": "LOCAL_NONCANONICAL_CONTAINER_DETERMINISTIC_TEST_ONLY",
+    "command": "python3 -m unittest -v tests/test_local_research_model_identity_gate_868.py",
+    "result": "5/5 PASS",
+    "bash_n": "PASS",
+    "python_compile": "PASS",
+    "external_provider_network_performed": false,
+    "provider_secret_lookup_performed": false,
+    "positive_control": "exact fake runtime + exact fake GGUF hashes execute fake runtime exactly once and emit bounded v2 state",
+    "negative_controls": [
+      "wrong GGUF SHA-256 rejects before runtime",
+      "wrong runtime SHA-256 rejects before runtime",
+      "missing/malformed SHA-256 rejects before runtime",
+      "source regression rejects remote materialization paths"
+    ],
+    "authored_source_sha256": {
+      "tools/local_research_model_server.sh": "f04599db650836456a0514350abc84f6e741f7e7541e2f37340c9a000f94ae55",
+      "tests/test_local_research_model_identity_gate_868.py": "a00853610c6913167c89def9e22bf753346af086422ea6f107f54b3701d8124f"
+    },
+    "github_blob_identity_after_write": {
+      "tools/local_research_model_server.sh": "77e26f975ce1c0fbc75bba6a81610a48ec7baf0a",
+      "tests/test_local_research_model_identity_gate_868.py": "4e3477473f5db365736eef9904a073f884b487bd"
+    },
+    "evidence_scope": "SOURCE_AND_DETERMINISTIC_COMPONENT_MECHANISM_ONLY_NOT_REAL_MODEL_RUNTIME"
+  },
+  "tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED: the zero-cost local synthesis path is now fail-closed on exact pre-existing runtime/model bytes instead of materializing moving remote dependencies during execution.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED: exact runtime + model identities are now available as deterministic pre-invocation inputs for the existing VerifiedEngineAdmission/ModelExecution/InferenceReceipt chain; loader-consumption remains explicitly unresolved rather than inferred.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "ADVANCED: local zero-provider-billing model work gains reproducible pre-invocation identity needed for causal trace attribution, while J-Space model runtime and training credit remain zero. Qwen3-4B is a research synthesis path, not promotion of the approximately-0.8B specialization target."
+  },
+  "credits": {
+    "provider_runtime": 0,
+    "whole_entityos_hcu_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "On an authorized zero-cost local normal-user or clay-direct-dev surface, provision an exact llama-server binary and exact local GGUF outside the execution path, bind their SHA-256 identities, execute this exact branch source, and capture runtime evidence that binds the actually consumed model/runtime identity into canonical ModelExecution -> InferenceReceipt/v4 -> model-specific J-Space/GWT trace. External LLM-provider traffic remains quarantined until its separate typed FREE admission executable gate passes.",
+  "acceptance": "IN_PROGRESS"
+}

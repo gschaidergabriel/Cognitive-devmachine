@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_LOCAL_COMMAND/v1",
+  "command_id": "vault-presence-20260824T1636",
+  "op": "exec",
+  "cwd": "/home/ai-core-node",
+  "timeout_seconds": 120,
+  "command": "set -euo pipefail; python3 - <<'PY'\nfrom pathlib import Path\nfor p in ['/etc/clayverse/freie-zugaenge.env','/etc/clayverse/github-token.env','/etc/clayverse/keys.env','/etc/entityos/tresor']:\n q=Path(p); print(p,'exists',q.exists(),'readable',__import__('os').access(p,__import__('os').R_OK))\nPY\nset -a; [ ! -r /etc/clayverse/freie-zugaenge.env ] || . /etc/clayverse/freie-zugaenge.env; [ ! -r /etc/clayverse/github-token.env ] || . /etc/clayverse/github-token.env; [ ! -r /etc/clayverse/keys.env ] || . /etc/clayverse/keys.env; set +a; python3 - <<'PY'\nimport os\ngroups={'groq':['GROQ_API_KEY','GROQ2_API_KEY','GROQ3_API_KEY'],'mistral':['MISTRAL_API_KEY','MISTRAL2_API_KEY','MISTRAL3_API_KEY'],'nvidia':['NVIDIA_API_KEY','NVIDIA_NIM_API_KEY','NVIDIA2_API_KEY','NVIDIA3_API_KEY','NGC_API_KEY'],'github':['GH_TOKEN','GITHUB_TOKEN']}\nfor group,names in groups.items():\n present=[n for n in names if os.getenv(n,'').strip()]\n print(group,'present_count',len(present),'names',','.join(present) if present else '-')\nPY"
+}

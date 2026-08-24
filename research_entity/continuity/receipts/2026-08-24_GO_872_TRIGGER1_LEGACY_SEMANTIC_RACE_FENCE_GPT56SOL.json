@@ -1,0 +1,61 @@
+{
+  "schema": "CLAY_GO_RESEARCH_DELTA_RECEIPT/v1",
+  "authority_epoch": "8.72",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6-Sol",
+  "trigger": "go",
+  "macrocycle_identity": "MACROCYCLE_ID_UNRESOLVED",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "source_base_main": "0b3495aed89a86b3b626642aa202367862d0b489",
+  "finding": "The newly merged Trigger1 atomic lease gate only treated byte-identical trigger_key values as semantic duplicates. GO_EXPERIMENT_ATOMIC_LEASE_PROTOCOL.md additionally requires the migration/race fence to reject legacy/noncanonical encodings of the same timestamp plus payload digest; historical examples of both full-hash minute-format and shortened-hash second-format keys remain in the repository.",
+  "counterhypothesis": "Byte-identical canonical create-only paths are sufficient because new workers should only emit canonical keys.",
+  "counterhypothesis_result": "REJECTED_FOR_MIGRATION_FENCE_SCOPE: canonical create-only protects new canonical writers, but the current protocol explicitly requires inspection for legacy/noncanonical semantic duplicates before intervention and repository history contains such claims.",
+  "delta": [
+    "Extend trigger1_atomic_lease_gate.py with canonical timestamp identity parsing and conservative legacy timestamp/payload semantic-duplicate recognition.",
+    "Recognize the historical dashed minute-offset full-payload format and compact second-offset truncated-payload format without accepting those formats as canonical dispatch keys.",
+    "Treat a >=12-hex matching historical payload prefix plus matching normalized timestamp as fail-closed evidence of a semantic duplicate.",
+    "Add regressions proving both historical race formats are blocked and different minute/payload cases remain admissible."
+  ],
+  "tests": {
+    "surface": "deterministic local source-regression container",
+    "command": "python3 -m unittest -v tests.test_trigger1_atomic_lease_gate",
+    "result": "10_OF_10_PASS",
+    "runtime_scope": "SOURCE_CONTROL_PLANE_REGRESSION_ONLY",
+    "entityos_hcu_runtime_credit_added": 0,
+    "jspace_model_runtime_credit_added": 0,
+    "training_credit_added": 0
+  },
+  "external_harvest": {
+    "classification": "RESEARCH_INPUT_ONLY",
+    "finding": "Recent activation-steering work reinforces layer/source/regime sensitivity, supporting strict source/layer/control provenance rather than broad J-Space promotion from one steering effect.",
+    "sources": [
+      "https://arxiv.org/abs/2607.25270",
+      "https://arxiv.org/abs/2608.12334",
+      "https://github.com/wassname/steering-lite"
+    ]
+  },
+  "coordination": {
+    "shared_immutable_request_id_exposed": false,
+    "available_user_message_timestamp_precision": "MINUTE_ONLY",
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_experiments_executed": 0,
+    "overlap_handling": "PR1656 was discovered and reused as the source mechanism; it merged concurrently, so this delta is a successor hardening of that single retained mechanism rather than a duplicate implementation lane."
+  },
+  "go_tracks": {
+    "track_a": "ADVANCED_BY_HARDENING_THE_ONLY_CURRENT_TRIGGER1_EXECUTION_DISPATCH_BOUNDARY",
+    "track_b": "ADVANCED_BY_REPLAY_STABLE_MACROCYCLE_COORDINATION_AND_FAIL_CLOSED_CAUSAL_PROVENANCE",
+    "track_c": "ADVANCED_BY_MAKING_THE_QWEN_MIDLAYER_CAUSAL_DISCRIMINATOR_LEASE_SAFE_WITHOUT_RUNNING_AN_UNLEASED_INTERVENTION"
+  },
+  "credits": {
+    "provider_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "hcu_full": 0,
+    "jspace_model": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Review/fuse this small successor patch, then require an already-created canonical claim with reproducible macrocycle identity before any Trigger1 V2 intervention. After fusion, execute only ordinary deterministic regressions until a future exact go exposes a valid claim identity."
+}

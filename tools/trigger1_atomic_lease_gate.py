@@ -8,6 +8,7 @@ current Trigger1 V2 midlayer causal experiment.
 from __future__ import annotations
 
 import argparse
+import datetime as dt
 import hashlib
 import json
 from pathlib import Path
@@ -15,7 +16,19 @@ import re
 from typing import Any
 
 RID_RE = re.compile(r"^rid_[0-9a-f]{64}$")
-TS_RE = re.compile(r"^ts_[0-9]{8}T[0-9]{12}Z__p_[0-9a-f]{64}$")
+TS_RE = re.compile(
+    r"^ts_(?P<stamp>[0-9]{8}T[0-9]{12}Z)__p_(?P<payload>[0-9a-f]{64})$"
+)
+LEGACY_DASH_TS_RE = re.compile(
+    r"^(?P<date>[0-9]{4}-[0-9]{2}-[0-9]{2})T"
+    r"(?P<hour>[0-9]{2})-(?P<minute>[0-9]{2})(?:-(?P<second>[0-9]{2}))?"
+    r"(?P<sign>[+-])(?P<off_h>[0-9]{2})-(?P<off_m>[0-9]{2})"
+    r"(?:__go)?__(?P<payload>[0-9a-f]{12,64})$"
+)
+LEGACY_COMPACT_TS_RE = re.compile(
+    r"^(?P<date>[0-9]{8})T(?P<time>[0-9]{6})"
+    r"(?P<sign>[+-])(?P<offset>[0-9]{4})_(?P<payload>[0-9a-f]{12,64})$"
+)
 HEAD_RE = re.compile(r"^[0-9a-f]{40}$")
 BODY_KEY_RE = re.compile(r"(?m)^trigger_key:\s*(\S+)\s*$")
 CLAIM_SCHEMA = "clay-go-experiment-claim/v1"
@@ -38,6 +51,78 @@ def parse_trigger_key(issue_body: str) -> str:
     if not (RID_RE.fullmatch(key) or TS_RE.fullmatch(key)):
         raise ValueError("TRIGGER_KEY_NONCANONICAL")
     return key
+
+
+def _offset(sign: str, hour: str, minute: str) -> dt.timezone:
+    delta = dt.timedelta(hours=int(hour), minutes=int(minute))
+    if sign == "-":
+        delta = -delta
+    return dt.timezone(delta)
+
+
+def _canonical_ts_identity(key: str) -> tuple[dt.datetime, str] | None:
+    match = TS_RE.fullmatch(key)
+    if not match:
+        return None
+    stamp = dt.datetime.strptime(match.group("stamp"), "%Y%m%dT%H%M%S%fZ").replace(tzinfo=dt.timezone.utc)
+    return stamp, match.group("payload")
+
+
+def _legacy_ts_identity(key: str) -> tuple[dt.datetime, str, str] | None:
+    match = LEGACY_DASH_TS_RE.fullmatch(key)
+    if match:
+        year, month, day = (int(x) for x in match.group("date").split("-"))
+        second_text = match.group("second")
+        local = dt.datetime(
+            year,
+            month,
+            day,
+            int(match.group("hour")),
+            int(match.group("minute")),
+            int(second_text or "0"),
+            tzinfo=_offset(match.group("sign"), match.group("off_h"), match.group("off_m")),
+        )
+        precision = "second" if second_text is not None else "minute"
+        return local.astimezone(dt.timezone.utc), match.group("payload"), precision
+
+    match = LEGACY_COMPACT_TS_RE.fullmatch(key)
+    if match:
+        date = match.group("date")
+        time = match.group("time")
+        offset = match.group("offset")
+        local = dt.datetime(
+            int(date[0:4]),
+            int(date[4:6]),
+            int(date[6:8]),
+            int(time[0:2]),
+            int(time[2:4]),
+            int(time[4:6]),
+            tzinfo=_offset(match.group("sign"), offset[0:2], offset[2:4]),
+        )
+        return local.astimezone(dt.timezone.utc), match.group("payload"), "second"
+    return None
+
+
+def _semantic_duplicate_trigger_key(candidate_key: Any, canonical_key: str) -> bool:
+    if not isinstance(candidate_key, str):
+        return False
+    if candidate_key == canonical_key:
+        return True
+
+    canonical = _canonical_ts_identity(canonical_key)
+    legacy = _legacy_ts_identity(candidate_key)
+    if canonical is None or legacy is None:
+        return False
+
+    canonical_time, canonical_payload = canonical
+    legacy_time, legacy_payload, precision = legacy
+    # Historical race-era keys sometimes truncated the payload digest. A matching
+    # >=12-hex prefix plus matching normalized timestamp is enough to fail closed.
+    if not canonical_payload.startswith(legacy_payload):
+        return False
+    if precision == "minute":
+        return legacy_time.replace(second=0, microsecond=0) == canonical_time.replace(second=0, microsecond=0)
+    return legacy_time.replace(microsecond=0) == canonical_time.replace(microsecond=0)
 
 
 def validate_claim(*, issue_body: str, claims_root: Path, expected_experiment: str = EXPECTED_EXPERIMENT) -> dict[str, Any]:
@@ -84,7 +169,7 @@ def validate_claim(*, issue_body: str, claims_root: Path, expected_experiment: s
             candidate = json.loads(sibling.read_text(encoding="utf-8"))
         except Exception:
             continue
-        if isinstance(candidate, dict) and candidate.get("trigger_key") == trigger_key:
+        if isinstance(candidate, dict) and _semantic_duplicate_trigger_key(candidate.get("trigger_key"), trigger_key):
             duplicates.append(str(sibling))
     if duplicates:
         return {"pass": False, "reason": "EXPERIMENT_BUDGET_RACE_VIOLATION", "trigger_key": trigger_key, "claim_path": str(claim_path), "semantic_duplicate_claims": sorted(duplicates)}

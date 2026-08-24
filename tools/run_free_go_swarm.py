@@ -17,6 +17,8 @@ from typing import Any
 import _run_free_go_swarm_impl as _legacy
 import free_swarm_provider_admission as _admission
 
+_ORIGINAL_COLLECT_KEYS = _legacy.collect_keys
+
 ROOT = Path(__file__).resolve().parents[1]
 
 # Re-export compatibility API expected by run_24h_entityos_swarm.py.
@@ -64,7 +66,7 @@ def collect_keys(spec: ProviderSpec) -> list[str]:
     # Count/read environment key material only after typed admission. We keep the
     # legacy normalizer to preserve multi-key compatibility and dedup semantics.
     _admission.read_provider_env_keys(spec.name, admission=admission)
-    return _legacy.collect_keys(spec)
+    return _ORIGINAL_COLLECT_KEYS(spec)
 
 
 def _sync_legacy_hooks(admission: _admission.Admission) -> None:

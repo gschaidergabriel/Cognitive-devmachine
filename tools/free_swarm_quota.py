@@ -1,12 +1,9 @@
 #!/usr/bin/env python3
 """Cross-process FREE_ONLY provider gate for Clay research swarms.
 
-The gate coordinates concurrency and provider-wide cooldowns in one SQLite file
-shared by the main Free Swarm and the research distillery. It does not rotate
-credentials to evade provider limits and it never upgrades billing.
-
-This is deliberately a coarse admission layer. Provider response headers and
-HTTP 429 remain the source of truth for actual dynamic quotas.
+Coordinates all autonomous swarm/provider concurrency in one SQLite file. It
+never rotates credentials to evade organization limits and never upgrades
+billing. HTTP response headers and 429/402 remain provider truth.
 """
 from __future__ import annotations
 
@@ -21,6 +18,10 @@ import uuid
 from typing import Iterator
 
 DB_PATH = Path(os.getenv("CLAY_FREE_PROVIDER_BUDGET_DB", "/artifacts/clay-entityos-swarm/provider_budget.sqlite3"))
+# Conservative cross-process ceilings. Individual workers may run lower AIMD caps.
+# E2B Hobby documents up to 20 concurrent sandboxes; we additionally enforce a
+# sandbox-seconds budget in the evidence forge so concurrency cannot consume
+# unlimited free credits.
 DEFAULTS = {
     "groq": (12, 0.0),
     "mistral": (6, 0.0),
@@ -31,6 +32,14 @@ DEFAULTS = {
     "github": (1, 1.0),
     "arxiv": (1, 3.1),
     "reddit": (1, 1.0),
+    "openalex": (2, 0.25),
+    "semantic_scholar": (1, 1.0),
+    "crossref": (1, 1.0),
+    "huggingface_hub": (4, 0.25),
+    "e2b": (20, 0.0),
+    "judge0": (2, 0.5),
+    "rapidapi": (2, 0.5),
+    "local_forge": (4, 0.0),
 }
 
 
@@ -130,15 +139,12 @@ def observe(provider: str, owner: str, status: int | str | None, headers: dict[s
     headers = {str(k).lower(): str(v) for k, v in (headers or {}).items()}
     if retry_after_s is None:
         raw = headers.get("retry-after")
-        try:
-            retry_after_s = float(raw) if raw is not None else None
-        except ValueError:
-            retry_after_s = None
+        try: retry_after_s = float(raw) if raw is not None else None
+        except ValueError: retry_after_s = None
     status_s = str(status) if status is not None else "UNKNOWN"
     now = time.time()
     success = status_s.isdigit() and 200 <= int(status_s) < 300
     rate = status_s == "429"
-    error = not success and not rate
     remaining = {k: v for k, v in headers.items() if k.startswith("x-ratelimit-") or "remaining" in k or "reset" in k}
     with _connect() as con:
         if rate:
@@ -156,7 +162,7 @@ def observe(provider: str, owner: str, status: int | str | None, headers: dict[s
             (dt.datetime.now(dt.timezone.utc).isoformat(), provider, owner, status_s, retry_after_s,
              json.dumps(remaining, sort_keys=True, separators=(",", ":"))),
         )
-        con.execute("DELETE FROM observations WHERE id NOT IN (SELECT id FROM observations ORDER BY id DESC LIMIT 5000)")
+        con.execute("DELETE FROM observations WHERE id NOT IN (SELECT id FROM observations ORDER BY id DESC LIMIT 10000)")
 
 
 @contextlib.contextmanager

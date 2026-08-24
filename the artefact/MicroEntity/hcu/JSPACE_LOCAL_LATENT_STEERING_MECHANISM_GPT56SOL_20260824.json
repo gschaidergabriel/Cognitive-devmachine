@@ -1,0 +1,160 @@
+{
+  "schema": "ENTITYOS_HCU_JSPACE_LOCAL_LATENT_STEERING_MECHANISM/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "authority_epoch": "8.63",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "trigger": "other",
+  "status": "LOCAL_SCRATCH_MECHANISM_PASS_NO_ENTITYOS_RUNTIME_CREDIT",
+  "authority_reentry": {
+    "canonical_main_observed_before_write": "9d6ab98f012199167284dc0caeed72cadefbb0a5",
+    "retained_donor_pr": "gschaidergabriel/clay-global-research-entity#1263",
+    "retained_donor_head_observed_before_write": "f90fa8d2c7c20a6bb9dccc1aea7897414b7cb7c5",
+    "retained_executor_pr": "gschaidergabriel/Dr.-Unterweger#810"
+  },
+  "user_goal": "Test whether J-Space/vector control can causally steer multiple model instances directly, iterating until a working mechanism is found without paid provider execution.",
+  "execution_classification": {
+    "surface": "LOCAL_CHATGPT_CONTAINER_CPU_SCRATCH",
+    "project_runtime_evidence": false,
+    "authorized_entityos_hcu_runtime_capsule": false,
+    "external_paid_api_used": false,
+    "free_api_tokens_assumed_or_consumed": false,
+    "provider_credentials_used": false,
+    "note": "This is a bounded mechanism experiment on synthetic locally trained hookable Transformer classifiers. It is not an EntityOS runtime acceptance run, not Qwen3-0.6B execution evidence, and not API-instance evidence."
+  },
+  "hypothesis": "A model can be causally steered by adding a J-Space-derived vector in its residual/latent stream, and a quantized control packet can preserve the steering effect if a model/version/layer-specific basis adapter maps canonical J-Space intent into the model's local latent coordinates.",
+  "counterhypotheses": [
+    "The apparent effect is merely a generic large perturbation rather than direction-specific control.",
+    "q8 quantization destroys the useful causal direction.",
+    "One raw vector can be injected unchanged across independently initialized model instances.",
+    "A naive averaged gradient direction is necessarily a better transferable actuator than a mean-difference direction."
+  ],
+  "scratch_model": {
+    "framework": "PyTorch 2.10.0+cpu",
+    "model_class": "small locally trained Transformer classifier with direct per-layer residual intervention",
+    "independent_initializations": 6,
+    "seeds": [11, 29, 47, 83, 101, 131],
+    "task": "synthetic categorical YES/NO classification used only to test causal intervention mechanics",
+    "model_training_accuracy": 1.0,
+    "steering_calibration_split": "contexts 0-1 and words 0-3",
+    "steering_holdout_split": "contexts 2-3 and words 4-7",
+    "important_scope_note": "The holdout is disjoint from steering-direction/layer/gain calibration, but the classifier itself was trained on the synthetic task examples; this is a steering-mechanism holdout, not a model-generalization benchmark."
+  },
+  "experiments": {
+    "initial_mean_difference_4_instances": {
+      "independent_instances": 4,
+      "baseline_negative_prompt_mean_p_yes": 0.0001406185,
+      "plus_direction_alpha_1_mean_p_yes": 0.74188956,
+      "minus_direction_alpha_1_mean_p_yes": 0.0001702085,
+      "orthogonal_same_norm_random_mean_p_yes": 0.00098454,
+      "plus_direction_alpha_2_full_flip_instances": "4/4",
+      "raw_cross_instance_alpha_1_mean_flip_rate": 0.0,
+      "interpretation": "Direction-specific causal steering is present; unchanged raw coordinates do not transfer reliably between independently initialized latent bases."
+    },
+    "q8_holdout_6_instances_fixed_layer": {
+      "baseline_holdout_mean_p_yes": 0.0000882556,
+      "q8_local_holdout_mean_p_yes": 0.9007375,
+      "mean_holdout_flip_rate": 0.9166667,
+      "fully_flipped_instances": "5/6",
+      "max_normalized_q8_coordinate_error": 0.0039297,
+      "sign_flip_mean_p_yes": 0.0001269,
+      "raw_cross_instance_alpha_2_mean_flip_rate_over_30_pairs": 0.0291667,
+      "raw_cross_instance_min_flip_rate": 0.0,
+      "raw_cross_instance_max_flip_rate": 0.625,
+      "interpretation": "q8 precision is not the primary bottleneck; per-model latent basis and intervention location dominate reliability. Raw transfer is occasionally effective by chance/alignment but not robust."
+    },
+    "naive_gradient_direction_countertest": {
+      "local_holdout_mean_flip_rate": 0.6667,
+      "raw_cross_instance_mean_flip_rate": 0.275,
+      "interpretation": "Naively averaged local gradients are not automatically the best local or shared actuator; gradient provenance alone does not justify promotion."
+    },
+    "layer_calibrated_q8_latent_basis_adapter": {
+      "calibration_rule": "For each independent model, evaluate mean-difference directions at candidate intervention stages using the steering calibration split only; choose the stage plus smallest gain that reaches full calibration flip; q8-quantize that selected local steering vector; evaluate only on the disjoint steering holdout.",
+      "selected_adapters": [
+        {"instance": 0, "stage": "l2", "alpha": 0.5},
+        {"instance": 1, "stage": "l2", "alpha": 0.75},
+        {"instance": 2, "stage": "norm", "alpha": 0.5},
+        {"instance": 3, "stage": "norm", "alpha": 0.5},
+        {"instance": 4, "stage": "l2", "alpha": 0.75},
+        {"instance": 5, "stage": "l2", "alpha": 0.75}
+      ],
+      "holdout_flip_rate_mean": 1.0,
+      "holdout_flip_rate_min_per_instance": 1.0,
+      "holdout_mean_p_yes": 0.8402585586,
+      "sign_flip_holdout_mean_p_yes": 0.000061390977,
+      "orthogonal_same_norm_random_holdout_mean_p_yes": 0.00312451695,
+      "per_instance_holdout_p_yes": [
+        0.9993756,
+        0.99985236,
+        0.51453191,
+        0.52809751,
+        0.99981964,
+        0.99987429
+      ],
+      "result": "6/6_INDEPENDENT_TRANSFORMER_INSTANCES_FULL_HOLDOUT_FLIP_WITH_Q8_LOCAL_ADAPTER",
+      "interpretation": "The working mechanism is canonical J-Space/control intent plus a model/version/layer-specific LatentBasisAdapter, not one unmodified universal residual vector."
+    }
+  },
+  "source_alignment": {
+    "current_jspace_vector_control_abi": "JSPACE_VECTOR_CONTROL_ABI/v1",
+    "current_abi_role": "deterministic basis/generation/role-bound q8 control packet; not itself hidden-state evidence",
+    "local_model_candidate_file": "the artefact/MicroEntity/hcu/LOCAL_08B_QWEN3_06B_Q8_GGUF_CANDIDATE.json",
+    "candidate_model": "Qwen/Qwen3-0.6B-GGUF:Q8_0",
+    "candidate_model_sha256": "9465e63a22add5354d9bb4b99e90117043c7124007664907259bd16d043bb031",
+    "candidate_runtime_family": "llama.cpp",
+    "candidate_runtime_source_commit": "bb4caa7540188872173c44d161602d9271386413",
+    "exact_runtime_source_observation": {
+      "cli_support": [
+        "--control-vector FNAME",
+        "--control-vector-scaled FNAME:SCALE",
+        "--control-vector-layer-range START END"
+      ],
+      "qwen3_source": "src/models/qwen3.cpp at the pinned runtime source commit applies build_cvec(cur, il) in the Qwen3 layer loop and identifies the 28-layer/1024-embedding configuration as 0.6B",
+      "classification": "EXACT_SOURCE_SUPPORT_ONLY_NO_MODEL_EXECUTION_CREDIT"
+    }
+  },
+  "architecture_delta": {
+    "required_new_boundary": "JSPACE_LATENT_BASIS_ADAPTER/v1",
+    "proposed_chain": "Global J-Space semantic/control coordinate -> JSPACE_VECTOR_CONTROL_ABI/v1 packet -> model/version/layer-specific LatentBasisAdapter -> native llama.cpp control-vector application -> exact model execution -> inference/J-Space causal receipt",
+    "adapter_must_bind": [
+      "exact model/checkpoint SHA-256",
+      "exact tokenizer/container identity",
+      "exact llama.cpp source/build/runtime identity",
+      "J-Space basis_id and basis_sha256",
+      "generation and role",
+      "vector packet SHA-256",
+      "layer start/end or exact intervention stage mapping",
+      "gain/scale",
+      "calibration dataset/family identity",
+      "control condition",
+      "calibration metrics and holdout metrics"
+    ],
+    "required_controls": [
+      "BASELINE",
+      "NULL_VECTOR",
+      "SIGN_FLIP",
+      "PERMUTED_OR_ORTHOGONAL_CONTROL",
+      "ROLE_SWAP",
+      "LESION"
+    ],
+    "basis_law": "A control vector is not transferable authority across model identities. The canonical command may be shared, but the residual coordinates require an explicitly calibrated model-specific projection/basis adapter."
+  },
+  "credit_boundary": {
+    "local_mechanism_proof": "PASS_AT_DECLARED_SYNTHETIC_SCOPE",
+    "entityos_hcu_runtime_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "qwen3_06b_model_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "negative_evidence": [
+    "The exact-current Vercel PR810 deployment route was reachable only to Vercel deployment protection/SSO in this session; no function invocation/runtime logs were observed and no runtime credit was minted.",
+    "Raw cross-instance vectors were not robustly transferable.",
+    "Naive gradient direction did not dominate the calibrated mean-difference adapter.",
+    "No actual Qwen3-0.6B bytes were downloaded or executed in this local scratch experiment."
+  ],
+  "next_exact_gate": "Implement and source-test JSPACE_LATENT_BASIS_ADAPTER/v1 around the already pinned llama.cpp native control-vector mechanism, then on an admitted zero-cost surface materialize the exact pinned Qwen3-0.6B Q8_0 artifact and exact runtime build, bind actual loader consumption, calibrate layer-range/gain without evaluation leakage, and run BASELINE/+VECTOR/SIGN_FLIP/NULL/RANDOM-OR-PERMUTED controls with exact inference/J-Space receipts before granting any model-runtime or causal J-Space credit."
+}

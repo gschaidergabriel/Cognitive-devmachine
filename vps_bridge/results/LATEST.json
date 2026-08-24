@@ -1,17 +1,20 @@
 {
   "schema": "CLAY_VPS_RECEIPT/v4",
-  "command_id": "research-distillery-entry-inventory-20260824T1741",
-  "command_sha256": "ab9e63cf2cb7c4071f9fba26fd5df9b8660849e52716352cd60ddedfe8f885f5",
-  "started_at": "2026-08-24T10:39:37.558681+00:00",
-  "finished_at": "2026-08-24T10:39:37.936253+00:00",
+  "command_id": "research-distillery-supervisor-sync-20260824T1744",
+  "command_sha256": "2acaa935c8966d05f0c78348ca351847229157ef8075959e5b1a6b0406482b76",
+  "started_at": "2026-08-24T10:40:43.770356+00:00",
+  "finished_at": "2026-08-24T10:40:45.962432+00:00",
   "status": "PASS",
   "exit_code": 0,
-  "op": "exec",
-  "stdout_sha256": "b05a51ada68a3e5b58ba75e3f037c348ba414139a7db95f0421d325ce052b59e",
+  "op": "canonical_sync",
+  "stdout_sha256": "0877c88b4b46a2d08615a690e9c079efdfa0f9c29af9d5f3833809400b251043",
   "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-  "stdout_tail": "{\n  \"schema\": \"CLAY_RESEARCH_DISTILLERY_STATUS/v1\",\n  \"generated_at\": \"2026-08-24T10:39:37.900794+00:00\",\n  \"collected_source_tokens\": 0,\n  \"accepted_dataset_tokens\": 0,\n  \"dataset_yield\": 0.0,\n  \"compression_factor\": null,\n  \"collected_chunks\": 0,\n  \"accepted_packets\": 0,\n  \"rejected_candidates\": 0,\n  \"questions\": {\n    \"OPEN\": 10\n  },\n  \"source_metadata_rows\": {},\n  \"small_models\": [\n    \"nvidia/nemotron-3-nano-30b-a3b:free\",\n    \"nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free\",\n    \"nvidia/nemotron-3-super-120b-a12b:free\",\n    \"nvidia/nemotron-3-ultra-550b-a55b:free\",\n    \"nvidia/nemotron-nano-12b-v2-vl:free\",\n    \"nvidia/nemotron-nano-9b-v2:free\",\n    \"google/gemma-4-26b-a4b-it:free\",\n    \"google/gemma-4-31b-it:free\"\n  ],\n  \"reviewers\": [\n    {\n      \"lane\": \"nvidia_reviewer\",\n      \"provider\": \"nvidia\",\n      \"model\": \"nvidia/llama-3.3-nemotron-super-49b-v1\"\n    }\n  ],\n  \"model_input_tokens\": 0,\n  \"model_output_tokens\": 0,\n  \"shared_provider_budget\": {\n    \"schema\": \"CLAY_SHARED_PROVIDER_BUDGET/v1\",\n    \"generated_at\": \"2026-08-24T10:39:37.901100+00:00\",\n    \"providers\": {\n      \"openrouter\": {\n        \"max_inflight\": 3,\n        \"active_leases\": 0,\n        \"min_interval_s\": 0.5,\n        \"cooldown_seconds\": 0.0,\n        \"total_requests\": 1,\n        \"total_success\": 1,\n        \"total_429\": 0,\n        \"total_errors\": 0,\n        \"last_status\": \"200\",\n        \"last_observed_at\": \"2026-08-24T10:39:37.886103+00:00\"\n      }\n    }\n  },\n  \"db_bytes\": 90112\n}\n",
+  "stdout_tail": "93cad8cb7b6192fb6079e306cb5d0bedea54b99b\n",
   "stderr_tail": "",
-  "meta": {},
+  "meta": {
+    "head": "93cad8cb7b6192fb6079e306cb5d0bedea54b99b",
+    "ref": "main"
+  },
   "execution_boundary": "ROOT_INSIDE_ROOTLESS_PODMAN_OR_EXPLICIT_REPO_CONTROL_OP",
   "canonical_credit_minted": 0
 }

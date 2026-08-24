@@ -156,6 +156,28 @@ def _verify_transition_trace_identity(trace: Any, claimed_sha256: str) -> None:
         raise JSpaceDatasetAdmissionError("TRANSITION_TRACE_IDENTITY_MISMATCH")
 
 
+def _canonical_training_sha256(trace: Any) -> str:
+    """Recreate the TrainingTrace producer's RFC8785/JCS identity from serialized material.
+
+    ``TrainingTrace.trace_sha256`` is defined over the canonical serialized trace with only
+    ``trace_sha256`` removed. DatasetAdmission receives that serialized mapping, so accepting
+    a caller-owned registry key without re-deriving this digest would allow an admission
+    object to carry content-false training ancestry even though the later compiler would
+    eventually reject the row. Keep this check in the existing admission authority and reuse
+    the selected RFC8785/JCS canonicalizer rather than introducing a second serializer.
+    """
+    material = dict(_mapping(trace, "admitted_training_trace"))
+    material.pop("trace_sha256", None)
+    if material.get("canonicalization_schema") != CANONICALIZATION_SCHEMA:
+        raise JSpaceDatasetAdmissionError("TRAINING_TRACE_CANONICALIZATION_SCHEMA_MISMATCH")
+    return _canonical_mapping_sha256(material, "admitted_training_trace.material")
+
+
+def _verify_training_trace_identity(trace: Any, claimed_sha256: str) -> None:
+    if _canonical_training_sha256(trace) != claimed_sha256:
+        raise JSpaceDatasetAdmissionError("TRAINING_TRACE_IDENTITY_MISMATCH")
+
+
 def _verify_outcome_receipt_identity(
     receipt: Any,
     claimed_sha256: str,
@@ -324,10 +346,10 @@ def admit_for_training_dataset(
 
     This gate does not mint truth. It proves that admitted training, live-transition,
     prototype and GRID10 evidence refer to the same generation/cell/role/basis, exact Vector
-    Control packet/control condition, and Entry->Route->GRID10 identities. The transition
-    and prototype ancestry keys must additionally resolve to the exact RFC8785/JCS content
-    identities they claim. The shared Vector Control digest must resolve through a caller-owned
-    registry to an exact canonical packet preimage that passes the sole
+    Control packet/control condition, and Entry->Route->GRID10 identities. The training,
+    transition and prototype ancestry keys must additionally resolve to the exact RFC8785/JCS
+    content identities they claim. The shared Vector Control digest must resolve through a
+    caller-owned registry to an exact canonical packet preimage that passes the sole
     ``JSPACE_VECTOR_CONTROL_ABI/v1`` validator. Outcome identity uses the selected acyclic
     content key and separately revalidates the final training-trace back-reference. A raw
     standalone prototype, self-consistent row, digest-only vector label, shared but unadmitted
@@ -482,6 +504,8 @@ def admit_for_training_dataset(
         )
     elif credit != "UNKNOWN":
         raise JSpaceDatasetAdmissionError("NONUNKNOWN_CREDIT_REQUIRES_ADMITTED_OUTCOME_RECEIPT")
+
+    _verify_training_trace_identity(training_trace, training_sha)
 
     return DatasetAdmission(
         schema=ADMISSION_SCHEMA,

@@ -1,0 +1,8 @@
+{
+  "schema":"CLAY_VPS_COMMAND/v4",
+  "command_id":"00000-ramp-check-6000-20260824T2055p0700",
+  "op":"exec",
+  "cwd":"/workspace/clay-global-research-entity",
+  "timeout_seconds":120,
+  "command":"set -e; sleep 45; echo STATUS; cat /artifacts/clay-entityos-swarm/active-fabric6000-v2-20260824T135052Z/status.json; echo RECEIPTS; wc -l /artifacts/clay-entityos-swarm/free_lane_execution_receipts.jsonl 2>/dev/null || true; echo MEMORY; free -h"
+}

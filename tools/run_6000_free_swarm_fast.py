@@ -1,19 +1,24 @@
 #!/usr/bin/env python3
-"""High-I/O-concurrency launcher for the route-bound 6000 logical Free Swarm."""
+"""High-I/O launcher for the accelerated 6000 logical Free Swarm."""
 from __future__ import annotations
 import asyncio
 import concurrent.futures
 import os
 import threading
+
+# Install throughput behavior *before* importing the 6000 fabric so its
+# FastProviderRuntime inherits transient-error isolation and its shard prompt wraps
+# the stable cache-friendly prefix. Economic route gating remains in v3.
+import run_free_go_swarm as base
+import run_24h_entityos_swarm as opt
+import free_swarm_accelerator_v2 as accelerator
+accelerator.install(base, opt)
 import run_6000_free_swarm_v3 as fabric
 
 
 def main() -> int:
     workers=max(64,min(1024,int(os.getenv("CLAY_SWARM_HTTP_THREADS","512"))))
-    # Calls are blocking urllib operations executed via asyncio.to_thread. The
-    # enlarged pool prevents the Python default executor from becoming the local
-    # concurrency ceiling; provider/shared-quota gates remain authoritative.
-    try: threading.stack_size(2*1024*1024)
+    try: threading.stack_size(1024*1024)
     except (ValueError,RuntimeError): pass
     loop=asyncio.new_event_loop(); asyncio.set_event_loop(loop)
     ex=concurrent.futures.ThreadPoolExecutor(max_workers=workers,thread_name_prefix="clay-free-http")

@@ -1,17 +1,20 @@
 {
   "schema": "CLAY_VPS_RECEIPT/v4",
-  "command_id": "zzzzz-b-activate-accelerated-fabric-20260824T2050p0700",
-  "command_sha256": "7ce17001da0792754786056a51cadb983797724ebce4b245bddb5e09fe5f55e8",
-  "started_at": "2026-08-24T13:49:40.448957+00:00",
-  "finished_at": "2026-08-24T13:49:40.662268+00:00",
-  "status": "FAIL",
-  "exit_code": 4,
-  "op": "exec",
-  "stdout_sha256": "8eca4334420162056f91e5efe3cdd7b71d47d71af31ec13b553f45880712ad73",
+  "command_id": "zzzzzz-a-sync-871-20260824T2051p0700",
+  "command_sha256": "4737f478e213853163ad5bf517c2602fb76f0d8f84b98718d82bc5ec481c71bc",
+  "started_at": "2026-08-24T13:50:33.897511+00:00",
+  "finished_at": "2026-08-24T13:50:35.772805+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "canonical_sync",
+  "stdout_sha256": "5f07314e36f7267f4e75f76c6b2ec3463757f7d3ffb0d7b22741be68d2cd9cb0",
   "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-  "stdout_tail": "HEAD=690cf117bd4274b9d89974e60a62faff1e7554e4\n--- PREFLIGHT ---\nFilesystem      Size  Used Avail Use% Mounted on\n/dev/sda1       193G   36G  157G  19% /workspace\n/dev/sda1       193G   36G  157G  19% /cache\n/dev/sda1       193G   36G  157G  19% /artifacts\n               total        used        free      shared  buff/cache   available\nMem:            15Gi       5.4Gi       5.3Gi       1.8Mi       5.3Gi        10Gi\nSwap:             0B          0B          0B\n--- ADMISSION ---\n{\"admitted_free_providers\":[],\"ok\":false,\"schema\":\"ENTITYOS_HCU_FREE_PROVIDER_ADMISSION_STATUS/v1\",\"status\":\"PROVIDER_ADMISSION_AUTHORITY_EPOCH_MISMATCH\"}\n",
+  "stdout_tail": "a06457f4d278f39d7c23e9b4b74704192fcdb772\n",
   "stderr_tail": "",
-  "meta": {},
+  "meta": {
+    "head": "a06457f4d278f39d7c23e9b4b74704192fcdb772",
+    "ref": "main"
+  },
   "execution_boundary": "ROOT_INSIDE_ROOTLESS_PODMAN_OR_EXPLICIT_REPO_CONTROL_OP",
   "canonical_credit_minted": 0
 }

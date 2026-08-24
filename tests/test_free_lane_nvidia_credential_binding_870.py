@@ -22,7 +22,7 @@ class NvidiaCredentialBinding870Tests(unittest.TestCase):
                 "nvidia": {
                     "allowed_endpoint_host": "integrate.api.nvidia.com",
                     "evidence_kind": "NVIDIA_HOSTED_NIM_DEVELOPER_FREE_PROTOTYPING",
-                    "source": "https://developer.nvidia.com/nim",
+                    "sources": ["https://developer.nvidia.com/nim"],
                     "scope": "NVIDIA-hosted API Catalog/NIM prototyping endpoint only",
                 }
             }
@@ -54,7 +54,7 @@ class NvidiaCredentialBinding870Tests(unittest.TestCase):
             "providers": {
                 "nvidia": {
                     **self.base["providers"]["nvidia"],
-                    "admitted_credential_fingerprints": [],
+                    "allowed_credential_fingerprints": [],
                 }
             }
         }
@@ -65,7 +65,18 @@ class NvidiaCredentialBinding870Tests(unittest.TestCase):
             "providers": {
                 "nvidia": {
                     **self.base["providers"]["nvidia"],
-                    "admitted_credential_fingerprints": ["fp-other"],
+                    "allowed_credential_fingerprints": ["fp-other"],
+                }
+            }
+        }
+        self.assertFalse(self.evidence(provenance, "fp-test")["ok"])
+
+    def test_legacy_mismatched_field_name_does_not_authorize(self) -> None:
+        provenance = {
+            "providers": {
+                "nvidia": {
+                    **self.base["providers"]["nvidia"],
+                    "admitted_credential_fingerprints": ["fp-test"],
                 }
             }
         }
@@ -76,7 +87,7 @@ class NvidiaCredentialBinding870Tests(unittest.TestCase):
             "providers": {
                 "nvidia": {
                     **self.base["providers"]["nvidia"],
-                    "admitted_credential_fingerprints": ["fp-test"],
+                    "allowed_credential_fingerprints": ["fp-test"],
                 }
             }
         }
@@ -87,13 +98,14 @@ class NvidiaCredentialBinding870Tests(unittest.TestCase):
             result["assertion"],
             "BOUND_CREDENTIAL_NVIDIA_DEVELOPER_FREE_NIM_PROTOTYPING_ONLY",
         )
+        self.assertEqual(result["sources"], ["https://developer.nvidia.com/nim"])
 
     def test_wrong_endpoint_still_fails_even_for_bound_credential(self) -> None:
         provenance = {
             "providers": {
                 "nvidia": {
                     **self.base["providers"]["nvidia"],
-                    "admitted_credential_fingerprints": ["fp-test"],
+                    "allowed_credential_fingerprints": ["fp-test"],
                 }
             }
         }

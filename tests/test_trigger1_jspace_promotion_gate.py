@@ -98,6 +98,29 @@ class Trigger1PromotionGateTests(unittest.TestCase):
         self.assertTrue(verdict["owner_trigger1_goal_credit_candidate"])
         self.assertEqual([], verdict["owner_target_failures"])
 
+    def test_terminal_output_projection_shortcut_fails_mechanism_and_goal(self):
+        candidate = valid_local_api_candidate()
+        candidate["runtime_intervention_class"] = "LOCAL_PYTORCH_ACTIVATION_INTERVENTION"
+        candidate["intervention"]["activation_site"] = "model.model.norm:output:last_token"
+        verdict = gate.adjudicate(candidate)
+        self.assertFalse(verdict["mechanism_runtime_vector_credit_candidate"])
+        self.assertFalse(verdict["owner_trigger1_goal_credit_candidate"])
+        self.assertIn(
+            "TERMINAL_OUTPUT_PROJECTION_SHORTCUT_NOT_JSPACE_CAUSAL_EVIDENCE",
+            verdict["failures"],
+        )
+
+    def test_declared_terminal_output_projection_shortcut_fails_closed(self):
+        candidate = valid_local_api_candidate()
+        candidate["intervention"]["terminal_output_projection_shortcut"] = True
+        verdict = gate.adjudicate(candidate)
+        self.assertFalse(verdict["mechanism_runtime_vector_credit_candidate"])
+        self.assertFalse(verdict["owner_trigger1_goal_credit_candidate"])
+        self.assertIn(
+            "TERMINAL_OUTPUT_PROJECTION_SHORTCUT_NOT_JSPACE_CAUSAL_EVIDENCE",
+            verdict["failures"],
+        )
+
     def test_hosted_prompt_only_fails_closed(self):
         candidate = valid_candidate()
         candidate["transport"]["hosted_prompt_only"] = True

@@ -1,0 +1,78 @@
+{
+  "schema": "CLAY_GO_COLLECTIVE_METRICS/v1",
+  "generated_at": "2026-08-24T11:59:40Z",
+  "generation_class": "BOOTSTRAP_BASELINE_SOURCE_DERIVED_NOT_AGGREGATOR_RUNTIME",
+  "canonical_main_observed": "2ee80b54c2eecc3f2a8cd676109c166a5add19c3",
+  "authority_epoch": "8.69",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "selection_policy": "PARETO_WITH_HARD_GATES_NO_SINGLE_SCALAR",
+  "source_metrics": {
+    "free_swarm_live_metrics_generated_at": "2026-08-24T11:58:11.023677+00:00",
+    "worker_records": 709,
+    "exact_usage_rows": 414,
+    "input_tokens": 2605050,
+    "output_tokens": 582885,
+    "total_tokens": 3187935,
+    "architecture_delta_records": 1,
+    "accepted_architecture_deltas": 0
+  },
+  "aggregate": {
+    "token_quality_efficiency_per_1k_tokens": 0.0,
+    "token_quality_note": "Known exact tokens with zero accepted verified architecture deltas in the current adjudication ledger. This is a verified-utility baseline, not a statement that all historical tokens were useless.",
+    "code_quality_score": null,
+    "code_quality_status": "UNKNOWN_NO_ACCEPTED_DELTA_EVIDENCE",
+    "verified_innovation_score": null,
+    "verified_innovation_status": "UNKNOWN_NO_ACCEPTED_DELTA_EVIDENCE",
+    "performance_index": null,
+    "p95_information_latency_seconds": null,
+    "capability_information_latency_ratio": null,
+    "latency_status": "UNKNOWN_DOWNSTREAM_CONSUMPTION_ACK_NOT_YET_INSTRUMENTED",
+    "hcu_confidence": {
+      "event": "HCU_TARGET_100_GO",
+      "forecast_probability": 0.4305,
+      "wide_uncertainty_interval": [0.20, 0.65],
+      "classification": "UNCALIBRATED_MODEL_FORECAST_NOT_FACT",
+      "milestone_probabilities": {
+        "authority_truth_effect_invariants": 0.90,
+        "typed_entry_causal_identity": 0.75,
+        "provider_runtime_effect_boundaries": 0.35,
+        "engine_loader_consumed_identity": 0.45,
+        "grid10_inference_receipt_closure": 0.55,
+        "canonical_local_model_execution": 0.40,
+        "jspace_model_specific_observation": 0.45,
+        "jspace_causal_intervention_controls": 0.25,
+        "dataset_training_readiness": 0.35,
+        "recovery_replay_fail_closed": 0.55,
+        "performance_latency_scale": 0.20,
+        "integration_independent_reproducibility": 0.40
+      },
+      "calibration_state": "UNCALIBRATED_BOOTSTRAP",
+      "brier_score": null,
+      "log_loss": null
+    }
+  },
+  "per_worker_table": {
+    "status": "PENDING_FIRST_AGGREGATOR_RUN_ON_ARTIFACT_SURFACE",
+    "reason": "The connected GitHub surface exposes the persisted aggregate LIVE_METRICS but not the local /artifacts worker JSONL tree. go_collective_metrics.py will populate full worker rows when run at the end of the next go on an authorized artifact-bearing local/clay-direct-dev surface.",
+    "required_columns": ["worker", "tokens", "TQE", "CQS", "VIS", "performance_index", "information_latency", "CILR", "evidence_lineage", "HCU_forecast_contribution", "status"]
+  },
+  "anti_goodhart": {
+    "single_scalar_selection_forbidden": true,
+    "raw_measurements_append_only": true,
+    "evidence_lineage_collapse": true,
+    "metric_weights_frozen_for_macrocycles": 10,
+    "metric_changes_shadow_macrocycles": 3,
+    "score_can_decrease": true,
+    "holdout_or_countermetric_required_when_practical": true,
+    "latency_cannot_skip_verification": true,
+    "token_efficiency_cannot_skip_required_evidence": true,
+    "confidence_is_not_optimization_target": true
+  },
+  "runtime_credit_added": 0,
+  "whole_entityos_hcu_runtime_credit_added": 0,
+  "hcu_full_runtime_credit_added": 0,
+  "jspace_model_runtime_credit_added": 0,
+  "training_credit_added": 0
+}

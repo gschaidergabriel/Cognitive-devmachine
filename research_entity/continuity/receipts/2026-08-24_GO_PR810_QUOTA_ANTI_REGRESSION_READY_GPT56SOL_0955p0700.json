@@ -1,0 +1,106 @@
+{
+  "schema": "CLAY_GO_ENTITYOS_HCU_EXECUTOR_BUILD_CONVERGENCE_RECEIPT/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "supervisor": "SUPERVISOR_STEERING_8_63",
+  "mode": "FREE_ONLY",
+  "authority_reentry": {
+    "research_main_observed_before_write": "03e3e09b86971857e337c53868a327a00e76f5c7",
+    "latest_training_source_gate_observed": "HCU_JSPACE_MODEL_INPUT_CONTROL_CLOSURE_SOURCE_REVALIDATION_GATE_V1",
+    "training_source_gate_credit": 0
+  },
+  "retained_executor": {
+    "identity": "gschaidergabriel/Dr.-Unterweger#810",
+    "commit": "6a15601183f9bb61d445368e4d239e90a47b300c",
+    "parent": "bdb1d5116ba3243841c263cc30eb6620e4da3f2c",
+    "commit_message": "guard(hcu): pin fail-closed Sandbox quota invariants",
+    "changed_file": "mcp/vercel-sandbox-mcp/scripts/guard-entityos-hcu-current-executor.mjs"
+  },
+  "build_history": {
+    "carrier_path_guard_commit": "588315b63f4f4255f6e73bd604cbc1789cbe12c9",
+    "carrier_path_guard_build": "dpl_3brnpJBb1jq9mQE9yGuHx1ahVM6m",
+    "carrier_path_guard_build_result": "ERROR",
+    "carrier_path_guard_build_error": "ENTITYOS_HCU_PREVERCEL_SUCCESSOR_GUARD_CHAIN_DRIFT",
+    "classification": "BUILD_GUARD_INTEGRATION_DEFECT_NOT_PRODUCT_RUNTIME_FAILURE",
+    "parallel_sync_fix_commit": "bdb1d5116ba3243841c263cc30eb6620e4da3f2c",
+    "parallel_sync_fix_deployment": "dpl_7u6VPVhzXpGTWmmDA2PochdG2DCq",
+    "parallel_sync_fix_state": "READY"
+  },
+  "anti_regression_delta": {
+    "required_markers_added_to_exclusive_executor_guard": [
+      "remaining_sandbox_quota_directly_observed: false",
+      "remaining_quota_assumption_forbidden: true",
+      "runtime_gate: BLOCKED_QUOTA_UNOBSERVED",
+      "SUPERVISOR_8_63_REQUIRES_DIRECT_REMAINING_INCLUDED_QUOTA_OBSERVATION_BEFORE_SANDBOX_CREATE",
+      "SANDBOX_COST_ADMISSION.remaining_sandbox_quota_directly_observed === true",
+      "SANDBOX_COST_ADMISSION.runtime_gate === OPEN_DIRECT_QUOTA_OBSERVED"
+    ],
+    "effect": "THE_EXCLUSIVE_BUILD_GUARD_NOW_REJECTS_SILENT_REGRESSION_FROM_DIRECT_QUOTA_EVIDENCE_REQUIREMENT_TO_PLAN_IDENTITY_ONLY",
+    "execution_authority_opened": false
+  },
+  "exact_build_evidence": {
+    "vercel_project": "dr-unterweger",
+    "deployment_id": "dpl_J2W13WSMy3ewWspjfNdn2wqM6rtN",
+    "deployment_git_sha": "6a15601183f9bb61d445368e4d239e90a47b300c",
+    "exact_executor_commit_match": true,
+    "deployment_state": "READY",
+    "observed_build_guards": [
+      "HCU_JSPACE_CARRIER_DONOR_PATH_IDENTITY=PASS",
+      "JSPACE_V4_V3_CURRENT_PRODUCER_DERIVED_DONOR_CLOSURE=PASS",
+      "MANIFEST_CONTRACT_IDENTITY=PASS",
+      "EXACT_BLOBS_CHECKED=17",
+      "SOURCE_REBOUND_READY_SUCCESSOR_DYNAMIC_17_BLOB_EXACT_14_RESULT_FENCE_PASS",
+      "SOURCE_REBOUND_READY_SOURCE_VERIFY_PERMISSION_FENCE_PASS",
+      "CURRENT_EXECUTOR_FREE_ONLY_JSPACE_V4_V3_SOURCE_REBOUND_READY_SUCCESSOR_DYNAMIC_GUARDED"
+    ],
+    "retained_donor_commit": "511d568932bf47828679e3ca6ba05650f18d284d",
+    "carrier_manifest": "jspace-v4-v3-required-blobs-511d5689.json",
+    "carrier_source_directory": "jspace-execution-store-511d5689",
+    "function_invocation_observed": false,
+    "sandbox_create_observed": false
+  },
+  "execution_gate": {
+    "remaining_included_sandbox_quota_directly_observed": false,
+    "runtime_gate": "BLOCKED_QUOTA_UNOBSERVED",
+    "hobby_plan_identity_is_remaining_quota_evidence": false,
+    "ready_deployment_is_runtime_evidence": false,
+    "decision": "DO_NOT_INVOKE_SANDBOX_UNTIL_INVOCATION_SCOPED_DIRECT_QUOTA_AND_NO_CHARGE_NO_UPGRADE_NO_BILLING_PATH_EVIDENCE_EXISTS"
+  },
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED: the retained executor's carrier-guard integration defect was closed, quota fail-closed semantics are now anti-regression guarded, and the exact resulting executor commit built READY on Vercel.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED: donor carrier paths are bound to retained donor identity, the 17-blob source closure and exact 14-result fence remain guarded, and the central Sandbox admission boundary cannot silently regress to plan-identity-only authorization.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "TRAINING_READINESS_NO_CHANGE_WITH_REASON: source/build readiness improved, and current main adds canonical model-input control-closure source revalidation as a pre-training gate, but no admissible Function/Sandbox/model execution occurred and no J-Space model-runtime or training credit exists."
+  },
+  "research_finding": {
+    "hypothesis": "Build-time authority guards can themselves become stale when a new predecessor guard is inserted, and execution-safety repairs need an anti-regression assertion in the exclusive guard rather than relying on the repaired admission module alone.",
+    "counterhypothesis": "Once free-only-sandbox-admission.js is repaired, no exclusive-guard assertion of its direct-quota semantics is necessary.",
+    "discriminator": "Add exact direct-quota marker assertions to the exclusive build guard and observe the exact resulting commit through the full Vercel build guard chain.",
+    "result": "COUNTERHYPOTHESIS_REJECTED_BY_DURABLE_ANTI_REGRESSION_GUARD_PLUS_EXACT_READY_BUILD"
+  },
+  "coordination": {
+    "shared_immutable_macrocycle_id_available": false,
+    "unusual_experiment_status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_experiments_executed": 0,
+    "duplicate_executor_lane_created": false
+  },
+  "credits": {
+    "component_runtime_credit_added": false,
+    "whole_entityos_hcu_runtime": 0,
+    "full_hcu_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "readme": {
+    "status": "NO_CHANGE_WITH_REASON",
+    "reason": "the artefact/README.md is a rapidly moving whole-system surface under concurrent canonical writes; this append-only exact receipt records the nonduplicate executor/build delta without overwriting fresher system state."
+  },
+  "next_exact_gates": [
+    "For runtime acceptance: obtain invocation-scoped direct evidence of remaining included Vercel Sandbox quota plus no-charge/no-upgrade/no-billing-path authority; otherwise keep BLOCKED_QUOTA_UNOBSERVED and do not invoke.",
+    "For J-Space training readiness: in the single retained PR1263 path wire canonical source revalidation of JSpaceModelInputControlClosure/v1 into non-BASELINE serious training promotion and add the forged self-consistent closure negative regression before any training promotion."
+  ],
+  "evidence_boundary": "This receipt establishes source/build/guard convergence only. READY is not Function invocation. No Sandbox execution, real model execution, hidden-state causal use, J-Space model-runtime credit, training credit or whole EntityOS/HCU PASS is claimed."
+}

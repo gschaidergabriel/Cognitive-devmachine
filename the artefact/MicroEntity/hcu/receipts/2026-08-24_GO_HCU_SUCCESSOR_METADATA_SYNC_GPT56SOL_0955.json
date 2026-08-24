@@ -1,0 +1,100 @@
+{
+  "schema": "CLAY_GO_HCU_SOURCE_FUSION_RECEIPT/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "persistent_entity": "Clay",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "supervisor": "8.63",
+  "mode": "FREE_ONLY",
+  "canonical_main_observed_at_reentry": "c136a2112d5043250e2c8ca7d1b0f5c3b14e5cf6",
+  "retained_donor_pr": 1263,
+  "retained_donor_head_observed_before_receipt": "16a24bc7fbe50155b76cf618d116b98791e6a581",
+  "retained_executor": "gschaidergabriel/Dr.-Unterweger#810",
+  "executor_head_observed_during_cycle": "7994352f4dcd48dbd7d0c6c5154bad5632b054c1",
+  "coordination": {
+    "upstream_shared_macrocycle_id": null,
+    "classification": "NO_SHARED_REPRODUCIBLE_MACROCYCLE_ID_OBSERVED",
+    "unusual_experiment": "NOT_ATTEMPTED_ORDINARY_DETERMINISTIC_SOURCE_FUSION",
+    "atomic_lease": "NOT_REQUIRED_FOR_ACTIONS_TAKEN",
+    "legacy_parallel_receipts_grouped_post_hoc": false
+  },
+  "observation": {
+    "stale_island_found": true,
+    "hcu_data_index_before": {
+      "schema": "HCU_DATA_INDEX/v12",
+      "supervisor_pointer": "SUPERVISOR_STEERING_8_61.json",
+      "inference_receipt_schema": "HCU_INFERENCE_RECEIPT/v3",
+      "dataset_admission_schema": "ENTITYOS_HCU_JSPACE_DATASET_ADMISSION/v1",
+      "jspace_inference_binding_schema": "ENTITYOS_HCU_JSPACE_INFERENCE_BINDING/v1"
+    },
+    "live_source_observed": {
+      "supervisor_pointer": "SUPERVISOR_STEERING_8_63.json",
+      "inference_receipt_schema": "HCU_INFERENCE_RECEIPT/v4",
+      "dataset_admission_schema": "ENTITYOS_HCU_JSPACE_DATASET_ADMISSION/v2",
+      "jspace_inference_binding_schema": "ENTITYOS_HCU_JSPACE_INFERENCE_BINDING/v3",
+      "verified_model_execution_schema": "HCU_VERIFIED_MODEL_EXECUTION/v1"
+    },
+    "risk": "CURRENT_RELEASE_OR_REBIND_METADATA_COULD_ROUTE_FUTURE_WORK_TO_SUPERSEDED_SCHEMA_IDENTITIES_DESPITE_NEWER_LIVE_SOURCE"
+  },
+  "hypothesis": "Successor-stale release metadata is a real convergence hazard because a consumer can select obsolete supervisor or causal schema identities even when current source has already advanced.",
+  "counterhypothesis": "The metadata may be ignored by some consumers and therefore could be documentation-only drift rather than an execution-path defect.",
+  "discriminator": "Bind release metadata to live source constants with deterministic regression checks and canonical bootstrap authority comparison; execute that regression only on an admitted exact-source FREE surface before granting runtime credit.",
+  "writes": [
+    {
+      "commit": "264ffe2213cff72006bd99e04acbb65e7a04885c",
+      "path": "the artefact/MicroEntity/hcu/HCU_DATA_INDEX.json",
+      "delta": "v13 successor-current supervisor/inference/dataset/binding/model-execution metadata"
+    },
+    {
+      "commit": "49c4d3742dd3d858a50c806fd9deea022421688d",
+      "path": "the artefact/MicroEntity/PACKAGE_MANIFEST.json",
+      "delta": "release manifest includes current Inference v4, J-Space Binding v3, Dataset Admission v2 and family-split training-readiness source path"
+    },
+    {
+      "commit": "9b717770011a0d5a6827405f59ee8488e158257f",
+      "path": "the artefact/MicroEntity/hcu/test_hcu_release_manifest_sync_v1.py",
+      "delta": "successor-dynamic source/schema/bootstrap coherence regression"
+    }
+  ],
+  "track_a": {
+    "name": "ENTITYOS_EXECUTABLE_CONVERGENCE",
+    "delta": "Release/rebind metadata now points at the current retained causal source chain rather than v3/v1 predecessors; package chain extends through DatasetAdmission v2 and family split.",
+    "runtime_credit_change": 0
+  },
+  "track_b": {
+    "name": "HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT",
+    "delta": "HCU data index now binds Entry/route/load/GRID10 to canonical MiniUnifiedDB ModelExecution admission and HCU_INFERENCE_RECEIPT/v4 without creating a second authority.",
+    "runtime_credit_change": 0
+  },
+  "track_c": {
+    "name": "GLOBAL_JSPACE_GWT_PROTOTYPE_AND_FREE_ONLY_LOCAL_08B_READINESS",
+    "delta": "Training-readiness metadata is promoted to DatasetAdmission v2 plus J-Space Binding v3 and release inclusion; regression prevents future silent schema drift.",
+    "training_credit_change": 0
+  },
+  "runtime_discriminator": {
+    "vercel_team_plan_observed": "hobby",
+    "exact_pr810_head_ready_deployment_observed": false,
+    "sandbox_invoked": false,
+    "reason": "No READY deployment bound to the exact observed PR810 head; predecessor or redeployed older commits cannot be projected onto current-head runtime evidence."
+  },
+  "parallel_movement": {
+    "observed": true,
+    "handling": "REENTERED_LIVE_PR_HEAD_AFTER_409_AND_PRESERVED_ONLY_ANCESTRY_CONFIRMED_WRITES",
+    "newer_donor_source_examples": [
+      "jspace_control_consumption_binding_v1.py",
+      "test_jspace_model_input_control_closure_revalidation_v1.py",
+      "test_loader_consumption_witness_v1.py"
+    ],
+    "promotion_rule": "NEW_PARALLEL_SOURCE_IS_NOT_AUTOMATICALLY_CURRENT_RELEASE_AUTHORITY"
+  },
+  "credits": {
+    "whole_entityos_hcu_runtime": 0,
+    "full_hcu_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "When an included-tier Vercel preview is naturally READY at the exact then-current PR810 Git SHA, invoke only the fixed FREE_ONLY executor route and require exact source/hash/result/secret/cleanup fences. Separately run the new release-metadata coherence regression on an admitted exact-source FREE surface before promoting it from source evidence."
+}

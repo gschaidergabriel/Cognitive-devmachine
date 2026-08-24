@@ -97,7 +97,6 @@ The retained launcher was changed to delegate to that stronger protocol and brid
 No new unusual experiment was executed in this macrocycle because no reproducible shared immutable macrocycle/request identity was available beyond minute-level conversation timing. This is a durable source/control-plane/J-Space-readiness delta only and mints zero model-runtime, J-Space-model, HCU-full, training or whole-product credit.
 
 ### GO 23:33 promotion-gate metric-modality closure
-
 The current `CLAY_TRIGGER1_JSPACE_PROMOTION_GATE/v4` previously enforced label counterbalancing only when `holdout.metric_uses_output_tokens` was the literal boolean `true`. Missing or non-boolean values could therefore evade an explicit holdout metric-modality declaration.
 
 Current `main` now requires `metric_uses_output_tokens` to be an explicit boolean. Missing/non-boolean values fail closed with `HOLDOUT_METRIC_OUTPUT_TOKEN_MODALITY_REQUIRED`; token-output metrics still require `label_mapping_counterbalanced=true`. `tests/test_trigger1_jspace_metric_modality_v4.py` locks missing, non-boolean and legitimate counterbalanced cases.
@@ -165,3 +164,11 @@ A source file, test, workflow, deployment, provider HTTP success, token count or
 For every material claim distinguish direct observation, source-derived claim, inference, generated hypothesis, counterhypothesis, intervention/test and verified scope. Negative evidence is first-class. Auth/rate/quota/runner failure is not automatically product/science failure. A component PASS is not whole-product PASS.
 
 Before substantive continuation: refresh verified `main`; resolve newest owner/supervisor authority; inspect overlapping work; preserve exact source/runtime identities; execute the cheapest high-information discriminator; persist bounded evidence; and re-enter `main` after every material write.
+
+### GO 23:34 canonical lease timestamp-semantics delta
+
+Parallel `main` absorbed the broader Trigger-1 legacy timestamp/digest alias fence and damaged-legacy-filename race fence during this macrocycle, so duplicate candidate PRs were closed rather than fused. Re-entry then narrowed the remaining nonduplicate coordination defect to timestamp semantics in the single retained `tools/trigger1_atomic_lease_gate.py` path.
+
+The bounded successor keeps the current `CLAY_TRIGGER1_LOCAL_QWEN06_INTERMEDIATE_CONTRASTIVE/v1` experiment contract and adds only two fail-closed parser properties: canonical `ts_…__p_…` keys must be calendar-valid before claim admission, and regex-shaped legacy date/offset aliases with impossible values must return deterministic non-alias rather than raising out of the race scan. Regression definitions cover both cases while preserving the existing legacy alias, damaged-file and unrelated-file controls.
+
+No unusual intervention was executed because this exact `go` exposes no shared immutable request/turn identity and only minute-precision conversation time. Coordination is therefore `COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT`. Track A advances the pre-intervention EntityOS execution gate; Track C advances J-Space execution readiness; Track B records `HCU_NO_CHANGE_WITH_REASON` because concurrent current-main work already advanced the HCU/J-Space route and a second Typed Entry/HCU primitive here would be duplicate work. Evidence remains source + regression-definition only until exact-head execution, with whole EntityOS/HCU, HCU-full, J-Space-model and training credit all zero.

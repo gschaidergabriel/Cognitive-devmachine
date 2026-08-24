@@ -4,11 +4,17 @@
 Imports the v2 scheduler, but prevents reservation/network I/O for any concrete
 credential+route lacking provider-side zero-cost/free-entitlement evidence. Every
 executed provider request emits FREE_LANE_EXECUTION_RECEIPT/v1.
+
+The v2 scheduler historically performed authenticated provider model-catalog
+network discovery before the per-lane gate ran. Epoch 8.70 does not establish
+catalog-endpoint zero-cost provenance, so this wrapper also replaces that
+pre-route discovery with a network-free environment/static-default resolver.
 """
 from __future__ import annotations
 
 import hashlib
 import json
+import os
 import threading
 from typing import Any
 
@@ -28,6 +34,84 @@ _SOURCE = {
     "commit": fabric.base.git_text("rev-parse", "HEAD"),
     "tree": fabric.base.git_text("rev-parse", "HEAD^{tree}"),
 }
+
+
+def route_safe_discover_and_export(timeout: float) -> dict[str, dict]:
+    """Resolve candidate models without provider network I/O.
+
+    Provider-level admission authorizes only the owner's free contingent; it is
+    not economic proof for an arbitrary authenticated catalog request. Current
+    epoch-8.70 economic provenance binds concrete inference routes, not catalog
+    endpoints. Therefore the active 6000-worker path may use an explicit local
+    model override or the controller's static defaults, while final credential +
+    route admission remains the responsibility of ``current_lane_binding``.
+
+    ``timeout`` is retained for API compatibility with the v2 scheduler.
+    """
+    del timeout
+    report: dict[str, dict] = {}
+    try:
+        admission = fabric.load_provider_admission()
+    except fabric.ProviderAdmissionError as exc:
+        return {
+            spec.name: {
+                "source": "typed_admission_invalid",
+                "keys": 0,
+                "models": [],
+                "catalog_network_attempted": False,
+                "status": str(exc),
+            }
+            for spec in fabric.base.PROVIDERS
+        }
+
+    if not fabric.base.truthy(os.getenv("CLAY_FREE_ONLY_ATTESTED")):
+        return {
+            spec.name: {
+                "source": "global_compat_attestation_missing",
+                "keys": 0,
+                "models": [],
+                "catalog_network_attempted": False,
+            }
+            for spec in fabric.base.PROVIDERS
+        }
+
+    for spec in fabric.base.PROVIDERS:
+        if not fabric.provider_is_admitted_free(spec.name, admission):
+            report[spec.name] = {
+                "source": "typed_admission_blocked",
+                "keys": 0,
+                "models": [],
+                "catalog_network_attempted": False,
+            }
+            continue
+        if not fabric.base.truthy(os.getenv(spec.attestation_env)):
+            report[spec.name] = {
+                "source": "provider_compat_attestation_missing",
+                "keys": 0,
+                "models": [],
+                "catalog_network_attempted": False,
+            }
+            continue
+
+        # Credential material is still collected only through the canonical
+        # provider-admission-aware loader. No provider request is made here.
+        keys = fabric.base.collect_keys(spec, admission)
+        override = fabric.base.split_values(os.getenv(spec.models_env))
+        models = fabric.base.unique(override or list(spec.default_models))
+        if models:
+            os.environ[spec.models_env] = ",".join(models)
+        report[spec.name] = {
+            "source": (
+                "environment_override"
+                if override
+                else "static_defaults_no_catalog_economic_provenance"
+            ),
+            "keys": len(keys),
+            "models": models,
+            "catalog_network_attempted": False,
+            "route_binding_deferred_to_current_lane_binding": True,
+        }
+    return report
 
 
 def _evidence(spec: fabric.base.ProviderSpec, key: str, model: str) -> dict[str, Any]:
@@ -128,6 +212,10 @@ def gated_request_chat(
     return status, headers, payload
 
 
+# The v2 fabric invokes opt.discover_and_export() at the start of run(). Replace
+# it before exporting run so the active v3 launcher cannot perform authenticated
+# catalog I/O outside the route/credential economic boundary.
+fabric.opt.discover_and_export = route_safe_discover_and_export
 fabric.FastProviderRuntime.next_key_model = gated_next_key_model
 fabric.base.request_chat = gated_request_chat
 

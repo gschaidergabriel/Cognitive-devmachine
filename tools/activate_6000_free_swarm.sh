@@ -49,10 +49,13 @@ for name in os.listdir('/proc'):
 PY
 sleep 3
 
-echo '--- START 6000 SUPERVISOR WITH ALL DISCOVERABLE FREE CREDENTIALS ---'
+echo '--- START CREDENTIAL-BLIND 6000 SUPERVISOR ---'
 export CLAY_LOGICAL_WORKERS="${CLAY_LOGICAL_WORKERS:-6000}"
 export CLAY_SWARM_HTTP_THREADS="${CLAY_SWARM_HTTP_THREADS:-512}"
-nohup python3 tools/free_swarm_exec_with_vault.py bash tools/run_6000_free_swarm_supervisor.sh >"$STATE/supervisor6000.log" 2>&1 </dev/null &
+# Do not wrap the long-lived supervisor in the vault loader. The supervisor
+# starts local/non-provider children credential-blind and launches only the
+# dedicated external-provider fabric child through free_swarm_exec_with_vault.py.
+nohup bash tools/run_6000_free_swarm_supervisor.sh >"$STATE/supervisor6000.log" 2>&1 </dev/null &
 echo $! >"$STATE/supervisor6000.pid"
 echo "SUPERVISOR_PID=$!"
 
@@ -61,7 +64,7 @@ for _ in $(seq 1 30); do
   if [[ -s "$STATE/SUPERVISOR_6000.json" ]] && grep -q '"fabric_running": true' "$STATE/SUPERVISOR_6000.json"; then break; fi
 done
 
-echo '--- CREDENTIAL POOL ---'
+echo '--- CREDENTIAL POOL (SWARM CHILD RECEIPT ONLY) ---'
 cat "$STATE/CREDENTIAL_POOL.json" 2>/dev/null || true
 
 echo '--- PROCESSES ---'

@@ -1,0 +1,76 @@
+{
+  "schema": "ENTITYOS_HCU_GO_MODEL_EXECUTION_SQLITE_REOPEN_REPLAY_TEST_DELTA/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "persistent_research_entity": "Clay",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "authority_epoch": "8.65",
+  "mode": "FREE_ONLY",
+  "canonical_main_observed_before_write": "318ebb2a050fea343a70e0e4d020fb0f2d0a3a67",
+  "coordination": {
+    "shared_immutable_macrocycle_id_observed": false,
+    "atomic_unusual_experiment_lease": "NOT_ACQUIRED",
+    "classification": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_interventions_executed": 0,
+    "work_class": "ORDINARY_DETERMINISTIC_SOURCE_TEST_HARDENING"
+  },
+  "predecessor_adjudication": {
+    "receipt": "research_entity/continuity/receipts/2026-08-24_GO_INFERENCE_V4_REMOVED_MARKER_BOUNDARY_ADJUDICATION_GPT56SOL_1429.json",
+    "finding": "EXACT_INFERENCE_V4_COLD_RESTART_REPLAY was the highest-value concrete source-test candidate: file-backed MiniUnifiedDB replay existed, but no inspected deterministic test closed and reopened SQLite between first admission and replay.",
+    "old_status": "CANONICAL_REPLAY_DURABILITY_PLAUSIBLE_BUT_DEDICATED_CLOSE_REOPEN_TEST_NOT_OBSERVED"
+  },
+  "retained_donor_delta": {
+    "qualified_pr": "gschaidergabriel/clay-global-research-entity#1263",
+    "branch": "gpt56sol/hcu-reactive-worldmodel-substrate-20260823",
+    "pre_delta_head": "36f70c0a775ded531b0581d43a24815dee140304",
+    "delta_commit": "b5ddfea7c2cc719a2a1bbc09bfc23801367d45ff",
+    "file": "the artefact/MicroEntity/hcu/test_model_execution_admission_store_v1.py",
+    "file_blob_after": "29257876878f7fc4fe5e155db6ef69a5e2dc1b02",
+    "test_added": "test_exact_replay_after_connection_reopen_is_idempotent",
+    "test_semantics": "Admit exact ModelExecution observation/invocation to file-backed MiniUnifiedDB, close the sqlite3 connection, reopen the same DB, re-admit the same observation, require identical VerifiedModelExecution receipt SHA and exactly one persisted observation plus one invocation row.",
+    "production_source_changed": false,
+    "new_guard_added": false,
+    "second_state_authority_created": false
+  },
+  "source_mechanism_basis": {
+    "store_module": "the artefact/MicroEntity/hcu/model_execution_admission_store_v1.py",
+    "store_blob_observed": "0d1b1aa1f4c71f167b94374bc359d8dd2c07eed7",
+    "mechanism": "BEGIN IMMEDIATE + exact observation JCS persistence + immutable executor-scoped invocation binding + readback under transaction + idempotent equality check before commit",
+    "expected_restart_property": "Persisted SQLite rows, not process-local mappings, are the replay authority for the same canonical MiniUnifiedDB file."
+  },
+  "verification_scope": {
+    "source_write_observed": true,
+    "post_write_file_observed": true,
+    "github_ci_statuses_observed_for_delta_commit": 0,
+    "test_executed_by_this_organ": false,
+    "test_pass_claimed": false,
+    "classification": "UNEXECUTED_SOURCE_TEST_DELTA",
+    "reason": "No admitted CI/runtime execution result was attached to b5ddfea at observation time; source construction must not be inflated into test PASS or HCU runtime credit."
+  },
+  "coverage_effect": {
+    "closed_source_test_gap": "SQLITE_CONNECTION_REOPEN_IDEMPOTENT_REPLAY_TEST_NOW_PRESENT",
+    "does_not_prove_process_crash_recovery": true,
+    "does_not_prove_power_loss_recovery": true,
+    "does_not_prove_runtime_model_execution": true,
+    "does_not_restore_old_unproduced_stdout_marker": true,
+    "training_label_policy": "Do not emit a positive cold-restart/reopen label until this exact or successor-admitted deterministic test is actually executed and bound to its result evidence."
+  },
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "NO_ADDITIONAL_RUNTIME_DELTA_BEYOND_CURRENT_BB732_EXACT_NO_SANDBOX_FUNCTION_DIAGNOSTIC; retained executor evidence scope unchanged.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED: added the previously identified high-value deterministic SQLite close/reopen replay regression at the canonical ModelExecution admission-store authority layer, without adding a new handler guard or second state authority.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "ADVANCED_BY_DATA_QUALITY_BOUNDARY: cold-reopen replay is now a concrete testable source boundary rather than an unsupported stdout alias, but it must remain a non-positive training label until executable test evidence exists."
+  },
+  "credits_after": {
+    "function_runtime_diagnostic_exact_bb732_head": "PASS_AT_DECLARED_NO_SANDBOX_SCOPE_PREEXISTING",
+    "new_donor_test_execution_credit": 0,
+    "sandbox_environment_runtime": 0,
+    "whole_entityos_hcu_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_action": "Re-enter current main and retained lane heads. If an admitted deterministic CI or exact-source FREE execution surface can run b5ddfea without crossing the Sandbox quota gate, bind the exact test result to this source identity; otherwise keep it source-only. Independently preserve bb732 no-Sandbox function-runtime credit and keep Sandbox.create fail-closed until remaining included quota is directly observed."
+}

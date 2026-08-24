@@ -15,7 +15,7 @@
   },
   "success_semantics": {
     "core_mechanism": "actual runtime consumption of a bound model-specific vector intervention",
-    "api_boundary": "The successful runtime must be callable through an exact API boundary. A loopback-only local API such as llama-server is valid and preferred when it removes hosted-provider blockers.",
+    "api_boundary": "The successful runtime must be callable through an exact API boundary. A loopback-only local API is valid and preferred when it removes hosted-provider blockers.",
     "local_runtime_is_not_a_surrogate_when_it_is_the_exact_target_runtime": true,
     "external_provider_required": false,
     "hosted_provider_output_logit_control_is_component_evidence_only": true,
@@ -35,14 +35,15 @@
   "convergence_ladder": [
     {
       "priority": 1,
-      "path": "LOCAL_LLAMA_CPP_QWEN3_06B_CVEC_API",
-      "reason": "Removes provider billing, credential entitlement, route fallback, provider-runtime identity, provider rate-limit and unsupported hosted-parameter blockers while retaining a real API boundary and native control-vector intervention.",
-      "target": "Qwen/Qwen3-0.6B-GGUF on loopback llama-server with native control-vector controls"
+      "path": "LOCAL_PYTORCH_QWEN3_06B_ACTIVATION_HOOK_API",
+      "reason": "Shortest already-implemented zero-provider-billing path to a runtime-observed hidden-state vector intervention with an exact loopback API boundary; removes provider billing, credential entitlement, route fallback, provider-runtime identity, rate-limit and hosted-parameter blockers without requiring native-cvec integration first.",
+      "target": "Qwen/Qwen3-0.6B exact revision on a loopback-only API with runtime-observed activation-vector consumption"
     },
     {
       "priority": 2,
-      "path": "LOCAL_PYTORCH_QWEN3_06B_ACTIVATION_HOOK_API",
-      "reason": "Fallback when llama.cpp control-vector materialization fails for a local technical reason; preserves real hidden-state intervention and can be wrapped in a loopback API."
+      "path": "LOCAL_LLAMA_CPP_QWEN3_06B_CVEC_API",
+      "reason": "Native-cvec replication/strengthening path after first causal completion, or fallback if the PyTorch hook path is technically unavailable.",
+      "target": "Qwen/Qwen3-0.6B-GGUF on loopback llama-server with native control-vector controls"
     },
     {
       "priority": 3,
@@ -59,7 +60,7 @@
     "blocker_is_not_terminal_if_an_authorized_alternative_path_exists": true,
     "classes": {
       "REPAIR_NOW": "Implement/test the smallest local repair in the same trigger run.",
-      "ROUTE_AROUND": "Switch to the next convergence-ladder path without waiting for the blocked dependency.",
+      "ROUTE_AROUND": "Switch to the next convergence-ladder path without waiting.",
       "EXTERNAL_TRANSIENT": "Continue the independent local path; external recovery may run in parallel but cannot gate completion.",
       "SCIENTIFIC_NEGATIVE": "Preserve as evidence and change hypothesis/vector/layer/gain while keeping the success law unchanged.",
       "HARD_AUTHORITY_BOUNDARY": "Fail closed only for the prohibited action; continue all remaining authorized local work."

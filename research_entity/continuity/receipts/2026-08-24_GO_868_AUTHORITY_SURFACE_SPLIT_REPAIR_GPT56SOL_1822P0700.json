@@ -1,0 +1,105 @@
+{
+  "schema": "CLAY_GO_RECEIPT/v1",
+  "authority_epoch": "8.68",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "canonical_main_observed": "35111436aad7b1fdb35046f630268e7d914e5c8e",
+  "branch": "gpt56sol/go-868-authority-surface-sync-20260824-1822",
+  "observed": {
+    "bootstrap_epoch": "8.68",
+    "bootstrap_blob": "dd6a4ee7f654ad8e5c09ed0ee60cdf9d15d0bd01",
+    "supervisor_inbox_epoch": "8.68",
+    "supervisor_inbox_blob": "75566607a228d951dd466fefdda06cd15277d3fe",
+    "supervisor_steering_blob": "a488d01f4f29d1a7ed90c21396311beae7288fe3",
+    "program_state_before_epoch": "8.67",
+    "program_state_before_blob": "3841ebf7b38645681db53fd55102227fc7738911",
+    "artefact_manifest_before_epoch": "8.65",
+    "artefact_manifest_before_blob": "92ca1c62ab33615fcab84d649977ddad82d11d0a",
+    "artefact_readme_before_epoch": "8.65",
+    "artefact_readme_before_blob": "75a0edfcf4d3dabbf6b04dd767c88d313927d17c",
+    "retained_hcu_donor": "gschaidergabriel/clay-global-research-entity#1263",
+    "retained_hcu_live_head": "2badebe78db868c56ef39f0a32d198282cffcd88",
+    "retained_executor": "gschaidergabriel/Dr.-Unterweger#810",
+    "retained_executor_live_head": "bb7324d2a21ffc143c241c652a31524c5be4c9d8"
+  },
+  "finding": "Current-facing authority surfaces were inconsistent: BOOTSTRAP_MINIMAL and SUPERVISOR_INBOX selected 8.68 while PROGRAM_STATE remained 8.67 and artefact manifest/README remained 8.65. The stale artefact surfaces still contained a blanket VPS-testing prohibition that is superseded by active owner authority plus supervisor 8.68, which explicitly permits zero-cost local normal-user and clay-direct-dev VPS sandbox development while preserving FREE_ONLY external-provider fences.",
+  "classification": "CURRENT_FACING_AUTHORITY_SPLIT_WITH_STALE_EXECUTION_LAW",
+  "hypothesis": "Workers that consume a stale current-facing surface can make materially wrong execution/admission decisions even if a newer authority exists elsewhere. Successor-synchronizing current-facing pointers and explicitly marking unresolved stale surfaces reduces the probability of stale-island execution law.",
+  "counterhypothesis": "Because authority order already ranks newer supervisor/owner files above PROGRAM_STATE/manifest/README, stale lower surfaces are harmless.",
+  "counterhypothesis_assessment": "Rejected as an operational safety assumption. The bootstrap explicitly requires all current-facing surfaces to be read, and stale self-consistent surfaces can still route workers incorrectly before a full cross-surface reconciliation. The observed 8.65 VPS prohibition directly conflicts with current 8.68 execution authority.",
+  "external_solution_harvest": [
+    {
+      "source": "https://theupdateframework.io/docs/metadata/",
+      "principle": "snapshot metadata provides a consistent view so metadata from different repository times cannot be mixed",
+      "use": "design corroboration for successor-coherent current-facing authority surfaces only"
+    },
+    {
+      "source": "https://theupdateframework.io/docs/security/",
+      "principle": "rollback/freeze attacks arise when clients accept obsolete metadata",
+      "use": "analogy for stale authority-island risk; not canonical Clay authority"
+    },
+    {
+      "source": "https://slsa.dev/spec/v1.2/provenance",
+      "principle": "provenance should bind artifacts to verifiable source/build identity",
+      "use": "corroborates exact SHA/blob-bound receipts; not canonical Clay authority"
+    }
+  ],
+  "writes": {
+    "program_state_commit": "1c498a82f8e48bb8fcff34a326e0de914f801340",
+    "program_state_after_blob": "fb314aa977a2462c555816758600cdd44722e2e7",
+    "readme_commit": "55191735d04c053f04d084b768a1daab61eca049",
+    "readme_after_blob": "ea39be0389894c08fed8f82af916f46571df29ad"
+  },
+  "go_tracks": {
+    "track_a": {
+      "status": "ADVANCED",
+      "delta": "PROGRAM_STATE and artefact README successor-synchronized to supervisor 8.68 provider quarantine and active dual-machine zero-cost execution law."
+    },
+    "track_b": {
+      "status": "HCU_NO_CHANGE_WITH_REASON",
+      "reason": "The highest-information nonduplicate blocker was the current-facing execution-authority split. Open PR1427 already owns the provider pre-I/O implementation lane, and retained PR1263 remains the single HCU/Typed Entry/J-Space donor lane. Creating another HCU/Entry implementation would duplicate authority.",
+      "next_discriminator": "Execute exact live donor InferenceReceipt/v4 rejection-boundary tests on an exposed authorized zero-cost local or clay-direct-dev surface, then rebind only on exact PASS."
+    },
+    "track_c": {
+      "status": "TRAINING_READINESS_NO_CHANGE_WITH_REASON",
+      "reason": "No exposed authorized local/VPS bridge was available in this ChatGPT tool surface, external LLM providers are quarantined, and exact model-specific J-Space runtime evidence remains zero. Source-only training changes would outrun the executable causal gate.",
+      "next_discriminator": "After donor rejection-boundary PASS, run actual zero-cost local model invocation -> canonical ModelExecution -> InferenceReceipt/v4 -> model-specific J-Space control/intervention trace before any dataset/model promotion."
+    }
+  },
+  "coordination": {
+    "open_provider_fusion_pr": "gschaidergabriel/clay-global-research-entity#1427",
+    "open_provider_fusion_changed_files_overlap_with_this_delta": false,
+    "shared_reproducible_macrocycle_identity_available": false,
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT"
+  },
+  "execution": {
+    "vps_bridge_health_checked": false,
+    "reason": "No executable local/VPS bridge connector was exposed in this ChatGPT session.",
+    "generic_chatgpt_container_clone_attempt": "FAILED_DNS_NO_GITHUB_NETWORK",
+    "generic_chatgpt_container_credit": 0,
+    "external_llm_provider_calls": 0,
+    "provider_secret_lookups": 0,
+    "together_calls": 0,
+    "paid_execution": 0,
+    "training_runs": 0
+  },
+  "runtime_credit": {
+    "provider_runtime_credit_added": 0,
+    "entityos_hcu_whole_runtime_credit_added": 0,
+    "hcu_full_runtime_credit_added": 0,
+    "jspace_model_runtime_credit_added": 0,
+    "training_credit_added": 0,
+    "whole_product_pass": false
+  },
+  "unresolved": [
+    "the artefact/manifest.json remains stale at supervisor 8.65 and still requires successor-safe synchronization without erasing historical bounded evidence",
+    "FREE_SWARM_ADMISSION_BOUNDARY_RECEIPT/v1 has not executed on exact current source",
+    "retained donor InferenceReceipt/v4 rejection-boundary tests have not executed at the observed live donor head",
+    "actual model-specific Global J-Space/GWT runtime credit remains zero"
+  ],
+  "next_exact_action": "Re-enter current main. If this branch remains nonduplicate, synchronize the artefact manifest to 8.68 while preserving historical receipt/evidence fields, then execute FREE_SWARM_ADMISSION_BOUNDARY_RECEIPT/v1 on an actually exposed authorized zero-cost local or clay-direct-dev surface."
+}

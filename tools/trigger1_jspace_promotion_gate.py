@@ -3,12 +3,12 @@
 
 Trigger-1 V2 is goal-bound rather than provider-bound. The full target may be met by
 an exact admitted FREE external API runtime or by an exact zero-provider-billing
-loopback API runtime, provided the same internal-vector, identity, matched-control
-and disjoint-holdout evidence is present.
+loopback API runtime, provided the same internal-vector, identity, matched-control,
+scientific-independence and disjoint-holdout evidence is present.
 
 Hosted prompt/completion traffic alone can never satisfy a positive verdict.
-Terminal output-projection shortcuts are valid technical positive controls but cannot
-satisfy J-Space mechanism or Trigger-1 promotion credit.
+A vector can establish low-level mechanism evidence without establishing the owner
+Trigger-1 goal when its construction leaks the evaluated output readout.
 """
 from __future__ import annotations
 
@@ -20,7 +20,7 @@ from typing import Any
 from urllib.parse import urlparse
 
 CANDIDATE_SCHEMA = "CLAY_TRIGGER1_JSPACE_DIRECT_STEERING_CANDIDATE/v1"
-VERDICT_SCHEMA = "CLAY_TRIGGER1_JSPACE_PROMOTION_GATE/v2"
+VERDICT_SCHEMA = "CLAY_TRIGGER1_JSPACE_PROMOTION_GATE/v3"
 REQUIRED_CONTROLS = (
     "BASELINE",
     "+VECTOR",
@@ -73,28 +73,19 @@ def _loopback_url(value: Any) -> bool:
 
 
 def _causal_site_evidence(candidate: dict[str, Any]) -> tuple[bool, list[str]]:
-    """Reject intervention sites that are only terminal output-projection shortcuts.
-
-    A perturbation applied at the final normalized hidden state or output head can alter
-    logits without any downstream transformer computation. Such a run is useful as a
-    harness/actuator positive control, but it cannot establish an internal J-Space causal
-    mechanism and therefore cannot satisfy Trigger-1 promotion.
-    """
-    failures: list[str] = []
+    """Require downstream model computation after the intervention for J-Space promotion."""
     intervention = candidate.get("intervention")
     if not isinstance(intervention, dict):
         return False, ["INTERVENTION_IDENTITY_REQUIRED"]
-
     site = intervention.get("activation_site")
     if not _nonempty(site):
         return False, ["ACTIVATION_SITE_REQUIRED"]
-
     normalized = str(site).strip().lower().replace(" ", "")
-    declared_shortcut = intervention.get("terminal_output_projection_shortcut")
-    if declared_shortcut is True or any(marker in normalized for marker in TERMINAL_OUTPUT_SITE_MARKERS):
-        failures.append("TERMINAL_OUTPUT_PROJECTION_SHORTCUT_NOT_JSPACE_CAUSAL_EVIDENCE")
-
-    return not failures, failures
+    if intervention.get("terminal_output_projection_shortcut") is True or any(
+        marker in normalized for marker in TERMINAL_OUTPUT_SITE_MARKERS
+    ):
+        return False, ["TERMINAL_OUTPUT_PROJECTION_SHORTCUT_NOT_JSPACE_CAUSAL_EVIDENCE"]
+    return True, []
 
 
 def _control_receipts(controls: Any) -> tuple[bool, list[str]]:
@@ -192,6 +183,42 @@ def _identity_evidence(candidate: dict[str, Any]) -> tuple[bool, list[str]]:
     return not failures, failures
 
 
+def _scientific_independence_evidence(candidate: dict[str, Any]) -> tuple[bool, list[str]]:
+    """Guard Trigger-1 goal credit against output-readout target leakage."""
+    failures: list[str] = []
+    derivation = candidate.get("vector_derivation")
+    holdout = candidate.get("holdout")
+    if not isinstance(derivation, dict):
+        return False, ["VECTOR_DERIVATION_EVIDENCE_REQUIRED"]
+    if not isinstance(holdout, dict):
+        holdout = {}
+
+    if not _nonempty(derivation.get("method")):
+        failures.append("VECTOR_DERIVATION_METHOD_REQUIRED")
+    if derivation.get("uses_output_head_weights") is not False:
+        failures.append("OUTPUT_HEAD_DERIVED_VECTOR_CANNOT_SATISFY_JSPACE_GOAL")
+    if derivation.get("uses_holdout_data") is not False:
+        failures.append("VECTOR_DERIVATION_MUST_NOT_USE_HOLDOUT_DATA")
+    if not _nonempty(derivation.get("derivation_family_id")):
+        failures.append("VECTOR_DERIVATION_FAMILY_ID_REQUIRED")
+    if not _sha256(derivation.get("derivation_receipt_sha256")):
+        failures.append("VECTOR_DERIVATION_RECEIPT_REQUIRED")
+
+    hold_family = holdout.get("family_id")
+    deriv_family = derivation.get("derivation_family_id")
+    if _nonempty(hold_family) and _nonempty(deriv_family) and hold_family == deriv_family:
+        failures.append("VECTOR_DERIVATION_AND_HOLDOUT_FAMILY_MUST_DIFFER")
+
+    if holdout.get("evaluation_independent_of_vector_derivation") is not True:
+        failures.append("HOLDOUT_EVALUATION_INDEPENDENCE_REQUIRED")
+    if not _sha256(holdout.get("metric_definition_sha256")):
+        failures.append("HOLDOUT_METRIC_DEFINITION_RECEIPT_REQUIRED")
+    if holdout.get("metric_uses_output_tokens") is True and holdout.get("label_mapping_counterbalanced") is not True:
+        failures.append("TOKEN_OUTPUT_METRIC_REQUIRES_COUNTERBALANCED_LABEL_MAPPING")
+
+    return not failures, failures
+
+
 def _owner_target_evidence(candidate: dict[str, Any]) -> tuple[bool, list[str]]:
     failures: list[str] = []
     target = candidate.get("target")
@@ -272,12 +299,15 @@ def adjudicate(candidate: dict[str, Any]) -> dict[str, Any]:
         and site_ok
     )
 
+    scientific_ok, scientific_failures = _scientific_independence_evidence(candidate)
     owner_target_ok, target_failures = _owner_target_evidence(candidate)
-    owner_target_pass = mechanism_pass and owner_target_ok
+    owner_target_pass = mechanism_pass and owner_target_ok and scientific_ok
+    owner_failures = sorted(set(target_failures + scientific_failures))
 
     return {
         "schema": VERDICT_SCHEMA,
         "mechanism_runtime_vector_credit_candidate": bool(mechanism_pass),
+        "scientifically_independent_vector_candidate": bool(mechanism_pass and scientific_ok),
         "owner_trigger1_goal_credit_candidate": bool(owner_target_pass),
         "owner_trigger1_direct_free_api_model_credit_candidate": bool(owner_target_pass),
         "canonical_credit_minted": False,
@@ -285,13 +315,15 @@ def adjudicate(candidate: dict[str, Any]) -> dict[str, Any]:
         "jspace_model_runtime_credit": False,
         "training_credit": False,
         "failures": sorted(set(failures)),
-        "owner_target_failures": sorted(set(target_failures)),
+        "scientific_independence_failures": sorted(set(scientific_failures)),
+        "owner_target_failures": owner_failures,
         "evidence_boundary": (
-            "PASS means promotion-candidate evidence only. The runtime may be an admitted FREE external API "
-            "or an exact zero-provider-billing loopback API. Scientific requirements are identical: actual "
-            "internal-vector consumption, exact identities, six matched controls, disjoint holdout, and a "
-            "non-terminal intervention site with downstream model computation. Terminal output-projection "
-            "shortcuts remain technical positive controls only."
+            "Mechanism PASS means only that an exact runtime consumed a bound vector and survived the "
+            "declared matched-control/split checks. Trigger-1 goal PASS additionally requires an exact "
+            "zero-cost API boundary, a non-terminal intervention site with downstream model computation, "
+            "and scientific independence: the steering direction may not be constructed from the exact "
+            "output-head/readout weights used by the evaluation, may not use holdout data, and token-output "
+            "metrics require counterbalanced label mapping."
         ),
     }
 
@@ -303,6 +335,7 @@ def adjudicate_file(path: Path) -> dict[str, Any]:
         return {
             "schema": VERDICT_SCHEMA,
             "mechanism_runtime_vector_credit_candidate": False,
+            "scientifically_independent_vector_candidate": False,
             "owner_trigger1_goal_credit_candidate": False,
             "owner_trigger1_direct_free_api_model_credit_candidate": False,
             "canonical_credit_minted": False,
@@ -310,6 +343,7 @@ def adjudicate_file(path: Path) -> dict[str, Any]:
             "jspace_model_runtime_credit": False,
             "training_credit": False,
             "failures": [f"CANDIDATE_FILE_INVALID:{type(exc).__name__}"],
+            "scientific_independence_failures": [],
             "owner_target_failures": [],
             "evidence_boundary": "Invalid candidate files fail closed.",
         }
@@ -317,6 +351,7 @@ def adjudicate_file(path: Path) -> dict[str, Any]:
         return {
             "schema": VERDICT_SCHEMA,
             "mechanism_runtime_vector_credit_candidate": False,
+            "scientifically_independent_vector_candidate": False,
             "owner_trigger1_goal_credit_candidate": False,
             "owner_trigger1_direct_free_api_model_credit_candidate": False,
             "canonical_credit_minted": False,
@@ -324,6 +359,7 @@ def adjudicate_file(path: Path) -> dict[str, Any]:
             "jspace_model_runtime_credit": False,
             "training_credit": False,
             "failures": ["CANDIDATE_OBJECT_REQUIRED"],
+            "scientific_independence_failures": [],
             "owner_target_failures": [],
             "evidence_boundary": "Invalid candidate files fail closed.",
         }
@@ -338,10 +374,13 @@ def scan_batch(batch_dir: Path) -> dict[str, Any]:
     verdicts = [adjudicate_file(path) for path in paths]
     goal = any(item.get("owner_trigger1_goal_credit_candidate") is True for item in verdicts)
     return {
-        "schema": "CLAY_TRIGGER1_JSPACE_BATCH_PROMOTION_SCAN/v2",
+        "schema": "CLAY_TRIGGER1_JSPACE_BATCH_PROMOTION_SCAN/v3",
         "candidate_files_seen": len(paths),
         "mechanism_runtime_vector_credit_candidate": any(
             item.get("mechanism_runtime_vector_credit_candidate") is True for item in verdicts
+        ),
+        "scientifically_independent_vector_candidate": any(
+            item.get("scientifically_independent_vector_candidate") is True for item in verdicts
         ),
         "owner_trigger1_goal_credit_candidate": goal,
         "owner_trigger1_direct_free_api_model_credit_candidate": goal,

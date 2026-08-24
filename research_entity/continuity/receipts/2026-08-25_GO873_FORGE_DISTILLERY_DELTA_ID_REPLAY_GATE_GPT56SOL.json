@@ -1,0 +1,60 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "date_local": "2026-08-25",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol / ChatGPT project organ",
+  "authority_epoch": "8.73",
+  "program": "ENTITYOS_HCU",
+  "stage": "ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "execution_mode": "FREE_ONLY",
+  "observed_canonical_main_before_branch": "5fbf7aa1a9a5bb4089166ac787f291122a192b3c",
+  "finding": {
+    "classification": "SOURCE_CONFIRMED_REPLAY_IDENTITY_GAP",
+    "statement": "Current execution_replay_identity still includes delta_id, and measured_packet also carries delta_id. Supervisor-8.73 review already classified delta_id as candidate/evaluation-envelope identity rather than measured-execution identity. A delta_id-only replay can therefore receive a different replay digest and different training-bearing packet bytes even when source, worker, target blobs, execution admission, metric and measured evidence are unchanged.",
+    "existing_regression_gap": "tests/test_forge_distillery_replay_identity_873.py covers timestamp/narration mutation but does not hold measured execution fixed while changing only delta_id."
+  },
+  "hypothesis": "Removing envelope-only delta_id from the stable execution replay identity and measured training packet preimage, while retaining it as observation/candidate provenance metadata, makes semantically identical measured executions replay-stable without collapsing genuinely distinct execution evidence.",
+  "counterhypothesis": "delta_id is itself a deterministic function of the exact measured execution and therefore belongs in stable replay identity.",
+  "counterhypothesis_status": "UNPROVEN; current producer path derives candidate delta_id from proposal/candidate data, and no admitted contract proving exact measured-execution derivation was found during this macrocycle.",
+  "delta": {
+    "type": "EXECUTABLE_FAIL_CLOSED_REGRESSION_DEFINITION",
+    "path": "tests/test_forge_distillery_delta_id_replay_873.py",
+    "acceptance": [
+      "delta_id-only mutation must not alter execution_replay_identity",
+      "delta_id-only mutation must not alter measured_packet or measured_evidence_identity",
+      "second ingest of same measured execution with only delta_id changed must classify DUPLICATE with accepted_dataset_tokens delta +0",
+      "fresh rebuilds differing only in delta_id must emit byte-identical packet text, packet id, replay digest, measured digest and token count"
+    ]
+  },
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED: converts an authority-identified replay ambiguity into an exact deterministic acceptance gate for the single Forge-to-Distillery path.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED: sharpens causal-event versus envelope/admission identity separation reusable at Typed Entry/HCU boundaries.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_FREE_ONLY_LOCAL_08B_READINESS": "ADVANCED_AT_DATASET_SAFETY_SCOPE: prevents candidate-envelope identifiers from rekeying future training-bearing evidence packets; no J-Space/model/training credit is minted."
+  },
+  "coordination": {
+    "open_implementation_pr_for_delta_id_gap_found": false,
+    "related_closed_donor_pr": 1687,
+    "related_rebuild_stability_pr": 1726,
+    "related_concurrent_admission_receipt_main": "5fbf7aa1a9a5bb4089166ac787f291122a192b3c",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_interventions_executed": 0
+  },
+  "execution_observation": {
+    "exact_branch_test_executed": false,
+    "reason": "No admitted zero-cost exact-source execution surface was invoked in this organ; unknown-cost hosted GitHub reruns were not used.",
+    "source_prediction": "CURRENT_MAIN_EXPECTED_RED_BECAUSE_DELTA_ID_IS_PRESENT_IN_BOTH_REPLAY_IDENTITY_AND_MEASURED_PACKET",
+    "runtime_credit_granted": 0
+  },
+  "credits": {
+    "whole_entityos_hcu_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "provider_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Implement the narrow successor on current main: exclude delta_id from CLAY_FORGE_EXECUTION_REPLAY_IDENTITY/v1 and CLAY_DISTILLERY_FORGE_EXECUTION_PACKET measured preimage, preserve delta_id only as provenance metadata, then execute the new regression together with timestamp/narration rebuild-stability and concurrent replay-admission tests on an admitted zero-cost exact-source surface.",
+  "epistemic_boundary": "SOURCE_PLUS_REGRESSION_DEFINITION_ONLY; FACT_UNKNOWN + METHOD_PRESENT != FACT_PRESENT"
+}

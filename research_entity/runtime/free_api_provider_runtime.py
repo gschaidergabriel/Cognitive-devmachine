@@ -249,14 +249,17 @@ def _try_publish_payment_latch(
 def _publish_payment_latch(
     payment_latches: set[str], latch_key: str
 ) -> tuple[bool, bool]:
-    """Publish to caller storage or retain a process-local hard-stop fallback."""
-    if _try_publish_payment_latch(payment_latches, latch_key):
-        return True, False
-    fallback_active = bool(
-        payment_latches is not PROCESS_PAYMENT_LATCHES
-        and _try_publish_payment_latch(PROCESS_PAYMENT_LATCHES, latch_key)
+    """Publish externally and retain every 402 in process-local hard-stop state."""
+    primary_active = _try_publish_payment_latch(payment_latches, latch_key)
+    if payment_latches is PROCESS_PAYMENT_LATCHES:
+        return primary_active, not primary_active
+    fallback_active = _try_publish_payment_latch(
+        PROCESS_PAYMENT_LATCHES, latch_key
     )
-    return fallback_active, True
+    return (
+        primary_active or fallback_active,
+        not (primary_active and fallback_active),
+    )
 
 
 def inventory(

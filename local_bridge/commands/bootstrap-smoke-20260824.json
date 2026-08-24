@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_LOCAL_COMMAND/v1",
+  "command_id": "local-bootstrap-smoke-20260824",
+  "op": "exec",
+  "cwd": "~",
+  "command": "set -euo pipefail; echo CLAY_LOCAL_EXEC_OK; date -u +%Y-%m-%dT%H:%M:%SZ; id; uname -a; python3 --version; git --version; tmux -V; mkdir -p ~/.local/share/clay-local-bridge/state; printf 'local bridge write ok\\n' > ~/.local/share/clay-local-bridge/state/smoke-probe.txt; sha256sum ~/.local/share/clay-local-bridge/state/smoke-probe.txt; printf 'HOME=%s\\nPWD=%s\\n' \"$HOME\" \"$PWD\"",
+  "timeout_seconds": 120
+}

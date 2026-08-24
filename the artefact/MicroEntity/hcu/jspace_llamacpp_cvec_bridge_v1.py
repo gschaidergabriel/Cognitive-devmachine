@@ -3,7 +3,7 @@
 
 This module translates one already-admitted ``JSPACE_VECTOR_CONTROL_ABI/v1`` packet into
 an exact float32 layer-major buffer consumable by llama.cpp ``llama_set_adapter_cvec``.
-It is deterministic source/evidence plumbing only.  It does not load a model, perform
+It is deterministic source/evidence plumbing only. It does not load a model, perform
 inference, prove hidden-state efficacy, create canonical truth, or authorize effects.
 
 Pinned zero-cost candidate targeted by the convenience constructor:
@@ -14,7 +14,7 @@ Pinned zero-cost candidate targeted by the convenience constructor:
 
 At the pinned llama.cpp source identity, control-vector storage has no layer-0 tensor;
 ``llama_adapter_cvec::apply`` consumes layer-major chunks using
-``off = n_embd * (il - 1)`` for layers 1..n_layer-1.  The Qwen3 graph applies
+``off = n_embd * (il - 1)`` for layers 1..n_layer-1. The Qwen3 graph applies
 ``build_cvec(cur, il)`` to the residual layer output before it becomes the next layer input.
 """
 from __future__ import annotations
@@ -27,11 +27,7 @@ from typing import Any
 
 try:
     from .entry_canonicalization_v1 import CanonicalizationError, canonicalize
-    from .jspace_vector_control_v1 import (
-        VectorControlPacket,
-        decode_vector,
-        validate_packet,
-    )
+    from .jspace_vector_control_v1 import VectorControlPacket, decode_vector, validate_packet
 except ImportError:
     from entry_canonicalization_v1 import CanonicalizationError, canonicalize
     from jspace_vector_control_v1 import VectorControlPacket, decode_vector, validate_packet
@@ -129,6 +125,60 @@ def _binding_material(binding: LlamaCppCVecBinding) -> dict[str, Any]:
     return material
 
 
+def _validate_shape(n_embd: Any, n_layer: Any, il_start: Any, il_end: Any) -> tuple[int, int, int, int]:
+    n_embd = _positive_int(n_embd, "n_embd")
+    n_layer = _positive_int(n_layer, "n_layer")
+    if n_layer < 2:
+        raise LlamaCppCVecBridgeError("n_layer:AT_LEAST_TWO_REQUIRED")
+    if isinstance(il_start, bool) or not isinstance(il_start, int):
+        raise LlamaCppCVecBridgeError("il_start:INTEGER_REQUIRED")
+    if isinstance(il_end, bool) or not isinstance(il_end, int):
+        raise LlamaCppCVecBridgeError("il_end:INTEGER_REQUIRED")
+    if not (1 <= il_start <= il_end < n_layer):
+        raise LlamaCppCVecBridgeError("layer_range:MUST_BE_WITHIN_1_TO_N_LAYER_MINUS_1")
+    return n_embd, n_layer, il_start, il_end
+
+
+def _pack_controlled_chunk(decoded: tuple[float, ...], strength: float) -> bytes:
+    values: list[bytes] = []
+    for value in decoded:
+        scaled = float(value) * strength
+        if not math.isfinite(scaled):
+            raise LlamaCppCVecBridgeError("SCALED_CONTROL_VECTOR_NONFINITE")
+        try:
+            values.append(struct.pack("<f", scaled))
+        except (OverflowError, struct.error) as exc:
+            raise LlamaCppCVecBridgeError("SCALED_CONTROL_VECTOR_BINARY32_RANGE_REQUIRED") from exc
+    return b"".join(values)
+
+
+def _raw_from_packet(
+    packet: VectorControlPacket,
+    *,
+    n_embd: int,
+    n_layer: int,
+    il_start: int,
+    il_end: int,
+    strength: float,
+) -> bytes:
+    decoded = decode_vector(
+        packet,
+        current_generation=packet.generation,
+        expected_basis_id=packet.basis_id,
+        expected_basis_sha256=packet.basis_sha256,
+        expected_role=packet.role,
+        expected_control_condition=packet.control_condition,
+    )
+    if len(decoded) != n_embd:
+        raise LlamaCppCVecBridgeError("VECTOR_DIMENSION_MUST_EQUAL_MODEL_N_EMBD")
+    controlled_chunk = _pack_controlled_chunk(decoded, strength)
+    zero_chunk = b"\x00" * (4 * n_embd)
+    return b"".join(
+        controlled_chunk if il_start <= il <= il_end else zero_chunk
+        for il in range(1, n_layer)
+    )
+
+
 def build_llamacpp_cvec_buffer(
     packet: VectorControlPacket,
     *,
@@ -147,49 +197,31 @@ def build_llamacpp_cvec_buffer(
     """Build the exact F32LE buffer and a self-authenticating binding.
 
     The output contains one chunk for each llama.cpp control-vector tensor layer
-    ``1..n_layer-1``.  Selected chunks contain ``decoded_jspace_vector * strength``;
-    chunks outside ``[il_start, il_end]`` are all-zero.  Layer 0 is intentionally absent.
+    ``1..n_layer-1``. Selected chunks contain ``decoded_jspace_vector * strength``;
+    chunks outside ``[il_start, il_end]`` are all-zero. Layer 0 is intentionally absent.
     """
     validate_packet(packet)
-    checkpoint_sha256 = _sha256_text(checkpoint_sha256, "checkpoint_sha256")
-    llama_cpp_source_commit = _commit(llama_cpp_source_commit)
-    n_embd = _positive_int(n_embd, "n_embd")
-    n_layer = _positive_int(n_layer, "n_layer")
-    if n_layer < 2:
-        raise LlamaCppCVecBridgeError("n_layer:AT_LEAST_TWO_REQUIRED")
-    if isinstance(il_start, bool) or not isinstance(il_start, int):
-        raise LlamaCppCVecBridgeError("il_start:INTEGER_REQUIRED")
-    if isinstance(il_end, bool) or not isinstance(il_end, int):
-        raise LlamaCppCVecBridgeError("il_end:INTEGER_REQUIRED")
-    if not (1 <= il_start <= il_end < n_layer):
-        raise LlamaCppCVecBridgeError("layer_range:MUST_BE_WITHIN_1_TO_N_LAYER_MINUS_1")
-    strength = _strength(strength)
-
-    decoded = decode_vector(
+    # Enforce the caller's current causal fences before converting anything into a model input.
+    decode_vector(
         packet,
         current_generation=current_generation,
         expected_basis_id=expected_basis_id,
         expected_basis_sha256=expected_basis_sha256,
         expected_role=expected_role,
     )
-    if len(decoded) != n_embd:
-        raise LlamaCppCVecBridgeError("VECTOR_DIMENSION_MUST_EQUAL_MODEL_N_EMBD")
+    checkpoint_sha256 = _sha256_text(checkpoint_sha256, "checkpoint_sha256")
+    llama_cpp_source_commit = _commit(llama_cpp_source_commit)
+    n_embd, n_layer, il_start, il_end = _validate_shape(n_embd, n_layer, il_start, il_end)
+    strength = _strength(strength)
 
-    controlled: list[float] = []
-    for value in decoded:
-        scaled = float(value) * strength
-        if not math.isfinite(scaled):
-            raise LlamaCppCVecBridgeError("SCALED_CONTROL_VECTOR_NONFINITE")
-        # Canonicalize through IEEE-754 binary32 exactly as llama.cpp consumes it.
-        controlled.append(struct.unpack("<f", struct.pack("<f", scaled))[0])
-
-    zero_chunk = b"\x00" * (4 * n_embd)
-    controlled_chunk = b"".join(struct.pack("<f", value) for value in controlled)
-    chunks: list[bytes] = []
-    for il in range(1, n_layer):
-        chunks.append(controlled_chunk if il_start <= il <= il_end else zero_chunk)
-    raw = b"".join(chunks)
-
+    raw = _raw_from_packet(
+        packet,
+        n_embd=n_embd,
+        n_layer=n_layer,
+        il_start=il_start,
+        il_end=il_end,
+        strength=strength,
+    )
     float_count = (n_layer - 1) * n_embd
     if len(raw) != float_count * 4:
         raise AssertionError("internal cvec buffer length invariant violated")
@@ -220,6 +252,7 @@ def build_llamacpp_cvec_buffer(
         **material,
         binding_sha256=_canonical_sha256(_binding_material(provisional), "LLAMA_CPP_CVEC_BINDING"),
     )
+    validate_llamacpp_cvec_binding(binding, raw, packet)
     return raw, binding
 
 
@@ -256,7 +289,7 @@ def validate_llamacpp_cvec_binding(
     raw: bytes,
     packet: VectorControlPacket,
 ) -> None:
-    """Fail closed on buffer, packet or binding identity drift."""
+    """Recompute semantics and exact bytes; fail closed on any caller-minted alias."""
     if not isinstance(binding, LlamaCppCVecBinding):
         raise LlamaCppCVecBridgeError("LLAMA_CPP_CVEC_BINDING_REQUIRED")
     if not isinstance(raw, bytes):
@@ -264,6 +297,20 @@ def validate_llamacpp_cvec_binding(
     validate_packet(packet)
     if binding.schema != SCHEMA or binding.layout_schema != LAYOUT_SCHEMA or binding.llama_api != LLAMA_API:
         raise LlamaCppCVecBridgeError("LLAMA_CPP_CVEC_SCHEMA_UNSUPPORTED")
+
+    _sha256_text(binding.checkpoint_sha256, "checkpoint_sha256")
+    _commit(binding.llama_cpp_source_commit)
+    n_embd, n_layer, il_start, il_end = _validate_shape(
+        binding.n_embd, binding.n_layer, binding.il_start, binding.il_end
+    )
+    strength = _strength(binding.strength)
+    expected_float_count = (n_layer - 1) * n_embd
+    if binding.float_count != expected_float_count:
+        raise LlamaCppCVecBridgeError("CVEC_FLOAT_COUNT_MISMATCH")
+    if binding.byte_count != expected_float_count * 4:
+        raise LlamaCppCVecBridgeError("CVEC_BYTE_COUNT_MISMATCH")
+    _sha256_text(binding.cvec_f32le_sha256, "cvec_f32le_sha256")
+
     if binding.vector_control_packet_sha256 != packet.packet_sha256:
         raise LlamaCppCVecBridgeError("VECTOR_CONTROL_PACKET_IDENTITY_MISMATCH")
     if binding.generation != packet.generation:
@@ -274,7 +321,18 @@ def validate_llamacpp_cvec_binding(
         raise LlamaCppCVecBridgeError("JSPACE_BASIS_IDENTITY_MISMATCH")
     if binding.role != packet.role:
         raise LlamaCppCVecBridgeError("ROLE_MISMATCH")
-    if len(raw) != binding.byte_count or len(raw) != binding.float_count * 4:
+
+    expected_raw = _raw_from_packet(
+        packet,
+        n_embd=n_embd,
+        n_layer=n_layer,
+        il_start=il_start,
+        il_end=il_end,
+        strength=strength,
+    )
+    if raw != expected_raw:
+        raise LlamaCppCVecBridgeError("CVEC_BUFFER_SEMANTIC_REVALIDATION_MISMATCH")
+    if len(raw) != binding.byte_count:
         raise LlamaCppCVecBridgeError("CVEC_BUFFER_SIZE_MISMATCH")
     if hashlib.sha256(raw).hexdigest() != binding.cvec_f32le_sha256:
         raise LlamaCppCVecBridgeError("CVEC_BUFFER_DIGEST_MISMATCH")

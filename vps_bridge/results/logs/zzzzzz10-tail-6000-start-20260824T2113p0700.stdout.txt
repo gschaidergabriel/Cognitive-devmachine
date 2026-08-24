@@ -1,0 +1,26 @@
+PIDS
+WLOG
+{"schema": "CLAY_6000_SWARM_DISCOVERY/v2", "logical_workers": 6000, "scheduler": "GLOBAL_WORK_STEALING_V2", "providers": {"groq": {"source": "static_defaults_no_catalog_economic_provenance", "keys": 1, "models": ["openai/gpt-oss-120b", "qwen/qwen3.6-27b", "openai/gpt-oss-20b"], "catalog_network_attempted": false, "route_binding_deferred_to_current_lane_binding": true}, "mistral": {"source": "static_defaults_no_catalog_economic_provenance", "keys": 0, "models": ["mistral-small-latest"], "catalog_network_attempted": false, "route_binding_deferred_to_current_lane_binding": true}, "nvidia": {"source": "static_defaults_no_catalog_economic_provenance", "keys": 1, "models": ["nvidia/nemotron-3-super-120b-a12b", "nvidia/nemotron-3-ultra-550b-a55b", "nvidia/nemotron-mini-4b-instruct"], "catalog_network_attempted": false, "route_binding_deferred_to_current_lane_binding": true}, "openrouter": {"source": "environment_override", "keys": 1, "models": ["openrouter/free"], "catalog_network_attempted": false, "route_binding_deferred_to_current_lane_binding": true}}}
+Traceback (most recent call last):
+  File "/workspace/clay-global-research-entity/tools/run_6000_free_swarm_fast.py", line 35, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "/workspace/clay-global-research-entity/tools/run_6000_free_swarm_fast.py", line 27, in main
+    return int(loop.run_until_complete(fabric.run(fabric.parse_args())))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/asyncio/base_events.py", line 687, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/workspace/clay-global-research-entity/tools/run_6000_free_swarm.py", line 461, in run
+    protocol = base.load_protocol()
+               ^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/clay-global-research-entity/tools/run_free_go_swarm.py", line 198, in load_protocol
+    raise RuntimeError(f"mandatory GRF/ClayCode protocol block missing from {PROTOCOL_PATH}")
+RuntimeError: mandatory GRF/ClayCode protocol block missing from /workspace/clay-global-research-entity/research_entity/claycode/CLAYCODE_ALL_WORKERS_EXECUTION_DIRECTIVE.md
+SLOG
+RUN_DIRS
+drwxr-xr-x 2 root root 4096 Aug 24 14:06 /artifacts/clay-entityos-swarm/active-fabric6000-v2-20260824T140548Z
+drwxr-xr-x 2 root root 4096 Aug 24 14:05 /artifacts/clay-entityos-swarm/active-fabric6000-v2-20260824T140250Z
+drwxr-xr-x 2 root root 4096 Aug 24 14:02 /artifacts/clay-entityos-swarm/active-fabric6000-v2-20260824T135526Z
+drwxr-xr-x 2 root root 4096 Aug 24 13:55 /artifacts/clay-entityos-swarm/active-fabric6000-v2-20260824T135052Z
+drwxr-xr-x 2 root root 4096 Aug 24 13:49 /artifacts/clay-entityos-swarm/active-fabric6000-v2-20260824T134045Z

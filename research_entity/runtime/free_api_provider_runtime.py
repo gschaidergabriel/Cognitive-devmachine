@@ -198,12 +198,10 @@ def _passive_payment_latches(
     """Return latch storage only when membership and mutation are passive."""
     if payment_latches is None:
         payment_latches = PROCESS_PAYMENT_LATCHES
-    if type(payment_latches) is not set:
-        raise ValueError("payment_latches_must_be_set")
-    if len(payment_latches) > MAX_PAYMENT_LATCH_ENTRIES:
-        raise ValueError("payment_latches_too_large")
-    if any(type(latch) is not str for latch in payment_latches):
-        raise ValueError("payment_latches_must_contain_strings")
+    # Validate a bounded copy rather than iterating caller-owned mutable
+    # storage.  The original remains the publication target, while route()
+    # independently snapshots the state instant it claims.
+    _payment_latch_snapshot(payment_latches)
     return payment_latches
 
 

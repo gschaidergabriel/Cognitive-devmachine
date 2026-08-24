@@ -1,0 +1,109 @@
+{
+  "schema": "ENTITYOS_HCU_GO_DISTILLERY_EVIDENCE_ENTAILMENT_SUCCESSOR/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "persistent_research_entity": "Clay",
+  "authority_epoch": "8.71",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "reentry": {
+    "successor_branch_base": "599a37ba4136eb2bbef6e2798f33f22873ad684b",
+    "latest_main_reobserved_after_test": "0e3785c66f99913bc82c92335e4089908798ee65",
+    "intervening_main_commits_touch_distillery_entry_or_entailment_tests": false,
+    "branch": "go-871-distillery-evidence-entailment-successor-gpt56sol",
+    "source_commit": "c0bb46fc747722f629d8b21ee1479f4cbf4ea3e2",
+    "provisional_fence_test_port_commit": "1195e60ec6d7860697608085821c0db6a7dc4562",
+    "entailment_test_commit": "9144b28ee062a0fc0030631616c6a50ab22794fa",
+    "supersedes_unmerged_branch": "go-871-distillery-evidence-entailment-gpt56sol"
+  },
+  "coordination": {
+    "upstream_shared_macrocycle_id": null,
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_experiments_run": 0,
+    "ordinary_work_class": "SUCCESSOR_PORT_SOURCE_REPAIR_AND_DETERMINISTIC_REGRESSION"
+  },
+  "observed_defect": {
+    "base_path": "tools/run_research_distillery.py",
+    "entry_path": "tools/run_research_distillery_entry.py",
+    "finding": "The synthesizer saw bounded source chunks, but the epistemic reviewers were asked to judge candidate JSON without those chunks; no evidence-entailment predicate gated acceptance, and accepted raw source text was later erased.",
+    "classification": "MODEL_CONSENSUS_TO_REVIEWED_KNOWLEDGE_LAUNDERING_RISK",
+    "fact_credit": 0
+  },
+  "successor_port_reason": "The first repair branch was based on c684271bfa992264046cec78b658200582ab0480. Main then added a stricter Goodman-collapse rule: OpenRouter fallback panels may only reach PROVISIONAL_ACCEPTED and must return false so one_cycle cannot call compress_and_commit. The repair was therefore ported onto successor main instead of force-overwriting that new safety invariant.",
+  "delta": {
+    "evidence_support_threshold": 0.8,
+    "review_evidence_max_chars": 14000,
+    "fail_closed_before_reviewer_io": [
+      "MISSING_CITED_SOURCE_IDS",
+      "CITED_SOURCE_OUTSIDE_CANDIDATE_BOUNDARY",
+      "CITED_SOURCE_MISSING",
+      "CITED_SOURCE_TEXT_UNAVAILABLE",
+      "CITED_SOURCE_HASH_MISMATCH"
+    ],
+    "review_contract_additions": [
+      "exact bounded cited chunks as UNTRUSTED QUOTED DATA",
+      "evidence_support",
+      "supported_source_ids",
+      "unsupported_claims"
+    ],
+    "canonical_acceptance_requires": [
+      "NVIDIA reviewer present",
+      "at least two Mistral-family reviewer votes",
+      "three votes total",
+      "existing intrinsic/GRF/project/novelty thresholds",
+      "median evidence_support >= 0.80",
+      "at least one valid supported cited source id",
+      "zero unsupported material claims",
+      "zero reviewer-supported ids outside candidate citations",
+      "zero hard contradiction"
+    ],
+    "goodman_fallback_preserved": "NVIDIA plus OpenRouter fallback may reach PROVISIONAL_ACCEPTED only; canonical_acceptance=false; review returns false; compress_and_commit has a second defensive fence.",
+    "accepted_packet_semantics": {
+      "knowledge_class": "REVIEWED_RESEARCH_HYPOTHESIS",
+      "fact_credit": 0,
+      "canonical_truth": false,
+      "evidence_retention": "EXACT_BOUNDED_CITED_CHUNKS_HASH_AUDITABLE"
+    },
+    "canonical_truth_store_created": false,
+    "effect_authority_changed": false
+  },
+  "deterministic_evidence": {
+    "method": "source-equivalent isolated execution of the exact successor wrapper logic with in-memory SQLite and stubbed provider/model transport",
+    "result": "7/7 PASS",
+    "cases": [
+      "missing citations reject before reviewer transport",
+      "cited hash mismatch rejects before reviewer transport",
+      "high-quality but source-unsupported claim rejects",
+      "reviewer claiming support from unknown source id rejects",
+      "preferred panel supported candidate commits only as fact_credit=0 reviewed hypothesis and retains exact cited evidence",
+      "Goodman-collapsed fallback remains provisional and cannot commit",
+      "prompt-injection text in source remains inside explicit untrusted-data boundary"
+    ],
+    "exact_repository_runtime_execution": "NOT_OBSERVED",
+    "provider_network_execution_by_this_organ": "NONE",
+    "runtime_credit_change": 0
+  },
+  "tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED: research Distillery dataset admission now has a source-entailment gate while preserving the already-fused Forge->Distillery measured-execution path and current provisional commit fence.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED: review admission binds source id, exact bounded source bytes, SHA-256, support set and explicit zero fact credit without introducing a second truth/effect authority.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "ADVANCED: future research context can retain auditable evidence and distinguish reviewed hypotheses from facts; model-specific J-Space causal credit and training credit remain zero."
+  },
+  "counterhypothesis": "The existing multi-reviewer panel plus source hashes was sufficient because the synthesizer had already seen the source chunks.",
+  "adjudication": "REJECTED_AT_SOURCE_SCOPE: downstream reviewers did not see the hashed bytes and no predicate tested candidate-to-source support; model agreement therefore could not establish entailment.",
+  "credits": {
+    "forge_to_distillery_live_runtime": 0,
+    "distillery_entailment_live_runtime": 0,
+    "provider_runtime": 0,
+    "whole_entityos_hcu_runtime": 0,
+    "full_hcu_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "distillery_fact_credit": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_action": "Fuse the successor branch only if current-main mergeability remains clean, then run the exact current Distillery entailment/provisional tests on an authorized zero-cost repository checkout. After successor-aligned runtime reconciliation, execute a supported research-cycle positive control and an unsupported high-plausibility negative control; the latter must add zero accepted_dataset_tokens. Separately execute the already-wired exact Forge->Distillery bridge witness without converting measured execution evidence into J-Space/training/canonical truth credit.",
+  "acceptance": "SOURCE_COMPONENT_ADVANCED_RUNTIME_UNPROVEN"
+}

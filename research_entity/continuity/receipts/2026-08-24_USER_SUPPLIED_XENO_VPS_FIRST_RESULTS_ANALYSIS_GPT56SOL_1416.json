@@ -1,0 +1,129 @@
+{
+  "schema": "ENTITYOS_HCU_USER_SUPPLIED_VPS_FIRST_RESULTS_INGEST/v1",
+  "date": "2026-08-24",
+  "ingest_local_time": "2026-08-24T14:16:00+07:00",
+  "organ": "GPT-5.6 Sol",
+  "persistent_research_entity": "Clay",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "authority_epoch_at_analysis": "8.65",
+  "mode": "FREE_ONLY",
+  "source_classification": "USER_SUPPLIED_EXTERNAL_VPS_LAB_EVIDENCE_NOT_AUTONOMOUSLY_EXECUTED_BY_THIS_ORGAN",
+  "authority_boundary": {
+    "current_vps_testing_policy": "FORBIDDEN_FOR_AUTONOMOUS_ORGANS_UNDER_SUPERVISOR_8_65",
+    "ingest_allowed": true,
+    "credit_rule": "Preserve as external user-supplied compatibility-lab evidence; do not mint current admitted Sandbox/HCU/model/J-Space/training/whole-product runtime credit.",
+    "unusual_experiment_credit": "NOT_CLAIMED_BY_THIS_INGEST"
+  },
+  "archive_identity": {
+    "xeno_vps_results_zip_sha256": "d3c9556e1f5cb325995904f3b483b5e07f5bf3a84a350961a1c21f1980c0c0b5",
+    "xeno_results_zip_sha256": "52eda03cb7354a5a3993794a980979fc51163e9bb77e85c1d5911e82fd87cc08",
+    "shared_files_byte_identical": 114,
+    "vps_only_file": "reports/VPS_TEST_OUTPUT.txt",
+    "vps_test_output_sha256": "6bcb6ca71ddf8ee041cb9b5b833c8d9c00ab849b39ddbb411665ad6e8637e5f1",
+    "package_manifest_sha256": "273913ed2eb3e1a79777ac1f476cd81e401046002700cbf10e09b0d962ace522",
+    "checksums_manifest_sha256": "40e99125bfc540261712f684fd51c9965759a7f1f0de2ac91cc9e16fd4d3ab15",
+    "internal_checksum_entries_verified": 113,
+    "internal_checksum_failures": 0
+  },
+  "raw_evidence": {
+    "canonical_path": "research_entity/continuity/external_evidence/2026-08-24_USER_SUPPLIED_XENO_VPS_TEST_OUTPUT_1416.txt",
+    "ingest_commit": "820703070eaf697bfae6d4fa9fb4b5201e40a3ab"
+  },
+  "vps_observed_environment": {
+    "cpu_count": 4,
+    "memory_bytes": 16769044480,
+    "disk_free_bytes": 171155423232,
+    "python": "3.12.3",
+    "kernel": "6.8.0-138-generic",
+    "sqlite": "3.45.1"
+  },
+  "unit_tests": {
+    "count": 57,
+    "pass": 57,
+    "fail": 0,
+    "elapsed_seconds": 0.112
+  },
+  "fast_experiments": {
+    "count": 50,
+    "pass": 47,
+    "fail": 0,
+    "skip": 3,
+    "skips": {
+      "repo_contract_probe": "canonical repository not cloned on target",
+      "authority_snapshot": "canonical BOOTSTRAP_MINIMAL.json not present on target",
+      "source_symbol_matrix": "canonical repository not cloned"
+    },
+    "scope_declared_by_runner": "LAB_DISCRIMINATORS_ONLY"
+  },
+  "strongest_supported_findings": [
+    "The packaged Xeno compatibility lab executes on the supplied Ubuntu/Python/SQLite VPS environment without unit-test or executed fast-discriminator failure.",
+    "Typed Entry reference invariants execute successfully: admission, payload digest, negative generation rejection, and capability self-grant rejection.",
+    "Causal identity reference invariants execute successfully: stable causal event identity, distinct admissions, route-engine binding, and route-policy binding.",
+    "Loader reference checks reject missing/mutated/stale consumed-byte states.",
+    "GRID10 and logical scale-plan generation are deterministic at lab scope while physical worker count remains distinct from logical cell count.",
+    "SQLite WAL, contention, backup, atomic invocation duplicate rejection, crash-recovery persistence, and UNKNOWN-effect no-blind-replay behaviors execute successfully at lab scope.",
+    "J-Space vector ABI, cosine, lesion, shuffle, signflip, recurrence and lesion-rescue controls execute successfully as deterministic vector-lab controls only.",
+    "Dataset family split and deterministic hard-negative reference behaviors execute without leakage in the packaged lab tests.",
+    "No model artifact was found on the VPS, and the end-to-end path is explicitly a stub with model_runtime_credit=0."
+  ],
+  "cross_environment_replication": {
+    "comparison_baseline": "embedded OpenAI artifact-build-container fast profile",
+    "stable_across_vps_and_embedded_local": [
+      "canonical hash digest",
+      "causal event id",
+      "GRID plan ids for 10/32/64/128/256 logical cells",
+      "J-Space vector id and analytic control results",
+      "family split counts",
+      "all pass/fail/skip classifications"
+    ],
+    "expected_or_contextual_differences": [
+      "performance timings/throughput",
+      "resource snapshot",
+      "loader lease id",
+      "stub route/final receipt identities",
+      "model search home path"
+    ],
+    "interpretation": "Useful cross-environment replication for deterministic lab primitives, not independent canonical EntityOS/HCU runtime acceptance."
+  },
+  "single_sample_vps_vs_embedded_local_fast_ratios": {
+    "cpu_hash_work_speedup": 2.71,
+    "memory_copy_throughput_speedup": 6.8,
+    "disk_fsync_throughput_speedup": 24.59,
+    "sqlite_wal_rows_per_second_speedup": 3.46,
+    "canonical_hash_ops_per_second_speedup": 2.42,
+    "serialization_throughput_speedup": 2.46,
+    "caveat": "Directional single-run comparison only; environments differ and no statistical confidence or whole-HCU performance claim is warranted."
+  },
+  "falsifiers_and_missing_gates": [
+    "Canonical private repository was not cloned, so source-symbol compatibility and current authority snapshot were not tested on the VPS.",
+    "The kit reentry cache was stale relative to supervisor 8.65; current authority must be resolved from canonical main before any promotion.",
+    "No real model/checkpoint/tokenizer/runtime/build was present or invoked.",
+    "No model-specific loader-consumption -> ModelExecution -> InferenceReceipt -> J-Space/GWT trace was produced.",
+    "Logical GRID scale-plan generation is not evidence of equal resident-model count, simultaneous decodes, or scale performance.",
+    "J-Space controls operate on deterministic lab vectors, not observed model hidden states.",
+    "User-supplied VPS execution is outside the current autonomous 8.65 admitted execution lane and therefore cannot open current whole-runtime credit."
+  ],
+  "research_update": {
+    "hypothesis_promoted": "STANDARD_UBUNTU_PYTHON312_SQLITE345_HOST_COMPATIBILITY_FOR_REFERENCE_HCU_PRIMITIVES",
+    "status": "SUPPORTED_BY_USER_SUPPLIED_EXTERNAL_LAB_EXECUTION",
+    "counterhypothesis_weakened": "The immediate blocker is a generic inability of the reference HCU primitives to execute on a normal 4-core/16GB Ubuntu host.",
+    "remaining_primary_blocker": "Canonical/current-authority integrated execution and real-model/J-Space causal closure, not basic reference-lab host capability."
+  },
+  "worker_directive": [
+    "Use this evidence as a regression/environment prior and source of concrete target metrics.",
+    "Do not rerun VPS tests autonomously under supervisor 8.65.",
+    "Do not promote the results into current Vercel Sandbox, HCU full, model, J-Space, training, or whole-product credit.",
+    "When an admitted FREE_ONLY environment opens, prioritize reproducing Python/SQLite host capability plus the canonical causal chain rather than adding duplicate source guards.",
+    "Bind any future canonical reproduction to exact repo SHA, source blobs, model/checkpoint/tokenizer/runtime/build, loader-consumed bytes, GRID plan/cells, ModelExecution, InferenceReceipt and J-Space trace."
+  ],
+  "credits_after_ingest": {
+    "external_user_supplied_vps_lab_evidence": "POSITIVE",
+    "current_admitted_sandbox_environment_runtime": 0,
+    "whole_entityos_hcu_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  }
+}

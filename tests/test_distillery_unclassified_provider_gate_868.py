@@ -35,7 +35,33 @@ class DistilleryUnclassifiedProviderGate868Tests(unittest.TestCase):
                 "https://api.github.com/repos/example/example",
             )
         self.assertEqual(observed, expected)
-        downstream.assert_called_once()
+        downstream.assert_called_once_with(
+            "github", "test", "https://api.github.com/repos/example/example",
+            key="", payload=None, headers=None, timeout=90.0,
+        )
+
+    def test_public_github_path_is_host_bound_and_credential_blind(self) -> None:
+        with mock.patch.object(entry, "_ORIGINAL_REQUEST_JSON", side_effect=AssertionError("network reached")):
+            wrong_host = entry.admitted_request_json(
+                "github", "test", "https://example.com/repos/example/example"
+            )
+            key_bearing = entry.admitted_request_json(
+                "github", "test", "https://api.github.com/repos/example/example", key="secret"
+            )
+            auth_bearing = entry.admitted_request_json(
+                "github", "test", "https://api.github.com/repos/example/example",
+                headers={"Authorization": "Bearer secret"},
+            )
+            cookie_bearing = entry.admitted_request_json(
+                "github", "test", "https://api.github.com/repos/example/example",
+                headers={"Cookie": "session=secret"},
+            )
+        self.assertEqual(wrong_host[0], 412)
+        self.assertEqual(wrong_host[2].get("error"), "PUBLIC_SOURCE_HOST_NOT_ADMITTED")
+        for status, headers, body in (key_bearing, auth_bearing, cookie_bearing):
+            self.assertEqual(status, 412)
+            self.assertEqual(headers, {})
+            self.assertEqual(body.get("error"), "PUBLIC_SOURCE_CREDENTIALS_FORBIDDEN")
 
     def test_typed_free_llm_path_remains_available_after_positive_admission(self) -> None:
         expected = (200, {}, {"ok": True})

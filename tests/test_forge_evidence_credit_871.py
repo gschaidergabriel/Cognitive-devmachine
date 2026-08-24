@@ -33,6 +33,15 @@ def base_row():
             "source_scope": "EXACT_WORKER_PROMPT_HEAD",
             "source_identity_admitted": True,
             "source_head": "a" * 40,
+            "evaluation_checkout_head": "c" * 40,
+            "decisions": [
+                {
+                    "admitted": True,
+                    "reason": "ALLOWLISTED_PYTEST",
+                    "argv": ["pytest", "-q", "tests/test_x.py"],
+                    "execution_class": "TEST",
+                }
+            ],
             "all_commands_admitted": True,
             "candidate_is_canonical_truth": False,
             "backend": {
@@ -66,6 +75,26 @@ class EvidenceCreditTests(unittest.TestCase):
         row = base_row()
         row["execution_admission"]["source_head"] = "e" * 40
         self.assertEqual(guard.evidence_reason(row), (False, "EXECUTION_SOURCE_HEAD_MISMATCH"))
+
+    def test_evaluation_checkout_mismatch_fails_closed(self):
+        row = base_row()
+        row["execution_admission"]["evaluation_checkout_head"] = "e" * 40
+        self.assertEqual(guard.evidence_reason(row), (False, "EXECUTION_EVALUATION_HEAD_MISMATCH"))
+
+    def test_missing_evaluation_checkout_fails_closed(self):
+        row = base_row()
+        row["execution_admission"].pop("evaluation_checkout_head")
+        self.assertEqual(guard.evidence_reason(row), (False, "EXECUTION_EVALUATION_HEAD_UNBOUND"))
+
+    def test_missing_command_decisions_fail_closed(self):
+        row = base_row()
+        row["execution_admission"]["decisions"] = []
+        self.assertEqual(guard.evidence_reason(row), (False, "EXECUTION_COMMAND_DECISIONS_MISSING"))
+
+    def test_rejected_command_decision_fails_closed(self):
+        row = base_row()
+        row["execution_admission"]["decisions"][0]["admitted"] = False
+        self.assertEqual(guard.evidence_reason(row), (False, "EXECUTION_COMMAND_DECISION_REJECTED"))
 
     def test_audit_separates_nominal_from_qualified(self):
         legacy = base_row()

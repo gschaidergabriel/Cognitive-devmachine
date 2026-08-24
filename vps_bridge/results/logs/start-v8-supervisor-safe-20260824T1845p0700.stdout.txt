@@ -1,0 +1,48 @@
+SUPERVISOR_PID=2886
+  19807       14:03 python3 /workspace/clay-global-research-entity/free swarm/evaluate.py --repo /workspace/clay-global-research-entity --artifacts /artifacts/clay-entityos-swarm --watch --hours 24 --interval-seconds 60
+  19835       13:32 [llama-server] <defunct>
+  19841       13:32 python3 /workspace/clay-global-research-entity/tools/run_research_distillery_local.py --hours 24 --sleep-seconds 3
+  19844       13:32 python3 /workspace/clay-global-research-entity/tools/run_free_evidence_forge.py --hours 24 --sleep-seconds 20 --discovery-parallel 8 --local-parallel 4 --e2b-parallel 20
+  22553       00:08 bash -lc set -euo pipefail; if ! pgrep -f '[r]un_24h_entityos_swarm_supervisor.sh' >/dev/null; then nohup bash tools/run_24h_entityos_swarm_supervisor.sh >/artifacts/clay-entityos-swarm/supervisor-v8.log 2>&1 </dev/null & echo $! >/artifacts/clay-entityos-swarm/supervisor.pid; fi; sleep 8; echo SUPERVISOR_PID=$(cat /artifacts/clay-entityos-swarm/supervisor.pid 2>/dev/null || true); ps -eo pid,etime,args | grep -E '[r]un_24h_entityos_swarm_supervisor|[r]un_research_distillery|[r]un_free_evidence_forge|[f]ree swarm/evaluate.py|[l]lama-server'; echo ---SUPERVISOR---; cat /artifacts/clay-entityos-swarm/SUPERVISOR.json
+---SUPERVISOR---
+{
+  "schema": "CLAY_ENTITYOS_SWARM_SUPERVISOR/v8",
+  "observed_at": "2026-08-24T11:28:03.757954+00:00",
+  "repo_root": "/workspace/clay-global-research-entity",
+  "remaining_seconds": 86400,
+  "provider_admission": {
+    "schema": "ENTITYOS_HCU_FREE_PROVIDER_ADMISSION_STATUS/v1",
+    "ok": true,
+    "authority_epoch": "8.68",
+    "steering": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_68.json",
+    "admitted_free_providers": [],
+    "providers": {
+      "groq": {
+        "admitted": false,
+        "cost_class": "UNKNOWN",
+        "evidence_ref": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_68.json#evidence.typed_admission_state"
+      },
+      "mistral": {
+        "admitted": false,
+        "cost_class": "UNKNOWN",
+        "evidence_ref": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_68.json#evidence.typed_admission_state"
+      },
+      "nvidia": {
+        "admitted": false,
+        "cost_class": "UNKNOWN",
+        "evidence_ref": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_68.json#evidence.typed_admission_state"
+      },
+      "openrouter": {
+        "admitted": false,
+        "cost_class": "UNKNOWN",
+        "evidence_ref": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_68.json#evidence.typed_admission_state"
+      }
+    }
+  },
+  "go_swarm_running": false,
+  "local_research_model_ready": false,
+  "distillery_running": false,
+  "forge_running": false,
+  "dashboard_running": true,
+  "policy": "EXTERNAL_LLM_SWARM_ONLY_WHEN_TYPED_FREE_ADMITTED; LOOPBACK_4B+PUBLIC_FORGE_CONTINUE_DURING_QUARANTINE"
+}

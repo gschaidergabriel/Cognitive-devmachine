@@ -13,15 +13,23 @@ from __future__ import annotations
 import argparse
 import asyncio
 import collections
+import hashlib
 import json
 import os
 from pathlib import Path
 import re
 import sqlite3
+import threading
 import urllib.error
 import urllib.request
 
 import run_free_go_swarm as base
+from free_lane_provenance import (
+    binding_still_current,
+    current_lane_binding,
+    emit_execution_receipt,
+    lane_evidence,
+)
 from free_swarm_quota import slot as quota_slot, observe as quota_observe
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -59,11 +67,82 @@ UNKNOWN_HIGH_VALUE = (
 PROVIDER_MODEL_CAP = {"groq": 3, "mistral": 8, "nvidia": 16}
 
 _ORIGINAL_REQUEST_CHAT = base.request_chat
+_ORIGINAL_NEXT_KEY_MODEL = base.ProviderRuntime.next_key_model
+_RECEIPT_LOCK = threading.Lock()
+_EVIDENCE_CACHE: dict[tuple[str, str, str, str], dict] = {}
+_SOURCE = {
+    "commit": base.git_text("rev-parse", "HEAD"),
+    "tree": base.git_text("rev-parse", "HEAD^{tree}"),
+}
+
+
+def _lane_evidence_cached(spec, key: str, model: str) -> dict:
+    """Cheap reservation filter; exact authority is re-read before every network call."""
+    fp = base.key_fingerprint(key)
+    cache_key = (spec.name, fp, model, spec.endpoint)
+    if cache_key not in _EVIDENCE_CACHE:
+        _EVIDENCE_CACHE[cache_key] = lane_evidence(
+            spec.name,
+            fp,
+            model,
+            spec.endpoint,
+            artifacts=ARTIFACT_ROOT,
+        )
+    return _EVIDENCE_CACHE[cache_key]
+
+
+def lane_bounded_next_key_model(self):
+    attempts = max(1, len(self.keys) * len(self.models))
+    for _ in range(attempts):
+        pair = _ORIGINAL_NEXT_KEY_MODEL(self)
+        if pair is None:
+            return None
+        key, model = pair
+        if _lane_evidence_cached(self.spec, key, model).get("ok"):
+            return key, model
+    return None
+
+
+def _request_id(headers: dict[str, str], payload) -> str | None:
+    for name in ("x-request-id", "request-id", "x-groq-request-id", "cf-ray"):
+        if headers.get(name):
+            return str(headers[name])
+    if isinstance(payload, dict):
+        for name in ("id", "request_id"):
+            if payload.get(name):
+                return str(payload[name])
+    return None
+
+
+def _payload_digest(payload) -> str:
+    return hashlib.sha256(
+        json.dumps(payload, sort_keys=True, ensure_ascii=False, default=str).encode("utf-8")
+    ).hexdigest()
 
 
 def provider_bounded_request_chat(spec, key, model, prompt, max_tokens, timeout):
     if not base.provider_is_admitted_free(spec.name):
         return 412, {}, {"error": {"message": "typed FREE provider admission required", "type": "provider_admission"}}
+
+    fp = base.key_fingerprint(key)
+    binding = current_lane_binding(
+        spec.name,
+        fp,
+        model,
+        spec.endpoint,
+        artifacts=ARTIFACT_ROOT,
+    )
+    if not binding.get("ok"):
+        return 460, {}, {
+            "error": {
+                "message": "exact FREE lane binding required",
+                "type": "free_lane_binding",
+                "reason": binding.get("reason"),
+            }
+        }
+    if not binding_still_current(binding):
+        return 460, {}, {"error": {"message": "FREE lane authority changed before network", "type": "free_lane_binding_drift"}}
+
     if spec.name == "groq":
         max_tokens = min(int(max_tokens), int(os.getenv("CLAY_GROQ_MAX_TOKENS", "900")))
     elif spec.name == "mistral":
@@ -73,14 +152,38 @@ def provider_bounded_request_chat(spec, key, model, prompt, max_tokens, timeout)
     owner = f"go-swarm:{model}"
     try:
         with quota_slot(spec.name, owner, timeout_s=min(float(timeout), 90.0), lease_s=max(240.0, float(timeout) + 45.0)):
+            if not binding_still_current(binding):
+                return 460, {}, {"error": {"message": "FREE lane authority changed before provider call", "type": "free_lane_binding_drift"}}
             status, headers, payload = _ORIGINAL_REQUEST_CHAT(spec, key, model, prompt, max_tokens, timeout)
+        stable_after_call = binding_still_current(binding)
         quota_observe(spec.name, owner, status, headers)
+        try:
+            with _RECEIPT_LOCK:
+                emit_execution_receipt(
+                    provider=spec.name,
+                    credential_fingerprint=fp,
+                    model_or_route=model,
+                    endpoint=spec.endpoint,
+                    binding=binding,
+                    request_id=_request_id(headers, payload),
+                    usage=base.usage_from(payload),
+                    http_status=status,
+                    result_digest=_payload_digest(payload),
+                    source_commit_and_tree=_SOURCE,
+                    binding_stable_after_call=stable_after_call,
+                    artifacts=ARTIFACT_ROOT,
+                )
+        except Exception as exc:
+            return 598, {}, {"error": {"message": "provider call completed but FREE lane receipt persistence failed", "type": "free_lane_receipt", "detail": type(exc).__name__}}
+        if not stable_after_call:
+            return 409, headers, {"error": {"message": "FREE lane authority changed after provider call; result quarantined", "type": "free_lane_binding_drift"}}
         return status, headers, payload
     except TimeoutError:
         quota_observe(spec.name, owner, "GATE_TIMEOUT", {})
         return 503, {}, {"error": {"message": "shared provider gate timeout", "type": "local_quota_gate"}}
 
 
+base.ProviderRuntime.next_key_model = lane_bounded_next_key_model
 base.request_chat = provider_bounded_request_chat
 _ORIGINAL_BUILD_STATE_CONTEXT = base.build_state_context
 _ORIGINAL_WORKER_PROMPT = base.worker_prompt
@@ -162,25 +265,9 @@ base.worker_prompt = optimized_worker_prompt
 
 
 def fetch_catalog(provider: str, url: str, key: str, timeout: float) -> list[dict]:
-    if not base.provider_is_admitted_free(provider):
-        return []
-    req = urllib.request.Request(url, headers={"Authorization": f"Bearer {key}", "Content-Type": "application/json", "User-Agent":"clay-entityos-swarm/5.0"})
-    owner=f"go-swarm:catalog:{provider}"
-    try:
-        with quota_slot(provider,owner,timeout_s=min(timeout,60.0),lease_s=120.0):
-            with urllib.request.urlopen(req, timeout=timeout) as resp:
-                payload = json.loads(resp.read().decode("utf-8", errors="replace"))
-                headers={k.lower():v for k,v in resp.headers.items()}
-        quota_observe(provider,owner,200,headers)
-    except urllib.error.HTTPError as exc:
-        headers={k.lower():v for k,v in exc.headers.items()} if exc.headers else {}
-        quota_observe(provider,owner,int(exc.code),headers)
-        return []
-    except Exception:
-        quota_observe(provider,owner,"CATALOG_ERROR",{})
-        return []
-    rows = payload.get("data", []) if isinstance(payload, dict) else []
-    return [x if isinstance(x, dict) else {"id": str(x)} for x in rows]
+    """Fail closed: credentialed catalog routes have no per-lane economic contract."""
+    del provider, url, key, timeout
+    return []
 
 
 def explicit_billions(model_id: str) -> float | None:
@@ -259,13 +346,13 @@ def discover_and_export(timeout: float) -> dict[str, dict]:
             os.environ[spec.models_env]=",".join(selected)
             report[spec.name]={"source":"live_catalog_empirical_filter","keys":len(keys),"catalog":len(rows),"models":selected}
         else:
-            report[spec.name]={"source":"controller_fallback","keys":len(keys),"catalog":len(rows),"models":list(spec.default_models)}
+            report[spec.name]={"source":"controller_fallback_no_unbound_catalog_network","keys":len(keys),"catalog":0,"models":list(spec.default_models)}
     return report
 
 
 async def main(args: argparse.Namespace) -> int:
     report=discover_and_export(args.timeout)
-    print(json.dumps({"schema":"CLAY_ENTITYOS_SWARM_DISCOVERY/v5","providers":report,"distillery_context":DISTILLERY_DB.exists(),"live_runtime_context":True,"shared_quota_gate":True,"typed_provider_admission":True},ensure_ascii=False),flush=True)
+    print(json.dumps({"schema":"CLAY_ENTITYOS_SWARM_DISCOVERY/v5","providers":report,"distillery_context":DISTILLERY_DB.exists(),"live_runtime_context":True,"shared_quota_gate":True,"typed_provider_admission":True,"exact_free_lane_binding":True,"credentialed_catalog_network":False},ensure_ascii=False),flush=True)
     if args.inventory_only:return 0
     out=args.output_dir or f"/artifacts/clay-entityos-swarm/{__import__('datetime').datetime.now(__import__('datetime').timezone.utc).strftime('%Y%m%dT%H%M%SZ')}"
     base_args=argparse.Namespace(hours=args.hours,max_tokens=args.max_tokens,context_chars=args.context_chars,timeout=args.timeout,drain_seconds=args.drain_seconds,output_dir=out)

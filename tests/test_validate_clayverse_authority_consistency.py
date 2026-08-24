@@ -12,46 +12,51 @@ spec.loader.exec_module(mod)
 
 
 class AuthorityConsistencyTests(unittest.TestCase):
-    def make_tree(self):
+    def make_tree(self, version="8.68"):
         td = tempfile.TemporaryDirectory()
         root = Path(td.name)
-        files = {
-            "research_entity/continuity/RESEARCH_ENTITY_CANONICAL.json": {
+        suffix = version.replace(".", "_")
+        authority = f"research_entity/claycode/autonomous/SUPERVISOR_STEERING_{suffix}.json"
+
+        def put_json(rel, obj):
+            path = root / rel
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text(json.dumps(obj, sort_keys=True), encoding="utf-8")
+
+        def put_text(rel, text):
+            path = root / rel
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text(text, encoding="utf-8")
+
+        put_json("research_entity/continuity/RESEARCH_ENTITY_CANONICAL.json", {"entity_id": "entity"})
+        put_json(
+            "research_entity/continuity/BOOTSTRAP_MINIMAL.json",
+            {
                 "entity_id": "entity",
-            },
-            "research_entity/continuity/BOOTSTRAP_MINIMAL.json": {
-                "entity_id": "entity",
-                "identity": {
-                    "persistent_research_entity": "Clay",
-                    "temporary_worker": "ORGAN_NOT_ENTITY",
-                },
+                "identity": {"persistent_research_entity": "Clay", "temporary_worker": "ORGAN_NOT_ENTITY"},
                 "active_program": mod.CURRENT_PROGRAM,
                 "active_stage": mod.CURRENT_STAGE,
                 "product_endpoint": mod.CURRENT_PRODUCT,
                 "integrated_cognition_compute_architecture": mod.CURRENT_COMPUTE_ARCHITECTURE,
-                "authority_correction": mod.CURRENT_AUTHORITY,
-                "mandatory_invariants": [
-                    "EntityOS is the sole current product/system identity",
-                    "HCU is the sole current integrated cognition/compute architecture",
-                    "FACT_UNKNOWN + METHOD_PRESENT != FACT_PRESENT",
-                ],
-                "execution_surface": "AUTHORIZED_ISOLATED_SANDBOX_ONLY",
-                "together_api": "FORBIDDEN",
-                "paid_fallback": "FORBIDDEN",
-                "final_paid_model_training": "OWNER_AUTHORIZATION_REQUIRED",
+                "authority_correction": authority,
                 "effect_authority": "EffectGate+EffectJournal",
+                "free_only": True,
+                "paid_fallback": "FORBIDDEN",
+                "together_api": "FORBIDDEN_IN_CURRENT_FREE_ONLY_SUPERVISOR_MODE",
+                "free_provider_allowlist_current": ["groq", "mistral", "nvidia", "openrouter"],
             },
-            "research_entity/rooms/PROGRAM_STATE.json": {
+        )
+        put_json(
+            "research_entity/rooms/PROGRAM_STATE.json",
+            {
+                "schema_version": version,
                 "program_id": "entityos-hcu",
                 "status": "ACTIVE",
                 "stage": mod.CURRENT_STAGE,
                 "current_stage": mod.CURRENT_STAGE,
                 "product": mod.CURRENT_PRODUCT,
                 "integrated_cognition_compute_architecture": mod.CURRENT_COMPUTE_ARCHITECTURE,
-                "identity": {
-                    "persistent_research_entity": "Clay",
-                    "temporary_workers": "ORGANS_NOT_ENTITIES",
-                },
+                "authority_correction": authority,
                 "authority": {
                     "external_effects": "EffectGate+EffectJournal",
                     "second_persistent_identity": "FORBIDDEN",
@@ -59,312 +64,218 @@ class AuthorityConsistencyTests(unittest.TestCase):
                 },
                 "execution_policy": {
                     "free_only": True,
-                    "isolated_sandbox_only": True,
-                    "vps_testing_forbidden": True,
-                    "self_hosted_vps_test_runners_forbidden": True,
+                    "authorized_zero_cost_local_normal_user_execution": True,
+                    "authorized_clay_direct_dev_vps_sandbox_execution": True,
+                    "local_root_or_sudo_new_authority_implied": False,
+                    "unrelated_vps_host_changes_allowed": False,
                     "production_host_testing_forbidden": True,
-                    "together_forbidden": True,
-                    "paid_fallback": False,
-                },
-                "go_required_tracks": {
-                    "track_a": "ENTITYOS_EXECUTABLE_CONVERGENCE",
-                    "track_b": "HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT",
+                    "external_provider_admission_file": mod.CANONICAL_PROVIDER_ADMISSION,
+                    "together_general_inference_and_fallback_forbidden": True,
+                    "other_paid_fallback": False,
                 },
                 "runtime_credit": {
                     "entityos_hcu_whole_runtime_credit": 0,
+                    "hcu_full_runtime_credit": 0,
+                    "jspace_model_runtime_credit": 0,
+                    "training_credit": 0,
                     "whole_product_pass": False,
                 },
             },
-            mod.CURRENT_AUTHORITY: {
-                "schema_version": "8.52",
-                "status": "CURRENT_OWNER_AUTHORITY_CORRECTION",
-                "program": mod.CURRENT_PROGRAM,
-                "product": mod.CURRENT_PRODUCT,
-                "integrated_cognition_compute_architecture": mod.CURRENT_COMPUTE_ARCHITECTURE,
-                "adjudication": {
-                    "entityos": "SOLE_CURRENT_PRODUCT_SYSTEM_IDENTITY",
-                    "hcu": "SOLE_CURRENT_INTEGRATED_COGNITION_COMPUTE_ARCHITECTURE",
-                    "clayverse": "HISTORICAL_DONOR_PROVENANCE_ONLY",
-                },
-                "routing_law": [
-                    "FREE_ONLY_REMAINS_FAIL_CLOSED_WITH_NO_PAID_FALLBACK",
-                    "EXECUTABLE_EVIDENCE_OUTRANKS_MODEL_CONSENSUS",
-                ],
-                "current_runtime_evidence": {
-                    "entityos_hcu_whole_runtime_credit": 0,
-                    "whole_product_pass": False,
-                },
-            },
-            "the artefact/manifest.json": {
-                "schema": "ENTITYOS_HCU_ARTIFACT_MANIFEST/v1",
+        )
+        put_json(
+            "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
+            {"schema_version": version, "steering": authority},
+        )
+        put_json(
+            "the artefact/manifest.json",
+            {
                 "artifact": mod.CURRENT_PRODUCT,
                 "product_endpoint": mod.CURRENT_PRODUCT,
                 "integrated_cognition_compute_architecture": mod.CURRENT_COMPUTE_ARCHITECTURE,
                 "stage": mod.CURRENT_STAGE,
-                "canonical_workspace": "the artefact/",
-                "authority_correction": mod.CURRENT_AUTHORITY,
+                "authority_correction": authority,
                 "effect_authority": "EffectGate+EffectJournal",
                 "execution_policy": {
-                    "free_only": True,
-                    "isolated_sandbox_only": True,
-                    "vps_testing_forbidden": True,
-                    "together_forbidden": True,
-                    "paid_fallback": False,
+                    "active_supervisor_free_only": True,
+                    "authorized_zero_cost_local_normal_user_execution": True,
+                    "authorized_clay_direct_dev_vps_sandbox_execution": True,
+                    "external_provider_admission_file": mod.CANONICAL_PROVIDER_ADMISSION,
+                    "external_llm_provider_execution": "QUARANTINED_UNTIL_FREE_SWARM_ADMISSION_BOUNDARY_RECEIPT_V1_EXACT_SOURCE_PASS",
+                    "together_general_inference_and_fallback_forbidden": True,
+                    "other_paid_fallback": False,
                 },
                 "runtime_credit": {
                     "entityos_hcu_whole_runtime_credit": 0,
+                    "hcu_full_runtime_credit": 0,
+                    "jspace_model_runtime_credit": 0,
+                    "training_credit": 0,
                     "whole_product_pass": False,
                 },
-                "legacy_donor": {
-                    "prior_product": "ClayVerse",
-                    "scope": "HISTORICAL_DONOR_PROVENANCE_ONLY",
+            },
+        )
+        put_json(
+            authority,
+            {
+                "schema_version": version,
+                "active_program": mod.CURRENT_PROGRAM,
+                "product": mod.CURRENT_PRODUCT,
+                "integrated_cognition_compute_architecture": mod.CURRENT_COMPUTE_ARCHITECTURE,
+                "free_only": {
+                    "enabled": True,
+                    "no_paid_fallback": True,
+                    "together_forbidden": True,
+                    "external_llm_provider_execution": "QUARANTINED_UNTIL_EXECUTABLE_TYPED_FREE_ADMISSION_PASS",
+                },
+                "promotion": {
+                    "entityos_whole_runtime_pass": False,
+                    "hcu_full_runtime_pass": False,
+                    "provider_runtime_credit": 0,
+                    "training_credit": 0,
                 },
             },
-            mod.CONTROL41: {
+        )
+        put_json(
+            mod.CANONICAL_PROVIDER_ADMISSION,
+            {
+                "schema": "ENTITYOS_HCU_FREE_PROVIDER_ADMISSION/v1",
+                "authority_epoch": version,
+                "mode": "FREE_ONLY",
+                "product": mod.CURRENT_PRODUCT,
+                "compute_architecture": mod.CURRENT_COMPUTE_ARCHITECTURE,
+                "source": "ENTITYOS_HCU_CONTROL_PLANE",
+                "providers": {
+                    name: {"admitted": False, "cost_class": "UNKNOWN"}
+                    for name in ["groq", "mistral", "nvidia", "openrouter"]
+                },
+                "runtime_provider_credit": 0,
+                "execution_state": "EXTERNAL_LLM_PROVIDER_TRAFFIC_QUARANTINED_UNTIL_EXECUTABLE_TYPED_FREE_ADMISSION_PASS",
+            },
+        )
+        put_text(
+            "CLAUDE.md",
+            f"AUTONOMOUS_SUPERVISOR=SUPERVISOR_STEERING_{suffix}\n"
+            f"SUPERVISOR_STEERING_{suffix}.json\n"
+            f"CLAYCODE_ALL_WORKERS_EXECUTION_DIRECTIVE_{suffix}.md\n"
+            "clay-direct-dev\nprovider traffic QUARANTINED\n",
+        )
+
+        put_json(
+            mod.CONTROL41,
+            {
                 "schema_version": "4.1",
-                "status": "ACTIVE",
                 "mode": "FREE_ONLY",
-                "cycle_policy": {
-                    "paid_fallback": False,
-                    "automatic_subscription_upgrade": False,
-                    "vps_testing": "FORBIDDEN",
-                },
-                "authority_rules": [
-                    "model_output_is_candidate_not_truth",
-                    "autonomous_cycle_may_not_modify_FRANK_harness",
-                ],
+                "cycle_policy": {"paid_fallback": False},
+                "authority_rules": ["model_output_is_candidate_not_truth"],
             },
-            mod.CONTROL42: {
+        )
+        put_json(
+            mod.CONTROL42,
+            {
                 "schema_version": "4.2-execution-boundary-addendum",
-                "status": "ACTIVE",
-                "mode": "FREE_ONLY",
-                "base_control_path": mod.CONTROL41,
-                "base_control_blob_sha": "pending",
-                "execution_routing": {
-                    "direct_vps_host_candidate_execution": "FORBIDDEN",
-                    "persistent_self_hosted_candidate_execution": "FORBIDDEN",
-                    "production_host_testing": "FORBIDDEN",
-                },
-                "preserved_hard_rules": {
-                    "free_only": True,
-                    "paid_fallback": False,
-                    "together_forbidden": True,
-                    "frank_harness_modification": "FORBIDDEN",
-                },
+                "preserved_hard_rules": {"free_only": True, "paid_fallback": False, "together_forbidden": True},
             },
-            mod.CONTROL43: {
+        )
+        put_json(
+            mod.CONTROL43,
+            {
                 "schema_version": "4.3-program-authority-addendum",
-                "status": "ACTIVE",
-                "mode": "FREE_ONLY",
-                "base_control_path": mod.CONTROL41,
-                "base_control_blob_sha": "pending",
-                "execution_boundary_addendum_path": mod.CONTROL42,
-                "execution_boundary_addendum_blob_sha": "pending",
                 "preserved_hard_rules": {
                     "free_only": True,
                     "paid_fallback": False,
-                    "together_forbidden_under_current_control": True,
                     "model_output_is_candidate_not_truth": True,
-                    "runtime_credit_requires_exact_admitted_execution": True,
-                    "frank_harness_modification": "FORBIDDEN",
                 },
             },
-            mod.CONTROL44: {
+        )
+        put_json(
+            mod.CONTROL44,
+            {
                 "schema_version": "4.4-clayverse-product-authority-addendum",
-                "status": "ACTIVE",
-                "mode": "FREE_ONLY",
-                "base_control_path": mod.CONTROL41,
-                "execution_boundary_addendum_path": mod.CONTROL42,
-                "prior_program_authority_addendum_path": mod.CONTROL43,
-                "prior_program_authority_addendum_blob_sha": "pending",
-                "composition_order": [
-                    "4.1",
-                    "4.2-execution-boundary-addendum",
-                    "4.3-program-authority-addendum",
-                    "4.4-clayverse-product-authority-addendum",
-                ],
-                "effective_control_version": mod.LEGACY_EXPECTED_CONTROL,
-                "program_identity_override": {
-                    "active_program": "CLAYVERSE_SINGLE_CONTAINER",
-                    "target_stage": "CLAYVERSE_ARTIFACT",
-                    "product_endpoint": "ClayVerse",
-                    "release_form": "ONE_OCI_DOCKER_COMPATIBLE_CONTAINER_IMAGE",
-                },
-                "preserved_hard_rules": {
-                    "free_only": True,
-                    "paid_fallback": False,
-                    "together_forbidden": True,
-                    "vps_testing": False,
-                    "runtime_credit_requires_exact_admitted_isolated_execution": True,
-                    "model_output_is_candidate_not_truth": True,
-                    "frank_harness_modification": "FORBIDDEN",
-                    "legacy_mini_entity_swarm_controller": "FORBIDDEN_UNTIL_CLAYVERSE_PROMPT_AND_AUTHORITY_MIGRATION",
-                },
+                "program_identity_override": {"product_endpoint": "ClayVerse"},
+                "preserved_hard_rules": {"free_only": True, "paid_fallback": False, "together_forbidden": True},
             },
-        }
-        text = {
-            "research_entity/global/CLAY_STATUS_FOOTER_PROTOCOL.md": (
-                "Program: EntityOS + HCU\n"
-                "Stage: ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP\n"
-                "Product: EntityOS\n"
-                "Compute architecture: HCU\n"
-            ),
-            "the artefact/ARCHITECTURE.md": (
-                "# EntityOS + HCU architecture\n"
-                "EntityOS is the sole current product/system. HCU is the integrated cognition/compute architecture.\n"
-            ),
-            "the artefact/README.md": "# the artefact — EntityOS + HCU cognitive computer\n",
-            mod.ROOT_CLAUDE: (
-                "# CLAY — CURRENT ENTITYOS / HCU REPO ORGAN\n"
-                "`PROGRAM=ENTITYOS_HCU`\n"
-                "`STAGE=ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP`\n"
-                "`PRODUCT=EntityOS`\n"
-                "`COMPUTE_ARCHITECTURE=HCU`\n"
-                "Read research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_52.json.\n"
-            ),
-        }
-        for rel, data in files.items():
-            path = root / rel
-            path.parent.mkdir(parents=True, exist_ok=True)
-            path.write_text(json.dumps(data, sort_keys=True), encoding="utf-8")
-        for rel, data in text.items():
-            path = root / rel
-            path.parent.mkdir(parents=True, exist_ok=True)
-            path.write_text(data, encoding="utf-8")
+        )
+        return td, root, authority
 
-        control42_path = root / mod.CONTROL42
-        control42 = json.loads(control42_path.read_text(encoding="utf-8"))
-        control42["base_control_blob_sha"] = mod.git_blob_sha(root / mod.CONTROL41)
-        control42_path.write_text(json.dumps(control42, sort_keys=True), encoding="utf-8")
+    def load(self, root, rel):
+        return json.loads((root / rel).read_text(encoding="utf-8"))
 
-        control43_path = root / mod.CONTROL43
-        control43 = json.loads(control43_path.read_text(encoding="utf-8"))
-        control43["base_control_blob_sha"] = mod.git_blob_sha(root / mod.CONTROL41)
-        control43["execution_boundary_addendum_blob_sha"] = mod.git_blob_sha(control42_path)
-        control43_path.write_text(json.dumps(control43, sort_keys=True), encoding="utf-8")
+    def save(self, root, rel, obj):
+        (root / rel).write_text(json.dumps(obj, sort_keys=True), encoding="utf-8")
 
-        control44_path = root / mod.CONTROL44
-        control44 = json.loads(control44_path.read_text(encoding="utf-8"))
-        control44["prior_program_authority_addendum_blob_sha"] = mod.git_blob_sha(control43_path)
-        control44_path.write_text(json.dumps(control44, sort_keys=True), encoding="utf-8")
-        return td, root
+    def assert_error(self, result, code):
+        self.assertFalse(result["pass"], result)
+        self.assertTrue(any(err == code or err.startswith(code) for err in result["errors"]), result)
 
-    def test_coherent_entityos_hcu_authority_passes(self):
-        td, root = self.make_tree()
+    def test_current_868_pointer_consensus_passes(self):
+        td, root, authority = self.make_tree()
         self.addCleanup(td.cleanup)
         result = mod.validate(root)
-        self.assertTrue(result["pass"], result["errors"])
+        self.assertTrue(result["pass"], result)
+        self.assertEqual(result["resolved_authority"], authority)
+        self.assertEqual(result["resolved_authority_epoch"], "8.68")
 
-    def test_clayverse_bootstrap_regression_fails_closed(self):
-        td, root = self.make_tree(); self.addCleanup(td.cleanup)
-        path = root / "research_entity/continuity/BOOTSTRAP_MINIMAL.json"
-        data = json.loads(path.read_text()); data["active_program"] = "CLAYVERSE_SINGLE_CONTAINER"
-        path.write_text(json.dumps(data))
-        self.assertIn("BOOTSTRAP_ACTIVE_PROGRAM_MISMATCH", mod.validate(root)["errors"])
+    def test_successor_869_requires_no_code_constant_bump(self):
+        td, root, authority = self.make_tree("8.69")
+        self.addCleanup(td.cleanup)
+        result = mod.validate(root)
+        self.assertTrue(result["pass"], result)
+        self.assertEqual(result["resolved_authority_epoch"], "8.69")
 
-    def test_hcu_architecture_regression_fails_closed(self):
-        td, root = self.make_tree(); self.addCleanup(td.cleanup)
-        path = root / "research_entity/rooms/PROGRAM_STATE.json"
-        data = json.loads(path.read_text()); data["integrated_cognition_compute_architecture"] = "XCU"
-        path.write_text(json.dumps(data))
-        self.assertIn("PROGRAM_COMPUTE_ARCHITECTURE_MISMATCH", mod.validate(root)["errors"])
+    def test_manifest_pointer_lag_fails_split_brain(self):
+        td, root, _ = self.make_tree()
+        self.addCleanup(td.cleanup)
+        data = self.load(root, "the artefact/manifest.json")
+        data["authority_correction"] = "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_65.json"
+        self.save(root, "the artefact/manifest.json", data)
+        self.assert_error(mod.validate(root), "AUTHORITY_POINTER_SPLIT_BRAIN")
 
-    def test_manifest_cannot_reactivate_clayverse(self):
-        td, root = self.make_tree(); self.addCleanup(td.cleanup)
-        path = root / "the artefact/manifest.json"
-        data = json.loads(path.read_text()); data["artifact"] = "ClayVerse"; data["product_endpoint"] = "ClayVerse"
-        path.write_text(json.dumps(data))
-        errors = mod.validate(root)["errors"]
-        self.assertIn("MANIFEST_ARTIFACT_MISMATCH", errors)
-        self.assertIn("MANIFEST_PRODUCT_ENDPOINT_MISMATCH", errors)
+    def test_traversal_or_malformed_pointer_fails_closed(self):
+        td, root, _ = self.make_tree()
+        self.addCleanup(td.cleanup)
+        data = self.load(root, "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json")
+        data["steering"] = "research_entity/claycode/autonomous/../SUPERVISOR_STEERING_8_68.json"
+        self.save(root, "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json", data)
+        self.assert_error(mod.validate(root), "AUTHORITY_POINTER_INVALID:inbox")
 
-    def test_steering852_free_only_fence_is_required(self):
-        td, root = self.make_tree(); self.addCleanup(td.cleanup)
-        path = root / mod.CURRENT_AUTHORITY
-        data = json.loads(path.read_text()); data["routing_law"] = ["EXECUTABLE_EVIDENCE_OUTRANKS_MODEL_CONSENSUS"]
-        path.write_text(json.dumps(data))
-        self.assertIn("STEERING852_FREE_ONLY_FENCE_MISSING", mod.validate(root)["errors"])
+    def test_provider_epoch_mismatch_fails_closed(self):
+        td, root, _ = self.make_tree()
+        self.addCleanup(td.cleanup)
+        data = self.load(root, mod.CANONICAL_PROVIDER_ADMISSION)
+        data["authority_epoch"] = "8.67"
+        self.save(root, mod.CANONICAL_PROVIDER_ADMISSION, data)
+        self.assert_error(mod.validate(root), "PROVIDER_ADMISSION_EPOCH_MISMATCH")
 
-    def test_program_paid_fallback_weakening_fails_closed(self):
-        td, root = self.make_tree(); self.addCleanup(td.cleanup)
-        path = root / "research_entity/rooms/PROGRAM_STATE.json"
-        data = json.loads(path.read_text()); data["execution_policy"]["paid_fallback"] = True
-        path.write_text(json.dumps(data))
-        self.assertIn("PROGRAM_PAID_FALLBACK_WEAKENED", mod.validate(root)["errors"])
+    def test_provider_self_grant_while_quarantined_fails(self):
+        td, root, _ = self.make_tree()
+        self.addCleanup(td.cleanup)
+        data = self.load(root, mod.CANONICAL_PROVIDER_ADMISSION)
+        data["providers"]["groq"] = {"admitted": True, "cost_class": "FREE"}
+        self.save(root, mod.CANONICAL_PROVIDER_ADMISSION, data)
+        self.assert_error(mod.validate(root), "PROVIDER_SELF_GRANT_WHILE_QUARANTINED:groq")
 
-    def test_program_effect_authority_weakening_fails_closed(self):
-        td, root = self.make_tree(); self.addCleanup(td.cleanup)
-        path = root / "research_entity/rooms/PROGRAM_STATE.json"
-        data = json.loads(path.read_text()); data["authority"]["external_effects"] = "HCU"
-        path.write_text(json.dumps(data))
-        self.assertIn("PROGRAM_EFFECT_AUTHORITY_MISMATCH", mod.validate(root)["errors"])
+    def test_reintroducing_old_blanket_vps_prohibition_is_detected(self):
+        td, root, _ = self.make_tree()
+        self.addCleanup(td.cleanup)
+        data = self.load(root, "research_entity/rooms/PROGRAM_STATE.json")
+        data["execution_policy"]["authorized_clay_direct_dev_vps_sandbox_execution"] = False
+        self.save(root, "research_entity/rooms/PROGRAM_STATE.json", data)
+        self.assert_error(mod.validate(root), "PROGRAM_CLAY_DIRECT_DEV_EXECUTION_DRIFT")
 
-    def test_program_runtime_credit_cannot_self_promote(self):
-        td, root = self.make_tree(); self.addCleanup(td.cleanup)
-        path = root / "research_entity/rooms/PROGRAM_STATE.json"
-        data = json.loads(path.read_text()); data["runtime_credit"]["entityos_hcu_whole_runtime_credit"] = 1
-        path.write_text(json.dumps(data))
-        self.assertIn("PROGRAM_RUNTIME_CREDIT_NONZERO", mod.validate(root)["errors"])
+    def test_provider_admission_path_cannot_be_substituted(self):
+        td, root, _ = self.make_tree()
+        self.addCleanup(td.cleanup)
+        data = self.load(root, "the artefact/manifest.json")
+        data["execution_policy"]["external_provider_admission_file"] = "scratch/forged_free.json"
+        self.save(root, "the artefact/manifest.json", data)
+        self.assert_error(mod.validate(root), "MANIFEST_PROVIDER_ADMISSION_PATH_DRIFT")
 
-    def test_control41_paid_fallback_mutation_breaks_ancestry(self):
-        td, root = self.make_tree(); self.addCleanup(td.cleanup)
-        path = root / mod.CONTROL41
-        data = json.loads(path.read_text()); data["cycle_policy"]["paid_fallback"] = True
-        path.write_text(json.dumps(data, sort_keys=True))
-        errors = mod.validate(root)["errors"]
-        self.assertIn("CONTROL41_PAID_FALLBACK_WEAKENED", errors)
-        self.assertIn("CONTROL42_BASE_BLOB_MISMATCH", errors)
-        self.assertIn("CONTROL43_BASE_BLOB_MISMATCH", errors)
-
-    def test_control42_together_mutation_breaks_ancestry(self):
-        td, root = self.make_tree(); self.addCleanup(td.cleanup)
-        path = root / mod.CONTROL42
-        data = json.loads(path.read_text()); data["preserved_hard_rules"]["together_forbidden"] = False
-        path.write_text(json.dumps(data, sort_keys=True))
-        errors = mod.validate(root)["errors"]
-        self.assertIn("CONTROL42_TOGETHER_FENCE_WEAKENED", errors)
-        self.assertIn("CONTROL43_EXEC_BLOB_MISMATCH", errors)
-
-    def test_control43_mutation_breaks_control44_blob_ancestry(self):
-        td, root = self.make_tree(); self.addCleanup(td.cleanup)
-        path = root / mod.CONTROL43
-        data = json.loads(path.read_text()); data["tampered"] = True
-        path.write_text(json.dumps(data, sort_keys=True))
-        self.assertIn("CONTROL44_PRIOR_BLOB_MISMATCH", mod.validate(root)["errors"])
-
-    def test_control44_safety_weakening_still_fails_closed(self):
-        td, root = self.make_tree(); self.addCleanup(td.cleanup)
-        path = root / mod.CONTROL44
-        data = json.loads(path.read_text()); data["preserved_hard_rules"]["free_only"] = False
-        path.write_text(json.dumps(data))
-        self.assertIn("CONTROL44_FREE_ONLY_WEAKENED", mod.validate(root)["errors"])
-
-    def test_control44_historical_product_bytes_remain_provenance_bound(self):
-        td, root = self.make_tree(); self.addCleanup(td.cleanup)
-        path = root / mod.CONTROL44
-        data = json.loads(path.read_text()); data["program_identity_override"]["product_endpoint"] = "EntityOS"
-        path.write_text(json.dumps(data))
-        self.assertIn("CONTROL44_HISTORICAL_PRODUCT_ANCESTRY_MISMATCH", mod.validate(root)["errors"])
-
-    def test_root_claude_stale_clayverse_program_fails_closed(self):
-        td, root = self.make_tree(); self.addCleanup(td.cleanup)
-        path = root / mod.ROOT_CLAUDE
-        path.write_text(
-            "`PROGRAM=CLAYVERSE_SINGLE_CONTAINER`\n"
-            "`STAGE=ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP`\n"
-            "`PRODUCT=EntityOS`\n"
-            "`COMPUTE_ARCHITECTURE=HCU`\n"
-            "SUPERVISOR_STEERING_8_52.json\n"
-        )
-        errors = mod.validate(root)["errors"]
-        self.assertIn("ROOT_CLAUDE_PROGRAM_MISMATCH", errors)
-        self.assertIn("ROOT_CLAUDE_STALE_CLAYVERSE_PROGRAM_ACTIVE", errors)
-
-    def test_architecture_stale_clayverse_product_fails_closed(self):
-        td, root = self.make_tree(); self.addCleanup(td.cleanup)
-        path = root / "the artefact/ARCHITECTURE.md"
-        path.write_text("# EntityOS HCU\nClayVerse is the product endpoint.\n")
-        self.assertIn("ARCHITECTURE_STALE_CLAYVERSE_PRODUCT_AUTHORITY", mod.validate(root)["errors"])
+    def test_runtime_credit_inflation_fails(self):
+        td, root, _ = self.make_tree()
+        self.addCleanup(td.cleanup)
+        data = self.load(root, "research_entity/rooms/PROGRAM_STATE.json")
+        data["runtime_credit"]["jspace_model_runtime_credit"] = 1
+        self.save(root, "research_entity/rooms/PROGRAM_STATE.json", data)
+        self.assert_error(mod.validate(root), "PROGRAM_JSPACE_RUNTIME_CREDIT_NONZERO")
 
 
 if __name__ == "__main__":

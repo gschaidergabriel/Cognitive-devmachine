@@ -1,0 +1,49 @@
+{
+  "schema": "CLAY_GO_872_TRIGGER1_STRICT_WRONG_LAYER_LOCALITY/v1",
+  "authority_epoch": "8.72",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol / ChatGPT",
+  "canonical_base_at_branch_creation": "c663a7592ba3af3e4184235fbc739cbf98f80818",
+  "branch": "go872/trigger1-strict-wrong-layer-locality-20260824-2350-gpt56sol",
+  "observed_current_main": {
+    "same_selected_vector_wrong_layer_control": "PRESENT",
+    "executor_selected_vector_sha_check": "PRESENT",
+    "deterministic_wrong_layer_gate": "wrong_layer_delta <= 0",
+    "remaining_confound": "an equal effect at a different layer can pass localization"
+  },
+  "hypothesis": "model-specific layer-locality evidence requires the selected layer to outperform relocation of the same selected vector; equality does not distinguish the selected site",
+  "counterhypothesis": "if a tie were sufficient, the claimed causal site would remain non-unique and therefore not localized",
+  "delta": {
+    "protocol_change": "wrong_layer_delta <= 0 -> wrong_layer_delta < 0",
+    "regression": "new deterministic test covers weaker wrong layer PASS, equal effect FAIL, stronger wrong layer FAIL",
+    "scope": "SOURCE_AND_DETERMINISTIC_REGRESSION_DEFINITION_ONLY"
+  },
+  "go_tracks": {
+    "track_a": "ENTITYOS_EXECUTABLE_CONVERGENCE: fail-closed promotion evidence is stricter before executable promotion",
+    "track_b": "HCU_NO_CHANGE_WITH_REASON: parallel main already fused the reusable selected-vector provenance primitive; another Entry/HCU lane would duplicate current work",
+    "track_c": "GLOBAL_JSPACE_GWT_PROTOTYPE_AND_FREE_ONLY_LOCAL_08B_READINESS: layer-locality tie can no longer promote a model-specific causal candidate"
+  },
+  "coordination": {
+    "prior_branch_pr": 1706,
+    "prior_branch_status": "SUPERSEDED_BY_PARALLEL_MAIN_FOR_SAME_VECTOR_PORTION",
+    "shared_reproducible_macrocycle_identity": false,
+    "available_trigger_timestamp_precision": "minute",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_experiments_executed": 0
+  },
+  "artefact_readme": {
+    "status": "NO_CHANGE_WITH_REASON",
+    "reason": "current main README was concurrently refreshed by the same macrocycle for strongest-intermediate routing and J-Space gates; this narrow strict-locality delta is append-only here and in its PR to avoid overwriting moving current-facing synthesis"
+  },
+  "credits": {
+    "whole_entityos_hcu": 0,
+    "hcu_full": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "provider_runtime": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "observe exact PR-head deterministic tests and fuse if green/current/nonduplicate; any model intervention remains deferred to a future reproducibly leased macrocycle"
+}

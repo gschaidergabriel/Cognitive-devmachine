@@ -23,6 +23,12 @@ model_health.install_scheduler(fabric_v2)
 import run_6000_free_swarm_v5 as fabric
 model_health.bind_request_observer(fabric)
 import free_swarm_conversion_backpressure_872 as conversion_backpressure
+import free_swarm_typed_delta_bridge as typed_delta_bridge
+
+# v5 exposes the same underlying gated fabric as ``fabric.fabric``. Install the
+# typed output observer there so exact-source synthesis and the v3 economic route
+# stay authoritative while successful worker rows gain hash-bound sidecars.
+typed_delta_bridge.install(fabric.fabric)
 
 
 def main() -> int:

@@ -1,0 +1,57 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "authority_epoch": "8.73",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "trigger": "go",
+  "organ": "GPT-5.6-Sol",
+  "canonical_main_observed_before_successor": "fc45471f0eb61da17191a9f4a5edae7e184a1346",
+  "supersedes_branch_receipt": "2026-08-25_GO_873_DISTILLERY_REBUILD_STABLE_PACKET_SUCCESSOR_GPT56SOL.json",
+  "finding": {
+    "classification": "SOURCE_CONFIRMED_REPLAY_ENVELOPE_IDENTITY_OVERBINDING",
+    "statement": "Fresh-rebuild determinism requires excluding both volatile evaluated_at and envelope-only delta_id from training-bearing measured_packet and stable execution replay identity. Otherwise equivalent measured executions can be re-keyed by observation/evaluation envelope metadata and produce different packet bytes or duplicate causal identities.",
+    "counterhypothesis": "delta_id is a stable measured-execution identity and should remain in packet/replay identity.",
+    "counterhypothesis_disposition": "REJECTED_FOR_CURRENT_CONTRACT: current semantics treat delta_id as candidate/evaluation-envelope identity; source/provenance, target bytes, execution admission, metric and measured outcomes already bind the evidence-bearing execution."
+  },
+  "delta": {
+    "source_blob": "cc0594cdda9da6ed83dd23e0dfbdeba2548726a5",
+    "rebuild_test_blob": "1856592959913fac3619f7b8ca85d4c6c0ffad0d",
+    "replay_test_blob": "cf11a3e61916ccf44f012019c12547c6d0c41a70",
+    "semantics": [
+      "evaluated_at excluded from training-bearing packet bytes and retained metadata-only",
+      "delta_id excluded from measured packet and stable execution replay identity",
+      "measured evidence identity directly wraps the same replay-stable packet preimage",
+      "timestamp/narration/delta-id envelope-only replay must remain duplicate/token-stable",
+      "same stable execution identity with changed measured evidence remains fail-closed conflict"
+    ]
+  },
+  "go_tracks": {
+    "track_a": "ADVANCED_SOURCE_SCOPE: stronger deterministic Forge-to-Distillery replay/rebuild convergence",
+    "track_b": "ADVANCED_SOURCE_SCOPE: causal identity now separates measured execution from volatile/evaluation-envelope identity",
+    "track_c": "ADVANCED_DATASET_SAFETY_SCOPE: replay-equivalent envelopes cannot vary future training packet bytes/tokens; zero model/J-Space/training credit"
+  },
+  "execution": {
+    "external_ci_observed_on_parallel_donor": "FAILURE_WITH_ZERO_RECORDED_STEPS_AND_UNAVAILABLE_LOGS",
+    "failure_classification": "UNKNOWN_EXECUTION_INFRASTRUCTURE_OR_PRESTEP_FAILURE_NOT_PRODUCT_LOGIC_NEGATIVE",
+    "ci_rerun_requested": false,
+    "reason_no_rerun": "FREE_ONLY does not assume external CI execution cost is zero",
+    "provider_or_model_call": false,
+    "paid_or_together_execution": false,
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT"
+  },
+  "readme": {
+    "status": "NO_CHANGE_WITH_REASON",
+    "reason": "Unmerged successor branch only; do not overwrite current-facing artefact README before canonical fusion while main is parallel-moving."
+  },
+  "credit": {
+    "provider_runtime_credit": 0,
+    "entityos_hcu_whole_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Execute replay_identity_873 + rebuild_stable_packet_873 + live_bridge_871 on an explicitly admitted zero-cost surface against the exact successor source, then re-enter main and fuse only if still nonduplicate."
+}

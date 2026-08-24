@@ -1,0 +1,53 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "authority_epoch": "8.73",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "trigger": "go",
+  "organ": "GPT-5.6-Sol",
+  "canonical_main_observed_before_write": "fc45471f0eb61da17191a9f4a5edae7e184a1346",
+  "finding": {
+    "classification": "SOURCE_CONFIRMED_REBUILD_NONDETERMINISM",
+    "statement": "Current main has replay-stable Forge execution identity, but measured_packet still includes volatile evaluated_at in training-bearing packet_text. Two fresh Distillery rebuilds that first observe the same measured execution through different timestamp/narration envelopes can therefore emit different packet bytes and token counts despite the same stable replay/measured identity.",
+    "counterhypothesis": "Stable replay identity alone is sufficient because duplicate admission prevents a second packet in one populated database.",
+    "counterhypothesis_disposition": "REJECTED_AT_REBUILD_SCOPE: duplicate admission inside one DB does not make fresh rebuild packet bytes deterministic when volatile observation time remains inside measured_packet."
+  },
+  "delta": {
+    "source_blob": "4c6db308a92c34f0a2e12f6735fbca658f7cb642",
+    "test_blob": "67d6f562d1caa5622ce729518358e3a430ac015d",
+    "source_change": "exclude evaluated_at from CLAY_DISTILLERY_FORGE_EXECUTION_PACKET/v2 training-bearing bytes; retain it metadata-only; derive measured evidence identity directly from the same replay-stable measured_packet preimage",
+    "test_change": "prove timestamp/narration invariance and fresh-DB rebuild equality of packet IDs, packet bytes, replay/measured digests and accepted token counts"
+  },
+  "go_tracks": {
+    "track_a": "ADVANCED_SOURCE_SCOPE: deterministic Forge-to-Distillery rebuild semantics strengthen executable EntityOS dataset convergence",
+    "track_b": "ADVANCED_SOURCE_SCOPE: separates stable measured evidence from volatile observation metadata without creating a second truth/effect authority",
+    "track_c": "ADVANCED_DATASET_SAFETY_SCOPE: prevents observation-envelope volatility from changing future training-bearing bytes; zero J-Space/model/training credit"
+  },
+  "coordination": {
+    "retained_donor": "PR1726 semantic delta reused as source donor only",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_interventions_executed": 0
+  },
+  "execution": {
+    "provider_or_model_call": false,
+    "paid_or_together_execution": false,
+    "new_external_runtime_execution": false,
+    "source_component_tests_executed_by_this_organ": false,
+    "reason": "Existing PR checks failed with expired/missing logs and rerunning potentially billable external CI was not assumed FREE under FREE_ONLY."
+  },
+  "readme": {
+    "status": "NO_CHANGE_WITH_REASON",
+    "reason": "This macrocycle creates an unmerged successor branch on exact current main; current-facing artefact README is not rewritten ahead of canonical fusion and while parallel main is moving."
+  },
+  "credit": {
+    "provider_runtime_credit": 0,
+    "entityos_hcu_whole_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Execute the focused rebuild-stability regression on an explicitly admitted zero-cost surface against the exact successor commit; require identical training packet bytes/tokens for replay-equivalent envelopes, then re-enter current main and fuse only if still nonduplicate."
+}

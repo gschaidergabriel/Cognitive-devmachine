@@ -1,0 +1,53 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "authority_epoch": "8.73",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "trigger": "go",
+  "organ": "GPT-5.6-Sol",
+  "canonical_main_reentry": "8835f7a7a45c3e4bb6d28d8c24f7b2f1e4552609",
+  "observed_main_delta": "main now excludes delta_id from stable execution replay identity and post-hoc measured digest, but measured_packet still contains both delta_id and evaluated_at, so fresh rebuild packet bytes remain envelope-dependent",
+  "successor_scope": {
+    "source_blob": "cc0594cdda9da6ed83dd23e0dfbdeba2548726a5",
+    "rebuild_test_blob": "1856592959913fac3619f7b8ca85d4c6c0ffad0d",
+    "changes": [
+      "remove delta_id and evaluated_at from training-bearing measured_packet",
+      "retain evaluated_at as observation-only metadata",
+      "derive measured-evidence identity directly from the same stable measured_packet preimage",
+      "preserve current delta_id-stable replay identity and legacy-overlap fail-closed semantics",
+      "add fresh-DB rebuild regression for packet/token/digest equality across replay-equivalent envelopes"
+    ]
+  },
+  "go_tracks": {
+    "track_a": "ADVANCED_SOURCE_SCOPE: exact-current Forge-to-Distillery rebuild determinism successor",
+    "track_b": "ADVANCED_SOURCE_SCOPE: stable measured-execution identity is separated from envelope identity at packet preimage, not only at secondary digest",
+    "track_c": "ADVANCED_DATASET_SAFETY_SCOPE: replay-equivalent observation envelopes cannot change training-bearing bytes or token counts"
+  },
+  "coordination": {
+    "parallel_main_change_absorbed": "8835f7a7 delta_id-stable replay identity",
+    "stale_donor_pr_1726": "CLOSED_AFTER_SUCCESSOR_EXTRACTION",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT"
+  },
+  "execution_evidence": {
+    "focused_external_ci": "FAILURE_WITH_ZERO_RECORDED_STEPS_AND_UNAVAILABLE_LOGS",
+    "classification": "UNKNOWN_PRESTEP_OR_INFRASTRUCTURE_FAILURE_NOT_PRODUCT_LOGIC_NEGATIVE",
+    "rerun_requested": false,
+    "reason": "FREE_ONLY does not assume external CI is zero-cost",
+    "exact_successor_component_test_execution": "UNOBSERVED"
+  },
+  "readme": {
+    "status": "NO_CHANGE_WITH_REASON",
+    "reason": "Current-facing artefact README is not rewritten for an unmerged source-only successor while canonical main is rapidly parallel-moving."
+  },
+  "credits": {
+    "provider_runtime_credit": 0,
+    "entityos_hcu_whole_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Execute the current-main replay regression plus successor rebuild-stability regression and existing live-bridge regression on an explicitly admitted zero-cost execution surface; if green, re-enter main and fuse only the remaining nonduplicate packet-preimage delta."
+}

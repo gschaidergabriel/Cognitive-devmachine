@@ -1,0 +1,77 @@
+{
+  "schema": "ENTITYOS_HCU_GO_PROVIDER_NEGATIVE_EVIDENCE_RECEIPT/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "authority_epoch": "8.65",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "reentry": {
+    "canonical_main_observed": "6ad4d1bb1936a6c26ce036833e27c2a7ac11b1b4",
+    "retained_donor_pr": "gschaidergabriel/clay-global-research-entity#1263",
+    "retained_donor_head_observed_before_write": "e3dadf716007f4c8d11a1d21d781e8e991bfe96f",
+    "retained_executor_pr": "gschaidergabriel/Dr.-Unterweger#810",
+    "retained_executor_head_observed": "bb7324d2a21ffc143c241c652a31524c5be4c9d8",
+    "exact_ready_deployment": "dpl_EN62ggtQnuEcjuvtJNathL3D9Tkf"
+  },
+  "coordination": {
+    "upstream_shared_macrocycle_id": null,
+    "immutable_user_message_timestamp_precision_available": "MINUTE_ONLY",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_experiments_run": 0,
+    "ordinary_work_class": "READ_ONLY_PROVIDER_OBSERVABILITY_NEGATIVE_EVIDENCE"
+  },
+  "observations": {
+    "vercel_team_id": "team_hwPBWKuCJxkfVhCx3WLdcTRx",
+    "vercel_plan": "hobby",
+    "vercel_project_id": "prj_ifIgM9X7jqIQS8mNIGllImziePPG",
+    "deployment_state": "READY",
+    "deployment_git_sha": "bb7324d2a21ffc143c241c652a31524c5be4c9d8",
+    "direct_remaining_sandbox_quota_observed": false,
+    "sandbox_create_performed": false,
+    "runtime_log_probe": {
+      "surface": "Vercel connected read-only runtime logs API",
+      "deployment": "dpl_EN62ggtQnuEcjuvtJNathL3D9Tkf",
+      "window": "2026-08-24T07:20:00Z..2026-08-24T07:30:00Z",
+      "result": "HTTP_400_PROVIDER_ERROR",
+      "provider_error": "ExceedsBillingLimitError"
+    },
+    "local_test_attempt": {
+      "target": "donor 0b205544 test_inference_v4_rejection_boundaries_v1.py",
+      "result": "INFRASTRUCTURE_BLOCKED",
+      "reason": "local container could not resolve github.com for git clone",
+      "product_negative_evidence": false
+    }
+  },
+  "classification": {
+    "exceeds_billing_limit_is_sandbox_remaining_quota_evidence": false,
+    "reason": "The error arose from the provider runtime-logs query surface. It does not identify the Sandbox included-quota ledger or a remaining Sandbox amount and therefore cannot open or conclusively close the Sandbox-specific monetary gate by itself.",
+    "is_provider_infrastructure_billing_negative_evidence": true,
+    "sandbox_gate": "REMAINS_BLOCKED_QUOTA_UNOBSERVED",
+    "runtime_credit_delta": 0
+  },
+  "parallel_work_fusion": {
+    "prior_current_receipt": "research_entity/continuity/receipts/2026-08-24_GO_QUOTA_OBSERVABILITY_AND_PARALLEL_INFERENCE_V4_CLOSURE_GPT56SOL_1728.json",
+    "prior_donor_head": "e3dadf716007f4c8d11a1d21d781e8e991bfe96f",
+    "duplicate_quota_receipt_created": false,
+    "new_information_only": "provider logs API returned ExceedsBillingLimitError after the prior receipt"
+  },
+  "tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED: exact live executor/deployment binding was independently re-observed and a provider billing-limit error on the read-only logs surface was preserved without misclassifying it as Sandbox quota or runtime failure; FREE_ONLY remains fail-closed.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "HCU_NO_CHANGE_WITH_REASON: canonical InferenceReceipt/v4 rejection coverage already exists on the retained donor lane; deterministic local execution could not be completed because the local container has no GitHub DNS/network and no CI run exists for donor 0b205. No duplicate HCU guard/source lane was created.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "TRAINING_READINESS_NO_CHANGE_WITH_REASON: model/J-Space runtime remains downstream of an admitted Sandbox environment and real local model invocation; no paid lane, quota inference, model pseudo-credit, or training action was performed."
+  },
+  "credits_after": {
+    "preexisting_function_runtime_diagnostic_exact_bb732_dpl_EN62_no_sandbox": "PASS_BOUNDED_PREEXISTING",
+    "sandbox_environment_runtime": 0,
+    "whole_entityos_hcu_runtime": 0,
+    "full_hcu_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_action": "Do not spend more Vercel runtime-log query budget in this macrocycle. Obtain a provider-authoritative read-only surface that explicitly reports remaining included Vercel Sandbox quota; until then keep Sandbox.create blocked. Separately, execute donor rejection-boundary tests only on an already materialized/network-independent checkout or an admitted deterministic test surface, then bind exact tested donor identities into PR810 before any successor deployment/runtime claim.",
+  "acceptance": "IN_PROGRESS"
+}

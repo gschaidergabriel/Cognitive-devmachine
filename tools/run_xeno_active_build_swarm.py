@@ -7,10 +7,11 @@ FREE fabric from architecture prose toward shippable Xeno patches, tests, benchm
 Global J-Space causal engineering, ClayCode migration, and measured recursive gains.
 
 Economic execution authority is inherited exclusively through the current route/
-credential-gated v3 fabric. Worker cognition receives a separately synthesized live
-authority envelope from Supervisor Inbox -> exact steering -> typed provider admission,
-so stale worker-directive prose cannot override a newer supervisor epoch. Xeno remains
-an implementation codename inside EntityOS/HCU.
+credential-gated v3 fabric. Worker cognition receives a synthesized process-bound
+authority envelope from Supervisor Inbox -> exact steering -> typed provider admission.
+The same operational authority snapshot is revalidated at reservation and immediately
+before provider network I/O, so a long-running Xeno process fails closed on authority
+or Xeno-control drift and must restart on the successor snapshot.
 """
 from __future__ import annotations
 
@@ -68,6 +69,8 @@ XENO_SHARDS = [
 ]
 
 _BASE_PREV = fabric._PREV_PROMPT
+_START_PROTOCOL: str | None = None
+_START_AUTHORITY_DIGEST: str | None = None
 
 
 def _read_json(path: Path) -> dict[str, Any] | None:
@@ -83,6 +86,56 @@ def _require_free_lane_binding() -> None:
         raise RuntimeError("XENO_FREE_LANE_REQUEST_GATE_DRIFT")
     if fabric.FastProviderRuntime.next_key_model is not economic.gated_next_key_model:
         raise RuntimeError("XENO_FREE_LANE_RESERVATION_GATE_DRIFT")
+
+
+def _operational_authority_snapshot(protocol: str | None = None) -> tuple[str, str]:
+    """Return exact worker protocol and digest of all GO control surfaces.
+
+    The digest intentionally excludes unrelated repo HEAD movement/metrics so a long
+    process does not stop for non-authority commits. It includes current live supervisor
+    + provider admission through ``protocol`` and the Xeno GO directive/state/harness.
+    """
+    current = protocol if protocol is not None else live_authority.build_protocol(ROOT)
+    h = hashlib.sha256()
+    for label, payload in (
+        ("live_protocol", current.encode("utf-8")),
+        ("build_directive", BUILD_DIRECTIVE.read_bytes()),
+        ("build_state", BUILD_STATE.read_bytes()),
+        ("harness_contract", HARNESS_CONTRACT.read_bytes()),
+    ):
+        label_b = label.encode("utf-8")
+        h.update(len(label_b).to_bytes(4, "big"))
+        h.update(label_b)
+        h.update(len(payload).to_bytes(8, "big"))
+        h.update(payload)
+    return current, h.hexdigest()
+
+
+def _authority_matches_start() -> bool:
+    if _START_AUTHORITY_DIGEST is None:
+        return False
+    try:
+        _, current_digest = _operational_authority_snapshot()
+    except Exception:
+        return False
+    return current_digest == _START_AUTHORITY_DIGEST
+
+
+def xeno_gated_next_key_model(self: Any) -> tuple[str, str] | None:
+    """Reservation-time authority fence before selecting a concrete credential/route."""
+    if not _authority_matches_start():
+        return None
+    return economic.gated_next_key_model(self)
+
+
+def xeno_gated_request_chat(spec: Any, key: str, model: str, prompt: str,
+                            max_tokens: int, timeout: float):
+    """Final Xeno authority + prompt snapshot check immediately before economic gate/network."""
+    if not _authority_matches_start():
+        return 460, {}, {"error": "XENO_OPERATIONAL_AUTHORITY_DRIFT_FAIL_CLOSED_BEFORE_NETWORK"}
+    if _START_PROTOCOL is None or not prompt.startswith(_START_PROTOCOL):
+        return 460, {}, {"error": "XENO_WORKER_PROTOCOL_NOT_BOUND_TO_START_AUTHORITY_FAIL_CLOSED_BEFORE_NETWORK"}
+    return economic.gated_request_chat(spec, key, model, prompt, max_tokens, timeout)
 
 
 def current_phase() -> dict[str, Any]:
@@ -102,11 +155,13 @@ def xeno_worker_prompt(protocol: str, role: str, task: str, state_context: str, 
 XENO ACTIVE BUILD / RECURSIVE IMPROVEMENT CONTRACT — OWNER PRIORITY
 phase={phase['phase']}
 v1_acceptance={phase['v1_acceptance']}
+operational_authority_digest={_START_AUTHORITY_DIGEST or 'UNBOUND'}
 - Xeno is the implementation codename inside EntityOS/HCU, not a second truth/product authority.
 - Every owner `go` executes this improvement objective until a newer explicit owner instruction supersedes it. Xeno v1 is a baseline, not a terminal product state.
 - Before v1: converge on a finished runnable Xeno with specialized ~0.8B core, switchable engine fabric, two-slot CORE/PRESTAGE harness, dashboard, Xeno peer-link, GRID10, Global J-Space/GWT, dataset/training integration and acceptance evidence.
 - After v1: continue measure -> patch -> test -> benchmark -> full-vector compare -> promote/reject across subsequent go cycles until superseded.
 - Every external FREE call must retain the current credential+route economic gate and FREE_LANE_EXECUTION_RECEIPT/v1. Provider-level FREE labels, key presence, model consensus or HTTP success cannot bypass that gate. Paid fallback stays zero.
+- If supervisor/provider authority or this Xeno GO directive/state/harness changes after process start, new reservations and provider network calls fail closed; restart on the successor snapshot instead of mixing authority epochs.
 - The internal ~0.8B engine must be independently switchable OFF; admitted external/local LLM profiles may be CORE without resetting canonical state.
 - Persist at most two external credential slots via opaque secret_ref only. Dashboard chooses CORE, optional distinct PRESTAGE, and PRESTAGE ON/OFF. Plaintext credentials never enter prompts, receipts, telemetry, source or ordinary profile state.
 - GRID10 means exactly ten logical cells at v1, not ten model copies. XENO_PEER_LINK/v1 must tolerate stale/duplicate/delayed packets, disconnect/reconnect and peer restart under deterministic admission/recovery fences.
@@ -125,20 +180,26 @@ MANDATORY XENO DELTA CONTENT
 
 
 def configure() -> None:
+    global _START_PROTOCOL, _START_AUTHORITY_DIGEST
     _require_free_lane_binding()
     if not BUILD_DIRECTIVE.exists() or not BUILD_STATE.exists() or not HARNESS_CONTRACT.exists():
         raise RuntimeError("XENO_ACTIVE_BUILD_CONTROL_FILES_MISSING")
-    protocol = live_authority.build_protocol(ROOT)
+    protocol, authority_digest = _operational_authority_snapshot()
     if not protocol.startswith(fabric.base.PROTOCOL_BEGIN):
         raise RuntimeError("XENO_LIVE_PROTOCOL_ABI_BEGIN_MISMATCH")
     if live_authority.LIVE_MARKER not in protocol:
         raise RuntimeError("XENO_LIVE_PROTOCOL_MARKER_MISSING")
+    _START_PROTOCOL = protocol
+    _START_AUTHORITY_DIGEST = authority_digest
     fabric.base.load_protocol = lambda: protocol
     fabric.base.DEFAULT_ROLES = list(XENO_ROLES)
     fabric.FALLBACK_SHARDS = list(XENO_SHARDS)
     fabric._PREV_PROMPT = xeno_worker_prompt
+    fabric.FastProviderRuntime.next_key_model = xeno_gated_next_key_model
+    fabric.base.request_chat = xeno_gated_request_chat
     os.environ["CLAY_XENO_BUILD_MODE"] = "ACTIVE_INFINITE_RECURSIVE"
     os.environ["CLAY_XENO_LIVE_PROTOCOL_SHA256"] = hashlib.sha256(protocol.encode("utf-8")).hexdigest()
+    os.environ["CLAY_XENO_OPERATIONAL_AUTHORITY_SHA256"] = authority_digest
 
 
 async def main() -> int:

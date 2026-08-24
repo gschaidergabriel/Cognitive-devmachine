@@ -1,0 +1,98 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "date_local": "2026-08-25",
+  "trigger": "go",
+  "organ": "ChatGPT GPT-5.6 Sol",
+  "persistent_research_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "stage": "ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority_epoch": "8.73",
+  "execution_mode": "FREE_ONLY",
+  "observed_canonical_main_before_receipt": "60fb7301bac7a04c9e56defe2c6fcf978cac5bc1",
+  "coordination": {
+    "upstream_macrocycle_id": null,
+    "available_user_message_timestamp_precision": "MINUTE_ONLY",
+    "unusual_experiment_status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_experiment_executed_by_this_organ": false,
+    "reason": "No shared immutable macrocycle/request identifier was exposed and the available user-turn timestamp is minute precision only, so the canonical atomic fallback key cannot be reproduced safely."
+  },
+  "observed": {
+    "supervisor_selected_focus": "FORGE_DISTILLERY_REPLAY_STABLE_IDENTITY",
+    "forge_replay_source_fix_already_fused": true,
+    "forge_replay_runtime_acceptance_still_unresolved": true,
+    "jspace_architecture_contract": "research_entity/claycode/HCU_JSPACE_OBSERVE_CONTROL_TRANSLATE_ARCHITECTURE_V1.md",
+    "parallel_trace_contract": "research_entity/claycode/JSPACE_TRACE_ABI_V1.schema.json",
+    "parallel_trace_validator": "tools/validate_jspace_trace_abi_v1.py",
+    "retained_hcu_donor_pr": 1263,
+    "material_namespace_collision_receipt": "research_entity/continuity/receipts/2026-08-24_GO_872_JSPACE_ABI_DONOR_COLLISION_GPT56SOL.json"
+  },
+  "material_finding": {
+    "classification": "JSPACE_VECTOR_CONTROL_ABI_NAMESPACE_COLLISION",
+    "statement": "The architecture requires JSPACE_VECTOR_CONTROL_ABI/v1 as a complete causal control packet, while current historical Trigger-1 source uses that literal inside a partial derivation/source hash preimage and retained PR1263 uses it for a q8 wire codec. Schema-name equality therefore does not imply semantic or wire compatibility.",
+    "risk": "Without one fail-closed semantic role, packet hashes, replay identity, provenance, trace linkage and future training rows can become ambiguous even when each producer is internally deterministic."
+  },
+  "hypothesis": "Reserving JSPACE_VECTOR_CONTROL_ABI/v1 for a complete evidence-bearing causal control packet and explicitly quarantining partial-descriptor/q8-codec uses will improve cross-mode provenance and make future Trigger-1 traces trainable without inventing missing causal facts.",
+  "counterhypothesis": "The three uses are complementary views and can safely share one schema literal.",
+  "counterhypothesis_adjudication": "REJECTED_AT_SOURCE_CONTRACT_SCOPE: their required preimages and semantics differ materially. Compatibility requires an explicit adapter or distinct namespace; it cannot be inferred from the shared literal.",
+  "writes_by_this_organ": [
+    {
+      "commit": "9c6f76078a05447f032bfc10c2c703f9b3af60a6",
+      "path": "tools/jspace_vector_control_abi_v1.py",
+      "delta": "Added canonical full-control packet builder/validator with explicit role, packet digest, six matched-control receipts, target/off-target metric separation, gain envelope, token-position policy, intervention operator, derivation/holdout fences and zero-credit truth fences."
+    },
+    {
+      "commit": "0607d5fd7c41e36763ed7ae730af6646c4f6b122",
+      "path": "tests/test_jspace_vector_control_abi_v1.py",
+      "delta": "Added deterministic positive and fail-closed regressions for missing explicit evidence, missing off-target metric, out-of-envelope gain, namespace-role collision and packet mutation."
+    },
+    {
+      "commit": "60fb7301bac7a04c9e56defe2c6fcf978cac5bc1",
+      "path": "research_entity/claycode/HCU_JSPACE_VECTOR_CONTROL_ABI_NAMESPACE_CONTRACT_V1.md",
+      "delta": "Established one current-facing full-control packet meaning, quarantined partial descriptor and donor q8 codec collisions, and defined an explicit migration order."
+    }
+  ],
+  "deterministic_evidence": {
+    "command": "python3 -m unittest -v tests/test_jspace_vector_control_abi_v1.py",
+    "result": "6/6 PASS",
+    "scope": "LOCAL_DETERMINISTIC_SOURCE_LOGIC_ONLY",
+    "exact_repo_test_blob_sha": "24d69fdd1e222f20e3dbd0e3f258b642053824a1",
+    "provider_calls": 0,
+    "model_execution": false,
+    "canonical_runtime_credit": 0,
+    "note": "The locally exercised source/test bytes are the bytes committed by this organ; this is not admitted EntityOS/HCU runtime acceptance."
+  },
+  "tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": {
+      "status": "ADVANCED",
+      "delta": "Added an executable standard-library control-packet admission boundary so future J-Space control data can be deterministically accepted or blocked instead of remaining prose-only architecture."
+    },
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": {
+      "status": "ADVANCED",
+      "delta": "Separated full causal control identity from partial derivation descriptors and q8 wire representation; exact runtime/model/vector/control/metric provenance must now converge into one full packet role."
+    },
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": {
+      "status": "ADVANCED",
+      "delta": "Future training/trace admission now has an explicit full-control packet target with off-target, magnitude, token-position and intervention-operator evidence. Current Trigger-1 candidates correctly remain blocked until these facts are emitted by an upstream measured/predeclared producer."
+    }
+  },
+  "negative_evidence": [
+    "The current Trigger-1 direct candidate does not yet expose JSPACE_VECTOR_CONTROL_EXPLICIT_EVIDENCE/v1, so no existing candidate is promoted through the new full-control ABI by assumption.",
+    "The historical partial descriptor in trigger1_intermediate_promotion_bridge.py is not silently relabeled or rewritten.",
+    "The PR1263 q8 wire codec is not fused under the colliding JSPACE_VECTOR_CONTROL_ABI/v1 literal.",
+    "No exact-current admitted Forge replay runtime witness was produced by this organ.",
+    "No unusual Qwen/J-Space intervention was run because the atomic macrocycle identity is unavailable."
+  ],
+  "credits": {
+    "whole_entityos_hcu_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "provider_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "intermodel_translation_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Extend the strongest current Trigger-1 producer/bridge to emit JSPACE_VECTOR_CONTROL_EXPLICIT_EVIDENCE/v1 only from predeclared/measured operator, token-position, off-target-metric, magnitude-envelope and frozen-calibration evidence; migrate its old partial source-packet preimage to a distinct derivation-descriptor namespace; then require full-control ABI PASS before trace/dataset promotion. In parallel, execute the exact-current Forge->Distillery replay-stable witness on an admitted zero-cost surface and require semantic replay +0 plus measured-evidence conflict rejection.",
+  "epistemic_boundary": "FACT_UNKNOWN + METHOD_PRESENT != FACT_PRESENT"
+}

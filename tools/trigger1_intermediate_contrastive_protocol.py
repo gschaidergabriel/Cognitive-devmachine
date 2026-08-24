@@ -182,17 +182,55 @@ def adjudicate_holdout(rows: Iterable[Mapping[str, Any]], *, selected_layer: int
     label_maps = {str(r.get("label_map_id")) for r in frozen if r.get("label_map_id") is not None}
     if len(label_maps) < 2:
         return {"pass": False, "classification": "LABEL_REMAP_HOLDOUT_REQUIRED"}
+
     by_case: dict[tuple[str,str], dict[str,float]] = {}
+    wrong_layer_seen: set[tuple[str, str]] = set()
+    lesion_rescue_seen: set[tuple[str, str]] = set()
     wrong_layer_ok = True
     lesion_rescue_ok = True
+
     for r in frozen:
         key = (str(r["case_id"]), str(r["label_map_id"]))
         if str(r.get("control")) in REQUIRED_CONTROLS:
             by_case.setdefault(key, {})[str(r["control"])] = _finite(r["target_score"], "target_score")
-        if r.get("wrong_layer_delta") is not None:
-            wrong_layer_ok = wrong_layer_ok and _finite(r["wrong_layer_delta"], "wrong_layer_delta") <= 0
-        if r.get("lesion_delta") is not None and r.get("rescue_delta") is not None:
-            lesion_rescue_ok = lesion_rescue_ok and _finite(r["lesion_delta"], "lesion_delta") <= 0 and _finite(r["rescue_delta"], "rescue_delta") > 0
+
+        wrong_layer = r.get("wrong_layer_delta")
+        if wrong_layer is not None:
+            wrong_layer_seen.add(key)
+            wrong_layer_ok = wrong_layer_ok and _finite(wrong_layer, "wrong_layer_delta") <= 0
+
+        lesion_value = r.get("lesion_delta")
+        rescue_value = r.get("rescue_delta")
+        if (lesion_value is None) != (rescue_value is None):
+            lesion_rescue_ok = False
+        elif lesion_value is not None and rescue_value is not None:
+            lesion_rescue_seen.add(key)
+            lesion_rescue_ok = (
+                lesion_rescue_ok
+                and _finite(lesion_value, "lesion_delta") <= 0
+                and _finite(rescue_value, "rescue_delta") > 0
+            )
+
+    expected_cases = set(by_case)
+    if not expected_cases:
+        return {"pass": False, "classification": "MATCHED_CONTROL_FAMILY_REQUIRED"}
+
+    missing_wrong_layer = sorted(expected_cases - wrong_layer_seen)
+    if missing_wrong_layer:
+        return {
+            "pass": False,
+            "classification": "WRONG_LAYER_EVIDENCE_REQUIRED",
+            "missing_wrong_layer_case_count": len(missing_wrong_layer),
+        }
+
+    missing_lesion_rescue = sorted(expected_cases - lesion_rescue_seen)
+    if missing_lesion_rescue:
+        return {
+            "pass": False,
+            "classification": "LESION_RESCUE_EVIDENCE_REQUIRED",
+            "missing_lesion_rescue_case_count": len(missing_lesion_rescue),
+        }
+
     margins = []
     null_drifts = []
     for vals in by_case.values():
@@ -202,12 +240,15 @@ def adjudicate_holdout(rows: Iterable[Mapping[str, Any]], *, selected_layer: int
         nuisance = max(vals["ORTHOGONAL_SAME_NORM"]-vals["BASELINE"], vals["PERMUTED_SAME_NORM"]-vals["BASELINE"])
         margins.append(directional-max(0.0,nuisance))
         null_drifts.append(abs(vals["NULL_VECTOR"]-vals["BASELINE"]))
+
     passed = bool(margins and min(margins) > 0 and max(null_drifts) <= 1e-6 and wrong_layer_ok and lesion_rescue_ok)
     return {
         "pass": passed,
         "classification": "INTERMEDIATE_REPRESENTATION_CAUSAL_CANDIDATE" if passed else "INTERMEDIATE_REPRESENTATION_NOT_ESTABLISHED",
         "case_count": len(margins),
         "label_map_count": len(label_maps),
+        "wrong_layer_evidence_case_count": len(wrong_layer_seen),
+        "lesion_rescue_evidence_case_count": len(lesion_rescue_seen),
         "worst_directional_specificity_margin": min(margins) if margins else None,
         "max_null_drift": max(null_drifts) if null_drifts else None,
         "wrong_layer_ok": wrong_layer_ok,

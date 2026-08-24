@@ -1,20 +1,17 @@
 {
   "schema": "CLAY_VPS_RECEIPT/v4",
-  "command_id": "swarm-sync-main-20260824T1615",
-  "command_sha256": "1bb51f43effb990ca4722710cc109b6373f50b2e8e3ff6fe4162b1589027fd28",
-  "started_at": "2026-08-24T09:16:53.128886+00:00",
-  "finished_at": "2026-08-24T09:16:55.132520+00:00",
-  "status": "PASS",
-  "exit_code": 0,
-  "op": "canonical_sync",
-  "stdout_sha256": "1c8e793bc0257655cf573ca6cbf10b63a822cf7d71c09fa4518e0fd25193b829",
-  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-  "stdout_tail": "96c0f66fa6e3f03ecf4e4193f76a963f1177be61\n",
-  "stderr_tail": "",
-  "meta": {
-    "head": "96c0f66fa6e3f03ecf4e4193f76a963f1177be61",
-    "ref": "main"
-  },
+  "command_id": "swarm-inventory-20260824T1617",
+  "command_sha256": "05bffebdb63b389a39e6133de16c505d40c2ac9115a21f6d1479979640634c01",
+  "started_at": "2026-08-24T09:17:44.283985+00:00",
+  "finished_at": "2026-08-24T09:17:44.451271+00:00",
+  "status": "FAIL",
+  "exit_code": 1,
+  "op": "exec",
+  "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stderr_sha256": "9ff09f216a0dcfcd35101fbf15292e75c4aded1b78990eaeaa80d3d51999d263",
+  "stdout_tail": "",
+  "stderr_tail": "Traceback (most recent call last):\n  File \"<stdin>\", line 4, in <module>\n  File \"<frozen importlib._bootstrap_external>\", line 991, in exec_module\n  File \"<frozen importlib._bootstrap_external>\", line 1128, in get_code\n  File \"<frozen importlib._bootstrap_external>\", line 1186, in get_data\nFileNotFoundError: [Errno 2] No such file or directory: '/workspace/tools/run_free_go_swarm.py'\n",
+  "meta": {},
   "execution_boundary": "ROOT_INSIDE_ROOTLESS_PODMAN_OR_EXPLICIT_REPO_CONTROL_OP",
   "canonical_credit_minted": 0
 }

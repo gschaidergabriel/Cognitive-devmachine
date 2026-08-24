@@ -35,21 +35,12 @@ load_secret_file() {
   set -a; source "$f"; set +a
 }
 
-all_llm_providers_admitted() {
-  provider_admitted groq && provider_admitted mistral && provider_admitted nvidia
-}
-
-# Mixed provider files cannot be inspected to learn which secrets they contain
-# without violating the boundary. Aggregate files are therefore read only when
-# every LLM provider they may contain is already canonically FREE-admitted.
+# Never source aggregate/mixed provider files here. Their provider contents are
+# unknowable before reading them, so loading them would violate the 8.67 boundary
+# for any UNKNOWN/PAID/SUBSCRIPTION provider (including distillery services such
+# as OpenRouter/Tavily/Exa). Only a provider-specific source whose provider has
+# already passed canonical typed FREE admission is eligible.
 load_admitted_secret_sources() {
-  if all_llm_providers_admitted; then
-    load_secret_file /run/secrets/clay_provider.env
-    load_secret_file /artifacts/.clay_provider.env
-    load_secret_file /cache/clay_provider.env
-    load_secret_file "$ROOT/.clay_provider.env"
-    load_secret_file "$ROOT/research_entity/private/API_TOKENS.env"
-  fi
   if provider_admitted groq; then
     load_secret_file "$ROOT/research_entity/private/GROQ_API.env"
   fi
@@ -140,21 +131,27 @@ split=lambda x:[v.strip() for v in os.getenv(x,'').replace(';',',').split(',') i
 def nset(*vals): return len(set(v for v in vals if v))
 try:
     admission=load_provider_admission()
-    admitted={p:provider_is_admitted_free(p,admission) for p in ('groq','mistral','nvidia')}
+    admitted={p:provider_is_admitted_free(p,admission) for p in ('groq','mistral','nvidia','openrouter','tavily','exa')}
     epoch=admission.get('authority_epoch')
 except ProviderAdmissionError:
-    admitted={p:False for p in ('groq','mistral','nvidia')}; epoch=None
+    admitted={p:False for p in ('groq','mistral','nvidia','openrouter','tavily','exa')}; epoch=None
 providers={
  'groq': bool(admitted['groq'] and (os.getenv('GROQ_API_KEY') or split('GROQ_API_KEYS'))),
  'mistral': bool(admitted['mistral'] and (os.getenv('MISTRAL_API_KEY') or split('MISTRAL_API_KEYS'))),
  'nvidia': bool(admitted['nvidia'] and (os.getenv('NVIDIA_API_KEY') or split('NVIDIA_API_KEYS') or os.getenv('NGC_API_KEY') or os.getenv('NVIDIA_NIM_API_KEY'))),
+ 'openrouter': bool(admitted['openrouter'] and os.getenv('OPENROUTER_API_KEY')),
+ 'tavily': bool(admitted['tavily'] and os.getenv('TAVILY_API_KEY')),
+ 'exa': bool(admitted['exa'] and os.getenv('EXA_API_KEY')),
 }
 counts={
  'groq': nset(*split('GROQ_API_KEYS'),os.getenv('GROQ_API_KEY')) if admitted['groq'] else 0,
  'mistral': nset(*split('MISTRAL_API_KEYS'),os.getenv('MISTRAL_API_KEY')) if admitted['mistral'] else 0,
  'nvidia': nset(*split('NVIDIA_API_KEYS'),os.getenv('NVIDIA_API_KEY'),os.getenv('NGC_API_KEY'),os.getenv('NVIDIA_NIM_API_KEY')) if admitted['nvidia'] else 0,
+ 'openrouter': int(bool(os.getenv('OPENROUTER_API_KEY'))) if admitted['openrouter'] else 0,
+ 'tavily': int(bool(os.getenv('TAVILY_API_KEY'))) if admitted['tavily'] else 0,
+ 'exa': int(bool(os.getenv('EXA_API_KEY'))) if admitted['exa'] else 0,
 }
-print(json.dumps({'schema':'CLAY_ENTITYOS_SWARM_SUPERVISOR/v6','observed_at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'repo_root':os.getcwd(),'remaining_seconds':$REMAINING,'typed_provider_admission_epoch':epoch,'providers_admitted_free':admitted,'provider_credentials_present_after_admission':providers,'provider_credential_counts_after_admission':counts,'dashboard_watch':True,'research_distillery':True,'distillery_entrypoint':'run_research_distillery_entry.py'},indent=2))
+print(json.dumps({'schema':'CLAY_ENTITYOS_SWARM_SUPERVISOR/v7','observed_at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'repo_root':os.getcwd(),'remaining_seconds':$REMAINING,'typed_provider_admission_epoch':epoch,'providers_admitted_free':admitted,'provider_credentials_present_after_admission':providers,'provider_credential_counts_after_admission':counts,'dashboard_watch':True,'research_distillery':True,'distillery_entrypoint':'run_research_distillery_entry.py'},indent=2))
 PY
   mv "$STATE_DIR/SUPERVISOR.json.tmp" "$STATE_DIR/SUPERVISOR.json"
 
@@ -165,4 +162,4 @@ PY
   sleep 60
 done
 
-printf '{"schema":"CLAY_ENTITYOS_SWARM_SUPERVISOR/v6","state":"EXPIRED_WITHOUT_CANONICALLY_FREE_ADMITTED_PROVIDER"}\n' > "$STATE_DIR/SUPERVISOR.json"
+printf '{"schema":"CLAY_ENTITYOS_SWARM_SUPERVISOR/v7","state":"EXPIRED_WITHOUT_CANONICALLY_FREE_ADMITTED_PROVIDER"}\n' > "$STATE_DIR/SUPERVISOR.json"

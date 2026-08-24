@@ -1,0 +1,43 @@
+---SUPERVISOR---
+{
+  "schema": "CLAY_ENTITYOS_SWARM_SUPERVISOR/v8",
+  "observed_at": "2026-08-24T11:28:03.757954+00:00",
+  "repo_root": "/workspace/clay-global-research-entity",
+  "remaining_seconds": 86400,
+  "provider_admission": {
+    "schema": "ENTITYOS_HCU_FREE_PROVIDER_ADMISSION_STATUS/v1",
+    "ok": true,
+    "authority_epoch": "8.68",
+    "steering": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_68.json",
+    "admitted_free_providers": [],
+    "providers": {
+      "groq": {
+        "admitted": false,
+        "cost_class": "UNKNOWN",
+        "evidence_ref": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_68.json#evidence.typed_admission_state"
+      },
+      "mistral": {
+        "admitted": false,
+        "cost_class": "UNKNOWN",
+        "evidence_ref": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_68.json#evidence.typed_admission_state"
+      },
+      "nvidia": {
+        "admitted": false,
+        "cost_class": "UNKNOWN",
+        "evidence_ref": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_68.json#evidence.typed_admission_state"
+      },
+      "openrouter": {
+        "admitted": false,
+        "cost_class": "UNKNOWN",
+        "evidence_ref": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_68.json#evidence.typed_admission_state"
+      }
+    }
+  },
+  "go_swarm_running": false,
+  "local_research_model_ready": false,
+  "distillery_running": false,
+  "forge_running": false,
+  "dashboard_running": true,
+  "policy": "EXTERNAL_LLM_SWARM_ONLY_WHEN_TYPED_FREE_ADMITTED; LOOPBACK_4B+PUBLIC_FORGE_CONTINUE_DURING_QUARANTINE"
+}
+---LOCAL-DISTILLERY-STATUS---

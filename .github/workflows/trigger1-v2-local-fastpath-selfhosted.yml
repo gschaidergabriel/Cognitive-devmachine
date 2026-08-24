@@ -35,7 +35,7 @@ jobs:
           set -euo pipefail
           python3 -m unittest -v tests.test_trigger1_jspace_promotion_gate
 
-      - name: Execute nonterminal contrastive hidden-state API discriminator
+      - name: Execute fused nonterminal midlayer causal discriminator
         id: experiment
         shell: bash
         env:
@@ -47,7 +47,7 @@ jobs:
           out="${RUNNER_TEMP}/clay-trigger1-v2-${GITHUB_RUN_ID}"
           mkdir -p "$out"
           set +e
-          bash tools/trigger1_local_qwen06_intermediate_api.sh "$out" >"$out/launcher.log" 2>&1
+          bash tools/trigger1_local_qwen06_midlayer_causal.sh "$out" >"$out/launcher.log" 2>&1
           rc=$?
           set -e
           echo "experiment_rc=$rc" >> "$GITHUB_OUTPUT"
@@ -56,7 +56,7 @@ jobs:
             python3 - "$out/trigger1_local_activation_api_result.json" "$rc" <<'PY'
           import json, pathlib, sys
           pathlib.Path(sys.argv[1]).write_text(json.dumps({
-              'schema':'CLAY_TRIGGER1_LOCAL_QWEN06_INTERMEDIATE_ACTIVATION_API_EXPERIMENT/v1',
+              'schema':'CLAY_TRIGGER1_LOCAL_QWEN06_MIDLAYER_CAUSAL_EXPERIMENT/v1',
               'status':'BLOCKED_BEFORE_RESULT',
               'process_exit_code':int(sys.argv[2]),
               'zero_provider_billing':True,

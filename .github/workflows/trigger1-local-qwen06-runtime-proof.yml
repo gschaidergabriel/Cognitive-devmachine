@@ -57,7 +57,7 @@ jobs:
           avail_kb="$(df -Pk "${HOME:?}" | awk 'NR==2 {print $4}')"
           printf '{"available_kb":%s}\n' "$avail_kb" > "$OUT/disk.json"
           if [[ "$avail_kb" -lt 5000000 ]]; then
-            printf '{"status":"BLOCKED_INSUFFICIENT_FREE_DISK","available_kb":%s}\n' "$OUT/preflight.json"
+            printf '{"status":"BLOCKED_INSUFFICIENT_FREE_DISK","available_kb":%s}\n' "$avail_kb" > "$OUT/preflight.json"
             exit 0
           fi
 

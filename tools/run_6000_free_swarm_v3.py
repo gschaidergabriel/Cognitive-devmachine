@@ -153,7 +153,7 @@ def _request_id(headers: dict[str, str], payload: Any) -> str | None:
     return None
 
 
-def _transport_exception_digest(exc: Exception) -> str:
+def _transport_exception_digest(exc: OSError) -> str:
     """Bind failure class without persisting exception text or secret-bearing details."""
     material = {
         "outcome": "UNKNOWN",
@@ -202,11 +202,11 @@ def gated_request_chat(
         status, headers, payload = _ORIGINAL_REQUEST(
             spec, key, model, prompt, max_tokens, timeout
         )
-    except Exception as exc:
-        # Once the admitted provider-call boundary has been entered, a timeout,
-        # DNS/socket failure, reset, or similar transport exception cannot prove
-        # whether the provider observed or processed the request. Preserve this
-        # ambiguity as UNKNOWN. This boundary deliberately performs no replay.
+    except OSError as exc:
+        # request_chat handles HTTPError responses itself. OSError is the
+        # remaining stdlib transport family for urlopen timeout/DNS/socket/TLS
+        # failures where remote application is uncertain. Do not classify
+        # ProviderAdmissionError or arbitrary local programming exceptions here.
         stable_after_call = binding_still_current(binding)
         with _RECEIPT_LOCK:
             emit_execution_receipt(

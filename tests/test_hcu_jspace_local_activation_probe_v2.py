@@ -11,6 +11,7 @@ assert SPEC.loader is not None
 SPEC.loader.exec_module(v)
 
 D = [f"{i:x}" * 64 for i in range(1, 15)]
+RID_KEY = "rid_" + "a" * 64
 
 
 def condition(name, before, after=None, layer=2, metrics=True):
@@ -63,13 +64,16 @@ def base(mode="intervention"):
             condition("OFF_TARGET_CONTROL", D[8], offref),
         ]
         lease = {
-            "trigger_key": "go-test",
-            "claim_path": "research_entity/continuity/go_experiment_claims/go-test.json",
+            "trigger_key": RID_KEY,
+            "trigger_key_identity": "IMMUTABLE_REQUEST_ID",
+            "claim_path": f"research_entity/continuity/go_experiment_claims/{RID_KEY}.json",
             "claim_sha256": D[9],
             "claimant_organ": "test",
             "experiment_name": "probe",
             "intervention_contract": "contract:v1",
             "lease_file_validated": True,
+            "create_only_semantics_reverified_by_probe": False,
+            "semantic_duplicate_race_scan_reverified_by_probe": False,
         }
         classification = "LOCAL_MODEL_SPECIFIC_CAUSAL_CANDIDATE_EVIDENCE_ONLY"
         probe = {
@@ -203,6 +207,29 @@ class Tests(unittest.TestCase):
         r["atomic_experiment_lease"]["lease_file_validated"] = False
         with self.assertRaisesRegex(v.ProbeReceiptError, "INTERVENTION_ATOMIC_LEASE_NOT_VALIDATED"):
             v.validate(r)
+
+    def test_noncanonical_trigger_key_fails(self):
+        r = base()
+        r["atomic_experiment_lease"]["trigger_key"] = "go-test"
+        with self.assertRaisesRegex(v.ProbeReceiptError, "TRIGGER_KEY_NONCANONICAL"):
+            v.validate(r)
+
+    def test_claim_path_must_bind_trigger_key(self):
+        r = base()
+        r["atomic_experiment_lease"]["claim_path"] = "research_entity/continuity/go_experiment_claims/other.json"
+        with self.assertRaisesRegex(v.ProbeReceiptError, "CLAIM_PATH_MISMATCH"):
+            v.validate(r)
+
+    def test_create_only_or_semantic_scan_cannot_be_self_promoted(self):
+        for field in (
+            "create_only_semantics_reverified_by_probe",
+            "semantic_duplicate_race_scan_reverified_by_probe",
+        ):
+            with self.subTest(field=field):
+                r = base()
+                r["atomic_experiment_lease"][field] = True
+                with self.assertRaisesRegex(v.ProbeReceiptError, "EVIDENCE_BOUNDARY_INVALID"):
+                    v.validate(r)
 
 
 if __name__ == "__main__":

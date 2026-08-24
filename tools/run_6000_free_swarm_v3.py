@@ -1,14 +1,10 @@
 #!/usr/bin/env python3
-"""Epoch-8.70 economic gate for the global work-stealing Free Swarm.
+"""Epoch-8.71 economic gate + typed delta ingress for the global work-stealing Free Swarm.
 
-Imports the v2 scheduler, but prevents reservation/network I/O for any concrete
-credential+route lacking provider-side zero-cost/free-entitlement evidence. Every
-executed provider request emits FREE_LANE_EXECUTION_RECEIPT/v1.
-
-The v2 scheduler historically performed authenticated provider model-catalog
-network discovery before the per-lane gate ran. Epoch 8.70 does not establish
-catalog-endpoint zero-cost provenance, so this wrapper also replaces that
-pre-route discovery with a network-free environment/static-default resolver.
+Imports the v2 scheduler, prevents reservation/network I/O for concrete credential+route
+pairs lacking current provider-side zero-cost/free-entitlement evidence, emits exact FREE
+lane receipts, and deterministically materializes worker architecture-delta candidates for
+Evidence Forge. Model output remains noncanonical.
 """
 from __future__ import annotations
 
@@ -25,9 +21,15 @@ from free_lane_provenance import (
     emit_execution_receipt,
     lane_evidence,
 )
+from free_swarm_delta_ingress import (
+    CANDIDATE_SCHEMA,
+    parse_questions,
+    parse_worker_delta,
+)
 
 _ORIGINAL_REQUEST = fabric.base.request_chat
 _ORIGINAL_NEXT_PAIR = fabric.FastProviderRuntime.next_key_model
+_ORIGINAL_SINK_APPEND = fabric.base.JsonlSink.append
 _RECEIPT_LOCK = threading.Lock()
 _EVIDENCE_CACHE: dict[tuple[str, str, str, str], dict[str, Any]] = {}
 _SOURCE = {
@@ -37,17 +39,7 @@ _SOURCE = {
 
 
 def route_safe_discover_and_export(timeout: float) -> dict[str, dict]:
-    """Resolve candidate models without provider network I/O.
-
-    Provider-level admission authorizes only the owner's free contingent; it is
-    not economic proof for an arbitrary authenticated catalog request. Current
-    epoch-8.70 economic provenance binds concrete inference routes, not catalog
-    endpoints. Therefore the active 6000-worker path may use an explicit local
-    model override or the controller's static defaults, while final credential +
-    route admission remains the responsibility of ``current_lane_binding``.
-
-    ``timeout`` is retained for API compatibility with the v2 scheduler.
-    """
+    """Resolve candidate models without provider network I/O."""
     del timeout
     report: dict[str, dict] = {}
     try:
@@ -93,8 +85,6 @@ def route_safe_discover_and_export(timeout: float) -> dict[str, dict]:
             }
             continue
 
-        # Credential material is still collected only through the canonical
-        # provider-admission-aware loader. No provider request is made here.
         keys = fabric.base.collect_keys(spec, admission)
         override = fabric.base.split_values(os.getenv(spec.models_env))
         models = fabric.base.unique(override or list(spec.default_models))
@@ -176,9 +166,6 @@ def gated_request_chat(
             "reason": binding.get("reason"),
         }
 
-    # Final fail-closed digest check immediately before the provider call. This
-    # prevents a cached reservation decision from surviving a current authority
-    # or economic-provenance update.
     if not binding_still_current(binding):
         return 460, {}, {
             "error": "FREE_LANE_BINDING_CHANGED_BEFORE_NETWORK",
@@ -212,12 +199,82 @@ def gated_request_chat(
     return status, headers, payload
 
 
-# The v2 fabric invokes opt.discover_and_export() at the start of run(). Replace
-# it before exporting run so the active v3 launcher cannot perform authenticated
-# catalog I/O outside the route/credential economic boundary.
+def _append_sidecar(path, record: dict[str, Any]) -> None:
+    sink = fabric.base.JsonlSink(path)
+    _ORIGINAL_SINK_APPEND(sink, record)
+
+
+def ingress_aware_sink_append(self: fabric.base.JsonlSink, row: dict[str, Any]) -> None:
+    """Classify worker output once and materialize the typed Forge handoff."""
+    if self.path.name != "workers.jsonl" or not isinstance(row, dict):
+        _ORIGINAL_SINK_APPEND(self, row)
+        return
+
+    enriched = dict(row)
+    status = enriched.get("http_status")
+    text = str(enriched.get("text") or "")
+    ingress = None
+    questions: list[str] = []
+    if isinstance(status, int) and 200 <= status < 300:
+        ingress = parse_worker_delta(text)
+        questions = parse_questions(text)
+        enriched["delta_ingress"] = {
+            "schema": ingress["schema"],
+            "status": ingress["status"],
+            "valid": ingress["valid"],
+            "ready_for_forge": ingress["ready_for_forge"],
+            "reasons": ingress["reasons"],
+            "proposal_sha256": ingress["proposal_sha256"],
+        }
+
+    _ORIGINAL_SINK_APPEND(self, enriched)
+
+    if ingress and ingress["valid"]:
+        worker_sha = str(
+            enriched.get("text_sha256")
+            or hashlib.sha256(text.encode("utf-8", errors="replace")).hexdigest()
+        )
+        record = {
+            "schema": CANDIDATE_SCHEMA,
+            "ingress_schema": ingress["schema"],
+            "provider": str(enriched.get("provider") or ""),
+            "model": str(enriched.get("model") or ""),
+            "role": str(enriched.get("role") or ""),
+            "worker_serial": enriched.get("worker_serial"),
+            "logical_worker_slot": enriched.get("logical_worker_slot"),
+            "repo_head_at_prompt": (
+                enriched.get("repo_head_at_prompt")
+                or enriched.get("repo_head")
+                or _SOURCE["commit"]
+            ),
+            "worker_text_sha256": worker_sha,
+            "proposal_sha256": ingress["proposal_sha256"],
+            "ready_for_forge": ingress["ready_for_forge"],
+            "proposal": ingress["proposal"],
+        }
+        _append_sidecar(self.path.parent / "architecture_deltas.jsonl", record)
+
+    for question in questions:
+        qsha = hashlib.sha256(question.encode("utf-8")).hexdigest()
+        _append_sidecar(
+            self.path.parent / "open_research_questions.jsonl",
+            {
+                "schema": "CLAY_OPEN_RESEARCH_QUESTION/v1",
+                "question_sha256": qsha,
+                "question": question,
+                "provider": str(enriched.get("provider") or ""),
+                "model": str(enriched.get("model") or ""),
+                "role": str(enriched.get("role") or ""),
+            },
+        )
+
+
+# The high-I/O launcher installs accelerator behavior before importing this module.
+# Preserve that order; this module only adds economic gates and typed candidate ingress.
 fabric.opt.discover_and_export = route_safe_discover_and_export
 fabric.FastProviderRuntime.next_key_model = gated_next_key_model
 fabric.base.request_chat = gated_request_chat
+fabric.base.JsonlSink.append = ingress_aware_sink_append
 
 run = fabric.run
 parse_args = fabric.parse_args

@@ -1,0 +1,50 @@
+{
+  "schema": "ENTITYOS_HCU_GO_FUNNEL_SUCCESSOR_RECEIPT/v1",
+  "created_at": "2026-08-24T14:02:30Z",
+  "trigger": "go",
+  "authority_epoch": "8.71",
+  "mode": "FREE_ONLY",
+  "base_main": "2e9900da5868fae53981808e8febc8a51ed08737",
+  "scope": "SOURCE_COMPONENT_ONLY",
+  "problem": {
+    "observed_swarm_tokens": 5001744,
+    "observed_machine_readable_deltas": 68,
+    "forge_accepted": 0,
+    "distillery_dataset_tokens": 0,
+    "finding": "Forge still reparsed workers.jsonl model text; typed architecture_deltas sidecars were not an active consumer boundary."
+  },
+  "delta": {
+    "typed_ingress_schema": "CLAY_ARCHITECTURE_DELTA_INGRESS/v2",
+    "candidate_schema": "CLAY_ARCHITECTURE_DELTA_CANDIDATE/v2",
+    "producer": "tools/run_6000_free_swarm_v3.py",
+    "consumer": "tools/run_free_evidence_forge.py",
+    "legacy_consumer_copy": "tools/run_free_evidence_forge_legacy.py",
+    "invariants": [
+      "patch header target set equals declared target_files exactly",
+      "candidate proposal hash is reverified at Forge ingress",
+      "ready_for_forge bit is cross-checked against proposal",
+      "current typed rows never fall back to raw model-prose reparsing",
+      "historical rows without delta_ingress retain compatibility ingestion",
+      "no candidate becomes canonical truth or effect authority"
+    ]
+  },
+  "local_evidence": {
+    "parser_tests": "9/9 PASS",
+    "py_compile": "PASS for parser, v3 producer, Forge wrapper and test definitions",
+    "environment": "ChatGPT local analysis container",
+    "credit": "SOURCE_COMPONENT_ONLY; not admitted EntityOS/HCU runtime evidence"
+  },
+  "go_tracks": {
+    "A": "ENTITYOS_EXECUTABLE_CONVERGENCE: typed worker-to-Forge handoff closes a concrete conversion edge",
+    "B": "HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT: deterministic candidate admission with exact patch-target/hash provenance",
+    "C": "GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY: J-Space/HCU worker proposals can enter Forge as typed noncanonical candidates; no model/training credit"
+  },
+  "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+  "reason": "No shared reproducible immutable macrocycle identity/create-only lease was available for this organ.",
+  "credits": {
+    "whole_entityos_hcu": 0,
+    "hcu_full": 0,
+    "jspace_model": 0,
+    "training": 0
+  }
+}

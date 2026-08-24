@@ -116,6 +116,40 @@ class Trigger1IntermediateBridgeGateContractTests(unittest.TestCase):
         self.assertFalse(verdict["jspace_model_runtime_credit"])
         self.assertFalse(verdict["training_credit"])
 
+    def test_missing_label_independence_receipt_blocks_bridge(self):
+        result, intermediate = passing_inputs()
+        del result["derivation"]["label_independence"]
+        with self.assertRaisesRegex(
+            bridge.BridgeError, "DERIVATION_LABEL_INDEPENDENCE_RECEIPT_REQUIRED"
+        ):
+            bridge.build_direct_candidate(result, intermediate)
+
+    def test_true_evaluation_label_use_blocks_bridge(self):
+        result, intermediate = passing_inputs()
+        result["derivation"]["label_independence"]["uses_evaluation_output_labels"] = True
+        with self.assertRaisesRegex(
+            bridge.BridgeError, "DERIVATION_MUST_PROVE_EVALUATION_LABEL_INDEPENDENCE"
+        ):
+            bridge.build_direct_candidate(result, intermediate)
+
+    def test_tampered_derivation_family_blocks_bridge(self):
+        result, intermediate = passing_inputs()
+        result["derivation"]["label_independence"]["derivation_input_family_sha256"] = HEX64
+        with self.assertRaisesRegex(
+            bridge.BridgeError, "DERIVATION_LABEL_INDEPENDENCE_FAMILY_MISMATCH"
+        ):
+            bridge.build_direct_candidate(result, intermediate)
+
+    def test_label_resolution_before_derivation_blocks_bridge(self):
+        result, intermediate = passing_inputs()
+        result["derivation"]["label_independence"][
+            "evaluation_output_labels_resolved_before_derivation"
+        ] = True
+        with self.assertRaisesRegex(
+            bridge.BridgeError, "DERIVATION_MUST_PRECEDE_EVALUATION_LABEL_RESOLUTION"
+        ):
+            bridge.build_direct_candidate(result, intermediate)
+
 
 if __name__ == "__main__":
     unittest.main()

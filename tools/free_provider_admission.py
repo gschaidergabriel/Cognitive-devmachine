@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Typed FREE_ONLY provider admission resolved before secrets or provider network I/O.
 
-This module intentionally reads only canonical repository control-plane files. It does
-not inspect API-key environment variables, provider responses, billing endpoints, or
-credential files. Those surfaces are downstream of admission.
+This module reads only canonical repository control-plane files. It does not
+inspect API-key environment variables, provider responses, billing endpoints,
+or credential files. Those surfaces are downstream of admission.
 """
 from __future__ import annotations
 
@@ -14,7 +14,7 @@ from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
 ADMISSION_PATH = ROOT / "research_entity/claycode/autonomous/FREE_PROVIDER_ADMISSION.json"
-BOOTSTRAP_PATH = ROOT / "research_entity/continuity/BOOTSTRAP_MINIMAL.json"
+SUPERVISOR_INBOX_PATH = ROOT / "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json"
 SCHEMA = "ENTITYOS_HCU_FREE_PROVIDER_ADMISSION/v1"
 ALLOWED_PROVIDERS = frozenset({"groq", "mistral", "nvidia"})
 
@@ -33,11 +33,32 @@ def _read_json(path: Path, label: str) -> dict[str, Any]:
     return payload
 
 
-def load_provider_admission(path: Path | None = None, *, bootstrap_path: Path | None = None) -> dict[str, Any]:
+def _active_supervisor_epoch(supervisor_path: Path | None = None) -> str:
+    supervisor = _read_json(supervisor_path or SUPERVISOR_INBOX_PATH, "SUPERVISOR_INBOX")
+    if supervisor.get("active_program") != "ENTITYOS_HCU":
+        raise ProviderAdmissionError("SUPERVISOR_PROGRAM_MISMATCH")
+    if supervisor.get("product") != "EntityOS":
+        raise ProviderAdmissionError("SUPERVISOR_PRODUCT_MISMATCH")
+    if supervisor.get("integrated_cognition_compute_architecture") != "HCU":
+        raise ProviderAdmissionError("SUPERVISOR_ARCHITECTURE_MISMATCH")
+    free_only = supervisor.get("free_only")
+    if not isinstance(free_only, dict) or free_only.get("enabled") is not True:
+        raise ProviderAdmissionError("SUPERVISOR_NOT_FREE_ONLY")
+    if free_only.get("provider_execution_requires_typed_explicit_free_classification") is not True:
+        raise ProviderAdmissionError("SUPERVISOR_TYPED_FREE_ADMISSION_NOT_REQUIRED")
+    epoch = str(supervisor.get("schema_version") or "").strip()
+    if not epoch:
+        raise ProviderAdmissionError("SUPERVISOR_EPOCH_MISSING")
+    return epoch
+
+
+def load_provider_admission(
+    path: Path | None = None,
+    *,
+    supervisor_path: Path | None = None,
+) -> dict[str, Any]:
     """Load canonical admission without touching any provider secret or network surface."""
-    target = path or ADMISSION_PATH
-    bootstrap = _read_json(bootstrap_path or BOOTSTRAP_PATH, "BOOTSTRAP")
-    payload = _read_json(target, "PROVIDER_ADMISSION")
+    payload = _read_json(path or ADMISSION_PATH, "PROVIDER_ADMISSION")
 
     if payload.get("schema") != SCHEMA:
         raise ProviderAdmissionError("PROVIDER_ADMISSION_SCHEMA_UNSUPPORTED")
@@ -49,9 +70,11 @@ def load_provider_admission(path: Path | None = None, *, bootstrap_path: Path | 
         raise ProviderAdmissionError("PROVIDER_ADMISSION_CONTROL_PLANE_SOURCE_REQUIRED")
 
     epoch = str(payload.get("authority_epoch") or "")
-    bootstrap_epoch = str(bootstrap.get("schema_version") or "")
-    if not epoch or epoch != bootstrap_epoch:
-        raise ProviderAdmissionError("PROVIDER_ADMISSION_AUTHORITY_EPOCH_MISMATCH")
+    supervisor_epoch = _active_supervisor_epoch(supervisor_path)
+    if not epoch or epoch != supervisor_epoch:
+        raise ProviderAdmissionError(
+            f"PROVIDER_ADMISSION_AUTHORITY_EPOCH_MISMATCH:admission={epoch or 'MISSING'}:supervisor={supervisor_epoch}"
+        )
 
     providers = payload.get("providers")
     if not isinstance(providers, dict):
@@ -77,28 +100,46 @@ def load_provider_admission(path: Path | None = None, *, bootstrap_path: Path | 
     return payload
 
 
-def provider_is_admitted_free(provider: str, admission: dict[str, Any] | None = None) -> bool:
+def provider_is_admitted_free(
+    provider: str,
+    admission: dict[str, Any] | None = None,
+    *,
+    path: Path | None = None,
+    supervisor_path: Path | None = None,
+) -> bool:
     if provider not in ALLOWED_PROVIDERS:
         return False
     try:
-        payload = admission if admission is not None else load_provider_admission()
+        payload = admission if admission is not None else load_provider_admission(path, supervisor_path=supervisor_path)
         record = payload["providers"][provider]
     except (ProviderAdmissionError, KeyError, TypeError):
         return False
     return record.get("admitted") is True and record.get("cost_class") == "FREE"
 
 
-def admitted_provider_names(admission: dict[str, Any] | None = None) -> tuple[str, ...]:
+def admitted_provider_names(
+    admission: dict[str, Any] | None = None,
+    *,
+    path: Path | None = None,
+    supervisor_path: Path | None = None,
+) -> tuple[str, ...]:
     try:
-        payload = admission if admission is not None else load_provider_admission()
+        payload = admission if admission is not None else load_provider_admission(path, supervisor_path=supervisor_path)
     except ProviderAdmissionError:
         return ()
-    return tuple(sorted(name for name in ALLOWED_PROVIDERS if provider_is_admitted_free(name, payload)))
+    return tuple(sorted(
+        name for name in ALLOWED_PROVIDERS
+        if provider_is_admitted_free(name, payload)
+    ))
 
 
-def admission_snapshot() -> dict[str, Any]:
+def admission_snapshot(
+    path: Path | None = None,
+    *,
+    supervisor_path: Path | None = None,
+) -> dict[str, Any]:
     try:
-        payload = load_provider_admission()
+        payload = load_provider_admission(path, supervisor_path=supervisor_path)
     except ProviderAdmissionError as exc:
         return {
             "schema": "ENTITYOS_HCU_FREE_PROVIDER_ADMISSION_STATUS/v1",
@@ -122,18 +163,29 @@ def admission_snapshot() -> dict[str, Any]:
     }
 
 
-def main() -> int:
+def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Read canonical EntityOS/HCU FREE provider admission")
     parser.add_argument("--provider", choices=sorted(ALLOWED_PROVIDERS))
     parser.add_argument("--json", action="store_true")
-    args = parser.parse_args()
-    snapshot = admission_snapshot()
-    if args.json or not args.provider:
+    parser.add_argument("--list-free", action="store_true")
+    parser.add_argument("--any-free", action="store_true")
+    parser.add_argument("--admission", type=Path, default=None, help="explicit deterministic test/admin path")
+    parser.add_argument("--supervisor", type=Path, default=None, help="explicit deterministic test/admin path")
+    args = parser.parse_args(argv)
+    snapshot = admission_snapshot(args.admission, supervisor_path=args.supervisor)
+    admitted = snapshot.get("admitted_free_providers", []) if snapshot.get("ok") else []
+
+    if args.list_free:
+        print("\n".join(admitted))
+    elif args.json or (not args.provider and not args.any_free):
         print(json.dumps(snapshot, sort_keys=True, separators=(",", ":")))
+
     if args.provider:
         if not snapshot.get("ok"):
             return 4
-        return 0 if args.provider in snapshot.get("admitted_free_providers", []) else 3
+        return 0 if args.provider in admitted else 3
+    if args.any_free:
+        return 0 if admitted else 3
     return 0 if snapshot.get("ok") else 4
 
 

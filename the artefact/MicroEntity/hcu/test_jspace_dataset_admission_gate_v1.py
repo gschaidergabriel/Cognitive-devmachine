@@ -19,9 +19,12 @@ def receipt_sha(receipt):
     return hashlib.sha256(canonicalize(dict(receipt))).hexdigest()
 
 
+def prototype_sha(prototype):
+    return hashlib.sha256(canonicalize(dict(prototype))).hexdigest()
+
+
 class GateTests(unittest.TestCase):
     def fixtures(self):
-        prototype_sha = h("a")
         training_sha = h("b")
         transition_sha = h("c")
         control_packet = encode_vector(
@@ -43,6 +46,7 @@ class GateTests(unittest.TestCase):
             "control_packet_identity_sha256": control_packet_sha,
             "control_condition": "BASELINE",
         }
+        prototype_digest = prototype_sha(prototype)
         transition = {
             "schema_version": "JSPACE_GWT_TRANSITION_TRACE/v1",
             "trace_sha256": transition_sha,
@@ -63,7 +67,7 @@ class GateTests(unittest.TestCase):
         training = {
             "schema_version": "ENTITYOS_HCU_JSPACE_TRAINING_TRACE/v1",
             "trace_sha256": training_sha,
-            "prototype_trace_sha256": prototype_sha,
+            "prototype_trace_sha256": prototype_digest,
             "generation": 7,
             "entry_event_sha256": h("1"),
             "entry_admission_sha256": h("2"),
@@ -90,7 +94,7 @@ class GateTests(unittest.TestCase):
         regs = {
             "admitted_training_traces": {training_sha: training},
             "admitted_transition_traces": {transition_sha: transition},
-            "admitted_prototype_traces": {prototype_sha: prototype},
+            "admitted_prototype_traces": {prototype_digest: prototype},
             "admitted_grid_plans": {h("4"): grid_plan},
             "admitted_vector_control_packets": {control_packet_sha: control_packet},
         }
@@ -115,9 +119,11 @@ class GateTests(unittest.TestCase):
         regs = deepcopy(regs)
         packet_sha = packet.packet_sha256
         prototype["control_packet_identity_sha256"] = packet_sha
+        rebound_prototype_sha = prototype_sha(prototype)
         transition["jspace_input_vector_ref"] = f"sha256:{packet_sha}"
+        training["prototype_trace_sha256"] = rebound_prototype_sha
         training["vector_control_packet_sha256"] = packet_sha
-        regs["admitted_prototype_traces"][training["prototype_trace_sha256"]] = prototype
+        regs["admitted_prototype_traces"] = {rebound_prototype_sha: prototype}
         regs["admitted_transition_traces"][transition["trace_sha256"]] = transition
         regs["admitted_training_traces"][training["trace_sha256"]] = training
         regs["admitted_vector_control_packets"] = {packet_sha: packet}
@@ -150,6 +156,19 @@ class GateTests(unittest.TestCase):
         self.assertEqual(admission.vector_control_packet_sha256, expected_packet_sha)
         self.assertEqual(admission.vector_control_condition, "BASELINE")
         self.assertEqual(admission.credit_label, "UNKNOWN")
+
+    def test_prototype_registry_key_must_match_canonical_trace_bytes(self):
+        prototype, transition, training, regs = self.fixtures()
+        exact = training["prototype_trace_sha256"]
+        first = "0" if exact[0] != "0" else "1"
+        forged_key = first + exact[1:]
+        forged_training = deepcopy(training)
+        forged_training["prototype_trace_sha256"] = forged_key
+        poisoned = deepcopy(regs)
+        poisoned["admitted_prototype_traces"] = {forged_key: deepcopy(prototype)}
+        poisoned["admitted_training_traces"][forged_training["trace_sha256"]] = forged_training
+        with self.assertRaisesRegex(JSpaceDatasetAdmissionError, "PROTOTYPE_TRACE_IDENTITY_MISMATCH"):
+            self.admit(transition=transition, training=forged_training, regs=poisoned)
 
     def test_shared_digest_without_packet_preimage_fails(self):
         _, transition, training, regs = self.fixtures()

@@ -1,0 +1,8 @@
+{
+  "schema":"CLAY_LOCAL_COMMAND/v1",
+  "command_id":"third-swarm-capacity-vps-inventory-20260824T1804p0700",
+  "op":"exec",
+  "cwd":"/home/ai-core-node",
+  "timeout_seconds":180,
+  "command":"ssh -o BatchMode=yes -o ConnectTimeout=20 -J root@100.71.48.1 root@72.61.19.188 'runuser -u claylab -- env HOME=/srv/claylab XDG_RUNTIME_DIR=/run/user/5001 CONTAINERS_CONF=/srv/claylab/.config/containers/containers.conf podman exec clay-direct-dev bash -lc '\"'\"'cd /workspace/clay-global-research-entity && python3 tools/rae_secret_loader.py GEMINI_API_KEY GEMINI2_API_KEY DEEPSEEK_API_KEY CLOUDFLARE_API_KEY HF_TOKEN HF_API_KEY OPENROUTER_API_KEY OPENROUTER2_API_KEY TAVILY_API_KEY EXA_API_KEY OPENALEX_API_KEY RAPIDAPI_KEY E2B_API_KEY GLM_API_KEY NEUROPEDIA_API_KEY GROQ_API_KEY MISTRAL_API_KEY NVIDIA_API_KEY NVIDIA_NIM_API_KEY && echo ---SHARED-QUOTA--- && python3 tools/free_swarm_quota.py && echo ---DISK--- && df -h /workspace /cache /artifacts'\"'\"''"
+}

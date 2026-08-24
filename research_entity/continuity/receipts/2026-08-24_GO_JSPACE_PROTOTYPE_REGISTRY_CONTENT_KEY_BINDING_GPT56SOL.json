@@ -1,0 +1,74 @@
+{
+  "schema_version": "ENTITYOS_HCU_GO_RECEIPT/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "authority_epoch": "8.63",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "supervisor_mode": "FREE_ONLY",
+  "canonical_main_observed_on_reentry": "d4363075548c52dc3d70f1aa288ff17b4e148ea9",
+  "retained_hcu_lane": "gschaidergabriel/clay-global-research-entity#1263",
+  "retained_hcu_head_observed_after_parallel_reentry_before_receipt": "824ab601ab1a119124058f08ec1f8ef0e39e43dc",
+  "retained_executor_lane": "gschaidergabriel/Dr.-Unterweger#810",
+  "retained_executor_head_last_observed": "7994352f4dcd48dbd7d0c6c5154bad5632b054c1",
+  "coordination": {
+    "upstream_macrocycle_id": null,
+    "user_message_timestamp_precision_available_to_this_organ": "MINUTE_ONLY",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "GO_EXPERIMENT_ATOMIC_LEASE_PROTOCOL requires an upstream immutable request id or at least whole-second immutable user-message timestamp; neither is available to this organ.",
+    "ordinary_work_class": "SOURCE_REVIEW_PLUS_DETERMINISTIC_REGRESSION_DESIGN"
+  },
+  "observe": {
+    "dataset_gate_source": "the artefact/MicroEntity/hcu/jspace_dataset_admission_gate_v1.py",
+    "training_trace_source": "the artefact/MicroEntity/hcu/jspace_training_trace_v1.py",
+    "finding": "TrainingTrace.prototype_trace_sha256 is produced as the RFC8785/JCS SHA-256 identity of the prototype trace, but DatasetAdmission previously used that value only as a caller-owned registry lookup key and never re-derived the digest from the admitted prototype bytes.",
+    "counterexample_class": "REGISTRY_CONTENT_KEY_LAUNDERING",
+    "consequence": "A mapping could be admitted under a syntactically valid but byte-false prototype_trace_sha256 key while downstream training provenance treated the key as cryptographic ancestry."
+  },
+  "hypothesis": "Re-deriving prototype_trace_sha256 from the admitted prototype preimage at the existing DatasetAdmission boundary closes the laundering path without creating a second trace/state authority.",
+  "counterhypothesis": "Registry membership alone may already be sufficient authority, making re-hashing redundant.",
+  "discriminator": "The producer explicitly defines prototype_trace_sha256 as a content digest, not as an opaque registry id; therefore a registry entry whose key differs from the canonical admitted bytes violates the producer/consumer identity contract even if membership is otherwise authorized.",
+  "delta": {
+    "source_commit": "5856ed6bc139320e73e95e0577ed1bc879836c63",
+    "test_commit": "c03a2c33eaea31430aacebb718d5d2bc7696548a",
+    "source_blob_after": "ceeb84c5a749049be2581302b7bab80e3dae9b72",
+    "test_blob_after": "e0e535cb46c11118fcc4d8cdacebfd0f93f421f5",
+    "repair": "DatasetAdmission now canonicalizes the admitted prototype mapping through the existing RFC8785/JCS canonicalizer, recomputes SHA-256, and rejects PROTOTYPE_TRACE_IDENTITY_MISMATCH before generation/cell/role/basis/vector-control promotion.",
+    "regression": "Fixture prototype identities are now derived from canonical bytes; packet-rebind fixtures re-derive prototype ancestry; a dedicated forged-key regression expects fail-closed rejection.",
+    "duplicate_authority_created": false,
+    "parallel_lane_created": false
+  },
+  "verification": {
+    "github_source_reinspection_at_parallel_successor_head": "PASS",
+    "successor_head_reinspection": "The source and forged-key regression remained present at retained donor successor head 824ab601ab1a119124058f08ec1f8ef0e39e43dc.",
+    "github_actions_runs_for_test_commit": 0,
+    "local_mechanism_check": {
+      "scope": "LOCAL_DETERMINISTIC_HELPER_RECONSTRUCTION_ONLY_NOT_ENTITYOS_RUNTIME",
+      "exact_key_accept": true,
+      "forged_key_reject": true,
+      "classification": "MECHANISM_PASS_NO_RUNTIME_CREDIT"
+    },
+    "authorized_free_sandbox_execution": "NOT_RUN",
+    "reason_not_run": "Current supervisor re-entry records the retained executor as fail-closed on a Vercel build-rate-limit/upgrade path; FREE_ONLY forbids upgrade or paid fallback."
+  },
+  "tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED_SOURCE_SAFETY_ON_SINGLE_RETAINED_DONOR; executor not rebound because exact-head FREE_ONLY runtime discriminator is currently blocked and the pinned executor snapshot must not silently inherit newer donor semantics.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED_CAUSAL_CONTENT_IDENTITY: prototype ancestry now binds registry key to exact canonical bytes at the single DatasetAdmission boundary.",
+    "C_GLOBAL_JSPACE_GWT_AND_FREE_ONLY_08B_READINESS": "ADVANCED_DATASET_PROVENANCE: false prototype content keys can no longer be laundered into training ancestry at this source boundary."
+  },
+  "credits": {
+    "entityos_hcu_whole_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "readme": {
+    "status": "NO_CHANGE_WITH_REASON",
+    "reason": "Parallel current-main and donor movement is active and this delta is source/test-only without admitted runtime promotion; avoid a stale root README overwrite. This receipt is the durable append-only cycle record."
+  },
+  "next_exact_gate": "When included-tier Vercel build admission naturally returns, execute the single fixed exact-source executor at its exact live Git SHA. Separately, before any dataset/runtime promotion, inspect whether training and transition registry keys require the same producer-consistent content-preimage revalidation or are already guaranteed by their canonical admission producers; do not assume equivalence from registry naming alone.",
+  "acceptance": "IN_PROGRESS"
+}

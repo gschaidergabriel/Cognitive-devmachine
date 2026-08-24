@@ -1,0 +1,107 @@
+{
+  "schema": "ENTITYOS_HCU_JSPACE_DIRECT_LATENT_STEERING_FUSION_RECEIPT/v1",
+  "date": "2026-08-24",
+  "trigger": "other",
+  "organ": "GPT-5.6 Sol",
+  "persistent_entity": "Clay",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority_epoch": "8.63",
+  "mode": "FREE_ONLY",
+  "canonical_main_observed_at_final_reentry": "9d6ab98f012199167284dc0caeed72cadefbb0a5",
+  "retained_donor_pr": 1263,
+  "retained_donor_head_before_receipt": "eaf717dbfff4963c62f64af913656b089d8935e1",
+  "retained_executor_pr": "gschaidergabriel/Dr.-Unterweger#810",
+  "retained_executor_head": "6a15601183f9bb61d445368e4d239e90a47b300c",
+  "coordination": {
+    "shared_immutable_request_id_observed": false,
+    "available_user_message_time_precision": "MINUTE_ONLY",
+    "new_unusual_external_intervention_by_this_organ": "COORDINATION_BLOCKED_NOT_EXECUTED",
+    "ordinary_source_fusion_and_exact_head_acceptance_checks": "EXECUTED",
+    "duplicate_semantic_authorities_removed": true
+  },
+  "scientific_result": {
+    "source": "the artefact/MicroEntity/hcu/JSPACE_LOCAL_LATENT_STEERING_MECHANISM_GPT56SOL_20260824.json",
+    "scope": "LOCAL_CHATGPT_CONTAINER_SYNTHETIC_HOOKABLE_TRANSFORMER_MECHANISM_ONLY",
+    "independent_model_initializations": 6,
+    "result": "6_OF_6_FULL_DISJOINT_STEERING_HOLDOUT_FLIP_WITH_Q8_MODEL_LAYER_SPECIFIC_ADAPTER",
+    "sign_flip_control": "NEAR_BASELINE",
+    "orthogonal_same_norm_control": "NEAR_BASELINE",
+    "raw_cross_instance_vector_transfer": "NOT_ROBUST",
+    "q8_precision_primary_bottleneck": false,
+    "supported_mechanism": "SHARED_JSPACE_CONTROL_INTENT_PLUS_MODEL_VERSION_LAYER_SPECIFIC_LATENT_BASIS_ADAPTER",
+    "qwen3_runtime_credit": 0,
+    "entityos_hcu_runtime_credit": 0
+  },
+  "retained_direct_path": {
+    "source_packet": "JSPACE_VECTOR_CONTROL_ABI/v1",
+    "adapter": "JSPACE_LATENT_BASIS_ADAPTER/v1",
+    "local_packet": "JSPACE_VECTOR_CONTROL_ABI/v1 in model-local residual basis",
+    "native_bridge": "jspace_llamacpp_cvec_bridge_v1.py",
+    "native_api": "llama_set_adapter_cvec",
+    "target_model_candidate": "Qwen/Qwen3-0.6B-GGUF:Q8_0",
+    "target_checkpoint_sha256": "9465e63a22add5354d9bb4b99e90117043c7124007664907259bd16d043bb031",
+    "target_runtime_source_commit": "bb4caa7540188872173c44d161602d9271386413",
+    "target_shape": {"n_embd": 1024, "n_layer": 28}
+  },
+  "writes_by_this_organ_retained": [
+    {
+      "commit": "2de6b6b3f13e95d68116138ff6f5157f5c468b5f",
+      "path": "the artefact/MicroEntity/hcu/jspace_activation_steering_search_v1.py",
+      "delta": "physical zero-vector control may not mutate target activation; nonzero steering must mutate it"
+    },
+    {
+      "commit": "49acd5aa7d3675c89486e608c2fceb791774d793",
+      "path": "the artefact/MicroEntity/hcu/test_jspace_activation_steering_search_v1.py",
+      "delta": "regression for exact zero-vector no-op fence"
+    },
+    {
+      "commit": "da75d297335cd0469b9af56e4560f83ae034947e",
+      "path": "the artefact/MicroEntity/hcu/jspace_latent_basis_adapter_v1.py",
+      "delta": "separate shared Global J-Space semantic basis from exact model/version/layer local residual basis and emit a distinct local control packet"
+    },
+    {
+      "commit": "eaf717dbfff4963c62f64af913656b089d8935e1",
+      "path": "the artefact/MicroEntity/hcu/test_jspace_latent_basis_adapter_v1.py",
+      "delta": "source regression bridges adapted local packet into retained llama.cpp cvec buffer path"
+    }
+  ],
+  "retracted_or_removed_by_this_organ": [
+    "jspace_preinvocation_control_admission_v1.py duplicate of stronger retained preinvocation_control_admission_store path",
+    "test_jspace_preinvocation_control_admission_v1.py duplicate regression",
+    "jspace_transformers_activation_executor_v1.py second execution path superseded by retained llama.cpp cvec path",
+    "jspace_model_activation_basis_v1.py conflated Global J-Space and local residual basis identities",
+    "test_jspace_model_activation_basis_v1.py associated conflated-basis regression"
+  ],
+  "free_api_assessment": {
+    "closed_chat_api_direct_hidden_state_vector_injection": "NOT_EXPOSED_ON_OBSERVED_CHAT_COMPLETION_SURFACES",
+    "free_api_role": "OPTIONAL_CANDIDATE_OR_BEHAVIORAL_COMPARATOR_NOT_DIRECT_LATENT_STEERING_PROOF",
+    "provider_credentials_consumed_by_this_organ": false,
+    "paid_provider_used": false,
+    "together_used_or_preflighted": false
+  },
+  "vercel_exact_head": {
+    "deployment_id": "dpl_J2W13WSMy3ewWspjfNdn2wqM6rtN",
+    "git_sha": "6a15601183f9bb61d445368e4d239e90a47b300c",
+    "state": "READY",
+    "function_invocation_result": "NOT_OBSERVED",
+    "observed_access_result": "HTTP_302_VERCEL_DEPLOYMENT_PROTECTION_SSO_BEFORE_FUNCTION",
+    "runtime_credit": 0
+  },
+  "automation": {
+    "title": "J-Space Steering Watch",
+    "mode": "HOURLY_CONDITION_WATCH",
+    "updated_to_current_mechanism": true,
+    "success_target": "DIRECT_REPRODUCIBLE_QWEN3_06B_STEERING_WITH_CALIBRATION_HOLDOUT_SIGN_NULL_ORTHOGONAL_CONTROLS_AND_EXACT_IDENTITIES"
+  },
+  "credits": {
+    "synthetic_direct_latent_mechanism": "PASS_AT_DECLARED_SCOPE",
+    "whole_entityos_hcu_runtime": 0,
+    "full_hcu_runtime": 0,
+    "qwen3_06b_model_runtime": 0,
+    "jspace_qwen3_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "On an admitted zero-cost instrumentable surface with a reproducible atomic experiment identity, materialize and verify the exact pinned Qwen3-0.6B Q8_0 plus exact llama.cpp build, calibrate the model/layer LatentBasisAdapter only on a calibration split, then execute BASELINE/+VECTOR/SIGN_FLIP/NULL/ORTHOGONAL-or-PERMUTED controls on disjoint holdout with exact loader, cvec, ModelExecution, inference and J-Space receipts."
+}

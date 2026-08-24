@@ -1,0 +1,8 @@
+{
+  "schema":"CLAY_VPS_COMMAND/v4",
+  "command_id":"postopt-swarm-runtime-audit-20260824T1819p0700",
+  "op":"exec",
+  "cwd":"/workspace/clay-global-research-entity",
+  "timeout_seconds":120,
+  "command":"echo HEAD=$(git rev-parse HEAD); python3 tools/free_provider_admission.py --json; echo ---PROCESSES---; ps -eo pid,etime,%cpu,%mem,args --sort=-%cpu | grep -E '[r]un_24h_entityos_swarm|[r]un_research_distillery|[r]un_free_evidence_forge|[f]ree swarm/evaluate.py' | head -30; echo ---DISTILLERY---; cat /artifacts/clay-entityos-swarm/distillery/STATUS.json 2>/dev/null || true; echo ---FORGE---; cat /artifacts/clay-entityos-swarm/forge/STATUS.json 2>/dev/null || true; echo ---DISK---; df -h /workspace /cache /artifacts"
+}

@@ -16,7 +16,7 @@ ROOT = Path(__file__).resolve().parents[1]
 ADMISSION_PATH = ROOT / "research_entity/claycode/autonomous/FREE_PROVIDER_ADMISSION.json"
 SUPERVISOR_INBOX_PATH = ROOT / "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json"
 SCHEMA = "ENTITYOS_HCU_FREE_PROVIDER_ADMISSION/v1"
-ALLOWED_PROVIDERS = frozenset({"groq", "mistral", "nvidia"})
+ALLOWED_PROVIDERS = frozenset({"groq", "mistral", "nvidia", "openrouter", "tavily", "exa"})
 
 
 class ProviderAdmissionError(RuntimeError):

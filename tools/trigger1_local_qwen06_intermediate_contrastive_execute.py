@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """Trigger-1 zero-cost local Qwen3-0.6B intermediate causal discriminator.
 
-Derives the steering direction only from intermediate calibration activations,
-freezes layer/gain before holdout, and evaluates label-remapped holdout with six
-matched controls plus wrong-layer and lesion/rescue tests. No provider credential
-or external LLM API is used. A PASS is only an intermediate-representation causal
-candidate and never mints canonical/HCU/J-Space/training credit by itself.
+The steering direction is derived only from intermediate calibration activations.
+Layer/gain are frozen before holdout. Holdout uses two output-label remaps, the six
+matched controls, a wrong-layer control, and lesion/rescue. Every model invocation
+binds the applied intervention identity. PASS is only intermediate-representation
+causal-candidate evidence; it never mints canonical/HCU/J-Space/training credit.
 """
 from __future__ import annotations
 
@@ -34,8 +34,6 @@ LABEL_MAPS = {
     "A_POS": {"positive": "A", "negative": "B"},
     "B_POS": {"positive": "B", "negative": "A"},
 }
-
-# Direction derivation uses only these prompt-end intermediate activations.
 DERIVATION_POSITIVE = (
     "Consider this claim silently: 2 + 2 = 4.",
     "Consider this claim silently: a triangle has three sides.",
@@ -60,20 +58,16 @@ HOLDOUT_CASES = (
 
 
 def canonical_sha(value: Any) -> str:
-    return hashlib.sha256(
-        json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode("utf-8")
-    ).hexdigest()
+    raw = json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode("utf-8")
+    return hashlib.sha256(raw).hexdigest()
 
 
 def git_text(*args: str) -> str:
     try:
         p = subprocess.run(
-            ["git", "-C", str(ROOT), *args],
-            text=True,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.DEVNULL,
-            timeout=5,
-            check=False,
+            ["git", "-C", str(ROOT), *args], text=True,
+            stdout=subprocess.PIPE, stderr=subprocess.DEVNULL,
+            timeout=5, check=False,
         )
         return p.stdout.strip() or "UNKNOWN"
     except Exception:
@@ -109,14 +103,12 @@ def prompt_for(statement: str, label_map_id: str) -> str:
     )
 
 
-def output_hidden(output: Any) -> Any:
+def _hidden(output: Any) -> Any:
     return output[0] if isinstance(output, tuple) else output
 
 
-def replace_hidden(output: Any, hidden: Any) -> Any:
-    if isinstance(output, tuple):
-        return (hidden, *output[1:])
-    return hidden
+def _replace(output: Any, hidden: Any) -> Any:
+    return (hidden, *output[1:]) if isinstance(output, tuple) else hidden
 
 
 class IntermediateRuntime:
@@ -128,17 +120,15 @@ class IntermediateRuntime:
         self.token_ids = token_ids
         self.invocations = 0
 
-    def capture(self, prompt: str, layer_index: int) -> Any:
+    def capture(self, prompt: str, layer: int) -> Any:
         captured: list[Any] = []
 
         def hook(_module: Any, _inputs: Any, output: Any):
-            hidden = output_hidden(output)
-            captured.append(hidden[0, -1].detach().float().cpu())
+            captured.append(_hidden(output)[0, -1].detach().float().cpu())
             return output
 
-        inputs = self.tokenizer(prompt, return_tensors="pt")
-        inputs = {k: v.to(self.device) for k, v in inputs.items()}
-        handle = self.model.model.layers[layer_index].register_forward_hook(hook)
+        inputs = {k: v.to(self.device) for k, v in self.tokenizer(prompt, return_tensors="pt").items()}
+        handle = self.model.model.layers[layer].register_forward_hook(hook)
         try:
             with self.torch.no_grad():
                 self.model(**inputs)
@@ -152,10 +142,11 @@ class IntermediateRuntime:
         self,
         prompt: str,
         label_map_id: str,
-        layer_index: int,
+        layer: int,
         transform: Callable[[Any], Any] | None,
         *,
         operation: str,
+        intervention_sha256: str,
     ) -> dict[str, Any]:
         hook_calls = 0
 
@@ -164,19 +155,16 @@ class IntermediateRuntime:
             hook_calls += 1
             if transform is None:
                 return output
-            hidden = output_hidden(output).clone()
-            last = hidden[:, -1, :]
-            replacement = transform(last.float()).to(device=hidden.device, dtype=hidden.dtype)
+            hidden = _hidden(output).clone()
+            replacement = transform(hidden[:, -1, :].float()).to(device=hidden.device, dtype=hidden.dtype)
             hidden[:, -1, :] = replacement
-            return replace_hidden(output, hidden)
+            return _replace(output, hidden)
 
-        inputs = self.tokenizer(prompt, return_tensors="pt")
-        inputs = {k: v.to(self.device) for k, v in inputs.items()}
-        handle = self.model.model.layers[layer_index].register_forward_hook(hook)
+        inputs = {k: v.to(self.device) for k, v in self.tokenizer(prompt, return_tensors="pt").items()}
+        handle = self.model.model.layers[layer].register_forward_hook(hook)
         try:
             with self.torch.no_grad():
-                output = self.model(**inputs)
-                logits = output.logits[0, -1].float().detach().cpu()
+                logits = self.model(**inputs).logits[0, -1].float().detach().cpu()
         finally:
             handle.remove()
         self.invocations += 1
@@ -187,8 +175,9 @@ class IntermediateRuntime:
             "invocation": self.invocations,
             "prompt_sha256": hashlib.sha256(prompt.encode()).hexdigest(),
             "label_map_id": label_map_id,
-            "layer": layer_index,
+            "layer": layer,
             "operation": operation,
+            "intervention_sha256": intervention_sha256,
             "hook_calls": hook_calls,
             "positive_logit": pos,
             "negative_logit": neg,
@@ -197,33 +186,29 @@ class IntermediateRuntime:
         return {**material, "runtime_receipt_sha256": canonical_sha(material)}
 
 
-def tensor_from_tuple(torch: Any, values: tuple[float, ...], device: Any) -> Any:
+def as_tensor(torch: Any, values: tuple[float, ...], device: Any) -> Any:
     return torch.tensor(values, dtype=torch.float32, device=device)
 
 
 def add_transform(vector: Any) -> Callable[[Any], Any]:
-    def apply(last: Any) -> Any:
-        return last + vector.to(device=last.device, dtype=last.dtype)
-    return apply
+    return lambda last: last + vector.to(device=last.device, dtype=last.dtype)
 
 
 def lesion_transform(torch: Any, direction: Any) -> Callable[[Any], Any]:
-    d = direction / torch.linalg.vector_norm(direction)
+    unit = direction / torch.linalg.vector_norm(direction)
 
     def apply(last: Any) -> Any:
-        dd = d.to(device=last.device, dtype=last.dtype)
-        projection = (last * dd).sum(dim=-1, keepdim=True)
-        return last - projection * dd
+        d = unit.to(device=last.device, dtype=last.dtype)
+        return last - (last * d).sum(dim=-1, keepdim=True) * d
     return apply
 
 
 def rescue_transform(torch: Any, direction: Any, gain: float) -> Callable[[Any], Any]:
     lesion = lesion_transform(torch, direction)
-    d = direction / torch.linalg.vector_norm(direction)
+    unit = direction / torch.linalg.vector_norm(direction)
 
     def apply(last: Any) -> Any:
-        base = lesion(last)
-        return base + float(gain) * d.to(device=last.device, dtype=last.dtype)
+        return lesion(last) + float(gain) * unit.to(device=last.device, dtype=last.dtype)
     return apply
 
 
@@ -232,14 +217,15 @@ def main() -> int:
     ap.add_argument("--output-dir", required=True)
     ap.add_argument("--cache-dir", default=os.getenv("HF_HOME") or str(Path.home() / ".cache" / "huggingface"))
     args = ap.parse_args()
-    out_dir = Path(args.output_dir)
-    out_dir.mkdir(parents=True, exist_ok=True)
-    result_path = out_dir / "trigger1_intermediate_contrastive_result.json"
+    out = Path(args.output_dir)
+    out.mkdir(parents=True, exist_ok=True)
+    result_path = out / "trigger1_intermediate_contrastive_result.json"
     started = dt.datetime.now(dt.timezone.utc).isoformat()
     source = {"repo_head": git_text("rev-parse", "HEAD"), "repo_tree": git_text("rev-parse", "HEAD^{tree}")}
 
     try:
-        torch, transformers, snapshot, tokenizer, model, device, checkpoint_sha, tokenizer_sha, weight_manifest = runtime_base.load_exact_runtime(Path(args.cache_dir))
+        loaded = runtime_base.load_exact_runtime(Path(args.cache_dir))
+        torch, transformers, snapshot, tokenizer, model, device, checkpoint_sha, tokenizer_sha, weight_manifest = loaded
         token_ids = resolve_ab_token_ids(tokenizer)
         layers = candidate_layers(model)
         rt = IntermediateRuntime(torch, tokenizer, model, device, token_ids)
@@ -252,18 +238,21 @@ def main() -> int:
             pos = [rt.capture(p, layer).tolist() for p in DERIVATION_POSITIVE]
             neg = [rt.capture(p, layer).tolist() for p in DERIVATION_NEGATIVE]
             direction_tuple = protocol.contrastive_direction(pos, neg)
-            direction = tensor_from_tuple(torch, direction_tuple, device)
+            direction = as_tensor(torch, direction_tuple, device)
             directions[layer] = direction
-            derivation_receipts[str(layer)] = {
+            row = {
                 "layer": layer,
                 "positive_prompt_sha256": [hashlib.sha256(p.encode()).hexdigest() for p in DERIVATION_POSITIVE],
                 "negative_prompt_sha256": [hashlib.sha256(p.encode()).hexdigest() for p in DERIVATION_NEGATIVE],
+                "positive_activation_rows_sha256": canonical_sha(pos),
+                "negative_activation_rows_sha256": canonical_sha(neg),
                 "direction_sha256": runtime_base.tensor_sha(direction),
                 "dimension": len(direction_tuple),
                 "output_embedding_rows_used": False,
                 "holdout_used": False,
             }
-            derivation_receipts[str(layer)]["receipt_sha256"] = canonical_sha(derivation_receipts[str(layer)])
+            row["receipt_sha256"] = canonical_sha(row)
+            derivation_receipts[str(layer)] = row
 
         calibration_rows: list[dict[str, Any]] = []
         for layer in layers:
@@ -272,73 +261,87 @@ def main() -> int:
                 controls = protocol.control_vectors(direction_tuple, gain)
                 for case_id, statement in CALIBRATION_CASES:
                     prompt = prompt_for(statement, "A_POS")
-                    for control_name in protocol.REQUIRED_CONTROLS:
-                        vec = tensor_from_tuple(torch, controls[control_name], device)
-                        row = rt.score(prompt, "A_POS", layer, add_transform(vec), operation=control_name)
+                    for control in protocol.REQUIRED_CONTROLS:
+                        vec = as_tensor(torch, controls[control], device)
+                        vector_sha = runtime_base.tensor_sha(vec)
+                        obs = rt.score(
+                            prompt, "A_POS", layer, add_transform(vec),
+                            operation=control, intervention_sha256=vector_sha,
+                        )
                         calibration_rows.append({
-                            "split": "calibration",
-                            "layer": layer,
-                            "gain": gain,
-                            "case_id": case_id,
-                            "control": control_name,
-                            "target_score": row["target_score"],
-                            "runtime_receipt_sha256": row["runtime_receipt_sha256"],
+                            "split": "calibration", "layer": layer, "gain": gain,
+                            "case_id": case_id, "control": control,
+                            "target_score": obs["target_score"],
+                            "applied_vector_sha256": vector_sha,
+                            "runtime_receipt_sha256": obs["runtime_receipt_sha256"],
                         })
 
         selected = protocol.select_layer_gain(calibration_rows)
         holdout_rows: list[dict[str, Any]] = []
-        holdout_runtime_receipts: list[dict[str, Any]] = []
+        runtime_receipts: list[dict[str, Any]] = []
+        auxiliary: list[dict[str, Any]] = []
         if selected.get("selected") is True:
             layer = int(selected["layer"])
             gain = float(selected["gain"])
             direction = directions[layer]
-            direction_tuple = tuple(float(x) for x in direction.detach().float().cpu().tolist())
-            controls = protocol.control_vectors(direction_tuple, gain)
+            direction_sha = runtime_base.tensor_sha(direction)
+            controls = protocol.control_vectors(
+                tuple(float(x) for x in direction.detach().float().cpu().tolist()), gain
+            )
             wrong_layer = next((x for x in layers if x != layer), layer - 1 if layer > 1 else layer + 1)
             for label_map_id in LABEL_MAPS:
                 for case_id, statement in HOLDOUT_CASES:
                     prompt = prompt_for(statement, label_map_id)
-                    baseline = rt.score(prompt, label_map_id, layer, None, operation="BASELINE_REFERENCE")
+                    baseline_identity = canonical_sha({"operation": "BASELINE_REFERENCE", "layer": layer, "vector": "ZERO"})
+                    baseline = rt.score(
+                        prompt, label_map_id, layer, None,
+                        operation="BASELINE_REFERENCE", intervention_sha256=baseline_identity,
+                    )
+                    wrong_vec = direction * gain
                     wrong = rt.score(
-                        prompt,
-                        label_map_id,
-                        wrong_layer,
-                        add_transform(direction * gain),
+                        prompt, label_map_id, wrong_layer, add_transform(wrong_vec),
                         operation="WRONG_LAYER_PLUS_VECTOR",
+                        intervention_sha256=runtime_base.tensor_sha(wrong_vec),
                     )
                     lesion = rt.score(
-                        prompt,
-                        label_map_id,
-                        layer,
-                        lesion_transform(torch, direction),
+                        prompt, label_map_id, layer, lesion_transform(torch, direction),
                         operation="LESION",
+                        intervention_sha256=canonical_sha({"operation": "LESION", "direction_sha256": direction_sha}),
                     )
                     rescue = rt.score(
-                        prompt,
-                        label_map_id,
-                        layer,
-                        rescue_transform(torch, direction, gain),
+                        prompt, label_map_id, layer, rescue_transform(torch, direction, gain),
                         operation="RESCUE",
+                        intervention_sha256=canonical_sha({"operation": "RESCUE", "direction_sha256": direction_sha, "gain": gain}),
                     )
                     wrong_delta = wrong["target_score"] - baseline["target_score"]
                     lesion_delta = lesion["target_score"] - baseline["target_score"]
                     rescue_delta = rescue["target_score"] - lesion["target_score"]
-                    holdout_runtime_receipts.extend((baseline, wrong, lesion, rescue))
-                    for control_name in protocol.REQUIRED_CONTROLS:
-                        vec = tensor_from_tuple(torch, controls[control_name], device)
-                        obs = rt.score(prompt, label_map_id, layer, add_transform(vec), operation=control_name)
-                        holdout_runtime_receipts.append(obs)
+                    runtime_receipts.extend((baseline, wrong, lesion, rescue))
+                    auxiliary.append({
+                        "case_id": case_id, "label_map_id": label_map_id,
+                        "selected_layer": layer, "wrong_layer": wrong_layer,
+                        "baseline_receipt_sha256": baseline["runtime_receipt_sha256"],
+                        "wrong_layer_receipt_sha256": wrong["runtime_receipt_sha256"],
+                        "lesion_receipt_sha256": lesion["runtime_receipt_sha256"],
+                        "rescue_receipt_sha256": rescue["runtime_receipt_sha256"],
+                        "wrong_layer_delta": wrong_delta, "lesion_delta": lesion_delta,
+                        "rescue_delta": rescue_delta,
+                    })
+                    for control in protocol.REQUIRED_CONTROLS:
+                        vec = as_tensor(torch, controls[control], device)
+                        vector_sha = runtime_base.tensor_sha(vec)
+                        obs = rt.score(
+                            prompt, label_map_id, layer, add_transform(vec),
+                            operation=control, intervention_sha256=vector_sha,
+                        )
+                        runtime_receipts.append(obs)
                         holdout_rows.append({
-                            "split": "holdout",
-                            "layer": layer,
-                            "gain": gain,
-                            "case_id": case_id,
-                            "label_map_id": label_map_id,
-                            "control": control_name,
-                            "target_score": obs["target_score"],
-                            "wrong_layer_delta": wrong_delta,
-                            "lesion_delta": lesion_delta,
+                            "split": "holdout", "layer": layer, "gain": gain,
+                            "case_id": case_id, "label_map_id": label_map_id,
+                            "control": control, "target_score": obs["target_score"],
+                            "wrong_layer_delta": wrong_delta, "lesion_delta": lesion_delta,
                             "rescue_delta": rescue_delta,
+                            "applied_vector_sha256": vector_sha,
                             "runtime_receipt_sha256": obs["runtime_receipt_sha256"],
                         })
 
@@ -351,7 +354,6 @@ def main() -> int:
             if selected.get("selected") is True
             else {"pass": False, "classification": str(selected.get("reason") or "NO_CALIBRATION_SELECTION")}
         )
-
         evidence = {
             "schema": SCHEMA,
             "status": "PASS" if verdict.get("pass") else "SCIENTIFIC_NEGATIVE",
@@ -374,7 +376,9 @@ def main() -> int:
             "calibration_rows_sha256": canonical_sha(calibration_rows),
             "holdout_row_count": len(holdout_rows),
             "holdout_rows": holdout_rows,
-            "holdout_runtime_receipts_sha256": canonical_sha(holdout_runtime_receipts),
+            "runtime_receipts_sha256": canonical_sha(runtime_receipts),
+            "auxiliary_control_receipts": auxiliary,
+            "auxiliary_control_receipts_sha256": canonical_sha(auxiliary),
             "label_maps": LABEL_MAPS,
             "verdict": verdict,
             "external_llm_credentials_read": False,

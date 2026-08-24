@@ -3,8 +3,9 @@
 
 This module does not execute a model and does not decide that a causal effect exists.
 It validates that the minimum clean/corrupted/target/sham/off-target family is complete,
-uses one exact model/runtime/loader/activation-site identity, and does not relabel one
-execution/trace/output as multiple controls.
+uses one exact model/runtime/loader/activation-site identity, binds the exact consumed
+model-input content for every trial, and does not relabel one execution/trace/output as
+multiple controls.
 
 A PASS from this gate is identity/provenance readiness only:
 ``CAUSAL_FAMILY_IDENTITY_COMPLETE_NOT_JSPACE_CAUSAL_PASS``.
@@ -47,6 +48,8 @@ class CausalTrialIdentity:
     condition: str
     family_id: str
     input_variant_id: str
+    model_input_content_schema: str
+    model_input_content_sha256: str
     generation: int
     checkpoint_sha256: str
     tokenizer_sha256: str
@@ -76,6 +79,9 @@ class CausalFamilyIdentityResult:
     runtime_build_sha256: str
     loader_consumption_sha256: str
     activation_site_id: str
+    model_input_content_schema: str
+    clean_model_input_content_sha256: str
+    corrupted_model_input_content_sha256: str
     trial_identity_sha256: tuple[str, ...]
     family_identity_sha256: str
 
@@ -119,11 +125,17 @@ def _validated_trial(trial: CausalTrialIdentity) -> CausalTrialIdentity:
         raise CausalFamilyIdentityError("condition:UNSUPPORTED")
     family_id = _text(trial.family_id, "family_id")
     input_variant_id = _text(trial.input_variant_id, "input_variant_id")
+    model_input_content_schema = _text(
+        trial.model_input_content_schema,
+        "model_input_content_schema",
+        max_len=256,
+    )
     activation_site_id = _text(trial.activation_site_id, "activation_site_id")
     generation = _generation(trial.generation)
 
     hashes = {}
     for field in (
+        "model_input_content_sha256",
         "checkpoint_sha256",
         "tokenizer_sha256",
         "runtime_build_sha256",
@@ -150,6 +162,7 @@ def _validated_trial(trial: CausalTrialIdentity) -> CausalTrialIdentity:
         condition=trial.condition,
         family_id=family_id,
         input_variant_id=input_variant_id,
+        model_input_content_schema=model_input_content_schema,
         generation=generation,
         activation_site_id=activation_site_id,
         intervention_sha256=intervention,
@@ -168,6 +181,32 @@ def _require_unique(trials: Sequence[CausalTrialIdentity], field: str) -> None:
     values = [getattr(trial, field) for trial in trials]
     if len(values) != len(set(values)):
         raise CausalFamilyIdentityError(f"{field}:CROSS_CONTROL_REUSE_FORBIDDEN")
+
+
+def _validate_model_input_topology(
+    by_condition: dict[str, CausalTrialIdentity],
+) -> tuple[CausalTrialIdentity, CausalTrialIdentity]:
+    clean = by_condition["BASELINE_CLEAN"]
+    corrupted = by_condition["BASELINE_CORRUPTED"]
+    if clean.input_variant_id == corrupted.input_variant_id:
+        raise CausalFamilyIdentityError(
+            "input_variant_id:BASELINE_CLEAN_CORRUPTED_REUSE_FORBIDDEN"
+        )
+    if clean.model_input_content_sha256 == corrupted.model_input_content_sha256:
+        raise CausalFamilyIdentityError(
+            "model_input_content_sha256:BASELINE_CLEAN_CORRUPTED_REUSE_FORBIDDEN"
+        )
+    for condition in INTERVENTION_CONDITIONS:
+        trial = by_condition[condition]
+        if trial.input_variant_id != corrupted.input_variant_id:
+            raise CausalFamilyIdentityError(
+                f"{condition}:INTERVENTION_BASE_INPUT_VARIANT_MISMATCH"
+            )
+        if trial.model_input_content_sha256 != corrupted.model_input_content_sha256:
+            raise CausalFamilyIdentityError(
+                f"{condition}:INTERVENTION_BASE_INPUT_CONTENT_MISMATCH"
+            )
+    return clean, corrupted
 
 
 def validate_causal_family_identity(
@@ -198,6 +237,8 @@ def validate_causal_family_identity(
     runtime_build = _require_same(ordered, "runtime_build_sha256")
     loader_consumption = _require_same(ordered, "loader_consumption_sha256")
     activation_site = _require_same(ordered, "activation_site_id")
+    model_input_content_schema = _require_same(ordered, "model_input_content_schema")
+    clean_input, corrupted_input = _validate_model_input_topology(by_condition)
 
     # A control family is not five independent controls if the same execution, downstream
     # receipt, trace, or output identity can be relabeled into several conditions.
@@ -236,6 +277,9 @@ def validate_causal_family_identity(
         "runtime_build_sha256": runtime_build,
         "loader_consumption_sha256": loader_consumption,
         "activation_site_id": activation_site,
+        "model_input_content_schema": model_input_content_schema,
+        "clean_model_input_content_sha256": clean_input.model_input_content_sha256,
+        "corrupted_model_input_content_sha256": corrupted_input.model_input_content_sha256,
     }
     family_digest = _canonical_sha256(family_material, "causal_family")
 
@@ -252,6 +296,9 @@ def validate_causal_family_identity(
         runtime_build_sha256=runtime_build,
         loader_consumption_sha256=loader_consumption,
         activation_site_id=activation_site,
+        model_input_content_schema=model_input_content_schema,
+        clean_model_input_content_sha256=clean_input.model_input_content_sha256,
+        corrupted_model_input_content_sha256=corrupted_input.model_input_content_sha256,
         trial_identity_sha256=trial_digests,
         family_identity_sha256=family_digest,
     )

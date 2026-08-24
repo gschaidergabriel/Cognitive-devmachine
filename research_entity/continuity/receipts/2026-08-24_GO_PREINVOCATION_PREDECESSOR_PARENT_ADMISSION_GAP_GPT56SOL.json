@@ -1,0 +1,79 @@
+{
+  "schema": "CLAY_GO_ENTITYOS_HCU_PREINVOCATION_PREDECESSOR_PARENT_ADMISSION_GAP/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "authority_epoch": "8.63",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "observed_research_main_before_write": "0825e117fb9fb5e828a59e431c3cda4e0b9bd8d4",
+  "retained_lanes": {
+    "donor": "gschaidergabriel/clay-global-research-entity#1263",
+    "donor_head_observed": "b05ae7fb54878b46ce19ef94555406f6238e0ba1",
+    "executor": "gschaidergabriel/Dr.-Unterweger#810"
+  },
+  "observation": {
+    "preinvocation_source": "the artefact/MicroEntity/hcu/preinvocation_control_admission_store_v1.py",
+    "preinvocation_source_blob_observed": "8ea6d829a6f69633bdccc1a32c7c71703921e5c9",
+    "test_source": "the artefact/MicroEntity/hcu/test_preinvocation_control_admission_store_v1.py",
+    "test_source_blob_observed": "945aff7cbb5fa62d1b8f52138d87616a7cd08c31",
+    "temporal_ordering_improved": true,
+    "positive_current_property": "PREINVOCATION_CONTROL_PREPARATION_IS_COMMITTED_IN_EXISTING_CANONICAL_MINIUNIFIEDDB_BEFORE_CONTROLLED_MODEL_EXECUTION_ADMISSION_AND_FORBIDS_SAME_INVOCATION_POSTHOC_CONTROL",
+    "remaining_gap": "PREDECESSOR_JSPACE_BINDING_AND_TRAINING_TRACE_ARE_SELF_CONSISTENCY_VALIDATED_BUT_THE_PREINVOCATION_PATH_DOES_NOT_REQUIRE_THE_BINDING_REFERENCED_HCU_INFERENCE_RECEIPT_V4_TO_EXIST_IN_THE_ADMITTED_PARENT_REGISTRY_BEFORE_CANONICAL_PREPARATION_WRITE",
+    "test_evidence": "CURRENT_PREINVOCATION_TEST_CONSTRUCTS_A_SYNTHETIC_JSPACE_INFERENCE_BINDING_WITH_ARBITRARY_VALID_SHA_IDENTITIES_INCLUDING_INFERENCE_RECEIPT_SHA256_WITHOUT_SUPPLYING_AN_ADMITTED_INFERENCE_RECEIPT_REGISTRY_AND_POSITIVE_PREPARATION_PASSES",
+    "existing_single_parent_authority": "the artefact/MicroEntity/hcu/jspace_inference_parent_admission_v1.py::require_admitted_inference_receipt_parent",
+    "existing_guard_law": "A_SELF_CONSISTENT_JSPACE_INFERENCE_BINDING_DIGEST_PROVES_BINDING_BYTES_NOT_THAT_THE_REFERENCED_HCU_INFERENCE_RECEIPT_V4_WAS_ADMITTED"
+  },
+  "hypothesis": {
+    "id": "PREINVOCATION_CONTROL_MUST_REQUIRE_ADMITTED_PREDECESSOR_INFERENCE_PARENT",
+    "statement": "Before a predecessor J-Space packet may become canonical forward-control preparation evidence, the predecessor JSpaceInferenceBinding must pass the existing single inference-parent admission guard against an external admitted HCU_INFERENCE_RECEIPT/v4 registry. Otherwise a syntactically valid generated predecessor can be laundered into canonical forward-control evidence despite correct temporal ordering."
+  },
+  "counterhypothesis": {
+    "id": "DOWNSTREAM_REHYDRATION_IS_SUFFICIENT",
+    "statement": "Later J-Space/training source-revalidation could be sufficient even if pre-invocation preparation accepts a self-authenticating predecessor.",
+    "rejection_basis": "The pre-invocation preparation is itself persisted in canonical MiniUnifiedDB and is used to authorize/control a future invocation. Downstream training validation cannot retroactively establish that the predecessor evidence was admitted at the time the control decision was prepared."
+  },
+  "cheapest_high_information_discriminator": {
+    "class": "ORDINARY_DETERMINISTIC_SOURCE_REGRESSION",
+    "minimal_fix": "DELEGATE_TO_EXISTING_JSPACE_INFERENCE_PARENT_ADMISSION_GUARD_DO_NOT_COPY_ITS_SEMANTICS",
+    "api_delta": "PASS_ADMITTED_INFERENCE_RECEIPTS_TO_PREPARE_PREINVOCATION_CONTROL_OR_TO_A_SINGLE_SUBORDINATE_VALIDATION_HELPER_AND_CALL_REQUIRE_ADMITTED_INFERENCE_RECEIPT_PARENT_BEFORE_ANY_PREPARATION_TABLE_WRITE",
+    "required_negative_test": "A_SELF_AUTHENTICATING_PREDECESSOR_BINDING_WITH_NO_MATCHING_ADMITTED_INFERENCE_RECEIPT_MUST_FAIL_WITH_PARENT_NOT_ADMITTED_AND_CREATE_ZERO_PREINVOCATION_PREPARATION_ROWS",
+    "required_positive_test": "THE_EXACT_MATCHING_ADMITTED_INFERENCE_RECEIPT_PARENT_PLUS_CURRENT_TRACE_BINDING_INPUT_AND_GRID_EVIDENCE_PRESERVES_THE_EXISTING_POSITIVE_PREINVOCATION_PATH",
+    "required_tamper_tests": [
+      "ADMITTED_PARENT_DIGEST_VALID_BUT_MODEL_EXECUTION_IDENTITY_MISMATCH",
+      "ADMITTED_PARENT_DIGEST_VALID_BUT_INPUT_OR_GRID_IDENTITY_MISMATCH",
+      "REGISTRY_KEY_DOES_NOT_EQUAL_CANONICAL_PARENT_RECEIPT_IDENTITY"
+    ]
+  },
+  "go_tracks": {
+    "track_a_entityos_executable_convergence": "ADVANCED_BY_FENCING_A_CANONICAL_CONTROL_DECISION_PATH_FROM_SELF_AUTHENTICATING_BUT_UNADMITTED_PREDECESSOR_EVIDENCE_WITHOUT_CREATING_A_SECOND_EXECUTOR_OR_STATE_AUTHORITY",
+    "track_b_hcu_typed_entry": "ADVANCED_BY_IDENTIFYING_THE_EXACT_PREINVOCATION_PARENT_ADMISSION_BOUNDARY_AND_REUSING_THE_EXISTING_SINGLE_HCU_JSPACE_INFERENCE_PARENT_AUTHORITY",
+    "track_c_global_jspace_gwt_training_readiness_free_only": "ADVANCED_BY_PREVENTING_GENERATED_OR_SELF_CONSISTENT_PREDECESSOR_JSPACE_EVIDENCE_FROM_BEING_PROMOTED_TO_FORWARD_CONTROL_PREPARATION_BEFORE_PARENT_ADMISSION"
+  },
+  "execution": {
+    "runtime_execution_performed": false,
+    "reason": "CURRENT_FREE_ONLY_EXECUTOR_GATE_FAILS_CLOSED_WHILE_REMAINING_INCLUDED_VERCEL_SANDBOX_QUOTA_IS_UNOBSERVED; NO_PAID_OR_VPS_FALLBACK_ALLOWED",
+    "together_used": false,
+    "paid_provider_used": false,
+    "vps_self_hosted_or_production_test": false
+  },
+  "coordination": {
+    "shared_immutable_macrocycle_id_available": false,
+    "available_user_message_timestamp_precision": "MINUTE_ONLY",
+    "unusual_experiment_status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_experiments_run": 0
+  },
+  "artifact_readme": {
+    "status": "NO_CHANGE_WITH_REASON",
+    "reason": "the artefact/README.md is being updated by multiple concurrent organs during this macrocycle; a full-file replacement through the connected GitHub action risks clobbering fresher deltas. This append-only receipt is the durable nonduplicate delta and should be fused into the README by the successor-dynamic authority synchronization path."
+  },
+  "credits_after_delta": {
+    "whole_entityos_hcu_runtime": 0,
+    "full_hcu_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_action": "At the live retained donor head, update preinvocation_control_admission_store_v1.py to delegate predecessor binding parent verification to jspace_inference_parent_admission_v1.require_admitted_inference_receipt_parent before any canonical preparation write, add the fail-closed unadmitted-parent and tamper regressions, re-enter moving main/donor/executor state, and only then include the exact source/test bytes in a future immutable PR810 rebind when FREE_ONLY direct quota evidence permits execution."
+}

@@ -2,26 +2,26 @@
 
 `the artefact/` is the canonical product/research workspace for **EntityOS** and its integrated **HCU** cognition/compute architecture.
 
-This README is a **current-facing orientation surface**, not independent authority and not a historical ledger. Historical evidence belongs in immutable receipts. Always refresh verified `main`, newest explicit owner authority, newest admitted supervisor, and exact executable evidence before acting; do not pin a supposedly permanent current SHA here.
+This README is a **current-facing orientation surface**, not independent authority and not a historical ledger. Historical evidence belongs in immutable receipts. Always refresh verified `main`, newest explicit owner authority, newest admitted supervisor, exact executable evidence, and live retained PR heads before acting.
 
 ## Current authority — 2026-08-24
 
 Observed supervisor epoch during this update: **8.71**. Current autonomous mode: **FREE_ONLY**.
 
-Read current authority from:
+Resolve authority from:
 
 - `research_entity/continuity/BOOTSTRAP_MINIMAL.json`
 - `research_entity/rooms/PROGRAM_STATE.json`
-- `research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_71.json`
 - `research_entity/claycode/autonomous/SUPERVISOR_INBOX.json`
+- `research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_71.json`
 - current `research_entity/claycode/CLAYCODE_ALL_WORKERS_EXECUTION_DIRECTIVE*.md`
 - `CLAY_EXECUTION_AUTHORITY.md`
 - `governance/CLAY_DUAL_MACHINE_EXECUTION_AUTHORITY_2026-08-24.md`
 - `research_entity/continuity/GO_MACROCYCLE_IDENTITY_CONTRACT.md`
 - `research_entity/continuity/GO_EXPERIMENT_ATOMIC_LEASE_PROTOCOL.md`
-- exact current source/tests/receipts and live retained PR heads.
+- exact current source/tests/receipts/runtime evidence.
 
-Persistent research entity = **Clay**. Temporary ChatGPT/model/session/worker instances are organs, not new persistent entities. Product = **EntityOS**. Integrated cognition/compute architecture = **HCU**. Xeno/XCU are compatibility/research aliases only. Mini Entity/MicroEntity, ClayVerse and Frank are historical implementation/donor provenance unless newer authority explicitly re-admits a mechanism.
+Persistent research entity = **Clay**. Temporary ChatGPT/model/session/worker instances are organs, not new persistent entities. Product = **EntityOS**. Integrated cognition/compute architecture = **HCU**. Xeno/XCU are compatibility/research aliases only. Mini Entity/MicroEntity, ClayVerse and Frank remain historical implementation/donor provenance unless newer authority explicitly re-admits a mechanism.
 
 ## Deterministic authority boundary
 
@@ -39,144 +39,94 @@ Pre-load hashing is not loader-consumption attestation. Logical cell count is no
 
 ## Execution law — supervisor 8.71 / owner authority
 
-FREE_ONLY remains active.
-
-Current owner authority permits zero-cost development/testing on:
-
-- normal-user local Linux;
-- the authorized `clay-direct-dev` VPS sandbox;
-- bridge/container/runtime administration needed to keep that sandbox usable.
+FREE_ONLY remains active. Current owner authority permits zero-cost development/testing on normal-user local Linux and the authorized `clay-direct-dev` VPS sandbox, plus bounded bridge/container/runtime administration required to keep that sandbox usable.
 
 This does **not** imply new local root/sudo authority, unrelated production-host changes, new external production effects, paid/subscription/unknown-cost execution, upgrades/credit purchases, or Together execution. Canonical credit from local/VPS experiments is never automatic; exact source/artifact/runtime identity and bounded receipts remain mandatory.
 
-### FREE external-provider lanes
-
-Provider-level labels are not sufficient economic proof. Concrete credential/route provenance remains fail-closed.
-
-Current source-level economic provenance includes:
-
-- **OpenRouter:** explicit `openrouter/free` zero-price route only.
-- **Groq:** exact credential + model must match provider-documented Free Plan rate-limit evidence.
-- **NVIDIA:** current provenance binds an exact non-secret credential fingerprint to authenticated NVIDIA API Catalog evidence plus provider Developer Program/Public API Endpoint documentation and an evidence digest; only explicitly listed hosted NIM models are admitted by that record.
-- **Mistral:** remains fail-closed until provider-side Free-mode / PAYG-disabled evidence is bound.
-- **Together / paid fallback:** forbidden.
-
-Source/provenance admission is not provider runtime credit. Exact-current FREE-lane execution receipts are still required before any provider-runtime promotion.
+Provider-level FREE labels are insufficient economic proof. Concrete credential/model/route provenance remains fail-closed. OpenRouter is restricted to explicit current zero-price/free routes; Groq requires exact credential/model free-limit evidence; NVIDIA requires exact credential entitlement plus exact allowed hosted route; Mistral remains fail-closed until provider-side Free/PAYG-disabled evidence is bound. Together and all paid fallback remain forbidden.
 
 ## Runtime reentry warning
 
-The latest committed runtime dashboard reentry observed in this `go` was generated at `2026-08-24T14:14:00.324896Z` and reported:
+The latest committed Free Swarm dashboard reentry used by this `go` was generated at `2026-08-24T14:14:00.324896Z` and reported:
 
 - `supervisor = STOPPED/QUARANTINED`;
 - `go_swarm = RUNNING`;
+- `distillery = RUNNING`;
 - `evidence_forge = RUNNING`;
-- embedded provider-admission authority epoch `8.69` while canonical source authority is already `8.71`.
+- embedded provider-admission authority epoch `8.69` while canonical source authority is `8.71`.
 
-Therefore the committed runtime snapshot is **not successor-aligned** to current source authority. Provider counters in that snapshot do not establish exact-current 8.71 runtime credit. The next runtime action is a fail-closed reentry/restart on current source through an exposed authorized bridge, then exact post-restart evidence capture.
+Therefore that runtime snapshot is **not successor-aligned** to current source authority and cannot establish exact-current provider or whole-product runtime credit. Runtime must be re-entered/restarted on current source through an exposed authorized bridge before promotion claims.
 
 ## Retained convergence lanes
 
-- HCU / Typed Entry / J-Space donor: PR **#1263**. It remains the single retained donor/source lane and must be refreshed before every use. It is not a second product, truth store, effect path, persistent identity, or executor.
-- bounded execution-controller work must be refreshed independently before any source-to-runtime rebind. Never project an old executor PASS onto a newer donor/source head.
+- HCU / Typed Entry / J-Space donor: `gschaidergabriel/clay-global-research-entity#1263` — single retained donor/source lane, not a second product/state/effect authority.
+- bounded execution controller: `gschaidergabriel/Dr.-Unterweger#810` — execution infrastructure only; its historical authority wording must not override current 8.71 authority.
 
-Prefer fusion into the strongest current implementation. Do not create duplicate semantic authorities merely to preserve parallel work.
+Prefer fusion into the strongest current implementation. Do not create duplicate semantic authorities.
 
 ## Global J-Space / GWT
 
-Global J-Space/GWT remains an **empirical, model-specific causal hypothesis**. Recurrence, textual coherence, workspace stability, self-report, majority agreement or token volume do not prove causality.
+Global J-Space/GWT remains an **empirical, model-specific causal hypothesis**. Recurrence, textual coherence, workspace stability, self-report, majority agreement, token volume or hosted output-logit behavior alone do not prove hidden-state/J-Space causality.
 
-Current research direction preserves:
+Current research preserves `JSPACE_VECTOR_CONTROL_ABI/v1`, exact checkpoint/tokenizer/runtime/build identity, named activation/intervention sites, matched controls, holdout separation, deterministic hard negatives, family-level leak-resistant splits and exact trace-to-InferenceReceipt bindings. Approximately-0.8B specialization remains zero-cost work only after executable model-specific causal evidence. Completed training alone is not PASS.
 
-- `JSPACE_VECTOR_CONTROL_ABI/v1`;
-- exact model/checkpoint/tokenizer/runtime/build identity;
-- named activation/intervention sites;
-- clean/corrupted/target/sham/off-target causal controls;
-- sign/null/orthogonal/permuted controls where appropriate;
-- calibration/holdout separation;
-- deterministic hard negatives and family-level leak-resistant splits;
-- exact trace-to-InferenceReceipt bindings.
+## `go` — current three-track delta
 
-Approximately-0.8B specialization remains zero-cost local work only after executable model-specific causal evidence. Completed training alone is not PASS.
-
-## `go` — three coupled tracks
-
-Every exact `go` advances or explicitly no-changes all three:
+Every exact `go` advances or explicitly no-changes:
 
 1. `ENTITYOS_EXECUTABLE_CONVERGENCE`
 2. `HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT`
 3. `GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY`
 
-No new unusual experiment may run without a reproducible shared macrocycle/request identity and successful canonical create-only atomic lease. Missing shared identity fails closed to zero new unusual experiments; ordinary source review, deterministic regression and nonduplicate fusion may continue.
+No new unusual experiment ran in this macrocycle because this organ has no reproducible shared immutable macrocycle/request identity for the canonical create-only atomic lease.
 
-## Current `go` delta — Forge conversion/source identity
+### Observed conversion frontier
 
-### Track A — advanced
-
-The conversion funnel moved materially during this cycle.
-
-Earlier snapshot at `2026-08-24T13:58:54Z`:
-
-- 1001 successful worker outputs;
-- 176 machine-readable architecture deltas;
-- 105 marked `ready_for_forge`;
-- 104 Forge evaluations;
-- **0 accepted**;
-- 47 `NEEDS_IMPLEMENTATION`;
-- 57 `PATCH_REJECTED`.
-
-Later Forge snapshot at `2026-08-24T14:13:38.870119Z`:
+Earlier runtime evidence showed a hard zero-yield funnel. The latest committed snapshot used here has moved to:
 
 - 1128 successful worker outputs;
-- 215 architecture deltas;
+- 215 machine-readable architecture deltas;
 - 141 Forge-ready candidates;
 - 141 Forge evaluations;
-- **1 ACCEPTED**;
+- **1 Forge `ACCEPTED`**;
 - 65 `NEEDS_IMPLEMENTATION`;
 - 74 `PATCH_REJECTED`;
-- 1 `VALIDATED_NOT_BETTER`.
+- 1 `VALIDATED_NOT_BETTER`;
+- Distillery: 11,621 collected source tokens, **0 accepted dataset tokens**, **0 accepted packets**.
 
-This proves the funnel is no longer strictly zero-yield at Forge component scope. It does **not** prove why the first candidate passed, that the delta is merged/useful on current `main`, or that the overall conversion problem is solved.
+The first Forge acceptance predates the Forge source-identity merge by about three seconds, so it must not be credited to that merge. It is temporally compatible with earlier worker source grounding but exact causality remains unproven. The strong counterhypothesis remains that malformed/guessed patch synthesis dominates the 74 patch rejections.
 
-Two complementary source deltas are now fused on `main`:
+### Track A — advanced: Forge ACCEPTED -> Distillery admission
 
-1. **Worker-side exact-source grounding** (`#1538`, merge `caed18dbfce5646ff39ffc88cda9bed3a1c04575`): conversion-critical shards receive bounded hash-bound source excerpts and must fail closed to design-only output when exact target bytes are insufficient.
-2. **Forge-side exact source identity** (`#1544`, merge `08afa94d01d1588aa55111b7f52d0a5c46bd613c`): Forge persists/backfills `repo_head_at_prompt`, fails closed on missing/unavailable source identity, checks out the exact worker source commit in baseline and patched clones before `git apply`/tests, records target Git blob identities, and marks accepted source-bound candidates that require a later rebase.
+Source inspection found a structural missing edge: Forge reads Distillery questions and emits accepted evaluation records, while Distillery independently ingests worker questions and creates reviewed knowledge packets. No deterministic path admitted a measured Forge `ACCEPTED` evaluation into the Distillery dataset.
 
-### Causal timing boundary
+Current branch adds `tools/ingest_forge_accepts_into_distillery.py` and `tests/test_forge_distillery_ingest_871.py`.
 
-The first observed Forge acceptance snapshot is timestamped about three seconds **before** #1544 merged. Therefore the first acceptance MUST NOT be credited to #1544.
+The bridge admits only `CLAY_FORGE_DELTA_EVALUATION/v1` rows that are `accepted`, exact-worker-source scoped, source/evaluation-head bound, worker-digest bound, target-blob bound, reproducible, zero-failure on positive/negative/static controls, benchmark-nonregressing and positively improved. Admission is idempotent by evaluation digest. It writes into the **existing Distillery SQLite database**, never a second truth store.
 
-It occurred roughly five minutes after #1538 source grounding merged, so #1538 is temporally compatible with the improvement, but that is still not causal proof: the exact accepted evaluation record/source identity is not committed in the current snapshot. The strong counterhypothesis remains that the single acceptance is an unrelated outlier while malformed/guessed patches still dominate.
+A source-equivalent disposable logic check reported **8/8 PASS** plus Python compilation PASS. This is source/component logic evidence only; the live runtime has not yet executed this bridge on successor-aligned 8.71 bytes.
 
-A disposable noncanonical core mechanism check of #1544 reproduced the intended moving-head discriminator: source A had 0/2 baseline test passes, current HEAD had already moved to incompatible B, and the patch validated at exact A reached 2/2. This is **component/logic evidence only**, not live Forge conversion evidence.
+### Track B — advanced: typed/provenance conversion boundary
 
-GitHub `Research Entity Verify` / `Identity Guard` runs for the feature branch failed before exposing any job steps. Treat that as infrastructure/guard evidence, not a semantic negative and not a test PASS.
+The bridge adds a fail-closed provenance envelope across worker digest, exact producer/evaluation commits, target blob identities, reproducibility and measured control outcomes. It does not create canonical truth or a new effect authority.
 
-Durable receipts:
+### Track C — advanced: training-data infrastructure only
 
-- `research_entity/continuity/receipts/2026-08-24_GO_871_FORGE_SOURCE_IDENTITY_GPT56SOL_2114P0700.json`
-- `research_entity/continuity/receipts/2026-08-24_GO_871_FORGE_FIRST_ACCEPTED_REENTRY_GPT56SOL_2117P0700.json`
+The Distillery packet text contains **measured Forge execution evidence only**. Model-authored proposal hypothesis/falsifier remain metadata explicitly marked candidate-only. Packets state `canonical_truth=false`, `jspace_causal_credit=0` and `training_credit=0`.
 
-### Track B — HCU no-change with reason
+This advances dataset infrastructure for future HCU/J-Space learning without silently upgrading generated narration into fact. It grants **zero** model-specific J-Space causal credit and **zero** training credit.
 
-`HCU_NO_CHANGE_WITH_REASON`: the highest-information nonduplicate defect available to this organ was the measured Forge conversion/source-identity gap. The retained HCU donor and current HCU/J-Space work were already moving in parallel, while no authorized project-runtime shell bridge was exposed to this organ for an exact donor execution discriminator. Creating another HCU authority or duplicate donor lane would reduce convergence.
+Durable receipt:
 
-Next discriminator: refresh PR1263/current `main` and execute the exact current donor boundary tests only on an exposed authorized zero-cost runtime surface.
-
-### Track C — J-Space/training-readiness no-change with reason
-
-`TRAINING_READINESS_NO_CHANGE_WITH_REASON`: current `main` already contains parallel Trigger-1/J-Space source/control work. This `go` had no reproducible shared unusual-experiment identity and this organ had no exposed local/VPS hidden-state intervention runner, so no new model-specific causal intervention or training credit can be established without duplicating or fabricating evidence.
-
-Next discriminator: execute the current bounded local model-specific control family on an authorized intervention-capable surface with exact model/runtime/vector/activation identities and preserve matched controls plus holdout separation.
+- `research_entity/continuity/receipts/2026-08-24_GO_871_FORGE_DISTILLERY_ADMISSION_GPT56SOL.json`
 
 ## Current evidence credit
 
 Do not inflate source/component evidence into whole-system credit.
 
-Current promotion boundary remains:
-
-- Forge accepted component deltas observed: `1` at the latest committed pre-#1544 Forge snapshot;
-- external-provider runtime credit: `0`;
+- Forge accepted component deltas observed: `1` in the latest committed runtime snapshot used by this `go`;
+- Forge->Distillery bridge live-runtime credit: `0` until successor-aligned execution;
+- external-provider runtime credit: `0` unless exact-current admitted receipts promote a bounded route;
 - whole EntityOS/HCU runtime credit: `0`;
 - full HCU runtime credit: `0`;
 - J-Space model-runtime credit: `0`;
@@ -187,33 +137,18 @@ A source file, source test, deployment, receipt, model agreement, token count, s
 
 ## Current frontier
 
-Refresh `main` before using this list. Highest-value current gates are:
+Refresh `main` before using this list. Highest-value next gates are:
 
-1. **Successor-align the live Free Swarm/Forge runtime to current 8.71 source** through an exposed authorized bridge; current committed runtime state still reports 8.69 admission and supervisor STOPPED/QUARANTINED.
-2. **Measure Forge conversion after #1538 + #1544 on that exact runtime.** Partition failures into source-identity, patch syntax/apply, test failure, validated-not-better and accepted. Preserve exact candidate source heads and evaluation records.
-3. If `PATCH_REJECTED` remains dominant with exact source binding, add a source-bound repair/synthesis stage rather than weakening `git apply` or acceptance criteria.
-4. If candidates reach tests but rarely accept, inspect test design and benchmark discriminators separately from patch generation.
-5. Continue exact FREE-lane boundary execution on current source; source-level NVIDIA entitlement binding alone grants no provider runtime credit.
-6. Keep Mistral fail-closed until provider-side Free/PAYG-disabled evidence exists; keep OpenRouter exact-zero-route only; keep Groq exact credential/model Free-limit matching; keep Together and all paid fallback forbidden.
-7. Continue one canonical Typed Entry/HCU causal chain through verified loader consumption, model execution, InferenceReceipt and J-Space traces.
-8. Execute model-specific J-Space controls only on an authorized intervention-capable zero-cost runtime, with canonical atomic unusual-experiment lease where intervention is classified unusual.
-9. Build leak-resistant training data only from admitted causal traces; no training promotion from generated narration.
+1. **Successor-align the live Free Swarm/Forge/Distillery runtime to current 8.71 source** through an exposed authorized zero-cost bridge.
+2. **Wire and execute the Forge->Distillery bridge** against the first exact-source accepted Forge evaluation. Acceptance witness: exactly one new Distillery packet, nonzero `accepted_dataset_tokens`, and duplicate replay adds zero packets/tokens.
+3. Measure a bounded post-restart Forge batch after current source-grounding/source-identity deltas and partition failures into source-identity, patch syntax/apply, test failure, validated-not-better and accepted.
+4. If `PATCH_REJECTED` remains dominant, improve source-bound synthesis/repair rather than weakening application or acceptance gates.
+5. Continue one canonical Typed Entry -> loader -> model execution -> InferenceReceipt -> model-specific J-Space causal chain.
+6. Keep all provider routes fail-closed to exact FREE economic provenance and exact-current execution receipts; no paid/Together fallback.
+7. Build leak-resistant training data only from admitted measured/causal evidence; no training promotion from generated narration.
 
-## Evidence discipline
+## Evidence discipline and reentry
 
-For every material claim distinguish direct observation, source-derived claim, inference, generated hypothesis, counterhypothesis, intervention/test, and exact verified scope.
+For every material claim distinguish direct observation, source-derived claim, inference, generated hypothesis, counterhypothesis, intervention/test and exact verified scope. Negative evidence is first-class. Auth/rate/quota/runner failure is not automatically a product/science failure. A component PASS is not whole-product PASS.
 
-Negative evidence is first-class. Auth/rate/quota/runner failure is not automatically a product/science failure. A component PASS is not whole-product PASS. A self-consistent stale authority island is still stale.
-
-## Reentry rule
-
-Before substantive work:
-
-1. refresh verified `main`;
-2. resolve newest owner/supervisor authority;
-3. inspect open overlapping work;
-4. preserve exact source/runtime identities;
-5. choose the highest-information safe nonduplicate discriminator;
-6. execute where authorized;
-7. persist a bounded receipt/delta;
-8. re-enter `main` after the write.
+Before substantive continuation: refresh verified `main`; resolve newest owner/supervisor authority; inspect overlapping work; preserve exact source/runtime identities; execute the highest-information safe nonduplicate discriminator; persist bounded evidence; and re-enter `main` after every material write.

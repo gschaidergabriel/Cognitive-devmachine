@@ -1,0 +1,8 @@
+{
+  "schema":"CLAY_VPS_COMMAND/v4",
+  "command_id":"capacity-inventory-third-swarm-20260824T1803p0700",
+  "op":"exec",
+  "cwd":"/workspace/clay-global-research-entity",
+  "timeout_seconds":120,
+  "command":"python3 tools/rae_secret_loader.py GEMINI_API_KEY GEMINI2_API_KEY DEEPSEEK_API_KEY CLOUDFLARE_API_KEY HF_TOKEN HF_API_KEY OPENROUTER_API_KEY OPENROUTER2_API_KEY TAVILY_API_KEY EXA_API_KEY OPENALEX_API_KEY RAPIDAPI_KEY E2B_API_KEY GLM_API_KEY NEUROPEDIA_API_KEY GROQ_API_KEY MISTRAL_API_KEY NVIDIA_API_KEY NVIDIA_NIM_API_KEY && echo '--- shared quota ---' && python3 tools/free_swarm_quota.py && echo '--- disk ---' && df -h /workspace /cache /artifacts && echo '--- processes ---' && ps -eo pid,etime,%cpu,%mem,args --sort=-%cpu | grep -E '[r]un_24h_entityos_swarm|[r]un_research_distillery|[f]ree swarm/evaluate.py' | head -20"
+}

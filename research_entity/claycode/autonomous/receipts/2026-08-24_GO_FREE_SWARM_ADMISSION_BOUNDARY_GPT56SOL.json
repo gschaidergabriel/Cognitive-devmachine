@@ -1,0 +1,36 @@
+{
+  "authority_epoch": "8.67",
+  "base_main_sha": "874afdba0ab3cbe596c2353076a53c2f4c9e93fa",
+  "evidence_boundary": {
+    "claim": "deterministic source/component regression only; no external provider contacted",
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "provider_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0
+  },
+  "observed_at": "2026-08-24T10:36:46.543445+00:00",
+  "organ": "GPT-5.6 Sol",
+  "pass": true,
+  "required_negative_invariant": "secret_lookup_count=0,key_lookup_count=0,network_attempt_count=0",
+  "results": [
+    {"base_rc": 3, "case": "GLOBAL_ADMISSION_MISSING", "key_lookup_count": 0, "network_attempt_count": 0, "pass": true, "secret_lookup_count": 0},
+    {"base_rc": 3, "case": "PROVIDER_ADMISSION_MISSING", "key_lookup_count": 0, "network_attempt_count": 0, "pass": true, "secret_lookup_count": 0},
+    {"base_rc": 3, "case": "UNKNOWN", "key_lookup_count": 0, "network_attempt_count": 0, "pass": true, "secret_lookup_count": 0},
+    {"base_rc": 3, "case": "PAID", "key_lookup_count": 0, "network_attempt_count": 0, "pass": true, "secret_lookup_count": 0},
+    {"base_rc": 3, "case": "SUBSCRIPTION", "key_lookup_count": 0, "network_attempt_count": 0, "pass": true, "secret_lookup_count": 0},
+    {"case": "FREE_POSITIVE_CONTROL", "key_lookup_count": 1, "network_attempt_count": 0, "pass": true, "secret_lookup_count": 0}
+  ],
+  "schema": "FREE_SWARM_ADMISSION_BOUNDARY_RECEIPT/v1",
+  "scope": "DETERMINISTIC_LOCAL_REGRESSION_NO_PROVIDER_RUNTIME_CREDIT",
+  "source_sha256": {
+    "tools/free_swarm_provider_admission.py": "e099d96759c77e7cb472546c02a7cb85be9b0c9deedbfec84d70cd92dc36b8df",
+    "tools/free_swarm_secret_loader.py": "c88a6639b2b10939e035ea494850870fcd5cff909143578757bef6d760f43de6",
+    "tools/run_24h_entityos_swarm.py": "e162eeb9dbffb8308c21850522f5bf69d5acd8adc5264b924c93c209ade47f63",
+    "tools/run_24h_entityos_swarm_supervisor.sh": "8dcdd476c67319ce787302c9250f5e29024117f549fac6091228f960c74dfaa8",
+    "tools/run_free_go_swarm.py": "cbb1e67b3add9da33a9ba2d130a1eff611fd993dd2158688131e455081b498df",
+    "tools/test_free_swarm_admission_boundary_v1.py": "a51efb26112db9ce2831e1515c8bfbed5d19b809759574fd02017db338b3e7ac"
+  },
+  "trigger": "go",
+  "unusual_experiment": "NOT_RUN_DETERMINISTIC_REGRESSION_ONLY"
+}

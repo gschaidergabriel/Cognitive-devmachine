@@ -62,6 +62,9 @@ class NvidiaCredentialBinding870Tests(unittest.TestCase):
         evidence: dict | None = None,
     ) -> dict:
         provider_evidence = evidence or {
+            "provider": "NVIDIA",
+            "credential_fingerprint": "fp-test",
+            "endpoint_host": "integrate.api.nvidia.com",
             "evidence_ref": "provider-admin:developer-program-membership",
             "account_scope": "developer-program",
             "free_hosted_nim_prototyping": True,
@@ -104,8 +107,58 @@ class NvidiaCredentialBinding870Tests(unittest.TestCase):
         self.assertFalse(self.evidence(provenance)["ok"])
 
     def test_different_credential_entitlement_does_not_authorize(self) -> None:
-        provenance = self.provenance({"fp-other": self.entitlement()})
+        other = self.entitlement(
+            evidence={
+                "provider": "NVIDIA",
+                "credential_fingerprint": "fp-other",
+                "endpoint_host": "integrate.api.nvidia.com",
+                "evidence_ref": "provider-admin:developer-program-membership",
+                "account_scope": "developer-program",
+                "free_hosted_nim_prototyping": True,
+            }
+        )
+        provenance = self.provenance({"fp-other": other})
         self.assertFalse(self.evidence(provenance, "fp-test")["ok"])
+
+    def test_transplanted_provider_evidence_for_other_fingerprint_fails(self) -> None:
+        provider_evidence = {
+            "provider": "NVIDIA",
+            "credential_fingerprint": "fp-other",
+            "endpoint_host": "integrate.api.nvidia.com",
+            "account_scope": "developer-program",
+            "free_hosted_nim_prototyping": True,
+        }
+        provenance = self.provenance(
+            {"fp-test": self.entitlement(evidence=provider_evidence)}
+        )
+        self.assertFalse(
+            self.evidence(provenance, "fp-test")["ok"],
+            "provider-side entitlement evidence for a different credential fingerprint must not be transplantable under another outer entitlement key",
+        )
+
+    def test_nested_provider_and_endpoint_identity_must_match(self) -> None:
+        mismatches = (
+            {
+                "provider": "OTHER",
+                "credential_fingerprint": "fp-test",
+                "endpoint_host": "integrate.api.nvidia.com",
+                "account_scope": "developer-program",
+                "free_hosted_nim_prototyping": True,
+            },
+            {
+                "provider": "NVIDIA",
+                "credential_fingerprint": "fp-test",
+                "endpoint_host": "example.invalid",
+                "account_scope": "developer-program",
+                "free_hosted_nim_prototyping": True,
+            },
+        )
+        for provider_evidence in mismatches:
+            with self.subTest(provider_evidence=provider_evidence):
+                provenance = self.provenance(
+                    {"fp-test": self.entitlement(evidence=provider_evidence)}
+                )
+                self.assertFalse(self.evidence(provenance, "fp-test")["ok"])
 
     def test_exact_credential_and_model_entitlement_authorizes(self) -> None:
         provenance = self.provenance({"fp-test": self.entitlement()})

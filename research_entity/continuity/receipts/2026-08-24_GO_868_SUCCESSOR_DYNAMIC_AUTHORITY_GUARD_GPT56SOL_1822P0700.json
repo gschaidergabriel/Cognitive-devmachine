@@ -1,0 +1,87 @@
+{
+  "schema": "CLAY_GO_RECEIPT/v1",
+  "timestamp_local": "2026-08-24T18:22+07:00",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "trigger": "go",
+  "authority_epoch": "8.68",
+  "persistent_research_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "canonical_main_observed_after_write_reentry": "a4c4987e4dd0ad64a37611f38759de51b1ab2a64",
+  "branch": "gpt56sol/go-868-successor-dynamic-authority-20260824-1822",
+  "pull_request": "gschaidergabriel/clay-global-research-entity#1452",
+  "code_head_before_receipt": "0a733bba160e20cf71f3b3d1273470baee989fdb",
+  "classification": "SOURCE_AUTHORITY_ROUTING_DELTA_WITH_ZERO_ASSERTION_RUNTIME_CREDIT",
+  "observation": {
+    "current_supervisor": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_68.json",
+    "stale_guard_defect": "tools/validate_clayverse_authority_consistency.py on canonical main still selected SUPERVISOR_STEERING_8_52.json as current authority",
+    "stale_root_routing_defect": "CLAUDE.md on canonical main still hard-pinned an obsolete supervisor minor and obsolete execution wording",
+    "parallel_current_main": "provider admission-boundary and local J-Space probe source hardening advanced independently during this macrocycle without touching the three PR1452 files"
+  },
+  "hypothesis": "A successor-dynamic consensus resolver over the canonical current-facing authority pointers can prevent self-consistent stale supervisor islands without weakening inherited safety ancestry.",
+  "counterhypothesis": "Replacing the fixed supervisor guard could accidentally weaken historical 4.1->4.4 safety/provenance checks or create a second authority surface.",
+  "discriminator": "Modify the existing compatibility-named validator only, preserve every historical 4.1->4.4 safety/provenance invariant, require four-surface current authority pointer consensus, and add fail-closed regression fixtures for split pointers and inherited safety weakening.",
+  "delta": {
+    "track_a": {
+      "status": "SOURCE_DELTA_COMMITTED_TO_PR",
+      "changes": [
+        "removed fixed SUPERVISOR_STEERING_8_52 current-authority selection from the existing validator",
+        "added safe path validation and consensus across BOOTSTRAP_MINIMAL.authority_correction, PROGRAM_STATE.authority_correction, manifest.authority_correction and SUPERVISOR_INBOX.steering",
+        "bound the exact resolved supervisor filename epoch to supervisor schema_version",
+        "validated current 8.68 FREE_ONLY provider quarantine and zero runtime-credit boundaries",
+        "changed root CLAUDE.md routing to RESOLVE_FROM_SUPERVISOR_INBOX rather than a fixed minor",
+        "preserved the complete historical 4.1->4.4 safety/provenance ancestry including paid fallback, Together, VPS historical boundary, model-truth, exact-runtime-evidence and Frank Harness fences"
+      ]
+    },
+    "track_b": {
+      "status": "HCU_NO_CHANGE_WITH_REASON",
+      "reason": "Current main advanced HCU/J-Space local activation/intervention probe source readiness in parallel; no higher-information nonduplicate HCU/Typed Entry source change was found after re-entry. The current blocking discriminator is execution on an actually exposed authorized zero-cost local normal-user or clay-direct-dev surface, which this organ does not have.",
+      "next_discriminator": "execute exact-current HCU/J-Space local activation probe and retained causal receipt path on an exposed authorized zero-cost local or clay-direct-dev surface without minting broader credit"
+    },
+    "track_c": {
+      "status": "TRAINING_READINESS_NO_CHANGE_WITH_REASON",
+      "reason": "External LLM-provider traffic remains quarantined under supervisor 8.68 and no authorized local/clay-direct-dev execution bridge is exposed to this organ. Canonical main independently improved local J-Space probe/fail-closed source readiness, but model-specific causal runtime evidence and training credit remain zero.",
+      "next_discriminator": "after exact local probe execution, bind actual local model invocation -> ModelExecution -> InferenceReceipt/v4 -> model-specific J-Space intervention/control trace before any dataset/training promotion"
+    }
+  },
+  "tests_and_evidence": {
+    "static_schema_alignment": "REVIEWED_AGAINST_CANONICAL_8_68_BOOTSTRAP_PROGRAM_MANIFEST_SUPERVISOR_FOOTER_AND_4_1_TO_4_4_CONTROLS",
+    "pr_mergeable_observed": true,
+    "github_actions_attempt_1": {
+      "head": "84913144fa53a0ab49dc03eca117b652d08d2a70",
+      "research_entity_verify": "FAILURE_ZERO_VISIBLE_STEPS",
+      "identity_guard": "FAILURE_ZERO_VISIBLE_STEPS",
+      "assertion_credit": 0
+    },
+    "github_actions_attempt_2": {
+      "head": "0a733bba160e20cf71f3b3d1273470baee989fdb",
+      "research_entity_verify": "FAILURE_ZERO_VISIBLE_STEPS",
+      "identity_guard": "FAILURE_ZERO_VISIBLE_STEPS",
+      "assertion_credit": 0
+    },
+    "classification_law": "zero-step workflow failure is infrastructure/instrument evidence, not product logic failure and not test PASS"
+  },
+  "coordination": {
+    "macrocycle_identity": "UNAVAILABLE_TO_THIS_ORGAN_AT_REPRODUCIBLE_REQUIRED_PRECISION",
+    "atomic_unusual_experiment_lease": "NOT_CLAIMED",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_interventions_executed": 0
+  },
+  "runtime_credit": {
+    "authority_guard_assertion_runtime_credit": 0,
+    "free_swarm_provider_admission_runtime_credit": 0,
+    "external_provider_worker_runtime_credit": 0,
+    "entityos_hcu_whole_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "negative_evidence": [
+    "GitHub Actions jobs failed before exposing any workflow steps on both observed PR heads",
+    "generic ChatGPT container could not resolve github.com and is not treated as canonical project runtime evidence",
+    "no authorized clay-direct-dev bridge tool was exposed in this organ"
+  ],
+  "next_exact_action": "Run tests/test_validate_clayverse_authority_consistency.py plus tests/test_current_facing_authority_alignment_v1.py on an exposed authorized zero-cost local normal-user or clay-direct-dev source checkout at the exact PR1452 head; if assertion-bearing PASS is observed, re-enter current main and merge only if the three-file delta remains nonduplicate and current-authority compatible."
+}

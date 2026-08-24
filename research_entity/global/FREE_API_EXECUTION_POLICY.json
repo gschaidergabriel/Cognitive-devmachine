@@ -115,14 +115,14 @@
   "bounded_payment_latch_state": {
     "max_entries": 1024,
     "checked_at": "2026-08-24",
-    "claim": "Payment-latch storage is limited to 1024 exact built-in string entries. Cardinality is checked immediately after the exact-set boundary and before element iteration, inventory membership, credential use or network access. The numeric limit is a local FRANK process-state budget, not a Python or protocol standard.",
+    "claim": "Payment-latch storage is limited to 1024 exact built-in string entries. Cardinality is checked immediately after the exact-set boundary and before element iteration, inventory membership, credential use or network access. At exactly 1024 entries, inventory fails closed as payment-latch capacity exhausted so a further provider response cannot append entry 1025; larger injected state is structurally rejected. The numeric limit is a local FRANK process-state budget, not a Python or protocol standard.",
     "sources": [
       "https://docs.python.org/3/library/functions.html#len",
       "https://docs.python.org/3/library/stdtypes.html#set-types-set-frozenset",
       "https://cwe.mitre.org/data/definitions/400.html"
     ],
     "executable_evidence": "test_payment_latch_cardinality_is_bounded_before_network",
-    "counterhypothesis": "Exact built-in sets and strings sufficiently bound passive latch state; falsified locally because 1025 historical entries passed full element validation and reached authenticated routing without any cardinality policy. The repaired boundary accepts exactly 1024 and rejects the next entry before the opener."
+    "counterhypothesis": "Exact built-in sets and strings sufficiently bound passive latch state; falsified locally because 1025 historical entries passed full element validation and reached authenticated routing without any cardinality policy. The repaired boundary routes with 1023 entries, fails closed without an opener at exactly 1024, and structurally rejects 1025 before element iteration."
   },
   "passive_payment_latch_container_boundary": {
     "checked_at": "2026-08-24",

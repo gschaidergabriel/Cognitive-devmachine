@@ -1,0 +1,115 @@
+{
+  "schema": "ENTITYOS_HCU_GO_RECEIPT/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "authority_epoch": "8.68",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "reentry": {
+    "canonical_main_before_organ_delta": "0b897c8b87500ffe89f113be1162f784612b29bf",
+    "canonical_main_after_backend_selection_and_readme": "9e4722e589a0cee4d6e7521235d609a652e27685",
+    "authority_source": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_68.json",
+    "owner_authority": "governance/CLAY_DUAL_MACHINE_EXECUTION_AUTHORITY_2026-08-24.md"
+  },
+  "coordination": {
+    "upstream_shared_macrocycle_id": null,
+    "immutable_user_message_timestamp_precision_available": "MINUTE_ONLY",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_experiments_run": 0,
+    "duplicate_branch_created_before_parallel_reentry": "gpt56sol/free-swarm-admission-receipt-v1-20260824",
+    "duplicate_branch_commits": [
+      "5f2d4d804ebf5232824f7b19e2b48ab42575cc81",
+      "90da6b6cdefed6fde2a813957f0826281a943a5f"
+    ],
+    "duplicate_branch_merge_or_pr": false,
+    "duplicate_avoidance_reason": "Parallel canonical main landed a stronger admission receipt runner and malformed/socket tripwire coverage first; the duplicate lane was intentionally not promoted."
+  },
+  "observed": {
+    "external_llm_provider_execution": "QUARANTINED",
+    "providers_currently_typed_free_admitted": [],
+    "local_normal_user_execution_authorized": true,
+    "clay_direct_dev_execution_authorized": true,
+    "local_or_vps_execution_bridge_exposed_to_this_organ": false,
+    "provider_secret_lookup_performed_by_this_organ": false,
+    "provider_network_execution_performed_by_this_organ": false,
+    "paid_or_subscription_execution_performed": false,
+    "together_used": false,
+    "runtime_experiment_performed": false
+  },
+  "parallel_main_findings": {
+    "free_admission_receipt_runner": "LANDED_STRONGER_ON_MAIN_BEFORE_OR_DURING_REENTRY",
+    "malformed_and_socket_tripwires": "LANDED_ON_MAIN",
+    "local_model_postload_identity": "CLAY_LOCAL_RESEARCH_MODEL/v2_SOURCE_DELTA_PRESENT",
+    "local_jspace_gate": "HCU_JSPACE_LOCAL_INTERVENTION_BACKEND_GATE_V1_PRESENT",
+    "credits_promoted": false
+  },
+  "external_solution_harvest": {
+    "status": "SOURCE_CORROBORATED_BACKEND_SELECTION",
+    "sources": [
+      {
+        "name": "NNsight Quick Start",
+        "url": "https://nnsight.net/getting-started/quickstart/",
+        "principle": "Local PyTorch language models can expose and modify named intermediate activations inside trace contexts."
+      },
+      {
+        "name": "NNsight vLLM integration / nnsight-serve",
+        "url": "https://github.com/ndif-team/nnsight/releases",
+        "principle": "A local persistent vLLM-backed server can retain activation intervention semantics when direct local PyTorch is not the best execution form."
+      },
+      {
+        "name": "NNsight vLLM internals",
+        "url": "https://github.com/ndif-team/nnsight/blob/main/docs/developing/vllm-integration.md",
+        "principle": "vLLM interventions cross worker/process boundaries and therefore require stricter runtime/activation identity binding than direct local PyTorch."
+      },
+      {
+        "name": "TransformerLens activation patching",
+        "url": "https://transformerlensorg.github.io/TransformerLens/generated/code/transformer_lens.patching.html",
+        "principle": "Clean/corrupted activation patching is a causal intervention template with explicit output recovery measurement."
+      }
+    ],
+    "promotion": "MECHANISM_SELECTION_ONLY"
+  },
+  "hypothesis": "Separating local opaque inference from a dedicated instrumentable intervention backend yields cleaner evidence semantics and a cheaper first causal discriminator than extending the llama.cpp completion service into an ad hoc hidden-state research runtime.",
+  "counterhypothesis": "The existing llama.cpp service should be extended directly so one local runtime handles both completion and J-Space interventions.",
+  "counterhypothesis_adjudication": "NOT_REJECTED_ABSOLUTELY_BUT_DEFERRED: current llama.cpp state explicitly reports jspace_intervention_capable=false and exposes post-load identity rather than a named activation intervention ABI. Direct local NNsight/PyTorch already supplies the required activation access/modification primitive with fewer new moving parts for the first discriminator. If the exact Qwen model cannot fit or run acceptably through that path, local NNsight/vLLM is the next candidate; the causal gate is not weakened.",
+  "bounded_delta": {
+    "backend_selection_contract": {
+      "path": "research_entity/claycode/HCU_JSPACE_INTERVENTION_BACKEND_SELECTION_V1.md",
+      "commit": "07f131884ebd408c08ac72ef5554a1453b7e7614",
+      "classification": "SOURCE_RESEARCH_CONTRACT_ONLY"
+    },
+    "artifact_readme": {
+      "path": "the artefact/README.md",
+      "commit": "9e4722e589a0cee4d6e7521235d609a652e27685",
+      "classification": "CURRENT_FACING_FRONTIER_SYNC"
+    },
+    "selected_first_backend": "DIRECT_LOCAL_NNSIGHT_PYTORCH",
+    "selected_fallback_backend": "LOCAL_NNSIGHT_VLLM_OR_NNSIGHT_SERVE_IF_RESOURCE_OR_THROUGHPUT_DISCRIMINATOR_JUSTIFIES",
+    "llama_cpp_role": "LOCAL_INFERENCE_CAPABLE_ONLY_UNTIL_INDEPENDENT_INTERVENTION_GATE_PASS",
+    "remote_ndif_role": "NOT_SELECTED_CURRENT_PROVIDER_QUARANTINE_APPLIES"
+  },
+  "tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED_AT_ARCHITECTURE_CONVERGENCE_LEVEL: stable local inference and instrumentable causal research runtimes are separated by explicit capability/evidence classes rather than conflated.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED_AT_HCU_INTERFACE_CONTRACT_LEVEL: explicit LOCAL_INFERENCE_CAPABLE/JSPACE_OBSERVATION_CAPABLE/JSPACE_INTERVENTION_CAPABLE classes and exact receipt/causal identity requirements were added without a second authority.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_FREE_ONLY_LOCAL_08B_READINESS": "ADVANCED_AT_SOURCE_RESEARCH_CONTRACT_LEVEL: direct local NNsight/PyTorch selected as cheapest first causal instrumentation backend, local NNsight/vLLM as fallback, with five-run clean/corrupted/target/sham/off-target family and falsifiers."
+  },
+  "execution_evidence": {
+    "local_or_vps_runtime_execution_observed_by_this_organ": false,
+    "reason": "NO_EXPOSED_AUTHORIZED_LOCAL_OR_CLAY_DIRECT_DEV_EXECUTION_BRIDGE_IN_CURRENT_TOOL_SET",
+    "classification": "SOURCE_AND_RESEARCH_DELTA_ONLY",
+    "not_product_failure": true
+  },
+  "credits": {
+    "external_provider_runtime": 0,
+    "whole_entityos_hcu_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_action": "On an exposed authorized zero-cost local normal-user or clay-direct-dev surface, re-enter exact current main, execute the current FREE_SWARM_ADMISSION_BOUNDARY_RECEIPT/v1 and donor InferenceReceipt/v4 rejection tests where nonduplicate, then run one direct local NNsight/PyTorch observation-only trace at one named activation site on the smallest compatible already-available model. Only if exact activation/input/output identity closes, execute the five-run clean/corrupted/target/sham/off-target family and emit HCU_JSPACE_LOCAL_INTERVENTION_RECEIPT/v1 or successor. Loader-consumed bytes remain UNKNOWN until independently attested.",
+  "acceptance": "IN_PROGRESS"
+}

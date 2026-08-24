@@ -2592,9 +2592,16 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             "FRANK_PROVIDER_BASE_URL": "http://localhost:8765/v1",
             "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
         }
-        accepted = {f"historical-latch-{index}" for index in range(1_024)}
+        accepted = {f"historical-latch-{index}" for index in range(1_023)}
         self.assertEqual(
             MOD.route(env, payment_latches=accepted)["selected"], "nvidia"
+        )
+
+        full = accepted | {"historical-latch-capacity"}
+        full_route = MOD.route(env, payment_latches=full)
+        self.assertIsNone(full_route["selected"])
+        self.assertEqual(
+            full_route["reason"], "payment_required_hard_stop_active"
         )
 
         opener_calls = []
@@ -2603,7 +2610,7 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             opener_calls.append("open")
             return Response()
 
-        oversized = accepted | {"historical-latch-overflow"}
+        oversized = full | {"historical-latch-overflow"}
         with self.assertRaisesRegex(
             ValueError, "payment_latches_too_large"
         ):

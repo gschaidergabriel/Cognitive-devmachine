@@ -1,0 +1,53 @@
+{
+  "schema": "CLAY_BLOCKER_REPAIR_RECEIPT/v1",
+  "date": "2026-08-24",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "other",
+  "authority_epoch_observed": "8.71",
+  "mode": "FREE_ONLY",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "canonical_main_at_successor_branch_creation": "aaf404d5414bbd6cfdc523000aba1977c011542d",
+  "branch": "gpt56sol/blocker-forge-safe-supervisor-871-successor-20260824",
+  "supersedes_local_branch_attempt": "gpt56sol/blocker-forge-safe-supervisor-871-20260824",
+  "observed_blocker": {
+    "conversion_funnel": "Forge accepted remained zero in Supervisor 8.71 evidence while token/delta volume increased",
+    "active_wiring_gap": "current supervisor still launched tools/run_free_evidence_forge.py directly",
+    "execution_gap": "legacy Forge evaluates model-authored commands through bash -lc with inherited ambient environment",
+    "donor": "PR1540 source/mechanism donor only; donor was not active in supervisor",
+    "parallel_main_delta_preserved": "current main Forge-to-Distillery bridge ingest_forge_accepts_into_distillery.py remains wired"
+  },
+  "delta": {
+    "execution_policy": "CLAY_FORGE_EXECUTION_ADMISSION/v1",
+    "safe_entrypoint": "tools/run_free_evidence_forge_safe_871.py",
+    "admission_module": "tools/forge_execution_admission_871.py",
+    "supervisor": "tools/run_24h_entityos_swarm_supervisor.sh",
+    "tests": "tests/test_forge_execution_admission_871.py",
+    "properties": [
+      "no shell for model-authored candidate commands",
+      "small argv/test/static allowlist with path and shell-metacharacter rejection",
+      "secret-free child environment",
+      "functional bubblewrap --unshare-all required before model-authored command execution",
+      "host /home, /run and non-worktree /artifacts are not exposed",
+      "worker source commit and tree are required before candidate validation",
+      "candidate commands are refused outside a child of the disposable Forge root",
+      "only the disposable Forge worktree is writable so py_compile/tests/build artifacts can succeed",
+      "supervisor prefers the safe entrypoint, terminates a legacy Forge process, and preserves the current Forge-to-Distillery bridge",
+      "candidate evidence remains noncanonical"
+    ]
+  },
+  "evidence": {
+    "scope": "SOURCE_INTEGRATION_ONLY_PENDING_EXACT_HEAD_EXECUTION",
+    "github_writes": "COMMITTED_TO_BRANCH",
+    "exact_head_runtime": "NOT_YET_OBSERVED",
+    "provider_call": "NONE",
+    "unusual_experiment": "NONE",
+    "whole_entityos_hcu_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "provider_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0
+  },
+  "counterhypothesis": "Zero Forge acceptance may remain dominated by patch semantic quality or missing executable improvements even after safe execution/wiring is active; therefore the discriminator is the post-merge state distribution and accepted-delta count, not source inspection.",
+  "next_exact_gate": "Run the focused execution-admission tests plus py_compile and bash -n on the exact successor head. If green, fuse/merge without dropping the current Forge-to-Distillery bridge, restart the supervisor on an authorized execution surface, and measure source_identity/execution_admission/PATCH_REJECTED/VALIDATED_NOT_BETTER/accepted transitions before scaling worker volume."
+}

@@ -1,34 +1,45 @@
 {
   "schema": "ENTITYOS_HCU_FREE_PROVIDER_ADMISSION/v1",
-  "authority_epoch": "8.68",
+  "authority_epoch": "8.69",
   "mode": "FREE_ONLY",
   "product": "EntityOS",
   "compute_architecture": "HCU",
   "source": "ENTITYOS_HCU_CONTROL_PLANE",
   "default_policy": "FAIL_CLOSED_UNKNOWN_PAID_SUBSCRIPTION_BEFORE_SECRET_LOOKUP_AND_NETWORK_IO",
+  "runtime_quarantine": {
+    "active": true,
+    "epoch": "8.69",
+    "state": "RUNTIME_QUARANTINED",
+    "required_receipt": "FREE_PROVIDER_RUNTIME_QUARANTINE_RECEIPT/v1"
+  },
   "providers": {
     "groq": {
       "admitted": false,
       "cost_class": "UNKNOWN",
-      "evidence_ref": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_68.json#evidence.typed_admission_state"
+      "evidence_ref": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_69.json"
+    },
+    "huggingface": {
+      "admitted": false,
+      "cost_class": "UNKNOWN",
+      "evidence_ref": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_69.json"
     },
     "mistral": {
       "admitted": false,
       "cost_class": "UNKNOWN",
-      "evidence_ref": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_68.json#evidence.typed_admission_state"
+      "evidence_ref": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_69.json"
     },
     "nvidia": {
       "admitted": false,
       "cost_class": "UNKNOWN",
-      "evidence_ref": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_68.json#evidence.typed_admission_state"
+      "evidence_ref": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_69.json"
     },
     "openrouter": {
       "admitted": false,
       "cost_class": "UNKNOWN",
-      "evidence_ref": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_68.json#evidence.typed_admission_state"
+      "evidence_ref": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_69.json"
     }
   },
   "runtime_provider_credit": 0,
-  "execution_state": "EXTERNAL_LLM_PROVIDER_TRAFFIC_QUARANTINED_UNTIL_EXECUTABLE_TYPED_FREE_ADMISSION_PASS",
-  "note": "Groq, Mistral, NVIDIA and OpenRouter are all fail-closed at the current authority. Historical successful provider calls are unadmitted execution evidence and must not be relabeled FREE after the fact. Environment attestations, credential presence, :free route labels, HTTP success, 402/429 behavior, model catalogs and provider responses cannot self-admit a provider as FREE."
+  "execution_state": "EXTERNAL_LLM_PROVIDER_TRAFFIC_RUNTIME_QUARANTINED_PENDING_BOUNDARY_AND_SOAK_PASS",
+  "note": "Supervisor 8.69 records post-8.68-quarantine provider traffic and therefore keeps every external LLM provider fail-closed. Hugging Face is explicitly represented because a current selectable adapter exists, but it has no admitted FREE evidence. No credential, provider response, FREE suffix, historical success, HTTP status or model catalog can self-admit a provider."
 }

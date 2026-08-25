@@ -9,7 +9,10 @@ preregistration_case_rows and requires the exact source producer plans frozen be
 
 A positive candidate therefore requires one shared case/control universe from the exact
 frozen high-level preregistration through exact producer plans, runtime split evidence and
-v7 scientific adjudication. This tool is fail-closed, execution-free and non-minting.
+v7 scientific adjudication. The strongest full-native flag is recomputed at this successor
+boundary rather than inherited through ``**base``: it can remain true only when the upstream
+full-native candidate, v7 scientific/owner/modular evidence and exact v2 plan/runtime binding
+all pass together. This tool is fail-closed, execution-free and non-minting.
 """
 from __future__ import annotations
 
@@ -34,6 +37,13 @@ def adjudicate(candidate: dict[str, Any]) -> dict[str, Any]:
     scientific = bool(base.get("scientifically_independent_vector_candidate") is True and binding_ok)
     owner = bool(base.get("owner_trigger1_goal_credit_candidate") is True and binding_ok)
     modular = bool(base.get("modular_hcu_jspace_control_candidate") is True and binding_ok)
+    full_native = bool(
+        base.get("full_native_jspace_vector_control_candidate") is True
+        and scientific
+        and owner
+        and modular
+        and binding_ok
+    )
     failures = sorted(set(list(base.get("v7_failures", [])) + list(bound.get("failures", []))))
 
     return {
@@ -48,6 +58,7 @@ def adjudicate(candidate: dict[str, Any]) -> dict[str, Any]:
         "owner_trigger1_goal_credit_candidate": owner,
         "owner_trigger1_direct_free_api_model_credit_candidate": owner,
         "modular_hcu_jspace_control_candidate": modular,
+        "full_native_jspace_vector_control_candidate": full_native,
         "v10_failures": failures,
         "canonical_credit_minted": False,
         "canonical_semantics_promotion": False,
@@ -59,8 +70,10 @@ def adjudicate(candidate: dict[str, Any]) -> dict[str, Any]:
             "v10 requires both the current v7 scientific/evidence chain and exact producer-plan-bound "
             "preregistration/runtime binding v2. The exact high-level preregistration, calibration/holdout "
             "producer plans, runtime source-plan hashes, producer preregistration_case_rows and the case_rows "
-            "consumed by v7 must form one bound case/control universe. PASS is adjudication only and mints no "
-            "canonical semantics, runtime, J-Space, HCU, EntityOS, training, BASE, or effect credit."
+            "consumed by v7 must form one bound case/control universe. The strongest full-native candidate is "
+            "recomputed here and cannot survive failure of scientific, owner, modular or exact binding evidence. "
+            "PASS is adjudication only and mints no canonical semantics, runtime, J-Space, HCU, EntityOS, "
+            "training, BASE, or effect credit."
         ),
     }
 
@@ -74,6 +87,7 @@ def adjudicate_file(path: Path) -> dict[str, Any]:
             "scientifically_independent_vector_candidate": False,
             "owner_trigger1_goal_credit_candidate": False,
             "modular_hcu_jspace_control_candidate": False,
+            "full_native_jspace_vector_control_candidate": False,
             "preregistration_runtime_binding_v2_pass": False,
             "canonical_credit_minted": False,
             "v10_failures": [f"CANDIDATE_FILE_INVALID:{type(exc).__name__}"],
@@ -84,6 +98,7 @@ def adjudicate_file(path: Path) -> dict[str, Any]:
             "scientifically_independent_vector_candidate": False,
             "owner_trigger1_goal_credit_candidate": False,
             "modular_hcu_jspace_control_candidate": False,
+            "full_native_jspace_vector_control_candidate": False,
             "preregistration_runtime_binding_v2_pass": False,
             "canonical_credit_minted": False,
             "v10_failures": ["CANDIDATE_OBJECT_REQUIRED"],
@@ -108,6 +123,9 @@ def scan_batch(batch_dir: Path) -> dict[str, Any]:
         ),
         "modular_hcu_jspace_control_candidate": any(
             row.get("modular_hcu_jspace_control_candidate") is True for row in verdicts
+        ),
+        "full_native_jspace_vector_control_candidate": any(
+            row.get("full_native_jspace_vector_control_candidate") is True for row in verdicts
         ),
         "preregistration_runtime_binding_v2_pass": any(
             row.get("preregistration_runtime_binding_v2_pass") is True for row in verdicts

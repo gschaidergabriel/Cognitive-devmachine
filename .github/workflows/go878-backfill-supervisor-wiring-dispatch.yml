@@ -1,0 +1,137 @@
+name: GO878 backfill supervisor wiring dispatch
+
+on:
+  issues:
+    types: [opened]
+
+permissions:
+  contents: write
+  issues: read
+
+jobs:
+  wire-and-test:
+    if: github.repository == 'gschaidergabriel/clay-global-research-entity' && github.event.issue.title == '[CLAY-DISPATCH] backfill supervisor wiring v1' && github.event.issue.user.login == 'gschaidergabriel'
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 15
+    env:
+      BRANCH: go878/backfill-supervisor-wiring-gpt56sol-20260825
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: main
+          fetch-depth: 0
+          clean: true
+          persist-credentials: true
+
+      - name: Re-enter current main
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch origin main
+          git switch --detach origin/main
+          git switch -C "$BRANCH"
+          git config user.name 'clay-go878-runner'
+          git config user.email 'clay-go878-runner@users.noreply.github.com'
+          git rev-parse HEAD > /tmp/go878-base-head
+
+      - name: Wire backlog-first Forge into sole active supervisor path
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+
+          p = Path('tools/run_6000_free_swarm_supervisor.sh')
+          src = p.read_text(encoding='utf-8')
+          old = '''start_forge(){
+  local x="$ROOT/tools/run_free_evidence_forge_safe.py"; [[ -f "$x" ]] || return 0
+  # The active 6000 lane must never keep the shell-capable legacy Forge alive.
+  # Retire any pre-fix process before starting the argv-only, secret-free,
+  # bubblewrap-gated successor. A zero-match is the normal steady state.
+  while IFS= read -r pid; do
+    [[ -n "$pid" ]] && kill "$pid" 2>/dev/null || true
+  done < <(pgrep -f '[r]un_free_evidence_forge.py' || true)
+  pgrep -f '[r]un_free_evidence_forge_safe.py' >/dev/null 2>&1 && return 0
+  nohup python3 "$x" --hours 24 --sleep-seconds 20 --discovery-parallel 8 --local-parallel 4 --e2b-parallel 20 >"$STATE_DIR/forge.log" 2>&1 </dev/null &
+  echo $! >"$STATE_DIR/forge.pid"
+}
+'''
+          new = '''start_forge(){
+  local x="$ROOT/tools/run_free_evidence_forge_backfill.py"; [[ -f "$x" ]] || return 0
+  # Supervisor 8.78: one active Forge authority, backlog-first. Retire both the
+  # shell-capable legacy Forge and the pre-backfill safe entrypoint before
+  # starting the safe-derived historical-replay successor.
+  while IFS= read -r pid; do
+    [[ -n "$pid" ]] && kill "$pid" 2>/dev/null || true
+  done < <(pgrep -f '[r]un_free_evidence_forge.py' || true)
+  while IFS= read -r pid; do
+    [[ -n "$pid" ]] && kill "$pid" 2>/dev/null || true
+  done < <(pgrep -f '[r]un_free_evidence_forge_safe.py' || true)
+  pgrep -f '[r]un_free_evidence_forge_backfill.py' >/dev/null 2>&1 && return 0
+  nohup python3 "$x" --hours 24 --sleep-seconds 20 --discovery-parallel 8 --local-parallel 4 --e2b-parallel 20 >"$STATE_DIR/forge.log" 2>&1 </dev/null &
+  echo $! >"$STATE_DIR/forge.pid"
+}
+'''
+          if old not in src:
+              if 'local x="$ROOT/tools/run_free_evidence_forge_backfill.py"' in src:
+                  raise SystemExit('BACKFILL_SUPERVISOR_WIRING_ALREADY_PRESENT_OR_PARALLEL_WORK_LANDED')
+              raise SystemExit('START_FORGE_ANCHOR_MISSING')
+          p.write_text(src.replace(old, new, 1), encoding='utf-8')
+
+          t = Path('tests/test_free_swarm_backfill_supervisor_wiring.py')
+          t.write_text('''from pathlib import Path\nimport re\nimport unittest\n\nROOT = Path(__file__).resolve().parents[1]\nSUPERVISOR = ROOT / "tools/run_6000_free_swarm_supervisor.sh"\n\nclass BackfillSupervisorWiringTests(unittest.TestCase):\n    def start_forge(self):\n        text = SUPERVISOR.read_text(encoding="utf-8")\n        m = re.search(r"start_forge\\(\\)\\{(?P<body>.*?)\\n\\}", text, re.S)\n        self.assertIsNotNone(m)\n        return m.group("body")\n\n    def test_active_entrypoint_is_backlog_first(self):\n        body = self.start_forge()\n        self.assertIn('local x="$ROOT/tools/run_free_evidence_forge_backfill.py"', body)\n        self.assertNotIn('local x="$ROOT/tools/run_free_evidence_forge_safe.py"', body)\n\n    def test_single_live_process_guard_is_backfill_entrypoint(self):\n        body = self.start_forge()\n        self.assertIn("pgrep -f '[r]un_free_evidence_forge_backfill.py'", body)\n\n    def test_pre_backfill_safe_process_is_retired(self):\n        body = self.start_forge()\n        self.assertIn("pgrep -f '[r]un_free_evidence_forge_safe.py'", body)\n        self.assertIn('kill "$pid"', body)\n\n    def test_backfill_entrypoint_preserves_safe_authority_derivation(self):\n        text = (ROOT / "tools/run_free_evidence_forge_backfill.py").read_text(encoding="utf-8")\n        self.assertIn("import run_free_evidence_forge_safe_871 as safe", text)\n        self.assertIn("base = safe.base", text)\n\nif __name__ == "__main__":\n    unittest.main()\n''', encoding='utf-8')
+          PY
+
+      - name: Execute deterministic wiring and historical-backfill regressions
+        shell: bash
+        run: |
+          set -euo pipefail
+          bash -n tools/run_6000_free_swarm_supervisor.sh
+          python3 -m py_compile tools/run_free_evidence_forge_backfill.py tools/free_swarm_historical_backfill.py tools/free_swarm_backfill_scheduler.py tests/test_free_swarm_backfill_supervisor_wiring.py
+          python3 -m unittest -v tests.test_free_swarm_backfill_supervisor_wiring 2>&1 | tee /tmp/go878-wiring-tests.log
+          python3 -m pytest -q tests/test_free_swarm_historical_backfill.py 2>&1 | tee /tmp/go878-backfill-tests.log
+          cat /tmp/go878-wiring-tests.log /tmp/go878-backfill-tests.log | sha256sum | awk '{print $1}' > /tmp/go878-test-log-sha
+
+      - name: Commit bounded source delta
+        shell: bash
+        run: |
+          set -euo pipefail
+          git add tools/run_6000_free_swarm_supervisor.sh tests/test_free_swarm_backfill_supervisor_wiring.py
+          git commit -m 'free swarm: wire backlog-first Forge into active supervisor'
+          git rev-parse HEAD > /tmp/go878-source-head
+
+      - name: Emit wiring receipt
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p research_entity/continuity/receipts
+          BASE_HEAD="$(cat /tmp/go878-base-head)" SOURCE_HEAD="$(cat /tmp/go878-source-head)" TEST_LOG_SHA="$(cat /tmp/go878-test-log-sha)" python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+          receipt = {
+            'schema':'FREE_SWARM_BACKFILL_SUPERVISOR_WIRING_RECEIPT/v1',
+            'authority_epoch':'8.78',
+            'program':'ENTITYOS_HCU','product':'EntityOS','architecture':'HCU','mode':'FREE_ONLY','trigger':'go','organ':'GPT-5.6-Sol',
+            'base_main_observed_at_execution':os.environ['BASE_HEAD'],'exact_source_commit':os.environ['SOURCE_HEAD'],
+            'executor':'SELF_HOSTED_LINUX_X64_OWNER_VPS_RUNNER',
+            'tests':{'status':'PASS','log_sha256':os.environ['TEST_LOG_SHA'],'scope':['bash syntax','backfill supervisor wiring','historical backfill regression suite']},
+            'delta':{'active_forge_entrypoint':'tools/run_free_evidence_forge_backfill.py','single_forge_authority_preserved':True,'safe_authority_derivation_preserved':True,'pre_backfill_safe_process_retired':True},
+            'go_tracks':{
+              'track_a':'ADVANCED: active EntityOS Free-Swarm supervisor now starts backlog-first Forge rather than bypassing historical replay',
+              'track_b':'ADVANCED: historical worker evidence enters the same Forge SQLite authority with dedupe/provenance instead of a second truth path',
+              'track_c':'ADVANCED_AT_DATASET_READINESS_SCOPE: historical replay is prioritized before more raw generation; J-Space/model/training credit remains zero'
+            },
+            'coordination':{'unusual_experiment':'NOT_USED','unusual_interventions_executed':0},
+            'credits':{'provider_runtime_credit':0,'entityos_hcu_whole_runtime_credit':0,'hcu_full_runtime_credit':0,'jspace_model_runtime_credit':0,'training_credit':0,'whole_product_pass':False},
+            'next_exact_gate':'Review/fuse this source if still current, then let the existing main runtime-reconcile self-hosted workflow execute full historical replay/backfill metrics and require a terminal saturation receipt before any external scale-up.'
+          }
+          Path('research_entity/continuity/receipts/2026-08-25_GO878_BACKFILL_SUPERVISOR_WIRING_GPT56SOL.json').write_text(json.dumps(receipt,indent=2,sort_keys=True)+'\n',encoding='utf-8')
+          PY
+          git add research_entity/continuity/receipts/2026-08-25_GO878_BACKFILL_SUPERVISOR_WIRING_GPT56SOL.json
+          git commit -m 'evidence: record backfill supervisor wiring regression'
+
+      - name: Push bounded work branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          git push --force-with-lease origin "HEAD:$BRANCH"

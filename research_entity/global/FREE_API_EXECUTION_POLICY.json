@@ -708,6 +708,20 @@
     "counterhypothesis": "FRANK's local receipt clock can substitute for a missing provider creation time; falsified because the local clock measures the client-side attempt and cannot assert when the provider created its response object.",
     "uncertainty": "The upper bound 9999999999 is local FRANK v0.1 policy rather than an NVIDIA limit. No comparison with local wall time is claimed because clock skew is not measured, and no Ubuntu NVIDIA live receipt is available on this host."
   },
+  "provider_response_usage_provenance": {
+    "checked_at": "2026-08-26",
+    "claim": "Every successful non-streaming Chat Completions response must contain a usage object with exact built-in, nonnegative, locally bounded prompt_tokens, completion_tokens and total_tokens integers, and total_tokens must equal the sum of its two components. FRANK retains those three provider-asserted counts in the execution receipt.",
+    "sources": [
+      "https://docs.nvidia.com/nim/large-language-models/latest/deployment/csp-deployment/aws.html",
+      "https://docs.nvidia.com/nim/large-language-models/latest/reference/api-reference.html",
+      "https://docs.vllm.ai/en/v0.16.0/api/vllm/entrypoints/openai/chat_completion/serving/"
+    ],
+    "external_evidence": "NVIDIA's official expected non-streaming response contains usage with prompt_tokens, completion_tokens and total_tokens. NVIDIA identifies vLLM as the inference backend; official vLLM serving code constructs UsageInfo with the two measured component counts and their arithmetic sum.",
+    "internal_measurement": "A status-200 response containing the required object, provider id, provider creation time, matching model and exact terminal choice but omitting usage previously returned success and reached VERIFIED and DONE.",
+    "executable_evidence": "test_missing_response_usage_cannot_reach_verified_state",
+    "counterhypothesis": "A valid completion body plus FRANK's requested max_tokens is sufficient token provenance; falsified because max_tokens is only an output ceiling and neither asserts actual prompt consumption nor the provider's returned completion count.",
+    "uncertainty": "Token counts do not establish billing or monetary cost. The 9999999999 ceiling and rejection of non-null optional usage detail objects are local FRANK v0.1 safety policy, not NVIDIA limits. No Ubuntu NVIDIA live receipt is available on this host."
+  },
   "http_200_provider_error_envelope": {
     "checked_at": "2026-08-25",
     "claim": "A syntactically valid HTTP 200 JSON body whose object discriminator is error, or which carries an explicit top-level error member, is classified as provider_error. It remains EXECUTED but cannot reach VERIFIED or DONE and does not create HTTP-status evidence that was not received.",

@@ -1,0 +1,57 @@
+{
+  "schema": "CLAY_TRIGGER2_PARALLEL_FOUR_QUADRANT_FREEZE_FUSION/v1",
+  "date": "2026-08-26",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "supervisor_epoch": "8.82",
+  "mode": "FREE_ONLY",
+  "status": "SOURCE_ONLY_COORDINATION_FUSION_NO_MODEL_EXECUTION",
+  "problem": "Two non-identical four-quadrant source lanes landed on moving main within the same Trigger-2 interval. Treating both as competing selection-grade authorities would violate the nonduplication/evidence law and could create post-hoc sample/stopping ambiguity.",
+  "selection_grade_lane": {
+    "contract": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_FOUR_QUADRANT_CHECKPOINT_EVAL_FREEZE_V1_GPT56SOL.json",
+    "generator": "tools/trigger2_four_quadrant_checkpoint_eval_v1.py",
+    "tests": "tests/test_trigger2_four_quadrant_checkpoint_eval_v1.py",
+    "manifest_sha256": "9e9a2a421cdaa9207783060b6b127fa4ca26bf25d9415b22730812f31229d57d",
+    "shape": "512 cases / 256 matched families / 128 cases per quadrant",
+    "prospective_cumulative_cases_per_critical_axis": [64, 128, 256],
+    "classification": "PRIMARY_PROSPECTIVE_SELECTION_EVAL_LOGICAL_CASE_LANE_SOURCE_ONLY",
+    "reason": "It matches the existing preregistration's Stage-1 >=64 cases per critical axis and precommits the 64->128->256 expansion structure before candidate outputs are opened. It also balances all four decisions and freezes a strict grader/full-raw-output digest requirement.",
+    "credit_now": 0
+  },
+  "compact_lane": {
+    "manifest": "research_entity/global/j-space/research/manifests/TRIGGER2_FOUR_QUADRANT_SELECTIVE_ANSWERABILITY_AUTHORITY_EVAL_V1.json",
+    "evaluator": "tools/trigger2_four_quadrant_eval_v1.py",
+    "manifest_preoutput_sha256": "31a2b5d3a3c1bc28ff7cbd6c0f71c57c3fb9dfc2952c8ebe0135b2c15d598909",
+    "shape": "32 cases / 8 families / 4 quadrants per family",
+    "cases_per_critical_axis": 16,
+    "classification": "COMPACT_PREOUTPUT_SMOKE_FORMAT_AND_EVIDENCE_ORDER_DONOR_ONLY_NOT_SELECTION_GRADE",
+    "reason": "16 cases per critical axis is below the already-preregistered Stage-1 minimum of 64 per critical axis. Its exact two-line response contract, crossed Q3/Q4 evidence-order audit and compact source-binding tests remain useful as donor mechanisms, but its results cannot substitute for or be pooled into the primary selection-grade lane.",
+    "credit_now": 0
+  },
+  "fusion_rules": [
+    "Do not average, pool, concatenate or double-count the two lanes as independent checkpoint evidence.",
+    "Do not use compact-lane outputs to tune labels, families, renderer wording, margins, stopping rules or the primary selection-grade manifest.",
+    "If the compact lane executes before the primary lane, classify it as smoke/format evidence only and preserve primary-lane cases as unopened for selection purposes.",
+    "If overlap with any training/calibration/evaluation family is later discovered, fail closed for the affected selection evidence rather than relabeling it family-disjoint post hoc.",
+    "The final Xeno/ClayCode renderer transport gate and exact checkpoint/tokenizer/input/runtime identity remain mandatory regardless of lane.",
+    "Current N64 historical results remain exploratory/quarantined and do not become confirmatory through either new source lane."
+  ],
+  "runtime_authority": {
+    "runtime_quiescence": "NOT_PROVEN_NEGATIVE_CURRENT_EVIDENCE",
+    "provider_execution": "DO_NOT_INVOKE",
+    "model_execution": "NOT_PERFORMED",
+    "training": "NOT_PERFORMED",
+    "checkpoint_winner": null
+  },
+  "credits": {
+    "coordination_fusion_delta": 1,
+    "checkpoint_selection_credit": 0,
+    "jspace_model_credit": 0,
+    "training_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  },
+  "next_exact_action": "Keep P0 runtime quiescence closed. Before any selection-grade B1 output is opened, freeze the practical-margin contract and renderer-interaction decision policy. Treat the compact 32-case lane only as a format/evidence-order smoke donor; do not let it change the primary 512-case frozen families, grader or 64->128->256 stopping structure."
+}

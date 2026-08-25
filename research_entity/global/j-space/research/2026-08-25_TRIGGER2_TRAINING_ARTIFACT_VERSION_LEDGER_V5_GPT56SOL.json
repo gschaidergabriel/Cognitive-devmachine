@@ -1,0 +1,150 @@
+{
+  "schema": "CLAY_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER/v5",
+  "date": "2026-08-25",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "status": "CURRENT_RESEARCH_LEDGER_NONCANONICAL",
+  "supersedes": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V4_GPT56SOL.json",
+  "inherits_all_nonconflicting_records_from": "T2-LEDGER-V4",
+  "revision_reason": "Moving-main reentry after v4 produced multiple formal-world/relation-derivation donors, hardened the event/ancestry labeler v2, added derivation-bound gate/causal-chain candidates and C1 mixed-checkpoint research. V5 records which pieces are current donors, which are stale or duplicate, and keeps positive D/E admission blocked until one exact derivation-bound chain is converged.",
+  "authority": {
+    "observed_main_before_write": "ae244217994c5d160bd7429704ec50faf7049871",
+    "supervisor_epoch": "8.78",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "architecture": "HCU",
+    "finished_training_target": "QWEN3.5-0.8B_CLASS_COGNITIVE_PROCESS_SUBSTRATE_FOR_VARIABLE_COGNITIVE_GRID_PLUS_PERSISTENT_DATABASE_PLUS_CLAUDE_CODE",
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0
+  },
+  "artifact_overrides_and_additions": [
+    {
+      "artifact_id": "T2-LEDGER-V4",
+      "path": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V4_GPT56SOL.json",
+      "version": "v4",
+      "status": "SUPERSEDED",
+      "predecessor": "T2-LEDGER-V3",
+      "successor": "T2-LEDGER-V5",
+      "provenance": ["commit lineage before formal-deriver convergence burst"],
+      "target_architecture": "variable-grid EntityOS/HCU cognitive module",
+      "revision_reason": "Predates multiple formal-relation/causal-chain candidates and the current hardened labeler-v2 source."
+    },
+    {
+      "artifact_id": "T2-HYPERPOSITION-LABELER-V2-EVENT-ANCESTRY",
+      "path": "tools/trigger2_hyperposition_reference_labelers_v2.py",
+      "version": "v2",
+      "status": "CURRENT_STATE_UPDATE_DONOR_BLOCKED_AS_ROOT_LABEL_AUTHORITY",
+      "predecessor": "T2-HYPERPOSITION-LABELER-V1",
+      "successor": "T2-DERIVATION_BOUND_HYPERPOSITION_CHAIN-CONVERGED",
+      "provenance": ["current blob 78164abd07553f1732e28a5e6297158f9a833b2e", "event-vs-ancestry hardening and mutation tests"],
+      "target_architecture": "event/ancestry-aware U/D state transition semantics",
+      "revision_reason": "Current source now fails closed on several event-id/branch-id/merge collisions, but observation.relation and target_branch_ids remain upstream inputs. It is a state-transition donor, not the root producer of positive D/E labels."
+    },
+    {
+      "artifact_id": "T2-HYPERPOSITION-FORMAL-RELATION-DERIVER-V1",
+      "path": "tools/trigger2_hyperposition_formal_relation_deriver_v1.py",
+      "version": "v1",
+      "status": "CURRENT_FORMAL_DERIVATION_DONOR_REBIND_REQUIRED",
+      "predecessor": null,
+      "successor": "T2-DERIVATION_BOUND_HYPERPOSITION_CHAIN-CONVERGED",
+      "provenance": ["current blob e438e9ccfc211c8ec8eb74b6dab32f86e41bfae8"],
+      "target_architecture": "formal-world predicted outcomes -> branch relations + discriminator metadata",
+      "revision_reason": "Mechanically derives relations from predicted outcomes and observations, but is explicitly shaped for the older Hyperposition labeler-v1 lane and collapses every mismatch to FALSIFY under deterministic_total rather than the newer decisive/nondecisive rule family. Rebind/fuse rather than promote directly."
+    },
+    {
+      "artifact_id": "T2-SYNTHETIC-RELATION-DERIVER-V1-GPT56SOL",
+      "path": "tools/trigger2_synthetic_relation_deriver_v1.py",
+      "version": "v1",
+      "status": "CANDIDATE_DONOR_NONCANONICAL_DO_NOT_CREATE_SECOND_RELATION_AUTHORITY",
+      "predecessor": null,
+      "successor": "T2-DERIVATION_BOUND_HYPERPOSITION_CHAIN-CONVERGED",
+      "provenance": ["commit 603b60850bb9f8dc459c42aa6516002c3996ffc1", "tests commit 15b6f9ae5028c4aea88745b7d55457e23a116213"],
+      "target_architecture": "formal measurement predictions -> branch-local SUPPORTS/COUNTERS/FALSIFIES plus mechanically derived discriminator partition",
+      "revision_reason": "Useful nonoverlapping donor properties are explicit rejection of caller relation/effect/winner/target fields, decisive-vs-nondecisive mismatch typing, branch-order-stable receipts, world/observation digests and direct adapter receipts for the event/ancestry v2 relation vocabulary. It intentionally does not become a second authority and still lacks the full v/K/E+/E-/F/T/A/sigma state contract, global event registry/dependence-certificate semantics and exact gate integration.",
+      "execution_boundary": "Pre-write equivalent logic self-test passed locally, but exact committed repository tests were not executed on an admitted source-bound project surface; no runtime/training credit."
+    },
+    {
+      "artifact_id": "T2-HYPERPOSITION-CAUSAL-LABEL-CHAIN-V1",
+      "path": "tools/trigger2_hyperposition_causal_label_chain_v1.py",
+      "version": "v1",
+      "status": "STALE_DEPENDENCY_REBIND_REQUIRED",
+      "predecessor": "formal relation deriver + Hyperposition labeler v1",
+      "successor": "T2-DERIVATION_BOUND_HYPERPOSITION_CHAIN-CONVERGED",
+      "provenance": ["exact-current training revision audit v2"],
+      "target_architecture": "formal world -> typed relation -> reference state transition",
+      "revision_reason": "Valuable architecture, but it landed bound to labeler v1 after labeler v2 already existed. Rebind semantics and hashes; do not patch only a version string."
+    },
+    {
+      "artifact_id": "T2-HYPERPOSITION-DERIVATION-BOUND-GATE-V1",
+      "path": "tools/trigger2_hyperposition_derivation_bound_gate_v1.py",
+      "version": "v1",
+      "status": "CANDIDATE_RECHECK_REQUIRED_WITH_CONVERGED_CHAIN",
+      "predecessor": "semantic-Hyperposition gate-v2 donor",
+      "successor": "exact-source gate bound to the retained converged relation+labeler chain",
+      "provenance": ["parallel Trigger-2 derivation-bound implementation burst"],
+      "target_architecture": "positive D/E candidate admission only when derivation receipt reproduces",
+      "revision_reason": "Do not promote independently of the labeler/deriver authority decision; exact dependency graph and model-visible leakage boundary must be rechecked after convergence."
+    },
+    {
+      "artifact_id": "T2-SHP-GATE-V2",
+      "path": "tools/trigger2_semantic_hyperposition_gate_v2.py",
+      "version": "v2",
+      "status": "BLOCKED_CURRENT_SOURCE",
+      "predecessor": "tools/trigger2_semantic_hyperposition_gate_v1.py",
+      "successor": "derivation-bound gate bound to retained converged semantics",
+      "provenance": ["exact current fetch still imports removed trigger2_semantic_hyperposition_reference_labelers_v1.py"],
+      "target_architecture": "transition-aware semantic-Hyperposition admission",
+      "revision_reason": "Import/dependency drift remains real; gate-v2 source cannot receive executable admission credit."
+    },
+    {
+      "artifact_id": "T2-C1-MIXED-CHECKPOINT-EMERGENCE-PROTOCOL-V1",
+      "path": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_C1_MIXED_CHECKPOINT_EMERGENCE_PROTOCOL_V1_GPT56SOL.json",
+      "version": "v1",
+      "status": "CURRENT_RESEARCH_PROTOCOL_NONPROMOTING",
+      "predecessor": "C1 fixed-label symbolic preflight direction",
+      "successor": null,
+      "provenance": ["parallel Trigger-2 current-main research"],
+      "target_architecture": "capability/family-level emergence diagnostics during Qwen3.5-0.8B specialization",
+      "revision_reason": "Aggregate convergence is insufficient; preserve checkpoint/family/OOD emergence curves and diagnose persistent unlearned subsets before advancing curriculum phases."
+    }
+  ],
+  "external_research_revalidated_2026_08_25": [
+    {
+      "source": "Xue et al., ACL 2026, Why Supervised Fine-Tuning Fails to Learn",
+      "classification": "PRIMARY_METHOD_INPUT",
+      "delta": "SFT convergence can hide persistently unlearned subsets across Qwen/LLaMA/OLMo2; Trigger-2 should therefore track per-capability/per-family acquisition and prerequisite/conflict/rarity failure modes, not only aggregate loss or mean accuracy."
+    },
+    {
+      "source": "Gur-Arieh, Geva & Geiger, ICLR 2026, Mixing Mechanisms: How Language Models Retrieve Bound Entities In-Context",
+      "classification": "PRIMARY_METHOD_INPUT",
+      "delta": "Binding can mix positional, lexical and reflexive/pointer mechanisms and positional retrieval degrades in larger/middle-position settings; retain mechanism neutrality and stress length/position/cue factorials."
+    },
+    {
+      "source": "Venkatesh & Kurapath, ICLR 2026 workshop, On the Identifiability of Steering Vectors in Large Language Models",
+      "classification": "PRIMARY_METHOD_CAUTION",
+      "delta": "Behaviorally effective steering directions can be non-identifiable; J-Space causal-control status and representation-identifiability status remain separate typed evaluation axes."
+    },
+    {
+      "source": "Kim, ICML 2026 Mech Interp Workshop, Non-linear Interventions on Large Language Models",
+      "classification": "PRIMARY_METHOD_COUNTERHYPOTHESIS",
+      "delta": "Linear-vector weakness is not evidence that a controllable semantic representation is absent; nonlinear/regional intervention alternatives remain live in Hyperposition until discriminated."
+    },
+    {
+      "source": "Huang et al., ACL 2025, Selective Abstention Learning",
+      "classification": "PRIMARY_METHOD_INPUT",
+      "delta": "Explicit abstention objectives can improve selective rejection in studied settings; E/GRF should evaluate UNKNOWN/ABSTAIN with risk/coverage and retention rather than raw abstention frequency."
+    }
+  ],
+  "current_frontier": {
+    "highest_value_training_blocker": "The project now has formal relation-derivation donors, but there is still no single exact-current derivation-bound Hyperposition label chain and gate that owns formal world -> branch predictions -> derived relations/targets -> event/dependence-aware U/D -> task-local resolution with one frozen schema/source identity.",
+    "next_exact_action": "Converge one retained formal relation deriver with tools/trigger2_hyperposition_reference_labelers_v2.py (or its explicitly versioned successor), fuse the full Hyperposition carrier plus event/payload/ancestry/dependence identity semantics, bind the derivation-bound gate to exact bytes/hashes, then run mutation/property tests and regenerate only high-value positive D/E and owner-target process families. Do not add more flat volume before this gate closes."
+  },
+  "credits": {
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "positive_jspace_causal_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  }
+}

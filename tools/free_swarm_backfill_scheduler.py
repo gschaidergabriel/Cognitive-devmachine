@@ -16,7 +16,13 @@ import threading
 import time
 from typing import Any
 
-from free_swarm_historical_backfill import load_backfill_packets
+import free_swarm_historical_backfill as historical_backfill_core
+from free_swarm_backfill_exhaustiveness_878 import install as install_exhaustiveness
+
+# Keep producer-side packet scheduling on the same completion semantics as the
+# backlog-first Forge consumer. This changes no evidence authority.
+install_exhaustiveness(historical_backfill_core)
+load_backfill_packets = historical_backfill_core.load_backfill_packets
 
 ARTIFACT_ROOT = Path(os.getenv("CLAY_SWARM_ARTIFACT_ROOT", "/artifacts/clay-entityos-swarm"))
 FORGE_DB = ARTIFACT_ROOT / "forge/forge.sqlite3"
@@ -94,6 +100,8 @@ BACKFILL LAW
   exhaustive MUST be false unless the supplied chunk unambiguously contains no ninth distinct delta.
 - Set exhaustive=true only after you have inspected the complete supplied chunk and can affirm that this pass
   exhausted every materially distinct delta not already covered by known_concept_ids.
+- A zero-delta pass is not enough to close a chunk. SATURATED requires two consecutive zero-novel passes
+  whose envelopes both explicitly assert exhaustive=true.
 - This extraction pass grants ZERO acceptance credit. Every emitted delta still goes through the one canonical Forge.
 
 For this call, replace the ordinary single ARCHITECTURE_DELTA_JSON line with exactly:

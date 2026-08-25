@@ -1,0 +1,92 @@
+{
+  "schema": "CLAY_TRIGGER2_PRODUCER_AUTH_REENTRY_AUDIT/v3",
+  "date": "2026-08-25",
+  "local_trigger_time": "21:28+07:00",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU_VARIABLE_COGNITIVE_GRID",
+  "status": "CURRENT_RESEARCH_DELTA_NONPROMOTING",
+  "supersedes": [
+    "research_entity/global/j-space/research/2026-08-25_TRIGGER2_2128_PRODUCER_AUTH_REENTRY_AUDIT_V1_GPT56SOL.json",
+    "research_entity/global/j-space/research/2026-08-25_TRIGGER2_2128_PRODUCER_AUTH_REENTRY_AUDIT_V2_GPT56SOL.json"
+  ],
+  "revision_reason": "Moving-main reentry observed ledger v13 at commit 0117cffabc92ac64f0af9f01b8b501945d01ca9f after v2 had still named v12 current. V13 already fuses the same-trigger A02 contract and v12 donor audit. This v3 is only the lifecycle correction for this organ's audit chain; it creates no new contract, implementation lane or training rows.",
+  "authority_snapshot": {
+    "repository": "gschaidergabriel/clay-global-research-entity",
+    "branch": "main",
+    "observed_main_before_write": "9090ab45253ca180ed797c37c78ce5c54c1c0a78",
+    "supervisor_epoch": "8.78",
+    "mode": "FREE_ONLY",
+    "current_training_ledger": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V13_GPT56SOL.json",
+    "current_a02_contract": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_A02_DISCRIMINATOR_PRODUCER_AUTH_CONTRACT_V1_GPT56SOL.json",
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0
+  },
+  "lifecycle_corrections": [
+    {
+      "artifact": "2026-08-25_TRIGGER2_2128_PRODUCER_AUTH_REENTRY_AUDIT_V1_GPT56SOL.json",
+      "status": "SUPERSEDED",
+      "successor": "v3",
+      "reason": "Predates parallel A02 contract and ledger v12/v13 convergence."
+    },
+    {
+      "artifact": "2026-08-25_TRIGGER2_2128_PRODUCER_AUTH_REENTRY_AUDIT_V2_GPT56SOL.json",
+      "status": "SUPERSEDED",
+      "successor": "v3",
+      "reason": "Corrected v1 for v12 but ledger v13 had already superseded v12 during moving-main convergence."
+    },
+    {
+      "artifact": "2026-08-25_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V12_GPT56SOL.json",
+      "status": "SUPERSEDED",
+      "successor": "2026-08-25_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V13_GPT56SOL.json",
+      "reason": "V13 fuses the concurrent A02 contract with the donor audit and advances the frontier from contract design to implementation plus mutation execution."
+    },
+    {
+      "artifact": "2026-08-25_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V13_GPT56SOL.json",
+      "status": "CURRENT",
+      "reason": "Newest observed successor-dynamic Trigger-2 ledger at this reentry."
+    },
+    {
+      "artifact": "2026-08-25_TRIGGER2_A02_DISCRIMINATOR_PRODUCER_AUTH_CONTRACT_V1_GPT56SOL.json",
+      "status": "CURRENT_SOURCE_DESIGN_DELTA_NONPROMOTING",
+      "reason": "Contract exists; implementation and exact-current mutation execution remain open."
+    },
+    {
+      "artifact": "tools/trigger2_hyperposition_receipt_authority_gate_v1.py@ce63a89f5a52fbd2ee4fe69eaa59850ff2b86677",
+      "status": "NEEDS_REVISION_DONOR_NOT_MERGE_READY",
+      "reason": "Salvage world/history scope and exact receipt reconstruction topology only; producer/policy authority, formal spec binding and A02 mutations remain missing."
+    },
+    {
+      "artifact": "tools/trigger2_binding_router_factorial_generator_v3.py",
+      "status": "BLOCKED_QUARANTINED_FROM_DIRECT_TRAINING",
+      "reason": "Supervisor 8.78 model-visible conditional nuisance leakage remains dispositive."
+    }
+  ],
+  "current_frontier": {
+    "p0": "IMPLEMENT_A02_CONTRACT_IN_SINGLE_RETAINED_HYPERPOSITION_LANE",
+    "implementation_required": true,
+    "exact_current_mutation_execution_required": true,
+    "positive_generation_allowed": false,
+    "next_exact_action": "Implement repository-authority producer/policy resolution, exact producer source/schema/formal-spec binding, deterministic admissibility+execution+receipt derivation and all A02 mutations in the retained current-main state-history composition; then execute exact-current deterministic tests on an admitted FREE_ONLY zero-cost surface."
+  },
+  "generation_decision": {
+    "new_positive_rows": 0,
+    "new_hard_negative_rows": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "decision": "NO_NEW_ROWS_WITH_REASON"
+  },
+  "credits": {
+    "research_delta": 1,
+    "versioning_delta": 1,
+    "positive_D_E_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "positive_jspace_causal_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0
+  }
+}

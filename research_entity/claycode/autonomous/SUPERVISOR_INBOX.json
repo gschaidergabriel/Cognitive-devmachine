@@ -1,25 +1,22 @@
 {
-  "schema_version": "8.77",
-  "latest_cycle": "go-20260825-freshness-conversion-backpressure",
+  "schema_version": "8.78",
+  "latest_cycle": "go-20260825-historical-backfill-conversion-root-fix",
   "needs_review": true,
   "active_program": "ENTITYOS_HCU",
   "product": "EntityOS",
   "integrated_cognition_compute_architecture": "HCU",
-  "latest_repo_head_inspected_before_write": "d2d50e27ec19ed881415f4ccd62826a1485a8b3d",
-  "material_finding": "Supervisor 8.76 freshness policy still has not become executable publisher behavior. The live dashboard advanced to 35,308,070 cumulative Free-Swarm tokens and 1 nominal Forge ACCEPTED delta while Distillery remains at 0 accepted packets / 0 accepted dataset tokens. GO_COLLECTIVE_METRICS.json remains frozen at 2026-08-24T13:58:54Z / authority_epoch 8.71 / 7,302,860 tokens / 0 Forge accepts. PR #1771 remains open. Raw token growth is therefore outrunning verified conversion and must not be treated as progress.",
+  "latest_repo_head_inspected_before_write": "184e40c749cdf8387dbe8ab491a7d748a8bb3c10",
+  "material_finding": "The previous 8.77 state is stale. Replay-v2 migration has been fused onto main, and a full-history deduplicating Free-Swarm backfill plus backlog-first Forge entrypoint now exist. However no active supervisor/activation reference to run_free_evidence_forge_backfill.py was found in this review and no terminal exact-current-head historical-backfill receipt was observed. Therefore the 39M-token history must not be considered re-evaluated yet. The next cycle must wire the backlog-first entrypoint into the single active Forge path and execute full historical replay to saturation before additional raw generation is scaled. Replay-v2 also remains runtime-uncredited until exact-current-main migration regressions execute.",
   "current_frontier": {
-    "collective_metrics_freshness": "POLICY_PRESENT_IMPLEMENTATION_AND_EXECUTION_MISSING",
-    "live_dashboard_free_swarm_tokens": 35308070,
-    "live_dashboard_forge_evaluations": 144,
-    "live_dashboard_nominal_forge_accepted": 1,
-    "go_collective_metrics_generated_at": "2026-08-24T13:58:54Z",
-    "go_collective_metrics_authority_epoch": "8.71",
-    "go_collective_metrics_tokens": 7302860,
-    "go_collective_metrics_forge_accepted": 0,
-    "distillery_live_accepted_packets": 0,
-    "distillery_live_accepted_dataset_tokens": 0,
-    "forge_distillery_replay_v1_to_v2_migration": "OPEN_PR1771_HEAD_289b3144a06d0eaa8901b92cc023ef75893b8ba4",
-    "swarm_scale_state": "BACKPRESSURE_NO_SCALE_UP_UNTIL_FRESHNESS_AND_CONVERSION_GATES_PASS",
+    "historical_backfill_source": "PRESENT_96AE2CF581637006CEA7CF33B35CC4DD6262C42B",
+    "backlog_first_forge_entrypoint": "PRESENT_184E40C749CDF8387DBE8AB491A7D748A8BB3C10",
+    "active_backfill_supervisor_wiring": "NOT_OBSERVED",
+    "historical_backfill_runtime_receipt": "NOT_OBSERVED",
+    "distillery_replay_v2_migration_source": "FUSED_MAIN_92435B90E450A99B09E016592228A0F84BE53739",
+    "distillery_replay_v2_runtime_receipt": "NOT_OBSERVED_ON_EXACT_CURRENT_MAIN",
+    "qwen06_midlayer_causal_workflow": "SOURCE_READY_656F51615FFD82971767BC2E08C33B49A9F67AB9",
+    "qwen06_terminal_runtime_receipt": "NOT_OBSERVED_IN_THIS_REVIEW",
+    "swarm_scale_state": "BACKPRESSURE_NO_EXTERNAL_SCALE_UP_UNTIL_HISTORICAL_CONVERSION_GATES_PASS",
     "entityos_whole_runtime_credit": 0,
     "hcu_full_runtime_credit": 0,
     "jspace_model_runtime_credit": 0,
@@ -35,19 +32,18 @@
   "evidence_law": [
     "EXECUTABLE_EVIDENCE_OUTRANKS_MODEL_CONSENSUS",
     "SOURCE_TEST_PRESENCE_IS_NOT_TEST_EXECUTION",
-    "SUPERVISOR_POLICY_IS_NOT_IMPLEMENTED_GATE_UNTIL_EXECUTED",
-    "STALE_METRICS_MUST_NOT_SUPERSEDE_NEWER_CANONICAL_INPUT_SURFACES",
+    "HISTORICAL_REPLAY_MUST_PRESERVE_EXECUTION_IDENTITY_AND_GOODMAN_COLLAPSE",
     "RAW_TOKEN_OR_WORKER_GROWTH_IS_NOT_VERIFIED_UTILITY",
     "GOODMAN_COLLAPSE_SHARED_MODEL_FAMILY_PIPELINE_AND_ORCHESTRATION_ANCESTRY",
     "NO_CANONICAL_SEMANTICS_PROMOTION_WITHOUT_EXECUTABLE_COUNTEREVIDENCE_AND_REVIEW"
   ],
   "next_focus": [
-    "DO_NOT_SCALE_EXTERNAL_LLM_WORKERS_CONCURRENCY_OR_TOKEN_BUDGETS",
-    "IMPLEMENT_FRESHNESS_FAIL_CLOSED_IN_EXISTING_GO_COLLECTIVE_METRICS_PUBLISHER_CONSUMER_PATH",
-    "EXECUTE_FRESHNESS_REGRESSIONS_AND_EMIT_COLLECTIVE_METRICS_FRESHNESS_RECEIPT_V1",
-    "EXECUTE_DISTILLERY_REPLAY_ID_MIGRATION_RECEIPT_V1_ON_EXACT_CURRENT_PR1771_SOURCE",
-    "ONLY_THEN_RUN_ONE_FORGE_ACCEPT_TO_ONE_DISTILLERY_PACKET_TO_ACCEPTED_DATASET_TOKENS_GT_ZERO_TO_SEMANTIC_REPLAY_PLUS_ZERO",
-    "KEEP_LOCAL_QWEN_JSPACE_FRONTIER_SEPARATE_ZERO_COST_AND_NONPROMOTING",
+    "WIRE_RUN_FREE_EVIDENCE_FORGE_BACKFILL_INTO_THE_SINGLE_ACTIVE_FORGE_SUPERVISOR_PATH",
+    "RUN_ALL_HISTORICAL_WORKERS_JSONL_INCREMENTALLY_TO_SATURATION_AND_EMIT_FREE_SWARM_HISTORICAL_BACKFILL_RECEIPT_V1",
+    "PRIORITIZE_READY_AND_NEEDS_IMPLEMENTATION_BACKLOG_OVER_NEW_RAW_TOKEN_GENERATION",
+    "EXECUTE_REPLAY_V2_MIGRATION_REGRESSION_ON_EXACT_CURRENT_MAIN_WITH_FROZEN_PRE_V2_DB_CONCURRENCY_AND_REOPEN",
+    "THEN_PROVE_ONE_FORGE_ACCEPT_TO_EXACTLY_ONE_DISTILLERY_PACKET_TO_ACCEPTED_DATASET_TOKENS_GT_ZERO_TO_SEMANTIC_REPLAY_PLUS_ZERO",
+    "KEEP_LOCAL_QWEN06_MIDLAYER_CAUSAL_TEST_SEPARATE_ZERO_COST_AND_NONPROMOTING",
     "KEEP_FREE_ONLY_FAIL_CLOSED"
   ],
   "promotion_state": {
@@ -59,5 +55,5 @@
     "provider_runtime_credit": 0,
     "training_credit": 0
   },
-  "steering": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_77.json"
+  "steering": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_78.json"
 }

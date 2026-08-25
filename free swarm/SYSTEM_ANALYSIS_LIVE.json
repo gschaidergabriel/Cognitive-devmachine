@@ -1,6 +1,6 @@
 {
   "schema": "CLAY_FREE_SWARM_SYSTEM_ANALYSIS/v3",
-  "generated_at": "2026-08-25T03:04:11.827806+00:00",
+  "generated_at": "2026-08-25T03:19:17.722673+00:00",
   "runtime": {
     "supervisor": "STOPPED/QUARANTINED",
     "go_swarm": "STOPPED/QUARANTINED",
@@ -37,7 +37,7 @@
   },
   "distillery": {
     "schema": "CLAY_RESEARCH_DISTILLERY_STATUS/v1",
-    "generated_at": "2026-08-25T03:04:09.709636+00:00",
+    "generated_at": "2026-08-25T03:19:16.743246+00:00",
     "collected_source_tokens": 11621,
     "accepted_dataset_tokens": 0,
     "dataset_yield": 0.0,
@@ -58,7 +58,7 @@
     "model_output_tokens": 1455,
     "shared_provider_budget": {
       "schema": "CLAY_SHARED_PROVIDER_BUDGET/v1",
-      "generated_at": "2026-08-25T03:04:09.710350+00:00",
+      "generated_at": "2026-08-25T03:19:16.743963+00:00",
       "providers": {
         "arxiv": {
           "max_inflight": 1,
@@ -112,7 +112,7 @@
           "max_inflight": 128,
           "active_leases": 0,
           "min_interval_s": 0.0,
-          "cooldown_seconds": 826.5532262325287,
+          "cooldown_seconds": 0.0,
           "total_requests": 167,
           "total_success": 109,
           "total_429": 58,
@@ -196,22 +196,22 @@
     },
     "db_bytes": 864256,
     "top_questions": [
-      "How do model architecture and data quality impact system performance?",
-      "What are the potential risks and trade-offs associated with optimizing provider budget?",
-      "What are the potential limitations and risks associated with relying on FREE_ONLY provider admission?",
-      "Can the system's development and effectiveness be improved through the use of alternative provider admission models or strategies?",
-      "Wie lässt sich die Typed Entry Fabric‑Logik so skalieren, dass mehr als 10 logische Module ohne Signifikanzverlust laufen?",
-      "Welche Optimierungen im J‑Space‑Bereich reduzieren die Latenz unter 30 ms bei 5 M Tokens?",
-      "Wie kann die Admission‑Logik für neue Free‑Provider dynamisch aktualisiert werden, ohne die Free‑Only‑Kriterien zu verletzen?",
-      "Does model-specific J-Space causal attribution require access to model-internal activations (unavailable via API), or can causal evidence be constructed solely from observable inference metadata + economic provenance?",
-      "Why is the current accepted_packets count zero despite collected_chunks=48?",
-      "Is the distillery validation logic misconfigured?"
+      "What is the minimum validity window duration that balances security and operational practicality?",
+      "Does NVIDIA's API expose a deterministic per-credential per-model free-tier entitlement endpoint, or must we infer from rate-limit headers / 402 responses after a probe call?",
+      "Does predictive coding gating in HCU GRID10 cells produce genuine causal structure improvements or only apparent latency gains from reduced workspace competition?",
+      "Can credential rotation be fully automated without requiring manual evidence updates?",
+      "How to securely propagate new credential versions to all worker instances without exposing secrets in logs?",
+      "How does deterministic trace logging impact causal trace compression in J‑Space?",
+      "Can we formally prove that hash‑based tracing introduces no timing side‑channels affecting determinism?",
+      "What are the exact critical and non-critical modules in the EntityOS HCU runtime loader, and what are their initialization dependencies?",
+      "Does NVIDIA's free-tier rate header format remain stable across Developer Program and NIM endpoints, or must verification be endpoint-specific?",
+      "What is the latency budget impact of trace logging on the HCU inference pipeline?"
     ],
     "candidate_states": {}
   },
   "evidence_forge": {
     "schema": "CLAY_FREE_EVIDENCE_FORGE_STATUS/v1",
-    "generated_at": "2026-08-25T03:04:09.229329+00:00",
+    "generated_at": "2026-08-25T03:19:16.499967+00:00",
     "candidate_states": {
       "ACCEPTED": 1,
       "NEEDS_IMPLEMENTATION": 65,
@@ -235,7 +235,7 @@
     "peak_parallel_tasks": 0,
     "shared_provider_budget": {
       "schema": "CLAY_SHARED_PROVIDER_BUDGET/v1",
-      "generated_at": "2026-08-25T03:04:09.229991+00:00",
+      "generated_at": "2026-08-25T03:19:16.500711+00:00",
       "providers": {
         "arxiv": {
           "max_inflight": 1,
@@ -289,7 +289,7 @@
           "max_inflight": 128,
           "active_leases": 0,
           "min_interval_s": 0.0,
-          "cooldown_seconds": 827.0335900783539,
+          "cooldown_seconds": 0.0,
           "total_requests": 167,
           "total_success": 109,
           "total_429": 58,
@@ -380,6 +380,6 @@
     "measured_total_sonnet5_equivalent_usd": 148.830648,
     "verified_historical_savings_usd": null,
     "nominal_avoided_if_zero_cost_usd": 148.830648,
-    "repo_output_only_proxy_usd": 122.10001
+    "repo_output_only_proxy_usd": 122.2239
   }
 }

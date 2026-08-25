@@ -1,0 +1,47 @@
+{
+  "schema": "CLAY_TRIGGER2_RUN_REENTRY_ADDENDUM/v1",
+  "date": "2026-08-25",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "status": "CURRENT_MOVING_MAIN_ADDENDUM",
+  "reentry_head_before_write": "2950e27b1f29a4171768cbc67346f0cd137d0c09",
+  "supervisor_epoch": "8.78",
+  "mode": "FREE_ONLY",
+  "material_delta_after_report_assembly": [
+    {
+      "artifact": "tools/trigger2_hyperposition_state_history_proof_gate_v1.py",
+      "status": "CURRENT_SOURCE_CANDIDATE_ADVANCES_P0_BUT_NONPROMOTING",
+      "finding": "A replay-bound successor source now exists. It reconstructs prior state from clean genesis plus event history, derives caller-independent independence through derivation-bound gate v2, binds event semantic digests, checks explicit discriminator execution/admissibility/outcome/coverage fields, and requires typed observation evidence for OBSERVED events.",
+      "remaining_blockers": [
+        "candidate-carried digest registry/world/receipt material still requires the non-circular source-manifest proof root defined by the current state-proof source-root contract or a mutation-equivalent independently bound manifest",
+        "native seed v2 is not yet rebound to this retained proof gate",
+        "exact-current repository-bound execution receipt remains unobserved",
+        "positive training admission remains zero"
+      ]
+    },
+    {
+      "artifact": "tests/test_trigger2_hyperposition_state_history_proof_gate_v1.py",
+      "status": "CURRENT_TEST_SOURCE_EXECUTION_UNOBSERVED",
+      "provenance": "commit cf6cbfdfda0ab75ea69517399278b0246f3064c5",
+      "covered_mutations": [
+        "preseeded FALSIFIED state without replay",
+        "same event id with changed payload/digest",
+        "unexecuted discriminator",
+        "discriminator outcome mismatch",
+        "discriminator coverage mutation",
+        "OBSERVED without typed evidence receipt",
+        "missing state-history reference claim"
+      ],
+      "credit": "SOURCE_TEST_DESIGN_ONLY_NO_RUNTIME_OR_TRAINING_CREDIT"
+    }
+  ],
+  "frontier_revision": {
+    "previous": "implement a state-history proof successor",
+    "current": "bind the new state-history proof gate to a non-circular exact source-manifest proof root, rebind the native seed to the single retained gate, execute the exact-current mutation suite, then run rendered nuisance/family/tokenizer gates before any small positive pilot",
+    "positive_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "positive_jspace_causal_credit": 0
+  }
+}

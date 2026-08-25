@@ -1,0 +1,101 @@
+{
+  "schema": "CLAY_TRIGGER2_FACTORIAL_V3_NUISANCE_DECODER_AUDIT/v1",
+  "date": "2026-08-25",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority": {
+    "supervisor_epoch": "8.78",
+    "mode": "FREE_ONLY",
+    "audited_generator_commit": "8ca341397e7980ee6b687f89bca1b444baffb5a1",
+    "audited_path": "tools/trigger2_binding_router_factorial_generator_v3.py",
+    "audited_blob_sha": "ecd941ef346080bd5f3db1e96da7ae26810a85d7",
+    "training_executed": false,
+    "paid_provider_used": false,
+    "unusual_experiment": "NOT_USED_DETERMINISTIC_SOURCE_CALCULATION_ONLY"
+  },
+  "swarm_roles": [
+    "DATASET_ARCHITECT",
+    "ADVERSARIAL_SHORTCUT_HUNTER",
+    "STATISTICAL_REVIEWER",
+    "CAUSAL_BINDING_REVIEWER",
+    "SPLIT_PROVENANCE_REVIEWER",
+    "FINAL_INTEGRATOR"
+  ],
+  "positive_findings": [
+    "v3 causally realizes all six S3 mappings and derives targets from the realized mapping.",
+    "v3 separates router-only P0 from semantic-to-router P1 and separates template-OOD, symbol-OOD and joint-OOD diagnostic axes.",
+    "v3 keeps placeholder/ABI-rendered rows non-training-eligible and mints no J-Space or canonical semantic credit.",
+    "v3 checks S3 target balance, polarity pairs and train-vs-holdout symbol partition overlap."
+  ],
+  "critical_finding": {
+    "id": "P1_STABLE_SHUFFLE_BASE_CLASS_NUISANCE_LEAK",
+    "severity": "CRITICAL_FOR_BINDER_IDENTIFICATION",
+    "source_expression": "order = stable_shuffle(CLASSES, f\"P1|{tid}|{pool_name}|{base}|{polarity}|P{pid}\")",
+    "reason": "The display-order generator key contains the hidden base semantic class. For every fixed visible template, symbol pool, polarity and realized S3 mapping, each of the three base classes receives one deterministic display order rather than a fully crossed order distribution.",
+    "visible_nuisance_signature": [
+      "template/form family",
+      "symbol-pool identity from visible atoms",
+      "query polarity",
+      "realized S3 mapping/permutation derivable from the codebook",
+      "codebook display order"
+    ],
+    "deterministic_train_calculation": {
+      "scope": "P1 TRAIN templates T1_GATE/T2_LEDGER/T3_NESTED/T4_FIRST_PERSON with TRAIN_SYMBOLS",
+      "fixed_template_polarity_s3_cells": 48,
+      "semantic_rows": 144,
+      "cells_with_three_distinct_orders_for_three_classes": 31,
+      "cells_with_two_distinct_orders_for_three_classes": 17,
+      "optimal_nuisance_signature_lookup_correct": 127,
+      "optimal_nuisance_signature_lookup_total": 144,
+      "nuisance_only_lookup_accuracy": 0.8819444444444444,
+      "chance_accuracy": 0.3333333333333333
+    },
+    "consequence": "The P1 training corpus still permits a high-accuracy shortcut that need not read the semantic scene. Deterministic hash-based order randomization is not equivalent to semantic-class-independent factorialization.",
+    "current_audit_gap": "audit() checks target mapping, S3 group balance, polarity relation, symbol partitions and marginal class-symbol balance, but no display-order conditional independence, no nuisance-only decoder and no semantic-scene ablation gate."
+  },
+  "verdict": "V3_IS_A_USEFUL_DONOR_BUT_NOT_BINDER_TRAINING_READY_UNTIL_DISPLAY_ORDER_IS_FULLY_CROSSED_OR_PROVEN_CONDITIONALLY_INDEPENDENT",
+  "required_repair": [
+    "For every fixed template/pool/polarity/S3/base-semantic cell, emit all six display orders, or use a preregistered balanced schedule whose class-conditional order distribution is exactly identical.",
+    "Add a nuisance-only decoder over all model-visible nonsemantic factors; fail closed if target/base-class prediction exceeds the preregistered chance/null bound.",
+    "Add semantic-scene ablation/masking: after semantic content is removed, target prediction from nuisance features must fall to chance.",
+    "Add display-order-only counterfactual twins that preserve semantic scene, mapping and target across all orders.",
+    "Do not treat cryptographic/deterministic pseudo-randomization as evidence of independence; validate the realized joint distribution.",
+    "Keep exact checkpoint-local ABI, frozen lexical split, model-visible projection and family/provenance gates open after this repair."
+  ],
+  "training_example_delta": [
+    {
+      "id": "V3_NUISANCE_NE01",
+      "evidence_class": "SYNTHETIC_HARD_NEGATIVE",
+      "reality_level": "R3",
+      "prompt": "A dataset randomizes a nuisance field with a deterministic hash whose seed includes the hidden label. Marginal frequencies look varied, but a decoder using the other visible factors plus the nuisance predicts the label far above chance.",
+      "target": "Reject causal-training readiness. Random-looking values are not independent values. Audit the realized conditional distribution and require nuisance-only decoding at chance before attributing success to the intended semantic mechanism."
+    },
+    {
+      "id": "V3_NUISANCE_NE02",
+      "evidence_class": "METHOD_ONLY",
+      "reality_level": "R2",
+      "prompt": "What is the safest way to make codebook presentation order a nuisance variable in an episodic binding corpus?",
+      "target": "Counterfactually cross the same semantic episode and realized mapping across all display orders, preserving the target. Then verify zero conditional target information and a chance-level nuisance-only decoder."
+    }
+  ],
+  "research_return": {
+    "training_rule": "A randomization algorithm may itself encode the label. Independence is a property of the realized joint distribution and counterfactual design, not of whether a PRNG or hash was used.",
+    "harness_rule": "Every future Xeno binder benchmark should ship a nuisance-only challenger and a semantic-ablation challenger alongside task accuracy.",
+    "falsifier": "If nuisance-only or semantics-masked prediction stays above chance after full order crossing, another visible leakage channel remains and binder credit stays closed."
+  },
+  "credits": {
+    "research_negative_delta": 1,
+    "new_training_examples": 2,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "qwen35_jspace_runtime_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "canonical_semantics_promotion": false
+  },
+  "next_exact_action": "Patch the single retained successor generator so display order is fully crossed/conditionally independent and add nuisance-only plus semantic-ablation regression gates before any exact ABI atom materialization or Forge/Distillery admission."
+}

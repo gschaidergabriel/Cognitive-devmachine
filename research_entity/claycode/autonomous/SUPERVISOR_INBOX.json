@@ -1,22 +1,24 @@
 {
   "schema_version": "8.81",
-  "latest_cycle": "physical-grid10-proof-audit",
+  "latest_cycle": "physical-grid10-fused-pin-and-runtime-quiescence-audit",
   "needs_review": true,
   "active_program": "ENTITYOS_HCU",
   "product": "EntityOS",
   "integrated_cognition_compute_architecture": "HCU",
-  "material_finding": "The prior Xeno fabric repository-bound VPS bundle remains a bounded component runtime PASS after the S0 rollback fix. However, the newly introduced physical GRID10 harness at fbab5960980166f51047264775f102f2df22b292 is not credit-worthy as written: it launches ten ordinary nodes sequentially with subprocess.run and labels pids=len(packets), so it does not prove ten simultaneously live independent OS processes. In addition, coordinator admission accepts packet.state_epoch <= current and does not compare packet.state_digest to the current snapshot; the harness then commits serially stale packets while S1 advances. The stale-evidence/rebase policy is therefore underspecified. Existing physical-GRID10 VPS execution pinned to fbab596 may be useful diagnostically but MUST NOT mint physical GRID10 credit even if pass=true. Repair and repin first.",
+  "material_finding": "The prior physical GRID10 source blocker is no longer current: commit 0a76c14484c3230edb86f1075738a0a1011c5694 fuses ten overlapping Popen children, ten distinct parent-observed OS PIDs, one shared read-only S1 snapshot barrier, per-node membership/process-witness binding and one atomic cohort fan-in, and commit 208fd6d74e9dc5dcfcc525a86bdb66806acf0b18 pins that exact source for a repository-bound FREE_ONLY non-provider execution. No exact runtime receipt was observed, so physical GRID10 runtime credit remains 0. A new higher-priority control-plane blocker is live runtime drift after the owner FreeSwarm emergency stop: canonical FREE_PROVIDER_ADMISSION is HARD_OFF and says already-running unsynchronized host processes must be killed separately, while clay-direct-dev telemetry at 2026-08-25T19:49:43.899176Z still shows the old 6000 FreeSwarm supervisor, Forge, Distillery and dashboard processes. Source hard-off is not runtime quiescence. Quiesce and receipt the host before new experiment/provider execution, then re-enter current execution authority before running the fused GRID10 pin.",
   "current_frontier": {
     "canonical_s0_epoch_cas": "BOUNDED_COMPONENT_RUNTIME_PASS",
     "xeno_self_organizing_fabric": "BOUNDED_COMPONENT_RUNTIME_PASS",
-    "physical_grid10_process_harness_source": "NEEDS_REVISION_CONCURRENCY_AND_STALE_EVIDENCE_PROOF_GAPS",
-    "physical_grid10_existing_repository_execution": "PINNED_TO_FBAB596_DIAGNOSTIC_ONLY_NO_CREDIT",
-    "physical_grid10_repaired_repository_execution": "BLOCKED_PENDING_REPAIRED_COMMIT_AND_NEW_PIN",
-    "physical_grid10_load_failure_rejoin": "BLOCKED_PENDING_TRUE_BASE_PROCESS_PASS",
-    "physical_grid10_matched_budget_challengers": "BLOCKED_PENDING_TRUE_BASE_PROCESS_PASS",
-    "physical_grid10_hyperposition_gwt_reentry": "BLOCKED_PENDING_TRUE_BASE_PROCESS_PASS",
+    "physical_grid10_fused_source": "SOURCE_READY_AT_0A76C144_RUNTIME_UNOBSERVED",
+    "physical_grid10_repository_execution": "PINNED_AT_208FD6D_AWAITING_SEPARATELY_AUTHORIZED_NON_PROVIDER_EXECUTOR",
+    "free_swarm_provider_admission": "OWNER_EMERGENCY_STOP_HARD_OFF",
+    "free_swarm_runtime_quiescence": "NOT_PROVEN_LIVE_LEGACY_PROCESSES_OBSERVED_AFTER_STOP",
+    "physical_grid10_load_failure_rejoin": "BLOCKED_PENDING_TRUE_REPOSITORY_BOUND_FUSED_PROCESS_PASS",
+    "physical_grid10_matched_budget_challengers": "BLOCKED_PENDING_TRUE_REPOSITORY_BOUND_FUSED_PROCESS_PASS",
+    "physical_grid10_hyperposition_gwt_reentry": "BLOCKED_PENDING_TRUE_REPOSITORY_BOUND_FUSED_PROCESS_PASS",
     "trigger2_binding_router_factorial_generator_v3": "BLOCKED_FROM_DIRECT_TRAINING_CONDITIONAL_NUISANCE_LEAKAGE",
-    "checkpoint_selection": "UNRESOLVED_MORE_MATCHED_DATA_REQUIRED",
+    "qwen35_checkpoint_input_identity_abi": "SOURCE_READY_EXECUTION_RECEIPTS_MISSING_FOR_THREE_FROZEN_CANDIDATES",
+    "checkpoint_selection": "UNRESOLVED_NO_WINNER",
     "jspace_representation_metrology": "BLOCKED_KNOWN_INSTRUMENTATION_BUG",
     "evidence_qualified_forge_to_distillery_positive_yield": "BLOCKED_ACCEPTED_DATASET_TOKENS_ZERO_UNLESS_NEW_EXECUTABLE_RECEIPT_SUPERSEDES",
     "entityos_whole_runtime_credit": 0,
@@ -29,7 +31,9 @@
     "enabled": true,
     "no_paid_fallback": true,
     "together_forbidden": true,
-    "live_free_vps_surface_observed": true
+    "free_swarm_owner_emergency_stop": true,
+    "provider_routes_admitted": false,
+    "runtime_quiescence_required_before_new_execution": true
   },
   "evidence_law": [
     "EXECUTABLE_EVIDENCE_OUTRANKS_MODEL_CONSENSUS",
@@ -43,29 +47,33 @@
     "ORDINARY_XENO_MODULES_ARE_S1_READ_ONLY",
     "ONLY_VALID_DYNAMIC_COORDINATOR_LEASE_HOLDERS_MAY_WRITE_S1",
     "COORDINATOR_WRITE_NEVER_MINTS_S0_TRUTH_OR_EFFECT_AUTHORITY",
-    "PHYSICAL_GRID10_REQUIRES_10_SIMULTANEOUSLY_LIVE_INDEPENDENT_NODE_PROCESSES_NOT_SEQUENTIAL_INVOCATIONS_THREADS_OR_LOGICAL_CELLS",
-    "NODE_RESULT_OBSERVATION_IDENTITY_MUST_NOT_BE_SILENTLY_RELABELED_AS_CURRENT_AFTER_S1_ADVANCES",
-    "REPOSITORY_BOUND_FREE_VPS_RECEIPTS_MUST_BIND_CLEAN_HEAD_TREE_RUNTIME_AND_EXACT_SOURCE_HASHES",
+    "PHYSICAL_GRID10_REQUIRES_10_SIMULTANEOUSLY_LIVE_INDEPENDENT_NODE_PROCESSES_AND_EXACT_COHORT_CONSUMPTION",
+    "REPOSITORY_BOUND_FREE_EXECUTION_RECEIPTS_MUST_BIND_CLEAN_HEAD_TREE_RUNTIME_AND_EXACT_SOURCE_HASHES",
+    "OWNER_EMERGENCY_STOP_IS_NOT_RUNTIME_COMPLETE_UNTIL_PREEXISTING_PROVIDER_CAPABLE_PROCESSES_ARE_QUIESCED_AND_OBSERVED_QUIESCED",
+    "EXECUTION_PIN_DOES_NOT_ITSELF_MINT_EXECUTION_AUTHORITY",
     "NO_TRAINING_CREDIT_FROM_RUNTIME_COMPONENT_TESTS",
     "UBUNTU_ONLY_FRANK_V0_1_TARGET_REMAINS_UNCHANGED",
     "DO_NOT_MODIFY_FRANK_HARNESS"
   ],
   "next_focus": [
-    "REPAIR_XENO_PHYSICAL_GRID10_ACCEPTANCE_TO_USE_OVERLAPPING_POPEN_PROCESSES_WITH_TEN_DISTINCT_OS_PIDS_AND_A_BARRIER_OR_EQUIVALENT_CONCURRENT_LIVENESS_PROOF_ON_ONE_SHARED_READ_ONLY_S1",
-    "DEFINE_AND_TEST_STALE_NODE_RESULT_POLICY_REQUIRE_EXACT_SNAPSHOT_IDENTITY_OR_A_SEPARATELY_NAMED_PROVEN_REBASE_PROTOCOL_DO_NOT_ACCEPT_OLD_STATE_DIGEST_AS_CURRENT_EVIDENCE",
-    "ADD_NEGATIVE_STALE_DIGEST_AND_PID_OVERLAP_REGRESSIONS",
-    "COMMIT_REPAIRED_HARNESS_AND_CREATE_A_NEW_PINNED_FREE_VPS_EXECUTION_REQUEST_BOUND_TO_THAT_COMMIT",
-    "ONLY_IF_THE_REPAIRED_REPOSITORY_BOUND_RUN_PASSES_ADVANCE_TO_CONTROLLED_LOAD_COORDINATOR_FAILURE_REJOIN_MATCHED_BUDGET_CHALLENGERS_AND_HYPERPOSITION_GWT_REENTRY"
+    "QUIESCE_AND_RECEIPT_ALL_PREEXISTING_FREE_SWARM_PROVIDER_SUPERVISOR_OR_PROVIDER_CALLER_PROCESSES_ON_CLAY_DIRECT_DEV_OR_OTHER_LIVE_HOSTS_UNDER_OWNER_EMERGENCY_STOP",
+    "VERIFY_NO_NEW_PROVIDER_USAGE_DELTA_ACROSS_A_BOUNDED_POST_QUIESCENCE_OBSERVATION_WINDOW",
+    "REENTER_CURRENT_EXECUTION_AUTHORITY_AND_BIND_AN_ADMISSIBLE_FREE_NON_PROVIDER_ISOLATED_EXECUTION_SURFACE_FOR_THE_FUSED_GRID10_PIN",
+    "EXECUTE_EXACT_0A76C144_FUSED_GRID10_SOURCE_ONLY_AFTER_THE_PREVIOUS_TWO_GATES_AND_PERSIST_A_CLEAN_REPOSITORY_BOUND_RECEIPT",
+    "ONLY_IF_PASS_ADVANCE_TO_CONTROLLED_LOAD_COORDINATOR_FAILURE_REJOIN_MATCHED_BUDGET_CHALLENGERS_AND_HYPERPOSITION_GWT_REENTRY",
+    "KEEP_QWEN35_CHECKPOINT_IDENTITY_EXECUTION_SEPARATE_AND_DO_NOT_SELECT_A_WINNER_UNTIL_ALL_THREE_FROZEN_CANDIDATES_HAVE_SELECTION_GRADE_RECEIPTS_AND_MATCHED_EVALUATION"
   ],
   "promotion_state": {
     "canonical_s0_component_runtime_pass": true,
     "xeno_fabric_component_runtime_pass": true,
+    "physical_grid10_source_ready": true,
     "physical_grid10_component_runtime_pass": false,
     "entityos_whole_runtime_pass": false,
     "hcu_full_runtime_pass": false,
     "base_work_package_promotion": false,
     "canonical_semantics_promotion": false,
+    "checkpoint_selection_credit": 0,
     "training_credit": 0
   },
-  "steering": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_81_DELTA_2026-08-26T0150P0700_GPT56SOL.json"
+  "steering": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_81_DELTA_2026-08-26T0249P0700_GPT56SOL.json"
 }

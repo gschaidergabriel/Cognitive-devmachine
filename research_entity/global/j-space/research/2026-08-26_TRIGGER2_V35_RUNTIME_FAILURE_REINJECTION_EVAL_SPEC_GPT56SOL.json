@@ -1,0 +1,218 @@
+{
+  "schema": "CLAY_TRIGGER2_V35_RUNTIME_FAILURE_REINJECTION_EVAL_SPEC/v1",
+  "date": "2026-08-26",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "status": "CURRENT_NONTRAINABLE_EVAL_AND_GENERATOR_SPEC",
+  "observed_main_before_write": "016bf8840cedc72e860909ab3e4e08d4549f6c65",
+  "authority": {
+    "supervisor": "8.81",
+    "supervisor_inbox": "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
+    "steering": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_81_DELTA_2026-08-26T0150P0700_GPT56SOL.json",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "architecture": "HCU",
+    "training_target": "Qwen3.5-0.8B-class role-flexible Xeno node inside the variable-N HCU fabric"
+  },
+  "purpose": "Return the newest physical-GRID10 proof failures and current external method evidence into Trigger-2 before any new positive training admission. This artifact defines eval/generator families only; deterministic runtime authority stays outside the model.",
+  "observed_project_findings": [
+    {
+      "id": "F1_PHYSICAL_GRID10_CONCURRENCY_PROOF_GAP",
+      "classification": "R0_OBSERVED_SOURCE_PLUS_SUPERVISOR_FINDING",
+      "source": "tools/xeno_physical_grid10_acceptance_v1.py plus supervisor 8.81",
+      "finding": "The harness invokes ordinary nodes sequentially with subprocess.run and then equates len(packets)==10 with ten physical processes. This proves ten subprocess completions, not ten simultaneously live independent node processes.",
+      "credit_effect": "physical_grid10_runtime_credit remains 0"
+    },
+    {
+      "id": "F2_STALE_OBSERVATION_RELABEL_GAP",
+      "classification": "R0_OBSERVED_SOURCE_PLUS_SUPERVISOR_FINDING",
+      "source": "tools/xeno_physical_grid10_acceptance_v1.py and tools/xeno_self_organizing_fabric_acceptance_v1.py",
+      "finding": "coordinator_commit checks CAS identity for the current write and rejects only future packet epochs; it does not require packet.state_digest to equal the packet's claimed/current observation snapshot. The GRID10 harness serially rewrites packet epoch/generation during commit while retaining source evidence from an older snapshot. Observation identity and admission identity are therefore not yet cleanly separated for stale-result handling.",
+      "credit_effect": "existing fbab596-pinned physical GRID10 run is diagnostic only even if pass=true"
+    },
+    {
+      "id": "F3_POSITIVE_TRAINING_ADMISSION_REMAINS_CLOSED",
+      "classification": "R0_CURRENT_LEDGER_AND_SUPERVISOR",
+      "finding": "Training credit and accepted dataset tokens remain zero; the known binding-router factorial v3 stays quarantined and physical GRID10 is not yet executable-proof clean.",
+      "credit_effect": "no new admitted positive rows in this Trigger-2 cycle"
+    }
+  ],
+  "design_decision": {
+    "id": "D1_EXACT_SNAPSHOT_FIRST",
+    "status": "RECOMMENDED_FOR_V1_NOT_CANONICAL_UNTIL_RUNTIME_OWNER_ACCEPTS",
+    "decision": "For the first credit-worthy physical GRID10 gate, prefer exact observation-snapshot admission: packet.state_epoch and packet.state_digest must bind the authoritative snapshot actually observed by the node. If S1 advanced, reject/re-read/recompute. Treat evidence rebase as a separately named later protocol with explicit original-observation identity and revalidation receipts.",
+    "reason": "This is the smallest fail-closed contract, separates observation from write CAS, minimizes silent evidence relabeling, and gives training a crisp stale-state behavior without teaching the model deterministic authority logic.",
+    "counterhypothesis": "A validated rebase protocol could preserve useful expensive node work and improve throughput under contention.",
+    "falsifier_or_upgrade_gate": "After true concurrent GRID10 passes exact-snapshot V1, measure discard/recompute cost. Only introduce rebase if the measured cost is material and the rebase protocol preserves original epoch+digest+packet digest plus explicit current-snapshot revalidation without relabeling the old observation as current."
+  },
+  "evaluation_families": [
+    {
+      "id": "T2V35_EVAL_CONCURRENT_LIVENESS",
+      "class": "RUNTIME_GATE_ONLY_NOT_MODEL_SFT",
+      "target": "physical GRID10 acceptance truthfulness",
+      "positive_condition": "ten distinct OS PIDs with overlapping lifetimes, a barrier/equivalent all-live proof, and read-only attachment to one same isolated S1 snapshot identity",
+      "hard_negatives": [
+        "ten sequential subprocess completions",
+        "ten logical packets with no observed PIDs",
+        "threads presented as independent OS processes",
+        "pids=len(packets) or any derived count presented as PID evidence",
+        "processes that overlap but read different S1 snapshot identities"
+      ],
+      "training_use": "Evaluator/runtime acceptance only. Do not train the model to self-certify physical concurrency."
+    },
+    {
+      "id": "T2V35_EVAL_STALE_OBSERVATION_IDENTITY",
+      "class": "MODEL_EVAL_PLUS_FUTURE_CANDIDATE_GENERATOR",
+      "target": "recognize stale S1 evidence without silently relabeling it",
+      "required_behavior": "When current snapshot identity differs from NODE_RESULT observation epoch/digest, classify the result as stale-for-current-state and request reread/recompute unless an explicitly typed validated rebase receipt is supplied.",
+      "hard_negatives": [
+        "change state_epoch to current while retaining an old state_digest/payload and claim current evidence",
+        "accept old digest merely because generation matches",
+        "majority of stale nodes upgrades stale evidence to current",
+        "coordinator preference upgrades stale evidence to current",
+        "write-CAS success is treated as proof that the source observation was current"
+      ],
+      "retention_boundary": "Runtime gate must independently enforce the invariant; model correctness cannot grant authority."
+    },
+    {
+      "id": "T2V35_EVAL_EXPLICIT_REBASE_PROVENANCE",
+      "class": "DEFERRED_MODEL_EVAL_AND_RUNTIME_PROTOCOL_RESEARCH",
+      "target": "preserve causal observation identity if rebase is later introduced",
+      "required_fields_if_enabled": [
+        "original_state_epoch",
+        "original_state_digest",
+        "original_packet_digest",
+        "current_state_epoch",
+        "current_state_digest",
+        "revalidation_method_identity",
+        "revalidation_receipt_digest",
+        "changed_assumptions_or_conflicts",
+        "decision_recompute_reuse_or_reject"
+      ],
+      "hard_negative": "overwriting original observation identity with current snapshot fields"
+    },
+    {
+      "id": "T2V35_EVAL_VARIABLE_N_AND_NODE_ID_INVARIANCE",
+      "class": "MODEL_EVAL_PLUS_FUTURE_CANDIDATE_GENERATOR",
+      "target": "same checkpoint, role-flexible process semantics independent of N and node identity",
+      "controls": ["N=1", "N=2", "N=10", "N=32 logical", "node-id permutation", "coordinator-id permutation"],
+      "hard_negatives": [
+        "GRID10 becomes a semantic personality count",
+        "specific node IDs imply planner/critic/memory roles",
+        "resident weight copies or decode concurrency are inferred from logical N"
+      ]
+    },
+    {
+      "id": "T2V35_EVAL_EPISTEMIC_ABSTENTION_RETENTION",
+      "class": "MODEL_SELECTION_AND_RETENTION_GATE",
+      "target": "UNKNOWN/FALSE/MEASUREMENT_ERROR/HYPOTHESIS/OBSERVED/CANONICAL discrimination",
+      "required_axes": [
+        "unknowable fact abstention",
+        "false premise",
+        "measurement error distinct from hypothesis",
+        "DB fact outranks simulation without declaring the simulation necessarily false",
+        "outdated/stale evidence requires revalidation"
+      ],
+      "reason": "Current TARGET_MEASURED has a reproducible unknowable-fact fabrication weakness and POSTTRAINED has a DB-vs-simulation authority failure; neither can be frozen from the current small scope."
+    },
+    {
+      "id": "T2V35_EVAL_DYNAMIC_BINDING_SYSTEMATICITY",
+      "class": "MODEL_EVAL_PLUS_GENERATOR_RESEARCH",
+      "target": "episode-local current-codebook binding rather than shallow lexical or fixed-atom shortcuts",
+      "controls": [
+        "unseen mapping permutation",
+        "unseen symbol family",
+        "unseen template",
+        "codebook-first versus case-first order",
+        "query-polarity flip",
+        "nuisance-only decoder",
+        "family-disjoint semantic/provenance holdout"
+      ],
+      "hard_boundary": "trigger2_binding_router_factorial_generator_v3 remains blocked from direct training"
+    },
+    {
+      "id": "T2V35_EVAL_JSPACE_POST_INTERVENTION_METROLOGY",
+      "class": "MODEL_SPECIFIC_CAUSAL_EVAL_ONLY",
+      "target": "separate behavioral intervention effect from downstream representation change",
+      "required_method": "Capture downstream/post-intervention activation in the actual intervened forward pass (or architecture-valid equivalent), not a stale/pre-intervention tensor; preregister layer/site/vector/control matrix and keep behavior and representation credit separate.",
+      "controls": ["baseline", "target intervention", "sign flip", "null", "orthogonal same norm", "permuted same norm", "off-target behavior"]
+    }
+  ],
+  "external_method_evidence": [
+    {
+      "classification": "SOURCE_DIRECT_METHOD_EVIDENCE_NOT_PROJECT_RUNTIME_EVIDENCE",
+      "title": "Position: Multi-Agent Systems Should Prioritize Concurrency Control",
+      "year": 2026,
+      "arxiv": "2608.18092",
+      "relevance": "Frames stale reads, lost updates and inconsistent outcomes in multi-agent systems as first-class concurrency-control anomalies. Supports explicit snapshot/conflict/isolation gates but does not prove the Clay implementation."
+    },
+    {
+      "classification": "SOURCE_DIRECT_METHOD_EVIDENCE_NOT_QWEN35_SPECIFIC",
+      "title": "How Do Transformers Learn Variable Binding in Symbolic Programs?",
+      "year": 2025,
+      "arxiv": "2505.20896",
+      "relevance": "Shows a training trajectory from shallow heuristics to systematic variable-binding mechanisms and uses causal interventions to localize routing. Supports held-out binding permutations and causal tests rather than fixed lexical mappings."
+    },
+    {
+      "classification": "SOURCE_DIRECT_METHOD_EVIDENCE_NOT_QWEN35_SPECIFIC",
+      "title": "AbstentionBench: Reasoning LLMs Fail on Unanswerable Questions",
+      "year": 2025,
+      "arxiv": "2506.09038",
+      "relevance": "Finds abstention remains difficult and can degrade after reasoning fine-tuning. Supports treating epistemic abstention as a retention floor rather than assuming training monotonically improves it."
+    },
+    {
+      "classification": "SOURCE_DIRECT_METHOD_EVIDENCE_NOT_PROJECT_CAUSAL_CREDIT",
+      "title": "Towards Best Practices of Activation Patching in Language Models: Metrics and Methods",
+      "year": 2023,
+      "arxiv": "2309.16042",
+      "relevance": "Shows activation-patching conclusions can depend strongly on intervention/metric choices. Supports preregistered post-intervention representation capture and matched controls for J-Space claims."
+    }
+  ],
+  "hypotheses": [
+    {
+      "id": "H1",
+      "hypothesis": "Exact-snapshot rejection/recompute will produce cleaner first physical-GRID10 semantics than in-place stale-result relabeling.",
+      "counterhypothesis": "Strict snapshot equality could cause excessive recompute under coordinator fan-in and make the architecture impractical.",
+      "discriminator": "After concurrency repair, run matched exact-snapshot GRID10 and measure stale-result rate, recompute count, useful-result retention, S1 commit latency and task completion. Do not introduce rebase before this baseline."
+    },
+    {
+      "id": "H2",
+      "hypothesis": "The model's main vector-language weakness is dynamic current-codebook binding, not primitive semantic read/write.",
+      "counterhypothesis": "Observed binding weakness is mostly renderer/tokenizer/nuisance leakage rather than an internal binding limitation.",
+      "discriminator": "Use exact tokenizer/renderer identity, full mapping permutations, unseen mappings/templates/symbols, nuisance-only decoders and causal intervention controls before attributing failure to model capacity."
+    },
+    {
+      "id": "H3",
+      "hypothesis": "A checkpoint optimized for low refusal can regress epistemic abstention while retaining other protocol skills.",
+      "counterhypothesis": "The current 4/5 fabrication signal is small-sample noise or prompt-format sensitivity.",
+      "discriminator": "Run the preregistered matched greedy >=64 fresh held-out cases per decisive axis/candidate with exact checkpoint/tokenizer/renderer/input identity."
+    }
+  ],
+  "generation_decision": {
+    "new_positive_training_rows": 0,
+    "positive_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "training_executed": false,
+    "training_credit": 0,
+    "candidate_eval_spec_created": true,
+    "reason": "The current physical-GRID10 state semantics are not yet proof-clean and positive admission remains closed. Eval/generator hardening has higher information value than row growth."
+  },
+  "next_exact_gates": [
+    "Repair physical GRID10 harness to overlapping Popen/equivalent processes, ten distinct observed OS PIDs, barrier/all-live overlap proof and one shared read-only S1 snapshot identity.",
+    "Adopt exact-snapshot packet admission for the first credit-worthy V1 or explicitly version a separate evidence-rebase protocol; do not silently mutate observation identity.",
+    "Add negative stale-digest and fake-concurrency regressions before a new pinned FREE VPS execution request.",
+    "After a true physical GRID10 component pass, run matched fan-in/contention/recompute measurements before deciding whether evidence rebase is needed.",
+    "Continue checkpoint and J-Space research with separately preregistered matched holdouts; do not reopen positive training admission yet."
+  ],
+  "credits": {
+    "research_delta": 1,
+    "training_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "physical_grid10_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0,
+    "training_credit": 0
+  }
+}

@@ -22,7 +22,7 @@ class Response:
         status=200,
         body=(
             b'{"object":"chat.completion","model":"x",'
-            b'"choices":[{"finish_reason":"stop",'
+            b'"choices":[{"index":0,"finish_reason":"stop",'
             b'"message":{"role":"assistant","content":"ok"}}]}'
         ),
     ):

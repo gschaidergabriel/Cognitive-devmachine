@@ -1,0 +1,126 @@
+{
+  "schema": "CLAY_TRIGGER2_JSPACE_INTERVENTION_DISTRIBUTION_FIDELITY_GATE_RESEARCH_DELTA/v1",
+  "date": "2026-08-25",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU_VARIABLE_COGNITIVE_GRID",
+  "status": "CURRENT_EVAL_DESIGN_NONPROMOTING_NO_ROWS",
+  "authority_snapshot": {
+    "repository": "gschaidergabriel/clay-global-research-entity",
+    "branch": "main",
+    "observed_main_before_write": "a1c3999291348d56c8e3f1c46f27f33cdcf68486",
+    "supervisor_epoch": "8.78",
+    "mode": "FREE_ONLY",
+    "owner_target": "VARIABLE COGNITIVE GRID + PERSISTENT DATABASE + CLAUDE CODE + strongest causally evidenced Global J-Space bridge",
+    "training_target": "Qwen3.5-0.8B-class reusable cognitive-process substrate; runtime N variable; GRID10 benchmark-only",
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "positive_jspace_causal_credit": 0
+  },
+  "lifecycle": {
+    "predecessor_or_companion": [
+      "T2_ACTIONABILITY_AND_ROLE_TYPED_NUISANCE_GATE_V1",
+      "research_entity/global/j-space/research/2026-08-25_TRIGGER2_C1_MIXED_CHECKPOINT_EMERGENCE_PROTOCOL_V2_GPT56SOL.json",
+      "research_entity/global/j-space/research/2026-08-25_TRIGGER2_2222_EXECUTION_BOUNDARY_SOURCE_SELECTION_DELTA_V1_GPT56SOL.json",
+      "T2-LEDGER-V20"
+    ],
+    "relationship": "ORTHOGONAL_CAUSAL_FIDELITY_SUCCESSOR_DONOR_NOT_REPLACEMENT",
+    "reason": "Existing actionability/source-selection work asks whether an intervention changes the intended behavior and where steering vectors should be sourced. This delta adds a separate requirement: the intervention must not earn mechanism/J-Space credit merely by driving hidden states into an unnatural region that activates a dormant or off-manifold pathway.",
+    "moving_main_rule": "If a later converged Trigger-2 ledger exists at admission time, this artifact is a method donor until explicitly re-entered against that successor."
+  },
+  "external_research": [
+    {
+      "source": "Grant et al., Addressing divergent representations from causal interventions on neural networks, arXiv:2511.04638, 2025",
+      "url": "https://arxiv.org/abs/2511.04638",
+      "classification": "SOURCE_DIRECT_METHOD_INPUT",
+      "finding": "Common causal interventions can shift representations away from the target model's natural distribution; the authors distinguish harmless divergence from pernicious divergence that can activate dormant pathways, and study regularization toward natural distributions.",
+      "project_effect": "A behavior-changing intervention is insufficient for positive J-Space mechanism credit unless intervention-distribution fidelity is measured at exact model/runtime/site identity."
+    },
+    {
+      "source": "Vogels et al., In-Distribution Steering: Balancing Control and Coherence in Language Model Generation, arXiv:2510.13285, 2025",
+      "url": "https://arxiv.org/abs/2510.13285",
+      "classification": "SOURCE_DIRECT_METHOD_INPUT",
+      "finding": "Adaptive steering based on representation-space distribution is reported to preserve stronger generation stability than fixed unadapted steering in the studied setting.",
+      "project_effect": "Include a matched distribution-aware intervention control where technically feasible rather than treating fixed-strength steering as the only causal intervention family."
+    },
+    {
+      "source": "Ye et al., Where Steering Signals Come From: Activation Source Selection in Activation Steering, arXiv:2607.25270, 2026",
+      "url": "https://arxiv.org/abs/2607.25270",
+      "classification": "SOURCE_DIRECT_METHOD_INPUT",
+      "finding": "Holding downstream intervention fixed while varying source context/readout policy materially changes steering success across the reported models and tasks; execution-boundary source states are especially important.",
+      "project_effect": "Distribution-fidelity testing must be crossed with source-policy testing because an apparently strong source policy may also differ in how far its intervention moves the target representation from natural states."
+    }
+  ],
+  "hypothesis": {
+    "id": "T2_JSPACE_DISTRIBUTION_FIDELITY_H1",
+    "level": "R2_GENERATED",
+    "claim": "Some apparently successful J-Space/activation interventions will change behavior primarily because they create out-of-distribution hidden states, so behavioral actionability alone can overstate reuse of the model's natural cognitive mechanism."
+  },
+  "counterhypothesis": {
+    "id": "T2_JSPACE_DISTRIBUTION_FIDELITY_C1",
+    "level": "R3_COUNTER_REALITY",
+    "claim": "A representation can move measurably away from the empirical natural-state cloud while remaining causally faithful, for example through null-space movement or within a behaviorally equivalent region; therefore distribution distance alone must not veto a valid intervention."
+  },
+  "acceptance_design": {
+    "gate_id": "T2_JSPACE_INTERVENTION_DISTRIBUTION_FIDELITY_GATE_V1",
+    "promotion_scope": "MODEL_SPECIFIC_JSPACE_CAUSAL_CONTROL_ONLY",
+    "required_exact_identity": [
+      "model/checkpoint",
+      "tokenizer",
+      "runtime/build",
+      "layer/site/token position",
+      "source-policy identity",
+      "intervention vector/feature identity",
+      "strength/dose",
+      "prompt/family/split identity",
+      "random seed and numerical environment where relevant"
+    ],
+    "required_controls": [
+      "MATCHED_NATURAL_STATE_BASELINE_FROM_FROZEN_HOLDOUT",
+      "INTERVENTION_DISTRIBUTION_SHIFT_MEASURED_WITH_PREREGISTERED_STATISTIC",
+      "TARGET_BEHAVIOR_ACTIONABILITY",
+      "DOSE_RESPONSE_AND_MINIMAL_EFFECTIVE_STRENGTH",
+      "WRONG_LAYER_OR_WRONG_SITE_CONTROL",
+      "RANDOM_OR_MATCHED_NUISANCE_DIRECTION_CONTROL",
+      "OFF_TARGET_BEHAVIOR_AND_COHERENCE_RETENTION",
+      "RESCUE_OR_REVERSIBILITY_WHERE_MECHANISM_PREDICTS_IT",
+      "HELD_OUT_FAMILY_AND_TEMPLATE_TRANSFER",
+      "SOURCE_POLICY_CROSS_OR_PREREGISTERED_INTERACTION_TEST",
+      "DISTRIBUTION_AWARE_OR_NATURALISTIC_INTERVENTION_COMPARATOR_WHERE_FEASIBLE"
+    ],
+    "decision_logic": {
+      "behavior_changes_but_large_unexplained_distribution_shift": "CAUSAL_ACTIONABILITY_OBSERVED_MECHANISM_FIDELITY_BLOCKED",
+      "distribution_shift_small_but_behavior_unchanged": "NO_CAUSAL_CONTROL_CREDIT",
+      "distribution_shift_large_but_proven_harmless_by_null_behavioral_off_target_and_rescue_controls": "MAY_PROCEED_WITH_EXPLICIT_HARMLESS_DIVERGENCE_EVIDENCE",
+      "behavioral_effect_selective_reversible_transferable_and_distribution_fidelity_supported": "ELIGIBLE_FOR_BOUNDED_MODEL_SPECIFIC_CAUSAL_PROMOTION_ONLY_AFTER_ALL_OTHER_PROVENANCE_AND_HOLDOUT_GATES",
+      "distance_statistic_only": "NEVER_SUFFICIENT_FOR_PASS_OR_FAIL"
+    }
+  },
+  "training_effect": {
+    "positive_rows_generated": 0,
+    "hard_negative_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "positive_jspace_causal_credit": 0,
+    "rule": "Do not turn steering success into positive J-Space labels until exact-checkpoint actionability, source-policy, provenance, holdout and intervention-distribution fidelity gates jointly pass."
+  },
+  "architecture_effect": {
+    "global_jspace": "Strengthens the evidence ceiling: only causally useful and mechanistically distribution-faithful controls may be promoted as model-specific J-Space carriers.",
+    "hyperposition": "Preserve both explanations when actionability and distribution fidelity disagree: NATURAL_MECHANISM_CONTROL versus OOD_PATHWAY_ACTIVATION remain live alternatives until discriminated.",
+    "variable_grid": "No fixed N assumption is introduced; evaluation should include held-out N where the control semantics are intended to be grid-size invariant.",
+    "database_boundary": "No canonical truth or durable fact is inferred from activation geometry; exact state/evidence remains database-bound."
+  },
+  "next_discriminator": "On the first exact Qwen3.5-0.8B-class checkpoint/runtime admitted for J-Space causal testing, preregister one natural-state distribution statistic and threshold from frozen control data, then cross source policy x intervention strength on held-out families while measuring intended behavior, off-target behavior, reversibility/rescue and distribution shift. Preserve UNKNOWN rather than tuning the threshold after seeing target outcomes.",
+  "credits": {
+    "research_delta": 1,
+    "evaluation_design_delta": 1,
+    "runtime_credit": 0,
+    "training_credit": 0,
+    "positive_jspace_causal_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0
+  }
+}

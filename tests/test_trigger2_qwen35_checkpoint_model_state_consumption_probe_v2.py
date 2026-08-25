@@ -44,3 +44,15 @@ def test_model_call_binding_detects_token_transplant():
 
 def test_state_digest_detects_post_load_parameter_mutation():
     assert m._state_digest({"x": rec("a"*64)}) != m._state_digest({"x": rec("f"*64)})
+
+def test_same_top1_different_logits_changes_call_identity():
+    common = dict(candidate_id="C", checkpoint_manifest_sha256="1"*64, checkpoint_state_digest="2"*64, loaded_state_digest="3"*64, rendered_utf8_sha256="4"*64, input_ids={"raw_bytes_sha256":"5"*64}, attention_mask=None, runtime={"transformers":"x"})
+    a = m._call_binding_digest(**common, forward_output={"top1_token_id":7, "last_logits":{"raw_bytes_sha256":"a"*64}})
+    b = m._call_binding_digest(**common, forward_output={"top1_token_id":7, "last_logits":{"raw_bytes_sha256":"b"*64}})
+    assert a != b
+
+def test_output_transplant_across_candidate_identity_changes_call_identity():
+    common = dict(checkpoint_manifest_sha256="1"*64, checkpoint_state_digest="2"*64, loaded_state_digest="3"*64, rendered_utf8_sha256="4"*64, input_ids={"raw_bytes_sha256":"5"*64}, attention_mask=None, runtime={"transformers":"x"}, forward_output={"top1_token_id":7, "last_logits":{"raw_bytes_sha256":"a"*64}})
+    a = m._call_binding_digest(candidate_id="BASE", **common)
+    b = m._call_binding_digest(candidate_id="TARGET", **common)
+    assert a != b

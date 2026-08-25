@@ -7,7 +7,8 @@
 **Product:** EntityOS  
 **Architecture:** HCU  
 **Authority re-entered:** supervisor 8.81 delta / FREE_ONLY  
-**Branch base:** `8bdf6ea5f6c7d922562e0223e95b9cefebc65e86`
+**Branch base:** `8bdf6ea5f6c7d922562e0223e95b9cefebc65e86`  
+**Re-entered current main after write:** `392365d7dddc2a97ac5b531dc75367f675fd0a80`
 
 ## 1. Trigger meaning re-established
 
@@ -113,13 +114,19 @@ Correct Xeno behavior:
 - do not infer authority or permit execution;
 - do not convert the control-plane blocker into a scientific negative against Xeno/HCU.
 
-## 7. Ledger audit
+## 7. Ledger audit and re-entry
 
-Current ledger remains:
+At the first write, the newest inspected ledger was V48. During this same trigger, parallel current-main work advanced the Trigger-2 ledger to:
 
-`research_entity/global/j-space/research/2026-08-26_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V48_GPT56SOL.json`
+`research_entity/global/j-space/research/2026-08-26_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V51_GPT56SOL.json`
 
-This run does not supersede V48. It refines its P0 evidence surface:
+and updated the current cache at main commit:
+
+`392365d7dddc2a97ac5b531dc75367f675fd0a80`
+
+V51 still keeps the same global P0: prove and receipt runtime quiescence after the FreeSwarm emergency stop, including a bounded zero provider-usage delta. It also advances later J-Space causal-interface research, but none of that reopens execution or training admission.
+
+This run does **not** supersede V51. It is a nonduplicate partial P0 evidence donor:
 
 - bounded no-new-measured-LLM-usage window: **OBSERVED**;
 - full runtime quiescence: **UNPROVEN**;

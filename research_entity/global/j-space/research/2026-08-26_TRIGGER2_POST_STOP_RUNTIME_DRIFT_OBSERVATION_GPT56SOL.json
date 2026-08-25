@@ -1,0 +1,56 @@
+{
+  "schema": "CLAY_TRIGGER2_POST_STOP_RUNTIME_DRIFT_OBSERVATION/v1",
+  "date": "2026-08-26",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "observed_main_before_write": "8a4b5d990fd7524ef7aab5de3b96cef7bde34cc6",
+  "authority_epoch": "8.81_DELTA",
+  "mode": "FREE_ONLY",
+  "classification": "NONCANONICAL_RESEARCH_NEGATIVE_EVIDENCE",
+  "finding": "Repository telemetry continued to record OpenRouter request attempts after the owner emergency-stop commit hard-disabled FreeSwarm source admission. This strengthens the current supervisor classification that runtime quiescence is not proven and must remain ahead of all new provider/model/experiment execution.",
+  "evidence": {
+    "emergency_stop_commit": "34cde26849a31b852b677a38f2c426c75d881bcf",
+    "emergency_stop_commit_time_utc": "2026-08-25T19:13:49Z",
+    "pre_stop_provider_budget_generated_at": "2026-08-25T19:11:34.869118+00:00",
+    "pre_stop_openrouter_total_requests": 2982,
+    "pre_stop_openrouter_total_success": 134,
+    "pre_stop_openrouter_total_429": 2847,
+    "post_stop_provider_budget_generated_at": "2026-08-25T20:26:53.877789+00:00",
+    "post_stop_openrouter_total_requests": 3426,
+    "post_stop_openrouter_total_success": 134,
+    "post_stop_openrouter_total_429": 3291,
+    "delta_requests": 444,
+    "delta_success": 0,
+    "delta_429": 444,
+    "post_stop_distillery_state": "LIVE"
+  },
+  "historical_source_audit": {
+    "old_supervisor_ref": "686d1f5c08c956aa6baea8cc8f160c03ab766f9e:tools/run_6000_free_swarm_supervisor.sh",
+    "old_vault_ref": "686d1f5c08c956aa6baea8cc8f160c03ab766f9e:tools/free_swarm_exec_with_vault.py",
+    "old_fast_launcher_ref": "686d1f5c08c956aa6baea8cc8f160c03ab766f9e:tools/run_6000_free_swarm_fast.py",
+    "old_network_gate_ref": "686d1f5c08c956aa6baea8cc8f160c03ab766f9e:tools/run_6000_free_swarm_v3.py",
+    "old_lane_authority_ref": "686d1f5c08c956aa6baea8cc8f160c03ab766f9e:tools/free_lane_provenance.py",
+    "observed": "The historical v3 provider request path called current_lane_binding immediately before network I/O and rechecked binding freshness. That authority snapshot was read from the runtime filesystem.",
+    "inference": "Continued post-stop request telemetry is consistent with at least one active caller reading stale or unsynchronized runtime authority bytes, or a different provider-capable path that had not become quiescent.",
+    "inference_class": "HIGH_CONFIDENCE_INFERENCE_NOT_DIRECT_HOST_OBSERVATION",
+    "counterhypotheses": [
+      "The advancing counters could be replayed or synthesized telemetry rather than fresh outbound attempts.",
+      "A different process outside the audited v3 request path could own the increments.",
+      "A partially synchronized or second runtime working tree could explain the mismatch."
+    ]
+  },
+  "decision": {
+    "providers_invoked_this_cycle": false,
+    "model_runtime_executed_this_cycle": false,
+    "vps_execution_executed_this_cycle": false,
+    "training_executed_this_cycle": false,
+    "accepted_dataset_tokens_added": 0,
+    "training_credit_added": 0,
+    "checkpoint_selection_credit_added": 0,
+    "jspace_model_credit_added": 0,
+    "whole_hcu_runtime_credit_added": 0,
+    "whole_entityos_runtime_credit_added": 0
+  },
+  "next_gate": "Obtain direct authorized host-bound runtime-quiescence evidence with exact process/source identity and a bounded observation interval showing zero new provider-usage delta. Until that evidence exists, preserve all V52/V51 downstream execution and training gates as blocked."
+}

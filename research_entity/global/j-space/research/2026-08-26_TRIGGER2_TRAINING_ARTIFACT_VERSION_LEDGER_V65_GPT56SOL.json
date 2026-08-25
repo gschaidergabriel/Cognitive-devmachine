@@ -1,0 +1,126 @@
+{
+  "schema": "CLAY_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER/v65",
+  "date": "2026-08-26",
+  "trigger": "triggerwort2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "status": "CURRENT_RESEARCH_LEDGER_NONCANONICAL_SUCCESSOR_DYNAMIC",
+  "supersedes": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V64_GPT56SOL.json",
+  "inherits_all_nonconflicting_records_from": "T2-LEDGER-V64",
+  "observed_main_before_write": "ab13e595c9f811ff0108d6ce43e4e88f9998ea96",
+  "authority": {
+    "supervisor_epoch": "8.84",
+    "supervisor": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_84_DELTA_2026-08-26T0545P0700_GPT56SOL.json",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "architecture": "HCU",
+    "runtime_quiescence": "ACTIVE_FAIL_POST_STOP_PROVIDER_ATTEMPT_COUNTERS_INCREASING",
+    "provider_routes_admitted": false,
+    "training_execution_authorized": false
+  },
+  "revision_reason": "V64 correctly retained the resealed proof-envelope adapter but recorded no exact execution result for the newly landed adapter tests. V65 binds the exact committed bytes of the retained two-phase authority, invocation-semantics regression, retained membership-to-two-phase adapter and adapter tests to a local deterministic 24/24 PASS receipt. This promotes source-fixture reproducibility only; it does not execute or credit the actual FusedFabric integration path, providers, model runtime, physical GRID10, J-Space or training.",
+  "exact_committed_source_validation": {
+    "receipt": "research_entity/continuity/receipts/2026-08-26_TRIGGER2_FUSED_MEMBERSHIP_TWO_PHASE_SOURCE_VALIDATION_GPT56SOL.json",
+    "receipt_commit": "0d7da054022b3371ad166886ee33a8d8fd12c4ab",
+    "scope": "EXACT_COMMITTED_BYTES_LOCAL_DETERMINISTIC_SOURCE_FIXTURE_ONLY",
+    "py_compile": "PASS",
+    "pytest": "24 passed in 0.06s",
+    "repository_ci": false,
+    "git_blob_identity_matched": true,
+    "files": [
+      {
+        "path": "tools/trigger2_node_result_model_call_two_phase_authority_v1.py",
+        "git_blob_sha1": "8fe4ddafcb25e830eb7b56836aa974f4ce415856",
+        "sha256": "71b93071f1181ed3d2f08af89a52359b0b9d23128109b1cbe5e54376cce5c47f"
+      },
+      {
+        "path": "tests/test_trigger2_node_result_model_call_two_phase_authority_v1.py",
+        "git_blob_sha1": "0baaa1a20c8b944af557260b00d3a3dde14061db",
+        "sha256": "971482db3db904227c36aaf6f2b135533ba668ee3bcdfcb24ced035219d2eb7b"
+      },
+      {
+        "path": "tests/test_trigger2_two_phase_call_content_vs_invocation_semantics_v1.py",
+        "git_blob_sha1": "36e563024e08009062ca4c0c394aba61ce8d3649",
+        "sha256": "78f73b863c7781137bb08b5db705688e43d7aeca31a69a6d1a052a41b87e72cc"
+      },
+      {
+        "path": "tools/trigger2_fused_membership_two_phase_adapter_v1.py",
+        "git_blob_sha1": "b822290c4565867f746b708308ca8ebf4cbbfe39",
+        "sha256": "676936cbd6f4d1a9a3ca15245dfb0a75069b847b33b2208a78c0fb2afb07cbcd"
+      },
+      {
+        "path": "tests/test_trigger2_fused_membership_two_phase_adapter_v1.py",
+        "git_blob_sha1": "de466de22c4e6995d343fc9a510fa29e1ff2606f",
+        "sha256": "5fa8669fbae96ae82b35a0df5f6db13e5757858b91735e1e679a7bcf5acf851e"
+      }
+    ]
+  },
+  "adjudicated_source_semantics": {
+    "model_call_content_identity": "source_bound_model_call_identity_sha256 MAY repeat across independent deterministic invocations when content/evidence is equal",
+    "invocation_event_identity": "distinct launch_descriptor_sha256 plus executor_observation_sha256",
+    "membership_incarnation_identity": "source_node_admission_id must be unique across independently attributed cohort members absent an explicit multiplex/fanout contract",
+    "proof_membership_cross_binding": "source_node_admission_id/revision, node, PID, generation and immutable raw packet/state identity cross-validate against PROOF_CARRYING_NODE_RESULT/v1 membership evidence",
+    "persistence_binding": "retained adapter embeds the two-phase authority into controller-owned authority_extensions and reseals the existing proof envelope, allowing the sole existing fused cohort id/persisted envelope-digest array to transitively commit to invocation provenance without a second cohort authority"
+  },
+  "p0_runtime_quiescence": {
+    "telemetry_source": "free swarm/SYSTEM_ANALYSIS_LIVE.json",
+    "telemetry_generated_at": "2026-08-25T22:43:16.216858+00:00",
+    "supervisor": "STOPPED/QUARANTINED",
+    "go_swarm": "RUNNING",
+    "embedded_provider_admission_epoch": "8.78",
+    "openrouter_total_requests": 4230,
+    "openrouter_total_429": 4095,
+    "openrouter_total_success": 134,
+    "status": "ACTIVE_FAIL_STRENGTHENED",
+    "closure_required": "On the owning live host identify and terminate/quarantine every provider-capable survivor without issuing a provider probe; prove zero survivors and a bounded no-restart interval with zero provider-counter delta; only then re-enter current FREE non-provider execution authority."
+  },
+  "real_fusedfabric_acceptance": {
+    "status": "NOT_EXECUTED_NOT_CREDITED",
+    "reason": "The local exact-byte fixture used for the 24-test run contains the retained two-phase and adapter source/test files but not an exact-current locally executable checkout of the canonical FusedFabric dependency tree. The GitHub connector provides authoritative read access, while this container has no GitHub network path. A mirrored or manually reconstructed dependency tree would not justify exact-current integration credit.",
+    "required_acceptance": [
+      "actual FusedFabric fixture with ten current proof-carrying membership envelopes",
+      "ten valid retained two-phase invocation authorities attached and proof envelopes resealed",
+      "expected fused cohort id derived from the resealed envelope digests",
+      "one actual deterministic source-fixture atomic commit state_delta=1",
+      "persisted extended envelope digests equal the committed cohort member envelope digests",
+      "identical replay state_delta=0 with exact persisted digest equality",
+      "one stale/transplanted/tampered member fails before state mutation",
+      "transport order leaves validation/cohort identities invariant"
+    ]
+  },
+  "credits": {
+    "research_delta": 1,
+    "membership_incarnation_source_closure_credit": 1,
+    "resealed_fusion_source_credit": 1,
+    "exact_committed_source_fixture_test_credit": 1,
+    "repository_ci_credit": 0,
+    "model_call_runtime_credit": 0,
+    "checkpoint_selection_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "jspace_model_credit": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "canonical_semantics_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  },
+  "execution": {
+    "provider_called_this_cycle": false,
+    "model_runtime_executed_this_cycle": false,
+    "physical_grid10_executed_this_cycle": false,
+    "training_executed_this_cycle": false,
+    "vps_execution_performed": false,
+    "paid_execution": false,
+    "unusual_experiment_executed": false,
+    "work_class": "SOURCE_ONLY_EXACT_BYTE_VALIDATION_AND_RESEARCH_FUSION"
+  },
+  "next_priority_order": [
+    "P0 owning live host: prove FreeSwarm quiescence with zero provider-capable survivors plus bounded zero provider-counter delta without provider probing",
+    "P1 source-only when an exact-current local dependency tree is available: execute real FusedFabric resealed-two-phase adapter acceptance and preserve commit/replay/fail-before-mutation evidence",
+    "P1 source-only: salvage any unique negative cases from the non-resealing donor fusion lane into the retained adapter before retiring the duplicate executable lane",
+    "P1 after quiescence PASS: re-enter newest explicit FREE non-provider execution authority before model/provider/physical GRID10 promotion",
+    "P2 keep checkpoint selection blinded and training materialization closed until separately admitted executable evidence",
+    "P3 keep accepted_dataset_tokens and training credit at zero until one exact positive admission produces tokens and identical replay adds zero"
+  ],
+  "next_exact_action": "P0 remains owning-host quiescence. The next nonduplicate source discriminator is exact real-FusedFabric commit/replay/fail-before-mutation acceptance of the retained resealed adapter using an exact-current local dependency tree; do not substitute a reconstructed mirror or fake delegate for exact-current integration evidence."
+}

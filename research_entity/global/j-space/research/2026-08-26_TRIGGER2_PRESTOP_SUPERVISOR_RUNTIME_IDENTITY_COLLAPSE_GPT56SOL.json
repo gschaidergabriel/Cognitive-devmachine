@@ -1,0 +1,106 @@
+{
+  "schema": "CLAY_TRIGGER2_PRESTOP_SUPERVISOR_RUNTIME_IDENTITY_COLLAPSE/v1",
+  "date": "2026-08-26",
+  "trigger": "triggerwort2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "status": "APPEND_ONLY_RESEARCH_NEGATIVE_EVIDENCE_NONPROMOTING",
+  "observed_main_before_write": "9de435b6b9f4ac6f058d4fe9603a0dc851ce3c55",
+  "authority": {
+    "supervisor_epoch": "8.84",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "architecture": "HCU",
+    "free_swarm_owner_stop": "HARD_OFF",
+    "provider_execution_authorized": false,
+    "training_execution_authorized": false
+  },
+  "finding": "Direct owning-host telemetry now resolves an important part of the post-stop drift hypothesis. Two live bash processes with command line tools/run_6000_free_swarm_supervisor.sh (PIDs 680904 and 680982) were observed at both 2026-08-25T22:49:41.466428Z and 2026-08-25T22:50:49.709962Z. The host ps clock is UTC and both processes report START=11:28, whereas the hard-disable commit 34cde26849a31b852b677a38f2c426c75d881bcf was committed at 2026-08-25T19:13:49Z. These are therefore directly observed pre-stop runtime incarnations, not invocations of the current five-line kill-only supervisor source. Historical source at parent 686d1f5c08c956aa6baea8cc8f160c03ab766f9e shows that the pre-stop supervisor ran a 15-second reconciliation loop and could start run_6000_free_swarm_fast.py through free_swarm_exec_with_vault.py when its then-current admission checks passed. This materially strengthens the stale-runtime/source-epoch explanation for post-stop provider-attempt telemetry, while not yet proving that either surviving shell caused each individual OpenRouter counter increment.",
+  "direct_host_evidence": {
+    "telemetry_branch": "chatgpt-vps-results",
+    "latest_observed_telemetry_commit": "d0a9a50ccef3828736318a759948f7debce598da",
+    "observation_1": {
+      "commit": "34960d39631ef6f093aa966be09a1e1392618cf4",
+      "observed_at": "2026-08-25T22:49:41.466428+00:00",
+      "surviving_supervisors": [680904, 680982]
+    },
+    "observation_2": {
+      "commit": "d0a9a50ccef3828736318a759948f7debce598da",
+      "observed_at": "2026-08-25T22:50:49.709962+00:00",
+      "surviving_supervisors": [680904, 680982]
+    },
+    "ps_start_for_both": "11:28 UTC",
+    "minimum_directly_observed_persistence_seconds": 68,
+    "other_live_free_swarm_family_processes_at_observation_2": [
+      "PID 680917 free swarm/evaluate.py --watch",
+      "PID 680995 tools/run_research_distillery_local.py",
+      "PID 207688 free swarm/update_fabric_live.py --watch"
+    ]
+  },
+  "source_epoch_evidence": {
+    "hard_stop_commit": "34cde26849a31b852b677a38f2c426c75d881bcf",
+    "hard_stop_commit_time_utc": "2026-08-25T19:13:49Z",
+    "current_supervisor_path": "tools/run_6000_free_swarm_supervisor.sh",
+    "current_supervisor_blob": "eee83593fb86e674a5739daca757221ce8e6cc71",
+    "current_semantics": "KILL_ONLY_DELEGATE_TO_ACTIVATE_6000_FREE_SWARM_SH",
+    "current_activator_path": "tools/activate_6000_free_swarm.sh",
+    "current_activator_blob": "b5b8d0e96005ed837726c64332b16ee3da4a82ee",
+    "historical_provider_capable_supervisor_ref": "686d1f5c08c956aa6baea8cc8f160c03ab766f9e:tools/run_6000_free_swarm_supervisor.sh",
+    "historical_runtime_behavior": [
+      "15-second long-running reconciliation loop",
+      "provider environment/admission reconciliation",
+      "conditional start_6000",
+      "nohup free_swarm_exec_with_vault.py -> run_6000_free_swarm_fast.py"
+    ]
+  },
+  "hypothesis_update": {
+    "prior": "Post-stop request drift was consistent with stale/unsynchronized runtime authority bytes or another provider-capable path.",
+    "current": "At least two directly observed pre-stop supervisor runtime incarnations survived long after the hard-stop source commit. Because their historical source was provider-capable and recurrent, they are concrete candidate roots for the stale-runtime drift.",
+    "confidence_class": "DIRECT_PROCESS_IDENTITY_PLUS_HISTORICAL_SOURCE_EVIDENCE; CAUSAL_PROVIDER_COUNTER_BINDING_NOT_YET_PROVEN"
+  },
+  "counterhypotheses_remaining": [
+    "The two surviving supervisor shells may be idle with respect to provider calls while a different provider-capable process owns the OpenRouter attempt increments.",
+    "A ps command line plus start time identifies process class/incarnation but does not by itself attest the exact script bytes mapped/interpreted by the already-running bash process.",
+    "Short-lived descendants may be the actual network callers and can disappear between one-minute telemetry snapshots.",
+    "Recorded provider-attempt counters and exact token-usage counters cover different evidence surfaces; a token-usage plateau does not negate failed request-attempt drift."
+  ],
+  "highest_information_discriminator": {
+    "reuse_existing_execution_request": "047962d015c6eb0e768df3eebbbc3aba91cf097f",
+    "pinned_enforcer_source": "0d14624bf211e797936626e94c87459e37dd0cbb:tools/free_swarm_runtime_quiescence_enforcer_v1.py",
+    "required_dry_run_expectation": "The owning-host process selection should include PIDs 680904 and 680982 if still live, plus only exact legacy FreeSwarm/provider-capable descendants; ambiguity must fail closed before apply.",
+    "pass_gate": "zero matched survivors + no provider-capable restart + bounded >=60-second zero provider-attempt/usage delta without issuing a provider probe",
+    "after_pass": "Re-enter newest explicit FREE non-provider execution authority before any model/provider/physical-GRID10 promotion."
+  },
+  "coordination": {
+    "new_execution_request_created": false,
+    "reason": "The exact P0 quiescence execution request already exists at commit 047962d015c6eb0e768df3eebbbc3aba91cf097f; duplicate dispatch would add stampede risk and no information gain.",
+    "unusual_experiment_executed": false
+  },
+  "fusedfabric_side_finding": {
+    "status": "SOURCE_TEST_PATH_PRESENT_BUT_EXECUTION_NOT_CREDITED",
+    "test_path": "tests/test_trigger2_fused_membership_two_phase_real_fabric_source_v1.py",
+    "finding": "Current source now exercises the retained resealed two-phase adapter through the real FusedFabric class with commit/replay/persisted-envelope/fail-before-mutation/order-invariance assertions, but no exact-current execution PASS was observed in this organ. Do not promote integration/runtime credit from source presence alone."
+  },
+  "execution_this_cycle": {
+    "provider_called": false,
+    "model_runtime_executed": false,
+    "vps_command_executed": false,
+    "training_executed": false,
+    "paid_execution": false,
+    "work_class": "READ_EXISTING_HOST_TELEMETRY_PLUS_SOURCE_IDENTITY_FUSION"
+  },
+  "credits": {
+    "research_delta": 1,
+    "direct_prestop_supervisor_survivor_evidence": 1,
+    "host_process_quiescence_credit": 0,
+    "provider_quiescence_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "checkpoint_selection_credit": 0,
+    "jspace_model_credit": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  },
+  "next_exact_action": "Do not create another request or provider probe. Execute the already-pinned P0 quiescence enforcer request 047962d015c6eb0e768df3eebbbc3aba91cf097f on the owning host, bind the before tree to the directly observed stale supervisor roots, require zero survivors/restarts and a bounded zero-provider-delta receipt, then re-enter current FREE non-provider authority if and only if that gate passes."
+}

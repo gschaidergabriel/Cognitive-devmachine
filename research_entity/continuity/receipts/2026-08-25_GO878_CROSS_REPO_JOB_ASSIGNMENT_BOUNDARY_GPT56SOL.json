@@ -1,0 +1,66 @@
+{
+  "schema": "CLAY_GO_JOB_ASSIGNMENT_BOUNDARY_RECEIPT/v1",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol / ChatGPT project organ",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority_epoch": "8.78",
+  "mode": "FREE_ONLY",
+  "canonical_main_observed_before_write": "d449e956e86c46c11b16687f07debdcb8ab966c4",
+  "purpose": "Narrow the current clay-direct-dev transport blocker from workflow-level queue state to cross-repository job-materialization versus step-execution state without creating another dispatch.",
+  "observations": [
+    {
+      "repository": "gschaidergabriel/clay-global-research-entity",
+      "workflow_run_id": 32802727269,
+      "job_id": 97666643006,
+      "job_name": "probe",
+      "job_status": "queued",
+      "job_conclusion": null,
+      "steps_observed": null
+    },
+    {
+      "repository": "gschaidergabriel/Dr.-Unterweger",
+      "workflow_run_id": 32803694800,
+      "job_id": 97669528344,
+      "job_name": "probe",
+      "job_status": "queued",
+      "job_conclusion": null,
+      "steps_observed": null
+    }
+  ],
+  "observed_classification": "CROSS_REPOSITORY_JOBS_MATERIALIZED_BUT_NO_STEP_EXECUTION_OBSERVED",
+  "inference": "The observed stall is downstream of workflow/job materialization and upstream of any visible step execution on two independent repositories using the retained self-hosted execution surface.",
+  "not_claimed": [
+    "SELF_HOSTED_RUNNER_IS_DEFINITIVELY_OFFLINE",
+    "VPS_IS_DOWN",
+    "CLAY_DIRECT_DEV_IS_BROKEN",
+    "GITHUB_RUNNER_REGISTRATION_IS_BROKEN"
+  ],
+  "missing_discriminator": "Direct self-hosted runner registry status (online/offline/busy plus labels) is not exposed by the connected GitHub action surface used by this organ. Queued jobs alone cannot distinguish runner offline from runner-group, registration, concurrency, service-account, or scheduler state.",
+  "external_solution_harvest": {
+    "source_class": "OFFICIAL_GITHUB_DOCUMENTATION",
+    "finding": "GitHub's self-hosted runner administration surfaces expose runner status/busy/labels and are the clean next discriminator when repository administration read access is available through a compatible action surface."
+  },
+  "coordination": {
+    "new_runtime_dispatch_created": false,
+    "line_identity_generation_0_retriggered": false,
+    "line_identity_generation_1_duplicate_trigger_created": false,
+    "unusual_experiment_executed": false,
+    "paid_or_provider_execution": false
+  },
+  "go_tracks": {
+    "track_a": "ADVANCED_BLOCKER_DISCRIMINATION_ONLY",
+    "track_b": "HCU_NO_CHANGE_WITH_REASON: current canonical work already fused the higher-value extraction-liveness control fix; another HCU/Typed-Entry implementation lane would not resolve the measured execution-surface blocker.",
+    "track_c": "OBSERVED_PARALLEL_ADVANCE_ONLY: current supervisor records bounded Qwen3-0.6B hidden-state component evidence, while native llama.cpp cvec, J-Space model, training, full HCU, and whole-product credit remain zero."
+  },
+  "credit": {
+    "transport_runtime_pass": false,
+    "historical_backfill_runtime_pass": false,
+    "distillery_replay_v2_runtime_pass": false,
+    "whole_entityos_hcu_runtime_credit_added": 0,
+    "hcu_full_runtime_credit_added": 0,
+    "native_jspace_llamacpp_cvec_runtime_credit_added": 0,
+    "training_credit_added": 0
+  },
+  "next_exact_gate": "Observe one terminal admitted self-hosted job or direct runner registry status; then execute the already-singleton historical line-identity/backfill gate without creating parallel dispatch fan-out."
+}

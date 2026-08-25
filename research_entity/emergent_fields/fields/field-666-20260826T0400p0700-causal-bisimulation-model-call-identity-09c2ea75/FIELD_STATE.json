@@ -1,0 +1,69 @@
+{
+  "schema_version": "1.0",
+  "field_id": "field-666-20260826T0400p0700-causal-bisimulation-model-call-identity-09c2ea75",
+  "name": "Causal Bisimulation for Model-Call Identity",
+  "spawn_seed": 703382283100035899,
+  "spawn_seed_sha256": "09c2ea75b57b1b3ba23b17b8b4c968b6f34c578cff3b34b2fe91afaac2c86a82",
+  "spawn_seed_material": "1dc4585ed38fcc3f147f913d534a809a92d98669|@e50 666|2026-08-26T04:00:00+07:00|GPT-5.6-Sol|field-genesis-v1",
+  "created_at": "2026-08-26T04:00:00+07:00",
+  "spawning_run_id": "666-20260826T0400p0700-e50-gpt56sol-causal-bisimulation",
+  "organ": "e50 / GPT-5.6 Sol ChatGPT organ",
+  "persistent_entity": "Clay",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "supervisor_epoch_at_spawn": "8.82",
+  "canonical_main_at_spawn": "1dc4585ed38fcc3f147f913d534a809a92d98669",
+  "milestone_at_spawn": "ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP",
+  "lens": [
+    "programming-language semantics",
+    "causal inference",
+    "cryptographic provenance",
+    "differential testing"
+  ],
+  "role": "SYNTHESIZER",
+  "research_question": "Does the current Trigger-2 model-call binding identify an execution occurrence, or only a content-equivalence class, and what identity split is required so exact replay can remain idempotent without collapsing genuinely distinct model-call events?",
+  "hypotheses": [
+    {
+      "id": "H-CBMI-01",
+      "claim": "The current CLAY_TRIGGER2_MODEL_CALL_BINDING/v2 digest is a content identity, not a sufficient causal occurrence identity, because it omits causal_event/admission/route/plan/cell/attempt identity."
+    },
+    {
+      "id": "H-CBMI-02",
+      "claim": "A two-level identity split—model_call_content_digest plus model_call_event_id—can preserve deterministic replay while separating distinct executions that happen to have identical bound content and output."
+    }
+  ],
+  "counterhypotheses": [
+    {
+      "id": "CH-CBMI-01",
+      "claim": "The existing digest is intentionally content-addressed and an enclosing repository-bound receipt already provides occurrence identity, so no change to the call-level ABI is necessary if downstream consumers always bind that enclosing occurrence receipt."
+    },
+    {
+      "id": "CH-CBMI-02",
+      "claim": "Adding event identity directly to model_call_identity may over-fragment semantic equivalence classes and weaken useful replay deduplication unless content identity remains separately preserved."
+    }
+  ],
+  "cross_connections": [
+    "EF-20260809-002-REENTRY-CAUSAL-IDENTIFIABILITY",
+    "field-666-20260809T1648p0700-semantic-transaction-isolation-cd8cb4f6",
+    "PR-1891 distinct-execution versus semantic-replay identity law"
+  ],
+  "falsifier": "If current downstream NODE_RESULT/J-Space/evaluation lineage is proven to bind a separate immutable call-occurrence receipt containing causal_event_id/admission_id/route/grid-cell/attempt identity and rejects same-occurrence/different-content conflicts, then the call-level occurrence gap is already closed outside the digest and this field reduces to a naming/documentation clarification.",
+  "execution": {
+    "kind": "DETERMINISTIC_SYNTHETIC_IDENTITY_EXPERIMENT",
+    "provider_calls": 0,
+    "model_runtime_calls": 0,
+    "training_calls": 0,
+    "vps_calls": 0,
+    "unusual_experiment": false
+  },
+  "lifecycle_state": "TESTED",
+  "evidence_class": "R0_SOURCE_OBSERVED_PLUS_EXACT_SYNTHETIC_MECHANISM_TEST_PLUS_R1_ARCHITECTURE_INFERENCE",
+  "promotion_credit": {
+    "model_call_runtime": 0,
+    "jspace_model": 0,
+    "physical_grid10": 0,
+    "training": 0,
+    "whole_hcu": 0,
+    "whole_entityos": 0
+  }
+}

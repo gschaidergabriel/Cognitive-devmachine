@@ -16,14 +16,50 @@ def _ev_key(e: Dict[str, Any]) -> Tuple[str, str]:
     return str(e.get("evidence_id", "")), str(e.get("causal_ancestry_id", ""))
 
 
+def _validate_branches(branches: List[Dict[str, Any]]) -> None:
+    ids = [b.get("branch_id") for b in branches]
+    if any(not isinstance(i, str) or not i for i in ids):
+        raise ValueError("every branch requires a non-empty string branch_id")
+    if len(ids) != len(set(ids)):
+        raise ValueError("duplicate branch_id in Hyperposition state")
+
+
+def _validate_observation(observation: Dict[str, Any], branch_ids: set[str]) -> None:
+    relation = observation.get("relation")
+    targets = set(observation.get("target_branch_ids") or [])
+    unknown = targets - branch_ids
+    if unknown:
+        raise ValueError(f"observation references unknown target branch ids: {sorted(unknown)}")
+    if relation not in {"SUPPORTS", "COUNTERS", "FALSIFIES", "IRRELEVANT", "UNKNOWN_RELATION"}:
+        raise ValueError(f"unknown relation: {relation}")
+    if relation in {"SUPPORTS", "COUNTERS", "FALSIFIES"}:
+        for field in ("evidence_id", "causal_ancestry_id", "independence_group", "provenance"):
+            value = observation.get(field)
+            if not isinstance(value, str) or not value:
+                raise ValueError(f"evidence-bearing observation requires non-empty {field}")
+
+
 def _already_seen(branch: Dict[str, Any], obs: Dict[str, Any]) -> bool:
+    """Idempotent replay for one causal event, but fail on contradictory reuse.
+
+    Same evidence/ancestry packaged twice with the same relation is a replay and does not
+    gain independent weight. Reusing the same evidence identity or causal ancestry with a
+    different relation is not silently discarded: it is an inconsistent label source and
+    must be adjudicated/versioned before it can become training supervision.
+    """
     oid, oanc = _ev_key(obs)
+    orelation = str(obs.get("relation", ""))
     for field in ("E_plus", "E_minus", "F", "pending_falsifiers"):
         for e in branch.get(field, []) or []:
             eid, eanc = _ev_key(e)
-            if oid and eid == oid:
-                return True
-            if oanc and eanc == oanc:
+            same_identity = bool(oid and eid == oid)
+            same_ancestry = bool(oanc and eanc == oanc)
+            if same_identity or same_ancestry:
+                previous_relation = str(e.get("relation", ""))
+                if previous_relation and orelation and previous_relation != orelation:
+                    raise ValueError(
+                        "same evidence identity/causal ancestry reused with conflicting relation"
+                    )
                 return True
     return False
 
@@ -39,6 +75,7 @@ def _attach(branch: Dict[str, Any], field: str, obs: Dict[str, Any]) -> None:
 
 
 def _merge_explicit_equivalents(branches: List[Dict[str, Any]], cert: Dict[str, Any]) -> List[Dict[str, Any]]:
+    _validate_branches(branches)
     if not cert or not cert.get("equivalent"):
         return branches
     ids = sorted(set(cert.get("branch_ids") or []))
@@ -53,6 +90,11 @@ def _merge_explicit_equivalents(branches: List[Dict[str, Any]], cert: Dict[str, 
         if b.get("v") != pivot.get("v") or b.get("K") != pivot.get("K") or b.get("T") != pivot.get("T"):
             raise ValueError("equivalence certificate conflicts with branch semantics/scope")
     merged_id = cert.get("merge_to_branch_id") or ids[0]
+    if not isinstance(merged_id, str) or not merged_id:
+        raise ValueError("merge_to_branch_id must be a non-empty string")
+    keep = [b for b in branches if b["branch_id"] not in ids]
+    if any(b["branch_id"] == merged_id for b in keep):
+        raise ValueError("merge_to_branch_id collides with an existing non-merged branch")
     pivot["branch_id"] = merged_id
     pivot["merged_from_branch_ids"] = ids
     for field in ("E_plus", "E_minus", "F", "pending_falsifiers"):
@@ -78,15 +120,20 @@ def _merge_explicit_equivalents(branches: List[Dict[str, Any]], cert: Dict[str, 
         "merge_certificate": cert.get("certificate_id", "EXPLICIT_EQUIVALENCE"),
         "merged_origins": [deepcopy(b.get("A")) for b in group],
     }
-    keep = [b for b in branches if b["branch_id"] not in ids]
-    keep.append(pivot)
-    return keep
+    result = keep + [pivot]
+    _validate_branches(result)
+    return result
 
 
 def u_state(state: Dict[str, Any], observation: Dict[str, Any]) -> Dict[str, Any]:
     """Deterministic training-reference transition. Does not infer evidence truth from text."""
     out = deepcopy(state)
     branches = out.setdefault("branches", [])
+    if not isinstance(branches, list):
+        raise ValueError("state.branches must be a list")
+    _validate_branches(branches)
+    branch_ids = {b["branch_id"] for b in branches}
+    _validate_observation(observation, branch_ids)
     relation = observation["relation"]
     targets = set(observation.get("target_branch_ids") or [])
     for branch in branches:
@@ -112,16 +159,18 @@ def u_state(state: Dict[str, Any], observation: Dict[str, Any]) -> Dict[str, Any
                 branch["sigma"] = "FALSIFIED"
             else:
                 _attach(branch, "pending_falsifiers", observation)
-        else:
-            raise ValueError(f"unknown relation: {relation}")
 
     payload = observation.get("new_branch_payload")
     if payload is not None:
         if not observation.get("branch_creation_warranted", False):
             raise ValueError("new branch payload requires explicit branch_creation_warranted")
-        if any(b.get("branch_id") == payload.get("branch_id") for b in branches):
+        payload_id = payload.get("branch_id")
+        if not isinstance(payload_id, str) or not payload_id:
+            raise ValueError("new branch payload requires a non-empty string branch_id")
+        if any(b.get("branch_id") == payload_id for b in branches):
             raise ValueError("new branch id already exists")
         branches.append(deepcopy(payload))
+        _validate_branches(branches)
 
     out["branches"] = _merge_explicit_equivalents(
         branches, observation.get("equivalence_certificate")
@@ -131,6 +180,9 @@ def u_state(state: Dict[str, Any], observation: Dict[str, Any]) -> Dict[str, Any
 
 def d_resolve(state: Dict[str, Any]) -> Dict[str, Any]:
     branches = state.get("branches", [])
+    if not isinstance(branches, list):
+        raise ValueError("state.branches must be a list")
+    _validate_branches(branches)
     if any(b.get("K") == "UNKNOWN" and b.get("sigma") != "FALSIFIED" for b in branches):
         return {"resolution": "UNRESOLVED", "selected_branch_id": None}
     applicable = [b for b in branches if b.get("K") == "APPLIES"]
@@ -148,17 +200,26 @@ def apply_resolution(state: Dict[str, Any], resolution: Dict[str, Any]) -> Dict[
     out = deepcopy(state)
     if resolution.get("resolution") != "PASS":
         return out
-    sid = resolution["selected_branch_id"]
-    for b in out.get("branches", []):
-        if b.get("branch_id") == sid:
-            b["sigma"] = "RESOLVED_PASS"
+    branches = out.get("branches", [])
+    if not isinstance(branches, list):
+        raise ValueError("state.branches must be a list")
+    _validate_branches(branches)
+    sid = resolution.get("selected_branch_id")
+    matches = [b for b in branches if b.get("branch_id") == sid]
+    if len(matches) != 1:
+        raise ValueError("PASS resolution must select exactly one existing branch")
+    matches[0]["sigma"] = "RESOLVED_PASS"
     return out
 
 
 def _live_branch_ids(state: Dict[str, Any]) -> List[str]:
+    branches = state.get("branches", [])
+    if not isinstance(branches, list):
+        raise ValueError("state.branches must be a list")
+    _validate_branches(branches)
     return sorted(
         b["branch_id"]
-        for b in state.get("branches", [])
+        for b in branches
         if b.get("K") != "DOES_NOT_APPLY" and b.get("sigma") != "FALSIFIED"
     )
 

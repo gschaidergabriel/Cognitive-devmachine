@@ -3,8 +3,9 @@
 
 Offline/local collector. It reads append-only worker evidence plus existing Free Swarm
 worker artifacts and architecture-delta adjudications, derives a multi-objective table,
-and writes deterministic JSON/Markdown. It performs no provider call, reads no provider
-credential, and grants no canonical runtime/model/training credit.
+and publishes deterministic JSON/Markdown through the fail-closed shared freshness gate.
+It performs no provider call, reads no provider credential, and grants no canonical
+runtime/model/training credit.
 
 Scores are descriptive proxies behind hard evidence gates. Raw fields stay visible.
 UNKNOWN is preferred over invented precision.
@@ -15,6 +16,7 @@ import argparse
 import collections
 import datetime as dt
 import hashlib
+import importlib.util
 import json
 import math
 from pathlib import Path
@@ -97,6 +99,16 @@ def sha256_json(value: Any) -> str:
 
 def load_config(repo: Path) -> dict[str, Any]:
     return read_json(repo / "research_entity/continuity/go_metrics/GO_METRICS_CONFIG_V1.json")
+
+
+def load_freshness_guard():
+    path = Path(__file__).with_name("go_collective_freshness.py")
+    spec = importlib.util.spec_from_file_location("go_collective_freshness_runtime", path)
+    if spec is None or spec.loader is None:
+        raise RuntimeError("COLLECTIVE_FRESHNESS_GUARD_UNLOADABLE")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
 
 
 def accepted_delta(row: dict[str, Any]) -> bool:
@@ -473,18 +485,31 @@ def markdown(result: dict[str, Any]) -> str:
     a = result["aggregate"]
     h = a["hcu_confidence"]
     p = h.get("forecast_probability")
+    live = result.get("live_funnel") or {}
     lines = [
         AUTO_BEGIN,
         "## GO Collective Recursive-Improvement Metrics",
         f"Generated: `{result['generated_at']}`  ",
         f"Schema: `{SCHEMA}`  ",
+        f"Authority epoch: `{result.get('authority_epoch', 'UNKNOWN')}`  ",
+        f"Bound live snapshot: `{(result.get('bounded_live_snapshot') or {}).get('snapshot_id', 'UNKNOWN')}`  ",
+        "",
+        "### Fresh bound funnel",
+        "| Metric | Current |",
+        "|---|---:|",
+        f"| Free-Swarm total tokens | {fmt(live.get('free_swarm_total_tokens'),0)} |",
+        f"| Free-Swarm worker records | {fmt(live.get('free_swarm_worker_records'),0)} |",
+        f"| Forge evaluations | {fmt(live.get('forge_evaluations'),0)} |",
+        f"| Forge accepted deltas | {fmt(live.get('forge_accepted_deltas'),0)} |",
+        f"| Distillery accepted packets | {fmt(live.get('distillery_accepted_packets'),0)} |",
+        f"| Distillery accepted dataset tokens | {fmt(live.get('distillery_accepted_dataset_tokens'),0)} |",
         "",
         "### Aggregate",
         "| Metric | Current | Evidence note |",
         "|---|---:|---|",
-        f"| Worker records observed | {a['worker_records']} | all explicit records + available Free Swarm rows |",
+        f"| Worker records observed | {a['worker_records']} | explicit records + artifact rows when present |",
         f"| Exact-token rows | {a['exact_token_rows']} | missing tokens remain UNKNOWN |",
-        f"| Total exact tokens | {fmt(a['total_tokens'],0)} | no historical estimate added |",
+        f"| Total exact tokens | {fmt(a['total_tokens'],0)} | artifact-derived; do not substitute for bound live funnel |",
         f"| Token Quality Efficiency / 1k tokens | {fmt(a['token_quality_efficiency'],6)} | accepted verified utility only |",
         f"| Code Quality Score / 100 | {fmt(a['code_quality_score'],2)} | UNKNOWN when evidence coverage is insufficient |",
         f"| Verified Innovation Score / 100 | {fmt(a['verified_innovation_score'],2)} | self-reported novelty ignored |",
@@ -510,6 +535,7 @@ def markdown(result: dict[str, Any]) -> str:
         "- Shared model/source/prompt/orchestration ancestry is correlated evidence and must be collapsed.",
         "- Metric-definition changes are versioned, shadow-run, and do not rewrite raw history.",
         "- Confidence forecasts are calibrated on resolved outcomes using Brier/log loss when enough observations exist.",
+        "- The bound live funnel and artifact-derived worker aggregate remain distinct evidence surfaces.",
         AUTO_END,
         "",
     ]
@@ -530,6 +556,9 @@ def main() -> int:
     ap.add_argument("--artifacts", type=Path, default=Path("/artifacts/clay-entityos-swarm"))
     ap.add_argument("--output-json", type=Path, default=None)
     ap.add_argument("--output-md", type=Path, default=None)
+    ap.add_argument("--freshness-receipt", type=Path, default=None)
+    ap.add_argument("--max-live-age-seconds", type=float, default=3600.0)
+    ap.add_argument("--max-live-skew-seconds", type=float, default=30.0)
     ap.add_argument("--update-readme", action="store_true")
     args = ap.parse_args()
 
@@ -538,43 +567,85 @@ def main() -> int:
     if config.get("schema") != "CLAY_GO_COLLECTIVE_METRICS_CONFIG/v1":
         raise SystemExit("GO_METRICS_CONFIG_REQUIRED")
 
+    freshness_guard = load_freshness_guard()
+    snapshot = freshness_guard.build_live_snapshot(
+        repo,
+        max_age_seconds=args.max_live_age_seconds,
+        max_snapshot_skew_seconds=args.max_live_skew_seconds,
+    )
+
     workers = explicit_worker_rows(repo)
     workers.extend(free_swarm_rows(args.artifacts))
     deltas = delta_rows(repo)
     attach_delta_metrics(workers, deltas, config)
 
+    live_funnel = {
+        name: row["value"]
+        for name, row in snapshot["fields"].items()
+    }
+    publisher_source_sha256 = hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
+    freshness_guard_sha256 = hashlib.sha256(Path(__file__).with_name("go_collective_freshness.py").read_bytes()).hexdigest()
+    now = dt.datetime.now(dt.timezone.utc).isoformat()
     result = {
         "schema": SCHEMA,
-        "generated_at": dt.datetime.now(dt.timezone.utc).isoformat(),
+        "generated_at": now,
+        "authority_epoch": snapshot["authority"]["authority_epoch"],
         "program": "ENTITYOS_HCU",
         "product": "EntityOS",
         "architecture": "HCU",
         "config_sha256": sha256_json(config),
+        "publisher_source_sha256": publisher_source_sha256,
+        "freshness_guard_sha256": freshness_guard_sha256,
+        "bounded_live_snapshot": snapshot,
+        "live_funnel": live_funnel,
+        "freshness": {
+            "schema": freshness_guard.FRESHNESS_SCHEMA,
+            "status": "FRESH_BOUND_SNAPSHOT",
+            "assessed_at": now,
+            "runtime_credit_added": 0,
+        },
         "worker_record_count": len(workers),
         "aggregate": aggregate(workers, config),
         "workers": workers,
         "anti_goodhart": config.get("anti_goodhart"),
         "selection_policy": config.get("selection_policy"),
         "runtime_credit_added": 0,
-        "note": "Derived measurement only. It cannot mint canonical truth or runtime/model/training credit.",
+        "note": "Derived measurement only. Bound freshness does not mint canonical truth or runtime/model/training credit.",
     }
+    result["result_digest_sha256"] = freshness_guard.deterministic_result_digest(result)
     md = markdown(result)
 
     out_json = args.output_json or (repo / "free swarm/GO_COLLECTIVE_METRICS.json")
     out_md = args.output_md or (repo / "free swarm/GO_COLLECTIVE_METRICS.md")
-    out_json.write_text(json.dumps(result, indent=2, sort_keys=True, ensure_ascii=False) + "\n", encoding="utf-8")
-    out_md.write_text(md, encoding="utf-8")
+    receipt = args.freshness_receipt or (repo / "free swarm/COLLECTIVE_METRICS_FRESHNESS_RECEIPT.json")
 
+    readme_path = None
+    readme_text = None
     if args.update_readme:
-        readme = repo / "free swarm/README.md"
-        current = readme.read_text(encoding="utf-8") if readme.exists() else "# Free Swarm\n"
-        readme.write_text(replace_block(current, md), encoding="utf-8")
+        readme_path = repo / "free swarm/README.md"
+        current = readme_path.read_text(encoding="utf-8") if readme_path.exists() else "# Free Swarm\n"
+        readme_text = replace_block(current, md)
+
+    publication = freshness_guard.publish_bundle(
+        out_json=out_json,
+        out_md=out_md,
+        result=result,
+        markdown=md,
+        receipt_path=receipt,
+        readme_path=readme_path,
+        readme_text=readme_text,
+    )
 
     print(out_json)
     print(out_md)
+    print(receipt)
     h = result["aggregate"]["hcu_confidence"]
     print(json.dumps({
         "workers": len(workers),
+        "live_funnel": live_funnel,
+        "snapshot_id": snapshot["snapshot_id"],
+        "authority_epoch": result["authority_epoch"],
+        "publication_decision": publication["decision"],
         "tqe": result["aggregate"]["token_quality_efficiency"],
         "cqs": result["aggregate"]["code_quality_score"],
         "vis": result["aggregate"]["verified_innovation_score"],

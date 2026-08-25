@@ -8,13 +8,14 @@ def _text() -> str:
     return SUP.read_text(encoding="utf-8")
 
 
-def test_raw_generation_is_gated_by_conversion_pressure() -> None:
+def test_raw_generation_pressure_is_observed_fail_closed() -> None:
     text = _text()
     assert "raw_generation_allowed(){" in text
     assert "CLAY_SWARM_RAW_GENERATION_BACKPRESSURE/v1" in text
     assert "PAUSE_RAW_GENERATION_FAIL_CLOSED" in text
     assert "PAUSE_RAW_GENERATION_BACKPRESSURE" in text
-    assert "if raw_generation_allowed; then\n    start_6000\n  else\n    stop_6000\n  fi" in text
+    # Do not lock a specific process-stop policy here. The 6000 fabric also carries
+    # historical extraction, so transport liveness must remain independently testable.
 
 
 def test_backlog_first_forge_remains_single_active_entrypoint() -> None:

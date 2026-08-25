@@ -89,11 +89,15 @@ BACKFILL LAW
   the implementation queue instead of being discarded.
 - Dedupe against known_concept_ids conceptually; do not emit paraphrase-only duplicates.
 - Preserve counterhypotheses as separate candidates only when they imply a different executable discriminator.
-- Return at most 8 deltas in this pass. If more remain, exhaustive=false; the chunk will be scheduled again.
+- Return at most 8 deltas in this pass.
+- Set exhaustive=false whenever more materially distinct deltas may remain. In particular, if you emit 8 deltas,
+  exhaustive MUST be false unless the supplied chunk unambiguously contains no ninth distinct delta.
+- Set exhaustive=true only after you have inspected the complete supplied chunk and can affirm that this pass
+  exhausted every materially distinct delta not already covered by known_concept_ids.
 - This extraction pass grants ZERO acceptance credit. Every emitted delta still goes through the one canonical Forge.
 
 For this call, replace the ordinary single ARCHITECTURE_DELTA_JSON line with exactly:
-ARCHITECTURE_DELTA_BATCH_JSON={{"historical_source_event_id":"{packet.get('historical_source_event_id')}","historical_chunk_id":"{packet.get('historical_chunk_id')}","extraction_pass":{int(packet.get('extraction_pass') or 1)},"exhaustive":true,"deltas":[<0..8 normal architecture-delta objects>]}}
+ARCHITECTURE_DELTA_BATCH_JSON={{"historical_source_event_id":"{packet.get('historical_source_event_id')}","historical_chunk_id":"{packet.get('historical_chunk_id')}","extraction_pass":{int(packet.get('extraction_pass') or 1)},"exhaustive":<true|false>,"deltas":[<0..8 normal architecture-delta objects>]}}
 Then emit the normal OPEN_RESEARCH_QUESTIONS_JSON line.
 Each delta object must use the normal schema and include the same historical_source_event_id,
 historical_chunk_id and extraction_pass fields. Use ready_for_forge=true only with a real unified diff,

@@ -86,7 +86,13 @@ def _validate_native_target(target: Any, source: dict[str, Any], dim: int) -> di
         raise ValueError("PREEXECUTION_CONTROLLER_MUST_NOT_PRECLAIM_NATIVE_RUNTIME")
     if not isinstance(target.get("model_or_route"), str) or not target["model_or_route"].strip():
         raise ValueError("NATIVE_TARGET_MODEL_REQUIRED")
-    for key in ("runtime_build_sha256", "gguf_sha256", "tokenizer_sha256", "mapping_receipt_sha256"):
+    for key in (
+        "runtime_build_sha256",
+        "gguf_sha256",
+        "tokenizer_sha256",
+        "mapping_receipt_sha256",
+        "conversion_receipt_sha256",
+    ):
         if not _sha256(target.get(key)):
             raise ValueError(f"NATIVE_TARGET_{key.upper()}_REQUIRED")
     if not _git_sha(target.get("llama_cpp_source_commit")):
@@ -260,6 +266,7 @@ def build_candidate(activation_packet: dict[str, Any], rank_result: dict[str, An
             "float_count": len(payload) // 4,
             "byte_count": len(payload),
             "cvec_f32le_sha256": hashlib.sha256(payload).hexdigest(),
+            "conversion_receipt_sha256": target["conversion_receipt_sha256"],
             "native_runtime_observed": False,
         },
         "semantic_causality_established": False,
@@ -270,7 +277,7 @@ def build_candidate(activation_packet: dict[str, Any], rank_result: dict[str, An
         "whole_entityos_runtime_credit": 0,
         "training_credit": 0,
         "next_gate": "Execute this exact cvec on an admitted native runtime only after the control request and magnitude policy are frozen, then measure the full class-direction x requested-target matrix on unopened matched holdout families with sign/null/orthogonal/permuted/label-only nuisance controls and context-bound dual readout.",
-        "evidence_boundary": "Coordinate-to-cvec construction is deterministic source/control-plane readiness only. No model was executed and semantic causality is not inferred from geometry.",
+        "evidence_boundary": "Coordinate-to-cvec construction is deterministic source/control-plane readiness only. The explicit conversion receipt binds cross-runtime conversion provenance, but no model was executed and semantic causality is not inferred from geometry.",
     }
     candidate["candidate_sha256"] = canonical_sha(candidate)
     return candidate, payload

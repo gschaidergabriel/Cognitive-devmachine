@@ -32,7 +32,19 @@ def _row():
     return row
 
 
-def test_T2_SHPG_A02_producer_bound_happy_path_is_candidate_only():
+def _rehash_transport_receipt(receipt):
+    core = deepcopy(receipt)
+    core.pop("execution_receipt_id", None)
+    receipt["execution_receipt_id"] = "t2disc:v2:" + producer._digest(core)
+
+
+def _assert_exact_producer_mismatch(row):
+    result = gate.adjudicate(row)
+    assert not result["pass"]
+    assert "ROW_DISCRIMINATOR_RECEIPT_NOT_EXACT_PRODUCER_OUTPUT" in result["failures"]
+
+
+def test_T2_SHPG_A02_happy_path_is_candidate_only():
     result = gate.adjudicate(_row())
     assert result["pass"], result
     assert result["row_receipt_exact_match"] is True
@@ -44,35 +56,68 @@ def test_T2_SHPG_A02_producer_bound_happy_path_is_candidate_only():
     assert result["runtime_credit_minted"] == 0
 
 
-def test_T2_SHPG_A02_fake_executed_receipt_id_rewrite_rejected():
-    row = _row()
-    row["discriminator_execution_receipts_evaluator_only"][0]["execution_receipt_id"] = "exec:forged-but-nonempty"
-    result = gate.adjudicate(row)
-    assert not result["pass"]
-    assert "ROW_DISCRIMINATOR_RECEIPT_NOT_EXACT_PRODUCER_OUTPUT" in result["failures"]
-
-
-def test_T2_SHPG_A02_coherent_receipt_rewrite_rejected_even_after_rehash():
+def test_T2_SHPG_A02_FAKE_EXECUTED_rejects_arbitrary_receipt_id():
     row = _row()
     receipt = row["discriminator_execution_receipts_evaluator_only"][0]
-    receipt["pre_state_sha256"] = "0" * 64
-    core = deepcopy(receipt)
-    core.pop("execution_receipt_id", None)
-    receipt["execution_receipt_id"] = "t2disc:v2:" + producer._digest(core)
-    result = gate.adjudicate(row)
-    assert not result["pass"]
-    assert "ROW_DISCRIMINATOR_RECEIPT_NOT_EXACT_PRODUCER_OUTPUT" in result["failures"]
+    assert receipt["executed"] is True
+    receipt["execution_receipt_id"] = "exec:invented-without-producer-proof"
+    _assert_exact_producer_mismatch(row)
 
 
-def test_T2_SHPG_A02_formal_discriminator_spec_rewrite_rejected_by_authority():
+def test_T2_SHPG_A02_COHERENT_RECEIPT_REWRITE_rejects_attacker_rehash():
     row = _row()
-    row["formal_task_world_evaluator_only"]["tests"]["db_probe"]["risk_rank"] = 9
+    receipt = row["discriminator_execution_receipts_evaluator_only"][0]
+    receipt["producer_result_sha256"] = "0" * 64
+    _rehash_transport_receipt(receipt)
+    _assert_exact_producer_mismatch(row)
+
+
+def test_T2_SHPG_A02_PRODUCER_PATH_OR_SHA_SWAP_rejects_transport_rewrite():
+    row = _row()
+    receipt = row["discriminator_execution_receipts_evaluator_only"][0]
+    receipt["producer"]["repo_path"] = "tools/forged_discriminator.py"
+    receipt["producer"]["source_sha256"] = "f" * 64
+    _rehash_transport_receipt(receipt)
+    _assert_exact_producer_mismatch(row)
+
+
+def test_T2_SHPG_A02_POLICY_SWAP_rejects_transport_rewrite():
+    row = _row()
+    receipt = row["discriminator_execution_receipts_evaluator_only"][0]
+    receipt["policy_sha256"] = "1" * 64
+    _rehash_transport_receipt(receipt)
+    _assert_exact_producer_mismatch(row)
+
+
+def test_T2_SHPG_A02_PRESTATE_REWRITE_rejects_same_coverage_state():
+    row = _row()
+    row["hyperposition_state_before_evaluator_only"]["query_id"] = "same-coverage-but-unauthorized-prestate"
     result = gate.adjudicate(row)
     assert not result["pass"]
-    assert any("DISCRIMINATOR_FORMAL_SPEC_DIGEST_MISMATCH" in x for x in result["failures"])
+    assert any("DISCRIMINATOR_PRESTATE_DIGEST_MISMATCH" in x for x in result["failures"])
 
 
-def test_T2_SHPG_A02_producer_source_sha_authority_rewrite_rejected(monkeypatch):
+def test_T2_SHPG_A02_WORLD_SCOPED_EVENT_REWRITE_rejects_reused_event_payload():
+    row = _row()
+    row["formal_task_world_evaluator_only"]["world_id"] = "t2gp:world:forged-reuse:v1"
+    result = gate.adjudicate(row)
+    assert not result["pass"]
+    assert any(
+        "DISCRIMINATOR_WORLD_ID_NOT_AUTHORIZED" in x or "DISCRIMINATOR_FORMAL_WORLD_DIGEST_MISMATCH" in x
+        for x in result["failures"]
+    )
+
+
+def test_T2_SHPG_A02_COVERAGE_REWRITE_rejects_coherent_transport_rehash():
+    row = _row()
+    receipt = row["discriminator_execution_receipts_evaluator_only"][0]
+    receipt["separated_live_pairs"] = 999
+    receipt["separates_all_live_pairs"] = True
+    _rehash_transport_receipt(receipt)
+    _assert_exact_producer_mismatch(row)
+
+
+def test_T2_SHPG_A02_authority_source_sha_rewrite_rejected(monkeypatch):
     row = _row()
     original = gate.producer._authority
 
@@ -87,7 +132,7 @@ def test_T2_SHPG_A02_producer_source_sha_authority_rewrite_rejected(monkeypatch)
     assert any("DISCRIMINATOR_PRODUCER_SOURCE_SHA_MISMATCH" in x for x in result["failures"])
 
 
-def test_T2_SHPG_A02_nonempty_history_remains_fail_closed():
+def test_T2_SHPG_A02_nonempty_history_remains_fail_closed_for_next_p0():
     row = _row()
     row["synthetic_event_history_evaluator_only"] = [deepcopy(row["synthetic_test_event_evaluator_only"])]
     result = gate.adjudicate(row)
@@ -95,7 +140,7 @@ def test_T2_SHPG_A02_nonempty_history_remains_fail_closed():
     assert "PRODUCER_BOUND_V2_ONLY_AUTHORIZES_EMPTY_HISTORY_PILOT" in result["failures"]
 
 
-def test_T2_SHPG_A02_full_generation_epistemic_producer_chain_passes_source_candidate():
+def test_T2_SHPG_A02_full_generation_epistemic_producer_chain_is_nonpromoting():
     result = full_gate.adjudicate(_row())
     assert result["pass"], result
     assert result["bounded_empty_history_synthetic_pilot_source_closure"] is True
@@ -108,9 +153,7 @@ def test_T2_SHPG_A02_full_chain_rejects_coherent_receipt_forgery():
     row = _row()
     receipt = row["discriminator_execution_receipts_evaluator_only"][0]
     receipt["live_branch_projection_sha256"] = "f" * 64
-    core = deepcopy(receipt)
-    core.pop("execution_receipt_id", None)
-    receipt["execution_receipt_id"] = "t2disc:v2:" + producer._digest(core)
+    _rehash_transport_receipt(receipt)
     result = full_gate.adjudicate(row)
     assert not result["pass"]
     assert any("ROW_DISCRIMINATOR_RECEIPT_NOT_EXACT_PRODUCER_OUTPUT" in x for x in result["failures"])

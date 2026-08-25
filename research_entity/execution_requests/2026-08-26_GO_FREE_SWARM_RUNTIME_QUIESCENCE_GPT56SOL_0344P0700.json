@@ -1,0 +1,61 @@
+{
+  "schema": "GO_FREE_SWARM_RUNTIME_QUIESCENCE_REQUEST/v1",
+  "date": "2026-08-26",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "program": "ENTITYOS_HCU",
+  "target_architecture": "autonomous self-organizing Xeno/HCU fabric",
+  "priority": "P0",
+  "reason": "Current supervisor evidence says owner emergency stop is HARD_OFF in source but legacy FreeSwarm/provider-capable processes were still live on clay-direct-dev. Physical GRID10 execution must not proceed until runtime quiescence is proven.",
+  "allowed_surface": "clay-direct-dev or any other currently live host that contains the legacy FreeSwarm process classes",
+  "provider_policy": "NO_PROVIDER_CALLS_FREE_SWARM_HARD_OFF_TOGETHER_FORBIDDEN_NO_PAID_FALLBACK",
+  "required_actions": [
+    "Record UTC host timestamp, hostname, kernel/runtime identity and exact process list before action.",
+    "Identify only legacy FreeSwarm/provider-capable process classes including run_6000_free_swarm_supervisor.sh, run_free_evidence_forge.py, run_research_distillery_local.py and free swarm/evaluate.py --watch plus their descendants.",
+    "Terminate those legacy processes gracefully first; after a bounded wait, kill only remaining matching descendants if required. Do not terminate unrelated Xeno/Trigger2/repository services.",
+    "Record exact PID, PPID, argv and termination disposition for each matched process.",
+    "Record the process list immediately after termination and require zero remaining matching provider-supervisor/provider-caller processes.",
+    "Snapshot any locally available provider-usage counters/telemetry before the observation window without making provider calls.",
+    "Observe for at least 60 seconds with no provider-capable process restart and no new provider usage delta.",
+    "Snapshot process list and provider-usage counters again after the window.",
+    "Persist one machine-readable receipt with before/after process evidence, timestamps, observation duration, counter deltas and hashes of any raw evidence files.",
+    "Only if quiescence passes, mark the execution surface eligible for the already-pinned non-provider physical GRID10 fused-v1 experiment; do not execute GRID10 in the same receipt unless current execution authority is separately re-entered and bound."
+  ],
+  "pass_conditions": {
+    "free_swarm_admission_remains_hard_off": true,
+    "remaining_matching_provider_processes": 0,
+    "matching_process_restart_during_observation": 0,
+    "new_provider_usage_delta": 0,
+    "observation_seconds_min": 60,
+    "unrelated_processes_intentionally_killed": 0
+  },
+  "required_receipt_fields": [
+    "host_timestamp_before",
+    "host_timestamp_after",
+    "hostname",
+    "runtime_identity",
+    "processes_before",
+    "terminated_processes",
+    "processes_after_immediate",
+    "processes_after_observation",
+    "provider_counters_before",
+    "provider_counters_after",
+    "provider_usage_delta",
+    "observation_seconds",
+    "raw_evidence_sha256",
+    "pass"
+  ],
+  "fail_closed": [
+    "If provider counters cannot be observed, do not claim no-provider-usage proof; classify INCOMPLETE_COUNTER_VISIBILITY.",
+    "If any matching process restarts, classify FAIL_RUNTIME_QUIESCENCE.",
+    "If any provider usage increases, classify FAIL_PROVIDER_USAGE_DRIFT.",
+    "If execution authority for host process termination is not current/explicit, classify BLOCKED_AUTHORITY and make no host changes."
+  ],
+  "next_if_pass": "Re-enter current non-provider execution authority, then execute exact physical GRID10 fused-v1 pin 0a76c14484c3230edb86f1075738a0a1011c5694 on a clean repository-bound runtime.",
+  "credit": {
+    "source_progress": 1,
+    "runtime_quiescence_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "training_credit": 0
+  }
+}

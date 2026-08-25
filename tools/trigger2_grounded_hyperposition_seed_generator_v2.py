@@ -1,9 +1,14 @@
 import argparse
 import json
 from pathlib import Path
-from trigger2_semantic_hyperposition_reference_labelers_v2 import (
-    SCHEMA as LABELER_SCHEMA, DERIVATION_DOMAIN, U_update, D_resolve, U_d_test_order,
-)
+try:
+    from tools.trigger2_semantic_hyperposition_reference_labelers_v2 import (
+        SCHEMA as LABELER_SCHEMA, DERIVATION_DOMAIN, U_update, D_resolve, U_d_test_order,
+    )
+except ModuleNotFoundError:
+    from trigger2_semantic_hyperposition_reference_labelers_v2 import (
+        SCHEMA as LABELER_SCHEMA, DERIVATION_DOMAIN, U_update, D_resolve, U_d_test_order,
+    )
 
 
 def branch(bid, value, attributes, provenance, salience=0.0):

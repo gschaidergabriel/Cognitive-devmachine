@@ -1,0 +1,45 @@
+{
+  "schema": "CLAY_TRIGGER2_TRUSTED_SYNTHETIC_DISCRIMINATOR_AUTHORITY/v1",
+  "status": "CURRENT_SOURCE_AUTHORITY_CANDIDATE_NONPROMOTING",
+  "purpose": "Bind the one deterministic A02 discriminator producer/policy for the authority-pinned empty-history SYNTHETIC_PROOF pilot. This authority cannot mint canonical truth, effects, runtime, J-Space, HCU, EntityOS, dataset or training credit.",
+  "producer": {
+    "repo_path": "tools/trigger2_pinned_synthetic_discriminator_producer_v1.py",
+    "source_sha256": "7afea52af179343e0af9af28eabb1a8d569683009748fd1ab05c0af190a8669c",
+    "git_commit_sha": "9dde9483447d738bd87dade534561e85be219bfc",
+    "producer_schema_or_version": "CLAY_TRIGGER2_PINNED_SYNTHETIC_DISCRIMINATOR_PRODUCER/v1",
+    "source_lineage_base_main": "9090ab45253ca180ed797c37c78ce5c54c1c0a78"
+  },
+  "policy": {
+    "policy_id": "T2_PINNED_SYNTHETIC_DB_PROBE_DISCRIMINATOR/v1",
+    "policy_version": "1",
+    "allowed_case_id": "T2_GP_PILOT_DB_MATCH_V1",
+    "required_epistemic_type": "SYNTHETIC_PROOF",
+    "allowed_test_ids": ["db_probe"],
+    "require_full_live_pair_coverage": true,
+    "ordering_function": "u_test_order",
+    "formal_spec": {
+      "test_id": "db_probe",
+      "allowed_outcomes": ["MATCH", "MISSING"],
+      "mismatch_effect": "FALSIFIES",
+      "risk_rank": 0,
+      "cost_rank": 0,
+      "coordination_rank": 0
+    },
+    "formal_spec_jcs_sha256": "7e0dd6d14e1f573d37059a8598fa2ec19d302707ae62c064d57782132f0640ed"
+  },
+  "bounded_scope": {
+    "case_id": "T2_GP_PILOT_DB_MATCH_V1",
+    "world_id": "t2gp:world:db-match:v1",
+    "query_id": "t2gp:query:db-match:v1",
+    "event_id": "t2gp:event:db-match:v1",
+    "test_id": "db_probe",
+    "history_shape": "EMPTY_HISTORY_CLEAN_GENESIS_PILOT"
+  },
+  "authority_fences": {
+    "canonical_truth_allowed": false,
+    "direct_effect_authority": false,
+    "training_eligible": false,
+    "accepted_dataset_tokens_minted": 0,
+    "training_credit_minted": 0
+  }
+}

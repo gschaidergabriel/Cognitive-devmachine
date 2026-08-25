@@ -84,6 +84,8 @@ def validate_raw_node_result(packet: Mapping[str, Any]) -> dict[str, Any]:
     payload = _mapping(packet.get("payload"), "NODE_RESULT_PAYLOAD_REQUIRED")
     pid = payload.get("process_pid")
     _require(isinstance(pid, int) and pid > 0, "NODE_RESULT_PROCESS_PID_INVALID")
+    if "producer_pid" in packet:
+        _require(packet.get("producer_pid") == pid, "NODE_RESULT_PRODUCER_PID_PAYLOAD_MISMATCH")
     claimed_digest = _hex64(packet.get("packet_digest"), "NODE_RESULT_PACKET_DIGEST_INVALID")
     core = {key: packet[key] for key in packet if key not in ("packet_digest", "s1_write_intent")}
     observed_digest = canonical_sha256(core)

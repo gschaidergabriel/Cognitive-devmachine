@@ -1,6 +1,6 @@
 {
   "schema": "CLAY_FREE_SWARM_SYSTEM_ANALYSIS/v3",
-  "generated_at": "2026-08-25T21:42:51.442401+00:00",
+  "generated_at": "2026-08-25T21:57:57.640107+00:00",
   "runtime": {
     "supervisor": "STOPPED/QUARANTINED",
     "go_swarm": "RUNNING",
@@ -65,7 +65,7 @@
   },
   "distillery": {
     "schema": "CLAY_RESEARCH_DISTILLERY_STATUS/v1",
-    "generated_at": "2026-08-25T21:42:44.854978+00:00",
+    "generated_at": "2026-08-25T21:57:33.835575+00:00",
     "collected_source_tokens": 11621,
     "accepted_dataset_tokens": 0,
     "dataset_yield": 0.0,
@@ -111,7 +111,7 @@
     "model_output_tokens": 1455,
     "shared_provider_budget": {
       "schema": "CLAY_SHARED_PROVIDER_BUDGET/v1",
-      "generated_at": "2026-08-25T21:42:44.855548+00:00",
+      "generated_at": "2026-08-25T21:57:33.836131+00:00",
       "providers": {
         "arxiv": {
           "max_inflight": 1,
@@ -213,13 +213,13 @@
           "max_inflight": 16,
           "active_leases": 0,
           "min_interval_s": 0.5,
-          "cooldown_seconds": 9.993444681167603,
-          "total_requests": 3873,
+          "cooldown_seconds": 9.990885972976685,
+          "total_requests": 3960,
           "total_success": 134,
-          "total_429": 3738,
+          "total_429": 3825,
           "total_errors": 0,
           "last_status": "429",
-          "last_observed_at": "2026-08-25T21:42:44.849051+00:00"
+          "last_observed_at": "2026-08-25T21:57:33.827108+00:00"
         },
         "semantic_scholar": {
           "max_inflight": 1,
@@ -249,16 +249,16 @@
     },
     "db_bytes": 983040,
     "top_questions": [
-      "Welche minimalen Telemetriedaten (z. B. Latenz, Rückgabecodes) ermöglichen das zuverlässige Falschen von Admissions‑Gate‑Ordering‑Violationen?",
-      "How can we autonomously verify concrete NVIDIA credential proof without relying on provider-provided statements?",
-      "Ist ein deterministisches Kausalhändchen‑Tracking von Provider‑Aufrufen ohne SDK‑Instrumentierung realisierbar?",
-      "How does causal-event-identity binding interact with existing Hyperposition semantics?",
-      "Does recursive self-model injection generalize across model architectures (nemotron vs gpt-oss vs qwen) or is the effect model-specific, and what architectural properties mediate the effect?",
-      "Can the identity-cache be made lock-free without compromising consistency?",
-      "What's the minimum engine-identity set required to avoid cache thrashing?",
-      "Does predictive pre-admission generalize across provider rate-limit topologies (token-bucket vs leaky-bucket vs fixed-window) without provider-specific tuning?",
-      "What are the optimal convergence metrics to use for dynamic entropy tuning?",
-      "Does the current NVIDIA credential binding distinguish between Developer Program membership and NIM free-tier entitlement per concrete credential?"
+      "What is the minimal provider fingerprint surface (syscalls, /proc, device nodes, RPC endpoints) that reliably distinguishes gVisor/Firecracker/Kata/runc at container startup without CAP_SYS_ADMIN?",
+      "How does the choice of token validation mechanism impact dataset yield?",
+      "What exact Distillery admission predicate rejects chunks that pass collection but fail packet promotion?",
+      "How can we ensure the memory provenance log does not interfere with the determinism of J-Space operations when used for causal research?",
+      "1. Wie beeinflusst die dynamische Anpassung von Max-Inflight die Stabilität des NVIDIA-Providers?",
+      "Which upstream free-tier credential binding implementations (e.g., OAuth2 device code, mTLS, signed JWT claims) can be reproduced without paid fallback and map 1:1 to NVIDIA/Groq/OpenRouter route admission?",
+      "2. Welche Minimalanforderungen an die Rate-Limit-Logik sind für 1000+ gleichzeitige Anfragen notwendig?",
+      "3. Wie können J-Space-Vektoren genutzt werden, um Rate-Limit-Erwartungen zu vorhersagen?",
+      "How to balance cryptographic overhead with real-time admission throughput?",
+      "Mitigating hash collision risks in large-scale data processing?"
     ],
     "candidate_states": {}
   },
@@ -433,6 +433,6 @@
     "measured_total_sonnet5_equivalent_usd": 148.830648,
     "verified_historical_savings_usd": null,
     "nominal_avoided_if_zero_cost_usd": 148.830648,
-    "repo_output_only_proxy_usd": 139.9784
+    "repo_output_only_proxy_usd": 140.14367
   }
 }

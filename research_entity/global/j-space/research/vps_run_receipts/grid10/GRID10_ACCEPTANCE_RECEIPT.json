@@ -1,0 +1,257 @@
+{
+  "schema": "GRID10_PHYSICAL_ACCEPTANCE/v1",
+  "pass": true,
+  "model_load_time_s": 5.99,
+  "phase1_wallclock_s": 6.64,
+  "physical_node_count": 11,
+  "criteria": {
+    "ordinary_s1_write_rejection": {
+      "pass": true,
+      "node_level_rejections_observed": 8,
+      "harness_direct_probe_rejected": true,
+      "evidence": [
+        {
+          "event": "ORDINARY_WRITE_REJECTED",
+          "node_id": "xeno-00",
+          "error": "ORDINARY_NODE_S1_WRITE_FORBIDDEN",
+          "ts": 1787692480.3786654
+        },
+        {
+          "event": "ORDINARY_WRITE_REJECTED",
+          "node_id": "xeno-00",
+          "error": "ORDINARY_NODE_S1_WRITE_FORBIDDEN",
+          "ts": 1787692480.541614
+        },
+        {
+          "event": "ORDINARY_WRITE_REJECTED",
+          "node_id": "xeno-00",
+          "error": "ORDINARY_NODE_S1_WRITE_FORBIDDEN",
+          "ts": 1787692480.699833
+        }
+      ]
+    },
+    "autonomous_join": {
+      "pass": true,
+      "count": 11,
+      "note": "11 = 10 initial + 1 rejoin, all self-initiated (no central dispatcher call)"
+    },
+    "no_predefined_roles": {
+      "pass": true,
+      "distinct_nodes_that_did_real_work": [
+        "xeno-00",
+        "xeno-02",
+        "xeno-03",
+        "xeno-04",
+        "xeno-06",
+        "xeno-07"
+      ],
+      "note": "same node_loop code path run identically by every process; which node claims which task is determined only by S1 race outcome, never hardcoded"
+    },
+    "claim_awareness": {
+      "pass": true,
+      "unique_tasks_claimed": 6,
+      "total_claim_events": 6,
+      "no_double_claim": true,
+      "race_losses_observed": 1
+    },
+    "node_result_transport": {
+      "pass": true,
+      "count": 6,
+      "sample": [
+        {
+          "event": "NODE_RESULT_EMITTED",
+          "node_id": "xeno-00",
+          "task_id": "hp-a",
+          "answer": "paris.\nanswer:",
+          "packet_digest": "c67ae7e942f407b28f67353ff21de515e166d5596bf43e5e38f4c02a6c7ec100",
+          "ts": 1787692480.374487
+        },
+        {
+          "event": "NODE_RESULT_EMITTED",
+          "node_id": "xeno-02",
+          "task_id": "tb-0",
+          "answer": "a vast, blue expanse",
+          "packet_digest": "cba37ca6089fa767abe03b86afd4d9288591f82a25e034ac2279f94883f8e6d4",
+          "ts": 1787692479.7675457
+        }
+      ],
+      "note": "every emitted result carries s1_write_intent=false and only reaches canonical state via a separate coordinator commit"
+    },
+    "dynamic_coordinator_leasing": {
+      "pass": true,
+      "grants": [
+        {
+          "event": "DYNAMIC_COORDINATOR_LEASE_GRANTED",
+          "node_id": "xeno-02",
+          "scope": "branch:b",
+          "lease_id": "lease-b310fa5bffd2cfb09c6daae0",
+          "ts": 1787692479.7738187
+        },
+        {
+          "event": "DYNAMIC_COORDINATOR_LEASE_GRANTED",
+          "node_id": "xeno-06",
+          "scope": "branch:a",
+          "lease_id": "lease-f8a9ac47e32ca49e55368b4c",
+          "ts": 1787692480.3093095
+        }
+      ]
+    },
+    "two_concurrent_scoped_coordinators": {
+      "pass": true,
+      "scopes_that_had_a_coordinator": [
+        "branch:b",
+        "branch:a"
+      ],
+      "note": "each scope's lease is independent (elect_coordinator only checks that SCOPE, not global); distinct scopes had distinct active leases in the same run"
+    },
+    "immediate_lease_revocation": {
+      "pass": true,
+      "evidence": {
+        "rejected_immediately": true,
+        "error": "COORDINATOR_LEASE_INVALID"
+      },
+      "note": "revoke_lease() then commit attempted in the SAME epoch with NO wait -- rejection proves revocation is checked on every commit, not on a timer"
+    },
+    "coordinator_failure_replacement": {
+      "pass": true,
+      "killed_pid": 2569274,
+      "killed_node_id": "xeno-01",
+      "kill_ts": 1787692479.6850438,
+      "note": "SIGKILL sent to a real OS process holding/contending for a lease; fabric remained queryable and consistent afterward (see node_restart_rejoin), and no packet from the killed process's stale in-flight state was ever committed (digest/lease binding checked on every commit)"
+    },
+    "node_restart_rejoin": {
+      "pass": true,
+      "rejoined": true,
+      "fabric_consistent_after": true,
+      "rejoin_events_sample": [
+        {
+          "event": "AUTONOMOUS_JOIN",
+          "node_id": "xeno-01",
+          "pid": 2569563,
+          "capability": "reason",
+          "ts": 1787692479.8465111
+        }
+      ]
+    },
+    "duplicate_stale_rejection": {
+      "pass": true,
+      "evidence": {
+        "first_ok": true,
+        "second_rejected": true,
+        "error": "DUPLICATE_RESULT_REJECTED"
+      }
+    },
+    "cas_rebase": {
+      "pass": true,
+      "evidence": {
+        "stale_commit_rejected": "S1_COMPARE_AND_SWAP_FAILED",
+        "rebase_commit_ok": true,
+        "new_epoch": 124
+      }
+    },
+    "recursive_global_compression": {
+      "pass": true,
+      "evidence": {
+        "committed": true,
+        "new_epoch": 126
+      }
+    },
+    "hyperposition_preservation": {
+      "pass": true,
+      "note": "the hp-a task's payload declared 2 unresolved alternatives (Paris, Lyon-minority-hyp); both must still be findable in the compressed GLOBAL summary chain, not collapsed to a single majority value",
+      "found_paris": true,
+      "found_minority_alt": true
+    },
+    "gwt_broadcast_uptake_reentry": {
+      "pass": true,
+      "evidence": {
+        "uptake_read_global": true,
+        "reentry_committed": true,
+        "answer": ".",
+        "new_epoch": 129
+      }
+    },
+    "no_s0_effect_bypass": {
+      "pass": true,
+      "fabric_public_surface": [
+        "coordinator_commit",
+        "coordinator_drain_and_commit",
+        "elect_coordinator",
+        "emit_node_result",
+        "ordinary_write_attempt",
+        "outbox_pending_scopes",
+        "revoke_lease",
+        "runtime_claim_task",
+        "runtime_heartbeat",
+        "runtime_join",
+        "seed_scope",
+        "seed_task",
+        "snapshot"
+      ],
+      "note": "Fabric (S1) exposes zero methods capable of writing canonical S0 state or triggering external effects; the only S0-adjacent name is ordinary_write_attempt(), which always raises. S0 lives in an entirely separate system (zero_entityos_*) never imported here."
+    },
+    "weight_node_decode_separation": {
+      "pass": true,
+      "physical_node_count": 11,
+      "measured_weight_copy_evidence": {
+        "per_process_rss_kb_sample": {
+          "xeno-00": {
+            "Rss": 2092400,
+            "Pss_Dirty": 130541,
+            "Shared_Clean": 1516328
+          },
+          "xeno-01": {
+            "Rss": 2092400,
+            "Pss_Dirty": 130039,
+            "Shared_Clean": 1516328
+          },
+          "xeno-02": {
+            "Rss": 2092648,
+            "Pss_Dirty": 139750,
+            "Shared_Clean": 1516388
+          },
+          "xeno-03": {
+            "Rss": 2092576,
+            "Pss_Dirty": 136318,
+            "Shared_Clean": 1516388
+          },
+          "xeno-04": {
+            "Rss": 2092400,
+            "Pss_Dirty": 130730,
+            "Shared_Clean": 1516328
+          },
+          "xeno-05": {},
+          "xeno-06": {
+            "Rss": 2092516,
+            "Pss_Dirty": 137686,
+            "Shared_Clean": 1516328
+          },
+          "xeno-07": {
+            "Rss": 2092576,
+            "Pss_Dirty": 135180,
+            "Shared_Clean": 1516388
+          },
+          "xeno-08": {},
+          "xeno-09": {}
+        },
+        "shared_clean_kb_median": 1516328,
+        "interpretation": "Shared_Clean pages are counted once by the kernel but attributed to every process that maps them; a Shared_Clean value close to the model's on-disk weight size across N independent processes means the weight bytes are resident in physical RAM ONCE, not N times (verified empirically pre-run: fork()-based COW gave ~1.5GB Shared_Clean per 2GB RSS across 6 concurrent real-inference workers -- see weight_sharing_preflight.json)."
+      },
+      "decode_concurrency_note": "each node's cognitive_answer() call is single-threaded CPU generation; wall-clock overlap of NODE_RESULT_EMITTED timestamps below shows how many decodes were actually in flight concurrently, independent of the 11 physical processes that exist",
+      "node_result_emission_timestamps": [
+        1787692479.7675457,
+        1787692480.2793133,
+        1787692480.3034914,
+        1787692480.374487,
+        1787692480.555714,
+        1787692480.7353961
+      ]
+    }
+  },
+  "credit_scope": "PHYSICAL_GRID10_INFRASTRUCTURE_COMPONENT_ONLY_NOT_WHOLE_HCU_NOT_TRAINING",
+  "evidence_boundary": {
+    "training_credit": 0,
+    "hcu_whole_credit": 0,
+    "jspace_credit": 0
+  }
+}

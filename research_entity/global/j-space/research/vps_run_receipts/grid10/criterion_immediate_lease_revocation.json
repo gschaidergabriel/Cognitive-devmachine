@@ -1,0 +1,8 @@
+{
+  "pass": true,
+  "evidence": {
+    "rejected_immediately": true,
+    "error": "COORDINATOR_LEASE_INVALID"
+  },
+  "note": "revoke_lease() then commit attempted in the SAME epoch with NO wait -- rejection proves revocation is checked on every commit, not on a timer"
+}

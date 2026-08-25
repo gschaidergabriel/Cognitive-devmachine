@@ -1,0 +1,131 @@
+{
+  "schema": "GRID10_LOGICAL_N_SANDBOX_INTERFACE/v1",
+  "pass": true,
+  "proof": "with a fixed physical_processes_used=1 throughout, accepted_count tracks the configured logical_n exactly (1, then 2, then 4) -- demonstrating logical_n is a distinct, independently-configurable knob, not a proxy for physical process count",
+  "sweeps": {
+    "logical_n_1": {
+      "logical_n": 1,
+      "physical_processes_used": 1,
+      "attempts": [
+        {
+          "ok": true,
+          "logical_n": 1,
+          "outstanding_before": 0
+        },
+        {
+          "ok": false,
+          "reason": "LOGICAL_N_LIMIT_REACHED",
+          "logical_n": 1,
+          "outstanding": 1
+        },
+        {
+          "ok": false,
+          "reason": "LOGICAL_N_LIMIT_REACHED",
+          "logical_n": 1,
+          "outstanding": 1
+        },
+        {
+          "ok": false,
+          "reason": "LOGICAL_N_LIMIT_REACHED",
+          "logical_n": 1,
+          "outstanding": 1
+        },
+        {
+          "ok": false,
+          "reason": "LOGICAL_N_LIMIT_REACHED",
+          "logical_n": 1,
+          "outstanding": 1
+        },
+        {
+          "ok": false,
+          "reason": "LOGICAL_N_LIMIT_REACHED",
+          "logical_n": 1,
+          "outstanding": 1
+        }
+      ],
+      "accepted_count": 1
+    },
+    "logical_n_2": {
+      "logical_n": 2,
+      "physical_processes_used": 1,
+      "attempts": [
+        {
+          "ok": true,
+          "logical_n": 2,
+          "outstanding_before": 0
+        },
+        {
+          "ok": true,
+          "logical_n": 2,
+          "outstanding_before": 1
+        },
+        {
+          "ok": false,
+          "reason": "LOGICAL_N_LIMIT_REACHED",
+          "logical_n": 2,
+          "outstanding": 2
+        },
+        {
+          "ok": false,
+          "reason": "LOGICAL_N_LIMIT_REACHED",
+          "logical_n": 2,
+          "outstanding": 2
+        },
+        {
+          "ok": false,
+          "reason": "LOGICAL_N_LIMIT_REACHED",
+          "logical_n": 2,
+          "outstanding": 2
+        },
+        {
+          "ok": false,
+          "reason": "LOGICAL_N_LIMIT_REACHED",
+          "logical_n": 2,
+          "outstanding": 2
+        }
+      ],
+      "accepted_count": 2
+    },
+    "logical_n_4": {
+      "logical_n": 4,
+      "physical_processes_used": 1,
+      "attempts": [
+        {
+          "ok": true,
+          "logical_n": 4,
+          "outstanding_before": 0
+        },
+        {
+          "ok": true,
+          "logical_n": 4,
+          "outstanding_before": 1
+        },
+        {
+          "ok": true,
+          "logical_n": 4,
+          "outstanding_before": 2
+        },
+        {
+          "ok": true,
+          "logical_n": 4,
+          "outstanding_before": 3
+        },
+        {
+          "ok": false,
+          "reason": "LOGICAL_N_LIMIT_REACHED",
+          "logical_n": 4,
+          "outstanding": 4
+        },
+        {
+          "ok": false,
+          "reason": "LOGICAL_N_LIMIT_REACHED",
+          "logical_n": 4,
+          "outstanding": 4
+        }
+      ],
+      "accepted_count": 4
+    }
+  },
+  "credit_scope": "SANDBOXED_LOGICAL_N_INTERFACE_COMPONENT_ONLY",
+  "note": "separate sqlite file from the physical GRID10 run and from Zero's live production EntityOS/ClayVerse S1; not a second canonical DB system -- same grid10_fabric.py mechanics, one extra policy table"
+}

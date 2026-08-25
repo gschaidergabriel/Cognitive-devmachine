@@ -1,0 +1,57 @@
+{
+  "pass": true,
+  "physical_node_count": 11,
+  "measured_weight_copy_evidence": {
+    "per_process_rss_kb_sample": {
+      "xeno-00": {
+        "Rss": 2092400,
+        "Pss_Dirty": 130541,
+        "Shared_Clean": 1516328
+      },
+      "xeno-01": {
+        "Rss": 2092400,
+        "Pss_Dirty": 130039,
+        "Shared_Clean": 1516328
+      },
+      "xeno-02": {
+        "Rss": 2092648,
+        "Pss_Dirty": 139750,
+        "Shared_Clean": 1516388
+      },
+      "xeno-03": {
+        "Rss": 2092576,
+        "Pss_Dirty": 136318,
+        "Shared_Clean": 1516388
+      },
+      "xeno-04": {
+        "Rss": 2092400,
+        "Pss_Dirty": 130730,
+        "Shared_Clean": 1516328
+      },
+      "xeno-05": {},
+      "xeno-06": {
+        "Rss": 2092516,
+        "Pss_Dirty": 137686,
+        "Shared_Clean": 1516328
+      },
+      "xeno-07": {
+        "Rss": 2092576,
+        "Pss_Dirty": 135180,
+        "Shared_Clean": 1516388
+      },
+      "xeno-08": {},
+      "xeno-09": {}
+    },
+    "shared_clean_kb_median": 1516328,
+    "interpretation": "Shared_Clean pages are counted once by the kernel but attributed to every process that maps them; a Shared_Clean value close to the model's on-disk weight size across N independent processes means the weight bytes are resident in physical RAM ONCE, not N times (verified empirically pre-run: fork()-based COW gave ~1.5GB Shared_Clean per 2GB RSS across 6 concurrent real-inference workers -- see weight_sharing_preflight.json)."
+  },
+  "decode_concurrency_note": "each node's cognitive_answer() call is single-threaded CPU generation; wall-clock overlap of NODE_RESULT_EMITTED timestamps below shows how many decodes were actually in flight concurrently, independent of the 11 physical processes that exist",
+  "node_result_emission_timestamps": [
+    1787692479.7675457,
+    1787692480.2793133,
+    1787692480.3034914,
+    1787692480.374487,
+    1787692480.555714,
+    1787692480.7353961
+  ]
+}

@@ -1,6 +1,6 @@
 {
   "schema": "CLAY_FREE_SWARM_SYSTEM_ANALYSIS/v3",
-  "generated_at": "2026-08-25T15:55:26.104290+00:00",
+  "generated_at": "2026-08-25T16:10:32.073412+00:00",
   "runtime": {
     "supervisor": "STOPPED/QUARANTINED",
     "go_swarm": "RUNNING",
@@ -65,7 +65,7 @@
   },
   "distillery": {
     "schema": "CLAY_RESEARCH_DISTILLERY_STATUS/v1",
-    "generated_at": "2026-08-25T15:55:10.293226+00:00",
+    "generated_at": "2026-08-25T16:10:24.399672+00:00",
     "collected_source_tokens": 11621,
     "accepted_dataset_tokens": 0,
     "dataset_yield": 0.0,
@@ -111,7 +111,7 @@
     "model_output_tokens": 1455,
     "shared_provider_budget": {
       "schema": "CLAY_SHARED_PROVIDER_BUDGET/v1",
-      "generated_at": "2026-08-25T15:55:10.293815+00:00",
+      "generated_at": "2026-08-25T16:10:24.400172+00:00",
       "providers": {
         "arxiv": {
           "max_inflight": 1,
@@ -213,13 +213,13 @@
           "max_inflight": 16,
           "active_leases": 0,
           "min_interval_s": 0.5,
-          "cooldown_seconds": 9.992182731628418,
-          "total_requests": 1821,
+          "cooldown_seconds": 9.992039680480957,
+          "total_requests": 1911,
           "total_success": 134,
-          "total_429": 1686,
+          "total_429": 1776,
           "total_errors": 0,
           "last_status": "429",
-          "last_observed_at": "2026-08-25T15:55:10.286031+00:00"
+          "last_observed_at": "2026-08-25T16:10:24.392249+00:00"
         },
         "semantic_scholar": {
           "max_inflight": 1,
@@ -249,16 +249,16 @@
     },
     "db_bytes": 983040,
     "top_questions": [
-      "Can a dry-run test that blocks secret access and network calls reliably verify compliance with the FREE_ONLY provider admission rule in the presence of multiple FREE providers?",
-      "What is the exact concurrency threshold where free providers start to throttle or reject requests under EntityOS/HCU workloads?",
-      "What are the key factors contributing to the lack of convergence between the existing implementation and the desired EntityOS product?",
-      "How can the system automatically synchronize the `allowed_credentials` whitelist with provider‑issued free‑tier credential updates without manual intervention, ensuring continuous compliance with the FREE_ONLY contract?",
-      "Can the Global J-Space/GWT prototype be improved to better support the EntityOS product?",
-      "How do real-world LLM providers implement cost-class admission boundaries?",
-      "How can we dynamically verify provider economic provenance without hardcoding admission lists?",
-      "Does the optimal normalization variant depend on the distillation loss formulation (forward KL vs reverse KL vs JS) and temperature schedule?",
-      "Wie können wir die FREE_ONLY-Zulassung für komplexe Anwendungen überprüfen?",
-      "Wie kann die asynchrone Verarbeitung optimiert werden, um die FREE_ONLY-Regeln effizienter durchzusetzen?"
+      "What is the minimal per-credential economic validation interface that generalizes across OpenRouter (zero-price route), Groq (rate-header), Mistral (fail-closed), and NVIDIA (currently missing) without provider-specific code duplication?",
+      "Does NVIDIA's API expose a deterministic, machine-readable free-tier indicator in response headers for nemotron-mini-4b-instruct that distinguishes free from paid credentials without requiring a paid-model test call?",
+      "Wie wirkt sich die Implementierung von JIT-Compilierung auf die Energieeffizienz des Systems aus?",
+      "Wie kann die JIT-Compilierung für weitere Systemkomponenten optimiert werden?",
+      "What minimal set of typed FREE_PROVIDER_ADMISSION control‑plane states is required to satisfy the admission boundary without introducing additional runtime overhead?",
+      "Why is current dataset_yield 0 despite collected source tokens?",
+      "Which typed effect handler runtime (Koka, Eff, Frank, Multicore OCaml, OCaml 5+) has the minimal runnable kernel that demonstrates typed entry → effect → handler → typed exit with zero dynamic casts, and can its effect row be statically mapped to GRID10 logical cells?",
+      "Does activation patching on open-weight transformers (e.g., Gemma-2-2B, Llama-3.1-8B) with published causal intervention code (TransformerLens, nnsight, pyvene) reproduce the claimed causal mediation effect size on a clean CPU run, and can the intervention locus be mapped to a J-Space coordinate?",
+      "Is there a runnable zero-trust credential verifier (e.g., SPIFFE/SPIRE, sigstore/cosign, OPA/Rego) that can cryptographically bind a provider API key to a specific free-tier model+quota at call time without paid fallback, and what is its latency overhead per call?",
+      "Does the HCU microcode slot 0 have sufficient bandwidth to service prefetch DMA without starving primary compute fabric memory ports under sustained 6000-cell workloads?"
     ],
     "candidate_states": {}
   },
@@ -433,6 +433,6 @@
     "measured_total_sonnet5_equivalent_usd": 148.830648,
     "verified_historical_savings_usd": null,
     "nominal_avoided_if_zero_cost_usd": 148.830648,
-    "repo_output_only_proxy_usd": 133.80348
+    "repo_output_only_proxy_usd": 133.80412
   }
 }

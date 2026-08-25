@@ -60,7 +60,7 @@ Zweck: **Aktivität → ausführbarer Patch/Test → reproduzierbare Architektur
 
 <!-- RESEARCH_DISTILLERY_AUTO:BEGIN -->
 ## AUTO — Research Distillery / kumuliertes Wissens-Dataset
-Aktualisiert: `2026-08-25T15:55:24.403087+00:00`
+Aktualisiert: `2026-08-25T16:10:31.485433+00:00`
 
 **1. wichtigste Quote — Entity-Dataset-Yield:** `0 / 11,621 = 0.000%`  
 Kompressionsfaktor Quelltokens : akzeptierte Dataset-Tokens: **UNKNOWN**.
@@ -112,7 +112,7 @@ GO-Worker emittieren `OPEN_RESEARCH_QUESTIONS_JSON`; die Distillery zerlegt Frag
 
 <!-- SYSTEM_ANALYSIS_AUTO:BEGIN -->
 ## AUTO — Gesamtsystem, GO-Fluss, Script-Auswertung und Sonnet-Vergleich
-Aktualisiert: `2026-08-25T15:55:26.104290+00:00`
+Aktualisiert: `2026-08-25T16:10:32.073412+00:00`
 
 ### 1. Wichtigster Effizienzindikator — was geht im Durchschnitt wieder an `go`?
 **Source → GO Pass-through: 0.000%.** Definition: `accepted dataset-token yield × average distinct accepted-packet coverage delivered to GO macrocycles`.
@@ -151,16 +151,16 @@ Bei 0 akzeptierten Dataset-Tokens ist Source→GO exakt 0%; fehlende Reinjection
 - truth/effect/capability boundaries and falsification
 
 **Top offene Forschungsfragen aus der laufenden Queue:**
-- Can a dry-run test that blocks secret access and network calls reliably verify compliance with the FREE_ONLY provider admission rule in the presence of multiple FREE providers?
-- What is the exact concurrency threshold where free providers start to throttle or reject requests under EntityOS/HCU workloads?
-- What are the key factors contributing to the lack of convergence between the existing implementation and the desired EntityOS product?
-- How can the system automatically synchronize the `allowed_credentials` whitelist with provider‑issued free‑tier credential updates without manual intervention, ensuring continuous compliance with the FREE_ONLY contract?
-- Can the Global J-Space/GWT prototype be improved to better support the EntityOS product?
-- How do real-world LLM providers implement cost-class admission boundaries?
-- How can we dynamically verify provider economic provenance without hardcoding admission lists?
-- Does the optimal normalization variant depend on the distillation loss formulation (forward KL vs reverse KL vs JS) and temperature schedule?
-- Wie können wir die FREE_ONLY-Zulassung für komplexe Anwendungen überprüfen?
-- Wie kann die asynchrone Verarbeitung optimiert werden, um die FREE_ONLY-Regeln effizienter durchzusetzen?
+- What is the minimal per-credential economic validation interface that generalizes across OpenRouter (zero-price route), Groq (rate-header), Mistral (fail-closed), and NVIDIA (currently missing) without provider-specific code duplication?
+- Does NVIDIA's API expose a deterministic, machine-readable free-tier indicator in response headers for nemotron-mini-4b-instruct that distinguishes free from paid credentials without requiring a paid-model test call?
+- Wie wirkt sich die Implementierung von JIT-Compilierung auf die Energieeffizienz des Systems aus?
+- Wie kann die JIT-Compilierung für weitere Systemkomponenten optimiert werden?
+- What minimal set of typed FREE_PROVIDER_ADMISSION control‑plane states is required to satisfy the admission boundary without introducing additional runtime overhead?
+- Why is current dataset_yield 0 despite collected source tokens?
+- Which typed effect handler runtime (Koka, Eff, Frank, Multicore OCaml, OCaml 5+) has the minimal runnable kernel that demonstrates typed entry → effect → handler → typed exit with zero dynamic casts, and can its effect row be statically mapped to GRID10 logical cells?
+- Does activation patching on open-weight transformers (e.g., Gemma-2-2B, Llama-3.1-8B) with published causal intervention code (TransformerLens, nnsight, pyvene) reproduce the claimed causal mediation effect size on a clean CPU run, and can the intervention locus be mapped to a J-Space coordinate?
+- Is there a runnable zero-trust credential verifier (e.g., SPIFFE/SPIRE, sigstore/cosign, OPA/Rego) that can cryptographically bind a provider API key to a specific free-tier model+quota at call time without paid fallback, and what is its latency overhead per call?
+- Does the HCU microcode slot 0 have sufficient bandwidth to service prefetch DMA without starving primary compute fabric memory ports under sustained 6000-cell workloads?
 
 ### 5. Fortschritts-Funnel
 | Stufe | Wert |
@@ -192,7 +192,7 @@ Preisannahme: **Claude Sonnet 5 introductory through 2026-08-31: $2/M input + $1
 | Free-Swarm Usage | 31,313,649 input + 8,618,788 output | **$148.82** |
 | Distillery Modellarbeit | 460 input + 1,455 output | **$0.0155** |
 | zusammen, gemessener LLM-Tokenmix | — | **$148.83** |
-| persistenter Repo-Korpus, Output-only Proxy | 13,380,348 Proxy-Tokens | **$133.80** |
+| persistenter Repo-Korpus, Output-only Proxy | 13,380,412 Proxy-Tokens | **$133.80** |
 
 **Nominal vermiedene Sonnet-Kosten, falls diese Calls tatsächlich $0 kosteten: $148.83. Verifiziert gespart: UNKNOWN.** Die aktuelle typed Authority verbietet die nachträgliche FREE-Klassifikation historischer Provider-Traffic; der Korpuswert ist ebenfalls nur ein Neu-Erzeugungsproxy.
 
@@ -205,7 +205,7 @@ Dieser komplette Block ist Pflichtbestandteil des Publishers. Kompakte Tabellen 
 
 <!-- FREE_SWARM_AUTO:BEGIN -->
 ## AUTO — Live-Auswertung
-Aktualisiert: `2026-08-25T15:55:23.158160+00:00`
+Aktualisiert: `2026-08-25T16:10:30.121364+00:00`
 
 | Kennzahl | Wert |
 |---|---:|
@@ -219,7 +219,7 @@ Aktualisiert: `2026-08-25T15:55:23.158160+00:00`
 | Evident akzeptierte Architektur-Deltas | 0 |
 | Nominal/historisch akzeptierte Architektur-Deltas | 1 |
 | Legacy/unqualifizierte nominale Accepts | 1 |
-| Repo-Korpus-Proxy Tokens (4 Zeichen/Token) | 13380348 |
+| Repo-Korpus-Proxy Tokens (4 Zeichen/Token) | 13380412 |
 | Sonnet-5 Output-only Äquivalent des Repo-Proxys | $133.80 |
 
 ### Modelle
@@ -286,7 +286,7 @@ Innovativstes Modell: **NO EVIDENCE YET**
 | GPT/ChatGPT | 0 | UNKNOWN | UNKNOWN% |
 
 ### Research-Entity-Output / Sonnet-Kostenproxy
-API-exakte historische Gesamttokens aller früheren Organe bleiben **UNKNOWN**, solange keine vollständige historische Usage-Buchhaltung existiert. Der messbare persistente Repo-Korpus umfasst aktuell 10496 Textdateien / 53521393 Zeichen ≈ **13380348 Tokens** bei der ausdrücklich nur als Proxy verwendeten 4-Zeichen-Näherung.
+API-exakte historische Gesamttokens aller früheren Organe bleiben **UNKNOWN**, solange keine vollständige historische Usage-Buchhaltung existiert. Der messbare persistente Repo-Korpus umfasst aktuell 10496 Textdateien / 53521649 Zeichen ≈ **13380412 Tokens** bei der ausdrücklich nur als Proxy verwendeten 4-Zeichen-Näherung.
 Hypothetische reine Output-Neuerzeugung dieses Proxy-Korpus mit Claude Sonnet 5: **$133.80** zum derzeit geltenden Output-Tarif von $10/M Tokens. Input-/Caching-/Toolkosten sind darin nicht enthalten.
 <!-- FREE_SWARM_AUTO:END -->
 

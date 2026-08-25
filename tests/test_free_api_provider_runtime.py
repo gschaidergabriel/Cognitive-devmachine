@@ -1650,6 +1650,42 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
         self.assertIsNone(result["content"])
         self.assertEqual(captured_request["n"], 1)
 
+    def test_http_200_provider_error_envelope_is_classified_as_error(self):
+        class Response:
+            status = 200
+
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *args):
+                return False
+
+            def read(self, limit):
+                return (
+                    b'{"object":"error","message":"BadRequest",'
+                    b'"type":"BadRequestError","param":null,"code":400}'
+                )
+
+        env = {
+            "NVIDIA_API_KEY": "secret",
+            "FRANK_PROVIDER_BASE_URL": "http://localhost:8765/v1",
+            "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
+        }
+        result = MOD.execute_chat(
+            VALID_MESSAGES,
+            model="mock",
+            environ=env,
+            opener=lambda *args, **kwargs: Response(),
+            now=iter((50.4, 50.41)).__next__,
+        )
+        receipt = result["receipt"]
+        self.assertEqual(receipt["status"], 200)
+        self.assertEqual(receipt["outcome"], "provider_error")
+        self.assertIn("EXECUTED", receipt["lifecycle"])
+        self.assertNotIn("VERIFIED", receipt["lifecycle"])
+        self.assertNotIn("DONE", receipt["lifecycle"])
+        self.assertIsNone(result["content"])
+
     def test_non_bytes_response_body_cannot_reach_verified_state(self):
         class Response:
             status = 200

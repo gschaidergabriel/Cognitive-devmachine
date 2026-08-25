@@ -22,11 +22,16 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "tools"))
 
 import run_free_evidence_forge as forge  # noqa: E402
-from free_swarm_historical_backfill import (  # noqa: E402
-    backfill_metrics,
-    ensure_schema,
-    ingest_artifact_history,
-)
+import free_swarm_historical_backfill as historical_backfill_core  # noqa: E402
+from free_swarm_backfill_exhaustiveness_878 import install as install_exhaustiveness  # noqa: E402
+
+# The exact-source provider-free capsule mutates the same historical backfill state as
+# the live Forge and scheduler. Install the shared completion policy before binding any
+# mutation-capable helpers so one chunk cannot receive path-dependent saturation state.
+install_exhaustiveness(historical_backfill_core)
+backfill_metrics = historical_backfill_core.backfill_metrics
+ensure_schema = historical_backfill_core.ensure_schema
+ingest_artifact_history = historical_backfill_core.ingest_artifact_history
 
 SCHEMA = "FREE_SWARM_HISTORICAL_BACKFILL_RECEIPT/v1"
 

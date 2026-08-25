@@ -1,12 +1,15 @@
-name: GO878 wire backlog-first Forge supervisor
+name: GO878 wire backlog-first Forge supervisor (manual retry only)
 
+# The source wiring this one-shot workflow existed to produce is already fused on
+# canonical main.  Keep the capsule as a reproducible/manual donor, but never let
+# repeated issue creation fan out genealogically identical self-hosted jobs again.
+# Any future runtime retry must first advance an ORDINARY_DISPATCH semantic
+# generation/claim under ORDINARY_DISPATCH_IDEMPOTENCY_PROTOCOL.md.
 on:
-  issues:
-    types: [opened]
+  workflow_dispatch:
 
 permissions:
   contents: write
-  issues: read
 
 concurrency:
   group: go878-wire-backfill-supervisor
@@ -14,7 +17,7 @@ concurrency:
 
 jobs:
   wire-and-regress:
-    if: github.repository == 'gschaidergabriel/clay-global-research-entity' && github.event.issue.title == '[CLAY-DISPATCH] GO878 wire backlog-first Forge' && github.event.issue.user.login == 'gschaidergabriel'
+    if: github.repository == 'gschaidergabriel/clay-global-research-entity'
     runs-on: [self-hosted, Linux, X64]
     timeout-minutes: 20
     steps:

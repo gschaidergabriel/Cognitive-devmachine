@@ -168,20 +168,6 @@ def salience_items_for(family: str) -> list[dict[str, Any]]:
     ]
 
 
-def discriminator_outcome_for(klass: str, family: str) -> dict[str, Any] | None:
-    if klass == "QUERY_UNKNOWN":
-        return None
-    winner = "b0" if klass == "QUERY_TRUE" else "b1"
-    return {
-        "schema": L.DISC_SCHEMA,
-        "discriminator_id": f"d_exact_outcome:{family}",
-        "canonical_truth_allowed": False,
-        "direct_effect_authority": False,
-        "winner_branch_id": winner,
-        "separates_live_branch_ids": [winner],
-    }
-
-
 def render_prompt(
     template: str,
     evidence: str,
@@ -191,9 +177,7 @@ def render_prompt(
     mapping: tuple[int, int, int],
     layout: str,
 ) -> str:
-    codebook = "\n".join(
-        f"{CLASSES[i]} => {symbols[mapping[i]]}" for i in range(3)
-    )
+    codebook = "\n".join(f"{CLASSES[i]} => {symbols[mapping[i]]}" for i in range(3))
     branch_lines = "\n".join(
         f"{b['branch_id']}: value={b['v_semantic_value']}; status={b['sigma_epistemic_status']}; validity={b['validity']}"
         for b in before["branches"]
@@ -221,8 +205,9 @@ def build_row(template: str, split: str, klass: str, order: tuple[str, ...], map
     update = L.U_update(before, obs)
     assert update["pass"], update
     after = update["state_after"]
-    dout = discriminator_outcome_for(klass, family)
-    resolution = L.D_resolve(after, dout)
+    # PROVE transitions resolve through the explicit synthetic-proof validity emitted
+    # by U_update. UNKNOWN/SUPPORT stays unresolved. No branch deletion is performed.
+    resolution = L.D_resolve(after, None)
     assert resolution["pass"], resolution
     discriminators = discriminators_for(family)
     dorder = L.U_d_test_order(after, discriminators)
@@ -259,7 +244,7 @@ def build_row(template: str, split: str, klass: str, order: tuple[str, ...], map
             "observation": obs,
             "state_after": after,
             "resolution": resolution["resolution"],
-            "discriminator_outcome": dout,
+            "discriminator_outcome": None,
             "discriminators": discriminators,
             "discriminator_order": dorder["ordering"],
             "salience_items": salience_items,
@@ -278,7 +263,7 @@ def build_row(template: str, split: str, klass: str, order: tuple[str, ...], map
 
 def build_rows() -> list[dict[str, Any]]:
     rows: list[dict[str, Any]] = []
-    specs = [*( (t, "TRAIN") for t in TRAIN_TEMPLATES), *( (t, "VALIDATION") for t in VALIDATION_TEMPLATES)]
+    specs = [*((t, "TRAIN") for t in TRAIN_TEMPLATES), *((t, "VALIDATION") for t in VALIDATION_TEMPLATES)]
     for template, split in specs:
         for klass in CLASSES:
             for order in BRANCH_ORDERS:
@@ -293,7 +278,7 @@ def mi(rows: list[dict[str, Any]], fa, fb) -> float:
     joint = Counter((fa(r), fb(r)) for r in rows)
     a = Counter(fa(r) for r in rows)
     b = Counter(fb(r) for r in rows)
-    return sum((v/n) * math.log2((v/n) / ((a[x]/n) * (b[y]/n))) for (x, y), v in joint.items())
+    return sum((v / n) * math.log2((v / n) / ((a[x] / n) * (b[y] / n))) for (x, y), v in joint.items())
 
 
 def selftest(rows: list[dict[str, Any]] | None = None) -> dict[str, Any]:

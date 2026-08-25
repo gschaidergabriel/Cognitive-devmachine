@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v4",
+  "command_id": "gpt56sol-qwen06-specificity-result-summary-20260825",
+  "op": "exec",
+  "cwd": "/workspace",
+  "timeout_seconds": 120,
+  "command": "jq '{schema,status,result_sha256,source,model,model_revision,checkpoint_sha256,tokenizer_sha256,device,runtime_build_sha256,source_packet_sha256,calibration_policy,selected_calibration_candidate,fresh_holdout:{seeds:.fresh_holdout.seeds,family_sha256:.fresh_holdout.family_sha256,metrics:.fresh_holdout.metrics,rows:[.fresh_holdout.rows[]|{seed,prompt_family,control,target_score,best_label,hook_calls,runtime_observed_intervention,applied_vector_l2,applied_vector_sha256,runtime_receipt_sha256}]},promotion_candidate_written,external_provider_credentials_read,zero_provider_billing,evidence_boundary}' /workspace/qwen06-gpt56sol-direct/out-specificity/trigger1_local_qwen06_specificity_search_result.json"
+}

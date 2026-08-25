@@ -3,6 +3,7 @@
     "T2_GP_PILOT_DB_MATCH_V1": {
       "case_id": "T2_GP_PILOT_DB_MATCH_V1",
       "event_id": "t2gp:event:db-match:v1",
+      "event_sha256": "372d48f2862401ecaaf1d9edcf4fc3eed99977f45ecc0bb7afd4414113360ad4",
       "formal_discriminator_spec": {
         "allowed_outcomes": [
           "MATCH",
@@ -14,6 +15,7 @@
         "risk_rank": 0
       },
       "formal_discriminator_spec_sha256": "44ac402376a4d7ae906a7e3f277cf5974bfe29f3c2032845924fdb5054f816a9",
+      "formal_world_sha256": "244a152921ea08fd66adc8430a1ff04dbd0318e994a45d9a11761858284282d9",
       "policy": {
         "allowed_outcomes": [
           "MATCH",
@@ -25,6 +27,8 @@
         "require_complete_live_pair_coverage": true,
         "required_epistemic_type": "SYNTHETIC_PROOF"
       },
+      "policy_sha256": "54aec349be47de8e7b07a7e8ac13a91ac095abfeee4520c2d6cf1600ee3aa6ab",
+      "state_before_sha256": "7b2248741a1d3f0c999cf4a1c9ce00ea92b4ce93d8585a611b8e65038576c83c",
       "test_id": "db_probe",
       "world_id": "t2gp:world:db-match:v1"
     }
@@ -37,16 +41,25 @@
     "training_eligible": false
   },
   "producer": {
+    "donor_lineage": "trigger2-receipt-authority-gpt56sol-20260825@ce63a89f5a52fbd2ee4fe69eaa59850ff2b86677",
     "producer_schema_or_version": "CLAY_TRIGGER2_DETERMINISTIC_DISCRIMINATOR_PRODUCER_AUTH/v1",
     "repo_path": "tools/trigger2_discriminator_producer_auth_v1.py",
-    "source_sha256": "d746f146841ffcf2cae321dbb34a051cc6cc872a4f14768ffe3b4f29e37ca8d7"
+    "source_commit_sha": "639acaff057f52ae3dfdf3f6fa0978be4cd42ec1",
+    "source_lineage_base_main": "afcc81c605d3d57ff6f3ad1a252d4af5079f9098",
+    "source_sha256": "06a0120f17fe170d2cbdaa3dd844d90ce4eb81115f12faaff898084dd9e64f2f"
   },
   "purpose": "Pin one deterministic discriminator producer and admissibility policy for Trigger-2 A02 so row-carried admissible/executed/receipt assertions cannot create producer authority.",
   "schema": "CLAY_TRIGGER2_DETERMINISTIC_DISCRIMINATOR_PRODUCER_AUTHORITY/v1",
   "status": "CURRENT_SOURCE_AUTHORITY_CANDIDATE_NONPROMOTING",
   "upstream_requirement": {
+    "generation_authority_path": "research_entity/global/j-space/research/TRIGGER2_TRUSTED_SYNTHETIC_GENERATOR_AUTHORITY_V1.json",
     "must_pass": true,
     "reason": "Generator/world/event/state subjects must already be reconstructed from repository authority before discriminator production.",
+    "required_subject_hashes": {
+      "event_jcs_sha256": "372d48f2862401ecaaf1d9edcf4fc3eed99977f45ecc0bb7afd4414113360ad4",
+      "formal_world_jcs_sha256": "244a152921ea08fd66adc8430a1ff04dbd0318e994a45d9a11761858284282d9",
+      "state_before_jcs_sha256": "7b2248741a1d3f0c999cf4a1c9ce00ea92b4ce93d8585a611b8e65038576c83c"
+    },
     "schema": "CLAY_TRIGGER2_GENERATION_PROVENANCE_GATE/v1"
   }
 }

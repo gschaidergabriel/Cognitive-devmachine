@@ -1,0 +1,207 @@
+{
+  "schema": "CLAY_TRIGGER2_DYNAMIC_BINDING_PILOT_BLUEPRINT_SWARM_AUDIT/v2.1",
+  "date": "2026-08-25",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "user_trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority": {
+    "supervisor_epoch": "8.78",
+    "execution_mode": "FREE_ONLY",
+    "canonical_main_observed_before_first_write": "0edcc2ca0dba28fa0536bc5834fe6ede05a46e96",
+    "generator_first_commit": "2cb7cc9a18044377318beb2b555e1775142eda80",
+    "generator_repair_commit": "dc5b9a7ad74e930a79ce0db2d3c4b35b1f153f22",
+    "training_executed": false,
+    "provider_preflight_executed": false
+  },
+  "inputs": {
+    "claude_evidence_ingest": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_CLAUDE_XENO_VECTOR_EVIDENCE_INGEST_V1_GPT56SOL.json",
+    "source_package_sha256": "a2babae93dfe39e4e452a06bd8b848337f29766e38c422f05fb395126229b05c",
+    "abi_manifest_sha256": "0f664e6a4626351fbf97cd74a4825cedaf115b80f56b71b16c39315dba02fa11",
+    "target_model": "Goekdeniz-Guelmez/Josiefied-Qwen3.5-0.8B-gabliterated-v1",
+    "target_model_revision": "591852bda6e1979f59e4b0f5ee2919697b12e936",
+    "generator_path": "tools/trigger2_dynamic_binding_blueprint_v2.py",
+    "generator_local_source_sha256": "924febfd9d87bb683ee7fc62b898639e0266d017d8c30b7519a4b6e97c3986ec"
+  },
+  "evidence_basis": {
+    "observed": [
+      "Semantic readability is already strong from approximately layer 6 onward in the Claude evidence package.",
+      "The symbol write axis is causally writable in the measured package, including layer 23 hit rate 1.0 at gain 1 in the reported experiment.",
+      "Whitened HRR/MAP carrier binding remains perfect through k<=16 in the reported package and is not the current bottleneck.",
+      "Baseline dynamic codebook symbol hit rate is 0.361111 against 0.333333 chance and is not significant in the reported package.",
+      "Cross-task context transfer is approximately 0.52546 and transfer into T1 from T2/T3/T4 is chance-level 0.333333 in the reported package.",
+      "The old 9-case structural design was not polarity-orthogonal; output code C was always unnegated.",
+      "The Claude generator review found that selected S3 permutation metadata was not actually causal in the emitted codebook and that several leakage/counterbalance validators were too weak."
+    ],
+    "inference": "The highest-value training hypothesis is not to reteach semantic meaning or carrier capacity, but to train episode-local routing that composes an already-readable semantic state with the current codebook and emits the corresponding currently bound ABI symbol.",
+    "counterhypotheses": [
+      "Observed codebook failure may be dominated by prompt topology, token position or polarity nuisance rather than missing variable binding itself.",
+      "A training corpus can appear balanced while still exposing finite-sample order/template/symbol shortcuts that the model uses instead of codebook binding.",
+      "Even a successful SFT binding gain may not imply model-internal J-Space causal control; behavioral training and causal J-Space intervention remain separate evidence lanes."
+    ]
+  },
+  "training_objective": {
+    "primary": [
+      {"id": "A_CONTEXT_INVARIANT_BINDING", "reported_baseline": 0.52546, "reported_acceptance_target": ">=0.90"},
+      {"id": "B_DYNAMIC_CODEBOOK_BINDING", "reported_baseline": 0.361111, "reported_chance": 0.333333, "reported_acceptance_target": ">=0.90"}
+    ],
+    "protect_not_primary_retrain": [
+      "semantic reading",
+      "symbol emission/write axis",
+      "HRR/MAP carrier binding",
+      "general protocol/reasoning/retention behavior"
+    ]
+  },
+  "preregistered_resolution_of_source_tension": {
+    "class_word_policy": "ALLOW, DENY and ABSTAIN may occur only inside the rendered CODEBOOK block. They are forbidden from evidence/query text and all other model-visible spans.",
+    "reason": "This chooses one of the two explicit source-compatible resolutions instead of silently mixing the contradictory source instructions.",
+    "metadata_rule": "Target class metadata may exist outside model-visible text for generation/audit only and must never be serialized into the training prompt."
+  },
+  "pilot_blueprint_design": {
+    "schema": "CLAY_TRIGGER2_DYNAMIC_BINDING_EPISODE_BLUEPRINT/v2.1",
+    "rows_total": 9072,
+    "train_rows": 6912,
+    "validation_rows": 1728,
+    "frozen_holdout_rows": 432,
+    "train_templates": [
+      "T1_NUMERIC_COMPARISON",
+      "T2_SET_MEMBERSHIP",
+      "T3_ORDER_RELATION",
+      "T4_ATTRIBUTE_BINDING"
+    ],
+    "validation_template": "T5_BOOLEAN_XOR_VALIDATION",
+    "frozen_holdout_template": "T6_PARITY_HOLDOUT",
+    "train_validation_symbol_refs": "ABI_ACCEPTED_ORDINAL:00..11",
+    "frozen_unseen_symbol_refs": "ABI_ACCEPTED_ORDINAL:12..14",
+    "symbol_ref_semantics": "Ordinal over the accepted-only ABI atom inventory, never a raw unvalidated source row index.",
+    "factorial_product_per_template_symbol_triplet": {
+      "mapping_permutations": 6,
+      "codebook_entry_orders": 6,
+      "layouts": 2,
+      "semantic_classes": 3,
+      "query_polarities": 2,
+      "rows": 432
+    },
+    "causal_target_rule": "target_symbol_ref = symbol_triplet_refs[mapping_permutation_class_to_slot[target_class_index]]",
+    "holdout_isolation": "The frozen holdout uses a structurally unseen template and three symbol ordinals never used by train/validation.",
+    "render_status": "BLOCKED_UNTIL_EXACT_ABI_ATOM_SURFACE_AND_PINNED_TOKENIZER_BINDING",
+    "training_eligible": false
+  },
+  "swarm_cycle": [
+    {
+      "role": "EVIDENCE_EXTRACTOR",
+      "verdict": "PASS",
+      "finding": "Training target narrowed to dynamic/context-invariant codebook routing while preserving already measured semantic read, symbol write and carrier functions."
+    },
+    {
+      "role": "DATASET_ARCHITECT",
+      "verdict": "PASS_AFTER_REPAIR",
+      "finding": "Built explicit S3-causal mapping rows, four train task grammars, one validation grammar and one frozen unseen-template+symbol holdout."
+    },
+    {
+      "role": "ADVERSARIAL_SHORTCUT_HUNTER",
+      "verdict": "V2.0_FAIL_THEN_V2.1_PASS_ON_PRINCIPAL_MEASURED_FACTORS",
+      "finding": "The first 144-row design used deterministic pseudo-random codebook order and retained 0.2832836687 bit target-symbol/codebook-order MI. It was rejected. V2.1 factorializes all six codebook orders plus two layouts and removes this shortcut by construction."
+    },
+    {
+      "role": "STATISTICAL_REVIEWER",
+      "verdict": "PASS_FOR_BLUEPRINT_SCOPE",
+      "finding": "V2.1 local deterministic selftest reports zero mutual information, within floating tolerance, for class-target symbol, target symbol-template, target symbol-codebook order, target symbol-layout, target symbol-polarity, mapping-codebook order and class-codebook order. Every train target symbol occurs exactly 576 times."
+    },
+    {
+      "role": "ABI_PROVENANCE_REVIEWER",
+      "verdict": "BLOCKED_AT_RENDER_BOUNDARY",
+      "finding": "Model/source/ABI hashes are bound, but the complete accepted ABI atom surface is not present in current canonical repo evidence available to this organ. Therefore ordinals are references only and no model-visible symbols are emitted."
+    },
+    {
+      "role": "RETENTION_REVIEWER",
+      "verdict": "CONDITIONAL_PASS",
+      "finding": "The corpus isolates the missing routing function rather than explicitly retraining the already-good carrier/read/write mechanisms. Actual retention still requires a frozen pre/post checkpoint evaluation and cannot be inferred from dataset design."
+    },
+    {
+      "role": "HARNESS_COMPATIBILITY_REVIEWER",
+      "verdict": "PASS_WITH_OPEN_RENDERER_GATE",
+      "finding": "Rows expose deterministic mapping, symbol references, codebook order and layout fields suitable for later Xeno/JSPACE_VECTOR_CONTROL_ABI rendering. The harness must resolve exact accepted atom strings, verify single-token identity, token count and last-token position, and reject any mismatch before training admission."
+    },
+    {
+      "role": "FINAL_INTEGRATOR",
+      "verdict": "SOURCE_DELTA_COMMITTED_NO_TRAINING_CREDIT",
+      "finding": "Generator v2.1 is committed after adversarial repair; no rendered training tokens, model run, provider call or training promotion occurred."
+    }
+  ],
+  "local_selftest": {
+    "classification": "LOCAL_STATIC_GENERATOR_SELFTEST_NOT_ENTITYOS_RUNTIME_EVIDENCE",
+    "pass": true,
+    "rows": 9072,
+    "train": 6912,
+    "validation": 1728,
+    "holdout": 432,
+    "train_templates": 4,
+    "validation_templates": 1,
+    "frozen_unseen_templates": 1,
+    "s3_mapping_permutations": 6,
+    "s3_codebook_orders": 6,
+    "layouts": 2,
+    "train_symbols": 12,
+    "holdout_unseen_symbols": 3,
+    "shortcut_mi_bits": {
+      "class__target_symbol": 0.0,
+      "target_symbol__template": 0.0,
+      "target_symbol__codebook_order": 0.0,
+      "target_symbol__layout": 0.0,
+      "target_symbol__polarity": 0.0,
+      "mapping__codebook_order": 0.0,
+      "class__codebook_order": 0.0
+    },
+    "generated_stream_sha256": {
+      "train": "6f7bb435d1130e1e80cc86c576ed34584da9e197ce55fd8935515116276ff783",
+      "validation": "a63ee93c2b78d2f61e9935a3ebf1e4ba131c9ab0a3fe26133252439d9175debb",
+      "holdout": "e650ef3699a134eed2ab821074f4cdd66000d7cb7091f260e2045672e8ca0bbc"
+    }
+  },
+  "illustrative_blueprint_examples": [
+    {"template":"T1_NUMERIC_COMPARISON","class_meta":"ALLOW","polarity":"POS","mapping":[2,0,1],"symbol_refs":["ABI_ACCEPTED_ORDINAL:00","ABI_ACCEPTED_ORDINAL:01","ABI_ACCEPTED_ORDINAL:02"],"evidence":"Register r has value 7.","query":"Register r is greater than 5.","target_ref":"ABI_ACCEPTED_ORDINAL:02"},
+    {"template":"T2_SET_MEMBERSHIP","class_meta":"DENY","polarity":"NEG","mapping":[1,2,0],"symbol_refs":["ABI_ACCEPTED_ORDINAL:03","ABI_ACCEPTED_ORDINAL:04","ABI_ACCEPTED_ORDINAL:05"],"evidence":"Set K explicitly contains marker m.","query":"Marker m does not belong to set K.","target_ref":"ABI_ACCEPTED_ORDINAL:05"},
+    {"template":"T3_ORDER_RELATION","class_meta":"ABSTAIN","polarity":"POS","mapping":[0,2,1],"symbol_refs":["ABI_ACCEPTED_ORDINAL:06","ABI_ACCEPTED_ORDINAL:07","ABI_ACCEPTED_ORDINAL:08"],"evidence":"The order record states p before z; relation between p and q is unspecified.","query":"Node p occurs before node q.","target_ref":"ABI_ACCEPTED_ORDINAL:07"},
+    {"template":"T4_ATTRIBUTE_BINDING","class_meta":"ALLOW","polarity":"NEG","mapping":[1,0,2],"symbol_refs":["ABI_ACCEPTED_ORDINAL:09","ABI_ACCEPTED_ORDINAL:10","ABI_ACCEPTED_ORDINAL:11"],"evidence":"Object v is recorded with texture smooth.","query":"Object v does not have texture rough.","target_ref":"ABI_ACCEPTED_ORDINAL:10"},
+    {"template":"T5_BOOLEAN_XOR_VALIDATION","class_meta":"DENY","polarity":"POS","mapping":[2,1,0],"symbol_refs":["ABI_ACCEPTED_ORDINAL:00","ABI_ACCEPTED_ORDINAL:01","ABI_ACCEPTED_ORDINAL:02"],"evidence":"Flags a and b are both active.","query":"Exactly one of flags a and b is active.","target_ref":"ABI_ACCEPTED_ORDINAL:01"},
+    {"template":"T6_PARITY_HOLDOUT","class_meta":"ALLOW","polarity":"POS","mapping":[0,2,1],"symbol_refs":["ABI_ACCEPTED_ORDINAL:12","ABI_ACCEPTED_ORDINAL:13","ABI_ACCEPTED_ORDINAL:14"],"evidence":"The recorded integer is 14.","query":"The recorded integer is even.","target_ref":"ABI_ACCEPTED_ORDINAL:12"}
+  ],
+  "render_contract": {
+    "model_visible_codebook": "Render ALLOW/DENY/ABSTAIN labels and their semantic definitions only inside a delimited CODEBOOK block in the row-specified entry order. Resolve each symbol ref from the accepted-only ABI atom inventory bound to the exact manifest hash.",
+    "model_visible_task": "Render only evidence and query in the row-specified layout; never render class_meta, mapping indices, ordinal identifiers, split labels or target metadata.",
+    "target": "Resolve only target_ref to the exact ABI atom surface and require the exact measured tokenizer to encode it as the preregistered single-token target.",
+    "fail_closed": [
+      "ABI manifest hash mismatch",
+      "accepted-atom inventory missing or ambiguous",
+      "referenced ordinal outside accepted-only inventory",
+      "target atom tokenizes to anything other than the preregistered exact token count",
+      "prompt/target last-token position mismatch relative to the matched evaluation contract",
+      "class label leakage outside CODEBOOK block",
+      "train/validation/holdout semantic-family or holdout-symbol overlap",
+      "target derivation disagrees with causal S3 mapping"
+    ]
+  },
+  "open_risks_after_swarm": [
+    "Exact accepted atom strings and the source-package atom inventory are not currently accessible in canonical repo evidence to this organ; therefore the pilot is blueprint-only.",
+    "Full lexical-family hashing and protocol-token exemptions must be implemented at render/admission time; template separation alone is not sufficient evidence of lexical nonleakage.",
+    "Exact tokenizer token-count and last-token-position matching remain open and are required by supervisor 8.78 before promotion-grade successor evidence.",
+    "A behavioral SFT gain would not by itself establish causal Global J-Space control; the separately preregistered same-model causal successor remains required.",
+    "Retention and off-target regressions remain empirical gates after any future training run."
+  ],
+  "credits": {
+    "research_design_delta": 1,
+    "generator_source_delta": 1,
+    "rendered_training_rows": 0,
+    "accepted_dataset_tokens": 0,
+    "qwen35_jspace_runtime_credit": 0,
+    "qwen35_training_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "canonical_semantics_promotion": false
+  },
+  "research_delta": "Triggerwort 2 now has a concrete repaired variable-binding pilot generator derived from the Claude measurements rather than another architecture-prose seed. The swarm process caught and removed a finite-sample codebook-order shortcut, then replaced the small random design with a fully factorial 9,072-row blueprint covering causal S3 mapping, all six codebook orders, both evidence/query layouts, all three semantic outcomes, both polarities, four training grammars, an isolated validation grammar and a frozen unseen-template/unseen-symbol holdout. The generator remains deliberately non-trainable until the exact ABI atom surface and pinned-tokenizer rendering gates are available.",
+  "next_exact_action": "Ingest or expose the exact accepted-only ABI atom inventory from the Claude source package; bind it to manifest 0f664e6a4626351fbf97cd74a4825cedaf115b80f56b71b16c39315dba02fa11 and the pinned model tokenizer; implement a fail-closed renderer/admission gate with exact token-count and last-token-position checks plus full lexical-family leakage hashing; only then render this pilot into candidate TrainingTrace rows. Keep the frozen holdout unopened for tuning."
+}

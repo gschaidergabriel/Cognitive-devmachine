@@ -1,0 +1,119 @@
+{
+  "schema": "CLAY_TRIGGER2_DISCRIMINATOR_PRODUCER_AUTH_SOURCE_DELTA/v1",
+  "date": "2026-08-25",
+  "local_trigger_time": "21:28+07:00",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU_VARIABLE_COGNITIVE_GRID",
+  "status": "SOURCE_DELTA_NONPROMOTING_REVIEW_REQUIRED",
+  "authority_snapshot": {
+    "repository": "gschaidergabriel/clay-global-research-entity",
+    "branch_base": "afcc81c605d3d57ff6f3ad1a252d4af5079f9098",
+    "latest_main_observed_after_writes": "8b7b9c0002524de75a00206e67567994d4eb1ee3",
+    "supervisor_epoch": "8.78",
+    "mode": "FREE_ONLY",
+    "supervisor_priority": "T2_PINNED_PILOT_A02_DISCRIMINATOR_PRODUCER_AUTHENTICITY_BEFORE_NEW_POSITIVE_ROWS",
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0
+  },
+  "audit_findings": [
+    "uploaded bootstrap 8.63 is stale as current authority and remains only an operating-cache provenance source",
+    "current supervisor 8.78 explicitly blocks new Trigger-2 positive rows until discriminator producer authenticity is closed",
+    "retained state-history proof v1 recomputes coverage but trusts row-carried admissible=true, executed=true and a nonempty execution_receipt_id",
+    "existing generation-bound test helper synthesizes those execution assertions and therefore does not prove producer authenticity",
+    "binding-router factorial generator v3 remains blocked from direct training due higher-order nuisance leakage",
+    "accepted dataset tokens and training credit remain zero"
+  ],
+  "artifact_reclassification_delta": [
+    {
+      "artifact": "tools/trigger2_hyperposition_state_history_proof_gate_v1.py",
+      "predecessor_status": "CURRENT_PARTIAL_P0_ADVANCE_NEEDS_REVISION_EXECUTION_UNOBSERVED",
+      "status": "CURRENT_PREDECESSOR_NEEDS_REVISION_A02_ROW_CARRIED_EXECUTION_AUTHORITY",
+      "successor": "tools/trigger2_hyperposition_state_history_producer_bound_gate_v2.py",
+      "revision_reason": "receipt shape/digest/coverage checks remain useful but row-carried admissibility/execution/id are not producer provenance"
+    },
+    {
+      "artifact": "tests/test_trigger2_generation_bound_hyperposition_gate_v2.py",
+      "status": "CURRENT_PREDECESSOR_TEST_SOURCE_NEEDS_A02_PRODUCER_MUTATIONS",
+      "successor": "tests/test_trigger2_discriminator_producer_bound_gate_v2.py",
+      "revision_reason": "existing helper synthesizes execution assertions; successor adds exact-producer-output and coherent-rewrite attacks"
+    },
+    {
+      "artifact": "tools/trigger2_hyperposition_state_history_generation_bound_gate_v3.py",
+      "status": "CURRENT_PREDECESSOR_PARTIAL_NONPROMOTING",
+      "successor": "tools/trigger2_hyperposition_state_history_generation_bound_gate_v4.py",
+      "revision_reason": "v4 inserts producer-authenticated discriminator derivation while preserving generation and epistemic ordering"
+    },
+    {
+      "artifact": "tools/trigger2_binding_router_factorial_generator_v3.py",
+      "status": "BLOCKED_DIRECT_TRAINING",
+      "successor": "FULL_CROSS_OR_PREREGISTERED_CONDITIONAL_INDEPENDENCE_SUCCESSOR_ONLY",
+      "revision_reason": "supervisor 8.78 conditional nuisance leakage remains unresolved"
+    },
+    {
+      "artifact": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V11_GPT56SOL.json",
+      "status": "CURRENT_SUPPORTING_LEDGER",
+      "revision_reason": "its frontier already names producer-authenticated proof mutations and no-positive-corpus rule"
+    }
+  ],
+  "source_delta": [
+    {
+      "path": "tools/trigger2_trusted_discriminator_producer_v1.py",
+      "sha256": "ec54505b2677c77f56605a26c20d1c0035e1558f16243e53d579e1c41fb34a67",
+      "role": "repository-bound deterministic synthetic discriminator producer"
+    },
+    {
+      "path": "research_entity/global/j-space/research/TRIGGER2_TRUSTED_SYNTHETIC_DISCRIMINATOR_AUTHORITY_V1.json",
+      "sha256": "6f3b567d1acd98ddeac6b5f70893687ef87a741cc5634aca5cd41867af6d2875",
+      "role": "bounded case/producer/policy authority"
+    },
+    {
+      "path": "tools/trigger2_hyperposition_state_history_producer_bound_gate_v2.py",
+      "sha256": "a1e6255240a1e71d749c4b1859ec6ce0e8c327dee709a30ce1d6465be9703efd",
+      "role": "exact producer-output equality gate plus retained v1 replay translation"
+    },
+    {
+      "path": "tools/trigger2_hyperposition_epistemic_preupdate_guard_v2.py",
+      "sha256": "b21ebd96c9ce30fb3143d5f9f8def1ad7abf51407b70a9277aeb941ab012cc23",
+      "role": "epistemic rule retained while delegating to producer-bound state proof"
+    },
+    {
+      "path": "tools/trigger2_hyperposition_state_history_generation_bound_gate_v4.py",
+      "sha256": "3ec04727893cf8d70989c85a4ec8c1c7274351a733de7d8c5af51885bdbb75d2",
+      "role": "single bounded generation->epistemic->producer->replay composition"
+    },
+    {
+      "path": "tests/test_trigger2_discriminator_producer_bound_gate_v2.py",
+      "sha256": "d29dd23605ddb4d0379cbd209af552c5be1df181dea32648e0c5fdb768d6e3c7",
+      "role": "A02 happy-path/fake-id/coherent-rehash/spec/source-authority/history/full-chain mutations"
+    }
+  ],
+  "validation": {
+    "local_static_py_compile": "PASS_5_PYTHON_SOURCE_PLUS_TEST_FILE",
+    "authority_json_parse": "PASS",
+    "bounded_producer_mock_logic_sanity": "PASS_NON_REPOSITORY_MOCK_ONLY",
+    "exact_current_repository_execution": "UNOBSERVED",
+    "exact_live_free_vps_execution": "UNOBSERVED",
+    "runtime_credit_minted": 0
+  },
+  "generation_decision": {
+    "new_positive_rows": 0,
+    "new_hard_negative_rows": 0,
+    "decision": "NO_NEW_ROWS_WITH_REASON",
+    "reason": "supervisor 8.78 requires producer-authenticated discriminator proof closure before additional positive supervision; existing hard-negative families already cover the conceptual exploit class"
+  },
+  "credits": {
+    "research_delta": 1,
+    "source_implementation_delta": 1,
+    "positive_D_E_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "positive_jspace_causal_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0
+  },
+  "next_exact_action": "Review against latest moving main; if nonduplicate and mergeable, fuse the single A02 successor lane, then execute the exact-current merged v4 mutation suite from a clean authorized zero-cost checkout and admit only its bounded component evidence. Do not generate positive rows until that receipt is observed."
+}

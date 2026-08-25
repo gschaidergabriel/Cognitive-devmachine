@@ -1,0 +1,209 @@
+{
+  "schema": "COGNITIVE_PROCESS_ABI_CONTRACT/v1",
+  "status": "SOURCE_CONTRACT_ONLY_NO_RUNTIME_CREDIT",
+  "date": "2026-08-25",
+  "persistent_entity": "Clay",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "owner_target": {
+    "path": "research_entity/global/OWNER_CORRECTION_UNBOUNDED_AGENT_ZERO_COGNITIVE_GRID_2026-08-25.md",
+    "target": "UNBOUNDED_AGENT_ZERO_COGNITIVE_GRID",
+    "grid_size_law": "SIZE_INDEPENDENT_DYNAMIC_N_GRID10_TEST_FIXTURE_ONLY",
+    "next_gate": "COGNITIVE_PROCESS_ABI"
+  },
+  "authority_epoch": "8.78",
+  "mode": "FREE_ONLY",
+  "census_donor": {
+    "repository": "gschaidergabriel/clay-global-research-entity",
+    "pull_request": 1971,
+    "head_sha": "f953478d69fd815227bc621c53e4473c458116be",
+    "schema": "AGENT_ZERO_DISTRIBUTED_COGNITIVE_PROCESS_CENSUS/v1",
+    "role": "EXACT_SOURCE_DONOR_NOT_CANONICAL_AUTHORITY",
+    "process_ids": [
+      "AZP01",
+      "AZP02",
+      "AZP03",
+      "AZP04",
+      "AZP05",
+      "AZP06",
+      "AZP07",
+      "AZP08",
+      "AZP09",
+      "AZP10",
+      "AZP11",
+      "AZP12",
+      "AZP13",
+      "AZP14",
+      "AZP15",
+      "AZP16",
+      "AZP17",
+      "AZP18",
+      "AZP19",
+      "AZP20"
+    ]
+  },
+  "identity_law": {
+    "causal_event_id": "REPLAY_STABLE_REAL_WORLD_OR_AUTONOMOUS_CAUSAL_EVENT_IDENTITY",
+    "admission_id": "CONCRETE_TRANSPORT_ADMISSION_IDENTITY_SEPARATE_FROM_CAUSAL_EVENT",
+    "work_id": "STABLE_SEMANTIC_COGNITIVE_WORK_IDENTITY",
+    "work_id_excludes": [
+      "physical_node_id",
+      "grid_size",
+      "route_decision_id",
+      "claim_id",
+      "attempt",
+      "coordinator_topology",
+      "wall_clock_time",
+      "mutable_s1_epoch",
+      "mutable_s1_digest"
+    ],
+    "claim_id": "EXECUTION_ATTEMPT_IDENTITY_BOUND_TO_ROUTE_EXECUTOR_GENERATION_STATE_AND_EXTERNAL_AUTHORITY",
+    "result_id": "IMMUTABLE_RESULT_IDENTITY_BOUND_TO_ONE_CLAIM_AND_PAYLOAD",
+    "rejoin_law": "NODE_OR_EXECUTOR_REPLACEMENT_MAY_CREATE_NEW_CLAIM_ID_BUT_MUST_NOT_CHANGE_WORK_ID",
+    "scale_law": "N_CHANGE_MUST_NOT_CHANGE_SEMANTIC_WORK_IDENTITY"
+  },
+  "state_law": {
+    "S0": "CANONICAL_DURABLE_TRUTH_EFFECT_SECURITY_AUTHORITY",
+    "S1": "LIVE_SHARED_COGNITIVE_WORKSPACE_PROCESS_STATE",
+    "S2": "NODE_LOCAL_EPHEMERAL_INFERENCE_SCRATCH",
+    "ordinary_node_s1": "READ_ONLY",
+    "result_transport": "EPHEMERAL_TYPED_RESULT_TO_VALID_COORDINATOR",
+    "coordinator_write": "LEASE_SCOPED_S1_ONLY",
+    "parallel_state_advance": "AUTHENTIC_RESULT_REMAINS_IDENTICAL_BUT_INTEGRATION_REQUIRES_EXPLICIT_REBASE_OR_REJECT",
+    "s0_write_from_model_packet": "FORBIDDEN"
+  },
+  "packet_families": {
+    "COGNITIVE_WORK/v1": {
+      "purpose": "STABLE_SEMANTIC_WORK_UNIT",
+      "required": [
+        "causal_event_id",
+        "admission_id",
+        "workspace_episode_id",
+        "process_id",
+        "objective_ref",
+        "objective_sha256",
+        "semantic_generation"
+      ]
+    },
+    "COGNITIVE_EXECUTION_CLAIM/v1": {
+      "purpose": "ONE_ADMITTED_EXECUTION_ATTEMPT",
+      "required": [
+        "work_id",
+        "process_id",
+        "route_decision_id",
+        "executor_id",
+        "executor_runtime_sha256",
+        "executor_generation",
+        "state_epoch",
+        "state_digest",
+        "capability_authority_sha256",
+        "coordinator_lease_id",
+        "attempt"
+      ]
+    },
+    "COGNITIVE_RESULT/v1": {
+      "purpose": "IMMUTABLE_NONCANONICAL_RESULT",
+      "required": [
+        "work_id",
+        "claim_id",
+        "process_id",
+        "executor_id",
+        "base_state_epoch",
+        "base_state_digest",
+        "payload_ref",
+        "payload_sha256",
+        "epistemic_class",
+        "status"
+      ],
+      "truth_authority": false,
+      "effect_authority": false
+    },
+    "COGNITIVE_INTEGRATION_DECISION/v1": {
+      "purpose": "COORDINATOR_DECISION_TO_ADMIT_REBASE_OR_REJECT_RESULT_IN_S1",
+      "actions": [
+        "ADMIT_S1",
+        "REBASE_REQUIRED",
+        "REJECT"
+      ],
+      "s1_only": true,
+      "s0_truth_authority": false,
+      "effect_authority": false
+    },
+    "COGNITIVE_EFFECT_REQUEST/v1": {
+      "purpose": "AZP11_PROPOSE_ONLY_TYPED_EFFECT_REQUEST_FOR_EFFECTGATE_EFFECTJOURNAL",
+      "source_process": "AZP11",
+      "effect_authority": false
+    }
+  },
+  "epistemic_law": {
+    "classes": [
+      "OBSERVED",
+      "INFERRED",
+      "CANDIDATE",
+      "MEASUREMENT",
+      "COUNTEREVIDENCE",
+      "UNKNOWN"
+    ],
+    "unknown_status_rule": "STATUS_UNKNOWN_REQUIRES_EPISTEMIC_UNKNOWN",
+    "jspace_process": "AZP09",
+    "jspace_allowed_result_classes": [
+      "MEASUREMENT",
+      "COUNTEREVIDENCE",
+      "UNKNOWN"
+    ],
+    "jspace_cannot_mint": [
+      "CANONICAL_TRUTH",
+      "EFFECT_AUTHORITY",
+      "WHOLE_HCU_CREDIT",
+      "WHOLE_ENTITYOS_CREDIT",
+      "TRAINING_CREDIT"
+    ]
+  },
+  "authority_law": {
+    "capability_claims_inside_work_or_result": "INPUT_ONLY_NOT_AUTHORITY",
+    "claim_requires_external_capability_authority_binding": true,
+    "claim_requires_external_route_decision": true,
+    "claim_requires_coordinator_lease_binding": true,
+    "ordinary_result_truth_authority": false,
+    "ordinary_result_effect_authority": false,
+    "effect_request_source": "AZP11_PLAN_ACTION_CANDIDATE_SYNTHESIS",
+    "real_effect_path": "AZP12_EFFECT_POLICY_EXECUTION_JOURNAL_VIA_EFFECTGATE_EFFECTJOURNAL_ONLY",
+    "unknown_external_effect_outcome": "UNKNOWN_NO_BLIND_REPLAY"
+  },
+  "claycode_binding": {
+    "status": "NEXT_GATE_NOT_CLAIMED_COMPLETE",
+    "semantic_abi_wire_independence": "REQUIRED",
+    "requirement": "ClayCode encoding must preserve packet schema, work/claim/result identity, provenance, generation, state binding and authority flags without creating a second truth/effect authority."
+  },
+  "first_executable_discriminator": {
+    "description": "One runtime handles two distinct AZP work types from shared state, emits typed state/claim-bound results, restarts/rejoins on the same semantic work with a new claim, and cannot self-grant coordinator/S0/effect authority.",
+    "required_observations": [
+      "same_work_id_across_rejoin",
+      "different_claim_id_across_executor_generation",
+      "result_identity_stable_after_parallel_s1_advance",
+      "rebase_required_not_identity_rewrite",
+      "stale_or_invalid_coordinator_lease_rejected",
+      "truth_and_effect_self_grant_rejected",
+      "N_change_does_not_change_work_identity"
+    ],
+    "runtime_credit": 0
+  },
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED_BY_TYPED_SIZE_INDEPENDENT_PROCESS_EXECUTION_SPINE",
+    "B_HCU_TYPED_ENTRY_CO_DEVELOPMENT": "ADVANCED_BY_CAUSAL_WORK_CLAIM_RESULT_STATE_AND_COORDINATOR_BINDINGS",
+    "C_JSPACE_GWT_TRAINING_READINESS_FREE_ONLY": "ADVANCED_BY_AZP09_MEASUREMENT_ONLY_PACKET_BOUNDARY_AND_HARD_NEGATIVE_READY_IDENTITY_WITH_ZERO_PROMOTION"
+  },
+  "credit": {
+    "source_contract": 1,
+    "local_logic_mirror_tests": "14_OF_14_PASS_WITH_NONCANONICAL_TEST_CANONICALIZER_STUB",
+    "exact_repo_test_execution": 0,
+    "distributed_runtime": 0,
+    "whole_entityos": 0,
+    "whole_hcu": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "counterhypothesis": "A semantic ABI that ignores attempt/state/authority separation will either over-collapse genuinely distinct executions or fork semantic work across node/rejoin/scale changes; both failure modes break size-independent Agent Zero equivalence.",
+  "next_exact_action": "FUSE_OR_ADMIT_ONE_CENSUS_LANE_THEN_EXECUTE_THIS_ABI_ON_ONE_SHARED_STATE_RUNTIME_WITH_TWO_AZP_TYPES_AND_REJOIN_WITHOUT_S0_OR_EFFECT_SELF_GRANT"
+}

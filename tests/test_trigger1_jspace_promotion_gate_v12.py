@@ -1,7 +1,16 @@
+from __future__ import annotations
+
+import sys
 import unittest
+from pathlib import Path
 from unittest import mock
 
-from tools import trigger1_jspace_promotion_gate_v12 as gate
+ROOT = Path(__file__).resolve().parents[1]
+TOOLS = ROOT / "tools"
+if str(TOOLS) not in sys.path:
+    sys.path.insert(0, str(TOOLS))
+
+import trigger1_jspace_promotion_gate_v12 as gate
 
 V11_POSITIVE={
     'abstract_native_semantic_jspace_candidate':True,

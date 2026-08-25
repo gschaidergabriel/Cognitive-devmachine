@@ -1,11 +1,12 @@
 """EntityOS/HCU cognitive-process ABI v1.
 
 Source-level contract for the owner-directed variable-size cognitive grid.
-This module does not create a canonical state, canonicalizer, effect authority,
+This module does not create canonical state, a canonicalizer, effect authority,
 or model/J-Space runtime credit. Process semantic identity is intentionally
 independent of grid size and physical/logical cell assignment.
 
 Authority epoch: owner 2026-08-25 + supervisor 8.78.
+Canonical census: research_entity/global/ZERO_ENTITYOS_COGNITIVE_PROCESS_CENSUS_v1.json
 """
 from __future__ import annotations
 
@@ -16,18 +17,9 @@ ABI_VERSION = "ENTITYOS_HCU_COGNITIVE_PROCESS_ABI/v1"
 REQUEST_VERSION = "ENTITYOS_HCU_COGNITIVE_PROCESS_REQUEST/v1"
 RESULT_VERSION = "ENTITYOS_HCU_COGNITIVE_PROCESS_RESULT/v1"
 ASSIGNMENT_VERSION = "ENTITYOS_HCU_COGNITIVE_ASSIGNMENT/v1"
-
-KNOWN_PROCESS_IDS = frozenset({
-    "CONTEXT_INTERPRET", "RELEVANCE_SELECT", "WORKING_STATE_RECONSTRUCT",
-    "MEMORY_SELECT", "MEMORY_UPDATE_PROPOSE", "GOAL_MAINTAIN", "PLAN",
-    "REPLAN", "DECOMPOSE", "ALTERNATIVES_GENERATE", "CONTINUATION_SIMULATE",
-    "UNCERTAINTY_ESTIMATE", "CONTRADICTION_RECONCILE", "SELF_EVALUATE",
-    "NEXT_COGNITIVE_ACTION_SELECT", "TOOL_ACTION_PROPOSE", "OUTCOME_RECONCILE",
-    "RETRY_RECOVERY_DECIDE", "LONG_LOOP_CONTINUE", "WORKSPACE_COMPETE",
-    "WORKSPACE_BROADCAST", "WORKSPACE_UPTAKE", "CLAYCODE_TRANSFORM",
-    "HYPERPOSITION_TRANSFORM", "CLAUDE_CODE_HANDOFF", "CLAUDE_CODE_REENTRY",
-    "JSPACE_OBSERVE", "JSPACE_CONTROL_PROPOSE",
-})
+CENSUS_SCHEMA = "ZERO_ENTITYOS_COGNITIVE_PROCESS_CENSUS/v1"
+CENSUS_PATH = "research_entity/global/ZERO_ENTITYOS_COGNITIVE_PROCESS_CENSUS_v1.json"
+KNOWN_PROCESS_IDS = frozenset({f"ZECP{i:02d}" for i in range(1, 21)})
 
 FORBIDDEN_DIRECT_AUTHORITY_FIELDS = frozenset({
     "canonical_fact_write", "canonical_state_update", "canonical_truth",
@@ -74,6 +66,7 @@ class SemanticProcessIdentityMaterial:
         """
         return {
             "schema_version": ABI_VERSION,
+            "census_schema": CENSUS_SCHEMA,
             "causal_event_id": self.causal_event_id,
             "admission_id": self.admission_id,
             "generation": self.generation,
@@ -127,7 +120,6 @@ def validate_process_request(packet: Mapping[str, Any]) -> dict[str, Any]:
         raise CognitiveABIError("INPUT_REFS_INVALID")
     if not isinstance(evidence_refs, list) or not all(isinstance(x, str) and x for x in evidence_refs):
         raise CognitiveABIError("EVIDENCE_REFS_INVALID")
-
     return dict(packet)
 
 
@@ -142,8 +134,7 @@ def validate_process_result(packet: Mapping[str, Any]) -> dict[str, Any]:
     _require_text(packet, "process_instance_id")
 
     for key in ("candidates", "evidence_refs", "db_write_proposals", "effect_proposals"):
-        value = packet.get(key, [])
-        if not isinstance(value, list):
+        if not isinstance(packet.get(key, []), list):
             raise CognitiveABIError(f"{key.upper()}_INVALID")
 
     uncertainty = packet.get("uncertainty")
@@ -161,7 +152,6 @@ def validate_process_result(packet: Mapping[str, Any]) -> dict[str, Any]:
         if not isinstance(proposal, Mapping):
             raise CognitiveABIError("EFFECT_PROPOSAL_INVALID")
         _reject_direct_authority(proposal)
-
     return dict(packet)
 
 
@@ -171,7 +161,6 @@ def validate_assignment(packet: Mapping[str, Any]) -> dict[str, Any]:
     _require_text(packet, "assignment_id")
     _require_text(packet, "process_instance_id")
     _require_text(packet, "cell_id")
-
     grid_size = packet.get("grid_size")
     replica_index = packet.get("replica_index")
     if not isinstance(grid_size, int) or grid_size < 1:

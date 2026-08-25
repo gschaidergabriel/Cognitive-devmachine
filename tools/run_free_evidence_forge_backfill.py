@@ -9,16 +9,19 @@ from __future__ import annotations
 import argparse
 import asyncio
 import os
+from pathlib import Path
 import shutil
 import time
 
 import run_free_evidence_forge_safe_871 as safe
+from forge_runtime_identity import runtime_identity
 from free_swarm_backfill_provenance import reconcile_candidate_source_counts
 from free_swarm_historical_backfill import backfill_metrics, ensure_schema, ingest_artifact_history
 
 base = safe.base
 _ORIGINAL_CONNECT = base.connect
 _ORIGINAL_METRICS = base.metrics
+_RUNTIME_IDENTITY = runtime_identity(Path(__file__))
 
 
 def connect():
@@ -49,6 +52,12 @@ def metrics(con, peak_parallel: int = 0):
     out["ready_backlog"] = int(con.execute("SELECT COUNT(*) FROM candidates WHERE ready=1 AND state='NEW'").fetchone()[0])
     out["implementation_backlog"] = int(con.execute("SELECT COUNT(*) FROM candidates WHERE state='NEEDS_IMPLEMENTATION'").fetchone()[0])
     out["deduplicated_backlog"] = int(con.execute("SELECT COUNT(*) FROM candidates WHERE state='DUPLICATE_SUPERSEDED'").fetchone()[0])
+    out["runtime_identity"] = dict(_RUNTIME_IDENTITY)
+    if _RUNTIME_IDENTITY.get("runtime_identity_state") != "VERIFIED":
+        # A writer whose executable/source/process generation cannot be bound is
+        # explicitly non-LIVE even if the predecessor metrics implementation would
+        # otherwise report LIVE. External reconciliation can therefore fail closed.
+        out["state"] = "RUNTIME_IDENTITY_UNVERIFIED"
     return out
 
 

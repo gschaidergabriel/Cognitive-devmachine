@@ -1,0 +1,75 @@
+{
+  "schema": "CLAY_TRIGGER2_FAMILY_DEPENDENCE_SELECTION_DELTA/v1",
+  "date": "2026-08-26",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "status": "APPEND_ONLY_RESEARCH_DELTA_NONPROMOTING",
+  "observed_main_before_write": "d6ea399d43f5506988b839c0c7c16a3a0125eb30",
+  "authority": {
+    "supervisor_epoch": "8.81",
+    "mode": "FREE_ONLY",
+    "free_swarm_provider_routes": "OWNER_EMERGENCY_STOP_HARD_OFF",
+    "runtime_quiescence_required_before_new_execution": true,
+    "training_execution_authorized": false,
+    "checkpoint_selection_credit": 0,
+    "training_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  },
+  "dedup_against_current_main": {
+    "existing_selection_rubric": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_CHECKPOINT_SELECTION_RUBRIC_V1_GPT56SOL.json",
+    "existing_statistical_preregistration": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_CHECKPOINT_DECISION_STATISTICAL_PREREGISTRATION_V1_GPT56SOL.json",
+    "diagnostic_measurement_commit": "7e4d6b3806deba0e6edcd7bade04e03e6bdb1c4d",
+    "action": "DO_NOT_DUPLICATE_EXISTING_OUTPUT_PROVENANCE_GRADER_OR_ITEM_LEVEL_STATISTICAL_GATES",
+    "unique_delta": "Make checkpoint uncertainty and expansion decisions family-aware because repeated templated items are not independent semantic families."
+  },
+  "observed_evidence": {
+    "case_manifest": "research_entity/global/j-space/research/vps_run_receipts/heldout_cases_used_axis_a64_axis_b64.json",
+    "axis_a": "Template-plus-slot variation with homogeneous judgment within four subtypes; the planned 84 cases were post-hoc trimmed to 64 after throughput measurement using first-N preservation within subtypes.",
+    "axis_b": "Eight distinct database-vs-simulation template pairs are cycled to reach n=64, with presentation order alternated.",
+    "current_diagnostic_grading": "The current selection rubric already correctly classifies the n=64 result as diagnostic/non-selection-grade because exact grader source, lossless outputs, frozen case-manifest provenance and checkpoint input identity are incomplete.",
+    "epistemic_boundary": "This delta does not claim that within-family outcomes are identical or perfectly correlated. It establishes that item-level independence cannot be assumed from the construction and must be measured or handled conservatively."
+  },
+  "new_finding": {
+    "id": "T2_TEMPLATE_FAMILY_DEPENDENCE_GAP",
+    "classification": "R0_MANIFEST_STRUCTURE_PLUS_R1_STATISTICAL_DESIGN_INFERENCE",
+    "finding": "The existing paired item-level McNemar/bootstrap preregistration is necessary but can overstate effective evidence if repeated template/slot variants share family-level failure modes. The nominal n=64 therefore must not be interpreted as 64 independent semantic families.",
+    "scope": "Affects uncertainty intervals, superiority/noninferiority claims, expansion stopping and tie-breakers. It does not erase observed hard truth-boundary failures: any observed A1 fabrication or B1 simulation-as-canonical violation remains a real diagnostic failure under the current hard-boundary rubric."
+  },
+  "required_successor_contract": {
+    "before_selection_grade_rerun": [
+      "Assign immutable family_id and template_id before rendering/unblinding for every evaluation item.",
+      "Freeze family allocation and any downsampling policy before model outputs are observed; no post-hoc first-N trimming for selection-grade evidence.",
+      "Persist lossless model output bytes and exact committed grader/evaluator source as already required by the current selection rubric.",
+      "Close CHECKPOINT_INPUT_IDENTITY_ABI/v1 for every candidate before statistical comparison."
+    ],
+    "family_aware_reporting": [
+      "Report item-level counts and family-level counts together.",
+      "Report per-family failure rates and worst-family behavior for critical axes.",
+      "Report the number of distinct semantic/template families separately from nominal item N."
+    ],
+    "family_aware_inference": [
+      "For uncertainty and effect intervals, resample at the family level or use an explicitly justified clustered/hierarchical paired method; do not bootstrap nominal items as independent when family dependence is present.",
+      "For sequential expansion, add new frozen disjoint families rather than only more slot variants of already-seen templates when the unresolved quantity is cross-family generalization.",
+      "Preserve exact candidate pairing within each item/family and keep Holm/multiplicity handling from the existing statistical preregistration.",
+      "If family count is too small for a stable inferential claim, remain NEEDS_MORE_EVIDENCE or UNRESOLVED rather than selecting a winner."
+    ],
+    "hard_boundary_interpretation": "The current zero-critical-failure A1/B1 gate remains fail-closed. Family-aware statistics may quantify uncertainty and generalization; they may not average away a declared critical truth-boundary violation."
+  },
+  "current_decision": {
+    "checkpoint_winner": null,
+    "diagnostic_n64_status": "INFORMATIVE_NONPROMOTABLE",
+    "positive_training_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "training_executed": false,
+    "training_credit": 0,
+    "model_runtime_executed_this_delta": false,
+    "provider_execution_this_delta": false,
+    "unusual_experiment_attempted": false
+  },
+  "next_exact_action": "First satisfy runtime-quiescence/current-authority gates. Then close CHECKPOINT_INPUT_IDENTITY_ABI/v1 for all three frozen candidates. For any selection-grade rerun, freeze lossless outputs + committed grader + immutable family_id/template_id manifest and use family-aware uncertainty/expansion; otherwise keep checkpoint_winner=null."
+}

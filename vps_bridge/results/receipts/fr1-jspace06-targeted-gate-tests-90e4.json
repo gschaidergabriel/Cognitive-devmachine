@@ -1,0 +1,17 @@
+{
+  "schema": "CLAY_VPS_RECEIPT/v4",
+  "command_id": "fr1-jspace06-targeted-gate-tests-90e4",
+  "command_sha256": "1d148c7280ffe6f2f76ec46b4020d7f7c75073c40f2c1fc1ebd8ae254bc4d88c",
+  "started_at": "2026-08-25T04:13:33.145927+00:00",
+  "finished_at": "2026-08-25T04:13:36.402931+00:00",
+  "status": "FAIL",
+  "exit_code": 1,
+  "op": "exec",
+  "stdout_sha256": "4bccb0d2d283609a5015ee83bfa1842c1e84d32d42c3a6b58d557158e94f7bed",
+  "stderr_sha256": "0e1433db6d2201609926ccfeee87b018a441c97d74ccef4a4c2928af7accf335",
+  "stdout_tail": "source_head=90e4d3e64ea802d04d42c0b816ac3b1a46f2c3f5\n===tests/test_trigger1_jspace_promotion_gate_v5.py===\n===tests/test_trigger1_jspace_promotion_gate_v6.py===\n===tests/test_trigger1_jspace_promotion_gate_v7.py===\n===tests/test_trigger1_semantic_simplex_rank_admission.py===\n",
+  "stderr_tail": "..........\n----------------------------------------------------------------------\nRan 10 tests in 0.009s\n\nOK\n.......\n----------------------------------------------------------------------\nRan 7 tests in 0.001s\n\nOK\n...\n----------------------------------------------------------------------\nRan 3 tests in 0.001s\n\nOK\nTraceback (most recent call last):\n  File \"/workspace/clay-global-research-entity/tests/test_trigger1_semantic_simplex_rank_admission.py\", line 8, in <module>\n    from tools import trigger1_semantic_simplex_rank_admission as admission\nModuleNotFoundError: No module named 'tools'\n",
+  "meta": {},
+  "execution_boundary": "ROOT_INSIDE_ROOTLESS_PODMAN_OR_EXPLICIT_REPO_CONTROL_OP",
+  "canonical_credit_minted": 0
+}

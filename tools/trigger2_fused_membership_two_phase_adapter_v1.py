@@ -267,9 +267,12 @@ def atomic_fused_two_phase_commit(
     envelopes: Sequence[Mapping[str, Any]],
     **commit_kwargs: Any,
 ) -> dict[str, Any]:
-    """Validate the two-phase extension before delegating to the sole existing fused coordinator."""
-    validation = validate_two_phase_cohort(envelopes, expected_member_count=N)
-    receipt = fabric.atomic_fused_cohort_commit(envelopes=list(envelopes), **commit_kwargs)
+    """Validate and delegate one controller-owned snapshot to the sole fused coordinator."""
+    # Materialize exactly once. A mutable/custom Sequence may otherwise expose one cohort
+    # during validation and different bytes during the subsequent delegated traversal.
+    frozen_envelopes = deepcopy(list(envelopes))
+    validation = validate_two_phase_cohort(frozen_envelopes, expected_member_count=N)
+    receipt = fabric.atomic_fused_cohort_commit(envelopes=frozen_envelopes, **commit_kwargs)
     return {
         "fused_coordinator_receipt": receipt,
         "two_phase_validation": validation,

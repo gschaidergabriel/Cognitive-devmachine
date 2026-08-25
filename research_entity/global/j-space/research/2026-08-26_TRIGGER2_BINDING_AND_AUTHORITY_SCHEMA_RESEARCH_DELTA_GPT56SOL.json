@@ -1,0 +1,122 @@
+{
+  "schema": "CLAY_TRIGGER2_BINDING_AND_AUTHORITY_SCHEMA_RESEARCH_DELTA/v1",
+  "date": "2026-08-26",
+  "trigger": "triggerwort2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "status": "NONCANONICAL_SOURCE_ONLY_RESEARCH_DELTA",
+  "observed_main_before_branch": "b972dbd8e2567d615b01ade32a23a3c4efc70bf4",
+  "current_ledger_at_reentry": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V66_GPT56SOL.json",
+  "authority": {
+    "supervisor_epoch": "8.84",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "architecture": "HCU",
+    "runtime_quiescence": "ACTIVE_FAIL_POST_STOP_PROVIDER_ATTEMPT_COUNTERS_INCREASING",
+    "provider_routes_admitted": false,
+    "training_execution_authorized": false
+  },
+  "nonduplication": {
+    "open_pr_search_for_physical_proof_blocker": "NO_EXACT_OPEN_PR_MATCH_AT_TIME_OF_SEARCH",
+    "open_pr_search_for_closed_authority_schema": "NO_EXACT_OPEN_PR_MATCH_AT_TIME_OF_SEARCH",
+    "decision": "DO_NOT_CREATE_A_COMPETING_V67_LEDGER_OR_SECOND_PHYSICAL_WITNESS_AUTHORITY; ADD_ONE_ORTHOGONAL_FAIL_CLOSED_REGRESSION_GATE_ONLY"
+  },
+  "source_observation": {
+    "file": "tools/trigger2_node_result_model_call_two_phase_authority_v1.py",
+    "function": "validate_authority_envelope",
+    "observed_behavior": [
+      "authority_envelope_sha256 is recomputed from a fixed body_keys projection",
+      "the validator does not visibly require the complete envelope key set to equal an admitted closed schema",
+      "the validator returns dict(envelope), so unknown top-level fields survive validation even though they are not part of authority_envelope_sha256"
+    ],
+    "classification": "SOURCE_OBSERVED_BOUNDARY_AMBIGUITY",
+    "not_claimed": "No exploit, state mutation, runtime promotion or downstream semantic consumption of an unknown field has been demonstrated."
+  },
+  "hypothesis": {
+    "id": "AUTHORITY_ENVELOPE_CLOSED_SCHEMA_REQUIRED",
+    "claim": "Promotion-bearing authority envelopes should reject unknown top-level fields rather than preserve fields outside the authority identity commitment, preventing later schema extension or downstream consumers from accidentally assigning semantics to uncommitted data.",
+    "counterhypothesis": "If every downstream consumer forever ignores unknown fields and an outer proof envelope commits the complete object, the current behavior may be non-exploitable at present.",
+    "adjudication": "The counterhypothesis does not remove the fail-closed maintenance risk. Closed authority schemas make the semantic commitment boundary explicit and prevent future consumers from silently turning previously ignored data into authority-bearing meaning.",
+    "falsifier": "Show an exact-current closed-field-set guard before authority-envelope acceptance, or prove by a stronger typed boundary that unknown fields cannot survive into any promotion-bearing consumer."
+  },
+  "regression_delta": {
+    "path": "tests/test_trigger2_two_phase_authority_closed_schema_gate_gpt56sol.py",
+    "mode": "STRICT_XFAIL_DESIRED_BEHAVIOR_GATE",
+    "desired_property": "an otherwise valid authority envelope with an extra uncommitted top-level field must raise GateError",
+    "credit": "SOURCE_TEST_DESIGN_ONLY_UNTIL_EXECUTED_AT_EXACT_IDENTITY"
+  },
+  "external_method_research": [
+    {
+      "source": "JSON Schema object/additionalProperties guidance",
+      "url": "https://json-schema.org/understanding-json-schema/reference/object",
+      "source_claim": "Object schemas allow extra properties by default; additionalProperties=false is the standard closed-object pattern.",
+      "use_in_clay": "Method analogy only: authority objects should use explicit closed-world field admission rather than permissive extension semantics.",
+      "evidence_class": "EXTERNAL_METHOD_NOT_PROJECT_FACT"
+    },
+    {
+      "source": "Jang et al., NAACL 2024, Rectifying Demonstration Shortcut in In-Context Learning",
+      "url": "https://aclanthology.org/2024.naacl-long.242/",
+      "source_claim": "ICL can rely on pretrained semantic priors instead of demonstration input-label relationships; semantically unrelated labels expose the shortcut.",
+      "use_in_clay": "Supports keeping Trigger-2 dynamic codebooks semantically arbitrary and requiring current-episode mapping rather than global class-token priors.",
+      "evidence_class": "EXTERNAL_METHOD_NOT_QWEN35_CAUSAL_EVIDENCE"
+    },
+    {
+      "source": "Sun et al., ACL 2025, Interpret and Improve In-Context Learning via the Lens of Input-Label Mappings",
+      "url": "https://aclanthology.org/2025.acl-long.196/",
+      "source_claim": "Input-label mappings can be localized to a small subset of layers/attention heads in studied LLMs and targeted interventions can alter ICL behavior.",
+      "use_in_clay": "Supports a future model-specific diagnostic after exact Qwen3.5 runtime authorization; it does not justify copying the reported layers/heads or creating positive J-Space labels now.",
+      "evidence_class": "EXTERNAL_METHOD_NOT_QWEN35_CAUSAL_EVIDENCE"
+    },
+    {
+      "source": "Wu, Geiger, Milliere, ICML 2025, How Do Transformers Learn Variable Binding in Symbolic Programs?",
+      "url": "https://proceedings.mlr.press/v267/wu25j.html",
+      "source_claim": "A trained Transformer learned systematic variable binding after a heuristic phase; causal interventions implicated residual-stream addressable memory and specialized routing heads in the studied model.",
+      "use_in_clay": "Raises the plausibility that episode-local Xeno codebook binding is learnable, while motivating explicit heuristic-phase challengers and causal diagnostics rather than assuming binding from aggregate accuracy.",
+      "evidence_class": "EXTERNAL_METHOD_NOT_QWEN35_CAUSAL_EVIDENCE"
+    }
+  ],
+  "training_fusion": {
+    "current_primary_training_uncertainty": "CONTEXT_DEPENDENT_VARIABLE_BINDING_ROUTING_WITHOUT_SHORTCUT_LEAKAGE",
+    "recommended_eval_orbits": [
+      "same semantics with all admitted episode-local codebook permutations must transform the output equivariantly",
+      "same visible nuisance surface with semantic evidence changed must change only the semantically implied target",
+      "semantic-evidence ablation must reduce exact visible-signature target predictability to chance rather than preserve a shortcut",
+      "unseen mapping plus unseen template holdout must remain family/provenance disjoint",
+      "primary scoring remains greedy/constrained decode; sampling remains diagnostic"
+    ],
+    "46_atom_abi_status": "REPORTED_MEASURED_HANDOFF_PROVENANCE_ONLY_NOT_EXACTLY_REBOUND",
+    "46_atom_repo_search_result": "Only current-course/ledger references were located in the bounded search; the actual atom inventory plus tokenizer/manifest binding was not located and must not be inferred.",
+    "positive_training_admission": "CLOSED",
+    "accepted_dataset_tokens_added": 0,
+    "training_credit_added": 0
+  },
+  "execution": {
+    "provider_called": false,
+    "model_runtime_executed": false,
+    "physical_grid10_executed": false,
+    "training_executed": false,
+    "vps_execution": false,
+    "paid_execution": false,
+    "unusual_experiment": false
+  },
+  "next_exact_actions": [
+    "Keep V66 physical-proof provenance closure as the higher-priority runtime/source blocker; do not create a competing witness authority.",
+    "Execute the new closed-schema regression at exact branch identity when an admitted execution surface is available; until then it is source-test design only.",
+    "If the regression confirms the expected xfail, minimally require an exact admitted top-level field set in validate_authority_envelope and add transplant/extra-field negatives before fusion.",
+    "Separately locate or import the actual 46-atom ABI manifest/tokenizer identity before any atom-rendered Trigger-2 pilot; do not reconstruct it from the count 46.",
+    "Continue dynamic-binding curriculum work through counterfactual permutation/ablation orbits rather than row-volume growth."
+  ],
+  "credits": {
+    "research_delta": 1,
+    "source_test_design_credit": 1,
+    "executed_test_credit": 0,
+    "repository_ci_credit": 0,
+    "accepted_dataset_tokens": 0,
+    "checkpoint_selection_credit": 0,
+    "jspace_model_credit": 0,
+    "training_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  }
+}

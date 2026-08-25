@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import copy
 import importlib.util
 import json
@@ -25,16 +27,30 @@ def test_fixed_grid_regression_fails():
     assert any("grid law" in e for e in mod.validate(doc))
 
 
-def test_missing_process_binding_fails():
+def test_generic_causal_identity_alias_is_rejected():
     doc = load()
-    del doc["process_binding"]["AZP20"]
-    assert any("process binding mismatch" in e for e in mod.validate(doc))
+    req = doc["packet_types"]["CognitiveWorkUnit"]["required"]
+    req[req.index("entry_event_sha256")] = "causal_event_id"
+    assert any("entry_event_sha256" in e or "generic identity alias" in e for e in mod.validate(doc))
 
 
-def test_unknown_packet_reference_fails():
+def test_claude_bridge_cannot_be_acceptance_only():
     doc = load()
-    doc["process_binding"]["AZP06"].append("MagicTruthPacket")
-    assert any("unknown packet" in e for e in mod.validate(doc))
+    for pid in ("AZP06", "AZP08", "AZP13"):
+        doc["process_binding"][pid] = [x for x in doc["process_binding"][pid] if x != "ClaudeCodeBridgePacket"]
+    assert any("Claude bridge missing semantic bindings" in e for e in mod.validate(doc))
+
+
+def test_state_placement_boundary_is_required():
+    doc = load()
+    del doc["packet_types"]["StatePlacementDecision"]
+    assert any("packet set mismatch" in e for e in mod.validate(doc))
+
+
+def test_effect_boundary_cannot_be_recast_as_cognitive_result():
+    doc = load()
+    doc["process_binding"]["AZP12"] = ["EffectProposal", "CognitiveResult"]
+    assert any("AZP12 must remain deterministic effect boundary" in e for e in mod.validate(doc))
 
 
 def test_credit_inflation_fails():
@@ -43,10 +59,10 @@ def test_credit_inflation_fails():
     assert any("inflated credit" in e for e in mod.validate(doc))
 
 
-def test_discriminator_must_keep_fail_closed_negatives():
+def test_discriminator_must_check_deeper_interface_evidence():
     doc = load()
     doc["first_executable_discriminator"]["steps"] = [
         s for s in doc["first_executable_discriminator"]["steps"]
-        if "stale-generation" not in s
+        if "deeper-interface-without-evidence" not in s
     ]
-    assert any("stale-generation" in e for e in mod.validate(doc))
+    assert any("deeper-interface-without-evidence" in e for e in mod.validate(doc))

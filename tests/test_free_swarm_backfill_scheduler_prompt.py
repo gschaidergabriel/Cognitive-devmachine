@@ -17,16 +17,16 @@ class _Base:
         return "ORIGINAL"
 
 
+def _packet() -> dict:
+    return {
+        "historical_source_event_id": "event-1",
+        "historical_chunk_id": "chunk-1",
+        "extraction_pass": 3,
+    }
+
+
 def test_backfill_prompt_does_not_hardcode_exhaustive_true(monkeypatch) -> None:
-    monkeypatch.setattr(
-        scheduler,
-        "_reserve",
-        lambda serial: {
-            "historical_source_event_id": "event-1",
-            "historical_chunk_id": "chunk-1",
-            "extraction_pass": 3,
-        },
-    )
+    monkeypatch.setattr(scheduler, "_reserve", lambda serial: _packet())
     base = _Base()
     scheduler.install(base)
     prompt = base.worker_prompt("p", "r", "t", "s", 1)
@@ -34,3 +34,21 @@ def test_backfill_prompt_does_not_hardcode_exhaustive_true(monkeypatch) -> None:
     assert '"exhaustive":true,"deltas"' not in prompt
     assert "if you emit 8 deltas" in prompt
     assert "exhaustive MUST be false" in prompt
+
+
+def test_every_reservable_slot_is_conversion_while_backlog_exists(monkeypatch) -> None:
+    monkeypatch.setattr(scheduler, "_reserve", lambda serial: _packet())
+    base = _Base()
+    scheduler.install(base)
+    # Serial values divisible by four used to bypass extraction and create new raw
+    # research. They must now stay on the historical conversion transport as well.
+    for serial in range(8):
+        prompt = base.worker_prompt("p", "r", "t", "s", serial)
+        assert "HISTORICAL FREE-SWARM BACKFILL OVERRIDE" in prompt
+
+
+def test_raw_prompt_resumes_only_when_no_backfill_packet_is_available(monkeypatch) -> None:
+    monkeypatch.setattr(scheduler, "_reserve", lambda serial: None)
+    base = _Base()
+    scheduler.install(base)
+    assert base.worker_prompt("p", "r", "t", "s", 0) == "ORIGINAL"

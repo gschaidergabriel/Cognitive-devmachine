@@ -39,12 +39,14 @@ def candidate() -> dict:
             "basis_design_sha256": att["basis_design_sha256"],
             "captured_prompt_sha256": [row["prompt_sha256"] for row in basis_rows],
             "family_count": 6,
+            "structure_id": protocol.STRUCTURE_IDS["BASIS"],
             "capture_frozen_before_holdout": True,
             "basis_capture_receipt_sha256": h("basis-capture"),
             "projected_basis_receipt_sha256": projected,
         },
         "abstract_state_deconfound": {
             "basis_holdout_lexically_disjoint": True,
+            "basis_holdout_scenario_disjoint": True,
             "semantic_synonym_lexicon_disjoint": True,
             "projected_basis_receipt_sha256": projected,
         },
@@ -88,6 +90,26 @@ class PromotionV12Test(unittest.TestCase):
         self.assertFalse(result["abstract_native_semantic_jspace_candidate"])
         self.assertIn("ABSTRACT_STATE_BASIS_CAPTURE_PROMPT_UNIVERSE_MISMATCH", result["v12_failures"])
 
+    def test_basis_structure_identity_drift_blocks(self):
+        value = candidate()
+        value["abstract_state_basis_capture_binding"]["structure_id"] = protocol.STRUCTURE_IDS["HOLDOUT"]
+        with mock.patch.object(gate.v11, "adjudicate", return_value=v11_positive()):
+            result = gate.adjudicate(value)
+        self.assertFalse(result["abstract_native_semantic_jspace_candidate"])
+        self.assertIn("ABSTRACT_STATE_BASIS_CAPTURE_STRUCTURE_ID_MISMATCH", result["v12_failures"])
+
+    def test_declared_structural_disjointness_cannot_be_faked(self):
+        value = candidate()
+        value["abstract_state_exact_protocol"] = deepcopy(value["abstract_state_exact_protocol"])
+        value["abstract_state_exact_protocol"]["basis_calibration_holdout_structurally_disjoint"] = False
+        with mock.patch.object(gate.v11, "adjudicate", return_value=v11_positive()):
+            result = gate.adjudicate(value)
+        self.assertFalse(result["exact_abstract_source_audit_pass"])
+        self.assertIn(
+            "ABSTRACT_STATE_EXACT_PROTOCOL_FIELD_MISMATCH:basis_calibration_holdout_structurally_disjoint",
+            result["v12_failures"],
+        )
+
     def test_projected_basis_receipt_must_cross_bind_v11_deconfound(self):
         value = candidate()
         value["abstract_state_deconfound"]["projected_basis_receipt_sha256"] = h("different")
@@ -95,6 +117,14 @@ class PromotionV12Test(unittest.TestCase):
             result = gate.adjudicate(value)
         self.assertFalse(result["abstract_native_semantic_jspace_candidate"])
         self.assertIn("ABSTRACT_STATE_PROJECTED_BASIS_RECEIPT_CROSS_BINDING_MISMATCH", result["v12_failures"])
+
+    def test_v11_scenario_disjointness_attestation_must_remain_true(self):
+        value = candidate()
+        value["abstract_state_deconfound"]["basis_holdout_scenario_disjoint"] = False
+        with mock.patch.object(gate.v11, "adjudicate", return_value=v11_positive()):
+            result = gate.adjudicate(value)
+        self.assertFalse(result["abstract_native_semantic_jspace_candidate"])
+        self.assertIn("V11_BASIS_HOLDOUT_SCENARIO_DISJOINTNESS_ATTESTATION_MUST_REMAIN_TRUE", result["v12_failures"])
 
     def test_negative_v11_cannot_be_overridden(self):
         base = v11_positive()

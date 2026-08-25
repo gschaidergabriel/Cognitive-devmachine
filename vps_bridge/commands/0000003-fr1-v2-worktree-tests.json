@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v4",
+  "command_id": "fr1-v2-worktree-tests-20260825",
+  "op": "exec",
+  "cwd": "/workspace",
+  "timeout_seconds": 900,
+  "command": "set -euo pipefail; SRC=/workspace/clay-global-research-entity; DST=/workspace/qwen06-fr1-v2repo; BR=origin/research/fr1-dual-qwen06-blind-cumulative-v2; if git -C \"$SRC\" worktree list --porcelain | grep -Fq \"worktree $DST\"; then git -C \"$SRC\" worktree remove --force \"$DST\"; fi; rm -rf \"$DST\"; git -C \"$SRC\" show-ref --verify \"refs/remotes/$BR\"; git -C \"$SRC\" worktree add --detach \"$DST\" \"$BR\"; cd \"$DST\"; echo HEAD=$(git rev-parse HEAD); test \"$(git rev-parse HEAD)\" = 3a146cfc7a97f429e2b343d711c11bc372355e12; export PYTHONPATH=$DST; /cache/clay-qwen06/venv/bin/python tests/test_forschungsrun1_dual_qwen06_jspace_blind_cumulative.py"
+}

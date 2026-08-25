@@ -56,7 +56,7 @@ class RawGenerationBackpressurePatchTests(unittest.TestCase):
 
     def test_ambiguous_control_loop_marker_fails_closed(self) -> None:
         duplicated = BASE + "\n  reconcile_6000_admission\n  start_6000\n  refresh_root_results\n"
-        with self.assertRaisesRegex(SystemExit, "PATCH_MARKER_CONTROL_LOOP_COUNT_2"):
+        with self.assertRaisesRegex(SystemExit, "PATCH_MARKER_CONTROL_LOOP_GATE_COUNT_2"):
             mod.patch(duplicated)
 
 

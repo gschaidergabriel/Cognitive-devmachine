@@ -1,0 +1,35 @@
+{
+  "schema": "CLAY_GO_RESEARCH_DELTA/v1",
+  "date": "2026-08-25",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol / ChatGPT project organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority": {"supervisor_epoch_observed":"8.78","mode":"FREE_ONLY","canonical_repository":"gschaidergabriel/clay-global-research-entity","canonical_branch":"main"},
+  "finding": {
+    "classification":"EXACT_SUCCESSOR_REENTRY_WORKFLOW_WAS_STALE",
+    "old_workflow_executor":"tools/run_go878_backfill_line_checkpoint_reentry.py",
+    "old_expected_source_blob":"f095ec12ab28aa5df87b1762b2cc19afca592365",
+    "current_post_provenance_source_blob":"5cb0045f5c355170372efd4f08c033b33c91fbed",
+    "existing_exact_successor_adapter":"tools/apply_go878_backfill_line_checkpoint_after_provenance_fusion.py",
+    "consequence_before_fix":"Authorized manual reentry would fail closed before the one-shot-vs-resume provenance-identity regressions because the workflow invoked a predecessor-pinned wrapper."
+  },
+  "delta": {
+    "commit":"9dfc24a57a06f24de8d0b7c927b9f77e3ca71218",
+    "workflow":".github/workflows/go878-backfill-line-identity-reentry.yml",
+    "new_executor":"tools/apply_go878_backfill_line_checkpoint_after_provenance_fusion.py",
+    "receipt_source_predecessor_blob":"5cb0045f5c355170372efd4f08c033b33c91fbed",
+    "new_issue_or_dispatch_created":false,
+    "new_execution_authority_created":false
+  },
+  "coordination":{"unusual_experiment":"COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT","new_unusual_experiments_executed":0},
+  "three_tracks": {
+    "track_a":{"status":"ADVANCED_SOURCE_CONTROL_PLANE","delta":"Existing line-identity runtime gate can now reach the exact post-provenance successor adapter instead of failing at stale source admission."},
+    "track_b":{"status":"ADVANCED_CAUSAL_PROVENANCE_BOUNDARY","delta":"Replay-stable causal source identity is wired as the executable predecessor for trustworthy provenance/source-count collapse; no second HCU authority was created."},
+    "track_c":{"status":"ADVANCED_DATA_PROVENANCE_READINESS","delta":"Historical evidence cannot be promoted toward Distillery/J-Space training readiness until resumed source identity is stable; the corrected gate makes that discriminator executable on current successor source."}
+  },
+  "observed_parallel_track_c":{"commit":"8acce46e7989fa0cf6e7cf368f2731c2f18ce7c2","classification":"QWEN3_06B_MODEL_SPECIFIC_NONTERMINAL_CAUSAL_COMPONENT_PASS","credit_boundary":"PyTorch forward-hook hidden-state steering component only; native llama.cpp cvec, full HCU, training and whole-product credit remain false."},
+  "evidence_boundary":{"workflow_source_convergence":true,"line_identity_terminal_runtime_pass_observed":false,"historical_backfill_saturation_runtime_credit":0,"provider_runtime_credit":0,"whole_entityos_hcu_runtime_credit":0,"hcu_full_runtime_credit":0,"native_llamacpp_cvec_runtime_credit":0,"training_credit":0,"whole_product_pass":false},
+  "next_exact_gate":"Run the existing manual line-identity reentry lane on an authorized self-hosted/clay-direct-dev surface, require exact-source full historical-backfill regression PASS and repository-bound receipt, then validate combined one-shot-vs-resume + source-count + second-no-change replay before saturation credit."
+}

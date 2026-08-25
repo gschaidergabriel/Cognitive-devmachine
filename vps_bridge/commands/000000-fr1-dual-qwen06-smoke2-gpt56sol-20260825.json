@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v4",
+  "command_id": "fr1-dual-qwen06-smoke2-gpt56sol-20260825",
+  "op": "exec",
+  "cwd": "/workspace/clay-global-research-entity",
+  "timeout_seconds": 1200,
+  "command": "set -euo pipefail; test \"$(git rev-parse HEAD)\" = 91eb282627c873655bae74a257f950066b135f53; unset OPENAI_API_KEY OPENAI_API_KEYS ANTHROPIC_API_KEY ANTHROPIC_API_KEYS GROQ_API_KEY GROQ_API_KEYS MISTRAL_API_KEY MISTRAL_API_KEYS NVIDIA_API_KEY NVIDIA_API_KEYS NVIDIA_NIM_API_KEY NGC_API_KEY OPENROUTER_API_KEY OPENROUTER_API_KEYS TOGETHER_API_KEY TOGETHER_API_KEYS HF_TOKEN HUGGING_FACE_HUB_TOKEN HUGGINGFACE_HUB_TOKEN || true; export HF_HUB_OFFLINE=1 HF_HUB_DISABLE_IMPLICIT_TOKEN=1 HF_HUB_DISABLE_TELEMETRY=1 TOKENIZERS_PARALLELISM=false OMP_NUM_THREADS=2 MKL_NUM_THREADS=2 PYTHONPATH=/workspace/clay-global-research-entity; OUT=/workspace/qwen06-fr1-current/dual-smoke2; rm -rf \"$OUT\"; /cache/clay-qwen06/venv/bin/python tools/forschungsrun1_dual_qwen06_jspace_search.py --output-dir \"$OUT\" --cache-dir /cache/clay-qwen06/hf --episodes 6 --turns 4 --skip-native; echo RESULT; /cache/clay-qwen06/venv/bin/python -c 'import json; x=json.load(open(\"/workspace/qwen06-fr1-current/dual-smoke2/forschungsrun1_dual_qwen06_jspace_result.json\")); print(json.dumps({\"status\":x[\"status\"],\"turns\":x[\"experiment\"][\"dialogue_turns\"],\"positive_fraction\":x[\"experiment\"][\"controller_policy_positive_delta_fraction\"],\"trace_sha256\":x[\"trace\"][\"sha256\"],\"result_sha256\":x[\"result_sha256\"]},sort_keys=True))'"
+}

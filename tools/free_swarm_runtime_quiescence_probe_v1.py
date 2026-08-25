@@ -4,12 +4,14 @@
 This tool performs no provider/model/network execution. It only observes:
   * canonical FREE_PROVIDER_ADMISSION hard-off state,
   * local /proc command lines for forbidden legacy Free-Swarm process classes,
-  * provider-usage counters in free swarm/LIVE_METRICS.json over a bounded window,
+  * derived provider-usage counters in free swarm/LIVE_METRICS.json,
+  * the shared provider-budget SQLite gate's direct cumulative counters/leases,
   * repository HEAD/tree/dirty identity.
 
-A PASS means only that the sampled host showed no forbidden process classes and no
-provider-usage counter movement during the declared observation window while canonical
-provider admission was hard-off. It does not grant model, GRID10, training, or product credit.
+A PASS means only that the sampled host showed no forbidden process classes, no
+movement in either observed provider-counter surface, and no unexpired shared-budget
+leases during the declared observation window while canonical provider admission was
+hard-off. It does not grant model, GRID10, training, or product credit.
 """
 from __future__ import annotations
 
@@ -18,6 +20,7 @@ import hashlib
 import json
 import os
 from pathlib import Path
+import sqlite3
 import subprocess
 import sys
 import time
@@ -25,6 +28,10 @@ from typing import Any, Iterable
 
 SCHEMA = "CLAY_FREE_SWARM_RUNTIME_QUIESCENCE_RECEIPT/v1"
 REQUIRED_EXECUTION_STATE = "OWNER_EMERGENCY_STOP_FREE_SWARM_HARD_OFF"
+DEFAULT_PROVIDER_BUDGET_DB = os.getenv(
+    "CLAY_FREE_PROVIDER_BUDGET_DB",
+    "/artifacts/clay-entityos-swarm/provider_budget.sqlite3",
+)
 DEFAULT_FORBIDDEN = (
     "run_6000_free_swarm_supervisor.sh",
     "run_24h_entityos_swarm_supervisor.sh",
@@ -57,7 +64,7 @@ def _sha256_bytes(data: bytes) -> str:
 
 def file_sha256(path: Path) -> str:
     try:
-        return _sha256_bytes(path.read_bytes())
+        return _sha256_bytes(path.read_bytes()).hexdigest()
     except Exception as exc:
         raise ProbeError(f"cannot hash {path}: {exc}") from exc
 
@@ -131,6 +138,70 @@ def provider_usage_snapshot(path: Path) -> dict[str, Any]:
     }
 
 
+def provider_budget_snapshot(path: Path, *, now: float | None = None) -> dict[str, Any]:
+    """Read the shared quota gate directly without mutating/expiring any rows.
+
+    ``total_requests`` is incremented by free_swarm_quota.acquire() before a provider
+    request can proceed, so this is a stronger attempt counter than a derived worker
+    dashboard. The snapshot intentionally keeps the derived LIVE_METRICS check as an
+    independent surface rather than replacing it.
+    """
+    path = path.resolve()
+    if not path.exists() or not path.is_file():
+        raise ProbeError(f"shared provider budget DB unavailable: {path}")
+    current = time.time() if now is None else float(now)
+    try:
+        con = sqlite3.connect(f"file:{path}?mode=ro", uri=True, timeout=2)
+        try:
+            rows = con.execute(
+                "SELECT provider,total_requests,total_success,total_429,total_errors "
+                "FROM provider_state ORDER BY provider"
+            ).fetchall()
+            if not rows:
+                raise ProbeError("shared provider budget DB has no provider_state rows")
+            providers: dict[str, dict[str, int]] = {}
+            for provider, requests, success, rate, errors in rows:
+                values = {
+                    "total_requests": requests,
+                    "total_success": success,
+                    "total_429": rate,
+                    "total_errors": errors,
+                }
+                if any(not isinstance(v, int) or v < 0 for v in values.values()):
+                    raise ProbeError(f"shared provider budget has invalid counters for {provider!r}")
+                providers[str(provider)] = values
+            lease_rows = con.execute(
+                "SELECT lease_id,provider,owner,acquired_at,expires_at "
+                "FROM leases WHERE expires_at > ? ORDER BY provider,lease_id",
+                (current,),
+            ).fetchall()
+        finally:
+            con.close()
+    except ProbeError:
+        raise
+    except Exception as exc:
+        raise ProbeError(f"cannot read shared provider budget DB {path}: {exc}") from exc
+
+    counters = {"providers": providers}
+    unexpired = [
+        {
+            "lease_id": str(lease_id),
+            "provider": str(provider),
+            "owner": str(owner),
+            "acquired_at": float(acquired_at),
+            "expires_at": float(expires_at),
+        }
+        for lease_id, provider, owner, acquired_at, expires_at in lease_rows
+    ]
+    return {
+        "path": str(path),
+        "counter_sha256": canonical_sha256(counters),
+        "counters": counters,
+        "unexpired_leases": unexpired,
+        "zero_unexpired_leases": not unexpired,
+    }
+
+
 def scan_processes(proc_root: Path, forbidden: Iterable[str], ignore_pids: Iterable[int] = ()) -> dict[str, Any]:
     if not proc_root.exists() or not proc_root.is_dir():
         raise ProbeError(f"proc root unavailable: {proc_root}")
@@ -181,12 +252,24 @@ def evaluate(
     usage_before: dict[str, Any],
     usage_after: dict[str, Any],
     process_samples: list[dict[str, Any]],
+    provider_budget_before: dict[str, Any] | None = None,
+    provider_budget_after: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     hard_off = admission.get("hard_off") is True
     usage_stable = usage_before.get("usage_sha256") == usage_after.get("usage_sha256")
     process_evidence_present = bool(process_samples)
     process_quiet = process_evidence_present and all(s.get("zero_forbidden") is True for s in process_samples)
-    passed = hard_off and usage_stable and process_quiet
+    budget_evidence_present = provider_budget_before is not None and provider_budget_after is not None
+    budget_stable = bool(
+        budget_evidence_present
+        and provider_budget_before.get("counter_sha256") == provider_budget_after.get("counter_sha256")
+    )
+    no_budget_leases = bool(
+        budget_evidence_present
+        and provider_budget_before.get("zero_unexpired_leases") is True
+        and provider_budget_after.get("zero_unexpired_leases") is True
+    )
+    passed = hard_off and usage_stable and process_quiet and budget_stable and no_budget_leases
     reasons: list[str] = []
     if not hard_off:
         reasons.append("CANONICAL_PROVIDER_ADMISSION_NOT_HARD_OFF")
@@ -196,11 +279,21 @@ def evaluate(
         reasons.append("NO_PROCESS_SAMPLES")
     elif not process_quiet:
         reasons.append("FORBIDDEN_FREE_SWARM_PROCESS_OBSERVED")
+    if not budget_evidence_present:
+        reasons.append("NO_SHARED_PROVIDER_BUDGET_EVIDENCE")
+    else:
+        if not budget_stable:
+            reasons.append("SHARED_PROVIDER_BUDGET_COUNTER_CHANGED_DURING_WINDOW")
+        if not no_budget_leases:
+            reasons.append("UNEXPIRED_SHARED_PROVIDER_BUDGET_LEASE_OBSERVED")
     return {
         "hard_off": hard_off,
         "provider_usage_stable": usage_stable,
         "process_samples_present": process_evidence_present,
         "zero_forbidden_processes_all_samples": process_quiet,
+        "shared_provider_budget_evidence_present": budget_evidence_present,
+        "shared_provider_budget_counter_stable": budget_stable,
+        "zero_unexpired_shared_provider_budget_leases": no_budget_leases,
         "status": "PASS_COMPONENT_ONLY" if passed else "FAIL_CLOSED",
         "failure_reasons": reasons,
     }
@@ -210,6 +303,7 @@ def build_receipt(args: argparse.Namespace) -> dict[str, Any]:
     repo = Path(args.repo).resolve()
     admission_path = (repo / args.admission).resolve()
     metrics_path = (repo / args.metrics).resolve()
+    provider_budget_db = Path(args.provider_budget_db).expanduser().resolve()
     proc_root = Path(args.proc_root).resolve()
     forbidden = tuple(DEFAULT_FORBIDDEN) + tuple(args.forbid or ())
 
@@ -217,6 +311,7 @@ def build_receipt(args: argparse.Namespace) -> dict[str, Any]:
     admission = admission_state(admission_path)
     start_wall = time.time()
     usage_before = provider_usage_snapshot(metrics_path)
+    budget_before = provider_budget_snapshot(provider_budget_db, now=start_wall)
     samples: list[dict[str, Any]] = []
 
     end_at = time.monotonic() + args.window_seconds
@@ -233,7 +328,15 @@ def build_receipt(args: argparse.Namespace) -> dict[str, Any]:
 
     usage_after = provider_usage_snapshot(metrics_path)
     end_wall = time.time()
-    decision = evaluate(admission, usage_before, usage_after, samples)
+    budget_after = provider_budget_snapshot(provider_budget_db, now=end_wall)
+    decision = evaluate(
+        admission,
+        usage_before,
+        usage_after,
+        samples,
+        provider_budget_before=budget_before,
+        provider_budget_after=budget_after,
+    )
 
     try:
         source_hash = file_sha256(Path(__file__).resolve())
@@ -256,6 +359,8 @@ def build_receipt(args: argparse.Namespace) -> dict[str, Any]:
             "process_samples": samples,
             "provider_usage_before": usage_before,
             "provider_usage_after": usage_after,
+            "shared_provider_budget_before": budget_before,
+            "shared_provider_budget_after": budget_after,
         },
         "decision": decision,
         "credit_boundary": "RUNTIME_QUIESCENCE_COMPONENT_ONLY; NO_MODEL_GRID10_TRAINING_HCU_ENTITYOS_CREDIT",
@@ -267,6 +372,7 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     p.add_argument("--repo", default=".")
     p.add_argument("--admission", default="research_entity/claycode/autonomous/FREE_PROVIDER_ADMISSION.json")
     p.add_argument("--metrics", default="free swarm/LIVE_METRICS.json")
+    p.add_argument("--provider-budget-db", default=DEFAULT_PROVIDER_BUDGET_DB)
     p.add_argument("--proc-root", default="/proc")
     p.add_argument("--window-seconds", type=float, default=60.0)
     p.add_argument("--sample-interval-seconds", type=float, default=1.0)

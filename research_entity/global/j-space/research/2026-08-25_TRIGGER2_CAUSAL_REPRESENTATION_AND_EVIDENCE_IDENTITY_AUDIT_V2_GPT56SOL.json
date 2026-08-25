@@ -1,0 +1,120 @@
+{
+  "schema": "CLAY_TRIGGER2_CAUSAL_REPRESENTATION_AND_EVIDENCE_IDENTITY_AUDIT/v2",
+  "version": "2.0.0",
+  "date": "2026-08-25",
+  "trigger": "triggerwort 2",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "status": "CURRENT_CANDIDATE_REENTRY_SUCCESSOR",
+  "supersedes": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_CAUSAL_REPRESENTATION_AND_EVIDENCE_IDENTITY_AUDIT_V1_GPT56SOL.json",
+  "revision_reason": "CURRENT_MAIN_ADVANCED_AND_PARALLEL_LABELER_IMPLEMENTATION_CHANGED_EVIDENCE_IDENTITY_SEMANTICS",
+  "persistent_entity": "Clay",
+  "product": "EntityOS",
+  "architecture": "HCU variable cognitive grid",
+  "authority_snapshot": {
+    "canonical_main_observed": "99b701a8632ac53edd3001ba40ee090446923805",
+    "supervisor_epoch": "8.78",
+    "mode": "FREE_ONLY",
+    "owner_target": "research_entity/global/OWNER_CORRECTION_ZERO_ENTITYOS_COGNITIVE_GRID_DB_CLAUDECODE_GLOBAL_JSPACE_2026-08-25.md",
+    "owner_target_git_blob": "2315e204d2db876baff0d846b4c590a8df045729",
+    "convergence_pr": 2009,
+    "pr_head_before_this_write": "2b4c3b66dc006be942663c5e802c958c514552f5",
+    "pr_mergeability_before_this_write": false
+  },
+  "reentry_corrections": [
+    {
+      "finding_id": "T2_CR06_EVENT_IDENTITY_MUST_BE_DISTINCT_FROM_CORRELATION_ANCESTRY",
+      "v1_status": "REVIEW_REQUIRED_ON_PR_BRANCH_IMPLEMENTATION",
+      "current_main_status": "SOURCE_SEMANTICS_ALREADY_REPAIRED_PARTIAL_TEST_CLOSURE",
+      "current_main_evidence": "tools/trigger2_hyperposition_reference_labelers_v1.py now defines _evidence_identity as the triple (evidence_id, provenance_ancestry_id, independence_group), and _append_unique_evidence deduplicates only exact triple identity. Therefore a distinct evidence_id sharing ancestry/group remains attachable on current main.",
+      "remaining_gap": "Current test source explicitly checks exact duplicate idempotence, but a named regression for DISTINCT_EVENT_SAME_ANCESTRY_PRESERVED_NOT_INDEPENDENT was not observed in the inspected test excerpt. Add that regression so future simplification cannot silently re-conflate event identity with ancestry.",
+      "credit_boundary": "Source semantics only; no exact committed runtime test execution observed by this reentry."
+    },
+    {
+      "finding_id": "D_RESOLVE_CURRENT_MAIN_STRONGER_THAN_PR_BRANCH_V1",
+      "status": "CURRENT_MAIN_DONOR_PREFERRED",
+      "current_main_evidence": "D_resolve requires an executed admissible discriminator and a unique eligible branch, plus decisive support or an explicit all-other-branches-falsified condition. It returns canonical_truth_minted=false.",
+      "consequence": "PR #2009 should converge onto the current-main labeler semantics instead of retaining a competing older U_state/D_resolve implementation."
+    },
+    {
+      "finding_id": "OWNER_PROCESS_SEED_DIRECT_TRAINING_BLOCK_REPRODUCED_ON_MAIN_REVIEW",
+      "status": "BLOCKED_NO_CHANGE",
+      "current_main_evidence": "Commit 36f55c2374f1d189abab7ddebf5cb18457e329e4 records that the eight-row owner-target process seed has useful semantic intents but mismatches TrainingTrace gate-v2 schema, omits required fields/bindings, uses simplified Hyperposition state, and risks target leakage through model_visible_fields.",
+      "consequence": "Preserve semantic intents as donor provenance; generate a gate-v2/full-Hyperposition successor rather than training from seed v1."
+    }
+  ],
+  "findings_retained_from_v1": [
+    {
+      "id": "T2_CR01_DECODABLE_IS_NOT_CAUSALLY_USED",
+      "status": "CURRENT",
+      "rule": "C/Hyperposition probe decodability is representation evidence, not final functional acceptance; require behavioral/OOD use and matched causal-use evidence at the strongest exposed interface before causal promotion."
+    },
+    {
+      "id": "T2_CR02_BINDING_DEVELOPMENT_NEEDS_CHECKPOINT_MECHANISM_AUDIT",
+      "status": "CURRENT",
+      "rule": "Checkpoint evaluation must distinguish shallow shortcut acquisition from systematic variable binding using nuisance-only, hop/depth, unseen-symbol/permutation and mechanism-sensitive controls."
+    },
+    {
+      "id": "T2_CR03_HYPERPOSITION_SHOULD_NOT_BE_FORCED_TO_ONE_DIRECTION",
+      "status": "CURRENT",
+      "rule": "Treat Hyperposition as structured branch-state/set information; use rank-aware representation tests. A single steering vector can be a component probe, not the ontology."
+    },
+    {
+      "id": "T2_CR04_SUBSPACE_CAUSALITY_NEEDS_ANTI_ILLUSION_CONTROLS",
+      "status": "CURRENT",
+      "rule": "Activation/subspace patching requires off-target/alternate-site/lesion-shuffle-rescue and re-entry controls before faithful-mechanism claims."
+    },
+    {
+      "id": "T2_CR05_LINEAR_NEGATIVE_IS_NOT_REPRESENTATION_ABSENCE",
+      "status": "CURRENT",
+      "rule": "A failed linear probe/intervention narrows only the linear hypothesis; it does not prove feature absence. Any nonlinear successor must be preregistered on fresh data, never post-hoc fit to a frozen holdout."
+    },
+    {
+      "id": "T2_CR07_BRANCH_ID_AND_ORDER_EQUIVARIANCE_IS_A_CORE_HP_GATE",
+      "status": "CURRENT",
+      "rule": "Hyperposition state transitions should be equivariant to nuisance branch-ID renaming/order permutations when semantic relations are preserved."
+    }
+  ],
+  "external_method_basis": [
+    "Wu, Geiger, Milliere, ICML 2025, PMLR v267 / arXiv:2505.20896",
+    "Sharma, Dawes, Raval, arXiv:2604.22128, 2026",
+    "Yuan, Su, arXiv:2605.09496, 2026",
+    "Makelov, Lange, Geiger, Nanda, ICLR 2024",
+    "Kim, ICML 2026 Mechanistic Interpretability Workshop"
+  ],
+  "current_lifecycle_updates": [
+    {
+      "artifact": "2026-08-25_TRIGGER2_CAUSAL_REPRESENTATION_AND_EVIDENCE_IDENTITY_AUDIT_V1_GPT56SOL.json",
+      "new_state": "SUPERSEDED_BY_V2_AFTER_MAIN_REENTRY",
+      "reason": "Its current-defect characterization of ancestry-only evidence dedup no longer applies to current main."
+    },
+    {
+      "artifact": "current-main tools/trigger2_hyperposition_reference_labelers_v1.py",
+      "new_state": "CURRENT_SOURCE_CANDIDATE_TEST_EXECUTION_CREDIT_UNOBSERVED",
+      "reason": "Composite evidence identity and stronger D_resolve semantics observed on main."
+    },
+    {
+      "artifact": "PR2009 branch labeler implementation",
+      "new_state": "REVIEW_REQUIRED_CONVERGE_ON_CURRENT_MAIN",
+      "reason": "Current main independently advanced to a different stronger implementation while PR is non-mergeable."
+    },
+    {
+      "artifact": "trigger2_owner_target_hyperposition_process_seed_v1.jsonl",
+      "new_state": "REVIEW_REQUIRED_FORMAT_AND_HYPERPOSITION_ONTOLOGY_RETROFIT",
+      "reason": "Current-main compatibility review 36f55c2 blocks direct training."
+    }
+  ],
+  "next_exact_actions": [
+    "Resolve PR #2009 against current main without resurrecting duplicate labeler/versioning authorities.",
+    "Adopt current-main composite evidence identity semantics and add explicit distinct-event/same-ancestry preservation regression.",
+    "Execute exact committed current-main labeler and TrainingTrace gate-v2 tests on an admitted zero-cost surface before positive D/E admission.",
+    "Regenerate owner-target process seed v2 under exact gate-v2/full Hyperposition before/after carrier, prompt-only model input and exact labeler/generator hash bindings.",
+    "Add branch-ID/order equivariance plus representation/behavior/causal-use evaluation layers before scaling the corpus."
+  ],
+  "credits": {
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "positive_jspace_causal_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  }
+}

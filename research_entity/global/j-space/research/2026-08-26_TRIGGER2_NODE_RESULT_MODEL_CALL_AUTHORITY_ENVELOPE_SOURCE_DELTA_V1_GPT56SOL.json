@@ -1,0 +1,77 @@
+{
+  "schema": "CLAY_TRIGGER2_NODE_RESULT_MODEL_CALL_AUTHORITY_ENVELOPE_SOURCE_DELTA/v1",
+  "date": "2026-08-26",
+  "trigger": "triggerwort2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority_epoch": "8.83_DELTA",
+  "mode": "FREE_ONLY",
+  "status": "SOURCE_ONLY_NONPROMOTING_DELTA",
+  "observed_main_before_write": "cd2e4eb4663021bc1a29680c85537a0654dddc4f",
+  "basis": {
+    "current_trigger2_pointer": "research_entity/00_CURRENT/latest/trigger2-training.md",
+    "integration_audit": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_MODEL_CALL_TO_HCU_LINEAGE_INTEGRATION_AUDIT_V1_GPT56SOL.json",
+    "existing_call_identity_gate": "tools/trigger2_model_call_repository_bound_gate_v1.py",
+    "existing_fused_grid10_membership_cohort": "tools/trigger2_grid10_fused_physical_membership_cohort_acceptance_v1.py"
+  },
+  "observed_gap": "The current PROOF_CARRYING_NODE_RESULT/v1 path binds immutable NODE_RESULT, membership receipt and producer PID, but does not bind the exact existing source_bound_model_call_identity_sha256 or model_output_identity_sha256 into the node/cell authority lineage.",
+  "hypothesis": "A deterministic controller-owned launch binding can freeze node, process, GRID cell, NODE_RESULT digest, existing source-bound model-call identity and model-output identity, then wrap them without adding authority fields to model-generated cognition.",
+  "counterhypothesis": "NODE_RESULT packet integrity plus membership/PID is sufficient and model-call identity need not be carried downstream.",
+  "counterassessment": "Packet integrity cannot distinguish two exact model calls that yield the same semantic payload and therefore cannot establish checkpoint/input/runtime/source attribution for checkpoint selection or J-Space lineage.",
+  "new_delta": {
+    "source": "tools/trigger2_node_result_model_call_authority_envelope_v1.py",
+    "source_commit": "12c5aed833ceb848da7dd5f9ddf71b0b732277e7",
+    "test": "tests/test_trigger2_node_result_model_call_authority_envelope_v1.py",
+    "test_commit": "55d5302fcd48b2fc25b479a68f46037734675638",
+    "mechanism": [
+      "reuse the existing source_bound_model_call_identity_sha256; do not mint a second call ID",
+      "recompute and validate immutable NODE_RESULT/v1 packet digest",
+      "reject model-generated call/source/cell/authority fields",
+      "recompute the existing source-bound call identity from its source_bound_envelope",
+      "freeze node, PID, GRID cell, NODE_RESULT digest, expected call identity and expected output identity in a deterministic launch binding",
+      "reject node/process/result/call/output/cell transplants against that frozen binding",
+      "derive one downstream authority-envelope digest that changes when the call reference changes even if raw semantic NODE_RESULT remains identical",
+      "retain canonical_truth=false, effect_authority=false and zero promotion credits"
+    ]
+  },
+  "local_deterministic_validation": {
+    "py_compile": "PASS",
+    "pytest": "8/8 PASS",
+    "scope": "LOCAL_SOURCE_ONLY_DETERMINISTIC_FIXTURE_NOT_REPOSITORY_CI_NOT_MODEL_RUNTIME",
+    "negative_controls": [
+      "SAME_SEMANTIC_PAYLOAD_DIFFERENT_MODEL_CALL_NOT_INTERCHANGEABLE",
+      "MODEL_OUTPUT_IDENTITY_MISMATCH_REJECTED",
+      "MODEL_CALL_NODE_TRANSPLANT_REJECTED",
+      "GRID_CELL_BINDING_TAMPER_REJECTED",
+      "SOURCE_IDENTITY_DRIFT_FORCES_DISTINCT_CALL_AND_OLD_FREEZE_REJECTS",
+      "RAW_PACKET_UNCHANGED_CALL_REFERENCE_CHANGE_CHANGES_AUTHORITY_ENVELOPE_DIGEST",
+      "MODEL_GENERATED_AUTHORITY_FIELD_REJECTED",
+      "AUTHORITY_ENVELOPE_TAMPER_REJECTED"
+    ]
+  },
+  "execution": {
+    "provider_called": false,
+    "model_runtime_executed": false,
+    "vps_executed": false,
+    "training_executed": false,
+    "unusual_experiment_executed": false,
+    "local_source_fixture_only": true
+  },
+  "credits": {
+    "research_delta": 1,
+    "source_lineage_gate_credit": 1,
+    "model_call_runtime_credit": 0,
+    "checkpoint_selection_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "jspace_model_credit": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  },
+  "remaining_gap": "The source-only gate is not yet wired into FusedFabric.make_envelope/_verify_envelope, cohort_id derivation, cohort persistence, evaluation receipts or J-Space trace emission. Repository CI and admitted runtime evidence are also absent.",
+  "next_exact_action": "After review/merge, integrate the verified authority-envelope digest and call/output references into the existing fused GRID10 membership cohort member representation and cohort_id/summary persistence, then add whole-batch rejection for one invalid call authority envelope. P0 runtime quiescence remains independently blocked until owning-host zero-survivor plus bounded zero-provider-counter-delta evidence exists."
+}

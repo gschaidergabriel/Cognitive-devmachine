@@ -4,29 +4,44 @@ Any agent/session doing substantive work in this repository is a temporary organ
 
 ## Current authority
 
-Read first:
+Read first, in this order:
 
-1. `research_entity/continuity/BOOTSTRAP_MINIMAL.json`
-2. `research_entity/rooms/PROGRAM_STATE.json`
-3. `research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_52.json`
-4. `research_entity/claycode/autonomous/SUPERVISOR_INBOX.json`
-5. `research_entity/claycode/CLAYCODE_ALL_WORKERS_EXECUTION_DIRECTIVE.md`
-6. `the artefact/README.md`
-7. task-relevant current or compatibility implementation files.
+1. `CLAY_EXECUTION_AUTHORITY.md`
+2. `research_entity/claycode/autonomous/SUPERVISOR_INBOX.json`
+3. the exact steering file selected by that inbox
+4. `research_entity/continuity/BOOTSTRAP_MINIMAL.json`
+5. `research_entity/rooms/PROGRAM_STATE.json`
+6. `research_entity/claycode/CLAYCODE_ALL_WORKERS_EXECUTION_DIRECTIVE.md`
+7. `governance/CLAY_VPS_SANDBOX_BRIDGE_CURRENT.md`
+8. `the artefact/README.md`
+9. task-relevant current or compatibility implementation files.
+
+Newest explicit owner authority outranks stale cached supervisor/bootstrap text where they conflict.
 
 Current system: **EntityOS**.  
 Current integrated cognition/compute architecture: **HCU**.
 
 `Xeno` may remain as a transitional implementation compatibility codename and `XCU` as a transitional/research alias for HCU. Historical `Mini Entity`, `MicroEntity`, `mini_*`, `MINI_*`, ClayVerse and Frank names remain valid provenance where exact migration has not occurred. They do not define competing current systems.
 
+## VPS sandbox — mandatory current interpretation
+
+The designated owner-provisioned VPS development/research sandbox is `clay-direct-dev`.
+
+Inside `clay-direct-dev`, broad development/research execution is authorized under `governance/CLAY_VPS_SANDBOX_FULL_EXECUTION_AUTHORITY_2026-08-25.md`, including sandbox root/sudo when available, package/runtime installation, compilation, public downloads, repository/model acquisition, local Qwen execution, tests, fuzzing, benchmarks, ablations, vector/J-Space interventions, HCU experiments and destructive-to-scratch work.
+
+Do **not** stop on legacy `VPS_FORBIDDEN`, `SELF_HOSTED_FORBIDDEN`, `NO_ROOT_IN_SANDBOX` or `NO_EXECUTOR` conclusions before checking the already-prepared bridge/runner paths in `governance/CLAY_VPS_SANDBOX_BRIDGE_CURRENT.md`.
+
+The sandbox authority does not turn unrelated bare-host services, unrelated production effects, third-party attacks or external provider spending into implicit permissions. Platform/system safety rules and canonical EffectGate/evidence laws remain in force.
+
 ## `go`
 
-Exact `go` always has two coupled tracks:
+Exact `go` always has coupled tracks:
 
 1. `ENTITYOS_EXECUTABLE_CONVERGENCE`
 2. `HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT`
+3. Global J-Space/GWT local-model readiness and causal testing when useful.
 
-If track 2 cannot safely advance, record `HCU_NO_CHANGE_WITH_REASON` plus the next discriminator. Every material architecture run uses hypothesis, counterhypothesis, cheapest discriminator, evidence fusion and bounded re-entry.
+If a track cannot safely advance, record the no-change reason plus the next discriminator. Every material architecture run uses hypothesis, counterhypothesis, cheapest discriminator, evidence fusion and bounded re-entry.
 
 Build reusable HCU machine primitives shared by:
 
@@ -42,7 +57,7 @@ A future ~600 logical modules on H100-class hardware is **hypothesis only** unti
 
 ## `zero`
 
-Exact `zero` focuses on Zero ingress, Entity coherence, dynamic Function Fabric, model-specific J-Space measurement, Global J-Space/workspace coupling, Hyperposition and causal interventions inside the same EntityOS/HCU path.
+Exact `zero` focuses on Zero ingress, Entity coherence, dynamic Function Fabric, model-specific J-Space measurement, Global J-Space/workspace coupling, Hyperposition and causal interventions inside the same EntityOS/HCU path. Use the VPS sandbox for local model/J-Space work whenever it materially improves execution quality or evidence.
 
 ## Authority and controls
 
@@ -51,10 +66,9 @@ Exact `zero` focuses on Zero ingress, Entity coherence, dynamic Function Fabric,
 - majority/model agreement cannot mint truth;
 - unknown effect outcomes remain UNKNOWN until verified;
 - EffectGate/EffectJournal remain the only real/state-changing effect authority;
-- current tests remain authorized-isolated-sandbox-only unless newer owner authority changes this;
-- Together API/service forbidden; no paid fallback;
+- Together/API paid-provider and monetary-spend rules remain governed separately by newest explicit owner/provider authority;
 - no secrets in prompts/source/receipts;
-- final paid/model training requires explicit owner authorization;
-- source/component/historical PASS never implies broader runtime acceptance.
+- source/component/historical PASS never implies broader runtime acceptance;
+- exact executable evidence remains scoped to the observed source/model/runtime/environment/command/result identity.
 
 Immediate HCU gate: positive bound local/internal engine admission; immutable causal event + resolved engine identity/class + routing result in one route decision identity; downstream inference receipt must echo those identities before promotion.

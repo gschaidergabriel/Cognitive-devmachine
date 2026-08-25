@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v4",
+  "command_id": "gpt56sol-qwen06-summarize-result-20260825",
+  "op": "exec",
+  "cwd": "/workspace",
+  "timeout_seconds": 120,
+  "command": "jq '{schema,status,result_sha256,source,model,model_revision,checkpoint_sha256,tokenizer_sha256,device,runtime_build_sha256,activation_site,layer_index,num_hidden_layers,downstream_transformer_layers,basis_constructed_without_output_head,terminal_output_projection_shortcut,source_packet_sha256,adapter_sha256,local_vector_sha256,selected_gain,verdict,promotion_candidate_written,holdout_rows:[.holdout_rows[]|{seed,prompt_family,control,target_score,best_label,hook_calls,runtime_observed_intervention,applied_vector_l2,applied_vector_sha256,runtime_receipt_sha256}]}' /workspace/qwen06-gpt56sol-direct/out/trigger1_local_activation_api_result.json"
+}

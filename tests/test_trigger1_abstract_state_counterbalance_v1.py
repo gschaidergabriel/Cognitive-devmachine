@@ -22,7 +22,7 @@ class AbstractStateCounterbalanceTests(unittest.TestCase):
 
     def test_all_rows_end_at_identical_neutral_suffix(self):
         rows = design.build_rows()
-        self.assertEqual({row["prompt"].split()[-2:] for row in rows}, {("Context", "complete.")})
+        self.assertEqual({tuple(row["prompt"].split()[-2:]) for row in rows}, {("Context", "complete.")})
 
     def test_model_facing_evaluator_label_leak_fails_closed(self):
         rows = copy.deepcopy(design.build_rows())

@@ -6,7 +6,7 @@ asks a narrower question than a steering run: is the reproducible between-class
 geometry adequately one-dimensional, or is a second semantic dimension supported?
 
 It never opens holdout, never invokes a model, never mints canonical/J-Space/HCU/
-training credit, and never changes the current promotion gate.  Its output is a
+training credit, and never changes the current promotion gate. Its output is a
 measurement candidate that can decide which *future* native-cvec discriminator is
 scientifically appropriate.
 
@@ -35,10 +35,12 @@ Input schema (abridged):
     ]
   }
 
-The class-centroid plane has rank <= 2 after centering.  sigma2/sigma1 tests whether
-one signed contrast is enough.  A deterministic independent within-family class-label
+The class-centroid plane has rank <= 2 after centering. sigma2/sigma1 tests whether
+one signed contrast is enough. A deterministic independent within-family class-label
 permutation null tests whether sigma2 survives loss of cross-family semantic alignment.
 Cross-family h1/h2 cosine checks prevent a pooled average from hiding sign instability.
+The permutation stream is seeded only by source/data identity, never by decision-gate
+thresholds, so threshold edits cannot silently redraw the null sample.
 """
 from __future__ import annotations
 
@@ -54,6 +56,7 @@ import numpy as np
 
 INPUT_SCHEMA = "CLAY_TRIGGER1_SEMANTIC_SIMPLEX_CALIBRATION_INPUT/v1"
 RESULT_SCHEMA = "CLAY_TRIGGER1_SEMANTIC_SIMPLEX_CALIBRATION_RESULT/v1"
+NULL_SEED_SCHEMA = "CLAY_TRIGGER1_SEMANTIC_SIMPLEX_NULL_SEED/v1"
 CLASSES = ("AFFIRMATIVE", "NEGATIVE", "NEUTRAL")
 PERMUTATIONS = tuple(itertools.permutations(CLASSES))
 EPS = 1e-12
@@ -140,7 +143,7 @@ def h1_h2(means: dict[str, np.ndarray]) -> tuple[np.ndarray, np.ndarray | None]:
 
 
 def deterministic_null_sigma2(
-    families: list[dict[str, np.ndarray]], input_sha: str, null_samples: int
+    families: list[dict[str, np.ndarray]], null_seed_sha: str, null_samples: int
 ) -> list[float]:
     values: list[float] = []
     for sample_index in range(null_samples):
@@ -148,7 +151,7 @@ def deterministic_null_sigma2(
         selected: list[int] = []
         for family_index, family in enumerate(families):
             digest = hashlib.sha256(
-                f"{input_sha}|null|{sample_index}|family|{family_index}".encode("utf-8")
+                f"{null_seed_sha}|null|{sample_index}|family|{family_index}".encode("utf-8")
             ).digest()
             permutation_index = int.from_bytes(digest[:8], "big") % len(PERMUTATIONS)
             selected.append(permutation_index)
@@ -252,6 +255,11 @@ def adjudicate(payload: dict[str, Any]) -> dict[str, Any]:
             failures.append(str(exc))
 
     input_sha = canonical_sha(payload)
+    null_seed_sha = canonical_sha({
+        "schema": NULL_SEED_SCHEMA,
+        "source_identity": identity,
+        "families": raw_families,
+    })
     if failures:
         return {
             "schema": RESULT_SCHEMA,
@@ -297,7 +305,7 @@ def adjudicate(payload: dict[str, Any]) -> dict[str, Any]:
                 value = cosine(fh2, global_h2)
                 h2_cosines.append(-1.0 if value is None else value)
 
-    null_sigma2 = deterministic_null_sigma2(parsed, input_sha, null_samples)
+    null_sigma2 = deterministic_null_sigma2(parsed, null_seed_sha, null_samples)
     null_threshold = quantile_higher(null_sigma2, null_quantile)
     min_h1_observed = min(h1_cosines)
     min_h2_observed = min(h2_cosines) if h2_cosines and h2_degenerate_families == 0 else None
@@ -335,6 +343,8 @@ def adjudicate(payload: dict[str, Any]) -> dict[str, Any]:
         "singular_values": [float(x) for x in singular[:3]],
         "sigma2_over_sigma1": rank_ratio,
         "null": {
+            "seed_sha256": null_seed_sha,
+            "seed_scope": "SOURCE_IDENTITY_PLUS_FAMILY_CENTROID_DATA_ONLY",
             "samples": null_samples,
             "quantile": null_quantile,
             "sigma2_threshold": null_threshold,

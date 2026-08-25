@@ -1,4 +1,5 @@
 from pathlib import Path
+import importlib.util
 import sqlite3
 import sys
 import unittest
@@ -134,6 +135,26 @@ class BackfillExhaustiveness878Tests(unittest.TestCase):
         self.assertNotIn('"exhaustive":true', source)
         self.assertIn('"exhaustive":<true|false>', source)
         self.assertIn("two consecutive zero-novel passes", source)
+
+    def test_runtime_capsule_import_observes_shared_completion_law(self):
+        capsule_path = TOOLS / "run_free_swarm_historical_backfill_capsule_878.py"
+        spec = importlib.util.spec_from_file_location("go878_backfill_capsule_test", capsule_path)
+        self.assertIsNotNone(spec)
+        self.assertIsNotNone(spec.loader)
+        capsule = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(capsule)
+
+        self.assertIs(capsule.historical_backfill_core, backfill)
+        self.assertGreaterEqual(capsule.historical_backfill_core.MAX_PASSES, MAX_EXHAUSTIVE_PASSES)
+        self.assertIs(capsule.ingest_artifact_history, backfill.ingest_artifact_history)
+
+        before = self.row()
+        capsule.historical_backfill_core._record_batch_progress(
+            self.con,
+            self.envelope(1, True, source_event_id="source-foreign"),
+            0,
+        )
+        self.assertEqual(self.row(), before)
 
 
 if __name__ == "__main__":

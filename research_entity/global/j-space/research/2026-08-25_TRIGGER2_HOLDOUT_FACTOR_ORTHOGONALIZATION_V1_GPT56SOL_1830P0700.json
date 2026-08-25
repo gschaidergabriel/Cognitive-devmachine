@@ -1,0 +1,228 @@
+{
+  "schema": "CLAY_TRIGGER2_HOLDOUT_FACTOR_ORTHOGONALIZATION_REVIEW/v1",
+  "date": "2026-08-25",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority": {
+    "supervisor_epoch": "8.78",
+    "mode": "FREE_ONLY",
+    "training_executed": false,
+    "provider_preflight_executed": false,
+    "unusual_experiment": "NOT_USED_SOURCE_DATASET_REVIEW_ONLY"
+  },
+  "evidence_basis": {
+    "claude_package_sha256": "a2babae93dfe39e4e452a06bd8b848337f29766e38c422f05fb395126229b05c",
+    "measured_model_id": "Goekdeniz-Guelmez/Josiefied-Qwen3.5-0.8B-gabliterated-v1",
+    "measured_model_snapshot": "591852bda6e1979f59e4b0f5ee2919697b12e936",
+    "measured_training_objectives": {
+      "A_CONTEXT_INVARIANT_BINDING": {
+        "baseline": 0.5254629629629629,
+        "accept": 0.9
+      },
+      "B_DYNAMIC_CODEBOOK_BINDING": {
+        "baseline": 0.3611111111111111,
+        "chance": 0.3333333333333333,
+        "accept": 0.9
+      }
+    },
+    "protected_existing_capabilities": [
+      "semantic reading already measured present",
+      "symbol emission axis already measured writable",
+      "HRR/MAP carrier-space binding algebra measured sufficient through k<=16"
+    ],
+    "evidence_boundary": "All numerical claims are scoped to the exact Claude-measured donor snapshot; this review mints no Qwen3.5 Base/post-trained J-Space or training credit."
+  },
+  "current_retained_generator_observation": {
+    "path": "tools/trigger2_dynamic_binding_blueprint_v2.py",
+    "schema": "CLAY_TRIGGER2_DYNAMIC_BINDING_EPISODE_BLUEPRINT/v2.1",
+    "source_blob_sha": "c131a0dd344bdb4c66f8c458c4f2c4e6b323fd21",
+    "selftest_declared_counts": {
+      "train": 6912,
+      "validation": 1728,
+      "holdout": 432
+    },
+    "train_templates": 4,
+    "validation_template": "T5_BOOLEAN_XOR_VALIDATION",
+    "frozen_holdout_template": "T6_PARITY_HOLDOUT",
+    "train_symbols": 12,
+    "frozen_holdout_unseen_symbols": 3,
+    "positive_properties": [
+      "actual S3 mapping is used to derive target",
+      "all six S3 codebook mappings and all six codebook display orders are factorialized",
+      "DIRECT/INVERTED query polarity and evidence/query layout are crossed",
+      "training eligibility fails closed before exact ABI atom rendering",
+      "train and validation share admitted-symbol ordinals while frozen holdout uses a disjoint symbol triplet"
+    ],
+    "new_confounded_holdout_finding": {
+      "severity": "HIGH_BEFORE_MODEL_SELECTION_OR_PROMOTION",
+      "claim": "The single frozen T6 holdout changes template family and symbol familiarity at the same time. A failure therefore cannot distinguish context/template transfer failure from unseen-symbol binding failure or their interaction.",
+      "why_material": "The Claude measurements define context-invariant binding and dynamic codebook binding as distinct remediation targets, so the frozen evaluation should identify which target improved or failed.",
+      "epistemic_status": "SOURCE_DERIVED_STATIC_FINDING"
+    }
+  },
+  "swarm_roles": [
+    "EVIDENCE_EXTRACTOR",
+    "DATASET_ARCHITECT",
+    "ADVERSARIAL_SHORTCUT_HUNTER",
+    "STATISTICAL_REVIEWER",
+    "HOLDOUT_CUSTODIAN",
+    "ABI_PROVENANCE_REVIEWER",
+    "SFT_VISIBILITY_REVIEWER",
+    "FINAL_INTEGRATOR"
+  ],
+  "shadow_construction": {
+    "purpose": "Independent counterbalanced shadow construction used only to stress the split logic; it is not retained as a competing generator or train-ready dataset.",
+    "rows_total": 144,
+    "split_counts": {
+      "TRAIN": 72,
+      "VALIDATION": 36,
+      "HOLDOUT": 36
+    },
+    "train_templates": 4,
+    "validation_templates": 2,
+    "holdout_templates": 2,
+    "all_s3_permutations_per_template": true,
+    "class_symbol_mutual_information_bits_per_template": 0.0,
+    "family_split_leaks": 0,
+    "provenance_ancestry_split_leaks": 0,
+    "semantic_lexeme_intersections_across_splits": 0,
+    "duplicate_model_visible_prompts": 0,
+    "exact_class_label_leaks_outside_codebook": 0,
+    "contrast_sets_preserve_case_across_all_six_mapping_swaps": true,
+    "lesson": "Separating an unseen-template/seen-symbol holdout from an unseen-template/unseen-symbol holdout exposes a discriminator that the current single T6 holdout does not."
+  },
+  "required_successor_holdout_factorial": {
+    "freeze_before_tuning": true,
+    "axes": {
+      "template_structure": [
+        "FAMILIAR_STRUCTURE_NEW_PROVENANCE_LEXICON",
+        "UNSEEN_STRUCTURE"
+      ],
+      "symbol_partition": [
+        "SEEN_TRAIN_ATOMS",
+        "RESERVED_UNSEEN_ATOMS"
+      ]
+    },
+    "cells": [
+      {
+        "id": "H00",
+        "template_structure": "FAMILIAR_STRUCTURE_NEW_PROVENANCE_LEXICON",
+        "symbol_partition": "SEEN_TRAIN_ATOMS",
+        "purpose": "baseline on held-out semantic/provenance families without template or symbol novelty"
+      },
+      {
+        "id": "H10",
+        "template_structure": "UNSEEN_STRUCTURE",
+        "symbol_partition": "SEEN_TRAIN_ATOMS",
+        "purpose": "isolate context/template generalization"
+      },
+      {
+        "id": "H01",
+        "template_structure": "FAMILIAR_STRUCTURE_NEW_PROVENANCE_LEXICON",
+        "symbol_partition": "RESERVED_UNSEEN_ATOMS",
+        "purpose": "isolate unseen-symbol episodic binding"
+      },
+      {
+        "id": "H11",
+        "template_structure": "UNSEEN_STRUCTURE",
+        "symbol_partition": "RESERVED_UNSEEN_ATOMS",
+        "purpose": "measure interaction/generalization under both novelties"
+      }
+    ],
+    "hard_rules": [
+      "All four cells are frozen HOLDOUT and are invisible to checkpoint, mixture, hyperparameter, template, vector/layer, or evaluator selection.",
+      "FAMILIAR_STRUCTURE means only the structural proof grammar was trained; every holdout semantic lexical family and provenance ancestry remains disjoint.",
+      "RESERVED_UNSEEN_ATOMS are partitioned from the exact verified 46-atom ABI before rendering and never occur in train or validation model-visible text.",
+      "SEEN_TRAIN_ATOMS may recur in holdout specifically to isolate template novelty; their holdout semantic/provenance ancestry remains independent.",
+      "Retain all S3 mappings, codebook-order counterbalance, query polarity, layout balance, and the current proof-topology successor requirements in every cell.",
+      "Model-visible SFT projection contains prompt and target only; semantic class, permutation, family, and evaluator metadata remain sidecar-only.",
+      "No invented atom strings: materialization remains blocked until exact ABI manifest, tokenizer identity, single-token verification, symbol partition manifest, and receipt hashes are bound.",
+      "The rejected atom 'or' remains excluded.",
+      "No cross-model J-Space/vector/layer labels enter these rows."
+    ],
+    "analysis_contract": {
+      "primary_metrics": [
+        "exact-symbol accuracy",
+        "mapping-swap counterfactual consistency",
+        "semantic-state-flip counterfactual consistency",
+        "codebook-order invariance",
+        "proof-topology invariance",
+        "authority/protocol retention regressions"
+      ],
+      "effects_to_report": [
+        "template novelty main effect",
+        "symbol novelty main effect",
+        "template×symbol interaction",
+        "per-semantic-state effects",
+        "per-query-polarity effects",
+        "per-proof-topology effects"
+      ],
+      "promotion_falsifier": "Aggregate holdout accuracy alone is insufficient. If one factorial cell collapses, do not report the two measured remediation targets as jointly solved."
+    }
+  },
+  "counterfactual_blueprint_examples_nonproduction": [
+    {
+      "id": "H10_TEMPLATE_ONLY_TWIN",
+      "fixed": [
+        "realized S3 mapping",
+        "verified seen atom triplet",
+        "latent semantic state",
+        "query polarity",
+        "answer relation"
+      ],
+      "changed": "proof/template structure only: trained structural grammar -> unseen structural grammar with provenance-disjoint lexicon",
+      "expected": "same mapped target symbol",
+      "status": "BLUEPRINT_ONLY_NO_REAL_ABI_ATOM_INVENTED"
+    },
+    {
+      "id": "H01_SYMBOL_ONLY_TWIN",
+      "fixed": [
+        "familiar proof/template structure",
+        "latent semantic state",
+        "query polarity",
+        "mapping position relation"
+      ],
+      "changed": "verified symbol triplet: train-seen atoms -> reserved unseen atoms",
+      "expected": "target follows episode-local mapping to the new verified atom rather than a memorized global class-symbol relation",
+      "status": "BLUEPRINT_ONLY_NO_REAL_ABI_ATOM_INVENTED"
+    },
+    {
+      "id": "H11_INTERACTION_TWIN",
+      "fixed": [
+        "latent semantic decision rule",
+        "factorial balance schedule"
+      ],
+      "changed": [
+        "template structure becomes unseen",
+        "symbol triplet becomes reserved unseen"
+      ],
+      "expected": "binding survives both novelties without collapsing uncertainty or inventing labels",
+      "status": "BLUEPRINT_ONLY_NO_REAL_ABI_ATOM_INVENTED"
+    }
+  ],
+  "swarm_adjudication": {
+    "evidence_extractor": "ACCEPT: remediation target is binding/routing; do not spend primary capacity relearning measured read/write/carrier functions.",
+    "dataset_architect": "ACCEPT_WITH_SUCCESSOR: preserve retained generator; add orthogonal frozen evaluation axes rather than creating a second generator authority.",
+    "adversarial_shortcut_hunter": "BLOCK single-number holdout promotion because T6 currently conflates template and symbol novelty.",
+    "statistical_reviewer": "REQUIRE 2x2 cell-wise reporting plus main effects/interactions; retain exact S3 and nuisance counterbalance.",
+    "holdout_custodian": "REQUIRE immutable cell identities and split manifests before any model-selection pass.",
+    "abi_provenance_reviewer": "BLOCK train-ready materialization until exact accepted atom strings/tokenizer/token IDs and unseen-symbol partition are verified.",
+    "sft_visibility_reviewer": "REQUIRE tools/trigger2_sft_projection_gate_v1.py or admitted successor so metadata never becomes model-visible.",
+    "final_integrator": "DO_NOT_FORK_GENERATOR. Carry this 2x2 holdout requirement into the retained factorial/proof-topology successor."
+  },
+  "credits": {
+    "research_design_delta": 1,
+    "candidate_training_rows_promoted": 0,
+    "accepted_dataset_tokens": 0,
+    "qwen35_jspace_runtime_credit": 0,
+    "qwen35_training_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "canonical_semantics_promotion": false
+  },
+  "next_exact_trigger2_gate": "Fuse the 2x2 frozen template-novelty × symbol-novelty holdout matrix into the single retained dynamic-binding/proof-topology successor and its immutable split manifest, then run source tests plus cross-split and SFT-projection gates before any model pilot."
+}

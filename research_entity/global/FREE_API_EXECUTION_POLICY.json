@@ -679,6 +679,16 @@
     "counterhypothesis": "Every HTTP 200 body that lacks a verifiable choice is merely malformed transport data; falsified because NVIDIA explicitly documents application-level BadRequest errors carried with status 200.",
     "uncertainty": "The adapter recognizes only explicit error discriminators and never promotes a body-level numeric code to received HTTP status or payment-latch evidence."
   },
+  "response_model_provenance": {
+    "checked_at": "2026-08-25",
+    "claim": "When a non-streaming provider response includes a top-level model field, it must be an exact built-in string equal to the requested model before content can reach VERIFIED or DONE.",
+    "source": "https://docs.nvidia.com/nim/large-language-models/2.0.0/get-started/quickstart.html",
+    "external_evidence": "NVIDIA's documented Chat Completions response echoes the request's model name in the top-level model field alongside object=chat.completion and choices.",
+    "internal_measurement": "A status-200 response that explicitly named other-model while the request and receipt named mock previously returned success and reached VERIFIED and DONE.",
+    "executable_evidence": "test_response_model_mismatch_cannot_reach_verified_state",
+    "counterhypothesis": "Endpoint and credential binding make response model identity redundant; falsified for receipt provenance because a contradictory provider model claim was ignored while the requested model was recorded as if verified.",
+    "uncertainty": "The cross-provider v0.1 adapter still accepts omission of the response model field for compatibility; an Ubuntu NVIDIA live receipt is required before tightening the field from conditional to mandatory."
+  },
   "pending_http_results": {
     "checked_at": "2026-08-13",
     "claim": "For NVIDIA Chat Completions, HTTP 200 is fulfilled while HTTP 202 is pending and requires requestId polling; a 202 response cannot reach VERIFIED/DONE or trigger a blind replay of the original request.",

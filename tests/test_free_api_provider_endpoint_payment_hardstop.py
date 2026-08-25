@@ -21,7 +21,8 @@ class Response:
         self,
         status=200,
         body=(
-            b'{"choices":[{"finish_reason":"stop",'
+            b'{"object":"chat.completion","model":"x",'
+            b'"choices":[{"finish_reason":"stop",'
             b'"message":{"role":"assistant","content":"ok"}}]}'
         ),
     ):

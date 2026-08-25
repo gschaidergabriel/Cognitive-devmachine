@@ -1,0 +1,17 @@
+{
+  "schema": "CLAY_VPS_RECEIPT/v4",
+  "command_id": "fr2-frozen-result-detail-20260825-1319",
+  "command_sha256": "78290f37b5111d80ba4c53329857c9818c21a6e30db8fe62c6ad8b9636fe4294",
+  "started_at": "2026-08-25T06:18:59.528065+00:00",
+  "finished_at": "2026-08-25T06:18:59.677707+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "fcf51c7dacc04dd8cdd9046cbd6eb13ab4f3531252dcc4a722787d01c36cc96f",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "{\n  \"holdout_opened_only_after_calibration_residualizer_and_gain_frozen\": true,\n  \"jspace_model_runtime_credit\": 0,\n  \"layer21_residualizer\": {\n    \"nuisance_subspace_rank\": 8,\n    \"post_projection_max_abs_nuisance_cosine\": 9.540979117872439e-17,\n    \"projected_semantic_vector_sha256\": {\n      \"AFFIRMATIVE\": \"6b9ee3b34377487a4a256fdd17757bf1072ba7c60d7498ef32b215ac0122e7f2\",\n      \"NEGATIVE\": \"87072ebc01a95b6f127eabbd041a6abde320a5f163c5dc6a6fc7996b46ccf8dc\",\n      \"NEUTRAL\": \"647d938a0f81b699aaaa130f9cfff412a448777da419807fa099e2457934b7d3\"\n    },\n    \"result_sha256\": \"9a72e224ec2e300f8bd76fe7e7d7d1f4e13723e86bd206513b6b1a6af063387c\",\n    \"retained_semantic_subspace_norm_fraction\": 0.9942836148891943\n  },\n  \"layer24_downstream_estimator\": {\n    \"nuisance_subspace_rank\": 8,\n    \"post_projection_max_abs_nuisance_cosine\": 8.326672684688674e-17,\n    \"result_sha256\": \"99b116f887445f3e8f4b6045ae528ef499ed0cb9e2b199371b278dbeb9ff3537\",\n    \"retained_semantic_subspace_norm_fraction\": 0.9966947861230568\n  },\n  \"legacy_last_token_witness_used_as_causal_identity_premise\": false,\n  \"lexical_disjointness\": {\n    \"audit_sha256\": \"a02ef9fa05085394e6d08c73c77296b80e8768e97ce262c9a91c05244abb28b2\",\n    \"basis_holdout_lexically_disjoint\": true,\n    \"calibration_content_vocabulary_sha256\": \"064844bd682b0132403c43af72385e132b43daa2445000a7e82ccb76d5906f7a\",\n    \"content_overlap\": [],\n    \"content_overlap_count\": 0,\n    \"holdout_content_vocabulary_sha256\": \"1ffbb56cd070b6c51b6c8d61d508873d3d539020e6361681d746b5920dc5b708\"\n  },\n  \"model\": \"Qwen/Qwen3-0.6B-GGUF:Q8_0\",\n  \"native_api\": \"llama_set_adapter_cvec\",\n  \"native_token_scope\": \"ALL_PROMPT_TOKENS\",\n  \"nuisance_families\": [\n    \"CANONICAL_LABEL_LEXEME\",\n    \"SEMANTIC_SYNONYM_LEXICON\",\n    \"GENERIC_INSTRUCTION_COMPLIANCE\",\n    \"OUTPUT_CODE_IDENTITY\"\n  ],\n  \"primary_layer_input\": 21,\n  \"selected_gain_calibration_only\": 4.0,\n  \"training_credit\": 0,\n  \"whole_entityos_hcu_credit\": 0,\n  \"whole_hcu_credit\": 0\n}\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "ROOT_INSIDE_ROOTLESS_PODMAN_OR_EXPLICIT_REPO_CONTROL_OP",
+  "canonical_credit_minted": 0
+}

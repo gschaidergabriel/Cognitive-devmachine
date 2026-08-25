@@ -1,0 +1,44 @@
+{
+  "holdout_opened_only_after_calibration_residualizer_and_gain_frozen": true,
+  "jspace_model_runtime_credit": 0,
+  "layer21_residualizer": {
+    "nuisance_subspace_rank": 8,
+    "post_projection_max_abs_nuisance_cosine": 9.540979117872439e-17,
+    "projected_semantic_vector_sha256": {
+      "AFFIRMATIVE": "6b9ee3b34377487a4a256fdd17757bf1072ba7c60d7498ef32b215ac0122e7f2",
+      "NEGATIVE": "87072ebc01a95b6f127eabbd041a6abde320a5f163c5dc6a6fc7996b46ccf8dc",
+      "NEUTRAL": "647d938a0f81b699aaaa130f9cfff412a448777da419807fa099e2457934b7d3"
+    },
+    "result_sha256": "9a72e224ec2e300f8bd76fe7e7d7d1f4e13723e86bd206513b6b1a6af063387c",
+    "retained_semantic_subspace_norm_fraction": 0.9942836148891943
+  },
+  "layer24_downstream_estimator": {
+    "nuisance_subspace_rank": 8,
+    "post_projection_max_abs_nuisance_cosine": 8.326672684688674e-17,
+    "result_sha256": "99b116f887445f3e8f4b6045ae528ef499ed0cb9e2b199371b278dbeb9ff3537",
+    "retained_semantic_subspace_norm_fraction": 0.9966947861230568
+  },
+  "legacy_last_token_witness_used_as_causal_identity_premise": false,
+  "lexical_disjointness": {
+    "audit_sha256": "a02ef9fa05085394e6d08c73c77296b80e8768e97ce262c9a91c05244abb28b2",
+    "basis_holdout_lexically_disjoint": true,
+    "calibration_content_vocabulary_sha256": "064844bd682b0132403c43af72385e132b43daa2445000a7e82ccb76d5906f7a",
+    "content_overlap": [],
+    "content_overlap_count": 0,
+    "holdout_content_vocabulary_sha256": "1ffbb56cd070b6c51b6c8d61d508873d3d539020e6361681d746b5920dc5b708"
+  },
+  "model": "Qwen/Qwen3-0.6B-GGUF:Q8_0",
+  "native_api": "llama_set_adapter_cvec",
+  "native_token_scope": "ALL_PROMPT_TOKENS",
+  "nuisance_families": [
+    "CANONICAL_LABEL_LEXEME",
+    "SEMANTIC_SYNONYM_LEXICON",
+    "GENERIC_INSTRUCTION_COMPLIANCE",
+    "OUTPUT_CODE_IDENTITY"
+  ],
+  "primary_layer_input": 21,
+  "selected_gain_calibration_only": 4.0,
+  "training_credit": 0,
+  "whole_entityos_hcu_credit": 0,
+  "whole_hcu_credit": 0
+}

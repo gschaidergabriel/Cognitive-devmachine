@@ -11,13 +11,24 @@ on:
       - 'tools/run_6000_free_swarm_fast.py'
       - 'tools/run_free_evidence_forge_safe.py'
       - 'tools/run_free_evidence_forge_backfill.py'
+      - 'tools/run_free_evidence_forge_safe_871.py'
       - 'tools/free_swarm_historical_backfill.py'
       - 'tools/free_swarm_backfill_scheduler.py'
+      - 'tools/free_swarm_backfill_provenance.py'
+      - 'tools/free_swarm_conversion_backpressure_872.py'
+      - 'tools/free_swarm_delta_ingress.py'
       - 'tests/test_free_swarm_historical_backfill.py'
   workflow_dispatch:
 
 permissions:
   contents: read
+
+# The live runtime is a single authority. Superseded reconcile intents must not
+# queue up and later restart an already-newer runtime when a self-hosted runner
+# becomes available.
+concurrency:
+  group: entityos-runtime-reconcile-current-main
+  cancel-in-progress: true
 
 jobs:
   reconcile-runtime:

@@ -1,0 +1,51 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "authority_epoch": "8.78",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "trigger": "go",
+  "organ": "GPT-5.6-Sol",
+  "canonical_main_observed_before_receipt": "cf443995127b87b29c4954d524fdb2f272352dfe",
+  "finding": {
+    "classification": "BACKFILL_COMPLETION_SEMANTICS_MUST_CONVERGE_ACROSS_ALL_MUTATION_CALLERS",
+    "statement": "Canonical main now contains the fail-closed historical exhaustiveness policy, but the exact-source provider-free historical backfill capsule is a separate process that still imports ingest_artifact_history directly from free_swarm_historical_backfill without installing that policy. Therefore the evidence-producing capsule can retain different MAX_PASSES/_record_batch_progress semantics from the live producer and backlog-first Forge consumer unless the completion policy is installed or moved into the core itself.",
+    "evidence_boundary": "SOURCE_AND_INTEGRATION_PATH_REVIEW; NO NEW HISTORICAL_SATURATION_RUNTIME CREDIT"
+  },
+  "durable_action": {
+    "retired_pr": 1879,
+    "pr_comment_id": 5404748843,
+    "requirement": "Apply one identical fail-closed exhaustiveness/completion policy to every mutation-capable historical-ingestion caller, including tools/run_free_swarm_historical_backfill_capsule_878.py, and regression-test the capsule path before accepting FREE_SWARM_HISTORICAL_BACKFILL_RECEIPT/v1 as saturation evidence.",
+    "duplicate_implementation_created": false
+  },
+  "go_tracks": {
+    "track_a": "ADVANCED: prevented path-dependent premature historical saturation from being mistaken for an executable terminal backfill PASS.",
+    "track_b": "ADVANCED: strengthened a reusable single-authority causal/evidence invariant by requiring completion semantics to be path invariant across all historical-ingestion mutation callers.",
+    "track_c": "ADVANCED_BY_CURRENT_REENTRY_EVIDENCE: observed a model-specific nonterminal Qwen3-0.6B hidden-state steering component PASS with sign/null/orthogonal/permuted controls; native llama.cpp cvec, full HCU and training credit remain zero."
+  },
+  "hypothesis": "Path-invariant completion semantics are necessary for a terminal historical-backfill receipt to support downstream Distillery/J-Space dataset promotion without transport-dependent false saturation.",
+  "counterhypothesis": "Only the long-lived scheduler/Forge paths matter; the standalone capsule cannot affect saturation evidence.",
+  "counterhypothesis_disposition": "REJECTED_AT_SOURCE_INTEGRATION_LEVEL: the capsule repeatedly calls ingest_artifact_history and is the exact carrier that emits FREE_SWARM_HISTORICAL_BACKFILL_RECEIPT/v1.",
+  "coordination": {
+    "shared_immutable_macrocycle_identity": null,
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_experiments_executed": 0,
+    "provider_or_model_network_io_by_this_organ": false,
+    "paid_or_together_execution_by_this_organ": false
+  },
+  "artefact_readme": {
+    "status": "NO_CHANGE_WITH_REASON",
+    "reason": "the artefact/README.md and canonical main advanced concurrently throughout this go; this append-only receipt plus retained-lane coordination comment preserves the exact nonduplicate finding without clobbering newer current-facing state."
+  },
+  "credits": {
+    "historical_backfill_runtime_credit_added": 0,
+    "provider_runtime_credit_added": 0,
+    "entityos_hcu_whole_runtime_credit_added": 0,
+    "hcu_full_runtime_credit_added": 0,
+    "jspace_model_full_runtime_credit_added": 0,
+    "training_credit_added": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "On exact current main, make the fail-closed saturation policy apply to the historical-backfill capsule path and execute its focused regression; then require one terminal path-invariant FREE_SWARM_HISTORICAL_BACKFILL_RECEIPT/v1 to saturation, replay-v2 exact-current regression, and one Forge ACCEPT -> one Distillery packet -> accepted_dataset_tokens > 0 -> semantic replay +0 before downstream training promotion."
+}

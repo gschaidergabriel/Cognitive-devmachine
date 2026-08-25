@@ -1654,6 +1654,46 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
         )
         self.assertEqual(result["content"], "ok")
 
+    def test_documented_nvidia_reasoning_usage_remains_compatible(self):
+        class Response:
+            status = 200
+
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *args):
+                return False
+
+            def read(self, limit):
+                return (
+                    b'{"object":"chat.completion","id":"chatcmpl-test",'
+                    b'"created":1,"model":"mock","usage":{'
+                    b'"prompt_tokens":4,"completion_tokens":5,'
+                    b'"total_tokens":9,"completion_tokens_details":{'
+                    b'"reasoning_tokens":3}},"choices":[{"index":0,'
+                    b'"finish_reason":"stop","message":'
+                    b'{"role":"assistant","content":"ok"}}]}'
+                )
+
+        env = {
+            "NVIDIA_API_KEY": "secret",
+            "FRANK_PROVIDER_BASE_URL": "http://localhost:8765/v1",
+            "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
+        }
+        result = MOD.execute_chat(
+            VALID_MESSAGES,
+            model="mock",
+            environ=env,
+            opener=lambda *args, **kwargs: Response(),
+            now=iter((50.22, 50.23)).__next__,
+        )
+        self.assertEqual(result["receipt"]["outcome"], "success")
+        self.assertEqual(
+            result["receipt"]["provider_usage"]["completion_tokens_details"],
+            {"reasoning_tokens": 3},
+        )
+        self.assertEqual(result["content"], "ok")
+
     def test_multiple_response_choices_cannot_be_partially_verified(self):
         class Response:
             status = 200

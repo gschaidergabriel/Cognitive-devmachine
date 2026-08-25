@@ -45,14 +45,12 @@ def payload(kind: str, groups: int) -> dict:
         else:
             raise AssertionError(kind)
         for semantic, activation in vectors.items():
-            rows.append(
-                {
-                    "row_id": f"g{i}:{semantic}",
-                    "family_group_id": f"g{i}",
-                    "semantic_class": semantic,
-                    "activation": activation,
-                }
-            )
+            rows.append({
+                "row_id": f"g{i}:{semantic}",
+                "family_group_id": f"g{i}",
+                "semantic_class": semantic,
+                "activation": activation,
+            })
     return {
         "schema": mod.INPUT_SCHEMA,
         "dimension": 4,
@@ -66,6 +64,7 @@ class SemanticSimplexRankTests(unittest.TestCase):
         result = mod.analyze(payload("rank1", 6))
         self.assertEqual(result["verdict"], "ONE_DIMENSIONAL_SUPPORTED")
         self.assertAlmostEqual(result["geometry"]["h2_to_h1_ratio"], 0.0, places=12)
+        self.assertEqual(result["family_energy_balanced_robustness"]["classification"], "ONE_DIMENSIONAL_SUPPORTED")
         self.assertEqual(result["promotion_boundary"]["new_runtime_credit"], 0)
 
     def test_rank2_required_with_six_matched_families(self):
@@ -73,6 +72,7 @@ class SemanticSimplexRankTests(unittest.TestCase):
         self.assertEqual(result["verdict"], "TWO_DIMENSIONAL_REQUIRED")
         self.assertLessEqual(result["randomization"]["p_value"], 0.05)
         self.assertGreaterEqual(result["leave_one_family_out"]["min_h2_cosine_to_full"], 0.99)
+        self.assertEqual(result["family_energy_balanced_robustness"]["classification"], "TWO_DIMENSIONAL_REQUIRED")
 
     def test_three_family_rank2_design_is_underpowered_at_alpha_005(self):
         data = payload("rank2", 3)
@@ -94,6 +94,23 @@ class SemanticSimplexRankTests(unittest.TestCase):
             "EXACT_SIGNFLIP_DESIGN_CANNOT_REACH_DECLARED_ALPHA_AT_THIS_FAMILY_COUNT",
             result["reasons"],
         )
+
+    def test_family_energy_domination_cannot_force_rank1(self):
+        data = payload("rank2", 7)
+        # One matched family has a huge rank-1 contrast. Raw aggregation is therefore
+        # driven toward rank-1 even though the six equal-weight families are rank-2.
+        for row in data["rows"]:
+            if row["family_group_id"] != "g0":
+                continue
+            row["activation"] = {
+                "AFFIRMATIVE": [1000.0, 0.0, 0.0, 0.0],
+                "NEGATIVE": [-1000.0, 0.0, 0.0, 0.0],
+                "NEUTRAL": [0.0, 0.0, 0.0, 0.0],
+            }[row["semantic_class"]]
+        result = mod.analyze(data)
+        self.assertEqual(result["verdict"], "UNRESOLVED")
+        self.assertIn("RAW_AND_FAMILY_ENERGY_BALANCED_CLASSIFICATIONS_DISAGREE", result["reasons"])
+        self.assertEqual(result["family_energy_balanced_robustness"]["classification"], "TWO_DIMENSIONAL_REQUIRED")
 
     def test_missing_class_fails_closed(self):
         data = payload("rank1", 6)

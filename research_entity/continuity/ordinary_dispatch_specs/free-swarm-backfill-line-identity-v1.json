@@ -1,0 +1,24 @@
+{
+  "schema": "CLAY_ORDINARY_DISPATCH_SPEC/v1",
+  "dispatch_class": "free-swarm-backfill-line-identity-v1",
+  "trigger_title": "[CLAY-DISPATCH] GO878 repair backfill line identity",
+  "probe_contract": "FREE_SWARM_BACKFILL_LINE_IDENTITY_RECEIPT/v1",
+  "sandbox": "clay-direct-dev",
+  "transport": "SELF_HOSTED_LINUX_X64",
+  "retry_generation": 0,
+  "current_dispatch_key": "free-swarm-backfill-line-identity-v1-g0000",
+  "generation_rule": "INCREMENT_ONLY_AFTER_TERMINAL_RESULT_REQUIRING_DELIBERATE_RETRY_OR_EXPLICIT_INFRASTRUCTURE_OR_PROBE_SEMANTIC_CHANGE; NEW_GO_ALONE_MUST_NOT_INCREMENT",
+  "identity_excludes": [
+    "go_text",
+    "macrocycle_id",
+    "timestamp",
+    "issue_number",
+    "workflow_run_id",
+    "branch_name",
+    "unrelated_main_sha",
+    "organ_model_session_identity"
+  ],
+  "claim_path_template": "research_entity/continuity/ordinary_dispatch_claims/{dispatch_key}.json",
+  "result_path_template": "research_entity/continuity/ordinary_dispatch_results/{dispatch_key}.json",
+  "protocol": "research_entity/continuity/ORDINARY_DISPATCH_IDEMPOTENCY_PROTOCOL.md"
+}

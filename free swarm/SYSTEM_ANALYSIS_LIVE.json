@@ -1,6 +1,6 @@
 {
   "schema": "CLAY_FREE_SWARM_SYSTEM_ANALYSIS/v3",
-  "generated_at": "2026-08-25T02:18:44.266966+00:00",
+  "generated_at": "2026-08-25T02:33:50.077812+00:00",
   "runtime": {
     "supervisor": "STOPPED/QUARANTINED",
     "go_swarm": "RUNNING",
@@ -45,16 +45,16 @@
     "policy": "FREE_ONLY; CREDENTIAL_BLIND_CONTROL_PARENT; SWARM_CHILD_ONLY_SECRET_SCOPE; CURRENT_CANONICAL_PROVIDER_ADMISSION; NO_PAID_FALLBACK; TOGETHER_FORBIDDEN"
   },
   "conversion": {
-    "successful": 5431,
-    "delta": 543,
+    "successful": 5480,
+    "delta": 546,
     "ready": 148,
-    "questions": 988,
-    "macrocycles": 383,
-    "delta_rate": 0.09998158718468053,
-    "ready_rate": 0.027250966672804272,
-    "question_rate": 0.18191861535628798,
-    "avg_cycle_delta_rate": 0.08161754562365159,
-    "avg_cycle_ready_rate": 0.008828109983728988
+    "questions": 997,
+    "macrocycles": 389,
+    "delta_rate": 0.09963503649635036,
+    "ready_rate": 0.027007299270072994,
+    "question_rate": 0.18193430656934306,
+    "avg_cycle_delta_rate": 0.08130431135402494,
+    "avg_cycle_ready_rate": 0.008691943762900263
   },
   "go_feedback": {
     "receipts": 0,
@@ -65,7 +65,7 @@
   },
   "distillery": {
     "schema": "CLAY_RESEARCH_DISTILLERY_STATUS/v1",
-    "generated_at": "2026-08-25T02:18:43.061195+00:00",
+    "generated_at": "2026-08-25T02:33:47.961260+00:00",
     "collected_source_tokens": 11621,
     "accepted_dataset_tokens": 0,
     "dataset_yield": 0.0,
@@ -86,7 +86,7 @@
     "model_output_tokens": 1455,
     "shared_provider_budget": {
       "schema": "CLAY_SHARED_PROVIDER_BUDGET/v1",
-      "generated_at": "2026-08-25T02:18:43.061802+00:00",
+      "generated_at": "2026-08-25T02:33:47.961966+00:00",
       "providers": {
         "arxiv": {
           "max_inflight": 1,
@@ -140,13 +140,13 @@
           "max_inflight": 128,
           "active_leases": 0,
           "min_interval_s": 0.0,
-          "cooldown_seconds": 736.8618125915527,
-          "total_requests": 159,
-          "total_success": 105,
-          "total_429": 54,
+          "cooldown_seconds": 835.0647506713867,
+          "total_requests": 161,
+          "total_success": 106,
+          "total_429": 55,
           "total_errors": 26,
           "last_status": "429",
-          "last_observed_at": "2026-08-25T01:51:48.923640+00:00"
+          "last_observed_at": "2026-08-25T02:31:05.026744+00:00"
         },
         "huggingface_hub": {
           "max_inflight": 4,
@@ -165,12 +165,12 @@
           "active_leases": 1,
           "min_interval_s": 0.0,
           "cooldown_seconds": 0.0,
-          "total_requests": 6582,
-          "total_success": 5004,
-          "total_429": 618,
+          "total_requests": 6649,
+          "total_success": 5052,
+          "total_429": 637,
           "total_errors": 924,
           "last_status": "200",
-          "last_observed_at": "2026-08-25T02:18:39.319544+00:00"
+          "last_observed_at": "2026-08-25T02:33:45.347859+00:00"
         },
         "openalex": {
           "max_inflight": 2,
@@ -189,12 +189,12 @@
           "active_leases": 0,
           "min_interval_s": 0.5,
           "cooldown_seconds": 0.0,
-          "total_requests": 247,
+          "total_requests": 248,
           "total_success": 133,
-          "total_429": 113,
+          "total_429": 114,
           "total_errors": 0,
           "last_status": "429",
-          "last_observed_at": "2026-08-25T02:04:19.696760+00:00"
+          "last_observed_at": "2026-08-25T02:19:20.951376+00:00"
         },
         "semantic_scholar": {
           "max_inflight": 1,
@@ -224,26 +224,26 @@
     },
     "db_bytes": 860160,
     "top_questions": [
-      "How to formalize Hyperposition counterevidence in J-Space",
-      "How does the interaction between distiller temperature and HCU's typed Entry Fabric affect causal trace fidelity?",
-      "How can we formally verify that EffectGate cannot be bypassed via any environment variable or argument injection across all sandbox entry points?",
-      "Does NVIDIA expose a per-credential entitlement API that can distinguish free-tier from paid credentials without additional paid API calls?",
-      "Deterministic admission criteria for Groq/NVIDIA",
-      "Local sandbox API surface proofs for EffectGate",
-      "Does logical-cell decoupling (GRID10) require hardware-aware scheduling or can it be pure software abstraction?",
-      "Can typed schema enforcement (Typed Entry) compose with causal intervention (J-Space) without runtime overhead?",
-      "Is there a minimal free-tier credential binding primitive that composes across Groq/NVIDIA/OpenRouter without provider cooperation?",
-      "What is the authoritative machine-readable catalog of NVIDIA free-tier models+routes per credential type (Developer Program vs NIM free-prototyping) that can be verified at pre-call admission time?"
+      "How can causal credit be established in Global J-Space/GWT without self-report or token volume metrics?",
+      "What minimal HCU logical module allocation is required for deterministic inference of the local research model?",
+      "What is the minimum probe frequency required to detect quota synchronization drift before it causes production deployment failures?",
+      "Does predictive quota attention generalize across provider admission policy changes (e.g., NVIDIA credential binding refinement) without retraining the forecaster?",
+      "Does NVIDIA NIM API expose a per-credential model entitlement endpoint that can be queried before inference calls, or is model access implicitly granted to all Developer Program credentials for free-prototyping models?",
+      "What are the exact costs incurred by different providers and models?",
+      "How can the FREE_ONLY provider admission be modified to guarantee no costs are incurred?",
+      "How does varying provider concurrency (active vs cooldown) impact the stability of the global J‑Space vectors over time?",
+      "How to automatically synchronize the static NVIDIA free-tier allowlist with provider policy changes without introducing paid/unknown route admission?",
+      "Can a hybrid provider routing strategy (e.g., load‑balancing based on real‑time latency and model capability) improve J‑Space coherence without violating FREE_ONLY constraints?"
     ],
     "candidate_states": {}
   },
   "evidence_forge": {
     "schema": "CLAY_FREE_EVIDENCE_FORGE_STATUS/v1",
-    "generated_at": "2026-08-25T02:18:42.578543+00:00",
+    "generated_at": "2026-08-25T02:33:47.407216+00:00",
     "candidate_states": {
       "ACCEPTED": 1,
       "NEEDS_IMPLEMENTATION": 65,
-      "NEW": 395,
+      "NEW": 398,
       "PATCH_REJECTED": 81,
       "VALIDATED_NOT_BETTER": 1
     },
@@ -263,7 +263,7 @@
     "peak_parallel_tasks": 0,
     "shared_provider_budget": {
       "schema": "CLAY_SHARED_PROVIDER_BUDGET/v1",
-      "generated_at": "2026-08-25T02:18:42.579257+00:00",
+      "generated_at": "2026-08-25T02:33:47.407838+00:00",
       "providers": {
         "arxiv": {
           "max_inflight": 1,
@@ -317,13 +317,13 @@
           "max_inflight": 128,
           "active_leases": 0,
           "min_interval_s": 0.0,
-          "cooldown_seconds": 737.3443775177002,
-          "total_requests": 159,
-          "total_success": 105,
-          "total_429": 54,
+          "cooldown_seconds": 835.6188127994537,
+          "total_requests": 161,
+          "total_success": 106,
+          "total_429": 55,
           "total_errors": 26,
           "last_status": "429",
-          "last_observed_at": "2026-08-25T01:51:48.923640+00:00"
+          "last_observed_at": "2026-08-25T02:31:05.026744+00:00"
         },
         "huggingface_hub": {
           "max_inflight": 4,
@@ -342,12 +342,12 @@
           "active_leases": 1,
           "min_interval_s": 0.0,
           "cooldown_seconds": 0.0,
-          "total_requests": 6582,
-          "total_success": 5004,
-          "total_429": 618,
+          "total_requests": 6649,
+          "total_success": 5052,
+          "total_429": 637,
           "total_errors": 924,
           "last_status": "200",
-          "last_observed_at": "2026-08-25T02:18:39.319544+00:00"
+          "last_observed_at": "2026-08-25T02:33:45.347859+00:00"
         },
         "openalex": {
           "max_inflight": 2,
@@ -366,12 +366,12 @@
           "active_leases": 0,
           "min_interval_s": 0.5,
           "cooldown_seconds": 0.0,
-          "total_requests": 247,
+          "total_requests": 248,
           "total_success": 133,
-          "total_429": 113,
+          "total_429": 114,
           "total_errors": 0,
           "last_status": "429",
-          "last_observed_at": "2026-08-25T02:04:19.696760+00:00"
+          "last_observed_at": "2026-08-25T02:19:20.951376+00:00"
         },
         "semantic_scholar": {
           "max_inflight": 1,
@@ -403,11 +403,11 @@
   },
   "costs": {
     "price_basis": "Claude Sonnet 5 introductory through 2026-08-31: $2/M input + $10/M output",
-    "free_swarm_sonnet5_equivalent_usd": 145.48125,
+    "free_swarm_sonnet5_equivalent_usd": 146.804228,
     "distillery_sonnet5_equivalent_usd": 0.015470000000000001,
-    "measured_total_sonnet5_equivalent_usd": 145.49671999999998,
+    "measured_total_sonnet5_equivalent_usd": 146.819698,
     "verified_historical_savings_usd": null,
-    "nominal_avoided_if_zero_cost_usd": 145.49671999999998,
-    "repo_output_only_proxy_usd": 121.60684
+    "nominal_avoided_if_zero_cost_usd": 146.819698,
+    "repo_output_only_proxy_usd": 121.6051
   }
 }

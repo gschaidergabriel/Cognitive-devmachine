@@ -2,7 +2,7 @@
 
 Status: `CURRENT_BLOCKED_ADMISSION`
 
-Trigger-2 **V55** is the current research-ledger successor under Supervisor **8.83**. Positive training admission remains closed, accepted dataset tokens remain `0`, no checkpoint winner is selected, and J-Space/model/training/physical-GRID10/whole-HCU/EntityOS promotion credit remains `0`.
+Trigger-2 **V55** is the current research-ledger successor under Supervisor **8.83**, with a newer post-ledger renderer-interaction policy freeze now bound as a source-only companion delta. Positive training admission remains closed, accepted dataset tokens remain `0`, no checkpoint winner is selected, and J-Space/model/training/physical-GRID10/whole-HCU/EntityOS promotion credit remains `0`.
 
 ## P0 — runtime quiescence is actively failed
 
@@ -35,9 +35,9 @@ The primary logical-case freeze remains unchanged:
 - prospective cumulative blocks per critical axis: `64 -> 128 -> 256`
 - model outputs remain unopened in this lane
 
-### Practical risk/coverage thresholds are now frozen
+### Practical risk/coverage thresholds are frozen
 
-The previously open pre-unblinding threshold gate is closed source-only:
+The pre-unblinding threshold gate is closed source-only:
 
 - threshold contract: `research_entity/global/j-space/research/2026-08-26_TRIGGER2_FOUR_QUADRANT_PRACTICAL_THRESHOLD_FREEZE_V1_GPT56SOL.json`
 - canonical threshold-contract digest: `6dfebde63ae522fb61f7f20c17a32432d440dfadbebc0996ab39b0a5504d14de`
@@ -70,9 +70,20 @@ Power audit under the frozen joint-alpha gate:
 
 This gate is necessary checkpoint-selection research evidence only. It cannot by itself mint checkpoint-winner, training, J-Space, HCU, EntityOS, canonical-truth or effect credit.
 
-## Remaining pre-unblinding source gate
+### Renderer-interaction policy is now frozen pre-unblinding
 
-The exact renderer-interaction policy is still open. Before B1 model outputs are materialized, freeze whether deterministic within-family Q3/Q4 evidence-order counterbalancing (`DB_FIRST` versus `SIM_FIRST`) is admitted and how it enters the decision surface, without changing the frozen worlds, labels, primary grader or stopping blocks.
+The remaining source-only renderer-order gate is closed by:
+
+- policy: `research_entity/global/j-space/research/2026-08-26_TRIGGER2_RENDERER_INTERACTION_POLICY_FREEZE_V1_GPT56SOL.json`
+- policy commit: `fe0aede9afa5f776d30b825f4f0c1fc9b0372792`
+
+The frozen logical worlds, `model_input`, gold labels, matched-family membership, B1/B2/B3 stopping blocks and primary grader remain immutable. The order manipulation is renderer-view-only after frozen logical-case validation.
+
+For the `DB_VS_SIMULATION_AUTHORITY` axis, Q3/Q4 are deterministically counterbalanced between `DB_FIRST` and `SIM_FIRST` by frozen family-index parity: even families render Q3 DB-first/Q4 simulation-first; odd families invert the pair. Across all 128 B-axis families each quadrant therefore has `64/64` order balance, while every Q3/Q4 matched family contains opposite order arms. Q1/Q2 have one evidence item and therefore no order arm.
+
+Future receipts must bind case/family identity, renderer-policy version, renderer arm, exact renderer source/digest, rendered UTF-8 digest, tokenizer/config/chat-template identity and input-tensor identity. Arm assignment cannot depend on gold labels or model outputs and cannot change evidence content.
+
+At every opened block, Q3/Q4 must additionally be stratified by order arm. A preregistered absolute within-quadrant error-rate difference `> 0.10` is classified as `RENDERER_INTERACTION_SIGNAL`: it does not rewrite the primary result or choose/reject a checkpoint, but it prevents renderer transportability from being treated as established until the existing paired Xeno/ClayCode renderer gate is resolved. Absence of that signal is only a nuisance screen, not proof of renderer invariance or runtime/model/training credit.
 
 The old N64 result remains exploratory/quarantined. The compact parallel 32-case lane remains superseded historical donor only and must not be reconstructed as a competing selection lane.
 
@@ -80,7 +91,7 @@ The old N64 result remains exploratory/quarantined. The compact parallel 32-case
 
 After a genuine quiescence PASS, re-enter the newest execution authority. Only on an explicitly admitted FREE non-provider model-runtime surface, run one deduplicated current-SHA `CHECKPOINT_MODEL_STATE_CONSUMPTION_ABI/v2` BASE receipt first and preserve fail-closed output. Only after positive BASE component evidence extend identical exact semantics to POSTTRAINED and TARGET_MEASURED.
 
-Then, and only after the renderer-interaction policy is frozen, materialize **B1 only** through exact admitted renderer arms, persist full raw outputs/digests, grade with the frozen primary v1 logical-case source plus the bound v2 risk/coverage postprocessor, and open B2/B3 only under the preregistered stopping law. Keep `checkpoint_winner = null` unless all identity, renderer, risk/coverage and comparative decision gates close.
+Then materialize **B1 only** through the frozen exact renderer arms, persist full raw outputs/digests, grade with the frozen primary v1 logical-case source plus the bound v2 risk/coverage postprocessor, and open B2/B3 only under the preregistered stopping law. Keep `checkpoint_winner = null` unless all identity, renderer, risk/coverage and comparative decision gates close.
 
 P2 remains model/J-Space causal work: exact same-forward-pass PRE/POST metrology plus persistent-carrier/forked-futures natural causal reuse; decodability or one-step steering alone grants zero shared Global J-Space credit.
 

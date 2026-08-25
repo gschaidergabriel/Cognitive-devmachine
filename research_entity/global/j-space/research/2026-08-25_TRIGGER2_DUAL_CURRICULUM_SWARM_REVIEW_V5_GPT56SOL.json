@@ -1,0 +1,66 @@
+{
+  "schema": "CLAY_TRIGGER2_DUAL_CURRICULUM_SWARM_REVIEW/v1",
+  "date": "2026-08-25",
+  "trigger": "triggerwort 2",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "target_model": "Qwen3.5-0.8B",
+  "authority": {
+    "canonical_main_after_reentry": "e9474fd710c55b32c4067234a4f1ca6b3bcfe900",
+    "supervisor_epoch": "8.78",
+    "mode": "FREE_ONLY",
+    "owner_target": "XENO_HCU_GO_TARGET_ARCHITECTURE_OWNER_DIRECTIVE_2026-08-25",
+    "cognitive_process_census": "ZERO_ENTITYOS_COGNITIVE_PROCESS_CENSUS_v1"
+  },
+  "artifacts": {
+    "lane_c_binding": {
+      "path": "trigger2_xeno_evidence_routing_seed_v1.jsonl",
+      "sha256": "c29ae00183fa5f9c11c269f56f114278fa4751bf43db597b87db0fefd2e17615",
+      "rows": 216,
+      "role": "selective ternary gate + episodic opaque binding composition",
+      "final_ft_eligible": false
+    },
+    "lane_b_trajectories": {
+      "path": "trigger2_xeno_cognitive_process_trajectory_seed_v1.jsonl",
+      "sha256": "e84271483fb7bddeb1a0659e9d588ca356deb6e76726ad8ab100cfe06ec76f79",
+      "rows": 50,
+      "splits": {"TRAIN": 40, "VALIDATION": 5, "HOLDOUT": 5},
+      "train_process_coverage": {
+        "ZECP01": 2, "ZECP02": 2, "ZECP03": 2, "ZECP04": 2, "ZECP05": 2,
+        "ZECP06": 2, "ZECP07": 2, "ZECP08": 2, "ZECP09": 2, "ZECP10": 2,
+        "ZECP11": 2, "ZECP12": 2, "ZECP13": 2, "ZECP14": 2, "ZECP15": 2,
+        "ZECP16": 2, "ZECP17": 2, "ZECP18": 2, "ZECP19": 2, "ZECP20": 2
+      },
+      "family_split_leaks": {},
+      "authority_violations": [],
+      "hidden_interface_claim_violations": [],
+      "final_ft_eligible": false
+    }
+  },
+  "swarm_roles": [
+    {"role": "CENSUS_MAPPER", "decision": "Every ZECP01..ZECP20 process receives at least positive and hard-negative TRAIN coverage; composites test transfer."},
+    {"role": "BINDING_SPECIALIST", "decision": "Keep the 216-row S3 pack only for genuine local ternary gates; do not use it as a universal cognitive representation."},
+    {"role": "TRAJECTORY_ARCHITECT", "decision": "Add structured multi-step candidates for reconstruction, planning, Hyperposition, GWT, Claude bridge, effects/recovery, ClayCode and J-Space."},
+    {"role": "ADVERSARIAL_REDUCTION_REVIEWER", "caught": ["three-class reduction of open-ended cognition", "node/personality-bound process identity", "silent compression loss", "majority-to-fact collapse", "model assertion to observation promotion"]},
+    {"role": "AUTHORITY_REVIEWER", "caught": ["model direct S1/S0 write", "model effect execution", "syntax-as-authority", "hidden-state claims beyond exposed interface"]},
+    {"role": "PROVENANCE_REVIEWER", "caught": ["shared execution/model-family/orchestration ancestry counted as independent evidence", "holdout retuning after failure"]},
+    {"role": "RETENTION_REVIEWER", "decision": "Separate process-semantic correctness from binder correctness so a binding improvement cannot hide planning/recovery regressions."},
+    {"role": "FINAL_INTEGRATOR", "decision": "Dual curriculum accepted as SOURCE_DESIGN_ONLY: Lane A pure binder (existing repo work), Lane B process trajectories (new artifact), Lane C selective binder composition (new artifact)."}
+  ],
+  "research_feedback": {
+    "strongest_new_design_rule": "Train and score three separable capabilities: semantic process transition, episode-local opaque binding, and their selective composition. Never let final-symbol accuracy substitute for process correctness.",
+    "counterhypothesis": "The small 0.8B model may experience interference when architecture-process trajectories and binder overlays are mixed too early.",
+    "discriminator": "Run staged curriculum ablation: binder-only vs trajectories-only vs staged dual curriculum vs mixed-from-start, holding token budget fixed; score pure-binding, atomic-process, composite-process, recovery, authority-integrity and off-target retention separately.",
+    "falsifier": "Reject the dual-curriculum recipe if composition gains require regression in atomic process correctness, authority integrity, or pure binding generalization."
+  },
+  "credit_boundary": {
+    "training_executed": false,
+    "training_credit": 0,
+    "accepted_dataset_tokens_minted": 0,
+    "jspace_model_runtime_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  },
+  "next_exact_gate": "Bind exact selected Qwen3.5-0.8B checkpoint/tokenizer and verified ABI atoms; materialize Lane-A/C opaque atoms with token/last-position matching, convert Lane-B targets to the frozen training schema, run family/provenance leakage and authority lint, then perform a fixed-budget curriculum-order ablation before any large-scale corpus expansion."
+}

@@ -1,0 +1,115 @@
+{
+  "schema": "CLAY_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER/v13",
+  "date": "2026-08-25",
+  "local_trigger_time": "21:28+07:00",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "status": "CURRENT_RESEARCH_LEDGER_NONCANONICAL",
+  "supersedes": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V12_GPT56SOL.json",
+  "inherits_all_nonconflicting_records_from": "T2-LEDGER-V12",
+  "revision_reason": "Immediate moving-main reentry after v12 found a concurrent A02 producer-auth contract commit 54d41d1177ee2592db9b057e8c965be204740785 and its run receipt 622139f8051adfac729d3f7cc75047328db8e048. V12's donor audit remains valid and uniquely identifies the unmerged ce63a89 receipt-authority branch as a useful but incomplete topology donor, but the need to author a producer-auth contract is now superseded: that contract exists on main. V13 fuses both deltas and advances the exact frontier to implementation plus mutation execution, with no positive data generation.",
+  "authority": {
+    "repository": "gschaidergabriel/clay-global-research-entity",
+    "branch": "main",
+    "observed_main_on_reentry": "622139f8051adfac729d3f7cc75047328db8e048",
+    "supervisor_epoch": "8.78",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "architecture": "HCU_VARIABLE_COGNITIVE_GRID",
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0
+  },
+  "artifact_overrides_and_additions": [
+    {
+      "artifact_id": "T2-LEDGER-V12",
+      "path": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V12_GPT56SOL.json",
+      "version": "v12",
+      "status": "SUPERSEDED",
+      "predecessor": "T2-LEDGER-V11",
+      "successor": "T2-LEDGER-V13",
+      "revision_reason": "Its ce63a89 donor audit remains inherited, but concurrent main already contains the A02 successor contract it described as the next required design artifact."
+    },
+    {
+      "artifact_id": "T2-A02-DISCRIMINATOR-PRODUCER-AUTH-CONTRACT-V1",
+      "path": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_A02_DISCRIMINATOR_PRODUCER_AUTH_CONTRACT_V1_GPT56SOL.json",
+      "version": "v1",
+      "status": "CURRENT_SOURCE_DESIGN_DELTA_NONPROMOTING",
+      "predecessor": "T2-PINNED-PILOT-PROOF-CLOSURE-AUDIT-V1",
+      "successor": "one retained implementation plus exact A02 mutation execution",
+      "provenance": ["commit 54d41d1177ee2592db9b057e8c965be204740785"],
+      "revision_reason": "Now defines the current required authority resolution, input binding, deterministic derivation and adversarial mutations. No duplicate contract is needed."
+    },
+    {
+      "artifact_id": "T2-A02-RUN-RECEIPT-2128",
+      "path": "research_entity/trigger_runs/2/2-20260825-2128-gpt56sol-a02-producer-auth-contract/RUN_RECEIPT.json",
+      "version": "v1",
+      "status": "CURRENT_RESEARCH_CYCLE_RECEIPT_NONPROMOTING",
+      "predecessor": "A02 contract commit 54d41d1177ee2592db9b057e8c965be204740785",
+      "successor": "implementation/execution receipt",
+      "provenance": ["commit 622139f8051adfac729d3f7cc75047328db8e048"],
+      "revision_reason": "Correctly records zero row generation and zero training credit; it does not itself supply producer-auth implementation or runtime proof."
+    },
+    {
+      "artifact_id": "T2-RECEIPT-AUTHORITY-DONOR-CE63A89",
+      "artifact": "branch trigger2-receipt-authority-gpt56sol-20260825 @ ce63a89f5a52fbd2ee4fe69eaa59850ff2b86677",
+      "path": "tools/trigger2_hyperposition_receipt_authority_gate_v1.py",
+      "version": "v1 donor",
+      "status": "NEEDS_REVISION_DONOR_NOT_MERGE_READY",
+      "predecessor": "generation+epistemic+state-history composition",
+      "successor": "implementation conforming to A02 contract v1",
+      "provenance": ["branch trigger2-receipt-authority-gpt56sol-20260825", "commit ce63a89f5a52fbd2ee4fe69eaa59850ff2b86677"],
+      "revision_reason": "Retain world/history scoped binding and exact candidate-receipt reconstruction ideas only. Do not merge as-is: self-hash is not independent repository producer authority; admissible/executed are inferred from u_test_order coverage; no authority-pinned formal discriminator policy/spec; no required A02 mutations or exact-current execution evidence."
+    },
+    {
+      "artifact_id": "T2-UPLOADED-BOOTSTRAP-8-63-CACHE",
+      "artifact": "000_CLAY_ENTITYOS_HCU_FAST_BOOTSTRAP_SOURCE 2026-08-24 supervisor 8.63",
+      "version": "8.63 cache",
+      "status": "STALE",
+      "successor": "BOOTSTRAP_MINIMAL 8.78 + SUPERVISOR_STEERING_8_78",
+      "revision_reason": "Noncanonical cache and current authority changed, including zero-cost local/VPS sandbox permissions."
+    }
+  ],
+  "fused_frontier": {
+    "p0": "IMPLEMENT_A02_CONTRACT_IN_SINGLE_RETAINED_HYPERPOSITION_LANE",
+    "donor_policy": "SALVAGE_CE63A89_WORLD_HISTORY_SCOPE_AND_EXACT_RECONSTRUCTION_TOPOLOGY_ONLY",
+    "implementation_requirements": [
+      "repository authority selects producer path, exact expected source sha256, schema/version, case/world/test and policy version",
+      "formal discriminator spec digest is independently bound",
+      "world/prestate/world-scoped-event/test identities are bound",
+      "admissibility is policy-derived rather than row asserted",
+      "executed and execution receipt identity are derived from deterministic producer invocation/result rather than u_test_order alone",
+      "coverage is recomputed through retained deterministic semantic authority",
+      "row receipt must exactly equal authority-derived receipt",
+      "fake-executed, coherent-rewrite, producer/path-SHA, policy, prestate, world-scope and coverage mutations all reject",
+      "exact-current deterministic execution receipt is required before positive dataset generation"
+    ],
+    "after_p0": [
+      "bind immutable genesis/ordered-history authority before nonempty-history positives",
+      "authenticate OBSERVED evidence producer before OBSERVED positives",
+      "run rendered nuisance/full-cross-or-conditional-MI/family-provenance/tokenizer-ABI gates",
+      "only then regenerate a small family-disjoint positive pilot"
+    ]
+  },
+  "generation_decision": {
+    "new_positive_rows": 0,
+    "new_hard_negative_rows": 0,
+    "positive_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "decision": "NO_NEW_ROWS_WITH_REASON",
+    "reason": "The A02 implementation and executable mutation closure now dominate information gain. Additional rows would duplicate semantics while producer authenticity is unresolved."
+  },
+  "credits": {
+    "research_delta": 1,
+    "versioning_delta": 1,
+    "fusion_delta": 1,
+    "positive_D_E_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "positive_jspace_causal_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0
+  },
+  "next_exact_action": "Implement A02 contract v1 once in the retained Hyperposition lane, using only the valid ce63a89 donor topology, then execute the required mutation suite on exact-current source. No positive rows before that pass."
+}

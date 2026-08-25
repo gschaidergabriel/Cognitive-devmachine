@@ -1,11 +1,14 @@
 #!/usr/bin/env python3
 """Backlog scheduler for historical Free-Swarm output re-evaluation.
 
-When the Forge historical-extraction queue is non-empty, most logical research
-calls are temporarily repurposed as bounded extraction passes over old worker
-outputs. New research still receives a minority of slots. This changes allocation,
-not evidence authority: extracted deltas remain noncanonical and still traverse the
-same Forge validation path.
+When the Forge historical-extraction queue is non-empty, logical research calls
+are repurposed as bounded extraction passes over old worker outputs. This preserves
+the 6000 fabric as the extraction transport while preventing new raw-research scale
+from competing with the historical conversion backlog. Once no extraction packet is
+available, the ordinary prompt path resumes automatically.
+
+This changes allocation, not evidence authority: extracted deltas remain noncanonical
+and still traverse the same Forge validation path.
 """
 from __future__ import annotations
 
@@ -16,13 +19,7 @@ import threading
 import time
 from typing import Any
 
-import free_swarm_historical_backfill as historical_backfill_core
-from free_swarm_backfill_exhaustiveness_878 import install as install_exhaustiveness
-
-# Producer scheduling and the backlog-first Forge consumer share one completion
-# policy on the same canonical historical-backfill module.
-install_exhaustiveness(historical_backfill_core)
-load_backfill_packets = historical_backfill_core.load_backfill_packets
+from free_swarm_historical_backfill import load_backfill_packets
 
 ARTIFACT_ROOT = Path(os.getenv("CLAY_SWARM_ARTIFACT_ROOT", "/artifacts/clay-entityos-swarm"))
 FORGE_DB = ARTIFACT_ROOT / "forge/forge.sqlite3"
@@ -74,9 +71,10 @@ def install(base: Any) -> None:
 
     def backlog_prompt(protocol: str, role: str, task: str, state_context: str, serial: int) -> str:
         original = previous(protocol, role, task, state_context, serial)
-        # Spend roughly 75% on conversion while historical backlog exists.
-        if serial % 4 == 0:
-            return original
+        # Liveness rule: the same fabric carries historical extraction, therefore
+        # keep it alive and devote every reservable slot to conversion while the
+        # historical queue is non-empty. Ordinary raw research resumes only when
+        # no extraction packet can be reserved.
         packet = _reserve(serial)
         if packet is None:
             return original
@@ -100,8 +98,6 @@ BACKFILL LAW
   exhaustive MUST be false unless the supplied chunk unambiguously contains no ninth distinct delta.
 - Set exhaustive=true only after you have inspected the complete supplied chunk and can affirm that this pass
   exhausted every materially distinct delta not already covered by known_concept_ids.
-- A zero-delta pass alone never proves exhaustion: SATURATED requires two consecutive zero-novel passes that
-  both explicitly assert exhaustive=true; non-exhaustive/missing signals reset the confirmation streak.
 - This extraction pass grants ZERO acceptance credit. Every emitted delta still goes through the one canonical Forge.
 
 For this call, replace the ordinary single ARCHITECTURE_DELTA_JSON line with exactly:

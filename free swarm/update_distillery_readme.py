@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """Refresh the Research Distillery section in free swarm/README.md.
 
-After the Distillery block this updater also invokes update_system_analysis.py so
-the autonomous publisher cannot refresh compact metrics while dropping the
-script-by-script, GO-flow and Sonnet-cost analysis.
+After the Distillery block this updater invokes the existing system-analysis and
+GO collective-metrics publishers.  The latter owns the Supervisor-8.77 bounded
+snapshot/freshness gate, so live Distillery publication can no longer leave the
+canonical GO aggregate frozen behind newer Swarm/Forge/Distillery inputs.
 """
 from __future__ import annotations
 
@@ -81,15 +82,22 @@ def replace(readme:Path,block:str)->None:
     readme.write_text(text.rstrip()+"\n",encoding="utf-8")
 
 
+def run_publisher(script:Path,repo:Path,artifacts:Path,extra:list[str]|None=None,timeout:int=120)->dict:
+    if not script.exists(): return {"ran":False,"reason":"SCRIPT_MISSING"}
+    cmd=[sys.executable,str(script),"--repo",str(repo),"--artifacts",str(artifacts),*(extra or [])]
+    try:
+        proc=subprocess.run(cmd,stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True,timeout=timeout,check=False)
+        return {"ran":True,"returncode":proc.returncode,"stdout_tail":proc.stdout[-1000:],"stderr_tail":proc.stderr[-1000:]}
+    except Exception as exc:
+        return {"ran":False,"reason":f"{type(exc).__name__}:{str(exc)[:300]}"}
+
+
 def main()->int:
     ap=argparse.ArgumentParser(); ap.add_argument("--repo",default="/workspace/clay-global-research-entity"); ap.add_argument("--artifacts",default="/artifacts/clay-entityos-swarm"); args=ap.parse_args()
     repo=Path(args.repo); artifacts=Path(args.artifacts); metrics=load(artifacts/"distillery/distillery.sqlite3")
     replace(repo/"free swarm/README.md",md(metrics)); (repo/"free swarm/DISTILLERY_LIVE.json").write_text(json.dumps(metrics,indent=2,ensure_ascii=False)+"\n",encoding="utf-8")
-    analysis=repo/"free swarm/update_system_analysis.py"
-    analysis_rc=None
-    if analysis.exists():
-        proc=subprocess.run([sys.executable,str(analysis),"--repo",str(repo),"--artifacts",str(artifacts)],stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True,timeout=120,check=False)
-        analysis_rc=proc.returncode
-    print(json.dumps({"state":metrics["state"],"collected":metrics["collected_source_tokens"],"accepted":metrics["accepted_dataset_tokens"],"yield":metrics["dataset_yield"],"near_miss":metrics.get("counters",{}).get("near_miss_candidates",0),"system_analysis_rc":analysis_rc})); return 0
+    analysis_result=run_publisher(repo/"free swarm/update_system_analysis.py",repo,artifacts)
+    collective_result=run_publisher(repo/"free swarm/go_collective_metrics.py",repo,artifacts,["--update-readme"])
+    print(json.dumps({"state":metrics["state"],"collected":metrics["collected_source_tokens"],"accepted":metrics["accepted_dataset_tokens"],"yield":metrics["dataset_yield"],"near_miss":metrics.get("counters",{}).get("near_miss_candidates",0),"system_analysis":analysis_result,"collective_metrics":collective_result},ensure_ascii=False)); return 0
 
 if __name__=="__main__":raise SystemExit(main())

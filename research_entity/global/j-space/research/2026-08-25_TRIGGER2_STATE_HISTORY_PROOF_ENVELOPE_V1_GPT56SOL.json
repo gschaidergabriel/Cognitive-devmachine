@@ -1,0 +1,318 @@
+{
+  "schema": "CLAY_TRIGGER2_STATE_HISTORY_PROOF_ENVELOPE/v1",
+  "date": "2026-08-25",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "status": "CURRENT_RESEARCH_SPEC_NONPROMOTING",
+  "purpose": "Close the remaining positive Hyperposition D/E/Epistemic provenance root without creating a second labeler authority. This artifact specifies one proof envelope that the retained derivation-bound gate family can consume to prove immutable event identity, replay-equivalent state_before, source-bound evaluator world/registry, admissible executed discriminator coverage, and typed GRF observation evidence.",
+  "authority_snapshot": {
+    "repository": "gschaidergabriel/clay-global-research-entity",
+    "branch": "main",
+    "observed_main_before_write": "49125bb6218cd3414ea1db73db8d3c9e726abaf3",
+    "supervisor_epoch": "8.78",
+    "mode": "FREE_ONLY",
+    "owner_target_path": "research_entity/global/OWNER_CORRECTION_ZERO_ENTITYOS_COGNITIVE_GRID_DB_CLAUDECODE_GLOBAL_JSPACE_2026-08-25.md",
+    "finished_training_target": "QWEN3.5-0.8B_CLASS_COGNITIVE_PROCESS_SUBSTRATE_FOR_VARIABLE_COGNITIVE_GRID_PLUS_PERSISTENT_DATABASE_PLUS_CLAUDE_CODE",
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0
+  },
+  "why_this_is_not_a_duplicate_semantic_authority": {
+    "retained_semantic_root": "tools/trigger2_hyperposition_reference_labelers_v3.py or its single explicitly versioned hardened successor",
+    "retained_candidate_gate_root": "tools/trigger2_hyperposition_derivation_bound_gate_v2.py or its single explicitly versioned hardened successor",
+    "this_artifact_role": "PROOF_ENVELOPE_AND_MUTATION_ACCEPTANCE_CONTRACT_ONLY",
+    "forbidden": [
+      "deriving a competing branch relation ontology",
+      "minting winner/resolution labels independently of the retained labeler",
+      "granting canonical truth/effect/runtime/training authority",
+      "turning an external attestation standard into a second canonical state store"
+    ]
+  },
+  "reentry_findings_bound_by_this_spec": [
+    "state_before is structurally accepted today but is not yet replay-proven from genesis or an equivalent source-bound state proof",
+    "event_id is not yet globally bound to immutable event content across prior evidence history",
+    "the evaluator-only formal world/dependence registry can be supplied self-consistently without being independently tied to generator-produced manifest bytes",
+    "d_resolve is not yet bound to typed admissible executed discriminator receipts covering every eliminated applicable competitor",
+    "GRF OBSERVED promotion still has a naked boolean evidence-qualification root",
+    "native seed v2 still self-checks through the weaker semantic gate v3 rather than the later derivation-bound gate v2"
+  ],
+  "external_method_inputs": [
+    {
+      "source": "RFC 8785 JSON Canonicalization Scheme",
+      "url": "https://www.rfc-editor.org/rfc/rfc8785.html",
+      "classification": "METHOD_INPUT_ONLY",
+      "adopted_principle": "Hash/signature inputs need deterministic canonical bytes. Use RFC8785/JCS-compatible canonical JSON for proof-object content digests where the project schema permits JSON."
+    },
+    {
+      "source": "RFC 9162 Certificate Transparency Version 2.0",
+      "url": "https://www.rfc-editor.org/rfc/rfc9162.html",
+      "classification": "METHOD_INPUT_ONLY",
+      "adopted_principle": "Append-only Merkle inclusion and consistency proofs are a reusable pattern for proving ordered history commitment and detecting history mutation. This does not make Certificate Transparency a Clay authority."
+    },
+    {
+      "source": "SLSA v1.2 provenance",
+      "url": "https://slsa.dev/spec/v1.2/provenance",
+      "classification": "METHOD_INPUT_ONLY",
+      "adopted_principle": "Bind produced artifacts to resolved source/material identities and cryptographic digests so a consumer can verify where and how a proof object came from."
+    }
+  ],
+  "proof_envelope": {
+    "schema": "ENTITYOS_HCU_HYPERPOSITION_STATE_PROOF/v1",
+    "required_sections": [
+      "source_manifest",
+      "world_manifest",
+      "genesis_state",
+      "ordered_event_history",
+      "history_commitment",
+      "replay_result",
+      "discriminator_receipts",
+      "observation_receipts",
+      "gate_binding"
+    ],
+    "canonicalization": {
+      "algorithm": "RFC8785_JCS_COMPATIBLE",
+      "hash": "SHA-256",
+      "rule": "Digest the canonical semantic payload, never an arbitrary serializer byte stream or model-visible narration."
+    }
+  },
+  "source_manifest": {
+    "required": [
+      "generator_repo_path",
+      "generator_sha256",
+      "labeler_repo_path",
+      "labeler_sha256",
+      "gate_repo_path",
+      "gate_sha256",
+      "world_builder_entrypoint",
+      "manifest_sha256"
+    ],
+    "law": "The evaluator world and registries must be reproducible from or cryptographically committed by the declared source manifest; binding generator bytes alone is insufficient if independently supplied evaluator metadata can change semantics."
+  },
+  "world_manifest": {
+    "required": [
+      "world_id",
+      "world_sha256",
+      "dependence_registry_sha256",
+      "discriminator_registry_sha256",
+      "genesis_state_sha256",
+      "construction_receipt_sha256"
+    ],
+    "failure_rules": [
+      "same world_id with different world_sha256 => WORLD_IDENTITY_CONFLICT",
+      "dependence registry digest mismatch => DEPENDENCE_REGISTRY_BINDING_CONFLICT",
+      "discriminator registry digest mismatch => DISCRIMINATOR_REGISTRY_BINDING_CONFLICT",
+      "world rebuilt from declared source differs from supplied world => WORLD_REBUILD_MISMATCH"
+    ]
+  },
+  "event_identity": {
+    "canonical_event_payload_fields": [
+      "event_schema",
+      "event_id",
+      "world_id",
+      "correlation_ancestry_id",
+      "independence_group",
+      "payload_key",
+      "provenance",
+      "epistemic_type",
+      "test_id",
+      "observed_outcome"
+    ],
+    "excluded_from_event_truth_digest": [
+      "independence_qualified",
+      "derived_relation",
+      "winner_branch_id",
+      "target_branch_ids",
+      "model_visible_text"
+    ],
+    "required_record_fields": [
+      "event_id",
+      "event_sha256",
+      "history_index"
+    ],
+    "law": "same event_id + same event_sha256 is idempotent replay; same event_id + different event_sha256 is hard corruption failure before any branch update",
+    "mutation_acceptance": "Every semantic event field mutation under a reused event_id must fail closed even if the event and evaluator registry are mutated together."
+  },
+  "ordered_history_commitment": {
+    "leaf_payload": "JCS({history_index,event_id,event_sha256})",
+    "leaf_hash": "SHA256(leaf_payload)",
+    "root_method": "ORDERED_APPEND_ONLY_MERKLE_COMMITMENT",
+    "required": [
+      "history_length",
+      "history_root_sha256",
+      "event_inclusion_proofs_or_full_replay_input",
+      "prior_root_sha256_when_extending_history",
+      "append_only_consistency_proof_or_equivalent_full_recomputation"
+    ],
+    "law": "Reordering, deleting, inserting, or mutating a historical event changes the committed history and must invalidate the proof. Merkle proofs are an efficiency mechanism; deterministic full replay is an acceptable reference oracle."
+  },
+  "state_before_proof": {
+    "required": [
+      "genesis_state_sha256",
+      "history_root_sha256",
+      "supplied_state_before_sha256",
+      "replayed_state_before_sha256",
+      "replay_labeler_sha256",
+      "replay_world_sha256"
+    ],
+    "acceptance": "supplied_state_before_sha256 == replayed_state_before_sha256 and all source/world/history bindings pass",
+    "alternative_equivalent_proof": "A non-replay cryptographic state proof may replace full replay only after separately versioned mutation tests demonstrate the same fail-closed guarantees and it does not create a second semantic authority.",
+    "forbidden": "A syntactically valid preseeded F/E_plus/E_minus/sigma state is not accepted as provenance truth by itself."
+  },
+  "discriminator_execution_receipt": {
+    "schema": "ENTITYOS_HCU_SYNTHETIC_DISCRIMINATOR_EXECUTION_RECEIPT/v1",
+    "required": [
+      "discriminator_id",
+      "discriminator_spec_sha256",
+      "admission_policy_sha256",
+      "admissible",
+      "execution_id",
+      "execution_input_sha256",
+      "observed_outcome",
+      "observation_receipt_sha256",
+      "covered_applicable_branch_pairs",
+      "receipt_sha256"
+    ],
+    "resolution_law": "A branch may be eliminated for positive D-resolution promotion only when the resolution proof cites an admissible executed outcome-bound receipt whose mechanically derived partition covers that competitor under the same world/scope. Information content alone does not imply admissibility or execution.",
+    "coverage_law": "Every eliminated applicable competitor must be covered by at least one cited receipt; partial coverage keeps Hyperposition unresolved."
+  },
+  "typed_observation_receipt": {
+    "schema": "ENTITYOS_HCU_TYPED_OBSERVATION_RECEIPT/v1",
+    "required": [
+      "observation_id",
+      "event_id",
+      "event_sha256",
+      "source_type",
+      "source_identity",
+      "source_digest_or_synthetic_proof_digest",
+      "observed_value_digest",
+      "qualification_rule_id",
+      "qualification_rule_sha256",
+      "receipt_sha256"
+    ],
+    "grf_law": "UNKNOWN/HYPOTHESIS/PREDICTION/MEASUREMENT_ERROR/CONTRADICTION/COUNTERHYPOTHESIS -> OBSERVED promotion requires a valid typed receipt recomputed by the gate; a naked boolean cannot authorize the transition.",
+    "synthetic_scope_law": "Synthetic proof/observation remains typed as synthetic and cannot mint canonical world truth or real-effect authority."
+  },
+  "independence_proof": {
+    "current_donor": "tools/trigger2_hyperposition_derivation_bound_gate_v2.py:derive_independence",
+    "required_hardening": [
+      "dependence registry itself is world/source-manifest bound",
+      "prior records carry immutable event_sha256",
+      "same-id digest conflict fails before exact-replay idempotence",
+      "caller independence flag remains non-authoritative"
+    ]
+  },
+  "gate_acceptance": {
+    "must_recompute": [
+      "source manifest hashes",
+      "world and registry digests",
+      "event digests",
+      "history commitment or full replay",
+      "state_before replay equivalence",
+      "independence classification",
+      "formal branch relations",
+      "branch update",
+      "discriminator partition and cited coverage",
+      "task-local resolution",
+      "typed GRF observation qualification"
+    ],
+    "must_fail_on": [
+      "same event_id changed observed_outcome",
+      "same event_id changed epistemic_type",
+      "same event_id changed provenance",
+      "same event_id changed payload_key",
+      "same event_id changed independence_group",
+      "coherent event plus registry mutation under reused event_id",
+      "history event deletion",
+      "history event reorder",
+      "preseeded FALSIFIED competitor without replay proof",
+      "preseeded F record without event digest binding",
+      "world registry substitution with unchanged generator hash claim",
+      "inadmissible discriminator",
+      "unexecuted discriminator",
+      "outcome not bound to execution receipt",
+      "missing applicable competitor coverage",
+      "GRF OBSERVED promotion with boolean only",
+      "model-visible proof hashes or branch IDs used as target shortcuts"
+    ]
+  },
+  "training_program_effect": {
+    "new_positive_rows_admitted": 0,
+    "new_hard_negative_rows_required_immediately": 0,
+    "reason": "Existing hard-negative blueprints already represent these failure families; first repair the proof path, then regenerate family-disjoint rows against exact hardened bytes.",
+    "semantic_hyperposition_cross_cutting": true,
+    "variable_n_rule": "State/history proof identity is independent of module count N and module ordering so variable-grid resize cannot change durable fact/evidence identity.",
+    "database_boundary": "Durable history roots, event identities, exact state digests and provenance receipts belong in deterministic persistent state rather than model-simulated memory."
+  },
+  "artifact_lifecycle_delta": [
+    {
+      "artifact": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_CURRENT_PROTOCOL_V3_GPT56SOL.json",
+      "status": "STALE_FOR_CURRENT_FACING_GATE_GRAPH",
+      "successor": "ledger v8 plus current reentry audits; future protocol convergence file",
+      "revision_reason": "Predates derivation-bound gate v2, native-seed bypass audits and state-proof provenance findings."
+    },
+    {
+      "artifact": "tools/trigger2_hyperposition_reference_labelers_v3.py",
+      "status": "CURRENT_NEEDS_REVISION_P0",
+      "successor": "one hardened same-authority successor",
+      "revision_reason": "Retain semantic derivation donor; add immutable historical event identity and proof-consumption semantics through the converged gate path."
+    },
+    {
+      "artifact": "tools/trigger2_semantic_hyperposition_gate_v3.py",
+      "status": "NEEDS_REVISION_WEAKER_PARALLEL_GATE",
+      "successor": "single converged derivation-bound gate family",
+      "revision_reason": "Does not derive independence from source-bound dependence history before labeler update."
+    },
+    {
+      "artifact": "tools/trigger2_hyperposition_derivation_bound_gate_v2.py",
+      "status": "CURRENT_PARTIAL_P0_REPAIR",
+      "successor": "same gate family consuming ENTITYOS_HCU_HYPERPOSITION_STATE_PROOF/v1-compatible proof envelope",
+      "revision_reason": "Derived independence is real progress; history replay/digest/world-origin/discriminator/GRF proof closure remains."
+    },
+    {
+      "artifact": "tools/trigger2_semantic_hyperposition_native_seed_generator_v2.py",
+      "status": "BLOCKED_POSITIVE_TRAINING_NEEDS_GATE_REBIND",
+      "successor": "one semantically versioned seed successor bound to converged proof gate",
+      "revision_reason": "Current self-check uses semantic gate v3 and caller-qualified events. Reuse scenario families, not current positive labels."
+    },
+    {
+      "artifact": "tools/trigger2_binding_router_factorial_generator_v3.py",
+      "status": "BLOCKED_QUARANTINED_FROM_DIRECT_TRAINING",
+      "successor": "full-cross or preregistered conditional-independence route",
+      "revision_reason": "Supervisor 8.78 nuisance shortcut evidence remains dispositive."
+    },
+    {
+      "artifact": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_STATE_HISTORY_PROOF_ENVELOPE_V1_GPT56SOL.json",
+      "status": "CURRENT_RESEARCH_SPEC_NONPROMOTING",
+      "predecessor": "state-proof/discriminator findings in v8 reentry audits plus derivation-bound successor spec",
+      "successor": "implemented and mutation-tested converged gate proof ABI",
+      "revision_reason": "Turns the remaining P0/P1 provenance findings into one implementation-level proof contract without adding a second labeler."
+    }
+  ],
+  "highest_information_next_action": {
+    "name": "IMPLEMENT_PROOF_ENVELOPE_IN_EXISTING_DERIVATION_BOUND_GATE_LANE",
+    "ordinary_or_unusual": "ORDINARY_DETERMINISTIC_SOURCE_AND_MUTATION_TEST_WORK",
+    "steps": [
+      "extend retained evidence records with event_sha256 and hard same-id/different-digest rejection",
+      "bind evaluator world/dependence/discriminator registries to a generator-produced source manifest digest",
+      "reconstruct state_before from genesis + ordered event history or prove an equivalent state-proof receipt",
+      "add typed discriminator execution/admission/coverage receipts and require them in positive resolution proof",
+      "replace GRF observation boolean with typed observation receipt",
+      "rebind native seed v2 scenarios to the converged gate successor",
+      "run exact-current mutation tests, then only a small family-disjoint positive pilot"
+    ]
+  },
+  "credits": {
+    "research_delta": 1,
+    "proof_contract_delta": 1,
+    "source_runtime_credit": 0,
+    "positive_D_E_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "positive_jspace_causal_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0
+  }
+}

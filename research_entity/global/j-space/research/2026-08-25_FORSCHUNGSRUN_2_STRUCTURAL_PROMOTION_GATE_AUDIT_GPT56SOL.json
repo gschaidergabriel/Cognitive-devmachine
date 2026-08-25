@@ -1,0 +1,176 @@
+{
+  "schema": "CLAY_FORSCHUNGSRUN_2_STRUCTURAL_PROMOTION_GATE_AUDIT/v1",
+  "date": "2026-08-25",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "user_trigger": "forschungsrun 2",
+  "persistent_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority_epoch_observed": "8.78",
+  "execution_mode": "FREE_ONLY",
+  "canonical_main_observed_before_write": "7c1022b309d7e35084efd575099f6365f2c8703d",
+  "scope": "STATIC_AND_METHOD_AUDIT_OF_QUEUED_QWEN3_0_6B_STRUCTURAL_LABEL_FREE_NATIVE_CVEC_PROMOTION_DISCRIMINATOR",
+  "execution": {
+    "new_model_intervention_executed": false,
+    "reason": "Supervisor 8.78 says the already-dispatched structural run 32810213066 and recovery run 32811360359 are queued on the same free self-hosted transport and forbids spawning duplicate dispatches while they remain queued.",
+    "structural_run_id": 32810213066,
+    "structural_run_status_observed": "queued",
+    "recovery_run_id": 32811360359,
+    "recovery_run_status_observed": "queued",
+    "scientific_negative_inferred_from_queue": false
+  },
+  "observed_source": {
+    "executor": {
+      "path": "tools/trigger1_structural_native_abstract_execute.py",
+      "blob_sha": "0711e07609c2f402db9762cf9495c31cae7888e8",
+      "native_api": "llama_set_adapter_cvec",
+      "native_scope": "ALL_PROMPT_TOKENS",
+      "injection_layer": 20,
+      "gain_grid": [4.0, 8.0, 16.0, 24.0, 32.0]
+    },
+    "case_generator": {
+      "path": "tools/trigger1_structural_label_free_cases.py",
+      "blob_sha": "66bb2f5cfccad602ee9c759961a369ab2c61be41",
+      "model_facing_explicit_semantic_labels": false,
+      "target_x_code_counterbalance": "EXACT_3X3_ON_EACH_SPLIT",
+      "calibration_holdout_content_vocabulary": "DISJOINT_BY_GENERATOR_INVARIANT",
+      "case_count_per_split": 9
+    },
+    "forschungsrun_1_preregistration": {
+      "path": "research_entity/global/j-space/research/2026-08-25_FORSCHUNGSRUN_1_NATIVE_CVEC_LEXICAL_DECONFOUND_GPT56SOL.json",
+      "blob_sha": "20dc2b877295a4a3870a170c5d1c3fc2f757c7e4",
+      "required_prior_gain_freeze": 32.0,
+      "required_geometry_gate": "pairwise family cosine plus leave-one-family-out cosine above preregistered class-assignment permutation null",
+      "required_sign_rule": "SIGN_FLIP reverses preregistered semantic interaction direction",
+      "required_specificity": "positive semantic interaction on every fresh lexical family",
+      "required_off_target_regression": true
+    }
+  },
+  "positive_findings": [
+    "The structural generator removes the canonical AFFIRMATIVE/NEGATIVE/NEUTRAL words and a broad synonym list from model-facing prompts.",
+    "Semantic target and opaque A/B/C output-code identity are exactly factorially counterbalanced on calibration and holdout.",
+    "Calibration and holdout use disjoint content-symbol vocabularies while retaining only an explicit structural whitelist.",
+    "The native executor retains exact Qwen3-0.6B GGUF and llama.cpp identity checks and native all-prompt-token cvec application.",
+    "The executor includes nuisance residualization and null, orthogonal, permuted, nuisance and sign-flip controls.",
+    "The executor explicitly refuses to claim mechanistic identity with the legacy last-token witness and sets canonical promotion/whole-system/training credit to zero in its result schema."
+  ],
+  "promotion_blockers_found": [
+    {
+      "id": "R2_B1_GAIN_PREREGISTRATION_DRIFT",
+      "severity": "MATERIAL",
+      "observation": "Forschungsrun 1 preregistered the previously evidenced native gain 32.0 as frozen. The queued executor instead reselects gain from 4/8/16/24/32 using the same calibration cases used to estimate the semantic vectors.",
+      "implication": "This is calibration-only rather than holdout leakage, but it is a protocol change and adds a degree of freedom. A pass can be credited only to the calibration-tuned structural protocol unless a successor run restores the frozen-gain design or explicitly preregisters the tuning rule before data use."
+    },
+    {
+      "id": "R2_B2_GEOMETRIC_COHERENCE_GATE_MISSING",
+      "severity": "MATERIAL",
+      "observation": "The executor does not implement the Run-1 pairwise family-direction cosine, leave-one-family-out alignment or class-assignment permutation-null gate.",
+      "implication": "The derived vectors can be task/scenario-specific averages without demonstrating a reusable cross-family axis."
+    },
+    {
+      "id": "R2_B3_PASS_RULE_DOES_NOT_REQUIRE_PER_TARGET_POSITIVITY",
+      "severity": "CRITICAL_FOR_PROMOTION",
+      "observation": "causal_matrix computes diagonal_each_positive but behavior_pass does not require it. behavior_pass only requires matched_mean_delta > 0, diagonal_advantage > 0, matched_mean_delta greater than aggregate control magnitudes, and signflip_mean_delta < matched_mean_delta.",
+      "implication": "A pooled effect can pass while one or more semantic targets fail or reverse. This violates the Run-1 specificity requirement."
+    },
+    {
+      "id": "R2_B4_SIGN_FLIP_REVERSAL_NOT_ENFORCED",
+      "severity": "CRITICAL_FOR_CAUSAL_SPECIFICITY",
+      "observation": "The behavioral and downstream sign-flip checks require only signflip < matched, not signflip < 0 or an equivalent preregistered reversal statistic.",
+      "implication": "Both +VECTOR and SIGN_FLIP can move in the same direction, with the sign-flip merely smaller, and still satisfy this part of PASS. That does not establish bidirectional axis causality."
+    },
+    {
+      "id": "R2_B5_OFF_TARGET_REGRESSION_ABSENT",
+      "severity": "MATERIAL",
+      "observation": "Forschungsrun 1 required structurally matched A/B/C tasks whose correct code depends on a property unrelated to the semantic pole. The queued executor has no such off-target task family in the visible pass gate.",
+      "implication": "Generic disruption or generic in-context codebook facilitation is not tightly bounded."
+    },
+    {
+      "id": "R2_B6_ONE_SYNTHETIC_TASK_GRAMMAR_NOT_CROSS_DOMAIN_ABSTRACTION",
+      "severity": "CLAIM_SCOPE",
+      "observation": "Calibration and holdout are lexically disjoint in content symbols but share the same formal F/R/Q grammar, the same three relation-generating rules, the same demo/probe format and the same A/B/C in-context classification task.",
+      "implication": "Even a clean pass supports at most a task-generalized structural relation-control component within this synthetic grammar. It does not by itself prove a domain-general decision-state coordinate or a global semantic J-Space."
+    },
+    {
+      "id": "R2_B7_EFFECTIVE_SAMPLE_SIZE_TOO_SMALL_FOR_STRONG_PROMOTION",
+      "severity": "STATISTICAL_ROBUSTNESS",
+      "observation": "Each split contains 9 cases: exactly one observation for each semantic-target x output-code cell. The same 9 calibration cases define the semantic directions and select gain.",
+      "implication": "There is no within-cell replication and little protection against scenario-specific idiosyncrasy. Strong promotion should use multiple independent lexical/task families with repeated factorial cells and deterministic uncertainty/permutation analysis."
+    }
+  ],
+  "counterhypotheses_retained": [
+    {
+      "id": "H0_TASK_SPECIFIC_RELATION_CIRCUIT",
+      "statement": "The cvec controls a model-specific latent feature for the single synthetic logical relation-classification grammar rather than an abstract reusable decision-state coordinate."
+    },
+    {
+      "id": "H0_CALIBRATION_OPTIMIZED_CLASSIFICATION_DIRECTION",
+      "statement": "Using the same small calibration set for class-direction estimation and gain selection can produce a direction/gain pair tuned to this exact task family without broad transfer."
+    },
+    {
+      "id": "H0_UNIDIRECTIONAL_GENERIC_FACILITATION",
+      "statement": "The positive vector may facilitate the requested-code computation while the sign-flipped vector merely facilitates it less; the current sign test does not require causal reversal."
+    }
+  ],
+  "external_research_inputs": [
+    {
+      "source": "Cross-Architecture Steering Transfer in Language Models: A Systematic Empirical Study",
+      "arxiv": "2608.05164",
+      "use": "Supports treating functional steering transfer as an empirical generalization question and warns that transfer quality degrades at very small model scales; this is contextual evidence only, not a Clay runtime fact."
+    },
+    {
+      "source": "Beyond Single Concept Vector: Modeling Concept Subspace in LLMs with Gaussian Distribution",
+      "arxiv": "2410.00153",
+      "use": "Supports the concern that a single concept vector can vary with data/training and motivates subspace/distributional robustness checks."
+    }
+  ],
+  "successor_discriminator_v3": {
+    "name": "CROSS_TASK_FAMILY_BIDIRECTIONAL_NATIVE_JSPACE_GATE",
+    "goal": "Distinguish one-task structural relation steering from a reusable abstract model-internal control coordinate without overclaiming global J-Space.",
+    "phase_0_freeze": [
+      "Use the pinned Qwen3-0.6B Q8_0 GGUF, pinned llama.cpp commit, injection layer 20 and the previously evidenced gain 32.0 as fixed primary settings.",
+      "If gain robustness is studied, report a preregistered fixed gain panel as replication; never select the winning gain on the evaluation families."
+    ],
+    "phase_1_cross_task_basis": [
+      "Construct at least three genuinely different model-facing task grammars that instantiate the same evaluator-side three-state relation while sharing no semantic pole labels and minimal formatting vocabulary.",
+      "Example families: symbolic implication/contradiction/underdetermination, temporal precedence/conflict/unknown, and set-membership derivation/conflict/undetermined.",
+      "Estimate a direction per task family and require a common component under a preregistered mean/PCA rule."
+    ],
+    "phase_2_geometry": [
+      "Require pairwise family-direction cosine and leave-one-task-family-out alignment to beat an exact deterministic class-assignment permutation null.",
+      "Fail closed if any family reverses relative to the common direction beyond the preregistered tolerance."
+    ],
+    "phase_3_holdout": [
+      "Use at least three entirely unseen task grammars with independent symbol vocabularies.",
+      "Within every task family, repeat the full semantic-target x A/B/C factorial with multiple symbol/scenario replicates so every cell has replication."
+    ],
+    "phase_4_strict_causal_pass": [
+      "Require every holdout task family to have positive matched diagonal effect and positive diagonal advantage.",
+      "Require SIGN_FLIP to reverse the preregistered target interaction, not merely be smaller than +VECTOR.",
+      "Require null, orthogonal, permuted and nuisance controls to remain below calibration-frozen effect bounds in every family.",
+      "Require target specificity after conditioning on requested output-code identity."
+    ],
+    "phase_5_off_target": [
+      "Run matched codebook tasks based on unrelated properties and bound degradation/facilitation relative to baseline with calibration-frozen thresholds."
+    ],
+    "phase_6_claim_scope": "Even on PASS, promote only to QWEN3_0_6B_CROSS_TASK_ABSTRACT_NATIVE_CONTROL_COMPONENT. A claim of global semantic J-Space requires additional evidence that the coordinate participates in broader workspace/state coordination rather than one three-state relation family."
+  },
+  "current_queued_run_reclassification_rule": {
+    "if_pass": "STRONG_LABEL_FREE_STRUCTURAL_NATIVE_COMPONENT_EVIDENCE_UNDER_CALIBRATION_TUNED_GAIN; NO_CANONICAL_SEMANTIC_JSPACE_PROMOTION_FROM_THIS RESULT_ALONE",
+    "if_fail": "FALSIFY_OR_WEAKEN_CURRENT_STRUCTURAL_NATIVE_SEMANTIC_CANDIDATE_AT_EXACT_IDENTITY; PRESERVE FAILURE",
+    "if_remains_queued": "TRANSPORT_BLOCKER_ONLY; NO SCIENTIFIC CREDIT OR NEGATIVE RESULT"
+  },
+  "credit_change": {
+    "new_runtime_credit": 0,
+    "native_llamacpp_cvec_component_runtime_credit": 1,
+    "structural_label_free_native_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0,
+    "training_credit": 0,
+    "canonical_semantics_promotion": false
+  },
+  "research_delta": "Forschungsrun 2 audits the exact queued structural native discriminator against Run-1's own promotion preregistration. It confirms label removal, factorial code counterbalance and lexical split hygiene, but identifies promotion-critical gaps: gain-freeze drift, missing geometry null, pooled rather than per-target pass logic, non-reversing sign-flip criterion, absent off-target regression, single-task-grammar scope and minimal cell replication. It defines a cross-task-family bidirectional successor gate while preserving the frozen queued run as bounded component evidence only.",
+  "next_exact_action": "Do not spawn a duplicate runtime job. Execute the already queued run when the free runner becomes live; regardless of PASS, keep canonical J-Space semantics blocked until the successor gate fixes the critical pass-criterion and generalization gaps."
+}

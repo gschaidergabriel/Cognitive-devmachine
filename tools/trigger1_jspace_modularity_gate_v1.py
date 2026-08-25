@@ -26,6 +26,13 @@ import trigger1_jspace_promotion_gate_v5 as v5
 VERDICT_SCHEMA = "CLAY_TRIGGER1_JSPACE_MODULARITY_GATE/v1"
 BATCH_SCHEMA = "CLAY_TRIGGER1_JSPACE_MODULARITY_BATCH_SCAN/v1"
 ALLOWED_RANKS = {1, 2}
+REQUIRED_SENTINELS = {
+    "GENERIC_INSTRUCTION_CODE_COMPLIANCE",
+    "CONFIDENCE_OR_DECISIVENESS_PROXY",
+    "NONSEMANTIC_CODEBOOK_ACCURACY",
+    "LEXICALLY_MATCHED_UNRELATED_CLASSIFICATION",
+    "BOUNDED_SAFETY_OR_PROTOCOL_BEHAVIOR",
+}
 
 
 def _sha256(value: Any) -> bool:
@@ -38,8 +45,8 @@ def _sha256(value: Any) -> bool:
     return True
 
 
-def _positive_int(value: Any) -> bool:
-    return isinstance(value, int) and not isinstance(value, bool) and value > 0
+def _positive_int(value: Any, minimum: int = 1) -> bool:
+    return isinstance(value, int) and not isinstance(value, bool) and value >= minimum
 
 
 def _finite_nonnegative(value: Any) -> bool:
@@ -59,10 +66,14 @@ def _cross_effect_evidence(candidate: dict[str, Any]) -> tuple[bool, list[str]]:
         failures.append("SENTINEL_SET_MUST_BE_PREREGISTERED")
     if not _sha256(modularity.get("sentinel_set_receipt_sha256")):
         failures.append("SENTINEL_SET_RECEIPT_REQUIRED")
-    if not _positive_int(modularity.get("sentinel_behavior_count")):
-        failures.append("POSITIVE_SENTINEL_BEHAVIOR_COUNT_REQUIRED")
-    if not _positive_int(modularity.get("heldout_scenario_family_count")):
-        failures.append("POSITIVE_HELDOUT_SCENARIO_FAMILY_COUNT_REQUIRED")
+    sentinels = modularity.get("sentinel_behaviors")
+    normalized = {str(value).strip().upper() for value in sentinels} if isinstance(sentinels, list) else set()
+    if not REQUIRED_SENTINELS.issubset(normalized):
+        failures.append("REQUIRED_SENTINEL_BEHAVIOR_SET_MISSING")
+    if not _positive_int(modularity.get("sentinel_behavior_count"), len(REQUIRED_SENTINELS)):
+        failures.append("SUFFICIENT_SENTINEL_BEHAVIOR_COUNT_REQUIRED")
+    if not _positive_int(modularity.get("heldout_scenario_family_count"), 3):
+        failures.append("AT_LEAST_THREE_HELDOUT_SCENARIO_FAMILIES_REQUIRED")
 
     if modularity.get("cross_effect_matrix_test") is not True:
         failures.append("CROSS_EFFECT_MATRIX_TEST_REQUIRED")
@@ -74,6 +85,8 @@ def _cross_effect_evidence(candidate: dict[str, Any]) -> tuple[bool, list[str]]:
         failures.append("PER_FAMILY_SIGNED_CROSS_EFFECTS_REQUIRED")
     if modularity.get("per_family_cross_effect_stability_test") is not True:
         failures.append("PER_FAMILY_CROSS_EFFECT_STABILITY_TEST_REQUIRED")
+    if modularity.get("target_selectivity_preserved_across_families") is not True:
+        failures.append("TARGET_SELECTIVITY_NOT_FAMILY_STABLE")
 
     if modularity.get("cross_effect_thresholds_selected_on_calibration_only") is not True:
         failures.append("CROSS_EFFECT_THRESHOLDS_MUST_BE_CALIBRATION_ONLY")
@@ -131,8 +144,6 @@ def _composition_evidence(candidate: dict[str, Any]) -> tuple[bool, list[str], i
         failures.append("SEMANTIC_SUBSPACE_RANK_MUST_BE_SELECTED_BEFORE_HOLDOUT")
 
     if rank == 1:
-        # No coefficient-composition claim exists for a one-dimensional candidate. The
-        # structured cross-effect gate is sufficient for the bounded modularity question.
         return not failures, sorted(set(failures)), 1
 
     composition = candidate.get("composition_evidence")
@@ -146,8 +157,16 @@ def _composition_evidence(candidate: dict[str, Any]) -> tuple[bool, list[str], i
         failures.append("RANK2_COMBINATION_GRID_RECEIPT_REQUIRED")
     if composition.get("composition_model_fit_on_calibration_only") is not True:
         failures.append("RANK2_COMPOSITION_MODEL_MUST_BE_CALIBRATION_ONLY")
+    if not _sha256(composition.get("composition_model_receipt_sha256")):
+        failures.append("RANK2_COMPOSITION_MODEL_RECEIPT_REQUIRED")
+    if composition.get("same_residual_norm_relative_dose") is not True:
+        failures.append("RANK2_COMPOSITION_DOSE_MUST_BE_NORM_MATCHED")
+    if not _sha256(composition.get("combined_intervention_receipt_sha256")):
+        failures.append("RANK2_COMBINED_INTERVENTION_RECEIPT_REQUIRED")
     if composition.get("heldout_compositional_residual_test") is not True:
         failures.append("RANK2_HELDOUT_COMPOSITIONAL_RESIDUAL_TEST_REQUIRED")
+    if not _sha256(composition.get("compositional_residual_metric_sha256")):
+        failures.append("RANK2_COMPOSITIONAL_RESIDUAL_METRIC_RECEIPT_REQUIRED")
     if composition.get("target_and_sentinel_endpoints_included") is not True:
         failures.append("RANK2_TARGET_AND_SENTINEL_ENDPOINTS_REQUIRED")
     if composition.get("per_family_residuals_recorded") is not True:
@@ -171,6 +190,8 @@ def _composition_evidence(candidate: dict[str, Any]) -> tuple[bool, list[str], i
         failures.append("RANK2_COMPOSITIONAL_RESIDUALS_MUST_BE_WITHIN_PREREGISTERED_BOUNDS")
     if composition.get("systematic_sign_interaction_missed_by_model") is not False:
         failures.append("RANK2_SYSTEMATIC_SIGN_INTERACTION_MUST_BE_ABSENT")
+    if composition.get("family_consistency_pass") is not True:
+        failures.append("RANK2_COMPOSITION_NOT_FAMILY_STABLE")
 
     return not failures, sorted(set(failures)), 2
 
@@ -216,9 +237,10 @@ def adjudicate(candidate: dict[str, Any]) -> dict[str, Any]:
         "effect_authority_changed": False,
         "evidence_boundary": (
             "This companion composes Trigger-1 v5 without weakening it. A modular control candidate must first "
-            "be a v5 scientifically independent vector candidate, then pass structured held-out sentinel "
-            "cross-effect evidence; rank-2 candidates additionally require calibration-frozen held-out "
-            "compositional residual evidence. The verdict is bounded control-architecture metrology only "
+            "be a v5 scientifically independent vector candidate, then pass a preregistered structured held-out "
+            "sentinel cross-effect matrix with explicit numerical bounds and family stability. Rank-2 candidates "
+            "additionally require exact rank-decision provenance plus calibration-frozen held-out compositional "
+            "residual evidence at norm-matched dose. The verdict is bounded control-architecture metrology only "
             "and never mints canonical semantics, J-Space model-runtime, HCU, EntityOS, training, whole-product, "
             "or real-effect authority."
         ),

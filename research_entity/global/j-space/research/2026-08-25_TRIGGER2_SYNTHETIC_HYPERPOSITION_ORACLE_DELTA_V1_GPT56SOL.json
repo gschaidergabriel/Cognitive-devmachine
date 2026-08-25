@@ -1,0 +1,106 @@
+{
+  "schema": "CLAY_TRIGGER2_SYNTHETIC_HYPERPOSITION_ORACLE_DELTA/v1",
+  "date": "2026-08-25",
+  "trigger": "triggerwort 2",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "persistent_entity": "Clay",
+  "product": "EntityOS",
+  "architecture": "HCU_VARIABLE_COGNITIVE_GRID",
+  "authority": {
+    "supervisor_epoch": "8.78",
+    "mode": "FREE_ONLY",
+    "owner_target": "research_entity/global/OWNER_CORRECTION_ZERO_ENTITYOS_COGNITIVE_GRID_DB_CLAUDECODE_GLOBAL_JSPACE_2026-08-25.md",
+    "branch_base_main": "ccfda671d85b768197f9d9bbd022657bf0de1efd"
+  },
+  "research_question": "Can positive synthetic Hyperposition D/E targets be derived without trusting generator-supplied branch relations, target IDs, decision roles, winners or resolution labels?",
+  "observed_predecessor_gap": {
+    "status": "BLOCKED_FOR_POSITIVE_D_E_ADMISSION",
+    "evidence": [
+      "tools/trigger2_hyperposition_reference_seed_v1.py materializes branch_relations as already-labeled evaluator metadata before calling the reference labeler.",
+      "tools/entityos_hcu_trainingtrace_candidate_gate_v2.py validates SHA-256 string shape and self-declared synthetic-resolution metadata but does not itself reconstruct the relation derivation from formal synthetic-world bytes.",
+      "2026-08-25_TRIGGER2_CURRENT_HYPERPOSITION_LABELER_CAUSAL_CHAIN_AUDIT_V2_GPT56SOL.json independently classifies upstream branch-relation derivation as a critical remaining causal-chain gap."
+    ]
+  },
+  "artifact_lifecycle": [
+    {
+      "artifact": "tools/trigger2_hyperposition_reference_labelers_v2.py",
+      "version": "v2",
+      "status": "CURRENT_COMPONENT_SOURCE",
+      "successor_needed_for": "none in this delta; consumed as downstream transition primitive",
+      "credit": "SOURCE_COMPONENT_ONLY"
+    },
+    {
+      "artifact": "tools/trigger2_hyperposition_reference_seed_v1.py",
+      "version": "v1",
+      "status": "RETROFIT_REQUIRED",
+      "revision_reason": "branch_relations are generator-authored rather than mechanically reconstructed from a formal world/event",
+      "recommended_successor": "oracle-backed Hyperposition-native generator"
+    },
+    {
+      "artifact": "tools/entityos_hcu_trainingtrace_candidate_gate_v2.py",
+      "version": "v2",
+      "status": "REVIEW_REQUIRED_BLOCKED_FOR_POSITIVE_D_E",
+      "revision_reason": "format-valid SHA strings and declarative resolution_basis are not byte-level proof of source->oracle->labeler derivation",
+      "recommended_successor": "gate that recomputes exact bound bytes and verifies oracle derivation receipt"
+    },
+    {
+      "artifact": "tools/trigger2_synthetic_hyperposition_oracle_v1.py",
+      "version": "v1",
+      "status": "CANDIDATE_DONOR_NOT_TRAINING_ADMITTED",
+      "git_blob": "c8935ca47c3b5b62960803af55b043efea8b51e2",
+      "predecessor": "generator-supplied branch relation metadata",
+      "revision_reason": "derive relation/targets and correlation ancestry mechanically from formal synthetic world semantics",
+      "successor_condition": "exact committed tests + admission gate byte binding + model-visible leakage gate"
+    },
+    {
+      "artifact": "tests/test_trigger2_synthetic_hyperposition_oracle_v1.py",
+      "version": "v1",
+      "status": "SOURCE_TEST_PRESENT_NOT_EXECUTION_CREDIT",
+      "git_blob": "3c569b67a4437877ffffb89b107ecd1fdff84617"
+    }
+  ],
+  "oracle_contract": {
+    "accepted_test_kinds": {
+      "FINITE_OUTCOME_EQUALITY": "matching prediction => SUPPORTS; concrete mismatch => FALSIFIES; UNKNOWN => UNKNOWN_RELATION",
+      "FINITE_OUTCOME_NOISY_SIGNAL": "matching prediction => SUPPORTS; concrete mismatch => COUNTERS; UNKNOWN => UNKNOWN_RELATION"
+    },
+    "forbidden_prelabels": [
+      "relation",
+      "branch_relations",
+      "target_branch_ids",
+      "decision_role",
+      "winner_branch_id",
+      "resolved_branch",
+      "resolution"
+    ],
+    "ancestry_rule": "event dependency DAG roots determine correlation_ancestry_id; dependent relay events are not independence-qualified",
+    "hash_receipt": "canonical JSON SHA-256 over world, event, derivation basis and derived observations",
+    "model_visible_fields": []
+  },
+  "tests_declared": [
+    "mechanical exact-world relation derivation",
+    "direct prelabel rejection",
+    "counterfactual outcome changes entailed relations and output hash",
+    "branch-map order invariance",
+    "dependency-DAG shared ancestry / no independent credit",
+    "semantic world mutation changes world hash",
+    "UNKNOWN is never silently falsified",
+    "exact equality can resolve through current v2 labeler",
+    "noisy signal weakens without resolving"
+  ],
+  "execution_credit": {
+    "tests_executed_on_admitted_repo_surface": false,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  },
+  "scientific_boundary": {
+    "synthetic_resolution_scope": "task-local training target only",
+    "real_world_truth": "not minted",
+    "jspace_causality": "not promoted",
+    "falsifier": "If a caller can alter relation/targets without changing formal branch predictions or observed outcome and still pass the eventual admission chain, this oracle/gate design has failed."
+  },
+  "next_exact_action": "Execute the committed oracle integration tests, then require the candidate admission successor to recompute exact source/world/event/derivation bytes and reject format-only SHA or self-declared resolution_basis before any positive D/E row is training-admitted."
+}

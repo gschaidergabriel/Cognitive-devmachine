@@ -1,0 +1,112 @@
+{
+  "schema": "CLAY_TRIGGER2_P0_INDEPENDENT_ADMISSION_WITNESS_TRUST_BOUNDARY/v1",
+  "date": "2026-08-25",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU_VARIABLE_COGNITIVE_GRID",
+  "supervisor_epoch": "8.78",
+  "mode": "FREE_ONLY",
+  "status": "CURRENT_RESEARCH_METHOD_DELTA_NONPROMOTING",
+  "purpose": "Make the V31 OBSERVED-to-Typed-Entry P0 trust boundary implementation-testable without creating a second state/truth authority. This artifact distinguishes content identity from independently witnessed admission authority and records threat/acceptance rules for the single retained successor lane.",
+  "current_ledger": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V31_GPT56SOL.json",
+  "current_p0_design": "OBSERVED_TO_TYPED_ENTRY_BRIDGE_WITH_INDEPENDENT_ADMISSION_WITNESS",
+  "repo_evidence_basis": [
+    "the artefact/MicroEntity/hcu/xeno_entry_fabric_v1.py",
+    "tools/trigger2_hyperposition_state_history_proof_gate_v1.py",
+    "research_entity/global/j-space/research/vps_run_receipts/2026-08-25_TRIGGER2_TRACKA_P4_OBSERVED_PRODUCER_AUTH_VPS_RECEIPT.json",
+    "research_entity/global/j-space/research/2026-08-25_TRIGGER2_POST_VPS_TYPED_ENTRY_JSPACE_FUSION_GPT56SOL.json",
+    "research_entity/global/j-space/research/2026-08-25_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V31_GPT56SOL.json"
+  ],
+  "external_method_inputs": [
+    {
+      "source": "SLSA specification v1.2, https://slsa.dev/spec/v1.2/",
+      "classification": "EXTERNAL_METHOD_INPUT_NOT_CLAY_AUTHORITY",
+      "method_donor": "provenance verification relies on a defined trust boundary rather than treating caller-controlled metadata as self-authenticating"
+    },
+    {
+      "source": "SLSA Provenance v1 model, https://slsa.dev/spec/v1.2/build-provenance",
+      "classification": "EXTERNAL_METHOD_INPUT_NOT_CLAY_AUTHORITY",
+      "method_donor": "externalParameters are untrusted while builder/control-plane identity represents the trusted platform boundary; output subject identity alone does not establish who was authorized to produce the attestation"
+    }
+  ],
+  "trust_boundary_law": {
+    "statement": "ENTRY_IDENTITY_FROM_CANDIDATE_CONTROLLED_FIELDS != INDEPENDENT_ADMISSION_AUTHENTICATION",
+    "corollary": "A valid event_sha256/admission_sha256 proves deterministic identity of the supplied Entry under the retained canonicalizer; it does not prove that the Entry traversed the authorized OBSERVED admission path.",
+    "required_independence": "The positive witness must be sourced from a controller-held or canonically persisted admission record that the candidate row, observation receipt, model output and untrusted observation producer cannot choose, mint, rewrite or co-mutate during evaluation.",
+    "no_second_authority": "The witness is provenance/admission evidence only. It must reference the existing Typed Entry event/admission identities and existing deterministic/canonical state substrate; it must not become a second truth database or effect path."
+  },
+  "minimum_witness_semantics": {
+    "schema_name_candidate": "ENTITYOS_OBSERVED_ADMISSION_WITNESS/v1",
+    "authority_bound_fields": [
+      "witness_authority_id",
+      "witness_authority_epoch_or_version",
+      "producer_authorization_identity_or_policy_digest"
+    ],
+    "existing_entry_identity_references": [
+      "entry_event_sha256",
+      "entry_admission_sha256",
+      "causal_id",
+      "ingress_id",
+      "entity_generation",
+      "payload_sha256",
+      "provenance_sha256"
+    ],
+    "observation_subject_binding": [
+      "event_id",
+      "event_semantic_sha256",
+      "subject_or_measured_payload_sha256",
+      "observed_time"
+    ],
+    "replay_fields": [
+      "witness_id_or_replay_identity",
+      "parent_witness_or_parent_receipt_id_when_protocol_requires_it"
+    ],
+    "fences": {
+      "canonical_truth_allowed": false,
+      "direct_effect_authority": false,
+      "training_eligible_by_witness_alone": false
+    }
+  },
+  "implementation_constraints": [
+    "Do not derive expected witness identity solely from the candidate row, observation receipt or an Entry object reconstructed from those same candidate-controlled fields.",
+    "Do not accept producer source-code identity as runtime-instance authentication; source authorization and concrete instance admission are separate gates.",
+    "If the witness is cryptographically authenticated, the signing/MAC authority must live outside the candidate-controlled producer/evaluator data path; a key available to that path collapses the independence assumption.",
+    "If the witness is canonically persisted instead of cryptographically signed, verification must query/read the authoritative persisted admission record by exact identity rather than accept a caller-supplied copy as authority.",
+    "Bind the witness to exact generation and exact admission_sha256 so a valid witness cannot be replayed across generation/admission changes.",
+    "Preserve UNKNOWN/fail-closed behavior when witness authority, persisted record, generation or identity cannot be resolved exactly.",
+    "A witness validates provenance/path traversal, not factual correctness of the observation. Truth/evidence qualification remains a separate semantic/evidence gate."
+  ],
+  "adversarial_acceptance_matrix": [
+    {"case": "EXACT_ENTRY_PLUS_EXACT_INDEPENDENT_WITNESS", "expected": "PASS_CANDIDATE_PRE_ADMISSION_ONLY"},
+    {"case": "FORGED_RECEIPT_ONLY", "expected": "REJECT"},
+    {"case": "COHERENT_FORGED_ENTRY_PLUS_FORGED_RECEIPT_NO_EXTERNAL_WITNESS", "expected": "REJECT"},
+    {"case": "CALLER_SUPPLIES_EXPECTED_WITNESS_DIGEST", "expected": "REJECT_AS_AUTHORITY"},
+    {"case": "AUTHORIZED_PRODUCER_SOURCE_BUT_NO_INSTANCE_WITNESS", "expected": "REJECT"},
+    {"case": "VALID_WITNESS_WRONG_ADMISSION_SHA256", "expected": "REJECT"},
+    {"case": "VALID_WITNESS_STALE_GENERATION", "expected": "REJECT"},
+    {"case": "VALID_WITNESS_PAYLOAD_OR_PROVENANCE_SUBSTITUTION", "expected": "REJECT"},
+    {"case": "VALID_WITNESS_REPLAYED_FOR_DIFFERENT_EVENT_SEMANTIC_DIGEST", "expected": "REJECT"},
+    {"case": "CROSS_PRODUCER_WITNESS_SUBSTITUTION", "expected": "REJECT"},
+    {"case": "WITNESS_RECORD_MISSING_OR_AUTHORITY_UNRESOLVED", "expected": "FAIL_CLOSED_UNKNOWN_OR_REJECT"},
+    {"case": "WITNESS_VALID_BUT_OBSERVATION_SEMANTICS_UNSUPPORTED", "expected": "PROVENANCE_PASS_DOES_NOT_MINT_FACT"}
+  ],
+  "falsifier": "This design should be revised if a current mandatory pre-gate path is demonstrated that already supplies an independently controlled/canonically persisted exact admission witness to every retained OBSERVED path and the state-history gate mechanically verifies it.",
+  "training_effect": {
+    "new_positive_rows_generated": 0,
+    "new_hard_negative_rows_generated": 0,
+    "positive_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "reason": "This is a trust-boundary method delta. P0 implementation/execution, P1 history authority, P1.5 labeler repair and corpus leakage closure remain prerequisites to positive training admission."
+  },
+  "relationship_to_v31": {
+    "status": "ADDITIVE_P0_IMPLEMENTATION_CONSTRAINT",
+    "does_not_supersede_v31": true,
+    "does_not_create_second_truth_authority": true,
+    "does_not_authorize_training_or_paid_execution": true
+  },
+  "next_exact_action": "Implement the single retained OBSERVED-to-Typed-Entry bridge so expected witness authority is read from independently controlled/canonically persisted admission state rather than candidate fields; preserve the existing forged-receipt counterexample and add coherent Entry+receipt co-mutation, caller-supplied-witness, source-valid/no-instance-witness and stale-generation tests; execute exact source repository-bound on the admitted zero-cost VPS and mint zero training/whole-system credit."
+}

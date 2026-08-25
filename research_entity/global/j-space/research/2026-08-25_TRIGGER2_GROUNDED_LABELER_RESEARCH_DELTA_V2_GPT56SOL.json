@@ -1,0 +1,147 @@
+{
+  "schema": "CLAY_TRIGGER2_GROUNDED_LABELER_RESEARCH_DELTA/v2",
+  "date": "2026-08-25",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority": {
+    "supervisor_epoch": "8.78",
+    "mode": "FREE_ONLY",
+    "observed_main_before_lane": "ffa12bccbaa83f7fc20dbc2d7ffd310572aec353",
+    "training_executed": false,
+    "accepted_dataset_tokens_minted": 0,
+    "canonical_truth_promotion": false,
+    "unusual_experiment": "NOT_USED_SOURCE_RESEARCH_ONLY"
+  },
+  "research_question": "Can Trigger-2 close the D/E labeler blocker without moving invented labels one field upstream?",
+  "current_evidence": [
+    {
+      "class": "REPO_OBSERVED",
+      "finding": "Supervisor 8.78 quarantines binding-router factorial v3 because conditional nuisance leakage makes target class highly recoverable from nuisance signatures; marginal balance is insufficient."
+    },
+    {
+      "class": "REPO_OBSERVED",
+      "finding": "Current-main adversarial audit ffa12bcc independently finds v1 reference logic circular because update effects and discriminator winner/separation can be caller asserted, and independence/admissibility guards are incomplete."
+    },
+    {
+      "class": "EXTERNAL_METHOD_INPUT",
+      "source": "Wu, Geiger, Milliere, ICML 2025, How Do Transformers Learn Variable Binding in Symbolic Programs (arXiv:2505.20896)",
+      "finding": "Binding training can pass through heuristic phases before a systematic mechanism emerges; causal/mechanistic diagnostics matter in addition to endpoint accuracy."
+    },
+    {
+      "class": "EXTERNAL_METHOD_INPUT",
+      "source": "Wei et al., EMNLP 2023, Symbol tuning improves in-context learning in language models (arXiv:2305.08298)",
+      "finding": "Arbitrary/flipped labels can pressure models to use episode-local mappings rather than semantic label priors; this supports B-style codebook training but does not prove the same mechanism in the target 0.8B model."
+    },
+    {
+      "class": "EXTERNAL_MECHANISM_PLAUSIBILITY_ONLY",
+      "source": "Prakash et al., ICLR 2026, Language Models Use Lookbacks to Track Beliefs (arXiv:2505.14685)",
+      "finding": "A large Llama model exhibits causally studied low-rank binding/lookback mechanisms; this motivates binding probes but cannot be transferred as positive evidence to the selected small model."
+    },
+    {
+      "class": "EXTERNAL_COUNTEREVIDENCE_TO_GLOBAL_DIRECTION_ASSUMPTION",
+      "source": "Hoang et al., 2026 preprint, Sparse Autoencoders Encode Both Concepts and Functions (arXiv:2607.24645)",
+      "finding": "Interpretable features can have context-dependent or diffuse downstream effects, so decodability/readability must not be equated with a stable universal steering direction."
+    }
+  ],
+  "hypothesis": "For synthetic D/E episodes, a narrow executable task-world oracle can generate non-circular branch-update/resolution targets more safely than a generic labeler that accepts caller-supplied semantic effects.",
+  "counterhypothesis": "A perfectly deterministic toy-world oracle may teach a brittle attribute simulator rather than the intended generalized Hyperposition update operation; passing source tests is therefore necessary but far from model/curriculum acceptance.",
+  "v2_design": {
+    "scope": "SYNTHETIC_ATTRIBUTE_WORLD/v1 only; deliberately not a generic semantic oracle",
+    "derivation": "Each branch contains an explicit synthetic task world. An ATTRIBUTE_READ discriminator is executed against every branch; prediction, SUPPORT/FALSIFY relation, branch state update, resolution and pair coverage are derived from those executable relations.",
+    "anti_circularity": [
+      "no caller-supplied SUPPORT/FALSIFY/PROVE label",
+      "no caller-supplied winner branch",
+      "no caller-supplied pair coverage",
+      "inadmissible discriminator attribute fails closed",
+      "zero surviving branches yields contradiction, not forced winner"
+    ],
+    "provenance_independence": [
+      "same evidence_id with changed identity fails closed",
+      "same independence_group reused for a different observation fails closed",
+      "exact replay is idempotent"
+    ],
+    "anti_collapse": [
+      "branch objects are retained after falsification",
+      "salience is attention ordering only",
+      "resolution requires exactly one live branch after derived observations"
+    ]
+  },
+  "artifacts": {
+    "labeler": {
+      "path": "tools/trigger2_semantic_hyperposition_reference_labelers_v2.py",
+      "sha256": "b003b245e2fafc94e96938cab0a6752aaf6c29e6cbd42246373770c31745c7ab"
+    },
+    "tests": {
+      "path": "tests/test_trigger2_reference_labelers_v2.py",
+      "sha256": "3c240f22e1a76cb0fa6903f29c5d317df355c406dd2b035e9d4011ec32546574"
+    },
+    "generator": {
+      "path": "tools/trigger2_grounded_hyperposition_seed_generator_v2.py",
+      "sha256": "f2fb8aafc1ead18511f073de422bc8b34f6bd46917a5203260b162d2386c6d68"
+    },
+    "seed_tests": {
+      "path": "tests/test_trigger2_grounded_hyperposition_seed_v2.py",
+      "sha256": "37b003f555da5e2b1abe2ec7e5d94b75e385199b57e6f5dc0f57f17e40bfa248"
+    },
+    "seed": {
+      "path": "research_entity/global/j-space/research/trigger2_grounded_hyperposition_labeler_seed_v2.jsonl",
+      "sha256": "702c5eab77ccadc6d0faf870991b8822db7328e4d2286480d0dd8fb686db46ad",
+      "materialization_status": "LOCAL_REFERENCE_MATERIALIZATION_REPRODUCIBLE_FROM_COMMITTED_GENERATOR; JSONL_NOT_REQUIRED_FOR_SOURCE_REVIEW"
+    }
+  },
+  "local_static_execution": {
+    "command": "PYTHONPATH=. pytest -q tests/test_trigger2_reference_labelers_v2.py tests/test_trigger2_grounded_hyperposition_seed_v2.py",
+    "result": "15 passed in 0.05s",
+    "scope": "LOCAL_DETERMINISTIC_SOURCE_TEST_ONLY; NOT ADMITTED ENTITYOS/HCU/MODEL/TRAINING RUNTIME EVIDENCE"
+  },
+  "seed": {
+    "rows": 12,
+    "splits": {
+      "TRAIN": 8,
+      "VALIDATION": 2,
+      "HOLDOUT": 2
+    },
+    "training_status": "CANDIDATE_ONLY_BLOCKED",
+    "accepted_dataset_tokens": 0,
+    "positive_jspace_labels": 0
+  },
+  "revision_decisions": [
+    {
+      "artifact": "tools/trigger2_semantic_hyperposition_reference_labelers_v1.py or equivalent v1 source audited by current main",
+      "new_status": "SUPERSEDED_FOR_D_E_ADMISSION_BY_V2_DESIGN_PENDING_REVIEW",
+      "reason": "caller-asserted semantic effects/outcomes are circular"
+    },
+    {
+      "artifact": "tools/trigger2_binding_router_factorial_generator_v3.py",
+      "new_status": "QUARANTINE_UNCHANGED",
+      "reason": "Supervisor 8.78 conditional nuisance leakage remains dispositive"
+    },
+    {
+      "artifact": "trigger2_grounded_hyperposition_labeler_seed_v2.jsonl",
+      "new_status": "CANDIDATE_ONLY_BLOCKED",
+      "reason": "derivation-bound but tiny/narrow; not yet passed current candidate gate, nuisance conditional-independence census, broader generator-family split or model-specific evaluation"
+    }
+  ],
+  "next_gates": [
+    "Run exact-current repository tests after fusion; local source tests alone are insufficient.",
+    "Upgrade semantic-Hyperposition candidate admission to require reference_labeler_schema + derivation domain/receipt for every D/E transition target.",
+    "Add full branch-order/codebook-order/target-slot/format nuisance crossing and nuisance-only/conditional-MI audit to a successor materializer; the 12-row seed is diagnostic only.",
+    "Generalize with separately versioned executable relation/proof evaluators for C symbolic worlds instead of pretending SYNTHETIC_ATTRIBUTE_WORLD/v1 covers C1-C6.",
+    "Freeze C1 pilot/checkpoint/tokenizer/splits/evaluation bytes before any model update; no paid/Together execution.",
+    "After a model run, distinguish semantic state, binding/writeout, D update and E typing with factorized holdouts and causal tests; decodability alone does not mint J-Space causal credit."
+  ],
+  "credits": {
+    "research_delta": 1,
+    "new_candidate_rows": 12,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "materialized_training_rows_committed": 0
+  }
+}

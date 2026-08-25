@@ -60,7 +60,7 @@ Zweck: **Aktivität → ausführbarer Patch/Test → reproduzierbare Architektur
 
 <!-- RESEARCH_DISTILLERY_AUTO:BEGIN -->
 ## AUTO — Research Distillery / kumuliertes Wissens-Dataset
-Aktualisiert: `2026-08-25T16:10:31.485433+00:00`
+Aktualisiert: `2026-08-25T16:25:37.421680+00:00`
 
 **1. wichtigste Quote — Entity-Dataset-Yield:** `0 / 11,621 = 0.000%`  
 Kompressionsfaktor Quelltokens : akzeptierte Dataset-Tokens: **UNKNOWN**.
@@ -112,7 +112,7 @@ GO-Worker emittieren `OPEN_RESEARCH_QUESTIONS_JSON`; die Distillery zerlegt Frag
 
 <!-- SYSTEM_ANALYSIS_AUTO:BEGIN -->
 ## AUTO — Gesamtsystem, GO-Fluss, Script-Auswertung und Sonnet-Vergleich
-Aktualisiert: `2026-08-25T16:10:32.073412+00:00`
+Aktualisiert: `2026-08-25T16:25:39.393748+00:00`
 
 ### 1. Wichtigster Effizienzindikator — was geht im Durchschnitt wieder an `go`?
 **Source → GO Pass-through: 0.000%.** Definition: `accepted dataset-token yield × average distinct accepted-packet coverage delivered to GO macrocycles`.
@@ -151,16 +151,16 @@ Bei 0 akzeptierten Dataset-Tokens ist Source→GO exakt 0%; fehlende Reinjection
 - truth/effect/capability boundaries and falsification
 
 **Top offene Forschungsfragen aus der laufenden Queue:**
-- What is the minimal per-credential economic validation interface that generalizes across OpenRouter (zero-price route), Groq (rate-header), Mistral (fail-closed), and NVIDIA (currently missing) without provider-specific code duplication?
-- Does NVIDIA's API expose a deterministic, machine-readable free-tier indicator in response headers for nemotron-mini-4b-instruct that distinguishes free from paid credentials without requiring a paid-model test call?
-- Wie wirkt sich die Implementierung von JIT-Compilierung auf die Energieeffizienz des Systems aus?
-- Wie kann die JIT-Compilierung für weitere Systemkomponenten optimiert werden?
-- What minimal set of typed FREE_PROVIDER_ADMISSION control‑plane states is required to satisfy the admission boundary without introducing additional runtime overhead?
-- Why is current dataset_yield 0 despite collected source tokens?
-- Which typed effect handler runtime (Koka, Eff, Frank, Multicore OCaml, OCaml 5+) has the minimal runnable kernel that demonstrates typed entry → effect → handler → typed exit with zero dynamic casts, and can its effect row be statically mapped to GRID10 logical cells?
-- Does activation patching on open-weight transformers (e.g., Gemma-2-2B, Llama-3.1-8B) with published causal intervention code (TransformerLens, nnsight, pyvene) reproduce the claimed causal mediation effect size on a clean CPU run, and can the intervention locus be mapped to a J-Space coordinate?
-- Is there a runnable zero-trust credential verifier (e.g., SPIFFE/SPIRE, sigstore/cosign, OPA/Rego) that can cryptographically bind a provider API key to a specific free-tier model+quota at call time without paid fallback, and what is its latency overhead per call?
-- Does the HCU microcode slot 0 have sufficient bandwidth to service prefetch DMA without starving primary compute fabric memory ports under sustained 6000-cell workloads?
+- How does the gated module affect other cognitive domains (e.g., long‑term memory, decision‑making) within the HCU?
+- What are the potential benefits and drawbacks of focusing on resolving specific technical debt or addressing known issues in the project?
+- Does the current HCU admission pipeline distinguish between 'provider not admitted' vs 'provider admitted but credential not bound to free tier' at the EffectJournal granularity required for causal credit?
+- How can immutable lease verification be performed without external state while preserving FREE_ONLY cost constraints?
+- Does the NVIDIA Developer Program free-prototyping entitlement actually cover nemotron-3-super/ultra for this specific credential, or is it limited to smaller models like nemotron-mini-4b (which already shows 400 hard errors)?
+- Does NVIDIA expose a programmatic API to query a credential's current tier/entitlement (free vs paid) at runtime, or is the free-tier claim only documented in static Developer Program terms?
+- How can the project's approach to advancing the highest-information nonduplicate EntityOS blocker be improved or optimized?
+- Which causal intervention method (activation patching vs. counterfactual generation vs. mechanistic probing) yields highest bits-per-parameter for J-Space/GWT credit on 0.8B-8B models?
+- Does recursive critique improve causal reasoning (not just pattern matching) as measured by counterfactual consistency across critique passes?
+- Wie kann die FREE_SWARM_ADMISSION_BOUNDARY_RECEIPT/v1 modifiziert werden, um Geheimnis- und Socket-Tripwires zu integrieren?
 
 ### 5. Fortschritts-Funnel
 | Stufe | Wert |
@@ -192,7 +192,7 @@ Preisannahme: **Claude Sonnet 5 introductory through 2026-08-31: $2/M input + $1
 | Free-Swarm Usage | 31,313,649 input + 8,618,788 output | **$148.82** |
 | Distillery Modellarbeit | 460 input + 1,455 output | **$0.0155** |
 | zusammen, gemessener LLM-Tokenmix | — | **$148.83** |
-| persistenter Repo-Korpus, Output-only Proxy | 13,380,412 Proxy-Tokens | **$133.80** |
+| persistenter Repo-Korpus, Output-only Proxy | 13,380,932 Proxy-Tokens | **$133.81** |
 
 **Nominal vermiedene Sonnet-Kosten, falls diese Calls tatsächlich $0 kosteten: $148.83. Verifiziert gespart: UNKNOWN.** Die aktuelle typed Authority verbietet die nachträgliche FREE-Klassifikation historischer Provider-Traffic; der Korpuswert ist ebenfalls nur ein Neu-Erzeugungsproxy.
 
@@ -205,7 +205,7 @@ Dieser komplette Block ist Pflichtbestandteil des Publishers. Kompakte Tabellen 
 
 <!-- FREE_SWARM_AUTO:BEGIN -->
 ## AUTO — Live-Auswertung
-Aktualisiert: `2026-08-25T16:10:30.121364+00:00`
+Aktualisiert: `2026-08-25T16:25:35.977739+00:00`
 
 | Kennzahl | Wert |
 |---|---:|
@@ -219,8 +219,8 @@ Aktualisiert: `2026-08-25T16:10:30.121364+00:00`
 | Evident akzeptierte Architektur-Deltas | 0 |
 | Nominal/historisch akzeptierte Architektur-Deltas | 1 |
 | Legacy/unqualifizierte nominale Accepts | 1 |
-| Repo-Korpus-Proxy Tokens (4 Zeichen/Token) | 13380412 |
-| Sonnet-5 Output-only Äquivalent des Repo-Proxys | $133.80 |
+| Repo-Korpus-Proxy Tokens (4 Zeichen/Token) | 13380932 |
+| Sonnet-5 Output-only Äquivalent des Repo-Proxys | $133.81 |
 
 ### Modelle
 | Provider | Modell | Requests | Success | 429 | Input | Output | Total |
@@ -286,8 +286,8 @@ Innovativstes Modell: **NO EVIDENCE YET**
 | GPT/ChatGPT | 0 | UNKNOWN | UNKNOWN% |
 
 ### Research-Entity-Output / Sonnet-Kostenproxy
-API-exakte historische Gesamttokens aller früheren Organe bleiben **UNKNOWN**, solange keine vollständige historische Usage-Buchhaltung existiert. Der messbare persistente Repo-Korpus umfasst aktuell 10496 Textdateien / 53521649 Zeichen ≈ **13380412 Tokens** bei der ausdrücklich nur als Proxy verwendeten 4-Zeichen-Näherung.
-Hypothetische reine Output-Neuerzeugung dieses Proxy-Korpus mit Claude Sonnet 5: **$133.80** zum derzeit geltenden Output-Tarif von $10/M Tokens. Input-/Caching-/Toolkosten sind darin nicht enthalten.
+API-exakte historische Gesamttokens aller früheren Organe bleiben **UNKNOWN**, solange keine vollständige historische Usage-Buchhaltung existiert. Der messbare persistente Repo-Korpus umfasst aktuell 10497 Textdateien / 53523726 Zeichen ≈ **13380932 Tokens** bei der ausdrücklich nur als Proxy verwendeten 4-Zeichen-Näherung.
+Hypothetische reine Output-Neuerzeugung dieses Proxy-Korpus mit Claude Sonnet 5: **$133.81** zum derzeit geltenden Output-Tarif von $10/M Tokens. Input-/Caching-/Toolkosten sind darin nicht enthalten.
 <!-- FREE_SWARM_AUTO:END -->
 
 

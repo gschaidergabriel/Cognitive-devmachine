@@ -669,6 +669,19 @@
     "counterhypothesis": "Verifying choices[0] is sufficient because additional choices can be ignored; falsified for FRANK's receipt claim because a second distinct completion crossed the execution boundary without validation or provenance.",
     "uncertainty": "Multi-choice generation remains intentionally unsupported; a future adapter must type, verify and receipt every returned choice before requesting n greater than one."
   },
+  "response_choice_index_provenance": {
+    "checked_at": "2026-08-25",
+    "claim": "FRANK v0.1 requires its single non-streaming Chat Completions choice to assert the exact built-in integer index=0 before content can reach VERIFIED or DONE.",
+    "sources": [
+      "https://docs.nvidia.com/nim/large-language-models/latest/reference/api-reference.html",
+      "https://docs.vllm.ai/en/v0.16.0/api/vllm/entrypoints/openai/chat_completion/protocol/"
+    ],
+    "external_evidence": "NVIDIA identifies vLLM as the NIM inference backend and directs full schemas to it. The official vLLM ChatCompletionResponseChoice declares index as a required integer, while FRANK requests n=1 and supports only choice zero.",
+    "internal_measurement": "A status-200 response with exactly one otherwise valid Chat Completion choice but no index previously returned success and reached VERIFIED and DONE.",
+    "executable_evidence": "test_missing_response_choice_index_cannot_reach_verified_state",
+    "counterhypothesis": "Exactly one returned choice makes its index safely inferable; falsified for receipt provenance because FRANK promoted an index the provider response never asserted despite the backend schema requiring it.",
+    "uncertainty": "No Ubuntu NVIDIA live receipt is available on this host; the required index is supported by the official backend contract and local executable evidence. Multi-choice handling remains outside the v0.1 text adapter."
+  },
   "http_200_provider_error_envelope": {
     "checked_at": "2026-08-25",
     "claim": "A syntactically valid HTTP 200 JSON body whose object discriminator is error, or which carries an explicit top-level error member, is classified as provider_error. It remains EXECUTED but cannot reach VERIFIED or DONE and does not create HTTP-status evidence that was not received.",

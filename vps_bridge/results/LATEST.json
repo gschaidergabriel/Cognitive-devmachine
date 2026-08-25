@@ -1,17 +1,20 @@
 {
   "schema": "CLAY_VPS_RECEIPT/v4",
-  "command_id": "gpt56sol-native-cvec-compile-harness-20260825",
-  "command_sha256": "581937ccae9bac857d2cca0ee5ff26450486c8dc8745f35b9c9295739a6eb5e2",
-  "started_at": "2026-08-25T03:42:30.375042+00:00",
-  "finished_at": "2026-08-25T03:42:31.519486+00:00",
+  "command_id": "gpt56sol-native-cvec-z2-sync-current-main-20260825",
+  "command_sha256": "993dfeca8cbe3cbf89196b3f9643fad784acc8eb0da3887161ef80a6789567c5",
+  "started_at": "2026-08-25T03:43:05.790363+00:00",
+  "finished_at": "2026-08-25T03:43:07.932864+00:00",
   "status": "PASS",
   "exit_code": 0,
-  "op": "exec",
-  "stdout_sha256": "e8ca6993dcecb82593a137e5ba8058c5564f69f4acd89ddecd21c9075e679987",
+  "op": "canonical_sync",
+  "stdout_sha256": "72440cc91443f93ad9430f20d7e35971c5ec9ec8a2d2f1616af8eceb605eaa98",
   "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-  "stdout_tail": "COMPILE_NATIVE_HARNESS=PASS\nbinary_sha256=faeacd6f5c3fbc7669921bc5f260c5014bdc1567ff1b366a8b2e2e89797c8ad7\n\tlinux-vdso.so.1 (0x00007ffd975c2000)\n\tlibllama.so.0 => /cache/clay-qwen06-native/build/bin/libllama.so.0 (0x0000704bfaa00000)\n\tlibggml.so.0 => /cache/clay-qwen06-native/build/bin/libggml.so.0 (0x0000704bfaee5000)\n\tlibstdc++.so.6 => /lib/x86_64-linux-gnu/libstdc++.so.6 (0x0000704bfa782000)\n\tlibgcc_s.so.1 => /lib/x86_64-linux-gnu/libgcc_s.so.1 (0x0000704bfaeb3000)\n\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x0000704bfa570000)\n\tlibggml-base.so.0 => /cache/clay-qwen06-native/build/bin/libggml-base.so.0 (0x0000704bfade2000)\n\tlibm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x0000704bfa487000)\n\t/lib64/ld-linux-x86-64.so.2 (0x0000704bfaf00000)\n\tlibggml-cpu.so.0 => /cache/clay-qwen06-native/build/bin/libggml-cpu.so.0 (0x0000704bfa2fc000)\n\tlibgomp.so.1 => /lib/x86_64-linux-gnu/libgomp.so.1 (0x0000704bfa2a6000)\n",
+  "stdout_tail": "277d39f6d1f7b130b44fc9fdc1c93231d95bbd64\n",
   "stderr_tail": "",
-  "meta": {},
+  "meta": {
+    "head": "277d39f6d1f7b130b44fc9fdc1c93231d95bbd64",
+    "ref": "main"
+  },
   "execution_boundary": "ROOT_INSIDE_ROOTLESS_PODMAN_OR_EXPLICIT_REPO_CONTROL_OP",
   "canonical_credit_minted": 0
 }

@@ -1,0 +1,151 @@
+{
+  "schema": "CLAY_FORSCHUNGSRUN_1_OUTPUT_METRIC_CONTEXT_BOUNDARY/v1",
+  "date": "2026-08-25",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "user_trigger": "forschungsrun 1",
+  "persistent_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "stage": "ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP",
+  "authority_epoch_observed": "8.78",
+  "execution_mode": "FREE_ONLY",
+  "canonical_main_observed_before_write": "68e149835a77de8ef1f9c9a0b15b9f589a009153",
+  "scope": "QWEN3_0_6B_TRIGGER1_NATIVE_CVEC_OUTPUT_MEASUREMENT_VALIDITY",
+  "observed_current_source": {
+    "semantic_executor": {
+      "path": "tools/trigger1_local_qwen06_native_semantic_counterbalanced_execute.py",
+      "blob_sha": "07287f9ffd7d775a5f5c924cc191d6e4ee9e8738",
+      "measurement": "For each case, target_score is the mapped target code's single next-token logit minus the mean of the other two selected code-token logits."
+    },
+    "native_harness": {
+      "path": "tools/trigger1_native_llamacpp_cvec_logits.cpp",
+      "blob_sha": "c9f649b8a803ff999b07e9c40c90f5f92e08c86d",
+      "token_triplet_resolution": "The harness selects the first globally single-token distinct triplet among bare A/B/C, space-prefixed A/B/C, then 1/2/3.",
+      "context_boundary_check_present": false,
+      "generated_text_agreement_check_present": false,
+      "multi_codebook_family_replication_present": false,
+      "important_positive": "The harness already rejects non-single-token or non-distinct triplets, so raw token-count asymmetry inside the selected triplet is not the primary gap."
+    },
+    "promotion_context": {
+      "latest_fusion_commit_observed": "68e149835a77de8ef1f9c9a0b15b9f589a009153",
+      "semantic_target_counterbalance_guard_present": true,
+      "lexical_deconfound_research_present": true,
+      "token_scope_boundary_research_present": true,
+      "semantic_simplex_dimensionality_research_present": true,
+      "canonical_semantics_promotion": false,
+      "jspace_model_runtime_credit": 0,
+      "training_credit": 0,
+      "whole_entityos_hcu_runtime_credit": 0
+    }
+  },
+  "new_measurement_gap": {
+    "id": "FIRST_TOKEN_CODE_METRIC_CONTEXT_BOUNDARY_AND_BEHAVIORAL_AGREEMENT_GAP",
+    "statement": "A globally valid one-token symbol is not necessarily the context-faithful completion token for the exact prompt boundary. The current harness resolves one token form globally, then scores only its next-token logit; it does not prove that this token form is the model's actual code realization at the exact prompt boundary or that the logit winner agrees with emitted text.",
+    "why_counterbalance_does_not_fully_close_it": "Rotating semantic targets across A/B/C cancels a fixed label prior better than a fixed mapping, but does not guarantee cancellation when intervention changes whitespace/style/token-form preference or when the scored token form is not the form used by generation. A treatment-dependent change in output form can therefore move the measured logits without a matching semantic code selection behavior.",
+    "second_gap": "Replication is currently tied to one answer-symbol family. Even exact A/B/C counterbalancing can remain family-specific if the intervention interacts with alphabetic option-symbol priors or symbol binding rather than the requested semantic state."
+  },
+  "counterhypothesis": {
+    "id": "H0_COUNTERBALANCED_MATCHED_BASELINE_MAKES_SYMBOL_FORM_IRRELEVANT",
+    "statement": "Because every intervention is compared with a matched baseline on the exact same prompt and A/B/C targets are counterbalanced, any stable symbol-token preference should cancel sufficiently for the causal contrast.",
+    "falsifier": "If context-bound tokenization, equivalent codebook families and emitted-text decisions preserve the same treatment-by-semantic-target interaction and sign under the frozen intervention, the simpler single-token logit metric is supported as an adequate surrogate at this scope."
+  },
+  "primary_hypothesis": {
+    "id": "H1_SEMANTIC_CVEC_EFFECT_SURVIVES_OUTPUT_REALIZATION_CHANGES",
+    "statement": "A genuine semantic steering effect should survive changes in answer-symbol realization and should agree between context-valid code likelihoods and actual constrained/generated code behavior, not only within one globally resolved A/B/C token triplet.",
+    "prediction": "The preregistered semantic target x intervention interaction keeps its direction across at least two lexically disjoint codebook families with exact prompt-boundary tokenization, and the same target preference is observed in generated/constrained code selection."
+  },
+  "external_primary_inputs": [
+    {
+      "source": "Wang et al. (2024), My Answer is C: First-Token Probabilities Do Not Match Text Answers in Instruction-Tuned Language Models, arXiv:2402.14499",
+      "source_class": "PRIMARY_PAPER",
+      "relevance": "Reports severe mismatch between first-token MCQ probability evaluation and text answers, including under increasingly constrained prompts; motivates a generated-text agreement gate rather than treating next-token logits as behavioral ground truth."
+    },
+    {
+      "source": "Sanz-Guerrero, Bui, von der Wense (2025), Mind the Gap: A Closer Look at Tokenization for Multiple-Choice Question Answering with LLMs, arXiv:2509.15020",
+      "source_class": "PRIMARY_PAPER",
+      "relevance": "Shows that seemingly minor answer-boundary whitespace/tokenization choices can materially change MCQA accuracy and rankings; directly motivates exact prompt-boundary tokenization attestation."
+    },
+    {
+      "source": "Zheng et al. (2023), Large Language Models Are Not Robust Multiple Choice Selectors, arXiv:2309.03882",
+      "source_class": "PRIMARY_PAPER",
+      "relevance": "Attributes option-selection bias partly to token priors over option identifiers; motivates disjoint codebook-family replication rather than relying only on within-family label rotation."
+    },
+    {
+      "source": "Wang et al. (2024), Look at the Text: Instruction-Tuned Language Models are More Robust Multiple Choice Selectors than You Think, arXiv:2404.08382",
+      "source_class": "PRIMARY_PAPER",
+      "relevance": "Finds text-answer evaluation more robust than first-token probability evaluation in mismatch regimes; supports keeping a behavioral emission readout alongside logits."
+    }
+  ],
+  "proposed_discriminator": {
+    "name": "CONTEXT_BOUNDARY_AWARE_MULTI_CODEBOOK_GENERATION_AGREEMENT/v1",
+    "phase_0_freeze": [
+      "Freeze exact Qwen3-0.6B checkpoint/GGUF, tokenizer, llama.cpp build, layer, token-scope condition, vector bytes, gain-selection rule, semantic-target factorial and all existing controls before opening fresh holdout.",
+      "Do not choose symbol family, whitespace form, decoding parser or threshold after observing holdout effects."
+    ],
+    "phase_1_context_boundary_attestation": [
+      "For every exact evaluation prompt and candidate output symbol, attest that tokenize(prompt + completion_form) has the exact tokenize(prompt) sequence as a prefix and yields a declared suffix token sequence; otherwise reject that prompt/form combination rather than silently scoring a globally tokenizable symbol.",
+      "Prefer a deliberately stable answer boundary such as a frozen output delimiter whose tokenization is tested at source/runtime identity.",
+      "Persist exact prompt token IDs, completion suffix token IDs, token texts and tokenizer identity in the receipt."
+    ],
+    "phase_2_codebook_family_replication": {
+      "minimum": "At least two disjoint symbol families that are context-boundary valid and exactly counterbalanced, for example alphabetic and numeric/symbolic families when the exact tokenizer supports them cleanly.",
+      "mapping": "Within each family, rotate requested semantic targets independently over the three code identities exactly as in the semantic-target x output-code factorial.",
+      "decision": "A semantic claim requires the target-specific causal interaction to retain direction across codebook families; family-specific effect or sign reversal is negative evidence for output-symbol independence."
+    },
+    "phase_3_dual_readout": {
+      "logit_readout": "Use the context-attested completion token sequence, not a globally chosen token form. For single-token suffixes, preserve the current margin metric; for multi-token suffixes, use a preregistered length-normalized sequence log-likelihood rule or reject multi-token families.",
+      "behavioral_readout": "Run a separately declared constrained-choice decode over only the three exact context-valid completions, and also record a short greedy text emission parsed by a frozen strict code parser where feasible.",
+      "agreement_gate": "The semantic-intervention ordering must agree between the preregistered logit/sequence metric and constrained code selection. Unconstrained text disagreement is preserved as negative evidence and blocks claims about emitted behavior even if internal/logit causal measurement remains positive."
+    },
+    "phase_4_controls": [
+      "BASELINE",
+      "CLASS_OR_PLUS_VECTOR",
+      "SIGN_FLIP",
+      "NULL_VECTOR",
+      "ORTHOGONAL_SAME_NORM",
+      "PERMUTED_SAME_NORM",
+      "LABEL_ONLY_NUISANCE_VECTOR",
+      "NONSEMANTIC_CODEBOOK_TASK"
+    ],
+    "phase_5_decision": {
+      "promotion_support": "Target-specific effect survives semantic-target counterbalance, lexical-family holdout, token-scope/norm calibration, context-boundary attestation, at least two codebook families and dual readout agreement with nuisance controls negative.",
+      "measurement_only": "Logit effect survives but constrained/generated code choice does not: retain internal/logit measurement credit only; do not call it emitted semantic behavior.",
+      "reject_output_independence": "Effect is materially dependent on symbol family, whitespace/token form or output parser: classify current result as output-realization-sensitive and do not promote canonical semantics."
+    }
+  },
+  "relationship_to_existing_forschungsrun_1_deltas": {
+    "semantic_target_counterbalance": "COMPLEMENTARY_NOT_DUPLICATE",
+    "lexical_deconfound": "COMPLEMENTARY_NOT_DUPLICATE",
+    "token_scope_matching": "COMPLEMENTARY_NOT_DUPLICATE",
+    "residual_norm_operating_point_calibration": "COMPLEMENTARY_NOT_DUPLICATE",
+    "semantic_simplex_rank_test": "COMPLEMENTARY_NOT_DUPLICATE",
+    "reason": "Those gates address what semantic contrast is built, where/how it is injected and whether semantic targets are independently varied. This gate asks whether the downstream measurement itself is context-valid and invariant to output-symbol realization."
+  },
+  "implementation_delta_recommended": {
+    "source_only_first": [
+      "Add a deterministic token-boundary auditor for the exact prompt x codebook combinations.",
+      "Extend the native harness header/observation receipt with exact context-attested token forms and IDs rather than only one globally resolved triplet.",
+      "Add a source regression that rejects a completion form whose prompt-plus-completion tokenization does not preserve the prompt token prefix.",
+      "Extend the promotion gate to require codebook-family replication and readout-agreement metadata before emitted-semantic promotion."
+    ],
+    "runtime_intervention_required_now": false,
+    "reason": "The source-level measurement contract can be made fail-closed without spending the unusual-experiment budget. Executing the new native intervention/readout discriminator remains a separate coordinated experiment."
+  },
+  "unusual_experiment": {
+    "executed_by_this_organ": false,
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "This standalone research trigger does not expose a canonical shared immutable macrocycle/request identity plus successful create-only unusual-experiment lease. No new native intervention was executed."
+  },
+  "credit_change": {
+    "new_runtime_credit": 0,
+    "existing_native_llamacpp_cvec_component_credit_revoked": false,
+    "jspace_model_runtime_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "training_credit": 0,
+    "canonical_semantics_promotion": false
+  },
+  "research_delta": "Forschungsrun 1 identifies a downstream measurement-validity boundary not closed by existing counterbalancing: the native harness scores one globally resolved answer-token triplet but does not attest exact prompt-boundary completion tokenization, replicate across disjoint output-code families, or require agreement with constrained/generated code behavior. The next promotion discriminator should therefore be context-boundary aware, codebook-family replicated and dual-readout, while retaining all existing semantic, lexical, token-scope, norm and nuisance controls.",
+  "next_exact_action": "Implement a deterministic source-only context-boundary/codebook auditor and fail-closed promotion metadata first; then, only under canonical unusual-experiment coordination, run the frozen multi-codebook dual-readout native cvec discriminator on fresh holdout."
+}

@@ -1,0 +1,38 @@
+{
+  "schema": "TRIGGER2_EVIDENCE_SAFETY_SEED_VALIDATION_RECEIPT/v1",
+  "date": "2026-08-25",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "trigger": "triggerwort 2",
+  "dataset": {
+    "path": "research_entity/global/j-space/research/trigger2_evidence_safety_swarm_seed_v2.jsonl",
+    "dataset_commit": "eab1b8f48e0c4f3646aa76cc50afd248304c4e0a",
+    "sha256": "91cfc249156813a6b2ecf6f5196462d1bf10e207594a9fcd86270848529072c2",
+    "rows_total": 36
+  },
+  "validation": {
+    "method": "LOCAL_SOURCE_EQUIVALENT_VALIDATION_AGAINST_FETCHED_ENTITYOS_HCU_TRAININGTRACE_CANDIDATE_GATE_V1_AND_TRIGGER2_FAMILY_SPLIT_LINTER_V1_INVARIANTS",
+    "row_gate_pass": 36,
+    "row_gate_fail": 0,
+    "family_split_leaks": 0,
+    "provenance_ancestry_split_leaks": 0,
+    "duplicate_prompts": 0,
+    "duplicate_prompt_target_pairs": 0,
+    "result": "PASS"
+  },
+  "render_contract": {
+    "model_input_fields": ["prompt"],
+    "target_field": "target",
+    "metadata_fields_are_not_model_input": true,
+    "reason": "family_id, provenance_ancestry_id, split, evidence_basis and swarm_review are governance/evidence metadata. Serializing them into the model prompt would introduce shortcut/leakage channels and teach dataset bookkeeping instead of the intended epistemic behavior."
+  },
+  "scope": {
+    "candidate_schema_validation_only": true,
+    "canonical_dataset_admission": false,
+    "accepted_dataset_tokens_minted": 0,
+    "runtime_credit_minted": 0,
+    "jspace_model_runtime_credit_minted": 0,
+    "training_credit_minted": 0,
+    "whole_entityos_hcu_credit_minted": 0
+  },
+  "next_gate": "Use only prompt->target rendering and pass the candidate set through evidence-qualified TrainingTrace -> Forge -> exactly-one Distillery packet admission. Require accepted_dataset_tokens > 0 and semantic replay +0 before dataset utility credit. Exact Qwen3.5 J-Space supervision remains closed until same-model causal receipt binding exists."
+}

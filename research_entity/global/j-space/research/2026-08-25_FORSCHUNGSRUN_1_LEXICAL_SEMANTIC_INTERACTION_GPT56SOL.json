@@ -1,0 +1,133 @@
+{
+  "schema": "CLAY_FORSCHUNGSRUN_1_LEXICAL_SEMANTIC_INTERACTION/v1",
+  "date": "2026-08-25",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "authority_epoch_observed": "8.78",
+  "canonical_main_observed": "6ff57c01a8ef641e51568cce18a04178cf724116",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "execution_mode": "FREE_ONLY",
+  "user_goal": "Forschungsrun 1; remove the highest-value J-Space/Qwen3-0.6B scientific blocker possible within current authority.",
+  "current_runtime_boundary": {
+    "qwen06_hidden_state_specificity": "PASS_FRESH_DISJOINT_HOLDOUT_NONTERMINAL_COMPONENT",
+    "qwen06_native_llamacpp_cvec": "PASS_FRESH_HOLDOUT_MATCHED_CONTROLS_NATIVE_COMPONENT",
+    "canonical_semantics_promotion": false,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0
+  },
+  "current_main_scientific_lineage": {
+    "semantic_counterbalanced_executor_commit": "254dfc1529c6a795b15114cd1ed2bba728d1b1a6",
+    "semantic_counterbalanced_executor": "tools/trigger1_local_qwen06_native_semantic_counterbalanced_execute.py",
+    "generic_compliance_counterhypothesis_commit": "db7b5be9c10da3353646846ad16932f7b5d0bcb3",
+    "observed_basis": "AFFIRMATIVE - 0.5*(NEGATIVE+NEUTRAL), derived from internal activation families",
+    "observed_output_counterbalance": "AFFIRMATIVE maps once each to A/B/C per calibration and holdout split",
+    "observed_remaining_limit": "all current calibration and holdout cases request AFFIRMATIVE"
+  },
+  "new_material_finding": {
+    "classification": "LEXICAL_EMBEDDING_UNEMBEDDING_AND_AXIS_GEOMETRY_CONFOUND",
+    "finding_1": "The derivation prompts explicitly contain AFFIRMATIVE, NEGATIVE or NEUTRAL in every semantic family, and evaluation templates reuse those semantic class words. Therefore the activation contrast is not lexical-family independent.",
+    "finding_2": "Official Qwen3-0.6B configuration reports hidden_size=1024, num_hidden_layers=28 and tie_word_embeddings=true. With tied input/output embeddings, uses_output_head_weights=false is necessary but does not by itself exclude an embedding/unembedding-adjacent lexical shortcut caused by repeated class-token identity.",
+    "finding_3": "The current one-dimensional vector contrasts AFFIRMATIVE with the centroid of NEGATIVE+NEUTRAL. Its sign flip therefore points toward the combined non-affirmative centroid, not uniquely toward NEGATIVE. A three-class semantic inversion claim is underdetermined on this axis.",
+    "finding_4": "The existing 3-case calibration and 3-case fresh holdout are exactly disjoint by seed/family but remain template-narrow; they are insufficient to discriminate robust semantic transfer from family-local behavior if promotion is intended to mean a general semantic causal direction."
+  },
+  "external_research_inputs": [
+    {
+      "source": "Qwen/Qwen3-0.6B official model card/config",
+      "claim_used": "0.6B dense causal LM; 28 layers; hidden size 1024; tied word embeddings",
+      "use": "model-specific lexical/unembedding confound analysis"
+    },
+    {
+      "source": "Rimsky et al., Steering Llama 2 via Contrastive Activation Addition, ACL 2024 / arXiv:2312.06681",
+      "claim_used": "CAA derives steering directions from contrastive activation differences and evaluates causal steering",
+      "use": "supports matched contrastive derivation rather than unrelated class prototypes"
+    },
+    {
+      "source": "Park, Choe & Veitch, The Linear Representation Hypothesis and the Geometry of Large Language Models, arXiv:2311.03658",
+      "claim_used": "linear concept representations are formalized with counterfactual pairs that vary the concept while preserving other factors; geometry/inner product choice matters",
+      "use": "supports binary causally-separable primary axis and paired counterfactual derivation"
+    },
+    {
+      "source": "Stoehr et al., Activation Scaling for Steering and Interpreting Language Models, Findings EMNLP 2024 / arXiv:2410.04962",
+      "claim_used": "successful interventions should be evaluated for effectiveness, faithfulness and minimality rather than output change alone",
+      "use": "supports off-target neutrality and matched nuisance controls"
+    },
+    {
+      "source": "ggml-org/llama.cpp current llama_adapter_cvec implementation",
+      "claim_used": "native cvec is applied additively at selected layers and llama_set_adapter_cvec binds layer-range/vector data",
+      "use": "supports retaining six matched vector controls in native runtime"
+    }
+  ],
+  "counterhypotheses": [
+    {
+      "id": "H0_GENERIC_COMPLIANCE",
+      "statement": "The cvec increases requested-code compliance/confidence/task engagement rather than AFFIRMATIVE-specific semantics.",
+      "falsifier": "balance requested semantic targets; require treatment-by-semantic-target interaction rather than aggregate correct-code uplift"
+    },
+    {
+      "id": "H0_LEXICAL_CLASS_TOKEN",
+      "statement": "The derived direction is substantially driven by lexical identity of class words or their embedding/unembedding-adjacent representation rather than a transferable semantic relation.",
+      "falsifier": "derive from matched counterfactual prompts with no class-label or output-code tokens and require vocabulary/template-disjoint holdout transfer"
+    },
+    {
+      "id": "H0_NONAFFIRMATIVE_CENTROID",
+      "statement": "SIGN_FLIP is only movement toward a NEGATIVE+NEUTRAL centroid and therefore cannot be interpreted as a specific semantic inverse.",
+      "falsifier": "first test a binary AFFIRMATIVE<->NEGATIVE axis with NEUTRAL as off-axis control; only later promote a two-dimensional three-class plane"
+    },
+    {
+      "id": "H0_TEMPLATE_LOCAL",
+      "statement": "The effect is specific to the tiny prompt/template family and does not transfer as a semantic relation.",
+      "falsifier": "multi-domain lexical-disjoint holdout families precommitted before runtime"
+    }
+  ],
+  "recommended_successor_discriminator": {
+    "name": "QWEN06_NATIVE_CVEC_BINARY_LEXICAL_DISJOINT_SEMANTIC_INTERACTION/v1",
+    "primary_axis": "AFFIRMATIVE<->NEGATIVE",
+    "off_axis_control": "NEUTRAL",
+    "derivation": [
+      "matched counterfactual prompt pairs with identical surrounding structure",
+      "multiple semantic domains and paraphrase families",
+      "no literal AFFIRMATIVE/NEGATIVE/NEUTRAL or output-code tokens in derivation prompts",
+      "compute per-pair activation differences then aggregate and normalize",
+      "bind exact prompt, tokenization, activation and vector receipts"
+    ],
+    "evaluation": [
+      "equal positive and negative requested semantic targets",
+      "Latin-square opaque output-code mapping independent of semantic target",
+      "prefer a second disjoint output-token alphabet as replication arm",
+      "fresh holdout vocabulary and templates disjoint from derivation and calibration",
+      "NEUTRAL cases used as faithfulness/off-axis controls"
+    ],
+    "matched_controls": [
+      "BASELINE",
+      "+VECTOR",
+      "SIGN_FLIP",
+      "NULL_VECTOR",
+      "ORTHOGONAL_SAME_NORM",
+      "PERMUTED_SAME_NORM"
+    ],
+    "primary_statistic": "predeclared treatment_by_semantic_target_interaction",
+    "positive_prediction": "+VECTOR increases the positive-target margin while SIGN_FLIP increases the negative-target margin on vocabulary-disjoint holdout; nuisance controls do not reproduce the interaction",
+    "generic_compliance_prediction": "+VECTOR raises requested-code margins similarly for both target semantics or fails to show the declared interaction",
+    "lexical_shortcut_prediction": "effect collapses under vocabulary/template-disjoint holdout or is reproduced by label-token/unembedding-adjacent control",
+    "diagnostic_only": "measure vector projection/cosine against derivation-lexeme and output-code input/output embedding rows; do not treat Euclidean projection alone as causal proof",
+    "optional_sensitivity": "orthogonalize the candidate vector against a preregistered class-lexeme embedding/unembedding subspace and test whether causal effect survives"
+  },
+  "promotion_law_recommended": "OUTPUT_CODE_COUNTERBALANCE_AND_USES_OUTPUT_HEAD_WEIGHTS_FALSE_ARE_NOT_SUFFICIENT_FOR_GENERAL_SEMANTIC_CAUSAL_PROMOTION; REQUIRE_SEMANTIC_TARGET_BALANCE_PLUS_LEXICAL_FAMILY_DISJOINT_CAUSAL_TRANSFER",
+  "coordination": {
+    "existing_research_pr": 1919,
+    "action": "review added to existing PR instead of creating a duplicate implementation lane",
+    "unusual_experiment_executed": false,
+    "unusual_experiment_status": "NOT_EXECUTED_REQUIRES_CANONICAL_COORDINATION_BEFORE_NEXT_INTERVENTION"
+  },
+  "credits": {
+    "existing_native_cvec_component_credit_revoked": false,
+    "new_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "training_credit": 0,
+    "canonical_semantics_promotion": false
+  },
+  "next_exact_action": "implement a source-level binary lexical-disjoint semantic-target interaction successor and regression on exact-current main, without launching the model; execute only after canonical unusual-experiment coordination succeeds"
+}

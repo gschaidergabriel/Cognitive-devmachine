@@ -17,17 +17,19 @@ import shutil
 import subprocess
 import time
 
-import run_free_evidence_forge_safe_871 as safe
-from free_swarm_backfill_provenance import reconcile_candidate_source_counts
+import forge_runtime_material_identity_878 as material_identity
+import free_swarm_backfill_exhaustiveness_878 as exhaustiveness_policy
+import free_swarm_backfill_provenance as backfill_provenance
 import free_swarm_historical_backfill as historical_backfill_core
-from free_swarm_backfill_exhaustiveness_878 import install as install_exhaustiveness
+import run_free_evidence_forge_safe_871 as safe
 
 # The active Forge consumer must share the producer's conservative completion
 # semantics. A chunk is never SATURATED from an implicit/one-off zero-novel pass.
-install_exhaustiveness(historical_backfill_core)
+exhaustiveness_policy.install(historical_backfill_core)
 backfill_metrics = historical_backfill_core.backfill_metrics
 ensure_schema = historical_backfill_core.ensure_schema
 ingest_artifact_history = historical_backfill_core.ingest_artifact_history
+reconcile_candidate_source_counts = backfill_provenance.reconcile_candidate_source_counts
 
 base = safe.base
 _ORIGINAL_CONNECT = base.connect
@@ -53,11 +55,12 @@ def _git_output(root: Path, *args: str) -> str:
 
 
 def _source_identity() -> dict[str, object]:
-    """Bind claimed canonical source to the tracked bytes observed at process start.
+    """Bind claimed source to material runtime bytes observed at process start.
 
-    HEAD/tree alone are insufficient when a tracked worktree is locally modified:
-    those refs still name canonical bytes while Python may execute different bytes.
-    Keep execution available for research, but make promotion eligibility fail closed.
+    Runtime telemetry intentionally writes tracked files in this repository, so a
+    globally clean tracked worktree is not a valid executable-identity predicate.
+    Promotion eligibility instead requires every declared material Forge module to
+    match the exact blob selected by HEAD. Global dirtiness remains diagnostic.
     """
     root = Path(__file__).resolve().parents[1]
     rel = _ENTRYPOINT.relative_to(root).as_posix()
@@ -68,6 +71,8 @@ def _source_identity() -> dict[str, object]:
         "source_entrypoint_blob": None,
         "runtime_entrypoint_git_blob": None,
         "entrypoint_matches_source_tree": False,
+        "material_sources_match": False,
+        "material_source_binding": None,
         "source_identity_admitted": False,
         "source_identity_reason": "SOURCE_IDENTITY_UNRESOLVED",
     }
@@ -75,17 +80,36 @@ def _source_identity() -> dict[str, object]:
         head = _git_output(root, "rev-parse", "HEAD")
         tree = _git_output(root, "rev-parse", "HEAD^{tree}")
         tracked_status = _git_output(root, "status", "--porcelain=v1", "--untracked-files=no")
-        source_blob = _git_output(root, "rev-parse", f"HEAD:{rel}")
-        runtime_blob = _git_output(root, "hash-object", str(_ENTRYPOINT))
         dirty = bool(tracked_status)
+        binding = material_identity.bind_material_sources(
+            root,
+            [
+                __file__,
+                material_identity.__file__,
+                exhaustiveness_policy.__file__,
+                backfill_provenance.__file__,
+                historical_backfill_core.__file__,
+                safe.__file__,
+                base.__file__,
+            ],
+        )
+        material_match = binding.get("material_sources_match") is True
+        entry = next(
+            (row for row in binding.get("material_sources", []) if row.get("path") == rel),
+            {},
+        )
+        source_blob = entry.get("committed_blob")
+        runtime_blob = entry.get("runtime_blob")
         entrypoint_matches = bool(source_blob and runtime_blob and source_blob == runtime_blob)
-        admitted = bool(head and tree and not dirty and entrypoint_matches)
-        if dirty:
-            reason = "TRACKED_WORKTREE_DIRTY"
+        admitted = bool(head and tree and material_match and entrypoint_matches)
+        if not material_match:
+            reason = str(binding.get("reason") or "MATERIAL_SOURCE_BLOB_MISMATCH")
         elif not entrypoint_matches:
             reason = "ENTRYPOINT_BLOB_MISMATCH"
+        elif dirty:
+            reason = "MATERIAL_SOURCES_MATCH_HEAD_NONMATERIAL_TRACKED_DIRTY"
         elif admitted:
-            reason = "CLEAN_TRACKED_TREE_AND_ENTRYPOINT_MATCH_HEAD"
+            reason = "MATERIAL_SOURCES_MATCH_HEAD"
         else:
             reason = "SOURCE_IDENTITY_UNRESOLVED"
         return {
@@ -95,6 +119,8 @@ def _source_identity() -> dict[str, object]:
             "source_entrypoint_blob": source_blob,
             "runtime_entrypoint_git_blob": runtime_blob,
             "entrypoint_matches_source_tree": entrypoint_matches,
+            "material_sources_match": material_match,
+            "material_source_binding": binding,
             "source_identity_admitted": admitted,
             "source_identity_reason": reason,
         }
@@ -120,6 +146,8 @@ def runtime_identity() -> dict[str, object]:
         "source_entrypoint_blob": _RUNTIME_SOURCE_IDENTITY.get("source_entrypoint_blob"),
         "runtime_entrypoint_git_blob": _RUNTIME_SOURCE_IDENTITY.get("runtime_entrypoint_git_blob"),
         "entrypoint_matches_source_tree": _RUNTIME_SOURCE_IDENTITY.get("entrypoint_matches_source_tree"),
+        "material_sources_match": _RUNTIME_SOURCE_IDENTITY.get("material_sources_match"),
+        "material_source_binding": _RUNTIME_SOURCE_IDENTITY.get("material_source_binding"),
         "source_identity_admitted": _RUNTIME_SOURCE_IDENTITY.get("source_identity_admitted"),
         "source_identity_reason": _RUNTIME_SOURCE_IDENTITY.get("source_identity_reason"),
         "process_generation_identity": _PROCESS_GENERATION_ID,

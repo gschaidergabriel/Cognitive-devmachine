@@ -1,0 +1,76 @@
+{
+  "schema": "CLAY_TRIGGER2_CURRICULUM_ANCESTRY_GOODHART_SWARM_AUDIT/v1",
+  "date": "2026-08-25",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority": {
+    "supervisor_epoch": "8.78",
+    "mode": "FREE_ONLY",
+    "canonical_main_observed_before_write": "8a857e72d0be4f1f48946e707b4257e123a23bd0"
+  },
+  "dataset": {
+    "path": "research_entity/global/j-space/research/trigger2_curriculum_ancestry_goodhart_seed_v1.jsonl",
+    "sha256": "63b62c23db042b8f831526cfdca35aff1d33cfa25ecf4a9ce944a75b7734ea6e",
+    "rows": 12,
+    "method_rows": 6,
+    "hard_negative_rows": 6,
+    "families": 6,
+    "split_counts": {"TRAIN": 12},
+    "candidate_gate_pass": true,
+    "candidate_gate_failures": []
+  },
+  "swarm_roles": [
+    {
+      "role": "EVIDENCE_BOUNDARY_REVIEWER",
+      "verdict": "PASS",
+      "finding": "Rows are METHOD_ONLY/R2 or SYNTHETIC_HARD_NEGATIVE/R3 and mint no factual/runtime/training credit."
+    },
+    {
+      "role": "DUPLICATION_REVIEWER",
+      "verdict": "PASS_NEW_DELTA",
+      "finding": "Targets curriculum-level correlated-row overweighting rather than repeating the already-covered T01/T05/T06 evidence-classification examples."
+    },
+    {
+      "role": "GOODHART_REVIEWER",
+      "verdict": "PASS",
+      "finding": "Explicitly separates verbal protocol competence, rationale quality and row-frequency dominance from the target episode-local binder behavior."
+    },
+    {
+      "role": "SPLIT_PROVENANCE_REVIEWER",
+      "verdict": "PASS",
+      "finding": "Teaches cross-file descendants to remain ancestry-bound rather than using file layout as independence."
+    },
+    {
+      "role": "RETENTION_CALIBRATION_REVIEWER",
+      "verdict": "PASS_METHOD_ONLY",
+      "finding": "Flags over-abstention/denial risk from an oversized fail-closed overlay; does not assert an achieved calibration result."
+    },
+    {
+      "role": "FINAL_ADJUDICATOR",
+      "verdict": "ACCEPT_CANDIDATE_SEED_NOT_CANONICAL_DATASET",
+      "finding": "Useful as a small curriculum-integrity overlay after canonical admission; it is not a replacement for the dynamic binding core and does not resolve the 46-atom blocker."
+    }
+  ],
+  "research_delta": {
+    "hypothesis": "A swarm can produce individually valid but highly correlated training rows whose raw multiplicity Goodharts SFT loss, causing protocol/rationale competence or refusal bias to dominate the intended dynamic binding objective.",
+    "counterhypothesis": "Ordinary shuffle/deduplication may already make this effect negligible, so ancestry-aware weighting could be unnecessary complexity.",
+    "discriminator": "Before Full-FT, compare raw-row sampling against ancestry-capped sampling on identical train tokens; evaluate frozen unseen-template/atom binding, ALLOW-DENY-ABSTAIN calibration, protocol-integrity probes and retention. Do not open final holdout for mixture selection.",
+    "promotion_boundary": "This is a method/design hypothesis. No empirical benefit is claimed until a separately preregistered training comparison is run on an authorized zero-cost local path."
+  },
+  "credits": {
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0
+  },
+  "unresolved": [
+    "Exact 46 accepted ABI atom lexemes plus selected tokenizer revalidation remain unavailable on current accessible source surfaces.",
+    "Forge->Distillery evidence-qualified acceptance remains at zero accepted dataset tokens.",
+    "Frozen T01 negative remains unchanged; live strict J-Space promotion path still requires end-to-end retained-gate resolution."
+  ],
+  "next_exact_action": "Treat ancestry-aware curriculum weighting as a preprocessing/sampler invariant candidate; first resolve exact ABI atom materialization and canonical candidate admission, then compare raw versus ancestry-capped sampling only on a fresh preregistered zero-cost local training pilot without using the final holdout for selection."
+}

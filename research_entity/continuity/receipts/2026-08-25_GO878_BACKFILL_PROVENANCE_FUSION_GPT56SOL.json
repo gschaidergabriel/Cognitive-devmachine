@@ -1,0 +1,77 @@
+{
+  "schema": "CLAY_GO878_BACKFILL_PROVENANCE_FUSION_RECEIPT/v1",
+  "authority_epoch": "8.78",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "trigger": "go",
+  "organ": "GPT-5.6-Sol",
+  "observed_main_before_fusion": "9239370999c192328f33eb47fa3bbb7e88ab39a7",
+  "observed_main_after_reentry": "3b3deaf9dc55a525509b30be3f73f1f563adf941",
+  "supervisor_inbox_selected": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_78.json",
+  "finding": {
+    "classification": "REPLAY_NONIDEMPOTENT_SCHEDULING_METADATA",
+    "source": "tools/free_swarm_historical_backfill.py::_insert_candidate",
+    "mechanism": "An existing execution-equivalent candidate increments source_count before candidate_sources can establish whether the provenance event is actually new. Re-reading one historical source through multiple chunks/extractors can therefore increase scheduling weight without adding independent evidence.",
+    "counterhypothesis": "The inflation might be harmless if source_count were never used for scheduling. Rejected by exact-current backlog-first source: candidate selection orders by priority then source_count.",
+    "risk": "Repeated historical replay can bias Forge backlog order toward duplicated provenance and weaken Goodman-style evidence collapse."
+  },
+  "delta": {
+    "helper": "tools/free_swarm_backfill_provenance.py",
+    "active_path": "tools/run_free_evidence_forge_backfill.py",
+    "regression": "tests/test_free_swarm_backfill_provenance_878.py",
+    "rule": "For candidates with provenance links, scheduling source_count is reconciled to COUNT(DISTINCT source_event_id) after historical ingestion. Candidates with no candidate_sources links are left unchanged.",
+    "metric": "historical_backfill_source_counts_reconciled",
+    "fusion_commits": [
+      "ca7829f01727644bd3b835f975851397bdce3dae",
+      "28f4401489e5d562a219d34e61c765a204916ec1",
+      "25ce07e151749b7814e20f778f3034a7ca1e7370"
+    ],
+    "exact_current_active_path_blob": "57193844ea24d5ff5061387f1694af0a30aaa98a",
+    "donor_pr": "gschaidergabriel/clay-global-research-entity#1851",
+    "donor_state_after_fusion": "CLOSED_UNMERGED_TO_AVOID_SECOND_SEMANTIC_LANE",
+    "second_forge_authority_created": false,
+    "second_truth_or_effect_authority_created": false
+  },
+  "validation": {
+    "scope": "LOCAL_DETERMINISTIC_LOGIC_ONLY_PLUS_EXACT_CURRENT_SOURCE_REENTRY",
+    "local_checks": "3_LOGICAL_CHECKS_PASS",
+    "cases": [
+      "same source_event_id across multiple chunks/extractors counts once",
+      "reconciliation is idempotent on immediate replay",
+      "legacy candidate with no provenance links is not silently set to zero"
+    ],
+    "exact_current_source_reentry": "PASS_ACTIVE_WIRING_OBSERVED_AT_3b3deaf9dc55a525509b30be3f73f1f563adf941",
+    "terminal_historical_backfill_runtime_receipt": "NOT_OBSERVED",
+    "runtime_credit_added": 0
+  },
+  "go_tracks": {
+    "track_a": "ENTITYOS_EXECUTABLE_CONVERGENCE_ADVANCED_SOURCE_CONTROL_PLANE",
+    "track_b": "HCU_NO_CHANGE_WITH_REASON",
+    "track_b_reason": "The durable delta is Forge historical evidence scheduling/provenance, not a new HCU or Typed Entry primitive. The retained HCU donor lane remains #1263 and duplicate HCU implementation would not close the current conversion/runtime gate.",
+    "track_b_next_discriminator": "After terminal historical backfill/replay-v2 evidence, bind converted evidence through the existing Typed Entry -> verified engine/load -> GRID10 -> InferenceReceipt path rather than opening a second ingress lane.",
+    "track_c": "TRAINING_READINESS_NO_CHANGE_WITH_REASON",
+    "track_c_reason": "No terminal exact-current historical saturation/replay-v2/Forge-to-Distillery positive-token witness exists, and no reproducible shared immutable macrocycle identity is exposed for a canonical unusual-experiment lease.",
+    "track_c_next_discriminator": "Obtain terminal exact-current conversion receipts first; keep local Qwen3-0.6B J-Space work zero-cost, separate and nonpromoting until coordination and source-runtime binding gates are satisfied."
+  },
+  "coordination": {
+    "shared_immutable_macrocycle_identity": null,
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_experiments_executed": 0,
+    "ordinary_work_class": "SOURCE_REVIEW_FUSION_REGRESSION_ALLOWED",
+    "overlapping_donor_handling": "PR1851_SALVAGED_AND_CLOSED_AFTER_FUSION"
+  },
+  "credits": {
+    "historical_backfill_runtime": 0,
+    "distillery_replay_v2_runtime": 0,
+    "provider_runtime": 0,
+    "whole_entityos_hcu_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "On an already-authorized terminal zero-cost execution surface, run the exact-current backlog-first historical backfill to saturation twice and prove source_count does not increase on the second pass while emitting FREE_SWARM_HISTORICAL_BACKFILL_RECEIPT/v1; then execute replay-v2 migration/concurrency/reopen and Forge ACCEPT -> exactly one Distillery packet -> positive tokens -> semantic replay +0.",
+  "evidence_boundary": "This receipt establishes a current-main source/control-plane correction plus local deterministic logic checks only. It is not historical-backfill saturation evidence, replay-v2 runtime evidence, EntityOS/HCU runtime acceptance, model-specific J-Space causality, provider runtime evidence or training evidence."
+}

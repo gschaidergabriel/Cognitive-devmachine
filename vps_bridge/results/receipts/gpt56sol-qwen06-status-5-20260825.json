@@ -1,0 +1,17 @@
+{
+  "schema": "CLAY_VPS_RECEIPT/v4",
+  "command_id": "gpt56sol-qwen06-status-5-20260825",
+  "command_sha256": "de0c4e0e201a05f4ea9e66951214f2856a26b704a95d057394b93f60961e7522",
+  "started_at": "2026-08-25T03:00:36.720948+00:00",
+  "finished_at": "2026-08-25T03:00:39.817914+00:00",
+  "status": "PASS",
+  "exit_code": 0,
+  "op": "exec",
+  "stdout_sha256": "ebb8eb176e87ec1d24ade3fce02f80046cad3de60dbd7718efe3ff5af0e38a36",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout_tail": "status_probe=5\n533312 bash -lc set -euo pipefail; ROOT=/cache/clay-qwen06; VENV=$ROOT/venv; HFCACHE=$ROOT/hf; OUT=/workspace/qwen06-gpt56sol-direct/out; cd /workspace/clay-global-research-entity; $VENV/bin/python -m pip install -q --upgrade pip wheel setuptools; if ! $VENV/bin/python -c \"import torch, transformers, huggingface_hub, safetensors, accelerate\" >/dev/null 2>&1; then $VENV/bin/python -m pip install -q --upgrade torch transformers huggingface_hub safetensors accelerate; fi; unset OPENAI_API_KEY OPENAI_API_KEYS ANTHROPIC_API_KEY ANTHROPIC_API_KEYS GROQ_API_KEY GROQ_API_KEYS MISTRAL_API_KEY MISTRAL_API_KEYS NVIDIA_API_KEY NVIDIA_API_KEYS NVIDIA_NIM_API_KEY NGC_API_KEY OPENROUTER_API_KEY OPENROUTER_API_KEYS TOGETHER_API_KEY TOGETHER_API_KEYS HF_TOKEN HUGGING_FACE_HUB_TOKEN HUGGINGFACE_HUB_TOKEN || true; export HF_HUB_DISABLE_IMPLICIT_TOKEN=1 HF_HUB_DISABLE_TELEMETRY=1 TOKENIZERS_PARALLELISM=false OMP_NUM_THREADS=2 MKL_NUM_THREADS=2 HF_HOME=$HFCACHE; set +e; $VENV/bin/python tools/trigger1_local_qwen06_midlayer_causal_execute.py --output-dir $OUT --cache-dir $HFCACHE; rc=$?; set -e; echo $rc > $OUT/exit_code.txt; exit $rc\n533323 /cache/clay-qwen06/venv/bin/python -m pip install -q --upgrade torch transformers huggingface_hub safetensors accelerate\n533899 bash -lc echo status_probe=5; pgrep -af 'trigger1_local_qwen06_midlayer_causal_execute|pip install|qwen06-gpt56sol' || true; echo '--- log ---'; tail -240 /workspace/qwen06-gpt56sol-direct/execution.log 2>/dev/null || true; echo '--- outputs ---'; find /workspace/qwen06-gpt56sol-direct/out -maxdepth 1 -type f -printf '%f %s bytes\\n' 2>/dev/null | sort || true; echo '--- cache ---'; du -sh /cache/clay-qwen06 /cache/clay-qwen06/hf 2>/dev/null || true; echo '--- versions ---'; /cache/clay-qwen06/venv/bin/python -c 'import torch,transformers,huggingface_hub; print(torch.__version__, transformers.__version__, huggingface_hub.__version__)' 2>/dev/null || true; echo '--- exit ---'; cat /workspace/qwen06-gpt56sol-direct/out/exit_code.txt 2>/dev/null || true; echo '--- resources ---'; df -h /cache; free -h\n--- log ---\n--- outputs ---\n--- cache ---\n4.7G\t/cache/clay-qwen06\n--- versions ---\n--- exit ---\n--- resources ---\nFilesystem      Size  Used Avail Use% Mounted on\n/dev/sda1       193G   47G  147G  24% /cache\n               total        used        free      shared  buff/cache   available\nMem:            15Gi       5.6Gi       498Mi       2.4Mi       9.8Gi         9Gi\nSwap:             0B          0B          0B\n",
+  "stderr_tail": "",
+  "meta": {},
+  "execution_boundary": "ROOT_INSIDE_ROOTLESS_PODMAN_OR_EXPLICIT_REPO_CONTROL_OP",
+  "canonical_credit_minted": 0
+}

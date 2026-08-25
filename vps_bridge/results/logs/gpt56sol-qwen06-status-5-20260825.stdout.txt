@@ -1,0 +1,16 @@
+status_probe=5
+533312 bash -lc set -euo pipefail; ROOT=/cache/clay-qwen06; VENV=$ROOT/venv; HFCACHE=$ROOT/hf; OUT=/workspace/qwen06-gpt56sol-direct/out; cd /workspace/clay-global-research-entity; $VENV/bin/python -m pip install -q --upgrade pip wheel setuptools; if ! $VENV/bin/python -c "import torch, transformers, huggingface_hub, safetensors, accelerate" >/dev/null 2>&1; then $VENV/bin/python -m pip install -q --upgrade torch transformers huggingface_hub safetensors accelerate; fi; unset OPENAI_API_KEY OPENAI_API_KEYS ANTHROPIC_API_KEY ANTHROPIC_API_KEYS GROQ_API_KEY GROQ_API_KEYS MISTRAL_API_KEY MISTRAL_API_KEYS NVIDIA_API_KEY NVIDIA_API_KEYS NVIDIA_NIM_API_KEY NGC_API_KEY OPENROUTER_API_KEY OPENROUTER_API_KEYS TOGETHER_API_KEY TOGETHER_API_KEYS HF_TOKEN HUGGING_FACE_HUB_TOKEN HUGGINGFACE_HUB_TOKEN || true; export HF_HUB_DISABLE_IMPLICIT_TOKEN=1 HF_HUB_DISABLE_TELEMETRY=1 TOKENIZERS_PARALLELISM=false OMP_NUM_THREADS=2 MKL_NUM_THREADS=2 HF_HOME=$HFCACHE; set +e; $VENV/bin/python tools/trigger1_local_qwen06_midlayer_causal_execute.py --output-dir $OUT --cache-dir $HFCACHE; rc=$?; set -e; echo $rc > $OUT/exit_code.txt; exit $rc
+533323 /cache/clay-qwen06/venv/bin/python -m pip install -q --upgrade torch transformers huggingface_hub safetensors accelerate
+533899 bash -lc echo status_probe=5; pgrep -af 'trigger1_local_qwen06_midlayer_causal_execute|pip install|qwen06-gpt56sol' || true; echo '--- log ---'; tail -240 /workspace/qwen06-gpt56sol-direct/execution.log 2>/dev/null || true; echo '--- outputs ---'; find /workspace/qwen06-gpt56sol-direct/out -maxdepth 1 -type f -printf '%f %s bytes\n' 2>/dev/null | sort || true; echo '--- cache ---'; du -sh /cache/clay-qwen06 /cache/clay-qwen06/hf 2>/dev/null || true; echo '--- versions ---'; /cache/clay-qwen06/venv/bin/python -c 'import torch,transformers,huggingface_hub; print(torch.__version__, transformers.__version__, huggingface_hub.__version__)' 2>/dev/null || true; echo '--- exit ---'; cat /workspace/qwen06-gpt56sol-direct/out/exit_code.txt 2>/dev/null || true; echo '--- resources ---'; df -h /cache; free -h
+--- log ---
+--- outputs ---
+--- cache ---
+4.7G	/cache/clay-qwen06
+--- versions ---
+--- exit ---
+--- resources ---
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/sda1       193G   47G  147G  24% /cache
+               total        used        free      shared  buff/cache   available
+Mem:            15Gi       5.6Gi       498Mi       2.4Mi       9.8Gi         9Gi
+Swap:             0B          0B          0B

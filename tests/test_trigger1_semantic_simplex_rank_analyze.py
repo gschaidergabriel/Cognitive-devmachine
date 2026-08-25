@@ -85,6 +85,16 @@ class SemanticSimplexRankTests(unittest.TestCase):
         )
         self.assertGreater(result["randomization"]["theoretical_min_p_for_mode"], 0.05)
 
+    def test_three_family_rank1_design_is_also_underpowered(self):
+        data = payload("rank1", 3)
+        data["decision_config"]["min_matched_families"] = 3
+        result = mod.analyze(data)
+        self.assertEqual(result["verdict"], "UNRESOLVED")
+        self.assertIn(
+            "EXACT_SIGNFLIP_DESIGN_CANNOT_REACH_DECLARED_ALPHA_AT_THIS_FAMILY_COUNT",
+            result["reasons"],
+        )
+
     def test_missing_class_fails_closed(self):
         data = payload("rank1", 6)
         data["rows"] = [

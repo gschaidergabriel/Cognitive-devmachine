@@ -1,14 +1,18 @@
-import copy
-import math
+import importlib.util
+from pathlib import Path
+
 import pytest
 
-from tools.trigger2_four_quadrant_selection_eval_v1 import (
-    challenger_response,
-    grade_normalized,
-    selection_gate,
-    summarize,
-    validate_manifest,
-)
+MODULE_PATH = Path(__file__).resolve().parents[1] / "tools" / "trigger2_four_quadrant_selection_eval_v1.py"
+SPEC = importlib.util.spec_from_file_location("trigger2_four_quadrant_selection_eval_v1", MODULE_PATH)
+MODULE = importlib.util.module_from_spec(SPEC)
+assert SPEC and SPEC.loader
+SPEC.loader.exec_module(MODULE)
+challenger_response = MODULE.challenger_response
+grade_normalized = MODULE.grade_normalized
+selection_gate = MODULE.selection_gate
+summarize = MODULE.summarize
+validate_manifest = MODULE.validate_manifest
 
 
 def family(fid, quadrant, gold_action, gold_answer, db_value, simulation_value):

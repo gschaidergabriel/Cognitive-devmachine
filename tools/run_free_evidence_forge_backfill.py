@@ -43,24 +43,66 @@ def _entrypoint_sha256() -> str:
         return "UNREADABLE"
 
 
-def _source_identity() -> dict[str, str | None]:
+def _git_output(root: Path, *args: str) -> str:
+    return subprocess.check_output(
+        ["git", "-C", str(root), *args],
+        text=True,
+        stderr=subprocess.DEVNULL,
+        timeout=3,
+    ).strip()
+
+
+def _source_identity() -> dict[str, object]:
+    """Bind claimed canonical source to the tracked bytes observed at process start.
+
+    HEAD/tree alone are insufficient when a tracked worktree is locally modified:
+    those refs still name canonical bytes while Python may execute different bytes.
+    Keep execution available for research, but make promotion eligibility fail closed.
+    """
+    root = Path(__file__).resolve().parents[1]
+    rel = _ENTRYPOINT.relative_to(root).as_posix()
+    empty = {
+        "head": None,
+        "tree": None,
+        "tracked_worktree_dirty": None,
+        "source_entrypoint_blob": None,
+        "runtime_entrypoint_git_blob": None,
+        "entrypoint_matches_source_tree": False,
+        "source_identity_admitted": False,
+        "source_identity_reason": "SOURCE_IDENTITY_UNRESOLVED",
+    }
     try:
-        root = Path(__file__).resolve().parents[1]
-        head = subprocess.check_output(
-            ["git", "-C", str(root), "rev-parse", "HEAD"],
-            text=True,
-            stderr=subprocess.DEVNULL,
-            timeout=3,
-        ).strip()
-        tree = subprocess.check_output(
-            ["git", "-C", str(root), "rev-parse", "HEAD^{tree}"],
-            text=True,
-            stderr=subprocess.DEVNULL,
-            timeout=3,
-        ).strip()
-        return {"head": head, "tree": tree}
-    except Exception:
-        return {"head": None, "tree": None}
+        head = _git_output(root, "rev-parse", "HEAD")
+        tree = _git_output(root, "rev-parse", "HEAD^{tree}")
+        tracked_status = _git_output(root, "status", "--porcelain=v1", "--untracked-files=no")
+        source_blob = _git_output(root, "rev-parse", f"HEAD:{rel}")
+        runtime_blob = _git_output(root, "hash-object", str(_ENTRYPOINT))
+        dirty = bool(tracked_status)
+        entrypoint_matches = bool(source_blob and runtime_blob and source_blob == runtime_blob)
+        admitted = bool(head and tree and not dirty and entrypoint_matches)
+        if dirty:
+            reason = "TRACKED_WORKTREE_DIRTY"
+        elif not entrypoint_matches:
+            reason = "ENTRYPOINT_BLOB_MISMATCH"
+        elif admitted:
+            reason = "CLEAN_TRACKED_TREE_AND_ENTRYPOINT_MATCH_HEAD"
+        else:
+            reason = "SOURCE_IDENTITY_UNRESOLVED"
+        return {
+            "head": head,
+            "tree": tree,
+            "tracked_worktree_dirty": dirty,
+            "source_entrypoint_blob": source_blob,
+            "runtime_entrypoint_git_blob": runtime_blob,
+            "entrypoint_matches_source_tree": entrypoint_matches,
+            "source_identity_admitted": admitted,
+            "source_identity_reason": reason,
+        }
+    except Exception as exc:
+        return {
+            **empty,
+            "source_identity_reason": f"SOURCE_IDENTITY_UNRESOLVED:{type(exc).__name__}",
+        }
 
 
 _RUNTIME_SOURCE_IDENTITY = _source_identity()
@@ -74,6 +116,12 @@ def runtime_identity() -> dict[str, object]:
         "runtime_entrypoint_sha256": _RUNTIME_ENTRYPOINT_SHA256,
         "source_commit": _RUNTIME_SOURCE_IDENTITY.get("head"),
         "source_tree": _RUNTIME_SOURCE_IDENTITY.get("tree"),
+        "tracked_worktree_dirty": _RUNTIME_SOURCE_IDENTITY.get("tracked_worktree_dirty"),
+        "source_entrypoint_blob": _RUNTIME_SOURCE_IDENTITY.get("source_entrypoint_blob"),
+        "runtime_entrypoint_git_blob": _RUNTIME_SOURCE_IDENTITY.get("runtime_entrypoint_git_blob"),
+        "entrypoint_matches_source_tree": _RUNTIME_SOURCE_IDENTITY.get("entrypoint_matches_source_tree"),
+        "source_identity_admitted": _RUNTIME_SOURCE_IDENTITY.get("source_identity_admitted"),
+        "source_identity_reason": _RUNTIME_SOURCE_IDENTITY.get("source_identity_reason"),
         "process_generation_identity": _PROCESS_GENERATION_ID,
         "supervisor_generation_or_start_nonce": os.getenv("CLAY_SUPERVISOR_GENERATION_NONCE"),
         "status_writer_schema_version": "BACKLOG_FIRST_FORGE_STATUS/v2",

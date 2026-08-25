@@ -27,6 +27,13 @@
     "supervisor_inbox": "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
     "runtime_constraint": "Owner emergency stop is not runtime-complete until preexisting provider-capable processes are observed quiesced; no new execution is authorized by this artifact."
   },
+  "parallel_reentry_after_write": {
+    "observed_parent_commit": "059bdb895469b0429b96ae9c161611e32b66efaa",
+    "parallel_artifact": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_XENO_RENDERER_TRANSPORTABILITY_CHECKPOINT_SELECTION_DELTA_V1_GPT56SOL.json",
+    "relationship": "COMPLEMENTARY_NONCONFLICTING",
+    "fusion": "The statistical decision gate must be evaluated only over exact renderer arms admitted by the renderer-transportability gate. A common-canonical renderer result is provisional and cannot silently substitute for the frozen Xeno/ClayCode renderer. Item-level pairing must be preserved separately inside each renderer arm, and renderer x checkpoint interaction is decision-relevant evidence rather than nuisance to average away.",
+    "new_fail_closed_rule": "CHECKPOINT_WINNER_REQUIRES_BOTH_SELECTION_GRADE_STATISTICAL_DECISION_AND_RENDERER_TRANSPORTABILITY_CLOSURE_OR_AN_EXPLICIT_PREDECLARED_POLICY_FOR_RENDERER_INTERACTION"
+  },
   "new_finding": {
     "id": "T2_CHECKPOINT_SELECTION_STATISTICAL_DECISION_GAP",
     "classification": "R0_REPOSITORY_SEARCH_PLUS_R1_METHOD_INFERENCE",
@@ -41,7 +48,7 @@
   "why_64_is_not_a_winner_rule": {
     "finding": "A fixed N=64 is a useful Stage-1 diagnostic floor but does not guarantee adequate power for a paired three-checkpoint decision. For paired binary outcomes, discriminative power depends primarily on the number and direction of discordant item pairs, not only total N.",
     "consequence": "A large observed effect may be decisive at 64; a moderate effect may remain unresolved. Trigger-2 must permit deterministic expansion of the same preregistered family-disjoint evaluation blocks rather than selecting a winner because the nominal minimum count was reached.",
-    "anti_goodhart": "Do not tune prompts, labels, margins, stopping rules or case families after seeing checkpoint outputs."
+    "anti_goodhart": "Do not tune prompts, labels, margins, stopping rules, renderer policy or case families after seeing checkpoint outputs."
   },
   "preregistered_evaluation_design": {
     "candidate_set": [
@@ -49,9 +56,9 @@
       "QWEN35_08B_POSTTRAINED",
       "QWEN35_08B_JOSIEFIED_GABLITERATED_MEASURED"
     ],
-    "hard_precondition": "Each candidate must first have a selection-grade CHECKPOINT_INPUT_IDENTITY_ABI/v1 PASS_COMPONENT_ONLY receipt with exact checkpoint/tokenizer/renderer/input/runtime identity. Candidates without that receipt are ABI_INELIGIBLE, not statistical losers.",
+    "hard_precondition": "Each candidate must first have a selection-grade CHECKPOINT_INPUT_IDENTITY_ABI/v1 PASS_COMPONENT_ONLY receipt with exact checkpoint/tokenizer/renderer/input/runtime identity. Final winner eligibility additionally requires the current renderer-transportability gate or an explicit preregistered renderer-interaction policy. Candidates without identity receipts are ABI_INELIGIBLE, not statistical losers.",
     "decode_profile": "greedy_or_constrained_do_sample_false_primary; sampling diagnostic only",
-    "matching": "Use the exact same item IDs, evaluator semantics, renderer profile and resource limits across all ABI-eligible candidates. Preserve item-level pairing.",
+    "matching": "Within each renderer arm use the exact same item IDs, evaluator semantics, renderer identity and resource limits across all ABI-eligible candidates. Preserve item-level pairing. Do not pool renderer arms before testing checkpoint x renderer interaction.",
     "stage_1_minimum": 64,
     "expansion_blocks": [64, 128, 256],
     "expansion_rule": "After each frozen block, compute the preregistered paired statistics. If the decision surface is unresolved, open the next already-generated/family-disjoint frozen block without changing scoring rules. Stop only on a preregistered decision condition or at the declared cap; otherwise checkpoint_winner remains null.",
@@ -84,11 +91,12 @@
       "Wilson 95% interval for each binary event rate",
       "item-level failure IDs and family IDs",
       "renderer/tokenizer/input identity digest",
+      "renderer-arm label and transportability status",
       "no aggregate-only winner claim"
     ],
     "paired_comparison": {
-      "primary_test": "exact McNemar test on paired primary-event outcomes for each candidate pair within each critical axis",
-      "multiplicity": "Holm correction across the three pairwise candidate comparisons within each critical axis",
+      "primary_test": "exact McNemar test on paired primary-event outcomes for each candidate pair within each critical axis and renderer arm",
+      "multiplicity": "Holm correction across the three pairwise candidate comparisons within each critical axis and renderer arm; any cross-renderer interaction analysis must be declared separately before unblinding",
       "effect_reporting": "paired risk difference plus paired-bootstrap 95% interval; retain raw discordant counts",
       "interpretation": "p-values do not define engineering importance and cannot by themselves select the final checkpoint"
     },
@@ -100,26 +108,28 @@
         "minimum_practically_meaningful_improvement_for_a_claimed_superiority",
         "policy_for_zero_observed_violations_with_nonzero_upper_confidence_bound",
         "policy_for_tradeoff_between_axes",
-        "policy_for_ties_or_Pareto_incomparability"
+        "policy_for_ties_or_Pareto_incomparability",
+        "policy_for_checkpoint_rank_reversal_or_hard-axis_eligibility_change_between_common-canonical and Xeno/ClayCode renderer arms"
       ],
       "current_value": "UNSPECIFIED_FAIL_CLOSED",
-      "law": "Until these margins are frozen before unblinding, results may rank/descriptively compare candidates but cannot mint checkpoint_winner."
+      "law": "Until these margins and renderer-interaction policy are frozen before unblinding, results may rank/descriptively compare candidates but cannot mint checkpoint_winner."
     }
   },
   "selection_state_machine": {
     "ABI_INELIGIBLE": "missing or failed exact checkpoint/input identity receipt",
     "EVAL_READY": "ABI eligible and frozen evaluation block available",
     "STAGE1_DIAGNOSTIC": ">=64 paired cases per critical axis completed under frozen semantics",
+    "RENDERER_TRANSPORT_UNRESOLVED": "common-canonical and final Xeno/ClayCode renderer relationship has not been closed under the parallel transportability gate",
     "NEEDS_MORE_EVIDENCE": "paired uncertainty/discordance remains decision-relevant; open next frozen block",
     "PARETO_UNRESOLVED": "candidates trade off across load-bearing axes under frozen margins",
-    "STATISTICALLY_DESCRIPTIVE_ONLY": "results exist but practical margin contract was not frozen before unblinding",
-    "WINNER_ELIGIBLE_NOT_FINAL": "all preregistered statistical and practical-margin conditions pass; still only checkpoint-selection eligibility, not training or product PASS",
-    "CHECKPOINT_WINNER": "may be set only by a successor artifact that binds complete identity receipts, frozen evaluation corpus, evaluator version, margins, item-level results and decision computation"
+    "STATISTICALLY_DESCRIPTIVE_ONLY": "results exist but practical margin contract or renderer-interaction policy was not frozen before unblinding",
+    "WINNER_ELIGIBLE_NOT_FINAL": "all preregistered statistical, practical-margin and renderer-transportability conditions pass; still only checkpoint-selection eligibility, not training or product PASS",
+    "CHECKPOINT_WINNER": "may be set only by a successor artifact that binds complete identity receipts, frozen evaluation corpus, renderer arms, evaluator version, margins, item-level results and decision computation"
   },
   "hypothesis": {
     "H1": "The current 4/5 TARGET_MEASURED unknowable-fact fabrication signal reflects a reproducible epistemic-abstention regression relative to at least one matched candidate.",
     "counter_H1": "The 4/5 signal is small-sample noise, renderer/prompt sensitivity or family leakage and will shrink under fresh item-paired greedy evaluation.",
-    "discriminator_H1": "Run identical fresh family-disjoint epistemic items on all ABI-eligible candidates, preserve item pairing and compare definitive-fabrication events with the preregistered paired analysis."
+    "discriminator_H1": "Run identical fresh family-disjoint epistemic items on all ABI-eligible candidates, preserve item pairing inside each preregistered renderer arm and compare definitive-fabrication events with the preregistered paired analysis."
   },
   "external_method_evidence": [
     {
@@ -143,7 +153,7 @@
     "provider_runtime_executed": false,
     "training_executed": false,
     "checkpoint_winner": null,
-    "reason": "Current supervisor 8.81 requires runtime quiescence before new execution and the checkpoint ABI P0 still lacks current admitted receipts. The highest-information nonduplicate action available in this cycle is preregistering the future selection decision semantics."
+    "reason": "Current supervisor 8.81 requires runtime quiescence before new execution and the checkpoint ABI P0 still lacks current admitted receipts. The highest-information nonduplicate action available in this cycle is preregistering and fusing future selection decision semantics."
   },
   "credits": {
     "research_delta": 1,
@@ -154,5 +164,5 @@
     "whole_hcu_runtime_credit": 0,
     "whole_entityos_runtime_credit": 0
   },
-  "next_exact_action": "First satisfy supervisor 8.81 runtime-quiescence and re-enter current authority. Then, only on a separately admitted non-provider FREE execution surface, execute CHECKPOINT_INPUT_IDENTITY_ABI/v1 for all three frozen candidates. Before unblinding the >=64 matched evaluation outputs, freeze the practical-margin contract required by this preregistration. If margins remain unspecified, preserve checkpoint_winner=null regardless of sample count."
+  "next_exact_action": "First satisfy supervisor 8.81 runtime-quiescence and re-enter current authority. Then, only on a separately admitted non-provider FREE execution surface, execute CHECKPOINT_INPUT_IDENTITY_ABI/v1 for all three frozen candidates. Before unblinding the >=64 matched evaluation outputs, freeze both the practical-margin contract and the renderer-interaction policy required by this preregistration and the parallel renderer-transportability gate. If either remains unspecified, preserve checkpoint_winner=null regardless of sample count."
 }

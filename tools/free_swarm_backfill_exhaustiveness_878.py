@@ -2,13 +2,14 @@
 """Fail-closed exhaustiveness semantics for historical Free-Swarm extraction.
 
 Supervisor 8.78 requires the historical corpus to be re-evaluated rather than merely
-cursor-scanned.  A chunk therefore must not become SATURATED just because one later
-extraction pass produced zero novel candidates.  Saturation requires two consecutive
+cursor-scanned. A chunk therefore must not become SATURATED just because one later
+extraction pass produced zero novel candidates. Saturation requires two consecutive
 zero-novel passes whose batch envelopes explicitly assert exhaustive=true.
 
 This module is a small successor patch installed into the shared historical-backfill
-module by both the producer scheduler and the backlog-first Forge.  It preserves the
-single Forge SQLite authority and makes no provider/model/network call itself.
+module by both the producer scheduler and the backlog-first Forge. It preserves the
+single Forge SQLite authority, the pre-existing exact chunk/source/next-pass causal
+binding, and makes no provider/model/network call itself.
 """
 from __future__ import annotations
 
@@ -22,27 +23,42 @@ def install(backfill: Any) -> None:
     """Install conservative extraction completion semantics into *backfill*.
 
     The original 3-pass ceiling could close a 14k-character chunk after at most a
-    handful of bounded outputs.  Keep a finite safety ceiling, but make it large
+    handful of bounded outputs. Keep a finite safety ceiling, but make it large
     enough for repeated <=8-delta passes and require an explicit exhaustive signal
     before any zero-novel pass counts toward saturation.
+
+    Crucially, this successor must retain the original `_batch_binding` authority:
+    a model-provided chunk id, source-event id or extraction pass is input, not
+    authority. Foreign/stale/future envelopes and oversized/non-list batches do not
+    advance counters or saturation state.
     """
-    backfill.MAX_PASSES = max(int(getattr(backfill, "MAX_PASSES", 0) or 0), MAX_EXHAUSTIVE_PASSES)
+    backfill.MAX_PASSES = max(
+        int(getattr(backfill, "MAX_PASSES", 0) or 0), MAX_EXHAUSTIVE_PASSES
+    )
 
     def record_batch_progress(con, envelope: dict[str, Any], novel_count: int) -> None:
-        chunk_id = str(envelope.get("historical_chunk_id") or "").strip()
-        if not chunk_id:
+        binding = backfill._batch_binding(con, envelope)
+        values = envelope.get("deltas")
+        max_batch = int(getattr(backfill, "MAX_BATCH_DELTAS", 0) or 0)
+        if (
+            binding is None
+            or not isinstance(values, list)
+            or max_batch <= 0
+            or len(values) > max_batch
+        ):
             return
+
+        chunk_id, _, passes = binding
         row = con.execute(
-            "SELECT extraction_passes,consecutive_zero_novel FROM historical_chunks WHERE chunk_id=?",
+            "SELECT consecutive_zero_novel FROM historical_chunks WHERE chunk_id=?",
             (chunk_id,),
         ).fetchone()
         if not row:
             return
 
-        passes = max(int(row[0] or 0) + 1, int(envelope.get("extraction_pass") or 0))
         explicitly_exhaustive = envelope.get("exhaustive") is True
         zero = (
-            int(row[1] or 0) + 1
+            int(row[0] or 0) + 1
             if explicitly_exhaustive and int(novel_count) == 0
             else 0
         )

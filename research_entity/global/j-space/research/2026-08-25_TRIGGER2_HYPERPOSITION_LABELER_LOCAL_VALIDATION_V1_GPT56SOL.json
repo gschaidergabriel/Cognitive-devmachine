@@ -1,0 +1,48 @@
+{
+  "schema": "CLAY_TRIGGER2_HYPERPOSITION_LABELER_LOCAL_VALIDATION/v1",
+  "date": "2026-08-25",
+  "status": "LOCAL_PROPERTY_SMOKE_ONLY_NOT_REPO_RUNTIME_OR_TRAINING_ACCEPTANCE",
+  "branch": "trigger2/research-audit-versioning-v1",
+  "contract_path": "research_entity/global/j-space/research/TRIGGER2_HYPERPOSITION_REFERENCE_LABELER_CONTRACT_V1.json",
+  "implementation_path": "tools/trigger2_hyperposition_reference_labelers_v1.py",
+  "implementation_sha256_from_exact_generated_source": "075bec5f8e1a238e297be18b38005857d69ce1cafaecf95fdba245c55a393567",
+  "test_path": "tests/test_trigger2_hyperposition_reference_labelers_v1.py",
+  "local_private_smoke": {
+    "property_cases": 312,
+    "result": "PASS",
+    "coverage": [
+      "200 branch-order permutation invariance transitions",
+      "100 causal-ancestry duplicate/idempotence transitions",
+      "8 three-branch D_resolve live/falsified masks verifying PASS iff exactly one applicable live branch remains",
+      "4 discriminator-order cases verifying positive separation dominates zero-separation despite ordinal cost/risk"
+    ]
+  },
+  "additional_unit_tests_written_not_executed_on_repository_surface": [
+    "support idempotence by causal ancestry",
+    "counterevidence weakens without implicit falsification",
+    "explicit falsifier respects K context applicability",
+    "context filtering is not branch deletion",
+    "multiple live alternatives remain UNRESOLVED",
+    "unique live applicable branch can PASS",
+    "UNKNOWN context blocks collapse",
+    "branch permutation invariance",
+    "explicit-equivalence-only merge",
+    "actual discriminator outranks cheaper nondiscriminator",
+    "probability-free stable test ordering",
+    "salience ranking does not mutate truth/resolution state"
+  ],
+  "credit_boundary": {
+    "canonical_truth_credit": 0,
+    "runtime_credit": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "positive_D_E_training_admission": false
+  },
+  "remaining_gates": [
+    "execute exact committed implementation + tests on an admitted repository/runtime surface",
+    "swarm-review open semantic questions in f_salience_order and variable-N U_test_order",
+    "validate model-visible projection hides evaluator-only relation/provenance metadata",
+    "generate counterfactual Hyperposition-native row families and run leakage/ancestry gates",
+    "version dependency edges in registry from rows to exact labeler hash"
+  ]
+}

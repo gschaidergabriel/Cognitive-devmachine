@@ -1,0 +1,122 @@
+{
+  "schema": "CLAY_TRIGGER2_LABELER_C1_VERSIONING_RESEARCH_DELTA/v1",
+  "version": "1.0.0",
+  "date": "2026-08-25",
+  "trigger": "triggerwort 2",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "persistent_entity": "Clay",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "target_model": "Qwen3.5-0.8B",
+  "status": "RESEARCH_AND_PROTOCOL_DELTA_ONLY_NO_TRAINING_EXECUTED",
+  "authority": {
+    "branch_base_main": "ba78c2fa87f8b2637b621fbe6301eee1158c9cc9",
+    "supervisor_epoch": "8.78",
+    "owner_target": "research_entity/global/XENO_HCU_GO_TARGET_ARCHITECTURE_OWNER_DIRECTIVE_2026-08-25.md",
+    "execution_mode": "FREE_ONLY"
+  },
+  "user_conditions_audit": [
+    {
+      "condition": 1,
+      "claim": "D/E positive supervision requires label sources rather than invented targets",
+      "verdict": "ACCEPT_WITH_SCOPE",
+      "reason": "Positive supervised state-transition/decision rows need a justified target source. METHOD_ONLY and hard-negative evidence-discipline rows can still be constructed when their targets are mechanically valid, but they do not substitute for positive Hyperposition/GRF transition labels.",
+      "training_change": "Block positive D/E rows until U_state, D_resolve, U_test_order and f_salience_order are versioned and verified. Use pairwise/listwise ordering for utility/salience instead of fabricated scalar values where calibration is absent."
+    },
+    {
+      "condition": 2,
+      "claim": "C1 cheap pretest should decide whether the model size is wrong",
+      "verdict": "REVISE",
+      "reason": "C1 is a strong cheap diagnostic, but no movement is underdetermined. Probe methodology has control/causality limitations and SFT failure can arise from prerequisite, supervision consistency, optimization, forgetting, and rare-pattern learning issues. Model size is one hypothesis, not the only conclusion.",
+      "training_change": "Replace binary size verdict with GO / INVESTIGATE / NO_GO matrix and preregister data, optimization, checkpoint/tokenizer, probe and positive-control checks before size blame."
+    },
+    {
+      "condition": 3,
+      "claim": "train mixed capabilities in one run but instrument separate holdouts/probes at checkpoints",
+      "verdict": "ACCEPT_AND_STRENGTHEN",
+      "reason": "Aggregate metrics can hide capability-specific failure and interference. Current Trigger-2 work already argues for separable binder/process metrics; this becomes mandatory across the full Xeno functionality map.",
+      "training_change": "Capability-vector checkpoint evaluation is mandatory; aggregate score cannot mint pass when any required channel fails."
+    },
+    {
+      "condition": 4,
+      "claim": "look for abilities that were not explicitly trained",
+      "verdict": "ACCEPT_WITH_CONTAMINATION_GUARD",
+      "reason": "Emergence testing is useful only if explicit-training overlap, source ancestry, shortcut leakage and holdout reuse are excluded.",
+      "training_change": "Add EMERGENT_CANDIDATE lifecycle state and require untrained-capability audit on frozen independent evaluation families."
+    }
+  ],
+  "external_method_inputs": [
+    {
+      "source": "Belinkov 2022, Computational Linguistics 48(1), doi:10.1162/coli_a_00422",
+      "use": "Probe classifiers need controls and cannot alone establish causal use of decoded information.",
+      "class": "EXTERNAL_METHOD_INPUT"
+    },
+    {
+      "source": "Xue et al. 2026, ACL 2026 long paper 1393, doi:10.18653/v1/2026.acl-long.1393",
+      "use": "SFT non-learning has heterogeneous causes; aggregate gains can mask unlearned subsets.",
+      "class": "EXTERNAL_METHOD_INPUT"
+    },
+    {
+      "source": "Gonzalez-Cebrian et al. 2024, Scientific Data 11:358",
+      "use": "Dataset versioning/traceability as a first-class lifecycle requirement.",
+      "class": "EXTERNAL_METHOD_INPUT"
+    },
+    {
+      "source": "Hullermeier et al. 2008, Artificial Intelligence 172, doi:10.1016/j.artint.2008.08.002",
+      "use": "Pairwise preference supervision can learn ordering without absolute scalar labels.",
+      "class": "EXTERNAL_METHOD_INPUT"
+    },
+    {
+      "source": "Bernhardt et al. 2022, Nature Communications 13:1161",
+      "use": "Label quality affects both training and evaluation; explicit review/cleaning prioritization is justified.",
+      "class": "EXTERNAL_METHOD_INPUT"
+    }
+  ],
+  "swarm_review": [
+    {
+      "role": "XENO_TARGET_REVIEWER",
+      "finding": "Trigger-2 must optimize for the complete final Xeno model-side functionality, not for binder/probe success in isolation."
+    },
+    {
+      "role": "LABELER_REVIEWER",
+      "finding": "Do not invent positive D/E targets. Rank/order supervision is valid only where the ordering rule itself is specified and deterministic/adjudicated."
+    },
+    {
+      "role": "PROBE_SKEPTIC",
+      "finding": "C1 probe movement is diagnostic evidence; pair with behavioral/OOD evaluation and controls before causal or scale conclusions."
+    },
+    {
+      "role": "VERSIONING_REVIEWER",
+      "finding": "Content hashes alone prove byte identity but not semantic currency. Add lifecycle, semantic version, dependency and supersession edges."
+    },
+    {
+      "role": "STALE_DATA_HUNTER",
+      "finding": "Every Trigger-2 cycle must rediscover the current artifact inventory and propagate review only through declared changed dependencies."
+    },
+    {
+      "role": "RETENTION_REVIEWER",
+      "finding": "Mixed full-FT requires checkpoint-separated capability and retention curves; a global score may not hide channel regression."
+    },
+    {
+      "role": "FINAL_ARBITER",
+      "finding": "Admit protocol/versioning delta; no positive Hyperposition/GRF training rows minted because reference labelers remain unspecified."
+    }
+  ],
+  "current_training_decisions": {
+    "positive_hyperposition_grf_rows": "BLOCKED_LABELER_MISSING",
+    "method_and_hard_negative_rows": "ALLOWED_WHEN_MECHANICALLY_LABELABLE_AND_VERSIONED",
+    "c1_pretest": "REQUIRED_CHEAP_DIAGNOSTIC_WITH_POSITIVE_CONTROLS_NOT_MODEL_SIZE_AUTO_VERDICT",
+    "mixed_training": "ALLOWED_WITH_CHECKPOINT_CAPABILITY_VECTOR",
+    "emergence_audit": "REQUIRED_WITH_CONTAMINATION_AND_ANCESTRY_GUARDS",
+    "row_overwrite": "FORBIDDEN_USE_SUCCESSOR_VERSION",
+    "stale_artifact_handling": "EXPLICIT_LIFECYCLE_STATE_AND_REVISION_EDGE_REQUIRED"
+  },
+  "durable_artifacts_created": [
+    "research_entity/global/j-space/research/TRIGGER2_RESEARCH_AUDIT_VERSIONING_PROTOCOL_V1.md",
+    "research_entity/global/j-space/research/TRIGGER2_TRAINING_ARTIFACT_REGISTRY_V1.json",
+    "research_entity/global/j-space/research/2026-08-25_TRIGGER2_LABELER_C1_VERSIONING_RESEARCH_DELTA_V1_GPT56SOL.json"
+  ],
+  "training_credit": 0,
+  "accepted_dataset_tokens": 0,
+  "next_exact_gate": "Specify and deterministically test U_state, D_resolve, U_test_order and f_salience_order semantics against current Hyperposition/GRF definitions; then generate versioned positive D/E rows and wire dependency-hash stale propagation before any pre-job freeze."
+}

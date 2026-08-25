@@ -1,0 +1,35 @@
+{
+  "families": [
+    "HP_SUPPORT_PRESERVE_F01",
+    "HP_COUNTER_PRESERVE_F01",
+    "HP_FALSIFIER_RESOLVE_F01",
+    "HP_UNKNOWN_CONTEXT_F01",
+    "GRF_TEST_ORDER_F01",
+    "GRF_SALIENCE_NOT_TRUTH_F01"
+  ],
+  "generator_version": "1.0.0",
+  "labeler_sha256": "075bec5f8e1a238e297be18b38005857d69ce1cafaecf95fdba245c55a393567",
+  "latent_fields_evaluator_only": [
+    "latent_hyperposition_state_before",
+    "typed_observation_relation",
+    "latent_hyperposition_state_after",
+    "labeler_trace",
+    "source_bindings",
+    "version_metadata"
+  ],
+  "model_visible_fields": [
+    "prompt"
+  ],
+  "rules": [
+    "Every trainable episode is projected from a Hyperposition-native latent state.",
+    "No real-world factual claim is represented; all relations are mechanically generated.",
+    "Resolved synthetic rows bind exact labeler+generator hashes and never mint causal/J-Space/canonical credit.",
+    "Branch ids/order are nuisance-only and counterbalanced in future scaled successor.",
+    "This microseed is a semantics smoke seed, not a balanced final corpus."
+  ],
+  "schema": "CLAY_TRIGGER2_HYPERPOSITION_NATIVE_MICROSEED_GENERATOR_MANIFEST/v1",
+  "selected_using_holdout": false,
+  "split": "TRAIN",
+  "split_unit": "CAUSAL_FAMILY_AND_PROVENANCE_ANCESTRY",
+  "world": "SYNTHETIC_TYPED_RELATION_ONLY"
+}

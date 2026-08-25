@@ -1,0 +1,137 @@
+{
+  "schema": "CLAY_TRIGGER2_HYPERPOSITION_REFERENCE_LABELER_CONTRACT/v1",
+  "contract_version": "1.0.0-candidate",
+  "date": "2026-08-25",
+  "status": "CANDIDATE_REFERENCE_SEMANTICS_REQUIRES_TESTS_BEFORE_POSITIVE_ROW_ADMISSION",
+  "purpose": "Provide deterministic training-label semantics for semantic Hyperposition / GRF without inventing calibrated probabilities or allowing model judgement to mint facts.",
+  "authority_boundary": {
+    "canonical_truth_allowed": false,
+    "direct_effect_authority": false,
+    "labeler_output_scope": "TRAINING_TARGET_ONLY",
+    "rule": "Reference labelers transform typed episode state; they do not decide whether real-world evidence is true. Evidence relation/type must be admitted upstream or mechanically generated in synthetic training episodes."
+  },
+  "branch_schema": {
+    "required": ["branch_id","v","K","E_plus","E_minus","F","T","A","sigma","projection_visibility"],
+    "sigma_enum": ["LIVE_UNRESOLVED","SUPPORTED_UNRESOLVED","WEAKENED_UNRESOLVED","FALSIFIED","RESOLVED_PASS"],
+    "K_context_enum": ["APPLIES","DOES_NOT_APPLY","UNKNOWN"],
+    "projection_visibility_enum": ["VISIBLE","FILTERED_CONTEXT","HIDDEN_POLICY"],
+    "notes": [
+      "sigma is epistemic state, not probability.",
+      "projection visibility is not branch existence.",
+      "branch order and branch_id are nuisance/evaluator identity unless intentionally task-visible."
+    ]
+  },
+  "typed_observation_relation": {
+    "enum": ["SUPPORTS","COUNTERS","FALSIFIES","IRRELEVANT","UNKNOWN_RELATION"],
+    "required_fields": ["evidence_id","causal_ancestry_id","independence_group","relation","target_branch_ids","provenance"],
+    "optional_fields": ["equivalence_certificate","new_branch_payload"],
+    "hard_rule": "The reference labeler never infers relation from free text. Dataset generators/evidence admission must provide relation mechanically or from an independently adjudicated source."
+  },
+  "labelers": {
+    "U_state": {
+      "version": "1.0.0-candidate",
+      "input": "Hyperposition branch set H_t + typed observation relation",
+      "output": "H_t+1 with deterministic branch-local changes",
+      "rules": [
+        "Duplicate evidence with same evidence_id or same causal_ancestry_id already attached to the target branch does not add independent support/counterevidence.",
+        "IRRELEVANT or UNKNOWN_RELATION does not change epistemic support; preserve branch and mark unresolved where applicable.",
+        "SUPPORTS appends evidence to E_plus only once per causal ancestry; branch becomes SUPPORTED_UNRESOLVED unless already FALSIFIED.",
+        "COUNTERS appends evidence to E_minus only once per causal ancestry; branch becomes WEAKENED_UNRESOLVED unless already FALSIFIED.",
+        "FALSIFIES records the falsifier/evidence and sets branch sigma=FALSIFIED when the branch context K=APPLIES; if K=UNKNOWN, preserve unresolved and record pending falsifier context rather than deleting the branch.",
+        "K=DOES_NOT_APPLY may set projection_visibility=FILTERED_CONTEXT but never deletes the branch.",
+        "Branches merge only when an explicit equivalence_certificate states semantic equivalence under the current validity scope T; vector/embedding similarity, wording similarity, majority or recurrence are insufficient.",
+        "A new counterhypothesis branch is added only when new_branch_payload is explicit and generator/admission semantics declare that branch creation is warranted; no free-form branch invention by the labeler.",
+        "No update alone sets RESOLVED_PASS; resolution is delegated to D_resolve."
+      ]
+    },
+    "D_resolve": {
+      "version": "1.0.0-candidate",
+      "input": "updated branch set after U_state",
+      "output": "PASS(selected_branch_id) or UNRESOLVED",
+      "decision_table": [
+        {
+          "condition": "exactly one applicable branch is non-FALSIFIED AND every competing applicable branch is FALSIFIED by admissible typed evidence/discriminator",
+          "result": "PASS(unique_live_branch)"
+        },
+        {
+          "condition": "two or more applicable non-FALSIFIED branches remain",
+          "result": "UNRESOLVED"
+        },
+        {
+          "condition": "no applicable branch remains or applicability itself is UNKNOWN",
+          "result": "UNRESOLVED"
+        },
+        {
+          "condition": "majority/recurrence/GWT uptake/J-Space recurrence/salience differs but no discriminator falsifies alternatives",
+          "result": "UNRESOLVED"
+        }
+      ],
+      "postcondition": "Only the selected branch may receive sigma=RESOLVED_PASS in the training target; D_resolve still does not mint canonical truth."
+    },
+    "U_test_order": {
+      "version": "1.0.0-candidate",
+      "input": "live branches + candidate tests with mechanically declared branch-outcome signatures and ordinal cost/risk/coordination classes",
+      "output": "stable pairwise/listwise ordering of tests",
+      "no_probability_rule": "No expected-information-gain scalar is computed unless an independently calibrated probability model is later admitted.",
+      "ordering_key_lexicographic": [
+        "maximize number of unordered live-branch pairs that the test predicts different observable outcomes for",
+        "minimize worst-case largest remaining indistinguishable branch partition",
+        "minimize ordinal safety/risk class",
+        "minimize ordinal execution-cost class",
+        "minimize ordinal coordination-cost class",
+        "stable test_id tie-break only after all semantic criteria tie"
+      ],
+      "invalid_test": "A test with no branch-pair separation is dominated by any otherwise admissible test with positive separation."
+    },
+    "f_salience_order": {
+      "version": "1.0.0-candidate",
+      "input": "candidate workspace items with explicit ordinal features",
+      "output": "stable salience ordering only",
+      "feature_contract": {
+        "authority_boundary_risk": "ordinal 0..3",
+        "expiry_or_time_urgency": "ordinal 0..3",
+        "live_discriminator_relevance": "ordinal 0..3",
+        "current_goal_relevance": "ordinal 0..3",
+        "novel_independent_evidence": "0 or 1"
+      },
+      "ordering_key_lexicographic": [
+        "maximize authority_boundary_risk",
+        "maximize expiry_or_time_urgency",
+        "maximize live_discriminator_relevance",
+        "maximize current_goal_relevance",
+        "maximize novel_independent_evidence",
+        "stable item_id tie-break only after semantic tie"
+      ],
+      "hard_rule": "High salience changes attention/order only. It never changes E_plus/E_minus truth weight, D_resolve result, canonical state, or probability."
+    }
+  },
+  "required_invariants": [
+    "branch permutation invariance",
+    "duplicate/ancestry evidence idempotence",
+    "projection filtering is not deletion",
+    "majority is not collapse",
+    "salience is not truth/probability",
+    "GWT/J-Space recurrence is not resolution evidence",
+    "merge requires explicit equivalence certificate",
+    "UNKNOWN stays distinct from absent/false/falsified",
+    "D_resolve cannot PASS while two applicable non-falsified alternatives remain",
+    "U_test_order must be computable without probability values"
+  ],
+  "open_semantic_questions": [
+    "Whether COUNTERS should merely weaken or can trigger FALSIFIED without an explicit FALSIFIES relation. v1 says no.",
+    "Whether context K=UNKNOWN with a triggered falsifier should create a dedicated pending-falsifier field in the final branch schema.",
+    "Whether f_salience_order should use a Pareto partial order instead of the current explicit lexicographic training reference. The current form is chosen for deterministic labels, not claimed as final GRF runtime mathematics.",
+    "Whether U_test_order should use pair-separation count or a normalized partition score when branch count varies strongly. Current v1 is deterministic and probability-free but must be benchmarked."
+  ],
+  "training_admission_gate": {
+    "positive_D_E_rows_allowed_after": [
+      "reference implementation matches this contract",
+      "unit/property tests pass",
+      "branch-permutation and ancestry-idempotence tests pass",
+      "counterfactual family generation proves target changes only when discriminating input changes",
+      "model-visible formatter hides evaluator metadata and relation labels not intended as inputs",
+      "swarm review finds no truth/authority shortcut"
+    ],
+    "until_then": "BLOCKED_LABELER_NOT_VERIFIED"
+  }
+}

@@ -1,0 +1,71 @@
+{
+  "schema": "CLAY_GO_STEERING_DELTA/v1",
+  "date": "2026-08-26",
+  "local_time": "2026-08-26T05:43:14+07:00",
+  "organ": "GPT-5.6 Sol / ChatGPT go organ",
+  "program": "ENTITYOS_HCU",
+  "target_architecture": "AUTONOMOUS_SELF_ORGANIZING_XENO_HCU_SHARED_STATE_COORDINATOR_ONLY_WRITES",
+  "source_observed": {
+    "main_head": "6d9c059803a30fdf8313bd14d99e68af89efe6bb",
+    "main_tree": "980a4f3874b587eaee8ca01e603e7d7bda92abb2",
+    "supervisor_schema_observed": "8.84",
+    "supervisor_inbox_sha": "6bc106a773eb1ee623c46b1d6636495424ac1dbe"
+  },
+  "material_update": {
+    "node_admission_membership_incarnation_provenance": {
+      "prior_supervisor_status": "STRICT_XFAIL_SOURCE_GAP",
+      "new_source_status": "SOURCE_GAP_CLOSED_TEST_REGRESSION_PRESENT_RUNTIME_UNOBSERVED",
+      "evidence_commits": [
+        "1d9f5abfd032b01d5296f2d9a1ec68c669e981e1",
+        "b8e0f7a98a9aeafbf9a14f87797351b996c92044"
+      ],
+      "reason": "main now contains an explicit membership-incarnation uniqueness fix and the former xfail was promoted to a regression test"
+    },
+    "fused_grid10_two_phase_authority_integration": {
+      "prior_supervisor_status": "SOURCE_INTEGRATION_PENDING",
+      "new_source_status": "SOURCE_INTEGRATION_CLOSED_TEST_COVERAGE_PRESENT_RUNTIME_UNOBSERVED",
+      "evidence_commits": [
+        "925f1a70a538a834becedf9c11c7902d47f7ccc7",
+        "49c24d7bf116e4363db168a0f4fb78673c96a45e"
+      ],
+      "reason": "proof-carrying membership is now composed with phase-separated model-call invocation authority and adapter coverage exists"
+    }
+  },
+  "highest_information_frontier": {
+    "id": "RUNTIME_QUIESCENCE",
+    "status": "ACTIVE_FAIL",
+    "basis": "SUPERVISOR_8_84_PLUS_LATEST_FREE_SWARM_METRICS",
+    "required_next_action": "Execute the already-pinned quiescence enforcer on the owning host without provider probing; require zero provider-capable survivor processes, no restart during the observation window, and bounded zero provider-attempt/counter delta before any new non-provider model or physical GRID10 promotion run.",
+    "do_not_do": [
+      "DO_NOT_REOPEN_CLOSED_MEMBERSHIP_SOURCE_GAP",
+      "DO_NOT_REOPEN_CLOSED_FUSED_TWO_PHASE_SOURCE_INTEGRATION",
+      "DO_NOT_RUN_PROVIDER_OR_MODEL_PROBES_BEFORE_QUIESCENCE",
+      "DO_NOT_PROMOTE_QUARANTINED_17_OF_17_GRID10_RECEIPT",
+      "DO_NOT_CREATE_PAID_OR_TOGETHER_JOB"
+    ]
+  },
+  "latest_runtime_signal": {
+    "free_swarm_metrics_generated_at": "2026-08-25T22:43:14.212255+00:00",
+    "worker_records": 13571,
+    "total_tokens": 39932437,
+    "interpretation": "cumulative provider-capable telemetry remains active enough that source HARD_OFF cannot be treated as runtime quiescence; this delta itself does not prove a fresh counter increment interval because only one current snapshot was read"
+  },
+  "credit_boundary": {
+    "canonical_s0_component_runtime_credit": "RETAIN_EXISTING_BOUNDED_COMPONENT_PASS",
+    "xeno_self_organizing_fabric_component_runtime_credit": "RETAIN_EXISTING_BOUNDED_COMPONENT_PASS",
+    "physical_grid10_runtime_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0,
+    "canonical_semantics_credit": 0,
+    "training_credit": 0
+  },
+  "go_decision": "SOURCE_FRONTIER_DEDUPLICATED_RUNTIME_QUIESCENCE_REMAINS_P0",
+  "next_after_quiescence": [
+    "REENTER_FRESH_FREE_NON_PROVIDER_EXECUTION_AUTHORITY",
+    "RERUN_FUSED_PHYSICAL_GRID10_WITH_VALID_PREDECESSOR_CHAIN",
+    "MEASURE_DYNAMIC_COORDINATOR_K_FANIN_COMPRESSION_LATENCY_CONTENTION",
+    "TEST_COORDINATOR_CRASH_REPLACEMENT_AND_WORKER_REJOIN_UNDER_LOAD",
+    "RUN_MATCHED_BUDGET_CHALLENGERS",
+    "ONLY_THEN_ADVANCE_HCU_ACCEPTANCE"
+  ]
+}

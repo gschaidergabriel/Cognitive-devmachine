@@ -1,15 +1,12 @@
 name: Qwen3-0.6B hidden steering on clay-direct-dev
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - '.github/workflows/qwen06-hidden-steering-clay-direct-dev.yml'
-      - 'tools/trigger1_local_qwen06_midlayer_causal_execute.py'
-  workflow_dispatch:
+  issues:
+    types: [opened]
 
 permissions:
   contents: write
+  issues: read
 
 concurrency:
   group: qwen06-hidden-steering-clay-direct-dev
@@ -17,14 +14,65 @@ concurrency:
 
 jobs:
   qwen06-steering:
+    if: >-
+      github.repository == 'gschaidergabriel/clay-global-research-entity' &&
+      github.event.issue.title == '[CLAY-DISPATCH] Qwen3-0.6B hidden steering on clay-direct-dev' &&
+      github.event.issue.user.login == 'gschaidergabriel'
     runs-on: [self-hosted, Linux, X64]
     timeout-minutes: 90
     steps:
-      - name: Checkout exact Clay source
-        uses: actions/checkout@v4
+      - name: Checkout exact current main
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
+          ref: main
           fetch-depth: 0
           clean: true
+          persist-credentials: true
+
+      - name: Require canonical go atomic lease and bind source
+        shell: bash
+        env:
+          ISSUE_BODY: ${{ github.event.issue.body }}
+        run: |
+          set -euo pipefail
+          lease_result="${RUNNER_TEMP}/qwen06-lease-${GITHUB_RUN_ID}.json"
+          python3 tools/trigger1_atomic_lease_gate.py --issue-body "$ISSUE_BODY" --output "$lease_result"
+          SOURCE_HEAD="$(git rev-parse HEAD)"
+          SOURCE_TREE="$(git rev-parse 'HEAD^{tree}')"
+          SOURCE_DIRTY=false
+          [[ -n "$(git status --porcelain=v1)" ]] && SOURCE_DIRTY=true
+          python3 - "$lease_result" "$GITHUB_ENV" "$SOURCE_HEAD" "$SOURCE_TREE" "$SOURCE_DIRTY" <<'PY'
+          import json, pathlib, sys
+          r=json.loads(pathlib.Path(sys.argv[1]).read_text(encoding='utf-8'))
+          values={
+              'TRIGGER1_TRIGGER_KEY':r['trigger_key'],
+              'TRIGGER1_CLAIM_PATH':r['claim_path'],
+              'TRIGGER1_CLAIM_SHA256':r['claim_sha256'],
+              'TRIGGER1_CLAIM_OBSERVED_MAIN':r['observed_canonical_main'],
+              'TRIGGER1_EXPERIMENT_NAME':r['experiment_name'],
+              'TRIGGER1_SOURCE_HEAD':sys.argv[3],
+              'TRIGGER1_SOURCE_TREE':sys.argv[4],
+              'TRIGGER1_SOURCE_DIRTY':sys.argv[5],
+              'TRIGGER1_LEASE_ADMITTED':'true',
+          }
+          with pathlib.Path(sys.argv[2]).open('a',encoding='utf-8') as f:
+              for k,v in values.items():
+                  v=str(v)
+                  if '\n' in v or '\r' in v: raise SystemExit('UNSAFE_ENV_VALUE')
+                  f.write(f'{k}={v}\n')
+          PY
+          [[ "$SOURCE_DIRTY" == false ]] || { echo 'BLOCKED_SOURCE_DIRTY_BEFORE_INTERVENTION' >&2; exit 2; }
+          claim_main="$(python3 -c 'import json,sys;print(json.load(open(sys.argv[1]))["observed_canonical_main"])' "$lease_result")"
+          git cat-file -e "$claim_main^{commit}"
+          git merge-base --is-ancestor "$claim_main" "$SOURCE_HEAD" || { echo 'BLOCKED_CLAIM_MAIN_NOT_ANCESTOR_OF_EXECUTED_SOURCE' >&2; exit 2; }
+
+      - name: Verify deterministic control plane
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m unittest -v tests.test_trigger1_atomic_lease_gate
+          python3 -m unittest -v tests.test_trigger1_candidate_provenance_bind
+          python3 -m unittest -v tests.test_trigger1_jspace_promotion_gate
 
       - name: Verify clay-direct-dev runtime and resource headroom
         shell: bash
@@ -42,8 +90,6 @@ jobs:
             echo "nproc=$(nproc)"
             free -h || true
             df -h / /artifacts /workspace 2>/dev/null || df -h
-            test -d /workspace/clay-global-research-entity && echo 'live_workspace=present' || echo 'live_workspace=absent'
-            test -d /artifacts/clay-entityos-swarm && echo 'runtime_artifacts=present' || echo 'runtime_artifacts=absent'
           } | tee "$ROOT/preflight-${GITHUB_RUN_ID}.txt"
 
       - name: Prepare persistent exact-model environment
@@ -67,26 +113,62 @@ jobs:
           "$VENV/bin/python" -m pip freeze | sort > "$ROOT/pip-freeze-${GITHUB_RUN_ID}.txt"
 
       - name: Execute canonical nonterminal Qwen3-0.6B causal steering experiment
+        id: experiment
         shell: bash
         env:
           HF_HOME: /artifacts/clay-qwen06-jspace/hf
           HF_HUB_DISABLE_TELEMETRY: '1'
+          HF_HUB_DISABLE_IMPLICIT_TOKEN: '1'
           TOKENIZERS_PARALLELISM: 'false'
         run: |
-          set -euo pipefail
+          set -u
           ROOT=/artifacts/clay-qwen06-jspace
           RUN="$ROOT/runs/${GITHUB_RUN_ID}"
           LOG="$RUN/execution.log"
+          RESULT="$RUN/trigger1_local_activation_api_result.json"
+          CANDIDATE="$RUN/trigger1_direct_steering_candidate.json"
+          GATE="$RUN/promotion_gate.json"
           mkdir -p "$RUN"
+
+          unset OPENAI_API_KEY ANTHROPIC_API_KEY GROQ_API_KEY MISTRAL_API_KEY NVIDIA_API_KEY \
+            OPENROUTER_API_KEY TOGETHER_API_KEY HF_TOKEN HUGGING_FACE_HUB_TOKEN HUGGINGFACE_HUB_TOKEN || true
+
+          set +e
           "$ROOT/venv/bin/python" tools/trigger1_local_qwen06_midlayer_causal_execute.py \
             --output-dir "$RUN" \
             --cache-dir "$ROOT/hf" 2>&1 | tee "$LOG"
-          RESULT="$RUN/trigger1_local_activation_api_result.json"
-          CANDIDATE="$RUN/trigger1_direct_steering_candidate.json"
-          test -s "$RESULT"
+          rc=${PIPESTATUS[0]}
+          set -e
+
+          if [[ ! -s "$RESULT" ]]; then
+            python3 - "$RESULT" "$rc" <<'PY'
+          import json, pathlib, sys
+          pathlib.Path(sys.argv[1]).write_text(json.dumps({
+              'schema':'CLAY_TRIGGER1_LOCAL_QWEN06_MIDLAYER_CAUSAL_EXPERIMENT/v1',
+              'status':'WORKFLOW_RESULT_MISSING',
+              'process_exit_code':int(sys.argv[2]),
+              'promotion_candidate_written':False,
+              'whole_hcu_runtime_credit':0,
+              'jspace_model_runtime_credit':0,
+              'training_credit':0,
+          }, indent=2, sort_keys=True)+'\n', encoding='utf-8')
+          PY
+          fi
+
           echo "CLAY_QWEN_RESULT=$RESULT" >> "$GITHUB_ENV"
           echo "CLAY_QWEN_CANDIDATE=$CANDIDATE" >> "$GITHUB_ENV"
+          echo "CLAY_QWEN_GATE=$GATE" >> "$GITHUB_ENV"
           echo "CLAY_QWEN_LOG=$LOG" >> "$GITHUB_ENV"
+          echo "experiment_rc=$rc" >> "$GITHUB_OUTPUT"
+
+          if [[ -s "$CANDIDATE" ]]; then
+            python3 tools/trigger1_candidate_provenance_bind.py --result "$RESULT" --candidate "$CANDIDATE"
+            python3 tools/trigger1_jspace_promotion_gate.py --candidate "$CANDIDATE" > "$GATE"
+          else
+            printf '%s\n' '{"schema":"CLAY_TRIGGER1_JSPACE_PROMOTION_GATE/v4","mechanism_runtime_vector_credit_candidate":false,"scientifically_independent_vector_candidate":false,"owner_trigger1_goal_credit_candidate":false,"canonical_credit_minted":false,"failures":["NO_PROMOTION_CANDIDATE"]}' > "$GATE"
+          fi
+
+          exit "$rc"
 
       - name: Publish immutable runtime receipt to repository
         if: always()
@@ -107,7 +189,6 @@ jobs:
                 status: 'WORKFLOW_RESULT_MISSING',
                 github_run_id: runId,
                 github_sha: context.sha,
-                execution_surface: 'clay-direct-dev self-hosted runner',
                 promotion_candidate_written: false,
                 whole_hcu_runtime_credit: 0,
                 jspace_model_runtime_credit: 0,
@@ -124,6 +205,56 @@ jobs:
               branch: 'main'
             });
 
+      - name: Finalize canonical unusual-experiment lease result
+        if: always()
+        uses: actions/github-script@v7
+        env:
+          RESULT: ${{ env.CLAY_QWEN_RESULT }}
+          GATE: ${{ env.CLAY_QWEN_GATE }}
+          TRIGGER_KEY: ${{ env.TRIGGER1_TRIGGER_KEY }}
+          CLAIM_PATH: ${{ env.TRIGGER1_CLAIM_PATH }}
+          CLAIM_SHA256: ${{ env.TRIGGER1_CLAIM_SHA256 }}
+          SOURCE_HEAD: ${{ env.TRIGGER1_SOURCE_HEAD }}
+          SOURCE_TREE: ${{ env.TRIGGER1_SOURCE_TREE }}
+          EXPERIMENT_RC: ${{ steps.experiment.outputs.experiment_rc }}
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require('fs');
+            if (!process.env.TRIGGER_KEY) return;
+            const readJson = (p) => (p && fs.existsSync(p)) ? JSON.parse(fs.readFileSync(p, 'utf8')) : {};
+            const result = readJson(process.env.RESULT);
+            const gate = readJson(process.env.GATE);
+            const path = `research_entity/continuity/go_experiment_claims/${process.env.TRIGGER_KEY}.result.json`;
+            const payload = {
+              schema: 'clay-go-experiment-result/v1',
+              trigger_key: process.env.TRIGGER_KEY,
+              claim_path: process.env.CLAIM_PATH,
+              claim_sha256: process.env.CLAIM_SHA256,
+              source_identity: {head: process.env.SOURCE_HEAD, tree: process.env.SOURCE_TREE},
+              execution_surface: 'clay-direct-dev self-hosted runner',
+              observed_result: {
+                runtime_status: result.status || null,
+                runtime_result_sha256: result.result_sha256 || null,
+                promotion_gate: gate,
+                process_exit_code: Number(process.env.EXPERIMENT_RC || -1)
+              },
+              whole_product_evidence_established: false,
+              runtime_receipt_path: `research_entity/runtime/qwen06_midlayer_causal/${context.runId}.json`
+            };
+            try {
+              await github.rest.repos.createOrUpdateFileContents({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                path,
+                message: `evidence(qwen06): finalize unusual-experiment lease ${process.env.TRIGGER_KEY} [skip ci]`,
+                content: Buffer.from(JSON.stringify(payload, null, 2) + '\n', 'utf8').toString('base64'),
+                branch: 'main'
+              });
+            } catch (e) {
+              if (e.status !== 422) throw e;
+            }
+
       - name: Upload bounded diagnostic evidence
         if: always()
         uses: actions/upload-artifact@v4
@@ -132,6 +263,7 @@ jobs:
           path: |
             ${{ env.CLAY_QWEN_RESULT }}
             ${{ env.CLAY_QWEN_CANDIDATE }}
+            ${{ env.CLAY_QWEN_GATE }}
             ${{ env.CLAY_QWEN_LOG }}
             /artifacts/clay-qwen06-jspace/preflight-${{ github.run_id }}.txt
             /artifacts/clay-qwen06-jspace/pip-freeze-${{ github.run_id }}.txt

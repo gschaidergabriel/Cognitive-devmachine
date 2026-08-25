@@ -1,0 +1,37 @@
+{
+  "schema": "CLAY_TRIGGER2_NONDUP_RUNTIME_STATE_DELTA_AUDIT/v2",
+  "date": "2026-08-25",
+  "trigger": "triggerwort 2",
+  "supervisor_epoch_basis": "8.78",
+  "canonical_main_basis": "9b1ac0282e68468b5294e2c473667334887e7456",
+  "rows_total": 10,
+  "families_total": 5,
+  "pass": true,
+  "failures": [],
+  "dedup_decision": {
+    "discarded_from_admission_candidate": [
+      "source-vs-runtime generic pair",
+      "frozen-holdout retuning pair",
+      "Goodman ancestry generic pair",
+      "CVEC internal-transport-vs-behavior pair",
+      "pre-load-hash-vs-consumed-bytes generic pair",
+      "raw swarm volume generic pair"
+    ],
+    "reason": "Current main already contains stronger Claude-evidence hard negatives or current authority rules for these themes; duplicating them would overweight the same causal lesson."
+  },
+  "swarm_review": {
+    "generator": "PASS: 5 nonduplicate causal families, each with method + hard-negative twin.",
+    "dedup_reviewer": "PASS: removed lessons already fused on current main.",
+    "evidence_scope_reviewer": "PASS: no row mints runtime/training/J-Space/HCU/EntityOS credit.",
+    "leakage_reviewer": "PASS: every family and ancestry remains in one split.",
+    "shortcut_reviewer": "PASS_AT_THIS_SCOPE: these are protocol decisions, not opaque-code binding rows; no class/symbol shortcut claim is made."
+  },
+  "credits": {
+    "source_candidate_validation": 1,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0
+  }
+}

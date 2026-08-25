@@ -1,0 +1,75 @@
+{
+  "schema": "CLAY_TRIGGER2_DYNAMIC_CODEBOOK_V3_FACTORIAL_AUDIT/v1",
+  "date": "2026-08-25",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "trigger": "triggerwort 2",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "supervisor_epoch_observed": "8.78",
+  "mode": "FREE_ONLY",
+  "predecessor_negative_evidence": {
+    "canonical_commit": "ca62b54cf8290601f2b273344df7c7045a29c0df",
+    "verdict": "REJECT_FOR_DIRECT_TRAINING_SECOND_ORDER_SHORTCUT_PRESENT",
+    "shortcut": "mapping + template + codebook display order exactly decoded semantic class in v2"
+  },
+  "candidate_v3": {
+    "local_generator_sha256": "b4f75833679f14b42e3398c3e792487bb398f2f2c4ed32536aed83e0ebdd615a",
+    "abstract_jsonl_sha256": "19c2db100d6b3320a6134b955d5946646f2fa6f9d0e0fb73c7888fb96db01003",
+    "rows": 864,
+    "factorization": {
+      "semantic_scenarios": 3,
+      "s3_mappings": 6,
+      "codebook_display_orders": 6,
+      "query_polarities": 2,
+      "training_templates": 4
+    },
+    "evidence_class": "METHOD_ONLY",
+    "candidate_train_ready": false,
+    "requires_abi_atom_resolution": true
+  },
+  "deterministic_adversarial_tests": {
+    "pass": true,
+    "failures": [],
+    "class_symbol_mutual_information_bits": 0.0,
+    "conditional_mutual_information_semantic_class_display_order_given_mapping_template_query_bits": 0.0,
+    "nuisance_only_decoder_accuracy_mapping_template_order_query": 0.3333333333333333,
+    "nuisance_only_decoder_chance": 0.3333333333333333,
+    "counterfactual_display_order_cells": 144,
+    "counterfactual_mapping_cells": 144,
+    "counterfactual_query_cells": 432
+  },
+  "swarm_review": {
+    "evidence_extractor": "PASS: donor evidence still isolates episodic semantic-to-codebook routing as the primary measured training gap at donor-model scope.",
+    "dataset_architect": "PASS_FOR_ABSTRACT_FACTORIAL_SEED: every semantic scenario is independently crossed with all S3 mappings, all display orders, both query polarities and all four training templates.",
+    "adversarial_shortcut_hunter": "PASS_AGAINST_KNOWN_V2_SHORTCUT: mapping/template/order/query nuisance-only decoder is exactly chance; this does not prove absence of every future shortcut.",
+    "statistical_reviewer": "PASS_EXACT_DESIGN: marginal class-symbol MI and conditional class-order MI are exactly zero for the generated factorial seed.",
+    "abi_provenance_reviewer": "BLOCKED_FOR_REAL_TRAINING: abstract slots must be replaced only through the exact verified 46-atom ABI/tokenizer materialization path.",
+    "formatter_reviewer": "BLOCKED_FOR_REAL_TRAINING: downstream training projection must prove that metadata fields are excluded and only prompt/target enter model training payloads.",
+    "retention_reviewer": "NO_NEW_MODEL_EVIDENCE: preserve semantic-read, symbol-write, carrier-binding and general protocol/language retention gates.",
+    "harness_compatibility_reviewer": "PASS_WITH_GATES: v3 gives explicit mapping/order/query identities for lesion/shuffle/rescue and nuisance-decoder checks.",
+    "final_integrator": "CANDIDATE_SOURCE_PASS_NOT_TRAINING_READY"
+  },
+  "remaining_gates": [
+    "recover and hash-bind the exact verified 46 accepted ABI atoms and pinned tokenizer identity",
+    "prove the real training formatter serializes only intended model input/target fields and cannot leak metadata/family labels",
+    "materialize ABI symbols and re-run one-token and atom-row integrity tests",
+    "add split-isolated lexical families beyond the three semantic anchors without reopening nuisance shortcuts",
+    "keep validation and frozen unseen-template/unseen-symbol holdouts outside mixture/threshold/checkpoint selection",
+    "run base-model and post-FT preregistered evaluations; source factoriality alone is not behavioral success"
+  ],
+  "research_return": {
+    "hypothesis": "The episodic binder should be learned from a factorial local-routing curriculum whose nuisance structure is provably nonpredictive, while architecture-policy families remain a separately measurable curriculum channel.",
+    "counterhypothesis": "Even leak-free factorial prompt structure may overfit the three semantic anchors or interact destructively with architecture-policy specialization.",
+    "falsifier": "On frozen lexical/template/symbol holdouts, require >=0.90 dynamic binding and cross-template transfer while retention gates remain within tolerance; compare curriculum schedules at matched tokens.",
+    "go_harness_implication": "Expose nuisance-only decoders, display-order counterfactuals, mapping shuffles and binder lesion/rescue separately from multi-node HCU behavior."
+  },
+  "credit_boundary": {
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "qwen35_jspace_positive_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  }
+}

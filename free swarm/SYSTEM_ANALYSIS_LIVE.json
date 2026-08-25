@@ -1,6 +1,6 @@
 {
   "schema": "CLAY_FREE_SWARM_SYSTEM_ANALYSIS/v3",
-  "generated_at": "2026-08-25T17:26:05.380039+00:00",
+  "generated_at": "2026-08-25T17:41:11.810890+00:00",
   "runtime": {
     "supervisor": "STOPPED/QUARANTINED",
     "go_swarm": "RUNNING",
@@ -65,7 +65,7 @@
   },
   "distillery": {
     "schema": "CLAY_RESEARCH_DISTILLERY_STATUS/v1",
-    "generated_at": "2026-08-25T17:26:00.360854+00:00",
+    "generated_at": "2026-08-25T17:40:41.890011+00:00",
     "collected_source_tokens": 11621,
     "accepted_dataset_tokens": 0,
     "dataset_yield": 0.0,
@@ -111,7 +111,7 @@
     "model_output_tokens": 1455,
     "shared_provider_budget": {
       "schema": "CLAY_SHARED_PROVIDER_BUDGET/v1",
-      "generated_at": "2026-08-25T17:26:00.361653+00:00",
+      "generated_at": "2026-08-25T17:40:41.890570+00:00",
       "providers": {
         "arxiv": {
           "max_inflight": 1,
@@ -213,13 +213,13 @@
           "max_inflight": 16,
           "active_leases": 0,
           "min_interval_s": 0.5,
-          "cooldown_seconds": 9.988673686981201,
-          "total_requests": 2358,
+          "cooldown_seconds": 9.990726709365845,
+          "total_requests": 2445,
           "total_success": 134,
-          "total_429": 2223,
+          "total_429": 2310,
           "total_errors": 0,
           "last_status": "429",
-          "last_observed_at": "2026-08-25T17:26:00.350189+00:00"
+          "last_observed_at": "2026-08-25T17:40:41.881319+00:00"
         },
         "semantic_scholar": {
           "max_inflight": 1,
@@ -249,16 +249,16 @@
     },
     "db_bytes": 983040,
     "top_questions": [
-      "What are the implications of the FREE_SWARM_ADMISSION_BOUNDARY_RECEIPT/v1 execution on the program convergence?",
-      "How can the secret and socket tripwires be improved to ensure zero secret lookups and zero network attempts?",
-      "Does NVIDIA NGC expose a public API key introspection endpoint that returns entitlement claims (free-prototyping vs paid) without requiring a paid NGC org?",
-      "Does Groq expose /v1/keys/{key_id} or similar metadata endpoint returning rate_limit_tier and billing_status for free keys?",
-      "Does OpenRouter emit signed route receipts with pricing=0 for free models, verifiable via their public key?",
-      "What are the potential risks and consequences of the FREE_SWARM_ADMISSION_BOUNDARY_RECEIPT/v1 execution failure?",
-      "Why are unadmitted providers being executed despite the typed admission system?",
-      "What indirect paths might be allowing unadmitted provider execution?",
-      "What is the optimal concurrency limit for Nvidia?",
-      "Does NVIDIA Developer Program API expose per-credential model entitlements and rate limits programmatically, or must we rely on static tier mappings with operator attestation?"
+      "What is the minimal provider-side evidence (beyond credential fingerprint) that proves a concrete credential has FREE mode access for NVIDIA NIM, and can this be verified at HCU pre-call binding time without network I/O?",
+      "How does lazy loading of logical modules affect deterministic reproducibility and causal trace fidelity in FREE_ONLY HCU executions?",
+      "How does token-count caching affect overall HCU end-to-end latency under varying workload patterns?",
+      "How can we cryptographically bind provider admission tokens to actual free‑tier usage without introducing trusted third parties?",
+      "Can the Merkle tree be updated without re‑signing the governance file while preserving offline verifiability?",
+      "Can typed Entry Fabric preserve causal identity across provider boundaries without a centralized provenance coordinator that introduces non-zero coordination cost?",
+      "Does any executable LiteVerify component exist in the HCU/Entry Fabric codepath, or is it purely a documentation artifact from Xeno/XCU compatibility layer?",
+      "How does persistent JIT caching affect cross‑provider determinism and the ability to replay causal traces in FREE_ONLY mode?",
+      "Can credential fingerprint stability be guaranteed across provider key rotation without re-admission ceremonies?",
+      "Wie kann die Zuverlässigkeit und Skalierbarkeit des EntityOS/HCU-Systems unter verschiedenen Anliegen-Strategien bewertet werden?"
     ],
     "candidate_states": {}
   },
@@ -433,6 +433,6 @@
     "measured_total_sonnet5_equivalent_usd": 148.830648,
     "verified_historical_savings_usd": null,
     "nominal_avoided_if_zero_cost_usd": 148.830648,
-    "repo_output_only_proxy_usd": 134.8813
+    "repo_output_only_proxy_usd": 135.08773
   }
 }

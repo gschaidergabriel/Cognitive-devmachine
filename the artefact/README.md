@@ -4,7 +4,7 @@
 
 ## Current authority — 2026-08-25 re-entry
 
-Newest inbox-selected supervisor observed in this update: **8.78**. Mode: **FREE_ONLY**. Canonical `main` observed immediately before this write: `e89abd132938faae48659361c83a95a6c61717bd`.
+Newest inbox-selected supervisor observed in this update: **8.78**. Mode: **FREE_ONLY**. Canonical `main` observed immediately before this write: `ccb134d5d4b300b9f752d126ccb138740f79ffbd`.
 
 Persistent research entity = **Clay**. Temporary workers/models/sessions are organs, not persistent entities. Product = **EntityOS**. Integrated cognition/compute architecture = **HCU**. Xeno/XCU remain compatibility/research aliases only.
 
@@ -30,11 +30,11 @@ This GO also closed a separate re-entry defect: the inbox selected Supervisor **
 
 The four current-facing mirrors are now synchronized to `SUPERVISOR_STEERING_8_78.json` under commits `845a21bec23b97c11eb73a17ba152dad9313d4ab`, `884892a82d1d25bf3f0325dc90fe5bd7a2065739`, `41a8b3a4f40dd7706edb6d9799b531946a768fff`, and `1903eb6ed78856c80d358ab96b5229bc68accc`. The manifest/program live-funnel snapshot is aligned to the observed `free swarm/LIVE_METRICS.json`: **39,932,437** measured tokens, while Forge remains at **1 nominal historical ACCEPT** and Distillery remains at **0 accepted dataset tokens**. Raw volume remains non-crediting.
 
-The active 6000 supervisor also contains `CLAY_SWARM_RAW_GENERATION_BACKPRESSURE/v1`: it reads local canonical Forge SQLite counts, pauses/stops raw generation when conversion pressure is high, and fails closed when the Forge DB/schema/read is unavailable. This does not raise provider concurrency/token budget and does not read provider credentials.
+The active 6000 supervisor also contains `CLAY_SWARM_RAW_GENERATION_BACKPRESSURE/v1`. Its current successor semantics separate transport liveness from raw-scale backpressure: pending historical extraction keeps the shared 6000 extraction transport alive; with no pending extraction, ready + `NEEDS_IMPLEMENTATION` pressure can stop raw scale; missing/invalid Forge state remains fail-closed. The control path remains credential blind and does not raise provider concurrency/token budget.
 
 A second completed one-shot dispatch surface was closed in this GO: `.github/workflows/go878-wire-backfill-supervisor.yml` no longer listens to title-only `issues.opened` events after its source target had already converged. Commit `606062164802bbfcea84ca1083f24059f3bb93b8` leaves the old capsule manual-only; issue #1834 was closed completed and #1836/#1841/#1852 duplicate. The bounded receipt is `research_entity/continuity/receipts/2026-08-25_GO878_COMPLETED_ONESHOT_DISPATCH_RETIREMENT_GPT56SOL.json`. Existing queued legacy Actions remain scheduler evidence only and receive zero independent replication credit.
 
-These remain **source/control-plane deltas only**. No terminal exact-current historical-backfill saturation receipt, replay-v2 migration runtime receipt, backpressure runtime acceptance receipt, positive-token Forge-to-Distillery witness, or local model-runtime receipt was observed in this re-entry. Runtime/model/training/product credit therefore remains unchanged.
+These remain **source/control-plane deltas** unless an exact execution receipt says otherwise. No terminal exact-current historical-backfill saturation receipt, replay-v2 migration runtime receipt, state-split backpressure runtime acceptance receipt, or positive-token Forge-to-Distillery witness is credited here. Separately, the current supervisor records one bounded Qwen3-0.6B hidden-state causal **component** runtime credit; it does not promote J-Space model, full-HCU, training, canonical semantics, or whole-product credit.
 
 ### Track B — HCU + Typed Entry Fabric co-development
 
@@ -54,23 +54,24 @@ No second truth store, effect path, Forge authority, or persistent entity was in
 
 ### Track C — Global J-Space/GWT + zero-cost local model readiness
 
-**TRAINING_READINESS_NO_CHANGE_WITH_REASON.**
+**TRAINING_READINESS_NO_CHANGE_WITH_REASON FOR THIS ORGAN.**
 
-The strongest gates remain upstream and executable: historical replay must reach a terminal saturation receipt, replay-v2 must execute on exact-current source, raw-generation backpressure must be observed at runtime, and one evidence-qualified Forge ACCEPT must become exactly one persistent Distillery packet with `accepted_dataset_tokens > 0`, followed by semantic replay with exactly `+0` packets / `+0` accepted tokens.
+Current Supervisor 8.78 now records one bounded Qwen3-0.6B hidden-state causal component result, while native llama.cpp `cvec`, J-Space model runtime, full HCU and training credit remain zero. The strongest system gates also remain upstream and executable: historical replay must reach a terminal saturation receipt, replay-v2 must execute on exact-current source, state-split raw-generation/backfill behavior must be observed at runtime, and one evidence-qualified Forge ACCEPT must become exactly one persistent Distillery packet with `accepted_dataset_tokens > 0`, followed by semantic replay with exactly `+0` packets / `+0` accepted tokens.
 
-The local Qwen3-0.6B/J-Space causal lane remains zero-cost and nonpromoting. This invocation exposes no reproducible shared immutable macrocycle/request identity sufficient for the canonical create-only unusual-experiment lease, therefore:
+This invocation exposes no reproducible shared immutable macrocycle/request identity sufficient for the canonical create-only unusual-experiment lease, therefore:
 
 `COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT`
 
-No new unusual J-Space/model intervention, paid/provider execution, Together call, or training run was performed.
+No new unusual J-Space/model intervention, paid/provider execution, Together call, or training run was performed by this organ.
 
 ## Current evidence credit
 
 - current-facing authority alignment: **Supervisor 8.78 source/control-plane convergence present; no runtime credit implied**;
 - replay-v2 migration: **canonical source fusion present; exact-current runtime credit 0**;
 - backlog-first Forge supervisor wiring: **canonical source fusion present; historical-backfill runtime credit 0**;
-- raw-generation conversion backpressure: **canonical source fusion present; runtime credit 0**;
+- raw-generation/extraction transport state split: **canonical source + regression convergence present; runtime credit 0 until exact-current execution**;
 - completed one-shot GO878 issue-trigger retirement: **canonical source/control-plane convergence present; runtime credit 0**;
+- Qwen3-0.6B hidden-state causal component: **bounded component runtime credit 1 per current Supervisor 8.78; no native llama.cpp cvec/J-Space-model promotion**;
 - full historical Free-Swarm re-evaluation/saturation: **not yet terminally observed**;
 - persistent Forge -> Distillery positive-token conversion witness: **not yet observed**;
 - provider runtime credit: **0**;
@@ -86,11 +87,11 @@ A source file, workflow, queued run, token count, model consensus, or component 
 
 1. Execute the already-fused historical-backfill path on exact-current source across all existing `workers.jsonl` incrementally to saturation and emit `FREE_SWARM_HISTORICAL_BACKFILL_RECEIPT/v1` binding exact source commit/tree/dirty state, artifact root, scan set, lines scanned, successful outputs, explicit/batch deltas, new concepts, execution variants, duplicates superseded, ready backlog, implementation backlog, and remaining pending extraction.
 2. Execute replay-v2 migration/concurrency regressions on exact-current `main` using the frozen pre-v2 database fixture and reopen/concurrent replay cases.
-3. Verify `CLAY_SWARM_RAW_GENERATION_BACKPRESSURE/v1` on an authorized exact-current runtime: missing/invalid Forge DB must pause fail-closed; high conversion pressure must stop raw generation; low pressure may allow it without raising provider concurrency/token budget.
+3. Execute `tests/test_go_878_raw_generation_backpressure.py` on an authorized exact-current surface: missing/invalid Forge DB must pause fail-closed; pending extraction must keep the 6000 transport alive even when ready/implementation pressure is high; after pending extraction reaches zero, ready/implementation pressure at threshold must stop raw scale; low non-extraction pressure may allow it.
 4. Prove one evidence-qualified Forge ACCEPT -> exactly one persistent Distillery packet -> `accepted_dataset_tokens > 0` -> semantic replay -> exactly `+0` packets / `+0` accepted tokens.
 5. Validate retained historical provenance/source-count logic against exact-current replay so a second saturation pass cannot inflate scheduling weight from repeated provenance.
-6. Only after these gates should external Free-Swarm scale-up be reconsidered.
-7. Keep local Qwen3-0.6B/J-Space causal work separate, zero-cost, and nonpromoting until its own exact-source terminal evidence and experiment coordination requirements are satisfied.
+6. Bind the selected Qwen3-0.6B layer-20 basis through the pinned GGUF + llama.cpp `llama_set_adapter_cvec` path and repeat matched controls only after the required experiment coordination/identity gate is satisfied.
+7. Only after these gates should external Free-Swarm scale-up or broader model/training promotion be reconsidered.
 
 ## GO 8.78 — exact-current saturation-semantics re-entry delta
 
@@ -124,7 +125,7 @@ This advances Track A at historical Forge source scope, Track B at reusable caus
 
 Exact-current counterevidence at `377ffb32b055efeb4c9fa0b42aca1c85d50a71c0` shows that process-level backpressure cannot safely count `pending_extraction` as ordinary stop pressure while `tools/run_6000_free_swarm_fast.py` carries the historical backfill scheduler. Stopping that process can freeze the path required to drain the backlog. The successor controller must keep the extraction-carrying fabric alive while reducing raw-only scheduling under historical pressure.
 
-This organ added `tests/test_go_878_raw_generation_backpressure.py` and corrected it successor-dynamically at `93c9173627b157c622dabe010e41fc9c1507d3a1`. The fixture separates ready+implementation pressure from pending-only extraction pressure and records pending-only process stop as an explicit expected-failure liveness gate. A local reconstructed exact-gate-block run returned `4 passed, 1 xfailed`; that result validates the test logic only and is **not** canonical EntityOS/HCU runtime evidence. Durable receipt: `research_entity/continuity/receipts/2026-08-25_GO_878_BACKPRESSURE_LIVENESS_REGRESSION_GPT56SOL_1037P0700.json` at `5e70a6529ea610472dac5e05e1464b13bb6c63e1`.
+This organ added `tests/test_go_878_raw_generation_backpressure.py` and corrected it successor-dynamically at `93c9173627b157c622dabe010e41fc9c1507d3a1`. The fixture separated ready+implementation pressure from pending-only extraction pressure and originally recorded pending-only process stop as an explicit expected-failure liveness gate. A local reconstructed exact-gate-block run returned `4 passed, 1 xfailed`; that historical result validated the test logic only and was **not** canonical EntityOS/HCU runtime evidence. The later state-split convergence below supersedes the xfail as the current source law.
 
 Track C also gained repository-bound FREE_ONLY local model evidence at `8acce46e7989fa0cf6e7cf368f2731c2f18ce7c2`: a calibration-selected nonterminal Qwen3-0.6B layer-20 1024D direction reproduced on a fresh disjoint holdout against sign-flip, exact-null, orthogonal-same-norm and permuted-same-norm controls. This grants **model-specific nonterminal causal component credit only**. Native llama.cpp `cvec` consumption, full HCU runtime, training and whole-product PASS remain uncredited. The next model-specific discriminator is exact basis binding through the retained J-Space vector-control adapter into pinned Qwen3-0.6B Q8_0 GGUF + pinned llama.cpp `llama_set_adapter_cvec`, followed by the same matched controls and exact receipts.
 
@@ -147,6 +148,16 @@ Canonical `main` now contains the fail-closed compatibility fix at source commit
 A deterministic reconstructed alias check returned 4/4 expected outcomes for current `program`, legacy `active_program`, conflict rejection and missing-authority rejection. The fifth repository regression preserves the unchanged stale-admission-epoch rejection. GitHub Actions on the earlier PR head failed before any job step started (`runner_id = 0`, empty step list); this is non-execution/infrastructure evidence rather than a patch-test failure. PR #1890 is superseded by the direct exact-blob main fusion and should not become a second semantic lane.
 
 This advances Track A at deterministic control-plane admission scope and Track B at reusable typed-authority schema-compatibility scope. Track C remains upstream-gated by terminal historical saturation/replay evidence, Forge -> Distillery positive accepted tokens, and native pinned Qwen/llama.cpp J-Space vector-consumption evidence. No unusual experiment, provider call, paid path, Together call or training run was executed by this organ. Source fusion does not by itself prove that a running supervisor has reloaded the new bytes or that downstream provider/route checks pass.
+
+## GO 8.78 — extraction transport / non-extraction backpressure state split
+
+Exact-current re-entry exposed two successive failure modes of the same control variable. First, `pending_extraction` was included in stop pressure even though the 6000 process is itself the historical extraction transport. A later source edit restored liveness by ignoring the gate result and unconditionally starting the fabric; that in turn erased ready/`NEEDS_IMPLEMENTATION` raw-scale backpressure after pending extraction reached zero.
+
+Canonical successor commit `b27318a223771519dfd84796dc0f9518fdb84f9c` now makes the state split explicit in the existing single supervisor: `pending_extraction > 0` yields `KEEP_EXTRACTION_TRANSPORT`; with no pending extraction, ready + implementation pressure retains normal stop authority; missing/invalid Forge state remains `PAUSE_RAW_GENERATION_FAIL_CLOSED`. Commit `abeb4a7ff0c7829ae4574015657026a50223332e` replaces both historical xfails/telemetry-only expectations with normal regressions, including the harder case where pending extraction keeps the transport alive even while ready + implementation pressure is already at threshold.
+
+The stale-base PR #1909 was intentionally closed rather than force-merged because later canonical edits touched the same supervisor file; its useful semantic delta was ported onto exact-current source instead. Durable receipt: `research_entity/continuity/receipts/2026-08-25_GO878_TRANSPORT_BACKPRESSURE_STATE_SPLIT_GPT56SOL_1045P0700.json`.
+
+This is **source/regression convergence only** in this organ. No exact-current test execution or runtime reload/acceptance receipt was observed, so historical-backfill runtime, replay-v2 runtime, provider runtime, J-Space model, full HCU, training and whole-product credit remain unchanged. The next discriminator is execution of the state-split regressions on an admitted exact-current zero-cost surface followed by bounded historical replay toward a terminal saturation receipt.
 
 ## Evidence discipline and re-entry
 

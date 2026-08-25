@@ -4,31 +4,5 @@
   "op": "exec",
   "cwd": "/workspace/clay-global-research-entity",
   "timeout_seconds": 180,
-  "command": "set -euo pipefail; ROOT=/cache/clay-qwen06; VENV=$ROOT/venv; HFCACHE=$ROOT/hf; OUT=/workspace/qwen06-gpt56sol-direct/out; LOG=/workspace/qwen06-gpt56sol-direct/execution.log; mkdir -p $ROOT $HFCACHE $OUT /workspace/qwen06-gpt56sol-direct; test -f tools/trigger1_local_qwen06_midlayer_causal_execute.py; if [ ! -x $VENV/bin/python ]; then python3 -m venv $VENV; fi; cat > /workspace/qwen06-gpt56sol-direct/run.sh <<'EOS'
-#!/usr/bin/env bash
-set -euo pipefail
-ROOT=/cache/clay-qwen06
-VENV=$ROOT/venv
-HFCACHE=$ROOT/hf
-OUT=/workspace/qwen06-gpt56sol-direct/out
-cd /workspace/clay-global-research-entity
-$VENV/bin/python -m pip install -q --upgrade pip wheel setuptools
-if ! $VENV/bin/python -c 'import torch, transformers, huggingface_hub, safetensors, accelerate' >/dev/null 2>&1; then
-  $VENV/bin/python -m pip install -q --upgrade torch transformers huggingface_hub safetensors accelerate
-fi
-unset OPENAI_API_KEY OPENAI_API_KEYS ANTHROPIC_API_KEY ANTHROPIC_API_KEYS GROQ_API_KEY GROQ_API_KEYS MISTRAL_API_KEY MISTRAL_API_KEYS NVIDIA_API_KEY NVIDIA_API_KEYS NVIDIA_NIM_API_KEY NGC_API_KEY OPENROUTER_API_KEY OPENROUTER_API_KEYS TOGETHER_API_KEY TOGETHER_API_KEYS HF_TOKEN HUGGING_FACE_HUB_TOKEN HUGGINGFACE_HUB_TOKEN || true
-export HF_HUB_DISABLE_IMPLICIT_TOKEN=1
-export HF_HUB_DISABLE_TELEMETRY=1
-export TOKENIZERS_PARALLELISM=false
-export OMP_NUM_THREADS=2
-export MKL_NUM_THREADS=2
-export HF_HOME=$HFCACHE
-set +e
-$VENV/bin/python tools/trigger1_local_qwen06_midlayer_causal_execute.py --output-dir $OUT --cache-dir $HFCACHE
-rc=$?
-set -e
-echo $rc > $OUT/exit_code.txt
-exit $rc
-EOS
-chmod +x /workspace/qwen06-gpt56sol-direct/run.sh; nohup /workspace/qwen06-gpt56sol-direct/run.sh > $LOG 2>&1 < /dev/null & PID=$!; echo QWEN_PROCESS_LAUNCHED=PASS; echo pid=$PID; echo source_head=$(git rev-parse HEAD); echo script_sha256=$(sha256sum tools/trigger1_local_qwen06_midlayer_causal_execute.py | awk '{print $1}'); echo log=$LOG; echo result=$OUT/trigger1_local_activation_api_result.json"
+  "command": "set -euo pipefail; ROOT=/cache/clay-qwen06; VENV=$ROOT/venv; HFCACHE=$ROOT/hf; OUT=/workspace/qwen06-gpt56sol-direct/out; LOG=/workspace/qwen06-gpt56sol-direct/execution.log; mkdir -p $ROOT $HFCACHE $OUT /workspace/qwen06-gpt56sol-direct; test -f tools/trigger1_local_qwen06_midlayer_causal_execute.py; if [ ! -x $VENV/bin/python ]; then python3 -m venv $VENV; fi; nohup bash -lc 'set -euo pipefail; ROOT=/cache/clay-qwen06; VENV=$ROOT/venv; HFCACHE=$ROOT/hf; OUT=/workspace/qwen06-gpt56sol-direct/out; cd /workspace/clay-global-research-entity; $VENV/bin/python -m pip install -q --upgrade pip wheel setuptools; if ! $VENV/bin/python -c \"import torch, transformers, huggingface_hub, safetensors, accelerate\" >/dev/null 2>&1; then $VENV/bin/python -m pip install -q --upgrade torch transformers huggingface_hub safetensors accelerate; fi; unset OPENAI_API_KEY OPENAI_API_KEYS ANTHROPIC_API_KEY ANTHROPIC_API_KEYS GROQ_API_KEY GROQ_API_KEYS MISTRAL_API_KEY MISTRAL_API_KEYS NVIDIA_API_KEY NVIDIA_API_KEYS NVIDIA_NIM_API_KEY NGC_API_KEY OPENROUTER_API_KEY OPENROUTER_API_KEYS TOGETHER_API_KEY TOGETHER_API_KEYS HF_TOKEN HUGGING_FACE_HUB_TOKEN HUGGINGFACE_HUB_TOKEN || true; export HF_HUB_DISABLE_IMPLICIT_TOKEN=1 HF_HUB_DISABLE_TELEMETRY=1 TOKENIZERS_PARALLELISM=false OMP_NUM_THREADS=2 MKL_NUM_THREADS=2 HF_HOME=$HFCACHE; set +e; $VENV/bin/python tools/trigger1_local_qwen06_midlayer_causal_execute.py --output-dir $OUT --cache-dir $HFCACHE; rc=$?; set -e; echo $rc > $OUT/exit_code.txt; exit $rc' > $LOG 2>&1 < /dev/null & PID=$!; echo QWEN_PROCESS_LAUNCHED=PASS; echo pid=$PID; echo source_head=$(git rev-parse HEAD); echo script_sha256=$(sha256sum tools/trigger1_local_qwen06_midlayer_causal_execute.py | cut -d ' ' -f1); echo log=$LOG; echo result=$OUT/trigger1_local_activation_api_result.json"
 }

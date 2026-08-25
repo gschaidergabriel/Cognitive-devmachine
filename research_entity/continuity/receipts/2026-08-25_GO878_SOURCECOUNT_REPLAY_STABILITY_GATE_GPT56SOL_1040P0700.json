@@ -1,0 +1,60 @@
+{
+  "schema": "CLAY_GO_RESEARCH_DELTA_RECEIPT/v1",
+  "observed_at": "2026-08-25T10:40:00+07:00",
+  "organ": "GPT-5.6 Sol / ChatGPT project organ",
+  "trigger": "go",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority_epoch": "8.78",
+  "mode": "FREE_ONLY",
+  "finding": {
+    "classification": "REPLAY_PARTITION_IDENTITY_CAN_MANUFACTURE_FORGE_SCHEDULING_WEIGHT",
+    "observed_current_source": "tools/free_swarm_historical_backfill.py",
+    "mechanism": "The current offset-only incremental scanner resets local_line on each ingest_artifact_history resume while source_event_identity hashes line_no. The same physical workers.jsonl record can therefore receive different source_event_id values under different replay partitioning. The active backlog-first Forge calls source-count reconciliation after ingestion and uses source_count as a scheduling tie-breaker.",
+    "risk": "COUNT(DISTINCT source_event_id) is not an admissible provenance-weight estimate until source-event identity is replay-partition invariant."
+  },
+  "hypothesis": "A conservative scheduling lower bound prevents artificial provenance amplification until the absolute-line checkpoint is fused.",
+  "counterhypothesis": "Skipping reconciliation is sufficient.",
+  "counterhypothesis_disposition": "REJECTED: candidate insertion can already increase source_count when partition-sensitive replay produces a new synthetic source_event_id, so a no-op reconciliation can preserve or accumulate distorted weight.",
+  "delta": {
+    "helper": "tools/free_swarm_backfill_provenance.py",
+    "helper_commit_initial_gate": "cdd5dbe9b97aa173c2abda9eb5af3b8f9a54be43",
+    "helper_commit_conservative_clamp": "fa0c4023e52b67d220d3aa0f0ac3543edb090ca8",
+    "test": "tests/test_free_swarm_backfill_provenance_stability_gate_878.py",
+    "test_commit_initial": "f61dbd9d2079b0eefcb85ffe010731868c753e24",
+    "test_commit_clamp": "28ed45b67f734a128878aa4fa245e7f2d81fec06",
+    "fail_closed_rule": "If backfill_files.line_no is absent, linked candidates are clamped to source_count=1. If line_no is present, source_count may be reconciled to COUNT(DISTINCT source_event_id). Unlinked legacy candidates remain untouched.",
+    "automatic_reenable": "The gate derives readiness from the additive backfill_files.line_no schema marker; it does not require a second product/state/effect authority."
+  },
+  "evidence": {
+    "source_inspection": true,
+    "focused_regression_source_added": true,
+    "focused_regression_execution_observed": false,
+    "admitted_exact_current_runtime_execution_observed": false,
+    "historical_backfill_saturation_receipt_observed": false,
+    "scope": "SOURCE_AND_FAIL_CLOSED_PROVENANCE_SCHEDULING_INVARIANT_ONLY"
+  },
+  "coordination": {
+    "new_issue_dispatch_created_by_this_organ": false,
+    "line_identity_generation_zero_quarantined_by_parallel_convergence": true,
+    "line_identity_generation_one_semantic_singleton_observed": true,
+    "shared_immutable_macrocycle_identity": null,
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_experiments_executed": 0
+  },
+  "go_tracks": {
+    "track_a": "ADVANCED: active backlog-first Forge can no longer gain unprovable multi-source scheduling weight solely from replay partitioning while the absolute-line migration is absent",
+    "track_b": "ADVANCED: provenance/evidence admission now explicitly depends on replay-stable causal identity before multi-source weighting is admitted",
+    "track_c": "ADVANCED_BY_PARALLEL_EVIDENCE_ONLY: model-specific Qwen3-0.6B causal component evidence exists, but this organ performed no new J-Space/model intervention and grants no native cvec/training/full-HCU credit"
+  },
+  "credits": {
+    "historical_backfill_runtime": 0,
+    "whole_entityos_hcu_runtime": 0,
+    "hcu_full_runtime": 0,
+    "native_jspace_cvec_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_action": "Fuse and execute the replay-stable absolute-line checkpoint on current successor source, run the focused provenance gate plus historical-backfill regressions on the admitted runtime, then run full historical saturation. Only after line_no-backed identity is present should distinct-source scheduling weight be restored. In parallel preserve the retained HCU/J-Space ABI lane and require exact vector-coordinate provenance plus six matched controls before native llama.cpp cvec promotion."
+}

@@ -39,6 +39,26 @@ If an unusual experiment is consumed, exactly one receipt/claim inside that `mac
 
 A worker cannot distinguish concurrent separate user `go` triggers from parallel organs of one `go` using GitHub timing alone. A locally generated UUID would separate true siblings instead of joining them. Therefore the shared identity must originate at, or be propagated by, the trigger/orchestration boundary.
 
+## Ordinary repeatable dispatch identity is a different axis
+
+`macrocycle_id` MUST NOT be used to make a reusable ordinary infrastructure probe unique. Multiple organs and multiple independent `go` macrocycles can request the same still-pending measurement; creating one trigger per macrocycle causes issue/workflow fan-out without adding information.
+
+Before creating any repeatable ordinary Issue/workflow/runtime trigger, every `go` organ MUST follow:
+
+`research_entity/continuity/ORDINARY_DISPATCH_IDEMPOTENCY_PROTOCOL.md`
+
+In particular:
+
+- read the canonical dispatch spec;
+- derive its current semantic `dispatch_key` from dispatch class + explicit retry generation;
+- atomically CREATE-ONLY the canonical claim **before** creating the external trigger;
+- if the claim already exists, create **zero** additional issues/workflow triggers for that dispatch generation;
+- never include `go`, macrocycle id, timestamp, issue/run id, unrelated `main` movement, or organ identity in the reusable probe identity;
+- never increment retry generation merely because another `go` arrived;
+- preserve pending/queued as pending/queued rather than manufacturing another probe.
+
+This law is independent of the unusual-experiment lease. Ordinary dispatch singleton coordination does not consume or create an unusual-experiment slot.
+
 ## Evidence boundary
 
 This contract fixes bookkeeping/causal identity only. It creates no product PASS, runtime PASS, provider admission, training authorization, or model-quality evidence.

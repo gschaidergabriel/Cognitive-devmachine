@@ -1,0 +1,89 @@
+{
+  "schema": "CLAY_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER/v66",
+  "date": "2026-08-26",
+  "trigger": "triggerwort2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "status": "CURRENT_RESEARCH_LEDGER_NONCANONICAL_SUCCESSOR_DYNAMIC",
+  "supersedes": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V65_GPT56SOL.json",
+  "inherits_all_nonconflicting_records_from": "T2-LEDGER-V65",
+  "observed_main_before_write": "a1f876a0202224d25ca2c20e52aa6258ae77c2b2",
+  "authority": {
+    "supervisor_epoch": "8.84",
+    "supervisor": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_84_DELTA_2026-08-26T0545P0700_GPT56SOL.json",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "architecture": "HCU",
+    "runtime_quiescence": "ACTIVE_FAIL_POST_STOP_PROVIDER_ATTEMPT_COUNTERS_INCREASING",
+    "provider_routes_admitted": false,
+    "training_execution_authorized": false
+  },
+  "revision_reason": "V66 records a new fail-closed source blocker discovered while re-entering the V65 real-FusedFabric source-path test. The retained FusedFabric coordinator currently accepts a caller-supplied proof dictionary whose physical-cohort predicates are booleans. The newly landed source-path integration fixture explicitly synthesizes that proof and sets every physical predicate true while using deterministic fake producer PIDs. This is valid as a source-path composition fixture only, but it demonstrates that the coordinator has no source-level provenance boundary separating a genuinely observed physical cohort witness from a caller-forged proof dictionary. Therefore neither the test nor this source shape can promote physical GRID10 evidence.",
+  "source_observation": {
+    "fused_source_path": "tools/trigger2_grid10_fused_physical_membership_cohort_acceptance_v1.py",
+    "fused_source_git_blob_sha1": "f566feb3c4aedf8627f8f64428524ddf14044b23",
+    "real_fabric_source_test": "tests/test_trigger2_fused_membership_two_phase_real_fabric_source_v1.py",
+    "real_fabric_source_test_git_blob_sha1": "6f4134a0893e88f31eb02a28b9f7e58f85a221c0",
+    "observed_coordinator_behavior": [
+      "atomic_fused_cohort_commit requires proof booleans all_alive_at_barrier, distinct_os_pids == 10, parent_child_pid_binding, same_snapshot_identity, all_transactions_open_at_barrier, all_hold_readonly_s1_fd_at_barrier, writer_free_identity_stable and process_intervals_overlap_release",
+      "the coordinator consumes ready_by_node marker values from the same caller-supplied proof dictionary for PID, read-receipt and snapshot cross-checks",
+      "no proof schema, proof digest, source-generator identity, nonforgeable in-process witness capability, or direct procfs/held-transaction attestation is validated by atomic_fused_cohort_commit itself"
+    ],
+    "observed_test_behavior": [
+      "_synthetic_source_proof marks every physical predicate true",
+      "_fixture creates deterministic packets with producer_pid 9001..9010 rather than deriving the proof from spawn_held_cohort",
+      "the positive test is intentionally named/source-scoped around real FusedFabric persistence, but the physical proof supplied to that path is synthetic"
+    ]
+  },
+  "new_blocker": {
+    "id": "CALLER_FORGEABLE_PHYSICAL_COHORT_PROOF_DICTIONARY",
+    "status": "SOURCE_FAIL_CLOSED_GAP",
+    "claim": "At source/API level, possession of correctly shaped proof data is currently treated as equivalent to observation of the physical cohort proof. A caller can construct the same booleans/markers without having performed the underlying procfs/transaction/barrier observations.",
+    "counterhypothesis": "The proof object is intended to be an internal trusted value produced only by spawn_held_cohort, so raw-dictionary forgery is outside the intended call contract.",
+    "adjudication": "The counterhypothesis is not sufficient for Clay evidence authority because the function signature accepts an ordinary dict, source contains no trusted-constructor/provenance check, and the current integration test itself exercises the supposedly physical gate with a synthetic dict. Treat the physical proof as SOURCE_UNTRUSTED until a source-enforced provenance boundary exists.",
+    "falsifier": "Show an exact-current source guard that makes a synthetic proof dictionary incapable of entering atomic_fused_cohort_commit while preserving a separately explicit source-fixture-only composition path."
+  },
+  "design_direction": {
+    "preferred": "Split source-fixture composition from physical evidence admission. The physical coordinator should accept a typed/opaque PhysicalCohortWitness minted by the physical observation path and reject raw or explicitly synthetic proof dictionaries. Source-only integration may use a distinct helper/API whose receipt is structurally incapable of claiming physical_grid10_runtime_credit.",
+    "minimum_gate": [
+      "introduce explicit proof kind/provenance and fail closed on SYNTHETIC_SOURCE_FIXTURE at the physical commit boundary",
+      "bind witness identity to exact node/PID/read-receipt/snapshot/barrier observations generated by the retained physical observation path",
+      "add a strict regression showing a synthetically asserted all-true proof cannot mutate FusedFabric physical-cohort state",
+      "preserve a separate deterministic source-composition test for resealed-envelope persistence/replay without physical-evidence semantics",
+      "do not create a second cohort authority or second truth/effect path"
+    ]
+  },
+  "credit_boundary": {
+    "new_source_research_delta": 1,
+    "real_fusedfabric_source_persistence_execution_credit": 0,
+    "repository_ci_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "model_call_runtime_credit": 0,
+    "checkpoint_selection_credit": 0,
+    "jspace_model_credit": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "canonical_semantics_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  },
+  "execution": {
+    "provider_called_this_cycle": false,
+    "model_runtime_executed_this_cycle": false,
+    "physical_grid10_executed_this_cycle": false,
+    "training_executed_this_cycle": false,
+    "vps_execution_performed": false,
+    "paid_execution": false,
+    "unusual_experiment_executed": false,
+    "work_class": "SOURCE_ONLY_REENTRY_FAIL_CLOSED_PROVENANCE_ANALYSIS_AND_RESEARCH_FUSION"
+  },
+  "next_priority_order": [
+    "P0 owning live host: prove FreeSwarm quiescence with zero provider-capable survivors plus bounded zero provider-counter delta without provider probing",
+    "P1 source-only: close CALLER_FORGEABLE_PHYSICAL_COHORT_PROOF_DICTIONARY by separating synthetic source-fixture composition from physical witness admission",
+    "P1 source-only after that closure and with exact-current dependency tree: run resealed adapter commit/replay/fail-before-mutation against the actual retained physical witness path",
+    "P1 after quiescence PASS: re-enter newest explicit FREE non-provider execution authority before model/provider/physical GRID10 promotion",
+    "P2 keep checkpoint selection blinded and training materialization closed until separately admitted executable evidence",
+    "P3 keep accepted_dataset_tokens and training credit at zero until one exact positive admission produces tokens and identical replay adds zero"
+  ],
+  "next_exact_action": "Add a fail-closed source boundary so atomic_fused_cohort_commit cannot accept a synthetic/raw physical proof as physical evidence; keep a separate explicitly nonphysical source-fixture composition path for adapter persistence testing. Then execute exact-current regression only when the exact dependency tree is available."
+}

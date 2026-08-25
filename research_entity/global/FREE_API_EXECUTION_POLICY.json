@@ -720,7 +720,21 @@
     "internal_measurement": "A status-200 response containing the required object, provider id, provider creation time, matching model and exact terminal choice but omitting usage previously returned success and reached VERIFIED and DONE.",
     "executable_evidence": "test_missing_response_usage_cannot_reach_verified_state",
     "counterhypothesis": "A valid completion body plus FRANK's requested max_tokens is sufficient token provenance; falsified because max_tokens is only an output ceiling and neither asserts actual prompt consumption nor the provider's returned completion count.",
-    "uncertainty": "Token counts do not establish billing or monetary cost. The 9999999999 ceiling and rejection of non-null optional usage detail objects are local FRANK v0.1 safety policy, not NVIDIA limits. No Ubuntu NVIDIA live receipt is available on this host."
+    "uncertainty": "Token counts do not establish billing or monetary cost. The 9999999999 ceiling is local FRANK v0.1 safety policy, not an NVIDIA limit. No Ubuntu NVIDIA live receipt is available on this host."
+  },
+  "provider_response_usage_detail_compatibility": {
+    "checked_at": "2026-08-26",
+    "claim": "The v0.1 text adapter accepts only two non-null usage detail forms: prompt_tokens_details.cached_tokens and completion_tokens_details.reasoning_tokens. Each must be one exact built-in nonnegative integer no greater than its prompt_tokens or completion_tokens parent, and the complete accepted detail object is retained in the receipt.",
+    "sources": [
+      "https://docs.nvidia.com/nim/large-language-models/2.0.5/day-0/get-started-nemotron-3-ultra.html",
+      "https://docs.vllm.ai/en/v0.16.0/api/vllm/entrypoints/openai/engine/protocol/",
+      "https://docs.vllm.ai/en/v0.16.0/api/vllm/entrypoints/openai/chat_completion/serving/"
+    ],
+    "external_evidence": "NVIDIA documents completion_tokens_details.reasoning_tokens for reasoning-enabled Nemotron NIM responses and states that completion_tokens remains the combined generated-token count. Official vLLM declares prompt_tokens_details.cached_tokens and constructs it from the cached subset of prompt tokens.",
+    "internal_measurement": "An otherwise canonical status-200 response with completion_tokens_details.reasoning_tokens previously remained EXECUTED but was rejected as invalid_provider_response solely because every non-null usage detail object was blocked.",
+    "executable_evidence": "test_documented_nvidia_reasoning_usage_remains_compatible",
+    "counterhypothesis": "Rejecting every non-null usage detail is the safest compatible v0.1 policy; falsified because it rejects an officially documented NVIDIA success shape while a closed bounded sub-schema can preserve both safety and provenance.",
+    "uncertainty": "Usage-detail schemas vary across backend versions and models. FRANK accepts only the two evidenced one-field objects; all other keys, non-integers, negative values and child counts exceeding their parent remain unverified. No Ubuntu NVIDIA live receipt is available on this host."
   },
   "http_200_provider_error_envelope": {
     "checked_at": "2026-08-25",

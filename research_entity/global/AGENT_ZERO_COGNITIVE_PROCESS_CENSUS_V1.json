@@ -1,0 +1,320 @@
+{
+  "schema": "AGENT_ZERO_COGNITIVE_PROCESS_CENSUS/v1",
+  "date": "2026-08-25",
+  "owner_target_commit": "72bc01e5562391528cd3a91c2851f77ad33ebf00",
+  "base_main_sha": "310289774c72bba3a8439a312a1f4d748e99bab8",
+  "product": "EntityOS",
+  "architecture": "HCU_XENO_DYNAMIC_GRID",
+  "fixed_grid_size_authority": false,
+  "grid_size_specification": "N>=1_DYNAMICALLY_DETERMINED_BY_WORKLOAD_AND_AVAILABLE_COMPUTE",
+  "evidence_refs": {
+    "project_agentzero_manifest": {
+      "path": "agentZero/MANIFEST.json",
+      "blob_sha": "72e3e2c8c92e9d153a0d5f0e4121b6485ebc2dbb"
+    },
+    "upstream_agent_zero": {
+      "repository": "agent0ai/agent-zero",
+      "commit": "b22a144bf59f15b1516084c9e7b88133ba92c8a9",
+      "role": "DONOR_REFERENCE_NOT_CLAY_AUTHORITY"
+    }
+  },
+  "evidence_classes": [
+    "R0_PROJECT",
+    "R0_PROJECT_PARTIAL",
+    "R0_PROJECT_DONOR",
+    "R0_UPSTREAM",
+    "OWNER_REQUIRED",
+    "R1_INFERRED"
+  ],
+  "state_classes": {
+    "S0": "CANONICAL_DURABLE_TRUTH_EFFECT_SECURITY_AUTHORITY",
+    "S1": "LIVE_SHARED_COGNITIVE_WORKSPACE_PROCESS_STATE",
+    "S2": "EPHEMERAL_REQUEST_LOCAL_CANDIDATE_PROJECTION"
+  },
+  "processes": [
+    {
+      "id": "AZP-01",
+      "name": "INPUT_ADMISSION_AND_CONTEXT_BINDING",
+      "evidence": ["R0_PROJECT", "R0_UPSTREAM"],
+      "state": ["S0", "S1"],
+      "distribution": ["SHARDABLE", "GLOBAL_BOUNDARY_VALIDATION"],
+      "effect_authority": false,
+      "inputs": ["message", "session_identity", "user_identity", "resource_refs"],
+      "outputs": ["admitted_turn_identity", "bounded_context_identity"],
+      "sources": ["agentZero/code/produkt/turn_lifecycle.py", "agent0ai/agent-zero:agent.py"]
+    },
+    {
+      "id": "AZP-02",
+      "name": "STATE_RECONSTRUCTION_AND_WORLD_ASSEMBLY",
+      "evidence": ["R0_PROJECT"],
+      "state": ["S1", "S2"],
+      "distribution": ["SHARDABLE"],
+      "effect_authority": false,
+      "inputs": ["generation", "session_state", "recent_turns", "memory", "resources"],
+      "outputs": ["bounded_world_context"],
+      "sources": ["agentZero/code/produkt/turn_lifecycle.py", "agentZero/code/produkt/zustand.py"]
+    },
+    {
+      "id": "AZP-03",
+      "name": "MEMORY_RETRIEVAL_AND_CONTEXT_PACKING",
+      "evidence": ["R0_PROJECT"],
+      "state": ["S1", "S2"],
+      "distribution": ["SHARDABLE"],
+      "effect_authority": false,
+      "inputs": ["query_cues", "durable_memory", "retrieval_policy"],
+      "outputs": ["ranked_bounded_memory", "retrieval_receipt"],
+      "sources": ["agentZero/code/produkt/microclay_retrieval.py", "agentZero/abruf/retrieval_episodes.jsonl"]
+    },
+    {
+      "id": "AZP-04",
+      "name": "GOAL_INTENT_STATE_MACHINE_AND_PLANNING",
+      "evidence": ["R0_PROJECT"],
+      "state": ["S0", "S1", "S2"],
+      "distribution": ["SHARDABLE", "GLOBAL_BOUNDARY_VALIDATION"],
+      "effect_authority": false,
+      "inputs": ["goal_state", "evidence", "prior_step_result"],
+      "outputs": ["reason_candidate", "effect_candidate", "completion_candidate"],
+      "sources": ["agentZero/code/produkt/autonomy_planner.py"]
+    },
+    {
+      "id": "AZP-05",
+      "name": "MAIN_COGNITIVE_LOOP_AND_MODEL_INFERENCE",
+      "evidence": ["R0_UPSTREAM", "OWNER_REQUIRED"],
+      "state": ["S2"],
+      "distribution": ["SHARDABLE"],
+      "effect_authority": false,
+      "inputs": ["system_protocol", "history", "context"],
+      "outputs": ["reasoning_candidate", "response_candidate", "tool_request_candidate"],
+      "sources": ["agent0ai/agent-zero:agent.py"]
+    },
+    {
+      "id": "AZP-06",
+      "name": "WORK_DECOMPOSITION_AND_SUBORDINATE_DELEGATION",
+      "evidence": ["R0_UPSTREAM", "OWNER_REQUIRED"],
+      "state": ["S1", "S2"],
+      "distribution": ["SHARDABLE"],
+      "effect_authority": false,
+      "inputs": ["task_context", "delegation_decision"],
+      "outputs": ["child_work_context", "child_result"],
+      "sources": ["agent0ai/agent-zero:agent.py", "agent0ai/agent-zero:prompts/agent.system.tool.call_sub.py"]
+    },
+    {
+      "id": "AZP-07",
+      "name": "HYPERPOSITION_ALTERNATIVE_GENERATION",
+      "evidence": ["R0_PROJECT", "OWNER_REQUIRED"],
+      "state": ["S1", "S2"],
+      "distribution": ["SHARDABLE"],
+      "effect_authority": false,
+      "inputs": ["observation", "work_state"],
+      "outputs": ["bounded_alternatives", "branch_candidates"],
+      "sources": ["agentZero/code/produkt/workspace.py"]
+    },
+    {
+      "id": "AZP-08",
+      "name": "GLOBAL_WORKSPACE_COMPETITION_BROADCAST_REENTRY",
+      "evidence": ["R0_PROJECT_PARTIAL", "OWNER_REQUIRED"],
+      "state": ["S1"],
+      "distribution": ["COORDINATOR_SCOPED"],
+      "effect_authority": false,
+      "inputs": ["alternatives", "salience", "evidence", "workspace_state"],
+      "outputs": ["selected_workspace_state", "broadcast_ref", "reentry_ref"],
+      "sources": ["agentZero/code/produkt/workspace.py", "agentZero/kognition/workspace_episodes.jsonl"],
+      "gap": "FULL_DISTRIBUTED_CAUSAL_BROADCAST_UNVERIFIED"
+    },
+    {
+      "id": "AZP-09",
+      "name": "TOOL_REQUEST_EXTRACTION_VALIDATION_ROUTING",
+      "evidence": ["R0_UPSTREAM", "R0_PROJECT_PARTIAL"],
+      "state": ["S2", "S0"],
+      "distribution": ["SHARDABLE", "GLOBAL_BOUNDARY_VALIDATION"],
+      "effect_authority": false,
+      "inputs": ["model_candidate", "tool_schema", "capability_authority"],
+      "outputs": ["validated_request_candidate", "rejection"],
+      "sources": ["agent0ai/agent-zero:agent.py", "agentZero/code/produkt/effects.py"]
+    },
+    {
+      "id": "AZP-10",
+      "name": "EFFECT_PROPOSAL_GATE_EXECUTION_JOURNAL",
+      "evidence": ["R0_PROJECT"],
+      "state": ["S0"],
+      "distribution": ["GLOBAL_BOUNDARY"],
+      "effect_authority": true,
+      "effect_authority_scope": "ONLY_DETERMINISTIC_EFFECTGATE_EFFECTJOURNAL_PATH",
+      "inputs": ["effect_request", "session_generation", "capability", "lease"],
+      "outputs": ["effect_receipt", "denial", "failure", "verified_outcome"],
+      "sources": ["agentZero/code/produkt/effects.py", "agentZero/code/produkt/effect_journal.py"]
+    },
+    {
+      "id": "AZP-11",
+      "name": "CAUSAL_OUTCOME_RECONCILIATION_AND_CREDIT",
+      "evidence": ["R0_PROJECT"],
+      "state": ["S0", "S1"],
+      "distribution": ["GLOBAL_BOUNDARY"],
+      "effect_authority": false,
+      "inputs": ["effect_receipt", "causal_episode", "observation_identity"],
+      "outputs": ["causal_reentry", "bounded_credit", "unknown_outcome_state"],
+      "sources": ["agentZero/code/produkt/turn_lifecycle.py", "agentZero/code/produkt/recovery.py"]
+    },
+    {
+      "id": "AZP-12",
+      "name": "MEMORY_COMPACTION_GRAPH_AND_DURABLE_LEARNING_UPDATE",
+      "evidence": ["R0_PROJECT"],
+      "state": ["S0", "S1"],
+      "distribution": ["COORDINATOR_SCOPED", "GLOBAL_BOUNDARY"],
+      "effect_authority": false,
+      "inputs": ["terminal_turns", "outcomes", "retrieval_feedback"],
+      "outputs": ["durable_memory_update", "graph_projection_update", "retrieval_policy_update"],
+      "sources": ["agentZero/code/produkt/turn_lifecycle.py", "agentZero/code/produkt/microclay_retrieval.py"]
+    },
+    {
+      "id": "AZP-13",
+      "name": "AUTONOMOUS_WAKE_SCHEDULING_AND_CONTINUATION",
+      "evidence": ["R0_PROJECT", "OWNER_REQUIRED"],
+      "state": ["S0", "S1"],
+      "distribution": ["SHARDABLE", "LEASE_GUARDED"],
+      "effect_authority": false,
+      "inputs": ["runnable_goals", "wake_state", "activity_state", "runtime_safety"],
+      "outputs": ["reserved_dispatch", "bounded_next_step"],
+      "sources": ["agentZero/code/produkt/autonomy_pulse.py"]
+    },
+    {
+      "id": "AZP-14",
+      "name": "FAILURE_RECOVERY_GENERATION_REJOIN_NO_REPLAY",
+      "evidence": ["R0_PROJECT", "OWNER_REQUIRED"],
+      "state": ["S0"],
+      "distribution": ["GLOBAL_BOUNDARY", "SHARDABLE_INSPECTION"],
+      "effect_authority": false,
+      "inputs": ["active_turns", "effects", "leases", "persisted_outcomes", "generation"],
+      "outputs": ["safe_reentry", "advanced_generation", "unknown_preservation", "rejoin_state"],
+      "sources": ["agentZero/code/produkt/recovery.py"]
+    },
+    {
+      "id": "AZP-15",
+      "name": "HUMAN_INTERVENTION_FEEDBACK_AND_CORRECTION",
+      "evidence": ["R0_PROJECT", "R0_UPSTREAM"],
+      "state": ["S1", "S2"],
+      "distribution": ["SHARDABLE"],
+      "effect_authority": false,
+      "inputs": ["human_intervention", "human_feedback", "current_context"],
+      "outputs": ["bounded_intervention", "external_learning_signal"],
+      "sources": ["agentZero/code/produkt/microclay_retrieval.py", "agent0ai/agent-zero:agent.py"]
+    },
+    {
+      "id": "AZP-16",
+      "name": "OBSERVABILITY_MEASUREMENT_AND_UNKNOWN_PRESERVATION",
+      "evidence": ["R0_PROJECT"],
+      "state": ["S0"],
+      "distribution": ["SHARDABLE"],
+      "effect_authority": false,
+      "inputs": ["canonical_db", "runtime_probes"],
+      "outputs": ["measurement", "unknown", "telemetry_receipt"],
+      "sources": ["agentZero/code/produkt/zustand.py", "agentZero/MANIFEST.json"]
+    },
+    {
+      "id": "AZP-17",
+      "name": "CLAYCODE_COGNITIVE_REPRESENTATION_AND_EXECUTION",
+      "evidence": ["OWNER_REQUIRED", "R0_PROJECT_PARTIAL"],
+      "state": ["S1", "S2"],
+      "distribution": ["SHARDABLE", "DETERMINISTIC_VM_BOUNDARY"],
+      "effect_authority": false,
+      "inputs": ["cognitive_process_packet", "typed_ir", "protocol_structure"],
+      "outputs": ["claycode_representation", "deterministic_transform_result"],
+      "sources": ["research_entity/claycode/", "research_entity/clay_machine/", "research_entity/claycode/g9/XENO_G8_TO_CLAYCODE_G9_MIGRATION.clay"],
+      "gap": "END_TO_END_AZP_TO_CLAYCODE_MAPPING_UNRESOLVED"
+    },
+    {
+      "id": "AZP-18",
+      "name": "DISTRIBUTED_NODE_ADMISSION_WORK_SELECTION_RESULT_FUSION_AND_DYNAMIC_COORDINATION",
+      "evidence": ["OWNER_REQUIRED", "R0_PROJECT_DONOR"],
+      "state": ["S1", "S2"],
+      "distribution": ["COORDINATOR_SCOPED"],
+      "effect_authority": false,
+      "inputs": ["node_runtime_identity", "shared_state", "pending_work", "result_packets"],
+      "outputs": ["work_selection", "typed_result", "scoped_coordinator_update"],
+      "sources": ["research_entity/global/XENO_HCU_AUTONOMOUS_BOOT_ACCEPTANCE_V1.md", "PR#1966", "PR#1967"],
+      "gap": "INTEGRATED_SIZE_INDEPENDENT_RUNTIME_NOT_ACCEPTED"
+    },
+    {
+      "id": "AZP-19",
+      "name": "SCALE_COMPRESSION_AND_SELECTIVE_STATE_DISTRIBUTION",
+      "evidence": ["OWNER_REQUIRED", "R1_INFERRED"],
+      "state": ["S1", "S2"],
+      "distribution": ["SHARDABLE", "COORDINATOR_SCOPED"],
+      "effect_authority": false,
+      "inputs": ["process_graph", "shared_state", "resource_budget", "node_count"],
+      "outputs": ["bounded_state_view", "compressed_packet", "work_placement"],
+      "sources": ["research_entity/global/OWNER_CORRECTION_UNBOUNDED_AGENT_ZERO_COGNITIVE_GRID_2026-08-25.md"],
+      "gap": "NO_SCALE_INDEPENDENT_ACCEPTANCE_EVIDENCE"
+    },
+    {
+      "id": "AZP-20",
+      "name": "TERO_ENTITYOS_FUNCTIONAL_SURFACE_REPRODUCTION",
+      "evidence": ["OWNER_REQUIRED"],
+      "state": ["S0", "S1", "S2"],
+      "distribution": ["FUNCTION_DEPENDENT"],
+      "effect_authority": false,
+      "effect_authority_rule": "REAL_EFFECTS_ONLY_THROUGH_AZP_10",
+      "inputs": ["distributed_process_outputs", "required_entityos_tero_behavior"],
+      "outputs": ["system_level_equivalent_observable_function", "equivalent_state_transition"],
+      "sources": ["research_entity/global/OWNER_CORRECTION_UNBOUNDED_AGENT_ZERO_COGNITIVE_GRID_2026-08-25.md"],
+      "gap": "EXACT_CURRENT_TERO_FUNCTIONAL_CENSUS_UNRESOLVED"
+    }
+  ],
+  "dependency_spine": [
+    "AZP-01",
+    "AZP-02",
+    "AZP-03",
+    "AZP-04",
+    "AZP-05",
+    "AZP-06|AZP-07|AZP-08",
+    "AZP-09",
+    "AZP-10?",
+    "AZP-11",
+    "AZP-12",
+    "AZP-13"
+  ],
+  "cross_cutting": ["AZP-14", "AZP-15", "AZP-16"],
+  "distribution_transformation_layers": ["AZP-17", "AZP-18", "AZP-19"],
+  "functional_acceptance_surface": ["AZP-20"],
+  "abi_minimum_fields": [
+    "process_family_id",
+    "abi_version",
+    "causal_event_id",
+    "admission_or_transport_id",
+    "state_generation",
+    "state_epoch",
+    "state_digest_or_content_refs",
+    "node_runtime_model_identity",
+    "input_provenance",
+    "capability_authority_ref",
+    "resource_budget",
+    "parent_dependency_workspace_identity",
+    "output_class",
+    "canonical_credit_scope",
+    "replay_idempotency_identity",
+    "error_or_unknown",
+    "trace_identity",
+    "coordinator_authorization_if_s1_write",
+    "effectgate_handoff_if_real_effect"
+  ],
+  "open_gates": [
+    "COGNITIVE_PROCESS_ABI_V1",
+    "EXACT_CURRENT_TERO_FUNCTIONAL_CENSUS",
+    "AZP_TO_CLAYCODE_MAPPING",
+    "BOUNDED_SHARED_STATE_VS_UPSTREAM_SUBORDINATE_CONTEXT_EQUIVALENCE",
+    "DISTRIBUTED_GWT_BROADCAST_REENTRY_CAUSAL_ACCEPTANCE",
+    "MODEL_SPECIFIC_JSPACE_CAUSAL_EVIDENCE",
+    "DYNAMIC_COORDINATOR_CONTENTION_FAILURE_REJOIN",
+    "SCALE_COMPRESSION_CURVES",
+    "END_TO_END_AGENT_ZERO_FUNCTIONAL_EQUIVALENCE_BENCHMARK"
+  ],
+  "next_exact_gate": "DEFINE_COGNITIVE_PROCESS_ABI_V1_FOR_AZP_01_02_04_05_09_11_WITH_AZP_16_UNKNOWN_PROVENANCE_AND_EXISTING_S0_EFFECT_FENCES",
+  "credits": {
+    "whole_entityos_hcu_runtime": 0,
+    "full_hcu_runtime": 0,
+    "end_to_end_agent_zero_equivalence": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "final_acceptance": false
+  }
+}

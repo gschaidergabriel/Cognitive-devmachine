@@ -135,6 +135,13 @@ class BackfillExhaustiveness878Tests(unittest.TestCase):
         self.assertIn('"exhaustive":<true|false>', source)
         self.assertIn("two consecutive zero-novel passes", source)
 
+    def test_exact_source_capsule_installs_same_completion_policy(self):
+        source = (TOOLS / "run_free_swarm_historical_backfill_capsule_878.py").read_text(encoding="utf-8")
+        self.assertIn("import free_swarm_historical_backfill as historical_backfill_core", source)
+        self.assertIn("from free_swarm_backfill_exhaustiveness_878 import install as install_exhaustiveness", source)
+        self.assertIn("install_exhaustiveness(historical_backfill_core)", source)
+        self.assertNotIn("from free_swarm_historical_backfill import (", source)
+
 
 if __name__ == "__main__":
     unittest.main()

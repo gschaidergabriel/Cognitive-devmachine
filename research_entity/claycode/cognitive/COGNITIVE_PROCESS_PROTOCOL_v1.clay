@@ -1,0 +1,104 @@
+module entityos.hcu.cognitive_protocol
+version "1.0"
+status CANDIDATE
+
+record DBStateRef {
+  ref_id: Symbol
+  store: Symbol
+  snapshot_or_epoch: Symbol
+  object_key: Symbol
+  digest: Symbol
+  provenance: Symbol
+  mutability: Symbol
+}
+
+record GridRuntimeRef {
+  grid_instance_id: Symbol
+  requested_N: Int
+  available_N: Int
+  executor_id: Symbol
+  lease_id: Symbol
+  runtime_identity: Symbol
+}
+
+record CognitiveWorkPacket {
+  schema: Symbol
+  causal_event_id: Symbol
+  admission_id: Symbol
+  generation: Int
+  work_id: Symbol
+  process_id: Symbol
+  parent_work_ids: List<Symbol>
+  workspace_epoch: Int
+  state_snapshot_ref: DBStateRef
+  input_refs: List<Symbol>
+  epistemic_inputs: List<Symbol>
+  capability_scope_ref: Symbol
+  resource_budget: Symbol
+  grid_runtime: GridRuntimeRef
+  route_policy_ref: Symbol
+  completion_contract: Symbol
+}
+
+record CognitiveResultPacket {
+  schema: Symbol
+  causal_event_id: Symbol
+  admission_id: Symbol
+  generation: Int
+  work_id: Symbol
+  process_id: Symbol
+  executor_binding: GridRuntimeRef
+  result_id: Symbol
+  result_class: Symbol
+  result_payload_ref: Symbol
+  result_digest: Symbol
+  evidence_refs: List<Symbol>
+  unknowns: List<Symbol>
+  db_write_proposals: List<Symbol>
+  effect_request_candidates: List<Symbol>
+  workspace_reentry: Symbol
+  runtime_receipt: Symbol
+}
+
+record WorkspaceReentry {
+  source_result_id: Symbol
+  source_process_id: Symbol
+  causal_event_id: Symbol
+  from_workspace_epoch: Int
+  to_workspace_epoch: Int
+  reentry_payload_ref: Symbol
+  reentry_digest: Symbol
+  observed_downstream_change: Symbol
+}
+
+record ClaudeCodeBridgePacket {
+  bridge_id: Symbol
+  direction: Symbol
+  causal_event_id: Symbol
+  work_id: Symbol
+  workspace_epoch: Int
+  interface_class: Symbol
+  payload_ref: Symbol
+  payload_digest: Symbol
+  state_refs: List<Symbol>
+  tool_scope_ref: Symbol
+  request_or_result_identity: Symbol
+}
+
+interface CognitiveProtocol {
+  encode_work(work: CognitiveWorkPacket) -> Symbol
+  encode_result(result: CognitiveResultPacket) -> Symbol
+  encode_reentry(reentry: WorkspaceReentry) -> Symbol
+  encode_claude_bridge(bridge: ClaudeCodeBridgePacket) -> Symbol
+}
+
+law GridRuntimeRef never_confers canonical_truth
+law GridRuntimeRef never_confers capability_authority
+law CognitiveWorkPacket never_confers canonical_truth
+law CognitiveResultPacket never_confers canonical_truth
+law CognitiveResultPacket never_confers effect_authority
+law WorkspaceReentry never_implies global_jspace_causal_truth
+law ClaudeCodeBridgePacket never_confers canonical_truth
+law ClaudeCodeBridgePacket never_confers effect_authority
+rule DBStateRef required_before CognitiveWorkPacket
+rule CognitiveResultPacket required_before WorkspaceReentry

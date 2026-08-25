@@ -1,341 +1,267 @@
 #!/usr/bin/env python3
-"""Model-free ClayCode cognitive protocol adapter for the variable EntityOS/HCU grid.
+"""Deterministic ClayCode envelope adapter for COGNITIVE_PROCESS_ABI/v1.
 
-This is a deterministic component adapter, not a model runtime and not a new authority.
-It preserves the canonical COGNITIVE_PROCESS_ABI/v1 identity/state/effect boundaries
-while giving variable-grid work a compact replayable ClayCode wire projection.
+This is an executable transport/validation bridge, not a claim that the full cognitive
+payload is natively lowered into ClayCode TypedIR yet. The typed ABI payload remains a
+canonical deterministic JSON value inside a ClayCode BASE-D V18 candidate envelope; the
+actual checked-in ClayCode frontend parses/canonicalizes the envelope and binds its
+source/grammar/semantic hashes.
 
-Wire identity is deliberately distinct from semantic identity:
-  CLAYCODE-CP/1\n<sorted compact JSON>\n
-No provider, Claude Code, network, model, real-effect or canonical DB write is performed
-by this adapter. The existing deterministic DB authority and EffectGate/EffectJournal
-remain authoritative.
+Authority boundary: this adapter cannot grant canonical truth, capability, coordinator,
+security, real-effect or Global J-Space causal authority. Model/Claude/provider execution
+is outside this component.
 """
 from __future__ import annotations
 
+from dataclasses import dataclass
 import hashlib
 import json
+from pathlib import Path
+import sys
 from typing import Any, Mapping
 
-PROTOCOL_SCHEMA = "CLAYCODE_COGNITIVE_PROTOCOL/v1"
-WIRE_PREFIX = b"CLAYCODE-CP/1\n"
-WORK_SCHEMA = "CLAYCODE_COGNITIVE_WORK/v1"
-RESULT_SCHEMA = "CLAYCODE_COGNITIVE_RESULT/v1"
-PLACEMENT_SCHEMA = "STATE_PLACEMENT_DECISION/v1"
-CLAUDE_REQUEST_SCHEMA = "CLAUDE_CODE_BRIDGE_PACKET/v1"
-CLAUDE_RESULT_SCHEMA = "CLAUDE_CODE_BRIDGE_PACKET/v1"
-REENTRY_SCHEMA = "WORKSPACE_REENTRY/v1"
+ROOT = Path(__file__).resolve().parents[1]
+TOOLS = ROOT / "tools"
+if str(TOOLS) not in sys.path:
+    sys.path.insert(0, str(TOOLS))
 
-WORK_FIELDS = {
-    "schema", "protocol", "causal_event_id", "admission_id", "entry_event_sha256",
-    "entry_admission_sha256", "generation", "workspace_epoch", "process_id",
-    "state_snapshot_ref", "payload", "capability_scope_ref", "resource_budget",
-    "epistemic_inputs", "op_id", "op_semantics_hash",
+from claycode_base_frontend import DEFAULT_GRAMMAR, compile_frontend
+
+ABI_PATH = ROOT / "research_entity/global/COGNITIVE_PROCESS_ABI_v1.json"
+PROTOCOL_PATH = ROOT / "research_entity/claycode/cognitive/COGNITIVE_PROCESS_PROTOCOL_v1.clay"
+ENVELOPE_SCHEMA = "CLAYCODE_COGNITIVE_ENVELOPE/v1"
+PAYLOAD_ENCODING = "DETERMINISTIC_JSON_V1"
+SURFACE = "BASE_D_V18_REWARD_RELATIONS_CANDIDATE"
+
+FORBIDDEN_AUTHORITY_KEYS = {
+    "canonical_truth",
+    "canonical_truth_authority",
+    "truth_authority",
+    "effect_authority",
+    "direct_effect_execution",
+    "real_effect_executed",
+    "capability_grant",
+    "capability_authority",
+    "security_authority",
+    "coordinator_authority",
+    "direct_s0_write",
+    "global_jspace_causal_credit",
+    "activation_access_claimed",
 }
-ALLOWED_EPISTEMIC = {"OBSERVED", "INFERRED", "HYPOTHESIS", "UNKNOWN"}
-ALLOWED_CLAUDE_INTERFACE = {"TEXT", "STRUCTURED_TEXT", "TOOL_PROTOCOL", "SESSION_STATE_EXPOSED", "OTHER_EXPLICITLY_OBSERVED"}
 
 
-class ClayCodeProtocolError(ValueError):
+class ClayCodeCognitiveProtocolError(ValueError):
     pass
 
 
-def canonical_json(value: Any) -> str:
-    return json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=False, allow_nan=False)
+@dataclass(frozen=True)
+class ClayCodeEnvelope:
+    schema: str
+    packet_kind: str
+    packet_digest: str
+    payload_encoding: str
+    payload_json: str
+    clay_source: str
+    clay_source_sha256: str
+    clay_semantic_hash: str
+    clay_grammar_sha256: str
 
 
-def sha256_text(value: Any) -> str:
-    return hashlib.sha256(canonical_json(value).encode("utf-8")).hexdigest()
-
-
-def _sha256(value: Any, field: str) -> str:
-    if not isinstance(value, str) or len(value) != 64 or value.lower() != value:
-        raise ClayCodeProtocolError(f"{field}:LOWERCASE_SHA256_REQUIRED")
-    if any(ch not in "0123456789abcdef" for ch in value):
-        raise ClayCodeProtocolError(f"{field}:LOWERCASE_SHA256_REQUIRED")
-    return value
-
-
-def _nonnegative_int(value: Any, field: str) -> int:
-    if isinstance(value, bool) or not isinstance(value, int) or value < 0:
-        raise ClayCodeProtocolError(f"{field}:NONNEGATIVE_INTEGER_REQUIRED")
-    return value
-
-
-def _nonempty(value: Any, field: str) -> str:
-    if not isinstance(value, str) or not value.strip():
-        raise ClayCodeProtocolError(f"{field}:NONEMPTY_STRING_REQUIRED")
-    return value.strip()
-
-
-def trusted_op_semantics_hash() -> str:
-    """Hash trusted adapter semantics, never a model-declared effect footprint."""
-    return sha256_text({
-        "op_id": "entityos.cognition.execute",
-        "version": 1,
-        "authority": "READ_OR_PROPOSE_ONLY",
-        "canonical_db_write": False,
-        "real_effect_execution": False,
-        "process_identity_independent_of_grid_n": True,
-        "typed_entry_digest_binding_required": True,
-    })
-
-
-def make_work_packet(
-    *,
-    causal_event_id: str,
-    admission_id: str,
-    entry_event_sha256: str,
-    entry_admission_sha256: str,
-    generation: int,
-    workspace_epoch: int,
-    process_id: str,
-    state_snapshot_ref: str,
-    payload: Any,
-    capability_scope_ref: str,
-    resource_budget: Mapping[str, int],
-    epistemic_inputs: list[dict[str, Any]],
-) -> dict[str, Any]:
-    _nonempty(causal_event_id, "causal_event_id")
-    _nonempty(admission_id, "admission_id")
-    _sha256(entry_event_sha256, "entry_event_sha256")
-    _sha256(entry_admission_sha256, "entry_admission_sha256")
-    _nonnegative_int(generation, "generation")
-    _nonnegative_int(workspace_epoch, "workspace_epoch")
-    process_id = _nonempty(process_id, "process_id")
-    if not process_id.startswith("ZECP") or len(process_id) != 6 or not process_id[4:].isdigit():
-        raise ClayCodeProtocolError("process_id:ZECP_ID_REQUIRED")
-    _nonempty(state_snapshot_ref, "state_snapshot_ref")
-    _nonempty(capability_scope_ref, "capability_scope_ref")
-    if not isinstance(resource_budget, Mapping) or any(
-        isinstance(v, bool) or not isinstance(v, int) or v < 0 for v in resource_budget.values()
-    ):
-        raise ClayCodeProtocolError("resource_budget:NONNEGATIVE_INTEGER_MAP_REQUIRED")
-    if not isinstance(epistemic_inputs, list):
-        raise ClayCodeProtocolError("epistemic_inputs:LIST_REQUIRED")
-    for item in epistemic_inputs:
-        if not isinstance(item, dict) or item.get("status") not in ALLOWED_EPISTEMIC:
-            raise ClayCodeProtocolError("epistemic_inputs:STATUS_REQUIRED")
-
-    packet = {
-        "schema": WORK_SCHEMA,
-        "protocol": PROTOCOL_SCHEMA,
-        "causal_event_id": causal_event_id,
-        "admission_id": admission_id,
-        "entry_event_sha256": entry_event_sha256,
-        "entry_admission_sha256": entry_admission_sha256,
-        "generation": generation,
-        "workspace_epoch": workspace_epoch,
-        "process_id": process_id,
-        "state_snapshot_ref": state_snapshot_ref,
-        "payload": payload,
-        "capability_scope_ref": capability_scope_ref,
-        "resource_budget": dict(resource_budget),
-        "epistemic_inputs": epistemic_inputs,
-        "op_id": "entityos.cognition.execute",
-        "op_semantics_hash": trusted_op_semantics_hash(),
-    }
-    # Deliberately excludes grid N, executor/lease identity and wire bytes.
-    packet["semantic_hash"] = semantic_hash(packet)
-    return packet
-
-
-def semantic_hash(packet: Mapping[str, Any]) -> str:
-    basis = {k: packet[k] for k in sorted(WORK_FIELDS) if k in packet}
-    if set(basis) != WORK_FIELDS:
-        missing = sorted(WORK_FIELDS - set(basis))
-        raise ClayCodeProtocolError(f"WORK_FIELDS_MISSING:{','.join(missing)}")
-    return sha256_text(basis)
-
-
-def serialize_work(packet: Mapping[str, Any]) -> bytes:
-    parsed = validate_work_packet(dict(packet))
-    wire_value = dict(parsed)
-    wire_value["wire_profile"] = "SORTED_COMPACT_JSON/v1"
-    wire_value["wire_sha256"] = "0" * 64
-    provisional = WIRE_PREFIX + canonical_json(wire_value).encode("utf-8") + b"\n"
-    wire_value["wire_sha256"] = hashlib.sha256(provisional).hexdigest()
-    return WIRE_PREFIX + canonical_json(wire_value).encode("utf-8") + b"\n"
-
-
-def parse_work(wire: bytes) -> dict[str, Any]:
-    if not isinstance(wire, (bytes, bytearray)) or not bytes(wire).startswith(WIRE_PREFIX):
-        raise ClayCodeProtocolError("WIRE_PREFIX_INVALID")
-    body = bytes(wire)[len(WIRE_PREFIX):]
-    if not body.endswith(b"\n"):
-        raise ClayCodeProtocolError("WIRE_NEWLINE_REQUIRED")
+def _canonical_json(value: Any) -> str:
     try:
-        value = json.loads(body[:-1].decode("utf-8"))
-    except (UnicodeDecodeError, json.JSONDecodeError) as exc:
-        raise ClayCodeProtocolError("WIRE_JSON_INVALID") from exc
-    if not isinstance(value, dict):
-        raise ClayCodeProtocolError("WIRE_OBJECT_REQUIRED")
-    if value.pop("wire_profile", None) != "SORTED_COMPACT_JSON/v1":
-        raise ClayCodeProtocolError("WIRE_PROFILE_INVALID")
-    wire_sha = value.pop("wire_sha256", None)
-    _sha256(wire_sha, "wire_sha256")
-    provisional_value = dict(value)
-    provisional_value["wire_profile"] = "SORTED_COMPACT_JSON/v1"
-    provisional_value["wire_sha256"] = "0" * 64
-    expected_wire_sha = hashlib.sha256(
-        WIRE_PREFIX + canonical_json(provisional_value).encode("utf-8") + b"\n"
-    ).hexdigest()
-    if wire_sha != expected_wire_sha:
-        raise ClayCodeProtocolError("WIRE_SHA256_MISMATCH")
-    return validate_work_packet(value)
+        return json.dumps(
+            value,
+            ensure_ascii=False,
+            sort_keys=True,
+            separators=(",", ":"),
+            allow_nan=False,
+        )
+    except (TypeError, ValueError) as exc:
+        raise ClayCodeCognitiveProtocolError(f"NONCANONICAL_PAYLOAD:{exc}") from exc
 
 
-def validate_work_packet(packet: dict[str, Any]) -> dict[str, Any]:
-    expected = WORK_FIELDS | {"semantic_hash"}
-    if set(packet) != expected:
-        raise ClayCodeProtocolError("WORK_PACKET_FIELDS_INVALID")
-    if packet.get("schema") != WORK_SCHEMA or packet.get("protocol") != PROTOCOL_SCHEMA:
-        raise ClayCodeProtocolError("WORK_PACKET_SCHEMA_INVALID")
-    _sha256(packet.get("entry_event_sha256"), "entry_event_sha256")
-    _sha256(packet.get("entry_admission_sha256"), "entry_admission_sha256")
-    _nonnegative_int(packet.get("generation"), "generation")
-    _nonnegative_int(packet.get("workspace_epoch"), "workspace_epoch")
-    if packet.get("op_id") != "entityos.cognition.execute":
-        raise ClayCodeProtocolError("OP_ID_INVALID")
-    if packet.get("op_semantics_hash") != trusted_op_semantics_hash():
-        raise ClayCodeProtocolError("OP_SEMANTICS_HASH_MISMATCH")
-    expected_semantic = semantic_hash(packet)
-    if packet.get("semantic_hash") != expected_semantic:
-        raise ClayCodeProtocolError("SEMANTIC_HASH_MISMATCH")
+def _sha256_text(text: str) -> str:
+    return hashlib.sha256(text.encode("utf-8")).hexdigest()
+
+
+def _load_json(path: Path) -> dict[str, Any]:
+    value = json.loads(path.read_text(encoding="utf-8"))
+    if type(value) is not dict:
+        raise ClayCodeCognitiveProtocolError(f"OBJECT_REQUIRED:{path}")
+    return value
+
+
+def _find_forbidden_authority(value: Any, path: str = "$") -> str | None:
+    if isinstance(value, Mapping):
+        for key, child in value.items():
+            normalized = str(key).lower().replace("-", "_")
+            if normalized in FORBIDDEN_AUTHORITY_KEYS:
+                return f"{path}.{key}"
+            nested = _find_forbidden_authority(child, f"{path}.{key}")
+            if nested:
+                return nested
+    elif isinstance(value, (list, tuple)):
+        for index, child in enumerate(value):
+            nested = _find_forbidden_authority(child, f"{path}[{index}]")
+            if nested:
+                return nested
+    return None
+
+
+def load_abi() -> dict[str, Any]:
+    abi = _load_json(ABI_PATH)
+    if abi.get("schema") != "COGNITIVE_PROCESS_ABI/v1":
+        raise ClayCodeCognitiveProtocolError("ABI_SCHEMA_DRIFT")
+    return abi
+
+
+def compile_protocol_contract() -> dict[str, Any]:
+    source = PROTOCOL_PATH.read_text(encoding="utf-8")
+    grammar = DEFAULT_GRAMMAR.read_text(encoding="utf-8")
+    return compile_frontend(source, grammar, strict=False)
+
+
+def validate_packet(packet_kind: str, packet: Mapping[str, Any], abi: dict[str, Any] | None = None) -> dict[str, Any]:
+    if type(packet) is not dict:
+        raise ClayCodeCognitiveProtocolError("PACKET_EXACT_DICT_REQUIRED")
+    abi = abi or load_abi()
+    packet_contracts = abi.get("packet_types")
+    if type(packet_contracts) is not dict or packet_kind not in packet_contracts:
+        raise ClayCodeCognitiveProtocolError(f"PACKET_KIND_UNSUPPORTED:{packet_kind}")
+    if packet.get("schema") != packet_kind:
+        raise ClayCodeCognitiveProtocolError("PACKET_SCHEMA_KIND_MISMATCH")
+    contract = packet_contracts[packet_kind]
+    required = contract.get("required")
+    if not isinstance(required, list):
+        raise ClayCodeCognitiveProtocolError("ABI_REQUIRED_FIELDS_MISSING")
+    missing = [field for field in required if field not in packet]
+    if missing:
+        raise ClayCodeCognitiveProtocolError("PACKET_REQUIRED_FIELDS_MISSING:" + ",".join(missing))
+
+    forbidden = _find_forbidden_authority(packet)
+    if forbidden:
+        raise ClayCodeCognitiveProtocolError(f"PACKET_AUTHORITY_SMUGGLING:{forbidden}")
+
+    if packet_kind == "COGNITIVE_RESULT_PACKET/v1":
+        allowed = set(contract.get("allowed_result_class", []))
+        result_class = packet.get("result_class")
+        if result_class not in allowed:
+            raise ClayCodeCognitiveProtocolError(f"RESULT_CLASS_UNSUPPORTED:{result_class}")
+        if result_class == "EFFECT_RECEIPT" and packet.get("process_id") != "ZECP17":
+            raise ClayCodeCognitiveProtocolError("NON_ZECP17_EFFECT_RECEIPT_FORBIDDEN")
+
+    if packet_kind == "WORKSPACE_REENTRY/v1":
+        value = packet.get("observed_downstream_change")
+        if value not in {"TRUE", "FALSE", "UNKNOWN"}:
+            raise ClayCodeCognitiveProtocolError("REENTRY_DOWNSTREAM_CHANGE_TRI_STATE_REQUIRED")
+
+    if packet_kind == "CLAUDE_CODE_BRIDGE_PACKET/v1":
+        direction = packet.get("direction")
+        if direction not in set(contract.get("allowed_direction", [])):
+            raise ClayCodeCognitiveProtocolError("CLAUDE_BRIDGE_DIRECTION_UNSUPPORTED")
+        interface_class = packet.get("interface_class")
+        if interface_class not in set(contract.get("allowed_interface_class", [])):
+            raise ClayCodeCognitiveProtocolError("CLAUDE_BRIDGE_INTERFACE_UNSUPPORTED")
+
+    # Canonical JSON generation doubles as a closed scalar/NaN/unsupported-object fence.
+    _canonical_json(packet)
     return dict(packet)
 
 
-def execute_on_grid(runtime: Any, packet: Mapping[str, Any], *, current_generation: int) -> dict[str, Any]:
-    work = validate_work_packet(dict(packet))
-    if work["generation"] != current_generation:
-        raise ClayCodeProtocolError("STALE_GENERATION")
-    # Exact identity/state references are part of the cognitive payload that the existing
-    # variable-grid runtime hashes; N remains outside this semantic basis.
-    runtime_payload = {
-        "clay_semantic_hash": work["semantic_hash"],
-        "entry_event_sha256": work["entry_event_sha256"],
-        "entry_admission_sha256": work["entry_admission_sha256"],
-        "state_snapshot_ref": work["state_snapshot_ref"],
-        "workspace_epoch": work["workspace_epoch"],
-        "payload": work["payload"],
-    }
-    queued = runtime.enqueue(work["process_id"], runtime_payload)
-    raw_result = runtime.execute(queued)
-    return {
-        "schema": RESULT_SCHEMA,
-        "protocol": PROTOCOL_SCHEMA,
-        "causal_event_id": work["causal_event_id"],
-        "admission_id": work["admission_id"],
-        "entry_event_sha256": work["entry_event_sha256"],
-        "entry_admission_sha256": work["entry_admission_sha256"],
-        "generation": work["generation"],
-        "workspace_epoch": work["workspace_epoch"],
-        "process_id": work["process_id"],
-        "state_snapshot_ref": work["state_snapshot_ref"],
-        "clay_semantic_hash": work["semantic_hash"],
-        "runtime_result": raw_result,
-        "result_class": "CANDIDATE",
-        "canonical_truth": False,
-        "canonical_db_write": False,
-        "real_effect_authority": False,
-    }
-
-
-def classify_state(
-    *, entry_event_sha256: str, generation: int, datum_ref: str,
-    durable: bool, exact: bool, queryable: bool, restart_surviving: bool,
-    epistemic_status: str, shared_workspace: bool = True,
-) -> dict[str, Any]:
-    _sha256(entry_event_sha256, "entry_event_sha256")
-    _nonnegative_int(generation, "generation")
-    if epistemic_status not in ALLOWED_EPISTEMIC:
-        raise ClayCodeProtocolError("epistemic_status:INVALID")
-    selected = "DATABASE_S0" if (durable or restart_surviving or (exact and queryable)) else (
-        "WORKSPACE_S1" if shared_workspace else "LOCAL_EPHEMERAL_S2"
+def _render_clay_source(packet_kind: str, packet_digest: str, payload_json: str) -> str:
+    kind_literal = json.dumps(packet_kind, ensure_ascii=False)
+    digest_literal = json.dumps(packet_digest, ensure_ascii=False)
+    payload_literal = json.dumps(payload_json, ensure_ascii=False)
+    return (
+        "module entityos.hcu.cognitive_packet\n"
+        "version \"1.0\"\n"
+        "status CANDIDATE\n"
+        f"metric packet_kind = {kind_literal}\n"
+        f"metric packet_digest = {digest_literal}\n"
+        f"metric packet_payload = {payload_literal}\n"
+        "law packet_payload never_confers canonical_truth\n"
+        "law packet_payload never_confers effect_authority\n"
+        "law packet_payload never_confers capability_authority\n"
+        "law packet_payload never_implies global_jspace_causal_truth\n"
     )
-    decision_basis = {
-        "entry_event_sha256": entry_event_sha256,
-        "generation": generation,
-        "datum_ref": datum_ref,
-        "durable": durable,
-        "exact": exact,
-        "queryable": queryable,
-        "restart_surviving": restart_surviving,
-        "epistemic_status": epistemic_status,
-        "selected_plane": selected,
-    }
-    return {
-        "schema": PLACEMENT_SCHEMA,
-        "placement_id": "place-" + sha256_text(decision_basis)[:24],
-        **decision_basis,
-        "canonical_write": False,
-        "canonical_fact": False,
-        "requires_deterministic_admission": selected == "DATABASE_S0",
-    }
 
 
-def claude_bridge_request(work: Mapping[str, Any], *, interface_class: str, payload: Any) -> dict[str, Any]:
-    work = validate_work_packet(dict(work))
-    if interface_class not in ALLOWED_CLAUDE_INTERFACE:
-        raise ClayCodeProtocolError("CLAUDE_INTERFACE_CLASS_INVALID")
-    request = {
-        "schema": CLAUDE_REQUEST_SCHEMA,
-        "direction": "GRID_TO_CLAUDE",
-        "entry_event_sha256": work["entry_event_sha256"],
-        "entry_admission_sha256": work["entry_admission_sha256"],
-        "generation": work["generation"],
-        "work_id": work["semantic_hash"],
-        "workspace_epoch": work["workspace_epoch"],
-        "interface_class": interface_class,
-        "interface_evidence_ref": "EXPOSED_TEXT_TOOL_SESSION_ONLY",
-        "payload": payload,
-        "activation_access_claimed": False,
-        "claude_execution_observed": False,
-        "tool_scope_ref": work["capability_scope_ref"],
-        "authority": "REQUEST_ONLY",
-    }
-    request["bridge_id"] = "bridge-" + sha256_text(request)[:24]
-    return request
+def encode_packet(packet_kind: str, packet: Mapping[str, Any], abi: dict[str, Any] | None = None) -> ClayCodeEnvelope:
+    validated = validate_packet(packet_kind, packet, abi)
+    payload_json = _canonical_json(validated)
+    packet_digest = _sha256_text(payload_json)
+    clay_source = _render_clay_source(packet_kind, packet_digest, payload_json)
+    grammar = DEFAULT_GRAMMAR.read_text(encoding="utf-8")
+    frontend = compile_frontend(clay_source, grammar, strict=False)
+    if frontend.get("surface") != "BASE_D_V18_REWARD_RELATIONS":
+        raise ClayCodeCognitiveProtocolError("CLAYCODE_FRONTEND_SURFACE_DRIFT")
+    return ClayCodeEnvelope(
+        schema=ENVELOPE_SCHEMA,
+        packet_kind=packet_kind,
+        packet_digest=packet_digest,
+        payload_encoding=PAYLOAD_ENCODING,
+        payload_json=payload_json,
+        clay_source=clay_source,
+        clay_source_sha256=frontend["source_sha256"],
+        clay_semantic_hash=frontend["semantic_hash"],
+        clay_grammar_sha256=frontend["grammar_sha256"],
+    )
 
 
-def claude_bridge_stub_result(request: Mapping[str, Any], *, payload: Any) -> dict[str, Any]:
-    if request.get("schema") != CLAUDE_REQUEST_SCHEMA or request.get("direction") != "GRID_TO_CLAUDE":
-        raise ClayCodeProtocolError("CLAUDE_REQUEST_INVALID")
-    return {
-        "schema": CLAUDE_RESULT_SCHEMA,
-        "direction": "CLAUDE_TO_GRID",
-        "bridge_id": request["bridge_id"],
-        "entry_event_sha256": request["entry_event_sha256"],
-        "entry_admission_sha256": request["entry_admission_sha256"],
-        "generation": request["generation"],
-        "workspace_epoch": request["workspace_epoch"],
-        "interface_class": request["interface_class"],
-        "interface_evidence_ref": request["interface_evidence_ref"],
-        "payload": payload,
-        "activation_access_claimed": False,
-        "claude_execution_observed": False,
-        "global_jspace_causal_credit": False,
-        "authority": "CANDIDATE_ONLY",
-    }
+def decode_packet(envelope: ClayCodeEnvelope, abi: dict[str, Any] | None = None) -> dict[str, Any]:
+    if not isinstance(envelope, ClayCodeEnvelope):
+        raise ClayCodeCognitiveProtocolError("ENVELOPE_TYPE_REQUIRED")
+    if envelope.schema != ENVELOPE_SCHEMA or envelope.payload_encoding != PAYLOAD_ENCODING:
+        raise ClayCodeCognitiveProtocolError("ENVELOPE_SCHEMA_OR_ENCODING_MISMATCH")
+    if _sha256_text(envelope.payload_json) != envelope.packet_digest:
+        raise ClayCodeCognitiveProtocolError("PAYLOAD_DIGEST_MISMATCH")
+    expected_source = _render_clay_source(envelope.packet_kind, envelope.packet_digest, envelope.payload_json)
+    if envelope.clay_source != expected_source:
+        raise ClayCodeCognitiveProtocolError("CLAY_SOURCE_PAYLOAD_BINDING_MISMATCH")
+    grammar = DEFAULT_GRAMMAR.read_text(encoding="utf-8")
+    frontend = compile_frontend(envelope.clay_source, grammar, strict=False)
+    if frontend["source_sha256"] != envelope.clay_source_sha256:
+        raise ClayCodeCognitiveProtocolError("CLAY_SOURCE_IDENTITY_MISMATCH")
+    if frontend["semantic_hash"] != envelope.clay_semantic_hash:
+        raise ClayCodeCognitiveProtocolError("CLAY_SEMANTIC_IDENTITY_MISMATCH")
+    if frontend["grammar_sha256"] != envelope.clay_grammar_sha256:
+        raise ClayCodeCognitiveProtocolError("CLAY_GRAMMAR_IDENTITY_MISMATCH")
+    try:
+        packet = json.loads(envelope.payload_json)
+    except json.JSONDecodeError as exc:
+        raise ClayCodeCognitiveProtocolError("PAYLOAD_JSON_INVALID") from exc
+    return validate_packet(envelope.packet_kind, packet, abi)
 
 
-def workspace_reentry(result: Mapping[str, Any], bridge_result: Mapping[str, Any]) -> dict[str, Any]:
-    for field in ("entry_event_sha256", "entry_admission_sha256", "generation", "workspace_epoch"):
-        if result.get(field) != bridge_result.get(field):
-            raise ClayCodeProtocolError(f"REENTRY_BINDING_MISMATCH:{field}")
-    payload_digest = sha256_text(bridge_result.get("payload"))
-    return {
-        "schema": REENTRY_SCHEMA,
-        "source_result_id": result["runtime_result"]["result_id"],
-        "source_process_id": "ZECP14",
-        "entry_event_sha256": result["entry_event_sha256"],
-        "entry_admission_sha256": result["entry_admission_sha256"],
-        "generation": result["generation"],
-        "from_workspace_epoch": result["workspace_epoch"],
-        "to_workspace_epoch": result["workspace_epoch"] + 1,
-        "reentry_payload_ref": "sha256:" + payload_digest,
-        "reentry_digest": payload_digest,
-        "observed_downstream_change": "UNKNOWN",
-        "global_jspace_causal_credit": False,
-        "canonical_truth": False,
-    }
+def roundtrip(packet_kind: str, packet: Mapping[str, Any], abi: dict[str, Any] | None = None) -> tuple[ClayCodeEnvelope, dict[str, Any]]:
+    envelope = encode_packet(packet_kind, packet, abi)
+    decoded = decode_packet(envelope, abi)
+    if _canonical_json(decoded) != _canonical_json(packet):
+        raise ClayCodeCognitiveProtocolError("ROUNDTRIP_SEMANTIC_MISMATCH")
+    return envelope, decoded
+
+
+if __name__ == "__main__":
+    result = compile_protocol_contract()
+    print(
+        json.dumps(
+            {
+                "schema": "CLAYCODE_COGNITIVE_PROTOCOL_ADAPTER_SELF_CHECK/v1",
+                "status": "PASS_SOURCE_CONTRACT_ONLY",
+                "protocol_source": str(PROTOCOL_PATH.relative_to(ROOT)),
+                "frontend_surface": result["surface"],
+                "grammar_sha256": result["grammar_sha256"],
+                "semantic_hash": result["semantic_hash"],
+                "credit": {
+                    "claycode_protocol_source_contract": 1,
+                    "native_typed_ir_payload_lowering": 0,
+                    "model_runtime": 0,
+                    "claude_code_runtime": 0,
+                    "global_jspace_causal_runtime": 0,
+                    "training": 0,
+                },
+            },
+            sort_keys=True,
+            separators=(",", ":"),
+        )
+    )

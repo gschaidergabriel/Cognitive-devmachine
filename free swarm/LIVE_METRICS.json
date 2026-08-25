@@ -1,27 +1,27 @@
 {
   "schema": "CLAY_FREE_SWARM_METRICS/v1",
-  "generated_at": "2026-08-25T00:48:07.778467+00:00",
+  "generated_at": "2026-08-25T01:03:13.362945+00:00",
   "workers": {
-    "worker_records": 12995,
+    "worker_records": 13064,
     "worker_files": 12,
-    "average_concurrency": 4.022102539545493,
+    "average_concurrency": 3.9709516199135613,
     "peak_concurrency": 136,
-    "observed_seconds": 54009.209826,
-    "exact_usage_rows": 5158,
-    "input_tokens": 29104610,
-    "output_tokens": 7990690,
-    "total_tokens": 37095300,
+    "observed_seconds": 54923.678472,
+    "exact_usage_rows": 5205,
+    "input_tokens": 29366980,
+    "output_tokens": 8065890,
+    "total_tokens": 37432870,
     "models": [
       {
         "provider": "nvidia",
         "model": "nvidia/nemotron-3-super-120b-a12b",
-        "requests": 3985,
-        "success": 3050,
-        "rate_limits": 495,
+        "requests": 4053,
+        "success": 3097,
+        "rate_limits": 516,
         "errors": 440,
-        "input_tokens": 17116072,
-        "output_tokens": 4880955,
-        "total_tokens": 21997027
+        "input_tokens": 17378442,
+        "output_tokens": 4956155,
+        "total_tokens": 22334597
       },
       {
         "provider": "nvidia",
@@ -37,9 +37,9 @@
       {
         "provider": "openrouter",
         "model": "openrouter/free",
-        "requests": 279,
+        "requests": 280,
         "success": 115,
-        "rate_limits": 104,
+        "rate_limits": 105,
         "errors": 60,
         "input_tokens": 640932,
         "output_tokens": 224021,
@@ -568,11 +568,11 @@
   },
   "corpus": {
     "text_files": 9969,
-    "characters": 48641868,
-    "approx_tokens_4chars": 12160467,
+    "characters": 48642409,
+    "approx_tokens_4chars": 12160602,
     "sonnet5_input_usd_per_mtok": 2.0,
     "sonnet5_output_usd_per_mtok": 10.0,
-    "output_only_equivalent_usd": 121.60467,
+    "output_only_equivalent_usd": 121.60602,
     "pricing_basis": "Claude Sonnet 5 introductory through 2026-08-31: $2/M input + $10/M output; standard after: $3/M + $15/M"
   }
 }

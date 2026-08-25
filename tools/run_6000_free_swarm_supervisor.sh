@@ -337,11 +337,12 @@ while (( $(date +%s) < DEADLINE )); do
   start_forge
   stop_legacy_go_swarm
   reconcile_6000_admission
-  if raw_generation_allowed; then
-    start_6000
-  else
-    stop_6000
-  fi
+  # Conversion pressure is recorded here, but the shared 6000 fabric must stay
+  # alive because it is also the historical-extraction transport. Raw-research
+  # slots are suppressed inside free_swarm_backfill_scheduler while packets exist;
+  # killing this process would deadlock the backlog it is meant to drain.
+  raw_generation_allowed || true
+  start_6000
   refresh_root_results
 
   NOW=$(date +%s); REMAINING=$((DEADLINE-NOW))

@@ -1,0 +1,93 @@
+{
+  "schema": "CLAY_TRIGGER2_FOUR_QUADRANT_PRACTICAL_THRESHOLD_FREEZE/v1",
+  "date": "2026-08-26",
+  "trigger": "triggerwort2",
+  "status": "FROZEN_PREUNBLINDING_SOURCE_ONLY",
+  "supervisor_epoch": "8.83",
+  "mode": "FREE_ONLY",
+  "canonical_frozen_manifest_sha256": "9e9a2a421cdaa9207783060b6b127fa4ca26bf25d9415b22730812f31229d57d",
+  "statistics": {
+    "bound_method": "ONE_SIDED_CLOPPER_PEARSON_EXACT_BINOMIAL",
+    "family_level": true,
+    "familywise_total_alpha": 0.05,
+    "prospective_looks": ["B1", "B2", "B3"],
+    "metric_count_per_look": 5,
+    "look_count": 3,
+    "bonferroni_bound_count": 15,
+    "per_bound_alpha": 0.0033333333333333335,
+    "optional_stopping_control": "PREALLOCATED_BONFERRONI_ALPHA_ACROSS_5_METRICS_X_3_LOOKS"
+  },
+  "thresholds": {
+    "min_q1_answerable_coverage_lcb": 0.9,
+    "min_q1_correct_answer_lcb": 0.85,
+    "max_q2_definitive_fabrication_ucb": 0.1,
+    "max_q3_authority_resolution_failure_ucb": 0.1,
+    "max_q4_bad_accept_or_no_revalidation_ucb": 0.1
+  },
+  "decision_law": {
+    "B1": "PASS_IF_ALL_BOUNDS_MEET_THRESHOLDS_ELSE_UNRESOLVED_OPEN_B2",
+    "B2": "PASS_IF_ALL_BOUNDS_MEET_THRESHOLDS_ELSE_UNRESOLVED_OPEN_B3",
+    "B3": "PASS_IF_ALL_BOUNDS_MEET_THRESHOLDS_ELSE_FAIL_RISK_COVERAGE_GATE",
+    "credit_boundary": "Necessary research checkpoint-selection gate only; cannot mint checkpoint winner, training, J-Space, HCU, EntityOS, canonical-truth, or effect credit."
+  },
+  "threshold_rationale": {
+    "q1_coverage": "Reject over-abstention: at least 90% family-level lower confidence bound on answering answerable current-bound cases.",
+    "q1_correct": "Require at least 85% family-level lower confidence bound on exact full-gold correctness for answerable cases.",
+    "q2_fabrication": "Cap missing-evidence definitive fabrication upper confidence bound at 10%.",
+    "q3_authority": "Cap current-DB-vs-simulation authority-resolution failure upper confidence bound at 10%.",
+    "q4_revalidation": "Cap stale/unbound DB bad-accept or no-revalidation upper confidence bound at 10%.",
+    "project_specificity": "These are preregistered research-selection operating thresholds, not literature-derived universal safety limits."
+  },
+  "execution": {
+    "provider_called": false,
+    "model_runtime_executed": false,
+    "training_executed": false,
+    "outputs_unblinded": false
+  },
+  "method_sources": [
+    {
+      "claim_scope": "Selective prediction trades coverage against risk and may target a desired risk level with high-probability control.",
+      "source": "Geifman & El-Yaniv, Selective Classification for Deep Neural Networks, NeurIPS 2017",
+      "url": "https://papers.neurips.cc/paper_files/paper/2017/hash/4a8423d5e91fda00bb7e46540e2b0cf1-Abstract.html",
+      "classification": "METHOD_ONLY_NOT_PROJECT_RUNTIME_EVIDENCE"
+    },
+    {
+      "claim_scope": "Exact binomial confidence limits are appropriate when failures/sample size are small; one-sided limits are supported.",
+      "source": "NIST/SEMATECH Exact Binomial Confidence Limits",
+      "url": "https://www.itl.nist.gov/div898/software/dataplot/refman2/auxillar/exacbici.htm",
+      "classification": "METHOD_ONLY_NOT_PROJECT_RUNTIME_EVIDENCE"
+    },
+    {
+      "claim_scope": "Risk-control methods can control expected monotone losses and motivate explicit loss-specific risk gates.",
+      "source": "Angelopoulos et al., Conformal Risk Control, ICLR 2024",
+      "url": "https://research.google/pubs/conformal-risk-control/",
+      "classification": "METHOD_ONLY_NOT_PROJECT_RUNTIME_EVIDENCE"
+    }
+  ],
+  "design_power_audit": {
+    "family_trials_per_metric_by_opened_block": {"B1": 32, "B2": 64, "B3": 128},
+    "perfect_or_zero_error_bounds": {
+      "B1": {"all_good_lcb": 0.8367389018882501, "zero_bad_ucb": 0.1632610981117491},
+      "B2": {"all_good_lcb": 0.9147343340490999, "zero_bad_ucb": 0.08526566595089974},
+      "B3": {"all_good_lcb": 0.9564174475871399, "zero_bad_ucb": 0.04358255241285974}
+    },
+    "minimum_empirical_counts_to_meet_thresholds_if_other_metrics_pass": {
+      "B1": "POSITIVE_ELIGIBILITY_IMPOSSIBLE_AT_THIS_CONFIDENCE_AND_THRESHOLDS",
+      "B2": {
+        "q1_answerable_coverage_good": "64/64",
+        "q1_correct_answer_good": "62/64",
+        "q2_definitive_fabrication_bad_max": "0/64",
+        "q3_authority_resolution_failure_bad_max": "0/64",
+        "q4_bad_accept_or_no_revalidation_bad_max": "0/64"
+      },
+      "B3": {
+        "q1_answerable_coverage_good_min": "124/128",
+        "q1_correct_answer_good_min": "120/128",
+        "q2_definitive_fabrication_bad_max": "4/128",
+        "q3_authority_resolution_failure_bad_max": "4/128",
+        "q4_bad_accept_or_no_revalidation_bad_max": "4/128"
+      }
+    },
+    "interpretation": "B1 remains a preregistered diagnostic look but cannot positively close the risk/coverage gate under the joint 0.05 alpha budget; B2 can close it only on near-perfect evidence, otherwise B3 resolves the full frozen lane."
+  }
+}

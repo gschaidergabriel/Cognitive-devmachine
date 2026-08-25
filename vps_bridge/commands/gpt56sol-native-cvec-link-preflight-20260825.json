@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v4",
+  "command_id": "gpt56sol-native-cvec-link-preflight-20260825",
+  "op": "exec",
+  "cwd": "/workspace/clay-global-research-entity",
+  "timeout_seconds": 120,
+  "command": "set -euo pipefail; ROOT=/cache/clay-qwen06-native; echo source_head=$(git rev-parse HEAD); echo cpp_sha=$(sha256sum tools/trigger1_native_llamacpp_cvec_logits.cpp | cut -d ' ' -f1); echo py_sha=$(sha256sum tools/trigger1_local_qwen06_native_cvec_execute.py | cut -d ' ' -f1); echo '--- bin ---'; ls -lh $ROOT/build/bin | head -80; echo '--- shared libs ---'; find $ROOT/build -type f -name '*.so*' -printf '%p\\n' | sort | head -80; echo '--- llama ldd ---'; ldd $ROOT/build/bin/llama-cli | head -80; echo '--- compiler ---'; g++ --version | head -1"
+}

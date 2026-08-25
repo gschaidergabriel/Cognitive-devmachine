@@ -1,0 +1,77 @@
+{
+  "schema": "CLAY_TRIGGER2_V22_MODEL_VISIBLE_NUISANCE_ABLATION_REVIEW/v1",
+  "date": "2026-08-25",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority": {
+    "supervisor_epoch": "8.78",
+    "mode": "FREE_ONLY",
+    "branch_base_main": "32454388b1c23c5c2d1f15951a6b487ccaaf36ad",
+    "owner_target": "research_entity/global/OWNER_CORRECTION_ZERO_ENTITYOS_COGNITIVE_GRID_DB_CLAUDECODE_GLOBAL_JSPACE_2026-08-25.md"
+  },
+  "audited_source": {
+    "path": "tools/trigger2_binding_router_blueprint_generator_v2.py",
+    "blob_sha": "fdd6c1eacb90676d49bbec379db18ddd4da526d1",
+    "schema_revision": "v2.2",
+    "logical_rows": 11664,
+    "factorization": "6 templates x 3 base states x 6 S3 mappings x 6 display orders x 2 query polarities x 3 proof topologies x 3 focus positions"
+  },
+  "swarm_finding": {
+    "status": "VALIDATOR_PROOF_BUG_FOUND; V22_FACTORIAL_DESIGN_NOT_FALSIFIED_BY_CORRECTED_FORMULA_TEST",
+    "bug": "The in-generator nuisance-only decoder includes base_state_class even though that field is explicitly EXCLUDED_FROM_MODEL_INPUT, while omitting the realized S3 mapping/codebook identity even though the mapping is model-visible.",
+    "why_it_matters": "A nuisance-only gate must be computed from the actual rendered model-visible nonsemantic surface. Hidden audit metadata cannot establish absence of a visible shortcut.",
+    "relation_to_prior_negative_evidence": "Earlier v1/v2/v3 audits showed that zero marginal balance and pseudo-randomization can coexist with strong higher-order shortcuts. Therefore the proof object must be the realized model-visible projection, not a convenient metadata subset."
+  },
+  "corrected_discriminator": {
+    "method": "Mask only R1/R2/R3 semantic payload text in the rendered prompt while preserving codebook mapping/order, proof topology, focus route, query polarity, template-specific atom pool and serialization. Group identical ablated prompts and inspect the target distribution.",
+    "required_invariant": "Every ablated model-visible nuisance key must retain all three episode-local target symbols with equal counts; exact nuisance-only lookup accuracy must therefore equal 1/3.",
+    "deterministic_formula_simulation_scope": "Exact v2.2 factorial indices and target algebra reproduced; this is not an admitted EntityOS/HCU runtime execution.",
+    "rows": 11664,
+    "semantic_ablated_prompt_groups": 3888,
+    "rows_per_ablated_group": 3,
+    "semantic_ablated_target_lookup_accuracy": 0.3333333333333333,
+    "episode_local_chance": 0.3333333333333333,
+    "verdict": "PASS_AT_LOGICAL_FORMULA_SCOPE"
+  },
+  "new_gate_source": {
+    "path": "tools/trigger2_binding_router_visible_nuisance_gate_v1.py",
+    "test_path": "tests/test_trigger2_binding_router_visible_nuisance_gate_v1.py",
+    "design": [
+      "derive ablated nuisance keys only from rendered prompt bytes",
+      "never consume hidden base_state_class/audit_semantic_class/s3 ids as evidence of independence",
+      "preserve visible codebook mapping/order and proof/query routing during semantic ablation",
+      "fail if any ablated nuisance group loses three-target support or becomes target-imbalanced",
+      "fail if ablated exact-lookup accuracy exceeds 1/3",
+      "regression-test a deliberately injected visible target hint",
+      "regression-test that hidden audit metadata mutation cannot change the gate result"
+    ],
+    "execution_status": "SOURCE_AND_TESTS_WRITTEN; NO_GITHUB_CI_RUN_OBSERVED_AT_WRITE_TIME"
+  },
+  "training_data_update": {
+    "retain": [
+      "full S3 mapping crossing",
+      "full six display-order crossing",
+      "direct/inverted query polarity",
+      "DIRECT_MATCH / ONE_HOP / TWO_HOP proof topology",
+      "focus-position crossing",
+      "split-disjoint placeholder symbol pools"
+    ],
+    "add_as_mandatory_pre_materialization_gate": "MODEL_VISIBLE_SEMANTIC_ABLATION_NUISANCE_CHALLENGER",
+    "next_curriculum_extension_after_gate": "Only after exact serialized-row gate passes, extend proof depth/distractors and variable-N architecture families without breaking the same nuisance-independence invariant."
+  },
+  "epistemic_boundary": {
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "qwen35_jspace_runtime_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "canonical_semantics_promotion": false,
+    "training_executed": false,
+    "paid_provider_used": false
+  },
+  "next_exact_action": "Execute the new gate against the exact serialized 11664-row v2.2 blueprint in an admitted deterministic test surface; if it passes, freeze the gate into the single successor binder lane. Then resolve exact checkpoint-local ABI atom/tokenizer materialization and immutable split pools before any real training-row admission."
+}

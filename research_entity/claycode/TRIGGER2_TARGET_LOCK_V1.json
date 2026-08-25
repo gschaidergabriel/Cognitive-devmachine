@@ -1,0 +1,30 @@
+{
+  "schema": "TRIGGER2_TARGET_LOCK/v1",
+  "date": "2026-08-25",
+  "trigger": "2",
+  "program": "EntityOS + HCU",
+  "implementation_codename": "Xeno",
+  "training_target_parameter_class": "0.8B_ONLY",
+  "model_family": "Qwen3.5-0.8B",
+  "allowed_pretrain_selection_candidates": [
+    "Qwen/Qwen3.5-0.8B",
+    "Qwen/Qwen3.5-0.8B-Base"
+  ],
+  "paid_full_ft_jobs_planned": 1,
+  "paid_full_ft_models_trained": 1,
+  "selection_rule": "Zero-cost baseline comparison may choose exactly one 0.8B checkpoint; only that checkpoint may enter the first serious full fine-tune.",
+  "excluded_training_targets": [
+    "Qwen3-0.6B",
+    "all non-0.8B alternatives unless a newer explicit owner instruction supersedes this lock"
+  ],
+  "training_method_target": "FULL_SUPERVISED_FINE_TUNING",
+  "deployment_after_training": {
+    "primary": "GGUF_Q4_K_M",
+    "references": ["FULL_PRECISION", "GGUF_Q8_0", "GGUF_Q5_K_M"],
+    "law": "Quantization happens after full fine-tuning and must pass frozen quality/authority/J-Space/Hyperposition regression gates."
+  },
+  "dataset_policy": "LIVING_VERSIONED_UNTIL_PRE_JOB_FREEZE",
+  "semantic_hyperposition": "MANDATORY_MODEL_FACING_CAPABILITY_AND_RESEARCH_TRACK",
+  "full_xeno_model_functionality": "MANDATORY_FUNCTION_TO_DATA_AND_EVAL_COVERAGE",
+  "paid_job_creation_on_trigger_alone": false
+}

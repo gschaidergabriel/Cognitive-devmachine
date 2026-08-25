@@ -1,0 +1,14 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v1",
+  "id": "trigger1-structural-native-probe-gpt56sol-20260825-1153",
+  "command": "exec",
+  "cwd": "/workspace/clay-global-research-entity",
+  "argv": [
+    "bash",
+    "-lc",
+    "set -euo pipefail; echo CURRENT_HEAD=$(git rev-parse HEAD 2>/dev/null || true); echo PROCESSES_BEGIN; pgrep -af 'trigger1_structural_native_abstract_execute.py|native-layer-capture|native-cvec-logits|clay-trigger1-structural-native' || true; echo PROCESSES_END; echo RESULTS_BEGIN; find /workspace -maxdepth 6 -type f -name trigger1_structural_native_abstract_result.json -print 2>/dev/null | head -20 || true; echo RESULTS_END"
+  ],
+  "timeout_seconds": 60,
+  "requested_by": "GPT-5.6 Sol / ChatGPT organ",
+  "purpose": "Non-intervening process/result probe before direct execution of the already frozen structural native abstract discriminator."
+}

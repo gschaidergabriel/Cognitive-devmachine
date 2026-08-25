@@ -28,9 +28,13 @@ def test_conversion_pressure_never_kills_shared_extraction_fabric() -> None:
 def test_slot_level_scheduler_owns_raw_suppression_during_backfill() -> None:
     text = SCHEDULER.read_text(encoding="utf-8")
 
-    # Every reservable slot is conversion-first. Ordinary raw prompting is reached
-    # only when no historical packet can be reserved.
+    # Every reservable slot is conversion-first. If all visible packets are merely
+    # leased, the slot becomes an explicit hold rather than leaking back to raw
+    # research. Ordinary prompting resumes only after the queue itself is empty.
     assert "packet = _reserve(serial)" in text
-    assert "if packet is None:\n            return original" in text
+    assert "if packet is None:" in text
+    assert "if _packets():" in text
+    assert "HISTORICAL FREE-SWARM BACKFILL HOLD" in text
+    assert "NO_DELTA=HISTORICAL_BACKFILL_LEASE_BUSY" in text
     assert "if serial % 4 == 0" not in text
     assert "HISTORICAL FREE-SWARM BACKFILL OVERRIDE" in text

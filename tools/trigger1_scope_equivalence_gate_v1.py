@@ -1,21 +1,18 @@
 #!/usr/bin/env python3
-"""Three-way token-scope discriminator for Qwen3-0.6B Trigger-1 steering.
+"""Fail-closed three-way token-scope discriminator for Trigger-1 Qwen3-0.6B steering.
 
-The earlier PyTorch witness perturbs only the final prompt token at the selected residual
-site.  llama.cpp cvec adds the layer direction to every prompt position present in the
-decode batch.  Those interventions must not be called causally identical by default.
+The credited PyTorch witness perturbs the selected block output at the final prompt token.
+llama.cpp cvec broadcasts the layer direction over prompt positions present in the decode
+batch.  This adjudicator therefore requires matched observations for:
 
-This gate consumes preregistered, case/control-bound observations from:
   PYTORCH_LAST_TOKEN
   PYTORCH_ALL_PROMPT_TOKENS
   NATIVE_CVEC_ALL_PROMPT_TOKENS
 
-It first tests PyTorch LAST vs ALL (pure token-scope change), then PyTorch ALL vs native
-ALL (runtime/quantization/carrier transfer with scope matched).  A strict three-way scope-
-invariant replication requires both comparisons.  Native ALL matching PyTorch ALL alone
-is explicitly classified only as BROADCAST_SCOPE_CARRIER_REPLICATION.
-
-Execution-free, fail-closed, non-minting.
+PyTorch LAST vs ALL isolates token-scope.  PyTorch ALL vs native ALL isolates carrier /
+runtime / quantization transfer with token scope matched.  Native-ALL agreement alone is
+classified BROADCAST_SCOPE_CARRIER_REPLICATION, never strict last-token replication.
+Execution-free, fail-closed and non-minting.
 """
 from __future__ import annotations
 
@@ -41,6 +38,11 @@ CONTROLS = (
     "ORTHOGONAL_SAME_NORM",
     "PERMUTED_SAME_NORM",
 )
+SCOPES = {
+    "PYTORCH_LAST_TOKEN": "LAST_TOKEN_ONLY_AT_SELECTED_BLOCK_OUTPUT",
+    "PYTORCH_ALL_PROMPT_TOKENS": "ALL_PROMPT_TOKEN_POSITIONS_AT_SELECTED_BLOCK_OUTPUT",
+    "NATIVE_CVEC_ALL_PROMPT_TOKENS": "ALL_PROMPT_TOKEN_POSITIONS_PRESENT_IN_DECODE_BATCH",
+}
 
 
 def canonical_sha(value: Any) -> str:
@@ -63,9 +65,7 @@ def cosine(a: list[float], b: list[float]) -> float:
     dot = sum(x * y for x, y in zip(a, b))
     na = math.sqrt(sum(x * x for x in a))
     nb = math.sqrt(sum(y * y for y in b))
-    if na <= 1e-15 or nb <= 1e-15:
-        return float("nan")
-    return dot / (na * nb)
+    return dot / (na * nb) if na > 1e-15 and nb > 1e-15 else float("nan")
 
 
 def relative_l2(a: list[float], b: list[float]) -> float:
@@ -92,22 +92,21 @@ def _fail(reason: str) -> dict[str, Any]:
 def adjudicate(payload: dict[str, Any]) -> dict[str, Any]:
     if not isinstance(payload, dict) or payload.get("schema") != SCHEMA:
         return _fail("INPUT_SCHEMA_INVALID")
+
     prereg = payload.get("preregistration")
     if not isinstance(prereg, dict) or not is_sha(prereg.get("receipt_sha256")):
         return _fail("PREREGISTRATION_RECEIPT_SHA256_REQUIRED")
     if prereg.get("thresholds_frozen_before_holdout") is not True:
         return _fail("THRESHOLDS_MUST_BE_FROZEN_BEFORE_HOLDOUT")
     thresholds = prereg.get("thresholds")
-    if not isinstance(thresholds, dict):
-        return _fail("PREREGISTERED_THRESHOLDS_REQUIRED")
     try:
         min_cos = float(thresholds["min_effect_pattern_cosine"])
         max_rel = float(thresholds["max_effect_pattern_relative_l2"])
         max_null = float(thresholds["max_null_drift"])
     except (KeyError, TypeError, ValueError):
-        return _fail("THRESHOLD_FIELDS_INVALID")
-    if not (0.0 <= min_cos <= 1.0 and 0.0 <= max_rel <= 2.0 and max_null >= 0.0):
-        return _fail("THRESHOLD_RANGE_INVALID")
+        return _fail("PREREGISTERED_THRESHOLDS_INVALID")
+    if not (0 <= min_cos <= 1 and 0 <= max_rel <= 2 and max_null >= 0):
+        return _fail("PREREGISTERED_THRESHOLD_RANGE_INVALID")
 
     identity = payload.get("frozen_identity")
     if not isinstance(identity, dict):
@@ -129,19 +128,19 @@ def adjudicate(payload: dict[str, Any]) -> dict[str, Any]:
 
     failures: list[str] = []
     rows: dict[tuple[str, str, str], dict[str, Any]] = {}
-    case_universe: set[str] = set()
+    cases: set[str] = set()
     for i, row in enumerate(raw):
         prefix = f"ROW_{i}"
         if not isinstance(row, dict):
             failures.append(f"{prefix}_OBJECT_REQUIRED")
             continue
         condition = str(row.get("condition") or "")
-        case_id = str(row.get("case_identity_sha256") or "")
+        case = str(row.get("case_identity_sha256") or "")
         control = str(row.get("control") or "")
         if condition not in CONDITIONS:
             failures.append(f"{prefix}_CONDITION_INVALID")
             continue
-        if not is_sha(case_id):
+        if not is_sha(case):
             failures.append(f"{prefix}_CASE_IDENTITY_SHA256_INVALID")
             continue
         if control not in CONTROLS:
@@ -149,116 +148,115 @@ def adjudicate(payload: dict[str, Any]) -> dict[str, Any]:
             continue
         if row.get("basis_vector_sha256") != identity["basis_vector_sha256"]:
             failures.append(f"{prefix}_BASIS_VECTOR_IDENTITY_MISMATCH")
-        if int(row.get("layer", -1)) != layer:
-            failures.append(f"{prefix}_LAYER_MISMATCH")
-        if abs(float(row.get("gain", float("nan"))) - gain) > 1e-12:
-            failures.append(f"{prefix}_GAIN_MISMATCH")
         try:
+            if int(row.get("layer")) != layer:
+                failures.append(f"{prefix}_LAYER_MISMATCH")
+            if abs(float(row.get("gain")) - gain) > 1e-12:
+                failures.append(f"{prefix}_GAIN_MISMATCH")
             score = float(row["target_score"])
         except (KeyError, TypeError, ValueError):
-            failures.append(f"{prefix}_TARGET_SCORE_INVALID")
+            failures.append(f"{prefix}_NUMERIC_FIELD_INVALID")
             continue
         if not math.isfinite(score):
             failures.append(f"{prefix}_TARGET_SCORE_NONFINITE")
             continue
-        if condition == "PYTORCH_LAST_TOKEN" and row.get("intervention_scope") != "LAST_TOKEN_ONLY_AT_SELECTED_BLOCK_OUTPUT":
-            failures.append(f"{prefix}_PYTORCH_LAST_SCOPE_ATTESTATION_INVALID")
-        if condition == "PYTORCH_ALL_PROMPT_TOKENS" and row.get("intervention_scope") != "ALL_PROMPT_TOKEN_POSITIONS_AT_SELECTED_BLOCK_OUTPUT":
-            failures.append(f"{prefix}_PYTORCH_ALL_SCOPE_ATTESTATION_INVALID")
-        if condition == "NATIVE_CVEC_ALL_PROMPT_TOKENS":
-            if row.get("intervention_scope") != "ALL_PROMPT_TOKEN_POSITIONS_PRESENT_IN_DECODE_BATCH":
-                failures.append(f"{prefix}_NATIVE_SCOPE_ATTESTATION_INVALID")
-            if control != "BASELINE" and row.get("native_cvec_rc") != 0:
-                failures.append(f"{prefix}_NATIVE_CVEC_RC_NOT_ZERO")
-        key = (condition, case_id, control)
+        if row.get("intervention_scope") != SCOPES[condition]:
+            failures.append(f"{prefix}_SCOPE_ATTESTATION_INVALID")
+        if condition == "NATIVE_CVEC_ALL_PROMPT_TOKENS" and control != "BASELINE" and row.get("native_cvec_rc") != 0:
+            failures.append(f"{prefix}_NATIVE_CVEC_RC_NOT_ZERO")
+        key = (condition, case, control)
         if key in rows:
             failures.append(f"{prefix}_DUPLICATE_OBSERVATION")
-        rows[key] = {**row, "target_score": score}
-        case_universe.add(case_id)
+        else:
+            rows[key] = {**row, "target_score": score}
+        cases.add(case)
 
-    if not case_universe:
-        failures.append("EMPTY_CASE_UNIVERSE")
-    expected = {(c, case, k) for c in CONDITIONS for case in case_universe for k in CONTROLS}
-    missing = expected - set(rows)
-    extra = set(rows) - expected
-    if missing:
-        failures.append(f"MISSING_MATCHED_OBSERVATIONS:{len(missing)}")
-    if extra:
-        failures.append(f"EXTRA_MATCHED_OBSERVATIONS:{len(extra)}")
+    expected = {(condition, case, control) for condition in CONDITIONS for case in cases for control in CONTROLS}
+    if set(rows) != expected:
+        missing = expected - set(rows)
+        extra = set(rows) - expected
+        if missing:
+            failures.append(f"MISSING_MATCHED_OBSERVATIONS:{len(missing)}")
+        if extra:
+            failures.append(f"EXTRA_MATCHED_OBSERVATIONS:{len(extra)}")
 
-    effect_patterns: dict[str, list[float]] = {c: [] for c in CONDITIONS}
-    control_specificity: dict[str, bool] = {}
-    if not missing:
+    patterns = {condition: [] for condition in CONDITIONS}
+    specificity: dict[str, bool] = {}
+    if set(rows) == expected and expected:
         for condition in CONDITIONS:
-            cond_ok = True
-            for case in sorted(case_universe):
-                vals = {k: rows[(condition, case, k)]["target_score"] for k in CONTROLS}
-                plus = vals["+VECTOR"] - vals["BASELINE"]
-                sign = vals["BASELINE"] - vals["SIGN_FLIP"]
+            good = True
+            for case in sorted(cases):
+                vals = {control: rows[(condition, case, control)]["target_score"] for control in CONTROLS}
+                effect = (
+                    vals["+VECTOR"] - vals["BASELINE"],
+                    vals["BASELINE"] - vals["SIGN_FLIP"],
+                    vals["+VECTOR"] - vals["ORTHOGONAL_SAME_NORM"],
+                    vals["+VECTOR"] - vals["PERMUTED_SAME_NORM"],
+                )
                 null = abs(vals["NULL_VECTOR"] - vals["BASELINE"])
-                orth = vals["+VECTOR"] - vals["ORTHOGONAL_SAME_NORM"]
-                perm = vals["+VECTOR"] - vals["PERMUTED_SAME_NORM"]
-                # Pattern excludes the numerically-near-zero null term from cosine geometry,
-                # but null is independently thresholded.
-                effect_patterns[condition].extend([plus, sign, orth, perm])
-                if not (plus > 0 and sign > 0 and orth > 0 and perm > 0 and null <= max_null):
-                    cond_ok = False
-            control_specificity[condition] = cond_ok
-            if not cond_ok:
+                patterns[condition].extend(effect)
+                if not (all(x > 0 for x in effect) and null <= max_null):
+                    good = False
+            specificity[condition] = good
+            if not good:
                 failures.append(f"{condition}_SIX_CONTROL_SPECIFICITY_FAIL")
 
-    comparisons: dict[str, Any] = {}
-    def compare(name: str, left: str, right: str) -> bool:
-        a, b = effect_patterns[left], effect_patterns[right]
+    def compare(left: str, right: str) -> dict[str, Any]:
+        a, b = patterns[left], patterns[right]
         if not a or len(a) != len(b):
-            comparisons[name] = {"pass": False, "cosine": None, "relative_l2": None}
-            return False
+            return {"pass": False, "cosine": None, "relative_l2": None, "left": left, "right": right}
         c = cosine(a, b)
         r = relative_l2(a, b)
-        ok = bool(math.isfinite(c) and c >= min_cos and r <= max_rel)
-        comparisons[name] = {"pass": ok, "cosine": c, "relative_l2": r, "left": left, "right": right}
-        return ok
+        return {
+            "pass": bool(math.isfinite(c) and c >= min_cos and r <= max_rel),
+            "cosine": c,
+            "relative_l2": r,
+            "left": left,
+            "right": right,
+        }
 
-    last_vs_all = compare("PYTORCH_LAST_VS_ALL", "PYTORCH_LAST_TOKEN", "PYTORCH_ALL_PROMPT_TOKENS")
-    all_vs_native = compare("PYTORCH_ALL_VS_NATIVE_ALL", "PYTORCH_ALL_PROMPT_TOKENS", "NATIVE_CVEC_ALL_PROMPT_TOKENS")
+    last_all = compare("PYTORCH_LAST_TOKEN", "PYTORCH_ALL_PROMPT_TOKENS")
+    all_native = compare("PYTORCH_ALL_PROMPT_TOKENS", "NATIVE_CVEC_ALL_PROMPT_TOKENS")
+    comparisons = {"PYTORCH_LAST_VS_ALL": last_all, "PYTORCH_ALL_VS_NATIVE_ALL": all_native}
 
-    broadcast_replication = bool(all_vs_native and all(control_specificity.get(c) is True for c in ("PYTORCH_ALL_PROMPT_TOKENS", "NATIVE_CVEC_ALL_PROMPT_TOKENS")))
-    strict_three_way = bool(broadcast_replication and last_vs_all and control_specificity.get("PYTORCH_LAST_TOKEN") is True)
-    if not all_vs_native:
+    broadcast = bool(
+        all_native["pass"]
+        and specificity.get("PYTORCH_ALL_PROMPT_TOKENS") is True
+        and specificity.get("NATIVE_CVEC_ALL_PROMPT_TOKENS") is True
+    )
+    strict = bool(broadcast and last_all["pass"] and specificity.get("PYTORCH_LAST_TOKEN") is True)
+    if not all_native["pass"]:
         failures.append("PYTORCH_ALL_NATIVE_ALL_EFFECT_PATTERN_MISMATCH")
-    if not last_vs_all:
+    if not last_all["pass"]:
         failures.append("PYTORCH_LAST_ALL_SCOPE_INVARIANCE_NOT_ESTABLISHED")
 
-    if strict_three_way:
-        classification = "SCOPE_INVARIANT_THREE_WAY_REPLICATION"
-    elif broadcast_replication:
-        classification = "BROADCAST_SCOPE_CARRIER_REPLICATION"
-    else:
-        classification = "INTERVENTION_SCOPE_EQUIVALENCE_NOT_ESTABLISHED"
-
-    # `pass` is deliberately the strongest claim: it means the old last-token witness and
-    # the broadcast carrier survived the preregistered scope-isolation comparison.
+    classification = (
+        "SCOPE_INVARIANT_THREE_WAY_REPLICATION"
+        if strict
+        else "BROADCAST_SCOPE_CARRIER_REPLICATION"
+        if broadcast
+        else "INTERVENTION_SCOPE_EQUIVALENCE_NOT_ESTABLISHED"
+    )
     core = {
         "schema": RECEIPT_SCHEMA,
         "input_sha256": canonical_sha(payload),
         "preregistration_receipt_sha256": prereg["receipt_sha256"],
         "frozen_identity": identity,
-        "case_count": len(case_universe),
+        "case_count": len(cases),
         "observation_count": len(raw),
-        "control_specificity": control_specificity,
+        "control_specificity": specificity,
         "comparisons": comparisons,
-        "broadcast_scope_carrier_replication": broadcast_replication,
-        "strict_last_token_native_identity": strict_three_way,
-        "pass": strict_three_way and not any(x.endswith("INVALID") or "MISMATCH" in x or "MISSING_" in x for x in failures),
+        "broadcast_scope_carrier_replication": broadcast,
+        "strict_last_token_native_identity": strict,
+        "pass": bool(strict and not failures),
         "classification": classification,
         "failures": sorted(set(failures)),
         "runtime_credit_minted": False,
         "jspace_model_runtime_credit": False,
         "canonical_semantics_promotion": False,
         "evidence_boundary": (
-            "BROADCAST_SCOPE_CARRIER_REPLICATION means PyTorch ALL_PROMPT_TOKENS and native cvec ALL_PROMPT_TOKENS "
-            "match under preregistered controls; it does not identify the old last-token intervention. Only "
-            "SCOPE_INVARIANT_THREE_WAY_REPLICATION additionally survives PyTorch LAST_TOKEN vs ALL_PROMPT_TOKENS."
+            "BROADCAST_SCOPE_CARRIER_REPLICATION binds PyTorch-all to native-all only. "
+            "SCOPE_INVARIANT_THREE_WAY_REPLICATION additionally requires PyTorch-last vs PyTorch-all."
         ),
     }
     return {**core, "receipt_sha256": canonical_sha(core)}

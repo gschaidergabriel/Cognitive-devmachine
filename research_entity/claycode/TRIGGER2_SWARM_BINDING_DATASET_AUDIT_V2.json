@@ -1,0 +1,74 @@
+{
+  "schema": "TRIGGER2_SWARM_BINDING_DATASET_AUDIT/v2.1",
+  "status": "FAIL_SCIENTIFIC_DONOR_SUPERSEDED",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "trigger": "triggerwort 2",
+  "canonical_reentry": {
+    "latest_main_observed": "586c1834000736a3bad95d2c5961a75bc4ac49d2",
+    "supervisor": "8.78 FREE_ONLY",
+    "owner_target": "VARIABLE COGNITIVE GRID + PERSISTENT DATABASE + CLAUDE CODE",
+    "note": "GRID10 is a benchmark only; dynamic binding is one subsystem of variable-N Zero/EntityOS cognition."
+  },
+  "dataset_candidate": {
+    "rows": 144,
+    "split_counts": {"TRAIN": 72, "VALIDATION": 18, "HOLDOUT": 54},
+    "training_ready": false,
+    "real_abi_materialized_rows": 0,
+    "local_jsonl_sha256_after_self_correction": "c7f4da304f97b5e9343a868226eb453dfcd65b93efd7e3dde07bab47a29acd63"
+  },
+  "candidate_gate_recheck": {
+    "gate_path": "tools/entityos_hcu_trainingtrace_candidate_gate_v1.py",
+    "gate_blob_sha": "a51c7b8afc6a9ae5562e5ec647528960e812eba3",
+    "row_schema": "ENTITYOS_HCU_TRAININGTRACE_CANDIDATE/v1",
+    "rows_checked": 144,
+    "rows_passed": 144,
+    "rows_failed": 0,
+    "scope": "SCHEMA_EPISTEMIC_GATE_ONLY_NOT_SCIENTIFIC_SHORTCUT_ACCEPTANCE"
+  },
+  "scientific_audit": {
+    "class_target_symbol_mi_bits_within_each_train_template": 0.0,
+    "target_symbol_template_mi_bits_train": 2.0,
+    "class_label_leakage_outside_codebook": 0,
+    "holdout_template_absent_train_validation": true,
+    "verdict": "FAIL_SCIENTIFIC_PILOT_GEOMETRY",
+    "finding": "Each train template owns a disjoint three-symbol placeholder set, so target_symbol identifies template perfectly. The earlier audit measured class->symbol balance but omitted this nuisance relation.",
+    "anti_goodhart_rule": "144/144 generic candidate-gate PASS cannot override a later scientific shortcut failure."
+  },
+  "swarm_disposition": {
+    "EVIDENCE_EXTRACTOR": "PASS_WITH_SCOPE",
+    "DATASET_ARCHITECT": "DONOR_ONLY",
+    "ADVERSARIAL_SHORTCUT_HUNTER": "FAIL_TARGET_TEMPLATE_NUISANCE",
+    "STATISTICAL_REVIEWER": "FAIL_TARGET_TEMPLATE_MI_2_BITS",
+    "ABI_PROVENANCE_REVIEWER": "BLOCK_REAL_ATOM_MATERIALIZATION",
+    "RETENTION_REVIEWER": "OPEN_SEPARATE",
+    "HARNESS_COMPATIBILITY_REVIEWER": "DONOR_ROW_SHAPE_ONLY",
+    "FINAL_INTEGRATOR": "SUPERSEDED_DONOR_ONLY"
+  },
+  "retained_successor": {
+    "factorial_blueprint": "tools/trigger2_dynamic_binding_blueprint_v2.py v2.1; 9072 NON-TRAINABLE blueprint rows with nuisance-MI checks",
+    "materializer": "tools/trigger2_dynamic_binding_materializer_v1.py on PR1956",
+    "materializer_source_selftest": {
+      "scope": "SYNTHETIC_46_SYMBOL_SOURCE_TEST_ONLY",
+      "rows": 4320,
+      "train": 3456,
+      "validation": 864,
+      "train_visible_atoms": 36,
+      "reserved_unseen_atoms": 10,
+      "train_permutations": ["P012", "P021", "P102", "P120"],
+      "validation_permutation": "P201",
+      "sealed_holdout_permutation": "P210",
+      "sealed_template": "T5_FROZEN_UNMATERIALIZED",
+      "train_class_target_atom_mi_bits": 0.0
+    },
+    "remaining_blocker": "Exact accepted 46-atom ABI inventory + exact manifest/tokenizer binding. Real ABI-materialized rows remain 0."
+  },
+  "reusable_research_rule": "DISJOINT_SYMBOL_POOL_PER_TEMPLATE can create target-template nuisance information even when class-target MI is zero; audit all plausible nuisance pairs, not only the intended label relation.",
+  "credits": {
+    "training_executed": false,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "qwen35_jspace_runtime_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0
+  }
+}

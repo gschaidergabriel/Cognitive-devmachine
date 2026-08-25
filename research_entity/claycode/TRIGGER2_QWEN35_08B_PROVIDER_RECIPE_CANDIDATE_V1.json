@@ -1,0 +1,97 @@
+{
+  "schema": "TRIGGER2_QWEN35_08B_PROVIDER_RECIPE_CANDIDATE/v1",
+  "date": "2026-08-25",
+  "trigger": "2",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "implementation_codename": "Xeno",
+  "canonical_owner_main_observed": "60a81a1eafed6d878b7b27bc074ebf01924528ae",
+  "supervisor": {
+    "version": "8.78",
+    "mode": "FREE_ONLY",
+    "provider_execution_allowed": false,
+    "paid_execution_allowed": false
+  },
+  "evidence_scope": "PUBLIC_PRIMARY_DOCS_PLUS_CURRENT_TRIGGER2_SOURCE_ONLY",
+  "target": {
+    "family": "Qwen3.5-0.8B",
+    "exactly_one_checkpoint_may_be_selected_for_first_full_ft": true,
+    "candidates": [
+      {
+        "model_id": "Qwen/Qwen3.5-0.8B",
+        "role": "POSTTRAINED_CHALLENGER",
+        "provider_route": "CATALOG",
+        "public_full_ft_support": "CONFIRMED",
+        "provider_sft_context_ceiling": 131072,
+        "provider_packed_batch_min": 8,
+        "provider_packed_batch_max": 8
+      },
+      {
+        "model_id": "Qwen/Qwen3.5-0.8B-Base",
+        "role": "PRETRAINED_BASE_CHALLENGER",
+        "provider_route": "BYOM_SAME_FAMILY_TEMPLATE_CHALLENGER",
+        "template_model": "Qwen/Qwen3.5-0.8B",
+        "public_full_ft_support": "NOT_DIRECTLY_LISTED",
+        "byom_exact_08b_acceptance": "PENDING_LIVE_PREJOB_VALIDATION"
+      }
+    ]
+  },
+  "job_candidate": {
+    "training_method": "sft",
+    "training_type": "full",
+    "lora": false,
+    "train_vision": false,
+    "vision_scope_reason": "CURRENT_OWNER_TARGET_IS_TEXT_SHARED_STATE_COGNITION_PROTOCOL; REOPEN_ONLY_ON_NEW_OWNER_SCOPE",
+    "max_seq_length": "UNFROZEN_DATA_DERIVED",
+    "n_epochs": "UNFROZEN_COMPARE_1_VS_2",
+    "learning_rate": "UNFROZEN",
+    "lr_scheduler_type": "UNFROZEN_COMPARE_COSINE_VS_LINEAR",
+    "warmup_ratio": "UNFROZEN",
+    "max_grad_norm": "UNFROZEN_NONZERO_CHALLENGER",
+    "weight_decay": "UNFROZEN_MODEST_CHALLENGER",
+    "random_seed": "MUST_BE_EXPLICIT_AT_FREEZE",
+    "packing": "UNFROZEN_FROM_LENGTH_AND_FAMILY_ANALYSIS",
+    "train_on_inputs": "UNFROZEN_FROM_ROW_FORMAT_AND_TOKENIZER_PREVIEW",
+    "validation_file": "MUST_BE_HASH_PINNED_BEFORE_JOB",
+    "n_evals": "MUST_BE_POSITIVE_IF_VALIDATION_USED_AND_FROZEN_BEFORE_JOB",
+    "n_checkpoints": "MUST_BE_FROZEN_BEFORE_JOB",
+    "hf_model_revision": "MANDATORY_FOR_BYOM_SELECTED_BASE",
+    "training_file": "MUST_BE_HASH_PINNED_BEFORE_JOB",
+    "suffix": "MUST_IDENTIFY_TRIGGER2_DATASET_RECIPE_REVISION"
+  },
+  "pricing_public": {
+    "currency": "USD",
+    "standard_sft_full_ft_up_to_16b_per_1m_processed_tokens": 0.54,
+    "minimum_job_charge": 4.0,
+    "processed_tokens_formula": "train_tokens*n_epochs + validation_tokens*n_evals",
+    "minimum_charge_crossover_processed_tokens_approx": 7407407.407407407,
+    "anti_goodhart": "COST_CROSSOVER_IS_NOT_A_TOKEN_TARGET; NEVER_PAD_OR_DUPLICATE_DATA_TO_REACH_IT"
+  },
+  "prejob_fail_closed_gates": [
+    "NEW_EXPLICIT_OWNER_PAID_EXECUTION_AUTHORITY",
+    "CURRENT_SUPERVISOR_MODE_PERMITS_PROVIDER_AND_PAID_ACTIONS",
+    "ONE_CHECKPOINT_SELECTED_BY_FROZEN_BASELINE_GATE",
+    "EXACT_MODEL_REVISION_TOKENIZER_CONFIG_AND_WEIGHT_IDENTITIES_FROZEN",
+    "SEALED_HOLDOUT_FROZEN_AND_EXCLUDED_FROM_TRAIN_UPLOAD",
+    "TRAIN_VALIDATION_JSONL_AND_ANCESTRY_MANIFEST_HASH_BOUND",
+    "FAMILY_LEAKAGE_AND_DUPLICATE_SCAN_PASS",
+    "MUST_GAIN_AND_MUST_RETAIN_BASELINES_FROZEN",
+    "CURRENT_PROVIDER_MODEL_LIMITS_VALIDATED",
+    "SELECTED_ROUTE_ACCEPTED_CATALOG_OR_EXACT_BYOM",
+    "TOKENIZER_PREVIEW_NO_DESTRUCTIVE_TRUNCATION_OR_MASKING_ERROR",
+    "CURRENT_PRICE_ESTIMATE_RECORDED_AND_APPROVED",
+    "NO_DEDICATED_HOSTING_ENDPOINT_CREATED_BY_DEFAULT"
+  ],
+  "credits": {
+    "provider_public_documentation_progress": 1,
+    "provider_runtime_credit": 0,
+    "checkpoint_selection_credit": 0,
+    "qwen35_model_runtime_credit": 0,
+    "qwen35_jspace_runtime_credit": 0,
+    "training_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0
+  },
+  "next_exact_free_gate": "RUN_PINNED_BASE_VS_POSTTRAINED_ZERO_COST_BASELINE_AND_NON_PERSISTING_ADAPTATION_PROXY; DO_NOT_QUERY_PROVIDER_CREDENTIALLED_ENDPOINTS UNDER SUPERVISOR_8_78"
+}

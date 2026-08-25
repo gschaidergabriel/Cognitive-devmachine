@@ -1,0 +1,33 @@
+{
+  "schema": "TRIGGER2_REENTRY_NON_DUPLICATION/v1",
+  "date": "2026-08-25",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "canonical_main_reentered": "f548a1cac683b3e9d3dabf2936c0e201f4e3324d",
+  "parallel_main_delta": {
+    "commit_message": "research: add order-crossed trigger2 binding generator v2",
+    "generator_scope": "4 templates x 6 realized S3 mappings x 3 semantic classes x 6 display orders = 432 METHOD_ONLY logical-alias rows",
+    "effect_on_this_run": "The 18 direct S3 rows and their target-position balancing are downgraded to independent challenger/regression evidence, not a competing primary dataset lane."
+  },
+  "nonduplicate_candidate_delta_from_this_run": [
+    {
+      "family": "B_DYNAMIC_CODEBOOK_BINDING_EPISODE_RESET",
+      "rows": 3,
+      "purpose": "force episode-local mapping invalidation and reject stale binding carry-over when the codebook changes"
+    },
+    {
+      "family": "B_DYNAMIC_CODEBOOK_BINDING_MULTI_HOP",
+      "rows": 3,
+      "purpose": "force semantic-class -> role/slot -> final-symbol dereference under distractors rather than direct one-hop lookup"
+    }
+  ],
+  "search_for_overlap_on_reentry": {
+    "EPISODE_RESET": "NO_MAIN_CODE_SEARCH_HIT_OBSERVED",
+    "MULTI_HOP_codebook_binding": "NO_MAIN_CODE_SEARCH_HIT_OBSERVED",
+    "boundary": "Search absence is not proof of repository-wide semantic uniqueness; these remain candidate deltas pending exact-current fusion review."
+  },
+  "admission_status": "CANDIDATE_NOT_ADMITTED",
+  "next_exact_gate": "Integrate only the nonduplicate episode-reset and multi-hop families into the current exact-main order-crossed generator/materialization architecture, then render from verified accepted 46-atom ABI/tokenizer identity and rerun split/leak/S3/MI/provenance gates.",
+  "credits": {"training":0,"jspace_model_runtime":0,"whole_hcu":0,"whole_entityos_hcu":0}
+}

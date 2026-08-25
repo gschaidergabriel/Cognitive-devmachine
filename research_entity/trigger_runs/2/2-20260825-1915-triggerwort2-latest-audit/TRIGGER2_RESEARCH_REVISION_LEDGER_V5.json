@@ -1,0 +1,210 @@
+{
+  "schema": "CLAY_TRIGGER2_RESEARCH_REVISION_LEDGER/v5",
+  "cycle_id": "2-20260825-1915-triggerwort2-latest-audit",
+  "date_local": "2026-08-25T19:15:00+07:00",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority": {
+    "canonical_main_observed": "c05fd30f34b118efa14e625323f50971c5dcd7c4",
+    "supervisor_epoch": "8.78",
+    "mode": "FREE_ONLY",
+    "owner_target": "research_entity/global/OWNER_CORRECTION_ZERO_ENTITYOS_COGNITIVE_GRID_DB_CLAUDECODE_GLOBAL_JSPACE_2026-08-25.md",
+    "owner_finished_system": "VARIABLE COGNITIVE GRID + PERSISTENT DATABASE + CLAUDE CODE",
+    "target_small_model_class": "Qwen3.5-0.8B-class",
+    "training_executed": false,
+    "paid_provider_or_training_call_executed": false,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0
+  },
+  "cycle_goal": "Audit current Trigger-2 training artifacts against latest canonical authority and current external research; mark stale/superseded/blocked/current artifacts; feed only evidence-supported deltas into the living training design without minting training or J-Space credit.",
+  "canonical_observations": [
+    "Supervisor 8.78 blocks trigger2_binding_router_factorial_generator_v3 from direct training because its deterministic display-order schedule is target-conditioned and leaks target class through model-visible nuisance combinations.",
+    "The v3 audit measured 0/127 nuisance signatures with all three target classes possible, 110/127 signatures with only one possible target class, nuisance-signature lookup accuracy 0.8819444444 and conditional MI 1.3488513896 bits. These are generator diagnostics, not model accuracy claims.",
+    "Current v2.2 proof-topology binder is METHOD_ONLY with 11,664 logical rows, full S3 mapping crossing, six display orders, direct/inverted polarity, three proof topologies and three focus positions; it remains training_eligible=false until exact checkpoint-local atom/tokenizer materialization and final split/shortcut gates pass.",
+    "Open PR #2007 identifies a proof-object defect in the in-generator nuisance decoder and proposes a model-visible semantic-ablation gate that preserves codebook/routing nuisance surfaces while masking only semantic evidence. It is an open candidate, not canonical main.",
+    "The variable-N fusion remains a method-level extension for the actual owner target: the binder must compose with DB-vs-simulation, variable-N cognition and Claude handoff/re-entry rather than becoming a standalone label-remapping benchmark."
+  ],
+  "external_research_delta": [
+    {
+      "id": "EXT_SYMBOL_TUNING",
+      "source": "https://arxiv.org/abs/2305.08298",
+      "source_class": "PRIMARY_PAPER",
+      "claim_used": "Fine-tuning on arbitrary-symbol input-label mappings can improve following flipped labels and reduce reliance on natural-language label semantics.",
+      "training_implication": "KEEP arbitrary episode-local symbols and explicit mapping remaps as a central supervised family; do not regress to fixed semantic labels.",
+      "evidence_boundary": "PaLM-family result; does not prove Qwen3.5-0.8B behavior."
+    },
+    {
+      "id": "EXT_SEMANTIC_ANCHORS_SMALL_LM",
+      "source": "https://arxiv.org/abs/2511.21038",
+      "source_class": "PRIMARY_PREPRINT",
+      "claim_used": "Small/medium open models can remain strongly anchored to pretrained label semantics under inverted demonstrations, making semantic override a distinct capability rather than a trivial ICL behavior.",
+      "training_implication": "ADD a frozen semantic-override/label-inversion stress metric to pre/post training evaluation; require arbitrary-symbol and inverted-polarity generalization rather than assuming episode-local remapping emerges automatically.",
+      "evidence_boundary": "Cross-model study; not a Qwen3.5-specific causal result."
+    },
+    {
+      "id": "EXT_TASK_VECTOR_FORMATION",
+      "source": "https://arxiv.org/abs/2501.09240",
+      "source_class": "PRIMARY_PREPRINT",
+      "claim_used": "Task-relevant information can emerge as compact representations and auxiliary objectives can strengthen task-vector localization/generalization in controlled transformers.",
+      "training_implication": "ADD post-training representation-probe and transfer diagnostics for episode-local binder state, but DO NOT add positive hidden-state/J-Space supervision until same-selected-model causal evidence exists.",
+      "evidence_boundary": "Controlled/synthetic research; method prior only."
+    },
+    {
+      "id": "EXT_TARGET_PERMUTATION_EQUIVARIANCE",
+      "source": "https://papers.neurips.cc/paper_files/paper/2025/hash/5a66c7adffdbde9dd5e78820cbf6935c-Abstract-Conference.html",
+      "source_class": "PEER_REVIEWED_PRIMARY",
+      "claim_used": "Target-permutation non-equivariance creates an equivariance gap; explicit target-equivariant design can remove permutation-induced instability.",
+      "training_implication": "PROMOTE full-S3 orbit evaluation to a first-class binder criterion: report orbit-exact rate, worst-permutation accuracy and equivariance violations. Candidate future loss: an S3-equivariance consistency term across counterfactual codebook permutations, preregistered as a challenger rather than assumed beneficial.",
+      "evidence_boundary": "Tabular prior-fitted model result; architectural analogy only until tested on Qwen3.5 binder."
+    },
+    {
+      "id": "EXT_SHORTCUT_DETECTION",
+      "source": "https://arxiv.org/abs/2501.00942",
+      "source_class": "PRIMARY_PREPRINT",
+      "claim_used": "Transformer shortcut reliance can be detected/mitigated by explicitly probing undesired features rather than trusting aggregate accuracy.",
+      "training_implication": "KEEP nuisance-only challenger, conditional support/MI gates and worst-group diagnostics as pre-admission requirements; aggregate binder accuracy cannot promote a corpus/model by itself.",
+      "evidence_boundary": "General shortcut-learning evidence, not direct Trigger-2 validation."
+    },
+    {
+      "id": "EXT_SFT_LAYER_RETENTION_2026",
+      "source": "https://aclanthology.org/2026.acl-long.453/",
+      "source_class": "PEER_REVIEWED_PRIMARY",
+      "claim_used": "SFT-induced changes/forgetting can be depth-dependent, with substantial sensitivity concentrated in later layers in the reported 1B-32B experiments.",
+      "training_implication": "ADD frozen layer-wise representation/behavior retention measurements to the full-FT experiment. Keep full-FT as owner target; treat layer-restricted tuning only as a scientific challenger/control, not as a silent target replacement.",
+      "evidence_boundary": "Cross-model result; exact Qwen3.5 layer behavior must be measured."
+    },
+    {
+      "id": "EXT_QWEN35_OFFICIAL_MODEL_SURFACE",
+      "source": "https://huggingface.co/Qwen/Qwen3.5-0.8B",
+      "source_class": "OFFICIAL_MODEL_REPOSITORY",
+      "claim_used": "Qwen publishes an Apache-2.0 Qwen3.5-0.8B model and a separate Qwen3.5-0.8B-Base model surface.",
+      "training_implication": "Before materialization/training, freeze exact chosen repository, immutable revision, tokenizer/config/weight digests and runtime build; do not transfer atom geometry or hidden-state coordinates across checkpoints by name similarity.",
+      "evidence_boundary": "Availability/identity only; no project-specific capability credit."
+    }
+  ],
+  "revision_registry": [
+    {
+      "artifact": "tools/trigger2_binding_router_factorial_generator_v3.py",
+      "version": "v3",
+      "status": "SUPERSEDED_FOR_DIRECT_TRAINING__DONOR_ONLY",
+      "predecessor": "earlier Trigger-2 binding generators",
+      "successor": "tools/trigger2_binding_router_blueprint_generator_v2.py@v2.2 plus model-visible nuisance gate candidate",
+      "target_architecture_ref": "VARIABLE COGNITIVE GRID + PERSISTENT DATABASE + CLAUDE CODE",
+      "revision_reason": "Critical higher-order target leakage despite marginal balance/randomized presentation.",
+      "recheck_condition": "Only if rebuilt with fully crossed or preregistered conditionally independent model-visible nuisance schedule."
+    },
+    {
+      "artifact": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_V3_NUISANCE_CONDITIONAL_LEAK_AUDIT_GPT56SOL.json",
+      "version": "v1",
+      "status": "CURRENT_NEGATIVE_EVIDENCE",
+      "predecessor": null,
+      "successor": "future exact serialized-row nuisance audit",
+      "target_architecture_ref": "Trigger-2 binder curriculum",
+      "revision_reason": "Preserve as counterevidence and regression requirement; do not erase when generator changes.",
+      "recheck_condition": "Re-run equivalent model-visible audit after real-atom serialization."
+    },
+    {
+      "artifact": "tools/trigger2_binding_router_blueprint_generator_v2.py",
+      "version": "v2.2",
+      "status": "CURRENT_METHOD_ONLY__BLOCKED_MATERIALIZATION",
+      "predecessor": "v2.x binder designs and retained v3 donors",
+      "successor": "real-atom/tokenizer-bound serialized pilot only after all gates",
+      "target_architecture_ref": "episodic BIND/ROUTE subobjective for variable-grid cognition",
+      "revision_reason": "Full crossing/proof-topology design improves nuisance independence but placeholders and exact ABI/split evidence remain unresolved.",
+      "recheck_condition": "Exact 46-atom inventory + tokenizer/checkpoint freeze + serialized model-visible nuisance/split/twin gates."
+    },
+    {
+      "artifact": "PR#2007 research(trigger2): validate binder from model-visible semantic ablation",
+      "version": "candidate-v1",
+      "status": "PREFERRED_OPEN_SUCCESSOR_CANDIDATE__NOT_CANONICAL",
+      "predecessor": "metadata-subset nuisance decoder",
+      "successor": "merge/fusion into single retained binder lane if exact serialized execution passes review",
+      "target_architecture_ref": "Trigger-2 binder pre-materialization gate",
+      "revision_reason": "Corrects proof object to model-visible rendered nuisance surface rather than hidden audit metadata.",
+      "recheck_condition": "Review against latest main and execute on exact committed serialized rows."
+    },
+    {
+      "artifact": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_VARIABLE_N_BINDING_FACTORIAL_SWARM_FUSION_V4_GPT56SOL.json",
+      "version": "v4",
+      "status": "CURRENT_ARCHITECTURE_METHOD_DESIGN__NOT_TRAINING_READY",
+      "predecessor": "isolated binder-only training designs",
+      "successor": "checkpoint-local, split-frozen, real-symbol architecture-binding corpus",
+      "target_architecture_ref": "VARIABLE COGNITIVE GRID + PERSISTENT DATABASE + CLAUDE CODE",
+      "revision_reason": "Binds the narrow episodic router to variable-N, DB boundary, Claude handoff/re-entry and evidence-independence workloads.",
+      "recheck_condition": "Materialize only after exact model/tokenizer/atom identity and immutable family split freeze."
+    },
+    {
+      "artifact": "research_entity/global/j-space/research/trigger2_sft_projection_epistemic_seed_v1.jsonl",
+      "version": "v1",
+      "status": "DONOR_CANDIDATE__REQUIRES_REBASE_AND_DEDUP",
+      "predecessor": null,
+      "successor": "future architecture-bound epistemic/guard corpus",
+      "target_architecture_ref": "evidence/authority/hyperposition guard behavior",
+      "revision_reason": "Current target requires integration with variable-N cognition/DB/Claude semantics and separation from one-symbol binder target channel.",
+      "recheck_condition": "Run provenance-family dedup and owner-target coverage audit before any acceptance."
+    }
+  ],
+  "training_program_delta_v5": {
+    "retain": [
+      "arbitrary episode-local symbol binding",
+      "all six S3 mappings",
+      "all six model-visible display orders",
+      "direct and inverted query polarity",
+      "proof-topology crossing",
+      "focus-position crossing",
+      "semantic/write/router factorized metrics",
+      "family/provenance atomic split discipline",
+      "hard negatives for evidence, state, authority and majority-as-truth failures",
+      "variable-N architecture semantics",
+      "DB-vs-simulation boundary",
+      "Claude handoff/return and causal re-entry evaluation",
+      "semantic Hyperposition with unresolved alternatives preserved"
+    ],
+    "add_now_to_design_and_evaluation": [
+      "MODEL_VISIBLE_SEMANTIC_ABLATION_NUISANCE_CHALLENGER as mandatory corpus gate",
+      "S3_ORBIT_EXACT_RATE and WORST_PERMUTATION_ACCURACY as primary binder metrics",
+      "S3_EQUIVARIANCE_VIOLATION_RATE under exact counterfactual codebook permutations",
+      "SEMANTIC_OVERRIDE_RATE on frozen arbitrary-symbol and inverted-label families",
+      "PRE_POST_RETENTION_FLOORS for semantic readout, direct symbol write, ClayCode/protocol, DB boundary, uncertainty/Hyperposition and low-refusal behavior",
+      "LAYER_WISE_DRIFT_REPORT after full fine-tune as diagnostic, without using it as causal proof"
+    ],
+    "candidate_challengers_not_yet_promoted": [
+      "S3-equivariance consistency loss across orbit-related rows; require preregistered lambda and no degradation of semantic/write retention before adoption",
+      "task-vector/localized binder auxiliary objective; blocked until same-selected-model representation and causal evidence justify a target",
+      "layer-restricted tuning control arm; scientific retention challenger only because owner target remains a serious full fine-tune"
+    ],
+    "explicitly_forbidden_or_blocked": [
+      "direct training on v3 factorial generator",
+      "positive Qwen3.5 hidden-state/J-Space labels inherited from Qwen3-0.6B or another checkpoint",
+      "post-hoc retuning on an opened/falsified holdout",
+      "training-set acceptance from marginal MI/class balance alone",
+      "fixed GRID10 role/personality curriculum as final architecture definition",
+      "paid/provider training under current FREE_ONLY authority"
+    ]
+  },
+  "next_exact_gates": [
+    "Converge PR #2007/#2005/#2006 functionality into one retained binder gate lane rather than merging overlapping authorities independently.",
+    "Run the corrected model-visible semantic-ablation nuisance challenger on exact committed serialized v2.2 rows.",
+    "Recover and cryptographically bind the exact accepted 46 one-token atom inventory to the exact selected Qwen3.5-0.8B checkpoint/tokenizer revision.",
+    "Freeze immutable TRAIN/VALIDATION/HOLDOUT/FINAL_RESERVE atom and semantic/provenance families before real rendering.",
+    "Re-run model-visible nuisance, split overlap, target-frequency, position, counterfactual twin and S3-orbit gates on exact rendered bytes.",
+    "Freeze pre-FT baselines for READ/BIND/WRITE, semantic-override, variable-N, DB-vs-simulation, Claude re-entry, Hyperposition/evidence and low-refusal retention.",
+    "Only after these pass may a zero-cost/local pilot be considered under current authority; training credit remains zero until actual qualified execution and post-training acceptance evidence exist."
+  ],
+  "credits": {
+    "research_audit_delta": 1,
+    "external_research_delta": 1,
+    "version_registry_delta": 1,
+    "materialized_training_rows": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "qwen35_jspace_runtime_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "canonical_semantics_promotion": false
+  }
+}

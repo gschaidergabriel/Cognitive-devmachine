@@ -1,0 +1,138 @@
+{
+  "schema": "CLAY_TRIGGER2_DYNAMIC_BINDING_SWARM_DELTA/v1",
+  "date": "2026-08-25",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "persistent_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "trigger": "triggerwort 2",
+  "authority": {
+    "canonical_repo": "gschaidergabriel/clay-global-research-entity",
+    "canonical_main_observed": "0edcc2ca0dba28fa0536bc5834fe6ede05a46e96",
+    "supervisor_epoch": "8.78",
+    "execution_mode": "FREE_ONLY",
+    "owner_target": "research_entity/global/XENO_HCU_GO_TARGET_ARCHITECTURE_OWNER_DIRECTIVE_2026-08-25.md",
+    "training_lane_pr": 1956,
+    "note": "This is a bounded research/data-design delta on the existing Trigger-2 lane. It does not mint canonical truth, model runtime, J-Space, HCU, EntityOS, provider or training credit. Re-enter current main before fusion."
+  },
+  "measured_target_model": {
+    "model_id": "Goekdeniz-Guelmez/Josiefied-Qwen3.5-0.8B-gabliterated-v1",
+    "snapshot": "591852bda6e1979f59e4b0f5ee2919697b12e936"
+  },
+  "evidence_driven_training_focus": {
+    "observed_context_invariant_binding_baseline": 0.5254629629629629,
+    "observed_dynamic_codebook_binding_baseline": 0.3611111111111111,
+    "chance": 0.3333333333333333,
+    "accept_target": 0.90,
+    "teach_primary": [
+      "content-dependent semantic-to-episode-local-codebook routing",
+      "context-invariant variable binding across structurally different templates",
+      "correct symbol selection under unseen permutations, lexical families and symbols"
+    ],
+    "protect_not_primary_retraining_targets": [
+      "semantic reading already measured strong",
+      "symbol emission/write axis already measured directly writable",
+      "HRR/MAP carrier-space binding algebra already measured sufficient through k<=16"
+    ],
+    "interpretation": "The current evidence supports treating routing/binding, not carrier algebra or basic semantic readout, as the highest-value training deficit."
+  },
+  "swarm_roles": [
+    "EVIDENCE_EXTRACTOR",
+    "DATASET_ARCHITECT",
+    "ADVERSARIAL_SHORTCUT_HUNTER",
+    "STATISTICAL_REVIEWER",
+    "PROVENANCE_REVIEWER",
+    "JSPACE_REVIEWER",
+    "RED_TEAM",
+    "FINAL_ADJUDICATOR"
+  ],
+  "candidate_seed": {
+    "local_artifact": "TRIGGER2_DYNAMIC_BINDING_SWARM_V1.zip",
+    "local_zip_sha256": "ebad3e726a8c0af4f09b5887f94db44f21deadb33c908fb7c7cdb4205e90e2c1",
+    "rows_total": 140,
+    "binding_rows": 126,
+    "hard_negative_rows": 14,
+    "template_families": 7,
+    "train_binding_rows": 72,
+    "validation_binding_rows": 36,
+    "holdout_binding_rows": 18,
+    "factorial_per_family": "6 S3 permutations x 3 semantic classes = 18 rows",
+    "full_s3_per_family": true,
+    "class_symbol_pair_count_per_family": 2,
+    "class_symbol_mutual_information_bits_per_family": 0.0,
+    "symbol_set_overlap_across_families": 0,
+    "family_provenance_split_unit": "CAUSAL_FAMILY_AND_PROVENANCE_ANCESTRY",
+    "class_word_resolution": "ALLOW/DENY/ABSTAIN may appear only inside the episode-local codebook. Target semantic class is validator-only metadata and must not be rendered into model-facing text elsewhere."
+  },
+  "hard_negative_families": [
+    "STALE_CODEBOOK",
+    "MAJORITY_SYMBOL_PRIOR",
+    "CODEBOOK_ORDER_SHORTCUT",
+    "SELF_AUTHORED_MAPPING",
+    "OUT_OF_CODEBOOK_OUTPUT",
+    "TARGET_METADATA_LEAK",
+    "SPLIT_ANCESTRY_LEAK",
+    "SYMBOL_HOLDOUT_LEAK",
+    "TEMPLATE_HOLDOUT_LEAK",
+    "PARTIAL_S3",
+    "COUNTERBALANCE_DRIFT",
+    "JSPACE_OVERCLAIM",
+    "WRITE_AXIS_RETRAIN",
+    "UNWHITENED_GEOMETRY"
+  ],
+  "swarm_adjudication": {
+    "EVIDENCE_EXTRACTOR": "PASS",
+    "DATASET_ARCHITECT": "PASS",
+    "ADVERSARIAL_SHORTCUT_HUNTER": "PASS_WITH_BLOCKER",
+    "STATISTICAL_REVIEWER": "PASS",
+    "PROVENANCE_REVIEWER": "PASS",
+    "JSPACE_REVIEWER": "PASS",
+    "RED_TEAM": "PASS_WITH_WARNINGS",
+    "FINAL_ADJUDICATOR": "CANDIDATE_PASS_NOT_TRAINING_READY"
+  },
+  "critical_blockers_before_dataset_admission": [
+    "Replace synthetic ATOM_* placeholders with symbols from the verified 46-atom XENO ABI inventory.",
+    "Bind exact ABI manifest/member hashes and atom-row mapping for every emitted symbol.",
+    "Verify every output symbol is single-token under the exact measured tokenizer identity.",
+    "Run entityos_hcu_trainingtrace_candidate_gate_v1.py on every row.",
+    "Run trigger2_trainingtrace_family_split_linter_v1.py across the complete candidate corpus.",
+    "Freeze unseen-symbol and unseen-template holdouts before any tuning or hyperparameter selection.",
+    "Keep target semantic metadata out of model-facing serialization outside the allowed codebook span.",
+    "Do not convert behavioral binding success into J-Space causal labels without same-model causal receipts."
+  ],
+  "generator_repairs_required_from_claude_ingest": [
+    "Make the selected S3 permutation causally construct the actual class-symbol mapping, not metadata only.",
+    "Require exact full S3 coverage rather than len(perms)>=3.",
+    "Enforce exact/at-most-one counterbalance and near-zero class-symbol mutual information.",
+    "Replace the hardcoded class-word leakage pass with a real allowed-codebook-span parser and rejection outside it.",
+    "Audit semantic-bearing lexical families across train/validation/holdout, not only one sampled adjective.",
+    "Use full canonical lexical-family SHA-256 provenance rather than truncated single-word hashes.",
+    "Verify ABI row/member integrity before row emission.",
+    "Keep the designated frozen template family absent from both TRAIN and VALIDATION."
+  ],
+  "research_feedback": {
+    "hypothesis": "Fine-tuning that repeatedly forces a decoded semantic class to be routed through an episode-local arbitrary symbol mapping across independent templates should install the missing context-dependent binding computation while preserving measured semantic readout and write axes.",
+    "strongest_counterhypothesis": "The apparent binding deficit may arise from prompt/token-position or template-specific nuisance structure, so supervised codebook training could teach a new textual shortcut rather than a reusable internal binding mechanism.",
+    "discriminators": [
+      "frozen unseen-template transfer >=0.90",
+      "frozen unseen-symbol transfer >=0.90",
+      "all-six-S3 permutation transfer >=0.90",
+      "counterbalanced nuisance-only decoder remains at chance",
+      "semantic readability does not materially regress",
+      "direct write-axis controllability does not materially regress",
+      "matched lexical/template shortcut challengers fail",
+      "behavioral success is evaluated separately from any model-internal J-Space claim"
+    ],
+    "architecture_implication": "The same training primitive generalizes beyond a toy label task: Xeno must bind decoded state variables to episode/runtime-local roles, codes, coordinator leases, NODE_RESULT routes, Hyperposition branch identities and compact ClayCode/HyperMath symbols without treating any surface token as permanently meaningful."
+  },
+  "credit": {
+    "canonical_dataset_tokens": 0,
+    "training_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0,
+    "provider_runtime_credit": 0
+  },
+  "next_exact_action": "Recover/bind the verified 46-atom ABI inventory, substitute exact atoms into the audited factorial generator, run row-level and family/provenance leakage gates, then freeze the first ABI-bound unseen-symbol/unseen-template seed before scaling row volume."
+}

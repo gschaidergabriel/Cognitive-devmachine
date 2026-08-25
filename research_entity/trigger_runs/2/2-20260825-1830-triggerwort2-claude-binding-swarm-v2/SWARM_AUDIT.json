@@ -1,0 +1,61 @@
+{
+  "schema": "TRIGGER2_SWARM_AUDIT/v2",
+  "date": "2026-08-25",
+  "canonical_main_observed": "0edcc2ca0dba28fa0536bc5834fe6ede05a46e96",
+  "supervisor_epoch": "8.78",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "trigger": "triggerwort 2",
+  "basis": {
+    "measured_target": "dynamic context-dependent binding/routing; preserve existing semantic read, symbol write, and carrier binding functions",
+    "baseline_context_cross_transfer_L19": 0.5254629629629629,
+    "baseline_codebook_symbol_hit": 0.3611111111111111,
+    "chance": 0.3333333333333333,
+    "accepted_atom_count": 46,
+    "rejected_atom": "or",
+    "s3_requirement": "FULL_6_PERMUTATIONS",
+    "holdout_policy": "T5 and held-out lexical/symbol families are not materialized in this seed"
+  },
+  "swarm_roles": [
+    {"role":"EVIDENCE_EXTRACTOR","verdict":"PASS","note":"Rows target the measured missing binding/router capability; no training/runtime credit claimed."},
+    {"role":"DATASET_ARCHITECT","verdict":"PASS","note":"24 seed rows: 18 full-S3 direct bindings + 3 episode-reset + 3 multihop."},
+    {"role":"ADVERSARIAL_SHORTCUT_HUNTER","verdict":"PASS_WITH_GATE","note":"Static mapping, codebook position, stale episode binding, intermediate-handle and distractor shortcuts are represented; ABI handles remain abstract until manifest resolution."},
+    {"role":"STATISTICAL_REVIEWER","verdict":"PASS_SEED","note":"For direct S3 rows every semantic class maps to every one of three seed atoms exactly twice; each atom is target exactly six times."},
+    {"role":"ABI_PROVENANCE_REVIEWER","verdict":"BLOCK_FINAL_ADMISSION","note":"ABI_ATOM_nn are abstract row handles in this seed; final token rows require verified 46-atom manifest row->token resolution and tokenizer identity."},
+    {"role":"RETENTION_REVIEWER","verdict":"PASS_DESIGN","note":"No primary objective asks the model to relearn semantic reading, symbol-axis writeout or HRR/MAP carrier algebra already measured present."},
+    {"role":"HARNESS_COMPATIBILITY_REVIEWER","verdict":"PASS_DESIGN","note":"Rows expose explicit episode codebooks and final symbol targets; multihop rows require traceable intermediate binding in future harness."},
+    {"role":"FINAL_INTEGRATOR","verdict":"CANDIDATE_NOT_ADMITTED","note":"Seed is structurally validated but cannot become final training data until ABI handles and frozen split families are resolved by deterministic generator/manifest gates."}
+  ],
+  "deterministic_checks": {
+    "row_count": 24,
+    "family_counts": {"B_DYNAMIC_CODEBOOK_BINDING_S3":18,"B_DYNAMIC_CODEBOOK_BINDING_EPISODE_RESET":3,"B_DYNAMIC_CODEBOOK_BINDING_MULTI_HOP":3},
+    "class_counts": {"ALLOW":8,"DENY":8,"ABSTAIN":8},
+    "templates_used": ["T1","T2","T3","T4"],
+    "s3_unique_permutations": 6,
+    "s3_class_symbol_cell_count": {
+      "ALLOW->ABI_ATOM_03":2,"ALLOW->ABI_ATOM_17":2,"ALLOW->ABI_ATOM_29":2,
+      "DENY->ABI_ATOM_03":2,"DENY->ABI_ATOM_17":2,"DENY->ABI_ATOM_29":2,
+      "ABSTAIN->ABI_ATOM_03":2,"ABSTAIN->ABI_ATOM_17":2,"ABSTAIN->ABI_ATOM_29":2
+    },
+    "s3_target_counts": {"ABI_ATOM_03":6,"ABI_ATOM_17":6,"ABI_ATOM_29":6},
+    "codebook_entry_orders": 6,
+    "class_label_outside_codebook_leaks": 0,
+    "holdout_rows_materialized": 0,
+    "dataset_sha256": "9344c2c001b1263424033be6183d57729e3093a459e070e7e43960131f302ded",
+    "errors": [],
+    "status": "PASS"
+  },
+  "repair_delta_vs_v1": [
+    "actual mapping_realized is bound to target rather than permutation metadata only",
+    "all six S3 mappings are present and validated",
+    "class-symbol contingency is exactly balanced in the 18-row direct-binding seed",
+    "codebook entry order varies independently from mapping",
+    "four training templates T1-T4 are used; T5 is intentionally absent as frozen holdout family",
+    "episode-reset rows explicitly punish stale cross-episode binding",
+    "multihop rows add dereference depth and distractors",
+    "exact class labels are confined to codebook class fields in model-visible input",
+    "every row carries current main, supervisor, Claude archive and exact model snapshot provenance"
+  ],
+  "next_gate": "Resolve abstract ABI_ATOM_nn handles against the verified 46-atom manifest/tokenizer, freeze lexical/symbol/template holdout families before tuning, then rerun the same deterministic checks on emitted token rows.",
+  "no_credit_boundary": {"training_executed":false,"training_credit":0,"jspace_model_runtime_credit":0,"whole_hcu_runtime_credit":0,"whole_entityos_hcu_runtime_credit":0}
+}

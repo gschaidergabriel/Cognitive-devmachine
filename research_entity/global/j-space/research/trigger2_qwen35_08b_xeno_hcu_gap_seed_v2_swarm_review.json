@@ -1,0 +1,52 @@
+{
+  "dataset_file": "trigger2_xeno_hcu_gap_seed_v2.jsonl",
+  "dataset_sha256": "ee8a0291db2d540d15fe0a285faa8ae46793e2ac821fe90efbb0cb41d261c735",
+  "date": "2026-08-25",
+  "deterministic_gate": {
+    "accepted_dataset_tokens_minted": 0,
+    "canonical_dataset_write_performed": false,
+    "errors": [],
+    "pass": true,
+    "runtime_credit_minted": false,
+    "training_credit_minted": false
+  },
+  "evidence_class_counts": {
+    "METHOD_ONLY": 7,
+    "SYNTHETIC_HARD_NEGATIVE": 7
+  },
+  "families": [
+    "COORDINATOR_FANIN_COMPRESSION_F01",
+    "CORRELATED_EVIDENCE_ARBITRATION_F01",
+    "GRF_DISCRIMINATOR_F01",
+    "GRID_ACTIVATION_NOOP_F01",
+    "MATCHED_BUDGET_CHALLENGER_F01",
+    "MULTI_COORDINATOR_CAS_REBASE_F01",
+    "RECURSIVE_COORDINATION_F01"
+  ],
+  "no_credit_boundary": {
+    "physical_grid10_runtime_credit": 0,
+    "qwen35_jspace_positive_credit": 0,
+    "training_credit": 0,
+    "whole_entityos_runtime_credit": 0,
+    "whole_hcu_runtime_credit": 0
+  },
+  "research_return": {
+    "counterhypothesis": "A single full-FT mixture may entangle binder and protocol learning, reducing transfer.",
+    "falsifier": "At fixed tokens/families, compare curriculum schedules on frozen dynamic-codebook transfer, architecture-policy suites and retention; reject schedules that materially damage either channel.",
+    "go_harness_implication": "Expose separate binder accuracy and multi-node coordinator/shared-state metrics so one cannot mask failure in the other.",
+    "new_hypothesis": "Treat local episodic binder learning and multi-node architecture-policy learning as orthogonal measurable channels."
+  },
+  "rows": 14,
+  "schema": "CLAY_TRIGGER2_SWARM_REVIEW/v2",
+  "swarm_review": [
+    {"role":"EVIDENCE_EXTRACTOR","verdict":"PASS","finding":"Targets current uncovered causal capabilities, not the newly added dynamic-codebook corpus."},
+    {"role":"DATASET_ARCHITECT","verdict":"PASS","finding":"Seven causal families; each has one METHOD_ONLY protocol row and one SYNTHETIC_HARD_NEGATIVE adversarial row."},
+    {"role":"ADVERSARIAL_SHORTCUT_HUNTER","verdict":"PASS_WITH_FUTURE_TEST","finding":"No invented ABI symbols. Future expansion must vary nuisances without counting paraphrases as independent causal evidence."},
+    {"role":"STATISTICAL_REVIEWER","verdict":"PASS_FOR_SEED_ONLY","finding":"Balanced seed is not statistical evidence; final evaluation requires preregistered matched-budget uncertainty analysis."},
+    {"role":"ABI_PROVENANCE_REVIEWER","verdict":"PASS","finding":"No fabricated 46-atom ABI identities; dynamic-binding ABI materialization gate remains closed."},
+    {"role":"RETENTION_REVIEWER","verdict":"PASS_WITH_DOWNSTREAM_GATE","finding":"Rows do not teach semantic-read/symbol-write/carrier relearning; retention remains separately measured."},
+    {"role":"HARNESS_COMPATIBILITY_REVIEWER","verdict":"PASS","finding":"Families map directly to future harness observables for fan-in, CAS/rebase, recursive coordination, ancestry, activation, challengers and GRF."},
+    {"role":"FINAL_INTEGRATOR","verdict":"CANDIDATE_DATA_PASS_NOT_CANONICAL_ADMISSION","finding":"Grade-D method/hard-negative candidate material only; Forge/Distillery admission remains downstream."}
+  ],
+  "trigger": "triggerwort 2"
+}

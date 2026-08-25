@@ -1,0 +1,205 @@
+{
+  "schema": "TRIGGER2_QWEN35_08B_HYBRID_SITE_MANIFEST/v1",
+  "date": "2026-08-25",
+  "trigger": "2",
+  "program": "EntityOS + HCU",
+  "implementation_codename": "Xeno",
+  "status": "SOURCE_GROUNDED_SITE_MAP_RUNTIME_UNEXECUTED",
+  "target_model_family": "Qwen3.5-0.8B",
+  "allowed_checkpoint_candidates": [
+    "Qwen/Qwen3.5-0.8B-Base",
+    "Qwen/Qwen3.5-0.8B"
+  ],
+  "architecture_source": {
+    "primary": "https://huggingface.co/Qwen/Qwen3.5-0.8B-Base/blob/main/config.json",
+    "challenger": "https://huggingface.co/Qwen/Qwen3.5-0.8B/blob/main/config.json",
+    "observed_on": "2026-08-25",
+    "exact_weight_revision_bound": false,
+    "note": "This manifest freezes the currently observed architecture shape only. Exact checkpoint/tokenizer/runtime/build identities remain pre-runtime gates and must be bound separately before any model-specific credit."
+  },
+  "language_core": {
+    "hidden_size": 1024,
+    "num_hidden_layers": 24,
+    "intermediate_size": 3584,
+    "vocab_size": 248320,
+    "native_context": 262144,
+    "full_attention_interval": 4,
+    "linear_attention_layers": 18,
+    "full_attention_layers": 6,
+    "layer_indexing": "ZERO_BASED",
+    "layer_types": [
+      "linear_attention",
+      "linear_attention",
+      "linear_attention",
+      "full_attention",
+      "linear_attention",
+      "linear_attention",
+      "linear_attention",
+      "full_attention",
+      "linear_attention",
+      "linear_attention",
+      "linear_attention",
+      "full_attention",
+      "linear_attention",
+      "linear_attention",
+      "linear_attention",
+      "full_attention",
+      "linear_attention",
+      "linear_attention",
+      "linear_attention",
+      "full_attention",
+      "linear_attention",
+      "linear_attention",
+      "linear_attention",
+      "full_attention"
+    ]
+  },
+  "site_classes": {
+    "DELTA_LAYER_RESIDUAL": {
+      "required": true,
+      "layer_indices": [0, 1, 2, 4, 5, 6, 8, 9, 10, 12, 13, 14, 16, 17, 18, 20, 21, 22],
+      "vector_dim": 1024,
+      "claim_boundary": "Residual-stream measurement/intervention only; does not identify recurrent-state semantics."
+    },
+    "DELTA_RECURRENT_STATE_OR_EQUIVALENT_MEASURED_STATE": {
+      "required_when_runtime_exposes": true,
+      "layer_indices": [0, 1, 2, 4, 5, 6, 8, 9, 10, 12, 13, 14, 16, 17, 18, 20, 21, 22],
+      "vector_dim": "RUNTIME_DEFINED",
+      "claim_boundary": "Must bind the actual state object/shape/update semantics exposed by the exact runtime. Text replay or residual equality cannot substitute for recurrent-state identity."
+    },
+    "FULL_ATTN_LAYER_RESIDUAL": {
+      "required": true,
+      "layer_indices": [3, 7, 11, 15, 19, 23],
+      "vector_dim": 1024,
+      "claim_boundary": "Full-attention residual measurement/intervention; must be compared separately from DeltaNet-layer effects."
+    },
+    "FFN_POST_OR_RESIDUAL": {
+      "required": true,
+      "layer_indices": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23],
+      "vector_dim": 1024,
+      "claim_boundary": "Hook name and whether capture is pre/post residual-add must be exact-runtime bound; generic 'FFN layer' naming is insufficient."
+    },
+    "FINAL_NORM_READOUT_POSITIVE_CONTROL": {
+      "required": true,
+      "layer_indices": [],
+      "vector_dim": 1024,
+      "claim_boundary": "Positive control for vector transport/readout sensitivity only. A positive final-norm/readout result cannot mint intermediate semantic J-Space credit."
+    }
+  },
+  "matched_site_sampling_v1": {
+    "purpose": "Prevent generic-layer pooling from confusing DeltaNet-specific, full-attention-specific and depth effects.",
+    "depth_blocks": [
+      {
+        "block": 0,
+        "delta_layers": [0, 1, 2],
+        "full_attention_layer": 3
+      },
+      {
+        "block": 1,
+        "delta_layers": [4, 5, 6],
+        "full_attention_layer": 7
+      },
+      {
+        "block": 2,
+        "delta_layers": [8, 9, 10],
+        "full_attention_layer": 11
+      },
+      {
+        "block": 3,
+        "delta_layers": [12, 13, 14],
+        "full_attention_layer": 15
+      },
+      {
+        "block": 4,
+        "delta_layers": [16, 17, 18],
+        "full_attention_layer": 19
+      },
+      {
+        "block": 5,
+        "delta_layers": [20, 21, 22],
+        "full_attention_layer": 23
+      }
+    ],
+    "primary_cross_class_pairs": [
+      {"delta_layer": 2, "full_attention_layer": 3},
+      {"delta_layer": 6, "full_attention_layer": 7},
+      {"delta_layer": 10, "full_attention_layer": 11},
+      {"delta_layer": 14, "full_attention_layer": 15},
+      {"delta_layer": 18, "full_attention_layer": 19},
+      {"delta_layer": 22, "full_attention_layer": 23}
+    ],
+    "law": "Matched depth does not imply mechanistic equivalence. Report layer class, exact layer index, site, state scope and intervention scope separately."
+  },
+  "required_site_receipt_fields": [
+    "checkpoint_revision",
+    "tokenizer_revision",
+    "runtime_name",
+    "runtime_revision",
+    "runtime_build_digest",
+    "quantization",
+    "layer_index",
+    "layer_type",
+    "site_class",
+    "hook_or_api_identity",
+    "hidden_or_state_shape",
+    "token_or_time_scope",
+    "recurrent_state_semantics",
+    "intervention_scope",
+    "vector_or_state_digest",
+    "local_residual_or_state_norm",
+    "gain_or_coordinate",
+    "scenario_family_id",
+    "semantic_target_id_evaluator_only",
+    "output_code_map_digest",
+    "control_case",
+    "baseline_output_digest",
+    "intervened_output_digest",
+    "downstream_effect_metrics",
+    "off_target_metrics",
+    "lesion_rescue_identity",
+    "generation",
+    "causal_event_id"
+  ],
+  "mandatory_controls": [
+    "BASELINE",
+    "SIGN_FLIP",
+    "NULL_VECTOR_OR_STATE_DELTA",
+    "ORTHOGONAL_SAME_NORM",
+    "PERMUTED_SAME_NORM",
+    "WRONG_SITE_MATCHED_DEPTH",
+    "WRONG_LAYER_CLASS_MATCHED_DEPTH",
+    "STALE_RECURRENT_STATE",
+    "TEXT_REPLAY_SAME_PROMPT_DIFFERENT_STATE",
+    "LESION",
+    "RESCUE"
+  ],
+  "hybrid_specific_hard_negatives": [
+    "SAME_TEXT_DOES_NOT_PROVE_SAME_RECURRENT_STATE",
+    "SAME_LAYER_DEPTH_DOES_NOT_PROVE_SAME_LAYER_CLASS_MECHANISM",
+    "RESIDUAL_STEERING_DOES_NOT_PROVE_RECURRENT_STATE_CONTROL",
+    "FINAL_NORM_READOUT_STEERING_DOES_NOT_PROVE_INTERMEDIATE_JSPACE",
+    "QWEN3_06B_SITE_SUCCESS_DOES_NOT_TRANSFER_GEOMETRY_TO_QWEN35_08B",
+    "BROADCAST_EFFECT_DOES_NOT_PROVE_TOKEN_LOCAL_OR_STATE_LOCAL_EQUIVALENCE"
+  ],
+  "promotion_requirements": {
+    "architecture_manifest_bound": true,
+    "exact_checkpoint_and_runtime_identity_required": true,
+    "base_vs_posttrained_baseline_required_before_checkpoint_lock": true,
+    "label_free_lexically_disjoint_family_holdout_required": true,
+    "site_class_counterbalance_required": true,
+    "recurrent_state_identity_required_when_claiming_recurrent_control": true,
+    "matched_null_and_wrong_site_controls_required": true,
+    "ood_family_transfer_required": true,
+    "lesion_rescue_required_for_strong_causal_claim": true,
+    "trigger1_geometry_inheritance_allowed": false,
+    "trigger1_method_and_control_transfer_allowed": true
+  },
+  "execution_credit": {
+    "model_runtime_executed": false,
+    "jspace_model_runtime_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0
+  },
+  "next_gate": "Implement the zero-cost Base-vs-posttrained baseline harness and a runtime-specific hook/state discovery probe that emits this manifest's exact site identities without opening semantic holdout or running a paid/full-FT path."
+}

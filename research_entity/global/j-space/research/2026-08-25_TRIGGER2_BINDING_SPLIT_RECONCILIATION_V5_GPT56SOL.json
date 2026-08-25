@@ -1,0 +1,109 @@
+{
+  "schema": "CLAY_TRIGGER2_BINDING_SPLIT_RECONCILIATION/v5",
+  "date": "2026-08-25",
+  "trigger": "triggerwort 2",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority": {
+    "supervisor_epoch": "8.78",
+    "execution_mode": "FREE_ONLY",
+    "current_main_reentered": "bca346c617188f7f358b06482c07cfc3d98e8d15",
+    "active_trigger2_pr": 1956
+  },
+  "parallel_evidence_fused": {
+    "canonical_template_generator": "tools/trigger2_dynamic_codebook_binding_template_generator_v1.py",
+    "generator_rows": 72,
+    "generator_structure": "4 templates x 6 S3 mappings x 3 semantic classes",
+    "generator_scope": "PRE_MATERIALIZATION_TEMPLATE_MATRIX_ONLY",
+    "canonical_generator_selftest": "PASS_SOURCE_TEMPLATE_ONLY",
+    "canonical_generator_accepted_dataset_tokens": 0
+  },
+  "new_counterhypothesis_found": {
+    "claim_under_attack": "A fully crossed 72-row S3 seed can be treated directly as TRAIN while also evaluating unseen S3 permutation generalization.",
+    "verdict": "LOGICALLY_INCOMPATIBLE_IF_UNSEEN_PERMUTATION_MEANS_UNSEEN_S3_PATTERN",
+    "reason": "S3 for three classes has exactly six permutations. If TRAIN contains all six, no S3 permutation remains unseen. Therefore the 72-row matrix must remain an upstream design matrix or the acceptance term 'unseen permutation' must be redefined before evaluation.",
+    "preserved_source_requirements": [
+      "full S3 mapping family must be represented across the corpus/evaluation design",
+      "unseen-permutation generalization target remains >=0.90 unless a newer preregistration changes its meaning"
+    ]
+  },
+  "second_counterhypothesis": {
+    "claim_under_attack": "Simply hold one or two S3 patterns out from a fixed three-symbol training seed and counterbalance remains solved.",
+    "verdict": "FALSE_FOR_FIXED_THREE_SYMBOL_TRIPLET",
+    "reason": "Removing S3 patterns from a fixed ATOM_A/B/C triplet creates nonzero class-to-symbol identity dependence even though display order can remain balanced. The materializer must counterbalance over many actual accepted atom triplets/assignments, not only over permutation IDs.",
+    "measured_design_implication": "Class-symbol MI and per-symbol class counts must be computed on realized materialized rows after split assignment."
+  },
+  "reconciled_split_contract": {
+    "stage_0_template_matrix": {
+      "rows": 72,
+      "purpose": "Exercise every template/S3/class combination as a generator design oracle only.",
+      "may_be_used_as_direct_train_split": false
+    },
+    "stage_1_materializer": {
+      "requires": [
+        "exact accepted 46-atom ABI inventory plus manifest/source identity",
+        "frozen forbidden semantic-label/synonym inventory",
+        "frozen semantic lexical-family inventories",
+        "predeclared permutation split policy",
+        "predeclared unseen-symbol atom partition"
+      ],
+      "rule": "Instantiate many distinct accepted-atom triplets and atom orderings so TRAIN realized class-symbol identity is counterbalanced even when one or more S3 patterns are reserved for validation/holdout."
+    },
+    "stage_2_split_axes": [
+      "TRAIN_CORE: materialized rows using preregistered training S3 subset and training atom pool",
+      "VALIDATION_PERM: validation-only S3 pattern(s), never used for training updates",
+      "HOLDOUT_PERM: frozen S3 pattern(s) absent from train/validation tuning",
+      "HOLDOUT_SYMBOL: frozen accepted ABI atoms absent from all training triplets",
+      "HOLDOUT_TEMPLATE: T5_FROZEN_UNSEEN plus disjoint semantic lexical ancestry"
+    ],
+    "required_post_materialization_statistics": [
+      "full S3 coverage across the complete train/validation/holdout evaluation corpus",
+      "no S3 ID overlap between TRAIN_CORE and HOLDOUT_PERM",
+      "no accepted atom identity overlap between TRAIN_CORE and HOLDOUT_SYMBOL",
+      "per-symbol TRAIN class counts differ by at most one",
+      "TRAIN empirical I(class; emitted_atom) <= 1e-6 bits for the audited deterministic seed",
+      "codebook display order independent from realized mapping and target position",
+      "family/provenance ancestry split isolation"
+    ]
+  },
+  "new_fail_closed_gate": {
+    "path": "tools/trigger2_dynamic_codebook_binding_gate_v1.py",
+    "schema": "TRIGGER2_DYNAMIC_CODEBOOK_BINDING_GATE/v1.1",
+    "purpose": "Validate materialized split rows rather than the upstream 72-row placeholder matrix.",
+    "notable_checks": [
+      "P0-P5 realized mapping recomputation",
+      "target derivation from actual mapping",
+      "explicit [CODEBOOK] span and external label/synonym leakage rejection",
+      "frozen T5 isolation",
+      "family/provenance split isolation",
+      "full S3 total coverage plus unseen-permutation holdout isolation",
+      "unseen-symbol holdout isolation",
+      "class-symbol exact/near-exact balance and MI gate"
+    ]
+  },
+  "training_example_policy_delta": {
+    "positive_examples": "Generate counterfactual bundles, not isolated rows: same semantic case with changed codebook must change atom; same codebook with changed semantic case must follow mapping; codebook order change must not change target; lexical paraphrase must preserve target.",
+    "hard_negatives": [
+      "metadata permutation changes but realized codebook does not",
+      "target symbol disagrees with realized mapping",
+      "class/synonym leaks outside codebook",
+      "held-out template appears before holdout",
+      "held-out atom appears in training",
+      "held-out S3 appears in training",
+      "class-symbol MI shortcut survives apparent display-order randomization",
+      "cross-model Qwen3-0.6B J-Space label is promoted into Qwen3.5 positive target"
+    ]
+  },
+  "credits": {
+    "research_delta": 1,
+    "materialized_train_ready_rows": 0,
+    "accepted_dataset_tokens": 0,
+    "qwen35_jspace_runtime_credit": 0,
+    "qwen35_training_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0
+  },
+  "next_exact_action": "Obtain the exact 46 accepted atom inventory and frozen lexeme inventories, implement the evidence-bound materializer from the canonical 72-row matrix, then run generic candidate validation plus trigger2_dynamic_codebook_binding_gate_v1.1 on the emitted split corpus before scaling or any training pilot."
+}

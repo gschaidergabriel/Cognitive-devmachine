@@ -1,0 +1,114 @@
+{
+  "schema": "CLAY_TRIGGER2_RESEARCH_REVISION_LEDGER/v5.1",
+  "cycle_id": "2-20260825-1915-triggerwort2-latest-audit",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "status": "REENTRY_SUCCESSOR_DELTA",
+  "predecessor": {
+    "artifact": "TRIGGER2_RESEARCH_REVISION_LEDGER_V5.json",
+    "commit": "bed7fb988c41b2e8718ed7087fa8de869d8ac978",
+    "reason_for_successor": "Canonical main advanced during the same Trigger-2 cycle with new semantic-Hyperposition reference-labeler invariants; append-only successor preserves the original observed authority instead of rewriting history."
+  },
+  "authority_reentry": {
+    "canonical_main_after_v5_write": "ed5b4e7f8595d6723b7b60fd1ed3b76d135ae20e",
+    "main_commit_message": "tests(trigger2): lock semantic-hyperposition reference labeler invariants",
+    "supervisor_epoch": "8.78",
+    "mode": "FREE_ONLY",
+    "owner_finished_system": "VARIABLE COGNITIVE GRID + PERSISTENT DATABASE + CLAUDE CODE",
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0
+  },
+  "new_main_delta": {
+    "source": "tools/trigger2_semantic_hyperposition_reference_labelers_v1.py",
+    "test_source": "tests/test_trigger2_semantic_hyperposition_reference_labelers_v1.py",
+    "status": "CURRENT_SYNTHETIC_REFERENCE_LABELER_SOURCE__NOT_ACCEPTED_TRAINING_DATA_OR_RUNTIME_EVIDENCE",
+    "functions": ["U_update", "D_resolve", "U_d_test_order", "f_salience_rank"],
+    "invariants": [
+      "Hyperposition state contains at least two explicit branches and updates preserve the branch set rather than deleting alternatives.",
+      "SUPPORT or WEAKEN evidence updates branch evidence without automatic resolution.",
+      "FALSIFY marks a branch FALSIFIED but retains it for provenance/counterfactual history.",
+      "PROVE may mark a branch PROVEN_WITHIN_SYNTHETIC_WORLD only at synthetic reference scope.",
+      "Evidence sharing the same provenance_ancestry_id is retained but is non-independent for update credit.",
+      "No unique explicit proof or full discriminator leaves the state UNRESOLVED.",
+      "A discriminator can resolve only when it separates all live alternatives and selects a live branch; resolution is task-local synthetic resolution and all branches remain retained.",
+      "Discriminator ordering is ordinal: admissibility, pair separation, cost rank, stable id; it emits neither probability nor truth.",
+      "Salience ranking is actionability/scope/freshness ordering only and emits neither truth, probability nor evidence strength.",
+      "Any attempted canonical_truth_allowed or direct_effect_authority elevation fails closed.",
+      "Reference labelers mint no canonical truth, direct effect authority, runtime credit or training credit."
+    ]
+  },
+  "training_incorporation": {
+    "status": "ADD_TO_CURRICULUM_DESIGN_AND_EVALUATION_AS_REFERENCE_LOGIC",
+    "families": [
+      "HYPERPOSITION_BRANCH_PRESERVATION",
+      "EVIDENCE_UPDATE_WITHOUT_PREMATURE_RESOLUTION",
+      "PROVENANCE_ANCESTRY_COLLAPSE",
+      "FALSIFIER_RETENTION_AND_BRANCH_HISTORY",
+      "FULL_DISCRIMINATOR_REQUIRED_FOR_TASK_LOCAL_RESOLUTION",
+      "DISCRIMINATOR_VALUE_VS_COST_ORDERING_WITHOUT_FAKE_PROBABILITY",
+      "SALIENCE_IS_NOT_TRUTH",
+      "NO_CANONICAL_TRUTH_OR_EFFECT_AUTHORITY_FROM_COGNITIVE_STATE"
+    ],
+    "required_counterfactual_pairs": [
+      "same semantic state + independent evidence versus same-ancestry duplicate evidence",
+      "same alternatives + incomplete discriminator versus all-live-alternative discriminator",
+      "same branch evidence + SUPPORT versus PROVE",
+      "same attention candidates + changed salience rank while truth labels remain unchanged",
+      "same state + attempted truth/effect-authority bit elevation must flip expected outcome to fail-closed"
+    ],
+    "composition_requirement": "These Hyperposition families must compose with variable-N cognition, DB-vs-simulation, planning/replanning, evidence reconciliation, Claude handoff/re-entry and episode-local binder tasks; they are not a separate toy curriculum.",
+    "output_boundary": "Synthetic reference labels may supervise process-state transitions and hard negatives. They must not be serialized as claims that the model can mint world truth or effects."
+  },
+  "revision_registry_delta": [
+    {
+      "artifact": "tools/trigger2_semantic_hyperposition_reference_labelers_v1.py",
+      "version": "v1",
+      "status": "CURRENT_SYNTHETIC_REFERENCE_LOGIC__NEEDS_DATASET_MATERIALIZATION_AUDIT",
+      "predecessor": "prose-only semantic-Hyperposition curriculum requirements",
+      "successor": "counterbalanced architecture-composed Hyperposition training/eval families using immutable provenance-connected splits",
+      "revision_reason": "Provides deterministic label semantics for preserving unresolved alternatives, evidence ancestry and admissible discrimination while explicitly denying truth/effect authority.",
+      "recheck_condition": "Before accepting generated rows, audit model-visible nuisance leakage, family/provenance split atomicity, semantic label shortcuts and exact integration with current owner target."
+    },
+    {
+      "artifact": "tests/test_trigger2_semantic_hyperposition_reference_labelers_v1.py",
+      "version": "current-main@ed5b4e7f",
+      "status": "CURRENT_SOURCE_REGRESSION_EVIDENCE__EXECUTION_NOT_OBSERVED_BY_THIS_ORGAN",
+      "predecessor": null,
+      "successor": "exact committed-source deterministic execution receipt",
+      "revision_reason": "Locks key reference invariants in source, but source/test presence alone is not test execution.",
+      "recheck_condition": "Execute exact committed tests on an admitted deterministic surface and bind source/tree/result identity."
+    }
+  ],
+  "v5_training_program_effect": {
+    "changed": true,
+    "new_mandatory_dimension": "SEMANTIC_HYPERPOSITION_REFERENCE_TRANSITION_CORRECTNESS",
+    "new_primary_metrics": [
+      "branch_preservation_rate",
+      "premature_resolution_rate",
+      "same_ancestry_double_count_rate",
+      "falsified_branch_deletion_rate",
+      "full_discriminator_resolution_accuracy",
+      "incomplete_discriminator_false_resolution_rate",
+      "truth_authority_leak_rate",
+      "salience_truth_conflation_rate"
+    ],
+    "promotion_rule": "A binder or architecture SFT gain cannot pass if semantic-Hyperposition retention floors regress, even if final-symbol accuracy improves."
+  },
+  "credits": {
+    "research_reentry_delta": 1,
+    "source_reference_logic_credit": 1,
+    "test_execution_credit": 0,
+    "materialized_training_rows": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "qwen35_jspace_runtime_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0,
+    "canonical_semantics_promotion": false
+  },
+  "next_exact_action": "Converge semantic-Hyperposition reference logic into the existing Trigger-2 corpus/evaluation lane as counterbalanced architecture-composed families, then run exact-source reference-labeler tests and the same model-visible nuisance/provenance split gates before any dataset admission. Keep the v2.2 episodic binder and Hyperposition transition objective factorized in evaluation so a gain in one cannot mask failure in the other."
+}

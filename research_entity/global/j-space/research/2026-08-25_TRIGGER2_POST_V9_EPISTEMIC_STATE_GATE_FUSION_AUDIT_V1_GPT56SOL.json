@@ -1,0 +1,186 @@
+{
+  "schema": "CLAY_TRIGGER2_POST_V9_EPISTEMIC_STATE_GATE_FUSION_AUDIT/v1",
+  "date": "2026-08-25",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "status": "CURRENT_BRANCH_RESEARCH_DELTA_NONPROMOTING",
+  "authority_snapshot": {
+    "repository": "gschaidergabriel/clay-global-research-entity",
+    "base_main": "d6ea906b1d81ad80b50a96c8b210dc7965d750f3",
+    "supervisor_epoch": "8.78",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "architecture": "HCU",
+    "owner_target": "VARIABLE COGNITIVE GRID + PERSISTENT DATABASE + CLAUDE CODE + strongest causally evidenced Global J-Space bridge",
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0
+  },
+  "reentry_inputs": [
+    "research_entity/global/j-space/research/2026-08-25_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V9_GPT56SOL.json",
+    "research_entity/global/j-space/research/2026-08-25_TRIGGER2_EPISTEMIC_UPDATE_PATH_AUDIT_V1_GPT56SOL.json",
+    "research_entity/global/j-space/research/2026-08-25_TRIGGER2_STATE_HISTORY_PROOF_ENVELOPE_V1_GPT56SOL.json",
+    "tools/trigger2_hyperposition_reference_labelers_v3.py",
+    "tools/trigger2_hyperposition_state_history_proof_gate_v1.py",
+    "tests/test_trigger2_hyperposition_state_history_proof_gate_v1.py"
+  ],
+  "main_finding": {
+    "id": "P0_STATE_HISTORY_GATE_DOES_NOT_YET_ENFORCE_EPISTEMIC_EVIDENCE_ADMISSION",
+    "classification": "NEEDS_REVISION_P0",
+    "observed_source_behavior": [
+      "reference labeler v3 validates epistemic_type but u_state derives evidence updates from relation + independence without consulting epistemic_type or epistemic_guard",
+      "state_history_proof_gate_v1 validates a typed observation receipt only when event.epistemic_type == OBSERVED",
+      "for any other allowed epistemic type, _validate_observation_receipt returns success without an evidence-admission receipt",
+      "the gate then calls _derive_and_apply, which derives independence and invokes labeler-v3 u_state",
+      "therefore HYPOTHESIS, PREDICTION, UNKNOWN, MEASUREMENT_ERROR, COUNTERHYPOTHESIS or CONTRADICTION can still reach branch evidence mutation under the current proof gate if their formal outcome/relation and independence inputs otherwise pass"
+    ],
+    "training_consequence": "Replay-proof state, event digests and discriminator receipts are necessary but insufficient. Positive E and any D label depending on a non-observational update remain blocked until epistemic evidence admissibility is enforced before u_state mutation.",
+    "runtime_credit_effect": "NONE"
+  },
+  "receipt_contract_drift": {
+    "classification": "NEEDS_REVISION_P1_TO_P0_IF_USED_FOR_POSITIVE_PROMOTION",
+    "proof_envelope_schema": "ENTITYOS_HCU_TYPED_OBSERVATION_RECEIPT/v1",
+    "gate_source_schema": "ENTITYOS_TYPED_OBSERVATION_EVIDENCE_RECEIPT/v1",
+    "proof_envelope_requires": [
+      "observation_id",
+      "event_id",
+      "event_sha256",
+      "source_type",
+      "source_identity",
+      "source_digest_or_synthetic_proof_digest",
+      "observed_value_digest",
+      "qualification_rule_id",
+      "qualification_rule_sha256",
+      "receipt_sha256"
+    ],
+    "gate_source_current_checks": [
+      "event_semantic_sha256",
+      "canonical_truth_allowed=false",
+      "direct_effect_authority=false",
+      "source string present",
+      "provenance string present",
+      "observed_time string present",
+      "receipt_id string present"
+    ],
+    "finding": "The current gate requires a typed-shaped OBSERVED receipt, but it does not yet verify the source/qualification digests or self-digest specified by the proof envelope. A structured object must not become self-authenticating merely because required strings are nonempty.",
+    "required_resolution": "Converge to one versioned observation-receipt contract whose source identity, qualification rule, observed value and receipt digest are deterministically recomputed/bound by the retained gate."
+  },
+  "artifact_lifecycle_delta": [
+    {
+      "artifact": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V9_GPT56SOL.json",
+      "version": "v9",
+      "status": "NEEDS_REVISION_CURRENT_LEDGER_MISSES_TRANSITIVE_EPISTEMIC_GATE_EFFECT",
+      "predecessor": "v8",
+      "successor": "future ledger successor after this branch delta and newer parallel work are fused",
+      "revision_reason": "V9 correctly elevates generation provenance as P0 but does not classify the newly landed state-history gate against the separate P0 finding that non-observational epistemic types can still mutate evidence through raw u_state."
+    },
+    {
+      "artifact": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_EPISTEMIC_UPDATE_PATH_AUDIT_V1_GPT56SOL.json",
+      "version": "v1",
+      "status": "CURRENT_NEGATIVE_EVIDENCE",
+      "successor": "integrated gate mutation tests",
+      "revision_reason": "Its source-level finding remains behaviorally relevant after the state-history gate landed because the gate has not inserted epistemic evidence admission before _derive_and_apply."
+    },
+    {
+      "artifact": "tools/trigger2_hyperposition_state_history_proof_gate_v1.py",
+      "version": "v1",
+      "status": "CURRENT_PARTIAL_P0_REPAIR_NEEDS_EPISTEMIC_ADMISSION_AND_RECEIPT_SOURCE_BINDING",
+      "predecessor": "derivation-bound gate v2 plus state-proof envelope",
+      "successor": "same retained gate lane with deterministic epistemic evidence admission before u_state",
+      "revision_reason": "Strong replay/event/discriminator progress, but only OBSERVED is specially receipt-checked; other epistemic types can still flow into u_state evidence mutation and OBSERVED receipt source binding is weaker than the proof-envelope contract."
+    },
+    {
+      "artifact": "tools/trigger2_hyperposition_reference_labelers_v3.py",
+      "version": "v3",
+      "status": "CURRENT_SEMANTIC_DONOR_NEEDS_TRANSITIVE_EPISTEMIC_HARDENING",
+      "successor": "one retained hardened labeler/gate path",
+      "revision_reason": "u_state currently treats epistemic_type as metadata, not evidence-admission authority."
+    },
+    {
+      "artifact": "tools/trigger2_semantic_hyperposition_native_seed_generator_v2.py",
+      "version": "v2",
+      "status": "NEEDS_REVISION_REGEN_NOT_JUST_REBIND",
+      "successor": "owner-target seed successor regenerated after epistemic admission semantics freeze",
+      "revision_reason": "The seed contains default OBSERVED events and explicit UNKNOWN/SYNTHETIC_PROOF cases. Corrected epistemic admission can change evidence records/state transitions, so simply pointing the old rows at a new gate is insufficient; reference targets must be recomputed."
+    }
+  ],
+  "required_gate_order": [
+    "1 source/generation/world/state-history/event identity proof",
+    "2 deterministic epistemic evidence-admission decision",
+    "3 derived independence/dependence decision",
+    "4 derived branch relation",
+    "5 u_state mutation only when epistemic admission permits evidence credit",
+    "6 typed discriminator admission/execution/coverage proof for decisive elimination/resolution",
+    "7 task-local D resolution",
+    "8 candidate/source binding + nuisance/split admission"
+  ],
+  "epistemic_admission_reference_policy": {
+    "OBSERVED": "EVIDENCE_UPDATE_ALLOWED_ONLY_WITH_VALID_SOURCE_BOUND_TYPED_OBSERVATION_RECEIPT",
+    "SYNTHETIC_PROOF": "EVIDENCE_UPDATE_ALLOWED_ONLY_WITH_VALID_GENERATION_BOUND_FORMAL_PROOF_OR_EXECUTION_RECEIPT",
+    "HYPOTHESIS": "NO_DIRECT_E_PLUS_E_MINUS_F_OR_SIGMA_EVIDENCE_MUTATION",
+    "COUNTERHYPOTHESIS": "NO_DIRECT_E_PLUS_E_MINUS_F_OR_SIGMA_EVIDENCE_MUTATION",
+    "PREDICTION": "NO_DIRECT_E_PLUS_E_MINUS_F_OR_SIGMA_EVIDENCE_MUTATION",
+    "UNKNOWN": "NO_DIRECT_E_PLUS_E_MINUS_F_OR_SIGMA_EVIDENCE_MUTATION",
+    "MEASUREMENT_ERROR": "NO_DIRECT_E_PLUS_E_MINUS_F_OR_SIGMA_EVIDENCE_MUTATION",
+    "CONTRADICTION": "NO_AUTOMATIC_EVIDENCE_MUTATION; retain typed contradiction until an evidence-qualified observation/proof establishes the relevant relation"
+  },
+  "preregistered_regressions": [
+    {
+      "id": "EPI_GATE_01_HYPOTHESIS_MATCH",
+      "mutation": "Use a fresh independent HYPOTHESIS event whose outcome matches one live branch.",
+      "expected": "NO_E_PLUS_APPEND; NO_SIGMA_STRENGTHENING"
+    },
+    {
+      "id": "EPI_GATE_02_PREDICTION_MISMATCH",
+      "mutation": "Use a fresh independent PREDICTION event whose outcome mismatches a branch under a FALSIFIES test.",
+      "expected": "NO_F_APPEND; NO_FALSIFIED_SIGMA"
+    },
+    {
+      "id": "EPI_GATE_03_UNKNOWN_ALLOWED_OUTCOME",
+      "mutation": "Use epistemic_type UNKNOWN with a schema-valid outcome token.",
+      "expected": "NO_E_MINUS_OR_F_MUTATION; HYPERPOSITION_REMAINS_UNRESOLVED"
+    },
+    {
+      "id": "EPI_GATE_04_MEASUREMENT_ERROR_NEGATIVE_TOKEN",
+      "mutation": "Use MEASUREMENT_ERROR with a negative-looking allowed outcome.",
+      "expected": "NO_NEGATIVE_EVIDENCE_MUTATION"
+    },
+    {
+      "id": "EPI_GATE_05_COUNTERHYPOTHESIS_CONFLICT",
+      "mutation": "Create a COUNTERHYPOTHESIS that conflicts with the current leader.",
+      "expected": "RETAIN_ALTERNATIVE_WITHOUT_WEAKENING_EXISTING_BRANCH_FROM_EXISTENCE_ALONE"
+    },
+    {
+      "id": "EPI_GATE_06_OBSERVED_RECEIPT_SOURCE_DIGEST_MUTATION",
+      "mutation": "Keep receipt strings valid but change source_identity/source_digest/qualification-rule material while retaining old receipt identity.",
+      "expected": "REJECT_SOURCE_OR_RECEIPT_DIGEST_MISMATCH"
+    },
+    {
+      "id": "EPI_GATE_07_SYNTHETIC_PROOF_WITHOUT_GENERATION_BINDING",
+      "mutation": "Mark event SYNTHETIC_PROOF but omit the source/generation-bound formal proof receipt.",
+      "expected": "NO_POSITIVE_EVIDENCE_PROMOTION"
+    },
+    {
+      "id": "EPI_GATE_08_OBSERVED_VALID_TYPED_RECEIPT_CONTROL",
+      "mutation": "Provide exact event/source/qualification/observed-value digests under the retained typed receipt contract.",
+      "expected": "EPISTEMIC_ADMISSION_MAY_PASS; relation/independence/discriminator gates still decide the subsequent update and resolution"
+    }
+  ],
+  "deduplication": {
+    "new_training_rows_added": 0,
+    "reason": "The current epistemic audit already materializes six nonpromoting hard-negative blueprint families. This fusion adds lifecycle and gate-order consequences rather than duplicate examples.",
+    "existing_blueprint_source": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_EPISTEMIC_UPDATE_PATH_AUDIT_V1_GPT56SOL.json"
+  },
+  "credits": {
+    "research_fusion_delta": 1,
+    "artifact_revision_delta": 1,
+    "source_implementation_credit": 0,
+    "positive_D_E_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "positive_jspace_causal_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  },
+  "next_exact_action": "Patch the single retained state-history/derivation gate so deterministic epistemic evidence admission occurs before _derive_and_apply/u_state; converge the observation receipt to the proof-envelope source-bound digest contract; add EPI_GATE_01..08 exact mutation tests; then re-enter current main and regenerate rather than merely rebind owner-target seed rows whose reference state changes under corrected epistemic semantics."
+}

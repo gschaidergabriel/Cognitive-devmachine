@@ -1,0 +1,170 @@
+{
+  "schema": "CLAY_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER/v33",
+  "date": "2026-08-25",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "status": "CURRENT_RESEARCH_LEDGER_NONCANONICAL_SUCCESSOR_DYNAMIC",
+  "supersedes": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V32_GPT56SOL.json",
+  "inherits_all_nonconflicting_records_from": "T2-LEDGER-V32",
+  "observed_main_before_write": "3ef8ce6fd29f1ced7c3743bd99f88065a9263ed5",
+  "authority": {
+    "supervisor_epoch": "8.78",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "architecture": "HCU_VARIABLE_COGNITIVE_GRID",
+    "owner_target": "VARIABLE COGNITIVE GRID + PERSISTENT DATABASE + CLAUDE CODE; Qwen3.5-0.8B-class reusable cognitive-process substrate; runtime N variable; GRID10 benchmark-only"
+  },
+  "revision_reason": "Re-enter rapidly moving main after executable Phase-3 history work, OBSERVED-to-Typed-Entry bridge implementation, matched-baseline preregistration and CHECKPOINT_INPUT_IDENTITY_ABI source work. Remove the now-stale P1-blocked statement, preserve zero promotion credit, and distinguish implemented/source-tested gates from repository-bound or VPS-observed executable closure.",
+  "material_current_deltas": [
+    {
+      "id": "P1_GENESIS_ORDERED_HISTORY_AUTHORITY",
+      "previous_v32_state": "BLOCKED",
+      "current_state": "CLOSED_COMPONENT_SCOPE_WITH_VPS_RECEIPT",
+      "source_commits": [
+        "eea859bbede216b30215b82725135333e296baf5",
+        "ab59e4ed5b3fc75c6e96e6ef108956ca507b6eb5"
+      ],
+      "receipt_commit": "1b60b82243cac026a18c44bd81ddec024c752245",
+      "receipt": "research_entity/global/j-space/research/vps_run_receipts/2026-08-25_TRIGGER2_PHASE3_GENESIS_HISTORY_CLOSURE_VPS_RECEIPT.json",
+      "evidence": "5/5 new producer-authority tests pass; authorized HIST_CHAIN passes generation provenance plus retained replay-bound history gate; missing generation_case_id, forged history content and empty-history authority reuse fail closed; pre/post targeted sweep preserved the same 97 pre-existing unrelated failures while adding 5 passes.",
+      "scope_boundary": "immutable genesis/ordered-history producer authority component only",
+      "promotion_credit": 0
+    },
+    {
+      "id": "P0_OBSERVED_TYPED_ENTRY_ADMISSION_WITNESS",
+      "previous_v32_state": "IMPLEMENTATION_AND_EXECUTION_PENDING",
+      "current_state": "SOURCE_IMPLEMENTED_ADVERSARIAL_REGRESSIONS_ADDED_EXECUTION_CLOSURE_NOT_YET_OBSERVED",
+      "authority_commit": "1f2a05ceee5e777bcb63f97b180e0335ad892825",
+      "gate_commit": "a6d4bb4be385a24c71364b41cd0a5ebb9bf85dec",
+      "test_definition_commit": "3ef8ce6fd29f1ced7c3743bd99f88065a9263ed5",
+      "law": "Reuse retained Typed Entry event/admission identities but require an independently repository-held/canonically persisted admission witness. Candidate Entry/receipt fields cannot create or broaden that witness. The bridge authenticates admission provenance only and does not decide observation truth, canonical state or effects.",
+      "important_current_boundary": "The authority was introduced with an intentionally empty admitted-witness set. Source implementation and adversarial regression definitions do not by themselves establish one real admissible OBSERVED producer instance or repository-bound/VPS execution PASS.",
+      "next_acceptance": "Execute the exact current bridge/gate/adversarial suite on the admitted zero-cost repository checkout, including coherent Entry+receipt co-mutation, witness substitution, producer/path/blob/source-commit/repository mismatch and positive independently held witness control. Only exact successful execution at current source may close P0 component scope.",
+      "promotion_credit": 0
+    },
+    {
+      "id": "P1_5_EXACT_MERGE_SINGLETON_VALIDATION",
+      "current_state": "DESIGN_READY_IMPLEMENTATION_AND_EXECUTION_PENDING",
+      "issue": 2019,
+      "design_commit": "616b3e856c1f76b74d414640da4104810d66226d",
+      "defect": "A legitimate EXACT_FORMAL_SEMANTIC_SIGNATURE merge may collapse >=2 validated branches to one, but project_state reuses strict external-state validation and rejects the derived singleton.",
+      "repair_law": "Keep caller/pre-update singleton rejection strict. Permit a derived singleton only through an internal proof-carrying current-transition witness recomputed from the validated predecessor set; serialized caller merge markers are never sufficient.",
+      "promotion_credit": 0
+    },
+    {
+      "id": "P2A_QWEN35_PRETRAIN_BASELINE",
+      "current_state": "PREREGISTERED_INPUT_IDENTITY_PROBE_SOURCE_COMMITTED_EXECUTION_PENDING",
+      "preregistration_commit": "f8c8ab6adaad917c1fc22164d576079f6f57cf35",
+      "preregistration": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_QWEN35_08B_FULL_MATCHED_BASELINE_PREREGISTRATION_V1_GPT56SOL.json",
+      "input_identity_probe_commit": "0e70070c8b300703fbd043e37c29e2e34ddfdabb",
+      "input_identity_probe": "tools/trigger2_qwen35_checkpoint_input_identity_probe_v1.py",
+      "input_identity_probe_blob_at_observation": "960783307dd2fe696f55884278715442624480d3",
+      "test_definition_commit": "bedd46357de481a3ae40392afb9fed0f5e3be824",
+      "test_definition": "tests/test_trigger2_qwen35_checkpoint_input_identity_probe_v1.py",
+      "test_blob_at_observation": "6ed19765ff7c985cc31d0408b43a668ffaf81ad7",
+      "source_behavior": [
+        "offline local_files_only Qwen3.5 AutoModelForCausalLM/AutoTokenizer load",
+        "Linux strace open/openat capture for actually opened local checkpoint files",
+        "full pre-load and post-load manifest hashing",
+        "every expected weight shard must be observed opened",
+        "every observed local bundle file must be manifest-bound and hash-equal",
+        "Hugging-Face snapshot symlink member paths are preserved lexically instead of being destroyed by pre-comparison realpath resolution",
+        "resolved chat-template presence/hash, rendered UTF-8 hash, input_ids tensor content/dtype/shape hash and attention-mask identity are recorded",
+        "one no-grad forward proves the exact token tensor reaches the loaded model",
+        "model/tokenizer/config class, text model type, parameter dtype/device and Python/Torch/Transformers runtime are recorded"
+      ],
+      "local_precommit_mechanism_check": "6/6 deterministic unit tests PASS plus py_compile; this is not repository-bound or VPS model-runtime credit and the committed Git blobs are the durable source identities to execute next.",
+      "selection_scope": "P2A may establish eligibility and a pre-training baseline winner only. It cannot by itself prove the optimal final fine-tuning substrate.",
+      "promotion_credit": 0
+    },
+    {
+      "id": "P2B_MATCHED_MICRO_ADAPTATION_TRAINABILITY",
+      "current_state": "FUTURE_BLOCKED_UNTIL_TRUSTWORTHY_ADMITTED_CORPUS_EXISTS",
+      "law": "A P2A zero-shot/pre-training baseline winner is not automatically the best fine-tuning substrate. Equal-budget adaptation must later measure learning efficiency, retained hard capabilities, forgetting/interference and shortcut sensitivity among eligible candidates.",
+      "promotion_credit": 0
+    },
+    {
+      "id": "P2_5_COGNITIVE_TRAJECTORY_CORPUS",
+      "current_state": "NEEDS_REVISION_BEFORE_DIRECT_SFT_ADMISSION",
+      "audit_commit": "aa94460cd8792b8467f3d98c312754da56a291a6",
+      "finding": "A shallow TF-IDF unigram/bigram logistic classifier recovered POSITIVE vs HARD_NEGATIVE polarity across held-out process families at 21/26 on the 26 unique scenario bodies; repeated N/executor/presentation variants were already balanced, so model-visible semantic wording remains a shortcut surface.",
+      "successor_law": "Build Hyperposition-native, lexically counterbalanced semantic minimal pairs where decisive typed evidence/state fields change while surface skeleton and polarity cues are crossed. Require shallow surface-only/nuisance challengers to collapse toward chance before scale.",
+      "promotion_credit": 0
+    }
+  ],
+  "pilot_and_holdout_lifecycle": {
+    "target_measured_8_case_pilot": "INSPECTED_DIAGNOSTIC_ONLY_CONTAMINATED_FOR_WINNER_HOLDOUT",
+    "pilot_preserved_failures": [
+      "abstain_unknown 0/2 strict including fabricated exact fictional-company price/source claims",
+      "ONLY JSON requested but Markdown code fences emitted",
+      "Hyperposition semantic direction preserved but one-sentence exact-format contract violated",
+      "DB-vs-simulation answer correctly privileged canonical DB authority but overclaimed the noncanonical simulation as necessarily factually false"
+    ],
+    "winner_holdout_rule": "All eight inspected prompts and close lexical paraphrases are excluded. Final holdout is calibration-separated and commit-reveal seeded after renderer/evaluator/candidate/threshold freeze. NO_WINNER and NO_UNIQUE_WINNER are valid outcomes."
+  },
+  "external_method_revalidation_noncanonical": [
+    {
+      "source": "Hugging Face Transformers chat-template documentation, current 2026-08-25 web observation",
+      "method_only": "Chat-template/control-token and tokenization differences are executable model-input differences and can materially alter performance; exact render/input identity therefore belongs in P2A attribution."
+    },
+    {
+      "source": "Xue et al., ACL 2026, Why Supervised Fine-Tuning Fails to Learn",
+      "method_only": "Aggregate convergence can hide persistent unlearned subsets; retain family/worst-bucket learning and retention diagnostics."
+    },
+    {
+      "source": "Wu, Geiger & Milliere, ICML 2025, How Do Transformers Learn Variable Binding in Symbolic Programs?",
+      "method_only": "A shallow heuristic phase can precede systematic binding; OOD/distractor/counterfactual evaluation is required before crediting process generalization."
+    },
+    {
+      "source": "Sun et al., COLING 2025, Mitigating Shortcut Learning via Smart Data Augmentation based on Large Language Model",
+      "method_only": "Anti-shortcut counterparts are a reasonable donor method; Clay still requires its own deterministic leakage/challenger acceptance gates."
+    }
+  ],
+  "current_frontier": {
+    "P0": "SOURCE_IMPLEMENTED_TEST_DEFINITIONS_PRESENT_EXECUTION_PENDING",
+    "P1": "CLOSED_COMPONENT_SCOPE_WITH_VPS_RECEIPT",
+    "P1_5": "DESIGN_READY_IMPLEMENTATION_AND_EXECUTION_PENDING",
+    "P2A": "PREREGISTERED_INPUT_IDENTITY_SOURCE_READY_VPS_EXECUTION_PENDING",
+    "P2B": "BLOCKED_UNTIL_TRUSTWORTHY_ADMITTED_CORPUS",
+    "P2_5": "NEEDS_LEXICALLY_COUNTERBALANCED_HYPERPOSITION_NATIVE_SUCCESSOR",
+    "P3": "BLOCKED_UNTIL_CHECKPOINT_BASELINE_SELECTION_AND_EXACT_MODEL_INPUT_RUNTIME_IDENTITIES",
+    "P4": "POSITIVE_TRAINING_ADMISSION_REMAINS_CLOSED"
+  },
+  "priority_order": [
+    "P0 execute exact current OBSERVED-to-Typed-Entry witness bridge/adversarial suite and bind one independently held positive witness without creating a second truth/admission authority",
+    "P1.5 implement proof-carrying exact-merge singleton repair in the single retained v3 labeler and execute the complete retained labeler suite",
+    "P2A execute CHECKPOINT_INPUT_IDENTITY_ABI/v1 on BASE, POSTTRAINED and TARGET_MEASURED exact local snapshots; consumed_identity_match and prompt_input_identity_complete must be true before matched baseline",
+    "P2A materialize CALIBRATION only under the frozen common generator/evaluator; freeze any successor before final commit-reveal holdout",
+    "P2.5 only after upstream semantic/provenance gates, build a small all-process lexically counterbalanced Hyperposition-native successor and rerun surface/nuisance challengers before scale",
+    "P2B only after trustworthy admitted training data exists, preregister matched equal-budget micro-adaptation across P2A-eligible candidates",
+    "P3 only after sufficient checkpoint/substrate evidence, execute model-specific causal Global J-Space controls",
+    "P4 prove exact accepted-token lineage before reopening any positive pilot"
+  ],
+  "training_generation_decision": {
+    "decision": "NO_NEW_ADMITTED_ROWS_WITH_REASON",
+    "new_positive_rows_generated": 0,
+    "new_hard_negative_training_rows_generated": 0,
+    "positive_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "training_executed": false,
+    "training_credit": 0,
+    "reason": "The marginal information gain remains higher from closing authentic admission, exact reference-labeler semantics, checkpoint/input attribution and lexical shortcut structure than from increasing candidate row count. The current 208-row direct-SFT wording remains needs_revision."
+  },
+  "credits": {
+    "research_delta": 1,
+    "p1_history_authority_component_closure": 1,
+    "p0_observed_instance_runtime_closure": 0,
+    "reference_labeler_complete_oracle_credit": 0,
+    "checkpoint_input_identity_runtime_credit": 0,
+    "checkpoint_selection_credit": 0,
+    "final_training_substrate_credit": 0,
+    "causal_jspace_credit": 0,
+    "positive_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0
+  },
+  "next_exact_action": "Execute P0 bridge/adversarial current source on the admitted zero-cost VPS lane while a nonduplicate worker implements P1.5. In parallel execute the committed P2A checkpoint/input identity probe for all three exact candidates. Do not generate direct-SFT rows from the current 208-row wording and do not run the winner holdout until candidate identity, renderer/evaluator and calibration freeze gates are satisfied."
+}

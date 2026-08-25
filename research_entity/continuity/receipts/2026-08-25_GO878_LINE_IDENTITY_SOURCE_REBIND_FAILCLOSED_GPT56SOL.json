@@ -1,0 +1,59 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "date": "2026-08-25",
+  "authority_epoch": "8.78",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol / ChatGPT project organ",
+  "finding": {
+    "classification": "STALE_EXACT_SOURCE_DISPATCH_REBIND_AND_ADAPTER_SELF_CHECK",
+    "root_cause": "Historical backfill resume identity is still chunking-dependent because the persisted byte offset is combined with a per-call local_line reset. In parallel convergence the base cumulative-line patcher was rebound to current post-provenance source blob 5cb0045f5c355170372efd4f08c033b33c91fbed, while the workflow was routed through an adapter whose guard still expected the base patcher to name a different predecessor. Separately, generation-1 dispatch claim/carrier remained bound to older target source blob f095ec12ab28aa5df87b1762b2cc19afca592365.",
+    "risk": "Without fail-closed re-entry, a queued moving-main job could either abort before applying the repair or execute a source different from the source identity recorded in its claim, undermining causal provenance."
+  },
+  "delta": {
+    "adapter_alignment_commit": "7f0d82794c7a73ea86d74bb05cb308324a3256c5",
+    "adapter_path": "tools/apply_go878_backfill_line_checkpoint_after_provenance_fusion.py",
+    "adapter_expected_base_source_after": "5cb0045f5c355170372efd4f08c033b33c91fbed",
+    "semantic_result_commit": "56fbd116759941a60e635fe2034fd8daba49e6be",
+    "semantic_result_path": "research_entity/continuity/ordinary_dispatch_results/free-swarm-backfill-line-identity-v1-g0001.json",
+    "generation_1_status": "BLOCKED_SOURCE_IDENTITY_MOVED",
+    "carrier_issue": 1898,
+    "carrier_issue_closed": true,
+    "new_issue_created_by_this_organ": false,
+    "runtime_retriggered_by_this_organ": false,
+    "new_unusual_experiment": false,
+    "paid_or_provider_execution_started": false
+  },
+  "hypothesis": "A material fraction of historical evidence under-conversion or distorted scheduling can be amplified by replay-unstable source-event identity and provenance-weight drift rather than raw model quality alone.",
+  "counterhypothesis": "The identity defects are bookkeeping-only and fixing them will not materially increase evidence-qualified Forge-to-Distillery yield.",
+  "cheapest_high_information_discriminator": "After a successor semantic generation binds one frozen exact-current source and an already-authorized transport is executable, require one-shot versus repeated max_new_lines=1 equality of ordered (line_no, source_event_id, text_sha256), legacy offset migration correctness, inode/truncation reset correctness, then run full historical backfill to saturation and compare accepted evidence yield without granting duplicate provenance weight.",
+  "tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": {
+      "status": "ADVANCED_SOURCE_AND_COORDINATION",
+      "delta": "Retired a completed title-only fanout surface, aligned the exact-current line-identity patch adapter, and terminally blocked a stale source-bound dispatch before it could execute against moving main."
+    },
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": {
+      "status": "HCU_NO_CHANGE_WITH_REASON",
+      "reason": "The cycle strengthened replay-stable causal identity at the evidence-ingress boundary but did not add or change an HCU/Typed Entry implementation primitive; retained HCU/Entry lanes already exist and duplicating them would not close the current conversion/runtime gate.",
+      "next_discriminator": "Once stable historical source_event_id evidence is admitted, bind it through the existing Typed Entry -> route -> verified engine/load -> GRID10 -> inference receipt chain without creating a second authority."
+    },
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": {
+      "status": "ADVANCED_BY_CURRENT_MAIN_PARALLEL_EVIDENCE_WITHOUT_PROMOTION",
+      "delta": "Current-main re-entry records repository-bound zero-cost Qwen3-0.6B model-specific nonterminal causal component evidence with disjoint holdout and sign-flip/null/orthogonal/permuted controls. This organ performed no new model intervention; native llama.cpp cvec consumption, full HCU runtime, training, and whole-product promotion remain open.",
+      "next_discriminator": "Exact basis binding through the retained J-Space vector-control adapter into pinned Qwen3-0.6B Q8_0 GGUF plus pinned llama.cpp llama_set_adapter_cvec, followed by the same matched controls and exact receipts, only under current experiment-coordination law."
+    }
+  },
+  "credits_after_cycle": {
+    "historical_backfill_line_identity_runtime": 0,
+    "whole_entityos_hcu_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": "NONTERMINAL_COMPONENT_ONLY_FROM_CURRENT_MAIN_PARALLEL_EVIDENCE",
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_action": "Do not recreate generation 1. Freeze current source identity in a deliberate successor semantic generation only when transport can materially execute; run the cumulative-line identity regression and full historical saturation exactly once, then prove one evidence-qualified Forge ACCEPT -> exactly one persistent Distillery packet with accepted_dataset_tokens > 0 -> semantic replay +0. Keep raw generation backpressured until conversion clears.",
+  "evidence_boundary": "Source/control-plane/coordination delta plus observation of separately produced current-main component evidence. No new provider/model/J-Space/training/whole-product runtime promotion by this organ."
+}

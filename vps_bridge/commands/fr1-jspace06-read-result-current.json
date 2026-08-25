@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v4",
+  "command_id": "fr1-jspace06-read-result-current",
+  "op": "exec",
+  "cwd": "/workspace/clay-global-research-entity",
+  "timeout_seconds": 120,
+  "command": "set -euo pipefail; /cache/clay-qwen06/venv/bin/python -c \"import json; p='/workspace/qwen06-fr1-current/native-replication/trigger1_local_qwen06_native_cvec_result.json'; d=json.load(open(p)); print(json.dumps({'schema':d.get('schema'),'status':d.get('status'),'selected_gain':d.get('selected_gain'),'calibration':d.get('calibration'),'holdout':d.get('holdout'),'source_packet':d.get('source_packet'),'runtime_identity':d.get('runtime_identity')},sort_keys=True))\""
+}

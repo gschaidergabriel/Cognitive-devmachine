@@ -1,0 +1,108 @@
+{
+  "schema": "CLAY_TRIGGER2_CHECKPOINT_CONSUMED_STATE_ATTESTATION_AUDIT/v1",
+  "date": "2026-08-26",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "status": "CURRENT_RESEARCH_DELTA_NONCANONICAL_SUCCESSOR_DYNAMIC",
+  "authority": {
+    "observed_main_before_write": "d6ea399d43f5506988b839c0c7c16a3a0125eb30",
+    "newest_inbox_supervisor_observed": "8.81_DELTA",
+    "mode": "FREE_ONLY",
+    "free_swarm_owner_emergency_stop": "HARD_OFF",
+    "provider_execution_performed": false,
+    "model_runtime_execution_performed": false,
+    "training_execution_performed": false
+  },
+  "predecessor_state": {
+    "ledger": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V48_GPT56SOL.json",
+    "ledger_p0": "execute the already-existing CHECKPOINT_INPUT_IDENTITY_ABI/v1 for BASE, POSTTRAINED and TARGET_MEASURED only under separately admitted current FREE non-provider execution authority",
+    "probe": "tools/trigger2_qwen35_checkpoint_input_identity_probe_v1.py",
+    "probe_blob_sha1_observed": "960783307dd2fe696f55884278715442624480d3",
+    "runtime_receipt_credit": 0,
+    "checkpoint_selection_credit": 0
+  },
+  "static_observation": {
+    "classification": "PROOF_SCOPE_AMBIGUITY_NOT_ESTABLISHED_BUG",
+    "observed_mechanism": [
+      "pre-load hash/size verification of the frozen checkpoint manifest",
+      "offline local_files_only tokenizer/model load under Linux strace",
+      "strace capture is restricted to open/openat system calls",
+      "all expected manifest-bound weight shard pathnames must appear opened",
+      "opened manifest-bound local files are re-hashed and unknown opened files inside local_dir fail closed",
+      "post-load checkpoint manifest is reverified",
+      "exact rendered UTF-8 and token tensor identity are bound",
+      "one no-grad forward pass is observed",
+      "the parent then reports consumed_identity_match=true and PASS_COMPONENT_ONLY"
+    ],
+    "proof_boundary": "This is materially stronger than pre-load hashing alone and may be sufficient for a bounded exact-source loader-input identity claim. However, pathname-open observation is not by itself a direct digest of the in-memory parameters/buffers that actually participate in the observed forward. The current name consumed_identity_match therefore requires an explicit acceptance theorem or a stronger model-state attestation challenger before it is treated as a general loader-consumption theorem.",
+    "why_this_matters": "EntityOS/HCU evidence law already distinguishes artifact hashing from verified loader consumption. Trigger-2 checkpoint selection must not accidentally promote an input-path observation into a broader claim than the probe has falsifiably established."
+  },
+  "external_method_inputs_noncanonical": [
+    {
+      "source": "https://docs.pytorch.org/tutorials/recipes/recipes/what_is_state_dict.html",
+      "finding": "PyTorch identifies module parameters and registered buffers through state_dict/model parameter state, which directly affects module computation.",
+      "use": "supports treating post-load module state as a more direct forward-state identity surface than file-open provenance alone"
+    },
+    {
+      "source": "https://docs.pytorch.org/tutorials/beginner/saving_loading_models.html",
+      "finding": "PyTorch load_state_dict copies a deserialized parameter dictionary into the module used for inference.",
+      "use": "supports a loaded-module-state challenger without claiming that one specific Transformers implementation necessarily follows one storage path"
+    },
+    {
+      "source": "https://huggingface.co/docs/safetensors/api/torch",
+      "finding": "The safetensors Torch API exposes mmap and pread backends for serving tensor bytes.",
+      "use": "demonstrates why open/openat is an input-handle observation and why storage/backend details should not be silently conflated with active in-memory model-state identity"
+    }
+  ],
+  "hypotheses": [
+    {
+      "id": "T2_CSTATE_H1_OPENED_MANIFEST_BOUND_SHARDS_ARE_SUFFICIENT_FOR_BOUNDED_SELECTION_IDENTITY",
+      "claim": "For this exact trusted offline child source, requiring every expected shard to be opened, manifest-hash equal before and after load, plus a successful forward and exact input identity is sufficient for bounded checkpoint selection identity.",
+      "counterhypothesis": "The same path-level evidence can coexist with a different active in-memory parameter state, so consumed_identity_match overstates the causal binding unless active module state is independently bound.",
+      "status": "UNRESOLVED"
+    },
+    {
+      "id": "T2_CSTATE_H2_POSTLOAD_MODULE_STATE_DIGEST_IS_HIGHER_INFORMATION_THAN_SYSCALL_EXPANSION_ALONE",
+      "claim": "A deterministic digest over the actually loaded model parameters and persistent buffers, bound to the observed forward and exact source/runtime/input receipt, gives a more direct checkpoint-to-forward identity than merely adding read/pread/mmap syscall classes.",
+      "counterhypothesis": "Hashing the full module state is unnecessarily expensive and duplicates guarantees already provided by trusted exact source plus manifest/open/forward evidence.",
+      "status": "HYPOTHESIS"
+    }
+  ],
+  "recommended_discriminator": {
+    "priority": "AFTER_RUNTIME_QUIESCENCE_AND_SEPARATE_CURRENT_EXECUTION_AUTHORITY_ONLY",
+    "do_not_execute_from_this_artifact": true,
+    "primary": "Extend the selection-grade receipt with a deterministic post-load module-state digest over named_parameters plus persistent buffers using stable name/dtype/shape/content framing, then bind that digest to the same forward/input/runtime receipt. Compare it across frozen repeat loads of the same candidate and across the three candidates.",
+    "adversarial_negative": "A dedicated test fixture that opens/hash-validates the expected frozen bundle but intentionally constructs the active model state from a different manifest-bound fixture must be rejected by the stronger state-attestation gate even if simple pathname-open evidence is present.",
+    "secondary": "If full active-state hashing is too costly, explicitly downgrade the v1 semantic label to LOADER_OPEN_INPUT_IDENTITY and preregister the exact weaker claim rather than calling it full consumed-state identity.",
+    "syscall_note": "Tracing mmap/pread/read may improve storage-path observability but should not be treated as a complete substitute for binding the active module state that performs the forward."
+  },
+  "training_reinjection": {
+    "new_positive_rows": 0,
+    "accepted_dataset_tokens": 0,
+    "checkpoint_winner": null,
+    "new_model_semantic_label": false,
+    "lesson": "Runtime provenance proof predicates remain deterministic shell concerns. Xeno training consumes typed identity/admission outcomes; it must not learn file-descriptor or syscall behavior as semantic authority."
+  },
+  "coordination": {
+    "duplicate_implementation_lane_created": false,
+    "existing_probe_reused": true,
+    "existing_prs_reused_as_donors_only": [1956, 2009],
+    "new_issue_created": false,
+    "new_unusual_experiment": false
+  },
+  "credits": {
+    "research_delta": 1,
+    "checkpoint_input_identity_runtime_credit": 0,
+    "checkpoint_selection_credit": 0,
+    "jspace_model_credit": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  },
+  "next_exact_action": "First close and receipt Free-Swarm runtime quiescence under the owner emergency stop. Re-enter then-current execution authority. Only on an explicitly admitted free non-provider surface, execute the existing three-candidate CHECKPOINT_INPUT_IDENTITY_ABI/v1. Before promoting its consumed_identity_match field into a general consumed-state theorem, either bind a deterministic post-load active module-state digest or explicitly scope the v1 claim to loader-open/input identity. Do not select a checkpoint winner or admit positive training rows before that proof boundary and matched evaluation close."
+}

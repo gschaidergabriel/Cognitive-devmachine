@@ -1,0 +1,50 @@
+{
+  "schema": "CLAY_TRIGGER2_TRUSTED_SYNTHETIC_GENERATOR_AUTHORITY/v1",
+  "status": "CURRENT_SOURCE_AUTHORITY_CANDIDATE_NONPROMOTING",
+  "purpose": "Pin one deterministic evaluator-subject generator for Trigger-2 generation-provenance property testing without creating training/canonical/runtime credit.",
+  "generator": {
+    "repo_path": "tools/trigger2_trusted_hyperposition_pilot_generator_v1.py",
+    "source_sha256": "a0a83f41685be79bc3dc0b46cac18682e7b6c86d45d93ef92ba0ada985c7c6cb",
+    "git_commit_sha": "88e8090f613984d6f407d25fa2910b29e11f1b28",
+    "generator_schema_or_version": "CLAY_TRIGGER2_TRUSTED_HYPERPOSITION_PILOT_GENERATOR/v1"
+  },
+  "allowed_cases": {
+    "T2_GP_PILOT_DB_MATCH_V1": {
+      "deterministic_parameters": {
+        "schema": "CLAY_TRIGGER2_TRUSTED_HYPERPOSITION_PILOT_PARAMETERS/v1",
+        "case_variant": "DB_MATCH",
+        "world_scope": "synthetic_generation_provenance_pilot"
+      },
+      "deterministic_parameters_jcs_sha256": "ce8e3fa871684888ce872ac8d9c220c14acc11fbdf5b4ee1dc12f1384144f01b",
+      "materials_manifest": {
+        "schema": "XENO_SYNTHETIC_GENERATION_MATERIALS/v1",
+        "materials": [],
+        "generator_schema": "CLAY_TRIGGER2_TRUSTED_HYPERPOSITION_PILOT_GENERATOR/v1"
+      },
+      "materials_manifest_jcs_sha256": "c618c4c14df17f30fefba6feed79f834cb304e451e393771680865a86e91b373",
+      "subjects": {
+        "formal_world_jcs_sha256": "244a152921ea08fd66adc8430a1ff04dbd0318e994a45d9a11761858284282d9",
+        "event_dependence_registry_jcs_sha256": "341040b924d2ac8b4028fca8d55a1cf9f0ffa3b06c966b475baadf66827c20d4",
+        "event_jcs_sha256": "372d48f2862401ecaaf1d9edcf4fc3eed99977f45ecc0bb7afd4414113360ad4",
+        "state_before_jcs_sha256": "7b2248741a1d3f0c999cf4a1c9ce00ea92b4ce93d8585a611b8e65038576c83c"
+      },
+      "semantic_scope": {
+        "world_id": "t2gp:world:db-match:v1",
+        "query_id": "t2gp:query:db-match:v1",
+        "event_id": "t2gp:event:db-match:v1"
+      }
+    }
+  },
+  "canonicalization": {
+    "implementation": "the artefact/MicroEntity/hcu/entry_canonicalization_v1.py",
+    "schema": "RFC8785_JCS_IJSON/v1",
+    "digest": "SHA256"
+  },
+  "authority_fences": {
+    "canonical_truth_allowed": false,
+    "direct_effect_authority": false,
+    "training_eligible": false,
+    "accepted_dataset_tokens_minted": 0,
+    "training_credit_minted": 0
+  }
+}

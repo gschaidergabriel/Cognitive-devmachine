@@ -1,0 +1,101 @@
+{
+  "schema": "CLAY_TRIGGER2_SECOND_ORDER_DISPLAY_ORDER_LEAK_REVIEW/v1",
+  "date": "2026-08-25",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority": {
+    "supervisor_epoch": "8.78",
+    "execution_mode": "FREE_ONLY",
+    "canonical_main_observed_before_review": "a4dde86ecf2adc6aedfd6ef280aae396f77322f5",
+    "training_executed": false,
+    "paid_provider_or_training_call_executed": false,
+    "unusual_experiment": "NOT_USED_STATIC_SOURCE_DISCRIMINATOR_ONLY"
+  },
+  "review_target": {
+    "path": "tools/trigger2_dynamic_codebook_binding_template_generator_v1.py",
+    "source_commit": "549e316e41dfb27b7c8375b50b2c062ad045f836",
+    "source_blob_sha": "3e628a67c2e5696e7ef44089c059571c33eb7d2e",
+    "claimed_seed_shape": "4 templates x 6 S3 mappings x 3 semantic classes = 72 METHOD_ONLY rows"
+  },
+  "swarm_roles": [
+    "DATASET_ARCHITECT",
+    "ADVERSARIAL_SHORTCUT_HUNTER",
+    "STATISTICAL_REVIEWER",
+    "PROVENANCE_REVIEWER",
+    "HARNESS_COMPATIBILITY_REVIEWER",
+    "FINAL_INTEGRATOR"
+  ],
+  "finding": {
+    "severity": "HIGH",
+    "id": "DISPLAY_ORDER_IS_NOT_AN_INDEPENDENT_NUISANCE_VARIABLE",
+    "source_mechanism": "display_order(template_i, perm_i, class_i) deterministically selects one of six class orders as (perm_i + 2*class_i + 3*template_i) mod 6.",
+    "why_existing_checks_are_insufficient": "The v1 self-test proves exact class-position balance, but exact marginal class-position balance does not imply independence of target symbol from the complete display order or from display position conditional on semantic class.",
+    "static_discriminator": {
+      "method": "Exact enumeration of all 72 v1 rows from the published deterministic formulas; no model call and no training run.",
+      "rows": 72,
+      "target_symbol_vs_display_position_mutual_information_bits": 0.08387638912927428,
+      "target_symbol_vs_full_display_order_mutual_information_bits": 0.3060986113514965,
+      "conditional_target_vs_position_mi_bits": {
+        "ALLOW": 0.08496250072115619,
+        "DENY": 0.2516291673878228,
+        "ABSTAIN": 0.2516291673878228
+      },
+      "display_order_plus_semantic_class_states_with_deterministic_target": 2,
+      "interpretation": "A learner can obtain nonzero target information from presentation order without fully reading the realized class-to-symbol mapping. This is a shortcut channel in the source template distribution, even though aggregate class-position counts are balanced."
+    },
+    "counterhypothesis": "The residual order correlation is too weak to affect a trained 0.8B model because the codebook mapping is explicit.",
+    "reason_not_to_accept_counterhypothesis_without_test": "Removing the correlation is cheap and deterministic, whereas leaving it creates an avoidable alternate solution path and weakens any later claim that success reflects episode-local binding."
+  },
+  "required_repair": {
+    "primary": "Cross every logical 72-row S3 x class x template episode with all six codebook display orders, producing a 432-row METHOD_ONLY source template before lexical-family replication.",
+    "resulting_exact_shape": "4 templates x 6 S3 mappings x 3 semantic classes x 6 display orders = 432 rows",
+    "required_balance": [
+      "every (semantic_class, target_symbol_slot, display_order) combination occurs equally often",
+      "every target symbol occurs equally often at every display position",
+      "display order cannot predict target symbol, including conditional on semantic class",
+      "mapping identity and display order remain separate fields",
+      "target is always recomputed from hidden semantic class plus realized mapping"
+    ]
+  },
+  "second_order_gates_for_materialization": [
+    "ATOM_TRIPLET_INDEPENDENCE: actual ABI atom-triplet identity must not correlate with semantic class, S3 mapping, template, lexical family, display order or target slot; report pairwise/joint leakage statistics.",
+    "TARGET_TOKEN_FREQUENCY_BALANCE: actual output atom/token frequencies must be balanced so token prior cannot solve the task.",
+    "COUNTERFACTUAL_FAMILY_ATOMICITY: mapping-flip, semantic-flip, order-shuffle and paraphrase variants from one causal family must remain in the same dataset split.",
+    "MODEL_VISIBLE_SERIALIZER_REDACTION: hidden_class, permutation_id, realized_mapping metadata, split labels and source annotations must be absent from model-visible serialization; bind a render digest for audit.",
+    "SEMANTIC_DIFFICULTY_PARITY: class-specific lexical families must be matched for length/difficulty and paraphrased across independent families so ALLOW/DENY/ABSTAIN cannot be inferred from one stereotyped phrase family alone.",
+    "OPAQUE_KEY_FALSIFIER: keep a separately versioned frozen evaluation where semantic outcomes route through neutral episode-local keys before symbol lookup; failure there is evidence that the model learned canonical class-label lookup rather than a more general variable binder. Do not tune on this frozen evaluator."
+  ],
+  "corrected_training_example_family": {
+    "status": "METHOD_ONLY_LOGICAL_ALIAS_NOT_TRAINING_READY",
+    "semantic_case": "Facts: p=true; q=UNKNOWN. Rule condition: p AND q.",
+    "realized_mapping": {
+      "ALLOW": "ATOM_A",
+      "DENY": "ATOM_B",
+      "ABSTAIN": "ATOM_C"
+    },
+    "target": "ATOM_C",
+    "six_required_order_variants": [
+      "ALLOW,DENY,ABSTAIN",
+      "ALLOW,ABSTAIN,DENY",
+      "DENY,ALLOW,ABSTAIN",
+      "DENY,ABSTAIN,ALLOW",
+      "ABSTAIN,ALLOW,DENY",
+      "ABSTAIN,DENY,ALLOW"
+    ],
+    "invariant": "All six variants must retain target ATOM_C. ATOM_A/B/C remain logical aliases only until exact accepted ABI atoms are manifest-bound."
+  },
+  "credits": {
+    "research_design_delta": 1,
+    "accepted_dataset_tokens": 0,
+    "qwen35_jspace_runtime_credit": 0,
+    "qwen35_training_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "canonical_semantics_promotion": false
+  },
+  "next_exact_action": "Implement a successor template generator that fully crosses display order, self-tests zero target/order leakage at the logical-alias scope, then keep materialization blocked until exact accepted ABI atom identities and tokenizer/manifest provenance are available."
+}

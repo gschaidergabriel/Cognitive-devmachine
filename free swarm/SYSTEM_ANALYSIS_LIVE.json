@@ -1,6 +1,6 @@
 {
   "schema": "CLAY_FREE_SWARM_SYSTEM_ANALYSIS/v3",
-  "generated_at": "2026-08-25T19:11:48.921386+00:00",
+  "generated_at": "2026-08-25T19:26:55.225399+00:00",
   "runtime": {
     "supervisor": "STOPPED/QUARANTINED",
     "go_swarm": "RUNNING",
@@ -65,7 +65,7 @@
   },
   "distillery": {
     "schema": "CLAY_RESEARCH_DISTILLERY_STATUS/v1",
-    "generated_at": "2026-08-25T19:11:34.868411+00:00",
+    "generated_at": "2026-08-25T19:26:48.632275+00:00",
     "collected_source_tokens": 11621,
     "accepted_dataset_tokens": 0,
     "dataset_yield": 0.0,
@@ -111,7 +111,7 @@
     "model_output_tokens": 1455,
     "shared_provider_budget": {
       "schema": "CLAY_SHARED_PROVIDER_BUDGET/v1",
-      "generated_at": "2026-08-25T19:11:34.869118+00:00",
+      "generated_at": "2026-08-25T19:26:48.632760+00:00",
       "providers": {
         "arxiv": {
           "max_inflight": 1,
@@ -213,13 +213,13 @@
           "max_inflight": 16,
           "active_leases": 0,
           "min_interval_s": 0.5,
-          "cooldown_seconds": 9.990051507949829,
-          "total_requests": 2982,
+          "cooldown_seconds": 9.992814540863037,
+          "total_requests": 3072,
           "total_success": 134,
-          "total_429": 2847,
+          "total_429": 2937,
           "total_errors": 0,
           "last_status": "429",
-          "last_observed_at": "2026-08-25T19:11:34.859223+00:00"
+          "last_observed_at": "2026-08-25T19:26:48.625546+00:00"
         },
         "semantic_scholar": {
           "max_inflight": 1,
@@ -249,16 +249,16 @@
     },
     "db_bytes": 983040,
     "top_questions": [
-      "Can hybrid identity verification (local + swarm consensus) prevent credential leakage without breaking FREE_ONLY constraints?",
-      "What minimal formal model captures the tension between causal traceability and execution speed?",
-      "Does credential-bound admission enable cross-region free-tier validation?",
-      "Does recursive self-modeling generalize across model families (Nemotron vs GPT-OSS) or is it model-specific?",
-      "What is the minimal trace count N for statistically significant gains?",
-      "Can the meta-evaluator be replaced by a lightweight verifier (e.g., constraint checker) without quality loss?",
-      "Can credential verification be performed without exposing secrets to inference models?",
-      "How to handle credential rotation in admission evidence updates?",
-      "Does the FREE_ONLY credential binding layer expose per-call rate-limit headers to the scheduler, or are they stripped at the provider adapter boundary?",
-      "Does the FREE status of a provider truly eliminate any monetary or credit cost beyond request throttling?"
+      "Should provider config be derived from runtime health state automatically rather than static lists?",
+      "exact-source isolation: what level of OS‑level isolation (PID, network, mount) is required for PASS?",
+      "exact-source isolation: can a hybrid approach combine read‑only source with dynamic code generation while preserving exact‑source semantics?",
+      "Wie kann die Genauigkeit der Überprüfung der Admission-Boundary verbessert werden?",
+      "Wie kann die Skalierbarkeit der Lösung verbessert werden?",
+      "Kann Engine Identity dynamisch aktualisiert werden ohne Identitätswechsel?",
+      "Which causal tracing method (activation patching, causal mediation analysis, or counterfactual intervention) yields the most reproducible J-Space/GWT signal for sub-1B models under FREE_ONLY compute constraints?",
+      "Wie wird die Generationen-Fencing-Überwachung bei Netzwerk-Partitionen umgesetzt?",
+      "What is the minimal per-credential free-tier verification API call for NVIDIA NIM that can be executed at pre-call binding without consuming free quota?",
+      "Wie wird die kryptografische Bindung mit bestehenden Hyperposition-Protokollen integriert?"
     ],
     "candidate_states": {}
   },
@@ -433,6 +433,6 @@
     "measured_total_sonnet5_equivalent_usd": 148.830648,
     "verified_historical_savings_usd": null,
     "nominal_avoided_if_zero_cost_usd": 148.830648,
-    "repo_output_only_proxy_usd": 136.1791
+    "repo_output_only_proxy_usd": 137.44802
   }
 }

@@ -60,7 +60,7 @@ Zweck: **Aktivität → ausführbarer Patch/Test → reproduzierbare Architektur
 
 <!-- RESEARCH_DISTILLERY_AUTO:BEGIN -->
 ## AUTO — Research Distillery / kumuliertes Wissens-Dataset
-Aktualisiert: `2026-08-25T19:11:48.323307+00:00`
+Aktualisiert: `2026-08-25T19:26:54.611410+00:00`
 
 **1. wichtigste Quote — Entity-Dataset-Yield:** `0 / 11,621 = 0.000%`  
 Kompressionsfaktor Quelltokens : akzeptierte Dataset-Tokens: **UNKNOWN**.
@@ -112,7 +112,7 @@ GO-Worker emittieren `OPEN_RESEARCH_QUESTIONS_JSON`; die Distillery zerlegt Frag
 
 <!-- SYSTEM_ANALYSIS_AUTO:BEGIN -->
 ## AUTO — Gesamtsystem, GO-Fluss, Script-Auswertung und Sonnet-Vergleich
-Aktualisiert: `2026-08-25T19:11:48.921386+00:00`
+Aktualisiert: `2026-08-25T19:26:55.225399+00:00`
 
 ### 1. Wichtigster Effizienzindikator — was geht im Durchschnitt wieder an `go`?
 **Source → GO Pass-through: 0.000%.** Definition: `accepted dataset-token yield × average distinct accepted-packet coverage delivered to GO macrocycles`.
@@ -151,16 +151,16 @@ Bei 0 akzeptierten Dataset-Tokens ist Source→GO exakt 0%; fehlende Reinjection
 - truth/effect/capability boundaries and falsification
 
 **Top offene Forschungsfragen aus der laufenden Queue:**
-- Can hybrid identity verification (local + swarm consensus) prevent credential leakage without breaking FREE_ONLY constraints?
-- What minimal formal model captures the tension between causal traceability and execution speed?
-- Does credential-bound admission enable cross-region free-tier validation?
-- Does recursive self-modeling generalize across model families (Nemotron vs GPT-OSS) or is it model-specific?
-- What is the minimal trace count N for statistically significant gains?
-- Can the meta-evaluator be replaced by a lightweight verifier (e.g., constraint checker) without quality loss?
-- Can credential verification be performed without exposing secrets to inference models?
-- How to handle credential rotation in admission evidence updates?
-- Does the FREE_ONLY credential binding layer expose per-call rate-limit headers to the scheduler, or are they stripped at the provider adapter boundary?
-- Does the FREE status of a provider truly eliminate any monetary or credit cost beyond request throttling?
+- Should provider config be derived from runtime health state automatically rather than static lists?
+- exact-source isolation: what level of OS‑level isolation (PID, network, mount) is required for PASS?
+- exact-source isolation: can a hybrid approach combine read‑only source with dynamic code generation while preserving exact‑source semantics?
+- Wie kann die Genauigkeit der Überprüfung der Admission-Boundary verbessert werden?
+- Wie kann die Skalierbarkeit der Lösung verbessert werden?
+- Kann Engine Identity dynamisch aktualisiert werden ohne Identitätswechsel?
+- Which causal tracing method (activation patching, causal mediation analysis, or counterfactual intervention) yields the most reproducible J-Space/GWT signal for sub-1B models under FREE_ONLY compute constraints?
+- Wie wird die Generationen-Fencing-Überwachung bei Netzwerk-Partitionen umgesetzt?
+- What is the minimal per-credential free-tier verification API call for NVIDIA NIM that can be executed at pre-call binding without consuming free quota?
+- Wie wird die kryptografische Bindung mit bestehenden Hyperposition-Protokollen integriert?
 
 ### 5. Fortschritts-Funnel
 | Stufe | Wert |
@@ -192,7 +192,7 @@ Preisannahme: **Claude Sonnet 5 introductory through 2026-08-31: $2/M input + $1
 | Free-Swarm Usage | 31,313,649 input + 8,618,788 output | **$148.82** |
 | Distillery Modellarbeit | 460 input + 1,455 output | **$0.0155** |
 | zusammen, gemessener LLM-Tokenmix | — | **$148.83** |
-| persistenter Repo-Korpus, Output-only Proxy | 13,617,910 Proxy-Tokens | **$136.18** |
+| persistenter Repo-Korpus, Output-only Proxy | 13,744,802 Proxy-Tokens | **$137.45** |
 
 **Nominal vermiedene Sonnet-Kosten, falls diese Calls tatsächlich $0 kosteten: $148.83. Verifiziert gespart: UNKNOWN.** Die aktuelle typed Authority verbietet die nachträgliche FREE-Klassifikation historischer Provider-Traffic; der Korpuswert ist ebenfalls nur ein Neu-Erzeugungsproxy.
 
@@ -205,7 +205,7 @@ Dieser komplette Block ist Pflichtbestandteil des Publishers. Kompakte Tabellen 
 
 <!-- FREE_SWARM_AUTO:BEGIN -->
 ## AUTO — Live-Auswertung
-Aktualisiert: `2026-08-25T19:11:46.981643+00:00`
+Aktualisiert: `2026-08-25T19:26:53.220555+00:00`
 
 | Kennzahl | Wert |
 |---|---:|
@@ -219,8 +219,8 @@ Aktualisiert: `2026-08-25T19:11:46.981643+00:00`
 | Evident akzeptierte Architektur-Deltas | 0 |
 | Nominal/historisch akzeptierte Architektur-Deltas | 1 |
 | Legacy/unqualifizierte nominale Accepts | 1 |
-| Repo-Korpus-Proxy Tokens (4 Zeichen/Token) | 13617910 |
-| Sonnet-5 Output-only Äquivalent des Repo-Proxys | $136.18 |
+| Repo-Korpus-Proxy Tokens (4 Zeichen/Token) | 13744802 |
+| Sonnet-5 Output-only Äquivalent des Repo-Proxys | $137.45 |
 
 ### Modelle
 | Provider | Modell | Requests | Success | 429 | Input | Output | Total |
@@ -286,8 +286,8 @@ Innovativstes Modell: **NO EVIDENCE YET**
 | GPT/ChatGPT | 0 | UNKNOWN | UNKNOWN% |
 
 ### Research-Entity-Output / Sonnet-Kostenproxy
-API-exakte historische Gesamttokens aller früheren Organe bleiben **UNKNOWN**, solange keine vollständige historische Usage-Buchhaltung existiert. Der messbare persistente Repo-Korpus umfasst aktuell 10607 Textdateien / 54471641 Zeichen ≈ **13617910 Tokens** bei der ausdrücklich nur als Proxy verwendeten 4-Zeichen-Näherung.
-Hypothetische reine Output-Neuerzeugung dieses Proxy-Korpus mit Claude Sonnet 5: **$136.18** zum derzeit geltenden Output-Tarif von $10/M Tokens. Input-/Caching-/Toolkosten sind darin nicht enthalten.
+API-exakte historische Gesamttokens aller früheren Organe bleiben **UNKNOWN**, solange keine vollständige historische Usage-Buchhaltung existiert. Der messbare persistente Repo-Korpus umfasst aktuell 10648 Textdateien / 54979207 Zeichen ≈ **13744802 Tokens** bei der ausdrücklich nur als Proxy verwendeten 4-Zeichen-Näherung.
+Hypothetische reine Output-Neuerzeugung dieses Proxy-Korpus mit Claude Sonnet 5: **$137.45** zum derzeit geltenden Output-Tarif von $10/M Tokens. Input-/Caching-/Toolkosten sind darin nicht enthalten.
 <!-- FREE_SWARM_AUTO:END -->
 
 

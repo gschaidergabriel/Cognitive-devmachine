@@ -1,13 +1,13 @@
 {
   "schema": "CLAY_FREE_SWARM_SYSTEM_ANALYSIS/v3",
-  "generated_at": "2026-08-25T07:21:00.225205+00:00",
+  "generated_at": "2026-08-25T07:36:06.373659+00:00",
   "runtime": {
     "supervisor": "STOPPED/QUARANTINED",
     "go_swarm": "RUNNING",
     "distillery": "RUNNING",
     "evidence_forge": "RUNNING",
     "dashboard": "RUNNING",
-    "local_model": "NOT_READY",
+    "local_model": "BUILDING/BOOTSTRAPPING",
     "provider_admission": {
       "admitted_free_providers": [
         "groq",
@@ -65,7 +65,7 @@
   },
   "distillery": {
     "schema": "CLAY_RESEARCH_DISTILLERY_STATUS/v1",
-    "generated_at": "2026-08-25T07:20:57.698911+00:00",
+    "generated_at": "2026-08-25T07:36:03.870137+00:00",
     "collected_source_tokens": 11621,
     "accepted_dataset_tokens": 0,
     "dataset_yield": 0.0,
@@ -86,7 +86,7 @@
     "model_output_tokens": 1455,
     "shared_provider_budget": {
       "schema": "CLAY_SHARED_PROVIDER_BUDGET/v1",
-      "generated_at": "2026-08-25T07:20:57.699629+00:00",
+      "generated_at": "2026-08-25T07:36:03.870962+00:00",
       "providers": {
         "arxiv": {
           "max_inflight": 1,
@@ -224,22 +224,22 @@
     },
     "db_bytes": 864256,
     "top_questions": [
-      "Does NVIDIA expose a per-credential API to verify free-tier vs paid entitlement at admission time, or must we rely on provider-side free-mode binding?",
-      "What is the exact quota limit for the NVIDIA free tier, and is it sufficient for the planned J-Space calibration experiments?",
-      "Are there any hidden costs or rate limits on the OpenRouter free routes that would make them unusable in practice?",
-      "Has Mistral officially confirmed their free tier status, and what models are included in it?",
-      "Is there a way to automate the verification of provider status to ensure the allowlist stays up-to-date without manual checking?",
-      "How can cryptographic lease binding be ensured without violating FREE_ONLY latency constraints?",
-      "What causal graph structures optimally balance counterevidence expressiveness and computational efficiency in hyperposition-preserving models?",
-      "Can negative evidence anchors be compressed without losing discriminative power for adversarial pattern detection?",
-      "Does NVIDIA Developer Program API expose per-credential authorized model lists, or is model access uniformly granted per tier?",
-      "What specific statistical thresholds should be used for outlier detection in the distillery data?"
+      "What is the root cause of the high error rate in the NVIDIA provider?",
+      "Can the load balancing mechanism be applied to other providers?",
+      "What are the long-term effects of the load balancing mechanism on system performance?",
+      "What is the impact of the free swarm provider admission runtime credit on the development of the local research model?",
+      "How can we optimize the supervisor inbox to prioritize the convergence of the executable EntityOS/HCU?",
+      "How to balance identity binding latency with model throughput in free provider networks?",
+      "Can hybrid identity verification (local + swarm consensus) prevent credential leakage without breaking FREE_ONLY constraints?",
+      "What minimal formal model captures the tension between causal traceability and execution speed?",
+      "Does credential-bound admission enable cross-region free-tier validation?",
+      "Does recursive self-modeling generalize across model families (Nemotron vs GPT-OSS) or is it model-specific?"
     ],
     "candidate_states": {}
   },
   "evidence_forge": {
     "schema": "CLAY_FREE_EVIDENCE_FORGE_STATUS/v1",
-    "generated_at": "2026-08-25T07:20:58.975625+00:00",
+    "generated_at": "2026-08-25T07:36:05.527071+00:00",
     "candidate_states": {
       "ACCEPTED": 1,
       "NEEDS_IMPLEMENTATION": 65,
@@ -263,7 +263,7 @@
     "peak_parallel_tasks": 0,
     "shared_provider_budget": {
       "schema": "CLAY_SHARED_PROVIDER_BUDGET/v1",
-      "generated_at": "2026-08-25T07:20:58.979429+00:00",
+      "generated_at": "2026-08-25T07:36:05.527888+00:00",
       "providers": {
         "arxiv": {
           "max_inflight": 1,
@@ -408,6 +408,6 @@
     "measured_total_sonnet5_equivalent_usd": 148.830648,
     "verified_historical_savings_usd": null,
     "nominal_avoided_if_zero_cost_usd": 148.830648,
-    "repo_output_only_proxy_usd": 126.10615
+    "repo_output_only_proxy_usd": 126.28838
   }
 }

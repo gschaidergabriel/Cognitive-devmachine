@@ -1,6 +1,6 @@
 {
   "schema": "CLAY_FREE_SWARM_SYSTEM_ANALYSIS/v3",
-  "generated_at": "2026-08-25T00:02:51.687187+00:00",
+  "generated_at": "2026-08-25T00:17:57.359158+00:00",
   "runtime": {
     "supervisor": "STOPPED/QUARANTINED",
     "go_swarm": "RUNNING",
@@ -45,16 +45,16 @@
     "policy": "FREE_ONLY; CREDENTIAL_BLIND_CONTROL_PARENT; SWARM_CHILD_ONLY_SECRET_SCOPE; CURRENT_CANONICAL_PROVIDER_ADMISSION; NO_PAID_FALLBACK; TOGETHER_FORBIDDEN"
   },
   "conversion": {
-    "successful": 4966,
-    "delta": 508,
-    "ready": 144,
-    "questions": 910,
-    "macrocycles": 329,
-    "delta_rate": 0.1022956101490133,
-    "ready_rate": 0.02899718082964156,
-    "question_rate": 0.18324607329842932,
-    "avg_cycle_delta_rate": 0.08350854327856937,
-    "avg_cycle_ready_rate": 0.008936951467656874
+    "successful": 5062,
+    "delta": 528,
+    "ready": 148,
+    "questions": 936,
+    "macrocycles": 339,
+    "delta_rate": 0.10430659818253654,
+    "ready_rate": 0.029237455551165546,
+    "question_rate": 0.1849071513235875,
+    "avg_cycle_delta_rate": 0.08819557710218061,
+    "avg_cycle_ready_rate": 0.010957225537172672
   },
   "go_feedback": {
     "receipts": 0,
@@ -65,7 +65,7 @@
   },
   "distillery": {
     "schema": "CLAY_RESEARCH_DISTILLERY_STATUS/v1",
-    "generated_at": "2026-08-25T00:02:48.985885+00:00",
+    "generated_at": "2026-08-25T00:17:55.513126+00:00",
     "collected_source_tokens": 11621,
     "accepted_dataset_tokens": 0,
     "dataset_yield": 0.0,
@@ -74,7 +74,7 @@
     "accepted_packets": 0,
     "rejected_candidates": 0,
     "questions": {
-      "CYCLIC": 834,
+      "CYCLIC": 847,
       "OPEN": 21
     },
     "source_metadata_rows": {
@@ -86,7 +86,7 @@
     "model_output_tokens": 1455,
     "shared_provider_budget": {
       "schema": "CLAY_SHARED_PROVIDER_BUDGET/v1",
-      "generated_at": "2026-08-25T00:02:48.986616+00:00",
+      "generated_at": "2026-08-25T00:17:55.513622+00:00",
       "providers": {
         "arxiv": {
           "max_inflight": 1,
@@ -140,7 +140,7 @@
           "max_inflight": 128,
           "active_leases": 0,
           "min_interval_s": 0.0,
-          "cooldown_seconds": 1668.439033985138,
+          "cooldown_seconds": 761.9120078086853,
           "total_requests": 146,
           "total_success": 96,
           "total_429": 50,
@@ -165,12 +165,12 @@
           "active_leases": 1,
           "min_interval_s": 0.0,
           "cooldown_seconds": 0.0,
-          "total_requests": 6030,
-          "total_success": 4611,
-          "total_429": 460,
+          "total_requests": 6083,
+          "total_success": 4647,
+          "total_429": 477,
           "total_errors": 923,
           "last_status": "200",
-          "last_observed_at": "2026-08-25T00:02:25.767119+00:00"
+          "last_observed_at": "2026-08-25T00:17:54.348842+00:00"
         },
         "openalex": {
           "max_inflight": 2,
@@ -186,15 +186,15 @@
         },
         "openrouter": {
           "max_inflight": 16,
-          "active_leases": 0,
+          "active_leases": 3,
           "min_interval_s": 0.5,
           "cooldown_seconds": 0.0,
-          "total_requests": 160,
-          "total_success": 70,
-          "total_429": 89,
+          "total_requests": 228,
+          "total_success": 130,
+          "total_429": 94,
           "total_errors": 0,
-          "last_status": "429",
-          "last_observed_at": "2026-08-24T23:52:08.851709+00:00"
+          "last_status": "200",
+          "last_observed_at": "2026-08-25T00:17:49.454056+00:00"
         },
         "semantic_scholar": {
           "max_inflight": 1,
@@ -222,29 +222,29 @@
         }
       }
     },
-    "db_bytes": 856064,
+    "db_bytes": 860160,
     "top_questions": [
-      "Wie kann die EntityOS/HCU-Architektur verbessert werden, um die Anbieterzulassung zu stärken?",
-      "Does J-Space provenance of model health transitions causally improve routing decisions, or does it only add observability without changing outcomes?",
-      "Wie kann die FREE_SWARM_ADMISSION_BOUNDARY_RECEIPT/v1 eindeutig beweisbar sein, ohne dass geheime Schlüssel oder Netzwerkaufrufe durchgeführt werden müssen?",
-      "Is the provider network fully quarantined?",
-      "Is the supervisor stop helper effective in stopping all provider traffic?",
-      "How can we verify the quarantine status of the provider network and the effectiveness of the supervisor stop helper?",
-      "What is the actual measured throughput ceiling of the FREE_ONLY provider fleet under sustained load?",
-      "Welche minimalen Kriterien müssen in der typed admission‑Liste enthalten sein, damit eine externe Provider‑Lane als FREE klassifiziert wird?",
-      "What is the exact NVIDIA Developer Program/NIM free-prototyping policy per model, and can it be programmatically verified per credential?",
-      "How to define the minimal sufficient J-Space provenance surface for causal replay without capturing full model activations?"
+      "How does the optimal binding granularity vary across different workloads?",
+      "What is the minimal probe payload that reliably distinguishes free-tier from paid-only NVIDIA credentials without consuming significant quota?",
+      "What is the impact of implementing a more robust token validation mechanism on the dataset yield?",
+      "Does NVIDIA provide a dedicated credential-capability introspection endpoint that avoids consuming generation quota for verification?",
+      "How does the modified data collection process handle errors and exceptions?",
+      "What are the potential risks and challenges associated with implementing the proposed solution?",
+      "How can we ensure the integrity and security of the data used to inform dynamic admission policies?",
+      "Does HCU global workspace occupancy causally mediate reasoning performance, or does HCU use modular/local processing that bypasses global workspace for multi-step reasoning?",
+      "Which single upstream causal primitive (typed-entry, J-Space/GWT, or credential binding) yields the highest information-per-FREE-call when reproduced and integrated into HCU fabric?",
+      "What are the potential risks and challenges associated with the implementation of machine learning-based admission policies?"
     ],
     "candidate_states": {}
   },
   "evidence_forge": {
     "schema": "CLAY_FREE_EVIDENCE_FORGE_STATUS/v1",
-    "generated_at": "2026-08-25T00:02:50.068261+00:00",
+    "generated_at": "2026-08-25T00:17:55.343664+00:00",
     "candidate_states": {
       "ACCEPTED": 1,
       "NEEDS_IMPLEMENTATION": 65,
-      "NEW": 364,
-      "PATCH_REJECTED": 77,
+      "NEW": 380,
+      "PATCH_REJECTED": 81,
       "VALIDATED_NOT_BETTER": 1
     },
     "discovery_sources": {
@@ -255,7 +255,7 @@
     },
     "discovery_queries": 844,
     "discovery_hits": 4262,
-    "evaluations": 144,
+    "evaluations": 148,
     "accepted_deltas": 1,
     "e2b_jobs": 0,
     "e2b_pass": 0,
@@ -263,7 +263,7 @@
     "peak_parallel_tasks": 0,
     "shared_provider_budget": {
       "schema": "CLAY_SHARED_PROVIDER_BUDGET/v1",
-      "generated_at": "2026-08-25T00:02:50.068847+00:00",
+      "generated_at": "2026-08-25T00:17:55.344421+00:00",
       "providers": {
         "arxiv": {
           "max_inflight": 1,
@@ -317,7 +317,7 @@
           "max_inflight": 128,
           "active_leases": 0,
           "min_interval_s": 0.0,
-          "cooldown_seconds": 1667.3568317890167,
+          "cooldown_seconds": 762.081396818161,
           "total_requests": 146,
           "total_success": 96,
           "total_429": 50,
@@ -342,12 +342,12 @@
           "active_leases": 1,
           "min_interval_s": 0.0,
           "cooldown_seconds": 0.0,
-          "total_requests": 6030,
-          "total_success": 4611,
-          "total_429": 460,
+          "total_requests": 6083,
+          "total_success": 4647,
+          "total_429": 477,
           "total_errors": 923,
           "last_status": "200",
-          "last_observed_at": "2026-08-25T00:02:25.767119+00:00"
+          "last_observed_at": "2026-08-25T00:17:54.348842+00:00"
         },
         "openalex": {
           "max_inflight": 2,
@@ -363,15 +363,15 @@
         },
         "openrouter": {
           "max_inflight": 16,
-          "active_leases": 0,
+          "active_leases": 3,
           "min_interval_s": 0.5,
           "cooldown_seconds": 0.0,
-          "total_requests": 160,
-          "total_success": 70,
-          "total_429": 89,
+          "total_requests": 228,
+          "total_success": 130,
+          "total_429": 94,
           "total_errors": 0,
-          "last_status": "429",
-          "last_observed_at": "2026-08-24T23:52:08.851709+00:00"
+          "last_status": "200",
+          "last_observed_at": "2026-08-25T00:17:49.454056+00:00"
         },
         "semantic_scholar": {
           "max_inflight": 1,
@@ -399,15 +399,15 @@
         }
       }
     },
-    "db_bytes": 5472256
+    "db_bytes": 5918720
   },
   "costs": {
     "price_basis": "Claude Sonnet 5 introductory through 2026-08-31: $2/M input + $10/M output",
-    "free_swarm_sonnet5_equivalent_usd": 132.569156,
+    "free_swarm_sonnet5_equivalent_usd": 135.3612,
     "distillery_sonnet5_equivalent_usd": 0.015470000000000001,
-    "measured_total_sonnet5_equivalent_usd": 132.584626,
+    "measured_total_sonnet5_equivalent_usd": 135.37667,
     "verified_historical_savings_usd": null,
-    "nominal_avoided_if_zero_cost_usd": 132.584626,
-    "repo_output_only_proxy_usd": 121.59824
+    "nominal_avoided_if_zero_cost_usd": 135.37667,
+    "repo_output_only_proxy_usd": 121.60515
   }
 }

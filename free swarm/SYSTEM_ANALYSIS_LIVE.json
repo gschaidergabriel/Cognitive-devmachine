@@ -1,6 +1,6 @@
 {
   "schema": "CLAY_FREE_SWARM_SYSTEM_ANALYSIS/v3",
-  "generated_at": "2026-08-25T20:12:14.556989+00:00",
+  "generated_at": "2026-08-25T20:27:20.875353+00:00",
   "runtime": {
     "supervisor": "STOPPED/QUARANTINED",
     "go_swarm": "RUNNING",
@@ -65,7 +65,7 @@
   },
   "distillery": {
     "schema": "CLAY_RESEARCH_DISTILLERY_STATUS/v1",
-    "generated_at": "2026-08-25T20:12:10.992048+00:00",
+    "generated_at": "2026-08-25T20:26:53.876817+00:00",
     "collected_source_tokens": 11621,
     "accepted_dataset_tokens": 0,
     "dataset_yield": 0.0,
@@ -111,7 +111,7 @@
     "model_output_tokens": 1455,
     "shared_provider_budget": {
       "schema": "CLAY_SHARED_PROVIDER_BUDGET/v1",
-      "generated_at": "2026-08-25T20:12:10.992537+00:00",
+      "generated_at": "2026-08-25T20:26:53.877789+00:00",
       "providers": {
         "arxiv": {
           "max_inflight": 1,
@@ -213,13 +213,13 @@
           "max_inflight": 16,
           "active_leases": 0,
           "min_interval_s": 0.5,
-          "cooldown_seconds": 9.992239475250244,
-          "total_requests": 3339,
+          "cooldown_seconds": 9.9904203414917,
+          "total_requests": 3426,
           "total_success": 134,
-          "total_429": 3204,
+          "total_429": 3291,
           "total_errors": 0,
           "last_status": "429",
-          "last_observed_at": "2026-08-25T20:12:10.984810+00:00"
+          "last_observed_at": "2026-08-25T20:26:53.868254+00:00"
         },
         "semantic_scholar": {
           "max_inflight": 1,
@@ -249,16 +249,16 @@
     },
     "db_bytes": 983040,
     "top_questions": [
-      "Whether credential-specific binding at NVIDIA introduces latency overhead exceeding Groq/OpenRouter admission checks",
-      "causally distinct unresolved question: How to formally enforce that progress metrics are bound to verifiable model execution receipts rather than abstract resource counts?",
-      "How does the HYBRID model perform in comparison to other provider admission models?",
-      "What are the potential risks and challenges associated with implementing the HYBRID model?",
-      "What is the impact of identity binding granularity on security?",
-      "How does the optimal binding granularity vary across different workloads?",
-      "What is the minimal probe payload that reliably distinguishes free-tier from paid-only NVIDIA credentials without consuming significant quota?",
-      "What is the impact of implementing a more robust token validation mechanism on the dataset yield?",
-      "Does NVIDIA provide a dedicated credential-capability introspection endpoint that avoids consuming generation quota for verification?",
-      "How does the modified data collection process handle errors and exceptions?"
+      "Does NVIDIA NIM API expose a credential-scoped model entitlement endpoint accessible with free-prototyping credentials?",
+      "What are the potential security risks associated with using free providers?",
+      "How can the effectiveness of the wrapper be evaluated and verified?",
+      "Does the current NVIDIA admission path re-validate model-level free access immediately before network I/O, or only at provider-level credential fingerprint?",
+      "Does HCU layer-boundary noise injection generalize across model architectures (Nemotron vs Qwen vs GPT-OSS) in J-Space causal fidelity?",
+      "How to securely rotate HMAC keys without service interruption?",
+      "Can J-Space provenance compaction preserve causal replay fidelity for model-switching recovery without minting spurious training credit?",
+      "What is the performance impact of cryptographic verification on sandbox API throughput?",
+      "Can we leverage Vercel's built-in security features instead of implementing custom verification?",
+      "Wie kann die Aktualisierungshäufigkeit optimiert werden, um unnötige Berechnungen zu vermeiden?"
     ],
     "candidate_states": {}
   },
@@ -433,6 +433,6 @@
     "measured_total_sonnet5_equivalent_usd": 148.830648,
     "verified_historical_savings_usd": null,
     "nominal_avoided_if_zero_cost_usd": 148.830648,
-    "repo_output_only_proxy_usd": 137.55697
+    "repo_output_only_proxy_usd": 138.16482
   }
 }

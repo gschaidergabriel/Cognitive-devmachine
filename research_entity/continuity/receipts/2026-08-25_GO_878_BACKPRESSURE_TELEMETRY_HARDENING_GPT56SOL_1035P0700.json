@@ -10,6 +10,7 @@
   "successor_base": "9eeccc273c4c2d98191a19a047fd7e78f298bc25",
   "branch": "go878-backpressure-telemetry-hardening-gpt56sol-20260825",
   "source_commit": "bf112c67c29b786a40cb875622f58988476a1fd9",
+  "pull_request": 1892,
   "coordination": {
     "parallel_core_fix_landed_on_main": true,
     "duplicate_core_pr_created": false,
@@ -19,7 +20,9 @@
   "observed": [
     "main independently fused the Supervisor-8.78 raw-generation conversion-pressure gate while this organ was working",
     "the fused gate did not surface its RAW_GENERATION_BACKPRESSURE status inside SUPERVISOR_6000.json",
-    "the fused sqlite connection was closed only on the normal post-query path, not via a finally boundary"
+    "the fused sqlite connection was closed only on the normal post-query path, not via a finally boundary",
+    "PR 1892 Research Entity Verify run 32805817522 concluded failure with steps=null",
+    "PR 1892 Research Entity Identity Guard run 32805817514 concluded failure with steps=null"
   ],
   "delta": [
     "close the read-only Forge sqlite connection in finally whenever it was opened",
@@ -35,6 +38,22 @@
     "source_diff_inspected": true,
     "runtime_execution_observed": false,
     "test_execution_observed": false,
+    "workflow_negative_evidence": [
+      {
+        "run_id": 32805817522,
+        "workflow": "Research Entity Verify",
+        "conclusion": "failure",
+        "steps": null,
+        "classification": "RUNNER_CONTROL_PLANE_FAILURE_BEFORE_TEST_EXECUTION_ZERO_SEMANTIC_TEST_CREDIT"
+      },
+      {
+        "run_id": 32805817514,
+        "workflow": "Research Entity Identity Guard",
+        "conclusion": "failure",
+        "steps": null,
+        "classification": "RUNNER_CONTROL_PLANE_FAILURE_BEFORE_TEST_EXECUTION_ZERO_SEMANTIC_TEST_CREDIT"
+      }
+    ],
     "whole_entityos_hcu_runtime_credit": 0,
     "hcu_full_runtime_credit": 0,
     "jspace_model_runtime_credit": 0,

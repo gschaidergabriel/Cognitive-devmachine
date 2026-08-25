@@ -1,0 +1,54 @@
+{
+  "schema": "CLAY_TRIGGER2_OBSERVED_TYPED_ENTRY_BRIDGE_AUTHORITY/v1",
+  "status": "SOURCE_AUTHORITY_CANDIDATE_NONPROMOTING",
+  "purpose": "Pin the retained EntityOS Typed Entry Fabric producer/policy for Trigger-2 OBSERVED admission authentication while requiring independently controlled admission witnesses. This authority authenticates admission construction only; it does not decide observation truth, canonical state, or effects.",
+  "authority_epoch": "8.78",
+  "program": "ENTITYOS_HCU",
+  "mode": "FREE_ONLY",
+  "policy": {
+    "policy_id": "T2_OBSERVED_TYPED_ENTRY_BRIDGE_V1",
+    "policy_version": "1",
+    "observation_receipt_schema": "ENTITYOS_TYPED_OBSERVATION_EVIDENCE_RECEIPT/v1",
+    "instance_envelope_schema": "CLAY_TRIGGER2_OBSERVATION_ADMISSION_ENVELOPE/v1",
+    "subject_schema": "CLAY_TRIGGER2_OBSERVATION_AUTH_SUBJECT/v1",
+    "fail_closed_if_witness_unlisted": true,
+    "canonical_truth_allowed": false,
+    "direct_effect_authority": false
+  },
+  "policy_canonical_json_sha256": "12d7a57f9b28beebc052d332f4d64450cd0b7d7e5280f90b8891c58d1c4c75ed",
+  "entry_fabric_producer": {
+    "producer_id": "entityos-typed-entry-fabric-v1",
+    "producer_epoch": "1",
+    "status": "CURRENT",
+    "repo_path": "the artefact/MicroEntity/hcu/xeno_entry_fabric_v1.py",
+    "source_git_blob_sha": "7dc71dbb3388a5c2df280cdd4080c6ea3f5f6278",
+    "entry_schema": "XENO_ENTRY_PACKET/v1",
+    "entry_event_identity_schema": "ENTITYOS_HCU_ENTRY_EVENT_IDENTITY/v3",
+    "entry_admission_identity_schema": "ENTITYOS_HCU_ENTRY_ADMISSION_IDENTITY/v3",
+    "source_lineage": {
+      "repository": "gschaidergabriel/clay-global-research-entity",
+      "branch": "main",
+      "source_commit_sha": "0e70070c8b300703fbd043e37c29e2e34ddfdabb",
+      "source_path": "the artefact/MicroEntity/hcu/xeno_entry_fabric_v1.py"
+    }
+  },
+  "admission_witnesses": {},
+  "witness_policy_note": "The witness set is intentionally empty at source introduction. A candidate row cannot populate or broaden it. Future witnesses require an independently controlled/canonically persisted admission source and exact Typed Entry recomputation; adding a witness is not a claim that the underlying observation is true.",
+  "anti_second_authority_fences": {
+    "observation_truth_decided": false,
+    "canonical_state_authority": false,
+    "effect_authority": false,
+    "candidate_row_can_self_authorize_witness": false
+  },
+  "authority_fences": {
+    "canonical_truth_allowed": false,
+    "direct_effect_authority": false,
+    "training_eligible": false,
+    "accepted_dataset_tokens_minted": 0,
+    "training_credit_minted": 0,
+    "runtime_credit_minted": 0,
+    "jspace_runtime_credit_minted": 0,
+    "hcu_runtime_credit_minted": 0,
+    "entityos_runtime_credit_minted": 0
+  }
+}

@@ -13,7 +13,14 @@ import shutil
 import time
 
 import run_free_evidence_forge_safe_871 as safe
+import free_swarm_historical_backfill as historical
+import free_swarm_typed_ingress_wiring_878 as typed_ingress
 from free_swarm_historical_backfill import backfill_metrics, ensure_schema, ingest_artifact_history
+
+# Observe the existing historical ingest boundary through the already-admitted
+# CLAY_ARCHITECTURE_DELTA_INGRESS/v1 classifier. Candidate insertion/evaluation
+# remains entirely owned by historical replay + the existing safe Evidence Forge.
+typed_ingress.install_historical(historical)
 
 base = safe.base
 _ORIGINAL_CONNECT = base.connect
@@ -43,6 +50,7 @@ def ingest_worker_candidates(con, max_lines_per_file: int = 0) -> int:
 def metrics(con, peak_parallel: int = 0):
     out = _ORIGINAL_METRICS(con, peak_parallel)
     out["historical_backfill"] = backfill_metrics(con)
+    out["typed_ingress"] = typed_ingress.historical_metrics(con)
     out["ready_backlog"] = int(con.execute("SELECT COUNT(*) FROM candidates WHERE ready=1 AND state='NEW'").fetchone()[0])
     out["implementation_backlog"] = int(con.execute("SELECT COUNT(*) FROM candidates WHERE state='NEEDS_IMPLEMENTATION'").fetchone()[0])
     out["deduplicated_backlog"] = int(con.execute("SELECT COUNT(*) FROM candidates WHERE state='DUPLICATE_SUPERSEDED'").fetchone()[0])

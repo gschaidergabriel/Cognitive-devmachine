@@ -13,6 +13,8 @@ J-Space, HCU, EntityOS or training credit.
 from __future__ import annotations
 
 import copy
+import hashlib
+import json
 import re
 from typing import Any
 
@@ -21,11 +23,21 @@ from tools import trigger1_cross_task_abstract_control_gate_v2 as v2
 SCHEMA = "CLAY_TRIGGER1_CROSS_TASK_ABSTRACT_CONTROL_GATE/v3"
 ATTESTATION_SCHEMA = "CLAY_TRIGGER1_CROSS_TASK_ABSTRACT_CONTROL_EVIDENCE/v3"
 NUISANCE_SCHEMA = "CLAY_TRIGGER1_FROZEN_NUISANCE_SUBSPACE_BINDING/v1"
+EXPECTED_NUISANCE_PRODUCER_SCHEMA = "CLAY_TRIGGER1_NUISANCE_RESIDUALIZE_RESULT/v2"
+EXPECTED_NUISANCE_BASIS_METHOD = "ORDERED_TWO_PASS_MODIFIED_GRAM_SCHMIDT_ON_CANONICAL_NORMALIZED_NUISANCE_ROWS"
+MAX_BASIS_GRAM_ERROR = 1e-10
+MAX_BASIS_ROW_SPAN_RESIDUAL = 1e-9
 _SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
 
 
 def _sha256(value: Any) -> bool:
     return isinstance(value, str) and bool(_SHA256_RE.fullmatch(value))
+
+
+def _canonical_sha(value: Any) -> str:
+    return hashlib.sha256(
+        json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=False, allow_nan=False).encode("utf-8")
+    ).hexdigest()
 
 
 def _cell_key(row: dict[str, Any]) -> tuple[Any, ...]:
@@ -45,12 +57,33 @@ def _nuisance_binding(candidate: dict[str, Any], failures: list[str]) -> tuple[i
         return None, ()
     if binding.get("schema") != NUISANCE_SCHEMA:
         failures.append("NUISANCE_SUBSPACE_SCHEMA_MISMATCH")
+    if binding.get("producer_schema") != EXPECTED_NUISANCE_PRODUCER_SCHEMA:
+        failures.append("NUISANCE_SUBSPACE_PRODUCER_SCHEMA_MISMATCH")
+    if binding.get("basis_method") != EXPECTED_NUISANCE_BASIS_METHOD:
+        failures.append("NUISANCE_SUBSPACE_BASIS_METHOD_MISMATCH")
     if binding.get("fit_split") != "CALIBRATION":
         failures.append("NUISANCE_SUBSPACE_MUST_BE_CALIBRATION_ONLY")
     if binding.get("frozen_before_holdout") is not True:
         failures.append("NUISANCE_SUBSPACE_MUST_BE_FROZEN_BEFORE_HOLDOUT")
-    if not _sha256(binding.get("receipt_sha256")):
+    if not _sha256(binding.get("v1_result_sha256")):
+        failures.append("NUISANCE_SUBSPACE_V1_RESULT_SHA256_REQUIRED")
+    if not _sha256(binding.get("nuisance_source_receipt_sha256")):
+        failures.append("NUISANCE_SUBSPACE_SOURCE_RECEIPT_SHA256_REQUIRED")
+
+    gram_error = binding.get("basis_max_abs_gram_error")
+    if not v2._num(gram_error) or float(gram_error) > MAX_BASIS_GRAM_ERROR:
+        failures.append("NUISANCE_SUBSPACE_ORTHONORMALITY_NOT_ATTESTED")
+    row_residual = binding.get("basis_max_input_row_span_residual_l2")
+    if not v2._num(row_residual) or float(row_residual) > MAX_BASIS_ROW_SPAN_RESIDUAL:
+        failures.append("NUISANCE_SUBSPACE_SPAN_NOT_ATTESTED")
+
+    receipt_sha = binding.get("receipt_sha256")
+    if not _sha256(receipt_sha):
         failures.append("NUISANCE_SUBSPACE_RECEIPT_SHA256_REQUIRED")
+    else:
+        core = {k: v for k, v in binding.items() if k != "receipt_sha256"}
+        if _canonical_sha(core) != receipt_sha:
+            failures.append("NUISANCE_SUBSPACE_RECEIPT_HASH_MISMATCH")
 
     rank = binding.get("rank")
     if not isinstance(rank, int) or isinstance(rank, bool) or rank < 1:
@@ -70,8 +103,8 @@ def _nuisance_binding(candidate: dict[str, Any], failures: list[str]) -> tuple[i
                 continue
             axis_id = axis.get("axis_id")
             vector_sha = axis.get("vector_sha256")
-            if not isinstance(axis_id, str) or not axis_id:
-                failures.append(p + "_ID_INVALID")
+            if axis_id != f"q{i}":
+                failures.append(p + "_ID_NOT_CANONICAL_SEQUENCE")
                 continue
             if axis_id in seen:
                 failures.append(p + "_DUPLICATE_ID")
@@ -110,7 +143,6 @@ def _prepare_rank_complete_nuisance(candidate: dict[str, Any], failures: list[st
 
     for i, raw in enumerate(rows):
         if not isinstance(raw, dict):
-            # v2 will report the generic row error; do not mask it here.
             non_nuisance.append(raw)
             continue
         row = copy.deepcopy(raw)
@@ -214,5 +246,5 @@ def adjudicate(candidate: Any) -> dict[str, Any]:
         "whole_entityos_hcu_credit": False,
         "training_credit": False,
         "claim_scope_if_pass": "QWEN3_0_6B_RANK_CONSISTENT_PROOF_TOPOLOGY_POSITION_MATCHED_RANK_COMPLETE_NUISANCE_CROSS_TASK_NATIVE_CONTROL_COMPONENT_ONLY",
-        "evidence_boundary": "V3 requires calibration-bound rank-complete nuisance causal coverage and delegates the worst nuisance axis per cell into strict v2 cross-task/fixed-gain/rank/topology/position/bidirectional/off-target adjudication. It executes no model and mints no canonical/global J-Space credit.",
+        "evidence_boundary": "V3 requires a hash-verified calibration-only deterministic nuisance-basis receipt, rank-complete causal coverage, and worst-axis delegation into strict v2 cross-task/fixed-gain/rank/topology/position/bidirectional/off-target adjudication. It executes no model and mints no canonical/global J-Space credit.",
     }

@@ -146,14 +146,15 @@ BLUEPRINTS = {
     },
 }
 
-# Four pairwise-independent nuisance combinations. Within each semantic case/family,
-# every value of N, executor, and presentation appears twice and each factor pair
-# covers all 2x2 cells exactly once.
-NUISANCE_VARIANTS = (
-    {"n": 10, "executor": "node_kappa", "presentation": "STRUCTURED"},
-    {"n": 10, "executor": "node_sigma", "presentation": "NARRATIVE"},
-    {"n": 20, "executor": "node_kappa", "presentation": "NARRATIVE"},
-    {"n": 20, "executor": "node_sigma", "presentation": "STRUCTURED"},
+# Full 2x2x2 nuisance cross per semantic case/family. Current supervisor law
+# requires visible nuisance factors to be fully crossed or pass a preregistered
+# conditional-independence gate before training acceptance. Full crossing is the
+# simpler fail-closed choice here.
+NUISANCE_VARIANTS = tuple(
+    {"n": n, "executor": executor, "presentation": presentation}
+    for n in (10, 20)
+    for executor in ("node_kappa", "node_sigma")
+    for presentation in ("STRUCTURED", "NARRATIVE")
 )
 
 FORBIDDEN_MODEL_VISIBLE_MARKERS = ("CP01_", "CP02_", "CP03_", "CP04_", "CP05_", "CP06_", "CP07_", "CP08_", "CP09_", "CP10_", "CP11_", "CP12_", "CP13_", "ZECP")
@@ -294,21 +295,29 @@ def audit(generated: list[dict]) -> dict:
             failures.append("FAMILY_SPLIT_LEAK:" + family_id)
         if len(ancestries) != 1:
             failures.append("ANCESTRY_DRIFT:" + family_id)
-        if len(fam_rows) != 8:
+        if len(fam_rows) != 16:
             failures.append("FAMILY_ROW_COUNT_FAIL:" + family_id)
         for case in ("POSITIVE", "HARD_NEGATIVE"):
             cr = [r for r in fam_rows if r["trajectory_case_evaluator_only"] == case]
-            if len(cr) != 4:
+            if len(cr) != 8:
                 failures.append("CASE_ROW_COUNT_FAIL:" + family_id + ":" + case)
             nvals = [r["nuisance_controls_evaluator_only"]["n"] for r in cr]
             evals = [r["nuisance_controls_evaluator_only"]["executor"] for r in cr]
             pvals = [r["nuisance_controls_evaluator_only"]["presentation"] for r in cr]
-            if sorted(nvals) != [10, 10, 20, 20]:
+            if sorted(nvals) != [10, 10, 10, 10, 20, 20, 20, 20]:
                 failures.append("N_BALANCE_FAIL:" + family_id + ":" + case)
-            if sorted(evals) != ["node_kappa", "node_kappa", "node_sigma", "node_sigma"]:
+            if sorted(evals) != ["node_kappa"] * 4 + ["node_sigma"] * 4:
                 failures.append("EXECUTOR_BALANCE_FAIL:" + family_id + ":" + case)
-            if sorted(pvals) != ["NARRATIVE", "NARRATIVE", "STRUCTURED", "STRUCTURED"]:
+            if sorted(pvals) != ["NARRATIVE"] * 4 + ["STRUCTURED"] * 4:
                 failures.append("PRESENTATION_BALANCE_FAIL:" + family_id + ":" + case)
+            signatures = {
+                (r["nuisance_controls_evaluator_only"]["n"],
+                 r["nuisance_controls_evaluator_only"]["executor"],
+                 r["nuisance_controls_evaluator_only"]["presentation"])
+                for r in cr
+            }
+            if len(signatures) != 8:
+                failures.append("FULL_NUISANCE_CROSS_FAIL:" + family_id + ":" + case)
             for a, b in (("n", "executor"), ("n", "presentation"), ("executor", "presentation")):
                 if len(_pair_cells(fam_rows, case, a, b)) != expected_pair_cells:
                     failures.append(f"PAIRWISE_NUISANCE_CONFOUND:{family_id}:{case}:{a}x{b}")
@@ -322,7 +331,7 @@ def audit(generated: list[dict]) -> dict:
         "families": len(by_family),
         "split_counts": split_counts,
         "family_split_counts": family_split_counts,
-        "nuisance_factorial": "PAIRWISE_INDEPENDENT_2x2x2_HALF_FRACTION_PER_CASE",
+        "nuisance_factorial": "FULL_2x2x2_PER_CASE",
         "process_identity_model_visible": False,
         "source_design_only": True,
         "known_limit": "Four process families are reserved as OOD validation/holdout; this is a generator/audit seed, not the final full-coverage training mixture.",

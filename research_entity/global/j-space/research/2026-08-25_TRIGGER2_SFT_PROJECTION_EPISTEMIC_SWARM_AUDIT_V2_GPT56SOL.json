@@ -1,0 +1,100 @@
+{
+  "schema": "TRIGGER2_SFT_PROJECTION_EPISTEMIC_SWARM_AUDIT/v2",
+  "date": "2026-08-25",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority": {
+    "supervisor_epoch": "8.78",
+    "mode": "FREE_ONLY",
+    "current_source_review": {
+      "main_at_review": "fea6002534dbe48778d5fab0386f75af75f891e8",
+      "path": "tools/trigger2_sft_projection_gate_v1.py",
+      "git_blob_sha": "d6405832926c90e1bf70ad064f99f0c6290bcf51"
+    },
+    "current_test_commit": "fea6002534dbe48778d5fab0386f75af75f891e8",
+    "paid_provider_used": false,
+    "training_executed": false,
+    "unusual_experiment": "NOT_USED_SOURCE_AND_DATASET_REVIEW_ONLY"
+  },
+  "iteration_delta": {
+    "previous_audit": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_SFT_PROJECTION_EPISTEMIC_SWARM_AUDIT_V1_GPT56SOL.json",
+    "previous_finding_now_historical_only": "At blob e4d6f90aeca6262564544fe90f0dfeada61ad56f, the projection gate validated evidence identities only as hash-shaped strings.",
+    "current_repair_observed": "Current source now rejects the all-zero digest sentinel and recomputes SHA-256 over the exact four evidence files supplied to projection. The current unit test also mutates tokenizer evidence bytes and requires EVIDENCE_BYTE_HASH_MISMATCH.",
+    "remaining_current_boundary": "The source itself reports evidence_semantics_authenticated=false. Byte identity is now checked, but the projection stage still does not semantically prove exact ABI membership, tokenizer tokenization, partition semantics, counterbalance, or canonical dataset admission.",
+    "successor_dynamic_rule": "Preserve v1 as exact-source history; do not repeat its repaired hash-shape-only gap as a current-main claim."
+  },
+  "dataset_delta": {
+    "path": "research_entity/global/j-space/research/trigger2_sft_projection_semantic_auth_delta_v2.jsonl",
+    "commit": "5ec684822771c708e36f8bcbd31290c18de5c393",
+    "sha256": "5c43a1d339ec04a5641a48dbf145e905286f79666b4c762d988940917a720bc1",
+    "rows": 8,
+    "families": 4,
+    "split_counts": {"TRAIN": 4, "VALIDATION": 2, "HOLDOUT": 2},
+    "family_split_crossings": 0,
+    "provenance_ancestry_split_crossings": 0,
+    "status": "CANDIDATE_NOT_ADMITTED"
+  },
+  "swarm_review": [
+    {
+      "role": "SUCCESSOR_DYNAMIC_REVIEWER",
+      "verdict": "REPAIR_OBSERVED",
+      "finding": "The earlier byte-identity weakness was repaired in successor source. V1 remains valid only at its exact bound blob."
+    },
+    {
+      "role": "BYTE_IDENTITY_REVIEWER",
+      "verdict": "PASS_AT_SOURCE_SCOPE",
+      "finding": "Current projection CLI requires four evidence files and verifies their SHA-256 against row claims before writing model-visible output."
+    },
+    {
+      "role": "SEMANTIC_AUTH_REVIEWER",
+      "verdict": "GAP_REMAINS",
+      "finding": "Current summary explicitly states evidence_semantics_authenticated=false; exact evidence bytes are not the same as semantic validation of their claims."
+    },
+    {
+      "role": "ABI_MEMBERSHIP_REVIEWER",
+      "verdict": "GAP_REMAINS",
+      "finding": "Current adjudication still enforces only local triplet injectivity, target relation, literal 'or' exclusion, digest presence, and true guard flags; accepted-manifest membership is not interpreted here."
+    },
+    {
+      "role": "CREDIT_BOUNDARY_REVIEWER",
+      "verdict": "PASS",
+      "finding": "Projection still mints zero canonical dataset tokens and zero training credit."
+    },
+    {
+      "role": "LEAKAGE_REVIEWER",
+      "verdict": "PASS_FOR_DELTA_CONSTRUCTION",
+      "finding": "The four new causal/provenance families are each confined to one split: two train, one validation, one holdout."
+    },
+    {
+      "role": "FINAL_INTEGRATOR",
+      "verdict": "ACCEPT_AS_NONCANONICAL_TRAINING_RESEARCH_DELTA",
+      "finding": "Train the distinction BYTE_IDENTITY != SEMANTIC_AUTHENTICATION and exact-source successor reasoning; keep canonical admission/training credit closed."
+    }
+  ],
+  "research_return": {
+    "new_invariant": "EVIDENCE_BYTES_MATCH_CLAIMED_DIGESTS != EVIDENCE_SEMANTICS_AUTHENTICATED",
+    "companion_invariant": "HISTORICAL_GAP_REPAIRED_AT_SUCCESSOR != GAP_STILL_CURRENT",
+    "architecture_implication": "Use one retained semantic materialization verifier upstream of the visibility projector, or explicitly extend a single retained verifier path; do not create a second canonical training authority.",
+    "future_go_harness_implication": "The future Xeno/HCU harness should expose separate receipts for byte identity, semantic materialization verification, projection, canonical Forge/Distillery admission, training execution, and checkpoint evaluation."
+  },
+  "credits": {
+    "candidate_training_rows_added_this_iteration": 8,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "qwen35_jspace_runtime_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0
+  },
+  "validation": {
+    "local_deterministic_json_validation": "PASS",
+    "family_split_crossings": 0,
+    "provenance_ancestry_split_crossings": 0,
+    "official_repo_candidate_gate_runtime": "NOT_RUN",
+    "official_repo_family_split_linter_runtime": "NOT_RUN",
+    "entityos_hcu_runtime_execution": "NOT_RUN"
+  },
+  "next_exact_action": "Locate or construct the single retained semantic materialization verifier against the exact ABI manifest/tokenizer/symbol-partition evidence, then bind its immutable receipt into projection and only afterward test Forge->Distillery positive-yield admission."
+}

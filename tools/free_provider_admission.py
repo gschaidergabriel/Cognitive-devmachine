@@ -34,7 +34,12 @@ def _read_json(path: Path, label: str) -> dict[str, Any]:
 
 
 def _resolve_current_supervisor(*, inbox_path: Path | None = None, root: Path | None = None) -> tuple[str, str]:
-    """Resolve the successor-dynamic supervisor from the current inbox, not a lagging cache."""
+    """Resolve the successor-dynamic supervisor from the current inbox, not a lagging cache.
+
+    Steering documents have used both ``active_program`` and ``program`` across admitted
+    authority epochs. Treat those names as compatibility aliases only when they agree;
+    conflicting dual fields fail closed instead of letting a stale alias select authority.
+    """
     repo_root = (root or ROOT).resolve()
     inbox = _read_json(inbox_path or SUPERVISOR_INBOX_PATH, "SUPERVISOR_INBOX")
     epoch = str(inbox.get("schema_version") or "").strip()
@@ -54,7 +59,13 @@ def _resolve_current_supervisor(*, inbox_path: Path | None = None, root: Path | 
     steering = _read_json(steering_path, "SUPERVISOR_STEERING")
     if str(steering.get("schema_version") or "").strip() != epoch:
         raise ProviderAdmissionError("SUPERVISOR_INBOX_STEERING_EPOCH_MISMATCH")
-    if steering.get("active_program") != "ENTITYOS_HCU" or steering.get("product") != "EntityOS" or steering.get("integrated_cognition_compute_architecture") != "HCU":
+
+    active_program = str(steering.get("active_program") or "").strip()
+    program = str(steering.get("program") or "").strip()
+    if active_program and program and active_program != program:
+        raise ProviderAdmissionError("SUPERVISOR_PROGRAM_ALIAS_CONFLICT")
+    resolved_program = active_program or program
+    if resolved_program != "ENTITYOS_HCU" or steering.get("product") != "EntityOS" or steering.get("integrated_cognition_compute_architecture") != "HCU":
         raise ProviderAdmissionError("SUPERVISOR_PRODUCT_AUTHORITY_MISMATCH")
     return epoch, steering_ref
 

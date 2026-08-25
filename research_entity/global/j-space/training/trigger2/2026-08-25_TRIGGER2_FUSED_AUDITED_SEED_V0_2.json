@@ -1,0 +1,177 @@
+{
+  "architecture": "HCU",
+  "architecture_protocol_seed": {
+    "dataset_sha256": "2bb71ae75b1b3482f5efa9900e19bd9c4d7d506cfa6b1e6e134a4a09907e1451",
+    "rows": 24
+  },
+  "binding_seed": {
+    "class_label_leak_rows": [],
+    "dataset_sha256": "5f6c39f425af4178ebe45895103bacec460f604fad8a5a4486626fdef8eaafc7",
+    "rows": 234,
+    "split_counts": {
+      "HOLDOUT_UNSEEN_PERMUTATION": 24,
+      "HOLDOUT_UNSEEN_SYMBOL": 18,
+      "HOLDOUT_UNSEEN_TEMPLATE": 24,
+      "HOLDOUT_UNSEEN_VOCABULARY": 24,
+      "TRAIN": 120,
+      "VALIDATION": 24
+    },
+    "train_class_atom_joint_count_unique_values": [
+      1
+    ],
+    "train_layout_counts": {
+      "CASE_FIRST": 60,
+      "CODEBOOK_FIRST": 60
+    },
+    "train_mutual_information_bits_class_vs_target_atom": 0.0,
+    "train_permutation_counts": {
+      "P0": 24,
+      "P1": 24,
+      "P2": 24,
+      "P3": 24,
+      "P4": 24
+    },
+    "train_template_counts": {
+      "T1_FACT_TABLE": 30,
+      "T2_AUDIT_NOTE": 30,
+      "T3_FIRST_PERSON": 30,
+      "T4_SEQUENCE": 30
+    },
+    "unseen_permutation_holdout": {
+      "holdout_only": [
+        "P5"
+      ],
+      "train_seen": [
+        "P0",
+        "P1",
+        "P2",
+        "P3",
+        "P4"
+      ]
+    },
+    "unseen_symbol_holdout": {
+      "holdout_only_indices": "40..45",
+      "train_seen_indices": "0..39"
+    }
+  },
+  "canonical_main_at_start": "0edcc2ca0dba28fa0536bc5834fe6ede05a46e96",
+  "date": "2026-08-25",
+  "hypothesis": {
+    "H_BINDER": "A narrow variable-binding/router curriculum can raise unseen-template/unseen-permutation dynamic codebook transfer while preserving already measured semantic readout and symbol write axes.",
+    "counterhypothesis": "The model may learn formatting/lexical shortcuts rather than episode-local binding, or narrow training may damage existing general language/semantic functions.",
+    "falsifiers": [
+      "P5 unseen-permutation holdout remains near baseline/chance.",
+      "Frozen T5 unseen-template transfer remains below 0.90.",
+      "Unseen-symbol holdout collapses after literal atom materialization.",
+      "Retention exceeds the allowed 2% degradation bound.",
+      "Post-training causal lesion fails to break the learned mapping computation or rescue fails to restore it."
+    ]
+  },
+  "materialization_boundary": {
+    "accepted_dataset_tokens_minted": 0,
+    "final_abi_atoms_injected": false,
+    "required_next_gate": [
+      "Load exact accepted 46-atom literal table from the bound Claude ABI package/manifest.",
+      "Substitute atom references without changing split membership or class-symbol balance.",
+      "Recheck exact tokenizer single-token identity and output length.",
+      "Run lexical-family synonym leakage linter and family/provenance split linter.",
+      "Run small materialized sample through the evidence-qualified Forge/Distillery path before scaling."
+    ],
+    "training_credit_minted": 0
+  },
+  "mode": "FREE_ONLY",
+  "parallel_swarm_donors_reviewed": [
+    {
+      "file": "trigger2_swarm_audit_v2.json",
+      "observed_strengths": [
+        "288 prematerialization rows",
+        "class counts 96/96/96",
+        "class-symbol MI 0.0",
+        "four train templates",
+        "frozen T5 absent",
+        "16 adversarial hard negatives"
+      ],
+      "rejected_as_final_split_design_reason": "P5 is observed inside TRAIN_SEED_PREMATERIALIZATION, so it cannot itself establish an unseen-permutation holdout."
+    },
+    {
+      "dataset_sha256": "4352e50d49d679c2a8dfea0f3569e837475a514b568198f7d749dae20a929b63",
+      "file": "triggerwort2_xeno_hcu_training_candidates_swarm_v4_2026-08-25.jsonl",
+      "observed_strengths": [
+        "66 surviving rows after 12 rejections",
+        "split-disjoint placeholder symbol pools",
+        "template-family isolation",
+        "exact class-symbol balance per split"
+      ],
+      "rejected_as_final_unseen_permutation_design_reason": "Its audit shows permutations 0..5 in TRAIN, VALIDATION, and HOLDOUT; therefore HOLDOUT does not test a permutation unseen during training."
+    },
+    {
+      "file": "trigger2_binding_scientific_integrity_seed_delta_v2.jsonl",
+      "fusion": "Retain these scientific-integrity rules as curriculum/harness hard-negative donors; do not convert them into positive Qwen3.5 J-Space labels.",
+      "observed_strengths": [
+        "exact J-Space evidence-scope hard negatives",
+        "NOT_RUN != PASS",
+        "self-declared independence rejected",
+        "hash-shape != byte identity",
+        "matched controls per family"
+      ]
+    }
+  ],
+  "persistent_entity": "Clay",
+  "product": "EntityOS",
+  "schema": "CLAY_TRIGGER2_FUSED_AUDITED_SEED/v0.2",
+  "source_anchors": {
+    "abi_manifest_sha256": "0f664e6a4626351fbf97cd74a4825cedaf115b80f56b71b16c39315dba02fa11",
+    "accept_context_transfer": 0.9,
+    "accept_dynamic_binding": 0.9,
+    "binding_baseline_context_transfer": 0.5254629629629629,
+    "chance_three_way": 0.3333333333333333,
+    "claude_archive_sha256": "a2babae93dfe39e4e452a06bd8b848337f29766e38c422f05fb395126229b05c",
+    "dynamic_symbol_hit_baseline": 0.3611111111111111,
+    "model_id": "Goekdeniz-Guelmez/Josiefied-Qwen3.5-0.8B-gabliterated-v1",
+    "model_snapshot": "591852bda6e1979f59e4b0f5ee2919697b12e936"
+  },
+  "supervisor_epoch": "8.78",
+  "swarm_roles": [
+    {
+      "note": "Training target remains missing dynamic/context-invariant binding; protected read/write/carrier abilities are not primary objectives.",
+      "role": "EVIDENCE_EXTRACTOR",
+      "verdict": "PASS"
+    },
+    {
+      "note": "234 binding rows + 24 architecture protocol rows; P5 reserved for unseen-permutation holdout.",
+      "role": "DATASET_ARCHITECT",
+      "verdict": "PASS_PREMATERIALIZATION"
+    },
+    {
+      "note": "Causal mapping, codebook-order rotation, 50/50 codebook/case layout, class labels outside codebook absent.",
+      "role": "ADVERSARIAL_SHORTCUT_HUNTER",
+      "verdict": "PASS_WITH_MATERIALIZATION_RECHECK"
+    },
+    {
+      "note": "TRAIN class×atom contingency is exactly 1 for all 3×40 cells; mutual information 0.0 bits.",
+      "role": "STATISTICAL_REVIEWER",
+      "verdict": "PASS"
+    },
+    {
+      "note": "Exact 46 accepted literal atom lexemes are not present on current source surfaces used here; placeholders prevent fabricated token identities.",
+      "role": "ABI_PROVENANCE_REVIEWER",
+      "verdict": "BLOCK_FINAL_ADMISSION"
+    },
+    {
+      "note": "Examples do not label semantic-reading/symbol-write/carrier-binding as missing; retention still requires frozen post-FT evaluation.",
+      "role": "RETENTION_REVIEWER",
+      "verdict": "PASS_DESIGN_ONLY"
+    },
+    {
+      "note": "Protocol examples cover S0/S1/S2, ordinary-node read-only, coordinator lease, stale/duplicate results, Hyperposition/GWT/J-Space evidence boundaries and physical GRID10 scope.",
+      "role": "HARNESS_COMPATIBILITY_REVIEWER",
+      "verdict": "PASS_SOURCE_ALIGNMENT"
+    },
+    {
+      "note": "No accepted dataset tokens, training credit, J-Space runtime credit, HCU runtime credit, or whole-product credit minted.",
+      "role": "FINAL_INTEGRATOR",
+      "verdict": "ACCEPT_STRUCTURAL_SEED_ONLY"
+    }
+  ],
+  "trigger": "triggerwort 2"
+}

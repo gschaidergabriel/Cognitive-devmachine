@@ -1,0 +1,155 @@
+name: GO878 raw generation backpressure
+
+on:
+  issues:
+    types: [opened]
+
+permissions:
+  contents: write
+  issues: read
+
+concurrency:
+  group: go878-raw-generation-backpressure
+  cancel-in-progress: false
+
+jobs:
+  patch-and-regress:
+    if: github.repository == 'gschaidergabriel/clay-global-research-entity' && github.event.issue.title == '[CLAY-DISPATCH] GO878 raw generation backpressure' && github.event.issue.user.login == 'gschaidergabriel'
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: main
+          fetch-depth: 0
+          clean: true
+          persist-credentials: true
+
+      - name: Apply exact-source patch and deterministic pressure fixtures in clay-direct-dev
+        shell: bash
+        run: |
+          set -euo pipefail
+          scratch="/tmp/clay-go878-raw-backpressure-${GITHUB_RUN_ID}"
+          host_tmp="/tmp/clay-go878-raw-backpressure-host-${GITHUB_RUN_ID}"
+          rm -rf "$host_tmp"
+          mkdir -p "$host_tmp"
+
+          runtime=''
+          prefix=()
+          if command -v docker >/dev/null 2>&1 && docker inspect clay-direct-dev >/dev/null 2>&1; then
+            runtime='docker'; prefix=(docker)
+          elif command -v sudo >/dev/null 2>&1 && sudo -n docker inspect clay-direct-dev >/dev/null 2>&1; then
+            runtime='sudo-docker'; prefix=(sudo -n docker)
+          elif command -v podman >/dev/null 2>&1 && podman inspect clay-direct-dev >/dev/null 2>&1; then
+            runtime='podman'; prefix=(podman)
+          elif command -v sudo >/dev/null 2>&1 && sudo -n podman inspect clay-direct-dev >/dev/null 2>&1; then
+            runtime='sudo-podman'; prefix=(sudo -n podman)
+          else
+            echo 'clay-direct-dev unreachable' >&2
+            exit 41
+          fi
+
+          "${prefix[@]}" exec clay-direct-dev sh -lc "rm -rf '$scratch'; mkdir -p '$scratch'"
+          "${prefix[@]}" cp "$GITHUB_WORKSPACE/." "clay-direct-dev:$scratch"
+
+          "${prefix[@]}" exec clay-direct-dev sh -lc "set -eu
+            cd '$scratch'
+            before=\$(git hash-object tools/run_6000_free_swarm_supervisor.sh)
+            test \"\$before\" = cdbe6a4da423b2fb35fe988adc04397407360c3f
+            python3 tools/apply_go878_raw_generation_backpressure.py --repo '$scratch'
+            bash -n tools/run_6000_free_swarm_supervisor.sh
+            python3 - <<'PY'
+          import json, os, sqlite3, subprocess, sys, tempfile
+          from pathlib import Path
+
+          root=Path('.')
+          text=(root/'tools/run_6000_free_swarm_supervisor.sh').read_text()
+          assert text.count("CLAY_SWARM_RAW_GENERATION_BACKPRESSURE/v1") == 1
+          assert "if raw_generation_allowed; then\n    start_6000\n  else\n    stop_6000\n  fi" in text
+          assert "local x=\"$ROOT/tools/run_free_evidence_forge_backfill.py\"" in text
+          assert "local x=\"$ROOT/tools/run_free_evidence_forge_safe.py\"" not in text.split('start_forge(){',1)[1].split('refresh_root_results(){',1)[0]
+
+          start=text.index("raw_generation_allowed(){")
+          py_start=text.index("python3 - <<'PY'", start)+len("python3 - <<'PY'\n")
+          py_end=text.index("\nPY\n}", py_start)
+          code=text[py_start:py_end].replace("Path('/artifacts/clay-entityos-swarm')", "Path(os.environ['CLAY_TEST_STATE_ROOT'])")
+
+          def run_fixture(kind, ready=0, impl=0, pending=0):
+              td=Path(tempfile.mkdtemp(prefix='go878-pressure-'))
+              env=dict(os.environ, CLAY_TEST_STATE_ROOT=str(td))
+              if kind != 'missing':
+                  db=td/'forge/forge.sqlite3'
+                  db.parent.mkdir(parents=True)
+                  con=sqlite3.connect(db)
+                  con.execute('CREATE TABLE candidates(ready INTEGER,state TEXT)')
+                  con.executemany('INSERT INTO candidates VALUES(?,?)', [(1,'NEW')]*ready + [(0,'NEEDS_IMPLEMENTATION')]*impl)
+                  con.execute('CREATE TABLE historical_chunks(state TEXT)')
+                  con.executemany('INSERT INTO historical_chunks VALUES(?)', [('PENDING_EXTRACTION',)]*pending)
+                  con.commit(); con.close()
+              p=subprocess.run([sys.executable,'-c',code],env=env)
+              status=json.loads((td/'RAW_GENERATION_BACKPRESSURE.json').read_text())
+              return p.returncode,status
+
+          rc,s=run_fixture('missing')
+          assert rc == 1 and s['action'] == 'PAUSE_RAW_GENERATION_FAIL_CLOSED'
+          rc,s=run_fixture('high',ready=40,impl=20,pending=4)
+          assert rc == 1 and s['conversion_pressure'] == 64 and s['action'] == 'PAUSE_RAW_GENERATION_BACKPRESSURE'
+          rc,s=run_fixture('low',ready=2,impl=1,pending=0)
+          assert rc == 0 and s['conversion_pressure'] == 3 and s['action'] == 'ALLOW_RAW_GENERATION'
+          print('GO878_PRESSURE_FIXTURES_PASS')
+          PY
+            git hash-object tools/run_6000_free_swarm_supervisor.sh > /tmp/go878-after-blob.txt
+          "
+
+          "${prefix[@]}" cp "clay-direct-dev:$scratch/tools/run_6000_free_swarm_supervisor.sh" "$GITHUB_WORKSPACE/tools/run_6000_free_swarm_supervisor.sh"
+          "${prefix[@]}" cp clay-direct-dev:/tmp/go878-after-blob.txt "$host_tmp/after-blob.txt"
+
+          RUNTIME="$runtime" HOST_TMP="$host_tmp" python3 - <<'PY'
+          import hashlib, json, os, pathlib
+          from datetime import datetime, timezone
+          ws=pathlib.Path(os.environ['GITHUB_WORKSPACE'])
+          def sha(path): return hashlib.sha256(path.read_bytes()).hexdigest()
+          out={
+            'schema':'CLAY_SWARM_RAW_GENERATION_BACKPRESSURE_RECEIPT/v1',
+            'generated_at':datetime.now(timezone.utc).isoformat(),
+            'github_run_id':os.environ.get('GITHUB_RUN_ID'),
+            'github_sha_trigger':os.environ.get('GITHUB_SHA'),
+            'sandbox':'clay-direct-dev',
+            'container_runtime':os.environ.get('RUNTIME'),
+            'supervisor_before_blob':'cdbe6a4da423b2fb35fe988adc04397407360c3f',
+            'supervisor_after_blob':(pathlib.Path(os.environ['HOST_TMP'])/'after-blob.txt').read_text().strip(),
+            'patcher_sha256':sha(ws/'tools/apply_go878_raw_generation_backpressure.py'),
+            'fixture_missing_db':'PASS_FAIL_CLOSED',
+            'fixture_pressure_64':'PASS_PAUSE',
+            'fixture_pressure_3':'PASS_ALLOW',
+            'single_forge_authority_preserved':True,
+            'external_provider_calls_performed_by_gate':False,
+            'provider_concurrency_or_token_budget_increased':False,
+            'credentials_read_by_gate':False,
+            'unusual_experiment':False,
+            'runtime_credit_added':0,
+            'scope':'RAW_GENERATION_CONTROL_PLANE_BACKPRESSURE_SOURCE_AND_DETERMINISTIC_FIXTURES_ONLY',
+          }
+          target=ws/'research_entity/runtime/tool_results'/f"go878-raw-generation-backpressure-{os.environ['GITHUB_RUN_ID']}.json"
+          target.parent.mkdir(parents=True,exist_ok=True)
+          target.write_text(json.dumps(out,indent=2,sort_keys=True)+'\n')
+          PY
+
+          "${prefix[@]}" exec clay-direct-dev sh -lc "rm -rf '$scratch' /tmp/go878-after-blob.txt"
+          rm -rf "$host_tmp"
+
+      - name: Persist tested control-plane delta to current main
+        shell: bash
+        run: |
+          set -euo pipefail
+          git diff --check
+          git config user.name 'clay-go878-backpressure-runner'
+          git config user.email 'clay-go878-backpressure-runner@users.noreply.github.com'
+          git add tools/run_6000_free_swarm_supervisor.sh research_entity/runtime/tool_results/
+          git commit -m "runtime(go878): enforce raw-generation conversion backpressure ${GITHUB_RUN_ID} [skip ci]"
+          for attempt in 1 2 3 4 5 6; do
+            if git pull --rebase origin main && git push origin HEAD:main; then exit 0; fi
+            git rebase --abort 2>/dev/null || true
+            sleep $((attempt * 3))
+          done
+          exit 1

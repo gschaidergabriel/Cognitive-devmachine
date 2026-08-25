@@ -1,0 +1,73 @@
+{
+  "schema": "TRIGGER2_PHYSICAL_GRID10_REPOSITORY_BOUND_ACCEPTANCE_REQUEST/v2",
+  "created_local": "2026-08-26T02:05:00+07:00",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "supervisor_epoch": "8.81_DELTA",
+  "mode": "FREE_ONLY",
+  "priority": "P0",
+  "execution_surface": "clay-direct-dev live free VPS",
+  "repository": "gschaidergabriel/clay-global-research-entity",
+  "exact_source": {
+    "head": "0011673f34bc55b838f52420376df6d68e40d9be",
+    "tree": "63822465a05b6d4b9e08f6274639088ad18a7634",
+    "dirty_required": false,
+    "entrypoint": "tools/xeno_physical_grid10_acceptance_v2.py",
+    "expected_schema": "XENO_PHYSICAL_GRID10_ACCEPTANCE/v2"
+  },
+  "authority_basis": [
+    "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_81_DELTA_2026-08-26T0150P0700_GPT56SOL.json",
+    "research_entity/global/TRIGGERWORT_2_TRAINING_COURSE_DELTA_V35_SUPERVISOR_8_81_2026-08-26.md",
+    "research_entity/global/j-space/research/2026-08-26_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V37_GPT56SOL.json"
+  ],
+  "why_this_pin_exists": "Supervisor 8.81 denied physical GRID10 credit to v1 because it did not prove ten simultaneously live independent OS processes and allowed stale observation identity to be serially treated as current. Commit 0011673f adds v2 with an overlapping Popen barrier, ten distinct PID proof, one shared read-only snapshot identity, exact generation/epoch/digest admission and stale-epoch/stale-digest hard negatives. This request exists only to obtain exact repository-bound component execution evidence for that repaired source.",
+  "instruction": [
+    "On the observed live FREE VPS only, fetch the repository and checkout DETACHED at exact head 0011673f34bc55b838f52420376df6d68e40d9be. Do not execute moving main.",
+    "Verify git rev-parse HEAD equals 0011673f34bc55b838f52420376df6d68e40d9be and git rev-parse HEAD^{tree} equals 63822465a05b6d4b9e08f6274639088ad18a7634.",
+    "Require git status --porcelain to be empty before execution and record dirty=false.",
+    "Execute exactly: python3 tools/xeno_physical_grid10_acceptance_v2.py",
+    "Capture stdout, stderr, exit code, Python/platform/runtime identity, executed head/tree, and SHA-256 of tools/xeno_physical_grid10_acceptance_v2.py plus every imported project source used by the harness.",
+    "Require the receipt to expose the v2 per-test verdicts including ten distinct OS PIDs, all ten simultaneously live at the barrier, parent-child PID binding, overlapping process intervals, explicit read transaction, writer-free barrier interval, one shared read-only S1 snapshot, ordinary-node nonwrite, direct S1-write rejection, stale-epoch rejection, stale-digest rejection, and ten fresh exact-snapshot admissions.",
+    "Fail closed if any PID count/liveness/snapshot/source/hash/head/tree/dirty binding is missing or inconsistent. A pass=true without these bindings is diagnostic only and earns zero physical GRID10 credit.",
+    "Do not reinterpret a stale NODE_RESULT as current evidence and do not invent an unproven rebase path.",
+    "Do not modify Frank harness, production EntityOS, canonical S0 semantics, or effect authority during this request.",
+    "Do not use paid providers or Together. Do not fall back to a paid or unknown-cost surface.",
+    "If execution fails, distinguish infrastructure/auth/quota/transport failure from component logic failure and preserve the raw bounded receipt."
+  ],
+  "required_result": {
+    "receipt_schema": "TRIGGER2_PHYSICAL_GRID10_REPOSITORY_BOUND_ACCEPTANCE_RECEIPT/v2",
+    "must_bind": [
+      "requested_head",
+      "executed_head",
+      "requested_tree",
+      "executed_tree",
+      "dirty",
+      "runtime_identity",
+      "source_sha256",
+      "stdout_sha256",
+      "stderr_sha256",
+      "exit_code",
+      "per_test_verdicts",
+      "distinct_os_pids",
+      "all_ten_simultaneously_live",
+      "pid_binding_ok",
+      "same_snapshot_identity",
+      "stale_epoch_rejected",
+      "stale_digest_rejected"
+    ]
+  },
+  "credit_before_execution": {
+    "physical_grid10_runtime_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0,
+    "jspace_representation_level_credit": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0
+  },
+  "success_frontier": "Only an exact clean repository-bound PASS may promote physical GRID10 bounded component runtime credit. It still does not mint whole-HCU, whole-EntityOS, J-Space representation, training, canonical-truth or effect-authority credit. After such a PASS, proceed to controlled load, coordinator failure/replacement/rejoin, matched-budget challengers and Hyperposition/GWT re-entry.",
+  "failure_frontier": "On any proof or execution failure, reinject the exact failure into Trigger-2 research/eval, keep physical GRID10 credit at zero, repair once at the narrowest deterministic boundary, and repin a new immutable source before retry."
+}

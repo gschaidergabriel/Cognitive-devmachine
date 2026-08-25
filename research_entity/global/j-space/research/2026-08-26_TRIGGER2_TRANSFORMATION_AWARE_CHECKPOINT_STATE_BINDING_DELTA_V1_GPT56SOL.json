@@ -1,0 +1,196 @@
+{
+  "schema": "CLAY_TRIGGER2_TRANSFORMATION_AWARE_CHECKPOINT_STATE_BINDING_DELTA/v1",
+  "date": "2026-08-26",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU_VARIABLE_COGNITIVE_GRID",
+  "status": "CURRENT_RESEARCH_DELTA_NONPROMOTING_SUCCESSOR_DYNAMIC",
+  "authority_snapshot": {
+    "observed_main_before_write": "74d379503f5b3b4afe73d551a30de21ce7de5a68",
+    "owner_target": "VARIABLE COGNITIVE GRID + PERSISTENT DATABASE + CLAUDE CODE",
+    "owner_target_source": "research_entity/global/OWNER_CORRECTION_ZERO_ENTITYOS_COGNITIVE_GRID_DB_CLAUDECODE_GLOBAL_JSPACE_2026-08-25.md",
+    "supervisor_epoch": "8.81_DELTA",
+    "mode": "FREE_ONLY",
+    "free_swarm": "OWNER_EMERGENCY_STOP_HARD_OFF",
+    "training_execution_authorized": false,
+    "paid_provider_execution_authorized": false,
+    "accepted_dataset_tokens": 0,
+    "checkpoint_selection_credit": 0,
+    "jspace_model_credit": 0,
+    "training_credit": 0
+  },
+  "deduplication": {
+    "queries": [
+      "TRANSFORMATION_AWARE checkpoint state binding",
+      "in-memory dtype cast checkpoint trigger2"
+    ],
+    "result": "NO_EXISTING_PROJECT_DELTA_FOUND_FOR_TRANSFORMATION_AWARE_SOURCE_TO_REALIZED_STATE_RECONCILIATION",
+    "related_current_work": [
+      "research_entity/global/j-space/research/2026-08-26_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V49_GPT56SOL.json",
+      "research_entity/global/j-space/research/2026-08-26_TRIGGER2_CHECKPOINT_CONSUMPTION_ATTESTATION_GAP_V1_GPT56SOL.json",
+      "tools/trigger2_qwen35_checkpoint_input_identity_probe_v1.py"
+    ],
+    "scope_separation": "The current consumption-attestation delta correctly separates opened manifest-bound shards from loaded model state. This successor narrows a second boundary: source checkpoint bytes, realized post-load state, and parameters actually exercised by a particular forward are three distinct evidence scopes."
+  },
+  "observed_project_gap": {
+    "finding": "A deterministic post-load in-memory state digest is useful but is not by itself an equality proof against source checkpoint bytes, because the loader may apply declared dtype, device, key-mapping, offload, fusion, tied-weight or other version-specific transformations. Conversely, hashing the complete realized state and binding a forward to it does not prove that every parameter/buffer was actually read on that execution path.",
+    "risk": "Overloading one field such as consumed_identity_match can silently collapse SOURCE_CHECKPOINT_IDENTITY, REALIZED_MODEL_STATE_IDENTITY and FORWARD_EXECUTION_PATH_COVERAGE into one claim.",
+    "selection_effect": "Candidate comparison can become confounded if BASE, POSTTRAINED and TARGET_MEASURED are loaded under materially different transform plans even when each has a valid source manifest."
+  },
+  "external_method_evidence": [
+    {
+      "source": "https://huggingface.co/docs/transformers/models",
+      "classification": "SOURCE_DIRECT_EXTERNAL_NONCANONICAL",
+      "finding": "Transformers documents that dtype controls the dtype used to instantiate model weights and device_map/offloading controls where model submodules reside.",
+      "implication": "The realized model state is a function of source bytes plus the exact load/transform plan, not source bytes alone."
+    },
+    {
+      "source": "https://huggingface.co/docs/transformers/main_classes/model",
+      "classification": "SOURCE_DIRECT_EXTERNAL_NONCANONICAL",
+      "finding": "Transformers documents disable_mmap, device_map, dtype and fusion_config loading controls; fusion can alter inference behavior.",
+      "implication": "These controls belong in selection-grade load identity and must not remain implicit."
+    },
+    {
+      "source": "https://huggingface.co/docs/safetensors/api/torch",
+      "classification": "SOURCE_DIRECT_EXTERNAL_NONCANONICAL",
+      "finding": "safetensors load_file exposes mmap and pread backends and load_model reports missing/unexpected keys.",
+      "implication": "Opened-file observation, source tensor identity, load coverage and realized state are separable proof objects."
+    },
+    {
+      "source": "https://docs.pytorch.org/docs/stable/generated/torch.nn.Module.html",
+      "classification": "SOURCE_DIRECT_EXTERNAL_NONCANONICAL",
+      "finding": "PyTorch state_dict includes parameters and persistent buffers; Module.to can move and cast parameters/buffers.",
+      "implication": "A post-load state manifest can observe the realized module state, but source-to-state reconciliation must explicitly account for allowed transformations."
+    }
+  ],
+  "proposed_scope_ladder": [
+    {
+      "scope": "S0_SOURCE_BUNDLE",
+      "proof_object": "immutable checkpoint/tokenizer/config/template/file manifests with exact revisions and hashes",
+      "does_not_prove": "loader opened or realized those bytes"
+    },
+    {
+      "scope": "S1_OPENED_SHARDS",
+      "proof_object": "manifest-bound loader path/open observation plus pre/post file hashes",
+      "does_not_prove": "exact tensor values resident in the model after transformation"
+    },
+    {
+      "scope": "S2_REALIZED_MODEL_STATE",
+      "proof_object": "deterministic manifest over post-load parameter and persistent-buffer names, dtypes, shapes and raw value digests, bound to exact runtime/load plan",
+      "does_not_prove": "every state element was exercised by the observed forward"
+    },
+    {
+      "scope": "S3_FORWARD_BOUND_STATE",
+      "proof_object": "S2 digest + exact model mode/runtime/input identity + forward receipt + pre/post immutability check or typed allowed-mutation manifest",
+      "does_not_prove": "full per-parameter execution-path coverage"
+    },
+    {
+      "scope": "S4_EXECUTION_PATH_USE",
+      "proof_object": "only if scientifically required: versioned module/parameter use coverage or equivalent causal/path instrumentation",
+      "does_not_prove": "semantic/J-Space causality by itself"
+    }
+  ],
+  "proposed_contract": {
+    "id": "CHECKPOINT_TRANSFORM_RECONCILIATION_ABI/v1",
+    "status": "RESEARCH_CANDIDATE_NOT_EXECUTED_NOT_CANONICAL_ABI",
+    "source_tensor_manifest": [
+      "tensor name",
+      "source dtype",
+      "shape",
+      "source tensor content digest",
+      "source shard and byte-range or safetensors metadata reference where available"
+    ],
+    "load_transform_plan": [
+      "exact Python/PyTorch/Transformers/safetensors/accelerate versions",
+      "model class/config revision",
+      "key_mapping and trust_remote_code",
+      "dtype/torch_dtype resolution including auto source",
+      "device_map/offload plan",
+      "mmap/pread/disable_mmap resolution",
+      "fusion/quantization/compile flags if present",
+      "tied-weight policy and missing/unexpected/mismatched-key results",
+      "model.eval or training mode"
+    ],
+    "realized_state_manifest": [
+      "all named parameters and required persistent buffers",
+      "realized dtype and shape",
+      "device placement recorded separately from logical value identity",
+      "raw-value digest without implicit dtype conversion",
+      "unsupported tensor subclasses/quantized states fail closed unless a versioned adapter exists"
+    ],
+    "reconciliation_rules": [
+      "identity mapping plus unchanged dtype requires exact logical value equality",
+      "declared dtype cast requires a version-pinned deterministic expected-transform rule; do not compare source and realized raw bytes directly",
+      "key remaps/tied weights require explicit one-to-one or many-to-one provenance mapping",
+      "offloaded/disk-resident state requires equivalent identity evidence at the realized execution boundary",
+      "unknown transformation means reconciliation UNKNOWN, not PASS"
+    ],
+    "forward_binding": [
+      "bind exact S2 realized-state digest to forward receipt",
+      "bind exact rendered input/tensors and runtime mode",
+      "verify state digest unchanged across the forward unless a typed expected-mutation set is declared",
+      "do not label S3 as literal every-parameter consumption"
+    ]
+  },
+  "matched_candidate_rule": {
+    "principle": "Selection fairness requires either one common load-transform plan across candidates or an explicit arm variable for every unavoidable plan difference.",
+    "candidate_set": [
+      "QWEN35_08B_BASE",
+      "QWEN35_08B_POSTTRAINED",
+      "QWEN35_08B_JOSIEFIED_GABLITERATED_MEASURED"
+    ],
+    "minimum_reporting": [
+      "source checkpoint identity",
+      "load-transform plan digest",
+      "realized-state digest",
+      "input identity digest",
+      "forward receipt identity"
+    ],
+    "promotion_boundary": "This contract can establish selection-grade identity comparability only. It cannot select a winner, prove low-refusal retention, prove dynamic binding, prove J-Space causality or mint training credit."
+  },
+  "hypotheses": [
+    {
+      "id": "H_T2_TRANSFORM_1",
+      "hypothesis": "A transformation-aware source-to-realized-state proof will eliminate false equivalence between candidates that opened the expected files but instantiated materially different effective model states.",
+      "counterhypothesis": "For the frozen Qwen3.5 candidates the current load plans may be sufficiently identical that the added contract produces no practical discrimination.",
+      "cheapest_discriminator": "Run the contract on one frozen candidate twice under identical settings and once with a single controlled dtype change; identical runs must reconcile to the same logical S2 identity while the dtype-changed arm must be explicitly different or transformed under the preregistered rule."
+    },
+    {
+      "id": "H_T2_TRANSFORM_2",
+      "hypothesis": "Keeping S2 realized-state identity separate from S4 execution-path use will prevent overclaiming checkpoint consumption without requiring expensive per-parameter tracing for ordinary matched selection.",
+      "counterhypothesis": "Scientific promotion of J-Space mechanisms may eventually need fine-grained execution-path coverage, making S4 essential for some assays.",
+      "cheapest_discriminator": "Use S0-S3 for checkpoint eligibility; introduce S4 only for a preregistered mechanism test whose claim logically depends on a specific component being exercised."
+    }
+  ],
+  "execution_decision": {
+    "provider_execution_used": false,
+    "vps_execution_used": false,
+    "model_runtime_executed": false,
+    "training_executed": false,
+    "reason": "Current Trigger-2 global runtime-quiescence gate remains unresolved and no separately re-entered exact execution authority was used. This is a source/research delta only."
+  },
+  "training_generation_decision": {
+    "new_positive_rows_generated": 0,
+    "positive_rows_admitted": 0,
+    "new_hard_negative_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "checkpoint_winner": null,
+    "training_credit": 0,
+    "reason": "Identity/metrology closure has higher information value than corpus growth at the current blocked admission frontier."
+  },
+  "next_exact_action": "Do not duplicate the existing v1 input-identity probe. Amend or succeed the current proposed model-state consumption ABI so it emits separate S0/S1/S2/S3 scope fields and a load-transform-plan digest; then, only after runtime-quiescence and explicit FREE non-provider execution authority close, evaluate the three frozen candidates under a matched transform plan. Keep S4 optional and claim-scoped.",
+  "credits": {
+    "research_delta": 1,
+    "checkpoint_identity_metrology_delta": 1,
+    "runtime_credit": 0,
+    "checkpoint_selection_credit": 0,
+    "jspace_model_credit": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  }
+}

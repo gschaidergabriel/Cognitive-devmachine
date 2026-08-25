@@ -19,7 +19,13 @@ import json
 import math
 from pathlib import Path
 import statistics
+import sys
 from typing import Any, Iterable
+
+MODULE_DIR = Path(__file__).resolve().parent
+if str(MODULE_DIR) not in sys.path:
+    sys.path.insert(0, str(MODULE_DIR))
+import go_collective_metrics_freshness as freshness
 
 SCHEMA = "CLAY_GO_COLLECTIVE_METRICS/v1"
 WORKER_SCHEMA = "CLAY_GO_WORKER_METRICS/v1"
@@ -530,6 +536,7 @@ def main() -> int:
     ap.add_argument("--artifacts", type=Path, default=Path("/artifacts/clay-entityos-swarm"))
     ap.add_argument("--output-json", type=Path, default=None)
     ap.add_argument("--output-md", type=Path, default=None)
+    ap.add_argument("--freshness-receipt", type=Path, default=None)
     ap.add_argument("--update-readme", action="store_true")
     args = ap.parse_args()
 
@@ -562,16 +569,29 @@ def main() -> int:
 
     out_json = args.output_json or (repo / "free swarm/GO_COLLECTIVE_METRICS.json")
     out_md = args.output_md or (repo / "free swarm/GO_COLLECTIVE_METRICS.md")
-    out_json.write_text(json.dumps(result, indent=2, sort_keys=True, ensure_ascii=False) + "\n", encoding="utf-8")
-    out_md.write_text(md, encoding="utf-8")
+    freshness_receipt = args.freshness_receipt or (
+        repo / "research_entity/continuity/receipts/COLLECTIVE_METRICS_FRESHNESS_LATEST.json"
+    )
+    try:
+        publication = freshness.publish_candidate(
+            repo,
+            result,
+            out_json,
+            freshness_receipt,
+            output_md_path=out_md,
+            markdown_text=md,
+        )
+    except freshness.FreshnessError as exc:
+        raise SystemExit(f"GO_COLLECTIVE_METRICS_FRESHNESS_BLOCKED:{exc}") from exc
 
-    if args.update_readme:
+    if args.update_readme and publication["decision"]["action"] == "PUBLISH":
         readme = repo / "free swarm/README.md"
         current = readme.read_text(encoding="utf-8") if readme.exists() else "# Free Swarm\n"
         readme.write_text(replace_block(current, md), encoding="utf-8")
 
     print(out_json)
     print(out_md)
+    print(freshness_receipt)
     h = result["aggregate"]["hcu_confidence"]
     print(json.dumps({
         "workers": len(workers),
@@ -581,6 +601,9 @@ def main() -> int:
         "cilr": result["aggregate"]["capability_information_latency_ratio"],
         "hcu_forecast_probability": h.get("forecast_probability"),
         "calibration_state": h.get("calibration_state"),
+        "freshness_action": publication["decision"]["action"],
+        "freshness_reason": publication["decision"]["reason"],
+        "snapshot_id": publication["snapshot"]["snapshot_id"],
     }, sort_keys=True))
     return 0
 

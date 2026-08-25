@@ -2,37 +2,43 @@
 
 Status: `CURRENT_BLOCKED_ADMISSION`
 
-Trigger-2 **V57** is the current research-ledger successor under Supervisor **8.83**. This is a cache pointer only; newest explicit owner/supervisor authority and exact executable evidence outrank it.
+Trigger-2 **V58** is the current research-ledger successor under Supervisor **8.83**. This is a cache pointer only; newest explicit owner/supervisor authority and exact executable evidence outrank it.
 
-## P0 — runtime quiescence actively failed
+## P0 — runtime quiescence actively failed and strengthened
 
-Owner FreeSwarm remains `HARD_OFF`, but Supervisor 8.83 records post-stop provider-attempt counter growth. Provider/model/training execution remains closed. Required proof is still owning-host termination/disablement of the exact provider-capable process tree, zero survivors, bounded no-restart observation and zero provider-counter delta without issuing a provider probe.
+Owner FreeSwarm remains `HARD_OFF`, while exact-current committed telemetry reaches OpenRouter `4050` total requests and `3915` total 429 responses. This is `+267/+267` beyond the already-failing Supervisor 8.83 snapshot (`3783/3648`). Provider/model/training execution remains closed.
+
+Required proof is unchanged: on the owning runtime host identify and terminate/quarantine the exact provider-capable process tree without issuing a provider probe, prove zero provider-capable survivors, observe a bounded no-restart interval with `delta(total_requests)=0` and `delta(total_429)=0`, then re-enter current FREE non-provider execution authority.
 
 Pinned quiescence lane:
 
 - enforcer source: `0d14624bf211e797936626e94c87459e37dd0cbb`
 - execution request: `047962d015c6eb0e768df3eebbbc3aba91cf097f`
 - frontier receipt: `8300bbd7cc7ef037b66fc5a0e84c5da945a3aa4d`
+- newest drift re-entry: `research_entity/trigger_runs/2/2-20260826-0523-gpt56sol-quiescence-drift-reentry/FINAL_REPORT.md`
 
 ## Checkpoint-selection governance — frozen source-only
 
-The 512-case / 256-family four-quadrant logical manifest remains frozen and model outputs remain unopened. Practical risk/coverage thresholds and the block-aware B1/B2/B3 postprocessor are frozen. Renderer interaction is also frozen pre-unblinding: Q3/Q4 use deterministic parity-balanced `DB_FIRST` / `SIM_FIRST` renderer-view arms, with no mutation of logical world, gold, family, block or primary grader.
+The 512-case / 256-family four-quadrant logical manifest remains frozen and model outputs remain unopened. Practical risk/coverage thresholds and the block-aware B1/B2/B3 postprocessor remain frozen. Renderer interaction remains frozen pre-unblinding: Q3/Q4 use deterministic parity-balanced `DB_FIRST` / `SIM_FIRST` renderer-view arms, with no mutation of logical world, gold, family, block or primary grader.
 
 No checkpoint winner exists and checkpoint-selection credit remains `0`.
 
-## Model-call identity — V57 source integration delta
+## Model-call identity — V58 call → NODE_RESULT/node/cell source lineage
 
-Existing `CHECKPOINT_MODEL_STATE_CONSUMPTION_ABI/v2` already binds exact checkpoint/loaded state, rendered/token input, runtime identity and full last-token-logit output identity at source/component scope.
+`CHECKPOINT_MODEL_STATE_CONSUMPTION_ABI/v2` plus `tools/trigger2_model_call_repository_bound_gate_v1.py` already bind consumed checkpoint state, rendered/token input, runtime identity, full last-token-logit output identity and a precommitted clean repository/source identity at source/component scope.
 
-V57 adds:
+V58 adds the next nonduplicate source-only successor:
 
-- `tools/trigger2_model_call_repository_bound_gate_v1.py` — commit `59bca56ea474a49a673cde7d5dff6e8fd6905c2d`
-- `tests/test_trigger2_model_call_repository_bound_gate_v1.py` — commit `3934aca7c57deba0656773140cc1dadf3dbe9e28`
-- integration audit: `research_entity/global/j-space/research/2026-08-26_TRIGGER2_MODEL_CALL_TO_HCU_LINEAGE_INTEGRATION_AUDIT_V1_GPT56SOL.json` — commit `5ca1396f2842942946e3ef5aec2ee68cdbbe7493`
+- `tools/trigger2_node_result_model_call_authority_envelope_v1.py`
+- `tests/test_trigger2_node_result_model_call_authority_envelope_v1.py`
+- `research_entity/global/j-space/research/2026-08-26_TRIGGER2_NODE_RESULT_MODEL_CALL_AUTHORITY_ENVELOPE_SOURCE_DELTA_V1_GPT56SOL.json`
+- PR `#2036`
 
-The new gate recomputes the ABI-v2 call binding, requires a precommitted clean canonical repository identity (`HEAD`, tree, source path, Git blob, source SHA-256, `dirty=false`) and derives one source-bound call identity. Local deterministic source validation was `8/8 PASS`; this is not repository CI and not model-runtime evidence.
+The new gate **reuses** the existing `source_bound_model_call_identity_sha256`; it does not mint a second call-ID authority. A controller-owned launch binding freezes exact node, producer PID, GRID cell, immutable NODE_RESULT digest, expected source-bound call identity and expected model-output identity. Model-generated call/source/cell/authority fields are rejected.
 
-The primary remaining source gap is now explicit: current NODE_RESULT/atomic-cohort provenance binds packet/process/snapshot/cohort evidence but does not yet reference the exact source-bound `model_call_identity` and `model_output_identity`, nor the complete route/engine/cell chain end-to-end. Do **not** invent a second call-ID authority. The next source-only successor should reference the existing exact call identity from the deterministic NODE_RESULT authority envelope and reject call/packet/cell/source transplants.
+Local deterministic source validation is `8/8 PASS` (`py_compile PASS`), covering same-semantic/different-call non-interchangeability, output mismatch, call/node transplant, GRID-cell tamper, source-identity drift, unchanged raw packet with changed call reference, model-generated authority-field rejection and authority-envelope tamper. This is **not** repository CI and **not** model-runtime evidence.
+
+The primary remaining source integration gap is now narrower: wire this exact authority-envelope digest plus call/output references into the existing `FusedFabric` GRID10 cohort member derivation, `cohort_id`, persistence/summary and whole-batch rejection, then propagate the exact call/output reference into evaluation and J-Space receipts.
 
 ## Credits remain zero at promotion scope
 
@@ -45,6 +51,6 @@ The primary remaining source gap is now explicit: current NODE_RESULT/atomic-coh
 - whole HCU runtime credit: `0`
 - whole EntityOS runtime credit: `0`
 
-Current ledger: `research_entity/global/j-space/research/2026-08-26_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V57_GPT56SOL.json`
+Current ledger: `research_entity/global/j-space/research/2026-08-26_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V58_GPT56SOL.json`
 
 Supervisor: `research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_83_DELTA_2026-08-26T0435P0700_GPT56SOL.json`

@@ -1,18 +1,22 @@
 #!/usr/bin/env python3
-"""Generation + epistemic + replay-bound Trigger-2 Hyperposition proof composition v3.
+"""Generation + producer-auth + epistemic + replay-bound Trigger-2 proof composition v3.
 
-This successor composes the current positive-candidate proof path in one fail-closed order:
+This retained successor composition enforces the current positive-candidate proof order:
 
     generation provenance
+      -> repository-authorized deterministic discriminator production
       -> epistemic pre-update admission
       -> replay-bound state-history / discriminator / typed-observation proof
 
-The epistemic guard delegates to the retained state-history gate, which in turn delegates
-semantic transition authority to the existing v3 reference labeler. This file therefore
-creates no second labeler, truth store, effect authority, or independent semantic lane.
+The producer-auth step resolves producer identity and policy from repository authority,
+executes the retained u_test_order path, derives admissibility/execution from that invocation,
+and replaces row-carried discriminator assertions with authenticated deterministic output.
+The epistemic guard then delegates to the retained state-history gate and existing v3
+reference labeler. No second semantic authority, truth store, effect path, or model authority
+is created.
 
 PASS is candidate pre-admission component evidence only. It mints zero dataset, training,
-runtime, J-Space, HCU, EntityOS, canonical-truth, or direct-effect credit.
+runtime, J-Space, HCU, EntityOS, BASE, canonical-truth, or direct-effect credit.
 """
 from __future__ import annotations
 
@@ -37,6 +41,10 @@ generation = _load_sibling(
     "trigger2_generation_provenance_gate_v1.py",
     "trigger2_generation_provenance_for_hp_v3",
 )
+producer_auth = _load_sibling(
+    "trigger2_discriminator_producer_auth_v1.py",
+    "trigger2_discriminator_producer_auth_for_hp_v3",
+)
 epistemic = _load_sibling(
     "trigger2_hyperposition_epistemic_preupdate_guard_v1.py",
     "trigger2_epistemic_preupdate_for_hp_v3",
@@ -55,7 +63,9 @@ def _failures_from(prefix: str, result: Any) -> list[str]:
 def adjudicate(row: Any) -> dict[str, Any]:
     failures: list[str] = []
     generation_result = None
+    producer_auth_result = None
     epistemic_result = None
+    sanitized_row = None
 
     try:
         generation_result = generation.adjudicate(row)
@@ -65,12 +75,33 @@ def adjudicate(row: Any) -> dict[str, Any]:
         if not isinstance(generation_result, dict) or not generation_result.get("pass"):
             failures.extend(_failures_from("GENERATION:", generation_result))
 
-    # Ordering invariant: no epistemic/state update path is called until generation
-    # provenance has passed. The epistemic guard itself rejects non-evidence-bearing
-    # types before delegating to replay/u_state.
+    # Ordering invariant 1: producer execution cannot run until exact generation
+    # provenance has passed. This prevents row-supplied world/event/state substitution
+    # from reaching the deterministic discriminator producer.
     if not failures:
         try:
-            epistemic_result = epistemic.adjudicate(row)
+            producer_auth_result, sanitized_row = producer_auth.authenticate_and_sanitize(
+                row, generation_result
+            )
+        except Exception as exc:
+            failures.append("DISCRIMINATOR_PRODUCER_AUTH_EXCEPTION:" + type(exc).__name__)
+        else:
+            if (
+                not isinstance(producer_auth_result, dict)
+                or not producer_auth_result.get("pass")
+                or not isinstance(sanitized_row, dict)
+            ):
+                failures.extend(
+                    _failures_from("DISCRIMINATOR_PRODUCER_AUTH:", producer_auth_result)
+                )
+
+    # Ordering invariant 2: no epistemic/state update path is called until both
+    # generation provenance and producer-authenticated discriminator production pass.
+    # The epistemic guard rejects non-evidence-bearing types before delegating to
+    # replay/u_state.
+    if not failures and isinstance(sanitized_row, dict):
+        try:
+            epistemic_result = epistemic.adjudicate(sanitized_row)
         except Exception as exc:
             failures.append("EPISTEMIC_STATE_HISTORY_EXCEPTION:" + type(exc).__name__)
         else:
@@ -84,19 +115,23 @@ def adjudicate(row: Any) -> dict[str, Any]:
         "candidate_pre_admission_pass": not failures,
         "failures": failures,
         "generation_provenance": generation_result,
+        "discriminator_producer_auth": producer_auth_result,
         "epistemic_state_history_proof": epistemic_result,
         "required_order": [
             "GENERATION_PROVENANCE",
+            "REPOSITORY_AUTHORIZED_DETERMINISTIC_DISCRIMINATOR_PRODUCTION",
             "EPISTEMIC_PREUPDATE_ADMISSION",
             "REPLAY_STATE_HISTORY_DISCRIMINATOR_OBSERVATION_PROOF",
         ],
         "semantic_authority": "DELEGATED_TO_EXISTING_V3_REFERENCE_LABELER_VIA_RETAINED_STATE_HISTORY_GATE",
+        "discriminator_execution_authority": "REPOSITORY_AUTHORITY_PLUS_DETERMINISTIC_PRODUCER_OUTPUT",
+        "row_carried_admissible_or_executed_is_authority": False,
         "second_semantic_authority_created": False,
         "positive_D_E_promotion_ready": False,
         "remaining_p0": [
-            "producer-authenticated discriminator/observation receipts and immutable ordered-history authority still require exact-current closure where not already proven",
-            "world-scoped event identity and full mutation suite remain required by current reentry audit",
-            "exact-current execution plus rendered nuisance/family/tokenizer gates remain required before positive dataset admission",
+            "nonempty history requires authority-bound ordered-history generation/commitment",
+            "OBSERVED events require producer-authenticated observation evidence authority",
+            "exact-current admitted execution plus rendered nuisance/family/tokenizer/checkpoint gates remain required before positive dataset admission",
         ],
         "canonical_dataset_admission": False,
         "accepted_dataset_tokens_minted": 0,
@@ -105,14 +140,17 @@ def adjudicate(row: Any) -> dict[str, Any]:
         "jspace_runtime_credit_minted": 0,
         "hcu_runtime_credit_minted": 0,
         "entityos_runtime_credit_minted": 0,
+        "base_credit_minted": 0,
         "canonical_truth_minted": False,
         "direct_effect_authority_minted": False,
     }
 
 
 if __name__ == "__main__":
-    print({
-        "schema": SCHEMA,
-        "status": "SOURCE_ONLY_CANDIDATE_PRE_ADMISSION",
-        "positive_D_E_promotion_ready": False,
-    })
+    print(
+        {
+            "schema": SCHEMA,
+            "status": "SOURCE_ONLY_CANDIDATE_PRE_ADMISSION",
+            "positive_D_E_promotion_ready": False,
+        }
+    )

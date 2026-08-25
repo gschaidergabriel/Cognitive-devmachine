@@ -1,0 +1,45 @@
+{
+  "schema": "CLAY_ORDINARY_DISPATCH_SEMANTIC_REGISTRY/v1",
+  "purpose": "Prevent multiple dispatch_class names from creating competing active authorities for one repeatable ordinary probe while preserving legacy keys and receipts.",
+  "probes": {
+    "clay-direct-dev-roundtrip": {
+      "canonical_dispatch_class": "clay-direct-dev-roundtrip-v1",
+      "canonical_dispatch_key": "clay-direct-dev-roundtrip-v1-g0000",
+      "legacy_dispatch_keys": [],
+      "state": "CANONICAL_QUARANTINED_OR_PENDING_RESULT"
+    },
+    "distillery-replay-v2-exact-main": {
+      "canonical_dispatch_class": "distillery-replay-v2-exact-main-v1",
+      "canonical_dispatch_key": "distillery-replay-v2-exact-main-v1-g0000",
+      "legacy_dispatch_keys": [],
+      "state": "CANONICAL_QUARANTINED_OR_PENDING_RESULT"
+    },
+    "free-swarm-historical-backfill": {
+      "canonical_dispatch_class": "free-swarm-historical-backfill-saturation",
+      "canonical_dispatch_key": "free-swarm-historical-backfill-saturation-g0001",
+      "legacy_dispatch_keys": [
+        "free-swarm-historical-backfill-v1-g0000"
+      ],
+      "state": "CANONICAL_QUARANTINED_PENDING_TERMINAL_RESULT",
+      "migration_reason": "The generation-0 v1 and generation-1 saturation identities describe the same historical Free-Swarm replay/backfill probe and their quarantine claims cite overlapping legacy issues. The saturation identity is the current canonical semantic probe; v1-g0000 remains historical lineage only and must never authorize a parallel trigger or competing terminal result.",
+      "evidence": {
+        "canonical_claim": "research_entity/continuity/ordinary_dispatch_claims/free-swarm-historical-backfill-saturation-g0001.json",
+        "legacy_claim": "research_entity/continuity/ordinary_dispatch_claims/free-swarm-historical-backfill-v1-g0000.json",
+        "overlapping_legacy_issues": [1845, 1849, 1857, 1858]
+      }
+    },
+    "go878-wire-backlog-first-forge": {
+      "canonical_dispatch_class": "go878-wire-backlog-first-forge-v1",
+      "canonical_dispatch_key": "go878-wire-backlog-first-forge-v1-g0000",
+      "legacy_dispatch_keys": [],
+      "state": "CANONICAL_QUARANTINED_OR_PENDING_RESULT"
+    }
+  },
+  "invariants": [
+    "EVERY_ACTIVE_SPEC_KEY_IS_CANONICAL_FOR_EXACTLY_ONE_SEMANTIC_PROBE",
+    "EVERY_NONCANONICAL_SPEC_KEY_IS_LISTED_AS_LEGACY_FOR_EXACTLY_ONE_SEMANTIC_PROBE",
+    "LEGACY_KEYS_NEVER_AUTHORIZE_NEW_TRIGGER",
+    "ONE_SEMANTIC_PROBE_HAS_AT_MOST_ONE_CANONICAL_DISPATCH_KEY",
+    "LEGACY_RECEIPTS_REMAIN_HISTORICAL_EVIDENCE_AND_ARE_NOT_REWRITTEN"
+  ]
+}

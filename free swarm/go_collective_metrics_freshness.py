@@ -11,13 +11,14 @@ credit. A successful gate proves only publication freshness/coherence at the bou
 from __future__ import annotations
 
 import argparse
+from contextlib import contextmanager
 import datetime as dt
+import fcntl
 import hashlib
 import json
 import os
-from dataclasses import dataclass
 from pathlib import Path
-from typing import Any
+from typing import Any, Iterator, NamedTuple
 
 SNAPSHOT_SCHEMA = "CLAY_GO_COLLECTIVE_INPUT_SNAPSHOT/v1"
 RECEIPT_SCHEMA = "COLLECTIVE_METRICS_FRESHNESS_RECEIPT/v1"
@@ -61,13 +62,15 @@ def epoch_key(value: Any) -> tuple[int, ...]:
     if not text:
         raise FreshnessError("AUTHORITY_EPOCH_MISSING")
     try:
-        return tuple(int(part) for part in text.split("."))
+        parts = tuple(int(part) for part in text.split("."))
     except ValueError as exc:
         raise FreshnessError("AUTHORITY_EPOCH_INVALID") from exc
+    if not parts:
+        raise FreshnessError("AUTHORITY_EPOCH_INVALID")
+    return parts
 
 
-@dataclass(frozen=True)
-class Surface:
+class Surface(NamedTuple):
     name: str
     path: str
     generated_at: str
@@ -126,7 +129,8 @@ def resolve_authority(repo: Path) -> dict[str, Any]:
         raise FreshnessError("SUPERVISOR_STEERING_NOT_OBJECT")
     if str(steering.get("schema_version") or "").strip() != epoch:
         raise FreshnessError("AUTHORITY_EPOCH_MISMATCH")
-    if steering.get("program") != "ENTITYOS_HCU" or steering.get("product") != "EntityOS":
+    program = steering.get("program", steering.get("active_program"))
+    if program != "ENTITYOS_HCU" or steering.get("product") != "EntityOS":
         raise FreshnessError("AUTHORITY_PROGRAM_PRODUCT_MISMATCH")
     return {
         "authority_epoch": epoch,
@@ -137,22 +141,51 @@ def resolve_authority(repo: Path) -> dict[str, Any]:
     }
 
 
+def _bounded_source_metrics(surfaces: dict[str, Surface], snapshot_id: str) -> dict[str, Any]:
+    swarm = surfaces["swarm"]
+    forge = surfaces["forge"]
+    dist = surfaces["distillery"]
+    workers = swarm.payload.get("workers") if isinstance(swarm.payload.get("workers"), dict) else {}
+    return {
+        "bounded_snapshot_id": snapshot_id,
+        "swarm_snapshot_id": snapshot_id,
+        "forge_snapshot_id": snapshot_id,
+        "distillery_snapshot_id": snapshot_id,
+        "free_swarm_live_metrics_generated_at": swarm.generated_at,
+        "worker_records": workers.get("worker_records"),
+        "exact_usage_rows": workers.get("exact_usage_rows"),
+        "input_tokens": workers.get("input_tokens"),
+        "output_tokens": workers.get("output_tokens"),
+        "total_tokens": workers.get("total_tokens"),
+        "forge_generated_at": forge.generated_at,
+        "forge_discovery_hits": forge.payload.get("discovery_hits"),
+        "forge_evaluations": forge.payload.get("evaluations"),
+        "forge_accepted_deltas": forge.payload.get("accepted_deltas"),
+        "distillery_generated_at": dist.generated_at,
+        "distillery_collected_source_tokens": dist.payload.get("collected_source_tokens"),
+        "distillery_collected_chunks": dist.payload.get("collected_chunks"),
+        "distillery_accepted_packets": dist.payload.get("accepted_packets"),
+        "distillery_accepted_dataset_tokens": dist.payload.get("accepted_dataset_tokens"),
+    }
+
+
 def build_snapshot(repo: Path) -> dict[str, Any]:
     authority = resolve_authority(repo)
-    surfaces = [
+    ordered = [
         _read_surface("swarm", repo / "free swarm/LIVE_METRICS.json", repo),
         _read_surface("forge", repo / "free swarm/FORGE_LIVE.json", repo),
         _read_surface("distillery", repo / "free swarm/DISTILLERY_LIVE.json", repo),
     ]
-    timestamps = [parse_ts(s.generated_at) for s in surfaces]
+    surfaces = {surface.name: surface for surface in ordered}
+    timestamps = [parse_ts(surface.generated_at) for surface in ordered]
     identity_core = {
         "schema": SNAPSHOT_SCHEMA,
         "authority": authority,
-        "surfaces": [s.identity() for s in surfaces],
+        "surfaces": [surface.identity() for surface in ordered],
     }
     snapshot_id = sha256_json(identity_core)
     surface_rows = []
-    for surface in surfaces:
+    for surface in ordered:
         row = surface.identity()
         row["snapshot_id"] = snapshot_id
         surface_rows.append(row)
@@ -163,11 +196,19 @@ def build_snapshot(repo: Path) -> dict[str, Any]:
         "min_input_generated_at": iso(min(timestamps)),
         "max_input_generated_at": iso(max(timestamps)),
         "surfaces": surface_rows,
+        "source_metrics": _bounded_source_metrics(surfaces, snapshot_id),
     }
 
 
+def _materialize_candidate(candidate: dict[str, Any], snapshot: dict[str, Any]) -> dict[str, Any]:
+    out = dict(candidate)
+    out["authority_epoch"] = snapshot["authority"]["authority_epoch"]
+    out["source_metrics"] = snapshot["source_metrics"]
+    return out
+
+
 def candidate_digest(candidate: dict[str, Any], snapshot: dict[str, Any]) -> str:
-    payload = dict(candidate)
+    payload = _materialize_candidate(candidate, snapshot)
     payload.pop("generated_at", None)
     payload.pop("freshness", None)
     return sha256_json({"candidate": payload, "snapshot_id": snapshot["snapshot_id"]})
@@ -179,39 +220,69 @@ def publication_decision(
     current: dict[str, Any] | None,
 ) -> dict[str, Any]:
     candidate_epoch = str(candidate.get("authority_epoch") or snapshot["authority"]["authority_epoch"])
-    if epoch_key(candidate_epoch) != epoch_key(snapshot["authority"]["authority_epoch"]):
+    current_epoch = snapshot["authority"]["authority_epoch"]
+    if epoch_key(candidate_epoch) != epoch_key(current_epoch):
         raise FreshnessError("CANDIDATE_AUTHORITY_EPOCH_MISMATCH")
 
     digest = candidate_digest(candidate, snapshot)
     if not current:
-        return {"action": "PUBLISH", "reason": "NO_CURRENT_PUBLICATION", "result_digest_sha256": digest}
+        return {
+            "action": "PUBLISH",
+            "reason": "NO_CURRENT_PUBLICATION",
+            "current_state": "UNMEASURED",
+            "result_digest_sha256": digest,
+        }
 
     cur_fresh = current.get("freshness") if isinstance(current.get("freshness"), dict) else {}
-    cur_epoch = current.get("authority_epoch")
-    if cur_epoch:
-        if epoch_key(cur_epoch) > epoch_key(candidate_epoch):
+    cur_epoch_raw = current.get("authority_epoch")
+    current_state = "UNMEASURED"
+    if cur_epoch_raw:
+        cur_epoch = epoch_key(cur_epoch_raw)
+        new_epoch = epoch_key(candidate_epoch)
+        if cur_epoch > new_epoch:
             raise FreshnessError("OUT_OF_ORDER_AUTHORITY_REGRESSION")
+        if cur_epoch < new_epoch:
+            current_state = "HISTORICAL_AUTHORITY"
 
     cur_snapshot = cur_fresh.get("snapshot") if isinstance(cur_fresh.get("snapshot"), dict) else {}
+    cur_snapshot_id = cur_snapshot.get("snapshot_id")
     cur_max_raw = cur_snapshot.get("max_input_generated_at")
-    if cur_max_raw:
+    if current_state != "HISTORICAL_AUTHORITY" and cur_max_raw:
         cur_max = parse_ts(cur_max_raw)
         new_max = parse_ts(snapshot["max_input_generated_at"])
         if new_max < cur_max:
             raise FreshnessError("OUT_OF_ORDER_INPUT_SNAPSHOT")
+        if new_max > cur_max:
+            current_state = "STALE_INPUT_SNAPSHOT"
+        elif cur_snapshot_id and cur_snapshot_id != snapshot["snapshot_id"]:
+            raise FreshnessError("AMBIGUOUS_EQUAL_TIME_DIFFERENT_SNAPSHOT")
 
-    if cur_snapshot.get("snapshot_id") == snapshot["snapshot_id"]:
+    if cur_snapshot_id == snapshot["snapshot_id"]:
         cur_digest = cur_fresh.get("result_digest_sha256")
         if cur_digest == digest:
-            return {"action": "NO_CHANGE", "reason": "IDEMPOTENT_REPLAY", "result_digest_sha256": digest}
+            return {
+                "action": "NO_CHANGE",
+                "reason": "IDEMPOTENT_REPLAY",
+                "current_state": "CURRENT",
+                "result_digest_sha256": digest,
+            }
         raise FreshnessError("SAME_SNAPSHOT_DIFFERENT_RESULT")
 
-    return {"action": "PUBLISH", "reason": "FRESHER_OR_DIFFERENT_BOUND_SNAPSHOT", "result_digest_sha256": digest}
+    reason = {
+        "HISTORICAL_AUTHORITY": "CURRENT_PUBLICATION_HISTORICAL_AUTHORITY",
+        "STALE_INPUT_SNAPSHOT": "CURRENT_PUBLICATION_STALE_INPUT",
+        "UNMEASURED": "CURRENT_PUBLICATION_UNMEASURED",
+    }.get(current_state, "FRESHER_BOUND_SNAPSHOT")
+    return {
+        "action": "PUBLISH",
+        "reason": reason,
+        "current_state": current_state,
+        "result_digest_sha256": digest,
+    }
 
 
 def attach_freshness(candidate: dict[str, Any], snapshot: dict[str, Any], decision: dict[str, Any]) -> dict[str, Any]:
-    out = dict(candidate)
-    out["authority_epoch"] = snapshot["authority"]["authority_epoch"]
+    out = _materialize_candidate(candidate, snapshot)
     out["freshness"] = {
         "schema": PUBLISH_SCHEMA,
         "state": "FRESH_BOUND_SNAPSHOT",
@@ -225,8 +296,43 @@ def attach_freshness(candidate: dict[str, Any], snapshot: dict[str, Any], decisi
 def atomic_write(path: Path, data: bytes) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     tmp = path.with_name(path.name + f".tmp-{os.getpid()}")
-    tmp.write_bytes(data)
+    with tmp.open("wb") as handle:
+        handle.write(data)
+        handle.flush()
+        os.fsync(handle.fileno())
     os.replace(tmp, path)
+    try:
+        dir_fd = os.open(path.parent, os.O_RDONLY)
+    except OSError:
+        return
+    try:
+        os.fsync(dir_fd)
+    finally:
+        os.close(dir_fd)
+
+
+@contextmanager
+def publication_lock(output_path: Path) -> Iterator[None]:
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    lock_path = output_path.with_name(output_path.name + ".lock")
+    with lock_path.open("a+b") as handle:
+        fcntl.flock(handle.fileno(), fcntl.LOCK_EX)
+        try:
+            yield
+        finally:
+            fcntl.flock(handle.fileno(), fcntl.LOCK_UN)
+
+
+def _load_current(output_path: Path) -> dict[str, Any] | None:
+    if not output_path.exists():
+        return None
+    try:
+        parsed = json.loads(output_path.read_text(encoding="utf-8"))
+    except Exception as exc:
+        raise FreshnessError("CURRENT_PUBLICATION_UNREADABLE") from exc
+    if not isinstance(parsed, dict):
+        raise FreshnessError("CURRENT_PUBLICATION_NOT_OBJECT")
+    return parsed
 
 
 def publish(repo: Path, candidate_path: Path, output_path: Path, receipt_path: Path) -> dict[str, Any]:
@@ -237,36 +343,42 @@ def publish(repo: Path, candidate_path: Path, output_path: Path, receipt_path: P
         raise FreshnessError("CANDIDATE_UNREADABLE") from exc
     if not isinstance(candidate, dict):
         raise FreshnessError("CANDIDATE_NOT_OBJECT")
-    current = None
-    if output_path.exists():
-        try:
-            parsed = json.loads(output_path.read_text(encoding="utf-8"))
-            current = parsed if isinstance(parsed, dict) else None
-        except Exception:
-            raise FreshnessError("CURRENT_PUBLICATION_UNREADABLE")
 
-    decision = publication_decision(candidate, snapshot_before, current)
-    snapshot_after = build_snapshot(repo)
-    if snapshot_after["snapshot_id"] != snapshot_before["snapshot_id"]:
-        raise FreshnessError("INPUT_CHANGED_DURING_PUBLICATION")
+    with publication_lock(output_path):
+        snapshot_locked = build_snapshot(repo)
+        if snapshot_locked["snapshot_id"] != snapshot_before["snapshot_id"]:
+            raise FreshnessError("INPUT_CHANGED_BEFORE_LOCKED_PUBLICATION")
 
-    receipt = {
-        "schema": RECEIPT_SCHEMA,
-        "generated_at": iso(dt.datetime.now(dt.timezone.utc)),
-        "status": "PASS" if decision["action"] in {"PUBLISH", "NO_CHANGE"} else "FAIL",
-        "decision": decision,
-        "snapshot": snapshot_after,
-        "candidate_path": str(candidate_path),
-        "output_path": str(output_path),
-        "scope": "COLLECTIVE_METRICS_FRESHNESS_AND_BOUND_SNAPSHOT_PUBLICATION_ONLY",
-        "runtime_credit_added": 0,
-    }
+        current = _load_current(output_path)
+        decision = publication_decision(candidate, snapshot_locked, current)
 
-    if decision["action"] == "PUBLISH":
-        published = attach_freshness(candidate, snapshot_after, decision)
-        atomic_write(output_path, json.dumps(published, indent=2, sort_keys=True, ensure_ascii=False).encode("utf-8") + b"\n")
-    atomic_write(receipt_path, json.dumps(receipt, indent=2, sort_keys=True, ensure_ascii=False).encode("utf-8") + b"\n")
-    return receipt
+        snapshot_after = build_snapshot(repo)
+        if snapshot_after["snapshot_id"] != snapshot_locked["snapshot_id"]:
+            raise FreshnessError("INPUT_CHANGED_DURING_PUBLICATION")
+
+        receipt = {
+            "schema": RECEIPT_SCHEMA,
+            "generated_at": iso(dt.datetime.now(dt.timezone.utc)),
+            "status": "PASS" if decision["action"] in {"PUBLISH", "NO_CHANGE"} else "FAIL",
+            "decision": decision,
+            "snapshot": snapshot_after,
+            "candidate_path": str(candidate_path),
+            "output_path": str(output_path),
+            "scope": "COLLECTIVE_METRICS_FRESHNESS_AND_BOUND_SNAPSHOT_PUBLICATION_ONLY",
+            "runtime_credit_added": 0,
+        }
+
+        if decision["action"] == "PUBLISH":
+            published = attach_freshness(candidate, snapshot_after, decision)
+            atomic_write(
+                output_path,
+                json.dumps(published, indent=2, sort_keys=True, ensure_ascii=False).encode("utf-8") + b"\n",
+            )
+        atomic_write(
+            receipt_path,
+            json.dumps(receipt, indent=2, sort_keys=True, ensure_ascii=False).encode("utf-8") + b"\n",
+        )
+        return receipt
 
 
 def main() -> int:
@@ -278,7 +390,9 @@ def main() -> int:
     args = ap.parse_args()
     repo = args.repo.resolve()
     output = args.output_json or (repo / "free swarm/GO_COLLECTIVE_METRICS.json")
-    receipt = args.receipt or (repo / "research_entity/continuity/receipts/COLLECTIVE_METRICS_FRESHNESS_LATEST.json")
+    receipt = args.receipt or (
+        repo / "research_entity/continuity/receipts/COLLECTIVE_METRICS_FRESHNESS_LATEST.json"
+    )
     result = publish(repo, args.candidate_json, output, receipt)
     print(json.dumps(result, sort_keys=True))
     return 0

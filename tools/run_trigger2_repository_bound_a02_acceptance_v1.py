@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """Repository-bound Trigger-2 A02/Hyperposition acceptance runner v1.
 
-This is an execution/evidence wrapper, not a semantic authority.  It verifies that the
+This is an execution/evidence wrapper, not a semantic authority. It verifies that the
 checkout, the authority-declared producer lineage, and every relevant current source are
 bound to real Git objects before it executes the exact A02 adversarial mutation suite and
 retained Hyperposition v4 composition tests.
 
-A PASS from this runner is still bounded component evidence.  It does not admit training
+A PASS from this runner is still bounded component evidence. It does not admit training
 rows, mint canonical truth/effects, or grant J-Space/HCU/EntityOS/training credit.
 """
 from __future__ import annotations
@@ -77,16 +77,21 @@ def _git_blob_bytes(spec: str) -> bytes:
 
 
 def _normalize_remote(url: str) -> str | None:
-    value = url.strip()
-    suffixes = (
-        "github.com/gschaidergabriel/clay-global-research-entity.git",
-        "github.com/gschaidergabriel/clay-global-research-entity",
-        "github.com:gschaidergabriel/clay-global-research-entity.git",
-        "github.com:gschaidergabriel/clay-global-research-entity",
-    )
-    if any(value.endswith(suffix) for suffix in suffixes):
-        return EXPECTED_REPOSITORY
-    return None
+    """Return only a canonical repo id; never persist the input URL.
+
+    Exact accepted forms deliberately exclude credential-bearing HTTPS URLs and arbitrary
+    suffix matches so the receipt cannot leak a token or accept an attacker-controlled host.
+    """
+    value = url.strip().rstrip("/")
+    accepted = {
+        "https://github.com/gschaidergabriel/clay-global-research-entity",
+        "https://github.com/gschaidergabriel/clay-global-research-entity.git",
+        "git@github.com:gschaidergabriel/clay-global-research-entity",
+        "git@github.com:gschaidergabriel/clay-global-research-entity.git",
+        "ssh://git@github.com/gschaidergabriel/clay-global-research-entity",
+        "ssh://git@github.com/gschaidergabriel/clay-global-research-entity.git",
+    }
+    return EXPECTED_REPOSITORY if value in accepted else None
 
 
 def _head_binding(rel: Path) -> dict[str, Any]:
@@ -193,12 +198,18 @@ def main() -> int:
     try:
         head = _git("rev-parse", "HEAD")
         tree = _git("rev-parse", "HEAD^{tree}")
-        remote = _git("remote", "get-url", "origin")
+        raw_remote = _git("remote", "get-url", "origin")
     except Exception as exc:
-        print(json.dumps({"schema": SCHEMA, "pass": False, "failure": "GIT_CHECKOUT_REQUIRED", "error": type(exc).__name__}, sort_keys=True))
+        print(json.dumps({
+            "schema": SCHEMA,
+            "pass": False,
+            "failure": "GIT_CHECKOUT_REQUIRED",
+            "error": type(exc).__name__,
+        }, sort_keys=True))
         return 2
 
-    repository_ok = _normalize_remote(remote) == EXPECTED_REPOSITORY
+    normalized_repository = _normalize_remote(raw_remote)
+    repository_ok = normalized_repository == EXPECTED_REPOSITORY
     if not repository_ok:
         failures.append("REPOSITORY_REMOTE_IDENTITY_MISMATCH")
     dirty_before = bool(_git("status", "--porcelain"))
@@ -208,10 +219,15 @@ def main() -> int:
     try:
         authority = json.loads((ROOT / AUTHORITY_REL).read_text(encoding="utf-8"))
     except Exception as exc:
-        print(json.dumps({"schema": SCHEMA, "pass": False, "failure": "A02_AUTHORITY_LOAD_FAILED", "error": type(exc).__name__}, sort_keys=True))
+        print(json.dumps({
+            "schema": SCHEMA,
+            "pass": False,
+            "failure": "A02_AUTHORITY_LOAD_FAILED",
+            "error": type(exc).__name__,
+        }, sort_keys=True))
         return 2
 
-    source_bindings = {_p.as_posix(): _head_binding(_p) for _p in RELEVANT_SOURCES}
+    source_bindings = {p.as_posix(): _head_binding(p) for p in RELEVANT_SOURCES}
     bad_sources = sorted(k for k, v in source_bindings.items() if not v.get("pass"))
     if bad_sources:
         failures.append("WORKTREE_SOURCE_NOT_EXACT_HEAD:" + ",".join(bad_sources))
@@ -242,7 +258,8 @@ def main() -> int:
         "candidate_component_acceptance_pass": not failures,
         "failures": failures,
         "repository": EXPECTED_REPOSITORY,
-        "origin_remote": remote,
+        "origin_repository_normalized": normalized_repository,
+        "origin_remote_secret_fence": "RAW_REMOTE_URL_NOT_PERSISTED",
         "repository_remote_identity_verified": repository_ok,
         "executed_head": head,
         "executed_tree": tree,

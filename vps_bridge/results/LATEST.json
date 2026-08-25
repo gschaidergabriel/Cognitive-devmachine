@@ -1,17 +1,20 @@
 {
   "schema": "CLAY_VPS_RECEIPT/v4",
-  "command_id": "fr1-jspace06-read-result-current",
-  "command_sha256": "f31db3bcc69286ce4e580e034f54bd77c875102100d69bb416fe9e838c665e5c",
-  "started_at": "2026-08-25T04:09:48.621989+00:00",
-  "finished_at": "2026-08-25T04:09:48.800511+00:00",
+  "command_id": "fr1-jspace06-canonical-sync-main-2",
+  "command_sha256": "653ba7c7cfd79073b178a00994956c2f14806c5a547afee927e4adf7951667b9",
+  "started_at": "2026-08-25T04:10:35.537907+00:00",
+  "finished_at": "2026-08-25T04:10:37.301602+00:00",
   "status": "PASS",
   "exit_code": 0,
-  "op": "exec",
-  "stdout_sha256": "efbe82504cff475858de11a8b460bd284b1ec0c075f6cb1c59e150a144a55f5d",
+  "op": "canonical_sync",
+  "stdout_sha256": "d1558997319bc08dda435d9adea97494b2a40f3ac030fbcabb056eaac099b33b",
   "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-  "stdout_tail": "{\"calibration\": null, \"holdout\": null, \"runtime_identity\": {\"gguf_sha256\": \"9465e63a22add5354d9bb4b99e90117043c7124007664907259bd16d043bb031\", \"harness_sha256\": \"faeacd6f5c3fbc7669921bc5f260c5014bdc1567ff1b366a8b2e2e89797c8ad7\", \"llama_cpp_source_commit\": \"bb4caa7540188872173c44d161602d9271386413\", \"python_runtime_build_sha256\": \"f02efa52cc1d5e1f529fdb1ff1a2ecc826f2083259826d1443b88b52b15b6358\", \"source_checkpoint_sha256\": \"41cec1b674954ae680f5f69ee62bc7c5b3086a2472d0c9b6ea02c6ca73828ab2\", \"tokenizer_sha256\": \"aeb13307a71acd8fe81861d94ad54ab689df773318809eed3cbe794b4492dae4\"}, \"schema\": \"CLAY_TRIGGER1_LOCAL_QWEN06_NATIVE_LLAMA_CPP_CVEC_EXPERIMENT/v1\", \"selected_gain\": null, \"source_packet\": {\"dimension\": 1024, \"intent\": \"reuse the calibration-selected Qwen3-0.6B internal A-vs-B/C direction as a native llama.cpp control-vector source\", \"schema\": \"JSPACE_VECTOR_CONTROL_ABI/v1\", \"source_activation_site\": \"model.model.layers[20]:output:last_token\", \"source_basis_receipts_sha256\": \"cae59dd5749ed461e3bb46abcdf2f293359a86b81ffe770a19bf99bb4a3801f4\", \"source_basis_vector_sha256\": \"c5b21d01f88a532b26791f89aa1ef71076368e8a24892d221a37dcf8aad8944e\", \"source_checkpoint_sha256\": \"41cec1b674954ae680f5f69ee62bc7c5b3086a2472d0c9b6ea02c6ca73828ab2\", \"source_model\": \"Qwen/Qwen3-0.6B\", \"source_revision\": \"c1899de289a04d12100db370d81485cdf75e47ca\"}, \"status\": \"PASS\"}\n",
+  "stdout_tail": "9c8a1be9d1b3a65370a05c3fa986147448b41d62\n",
   "stderr_tail": "",
-  "meta": {},
+  "meta": {
+    "head": "9c8a1be9d1b3a65370a05c3fa986147448b41d62",
+    "ref": "main"
+  },
   "execution_boundary": "ROOT_INSIDE_ROOTLESS_PODMAN_OR_EXPLICIT_REPO_CONTROL_OP",
   "canonical_credit_minted": 0
 }

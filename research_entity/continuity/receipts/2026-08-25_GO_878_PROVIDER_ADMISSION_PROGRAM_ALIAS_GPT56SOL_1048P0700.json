@@ -1,0 +1,77 @@
+{
+  "schema": "CLAY_GO_RESEARCH_DELTA_RECEIPT/v1",
+  "observed_at": "2026-08-25T10:48:00+07:00",
+  "organ": "GPT-5.6 Sol / ChatGPT project organ",
+  "trigger": "go",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority_epoch": "8.78",
+  "mode": "FREE_ONLY",
+  "finding": {
+    "classification": "SUCCESSOR_STEERING_PROGRAM_ALIAS_FALSE_NEGATIVE_QUARANTINE",
+    "runtime_observation": "free swarm/SYSTEM_ANALYSIS_LIVE.json generated 2026-08-25T03:34:23.793728+00:00 reported STOPPED/QUARANTINED with provider admission SUPERVISOR_PRODUCT_AUTHORITY_MISMATCH",
+    "source_root_cause": "SUPERVISOR_STEERING_8_78.json carries program=ENTITYOS_HCU while tools/free_provider_admission.py accepted only active_program in the steering document",
+    "boundary": "The mismatch occurs before credential/model/route/provider economic checks and therefore cannot grant or deny provider-runtime credit by itself."
+  },
+  "delta": {
+    "source_commit": "02cea956a9f60c091ec87a58a205b5f68b0bcab2",
+    "source_file": "tools/free_provider_admission.py",
+    "source_blob_after": "6dd4a24e323cc865feeb5a1e7d1f54501ba19c63",
+    "test_definition_commit": "04496315a61fc27c81bed9b5a965eeef95237fff",
+    "test_file": "tests/test_free_provider_admission_successor_program_alias_878.py",
+    "artefact_commit": "2d8cc5f6ecbf15a1ebdf607774d6ca9591f2f48a",
+    "superseded_pr": 1890,
+    "rule": "program and active_program are steering compatibility aliases; either may resolve ENTITYOS_HCU, but conflicting simultaneous values fail closed with SUPERVISOR_PROGRAM_ALIAS_CONFLICT"
+  },
+  "verification": {
+    "current_main_source_reobserved": true,
+    "reconstructed_focused_component_cases": 5,
+    "reconstructed_focused_component_pass": 5,
+    "cases": [
+      "current program-only steering accepted",
+      "legacy active_program-only steering accepted",
+      "conflicting aliases fail closed",
+      "missing program authority fails closed",
+      "stale provider-admission epoch fails closed"
+    ],
+    "github_actions_semantic_test_execution_observed": false,
+    "earlier_pr_job_classification": "INFRASTRUCTURE_NONEXECUTION_RUNNER_ID_ZERO_EMPTY_STEPS",
+    "fresh_supervisor_reload_after_source_fix_observed": false,
+    "old_live_snapshot_predates_fix": true,
+    "runtime_credit_added": 0
+  },
+  "coordination": {
+    "duplicate_implementation_lane_retained": false,
+    "pr_1890_state": "CLOSED_SUPERSEDED_BY_DIRECT_EXACT_BLOB_MAIN_FUSION",
+    "shared_immutable_macrocycle_identity": null,
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_experiments_executed": 0,
+    "new_self_hosted_dispatches_created": 0,
+    "existing_clay_direct_dev_probe_run": 32803694800,
+    "existing_probe_status_observed": "queued"
+  },
+  "go_tracks": {
+    "track_a": "ADVANCED: removed a deterministic false provider-admission authority mismatch from the canonical EntityOS/HCU control plane",
+    "track_b": "ADVANCED: added fail-closed schema-evolution compatibility for typed authority fields without a second authority",
+    "track_c": "ADVANCED_BY_CURRENT_PARALLEL_EVIDENCE_ONLY: native Qwen3-0.6B llama.cpp cvec model-specific nonterminal causal component PASS exists at commit 46cd012d079b36e501b1262fda52911a99839674; this organ executed no new model intervention"
+  },
+  "credits": {
+    "provider_runtime": 0,
+    "historical_backfill_runtime": 0,
+    "whole_entityos_hcu_runtime": 0,
+    "hcu_full_runtime": 0,
+    "full_jspace_model_promotion": 0,
+    "native_qwen06_llamacpp_cvec_component_pass": true,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "execution_effects": {
+    "provider_model_calls": 0,
+    "paid_calls": 0,
+    "together_calls": 0,
+    "credentials_read_or_persisted": false,
+    "training_runs": 0
+  },
+  "next_exact_action": "Do not create a duplicate runner dispatch. Observe the existing clay-direct-dev probe run 32803694800 to terminal state; then on exact-current clean source execute the provider-admission regression/snapshot and Forge clean-source identity gate, require a post-fix supervisor status that no longer reports the false alias mismatch, execute bounded historical-backfill saturation plus replay-v2 regressions, and prove one evidence-qualified Forge ACCEPT -> exactly one persistent Distillery packet -> accepted_dataset_tokens > 0 -> semantic replay +0. Separately keep native Qwen/J-Space promotion gated on a label-independent counterbalanced pre-fixed semantic discriminator."
+}

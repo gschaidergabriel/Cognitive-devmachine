@@ -47,8 +47,20 @@ def test_every_reservable_slot_is_conversion_while_backlog_exists(monkeypatch) -
         assert "HISTORICAL FREE-SWARM BACKFILL OVERRIDE" in prompt
 
 
-def test_raw_prompt_resumes_only_when_no_backfill_packet_is_available(monkeypatch) -> None:
+def test_leased_backlog_never_falls_through_to_raw_research(monkeypatch) -> None:
     monkeypatch.setattr(scheduler, "_reserve", lambda serial: None)
+    monkeypatch.setattr(scheduler, "_packets", lambda: [_packet()])
+    base = _Base()
+    scheduler.install(base)
+    prompt = base.worker_prompt("p", "r", "t", "s", 0)
+    assert "HISTORICAL FREE-SWARM BACKFILL HOLD" in prompt
+    assert "NO_DELTA=HISTORICAL_BACKFILL_LEASE_BUSY" in prompt
+    assert "Do NOT perform the ordinary research task" in prompt
+
+
+def test_raw_prompt_resumes_only_when_backfill_queue_is_empty(monkeypatch) -> None:
+    monkeypatch.setattr(scheduler, "_reserve", lambda serial: None)
+    monkeypatch.setattr(scheduler, "_packets", lambda: [])
     base = _Base()
     scheduler.install(base)
     assert base.worker_prompt("p", "r", "t", "s", 0) == "ORIGINAL"

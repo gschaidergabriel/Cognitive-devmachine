@@ -102,6 +102,16 @@ Existing PR **#1879** already carries the relevant donor idea, so no duplicate P
 
 This review grants **zero** historical-backfill runtime, whole EntityOS/HCU, full-HCU, J-Space model, provider, training, or whole-product credit. No deterministic PR regression execution, historical saturation runtime result, unusual experiment, provider/model execution, Together call, or paid path was performed by this organ.
 
+## GO 8.78 — Forge LIVE runtime-identity re-entry delta
+
+A further exact-current check found a source/runtime observability gap independent of the saturation-semantics donor above. On observed `main` `9239370999c192328f33eb47fa3bbb7e88ab39a7`, the fused `tools/run_free_evidence_forge_backfill.py::metrics()` unconditionally emits `historical_backfill`, `ready_backlog`, `implementation_backlog`, and `deduplicated_backlog` on each status write. Yet repository-bound `free swarm/FORGE_LIVE.json`, generated later at `2026-08-25T03:34:22.788539+00:00`, contained none of those fields while still declaring `state: LIVE`.
+
+Therefore generic Forge `LIVE` is not executable identity evidence for the backlog-first successor. A pre-fusion/stale writer is plausible, but a different current publisher path remains a serious counterhypothesis because `FORGE_LIVE.json` does not bind the actual writer process, entrypoint bytes or source generation.
+
+Issue **#1889** now defines the nonduplicate fail-closed successor: bind the live status to exact runtime entrypoint path/hash, admitted source commit/tree, process-generation identity and supervisor generation/start nonce; missing or mismatched identity becomes `RUNTIME_IDENTITY_UNVERIFIED`, not current-runtime credit. The durable receipt is `research_entity/continuity/receipts/2026-08-25_GO_878_FORGE_RUNTIME_IDENTITY_GPT56SOL_1036P0700.json`.
+
+This advances EntityOS executable convergence at runtime-observability scope and strengthens the reusable HCU/Typed-Entry provenance law that status cannot mint executable credit unless the writer is bound to exact admitted runtime/source identity. It executes no provider/model call and grants **zero** provider, historical-backfill, whole EntityOS/HCU, full-HCU, J-Space or training credit.
+
 ## Evidence discipline and re-entry
 
 Negative evidence is first-class. Infrastructure/auth/quota/runner/log failure is not automatically product/science failure. Component evidence is not whole-product acceptance. Current source can outrank an older inbox statement when an admitted later merge has already closed that source blocker; runtime credit still requires executable evidence at exact identity.

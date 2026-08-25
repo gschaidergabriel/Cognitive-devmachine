@@ -1,18 +1,46 @@
 {
   "schema": "CLAY_FREE_SWARM_SYSTEM_ANALYSIS/v3",
-  "generated_at": "2026-08-25T03:49:34.990443+00:00",
+  "generated_at": "2026-08-25T04:04:40.787859+00:00",
   "runtime": {
     "supervisor": "STOPPED/QUARANTINED",
-    "go_swarm": "STOPPED/QUARANTINED",
+    "go_swarm": "RUNNING",
     "distillery": "RUNNING",
     "evidence_forge": "RUNNING",
     "dashboard": "RUNNING",
-    "local_model": "BUILDING/BOOTSTRAPPING",
+    "local_model": "NOT_READY",
     "provider_admission": {
-      "admitted_free_providers": [],
-      "ok": false,
+      "admitted_free_providers": [
+        "groq",
+        "mistral",
+        "nvidia",
+        "openrouter"
+      ],
+      "authority_epoch": "8.78",
+      "ok": true,
+      "providers": {
+        "groq": {
+          "admitted": true,
+          "cost_class": "FREE",
+          "evidence_ref": "governance/FREE_LANE_ECONOMIC_PROVENANCE_2026-08-24.json#groq"
+        },
+        "mistral": {
+          "admitted": true,
+          "cost_class": "FREE",
+          "evidence_ref": "governance/FREE_LANE_ECONOMIC_PROVENANCE_2026-08-24.json#mistral"
+        },
+        "nvidia": {
+          "admitted": true,
+          "cost_class": "FREE",
+          "evidence_ref": "governance/FREE_LANE_ECONOMIC_PROVENANCE_2026-08-24.json#nvidia"
+        },
+        "openrouter": {
+          "admitted": true,
+          "cost_class": "FREE",
+          "evidence_ref": "governance/FREE_LANE_ECONOMIC_PROVENANCE_2026-08-24.json#openrouter"
+        }
+      },
       "schema": "ENTITYOS_HCU_FREE_PROVIDER_ADMISSION_STATUS/v1",
-      "status": "SUPERVISOR_PRODUCT_AUTHORITY_MISMATCH"
+      "steering": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_78.json"
     },
     "policy": "FREE_ONLY; CREDENTIAL_BLIND_CONTROL_PARENT; SWARM_CHILD_ONLY_SECRET_SCOPE; CURRENT_CANONICAL_PROVIDER_ADMISSION; NO_PAID_FALLBACK; TOGETHER_FORBIDDEN"
   },
@@ -37,7 +65,7 @@
   },
   "distillery": {
     "schema": "CLAY_RESEARCH_DISTILLERY_STATUS/v1",
-    "generated_at": "2026-08-25T03:49:31.383442+00:00",
+    "generated_at": "2026-08-25T04:04:37.422105+00:00",
     "collected_source_tokens": 11621,
     "accepted_dataset_tokens": 0,
     "dataset_yield": 0.0,
@@ -58,7 +86,7 @@
     "model_output_tokens": 1455,
     "shared_provider_budget": {
       "schema": "CLAY_SHARED_PROVIDER_BUDGET/v1",
-      "generated_at": "2026-08-25T03:49:31.384242+00:00",
+      "generated_at": "2026-08-25T04:04:37.422814+00:00",
       "providers": {
         "arxiv": {
           "max_inflight": 1,
@@ -196,22 +224,22 @@
     },
     "db_bytes": 864256,
     "top_questions": [
-      "How to implement typed interconnects with zero-cost provenance across provider boundaries?",
-      "Can AI-driven dynamic admission policies enhance security without adding complexity?",
-      "What are the underlying causes of continued external LLM-provider traffic after quarantine?",
-      "How can the effectiveness of the quarantine mechanism be further improved?",
-      "Whether J-Space causal markers can be derived from provider-side execution receipts (InferenceReceipt) without model-specific training instrumentation, given FREE_ONLY credential binding constraints.",
-      "What are the implications of FREE_ONLY provider admission on the EntityOS/HCU system?",
-      "What is causing the 0% dataset yield despite token collection?",
-      "Is the distillery's acceptance criteria too restrictive?",
-      "Does HCU GRID10 allocation exhibit phase-transition behavior under sustained synthetic load, or only gradual degradation?",
-      "Are there unhandled errors in the data processing pipeline?"
+      "Wie kann die Anmelde-Rezeption in die aktuellen Sandbox-Tools integriert werden, ohne die bestehende Architektur zu verändern?",
+      "Wie kann die Effektivität der Integration der Anmelde-Rezeption in die aktuellen Sandbox-Tools gemessen werden?",
+      "How can we formally verify the correctness of the ClayCode type checker extensions for array index invariants?",
+      "Can token caching alone guarantee reduced admission latency across all provider types without additional rate‑limit handling?",
+      "Does the current HCU loader produce a verifiable GRID10 plan hash that can be causally linked to an InferenceReceipt, or is the loader-to-execution boundary still a semantic gap?",
+      "How to optimize the choice of prior distributions and hyperparameters for the hierarchical Bayesian model?",
+      "Can model-internal causal traces be extracted from FREE_ONLY provider models (Nemotron, GPT-OSS) without paid fine-tuning or proprietary tooling?",
+      "How to extend the proposed mechanism to handle non-linear relationships between simulations?",
+      "How to integrate the proposed mechanism with other components of the EntityOS/HCU system?",
+      "Does the Vercel Hobby sandbox quota impose an effective rate limit on OpenRouter calls independent of provider-level limits?"
     ],
     "candidate_states": {}
   },
   "evidence_forge": {
     "schema": "CLAY_FREE_EVIDENCE_FORGE_STATUS/v1",
-    "generated_at": "2026-08-25T03:49:34.106422+00:00",
+    "generated_at": "2026-08-25T04:04:39.587106+00:00",
     "candidate_states": {
       "ACCEPTED": 1,
       "NEEDS_IMPLEMENTATION": 65,
@@ -235,7 +263,7 @@
     "peak_parallel_tasks": 0,
     "shared_provider_budget": {
       "schema": "CLAY_SHARED_PROVIDER_BUDGET/v1",
-      "generated_at": "2026-08-25T03:49:34.107055+00:00",
+      "generated_at": "2026-08-25T04:04:39.587790+00:00",
       "providers": {
         "arxiv": {
           "max_inflight": 1,
@@ -380,6 +408,6 @@
     "measured_total_sonnet5_equivalent_usd": 148.830648,
     "verified_historical_savings_usd": null,
     "nominal_avoided_if_zero_cost_usd": 148.830648,
-    "repo_output_only_proxy_usd": 123.19321
+    "repo_output_only_proxy_usd": 123.46049
   }
 }

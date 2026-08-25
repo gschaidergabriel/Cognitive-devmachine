@@ -1,0 +1,97 @@
+{
+  "schema": "CLAY_TRIGGER2_EXACT_CURRENT_TRAINING_REVISION_AUDIT/v2",
+  "version": "2.0.0",
+  "date": "2026-08-25",
+  "trigger": "triggerwort 2",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "persistent_entity": "Clay",
+  "status": "CURRENT_RESEARCH_AUDIT_NONCANONICAL_AT_WRITE",
+  "supersedes": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_EXACT_CURRENT_TRAINING_REVISION_AUDIT_V1_GPT56SOL.json",
+  "revision_reason": "Moving-main re-entry found commit 73df5291e92178529a6bc75347574dd931e23d00 landed after the v1 audit snapshot but before its write. The new deterministic causal label chain imports Hyperposition labeler v1 even though labeler v2 had already landed, adding another dependency-staleness edge that v1 could not record.",
+  "authority_snapshot": {
+    "repository": "gschaidergabriel/clay-global-research-entity",
+    "branch": "main",
+    "observed_main_before_write": "5d17c10e28264c5bb90be24089effc4318265ae3",
+    "supervisor_epoch": "8.78",
+    "execution_mode": "FREE_ONLY",
+    "owner_target": "VARIABLE COGNITIVE GRID + PERSISTENT DATABASE + CLAUDE CODE + shared Global J-Space/workspace bridge"
+  },
+  "inherits_all_nonconflicting_findings_from_v1": true,
+  "new_exact_current_delta": [
+    {
+      "id": "T2R2-A09",
+      "severity": "P0_DEPENDENCY_STALE_AT_LANDING",
+      "artifact": "tools/trigger2_hyperposition_causal_label_chain_v1.py",
+      "landed_commit": "73df5291e92178529a6bc75347574dd931e23d00",
+      "finding": "The formal synthetic task-world -> typed relation -> reference transition derivation is a valuable answer to the no-invented-label requirement, but the module imports tools.trigger2_hyperposition_reference_labelers_v1 while tools/trigger2_hyperposition_reference_labelers_v2.py had already landed at 83bd939d2d0adfb49d7625ed4bc9427b414edbe3.",
+      "state": "CURRENT_DONOR_STALE_DEPENDENCY_REBIND_REQUIRED",
+      "retained_value": [
+        "formal world semantics rather than free-text label inference",
+        "mechanically derived branch relations",
+        "explicit synthetic execution/admissibility boundary",
+        "pair-separation derivation from predicted outcomes",
+        "no canonical truth/effect/runtime/training credit"
+      ],
+      "required_successor": "Rebind the chain to the single retained Hyperposition labeler/schema after authority convergence, regenerate exact hashes/receipts, and rerun its tests. Do not patch only the version string."
+    },
+    {
+      "id": "T2R2-A10",
+      "severity": "P0_VERSIONING_MECHANISM",
+      "finding": "Trigger-2 artifacts can become stale between audit snapshot and durable write under current parallel commit velocity.",
+      "training_consequence": "Artifact status must be dependency-graph/hash derived and rechecked after write/re-entry; timestamp or most-recent-filename is insufficient.",
+      "required_regression": "A successor ledger should fail if any CURRENT artifact binds a predecessor dependency when a declared nonconflicting successor already exists, unless an explicit compatibility exception is present."
+    }
+  ],
+  "revised_artifact_lifecycle_delta": [
+    {
+      "artifact": "2026-08-25_TRIGGER2_EXACT_CURRENT_TRAINING_REVISION_AUDIT_V1_GPT56SOL.json",
+      "state": "SUPERSEDED",
+      "successor": "2026-08-25_TRIGGER2_EXACT_CURRENT_TRAINING_REVISION_AUDIT_V2_GPT56SOL.json",
+      "reason": "Moving-main re-entry exposed a new stale-dependency edge not present in the v1 snapshot."
+    },
+    {
+      "artifact": "tools/trigger2_hyperposition_reference_labelers_v2.py",
+      "state": "CURRENT_CANDIDATE_SOURCE_REFERENCE",
+      "reason": "Newest observed labeler generation with event-vs-ancestry semantics and anti-collapse tests; still requires single-schema convergence with current contract/gates."
+    },
+    {
+      "artifact": "tools/trigger2_hyperposition_causal_label_chain_v1.py",
+      "state": "STALE_DEPENDENCY_REBIND_REQUIRED",
+      "predecessor_dependency": "tools/trigger2_hyperposition_reference_labelers_v1.py",
+      "required_dependency_successor": "tools/trigger2_hyperposition_reference_labelers_v2.py or the finally retained single canonical successor",
+      "reason": "Landed after labeler v2 but still imports v1."
+    },
+    {
+      "artifact": "tools/trigger2_hyperposition_reference_seed_v1.py",
+      "state": "STALE_DEPENDENCY_REBIND_REQUIRED",
+      "reason": "Also binds labeler v1 and must regenerate only after retained labeler+gate identity freezes."
+    },
+    {
+      "artifact": "tools/trigger2_semantic_hyperposition_gate_v2.py",
+      "state": "REVIEW_REQUIRED_SCHEMA_AUTHORITY_SPLIT",
+      "reason": "Still imports the older semantic-labeler lane and validates a different branch field ontology than the crosscutting contract/seed."
+    },
+    {
+      "artifact": "2026-08-25_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V2_GPT56SOL.json",
+      "state": "RECHECK_REQUIRED",
+      "successor": "TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V3",
+      "reason": "Its removed/superseded dependency disposition became false under later main, and it predates labeler-v2/causal-chain drift."
+    }
+  ],
+  "training_rules_confirmed_or_added": [
+    "FORMAL_SYNTHETIC_WORLD_CAN_LABEL_TASK_LOCAL_D_E_TRANSITIONS_WITHOUT_MINTING_WORLD_FACTS",
+    "FREE_TEXT_MUST_NOT_BE_THE_REFERENCE_LABEL_SOURCE_FOR_POSITIVE_D_E_TARGETS",
+    "LABEL_CHAIN_LABELER_GATE_GENERATOR_DEPENDENCIES_MUST_BIND_EXACT_SUCCESSOR_IDENTITY",
+    "POST_WRITE_REENTRY_MUST_RECLASSIFY_ARTIFACTS_IF_MAIN_MOVED",
+    "CURRENT_STATUS_CANNOT_BE_INFERRED_FROM_FILE_RECENCY_ALONE"
+  ],
+  "credits": {
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "positive_jspace_causal_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  },
+  "acceptance": "BLOCKED_PENDING_SINGLE_HYPERPOSITION_SCHEMA_AND_DEPENDENCY_CONVERGENCE",
+  "next_exact_action": "Converge one canonical Hyperposition latent schema and retained labeler across gate, seed and formal causal label chain; then publish dependency-derived ledger v3 and regenerate positive D/E candidates with exact frozen labeler/generator/gate identities before any training admission."
+}

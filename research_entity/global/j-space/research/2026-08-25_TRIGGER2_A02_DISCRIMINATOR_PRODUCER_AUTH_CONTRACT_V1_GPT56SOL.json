@@ -1,0 +1,167 @@
+{
+  "schema": "CLAY_TRIGGER2_A02_DISCRIMINATOR_PRODUCER_AUTH_CONTRACT/v1",
+  "date": "2026-08-25",
+  "local_trigger_time": "21:28+07:00",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU_VARIABLE_COGNITIVE_GRID",
+  "status": "CURRENT_SOURCE_DESIGN_DELTA_NONPROMOTING",
+  "authority_snapshot": {
+    "repository": "gschaidergabriel/clay-global-research-entity",
+    "branch": "main",
+    "observed_main_before_write": "afcc81c605d3d57ff6f3ad1a252d4af5079f9098",
+    "bootstrap_schema": "8.78",
+    "supervisor_epoch": "8.78",
+    "mode": "FREE_ONLY",
+    "current_protocol": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_CURRENT_PROTOCOL_V5_GPT56SOL.json",
+    "training_ledger": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V11_GPT56SOL.json",
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0
+  },
+  "audited_current_inputs": [
+    "research_entity/continuity/BOOTSTRAP_MINIMAL.json",
+    "research_entity/rooms/PROGRAM_STATE.json",
+    "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
+    "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_78.json",
+    "research_entity/global/j-space/research/2026-08-25_TRIGGER2_CURRENT_PROTOCOL_V5_GPT56SOL.json",
+    "research_entity/global/j-space/research/2026-08-25_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V11_GPT56SOL.json",
+    "research_entity/global/j-space/research/2026-08-25_TRIGGER2_PINNED_PILOT_PROOF_CLOSURE_AUDIT_V1_GPT56SOL.json",
+    "research_entity/global/j-space/research/TRIGGER2_TRUSTED_SYNTHETIC_GENERATOR_AUTHORITY_V1.json",
+    "tools/trigger2_trusted_hyperposition_pilot_generator_v1.py",
+    "tools/trigger2_generation_provenance_gate_v1.py",
+    "tools/trigger2_hyperposition_state_history_proof_gate_v1.py",
+    "tools/trigger2_hyperposition_state_history_generation_bound_gate_v3.py",
+    "tests/test_trigger2_hyperposition_state_history_proof_gate_v1.py",
+    "tests/test_trigger2_hyperposition_state_history_generation_bound_gate_v3.py"
+  ],
+  "bounded_subject": {
+    "case_id": "T2_GP_PILOT_DB_MATCH_V1",
+    "world_id": "t2gp:world:db-match:v1",
+    "query_id": "t2gp:query:db-match:v1",
+    "event_id": "t2gp:event:db-match:v1",
+    "event_epistemic_type": "SYNTHETIC_PROOF",
+    "history_shape": "EMPTY_HISTORY_CLEAN_GENESIS_PILOT",
+    "training_eligible": false
+  },
+  "observed_gap": {
+    "id": "T2_PINNED_PILOT_A02_DISCRIMINATOR_PRODUCER_AUTH",
+    "status": "P0_OPEN",
+    "source_observation": "The retained state-history gate recomputes test ordering/coverage and checks typed discriminator receipt shape, but it still accepts admissible=true, executed=true and a nonempty execution_receipt_id from the transported row. Current tests construct those values in the test helper. Therefore coherent row-carried receipt rewriting can satisfy shape/coverage without proving trusted deterministic producer execution.",
+    "counterhypothesis": "Coverage recomputation alone is sufficient because the synthetic event outcome is deterministic.",
+    "counterhypothesis_rejected_because": "Coverage recomputation proves only what the named test would separate under the supplied world/state. It does not prove that an authority-selected producer/policy admitted and executed the discriminator, nor that the execution_receipt_id was derived from that producer invocation rather than invented by the row."
+  },
+  "minimum_successor_contract": {
+    "authority_resolution": [
+      "producer identity MUST be resolved from a repository authority manifest, never from the candidate row",
+      "authority MUST bind producer repo_path, exact source_sha256, producer schema/version and git/source lineage",
+      "authority MUST bind the allowed bounded case_id and deterministic discriminator policy identity/version",
+      "authority MUST retain canonical_truth_allowed=false, direct_effect_authority=false, training_eligible=false and zero-credit fences"
+    ],
+    "input_binding": [
+      "world identity and exact formal-world digest MUST come from the already authority-reconstructed generation path",
+      "pre-state digest MUST bind the exact state used for discriminator ordering/coverage",
+      "event identity MUST bind world_id + event semantic digest + test_id + observed synthetic outcome",
+      "formal discriminator spec digest MUST bind allowed outcomes and ordering-relevant test policy",
+      "candidate-carried producer path/hash/policy/admissibility/executed flags MUST have zero authority"
+    ],
+    "deterministic_derivation": [
+      "admissibility MUST be derived from the pinned policy and bound formal discriminator spec",
+      "u_test_order or its retained semantic equivalent MUST be recomputed by the trusted producer from the bound world/pre-state/test",
+      "separated_live_pairs and separates_all_live_pairs MUST be producer-derived and exact-match checked",
+      "executed=true MUST mean the deterministic synthetic producer invocation completed and returned the bound result; it MUST NOT be accepted as a row boolean",
+      "execution_receipt_id MUST be deterministically derived from producer identity + policy digest + world/pre-state/world-scoped-event/test digests + producer result digest",
+      "the row-carried discriminator receipt MUST exactly equal the recomputed producer receipt or fail closed"
+    ],
+    "synthetic_scope": [
+      "producer execution is SYNTHETIC_PROOF_ONLY and noncanonical",
+      "producer execution MUST NOT imply external-world observation",
+      "PASS mints zero canonical truth, real-effect, provider, runtime, J-Space, HCU, EntityOS or training credit"
+    ]
+  },
+  "required_mutations": [
+    {
+      "id": "T2_SHPG_A02_FAKE_EXECUTED",
+      "mutation": "keep event/world/coverage coherent but set an invented executed=true and arbitrary execution_receipt_id without recomputed producer proof",
+      "required_result": "REJECT"
+    },
+    {
+      "id": "T2_SHPG_A02_COHERENT_RECEIPT_REWRITE",
+      "mutation": "rewrite the whole transported discriminator receipt coherently after changing receipt identity while leaving deterministic semantic coverage valid",
+      "required_result": "REJECT"
+    },
+    {
+      "id": "T2_SHPG_A02_PRODUCER_PATH_OR_SHA_SWAP",
+      "mutation": "claim a different producer path/source hash in row metadata while preserving the same semantic receipt",
+      "required_result": "REJECT"
+    },
+    {
+      "id": "T2_SHPG_A02_POLICY_SWAP",
+      "mutation": "change discriminator policy/spec identity or digest while preserving event outcome and coverage counts",
+      "required_result": "REJECT"
+    },
+    {
+      "id": "T2_SHPG_A02_PRESTATE_REWRITE",
+      "mutation": "use a different pre-state that happens to produce the same coverage count",
+      "required_result": "REJECT"
+    },
+    {
+      "id": "T2_SHPG_A02_WORLD_SCOPED_EVENT_REWRITE",
+      "mutation": "reuse the event semantic payload under a different world identity",
+      "required_result": "REJECT"
+    },
+    {
+      "id": "T2_SHPG_A02_COVERAGE_REWRITE",
+      "mutation": "tamper separated_live_pairs or separates_all_live_pairs",
+      "required_result": "REJECT"
+    }
+  ],
+  "artifact_reclassification_delta": [
+    {
+      "artifact": "tools/trigger2_hyperposition_state_history_proof_gate_v1.py",
+      "status": "CURRENT_PARTIAL_P0_ADVANCE_NEEDS_REVISION_A02_PRODUCER_AUTH_EXECUTION_UNOBSERVED",
+      "predecessor": "tools/trigger2_hyperposition_derivation_bound_gate_v2.py",
+      "successor": "same retained state-history lane with repository-authority-resolved deterministic discriminator producer proof",
+      "revision_reason": "Pair coverage is mechanically recomputed, but admission/execution identity remains row-carried."
+    },
+    {
+      "artifact": "tests/test_trigger2_hyperposition_state_history_proof_gate_v1.py",
+      "status": "CURRENT_SOURCE_MUTATION_SUITE_NEEDS_A02_AUTHENTICITY_MUTATIONS",
+      "revision_reason": "The helper itself constructs admissible=true, executed=true and execution_receipt_id; existing tests prove shape/outcome/coverage rejection but not trusted producer origin."
+    },
+    {
+      "artifact": "tools/trigger2_hyperposition_state_history_generation_bound_gate_v3.py",
+      "status": "CURRENT_SUCCESSOR_COMPOSITION_NONPROMOTING_BLOCKED_ON_A02",
+      "revision_reason": "Ordering of generation->epistemic->state-history is correct, but the composition delegates to a state-history discriminator receipt path that still lacks producer authenticity."
+    },
+    {
+      "artifact": "tools/trigger2_binding_router_factorial_generator_v3.py",
+      "status": "BLOCKED_DIRECT_TRAINING",
+      "revision_reason": "Supervisor 8.78 conditional nuisance leakage remains dispositive; this A02 contract does not change that status."
+    },
+    {
+      "artifact": "research_entity/global/j-space/research/trigger2_abliterated_checkpoint_selection_hardneg_seed_v1.jsonl",
+      "status": "CURRENT_NONPROMOTING_COMPLEMENTARY",
+      "revision_reason": "Checkpoint-selection counterexamples remain useful but are orthogonal to A02 proof authenticity."
+    }
+  ],
+  "training_generation_decision": {
+    "new_positive_rows": 0,
+    "new_hard_negative_rows": 0,
+    "decision": "NO_NEW_ROWS_WITH_REASON",
+    "reason": "Supervisor 8.78 explicitly requires A02 producer authenticity closure before new positive rows. Existing hard-negative families already cover the conceptual exploit; the highest-information nonduplicate delta is the exact producer-auth contract and mutation acceptance surface."
+  },
+  "credits": {
+    "research_delta": 1,
+    "artifact_reclassification_delta": 1,
+    "positive_D_E_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "positive_jspace_causal_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0
+  },
+  "next_exact_action": "Implement the authority-pinned deterministic discriminator producer and exact-match producer-auth gate in the single retained Hyperposition state-history lane; add T2_SHPG_A02_FAKE_EXECUTED and T2_SHPG_A02_COHERENT_RECEIPT_REWRITE plus source/policy/prestate/world-scope mutations; then obtain exact-current deterministic execution evidence before generating any positive pilot rows."
+}

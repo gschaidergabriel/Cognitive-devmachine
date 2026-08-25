@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v4",
+  "command_id": "gpt56sol-qwen06-diagnose-launch-20260825",
+  "op": "exec",
+  "cwd": "/workspace",
+  "timeout_seconds": 120,
+  "command": "REPO=/workspace/clay-global-research-entity; RUN=/workspace/qwen06-gpt56sol-direct; echo head=$(git -C \"$REPO\" rev-parse HEAD 2>&1); echo script_main=$(test -f \"$REPO/tools/trigger1_local_qwen06_midlayer_causal_execute.py\" && echo present || echo missing); echo launcher_main=$(test -f \"$REPO/tools/trigger1_local_qwen06_midlayer_causal.sh\" && echo present || echo missing); echo run_exists=$(test -e \"$RUN\" && echo yes || echo no); echo '--- worktrees ---'; git -C \"$REPO\" worktree list 2>&1 || true; echo '--- relevant tools ---'; ls -l \"$REPO\"/tools/trigger1_local_qwen06* 2>&1 || true; echo '--- cache venv ---'; ls -ld /cache/clay-qwen06-venv /cache/clay-qwen06-venv/bin/python 2>&1 || true; echo '--- run tree ---'; find \"$RUN\" -maxdepth 2 -type f -printf '%p %s bytes\\n' 2>/dev/null | head -40 || true"
+}

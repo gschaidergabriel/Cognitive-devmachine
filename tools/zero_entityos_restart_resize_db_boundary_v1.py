@@ -10,9 +10,9 @@ S1 = rebuildable noncanonical workspace projection held in process memory.
 S2 = disposable process-local scratch held in process memory.
 
 No model/grid/Claude/J-Space path can directly mutate S0 here. Durable writes
-must be proposed then admitted by the deterministic test boundary at the
-current runtime generation. Effects are proposal-only; no EffectJournal write
-exists in this fixture.
+must be proposed then atomically admitted by the deterministic test boundary at
+the current runtime generation and expected S0 epoch. Effects are proposal-only;
+no EffectJournal write exists in this fixture.
 """
 from __future__ import annotations
 
@@ -56,6 +56,7 @@ class RestartResizeDBBoundary:
     def _schema(self) -> None:
         self.con.executescript(
             """
+            PRAGMA journal_mode=WAL;
             CREATE TABLE IF NOT EXISTS runtime_metadata(
               key TEXT PRIMARY KEY,
               value INTEGER NOT NULL
@@ -76,6 +77,7 @@ class RestartResizeDBBoundary:
               value_json TEXT NOT NULL,
               value_digest TEXT NOT NULL,
               source_generation INTEGER NOT NULL,
+              expected_s0_epoch INTEGER NOT NULL,
               status TEXT NOT NULL
             );
             CREATE TABLE IF NOT EXISTS effect_proposals(
@@ -97,17 +99,22 @@ class RestartResizeDBBoundary:
         self.con.commit()
 
     def _next_runtime_generation(self) -> int:
-        row = self.con.execute(
-            "SELECT value FROM runtime_metadata WHERE key='runtime_generation'"
-        ).fetchone()
-        generation = 1 if row is None else int(row[0]) + 1
-        self.con.execute(
-            """INSERT INTO runtime_metadata(key,value) VALUES('runtime_generation',?)
-               ON CONFLICT(key) DO UPDATE SET value=excluded.value""",
-            (generation,),
-        )
-        self.con.commit()
-        return generation
+        self.con.execute("BEGIN IMMEDIATE")
+        try:
+            row = self.con.execute(
+                "SELECT value FROM runtime_metadata WHERE key='runtime_generation'"
+            ).fetchone()
+            generation = 1 if row is None else int(row[0]) + 1
+            self.con.execute(
+                """INSERT INTO runtime_metadata(key,value) VALUES('runtime_generation',?)
+                   ON CONFLICT(key) DO UPDATE SET value=excluded.value""",
+                (generation,),
+            )
+            self.con.commit()
+            return generation
+        except Exception:
+            self.con.rollback()
+            raise
 
     @property
     def identity(self) -> RuntimeIdentity:
@@ -116,7 +123,9 @@ class RestartResizeDBBoundary:
     def close(self) -> None:
         self.con.close()
 
-    def seed_s0_fixture(self, object_key: str, value: Any, *, provenance: str = "TEST_FIXTURE") -> None:
+    def seed_s0_fixture(
+        self, object_key: str, value: Any, *, provenance: str = "TEST_FIXTURE"
+    ) -> None:
         """Test-only deterministic seed. Never callable as a model/result admission."""
         if not object_key:
             raise BoundaryError("object_key:REQUIRED")
@@ -159,6 +168,12 @@ class RestartResizeDBBoundary:
             "provenance": row["provenance"],
         }
 
+    def _s0_epoch(self, object_key: str) -> int:
+        row = self.con.execute(
+            "SELECT epoch FROM s0_state WHERE object_key=?", (object_key,)
+        ).fetchone()
+        return 0 if row is None else int(row[0])
+
     def s0_snapshot(self) -> list[dict[str, Any]]:
         rows = self.con.execute(
             """SELECT object_key,value_json,epoch,digest,admitted_generation,provenance
@@ -177,10 +192,12 @@ class RestartResizeDBBoundary:
         ]
 
     def s0_fingerprint(self) -> str:
-        """Canonical-state fingerprint intentionally excludes runtime generation and grid N."""
+        """S0 fingerprint intentionally excludes current runtime generation and grid N."""
         return digest({"schema": "ZERO_ENTITYOS_S0_FIXTURE/v1", "state": self.s0_snapshot()})
 
-    def rebuild_s1_from_s0(self, object_keys: Iterable[str]) -> dict[str, dict[str, Any]]:
+    def rebuild_s1_from_s0(
+        self, object_keys: Iterable[str]
+    ) -> dict[str, dict[str, Any]]:
         projection: dict[str, dict[str, Any]] = {}
         for key in sorted(set(object_keys)):
             state = self.read_s0(key)
@@ -227,23 +244,29 @@ class RestartResizeDBBoundary:
             raise BoundaryError("DB_PROPOSAL_IDENTITY_REQUIRED")
         if source_generation is None:
             source_generation = self.runtime_generation
-        if isinstance(source_generation, bool) or not isinstance(source_generation, int) or source_generation < 1:
+        if (
+            isinstance(source_generation, bool)
+            or not isinstance(source_generation, int)
+            or source_generation < 1
+        ):
             raise BoundaryError("source_generation:MUST_BE_POSITIVE_INT")
         value_json = canonical_json(value)
         value_digest = digest(value)
-        proposal_id = "dbp-" + digest(
-            {
-                "schema": DB_PROPOSAL_SCHEMA,
-                "work_id": work_id,
-                "object_key": object_key,
-                "value_digest": value_digest,
-                "source_generation": source_generation,
-            }
-        )[:24]
+        expected_s0_epoch = self._s0_epoch(object_key)
+        proposal_material = {
+            "schema": DB_PROPOSAL_SCHEMA,
+            "work_id": work_id,
+            "object_key": object_key,
+            "value_digest": value_digest,
+            "source_generation": source_generation,
+            "expected_s0_epoch": expected_s0_epoch,
+        }
+        proposal_id = "dbp-" + digest(proposal_material)[:24]
         self.con.execute(
             """INSERT INTO db_write_proposals
-               (proposal_id,schema,work_id,object_key,value_json,value_digest,source_generation,status)
-               VALUES(?,?,?,?,?,?,?,?)""",
+               (proposal_id,schema,work_id,object_key,value_json,value_digest,
+                source_generation,expected_s0_epoch,status)
+               VALUES(?,?,?,?,?,?,?,?,?)""",
             (
                 proposal_id,
                 DB_PROPOSAL_SCHEMA,
@@ -252,59 +275,84 @@ class RestartResizeDBBoundary:
                 value_json,
                 value_digest,
                 source_generation,
+                expected_s0_epoch,
                 "PROPOSED_NOT_COMMITTED",
             ),
         )
         self.con.commit()
         return proposal_id
 
-    def admit_db_write(self, proposal_id: str, *, expected_generation: int) -> dict[str, Any]:
+    def admit_db_write(
+        self, proposal_id: str, *, expected_generation: int
+    ) -> dict[str, Any]:
         if expected_generation != self.runtime_generation:
             raise BoundaryError("ADMISSION_EXPECTED_GENERATION_STALE")
-        row = self.con.execute(
-            "SELECT * FROM db_write_proposals WHERE proposal_id=?", (proposal_id,)
-        ).fetchone()
-        if row is None:
-            raise BoundaryError("DB_PROPOSAL_NOT_FOUND")
-        if row["status"] != "PROPOSED_NOT_COMMITTED":
-            raise BoundaryError("DB_PROPOSAL_NOT_PENDING")
-        if int(row["source_generation"]) != self.runtime_generation:
+
+        self.con.execute("BEGIN IMMEDIATE")
+        try:
+            row = self.con.execute(
+                "SELECT * FROM db_write_proposals WHERE proposal_id=?", (proposal_id,)
+            ).fetchone()
+            if row is None:
+                raise BoundaryError("DB_PROPOSAL_NOT_FOUND")
+            if row["status"] != "PROPOSED_NOT_COMMITTED":
+                raise BoundaryError("DB_PROPOSAL_NOT_PENDING")
+            if int(row["source_generation"]) != self.runtime_generation:
+                self.con.execute(
+                    """UPDATE db_write_proposals
+                       SET status='REJECTED_STALE_GENERATION'
+                       WHERE proposal_id=?""",
+                    (proposal_id,),
+                )
+                self.con.commit()
+                raise BoundaryError("DB_PROPOSAL_SOURCE_GENERATION_STALE")
+
+            current_epoch = self._s0_epoch(row["object_key"])
+            if int(row["expected_s0_epoch"]) != current_epoch:
+                self.con.execute(
+                    """UPDATE db_write_proposals
+                       SET status='REJECTED_STALE_S0_EPOCH'
+                       WHERE proposal_id=?""",
+                    (proposal_id,),
+                )
+                self.con.commit()
+                raise BoundaryError("DB_PROPOSAL_EXPECTED_S0_EPOCH_STALE")
+
+            next_epoch = current_epoch + 1
             self.con.execute(
-                "UPDATE db_write_proposals SET status='REJECTED_STALE_GENERATION' WHERE proposal_id=?",
+                """INSERT INTO s0_state
+                   (object_key,value_json,epoch,digest,admitted_generation,provenance)
+                   VALUES(?,?,?,?,?,?)
+                   ON CONFLICT(object_key) DO UPDATE SET
+                     value_json=excluded.value_json,
+                     epoch=excluded.epoch,
+                     digest=excluded.digest,
+                     admitted_generation=excluded.admitted_generation,
+                     provenance=excluded.provenance""",
+                (
+                    row["object_key"],
+                    row["value_json"],
+                    next_epoch,
+                    row["value_digest"],
+                    self.runtime_generation,
+                    f"ADMITTED_PROPOSAL:{proposal_id}",
+                ),
+            )
+            self.con.execute(
+                """UPDATE db_write_proposals
+                   SET status='ADMITTED_TO_S0'
+                   WHERE proposal_id=?""",
                 (proposal_id,),
             )
             self.con.commit()
-            raise BoundaryError("DB_PROPOSAL_SOURCE_GENERATION_STALE")
-
-        current = self.con.execute(
-            "SELECT epoch FROM s0_state WHERE object_key=?", (row["object_key"],)
-        ).fetchone()
-        next_epoch = 1 if current is None else int(current[0]) + 1
-        self.con.execute(
-            """INSERT INTO s0_state
-               (object_key,value_json,epoch,digest,admitted_generation,provenance)
-               VALUES(?,?,?,?,?,?)
-               ON CONFLICT(object_key) DO UPDATE SET
-                 value_json=excluded.value_json,
-                 epoch=excluded.epoch,
-                 digest=excluded.digest,
-                 admitted_generation=excluded.admitted_generation,
-                 provenance=excluded.provenance""",
-            (
-                row["object_key"],
-                row["value_json"],
-                next_epoch,
-                row["value_digest"],
-                self.runtime_generation,
-                f"ADMITTED_PROPOSAL:{proposal_id}",
-            ),
-        )
-        self.con.execute(
-            "UPDATE db_write_proposals SET status='ADMITTED_TO_S0' WHERE proposal_id=?",
-            (proposal_id,),
-        )
-        self.con.commit()
-        return self.read_s0(row["object_key"])  # type: ignore[return-value]
+            return self.read_s0(row["object_key"])  # type: ignore[return-value]
+        except BoundaryError:
+            if self.con.in_transaction:
+                self.con.rollback()
+            raise
+        except Exception:
+            self.con.rollback()
+            raise
 
     def model_direct_s0_write(self, *_: Any, **__: Any) -> None:
         raise BoundaryError("DIRECT_MODEL_GRID_CLAUDE_JSPACE_TO_S0_FORBIDDEN")
@@ -346,7 +394,12 @@ class RestartResizeDBBoundary:
         raise BoundaryError("DIRECT_EFFECT_EXECUTION_FORBIDDEN_EFFECTGATE_REQUIRED")
 
     def count(self, table: str) -> int:
-        allowed = {"s0_state", "db_write_proposals", "effect_proposals", "effect_journal"}
+        allowed = {
+            "s0_state",
+            "db_write_proposals",
+            "effect_proposals",
+            "effect_journal",
+        }
         if table not in allowed:
             raise BoundaryError("table:NOT_ALLOWED")
         return int(self.con.execute(f"SELECT COUNT(*) FROM {table}").fetchone()[0])

@@ -1,0 +1,57 @@
+{
+  "schema": "CLAY_TRIGGER2_NODE_RESULT_MODEL_CALL_LINEAGE_DELTA/v1",
+  "date": "2026-08-26",
+  "supervisor": "8.83",
+  "mode": "FREE_ONLY_SOURCE_ONLY",
+  "trigger": "triggerwort2",
+  "base_main_sha": "48c572e57d70f9c6747bfceac9af84ff4bca8338",
+  "branch": "trigger2-v58-node-result-call-lineage",
+  "problem": "V57 leaves NODE_RESULT/atomic-cohort provenance without an exact reference to the existing source-bound model_call_identity/model_output_identity and without fail-closed route/engine/cell chain binding.",
+  "hypothesis": "A source-only successor can close the packet-level causal identity contract without creating a second model-call authority by referencing the existing source_bound_model_call_identity_sha256 verbatim, binding the exact model output identity, and requiring independently precommitted route/engine/cell and call-gate receipt digests.",
+  "counterhypothesis": "Adding a new lineage digest could accidentally become a competing call-ID authority or allow transplant attacks if it does not bind the pre-lineage NODE_RESULT digest, task/snapshot context, exact upstream call-gate receipt, and route/engine/cell chain commitment.",
+  "implementation": {
+    "source": "tools/trigger2_node_result_model_call_lineage_gate_v1.py",
+    "tests": "tests/test_trigger2_node_result_model_call_lineage_gate_v1.py",
+    "source_commit": "4724aa50c99840ef18a7b1db223de55dcb3b1dd3",
+    "test_commit": "8584782b0dfb872b26c84140c2313744b65c1d8a",
+    "identity_law": "REFERENCE_EXISTING_CALL_ID_NO_SECOND_CALL_AUTHORITY",
+    "chain_authority_semantics": "REFERENCE_ONLY_NO_EFFECT_OR_TRUTH_AUTHORITY"
+  },
+  "local_deterministic_validation": {
+    "command": "python -m pytest -q tests/test_trigger2_node_result_model_call_lineage_gate_v1.py",
+    "result": "9 passed",
+    "scope": "LOCAL_DETERMINISTIC_SOURCE_COMPONENT_ONLY",
+    "covered_negative_cases": [
+      "model_call_identity transplant with repacked outer NODE_RESULT",
+      "model_output_identity transplant with repacked outer NODE_RESULT",
+      "route/engine/cell chain transplant against frozen commitment",
+      "call-gate receipt transplant against frozen commitment",
+      "base NODE_RESULT payload transplant",
+      "task identity transplant",
+      "pre-existing lineage overwrite attempt",
+      "invalid original NODE_RESULT packet digest"
+    ]
+  },
+  "result": "SOURCE_CONTRACT_ADVANCED_PACKET_LEVEL_CALL_OUTPUT_AND_ROUTE_ENGINE_CELL_LINEAGE_FAIL_CLOSED",
+  "not_proven": [
+    "repository CI pass",
+    "model runtime execution",
+    "physical GRID10 promotion",
+    "runtime quiescence",
+    "checkpoint winner",
+    "J-Space causal model effect",
+    "training readiness promotion",
+    "whole HCU runtime",
+    "whole EntityOS runtime"
+  ],
+  "credits": {
+    "checkpoint_selection_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "jspace_model_credit": 0,
+    "training_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "entityos_whole_runtime_credit": 0
+  },
+  "next_gate": "Review/merge the source-only lineage contract, then integrate it at the exact NODE_RESULT production boundary without modifying the Frank harness and without model/provider execution until Supervisor-8.83 runtime-quiescence authority is restored. Confirm repository CI and reject call/packet/cell/source transplants at integration scope.",
+  "quiescence_constraint": "NO_PROVIDER_PROBE_OR_MODEL_TRAINING_EXECUTION_WHILE_OWNER_HARD_OFF_AND_RUNTIME_QUIESCENCE_ACTIVE_FAIL"
+}

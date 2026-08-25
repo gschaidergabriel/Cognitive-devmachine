@@ -1,6 +1,6 @@
 {
   "schema": "CLAY_FREE_SWARM_SYSTEM_ANALYSIS/v3",
-  "generated_at": "2026-08-25T16:55:51.639933+00:00",
+  "generated_at": "2026-08-25T17:10:57.795741+00:00",
   "runtime": {
     "supervisor": "STOPPED/QUARANTINED",
     "go_swarm": "RUNNING",
@@ -65,7 +65,7 @@
   },
   "distillery": {
     "schema": "CLAY_RESEARCH_DISTILLERY_STATUS/v1",
-    "generated_at": "2026-08-25T16:55:31.321287+00:00",
+    "generated_at": "2026-08-25T17:10:47.819140+00:00",
     "collected_source_tokens": 11621,
     "accepted_dataset_tokens": 0,
     "dataset_yield": 0.0,
@@ -111,7 +111,7 @@
     "model_output_tokens": 1455,
     "shared_provider_budget": {
       "schema": "CLAY_SHARED_PROVIDER_BUDGET/v1",
-      "generated_at": "2026-08-25T16:55:31.321726+00:00",
+      "generated_at": "2026-08-25T17:10:47.819704+00:00",
       "providers": {
         "arxiv": {
           "max_inflight": 1,
@@ -213,13 +213,13 @@
           "max_inflight": 16,
           "active_leases": 0,
           "min_interval_s": 0.5,
-          "cooldown_seconds": 9.992806673049927,
-          "total_requests": 2178,
+          "cooldown_seconds": 9.990458488464355,
+          "total_requests": 2268,
           "total_success": 134,
-          "total_429": 2043,
+          "total_429": 2133,
           "total_errors": 0,
           "last_status": "429",
-          "last_observed_at": "2026-08-25T16:55:31.314573+00:00"
+          "last_observed_at": "2026-08-25T17:10:47.810181+00:00"
         },
         "semantic_scholar": {
           "max_inflight": 1,
@@ -249,16 +249,16 @@
     },
     "db_bytes": 983040,
     "top_questions": [
-      "Can policy code hash be pinned to a git commit hash without introducing deployment coupling that defeats dynamic policy updates?",
-      "Can FREE providers scale with EntityOS/HCU under high workload?",
-      "What are the optimal parameters for the HCU architecture?",
-      "Does HCU attention mechanism exhibit a causal surprisal-bandwidth optimum for global workspace integration, or is apparent effect mediated by measurement artifacts in J-Space estimation?",
-      "Does per-model TEW specialization (e.g., nemotron-3-ultra vs nemotron-mini) yield additional gains beyond per-provider adaptation?",
-      "How does the Global J-Space/GWT prototype impact system convergence?",
-      "What are the potential risks and unintended consequences of refining the HCU architecture?",
-      "Does NVIDIA's NIM/Developer Program API expose any observable free-tier distinguishing signal (rate-limit headers, quota headers, model access restrictions) at pre-call time without consuming billable quota?",
-      "What are the long-term cost implications of relying on FREE providers?",
-      "How to audit deterministic hard negative coverage?"
+      "Can model-selection provenance be made tamper-evident without trusted hardware or external anchoring, given that all local state is mutable by the same process that emits records?",
+      "Does the minimal signature set change when J-Space causal controls require cross-model counterfactual queries?",
+      "Which concrete crate/module in the EntityOS/HCU repository contains the VM instruction dispatch loop, module loader, or JIT compilation entry point that would admit a benchmarkable bottleneck?",
+      "How can the system ensure that the external provider traffic is properly admitted and executed?",
+      "Does NVIDIA's free-tier credential validation occur at the API gateway (fast fail) or only at model-router level (rate-limit masquerades as auth)?",
+      "Is Groq's credential+model free-limit matching actually fail-closed, or does it succeed then rate-limit (observed 50% success, 12 rate-limits)?",
+      "Does attention schema disruption generalize across sensory modalities (auditory/tactile) or is the effect vision-specific?",
+      "Can J-Space causal trace divergence predict individual differences in metacognitive collapse magnitude?",
+      "Which open-source credential-binding framework (OPA, SPIFFE, Macaroons, or custom) can enforce per-call economic provenance (free-tier proof) at pre-network-I/O state without paid fallback, and has a reproducible benchmark for latency overhead?",
+      "Wie kann die Typed‑Free‑Admission für OpenRouter (und andere externe LLM‑Provider) im HCU‑Framework implementiert werden, ohne die aktuelle Quarantäne zu verletzen?"
     ],
     "candidate_states": {}
   },
@@ -433,6 +433,6 @@
     "measured_total_sonnet5_equivalent_usd": 148.830648,
     "verified_historical_savings_usd": null,
     "nominal_avoided_if_zero_cost_usd": 148.830648,
-    "repo_output_only_proxy_usd": 133.94835
+    "repo_output_only_proxy_usd": 134.532
   }
 }

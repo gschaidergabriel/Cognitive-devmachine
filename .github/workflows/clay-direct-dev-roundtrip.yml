@@ -1,0 +1,114 @@
+name: Clay direct-dev sandbox roundtrip
+
+on:
+  issues:
+    types: [opened]
+
+permissions:
+  contents: write
+  issues: read
+
+jobs:
+  probe:
+    if: github.repository == 'gschaidergabriel/clay-global-research-entity' && github.event.issue.title == '[CLAY-DISPATCH] clay-direct-dev roundtrip' && github.event.issue.user.login == 'gschaidergabriel'
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: main
+          fetch-depth: 0
+          clean: true
+          persist-credentials: true
+
+      - name: Discover and enter clay-direct-dev
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/clay-direct-dev-probe
+          python3 - <<'PY' > /tmp/clay-direct-dev-probe/base.json
+          import json, os, platform, socket
+          print(json.dumps({
+            'schema':'CLAY_DIRECT_DEV_ROUNDTRIP/v1',
+            'runner_name':os.environ.get('RUNNER_NAME','unknown'),
+            'runner_os':os.environ.get('RUNNER_OS','unknown'),
+            'runner_arch':os.environ.get('RUNNER_ARCH','unknown'),
+            'runner_hostname':socket.gethostname(),
+            'runner_platform':platform.platform(),
+            'github_sha':os.environ.get('GITHUB_SHA',''),
+            'run_id':os.environ.get('GITHUB_RUN_ID',''),
+          },indent=2,sort_keys=True))
+          PY
+
+          runtime=''
+          exec_prefix=()
+          found='false'
+          detail=''
+
+          try_runtime() {
+            local rt="$1"
+            if ! command -v "$rt" >/dev/null 2>&1; then return 1; fi
+            if "$rt" inspect clay-direct-dev >/dev/null 2>&1; then
+              runtime="$rt"; exec_prefix=("$rt" exec clay-direct-dev); found='true'; return 0
+            fi
+            if command -v sudo >/dev/null 2>&1 && sudo -n "$rt" inspect clay-direct-dev >/dev/null 2>&1; then
+              runtime="sudo-$rt"; exec_prefix=(sudo -n "$rt" exec clay-direct-dev); found='true'; return 0
+            fi
+            return 1
+          }
+
+          try_runtime docker || try_runtime podman || true
+
+          if [[ "$found" != true ]] && command -v incus >/dev/null 2>&1 && incus info clay-direct-dev >/dev/null 2>&1; then
+            runtime='incus'; exec_prefix=(incus exec clay-direct-dev --); found='true'
+          fi
+          if [[ "$found" != true ]] && command -v lxc >/dev/null 2>&1 && lxc info clay-direct-dev >/dev/null 2>&1; then
+            runtime='lxc'; exec_prefix=(lxc exec clay-direct-dev --); found='true'
+          fi
+
+          if [[ "$found" == true ]]; then
+            "${exec_prefix[@]}" sh -lc 'set -eu; echo CLAY_DIRECT_DEV_ROUNDTRIP=PASS; id; uname -a; pwd; df -Pk . | tail -n 1; command -v python3 || true; python3 --version 2>&1 || true' > /tmp/clay-direct-dev-probe/inside.txt 2>&1
+            status='PASS'
+          else
+            status='BLOCKED_SANDBOX_NOT_DISCOVERED_FROM_RUNNER'
+            {
+              echo 'docker:'; command -v docker || true; docker ps -a --format '{{.Names}}' 2>&1 || true
+              echo 'sudo docker:'; command -v sudo || true; sudo -n docker ps -a --format '{{.Names}}' 2>&1 || true
+              echo 'podman:'; command -v podman || true; podman ps -a --format '{{.Names}}' 2>&1 || true
+              echo 'incus:'; command -v incus || true; incus list 2>&1 || true
+              echo 'lxc:'; command -v lxc || true; lxc list 2>&1 || true
+            } > /tmp/clay-direct-dev-probe/discovery.txt
+          fi
+
+          STATUS="$status" RUNTIME="$runtime" python3 - <<'PY' > /tmp/clay-direct-dev-probe/receipt.json
+          import json, os, pathlib
+          base=json.loads(pathlib.Path('/tmp/clay-direct-dev-probe/base.json').read_text())
+          base.update({
+            'status':os.environ['STATUS'],
+            'sandbox':'clay-direct-dev',
+            'transport':'SELF_HOSTED_LINUX_X64',
+            'container_runtime':os.environ.get('RUNTIME') or None,
+            'inside_output':pathlib.Path('/tmp/clay-direct-dev-probe/inside.txt').read_text(errors='replace') if pathlib.Path('/tmp/clay-direct-dev-probe/inside.txt').exists() else None,
+            'discovery_output':pathlib.Path('/tmp/clay-direct-dev-probe/discovery.txt').read_text(errors='replace') if pathlib.Path('/tmp/clay-direct-dev-probe/discovery.txt').exists() else None,
+            'secret_values_recorded':False,
+            'scope':'non-invasive bridge/sandbox roundtrip only; no model intervention',
+          })
+          print(json.dumps(base,indent=2,sort_keys=True))
+          PY
+
+      - name: Persist receipt
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p research_entity/runtime/tool_results
+          target="research_entity/runtime/tool_results/clay-direct-dev-roundtrip-${GITHUB_RUN_ID}.json"
+          cp /tmp/clay-direct-dev-probe/receipt.json "$target"
+          git config user.name 'clay-direct-dev-runner'
+          git config user.email 'clay-direct-dev-runner@users.noreply.github.com'
+          git add "$target"
+          git commit -m "evidence(vps): clay-direct-dev roundtrip ${GITHUB_RUN_ID} [skip ci]"
+          for attempt in 1 2 3 4 5 6; do
+            git pull --rebase origin main && git push origin HEAD:main && exit 0
+            sleep $((attempt * 3))
+          done
+          exit 1

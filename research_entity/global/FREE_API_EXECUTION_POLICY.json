@@ -63,7 +63,7 @@
   "request_pre_snapshot_cardinality_bound": {
     "max_messages": 54792,
     "checked_at": "2026-08-24",
-    "claim": "An exact built-in message list is rejected before snapshot allocation and before the process-wide execution lock when its cardinality exceeds 54792. The bound is rechecked at the snapshot boundary because caller-owned mutable input can change after early admission. Under required role alternation, the densest valid 54792-message request with a leading system message occupies 1999970 bytes with the smallest valid model; the next valid cardinality exceeds the 2000000-byte envelope.",
+    "claim": "An exact built-in message list is rejected before snapshot allocation and before the process-wide execution lock when its cardinality exceeds 54792. The bound is rechecked at the snapshot boundary because caller-owned mutable input can change after early admission. Under required role alternation, the densest valid 54792-message request with a leading system message occupies 1999978 bytes with the smallest valid model and explicit n=1; the next valid cardinality occupies 2000015 bytes and exceeds the 2000000-byte envelope.",
     "sources": [
       "https://docs.python.org/3/library/functions.html#len",
       "https://docs.python.org/3/library/json.html#json.dumps",
@@ -658,6 +658,16 @@
     ],
     "counterhypothesis": "Unknown choice metadata is harmless to ignore; falsified for FRANK's verification claim because an unmodeled extension reached success, VERIFIED and DONE without typed handling or provenance.",
     "uncertainty": "Non-null log probabilities, stop reasons, token IDs or future NVIDIA/OpenAI-compatible extensions remain rejected until FRANK gives each value explicit typed handling and verification semantics."
+  },
+  "single_text_response_choice": {
+    "checked_at": "2026-08-25",
+    "claim": "FRANK v0.1 explicitly requests n=1 and requires the non-streaming provider response to contain exactly one choice. A response with zero or multiple choices remains EXECUTED but cannot be partially represented as VERIFIED or DONE.",
+    "source": "https://docs.nvidia.com/nim/large-language-models/1.7.0/system-example.html",
+    "external_evidence": "NVIDIA's official non-streaming Chat Completions examples set n to 1 and return one index-0 choice.",
+    "internal_measurement": "A status-200 response containing two valid choices previously returned the first content as success and reached VERIFIED and DONE without validating or representing the second choice.",
+    "executable_evidence": "test_multiple_response_choices_cannot_be_partially_verified",
+    "counterhypothesis": "Verifying choices[0] is sufficient because additional choices can be ignored; falsified for FRANK's receipt claim because a second distinct completion crossed the execution boundary without validation or provenance.",
+    "uncertainty": "Multi-choice generation remains intentionally unsupported; a future adapter must type, verify and receipt every returned choice before requesting n greater than one."
   },
   "pending_http_results": {
     "checked_at": "2026-08-13",

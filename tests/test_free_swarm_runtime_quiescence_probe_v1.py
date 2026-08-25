@@ -1,6 +1,8 @@
 import importlib.util
 import json
 from pathlib import Path
+import sqlite3
+import time
 
 import pytest
 
@@ -44,6 +46,53 @@ def metrics_obj(tokens=10, corpus_chars=100):
     }
 
 
+def budget_obj(signature="b", zero_leases=True):
+    return {
+        "counter_sha256": signature,
+        "zero_unexpired_leases": zero_leases,
+    }
+
+
+def make_budget_db(path: Path, *, requests=1, lease_expires_at=None):
+    con = sqlite3.connect(path)
+    con.executescript(
+        """
+        CREATE TABLE provider_state(
+          provider TEXT PRIMARY KEY,
+          max_inflight INTEGER NOT NULL,
+          min_interval_s REAL NOT NULL DEFAULT 0,
+          cooldown_until REAL NOT NULL DEFAULT 0,
+          last_start REAL NOT NULL DEFAULT 0,
+          total_requests INTEGER NOT NULL DEFAULT 0,
+          total_success INTEGER NOT NULL DEFAULT 0,
+          total_429 INTEGER NOT NULL DEFAULT 0,
+          total_errors INTEGER NOT NULL DEFAULT 0,
+          last_status TEXT,
+          last_observed_at TEXT
+        );
+        CREATE TABLE leases(
+          lease_id TEXT PRIMARY KEY,
+          provider TEXT NOT NULL,
+          owner TEXT NOT NULL,
+          acquired_at REAL NOT NULL,
+          expires_at REAL NOT NULL
+        );
+        """
+    )
+    con.execute(
+        "INSERT INTO provider_state(provider,max_inflight,total_requests,total_success,total_429,total_errors) "
+        "VALUES('openrouter',3,?,?,?,?)",
+        (requests, 1, 0, 0),
+    )
+    if lease_expires_at is not None:
+        con.execute(
+            "INSERT INTO leases(lease_id,provider,owner,acquired_at,expires_at) VALUES(?,?,?,?,?)",
+            ("lease-1", "openrouter", "worker", time.time(), lease_expires_at),
+        )
+    con.commit()
+    con.close()
+
+
 def test_admission_hard_off_passes(tmp_path):
     p = tmp_path / "admission.json"
     write_json(p, admission_obj(False))
@@ -71,6 +120,32 @@ def test_usage_signature_detects_provider_change(tmp_path):
     assert probe.provider_usage_snapshot(a)["usage_sha256"] != probe.provider_usage_snapshot(b)["usage_sha256"]
 
 
+def test_shared_budget_snapshot_detects_direct_counter_change(tmp_path):
+    db = tmp_path / "budget.sqlite3"
+    make_budget_db(db, requests=7)
+    before = probe.provider_budget_snapshot(db, now=time.time())
+    con = sqlite3.connect(db)
+    con.execute("UPDATE provider_state SET total_requests=total_requests+1 WHERE provider='openrouter'")
+    con.commit(); con.close()
+    after = probe.provider_budget_snapshot(db, now=time.time())
+    assert before["counter_sha256"] != after["counter_sha256"]
+    assert before["counters"]["providers"]["openrouter"]["total_requests"] == 7
+    assert after["counters"]["providers"]["openrouter"]["total_requests"] == 8
+
+
+def test_shared_budget_snapshot_reports_unexpired_lease(tmp_path):
+    db = tmp_path / "budget.sqlite3"
+    make_budget_db(db, requests=1, lease_expires_at=time.time() + 60)
+    snap = probe.provider_budget_snapshot(db, now=time.time())
+    assert snap["zero_unexpired_leases"] is False
+    assert snap["unexpired_leases"][0]["provider"] == "openrouter"
+
+
+def test_shared_budget_missing_fails_closed(tmp_path):
+    with pytest.raises(probe.ProbeError, match="shared provider budget DB unavailable"):
+        probe.provider_budget_snapshot(tmp_path / "missing.sqlite3")
+
+
 def test_scan_processes_detects_forbidden(tmp_path):
     proc = tmp_path / "proc"; cmd = proc / "123" / "cmdline"; cmd.parent.mkdir(parents=True)
     cmd.write_bytes(b"bash\0tools/run_free_evidence_forge.py\0")
@@ -85,17 +160,21 @@ def test_evaluate_pass_component_only():
         {"usage_sha256": "x"},
         {"usage_sha256": "x"},
         [{"zero_forbidden": True}, {"zero_forbidden": True}],
+        budget_obj("b", True),
+        budget_obj("b", True),
     )
     assert out["status"] == "PASS_COMPONENT_ONLY"
     assert out["failure_reasons"] == []
 
 
-def test_evaluate_fails_live_process_even_with_stable_usage():
+def test_evaluate_fails_live_process_even_with_stable_counters():
     out = probe.evaluate(
         {"hard_off": True},
         {"usage_sha256": "x"},
         {"usage_sha256": "x"},
         [{"zero_forbidden": True}, {"zero_forbidden": False}],
+        budget_obj("b", True),
+        budget_obj("b", True),
     )
     assert out["status"] == "FAIL_CLOSED"
     assert "FORBIDDEN_FREE_SWARM_PROCESS_OBSERVED" in out["failure_reasons"]
@@ -107,9 +186,48 @@ def test_evaluate_fails_usage_change_even_with_zero_processes():
         {"usage_sha256": "x"},
         {"usage_sha256": "y"},
         [{"zero_forbidden": True}],
+        budget_obj("b", True),
+        budget_obj("b", True),
     )
     assert out["status"] == "FAIL_CLOSED"
     assert "PROVIDER_USAGE_CHANGED_DURING_WINDOW" in out["failure_reasons"]
+
+
+def test_evaluate_fails_direct_budget_change_even_when_live_metrics_static():
+    out = probe.evaluate(
+        {"hard_off": True},
+        {"usage_sha256": "same-derived-worker-view"},
+        {"usage_sha256": "same-derived-worker-view"},
+        [{"zero_forbidden": True}],
+        budget_obj("before", True),
+        budget_obj("after", True),
+    )
+    assert out["status"] == "FAIL_CLOSED"
+    assert "SHARED_PROVIDER_BUDGET_COUNTER_CHANGED_DURING_WINDOW" in out["failure_reasons"]
+
+
+def test_evaluate_fails_unexpired_budget_lease():
+    out = probe.evaluate(
+        {"hard_off": True},
+        {"usage_sha256": "x"},
+        {"usage_sha256": "x"},
+        [{"zero_forbidden": True}],
+        budget_obj("b", False),
+        budget_obj("b", True),
+    )
+    assert out["status"] == "FAIL_CLOSED"
+    assert "UNEXPIRED_SHARED_PROVIDER_BUDGET_LEASE_OBSERVED" in out["failure_reasons"]
+
+
+def test_evaluate_fails_without_direct_budget_evidence():
+    out = probe.evaluate(
+        {"hard_off": True},
+        {"usage_sha256": "x"},
+        {"usage_sha256": "x"},
+        [{"zero_forbidden": True}],
+    )
+    assert out["status"] == "FAIL_CLOSED"
+    assert "NO_SHARED_PROVIDER_BUDGET_EVIDENCE" in out["failure_reasons"]
 
 
 def test_metrics_missing_aggregate_fails_closed(tmp_path):

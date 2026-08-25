@@ -68,6 +68,37 @@ def _assert_reject(row):
     return result
 
 
+def test_a02_repository_lineage_resolves_real_commit_path_bytes_and_ancestry():
+    p = _authority()["producer"]
+    failures, details = gate._verify_repository_lineage(p, p["repo_path"])
+    assert failures == []
+    assert details["origin_repository"] == gate.EXPECTED_REPOSITORY
+    assert details["declared_source_commit_sha"] == p["source_lineage"]["source_commit_sha"]
+    assert details["source_commit_path_sha256"] == p["source_sha256"]
+    assert details["executed_head_path_sha256"] == p["source_sha256"]
+    assert details["source_commit_is_ancestor_of_head"] is True
+    assert isinstance(details["executed_head_sha"], str)
+    assert len(details["executed_head_sha"]) == 40
+    assert isinstance(details["executed_tree_sha"], str)
+    assert len(details["executed_tree_sha"]) == 40
+
+
+def test_a02_repository_lineage_rejects_well_formed_nonexistent_commit():
+    p = deepcopy(_authority()["producer"])
+    p["source_lineage"]["source_commit_sha"] = "0" * 40
+    failures, details = gate._verify_repository_lineage(p, p["repo_path"])
+    assert "A02_PRODUCER_SOURCE_LINEAGE_COMMIT_UNRESOLVED" in failures
+    assert details["source_commit_is_ancestor_of_head"] is False
+
+
+def test_a02_repository_lineage_rejects_real_commit_wrong_path_binding():
+    p = deepcopy(_authority()["producer"])
+    p["source_lineage"]["source_path"] = "tools/trigger2_generation_provenance_gate_v1.py"
+    failures, _ = gate._verify_repository_lineage(p, p["repo_path"])
+    assert "A02_PRODUCER_SOURCE_LINEAGE_PATH_MISMATCH" in failures
+    assert "A02_PRODUCER_SOURCE_LINEAGE_COMMIT_PATH_SHA256_MISMATCH" in failures
+
+
 def test_a02_baseline_is_authority_derived_and_zero_credit():
     result = gate.adjudicate(_baseline_row())
     assert result["pass"] is True
@@ -76,6 +107,9 @@ def test_a02_baseline_is_authority_derived_and_zero_credit():
     assert result["producer_source_lineage_verified"] is True
     assert result["policy_digest_verified"] is True
     assert result["producer_invocation_completed"] is True
+    assert result["repository_lineage"]["source_commit_is_ancestor_of_head"] is True
+    assert result["repository_lineage"]["source_commit_path_sha256"] == _authority()["producer"]["source_sha256"]
+    assert result["repository_lineage"]["executed_head_path_sha256"] == _authority()["producer"]["source_sha256"]
     assert result["row_producer_or_policy_fields_authoritative"] is False
     assert result["canonical_dataset_admission"] is False
     assert result["accepted_dataset_tokens_minted"] == 0

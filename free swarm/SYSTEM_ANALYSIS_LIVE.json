@@ -1,13 +1,13 @@
 {
   "schema": "CLAY_FREE_SWARM_SYSTEM_ANALYSIS/v3",
-  "generated_at": "2026-08-25T09:52:10.324203+00:00",
+  "generated_at": "2026-08-25T10:07:16.775881+00:00",
   "runtime": {
     "supervisor": "STOPPED/QUARANTINED",
     "go_swarm": "RUNNING",
     "distillery": "RUNNING",
     "evidence_forge": "RUNNING",
     "dashboard": "RUNNING",
-    "local_model": "NOT_READY",
+    "local_model": "BUILDING/BOOTSTRAPPING",
     "provider_admission": {
       "admitted_free_providers": [
         "groq",
@@ -65,7 +65,7 @@
   },
   "distillery": {
     "schema": "CLAY_RESEARCH_DISTILLERY_STATUS/v1",
-    "generated_at": "2026-08-25T09:52:07.826047+00:00",
+    "generated_at": "2026-08-25T10:07:15.794165+00:00",
     "collected_source_tokens": 11621,
     "accepted_dataset_tokens": 0,
     "dataset_yield": 0.0,
@@ -86,7 +86,7 @@
     "model_output_tokens": 1455,
     "shared_provider_budget": {
       "schema": "CLAY_SHARED_PROVIDER_BUDGET/v1",
-      "generated_at": "2026-08-25T09:52:07.826924+00:00",
+      "generated_at": "2026-08-25T10:07:15.798052+00:00",
       "providers": {
         "arxiv": {
           "max_inflight": 1,
@@ -224,22 +224,22 @@
     },
     "db_bytes": 864256,
     "top_questions": [
-      "What are the potential risks and challenges associated with the execution of the local research model?",
-      "What are the potential risks associated with relying on free providers?",
-      "How can the security of the system be ensured while utilizing free providers?",
-      "What are the most effective methods for implementing additional security measures?",
-      "Can a lightweight tracing wrapper be integrated into the HCU inference pipeline without exceeding free provider runtime credit limits?",
-      "Does the added tracing affect the deterministic behavior of J‑Space/GWT inference, potentially invalidating causal trace analysis?",
-      "What is the minimal set of event identities that must be captured to satisfy the FREE_ONLY constraints while still providing useful instrumentation?",
-      "What is the optimal token bucket parameters for cooldown backpressure?",
-      "Which causal principle—counterfactual world-model rollout, typed-grammar constrained decoding, or MoE causal routing—yields the largest measurable improvement in HCU Typed Entry → GRID10 → J-Space/GWT fidelity per free-tier compute unit?",
-      "How do mixed provider workloads affect HCU's global j-space coherence?"
+      "What's the minimum engine-identity set required to avoid cache thrashing?",
+      "Does predictive pre-admission generalize across provider rate-limit topologies (token-bucket vs leaky-bucket vs fixed-window) without provider-specific tuning?",
+      "What are the optimal convergence metrics to use for dynamic entropy tuning?",
+      "Does the current NVIDIA credential binding distinguish between Developer Program membership and NIM free-tier entitlement per concrete credential?",
+      "How to handle noisy or unreliable convergence metrics?",
+      "What are the trade-offs between dynamic entropy tuning and other optimization techniques?",
+      "Does NVIDIA expose a per-credential free-tier eligibility API, or must economic binding rely on rate-limit header observation (x-ratelimit-remaining) as proxy for free-tier status?",
+      "Can model-specific J-Space causal structure be measured via intervention on InferenceReceipt latent projections without access to model weights or training data?",
+      "Why is the quota status blocked?",
+      "How can we ensure the accuracy of the Vercel API quota information?"
     ],
     "candidate_states": {}
   },
   "evidence_forge": {
     "schema": "CLAY_FREE_EVIDENCE_FORGE_STATUS/v1",
-    "generated_at": "2026-08-25T09:52:08.355963+00:00",
+    "generated_at": "2026-08-25T10:07:14.764415+00:00",
     "candidate_states": {
       "ACCEPTED": 1,
       "NEEDS_IMPLEMENTATION": 65,
@@ -263,7 +263,7 @@
     "peak_parallel_tasks": 0,
     "shared_provider_budget": {
       "schema": "CLAY_SHARED_PROVIDER_BUDGET/v1",
-      "generated_at": "2026-08-25T09:52:08.356564+00:00",
+      "generated_at": "2026-08-25T10:07:14.765434+00:00",
       "providers": {
         "arxiv": {
           "max_inflight": 1,
@@ -408,6 +408,6 @@
     "measured_total_sonnet5_equivalent_usd": 148.830648,
     "verified_historical_savings_usd": null,
     "nominal_avoided_if_zero_cost_usd": 148.830648,
-    "repo_output_only_proxy_usd": 126.37887
+    "repo_output_only_proxy_usd": 126.37756
   }
 }

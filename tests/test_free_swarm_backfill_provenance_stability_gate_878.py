@@ -58,12 +58,13 @@ def _seed(con: sqlite3.Connection) -> None:
     con.commit()
 
 
-def test_offset_only_schema_suppresses_reconciliation() -> None:
+def test_offset_only_schema_clamps_unprovable_multi_source_weight() -> None:
     con = _con(stable_line_checkpoint=False)
     _seed(con)
     assert replay_stable_source_event_identity_available(con) is False
+    assert reconcile_candidate_source_counts(con) == 1
+    assert con.execute("SELECT source_count FROM candidates WHERE candidate_hash='c1'").fetchone()[0] == 1
     assert reconcile_candidate_source_counts(con) == 0
-    assert con.execute("SELECT source_count FROM candidates WHERE candidate_hash='c1'").fetchone()[0] == 9
 
 
 def test_absolute_line_schema_allows_distinct_event_reconciliation() -> None:

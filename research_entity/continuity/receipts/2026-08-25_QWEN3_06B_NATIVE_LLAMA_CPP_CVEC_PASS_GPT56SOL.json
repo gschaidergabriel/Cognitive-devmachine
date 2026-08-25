@@ -1,0 +1,142 @@
+{
+  "schema": "CLAY_QWEN3_06B_NATIVE_LLAMA_CPP_CVEC_EVIDENCE/v1",
+  "date": "2026-08-25",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "direct_owner_continue",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "canonical_main_observed_before_write": "725df74789870a4903baa150fadecee07db0d728",
+  "execution_surface": {
+    "bridge": "chatgpt-vps-control -> clay-direct-dev -> chatgpt-vps-results",
+    "sandbox": "clay-direct-dev",
+    "execution_boundary": "ROOT_INSIDE_ROOTLESS_PODMAN_OR_EXPLICIT_REPO_CONTROL_OP",
+    "provider": "local",
+    "paid_provider_used": false,
+    "external_provider_credentials_read": false,
+    "zero_provider_billing": true
+  },
+  "source_identity": {
+    "experiment_repo_head": "277d39f6d1f7b130b44fc9fdc1c93231d95bbd64",
+    "experiment_repo_tree": "ce19c76e1a11fe21005a90ba416a32a2a353634d",
+    "executor": "tools/trigger1_local_qwen06_native_cvec_execute.py",
+    "executor_sha256": "eabb6dd6f4287340b1aa3948a6c849fca1faedccf9abba13c8cd87caf86feea0",
+    "native_harness_source": "tools/trigger1_native_llamacpp_cvec_logits.cpp",
+    "native_harness_source_sha256": "7bdd6e2a19d06c5479c5f42dbff98b6475b5de2b3765903076902dcf4d87c366",
+    "native_harness_binary_sha256": "faeacd6f5c3fbc7669921bc5f260c5014bdc1567ff1b366a8b2e2e89797c8ad7"
+  },
+  "source_model_identity": {
+    "model": "Qwen/Qwen3-0.6B",
+    "revision": "c1899de289a04d12100db370d81485cdf75e47ca",
+    "checkpoint_sha256": "41cec1b674954ae680f5f69ee62bc7c5b3086a2472d0c9b6ea02c6ca73828ab2",
+    "tokenizer_sha256": "aeb13307a71acd8fe81861d94ad54ab689df773318809eed3cbe794b4492dae4",
+    "runtime_build_sha256": "f02efa52cc1d5e1f529fdb1ff1a2ecc826f2083259826d1443b88b52b15b6358",
+    "source_layer": 20,
+    "source_basis_vector_sha256": "c5b21d01f88a532b26791f89aa1ef71076368e8a24892d221a37dcf8aad8944e"
+  },
+  "native_target_identity": {
+    "model": "Qwen/Qwen3-0.6B-GGUF:Q8_0",
+    "gguf_sha256": "9465e63a22add5354d9bb4b99e90117043c7124007664907259bd16d043bb031",
+    "gguf_bytes": 639446688,
+    "llama_cpp_source_commit": "bb4caa7540188872173c44d161602d9271386413",
+    "llama_cli_sha256": "9d08841a5b2d04cd3ec0d13d23f0c453893f03026ff21ff0b4f8ecda647a1514",
+    "llama_server_sha256": "56bc3ce0147dbdc86d1ce678d3f169e75542ca60b636a108c614c0d1dce8a96d",
+    "libllama_sha256": "abea60c662c51589d079845686b15ba50e77124c7aa43db40575dcc59809819f",
+    "n_embd": 1024,
+    "n_layer": 28,
+    "target_layer": 20,
+    "activation_semantics": "Qwen3 residual output after FFN+residual, before next layer input"
+  },
+  "jspace_binding": {
+    "source_packet_schema": "JSPACE_VECTOR_CONTROL_ABI/v1",
+    "source_packet_sha256": "0c3b04823c234b41b642217d1794453dde5010cb35982348461fe8723308dee6",
+    "adapter_schema": "JSPACE_LATENT_BASIS_ADAPTER/v1",
+    "adapter_sha256": "2c242655b56bfaf90e3b5649ff8e95244eadc11bfa19b9d6218e229531933f3c",
+    "local_packet_schema": "JSPACE_LOCAL_QWEN3_CONTROL_PACKET/v1",
+    "local_control_packet_sha256": "39cf0f2e0b4f8242cb56e98beb8355850b5577193d615ceb9816987930943bfd",
+    "mapping": "identity 1024D hidden-coordinate map, no padding/truncation/learned projection",
+    "native_api": "llama_set_adapter_cvec"
+  },
+  "native_calibration": {
+    "gain_grid": [4.0, 8.0, 16.0, 32.0],
+    "selected_gain": 32.0,
+    "target_layer": 20,
+    "runtime_receipts_sha256": "932edd6fde75264a2da324982003d2bdd1d4c712897ccfec8d55b9fc049d4994",
+    "min_plus_vs_baseline": 1.0428367853164673,
+    "min_baseline_vs_sign_flip": 1.0376496016979218,
+    "min_plus_vs_orthogonal_same_norm": 1.187623292207718,
+    "min_plus_vs_permuted_same_norm": 0.4757680147886276,
+    "max_null_drift": 0.0,
+    "pass": true
+  },
+  "fresh_native_holdout": {
+    "seeds": [12011, 13007, 14009],
+    "family_sha256": "a7e8532c371790625e578f46aca181931554c673407e053822f934b41e1d1a84",
+    "classification": "NATIVE_LLAMA_CPP_CVEC_FRESH_HOLDOUT_SPECIFIC_EFFECT_REPRODUCED",
+    "mean_scores": {
+      "BASELINE": 2.446431895097097,
+      "+VECTOR": 3.7294726371765137,
+      "SIGN_FLIP": 1.3402898013591766,
+      "NULL_VECTOR": 2.446431895097097,
+      "ORTHOGONAL_SAME_NORM": 2.0405004620552063,
+      "PERMUTED_SAME_NORM": 2.639041672150294
+    },
+    "min_plus_vs_baseline": 0.9677897691726685,
+    "min_baseline_vs_sign_flip": 0.928848922252655,
+    "min_plus_vs_orthogonal_same_norm": 1.4733150154352188,
+    "min_plus_vs_permuted_same_norm": 0.9149928092956543,
+    "max_null_drift": 0.0,
+    "pass": true
+  },
+  "native_control_receipts": {
+    "+VECTOR": {
+      "vector_sha256": "87c87257bceedf39dcd2b803682a0ef085e709cb45d9297fb4631af5fa70b0d0",
+      "cvec_f32le_sha256": "fdde7d67037cdba18787533c985065c288b594e2b14138820b31e0b1c1d9f800",
+      "runtime_receipt_sha256": "dc26a25396b6742fe20ea8a0d17b08c6c0f9d9f2bc5bf72f5cffc5d052ac1102"
+    },
+    "SIGN_FLIP": {
+      "vector_sha256": "deedaac28884aa6abb98768bec8b325c44907f44b64bb9a25ec8a1bea5ab590d",
+      "cvec_f32le_sha256": "90f2e30c855f3d8f422cdb3675e159b2bccaf0d30c4a180ab12c33731c2a26cd",
+      "runtime_receipt_sha256": "058d6c94eb3d35a57596005a5a0ee030a26e2d8c596c663ab1f8c76edc6d3eaa"
+    },
+    "NULL_VECTOR": {
+      "cvec_f32le_sha256": "7c98d2da7afa2bdee9765910c81cb588e14781b77538fb54df84f7e7039e4348",
+      "runtime_receipt_sha256": "79ef461788b39552d2bb5ef7ee185aaca688d86abe94631e18ef2cad49690f15"
+    },
+    "ORTHOGONAL_SAME_NORM": {
+      "cvec_f32le_sha256": "d9cd314ab326393d06a3aedb8876cd8928dcf4715c91d77bcfb7b2cb483af01d",
+      "runtime_receipt_sha256": "1bf398b99c9289633c33fa9f6d72434662a3125616b6a9a83b849a20c6d4a72b"
+    },
+    "PERMUTED_SAME_NORM": {
+      "cvec_f32le_sha256": "221d32ee0d77fef101d8018dd53db18155ca70a0ae0ad7ac5cb7ecc681ab6e58",
+      "runtime_receipt_sha256": "101129495239d60656ef3ae21c151e0d385c68658b79dbde1d685ee73a9dd64f"
+    },
+    "BASELINE": {
+      "cvec_applied": false,
+      "runtime_receipt_sha256": "7625e4fe815c603319a5a2cf7fa13413b18980b8808c2b45a40ef01b5ce601fc"
+    },
+    "cvec_float_count_each_nonbaseline": 27648,
+    "cvec_byte_count_each_nonbaseline": 110592,
+    "native_cvec_return_code": 0
+  },
+  "result_identity": {
+    "experiment_result_sha256": "8f0fc82d494e1de7133424c073f5b676f47e45490b98a62a44c8f966004b7dfa",
+    "result_file_sha256": "63145de73bb76d69c9921d1a227869d9077ded2ada0429c55c18b6b0253c02cc",
+    "runtime_prepare_receipt": "vps_bridge/results/receipts/gpt56sol-native-cvec-prepare-runtime-20260825.json",
+    "run_receipt": "vps_bridge/results/receipts/gpt56sol-native-cvec-z3-run-20260825.json",
+    "compact_summary_receipt": "vps_bridge/results/receipts/gpt56sol-native-cvec-z5-compact-20260825.json",
+    "full_read_receipt": "vps_bridge/results/receipts/gpt56sol-native-cvec-z6-read-full-20260825.json"
+  },
+  "adjudication": {
+    "direct_hidden_state_steering_pass": true,
+    "native_llamacpp_cvec_runtime_credit": true,
+    "model_specific_nonterminal_causal_component_credit": true,
+    "whole_entityos_hcu_runtime_credit": false,
+    "full_hcu_runtime_credit": false,
+    "training_credit": false,
+    "whole_product_pass": false,
+    "owner_trigger1_goal_credit": false,
+    "remaining_scientific_gate": "Current A/B/C derivation and output metric are not yet label-independent/counterbalanced enough for the separate strict promotion gate; native mechanism PASS is not silently upgraded to owner-goal/canonical credit."
+  },
+  "next_exact_discriminator": "Construct a semantic internal direction without evaluation-output-label identities, fix a counterbalanced output-label metric before evaluation, calibrate layer/gain only on calibration, and repeat a fresh native llama.cpp cvec holdout with all six controls; then submit the exact candidate to tools/trigger1_jspace_promotion_gate.py."
+}

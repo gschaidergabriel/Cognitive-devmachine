@@ -41,8 +41,13 @@ class AbstractStateCounterbalanceTests(unittest.TestCase):
 
     def test_counterbalance_corruption_fails_closed(self):
         rows = copy.deepcopy(design.build_rows())
-        subset = [r for r in rows if r["split"] == "CALIBRATION" and r["semantic_class"] == "AFFIRMATIVE"]
-        subset[0]["nuisance_affect"] = subset[1]["nuisance_affect"]
+        group = [
+            row for row in rows
+            if row["split"] == "CALIBRATION" and row["family_group_id"] == "council"
+        ]
+        group[0]["nuisance_affect"], group[1]["nuisance_affect"] = (
+            group[1]["nuisance_affect"], group[0]["nuisance_affect"]
+        )
         with self.assertRaisesRegex(ValueError, "COUNTERBALANCE_FAILED"):
             design.validate(rows)
 

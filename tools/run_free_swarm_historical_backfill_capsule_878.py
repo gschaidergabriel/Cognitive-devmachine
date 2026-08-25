@@ -34,6 +34,7 @@ ensure_schema = historical_backfill_core.ensure_schema
 ingest_artifact_history = historical_backfill_core.ingest_artifact_history
 
 SCHEMA = "FREE_SWARM_HISTORICAL_BACKFILL_RECEIPT/v1"
+PASS_STATUS = "PASS_FULL_HISTORICAL_SATURATION"
 
 
 def sha256_file(path: Path) -> str:
@@ -115,6 +116,39 @@ def bounded_scan_manifest(con: sqlite3.Connection, artifact_root: Path) -> tuple
     if not entries:
         saturated = False
     return entries, saturated
+
+
+def classify_full_saturation(
+    metrics: dict[str, Any],
+    consecutive_zero_scan_passes: int,
+    manifest_saturated: bool,
+) -> str:
+    """Return a terminal fail-closed status for the historical-backfill receipt.
+
+    Cursor saturation proves only that the bounded workers.jsonl scan stopped moving.
+    It does not prove that semantic extraction completed. Runtime PASS additionally
+    requires every admitted historical chunk to have reached the explicit SATURATED
+    state under the shared two-confirmation policy, with no pending or max-pass stall.
+    """
+    if consecutive_zero_scan_passes < 2 or not manifest_saturated:
+        return "FAIL_SCAN_SET_NOT_SATURATED"
+
+    states_raw = metrics.get("chunk_states")
+    states = states_raw if isinstance(states_raw, dict) else {}
+    chunks = int(metrics.get("historical_chunks", 0) or 0)
+    pending = int(metrics.get("pending_extraction", 0) or 0)
+    max_passes_reached = int(states.get("MAX_PASSES_REACHED", 0) or 0)
+    saturated = int(states.get("SATURATED", 0) or 0)
+
+    if chunks <= 0:
+        return "FAIL_NO_HISTORICAL_CHUNKS"
+    if pending > 0:
+        return "FAIL_PENDING_EXTRACTION"
+    if max_passes_reached > 0:
+        return "FAIL_MAX_PASSES_REACHED"
+    if saturated != chunks:
+        return "FAIL_CHUNK_STATE_NOT_SATURATED"
+    return PASS_STATUS
 
 
 def authority_snapshot() -> dict[str, Any]:
@@ -199,7 +233,9 @@ def run(artifact_root: Path, max_lines: int, max_passes: int) -> dict[str, Any]:
     source_sha = os.environ.get("CLAY_GO878_SOURCE_SHA", "")
     source_tree = os.environ.get("CLAY_GO878_SOURCE_TREE", "")
     dirty = os.environ.get("CLAY_GO878_DIRTY_STATE", "UNKNOWN")
-    status = "PASS_SATURATED_SCAN_SET" if consecutive_zero >= 2 and manifest_saturated else "FAIL_NOT_SATURATED"
+    status = classify_full_saturation(after_metrics, consecutive_zero, manifest_saturated)
+    chunk_states = after_metrics.get("chunk_states") if isinstance(after_metrics.get("chunk_states"), dict) else {}
+    semantic_saturated = status == PASS_STATUS
 
     receipt = {
         "schema": SCHEMA,
@@ -233,6 +269,8 @@ def run(artifact_root: Path, max_lines: int, max_passes: int) -> dict[str, Any]:
             "scan_set": final_manifest,
             "consecutive_zero_line_saturated_passes": consecutive_zero,
             "cursor_saturated_for_manifest": manifest_saturated,
+            "semantic_chunk_saturation": semantic_saturated,
+            "chunk_states": chunk_states,
         },
         "recovery": {
             "explicit_deltas_recovered": delta(after_modes, before_modes, "EXPLICIT_WORKER_DELTA"),
@@ -243,6 +281,9 @@ def run(artifact_root: Path, max_lines: int, max_passes: int) -> dict[str, Any]:
             "ready_backlog": int(after_states.get("READY_BACKLOG", 0)),
             "implementation_backlog": int(after_states.get("IMPLEMENTATION_BACKLOG", 0)),
             "remaining_pending_extraction": int(after_metrics.get("pending_extraction", 0)),
+            "max_passes_reached": int(chunk_states.get("MAX_PASSES_REACHED", 0) or 0),
+            "saturated_chunks": int(chunk_states.get("SATURATED", 0) or 0),
+            "historical_chunks": int(after_metrics.get("historical_chunks", 0) or 0),
         },
         "before": {
             "backfill": before_metrics,
@@ -256,14 +297,14 @@ def run(artifact_root: Path, max_lines: int, max_passes: int) -> dict[str, Any]:
         },
         "credit": {
             "scope": "HISTORICAL_BACKFILL_INGEST_COMPONENT_ONLY",
-            "historical_backfill_runtime_credit": 1 if status == "PASS_SATURATED_SCAN_SET" else 0,
+            "historical_backfill_runtime_credit": 1 if status == PASS_STATUS else 0,
             "whole_entityos_runtime_credit": 0,
             "whole_hcu_runtime_credit": 0,
             "jspace_model_runtime_credit": 0,
             "training_credit": 0,
             "canonical_semantics_promotion": False,
         },
-        "note": "Historical replay preserves execution provenance; deduplicated repackaging is not independent evidence. Pending extraction remains candidate work, not factual truth.",
+        "note": "Cursor saturation alone is not semantic extraction saturation. PASS requires every admitted historical chunk to be SATURATED under the shared explicit-exhaustiveness policy; pending/max-pass/other chunk states fail closed. Historical replay preserves execution provenance; deduplicated repackaging is not independent evidence.",
     }
     return receipt
 
@@ -284,9 +325,12 @@ def main() -> int:
         "successful_outputs": receipt["scan"]["successful_outputs"],
         "new_execution_variants": receipt["recovery"]["new_execution_variants"],
         "remaining_pending_extraction": receipt["recovery"]["remaining_pending_extraction"],
+        "max_passes_reached": receipt["recovery"]["max_passes_reached"],
+        "saturated_chunks": receipt["recovery"]["saturated_chunks"],
+        "historical_chunks": receipt["recovery"]["historical_chunks"],
         "scan_set_manifest_sha256": receipt["scan"]["scan_set_manifest_sha256"],
     }, sort_keys=True))
-    return 0 if receipt["status"] == "PASS_SATURATED_SCAN_SET" else 2
+    return 0 if receipt["status"] == PASS_STATUS else 2
 
 
 if __name__ == "__main__":

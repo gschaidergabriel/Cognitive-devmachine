@@ -1,6 +1,6 @@
 {
   "schema": "CLAY_FREE_SWARM_SYSTEM_ANALYSIS/v3",
-  "generated_at": "2026-08-25T09:21:58.076393+00:00",
+  "generated_at": "2026-08-25T09:37:04.467669+00:00",
   "runtime": {
     "supervisor": "STOPPED/QUARANTINED",
     "go_swarm": "RUNNING",
@@ -65,7 +65,7 @@
   },
   "distillery": {
     "schema": "CLAY_RESEARCH_DISTILLERY_STATUS/v1",
-    "generated_at": "2026-08-25T09:21:55.608519+00:00",
+    "generated_at": "2026-08-25T09:37:02.689732+00:00",
     "collected_source_tokens": 11621,
     "accepted_dataset_tokens": 0,
     "dataset_yield": 0.0,
@@ -86,7 +86,7 @@
     "model_output_tokens": 1455,
     "shared_provider_budget": {
       "schema": "CLAY_SHARED_PROVIDER_BUDGET/v1",
-      "generated_at": "2026-08-25T09:21:55.609221+00:00",
+      "generated_at": "2026-08-25T09:37:02.690647+00:00",
       "providers": {
         "arxiv": {
           "max_inflight": 1,
@@ -224,22 +224,22 @@
     },
     "db_bytes": 864256,
     "top_questions": [
-      "How can the output of synthetic cognition components be effectively explained and interpreted?",
-      "What are the potential risks and challenges associated with integrating synthetic cognition into HCU?",
-      "How can the hybrid architecture be optimized for maximum effectiveness?",
-      "Which causal principle — intervention-based faithfulness, counterfactual invariance, or mechanistic interpretability — most reliably transfers from 120B teacher to 0.8B-8B student under FREE_ONLY inference constraints?",
-      "Wie lässt sich der FREE_ONLY‑Zugang zu kostenpflichtigen Provider‑Tiers prüfen, ohne die Kosten‑Beschränkung zu verletzen?",
-      "Welche minimalen Telemetriedaten (z. B. Latenz, Rückgabecodes) ermöglichen das zuverlässige Falschen von Admissions‑Gate‑Ordering‑Violationen?",
-      "How can we autonomously verify concrete NVIDIA credential proof without relying on provider-provided statements?",
-      "Ist ein deterministisches Kausalhändchen‑Tracking von Provider‑Aufrufen ohne SDK‑Instrumentierung realisierbar?",
-      "How does causal-event-identity binding interact with existing Hyperposition semantics?",
-      "Does recursive self-model injection generalize across model architectures (nemotron vs gpt-oss vs qwen) or is the effect model-specific, and what architectural properties mediate the effect?"
+      "Whether J-Space causal graph structure is isomorphic enough across Nemotron model variants to allow checkpoint recovery without semantic drift, or if model-specific causal topology requires per-model checkpoint schemas",
+      "What exact state variables in the GWT prototype's admission engine define 'cost-free' per credential vs per provider, and where is the route-price revalidation gate before network I/O?",
+      "Can the sandbox maintain consistent low‑latency access to free providers under sustained load, or does provider‑specific rate‑limiting inevitably introduce latency and errors?",
+      "Does NVIDIA's Developer Program free tier enforce per-credential or per-account concurrency limits that differ from the published max_concurrency=256?",
+      "Can policy code hash be pinned to a git commit hash without introducing deployment coupling that defeats dynamic policy updates?",
+      "Can FREE providers scale with EntityOS/HCU under high workload?",
+      "What are the optimal parameters for the HCU architecture?",
+      "Does HCU attention mechanism exhibit a causal surprisal-bandwidth optimum for global workspace integration, or is apparent effect mediated by measurement artifacts in J-Space estimation?",
+      "Does per-model TEW specialization (e.g., nemotron-3-ultra vs nemotron-mini) yield additional gains beyond per-provider adaptation?",
+      "How does the Global J-Space/GWT prototype impact system convergence?"
     ],
     "candidate_states": {}
   },
   "evidence_forge": {
     "schema": "CLAY_FREE_EVIDENCE_FORGE_STATUS/v1",
-    "generated_at": "2026-08-25T09:21:55.889372+00:00",
+    "generated_at": "2026-08-25T09:37:01.680331+00:00",
     "candidate_states": {
       "ACCEPTED": 1,
       "NEEDS_IMPLEMENTATION": 65,
@@ -263,7 +263,7 @@
     "peak_parallel_tasks": 0,
     "shared_provider_budget": {
       "schema": "CLAY_SHARED_PROVIDER_BUDGET/v1",
-      "generated_at": "2026-08-25T09:21:55.890137+00:00",
+      "generated_at": "2026-08-25T09:37:01.681196+00:00",
       "providers": {
         "arxiv": {
           "max_inflight": 1,
@@ -408,6 +408,6 @@
     "measured_total_sonnet5_equivalent_usd": 148.830648,
     "verified_historical_savings_usd": null,
     "nominal_avoided_if_zero_cost_usd": 148.830648,
-    "repo_output_only_proxy_usd": 126.3384
+    "repo_output_only_proxy_usd": 126.33976
   }
 }

@@ -1,0 +1,185 @@
+name: FreeSwarm runtime quiescence enforcer
+
+on:
+  issues:
+    types: [opened]
+
+permissions:
+  contents: write
+  issues: read
+
+jobs:
+  enforce:
+    if: "github.repository == 'gschaidergabriel/clay-global-research-entity' && github.event.issue.title == '[CLAY-DISPATCH] free-swarm quiescence enforcer v1' && github.event.issue.user.login == 'gschaidergabriel' && contains(github.event.issue.body || '', 'dispatch_schema: CLAY_ORDINARY_DISPATCH/v1')"
+    concurrency:
+      group: free-swarm-quiescence-enforcer-v1
+      cancel-in-progress: false
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: main
+          fetch-depth: 0
+          clean: true
+          persist-credentials: true
+
+      - name: Validate singleton dispatch and current HARD_OFF authority
+        id: dispatch
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json, os, pathlib, re
+          event=json.loads(pathlib.Path(os.environ['GITHUB_EVENT_PATH']).read_text())
+          body=str((event.get('issue') or {}).get('body') or '')
+          fields={}
+          for line in body.splitlines():
+              if ':' in line:
+                  k,v=line.split(':',1)
+                  if k.strip() in {'dispatch_schema','dispatch_key'} and k.strip() not in fields:
+                      fields[k.strip()]=v.strip()
+          if fields.get('dispatch_schema') != 'CLAY_ORDINARY_DISPATCH/v1':
+              raise SystemExit('invalid dispatch_schema')
+          key=fields.get('dispatch_key','')
+          if not re.fullmatch(r'free-swarm-quiescence-enforcer-v1-g[0-9]{4}', key):
+              raise SystemExit('invalid dispatch_key')
+          spec=json.loads(pathlib.Path('research_entity/continuity/ordinary_dispatch_specs/free-swarm-quiescence-enforcer-v1.json').read_text())
+          expected=f"{spec['dispatch_class']}-g{int(spec['retry_generation']):04d}"
+          if key != expected or spec.get('current_dispatch_key') != expected:
+              raise SystemExit(f'stale/noncanonical dispatch key: {key} != {expected}')
+          claim_path=pathlib.Path(f'research_entity/continuity/ordinary_dispatch_claims/{key}.json')
+          if not claim_path.is_file(): raise SystemExit('create-only claim missing')
+          claim=json.loads(claim_path.read_text())
+          if claim.get('dispatch_key') != key or claim.get('dispatch_class') != spec.get('dispatch_class'):
+              raise SystemExit('claim identity mismatch')
+          if claim.get('new_issue_authorized_by_this_claim') is not True:
+              raise SystemExit('claim does not authorize trigger')
+          result=pathlib.Path(f'research_entity/continuity/ordinary_dispatch_results/{key}.json')
+          skip=result.is_file()
+          adm=json.loads(pathlib.Path('research_entity/claycode/autonomous/FREE_PROVIDER_ADMISSION.json').read_text())
+          providers=adm.get('providers') or {}
+          hard_off=(adm.get('execution_state') == 'OWNER_EMERGENCY_STOP_FREE_SWARM_HARD_OFF' and bool(providers) and all(isinstance(v,dict) and v.get('admitted') is False for v in providers.values()))
+          if not hard_off:
+              raise SystemExit('current canonical FREE_PROVIDER_ADMISSION is not HARD_OFF')
+          with open(os.environ['GITHUB_OUTPUT'],'a',encoding='utf-8') as out:
+              out.write(f'dispatch_key={key}\n')
+              out.write(f'skip={str(skip).lower()}\n')
+          print('ALREADY_SATISFIED' if skip else 'ADMITTED_SINGLETON', key)
+          PY
+
+      - name: Execute pinned host-local enforcer
+        if: steps.dispatch.outputs.skip != 'true'
+        shell: bash
+        env:
+          DISPATCH_KEY: ${{ steps.dispatch.outputs.dispatch_key }}
+          SOURCE_PIN: 0d14624bf211e797936626e94c87459e37dd0cbb
+        run: |
+          set -euo pipefail
+          WT="/tmp/clay-quiescence-${GITHUB_RUN_ID}"
+          OUT="/tmp/clay-quiescence-${GITHUB_RUN_ID}-out"
+          mkdir -p "$OUT"
+          cleanup() {
+            git worktree remove --force "$WT" >/dev/null 2>&1 || true
+            rm -rf "$WT" >/dev/null 2>&1 || true
+          }
+          trap cleanup EXIT
+          git fetch origin "$SOURCE_PIN"
+          git worktree add --detach "$WT" "$SOURCE_PIN"
+          test -z "$(git -C "$WT" status --porcelain=v1)"
+          test "$(git -C "$WT" rev-parse HEAD)" = "$SOURCE_PIN"
+
+          if command -v sudo >/dev/null 2>&1 && sudo -n true >/dev/null 2>&1; then
+            sudo -n git config --global --add safe.directory "$WT" || true
+            RUN=(sudo -n python3)
+          else
+            RUN=(python3)
+          fi
+
+          "${RUN[@]}" "$WT/tools/free_swarm_runtime_quiescence_enforcer_v1.py" \
+            --repo "$WT" \
+            --window-seconds 60 \
+            --output "$OUT/dry-run.json"
+
+          python3 - "$OUT/dry-run.json" <<'PY'
+          import json,sys
+          x=json.load(open(sys.argv[1]))
+          if x.get('decision',{}).get('status') != 'DRY_RUN_ONLY':
+              raise SystemExit('dry-run did not complete')
+          print('DRY_RUN_SELECTED_COUNT', x.get('decision',{}).get('selected_count'))
+          for p in x.get('selected_tree') or []:
+              print('SELECTED', p.get('pid'), p.get('ppid'), p.get('cmdline'), 'cwd=', p.get('cwd'))
+          PY
+
+          set +e
+          "${RUN[@]}" "$WT/tools/free_swarm_runtime_quiescence_enforcer_v1.py" \
+            --repo "$WT" \
+            --apply \
+            --window-seconds 60 \
+            --output "$OUT/enforcer.json"
+          RC=$?
+          set -e
+
+          if [[ -f "$WT/research_entity/continuity/receipts/FREE_SWARM_RUNTIME_QUIESCENCE_AFTER_ENFORCER.json" ]]; then
+            cp "$WT/research_entity/continuity/receipts/FREE_SWARM_RUNTIME_QUIESCENCE_AFTER_ENFORCER.json" "$OUT/probe.json"
+          fi
+
+          EVENT_SHA="$GITHUB_SHA" CHECKOUT_HEAD="$(git rev-parse HEAD)" RUNNER_NAME_VALUE="${RUNNER_NAME:-unknown}" RUN_ID_VALUE="$GITHUB_RUN_ID" ISSUE_NUMBER_VALUE="${{ github.event.issue.number }}" ENFORCER_RC="$RC" python3 - "$OUT" <<'PY'
+          import json, os, pathlib, sys
+          out=pathlib.Path(sys.argv[1])
+          dry=json.loads((out/'dry-run.json').read_text())
+          enf=json.loads((out/'enforcer.json').read_text()) if (out/'enforcer.json').is_file() else {}
+          probe=json.loads((out/'probe.json').read_text()) if (out/'probe.json').is_file() else None
+          def provider_deltas(p):
+              if not p: return None
+              obs=p.get('observation') or {}
+              b=((obs.get('shared_provider_budget_before') or {}).get('counters') or {}).get('providers') or {}
+              a=((obs.get('shared_provider_budget_after') or {}).get('counters') or {}).get('providers') or {}
+              names=sorted(set(b)|set(a))
+              return {n:{k:int((a.get(n) or {}).get(k,0))-int((b.get(n) or {}).get(k,0)) for k in ('total_requests','total_success','total_429','total_errors')} for n in names}
+          result={
+            'schema':'CLAY_ORDINARY_DISPATCH_RESULT/v1',
+            'dispatch_key':os.environ['DISPATCH_KEY'],
+            'dispatch_class':'free-swarm-quiescence-enforcer-v1',
+            'event_sha':os.environ['EVENT_SHA'],
+            'checkout_head':os.environ['CHECKOUT_HEAD'],
+            'source_pin':os.environ['SOURCE_PIN'],
+            'run_id':os.environ['RUN_ID_VALUE'],
+            'issue_number':int(os.environ['ISSUE_NUMBER_VALUE']),
+            'runner_name':os.environ['RUNNER_NAME_VALUE'],
+            'enforcer_returncode':int(os.environ['ENFORCER_RC']),
+            'dry_run_selected_tree':dry.get('selected_tree') or [],
+            'termination_events':enf.get('termination_events') or [],
+            'remaining_matching_tree':enf.get('remaining_matching_tree'),
+            'enforcer_decision':enf.get('decision'),
+            'probe_decision':(probe or {}).get('decision'),
+            'provider_counter_delta':provider_deltas(probe),
+            'zero_provider_capable_survivors': bool(enf.get('decision',{}).get('zero_survivors')),
+            'runtime_credit':'QUIESCENCE_COMPONENT_ONLY' if enf.get('decision',{}).get('status') == 'PASS_COMPONENT_ONLY' else 0,
+            'training_credit':0,
+            'whole_entityos_hcu_runtime_credit':0
+          }
+          (out/'result.json').write_text(json.dumps(result,indent=2,sort_keys=True)+'\n')
+          print(json.dumps(result,indent=2,sort_keys=True))
+          PY
+
+          mkdir -p research_entity/runtime/tool_results research_entity/continuity/receipts research_entity/continuity/ordinary_dispatch_results
+          cp "$OUT/dry-run.json" "research_entity/runtime/tool_results/free-swarm-quiescence-enforcer-${DISPATCH_KEY}-dry-run.json"
+          cp "$OUT/enforcer.json" "research_entity/runtime/tool_results/free-swarm-quiescence-enforcer-${DISPATCH_KEY}.json"
+          if [[ -f "$OUT/probe.json" ]]; then
+            cp "$OUT/probe.json" "research_entity/continuity/receipts/FREE_SWARM_RUNTIME_QUIESCENCE_AFTER_ENFORCER_${DISPATCH_KEY}.json"
+          fi
+          cp "$OUT/result.json" "research_entity/continuity/ordinary_dispatch_results/${DISPATCH_KEY}.json"
+
+          git fetch origin main
+          git pull --rebase origin main
+          git add research_entity/runtime/tool_results research_entity/continuity/receipts research_entity/continuity/ordinary_dispatch_results
+          git config user.name 'clay-quiescence-runner'
+          git config user.email 'clay-quiescence-runner@users.noreply.github.com'
+          git commit -m "evidence(runtime): singleton FreeSwarm quiescence ${DISPATCH_KEY} [skip ci]"
+          for attempt in 1 2 3 4 5 6; do
+            git pull --rebase origin main && git push origin HEAD:main && break
+            sleep $((attempt * 3))
+          done
+
+          exit "$RC"

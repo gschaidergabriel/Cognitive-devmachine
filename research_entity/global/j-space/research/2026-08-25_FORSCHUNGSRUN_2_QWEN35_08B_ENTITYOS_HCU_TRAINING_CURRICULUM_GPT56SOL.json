@@ -1,0 +1,256 @@
+{
+  "schema": "CLAY_FORSCHUNGSRUN_2_QWEN35_08B_ENTITYOS_HCU_TRAINING_CURRICULUM/v1",
+  "date": "2026-08-25",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "user_trigger": "forschungsrun 2",
+  "persistent_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority_epoch_observed": "8.78",
+  "execution_mode": "FREE_ONLY",
+  "canonical_main_observed_before_write": "c5e72161c114fca657684dbedb6568f2f3c0d25a",
+  "scope": "SOURCE_LEVEL_TRAINING_CURRICULUM_AND_ADMISSION_CONTRACT_ONLY",
+  "training_executed": false,
+  "paid_provider_used": false,
+  "together_used": false,
+  "training_credit_added": 0,
+  "current_model_choice": {
+    "candidate_base": "Qwen/Qwen3.5-0.8B-Base",
+    "selection_state": "CURRENT_RESEARCH_CANDIDATE_NOT_YET_EXACT_CHECKPOINT_ADMITTED",
+    "why_base_not_posttrained": "The official Base repository explicitly targets fine-tuning/research and avoids silently importing a post-training policy as the starting cognition authority. Exact revision, tokenizer, processor, weight hashes and runtime build remain mandatory before executable credit.",
+    "external_primary_source": "https://huggingface.co/Qwen/Qwen3.5-0.8B-Base",
+    "observed_model_facts": {
+      "license": "Apache-2.0",
+      "nominal_language_model_parameters": "0.8B",
+      "hidden_dimension": 1024,
+      "layers": 24,
+      "vocabulary_padded": 248320,
+      "architecture_summary": "6 x (3 x Gated DeltaNet+FFN -> 1 x gated attention+FFN)",
+      "native_context_tokens": 262144,
+      "multimodal": true
+    }
+  },
+  "legacy_training_donor_boundary": {
+    "directive": "research_entity/global/MINI_ENTITY_CLAYCOG_05B_TRAINING_DIRECTIVE.md",
+    "approx1b_directive": "research_entity/global/MINI_ENTITY_CLAYCOG_APPROX1B_TRAINING_DIRECTIVE.md",
+    "v2_receipt": "the artefact/blogpost_entity/receipts/2026-08-22_GO_CLAYCOG_05B_SFT_V2_FUSION_GPT56SOL.json",
+    "donor_only": true,
+    "admitted_donor_strength": "deterministic corpus generation + structural validity + exact uniqueness + zero exact/prompt cross-split overlap",
+    "not_established_by_legacy_v2": [
+      "J-Space causal quality",
+      "cross-task hidden-state semantics",
+      "full HCU cognition",
+      "forgetting resistance",
+      "trained-checkpoint quality",
+      "quantized hidden-state invariance",
+      "whole EntityOS acceptance"
+    ],
+    "migration_rule": "Reuse mechanisms and valid rows only through current Typed Entry / provenance / family-split / evidence admission; do not revive Mini Entity as a competing product or Together as a current execution authority."
+  },
+  "training_objective": {
+    "goal": "Teach a replaceable approximately-0.8B HCU cognition module to emit protocol-valid candidate cognition, preserve unresolved Hyperposition alternatives, consume/express J-Space vector-control traces, and respect deterministic truth/effect boundaries without becoming canonical state or effect authority.",
+    "non_goal": "Do not train the model to claim internal semantic facts that have not passed model-specific causal evidence gates.",
+    "truth_law": "FACT_UNKNOWN + METHOD_PRESENT != FACT_PRESENT",
+    "effect_law": "Model output remains ActionCandidate/projection only; EffectGate + EffectJournal retain real-effect authority."
+  },
+  "curriculum_families": [
+    {
+      "id": "RETENTION_REPLAY",
+      "purpose": "Preserve general language, reasoning, coding, multilingual, formatting and instruction competence during specialization.",
+      "admission": "High-quality general/reconstructed instruction examples with provenance and contamination checks; keep evaluation families disjoint.",
+      "why": "Current external SFT literature reports general-capability loss from narrow fine-tuning and improved preservation when screened retention data is mixed with new-domain data."
+    },
+    {
+      "id": "ENTITYOS_AUTHORITY_PROTOCOL",
+      "purpose": "Typed Entry, causal-event vs admission identity, generation/provenance rejection, UNKNOWN preservation, ActionCandidate/EffectGate split and no self-granted capabilities.",
+      "hard_negatives": [
+        "stale generation",
+        "ambiguous provenance",
+        "capability self-grant",
+        "unknown external effect outcome",
+        "model output presented as canonical fact"
+      ]
+    },
+    {
+      "id": "HCU_MODE_AND_CAUSAL_INTERCONNECT",
+      "purpose": "GRID10/COGSIM10/WM_TEST/NESTED_SIM/SCALEOUT typed coordination without equating logical cells to physical model concurrency.",
+      "hard_negatives": [
+        "simulation promoted to truth",
+        "workspace recurrence promoted to evidence",
+        "logical module count reported as resident-model count"
+      ]
+    },
+    {
+      "id": "HYPERPOSITION",
+      "purpose": "Preserve multiple unresolved alternatives with evidence/provenance bindings until a discriminator closes them.",
+      "teaching_form": "Candidate-set traces with explicit unresolved status, competing hypotheses, falsifier/evidence requests, and deterministic collapse criteria.",
+      "forbidden_shortcut": "Majority, recurrence, confidence or fluent explanation alone may not collapse Hyperposition into fact."
+    },
+    {
+      "id": "JSPACE_VECTOR_CONTROL_ABI",
+      "purpose": "Learn to consume/emit JSPACE_VECTOR_CONTROL_ABI/v1-compatible candidate traces and distinguish intervention from observation.",
+      "positive_rows": "Only rows derived from exact admitted causal traces at exact model/runtime/source identity.",
+      "hard_negatives": [
+        "wrong layer",
+        "wrong vector sign",
+        "null vector",
+        "orthogonal same-norm vector",
+        "permuted same-norm vector",
+        "wrong generation",
+        "wrong model/checkpoint/runtime identity",
+        "unbound nuisance axis"
+      ],
+      "promotion_gate": "Current strict Qwen3-0.6B cross-task gate successor chain, presently v6 at observed main, or a newer admitted successor. A source-only green gate does not itself create rows or runtime truth."
+    },
+    {
+      "id": "CAUSAL_TRACE_TO_TRAININGTRACE",
+      "purpose": "Convert only evidence-qualified Typed Entry -> route -> verified loader consumption -> model execution -> InferenceReceipt -> J-Space/GWT trace into TrainingTrace candidates.",
+      "admission": "Exact causal identity, family identity, source/model/runtime hashes and control identities required; ambiguous lineage fails closed."
+    },
+    {
+      "id": "OOD_COUNTERFACTUAL_TRANSFER",
+      "purpose": "Require learned protocol and abstract-state behavior to transfer across held-out task grammars/families rather than memorizing one syntax or codebook.",
+      "design": "Family-level split; lexical disjointness; target x code x polarity factorial; proof-topology and exact token-position matching; rank-consistent geometry; rank-complete nuisance coverage."
+    }
+  ],
+  "mixture_policy": {
+    "status": "PREREGISTERED_SEARCH_NOT_FIXED_RATIO",
+    "rule": "Do not guess a single permanent mixture ratio from intuition. Use small zero-cost pilot ablations on calibration/validation only, select by a multi-objective retention + HCU/J-Space score, then freeze the mixture before opening holdout.",
+    "candidate_retention_share_grid": [0.25, 0.4, 0.55],
+    "candidate_specialization_share_grid": [0.75, 0.6, 0.45],
+    "selection_constraints": [
+      "general-retention regression must remain within preregistered tolerance",
+      "EntityOS authority/fail-closed tests must not regress",
+      "J-Space causal/OOD validation must improve beyond base",
+      "no evaluation/holdout contamination",
+      "no ratio tuning on final holdout"
+    ],
+    "external_research_basis": [
+      "arXiv:2506.09428 — screened retention data mixed with new-domain SFT to mitigate catastrophic forgetting",
+      "arXiv:2508.11953 — data-mixture weights can be optimized from smaller-scale mixture experiments rather than assumed"
+    ]
+  },
+  "split_and_goodman_law": {
+    "unit": "CAUSAL_FAMILY_AND_PROVENANCE_ANCESTRY_NOT_RANDOM_ROW",
+    "rule": "All descendants sharing the same execution/source/model/intervention ancestry stay in one split. Paraphrase/template/output-code variants from the same causal event do not become independent evidence.",
+    "required_splits": ["TRAIN", "VALIDATION", "HOLDOUT"],
+    "holdout_opening": "Only after model/base identity, data mixture, curriculum, rank/geometry estimator and acceptance thresholds are frozen."
+  },
+  "hyperposition_to_training_encoding": {
+    "state_fields": [
+      "candidate_id",
+      "alternative_set_id",
+      "reality_level_R0_R6",
+      "evidence_refs",
+      "counterhypothesis_refs",
+      "resolution_status",
+      "required_discriminator",
+      "canonical_truth_allowed"
+    ],
+    "loss_semantics": "Penalize premature collapse where source truth is unresolved; reward exact preservation of alternatives and explicit evidence request. Resolution targets are admitted only when the source causal/evidence boundary actually closes the alternative set.",
+    "anti_hallucination_rule": "Generated synthetic narrative may teach method/format, but cannot label an unresolved external fact as resolved."
+  },
+  "full_ft_strategy": {
+    "status": "DESIGN_ONLY_FREE_ONLY_NO_TRAINING_RUN",
+    "primary_candidate": "Full-parameter fine-tuning after admitted dataset > 0 and exact checkpoint/runtime identity; LoRA remains a useful ablation, not proof of equivalence.",
+    "forgetting_controls": [
+      "retention replay mixture",
+      "base-vs-tuned matched evaluation",
+      "multiple seeds/pilot mixtures where zero-cost compute allows",
+      "prediction-level and representation/J-Space regression checks",
+      "fail closed if specialization improves while broad retention or authority behavior materially regresses"
+    ],
+    "important_model_specific_caution": "Qwen3.5-0.8B uses a hybrid DeltaNet/attention architecture. Existing Qwen3-0.6B J-Space layer numbers/vectors do not transfer by assumption; Qwen3.5 requires fresh model-specific hidden-state and intervention calibration."
+  },
+  "quantization_plan": {
+    "target": "Q4_K_M",
+    "stage": "POST_TRAINING_POST_FULL_PRECISION_ACCEPTANCE_ONLY",
+    "primary_tool": "llama.cpp llama-quantize",
+    "external_primary_source": "https://github.com/ggml-org/llama.cpp/blob/master/tools/quantize/README.md",
+    "source_fact": "Current llama.cpp documents Q4_K_M quantization from a high-precision GGUF and warns that quantization may introduce accuracy loss; it supports optional importance matrices.",
+    "rules": [
+      "Never requantize an already quantized checkpoint for final acceptance when high-precision source is available.",
+      "Measure base/tuned acceptance before quantization, then rerun protocol, general-retention and J-Space model-specific tests on exact Q4_K_M bytes.",
+      "Do not transfer hidden-state/J-Space causal credit from BF16/F16 to Q4_K_M by name or ancestry alone.",
+      "Bind GGUF hash, tokenizer/processor identity, llama.cpp commit/build and quantization command/parameters into the final receipt.",
+      "If Q4_K_M causes causal-geometry or protocol regressions, keep the high-precision checkpoint as the scientific reference and treat quantized deployment as failed until repaired."
+    ]
+  },
+  "dataset_admission_pipeline": {
+    "current_funnel_observed": "Forge nominal historical ACCEPT exists but Distillery accepted_dataset_tokens remains 0 in current artifact manifest snapshot.",
+    "law": "This curriculum does not create a second dataset truth store. Generated candidate rows must enter the existing evidence-qualified Forge -> Distillery / current admitted TrainingTrace path.",
+    "minimum_before_training": [
+      "accepted_dataset_tokens > 0 from evidence-qualified causal promotion",
+      "immediate semantic replay produces +0 duplicate packets and +0 duplicate accepted tokens",
+      "family/provenance split validator PASS",
+      "current J-Space promotion gate evidence at measured scope",
+      "exact Qwen3.5-0.8B-Base revision/tokenizer/processor/weight identity",
+      "frozen baseline evaluation and mixture policy"
+    ]
+  },
+  "evaluation_matrix": {
+    "pretraining_baseline": [
+      "general instruction following",
+      "reasoning",
+      "coding",
+      "multilingual",
+      "format/protocol validity",
+      "EntityOS authority/fail-closed behavior"
+    ],
+    "specialization": [
+      "Hyperposition preservation and evidence-gated resolution",
+      "JSPACE_VECTOR_CONTROL_ABI trace validity",
+      "cross-task abstract-state transfer",
+      "wrong-layer/sign/null/orthogonal/permuted/nuisance hard negatives",
+      "rank/geometry consistency",
+      "off-target preservation"
+    ],
+    "post_quantization": "Repeat the same frozen matrix on exact Q4_K_M artifact; no quantized promotion from perplexity/file-size alone."
+  },
+  "external_research": [
+    {
+      "source": "Qwen/Qwen3.5-0.8B-Base official model card",
+      "classification": "SOURCE_DIRECT",
+      "use": "Current base-model architecture, fine-tuning intent and dimensions."
+    },
+    {
+      "source": "Braun et al., Understanding (Un)Reliability of Steering Vectors in Language Models, arXiv:2505.22637",
+      "classification": "SOURCE_DIRECT_CONTEXT",
+      "use": "Prompt-dependent steering variance and directional coherence justify cross-family geometry and model-specific steering revalidation."
+    },
+    {
+      "source": "Ding & Wang, Improved Supervised Fine-Tuning for Large Language Models to Mitigate Catastrophic Forgetting, arXiv:2506.09428",
+      "classification": "SOURCE_DIRECT_CONTEXT",
+      "use": "Retention/replay data mixing rationale."
+    },
+    {
+      "source": "Li, Liu & Xing, Data Mixing Optimization for Supervised Fine-Tuning of Large Language Models, arXiv:2508.11953",
+      "classification": "SOURCE_DIRECT_CONTEXT",
+      "use": "Pilot-based mixture optimization instead of a guessed fixed ratio."
+    },
+    {
+      "source": "ggml-org/llama.cpp tools/quantize README, current 2026",
+      "classification": "SOURCE_DIRECT",
+      "use": "Q4_K_M deployment procedure and explicit accuracy-loss boundary."
+    }
+  ],
+  "promotion_boundary": {
+    "source_curriculum_present": true,
+    "qwen35_checkpoint_exact_identity_admitted": false,
+    "entityos_hcu_dataset_admitted": false,
+    "accepted_dataset_tokens_positive": false,
+    "full_ft_executed": false,
+    "trained_checkpoint_evaluated": false,
+    "q4_k_m_created": false,
+    "q4_k_m_revalidated": false,
+    "jspace_model_runtime_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0,
+    "training_credit": 0,
+    "canonical_semantics_promotion": false
+  },
+  "research_delta": "Forschungsrun 2 now has a current EntityOS/HCU-native training curriculum for Qwen3.5-0.8B-Base that treats historical ClayCog v2 only as a structurally valid donor, routes future rows through the canonical evidence-qualified dataset path, teaches Hyperposition as unresolved alternatives rather than forced labels, binds J-Space training examples to exact causal traces, uses family/provenance split isolation, protects general capability through retention-mixture ablations, and makes Q4_K_M a separately revalidated deployment artifact rather than inheriting full-precision causal credit.",
+  "strongest_counterhypothesis": "A small 0.8B full-FT checkpoint may learn the protocol vocabulary and output format without acquiring model-internal cross-task abstract-state control; the strict causal gates and held-out family transfer are therefore required and training loss alone cannot adjudicate the claim.",
+  "next_exact_action": "Do not launch training. First obtain an evidence-qualified positive Distillery/TrainingTrace token path and exact Qwen3.5-0.8B-Base checkpoint/tokenizer/processor identity. In parallel, keep the already dispatched Qwen3-0.6B frozen structural runtime run unchanged; when runner transport executes it, preserve raw evidence and feed only admitted causal traces into the new curriculum."
+}

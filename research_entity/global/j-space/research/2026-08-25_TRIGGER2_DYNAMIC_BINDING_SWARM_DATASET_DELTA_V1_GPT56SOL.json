@@ -1,0 +1,286 @@
+{
+  "schema": "CLAY_TRIGGER2_DYNAMIC_BINDING_SWARM_DATASET_DELTA/v1",
+  "date": "2026-08-25",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "persistent_entity": "Clay",
+  "trigger": "triggerwort 2",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority": {
+    "canonical_main_observed_before_write": "0edcc2ca0dba28fa0536bc5834fe6ede05a46e96",
+    "supervisor_epoch": "8.78",
+    "execution_mode": "FREE_ONLY",
+    "owner_target": "research_entity/global/XENO_HCU_GO_TARGET_ARCHITECTURE_OWNER_DIRECTIVE_2026-08-25.md",
+    "dedicated_trigger2_lane": "PR1956 research/trigger2-qwen35-08b-hcu-fullft-20260825"
+  },
+  "source_evidence": {
+    "claude_ingest": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_CLAUDE_XENO_VECTOR_EVIDENCE_INGEST_V1_GPT56SOL.json",
+    "measured_model": {
+      "model_id": "Goekdeniz-Guelmez/Josiefied-Qwen3.5-0.8B-gabliterated-v1",
+      "snapshot": "591852bda6e1979f59e4b0f5ee2919697b12e936",
+      "scope_warning": "Numerical J-Space measurements are exact-model/snapshot evidence only and do not automatically transfer to another Qwen3.5-0.8B checkpoint."
+    },
+    "observations": {
+      "semantic_readability": "0.94-1.00 from approximately L6 onward on the measured lexically separated family",
+      "baseline_dynamic_symbol_hit": 0.3611111111111111,
+      "chance_dynamic_symbol_hit": 0.3333333333333333,
+      "baseline_vs_chance_one_sided_binomial_p_approx": 0.4224625249772148,
+      "write_L23_hit": 1.0,
+      "write_L19_hit": 1.0,
+      "mean_cross_template_transfer_L19": 0.5254629629629629,
+      "transfer_into_codebook_from_other_three_templates": [0.3333333333333333, 0.3333333333333333, 0.3333333333333333],
+      "hrr_map_whitened_binding_capacity_k_1_to_16": 1.0,
+      "accepted_symbol_atoms": 46,
+      "rejected_symbol_atom": "or"
+    },
+    "strongest_supported_training_interpretation": "Semantic reading, symbol-axis writeout and carrier-space binding algebra are already present at measured scope. The missing behavior is context-dependent episodic routing that maps decoded semantics through the current episode-local codebook to the correct emitted symbol, with cross-template invariance."
+  },
+  "training_delta": {
+    "new_primary_capabilities": [
+      "DYNAMIC_EPISODIC_CODEBOOK_ROUTING",
+      "CONTEXT_INVARIANT_SEMANTIC_BINDING"
+    ],
+    "protect_not_primary_relearning_targets": [
+      "semantic class readability",
+      "symbol emission/write axis",
+      "HRR/MAP carrier algebra through measured k<=16"
+    ],
+    "hypothesis": "A relatively narrow learned semantic-to-episode-codebook routing computation can raise held-out codebook accuracy without relearning semantics or symbol emission.",
+    "counterhypotheses": [
+      "The apparent gap is not a missing router but a prompt/template-specific decoding artifact.",
+      "The task requires broad model adaptation rather than a narrow binding circuit.",
+      "High training accuracy can be achieved by lexical, position, permutation-id or symbol-frequency shortcuts without true episode-local binding.",
+      "The measured J-Space read/write sites are checkpoint-specific and may not remain useful after checkpoint selection or training."
+    ]
+  },
+  "swarm_review": {
+    "roles": [
+      "EVIDENCE_EXTRACTOR",
+      "DATASET_ARCHITECT",
+      "ADVERSARIAL_SHORTCUT_HUNTER",
+      "STATISTICAL_REVIEWER",
+      "ABI_PROVENANCE_REVIEWER",
+      "RETENTION_REVIEWER",
+      "CAUSAL_INTERVENTION_REVIEWER",
+      "HARNESS_COMPATIBILITY_REVIEWER",
+      "FINAL_INTEGRATOR"
+    ],
+    "review_findings": [
+      {
+        "role": "EVIDENCE_EXTRACTOR",
+        "verdict": "ACCEPT_NARROW_OBJECTIVE",
+        "reason": "The measured evidence directly supports a binding/routing gap more strongly than a missing semantic reader, missing symbol writer or insufficient carrier algebra."
+      },
+      {
+        "role": "ADVERSARIAL_SHORTCUT_HUNTER",
+        "verdict": "REJECT_NAIVE_GENERATOR",
+        "reason": "The inherited generator can log a permutation without using it causally, can pass a nonfunctional class-word leak check, and underchecks lexical/template isolation."
+      },
+      {
+        "role": "STATISTICAL_REVIEWER",
+        "verdict": "REQUIRE_CARTESIAN_S3_X_CLASS",
+        "reason": "Each structural template must contain the complete 6-permutation S3 family crossed with all 3 target semantic classes, yielding 18 balanced core episodes per template. This makes each semantic class map to each of three symbol slots exactly twice per template before lexical replication."
+      },
+      {
+        "role": "ABI_PROVENANCE_REVIEWER",
+        "verdict": "BLUEPRINT_ONLY_UNTIL_ATOM_MANIFEST_BOUND",
+        "reason": "The repository evidence establishes 46 accepted single-token atoms and one rejected atom but does not expose the complete literal atom list in the canonical research artifact. Generator blueprints therefore use ABI atom-row references and are not trainable until exact manifest/row/tokenizer identity is verified."
+      },
+      {
+        "role": "RETENTION_REVIEWER",
+        "verdict": "REQUIRE_PRESERVATION_CONTROLS",
+        "reason": "Training must not receive success credit by damaging semantic readability, symbol writeout, general language/code competence, typed protocol behavior or authority boundaries."
+      },
+      {
+        "role": "CAUSAL_INTERVENTION_REVIEWER",
+        "verdict": "POSTTRAIN_LESION_RESCUE_REQUIRED",
+        "reason": "Output accuracy alone cannot prove a J-Space binder. After a binding mechanism is learned, lesion/shuffle must selectively destroy codebook routing while preserving semantic readability, and rescue must restore it."
+      },
+      {
+        "role": "HARNESS_COMPATIBILITY_REVIEWER",
+        "verdict": "TRACE_BINDER_CHAIN",
+        "reason": "The future Xeno harness must expose an exact trace chain from semantic decision to episode codebook lookup to emitted atom while preserving deterministic S0/S1/effect boundaries."
+      },
+      {
+        "role": "FINAL_INTEGRATOR",
+        "verdict": "CANDIDATE_BLUEPRINT_APPROVED_NOT_DATASET_ADMITTED",
+        "reason": "The design is useful training research but mints zero accepted dataset tokens and zero training/runtime credit until generator, manifest, split and executable evidence gates pass."
+      }
+    ]
+  },
+  "generator_blueprint": {
+    "status": "NOT_DIRECTLY_TRAINABLE_BLUEPRINT",
+    "semantic_classes": ["ALLOW", "DENY", "ABSTAIN"],
+    "class_label_policy": "Preregister one interpretation before materialization: class labels may appear only inside the episode-local codebook span; the target semantic class must not appear elsewhere in prompt or answer metadata visible to the model. A separately versioned label-free demonstration-codebook successor is also admissible, but the two policies must not be mixed silently.",
+    "symbol_source": "Resolve literal symbols only from the exact verified 46-row accepted XENO_VECTOR_ABI atom manifest for the exact tokenizer/model identity; exclude rejected atom 'or'.",
+    "symbol_placeholder_format": "<ABI_ATOM_ROW_n>",
+    "s3_permutations": [
+      [0, 1, 2],
+      [0, 2, 1],
+      [1, 0, 2],
+      [1, 2, 0],
+      [2, 0, 1],
+      [2, 1, 0]
+    ],
+    "core_cartesian_rule": "For each structural template, emit every S3 mapping crossed with every target semantic class: 6 permutations x 3 classes = 18 core episodes.",
+    "training_templates": [
+      "T_BIND_QUESTION",
+      "T_BIND_DECLARATIVE",
+      "T_BIND_FIRST_PERSON",
+      "T_BIND_CONDITIONAL"
+    ],
+    "frozen_unseen_template": "T_BIND_RELATIONAL_HOLDOUT",
+    "core_counts": {
+      "train_blueprints": 72,
+      "frozen_template_holdout_blueprints": 18,
+      "total_core_blueprints": 90
+    },
+    "validation_policy": "Generate validation/calibration from separate semantic-bearing lexical families and separate provenance ancestry while reusing only nonsemantic protocol structure. The frozen T_BIND_RELATIONAL_HOLDOUT family is absent from train and validation.",
+    "counterfactual_pair_rule": "For a fixed semantic situation, create matched episodes that differ only in the episode-local class-to-symbol permutation. The correct output must change exactly when the codebook mapping changes. This is the primary anti-static-association pressure.",
+    "codebook_order_rule": "Independently randomize displayed codebook entry order; mapping identity must be derived from the realized class<->symbol pairs, never a metadata permutation id alone.",
+    "position_rule": "Counterbalance example/query position and codebook order so target class, symbol slot and output token are not predictable from position.",
+    "lexical_rule": "Semantic-bearing subjects, predicates, adjectives, negation forms and paraphrase families are split-isolated. Protocol separators and explicitly preregistered codebook syntax may be exempted from literal-token disjointness.",
+    "target_derivation_rule": "target_symbol = realized_codebook[target_semantic_class]; target_symbol is never sampled independently and never derived from a logging-only permutation field.",
+    "family_split_rule": "Keep connected causal-family and provenance-ancestry components within exactly one of TRAIN, VAL or HOLDOUT; holdout rows must have selected_using_holdout=false."
+  },
+  "concrete_blueprint_examples": [
+    {
+      "id": "PAIR_ALLOW_A",
+      "template": "T_BIND_QUESTION",
+      "trainable": false,
+      "realized_codebook": {"ALLOW": "<ABI_ATOM_ROW_07>", "DENY": "<ABI_ATOM_ROW_21>", "ABSTAIN": "<ABI_ATOM_ROW_34>"},
+      "situation": "Die geltende Regel gestattet die beschriebene Handlung ausdrücklich und es liegt keine entgegenstehende Bedingung vor.",
+      "query": "Welches Symbol gilt gemäß dem aktuellen Codebook? Antworte nur mit dem Symbol.",
+      "target_semantic_class_hidden_from_model_metadata": "ALLOW",
+      "target": "<ABI_ATOM_ROW_07>",
+      "purpose": "paired counterfactual A"
+    },
+    {
+      "id": "PAIR_ALLOW_B",
+      "template": "T_BIND_QUESTION",
+      "trainable": false,
+      "realized_codebook": {"ALLOW": "<ABI_ATOM_ROW_21>", "DENY": "<ABI_ATOM_ROW_07>", "ABSTAIN": "<ABI_ATOM_ROW_34>"},
+      "situation": "Die geltende Regel gestattet die beschriebene Handlung ausdrücklich und es liegt keine entgegenstehende Bedingung vor.",
+      "query": "Welches Symbol gilt gemäß dem aktuellen Codebook? Antworte nur mit dem Symbol.",
+      "target_semantic_class_hidden_from_model_metadata": "ALLOW",
+      "target": "<ABI_ATOM_ROW_21>",
+      "purpose": "same semantics, swapped mapping; correct symbol must flip"
+    },
+    {
+      "id": "PAIR_DENY_A",
+      "template": "T_BIND_DECLARATIVE",
+      "trainable": false,
+      "realized_codebook": {"ALLOW": "<ABI_ATOM_ROW_11>", "DENY": "<ABI_ATOM_ROW_29>", "ABSTAIN": "<ABI_ATOM_ROW_40>"},
+      "situation": "Eine verbindliche Vorgabe untersagt die Handlung in diesem Fall eindeutig.",
+      "query": "Gib ausschließlich das durch das aktuelle Codebook bestimmte Symbol aus.",
+      "target_semantic_class_hidden_from_model_metadata": "DENY",
+      "target": "<ABI_ATOM_ROW_29>"
+    },
+    {
+      "id": "PAIR_DENY_B",
+      "template": "T_BIND_DECLARATIVE",
+      "trainable": false,
+      "realized_codebook": {"ALLOW": "<ABI_ATOM_ROW_29>", "DENY": "<ABI_ATOM_ROW_40>", "ABSTAIN": "<ABI_ATOM_ROW_11>"},
+      "situation": "Eine verbindliche Vorgabe untersagt die Handlung in diesem Fall eindeutig.",
+      "query": "Gib ausschließlich das durch das aktuelle Codebook bestimmte Symbol aus.",
+      "target_semantic_class_hidden_from_model_metadata": "DENY",
+      "target": "<ABI_ATOM_ROW_40>"
+    },
+    {
+      "id": "PAIR_ABSTAIN_A",
+      "template": "T_BIND_FIRST_PERSON",
+      "trainable": false,
+      "realized_codebook": {"ALLOW": "<ABI_ATOM_ROW_03>", "DENY": "<ABI_ATOM_ROW_18>", "ABSTAIN": "<ABI_ATOM_ROW_42>"},
+      "situation": "Mir fehlen die entscheidenden Angaben, um die Handlung verlässlich als gestattet oder untersagt einzuordnen.",
+      "query": "Ich antworte nur mit dem Symbol des aktuellen Codebooks.",
+      "target_semantic_class_hidden_from_model_metadata": "ABSTAIN",
+      "target": "<ABI_ATOM_ROW_42>"
+    },
+    {
+      "id": "PAIR_ABSTAIN_B",
+      "template": "T_BIND_FIRST_PERSON",
+      "trainable": false,
+      "realized_codebook": {"ALLOW": "<ABI_ATOM_ROW_42>", "DENY": "<ABI_ATOM_ROW_03>", "ABSTAIN": "<ABI_ATOM_ROW_18>"},
+      "situation": "Mir fehlen die entscheidenden Angaben, um die Handlung verlässlich als gestattet oder untersagt einzuordnen.",
+      "query": "Ich antworte nur mit dem Symbol des aktuellen Codebooks.",
+      "target_semantic_class_hidden_from_model_metadata": "ABSTAIN",
+      "target": "<ABI_ATOM_ROW_18>"
+    },
+    {
+      "id": "CONDITIONAL_ALLOW",
+      "template": "T_BIND_CONDITIONAL",
+      "trainable": false,
+      "realized_codebook": {"ALLOW": "<ABI_ATOM_ROW_05>", "DENY": "<ABI_ATOM_ROW_16>", "ABSTAIN": "<ABI_ATOM_ROW_37>"},
+      "situation": "Wenn die Freigabebedingung erfüllt ist, darf der Vorgang fortgesetzt werden. Die Freigabebedingung ist nachweislich erfüllt.",
+      "query": "Ausgabe: genau ein Codebook-Symbol.",
+      "target_semantic_class_hidden_from_model_metadata": "ALLOW",
+      "target": "<ABI_ATOM_ROW_05>"
+    },
+    {
+      "id": "HOLDOUT_RELATIONAL_BLUEPRINT",
+      "template": "T_BIND_RELATIONAL_HOLDOUT",
+      "split": "HOLDOUT",
+      "trainable": false,
+      "realized_codebook": {"ALLOW": "<ABI_ATOM_ROW_HOLDOUT_A>", "DENY": "<ABI_ATOM_ROW_HOLDOUT_B>", "ABSTAIN": "<ABI_ATOM_ROW_HOLDOUT_C>"},
+      "situation": "A relation determines the decision only through a novel structural form reserved for sealed evaluation.",
+      "query": "Resolve semantics, then use only the current episode mapping; emit one symbol.",
+      "target": "DERIVED_ONLY_AT_SEALED_HOLDOUT_GENERATION",
+      "selected_using_holdout": false,
+      "note": "No literal semantic lexicon or symbol rows are chosen from holdout performance."
+    }
+  ],
+  "deterministic_generator_repair_gates": [
+    "PERMUTATION_CAUSALITY: realized class<->symbol mapping must be constructed from the selected S3 permutation and target derived from that realized mapping.",
+    "FULL_S3_COVERAGE: require exactly the declared six permutations at the required family scope, not len(perms)>=3.",
+    "EXACT_COUNTERBALANCE: each class-symbol-slot pair differs by at most one count at every admitted balanced block; for the 18-row core it is exact two-per-pair.",
+    "MUTUAL_INFORMATION_CHECK: class and output symbol frequency must not provide a shortcut outside the episode codebook; report MI and deterministic expected counts.",
+    "CLASS_WORD_LEAK_CHECK: class words/synonyms outside the allowed codebook span are a hard failure under the chosen preregistered policy.",
+    "LEXICAL_FAMILY_ISOLATION: normalized semantic-bearing lexeme/family overlap across splits is a hard failure except explicit protocol-token exemptions.",
+    "TEMPLATE_HOLDOUT_ISOLATION: frozen T_BIND_RELATIONAL_HOLDOUT is absent from train and validation.",
+    "ABI_MANIFEST_INTEGRITY: verify archive/manifest/member hashes, atom row mapping, tokenizer single-token property and rejected-atom exclusion before literal materialization.",
+    "PROVENANCE_INTEGRITY: bind model/checkpoint/tokenizer/runtime/generator version/ABI manifest/source package to every realized row family.",
+    "TARGET_RECOMPUTE: validator independently recomputes target from realized codebook and hidden semantic label; metadata target disagreement is failure.",
+    "COUNTERFACTUAL_FLIP: matched same-semantics/different-codebook pairs must flip target exactly when mapping changes.",
+    "NO_HOLDOUT_SELECTION: split assignment, thresholds, templates, lexical families, codebook policy and atom holdout are frozen before holdout scoring."
+  ],
+  "acceptance_contract": {
+    "dynamic_codebook_holdout_accuracy": ">=0.90",
+    "unseen_permutation_accuracy": ">=0.90",
+    "unseen_template_accuracy": ">=0.90",
+    "cross_template_transfer": ">=0.90",
+    "unseen_symbol_accuracy": ">=0.90 after literal ABI materialization",
+    "general_language_and_code_retention": "within 2% of frozen baseline unless a newer owner directive explicitly changes the floor",
+    "semantic_readability_retention": "must not materially regress from frozen same-checkpoint baseline",
+    "symbol_writeout_retention": "must remain intact at same-checkpoint post-training evaluation",
+    "causal_posttrain_test": "Lesion/shuffle the learned binder while preserving semantic readability: codebook symbol selection must fail selectively; rescue must restore it. Output accuracy alone does not establish J-Space causality.",
+    "statistics": "Report uncertainty, per-family/worst-case accuracy, shortcut-control performance, retention damage bounds and exact frozen sample identities."
+  },
+  "integration_with_xeno_hcu_training": {
+    "matrix_delta": "Add DYNAMIC_EPISODIC_CODEBOOK_ROUTING and CONTEXT_INVARIANT_SEMANTIC_BINDING as explicit model-facing capabilities feeding J-Space/GWT/HCU protocol specialization rather than treating them as generic semantics.",
+    "harness_trace_required": "semantic_decision -> episode_codebook_identity -> realized_mapping -> selected_symbol_atom -> emitted_token",
+    "architecture_boundary": "This learned binder remains cognition only. It cannot grant S1 coordinator authority, S0 canonical truth, effect authority or capability authority.",
+    "role_flexibility_link": "The same binding primitive can encode temporary runtime roles/relations without training permanent node personalities, provided deterministic authority remains outside the model.",
+    "hyperposition_link": "The binder can carry unresolved relation bindings, but Hyperposition collapse still requires evidence; binding a branch identifier is not fact promotion."
+  },
+  "credits": {
+    "research_design_delta": 1,
+    "blueprint_examples": 8,
+    "deterministic_core_blueprints_specified": 90,
+    "accepted_dataset_tokens": 0,
+    "training_executed": false,
+    "training_credit": 0,
+    "qwen35_jspace_runtime_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "canonical_semantics_promotion": false
+  },
+  "next_exact_actions": [
+    "Bind the literal 46-atom ABI list and tokenizer identity into canonical current research without inventing missing atom strings.",
+    "Implement a successor deterministic generator that realizes permutation causally and independently recomputes targets.",
+    "Implement exact S3/counterbalance/MI/class-leak/lexical-family/template/ABI/provenance validators.",
+    "Materialize only a small audited seed from the 90-core blueprint after those gates exist; swarm-review before scaling.",
+    "Freeze same-checkpoint pretraining baselines for semantic readability, dynamic binding, symbol writeout and general retention before any weight update.",
+    "Keep paid Together training and provider preflight forbidden under supervisor 8.78 FREE_ONLY."
+  ]
+}

@@ -1,0 +1,120 @@
+{
+  "schema": "CLAY_TRIGGER2_DYNAMIC_BINDING_V3_RENDER_GUARD_AUDIT/v1",
+  "date": "2026-08-25",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority_epoch_observed": "8.78",
+  "mode": "FREE_ONLY",
+  "source_evidence": {
+    "claude_xeno_ingest": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_CLAUDE_XENO_VECTOR_EVIDENCE_INGEST_V1_GPT56SOL.json",
+    "package_sha256": "a2babae93dfe39e4e452a06bd8b848337f29766e38c422f05fb395126229b05c",
+    "training_interpretation": "Prioritize content-dependent episode-local semantic-to-symbol binding/routing while preserving already-observed semantic readout, symbol writeout and carrier algebra."
+  },
+  "coordination": {
+    "parallel_v3_detected_before_write": true,
+    "parallel_source_blob_before_repair": "49c2b8740b60716f1a3d4daec10111c0b602cbc7",
+    "duplicate_generator_lane_created": false,
+    "action": "fuse only the nonredundant validator/render-integrity delta into the retained v3 path"
+  },
+  "swarm_roles": [
+    "EVIDENCE_EXTRACTOR",
+    "DATASET_ARCHITECT",
+    "ADVERSARIAL_SHORTCUT_HUNTER",
+    "STATISTICAL_REVIEWER",
+    "OUTPUT_CONTRACT_REVIEWER",
+    "ABI_PROVENANCE_REVIEWER",
+    "SPLIT_LEAKAGE_REVIEWER",
+    "FINAL_INTEGRATOR"
+  ],
+  "finding": {
+    "severity": "HIGH",
+    "id": "MODEL_VISIBLE_RENDER_NOT_CAUSALLY_BOUND_TO_PRIVATE_FACTORIAL_STATE",
+    "observed": "The first parallel v3 derived target_template from private mapping/polarity metadata and checked that private field names were absent from the visible prompt, but it did not recompute the expected visible prompt from template + mapping + display order + semantic case + polarity and compare it byte-for-byte.",
+    "counterexample": "A visible codebook symbol can be changed while private realized_mapping and target_template remain untouched; absent an expected-render comparison, metadata-side mapping checks alone do not prove that the model saw the mapping used to derive the target.",
+    "risk": "A materializer or later transform could silently create prompt/target inconsistency or shortcut-bearing rows while the private metadata still validates.",
+    "counterhypothesis": "The generator itself is deterministic, so post-generation prompt drift will never occur.",
+    "why_rejected_as_guard_policy": "Later materialization/serialization is explicitly pending and is the stage most likely to rewrite aliases, token strings or envelopes; binding the visible render is cheap and fail-closed."
+  },
+  "repair": {
+    "path": "tools/trigger2_dynamic_codebook_binding_template_generator_v3.py",
+    "commit": "766e0a20030a7e601415bb54aa570359bd75aead",
+    "git_blob_sha": "ef099efc7ff93221a4e0dcaaf02196f2153746e5",
+    "changes": [
+      "retain exact 4 x 6 x 3 x 2 x 6 = 864 positive one-symbol logical-alias factorial",
+      "bind each model-visible prompt to recomputation from hidden factorial state",
+      "bind prompt+target to model_visible_render_sha256",
+      "retain exact polarity pair integrity and display-order crossing",
+      "add explicit zero-MI checks for target vs display order, polarity, joint display-order+polarity and effective class vs target symbol",
+      "keep hard-negative rows out of the symbol-only objective",
+      "keep training_eligible=false and positive_jspace_label=false",
+      "retain materialization fail-closed until exact ABI/tokenizer/checkpoint/split evidence"
+    ]
+  },
+  "tests": {
+    "path": "tests/test_trigger2_dynamic_codebook_binding_template_generator_v3.py",
+    "commit": "a4f82706b3be90e5b7178755f13d8e19b211bdba",
+    "git_blob_sha": "804bcb8e1e5b70c1fb15c24e463af5bab84c9eda",
+    "local_exact_blob_execution": "8/8 PASS",
+    "cases": [
+      "full factorial selftest",
+      "explicit polarity semantics",
+      "target tamper rejection",
+      "visible prompt mapping drift rejection even after recomputing the render digest",
+      "private metadata leak rejection",
+      "render digest tamper rejection",
+      "missing polarity half rejection",
+      "positive J-Space label tamper rejection"
+    ]
+  },
+  "selftest": {
+    "rows": 864,
+    "counterfactual_pairs": 432,
+    "templates": 4,
+    "s3_permutations": 6,
+    "base_semantic_classes": 3,
+    "query_polarities": 2,
+    "display_orders": 6,
+    "target_frequency_each": 288,
+    "mutual_information_bits": {
+      "target_vs_display_order": 0.0,
+      "target_vs_query_polarity": 0.0,
+      "target_vs_display_order_and_polarity": 0.0,
+      "effective_class_vs_target_symbol": 0.0
+    },
+    "class_words_outside_codebook": 0,
+    "hard_negative_rows": 0,
+    "training_eligible_rows": 0,
+    "positive_jspace_labels": 0
+  },
+  "local_generated_artifact": {
+    "status": "SOURCE_TEMPLATE_ONLY_NOT_CANONICAL_DATASET",
+    "rows": 864,
+    "jsonl_sha256": "8c654427fb8518c52c7e742a5f8fd84cdc6c8b4e79200c5515c8c9f9accc7ddc",
+    "selftest_sha256": "6dd6c1323993206db729dcaad27cb9d22d95a2f0edd1ba69133a3459bff7b33e"
+  },
+  "remaining_gates": [
+    "materialize the exact accepted 46-atom ABI inventory with exact selected-checkpoint tokenizer identity, observed token IDs/counts and manifest/row integrity; rejected atom 'or' must remain excluded",
+    "construct split-isolated lexical/provenance families rather than cloning TRAIN ancestry",
+    "reserve an unseen-symbol holdout and a frozen unseen-template family before model/checkpoint tuning",
+    "run cross-split prompt/family/semantic/atom/provenance leakage audits on the final rendered sets",
+    "keep explanatory hard negatives in a separately typed output channel rather than mixing them into the one-symbol objective",
+    "run candidate-row/admission gates only after evidence-bound materialization",
+    "require same-model causal evidence after any behavioral gain before positive J-Space mechanism promotion"
+  ],
+  "credits": {
+    "research_design_delta": 1,
+    "source_generator_delta": 1,
+    "local_source_tests": "8/8 PASS",
+    "accepted_dataset_tokens": 0,
+    "qwen35_jspace_runtime_credit": 0,
+    "qwen35_training_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "canonical_semantics_promotion": false
+  },
+  "next_exact_action": "Recover/materialize the exact accepted 46-atom ABI manifest and selected-checkpoint tokenizer binding, then build disjoint TRAIN/VALIDATION/frozen HOLDOUT materializations from v3 with unseen-symbol and unseen-template isolation; run row gate + cross-split audit + atom/nuisance leakage statistics before any matched local/free pilot."
+}

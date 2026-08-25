@@ -1,13 +1,13 @@
 {
   "schema": "CLAY_FREE_SWARM_SYSTEM_ANALYSIS/v3",
-  "generated_at": "2026-08-25T09:06:47.163936+00:00",
+  "generated_at": "2026-08-25T09:21:58.076393+00:00",
   "runtime": {
     "supervisor": "STOPPED/QUARANTINED",
     "go_swarm": "RUNNING",
     "distillery": "RUNNING",
     "evidence_forge": "RUNNING",
     "dashboard": "RUNNING",
-    "local_model": "BUILDING/BOOTSTRAPPING",
+    "local_model": "NOT_READY",
     "provider_admission": {
       "admitted_free_providers": [
         "groq",
@@ -65,7 +65,7 @@
   },
   "distillery": {
     "schema": "CLAY_RESEARCH_DISTILLERY_STATUS/v1",
-    "generated_at": "2026-08-25T09:06:45.629100+00:00",
+    "generated_at": "2026-08-25T09:21:55.608519+00:00",
     "collected_source_tokens": 11621,
     "accepted_dataset_tokens": 0,
     "dataset_yield": 0.0,
@@ -86,7 +86,7 @@
     "model_output_tokens": 1455,
     "shared_provider_budget": {
       "schema": "CLAY_SHARED_PROVIDER_BUDGET/v1",
-      "generated_at": "2026-08-25T09:06:45.629757+00:00",
+      "generated_at": "2026-08-25T09:21:55.609221+00:00",
       "providers": {
         "arxiv": {
           "max_inflight": 1,
@@ -224,22 +224,22 @@
     },
     "db_bytes": 864256,
     "top_questions": [
-      "Does the FREE status of a provider truly eliminate any monetary or credit cost beyond request throttling?",
-      "Can a deterministic negative‑control burst reliably expose hidden usage limits on free provider tiers?",
-      "What minimal credential validation pattern achieves economic safety without blocking legitimate free-prototyping access?",
-      "Is there a measurable difference in request success rates between free and paid provider tiers for the same workload?",
-      "What are the specific steps needed to prepare the local research model for execution?",
-      "How can the system be verified to be correctly set up for the execution of the local research model?",
-      "What are the potential risks and challenges associated with the execution of the local research model?",
-      "What are the potential risks associated with relying on free providers?",
-      "How can the security of the system be ensured while utilizing free providers?",
-      "What are the most effective methods for implementing additional security measures?"
+      "How can the output of synthetic cognition components be effectively explained and interpreted?",
+      "What are the potential risks and challenges associated with integrating synthetic cognition into HCU?",
+      "How can the hybrid architecture be optimized for maximum effectiveness?",
+      "Which causal principle — intervention-based faithfulness, counterfactual invariance, or mechanistic interpretability — most reliably transfers from 120B teacher to 0.8B-8B student under FREE_ONLY inference constraints?",
+      "Wie lässt sich der FREE_ONLY‑Zugang zu kostenpflichtigen Provider‑Tiers prüfen, ohne die Kosten‑Beschränkung zu verletzen?",
+      "Welche minimalen Telemetriedaten (z. B. Latenz, Rückgabecodes) ermöglichen das zuverlässige Falschen von Admissions‑Gate‑Ordering‑Violationen?",
+      "How can we autonomously verify concrete NVIDIA credential proof without relying on provider-provided statements?",
+      "Ist ein deterministisches Kausalhändchen‑Tracking von Provider‑Aufrufen ohne SDK‑Instrumentierung realisierbar?",
+      "How does causal-event-identity binding interact with existing Hyperposition semantics?",
+      "Does recursive self-model injection generalize across model architectures (nemotron vs gpt-oss vs qwen) or is the effect model-specific, and what architectural properties mediate the effect?"
     ],
     "candidate_states": {}
   },
   "evidence_forge": {
     "schema": "CLAY_FREE_EVIDENCE_FORGE_STATUS/v1",
-    "generated_at": "2026-08-25T09:06:44.532332+00:00",
+    "generated_at": "2026-08-25T09:21:55.889372+00:00",
     "candidate_states": {
       "ACCEPTED": 1,
       "NEEDS_IMPLEMENTATION": 65,
@@ -263,7 +263,7 @@
     "peak_parallel_tasks": 0,
     "shared_provider_budget": {
       "schema": "CLAY_SHARED_PROVIDER_BUDGET/v1",
-      "generated_at": "2026-08-25T09:06:44.533041+00:00",
+      "generated_at": "2026-08-25T09:21:55.890137+00:00",
       "providers": {
         "arxiv": {
           "max_inflight": 1,
@@ -408,6 +408,6 @@
     "measured_total_sonnet5_equivalent_usd": 148.830648,
     "verified_historical_savings_usd": null,
     "nominal_avoided_if_zero_cost_usd": 148.830648,
-    "repo_output_only_proxy_usd": 126.33976
+    "repo_output_only_proxy_usd": 126.3384
   }
 }

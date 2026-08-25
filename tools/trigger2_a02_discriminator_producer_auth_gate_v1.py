@@ -9,6 +9,12 @@ It does not create a second Hyperposition semantic authority. It verifies produc
 authority, reconstructs the exact receipt using the retained v3 test-order semantics, and
 requires byte-structural equality with the transported receipt. PASS is candidate
 pre-admission component evidence only and mints zero credit.
+
+Repository lineage is fail-closed: the authority-declared producer commit must resolve as a
+real Git commit in the expected repository, ``commit:path`` must resolve to the exact pinned
+producer bytes, the commit must be an ancestor of executed HEAD, and the executed HEAD path
+must still contain those exact bytes. This prevents a syntactically valid 40-hex string from
+being mistaken for source-lineage proof.
 """
 from __future__ import annotations
 
@@ -16,6 +22,7 @@ from hashlib import sha256
 import importlib.util
 import json
 from pathlib import Path
+import subprocess
 from typing import Any
 
 SCHEMA = "CLAY_TRIGGER2_A02_DISCRIMINATOR_PRODUCER_AUTH_GATE/v1"
@@ -69,6 +76,155 @@ def _is_lower_hex_sha(value: Any, width: int) -> bool:
         and len(value) == width
         and all(ch in "0123456789abcdef" for ch in value)
     )
+
+
+def _git_bytes(*args: str) -> tuple[int, bytes, bytes]:
+    try:
+        proc = subprocess.run(
+            ["git", "-C", str(_repo_root()), *args],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            check=False,
+        )
+    except OSError as exc:
+        return 127, b"", (type(exc).__name__ + ":" + str(exc)).encode("utf-8", "replace")
+    return proc.returncode, proc.stdout, proc.stderr
+
+
+def _git_text(*args: str) -> tuple[int, str, str]:
+    code, stdout, stderr = _git_bytes(*args)
+    return (
+        code,
+        stdout.decode("utf-8", "replace").strip(),
+        stderr.decode("utf-8", "replace").strip(),
+    )
+
+
+def _remote_repository_identity(url: str) -> str | None:
+    value = url.strip()
+    if value.endswith(".git"):
+        value = value[:-4]
+    prefixes = (
+        "https://github.com/",
+        "http://github.com/",
+        "ssh://git@github.com/",
+        "git://github.com/",
+        "git@github.com:",
+    )
+    for prefix in prefixes:
+        if value.startswith(prefix):
+            candidate = value[len(prefix):].strip("/")
+            return candidate or None
+    return None
+
+
+def _verify_repository_lineage(
+    producer_auth: dict[str, Any],
+    producer_repo_path: str,
+) -> tuple[list[str], dict[str, Any]]:
+    failures: list[str] = []
+    details: dict[str, Any] = {
+        "expected_repository": EXPECTED_REPOSITORY,
+        "expected_branch": EXPECTED_BRANCH,
+        "declared_source_commit_sha": None,
+        "declared_source_path": None,
+        "origin_repository": None,
+        "executed_head_sha": None,
+        "executed_tree_sha": None,
+        "source_commit_path_blob_oid": None,
+        "source_commit_path_sha256": None,
+        "executed_head_path_blob_oid": None,
+        "executed_head_path_sha256": None,
+        "source_commit_is_ancestor_of_head": False,
+    }
+
+    source_lineage = producer_auth.get("source_lineage")
+    if not isinstance(source_lineage, dict):
+        return ["A02_PRODUCER_SOURCE_LINEAGE_REQUIRED"], details
+
+    source_commit_sha = source_lineage.get("source_commit_sha")
+    source_path = source_lineage.get("source_path")
+    details["declared_source_commit_sha"] = source_commit_sha
+    details["declared_source_path"] = source_path
+
+    if source_lineage.get("repository") != EXPECTED_REPOSITORY:
+        failures.append("A02_PRODUCER_SOURCE_LINEAGE_REPOSITORY_MISMATCH")
+    if source_lineage.get("branch") != EXPECTED_BRANCH:
+        failures.append("A02_PRODUCER_SOURCE_LINEAGE_BRANCH_MISMATCH")
+    if source_path != producer_repo_path:
+        failures.append("A02_PRODUCER_SOURCE_LINEAGE_PATH_MISMATCH")
+    if not _is_lower_hex_sha(source_commit_sha, 40):
+        failures.append("A02_PRODUCER_SOURCE_LINEAGE_COMMIT_INVALID")
+        return sorted(set(failures)), details
+
+    code, top_level, _ = _git_text("rev-parse", "--show-toplevel")
+    try:
+        top_level_matches = code == 0 and Path(top_level).resolve() == _repo_root().resolve()
+    except Exception:
+        top_level_matches = False
+    if not top_level_matches:
+        failures.append("A02_REPOSITORY_ROOT_NOT_GIT_BOUND")
+
+    code, origin_url, _ = _git_text("remote", "get-url", "origin")
+    origin_repo = _remote_repository_identity(origin_url) if code == 0 else None
+    details["origin_repository"] = origin_repo
+    if origin_repo != EXPECTED_REPOSITORY:
+        failures.append("A02_REPOSITORY_ORIGIN_IDENTITY_MISMATCH")
+
+    code, head_sha, _ = _git_text("rev-parse", "HEAD")
+    if code != 0 or not _is_lower_hex_sha(head_sha, 40):
+        failures.append("A02_EXECUTED_HEAD_UNRESOLVED")
+    else:
+        details["executed_head_sha"] = head_sha
+
+    code, tree_sha, _ = _git_text("rev-parse", "HEAD^{tree}")
+    if code != 0 or not _is_lower_hex_sha(tree_sha, 40):
+        failures.append("A02_EXECUTED_TREE_UNRESOLVED")
+    else:
+        details["executed_tree_sha"] = tree_sha
+
+    code, _, _ = _git_text("cat-file", "-e", source_commit_sha + "^{commit}")
+    if code != 0:
+        failures.append("A02_PRODUCER_SOURCE_LINEAGE_COMMIT_UNRESOLVED")
+        return sorted(set(failures)), details
+
+    code, source_blob_oid, _ = _git_text("rev-parse", f"{source_commit_sha}:{source_path}")
+    if code != 0 or not _is_lower_hex_sha(source_blob_oid, 40):
+        failures.append("A02_PRODUCER_SOURCE_LINEAGE_PATH_AT_COMMIT_UNRESOLVED")
+    else:
+        details["source_commit_path_blob_oid"] = source_blob_oid
+
+    code, source_bytes, _ = _git_bytes("show", f"{source_commit_sha}:{source_path}")
+    if code != 0:
+        failures.append("A02_PRODUCER_SOURCE_LINEAGE_BYTES_AT_COMMIT_UNRESOLVED")
+    else:
+        source_commit_sha256 = sha256(source_bytes).hexdigest()
+        details["source_commit_path_sha256"] = source_commit_sha256
+        if source_commit_sha256 != producer_auth.get("source_sha256"):
+            failures.append("A02_PRODUCER_SOURCE_LINEAGE_COMMIT_PATH_SHA256_MISMATCH")
+
+    if isinstance(details.get("executed_head_sha"), str):
+        code, _, _ = _git_text("merge-base", "--is-ancestor", source_commit_sha, head_sha)
+        details["source_commit_is_ancestor_of_head"] = code == 0
+        if code != 0:
+            failures.append("A02_PRODUCER_SOURCE_LINEAGE_COMMIT_NOT_ANCESTOR_OF_HEAD")
+
+        code, head_blob_oid, _ = _git_text("rev-parse", f"HEAD:{producer_repo_path}")
+        if code != 0 or not _is_lower_hex_sha(head_blob_oid, 40):
+            failures.append("A02_EXECUTED_HEAD_PRODUCER_PATH_UNRESOLVED")
+        else:
+            details["executed_head_path_blob_oid"] = head_blob_oid
+
+        code, head_bytes, _ = _git_bytes("show", f"HEAD:{producer_repo_path}")
+        if code != 0:
+            failures.append("A02_EXECUTED_HEAD_PRODUCER_BYTES_UNRESOLVED")
+        else:
+            head_sha256 = sha256(head_bytes).hexdigest()
+            details["executed_head_path_sha256"] = head_sha256
+            if head_sha256 != producer_auth.get("source_sha256"):
+                failures.append("A02_EXECUTED_HEAD_PRODUCER_SHA256_MISMATCH")
+
+    return sorted(set(failures)), details
 
 
 def _result(failures: list[str], **extra: Any) -> dict[str, Any]:
@@ -151,18 +307,12 @@ def adjudicate(row: Any) -> dict[str, Any]:
     if not producer_path.is_file():
         return _result(failures + ["A02_PRODUCER_FILE_MISSING"])
 
+    lineage_failures, repository_lineage = _verify_repository_lineage(
+        producer_auth,
+        producer_repo_path,
+    )
+    failures.extend(lineage_failures)
     source_lineage = producer_auth.get("source_lineage")
-    if not isinstance(source_lineage, dict):
-        failures.append("A02_PRODUCER_SOURCE_LINEAGE_REQUIRED")
-    else:
-        if source_lineage.get("repository") != EXPECTED_REPOSITORY:
-            failures.append("A02_PRODUCER_SOURCE_LINEAGE_REPOSITORY_MISMATCH")
-        if source_lineage.get("branch") != EXPECTED_BRANCH:
-            failures.append("A02_PRODUCER_SOURCE_LINEAGE_BRANCH_MISMATCH")
-        if source_lineage.get("source_path") != producer_repo_path:
-            failures.append("A02_PRODUCER_SOURCE_LINEAGE_PATH_MISMATCH")
-        if not _is_lower_hex_sha(source_lineage.get("source_commit_sha"), 40):
-            failures.append("A02_PRODUCER_SOURCE_LINEAGE_COMMIT_INVALID")
 
     actual_producer_sha = _source_sha256(producer_path)
     if actual_producer_sha != producer_auth.get("source_sha256"):
@@ -272,6 +422,12 @@ def adjudicate(row: Any) -> dict[str, Any]:
     if expected_receipt is not None and claimed_receipt != expected_receipt:
         failures.append("A02_DISCRIMINATOR_RECEIPT_NOT_EXACTLY_AUTHORITY_DERIVED")
 
+    lineage_failure_prefixes = (
+        "A02_PRODUCER_SOURCE_LINEAGE_",
+        "A02_REPOSITORY_",
+        "A02_EXECUTED_HEAD_",
+        "A02_EXECUTED_TREE_",
+    )
     return _result(
         failures,
         expected_producer_binding=expected_binding,
@@ -280,8 +436,9 @@ def adjudicate(row: Any) -> dict[str, Any]:
         bounded_generation_case_id=case_id,
         producer_source_verified=actual_producer_sha == producer_auth.get("source_sha256"),
         producer_source_lineage_verified=not any(
-            failure.startswith("A02_PRODUCER_SOURCE_LINEAGE_") for failure in failures
+            failure.startswith(lineage_failure_prefixes) for failure in failures
         ),
+        repository_lineage=repository_lineage,
         policy_digest_verified=actual_policy_digest == authority_policy_digest,
         producer_invocation_completed=expected_receipt is not None,
         semantic_authority="RETAINED_V3_U_TEST_ORDER_VIA_AUTHORITY_PINNED_PRODUCER",

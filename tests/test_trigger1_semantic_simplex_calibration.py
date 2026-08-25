@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import copy
+import hashlib
 from pathlib import Path
 import sys
 import unittest
@@ -83,6 +84,16 @@ def rank2_families(count: int = 12, *, invert_last_h2: bool = False) -> list[dic
     return rows
 
 
+def parsed_families(rows: list[dict]) -> list[dict]:
+    return [
+        {
+            semantic_class: simplex.np.asarray(row["centroids"][semantic_class], dtype=simplex.np.float64)
+            for semantic_class in simplex.CLASSES
+        }
+        for row in rows
+    ]
+
+
 class Trigger1SemanticSimplexCalibrationTests(unittest.TestCase):
     def test_clean_rank1_geometry_selects_one_dimensional_future_test(self):
         result = simplex.adjudicate(base_payload(rank1_families()))
@@ -142,6 +153,30 @@ class Trigger1SemanticSimplexCalibrationTests(unittest.TestCase):
         self.assertEqual(first["null"]["seed_sha256"], second["null"]["seed_sha256"])
         self.assertEqual(first["null"]["sigma2_threshold"], second["null"]["sigma2_threshold"])
         self.assertEqual(first["null"]["max_sigma2"], second["null"]["max_sigma2"])
+
+    def test_globally_identical_nonidentity_relabeling_is_forced_out_of_null(self):
+        families = parsed_families(rank2_families(count=3))
+        observed_sigma2 = float(simplex.geometry(families)[2][1])
+
+        selected_seed = None
+        selected_index = None
+        for nonce in range(10000):
+            seed = hashlib.sha256(f"same-permutation-{nonce}".encode("utf-8")).hexdigest()
+            indices = []
+            for family_index in range(len(families)):
+                digest = hashlib.sha256(
+                    f"{seed}|null|0|family|{family_index}".encode("utf-8")
+                ).digest()
+                indices.append(int.from_bytes(digest[:8], "big") % len(simplex.PERMUTATIONS))
+            if len(set(indices)) == 1 and indices[0] != 0:
+                selected_seed = seed
+                selected_index = indices[0]
+                break
+
+        self.assertIsNotNone(selected_seed)
+        self.assertIsNotNone(selected_index)
+        null_sigma2 = simplex.deterministic_null_sigma2(families, selected_seed, 1)[0]
+        self.assertLess(null_sigma2, observed_sigma2 - 1e-12)
 
 
 if __name__ == "__main__":

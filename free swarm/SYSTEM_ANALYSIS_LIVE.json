@@ -1,6 +1,6 @@
 {
   "schema": "CLAY_FREE_SWARM_SYSTEM_ANALYSIS/v3",
-  "generated_at": "2026-08-25T18:56:42.596222+00:00",
+  "generated_at": "2026-08-25T19:11:48.921386+00:00",
   "runtime": {
     "supervisor": "STOPPED/QUARANTINED",
     "go_swarm": "RUNNING",
@@ -65,7 +65,7 @@
   },
   "distillery": {
     "schema": "CLAY_RESEARCH_DISTILLERY_STATUS/v1",
-    "generated_at": "2026-08-25T18:56:20.795960+00:00",
+    "generated_at": "2026-08-25T19:11:34.868411+00:00",
     "collected_source_tokens": 11621,
     "accepted_dataset_tokens": 0,
     "dataset_yield": 0.0,
@@ -111,7 +111,7 @@
     "model_output_tokens": 1455,
     "shared_provider_budget": {
       "schema": "CLAY_SHARED_PROVIDER_BUDGET/v1",
-      "generated_at": "2026-08-25T18:56:20.796511+00:00",
+      "generated_at": "2026-08-25T19:11:34.869118+00:00",
       "providers": {
         "arxiv": {
           "max_inflight": 1,
@@ -213,13 +213,13 @@
           "max_inflight": 16,
           "active_leases": 0,
           "min_interval_s": 0.5,
-          "cooldown_seconds": 9.99229121208191,
-          "total_requests": 2892,
+          "cooldown_seconds": 9.990051507949829,
+          "total_requests": 2982,
           "total_success": 134,
-          "total_429": 2757,
+          "total_429": 2847,
           "total_errors": 0,
           "last_status": "429",
-          "last_observed_at": "2026-08-25T18:56:20.788813+00:00"
+          "last_observed_at": "2026-08-25T19:11:34.859223+00:00"
         },
         "semantic_scholar": {
           "max_inflight": 1,
@@ -249,16 +249,16 @@
     },
     "db_bytes": 983040,
     "top_questions": [
-      "What are the trade-offs between data throughput, processing time, and output quality in the distillery?",
-      "What is the minimal probe request payload that NVIDIA accepts for free-tier verification without consuming quota?",
-      "In welchen Szenarien könnte eine Flexibilisierung des Protokolls Innovationen fördern, ohne Sicherheit zu beeinträchtigen?",
-      "How can the HCU be extended to auto‑detect and bind a local engine without manual configuration?",
-      "What minimal J‑Space prototype structure is required to satisfy the FREE_ONLY readiness criteria?",
-      "Which sandbox health checks are sufficient to guarantee safe execution of local engine tests in the VPS bridge?",
-      "How can the FREE_ONLY admission boundary be formally verified to prevent secret file reads before provider admission in the current supervisor script?",
-      "How to define model-specific causal interface equivalence classes that permit safe model-switching without minting false training credit?",
-      "What minimal set of deterministic hard negatives can be derived from the existing causal traces to construct a leak‑resistant family‑split dataset for JSPACE_VECTOR_CONTROL_ABI/v1?",
-      "Does surprise-gated broadcasting produce genuine causal compression in J-Space or merely sparse correlation structures?"
+      "Can hybrid identity verification (local + swarm consensus) prevent credential leakage without breaking FREE_ONLY constraints?",
+      "What minimal formal model captures the tension between causal traceability and execution speed?",
+      "Does credential-bound admission enable cross-region free-tier validation?",
+      "Does recursive self-modeling generalize across model families (Nemotron vs GPT-OSS) or is it model-specific?",
+      "What is the minimal trace count N for statistically significant gains?",
+      "Can the meta-evaluator be replaced by a lightweight verifier (e.g., constraint checker) without quality loss?",
+      "Can credential verification be performed without exposing secrets to inference models?",
+      "How to handle credential rotation in admission evidence updates?",
+      "Does the FREE_ONLY credential binding layer expose per-call rate-limit headers to the scheduler, or are they stripped at the provider adapter boundary?",
+      "Does the FREE status of a provider truly eliminate any monetary or credit cost beyond request throttling?"
     ],
     "candidate_states": {}
   },
@@ -433,6 +433,6 @@
     "measured_total_sonnet5_equivalent_usd": 148.830648,
     "verified_historical_savings_usd": null,
     "nominal_avoided_if_zero_cost_usd": 148.830648,
-    "repo_output_only_proxy_usd": 135.34681
+    "repo_output_only_proxy_usd": 136.1791
   }
 }

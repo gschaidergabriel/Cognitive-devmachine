@@ -1,0 +1,60 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "authority_epoch": "8.78",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "trigger": "go",
+  "organ": "GPT-5.6-Sol",
+  "canonical_main_observed_before_write": "884892a82d1d25bf3f0325dc90fe5bd7a2065739",
+  "finding": {
+    "classification": "SOURCE_CONFIRMED_RUNTIME_GATE_NARROWED",
+    "statement": "Inbox-selected supervisor 8.78 outranks earlier 8.73 bootstrap/program-state surfaces. On current main, supervisor priority 1 is already source-converged: the single active Forge start path launches run_free_evidence_forge_backfill.py and retires legacy/pre-backfill Forge daemons; raw-generation backpressure and minimal-bootstrap authority sync have also landed. The singleton historical-backfill dispatch spec exists, but its canonical terminal result file was not observed at this exact main. Therefore the highest-information nonduplicate blocker is terminal exact-source saturation execution plus repository-bound FREE_SWARM_HISTORICAL_BACKFILL_RECEIPT/v1, not another dispatch or Forge authority."
+  },
+  "observations": {
+    "inbox_selected_supervisor": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_78.json",
+    "backfill_supervisor_wiring": "SOURCE_PRESENT_ON_CURRENT_MAIN",
+    "backfill_capsule": "tools/run_free_swarm_historical_backfill_capsule_878.py",
+    "singleton_dispatch_spec": "research_entity/continuity/ordinary_dispatch_specs/free-swarm-historical-backfill-saturation.json",
+    "singleton_dispatch_key": "free-swarm-historical-backfill-saturation-g0001",
+    "canonical_dispatch_result": "research_entity/continuity/ordinary_dispatch_results/free-swarm-historical-backfill-saturation-g0001.json",
+    "canonical_dispatch_result_observed": false,
+    "legacy_forge_runtime_run_32742535392_state": "QUEUED_AS_OBSERVED_DURING_THIS_GO",
+    "legacy_forge_runtime_job_97480167751_state": "QUEUED_AS_OBSERVED_DURING_THIS_GO"
+  },
+  "hypothesis": "With singleton backlog-first Forge wiring already fused, the next useful promotion discriminator is a terminal saturation receipt proving the bounded workers.jsonl scan set reaches stable EOF/cursor saturation and yields exact recovery/backlog counts without provider/model/network effects.",
+  "counterhypothesis": "A new dispatch, second Forge daemon, or additional raw generation is required before saturation can be tested.",
+  "counterhypothesis_disposition": "REJECTED_AT_CURRENT_SOURCE_COORDINATION_LEVEL: current main already has one backlog-first Forge authority, a singleton dispatch specification, and explicit raw-generation backpressure; duplicating any of these would weaken coordination and not add runtime evidence.",
+  "go_tracks": {
+    "track_a": "ADVANCED_BY_NON_DUPLICATIVE_GATE_CLOSURE: exact executable blocker narrowed to terminal singleton historical-backfill saturation receipt; duplicate executor/dispatch creation explicitly avoided.",
+    "track_b": "HCU_NO_CHANGE_WITH_REASON: current parallel main already contains active causal/backfill identity hardening and supervisor wiring; this organ observed no higher-information nonduplicate Typed Entry/HCU source delta than executing the pending saturation gate.",
+    "track_c": "TRAINING_READINESS_NO_CHANGE_WITH_REASON: local Qwen3-0.6B midlayer causal workflow remains source-ready but no terminal exact-source model-runtime receipt was observed; this go exposes no reproducible shared immutable macrocycle identity, so zero new unusual model interventions are permitted. Dataset-readiness remains gated by historical-backfill saturation and later replay-v2/live-Distillery execution evidence."
+  },
+  "coordination": {
+    "shared_reproducible_go_macrocycle_id_exposed_to_this_organ": false,
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_interventions_executed": 0,
+    "duplicate_dispatch_created": false,
+    "second_forge_authority_created": false
+  },
+  "execution": {
+    "provider_model_network_io": false,
+    "paid_or_unknown_execution": false,
+    "together_execution": false,
+    "canonical_effect": false,
+    "runtime_saturation_executed_by_this_organ": false,
+    "reason_runtime_not_executed_here": "No connector/tool surface in this organ exposes the owner-authorized clay-direct-dev runtime itself; the repository already contains a singleton dispatch rather than authorizing duplicate fanout."
+  },
+  "credit": {
+    "historical_backfill_runtime_credit_added": 0,
+    "distillery_replay_v2_runtime_credit_added": 0,
+    "provider_runtime_credit_added": 0,
+    "whole_entityos_hcu_runtime_credit_added": 0,
+    "hcu_full_runtime_credit_added": 0,
+    "jspace_model_runtime_credit_added": 0,
+    "training_credit_added": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_action": "Observe the canonical singleton dispatch result. If absent, let the existing single dispatch/executor path run rather than spawning another generation. Promotion requires PASS_SATURATED_SCAN_SET with exact source commit/tree/dirty state, artifact-root scan manifest, lines scanned, successful outputs, explicit and batch deltas recovered, new concepts/execution variants, duplicates superseded, ready/implementation backlog, remaining pending extraction, provider/model/network zero, then replay-v2 exact-current regression and one qualified Forge ACCEPT -> exactly one persistent Distillery packet -> accepted_dataset_tokens > 0 -> semantic replay +0."
+}

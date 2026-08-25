@@ -1,0 +1,152 @@
+name: GO 8.77 collective metrics freshness
+
+on:
+  pull_request:
+    paths:
+      - 'free swarm/go_collective_metrics.py'
+      - 'free swarm/go_collective_metrics_freshness.py'
+      - 'tests/test_go_collective_metrics_v1.py'
+      - 'tests/test_go_collective_metrics_freshness_v1.py'
+      - '.github/workflows/go877-collective-metrics-freshness.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'free swarm/LIVE_METRICS.json'
+      - 'free swarm/FORGE_LIVE.json'
+      - 'free swarm/DISTILLERY_LIVE.json'
+      - 'free swarm/architecture_delta_evaluations.jsonl'
+      - 'free swarm/go_collective_metrics.py'
+      - 'free swarm/go_collective_metrics_freshness.py'
+      - 'research_entity/continuity/go_metrics/**'
+      - 'research_entity/claycode/autonomous/SUPERVISOR_INBOX.json'
+      - 'research_entity/claycode/autonomous/SUPERVISOR_STEERING_*.json'
+      - '.github/workflows/go877-collective-metrics-freshness.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: go877-collective-metrics-freshness-${{ github.event_name == 'pull_request' && github.event.pull_request.number || 'main' }}
+  cancel-in-progress: false
+
+jobs:
+  regressions:
+    name: freshness regressions
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 20
+    steps:
+      - name: Checkout exact source
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          fetch-depth: 0
+
+      - name: Run fail-closed regressions
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          python3 -m py_compile 'free swarm/go_collective_metrics.py' 'free swarm/go_collective_metrics_freshness.py'
+          python3 -m unittest -v \
+            tests.test_go_collective_metrics_v1 \
+            tests.test_go_collective_metrics_freshness_v1
+
+  publish:
+    name: publish bounded current snapshot
+    if: github.event_name != 'pull_request'
+    needs: regressions
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 30
+    steps:
+      - name: Checkout main transport
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Snapshot, collect, and publish without regression
+        shell: bash
+        env:
+          ARTIFACT_ROOT: /artifacts/clay-entityos-swarm
+        run: |
+          set -Eeuo pipefail
+          git config user.name 'clay-metrics-freshness'
+          git config user.email 'clay-metrics-freshness@users.noreply.github.com'
+
+          [[ -d "$ARTIFACT_ROOT" ]] || {
+            echo 'BLOCKED_FAIL_CLOSED: live artifact root is unavailable on the self-hosted runner' >&2
+            exit 2
+          }
+
+          for attempt in 1 2 3; do
+            git fetch origin main
+            git reset --hard origin/main
+            SOURCE_HEAD="$(git rev-parse HEAD)"
+            SNAPSHOT_ROOT="$(mktemp -d)"
+            trap 'rm -rf "$SNAPSHOT_ROOT"' EXIT
+
+            while IFS= read -r -d '' src; do
+              rel="${src#${ARTIFACT_ROOT}/}"
+              dst="$SNAPSHOT_ROOT/$rel"
+              mkdir -p "$(dirname "$dst")"
+              cp -- "$src" "$dst"
+            done < <(find "$ARTIFACT_ROOT" -type f -name workers.jsonl -print0)
+
+            python3 'free swarm/go_collective_metrics_freshness.py' \
+              --repo "$GITHUB_WORKSPACE" \
+              --artifacts "$SNAPSHOT_ROOT"
+
+            python3 - "$SOURCE_HEAD" "$GITHUB_RUN_ID" "$GITHUB_SHA" <<'PY'
+          import datetime, json, pathlib, sys
+          source_head, run_id, event_sha = sys.argv[1:]
+          root = pathlib.Path('.')
+          receipt_path = root / 'free swarm/COLLECTIVE_METRICS_FRESHNESS_RECEIPT.json'
+          receipt = json.loads(receipt_path.read_text())
+          out = {
+              'schema': 'COLLECTIVE_METRICS_FRESHNESS_EXECUTION_RECEIPT/v1',
+              'observed_at': datetime.datetime.now(datetime.timezone.utc).isoformat(),
+              'github_run_id': run_id,
+              'event_sha': event_sha,
+              'source_head_before_result_commit': source_head,
+              'freshness_receipt': receipt,
+              'tests': {
+                  'test_go_collective_metrics_v1': 'PASS_IN_PRECEDING_JOB',
+                  'test_go_collective_metrics_freshness_v1': 'PASS_IN_PRECEDING_JOB',
+              },
+              'execution_surface': 'SELF_HOSTED_LINUX_X64_BOUNDED_PUBLISHER',
+              'artifact_input': 'IMMUTABLE_COPY_OF_WORKERS_JSONL_FOR_THIS_ATTEMPT',
+              'scope': 'COLLECTIVE_METRICS_FRESHNESS_PUBLICATION_ONLY',
+              'provider_calls': 0,
+              'provider_runtime_credit_added': 0,
+              'entityos_hcu_runtime_credit_added': 0,
+              'hcu_full_runtime_credit_added': 0,
+              'jspace_model_runtime_credit_added': 0,
+              'training_credit_added': 0,
+          }
+          p = root / 'research_entity/runtime/tool_results' / f'collective-metrics-freshness-{run_id}.json'
+          p.parent.mkdir(parents=True, exist_ok=True)
+          p.write_text(json.dumps(out, indent=2, sort_keys=True) + '\n')
+          PY
+
+            git add -- \
+              'free swarm/GO_COLLECTIVE_METRICS.json' \
+              'free swarm/GO_COLLECTIVE_METRICS.md' \
+              'free swarm/COLLECTIVE_METRICS_FRESHNESS_RECEIPT.json' \
+              "research_entity/runtime/tool_results/collective-metrics-freshness-${GITHUB_RUN_ID}.json"
+
+            if git diff --cached --quiet; then
+              echo 'NO_RESEARCH_DELTA: exact bounded result already present'
+              exit 0
+            fi
+
+            git commit -m "metrics: publish freshness-bound collective snapshot [run ${GITHUB_RUN_ID}]"
+            if git push origin HEAD:main; then
+              exit 0
+            fi
+
+            echo "main advanced during publication attempt ${attempt}; re-entering exact current main" >&2
+            rm -rf "$SNAPSHOT_ROOT"
+            trap - EXIT
+          done
+
+          echo 'BLOCKED_FAIL_CLOSED: main moved during all bounded publication attempts' >&2
+          exit 2

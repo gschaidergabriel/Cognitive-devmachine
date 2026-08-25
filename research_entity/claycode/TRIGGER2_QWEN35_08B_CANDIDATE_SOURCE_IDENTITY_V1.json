@@ -6,9 +6,9 @@
   "product": "EntityOS",
   "architecture": "HCU",
   "implementation_codename": "Xeno",
-  "canonical_main_observed": "60a81a1eafed6d878b7b27bc074ebf01924528ae",
-  "trigger2_branch_observed_before_write": "30d3285f92f8f4007710b28ba55bc835b0f6de44",
+  "canonical_main_observed": "7e00fa055c03fc76b0cedc2d3ad1b3466d271d13",
   "authority_binding": "research_entity/global/XENO_HCU_GO_TARGET_ARCHITECTURE_OWNER_DIRECTIVE_2026-08-25.md",
+  "checkpoint_manifest_artifact": "research_entity/claycode/TRIGGER2_QWEN35_08B_CANDIDATE_CHECKPOINT_MANIFEST_V1.json",
   "purpose": "Pin source-observed official Qwen artifact identities for the two preregistered Trigger-2 baseline challengers without minting runtime, J-Space, training, or selection credit.",
   "source_class": "OFFICIAL_QWEN_HUGGINGFACE_SOURCE_OBSERVED",
   "candidates": [
@@ -16,7 +16,6 @@
       "model_id": "Qwen/Qwen3.5-0.8B-Base",
       "role": "PRETRAINED_BASE_CHALLENGER",
       "artifact_revision": "a5fba42799b133463178a6603d0fc31ced693c5d",
-      "current_repo_head_observed": "f75361505deaead5ce6a4a25bd2f433cb1cd1ca3",
       "weights": {
         "path": "model.safetensors-00001-of-00001.safetensors",
         "sha256": "c2b1e5a17d9c1e27685d92ed9b382911ebb99955ecd89052d1721241adfbab6c",
@@ -30,17 +29,17 @@
       "config": {
         "path": "config.json",
         "source_presence_observed": true,
-        "byte_sha256": null,
-        "status": "EXACT_BYTE_DIGEST_PENDING"
+        "byte_sha256": "b90b86f35c8e6925ef74ee04d0e758f0a845c83a42089ad82bbaa948de9b4204",
+        "size_bytes": 2907,
+        "status": "EXACT_BYTE_DIGEST_BOUND_TO_PINNED_ARTIFACT_REVISION"
       },
-      "checkpoint_manifest_sha256": null,
-      "baseline_gate_identity_status": "PARTIAL_SOURCE_IDENTITY_ONLY__CONFIG_AND_MANIFEST_DIGEST_PENDING"
+      "checkpoint_manifest_sha256": "709aa9265a9800461c9fbfab8878bc96a76daea6025edb590456860e421a9799",
+      "baseline_gate_identity_status": "SOURCE_IDENTITY_COMPLETE__RUNTIME_CONSUMED_BYTES_AND_BASELINE_PENDING"
     },
     {
       "model_id": "Qwen/Qwen3.5-0.8B",
       "role": "POSTTRAINED_CHALLENGER",
       "artifact_revision": "2b48083dfa97c3cbf0220cf1a5e6cffe0a511157",
-      "current_repo_head_short_observed": "2fc0636",
       "weights": {
         "path": "model.safetensors-00001-of-00001.safetensors",
         "sha256": "04b1c301231dd422b8860db31311ab2721511346a32cb1e079c4c4e5f1fe4696",
@@ -54,22 +53,23 @@
       "config": {
         "path": "config.json",
         "source_presence_observed": true,
-        "byte_sha256": null,
-        "status": "EXACT_BYTE_DIGEST_PENDING"
+        "byte_sha256": "b90b86f35c8e6925ef74ee04d0e758f0a845c83a42089ad82bbaa948de9b4204",
+        "size_bytes": 2907,
+        "status": "EXACT_BYTE_DIGEST_BOUND_TO_PINNED_ARTIFACT_REVISION"
       },
-      "checkpoint_manifest_sha256": null,
-      "baseline_gate_identity_status": "PARTIAL_SOURCE_IDENTITY_ONLY__CONFIG_AND_MANIFEST_DIGEST_PENDING"
+      "checkpoint_manifest_sha256": "9d9d3910f181bdab461e3d56ed89b45fc54ca7746a34e1d1af7f91d02c6d25b6",
+      "baseline_gate_identity_status": "SOURCE_IDENTITY_COMPLETE__RUNTIME_CONSUMED_BYTES_AND_BASELINE_PENDING"
     }
   ],
   "closed_blockers": [
     "OFFICIAL_MODEL_REPOSITORY_EXISTENCE",
     "WEIGHT_FILE_SHA256_FOR_BOTH_CHALLENGERS",
     "TOKENIZER_FILE_SHA256_FOR_BOTH_CHALLENGERS",
-    "PINNABLE_OFFICIAL_ARTIFACT_REVISION_FOR_BOTH_CHALLENGERS"
+    "PINNABLE_OFFICIAL_ARTIFACT_REVISION_FOR_BOTH_CHALLENGERS",
+    "EXACT_CONFIG_BYTE_SHA256_FOR_BOTH_CHALLENGERS",
+    "DETERMINISTIC_CHECKPOINT_MANIFEST_SHA256_FOR_BOTH_CHALLENGERS"
   ],
   "remaining_identity_blockers": [
-    "EXACT_CONFIG_BYTE_SHA256_FOR_BOTH_CHALLENGERS",
-    "DETERMINISTIC_CHECKPOINT_MANIFEST_SHA256_FOR_BOTH_CHALLENGERS",
     "EXACT_RUNTIME_BUILD_AND_CONSUMED_BYTE_ATTESTATION",
     "ZERO_COST_BASELINE_MEASUREMENT"
   ],
@@ -84,5 +84,5 @@
     "paid_execution_credit": 0,
     "whole_entityos_hcu_runtime_credit": 0
   },
-  "next_exact_action": "Hash config.json bytes for both pinned artifact revisions and build deterministic candidate checkpoint manifests; then run the already-frozen zero-cost Base-vs-posttrained baseline packet protocol on an authorized free runtime surface. Do not select a checkpoint before both candidates pass hard floors and the non-persisting adaptation proxy requirement."
+  "next_exact_action": "Bind exact runtime/build identity and loader-consumed bytes for each challenger on an authorized free runtime surface, then execute the already-frozen zero-cost Base-vs-posttrained baseline packet protocol. Do not select a checkpoint before both candidates pass hard floors and the non-persisting adaptation proxy requirement."
 }

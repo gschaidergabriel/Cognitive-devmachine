@@ -1,6 +1,6 @@
 {
   "schema": "CLAY_FREE_SWARM_SYSTEM_ANALYSIS/v3",
-  "generated_at": "2026-08-25T22:28:09.891741+00:00",
+  "generated_at": "2026-08-25T22:43:16.216858+00:00",
   "runtime": {
     "supervisor": "STOPPED/QUARANTINED",
     "go_swarm": "RUNNING",
@@ -65,7 +65,7 @@
   },
   "distillery": {
     "schema": "CLAY_RESEARCH_DISTILLERY_STATUS/v1",
-    "generated_at": "2026-08-25T22:28:00.540765+00:00",
+    "generated_at": "2026-08-25T22:43:15.277276+00:00",
     "collected_source_tokens": 11621,
     "accepted_dataset_tokens": 0,
     "dataset_yield": 0.0,
@@ -111,7 +111,7 @@
     "model_output_tokens": 1455,
     "shared_provider_budget": {
       "schema": "CLAY_SHARED_PROVIDER_BUDGET/v1",
-      "generated_at": "2026-08-25T22:28:00.541518+00:00",
+      "generated_at": "2026-08-25T22:43:15.277780+00:00",
       "providers": {
         "arxiv": {
           "max_inflight": 1,
@@ -213,13 +213,13 @@
           "max_inflight": 16,
           "active_leases": 0,
           "min_interval_s": 0.5,
-          "cooldown_seconds": 9.989856243133545,
-          "total_requests": 4140,
+          "cooldown_seconds": 9.990742444992065,
+          "total_requests": 4230,
           "total_success": 134,
-          "total_429": 4005,
+          "total_429": 4095,
           "total_errors": 0,
           "last_status": "429",
-          "last_observed_at": "2026-08-25T22:28:00.531366+00:00"
+          "last_observed_at": "2026-08-25T22:43:15.268658+00:00"
         },
         "semantic_scholar": {
           "max_inflight": 1,
@@ -249,16 +249,16 @@
     },
     "db_bytes": 983040,
     "top_questions": [
-      "What are the performance implications of the dynamic binding mechanism?",
-      "How to achieve deterministic nonce generation without compromising cryptographic security in high-throughput registry systems?",
-      "What is the exact NVIDIA API endpoint and response schema that authoritatively returns the calling credential's tier (free vs paid) and model access list, without consuming paid quota?",
-      "Does provider-level circuit-breaking (zero assignment during cooldown) increase tail latency for logical workers that could have been served by a recovering provider?",
-      "Causally distinct unresolved question: How do multi-tier decay parameters interact with entropy minimization constraints in the J-Space/GWT prototype when preserving counterevidence across modality boundaries?",
-      "What is the minimal probe payload that reliably triggers provider-side free-tier path without incurring billable tokens or side effects?",
-      "causally distinct unresolved question",
-      "What is the actual source layout of the HCU runtime provider router, credential binding, and receipt emission modules? (EXACT_SOURCE_CAPSULE was NOT_SELECTED_FOR_THIS_SHARD)",
-      "What is the optimal mmap chunk size for memory‑mapped model loading across heterogeneous storage back‑ends and hardware configurations?",
-      "Wie kann die Kosten-Übernahme-Rate (CTR) für verschiedene Engine-Anfragen im FREE-ONLY-Modus optimiert werden?"
+      "What are the implications of external LLM-provider traffic continuing after FREE_ONLY quarantine was published?",
+      "Wie können die vorgeschlagenen Verbesserungen auf ihre potenziellen Auswirkungen auf die Systemleistung und -stabilität hin bewertet werden?",
+      "Wie wirkt sich die FREE ONLY-Anbieterzulassung auf die Systemleistung und -vertrauenswürdigkeit aus?",
+      "Welche Auswirkungen hat die kanonische Zustands-/Beweisevidenz auf die Systemleistung und -vertrauenswürdigkeit?",
+      "Wie können die Ergebnisse der A/B-Tests verwendet werden, um die Systemarchitektur zu optimieren?",
+      "Wie kann die aktuelle Implementierung verbessert werden, um die gewünschten Ergebnisse zu erzielen?",
+      "What is the exact NVIDIA API response pattern (status codes, headers, body) that distinguishes free-tier from paid-tier credentials for nemotron-3-super-120b-a12b?",
+      "Wie kann die Unsicherheit im System reduziert werden?",
+      "Wie kann die Wirksamkeit des Tests verbessert werden, um die Ergebnisse zu bestätigen?",
+      "Wie kann die Sicherheit von EAP effektiv gewährleistet werden?"
     ],
     "candidate_states": {}
   },
@@ -433,6 +433,6 @@
     "measured_total_sonnet5_equivalent_usd": 148.830648,
     "verified_historical_savings_usd": null,
     "nominal_avoided_if_zero_cost_usd": 148.830648,
-    "repo_output_only_proxy_usd": 140.30175
+    "repo_output_only_proxy_usd": 140.52758
   }
 }

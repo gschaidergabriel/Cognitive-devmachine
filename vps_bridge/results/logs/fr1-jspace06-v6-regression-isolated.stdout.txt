@@ -1,0 +1,59 @@
+source_head=9c8a1be9d1b3a65370a05c3fa986147448b41d62
+
+==================================== ERRORS ====================================
+______ ERROR collecting tests/test_blogpost_entity_terminal_closure_v2.py ______
+ImportError while importing test module '/workspace/clay-global-research-entity/tests/test_blogpost_entity_terminal_closure_v2.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_blogpost_entity_terminal_closure_v2.py:11: in <module>
+    from claycode_structured_backend import parse  # noqa: E402
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tools/claycode_structured_backend.py:21: in <module>
+    from lark import Lark, Transformer
+E   ModuleNotFoundError: No module named 'lark'
+___ ERROR collecting tests/test_trigger1_semantic_simplex_blocked_rank_v1.py ___
+ImportError while importing test module '/workspace/clay-global-research-entity/tests/test_trigger1_semantic_simplex_blocked_rank_v1.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_trigger1_semantic_simplex_blocked_rank_v1.py:8: in <module>
+    import numpy as np
+E   ModuleNotFoundError: No module named 'numpy'
+___ ERROR collecting tests/test_trigger1_semantic_simplex_rank_admission.py ____
+ImportError while importing test module '/workspace/clay-global-research-entity/tests/test_trigger1_semantic_simplex_rank_admission.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_trigger1_semantic_simplex_rank_admission.py:8: in <module>
+    from tools import trigger1_semantic_simplex_rank_admission as admission
+tools/trigger1_semantic_simplex_rank_admission.py:21: in <module>
+    from tools import trigger1_semantic_simplex_rank_analyze as rank
+tools/trigger1_semantic_simplex_rank_analyze.py:23: in <module>
+    import numpy as np
+E   ModuleNotFoundError: No module named 'numpy'
+____ ERROR collecting tests/test_trigger1_semantic_simplex_rank_analyze.py _____
+ImportError while importing test module '/workspace/clay-global-research-entity/tests/test_trigger1_semantic_simplex_rank_analyze.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/lib/python3.12/importlib/__init__.py:90: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_trigger1_semantic_simplex_rank_analyze.py:13: in <module>
+    SPEC.loader.exec_module(mod)
+tools/trigger1_semantic_simplex_rank_analyze.py:23: in <module>
+    import numpy as np
+E   ModuleNotFoundError: No module named 'numpy'
+=========================== short test summary info ============================
+ERROR tests/test_blogpost_entity_terminal_closure_v2.py
+ERROR tests/test_trigger1_semantic_simplex_blocked_rank_v1.py
+ERROR tests/test_trigger1_semantic_simplex_rank_admission.py
+ERROR tests/test_trigger1_semantic_simplex_rank_analyze.py
+!!!!!!!!!!!!!!!!!!! Interrupted: 4 errors during collection !!!!!!!!!!!!!!!!!!!!
+851 deselected, 4 errors in 2.13s

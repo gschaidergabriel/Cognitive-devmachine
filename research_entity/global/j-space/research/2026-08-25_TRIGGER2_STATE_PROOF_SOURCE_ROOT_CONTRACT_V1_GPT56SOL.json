@@ -1,0 +1,184 @@
+{
+  "schema": "CLAY_TRIGGER2_STATE_PROOF_SOURCE_ROOT_CONTRACT/v1",
+  "date": "2026-08-25",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "status": "CURRENT_NONPROMOTING_METHOD_CONTRACT",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "supervisor_epoch": "8.78",
+  "mode": "FREE_ONLY",
+  "owner_training_target": "QWEN3.5-0.8B_CLASS_COGNITIVE_PROCESS_SUBSTRATE_FOR_VARIABLE_COGNITIVE_GRID_PLUS_PERSISTENT_DATABASE_PLUS_CLAUDE_CODE",
+  "purpose": "Define a non-circular proof root for deterministic Hyperposition U/D/GRF candidate labels before any positive D/E training promotion. This contract is a method/evaluator design artifact only and mints no dataset, model, runtime or training credit.",
+  "supersedes": null,
+  "predecessors": [
+    "research_entity/global/j-space/research/2026-08-25_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V8_GPT56SOL.json",
+    "research_entity/global/j-space/research/2026-08-25_TRIGGER2_POST_DERIVED_INDEPENDENCE_STATE_PROOF_AUDIT_GPT56SOL.json",
+    "research_entity/global/j-space/research/2026-08-25_TRIGGER2_POST_DERIVED_INDEPENDENCE_REENTRY_AUDIT_V1_GPT56SOL.json",
+    "tools/trigger2_hyperposition_derivation_bound_gate_v2.py",
+    "tools/trigger2_hyperposition_reference_labelers_v3.py"
+  ],
+  "successor": "one exact source-bound implementation and mutation-test capsule in the existing Hyperposition authority lane",
+  "target_architecture": "semantic Hyperposition as cross-cutting cognitive carrier inside the variable-N HCU grid, with deterministic evidence/update/resolution semantics and no competing truth/effect authority",
+  "research_delta": {
+    "id": "T2-P0-NONCIRCULAR-SOURCE-ROOT",
+    "classification": "R1_INFERRED_FROM_CURRENT_SOURCE_AND_NEGATIVE_AUDIT",
+    "finding": "Placing event/content/state/discriminator digests only inside the same mutable candidate row or formal-world object does not by itself create immutable provenance. A self-consistent mutation can change both payload and co-located digest. Positive D/E promotion therefore needs a proof root whose expected identities are derived from exact bound generator/evaluator source or an independently equivalent immutable manifest, not accepted from the candidate row itself.",
+    "counterhypothesis": "Full replay from genesis is not always necessary if a source-manifest-bound snapshot proof is shown by mutation tests to be equivalent to replay for every semantic field relevant to U, D, discriminator coverage and GRF observation promotion.",
+    "decision": "ALLOW_TWO_PROOF_MODES_ONLY_AFTER_EQUIVALENCE_TESTS"
+  },
+  "proof_modes": {
+    "MODE_A_REPLAY_FROM_SOURCE_MANIFEST": {
+      "status": "PREFERRED_REFERENCE_MODE",
+      "requirements": [
+        "exact generator/evaluator repo path and byte digest are bound",
+        "generator/evaluator deterministically emits or exposes an immutable proof manifest keyed by proof_id",
+        "manifest expected values are recomputed from the bound source, not read as authority from the candidate row",
+        "genesis Hyperposition state identity is manifest-bound",
+        "ordered event history identity is manifest-bound",
+        "event_id -> event_content_sha256 mapping is unique and fail-closed",
+        "each event is replayed through the deterministic independence/relation/update chain",
+        "reconstructed canonical semantic state equals supplied state_before exactly",
+        "resolution proof names the decisive discriminator receipts that eliminated each applicable competitor"
+      ]
+    },
+    "MODE_B_SOURCE_MANIFEST_BOUND_STATE_PROOF": {
+      "status": "ALTERNATIVE_ONLY_IF_EQUIVALENT_TO_REPLAY",
+      "requirements": [
+        "exact generator/evaluator repo path and byte digest are bound",
+        "bound source deterministically exposes proof_id -> state_proof_manifest entry",
+        "manifest entry binds genesis digest, ordered history digest, event digest map, state_before digest and discriminator-receipt-set digest",
+        "candidate-carried hashes are treated only as claims and must equal recomputed manifest expectations",
+        "proof construction has mutation coverage equivalent to full replay for every semantically relevant field",
+        "no second state or evidence authority is introduced"
+      ]
+    }
+  },
+  "event_identity_contract": {
+    "event_digest_fields": [
+      "schema",
+      "event_id",
+      "correlation_ancestry_id",
+      "independence_group",
+      "payload_key",
+      "provenance",
+      "epistemic_type",
+      "test_id",
+      "observed_outcome",
+      "canonical_truth_allowed",
+      "direct_effect_authority"
+    ],
+    "derived_field_exclusion": [
+      "independence_qualified"
+    ],
+    "law": "independence_qualified is derived by the evaluator path and cannot be the immutable semantic root; event identity must remain stable independently of that derived boolean",
+    "collision_rule": "same event_id with any different event_content_sha256 fails closed across current event and complete prior history",
+    "history_rule": "every evidence record contributing to sigma/E_plus/E_minus/F must resolve to exactly one manifest-bound event digest"
+  },
+  "discriminator_proof_contract": {
+    "receipt_schema_candidate": "XENO_SYNTHETIC_DISCRIMINATOR_EXECUTION_RECEIPT/v1",
+    "required_fields": [
+      "receipt_id",
+      "test_id",
+      "proof_id",
+      "admissible",
+      "executed",
+      "execution_identity",
+      "source_or_plan_digest",
+      "event_id",
+      "event_content_sha256",
+      "observed_outcome_digest",
+      "covered_applicable_branch_ids",
+      "covered_applicable_branch_pairs",
+      "result_scope",
+      "canonical_truth_allowed",
+      "direct_effect_authority"
+    ],
+    "required_predicates": [
+      "admissible == true",
+      "executed == true",
+      "execution_identity is nonempty and manifest-bound",
+      "event_id/event_content_sha256 match the replayed decisive event",
+      "observed_outcome_digest matches the replayed observed outcome",
+      "every eliminated applicable competitor is covered by at least one decisive receipt",
+      "receipt set is source-manifest-bound and cannot be enlarged by candidate self-assertion"
+    ],
+    "anti_goodhart": "u_test_order pair-separation rank is an ordering hint only; it is not proof of admissibility, execution, outcome correctness or sufficient competitor coverage"
+  },
+  "grf_observation_contract": {
+    "status": "P1_REQUIRED_BEFORE_POSITIVE_OBSERVED_PROMOTION",
+    "receipt_schema_candidate": "XENO_TYPED_OBSERVATION_EVIDENCE_RECEIPT/v1",
+    "law": "OBSERVED cannot be promoted from a naked evidence_qualified_observation boolean. The evaluator must bind a typed observation receipt to event content, source/provenance, observation identity and scope.",
+    "fallback": "without the typed receipt, retain UNKNOWN/HYPOTHESIS/METHOD_ONLY as applicable and mint zero positive epistemic-label credit"
+  },
+  "mandatory_mutation_capsule": [
+    "same event_id + changed observed_outcome",
+    "same event_id + changed epistemic_type",
+    "same event_id + changed provenance",
+    "same event_id + changed payload_key",
+    "same event_id + changed correlation_ancestry_id",
+    "same event_id + changed independence_group",
+    "candidate row + co-located event digest mutated consistently",
+    "candidate row + co-located state digest mutated consistently",
+    "preseeded FALSIFIED sigma without replay-producing event",
+    "preseeded F record with unbound event digest",
+    "event history reordered",
+    "event removed while state_before left unchanged",
+    "discriminator receipt admissible=false",
+    "discriminator receipt executed=false",
+    "discriminator outcome digest mismatch",
+    "discriminator source/plan digest mismatch",
+    "one applicable competitor missing decisive coverage",
+    "extra candidate-injected decisive receipt absent from source manifest",
+    "GRF OBSERVED promotion with boolean but no typed observation receipt"
+  ],
+  "acceptance": {
+    "all_mutations_fail_closed": true,
+    "replay_or_equivalent_state_proof_exactly_matches_state_before": true,
+    "resolution_requires_complete_decisive_receipt_coverage": true,
+    "candidate_co_located_hashes_never_create_authority": true,
+    "canonical_dataset_write": false,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "positive_jspace_causal_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  },
+  "training_program_effect": {
+    "positive_D_E_generation": "BLOCKED_UNTIL_SOURCE_ROOT_AND_STATE_PROOF_PASS",
+    "hard_negative_generation": "NO_DUPLICATE_ROWS_REQUIRED_THIS_CYCLE",
+    "semantic_hyperposition_cross_cutting": true,
+    "binder_micro_skill": "SEPARATE_EVALUATION_CHANNEL",
+    "process_trajectory_training": "CONTINUES_AS_METHOD_CANDIDATE_WITHOUT_POSITIVE_CAUSAL_PROMOTION",
+    "dataset_admission": "ZERO"
+  },
+  "external_method_inputs": [
+    {
+      "status": "METHOD_INPUT_NONCANONICAL",
+      "source": "OpenReview: Rectifying Demonstration Shortcut in In-Context Learning",
+      "url": "https://openreview.net/forum?id=i9lkREhuhP",
+      "bounded_takeaway": "Models can follow semantic/demo priors instead of the intended input-label relation; supports explicit remapping/equivariance and shortcut tests rather than target-frequency balance alone."
+    },
+    {
+      "status": "METHOD_INPUT_NONCANONICAL",
+      "source": "ICML 2025/OpenReview: Does learning the right latent variables necessarily improve in-context learning?",
+      "url": "https://openreview.net/forum?id=tuYmhlu62K&noteId=5WzCAWJDXt",
+      "bounded_takeaway": "Recovering a task latent can still fail to yield robust downstream use; supports separate READ/BIND_ROUTE/WRITE scoring rather than treating latent readout as sufficient."
+    },
+    {
+      "status": "METHOD_INPUT_NONCANONICAL",
+      "source": "arXiv 2605.29971: Causal Interventions on Continuous Variables: A Case Study on Verb Bias in Steering Vectors for In-Context Learning",
+      "url": "https://arxiv.org/abs/2605.29971",
+      "bounded_takeaway": "Representation content and downstream causal use can diverge; supports intervention plus downstream behavioral criteria for J-Space promotion."
+    },
+    {
+      "status": "METHOD_INPUT_NONCANONICAL",
+      "source": "arXiv 2604.24693: Contextual Linear Activation Steering of Language Models",
+      "url": "https://arxiv.org/abs/2604.24693",
+      "bounded_takeaway": "Steering reliability can depend on context; supports context-indexed J-Space/vector-control evaluation instead of one global-vector assumptions."
+    }
+  ],
+  "next_exact_action": "Implement one source-manifest-bound proof interface in the existing Hyperposition gate/generator lane, then run the mandatory mutation capsule. Do not generate positive D/E rows before that pass."
+}

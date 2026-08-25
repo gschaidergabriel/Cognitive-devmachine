@@ -13,12 +13,17 @@ if str(TOOLS) not in sys.path:
 import trigger1_jspace_promotion_gate_v10 as gate
 
 
-def v7_result(passes: bool) -> dict:
+def v7_result(passes: bool, *, full_native: bool | None = None, modular: bool | None = None) -> dict:
+    if full_native is None:
+        full_native = passes
+    if modular is None:
+        modular = passes
     return {
         "schema": "CLAY_TRIGGER1_JSPACE_PROMOTION_GATE/v7",
         "scientifically_independent_vector_candidate": passes,
         "owner_trigger1_goal_credit_candidate": passes,
-        "modular_hcu_jspace_control_candidate": passes,
+        "modular_hcu_jspace_control_candidate": modular,
+        "full_native_jspace_vector_control_candidate": full_native,
         "v7_failures": [] if passes else ["V7_FAIL"],
         "canonical_credit_minted": False,
     }
@@ -47,6 +52,7 @@ class Trigger1PromotionGateV10Tests(unittest.TestCase):
         self.assertTrue(verdict["scientifically_independent_vector_candidate"])
         self.assertTrue(verdict["owner_trigger1_goal_credit_candidate"])
         self.assertTrue(verdict["modular_hcu_jspace_control_candidate"])
+        self.assertTrue(verdict["full_native_jspace_vector_control_candidate"])
         self.assertTrue(verdict["preregistration_runtime_binding_v2_pass"])
 
     def test_exact_binding_failure_revokes_all_positive_status(self):
@@ -57,15 +63,41 @@ class Trigger1PromotionGateV10Tests(unittest.TestCase):
         self.assertFalse(verdict["scientifically_independent_vector_candidate"])
         self.assertFalse(verdict["owner_trigger1_goal_credit_candidate"])
         self.assertFalse(verdict["modular_hcu_jspace_control_candidate"])
+        self.assertFalse(verdict["full_native_jspace_vector_control_candidate"])
         self.assertIn("EXACT_CASE_PLAN_BINDING_FAIL", verdict["v10_failures"])
 
-    def test_binding_cannot_rescue_v7_failure(self):
-        with patch.object(gate.v7, "adjudicate", return_value=v7_result(False)), patch.object(
-            gate.prereg_binding_v2, "validate", return_value=binding_result(True)
-        ):
+    def test_binding_cannot_rescue_v7_failure_or_inherited_full_native(self):
+        with patch.object(
+            gate.v7,
+            "adjudicate",
+            return_value=v7_result(False, full_native=True),
+        ), patch.object(gate.prereg_binding_v2, "validate", return_value=binding_result(True)):
             verdict = gate.adjudicate({})
         self.assertFalse(verdict["scientifically_independent_vector_candidate"])
+        self.assertFalse(verdict["full_native_jspace_vector_control_candidate"])
         self.assertIn("V7_FAIL", verdict["v10_failures"])
+
+    def test_modularity_failure_revokes_inherited_full_native(self):
+        with patch.object(
+            gate.v7,
+            "adjudicate",
+            return_value=v7_result(True, full_native=True, modular=False),
+        ), patch.object(gate.prereg_binding_v2, "validate", return_value=binding_result(True)):
+            verdict = gate.adjudicate({})
+        self.assertTrue(verdict["scientifically_independent_vector_candidate"])
+        self.assertTrue(verdict["owner_trigger1_goal_credit_candidate"])
+        self.assertFalse(verdict["modular_hcu_jspace_control_candidate"])
+        self.assertFalse(verdict["full_native_jspace_vector_control_candidate"])
+
+    def test_upstream_full_native_false_cannot_be_rescued(self):
+        with patch.object(
+            gate.v7,
+            "adjudicate",
+            return_value=v7_result(True, full_native=False),
+        ), patch.object(gate.prereg_binding_v2, "validate", return_value=binding_result(True)):
+            verdict = gate.adjudicate({})
+        self.assertTrue(verdict["scientifically_independent_vector_candidate"])
+        self.assertFalse(verdict["full_native_jspace_vector_control_candidate"])
 
     def test_all_credit_fields_remain_non_minting(self):
         with patch.object(gate.v7, "adjudicate", return_value=v7_result(True)), patch.object(

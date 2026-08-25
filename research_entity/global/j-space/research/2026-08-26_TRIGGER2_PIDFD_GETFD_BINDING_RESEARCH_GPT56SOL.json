@@ -1,0 +1,96 @@
+{
+  "schema": "CLAY_TRIGGER2_PIDFD_GETFD_BINDING_RESEARCH/v1",
+  "date": "2026-08-26",
+  "trigger": "triggerwort2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "status": "APPEND_ONLY_EXTERNAL_PRIMARY_SOURCE_RESEARCH_NONPROMOTING",
+  "observed_main_before_write": "5ae20eea4183ca397b5fcf8b169e0d0cf9052ee5",
+  "authority": {
+    "supervisor_epoch": "8.84",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "architecture": "HCU",
+    "runtime_quiescence": "ACTIVE_FAIL_POST_STOP_PROVIDER_ATTEMPT_COUNTERS_INCREASING",
+    "provider_routes_admitted": false,
+    "training_execution_authorized": false
+  },
+  "question": "Can the physical witness bind each held child to the actual S1 file descriptor without trusting caller-supplied /proc fd rows?",
+  "primary_sources": [
+    {
+      "url": "https://man7.org/linux/man-pages/man2/pidfd_getfd.2.html",
+      "claim": "pidfd_getfd duplicates targetfd from the process referenced by pidfd and the duplicate refers to the same open file description; permission is subject to PTRACE_MODE_ATTACH_REALCREDS; Linux history begins at 5.6."
+    },
+    {
+      "url": "https://man7.org/linux/man-pages/man2/pidfd_open.2.html",
+      "claim": "pidfd_open creates a stable descriptor referring to a task and pidfd_getfd is an intended use of that process handle."
+    },
+    {
+      "url": "https://www.man7.org/linux/man-pages/man2/F_GETFL.2const@@man-pages.html",
+      "claim": "F_GETFL returns access mode/status flags associated with the open file description and duplicated descriptors share those flags."
+    },
+    {
+      "url": "https://man7.org/linux/man-pages/man5/proc_pid_fdinfo.5.html",
+      "claim": "proc fdinfo exposes fd flags and mount identity but is still a separately read observation surface rather than a duplicated target descriptor."
+    }
+  ],
+  "finding": {
+    "classification": "HIGH_INFORMATION_DONOR_MECHANISM",
+    "mechanism": "During the live held barrier, open one pidfd per child, then use pidfd_getfd(pidfd, observed_target_fd, 0) inside the mint authority boundary. fstat the duplicated descriptor and F_GETFL it locally, and compare device+inode/access-mode against the canonical S1 path stat performed inside the same boundary.",
+    "why_stronger_than_caller_fd_rows": "The mint authority obtains a duplicate of the actual descriptor owned by the process incarnation referenced by pidfd. Caller-provided fdinfo rows are no longer sufficient to create the claimed S1 binding.",
+    "remaining_nonproofs": [
+      "A valid pidfd plus duplicated S1 descriptor does not by itself prove the child currently holds the intended SQLite read transaction.",
+      "It does not bind the later NODE_RESULT/read-receipt/snapshot packet unless a pre-release commitment is produced and checked after release.",
+      "It does not prove observer source-byte consumption identity by itself."
+    ]
+  },
+  "recommended_fusion": [
+    "Acquire pidfds before release/reap in the retained held-cohort lifecycle.",
+    "Inside the same mint boundary, stat the canonical S1 path and duplicate each child's observed S1 target fd with pidfd_getfd; locally fstat and F_GETFL the duplicate; reject device/inode or access-mode mismatch.",
+    "Bind each pidfd/process incarnation, duplicated-S1 identity, ready marker, generation/epoch/state digest and pre-release NODE_RESULT or packet commitment into one immutable physical witness.",
+    "After release, require the final packet/read-receipt to match the pre-release commitment before the sole FusedFabric mutation path is reachable.",
+    "Make raw proof mappings unreachable from every public PHYSICAL_OBSERVED commit entry; retain a distinct SOURCE_FIXTURE_ONLY route with hard zero physical/model/training credit.",
+    "Fail closed with an explicit UNSUPPORTED_PIDFD_GETFD_OR_PTRACE_POLICY code when kernel/syscall/permission support is unavailable; do not silently fall back to caller-supplied physical evidence."
+  ],
+  "counterhypothesis": "Reading /proc/<pid>/fdinfo plus statting /proc/<pid>/fd/<n> inside the boundary is sufficient and simpler.",
+  "counterhypothesis_adjudication": "It can be a bounded compatibility fallback only if its race/provenance semantics are explicitly accepted and tested. pidfd_getfd is the higher-information Linux-specific discriminator because the returned descriptor is tied to the pidfd-referenced process and the same open file description. No fallback may upgrade caller-supplied fd rows into physical evidence.",
+  "preconditions_and_failure_modes": [
+    "Linux kernel must support pidfd_getfd (documented since Linux 5.6).",
+    "The process must satisfy the ptrace access check PTRACE_MODE_ATTACH_REALCREDS; EPERM is an infrastructure/capability result, not a scientific negative.",
+    "Python may require a direct syscall/ctypes wrapper because a high-level stdlib pidfd_getfd wrapper is not assumed here.",
+    "All duplicated descriptors must be closed on success and failure paths.",
+    "No execution credit is granted until exact-current admitted runtime proves the path."
+  ],
+  "minimum_regressions_added_to_frontier": [
+    "LIVE_UNRELATED_PID_SAME_NUMERIC_TARGETFD_REJECTED",
+    "PIDFD_GETFD_DUPLICATE_DEVICE_INODE_MUST_EQUAL_CANONICAL_S1",
+    "PIDFD_GETFD_DUPLICATE_ACCESS_MODE_MUST_BE_READONLY",
+    "PIDFD_GETFD_EPERM_FAILS_CLOSED_WITHOUT_RAW_MAPPING_FALLBACK",
+    "PRE_RELEASE_PACKET_COMMITMENT_MISMATCH_REJECTED_BEFORE_MUTATION",
+    "ALL_DUPLICATED_FDS_CLOSED_ON_REJECTION"
+  ],
+  "execution_this_cycle": {
+    "provider_called": false,
+    "model_runtime_executed": false,
+    "physical_grid10_executed": false,
+    "vps_command_executed": false,
+    "training_executed": false,
+    "paid_execution": false,
+    "unusual_experiment_executed": false,
+    "work_class": "CURRENT_MAIN_REENTRY_PLUS_PRIMARY_LINUX_INTERFACE_RESEARCH"
+  },
+  "credits": {
+    "research_delta": 1,
+    "external_primary_source_research_credit": 1,
+    "physical_proof_boundary_closed": 0,
+    "repository_ci_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "model_call_runtime_credit": 0,
+    "jspace_model_credit": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  },
+  "next_exact_action": "Re-enter moving main. If the single retained physical witness path is still open, fuse live-barrier pidfd acquisition plus pidfd_getfd-derived actual S1 descriptor binding and a pre-release packet commitment into that sole path; keep raw dictionaries and SOURCE_FIXTURE_ONLY structurally disjoint."
+}

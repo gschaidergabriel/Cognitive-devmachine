@@ -1,0 +1,131 @@
+{
+  "schema": "CLAY_TRIGGER2_DYNAMIC_BINDING_EQUIVARIANCE_DELTA/v1",
+  "date": "2026-08-25",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority": {
+    "base_main": "6004cff60257f542211349502900ad6be2a73fc3",
+    "supervisor_epoch": "8.78",
+    "execution_mode": "FREE_ONLY",
+    "training_executed": false,
+    "provider_preflight_executed": false,
+    "unusual_experiment": "NOT_USED_DETERMINISTIC_SOURCE_REVIEW_ONLY"
+  },
+  "reviewed_current_work": [
+    "2026-08-25_TRIGGER2_DYNAMIC_BINDING_SWARM_DATASET_DELTA_V1_GPT56SOL.json",
+    "2026-08-25_TRIGGER2_DYNAMIC_BINDING_SWARM_REVIEW_V3_GPT56SOL.json",
+    "2026-08-25_TRIGGER2_CLAUDE_XENO_VECTOR_EVIDENCE_INGEST_V1_GPT56SOL.json"
+  ],
+  "why_nonduplicate": {
+    "existing_strength": "Current work already specifies full S3 x class counterbalancing, actual-atom balance, counterfactual family split locks, true unseen-atom holdout, label-free successor family, retention, and ABI provenance gates.",
+    "remaining_gap": "The acceptance contract is mostly per-row accuracy. It does not yet require group-level S3 equivariance: for one fixed semantic case, the six outputs across the complete S3 orbit should transform exactly with the episode-local permutation.",
+    "risk": "A model can achieve good aggregate accuracy while intermittently ignoring the codebook on specific permutations/templates. Aggregate accuracy can hide incomplete variable-binding."
+  },
+  "new_training_family": {
+    "id": "S3_ORBIT_EQUIVARIANT_BINDING",
+    "status": "SOURCE_BLUEPRINT_ONLY_UNTIL_ABI_MATERIALIZATION",
+    "construction": [
+      "Choose one semantic base case with one hidden semantic class c.",
+      "Choose one accepted real 3-atom triplet after ABI manifest binding.",
+      "Instantiate all six S3 class-to-atom mappings while keeping the semantic case fixed.",
+      "For each mapping pi, derive target strictly as realized_codebook_pi[c].",
+      "Keep all six members under one immutable orbit_id and causal_family_id; never split an orbit across train/validation/holdout.",
+      "Independently vary codebook display order in a nested subfamily without changing realized mapping.",
+      "Replicate the orbit across at least four training templates and separate semantic lexical families."
+    ],
+    "sft_use": "Standard next-token/full-SFT rows remain sufficient; orbit_id is grouping/provenance metadata. No custom loss is required for the first baseline.",
+    "optional_later_loss_hypothesis": "Only after a plain-SFT baseline is frozen, test an auxiliary orbit-consistency loss as a separately versioned experiment; do not mix it into the first acceptance baseline."
+  },
+  "concrete_pre_materialization_orbit": [
+    {
+      "orbit_id": "ORBIT_ALLOW_DEMO",
+      "semantic_case": "A rule explicitly permits the operation and no blocking condition applies.",
+      "hidden_class_metadata": "ALLOW",
+      "members": [
+        {"map": {"ALLOW": "ATOM_A", "DENY": "ATOM_B", "ABSTAIN": "ATOM_C"}, "target": "ATOM_A"},
+        {"map": {"ALLOW": "ATOM_A", "DENY": "ATOM_C", "ABSTAIN": "ATOM_B"}, "target": "ATOM_A"},
+        {"map": {"ALLOW": "ATOM_B", "DENY": "ATOM_A", "ABSTAIN": "ATOM_C"}, "target": "ATOM_B"},
+        {"map": {"ALLOW": "ATOM_B", "DENY": "ATOM_C", "ABSTAIN": "ATOM_A"}, "target": "ATOM_B"},
+        {"map": {"ALLOW": "ATOM_C", "DENY": "ATOM_A", "ABSTAIN": "ATOM_B"}, "target": "ATOM_C"},
+        {"map": {"ALLOW": "ATOM_C", "DENY": "ATOM_B", "ABSTAIN": "ATOM_A"}, "target": "ATOM_C"}
+      ],
+      "trainable": false,
+      "reason": "ATOM_A/B/C are placeholders; exact literal atom/token identities must come from the verified 46-atom ABI."
+    }
+  ],
+  "new_metrics": {
+    "S3_ORBIT_EXACT_RATE": "Fraction of complete six-permutation orbits for which all six outputs are correct. This is stricter than row accuracy.",
+    "S3_EQUIVARIANCE_VIOLATION_RATE": "Fraction of pairwise permutation transitions where the emitted atom fails to transform exactly as the realized codebook mapping requires.",
+    "CODEBOOK_DEPENDENCE_DELTA": "Accuracy(full episode) minus accuracy(codebook-masked or mapping-destroyed control). A real episode-local binder should depend strongly on the current codebook; the masked control should collapse toward chance while semantic readability is separately preserved.",
+    "SEMANTIC_STABILITY_UNDER_PERMUTATION": "The decoded semantic class for a fixed case should remain stable across all six codebook permutations even though the required output atom changes.",
+    "DISPLAY_ORDER_INVARIANCE": "Changing only displayed codebook entry order must not change output when the realized mapping is unchanged.",
+    "WORST_PERMUTATION_ACCURACY": "Minimum held-out accuracy over the six S3 permutations; prevents aggregate scores from hiding one systematically weak permutation."
+  },
+  "hard_negative_controls": [
+    {
+      "id": "CODEBOOK_BLIND_FIXED_CLASS_TO_ATOM",
+      "description": "Remove or mask the episode codebook and let a fixed class->atom shortcut answer. It should fail near chance under balanced S3."
+    },
+    {
+      "id": "MAPPING_SHUFFLE_WITH_CODEBOOK_TEXT_PRESERVED",
+      "description": "Preserve lexical/codebook surface statistics but break the true class<->atom pairing. Accuracy should collapse if the model uses realized mapping rather than surface cues."
+    },
+    {
+      "id": "DISPLAY_ORDER_ONLY_SHUFFLE",
+      "description": "Shuffle visual/codebook entry order while keeping mapping fixed. Output should remain invariant."
+    },
+    {
+      "id": "SEMANTIC_CASE_SWAP_MAPPING_FIXED",
+      "description": "Keep mapping fixed and change semantic case to another class. Output must move to that class's mapped atom."
+    },
+    {
+      "id": "SAME_CASE_FULL_S3_ORBIT",
+      "description": "Keep semantics fixed while traversing all six S3 mappings. Output must follow the permutation orbit exactly."
+    }
+  ],
+  "swarm_review": {
+    "EVIDENCE_REVIEWER": "ACCEPT: directly targets measured dynamic codebook gap; does not claim new J-Space fact.",
+    "DATASET_ARCHITECT": "ACCEPT: orbit grouping strengthens the existing 72-row minimum without requiring new token identities.",
+    "SHORTCUT_HUNTER": "ACCEPT: codebook masking, mapping shuffle and full-orbit tests expose static class/token shortcuts.",
+    "STATISTICAL_REVIEWER": "ACCEPT: worst-permutation and orbit-exact metrics prevent aggregate accuracy from hiding structured failures.",
+    "PROVENANCE_REVIEWER": "ACCEPT_WITH_EXISTING_BLOCK: orbit members must inherit exact ABI/model/tokenizer/generator identity and atomic causal-family split.",
+    "RETENTION_REVIEWER": "ACCEPT: semantic stability under permutation explicitly checks that routing changes while semantic class representation stays stable.",
+    "HARNESS_REVIEWER": "ACCEPT: future harness trace should record orbit_id, permutation_id, realized mapping, semantic decision, selected atom and emitted token.",
+    "FINAL_INTEGRATOR": "NONPROMOTING_RESEARCH_DELTA; zero accepted dataset/training/J-Space/HCU/product credit."
+  },
+  "acceptance_delta": {
+    "dynamic_codebook_accuracy": ">=0.90 remains necessary but not sufficient",
+    "s3_orbit_exact_rate": ">=0.80 initial candidate gate; raise only after pilot confidence intervals are observed and freeze before holdout",
+    "worst_permutation_accuracy": ">=0.85 initial candidate gate; freeze before holdout",
+    "display_order_invariance": ">=0.95",
+    "masked_codebook_control": "should fall toward the preregistered chance baseline while semantic-class readability remains within the frozen retention bound",
+    "note": "The numeric orbit/worst-permutation thresholds above are HYPOTHESES for calibration, not promoted acceptance truth. Final thresholds must be frozen using validation only."
+  },
+  "training_examples_delta": {
+    "principle": "Every semantic base example should be expanded as an S3 orbit rather than sampled as isolated mappings.",
+    "minimum_orbit_members_per_semantic_case": 6,
+    "counterfactual_relation": "same semantics + changed realized mapping => changed output atom exactly according to mapping",
+    "anti_leak": "orbit_id and hidden class are audit metadata only and must never be rendered into model-visible text"
+  },
+  "credits": {
+    "research_review_delta": 1,
+    "new_materialized_rows": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "qwen35_jspace_runtime_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "canonical_semantics_promotion": false
+  },
+  "next_exact_actions": [
+    "Add orbit_id/permutation_id/realized_mapping fields to the successor deterministic binding generator and validator.",
+    "Compute S3_ORBIT_EXACT_RATE, S3_EQUIVARIANCE_VIOLATION_RATE and WORST_PERMUTATION_ACCURACY on validation and frozen holdout.",
+    "Add codebook-masked, mapping-shuffle and display-order controls while preserving same semantic cases.",
+    "Materialize real atoms only after exact 46-atom ABI manifest/tokenizer identity is bound; inherit current actual-atom balance and true-unseen-atom gates.",
+    "Do not launch paid training or provider preflight under current FREE_ONLY authority."
+  ]
+}

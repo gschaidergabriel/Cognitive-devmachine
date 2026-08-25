@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v4",
+  "command_id": "fr2-native-cache-probe-20260825-1300",
+  "op": "exec",
+  "cwd": "/workspace/clay-global-research-entity",
+  "timeout_seconds": 60,
+  "command": "set -euo pipefail; echo SANDBOX=$(pwd); echo CACHE_TOP; find /cache -maxdepth 4 -type f \\( -name 'Qwen3-0.6B-Q8_0.gguf' -o -name 'python' -o -name 'libllama.so' \\) -print 2>/dev/null | sort | head -80; echo DIRS; find /cache -maxdepth 2 -type d -print 2>/dev/null | sort | head -80; echo NATIVE_HOST_MOUNT; find /srv/claylab/cache -maxdepth 4 -type f -name 'Qwen3-0.6B-Q8_0.gguf' -print 2>/dev/null | head -20 || true"
+}

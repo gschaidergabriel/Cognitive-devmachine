@@ -33,6 +33,7 @@ MAX_BEARER_TOKEN_CHARACTERS = 8_192
 MAX_ATTEMPT_NONCE_CHARACTERS = 128
 MAX_PROVIDER_RESPONSE_ID_CHARACTERS = 256
 MAX_PROVIDER_CREATED_UNIX_SECONDS = 9_999_999_999
+MAX_PROVIDER_USAGE_TOKENS = 9_999_999_999
 MAX_ZERO_COST_ATTESTATION_CHARACTERS = 1_024
 MAX_BUDGET_EPOCH_CHARACTERS = 256
 MAX_PROVIDER_BASE_URL_CHARACTERS = 2_048
@@ -52,6 +53,12 @@ EXECUTION_LOCK_TIMEOUT_SECONDS = 35
 TEXT_CHAT_ROLES = frozenset({"system", "user", "assistant"})
 TEXT_CHAT_MESSAGE_FIELDS = frozenset({"role", "content"})
 TEXT_RESPONSE_CHOICE_REQUIRED_FIELDS = frozenset({"finish_reason", "message"})
+TEXT_RESPONSE_USAGE_REQUIRED_FIELDS = frozenset(
+    {"prompt_tokens", "completion_tokens", "total_tokens"}
+)
+TEXT_RESPONSE_USAGE_FIELDS = TEXT_RESPONSE_USAGE_REQUIRED_FIELDS | frozenset(
+    {"prompt_tokens_details", "completion_tokens_details"}
+)
 TEXT_RESPONSE_CHOICE_FIELDS = frozenset(
     {
         "finish_reason",
@@ -905,6 +912,7 @@ def _execute_chat_locked(
     payment_latch_publication_failed = False
     provider_response_id_sha256 = None
     provider_created_unix_seconds = None
+    provider_usage = None
 
     try:
         try:
@@ -1027,6 +1035,40 @@ def _execute_chat_locked(
                 or payload["model"] != model
             ):
                 raise ValueError("response_model_must_match_request")
+            if "usage" not in payload or type(payload["usage"]) is not dict:
+                raise ValueError("response_usage_must_be_object")
+            usage = payload["usage"]
+            usage_fields = set(usage)
+            if (
+                not TEXT_RESPONSE_USAGE_REQUIRED_FIELDS.issubset(usage_fields)
+                or not usage_fields.issubset(TEXT_RESPONSE_USAGE_FIELDS)
+            ):
+                raise ValueError("response_usage_fields_not_supported")
+            for detail_field in (
+                "prompt_tokens_details",
+                "completion_tokens_details",
+            ):
+                if usage.get(detail_field) is not None:
+                    raise ValueError("response_usage_details_not_supported")
+            for token_field in TEXT_RESPONSE_USAGE_REQUIRED_FIELDS:
+                token_count = usage[token_field]
+                if (
+                    type(token_count) is not int
+                    or not 0 <= token_count <= MAX_PROVIDER_USAGE_TOKENS
+                ):
+                    raise ValueError("response_usage_must_be_bounded_integer")
+            if usage["total_tokens"] != (
+                usage["prompt_tokens"] + usage["completion_tokens"]
+            ):
+                raise ValueError("response_usage_total_must_match_components")
+            provider_usage = {
+                field: usage[field]
+                for field in (
+                    "prompt_tokens",
+                    "completion_tokens",
+                    "total_tokens",
+                )
+            }
             choices = payload["choices"]
             if not isinstance(choices, list) or len(choices) != 1:
                 raise ValueError("response_choices_must_contain_exactly_one_choice")
@@ -1183,6 +1225,7 @@ def _execute_chat_locked(
         "request_id": request_id,
         "provider_response_id_sha256": provider_response_id_sha256,
         "provider_created_unix_seconds": provider_created_unix_seconds,
+        "provider_usage": provider_usage,
         "attempt_id": _safe_attempt_id(
             # The nonce supplies attempt uniqueness.  Keeping an unbounded
             # injected integer clock out of string formatting prevents a

@@ -1,12 +1,13 @@
-name: GO878 historical backfill line identity reentry
+name: GO878 historical backfill line identity reentry (manual retry only)
 
+# Legacy issue-triggered donor quarantined under ORDINARY_DISPATCH_IDEMPOTENCY_PROTOCOL.
+# The opened issue already defines lineage; repeated issues must not queue genealogically
+# identical self-hosted jobs. A deliberate retry requires a semantic generation advance.
 on:
-  issues:
-    types: [opened]
+  workflow_dispatch:
 
 permissions:
   contents: write
-  issues: read
 
 concurrency:
   group: go878-backfill-line-identity
@@ -14,7 +15,7 @@ concurrency:
 
 jobs:
   repair-and-test:
-    if: github.repository == 'gschaidergabriel/clay-global-research-entity' && github.event.issue.title == '[CLAY-DISPATCH] GO878 repair backfill line identity reentry' && github.event.issue.user.login == 'gschaidergabriel'
+    if: github.repository == 'gschaidergabriel/clay-global-research-entity'
     runs-on: [self-hosted, Linux, X64]
     timeout-minutes: 20
     steps:

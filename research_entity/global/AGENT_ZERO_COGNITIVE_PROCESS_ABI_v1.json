@@ -1,0 +1,142 @@
+{
+  "schema": "AGENT_ZERO_COGNITIVE_PROCESS_ABI/v1",
+  "status": "CANDIDATE_SOURCE_CONTRACT_NOT_RUNTIME_CREDIT",
+  "authority": {
+    "canonical_repo": "gschaidergabriel/clay-global-research-entity",
+    "owner_target_path": "research_entity/global/OWNER_CORRECTION_ZERO_ENTITYOS_COGNITIVE_GRID_DB_CLAUDECODE_GLOBAL_JSPACE_2026-08-25.md",
+    "owner_target_summary": "VARIABLE_COGNITIVE_GRID_PLUS_PERSISTENT_DATABASE_PLUS_CLAUDE_CODE",
+    "census_source_path": "research_entity/global/AGENT_ZERO_DISTRIBUTED_COGNITIVE_PROCESS_CENSUS_v1.json",
+    "census_source_blob_sha": "e34f66bf158893a19b39b2540ffef13dc42acd67",
+    "census_authority_note": "PROCESS_SEMANTICS_REUSED; EARLIER UNBOUNDED_GRID AUTHORITY METADATA IS SUPERSEDED BY CURRENT OWNER TARGET",
+    "grid_size_law": "N_IS_RUNTIME_PARAMETER_NOT_ARCHITECTURE_IDENTITY",
+    "database_law": "SIMULATE_COGNITION_STORE_DURABLE_DATA",
+    "claude_code_role": "STRONG_MODEL_TOOL_CODE_PARTNER_NOT_REPLACED_BY_SMALL_MODEL_GRID",
+    "jspace_law": "USE_STRONGEST_EXPOSED_INTERFACE; DEEPER_COUPLING_REQUIRES_CAUSAL_REENTRY_EVIDENCE"
+  },
+  "credit_boundary": {
+    "scope": "ABI_SOURCE_CONTRACT_AND_DETERMINISTIC_VALIDATOR_ONLY",
+    "whole_entityos_hcu_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "provider_runtime_credit": 0
+  },
+  "process_ids": [
+    "AZP01", "AZP02", "AZP03", "AZP04", "AZP05", "AZP06", "AZP07", "AZP08", "AZP09", "AZP10",
+    "AZP11", "AZP12", "AZP13", "AZP14", "AZP15", "AZP16", "AZP17", "AZP18", "AZP19", "AZP20"
+  ],
+  "common_envelope": {
+    "required": [
+      "abi", "packet_kind", "packet_id", "causal_event_id", "admission_id", "generation",
+      "workspace_epoch", "process_id", "source_runtime_id", "target_selector", "state_basis",
+      "authority_refs", "provenance_refs", "payload"
+    ],
+    "abi_value": "AGENT_ZERO_COGNITIVE_PROCESS_ABI/v1",
+    "identity_law": "CAUSAL_EVENT_IDENTITY_IS_REPLAY_STABLE_AND_DISTINCT_FROM_CONCRETE_ADMISSION_IDENTITY",
+    "generation_law": "STALE_OR_AMBIGUOUS_GENERATION_FAILS_CLOSED_AT_STATE_EFFECT_AND_REENTRY_BOUNDARIES",
+    "routing_law": "TARGET_NODE_OR_ROLE_IS_EXECUTION_ROUTING_ONLY_AND_NEVER_CAPABILITY_OR_TRUTH_AUTHORITY",
+    "capability_law": "PACKET_CLAIMS_MAY_NARROW_BUT_NEVER_SELF_GRANT_CANONICAL_CAPABILITY_AUTHORITY",
+    "grid_law": "NO_PACKET_SEMANTICS_MAY_REQUIRE_A_FIXED_GRID_SIZE"
+  },
+  "state_basis": {
+    "required": ["canonical_state_version", "db_snapshot_ref", "workspace_state_ref"],
+    "truth_boundary": "MODEL_GRID_WORKSPACE_AND_CLAUDE_OUTPUTS_ARE_CANDIDATE_PROJECTION_OR_MEASUREMENT_ONLY",
+    "durable_boundary": "EXACT_DURABLE_QUERYABLE_STATE_BELONGS_IN_PERSISTENT_DATABASE",
+    "write_boundary": "COGNITIVE_MODULES_EMIT_WRITE_PROPOSALS; DETERMINISTIC_STATE_AUTHORITY_COMMITS"
+  },
+  "packet_kinds": {
+    "COGNITIVE_WORK": {
+      "required_payload": ["work_id", "objective", "inputs", "completion_test", "resource_budget"],
+      "authority": "NONE"
+    },
+    "COGNITIVE_RESULT": {
+      "required_payload": ["work_id", "result_class", "candidate", "evidence_refs", "uncertainty"],
+      "authority": "CANDIDATE_ONLY"
+    },
+    "DB_READ_REQUEST": {
+      "required_payload": ["query_id", "query_type", "query", "projection_limit"],
+      "authority": "READ_ONLY"
+    },
+    "DB_WRITE_PROPOSAL": {
+      "required_payload": ["proposal_id", "record_class", "candidate_delta", "evidence_refs", "expected_state_version"],
+      "authority": "PROPOSE_ONLY",
+      "direct_commit_forbidden": true
+    },
+    "WORKSPACE_BROADCAST": {
+      "required_payload": ["workspace_id", "selection_id", "content_refs", "salience_basis"],
+      "authority": "NONCANONICAL_SHARED_COGNITIVE_STATE"
+    },
+    "WORKSPACE_REENTRY": {
+      "required_payload": ["workspace_id", "source_result_refs", "reentry_target", "causal_change_test"],
+      "authority": "NONCANONICAL_REENTRY_SIGNAL"
+    },
+    "CLAUDE_CODE_HANDOFF": {
+      "required_payload": ["handoff_id", "interface_mode", "bounded_context_refs", "task", "expected_return_schema"],
+      "authority": "REQUEST_TO_STRONG_MODEL_TOOL_PARTNER"
+    },
+    "CLAUDE_CODE_RETURN": {
+      "required_payload": ["handoff_id", "interface_mode", "return_class", "candidate", "tool_receipt_refs"],
+      "authority": "CANDIDATE_OR_TOOL_RESULT_REQUIRES_RECONCILIATION"
+    },
+    "JSPACE_MEASUREMENT": {
+      "required_payload": ["measurement_id", "model_identity", "interface_or_hook_identity", "measurement_class", "result"],
+      "authority": "MEASUREMENT_ONLY"
+    },
+    "EFFECT_PROPOSAL": {
+      "required_payload": ["effect_proposal_id", "effect_type", "arguments", "capability_ref", "idempotency_key"],
+      "authority": "PROPOSE_ONLY_EFFECTGATE_REQUIRED",
+      "direct_execution_forbidden": true
+    },
+    "RECOVERY_REJOIN": {
+      "required_payload": ["rejoin_id", "prior_runtime_id", "new_runtime_id", "open_work_refs", "unknown_effect_refs"],
+      "authority": "RECOVERY_CANDIDATE_DETERMINISTIC_RECONCILIATION_REQUIRED"
+    }
+  },
+  "claude_code_bridge": {
+    "allowed_interface_classes": [
+      "TEXT_TOOL_SESSION",
+      "TYPED_CLAYCODE_PACKET",
+      "STRUCTURED_SHARED_STATE_SLICE",
+      "COMPRESSED_WORKSPACE_SUMMARY",
+      "VECTOR_INTERFACE_IF_EXPOSED_AND_BOUND",
+      "ACTIVATION_INTERFACE_ONLY_IF_EXPLICITLY_EXPOSED_AND_CAUSALLY_EVIDENCED"
+    ],
+    "activation_access_default": "UNKNOWN_NOT_CLAIMED",
+    "causal_reentry_requirement": "TRANSFERRED_STATE_MUST_MEASURABLY_CHANGE_DOWNSTREAM_COGNITION_BEFORE_GLOBAL_JSPACE_CAUSAL_CREDIT"
+  },
+  "jspace_research_boundary": {
+    "frozen_qwen3_06b_structural_native_v1": "FALSIFIED_FOR_ABSTRACT_BEHAVIORAL_CONTROL_AT_BOUND_IDENTITY_INTERNAL_TRANSPORT_PASS_ONLY",
+    "same_holdout_retune": "FORBIDDEN",
+    "successor_requirement": "SEPARATELY_VERSIONED_PREREGISTERED_FRESH_HOLDOUT_WITH_MODEL_FAMILY_PROVENANCE_SPLIT_AND_CAUSAL_CONTROLS",
+    "global_jspace_claim_rule": "TEXTUAL_OR_WORKSPACE_COHERENCE_ALONE_HAS_ZERO_MODEL_INTERNAL_CAUSAL_CREDIT"
+  },
+  "fail_closed_packet_rules": [
+    "REJECT_UNKNOWN_PACKET_KIND",
+    "REJECT_UNKNOWN_PROCESS_ID",
+    "REJECT_MISSING_CAUSAL_OR_ADMISSION_IDENTITY",
+    "REJECT_NEGATIVE_OR_NONINTEGER_GENERATION",
+    "REJECT_PACKET_SELF_GRANTED_CAPABILITY",
+    "REJECT_DIRECT_DB_COMMIT_FROM_COGNITIVE_PACKET",
+    "REJECT_DIRECT_EFFECT_EXECUTION_FROM_COGNITIVE_PACKET",
+    "REJECT_CANONICAL_FACT_ASSERTION_BY_COGNITIVE_RESULT",
+    "REJECT_CLAUDE_ACTIVATION_LEVEL_CLAIM_WITHOUT_EXPOSED_INTERFACE_AND_CAUSAL_REENTRY_EVIDENCE",
+    "REJECT_JSPACE_CAUSAL_CLAIM_WITHOUT_EXACT_MODEL_INTERFACE_INTERVENTION_AND_FRESH_HOLDOUT_EVIDENCE",
+    "REJECT_BLIND_REPLAY_OF_UNKNOWN_EXTERNAL_EFFECT",
+    "REJECT_FIXED_GRID_SIZE_AS_PACKET_SEMANTIC_REQUIREMENT"
+  ],
+  "first_runtime_discriminator": {
+    "claim": "ONE_RUNTIME_CAN_EXECUTE_MULTIPLE_PROCESS_TYPES_AGAINST_SHARED_DB_STATE_AND_REJOIN_WITHOUT_SELF_GRANTING_AUTHORITY",
+    "minimum_sequence": [
+      "ADMIT_ONE_CAUSAL_EVENT",
+      "RUN_AT_LEAST_TWO_DISTINCT_PROCESS_IDS_ON_THE_SAME_RUNTIME_OR_MODEL_INSTANCE",
+      "READ_DURABLE_STATE_THROUGH_DB_READ_PACKET",
+      "EMIT_DB_WRITE_PROPOSAL_WITHOUT_DIRECT_COMMIT",
+      "EMIT_TYPED_RESULT_BOUND_TO_CAUSAL_EVENT_ADMISSION_GENERATION_AND_STATE_BASIS",
+      "RESTART_OR_REJOIN_RUNTIME",
+      "RESUME_WITH_SAME_CAUSAL_ID_AND_NEW_RUNTIME_ID_WITHOUT_REPLAYING_UNKNOWN_EFFECTS",
+      "VERIFY_PROCESS_SEMANTICS_UNCHANGED_WHEN_N_CHANGES"
+    ],
+    "credit_if_passed": "BOUNDED_COGNITIVE_ABI_RUNTIME_COMPONENT_ONLY"
+  },
+  "next_owner_gate": "DB_VS_SIMULATION_BOUNDARY"
+}

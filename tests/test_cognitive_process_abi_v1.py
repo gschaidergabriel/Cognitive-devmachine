@@ -25,6 +25,12 @@ class CognitiveProcessABIV1Tests(unittest.TestCase):
         self.assertEqual(result["owner_acceptance_coverage"], 10)
         self.assertEqual(result["sole_real_effect_path"], "EFFECT_PROPOSAL/v1->EffectGate->EffectJournal")
 
+    def test_canonical_census_is_current_owner_aligned_zecp(self):
+        self.assertEqual(self.value["semantic_process_ids"][0], "ZECP01")
+        self.assertEqual(self.value["semantic_process_ids"][-1], "ZECP20")
+        self.assertEqual(self.value["authority"]["canonical_census_schema"], "ZERO_ENTITYOS_COGNITIVE_PROCESS_CENSUS/v1")
+        self.assertEqual(self.value["authority"]["canonical_census_main_sha"], self.value["authority"]["reentered_canonical_main_sha"])
+
     def test_grid_n_cannot_define_semantic_work_identity(self):
         bad = copy.deepcopy(self.value)
         bad["semantic_identity"]["work_id_inputs"].append("grid_n")

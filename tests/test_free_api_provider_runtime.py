@@ -1669,7 +1669,8 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
                     b'{"object":"chat.completion","id":"chatcmpl-test",'
                     b'"created":1,"model":"mock","usage":{'
                     b'"prompt_tokens":4,"completion_tokens":5,'
-                    b'"total_tokens":9,"completion_tokens_details":{'
+                    b'"total_tokens":9,"prompt_tokens_details":{'
+                    b'"cached_tokens":2},"completion_tokens_details":{'
                     b'"reasoning_tokens":3}},"choices":[{"index":0,'
                     b'"finish_reason":"stop","message":'
                     b'{"role":"assistant","content":"ok"}}]}'
@@ -1691,6 +1692,10 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
         self.assertEqual(
             result["receipt"]["provider_usage"]["completion_tokens_details"],
             {"reasoning_tokens": 3},
+        )
+        self.assertEqual(
+            result["receipt"]["provider_usage"]["prompt_tokens_details"],
+            {"cached_tokens": 2},
         )
         self.assertEqual(result["content"], "ok")
 

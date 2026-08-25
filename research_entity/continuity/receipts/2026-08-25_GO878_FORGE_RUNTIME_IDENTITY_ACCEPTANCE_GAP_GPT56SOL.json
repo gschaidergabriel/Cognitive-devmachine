@@ -1,0 +1,95 @@
+{
+  "schema": "ENTITYOS_HCU_GO878_FORGE_RUNTIME_IDENTITY_ACCEPTANCE_GAP/v1",
+  "date": "2026-08-25",
+  "trigger": "go",
+  "persistent_research_entity": "Clay",
+  "temporary_worker": "GPT-5.6 Sol organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "authority": {
+    "supervisor_epoch": "8.78",
+    "mode": "FREE_ONLY",
+    "owner_pointer": "CLAY_EXECUTION_AUTHORITY.md",
+    "observed_main_before_write": "10ed0c3bbb4ae471d46ffe3a3c3108387e1c10b5"
+  },
+  "coordination": {
+    "shared_immutable_macrocycle_id_exposed": false,
+    "available_user_message_time_precision": "MINUTE_ONLY",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_experiments_executed": 0,
+    "work_class": "ORDINARY_EXACT_SOURCE_REVIEW_AND_FUSION"
+  },
+  "observed_current_source": {
+    "forge_entrypoint": "tools/run_free_evidence_forge_backfill.py",
+    "forge_entrypoint_blob": "a7cdd69d14bb167fd7f34cde79b0e3d20e4d5ee5",
+    "supervisor": "tools/run_6000_free_swarm_supervisor.sh",
+    "supervisor_blob_last_observed_in_ancestry": "d0a7eb0b0d34772d988964bf84b951b6cdf1dd9f",
+    "issue": 1889
+  },
+  "finding": {
+    "classification": "PUBLISHER_IDENTITY_PRESENT_SUPERVISOR_ADMISSION_MISSING",
+    "publisher_status": "SOURCE_PRESENT",
+    "publisher_fields": [
+      "runtime_entrypoint_path",
+      "runtime_entrypoint_sha256",
+      "source_commit",
+      "source_tree",
+      "tracked_worktree_dirty",
+      "source_entrypoint_blob",
+      "runtime_entrypoint_git_blob",
+      "entrypoint_matches_source_tree",
+      "source_identity_admitted",
+      "source_identity_reason",
+      "process_generation_identity",
+      "supervisor_generation_or_start_nonce",
+      "status_writer_schema_version"
+    ],
+    "publisher_fail_closed_improvement": "Current source rejects promotion eligibility for a dirty tracked worktree or entrypoint blob mismatch while still allowing bounded research execution.",
+    "remaining_gap": "The active supervisor start_forge path still treats any pgrep match for run_free_evidence_forge_backfill.py as sufficient to return. It does not read FORGE_LIVE.json runtime_identity, compare the live writer identity to the expected entrypoint/source/process generation, require a non-null supervisor start nonce, or restart on missing/mismatched identity.",
+    "why_material": "A stale or alternate backlog-first process can therefore survive supervisor reconciliation even though the publisher schema is capable of distinguishing it. Generic process-name presence remains weaker than exact executable/source/process identity."
+  },
+  "counterhypothesis": {
+    "claim": "The publisher-side identity envelope alone is sufficient because only one backlog-first process name is allowed.",
+    "result": "REJECTED_AT_SOURCE_SCOPE",
+    "reason": "pgrep establishes a matching command name, not the status writer's exact bytes, checkout identity, process generation, or supervisor generation; the supervisor currently does not consume the stronger identity it already receives."
+  },
+  "successor_contract": {
+    "single_authority": "Do not create a second Forge evaluator or status authority.",
+    "supervisor_start_nonce": "Mint one nonce per Forge spawn/reconciliation generation and pass it as CLAY_SUPERVISOR_GENERATION_NONCE.",
+    "expected_identity": "Bind expected entrypoint path/hash plus admitted source commit/tree before spawn.",
+    "fresh_status_gate": "After spawn/reconciliation require one fresh FORGE_LIVE.json whose CLAY_FORGE_RUNTIME_IDENTITY/v1 matches expected source/entrypoint/nonce and source_identity_admitted=true.",
+    "mismatch_policy": "Missing, stale, dirty, wrong-entrypoint, wrong-source, wrong-generation or null-nonce identity is RUNTIME_IDENTITY_UNVERIFIED and must not receive current-runtime credit; supervisor may restart the single Forge authority when safe.",
+    "process_generation": "Prefer Linux /proc process-start generation binding or an equivalently replay-resistant process generation in addition to PID; do not rely on PID alone.",
+    "minimum_regressions": [
+      "matching fresh runtime identity accepted",
+      "missing runtime_identity rejected",
+      "wrong entrypoint hash rejected",
+      "wrong source commit/tree rejected",
+      "dirty source_identity_admitted=false rejected",
+      "stale/wrong supervisor nonce rejected",
+      "process-name match without matching status identity rejected",
+      "no second Forge authority introduced"
+    ]
+  },
+  "go_tracks": {
+    "track_a_entityos_executable_convergence": "ADVANCED: narrowed open runtime-observability issue #1889 from missing publisher identity to the exact remaining supervisor-side admission/reconciliation gap.",
+    "track_b_hcu_typed_entry_fabric_co_development": "ADVANCED: strengthened the reusable exact provenance rule that producer identity metadata is not authority until a deterministic consumer gate verifies it against expected source/process generation.",
+    "track_c_global_jspace_gwt_training_readiness_free_only": "ADVANCED_INDIRECTLY: prevents stale Forge writers from being credited as the conversion source feeding Distillery/J-Space training data; no model/J-Space intervention executed."
+  },
+  "artefact_readme": {
+    "status": "NO_CHANGE_WITH_REASON",
+    "reason": "the artefact/README.md is a rapidly moving shared fusion surface and was updated repeatedly by parallel organs during this macrocycle; replacing a stale full snapshot through the connector would risk deleting concurrent deltas. This append-only receipt preserves the exact new adjudication for successor fusion."
+  },
+  "credits": {
+    "forge_runtime_acceptance": 0,
+    "historical_backfill_runtime": 0,
+    "whole_entityos_hcu_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Fuse a deterministic supervisor-side verifier for CLAY_FORGE_RUNTIME_IDENTITY/v1 into the single start_forge/reconciliation path, bind a non-null per-spawn supervisor nonce, run its negative/matching regressions, then require one exact-current clay-direct-dev fresh-status witness before granting Forge runtime-identity credit.",
+  "acceptance": "IN_PROGRESS"
+}

@@ -1,88 +1,76 @@
 # Triggerwort 2 — Swarm Binding Dataset V2
 
-Status: `CANDIDATE_NOT_TRAINING_ADMITTED`  
+Status: `SUPERSEDED_DONOR_NOT_TRAINING_ADMITTED`  
 Date: 2026-08-25  
 Organ: GPT-5.6 Sol / ChatGPT organ of Clay  
-Target: Qwen3.5-0.8B Xeno/HCU specialization  
-Canonical evidence basis at design time: `main` `0edcc2ca0dba28fa0536bc5834fe6ede05a46e96`, supervisor 8.78.
+Target: Qwen3.5-0.8B Xeno/HCU specialization
 
-## Why this delta exists
+## Evidence-driven objective
 
-Current Claude/XENO measurements support a narrow training target: semantic readout and symbol-axis writeout are already present at measured scope, while dynamic episode-local codebook binding and cross-template transfer remain weak. The current source review also found critical generator defects: permutation metadata was not causally realized and the S3 validator could accept incomplete coverage.
+Claude/XENO measurements isolate a narrow deficit: measured semantic readability and symbol-axis writeability are stronger than episode-local codebook binding and cross-template transfer. The useful training target is therefore contextual binding/routing, while the already-strong read/write/carrier functions need retention protection.
 
-This V2 therefore does **not** add more generic architecture prose. It builds a deterministic, adversarially balanced binding corpus around the measured missing capability.
+The initial V2 generator emitted 144 gate-compatible candidate rows:
 
-## Dataset construction
+- TRAIN: 72 = four templates × six S3 mappings × three semantic classes;
+- VALIDATION: 18;
+- HOLDOUT: 54 across unseen semantic vocabulary, unseen template and unseen symbol-set families.
 
-The generator emits 144 rows:
+The first audit correctly found zero class↔target-symbol MI within every train template, no literal class-label leakage outside the codebook, and 144/144 PASS against the current generic `ENTITYOS_HCU_TRAININGTRACE_CANDIDATE/v1` gate. All rows remained `training_ready=false` because exact ABI atom materialization was unavailable.
 
-- `TRAIN`: 72 = 4 structurally distinct templates × 6 S3 permutations × 3 semantic classes.
-- `VALIDATION`: 18 = 6 S3 permutations × 3 classes with a calibration paraphrase family.
-- `HOLDOUT`: 54 (all rows carry `frozen_holdout=true`) = three orthogonal 18-row families:
-  - unseen semantic-bearing vocabulary;
-  - unseen structural template (`T5_STRUCTURED_EVIDENCE_BUNDLE`);
-  - unseen symbol-set instances.
+## Swarm self-correction: generic gate PASS was not scientific PASS
 
-Each training template has exact class↔symbol pair balance: every class maps to every local symbol exactly twice across the six permutations. Designed `MI(class; target_symbol)` is therefore 0 bit within each training template.
+A later nuisance-factor reviewer found a flaw omitted by the first audit: each train template owns a distinct three-symbol placeholder set. Over the 72 train rows this makes:
 
-Displayed codebook order is also rotated independently of the semantic class so line position cannot be a stable answer shortcut. Counterfactual siblings keep semantic content fixed while changing the episode-local mapping, forcing the target symbol to change with the codebook.
+`I(target_symbol ; template) = 2.0 bits`.
 
-## Model-visible leakage policy
+So although `I(semantic_class ; target_symbol)=0` at the intended class mapping, the output vocabulary still reveals the template perfectly. That is an avoidable context-dependent nuisance signal and is contrary to the goal of context-invariant binding.
 
-`ALLOW`, `DENY`, `ABSTAIN` are permitted only as labels inside the episode-local codebook. They do not occur in the model-visible situation or query. The semantic class used by the generator/auditor lives only in non-model-visible supervision metadata.
+The correct verdict is therefore:
 
-This adopts one side of the source-spec tension only as a **candidate preregistration**. A label-free demonstration codebook remains a separately versioned alternative; the two must not be silently mixed after holdout freeze.
+`FAIL_SCIENTIFIC_PILOT_GEOMETRY / SUPERSEDED_DONOR_ONLY`
 
-## ABI fail-closed rule
+The 144/144 generic candidate-gate PASS remains true only at schema/epistemic-boundary scope. A generic gate that does not test nuisance independence cannot overrule a later statistical shortcut failure.
 
-The connected evidence currently proves 46 accepted atoms and one rejected atom (`or`), but it does not expose a complete manifest-verified row→literal-single-token atom mapping in the current tool context. V2 therefore uses `ABI_ROW_PLACEHOLDER_*` references and sets every row:
+Reusable research rule:
 
-- `training_ready=false`;
-- `status=CANDIDATE_NOT_TRAINING_ADMITTED`;
-- `ABI_PROVENANCE_REVIEWER=BLOCKED_ATOM_MATERIALIZATION`.
+`DISJOINT_SYMBOL_POOL_PER_TEMPLATE can create target-template nuisance information even when class-target MI is zero.`
 
-Before any row can become training-admitted, the placeholders must be materialized from the exact ABI manifest and checked against the pinned tokenizer. Inventing atom names would be a provenance error.
+Future audits must enumerate plausible nuisance pairs, not only the intended label relation.
 
-## Swarm review
+## Stronger retained successor
 
-- **EVIDENCE_EXTRACTOR — PASS:** objective is bound to measured weak dynamic/context-invariant binding; already-present read/write/carrier functions remain protected, not primary targets.
-- **DATASET_ARCHITECT — PASS:** full class×S3 coverage across four train structures plus three frozen generalization axes.
-- **ADVERSARIAL_SHORTCUT_HUNTER — PASS_CANDIDATE:** static class-symbol priors, previous-episode bindings, line-position heuristics and safe-default collapse are attacked by permutation/order counterfactuals.
-- **STATISTICAL_REVIEWER — PASS_CANDIDATE:** exact pair balance and zero designed class-target MI per train template.
-- **ABI_PROVENANCE_REVIEWER — BLOCK:** exact manifest-bound literal atom materialization unavailable in the current connected evidence context.
-- **RETENTION_REVIEWER — OPEN_SEPARATE:** seed construction cannot establish post-FT retention; semantic-read, symbol-write, general language/code and any required multimodal retention remain evaluation gates.
-- **HARNESS_COMPATIBILITY_REVIEWER — PASS_SYMBOL_REF_LEVEL_ONLY:** rows expose typed episode-local codebook lookup; exact ABI hooks wait for materialization.
-- **FINAL_INTEGRATOR — CANDIDATE_ONLY:** no training, J-Space, HCU or whole-product credit.
+Parallel Trigger-2 work already produced a stronger current path, so no duplicate lane is created.
 
-## Important specification tension discovered
+`tools/trigger2_dynamic_binding_blueprint_v2.py` v2.1 on current main emits a 9,072-row NON-TRAINABLE fully factorial blueprint crossing S3 mappings, codebook orders, layouts, semantic outcomes and query polarities while explicitly checking nuisance mutual information.
 
-The source simultaneously asks for **full S3 mapping coverage** and an **unseen-permutation holdout**. If all six relative three-class permutations occur in training, no seventh relative S3 permutation exists to keep unseen.
+`tools/trigger2_dynamic_binding_materializer_v1.py` on PR #1956 is the retained materialization path. It preregisters:
 
-V2 therefore does **not** pretend that this contradiction is solved. It records:
+- TRAIN permutations `P012/P021/P102/P120`;
+- validation-only `P201`;
+- sealed holdout `P210`;
+- a deterministic hash partition with 36 train-visible and 10 reserved unseen atoms;
+- four visible training templates;
+- an unmaterialized `T5_FROZEN_UNMATERIALIZED` holdout;
+- direct and negated query polarities;
+- provenance hashes and post-materialization checks.
 
-`FULL_S3_TRAIN_VS_UNSEEN_RELATIVE_PERMUTATION_HOLDOUT = OPEN_PREREGISTRATION_REQUIRED`
+Its synthetic 46-symbol source self-test emitted 4,320 PRE-HOLDOUT rows: 3,456 TRAIN and 864 VALIDATION, with zero empirical TRAIN `I(semantic_class; target_atom)`, zero per-atom class imbalance, and no sealed holdout symbol/permutation/template leak. This is source-level synthetic evidence only.
 
-The present holdout tests unseen *mapping instances* through new symbol identities/codebook instances, not an impossible unseen seventh relative S3 permutation. Before dataset freeze, authority should preregister whether “unseen permutation” means an absolute atom-mapping instance or whether a different factor must be reserved.
+## Exact remaining blocker
 
-## Falsifiers retained
+The exact accepted 46-atom ABI inventory + manifest/tokenizer materialization evidence is not available in the current connected source context and must not be guessed. Therefore:
 
-1. If targets still score well after codebook mappings are shuffled independently of targets, a loader/dataset leak exists.
-2. If only unseen-vocabulary performance collapses, the model learned lexical semantics rather than context-invariant binding.
-3. If only unseen-symbol performance collapses, it learned atom identities rather than episodic variable binding.
-4. If narrow specialization damages measured semantic readout/symbol writeout or declared retention bounds, the “small router is sufficient” hypothesis weakens.
-5. After a binder exists, a targeted lesion should selectively break codebook choice while preserving semantic readability; rescue should restore it. Failure of this dissociation weakens causal binder claims.
+- real ABI-materialized binding rows: 0;
+- accepted Distillery tokens from this delta: 0;
+- training executed: NO;
+- training credit: 0;
+- Qwen3.5 causal J-Space credit: 0;
+- whole HCU / whole EntityOS runtime credit: 0.
 
-## Credit boundary
+The next correct binding action is to obtain the exact 46 accepted atoms and pinned tokenizer evidence, then run the retained materializer/gates while preserving the sealed P210 + ten-atom + T5 holdout. Only after that should multi-hop/distractor scale-up occur.
 
-This is dataset-method/source work only. Training was not executed. No J-Space model runtime, HCU runtime, EntityOS/HCU whole-runtime, canonical-semantics or training credit is minted by this delta.
+## Wider research feedback
 
-## Re-entry after main advanced
+The newest owner target is variable cognitive grid + persistent database + Claude Code. Dynamic binding remains one subobjective, not the architecture identity. Training should factor cognitive correctness away from fixed module count and later cover variable-N decomposition, durable DB-vs-transient state, Claude Code handoff/re-entry, Hyperposition/evidence reconciliation, workspace broadcast-versus-use, restart/rejoin and fail-closed authority behavior.
 
-After the first V2 write, canonical `main` advanced to `09965e898b27e21f86d0f9e5d08339fe8439fed4` with `CLAY_TRIGGER2_POSTTRAINING_CAUSAL_ADJUDICATION_SWARM/v1`. That delta establishes two constraints this V2 now adopts:
-
-1. behavioral episodic binding and scientific self-adjudication are separate curricula and must receive separate acceptance credit;
-2. candidate row schema/enums fail closed rather than being weakened to accommodate new prose.
-
-V2 was therefore converted to the exact current candidate row schema `ENTITYOS_HCU_TRAININGTRACE_CANDIDATE/v1` and rechecked against `tools/entityos_hcu_trainingtrace_candidate_gate_v1.py` at blob `a51c7b8afc6a9ae5562e5ec647528960e812eba3`.
-
-Result: **144/144 candidate rows pass the current gate**. This is only candidate-gate validity. All 144 remain `training_ready=false` because the exact manifest-bound ABI atom materialization is still blocked, and no canonical dataset admission or training credit follows from the gate pass.
+This run’s durable contribution is therefore not “144 good rows.” It is the self-correction that a schema-clean balanced seed can still contain a nuisance shortcut, plus a fail-closed disposition into the stronger nonduplicate materializer lane.

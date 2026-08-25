@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v4",
+  "command_id": "gpt56sol-native-cvec-preflight-20260825",
+  "op": "exec",
+  "cwd": "/workspace",
+  "timeout_seconds": 180,
+  "command": "set -euo pipefail; echo PRECHECK=START; echo '--- gguf candidates ---'; find /cache /workspace -type f -iname '*qwen*0.6*gguf' -o -type f -iname '*qwen3*gguf' 2>/dev/null | head -50; echo '--- all large gguf ---'; find /cache /workspace -type f -iname '*.gguf' -size +200M -printf '%s %p\\n' 2>/dev/null | sort -nr | head -30; echo '--- llama binaries ---'; find /cache /workspace -type f -perm -111 \( -name 'llama-cli' -o -name 'llama-server' -o -name 'llama-bench' -o -name 'libllama.so*' \) -printf '%p\\n' 2>/dev/null | head -50; echo '--- llama source repos ---'; find /cache /workspace -maxdepth 5 -type d -name '.git' 2>/dev/null | while read d; do r=${d%/.git}; case \"$r\" in *llama.cpp*) echo $r; git -C \"$r\" rev-parse HEAD 2>/dev/null || true;; esac; done | head -40; echo '--- resources ---'; free -h; df -h /cache"
+}

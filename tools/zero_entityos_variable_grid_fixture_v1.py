@@ -17,6 +17,7 @@ import hashlib
 import json
 import sqlite3
 from dataclasses import dataclass
+from pathlib import Path
 from typing import Any, Iterable
 
 CENSUS_SCHEMA = "ZERO_ENTITYOS_COGNITIVE_PROCESS_CENSUS/v1"
@@ -43,7 +44,13 @@ class RuntimeConfig:
 
 
 class VariableGridFixture:
-    def __init__(self, census: dict, abi: dict, config: RuntimeConfig):
+    def __init__(
+        self,
+        census: dict,
+        abi: dict,
+        config: RuntimeConfig,
+        db_path: str | Path = ":memory:",
+    ):
         if census.get("schema") != CENSUS_SCHEMA:
             raise ValueError("wrong census schema")
         if abi.get("schema") != ABI_SCHEMA:
@@ -52,25 +59,26 @@ class VariableGridFixture:
         self.abi = abi
         self.config = config
         self.processes = {p["id"]: p for p in census["processes"]}
-        self.con = sqlite3.connect(":memory:")
+        self.db_path = str(db_path)
+        self.con = sqlite3.connect(self.db_path)
         self.con.row_factory = sqlite3.Row
         self._schema()
 
     def _schema(self) -> None:
         self.con.executescript("""
-        CREATE TABLE canonical_state(
+        CREATE TABLE IF NOT EXISTS canonical_state(
           object_key TEXT PRIMARY KEY,
           value_json TEXT NOT NULL,
           epoch INTEGER NOT NULL,
           digest TEXT NOT NULL
         );
-        CREATE TABLE task_admission(
+        CREATE TABLE IF NOT EXISTS task_admission(
           causal_event_id TEXT PRIMARY KEY,
           admission_id TEXT NOT NULL UNIQUE,
           generation INTEGER NOT NULL,
           payload_digest TEXT NOT NULL
         );
-        CREATE TABLE work_queue(
+        CREATE TABLE IF NOT EXISTS work_queue(
           work_id TEXT PRIMARY KEY,
           causal_event_id TEXT NOT NULL,
           admission_id TEXT NOT NULL,
@@ -79,36 +87,38 @@ class VariableGridFixture:
           payload_json TEXT NOT NULL,
           payload_digest TEXT NOT NULL,
           workspace_epoch INTEGER NOT NULL,
+          state_snapshot_ref_json TEXT,
           status TEXT NOT NULL
         );
-        CREATE TABLE result_log(
+        CREATE TABLE IF NOT EXISTS result_log(
           result_id TEXT PRIMARY KEY,
           work_id TEXT NOT NULL,
           process_id TEXT NOT NULL,
           executor_id TEXT NOT NULL,
           result_class TEXT NOT NULL,
           result_json TEXT NOT NULL,
-          semantic_digest TEXT NOT NULL
+          semantic_digest TEXT NOT NULL,
+          executor_binding_json TEXT
         );
-        CREATE TABLE db_write_proposals(
+        CREATE TABLE IF NOT EXISTS db_write_proposals(
           proposal_id TEXT PRIMARY KEY,
           work_id TEXT NOT NULL,
           object_key TEXT NOT NULL,
           value_json TEXT NOT NULL,
           status TEXT NOT NULL
         );
-        CREATE TABLE effect_request_candidates(
+        CREATE TABLE IF NOT EXISTS effect_request_candidates(
           effect_candidate_id TEXT PRIMARY KEY,
           work_id TEXT NOT NULL,
           request_json TEXT NOT NULL,
           status TEXT NOT NULL
         );
-        CREATE TABLE effect_journal(
+        CREATE TABLE IF NOT EXISTS effect_journal(
           effect_id TEXT PRIMARY KEY,
           work_id TEXT NOT NULL,
           outcome TEXT NOT NULL
         );
-        CREATE TABLE workspace_reentry(
+        CREATE TABLE IF NOT EXISTS workspace_reentry(
           reentry_id TEXT PRIMARY KEY,
           source_result_id TEXT NOT NULL,
           source_process_id TEXT NOT NULL,
@@ -119,6 +129,13 @@ class VariableGridFixture:
           observed_downstream_change TEXT NOT NULL
         );
         """)
+        work_cols = {str(r[1]) for r in self.con.execute("PRAGMA table_info(work_queue)")}
+        if "state_snapshot_ref_json" not in work_cols:
+            self.con.execute("ALTER TABLE work_queue ADD COLUMN state_snapshot_ref_json TEXT")
+        result_cols = {str(r[1]) for r in self.con.execute("PRAGMA table_info(result_log)")}
+        if "executor_binding_json" not in result_cols:
+            self.con.execute("ALTER TABLE result_log ADD COLUMN executor_binding_json TEXT")
+        self.con.commit()
 
     def close(self) -> None:
         self.con.close()
@@ -138,10 +155,34 @@ class VariableGridFixture:
         ).fetchone()
         return json.loads(row[0]) if row else None
 
+    def canonical_state_ref(self, object_key: str) -> dict | None:
+        row = self.con.execute(
+            "SELECT value_json,epoch,digest FROM canonical_state WHERE object_key=?",
+            (object_key,),
+        ).fetchone()
+        if not row:
+            return None
+        return {
+            "schema": "DB_STATE_REF/v1",
+            "ref_id": "dbref-" + digest(
+                {"object_key": object_key, "epoch": int(row["epoch"]), "digest": row["digest"]}
+            )[:20],
+            "store": "fixture_sqlite_canonical_state",
+            "snapshot_or_epoch": int(row["epoch"]),
+            "object_key": object_key,
+            "digest": str(row["digest"]),
+            "provenance": "DETERMINISTIC_TEST_SEED",
+            "mutability": "CANONICAL_MUTABLE_WITH_EPOCH",
+        }
+
     def admit_task(self, payload: Any, generation: int = 1) -> dict:
         p_digest = digest(payload)
-        causal_event_id = "ce-" + digest({"generation": generation, "payload_digest": p_digest})[:20]
-        admission_id = "adm-" + digest({"causal_event_id": causal_event_id, "transport": "fixture"})[:20]
+        causal_event_id = "ce-" + digest(
+            {"generation": generation, "payload_digest": p_digest}
+        )[:20]
+        admission_id = "adm-" + digest(
+            {"causal_event_id": causal_event_id, "transport": "fixture"}
+        )[:20]
         self.con.execute(
             "INSERT OR IGNORE INTO task_admission(causal_event_id,admission_id,generation,payload_digest) VALUES(?,?,?,?)",
             (causal_event_id, admission_id, generation, p_digest),
@@ -154,21 +195,31 @@ class VariableGridFixture:
             "payload_digest": p_digest,
         }
 
-    def enqueue(self, admission: dict, process_id: str, payload: Any, workspace_epoch: int = 1) -> dict:
+    def enqueue(
+        self,
+        admission: dict,
+        process_id: str,
+        payload: Any,
+        workspace_epoch: int = 1,
+        state_snapshot_ref: dict | None = None,
+    ) -> dict:
         if process_id not in self.processes:
             raise ValueError("unknown process_id")
         payload_digest = digest(payload)
+        snapshot_digest = digest(state_snapshot_ref) if state_snapshot_ref is not None else "NONE"
         work_id = "work-" + digest({
             "causal_event_id": admission["causal_event_id"],
             "generation": admission["generation"],
             "process_id": process_id,
             "payload_digest": payload_digest,
             "workspace_epoch": workspace_epoch,
+            "state_snapshot_digest": snapshot_digest,
         })[:24]
         self.con.execute(
             """INSERT OR IGNORE INTO work_queue
-               (work_id,causal_event_id,admission_id,generation,process_id,payload_json,payload_digest,workspace_epoch,status)
-               VALUES(?,?,?,?,?,?,?,?,?)""",
+               (work_id,causal_event_id,admission_id,generation,process_id,payload_json,payload_digest,
+                workspace_epoch,state_snapshot_ref_json,status)
+               VALUES(?,?,?,?,?,?,?,?,?,?)""",
             (
                 work_id,
                 admission["causal_event_id"],
@@ -178,6 +229,7 @@ class VariableGridFixture:
                 canonical_json(payload),
                 payload_digest,
                 workspace_epoch,
+                canonical_json(state_snapshot_ref) if state_snapshot_ref is not None else None,
                 "READY",
             ),
         )
@@ -189,6 +241,26 @@ class VariableGridFixture:
         slot = int(hashlib.sha256(work_id.encode()).hexdigest(), 16) % n
         return f"fixture-executor-{slot:04d}"
 
+    def _executor_binding(self, work_id: str, process_id: str, executor_id: str) -> dict:
+        lease_id = "lease-" + digest({
+            "grid_instance_id": self.config.grid_instance_id,
+            "executor_id": executor_id,
+            "process_id": process_id,
+            "work_id": work_id,
+        })[:24]
+        return {
+            "schema": "GRID_EXECUTOR_BINDING/v1",
+            "grid_instance_id": self.config.grid_instance_id,
+            "requested_N": self.config.requested_n,
+            "available_N": self.config.available_n,
+            "executor_id": executor_id,
+            "lease_id": lease_id,
+            "process_id": process_id,
+            "runtime_identity": "python-sqlite-reference-fixture-v1",
+            "started_at": "FIXTURE_DETERMINISTIC",
+            "ended_at": "FIXTURE_DETERMINISTIC",
+        }
+
     def execute_ready(self) -> list[dict]:
         rows = self.con.execute(
             "SELECT * FROM work_queue WHERE status='READY' ORDER BY work_id"
@@ -197,6 +269,12 @@ class VariableGridFixture:
         for row in rows:
             process_id = row["process_id"]
             executor_id = self._executor_for(row["work_id"])
+            executor_binding = self._executor_binding(row["work_id"], process_id, executor_id)
+            state_snapshot_ref = (
+                json.loads(row["state_snapshot_ref_json"])
+                if row["state_snapshot_ref_json"]
+                else None
+            )
             semantic_result = {
                 "causal_event_id": row["causal_event_id"],
                 "admission_id": row["admission_id"],
@@ -210,23 +288,30 @@ class VariableGridFixture:
                     else "DETERMINISTIC_CONTROL_RESULT",
                 "payload_digest": row["payload_digest"],
                 "workspace_epoch": row["workspace_epoch"],
+                "state_snapshot_ref": state_snapshot_ref,
                 "credit_scope": "REFERENCE_FIXTURE_COMPONENT_ONLY",
             }
             semantic_digest = digest(semantic_result)
-            result_id = "res-" + digest({"semantic_digest": semantic_digest, "executor_id": executor_id})[:24]
+            result_id = "res-" + digest(
+                {"semantic_digest": semantic_digest, "executor_id": executor_id, "lease_id": executor_binding["lease_id"]}
+            )[:24]
             self.con.execute(
                 """INSERT INTO result_log
-                   (result_id,work_id,process_id,executor_id,result_class,result_json,semantic_digest)
-                   VALUES(?,?,?,?,?,?,?)""",
+                   (result_id,work_id,process_id,executor_id,result_class,result_json,semantic_digest,executor_binding_json)
+                   VALUES(?,?,?,?,?,?,?,?)""",
                 (
                     result_id, row["work_id"], process_id, executor_id,
                     semantic_result["result_class"], canonical_json(semantic_result), semantic_digest,
+                    canonical_json(executor_binding),
                 ),
             )
-            self.con.execute("UPDATE work_queue SET status='DONE' WHERE work_id=?", (row["work_id"],))
+            self.con.execute(
+                "UPDATE work_queue SET status='DONE' WHERE work_id=?", (row["work_id"],)
+            )
             results.append({
                 "result_id": result_id,
                 "executor_id": executor_id,
+                "executor_binding": executor_binding,
                 "semantic": semantic_result,
                 "semantic_digest": semantic_digest,
             })
@@ -234,28 +319,51 @@ class VariableGridFixture:
         return results
 
     def propose_db_write(self, work_id: str, object_key: str, value: Any) -> str:
-        proposal_id = "dbp-" + digest({"work_id": work_id, "object_key": object_key, "value": value})[:24]
+        proposal_id = "dbp-" + digest(
+            {"work_id": work_id, "object_key": object_key, "value": value}
+        )[:24]
         self.con.execute(
             "INSERT INTO db_write_proposals(proposal_id,work_id,object_key,value_json,status) VALUES(?,?,?,?,?)",
-            (proposal_id, work_id, object_key, canonical_json(value), "PROPOSED_NOT_COMMITTED"),
+            (
+                proposal_id,
+                work_id,
+                object_key,
+                canonical_json(value),
+                "PROPOSED_NOT_COMMITTED",
+            ),
         )
         self.con.commit()
         return proposal_id
 
     def propose_effect(self, work_id: str, request: Any) -> str:
-        candidate_id = "efp-" + digest({"work_id": work_id, "request": request})[:24]
+        candidate_id = "efp-" + digest(
+            {"work_id": work_id, "request": request}
+        )[:24]
         self.con.execute(
             "INSERT INTO effect_request_candidates(effect_candidate_id,work_id,request_json,status) VALUES(?,?,?,?)",
-            (candidate_id, work_id, canonical_json(request), "PROPOSED_NOT_EXECUTED"),
+            (
+                candidate_id,
+                work_id,
+                canonical_json(request),
+                "PROPOSED_NOT_EXECUTED",
+            ),
         )
         self.con.commit()
         return candidate_id
 
-    def stub_claude_roundtrip(self, admission: dict, work_id: str, workspace_epoch: int, state_refs: Iterable[str]) -> dict:
+    def stub_claude_roundtrip(
+        self,
+        admission: dict,
+        work_id: str,
+        workspace_epoch: int,
+        state_refs: Iterable[str],
+    ) -> dict:
         """Deterministic bridge fixture. This is explicitly NOT a Claude Code invocation."""
         bridge_request = {
             "schema": "CLAUDE_CODE_BRIDGE_PACKET/v1",
-            "bridge_id": "bridge-" + digest({"work_id": work_id, "direction": "GRID_TO_CLAUDE"})[:20],
+            "bridge_id": "bridge-" + digest(
+                {"work_id": work_id, "direction": "GRID_TO_CLAUDE"}
+            )[:20],
             "direction": "GRID_TO_CLAUDE",
             "causal_event_id": admission["causal_event_id"],
             "work_id": work_id,
@@ -269,7 +377,9 @@ class VariableGridFixture:
         }
         bridge_result = {
             **bridge_request,
-            "bridge_id": "bridge-" + digest({"work_id": work_id, "direction": "CLAUDE_TO_GRID"})[:20],
+            "bridge_id": "bridge-" + digest(
+                {"work_id": work_id, "direction": "CLAUDE_TO_GRID"}
+            )[:20],
             "direction": "CLAUDE_TO_GRID",
             "payload_ref": "fixture://return/" + work_id,
             "payload_digest": digest({"work_id": work_id, "kind": "return"}),
@@ -292,11 +402,18 @@ class VariableGridFixture:
         reentry_id = "re-" + digest(reentry)[:24]
         self.con.execute(
             """INSERT INTO workspace_reentry
-               (reentry_id,source_result_id,source_process_id,causal_event_id,from_workspace_epoch,to_workspace_epoch,payload_digest,observed_downstream_change)
+               (reentry_id,source_result_id,source_process_id,causal_event_id,
+                from_workspace_epoch,to_workspace_epoch,payload_digest,observed_downstream_change)
                VALUES(?,?,?,?,?,?,?,?)""",
             (
-                reentry_id, source_result_id, "ZECP14", admission["causal_event_id"],
-                workspace_epoch, workspace_epoch + 1, bridge_result["payload_digest"], "TRUE",
+                reentry_id,
+                source_result_id,
+                "ZECP14",
+                admission["causal_event_id"],
+                workspace_epoch,
+                workspace_epoch + 1,
+                bridge_result["payload_digest"],
+                "TRUE",
             ),
         )
         self.con.commit()
@@ -311,7 +428,8 @@ class VariableGridFixture:
     def count(self, table: str) -> int:
         if table not in {
             "canonical_state", "task_admission", "work_queue", "result_log",
-            "db_write_proposals", "effect_request_candidates", "effect_journal", "workspace_reentry"
+            "db_write_proposals", "effect_request_candidates", "effect_journal",
+            "workspace_reentry",
         }:
             raise ValueError("table not allowed")
         return int(self.con.execute(f"SELECT COUNT(*) FROM {table}").fetchone()[0])

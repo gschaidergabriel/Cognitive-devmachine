@@ -1,11 +1,11 @@
 {
-  "schema_version": "8.83",
-  "latest_cycle": "active-provider-drift-plus-grid10-authority-quarantine",
+  "schema_version": "8.84",
+  "latest_cycle": "v62-invocation-authority-correction-plus-active-quiescence-fail",
   "needs_review": true,
   "active_program": "ENTITYOS_HCU",
   "product": "EntityOS",
   "integrated_cognition_compute_architecture": "HCU",
-  "material_finding": "A real physical GRID10 runtime receipt now exists at commit 7b6b2988e61848976a5983777b02ace234438969 with 17/17 criteria reported PASS, but the execution is not bound to the required predecessor chain of runtime-quiescence PASS followed by current FREE non-provider authority re-entry, so promotion remains quarantined. More importantly, current telemetry now positively falsifies runtime quiescence rather than merely lacking proof: OpenRouter total_requests rose 3693->3783 and total_429 rose 3558->3648 over the latest bounded metrics interval while owner emergency-stop authority remained HARD_OFF. The GRID10 Shared_Clean/PSS measurements support substantial shared clean mappings but do not by themselves prove exactly one physical weight copy under Linux procfs semantics. Distillery remains 0/11621 accepted dataset tokens and Source-to-GO remains 0%. No BASE, training, canonical-semantics, physical-GRID10 promotion, Whole-HCU or EntityOS pass is justified.",
+  "material_finding": "Trigger-2 V62 falsified the assumption that source_bound_model_call_identity_sha256 must be injective across independent invocations. Exact committed-byte local deterministic source validation reports py_compile PASS and 9/9 pytest PASS for a phase-separated authority pattern: call-content/output evidence identity may repeat across deterministic invocations, while distinct causal invocation authority is carried by pre-call launch descriptors and post-call executor observations. The remaining source gap is node-admission/membership-incarnation provenance and fused cohort integration. Runtime quiescence remains actively failed under owner HARD_OFF, so provider/model/training execution and physical GRID10 promotion remain closed. No BASE, training, canonical-semantics, Whole-HCU or EntityOS pass is justified.",
   "current_frontier": {
     "canonical_s0_epoch_cas": "BOUNDED_COMPONENT_RUNTIME_PASS",
     "xeno_self_organizing_fabric": "BOUNDED_COMPONENT_RUNTIME_PASS",
@@ -16,7 +16,10 @@
     "physical_grid10_repository_execution": "NONPROMOTING_EXECUTION_OBSERVED_REQUIRES_VALID_QUIESCENCE_AND_AUTHORITY_CHAIN_BEFORE_ANY_PROMOTION_RERUN",
     "trigger2_binding_router_factorial_generator_v3": "BLOCKED_FROM_DIRECT_TRAINING_CONDITIONAL_NUISANCE_LEAKAGE",
     "qwen35_checkpoint_input_identity_abi": "SOURCE_READY_SELECTION_GRADE_RECEIPTS_MISSING_FOR_THREE_FROZEN_CANDIDATES",
-    "model_call_causal_identity": "SOURCE_CONTRACT_GAP_OUTPUT_AND_CALL_IDENTITY_NOT_CLOSED",
+    "model_call_content_identity": "SOURCE_FIXTURE_VALIDATED_CONTENT_EQUIVALENCE_IDENTITY_NOT_INVOCATION_IDENTITY",
+    "model_call_invocation_authority": "SOURCE_FIXTURE_VALIDATED_PHASE_SEPARATED_PRECALL_LAUNCH_PLUS_POSTCALL_OBSERVATION_RUNTIME_UNOBSERVED",
+    "node_admission_membership_incarnation_provenance": "STRICT_XFAIL_SOURCE_GAP",
+    "fused_grid10_two_phase_authority_integration": "SOURCE_INTEGRATION_PENDING",
     "n64_checkpoint_evaluation": "EXPLORATORY_ONLY_QUARANTINED_FROM_CONFIRMATORY_SELECTION",
     "jspace_representation_metrology": "SPECIFIC_SOURCE_BUG_REPAIRED_LOCAL_SYNTHETIC_COMPONENT_PASS_QWEN_RUNTIME_UNOBSERVED",
     "cross_checkpoint_alignment": "DESIGN_ONLY_FITTED_TRANSFORM_ANTI_LEAKAGE_GATE_REQUIRED",
@@ -47,7 +50,9 @@
     "MODEL_FAMILY_AND_CHECKPOINT_ANCESTRY_MUST_REMAIN_EXPLICIT",
     "EXPOSED_OR_POST_HOC_TUNED_EVALUATION_CANNOT_MINT_CONFIRMATORY_SELECTION_CREDIT",
     "LEARNED_ALIGNMENT_TRANSFORM_IS_AN_EVIDENCE_BEARING_FITTED_ARTIFACT_NOT_A_FREE_COORDINATE_CHANGE",
-    "MODEL_OUTPUT_LINEAGE_REQUIRES_EXACT_CALL_LEVEL_OUTPUT_BINDING_WHEN_USED_DOWNSTREAM",
+    "MODEL_CALL_CONTENT_IDENTITY_MUST_NOT_BE_CONFUSED_WITH_INVOCATION_EVENT_AUTHORITY",
+    "INVOCATION_EVENT_AUTHORITY_REQUIRES_PHASE_SEPARATED_PRECALL_LAUNCH_AND_POSTCALL_EXECUTOR_OBSERVATION_BINDING",
+    "NODE_ADMISSION_OR_MEMBERSHIP_INCARNATION_MUST_NOT_BE_PROJECTED_ACROSS_INDEPENDENT_NODES_WITHOUT_EXPLICIT_FANOUT_AUTHORITY",
     "ORDINARY_XENO_MODULES_ARE_S1_READ_ONLY",
     "ONLY_VALID_DYNAMIC_COORDINATOR_LEASE_HOLDERS_MAY_WRITE_S1",
     "COORDINATOR_WRITE_NEVER_MINTS_S0_TRUTH_OR_EFFECT_AUTHORITY",
@@ -62,12 +67,12 @@
     "DO_NOT_MODIFY_FRANK_HARNESS"
   ],
   "next_focus": [
-    "IDENTIFY_AND_TERMINATE_THE_EXACT_PROVIDER_CAPABLE_PROCESS_TREE_CAUSING_POST_STOP_OPENROUTER_ATTEMPTS_WITHOUT_ISSUING_ANY_PROVIDER_PROBE",
-    "RECEIPT_ZERO_PROVIDER_CAPABLE_SURVIVORS_AND_BOUNDED_ZERO_PROVIDER_COUNTER_DELTA_ON_CURRENT_TELEMETRY",
+    "EXECUTE_THE_ALREADY_PINNED_QUIESCENCE_ENFORCER_ON_THE_OWNING_HOST_WITHOUT_PROVIDER_PROBING_AND_REQUIRE_ZERO_PROVIDER_CAPABLE_SURVIVORS_PLUS_BOUNDED_ZERO_PROVIDER_COUNTER_DELTA",
+    "SOURCE_ONLY_CLOSE_NODE_ADMISSION_MEMBERSHIP_INCARNATION_PROVENANCE_AND_PRESERVE_EXPLICIT_FUTURE_FANOUT_AS_A_SEPARATE_AUTHORITY_CONTRACT",
+    "SOURCE_ONLY_INTEGRATE_PHASE_SEPARATED_INVOCATION_AUTHORITY_WITH_PROOF_CARRYING_NODE_RESULT_V1_AND_FUSED_GRID10_MEMBERSHIP_COHORT",
     "ONLY_AFTER_QUIESCENCE_PASS_REENTER_CURRENT_FREE_NON_PROVIDER_EXECUTION_AUTHORITY",
-    "IF_PHYSICAL_GRID10_PROMOTION_IS_STILL_REQUIRED_RERUN_OR_REBIND_ONLY_UNDER_THE_VALID_QUIESCENCE_TO_AUTHORITY_PREDECESSOR_CHAIN",
-    "FOR_EXACT_ONE_WEIGHT_COPY_CLAIMS_ADD_EXECUTABLE_PAGE_LEVEL_OR_AGGREGATE_PHYSICAL_MEMORY_EVIDENCE_BEYOND_SMAPS_SHARED_CLEAN_ALONE",
-    "CONTINUE_SOURCE_ONLY_MODEL_CALL_OUTPUT_IDENTITY_AND_FROZEN_FAMILY_DISJOINT_TRIGGER2_EVALUATION_WITHOUT_UNBLINDING_OR_TRAINING_PROMOTION"
+    "KEEP_FROZEN_CHECKPOINT_EVALUATION_BLINDED_AND_TRAINING_MATERIALIZATION_CLOSED_UNTIL_SEPARATELY_ADMITTED_EXECUTABLE_EVIDENCE",
+    "KEEP_FORGE_TO_DISTILLERY_TRAINING_CREDIT_ZERO_UNTIL_ACCEPTED_DATASET_TOKENS_GT_ZERO_FROM_ONE_EXACT_ACCEPTED_WITNESS_AND_EXACT_REPLAY_ADDS_ZERO"
   ],
   "promotion_state": {
     "canonical_s0_component_runtime_pass": true,
@@ -81,5 +86,5 @@
     "jspace_model_credit": 0,
     "training_credit": 0
   },
-  "steering": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_83_DELTA_2026-08-26T0435P0700_GPT56SOL.json"
+  "steering": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_84_DELTA_2026-08-26T0545P0700_GPT56SOL.json"
 }

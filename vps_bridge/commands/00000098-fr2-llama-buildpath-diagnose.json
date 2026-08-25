@@ -1,8 +1,0 @@
-{
-  "schema": "CLAY_VPS_COMMAND/v4",
-  "command_id": "fr2-llama-buildpath-diagnose-20260825-1311",
-  "op": "exec",
-  "cwd": "/workspace",
-  "timeout_seconds": 300,
-  "command": "set -euo pipefail; L=/cache/clay-qwen06-native/llama.cpp; test \"$(git -C \"$L\" rev-parse HEAD)\" = bb4caa7540188872173c44d161602d9271386413; echo BUILD_DIRS; find \"$L\" -maxdepth 4 -type d -name bin -o -name lib 2>/dev/null | sort; echo LIBS; find \"$L\" -maxdepth 6 -type f \( -name 'libllama.so*' -o -name 'libggml*.so*' -o -name 'libllama.a' -o -name 'libggml*.a' \) -printf '%p\\n' 2>/dev/null | sort | head -100; echo CMAKE_CACHE; find \"$L\" -maxdepth 4 -name CMakeCache.txt -printf '%p\\n' 2>/dev/null | sort; echo DONE"
-}

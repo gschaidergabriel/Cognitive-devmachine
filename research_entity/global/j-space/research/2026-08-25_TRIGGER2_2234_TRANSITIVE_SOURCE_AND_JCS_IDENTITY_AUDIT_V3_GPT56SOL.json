@@ -1,0 +1,118 @@
+{
+  "schema": "CLAY_TRIGGER2_TRANSITIVE_SOURCE_AND_JCS_IDENTITY_AUDIT/v3",
+  "artifact_version": "3.0.0",
+  "date": "2026-08-25",
+  "local_trigger_time": "22:34+07:00",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "status": "CURRENT_RESEARCH_AUDIT_NONPROMOTING_SUCCESSOR_DYNAMIC",
+  "supersedes_for_currentness_and_scope": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_2232_TRANSITIVE_SOURCE_AND_JCS_IDENTITY_AUDIT_V2_GPT56SOL.json",
+  "revision_reason": "Post-v2 inspection of the newly landed exact repository-bound A02 acceptance runner and VPS request shows that the outer runtime receipt already binds all listed transitive sources to executed HEAD/worktree bytes, including the Hyperposition v3 labeler and EntityOS JCS canonicalizer. Therefore v2's proposal of a wholly new transitive execution-manifest gate is too strong as a P0 blocker. The remaining issue is receipt composition/portability: the inner producer receipt does not itself encode those transitive source identities, so any later evidence or row that carries the inner receipt must preserve an authenticated link to the outer repository-bound receipt. The separate v3-labeler Python-compact-vs-JCS identity gap remains open for portable cross-runtime hash semantics.",
+  "authority": {
+    "repository": "gschaidergabriel/clay-global-research-entity",
+    "branch": "main",
+    "observed_main_before_v3_write": "cbf92fc99a117d3e9d4ea8dac826aa0f981abe16",
+    "supervisor_epoch": "8.78",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "architecture": "HCU_VARIABLE_COGNITIVE_GRID",
+    "latest_training_ledger_observed": "CLAY_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER/v23",
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "positive_jspace_causal_credit": 0
+  },
+  "predecessor_lifecycle": [
+    {
+      "artifact": "CLAY_TRIGGER2_TRANSITIVE_SOURCE_AND_JCS_IDENTITY_AUDIT/v1",
+      "status": "STALE_ON_ARRIVAL_FOR_CURRENTNESS_TECHNICAL_DONOR_ONLY",
+      "reason": "moving-main race placed the write after newer ledgers/repairs"
+    },
+    {
+      "artifact": "CLAY_TRIGGER2_TRANSITIVE_SOURCE_AND_JCS_IDENTITY_AUDIT/v2",
+      "status": "SUPERSEDED_SCOPE_TOO_STRONG_AFTER_RUNNER_INSPECTION",
+      "retain": [
+        "inner producer receipt does not name labeler/canonicalizer source hashes",
+        "v3 labeler internal compact digest is not RFC8785/JCS"
+      ],
+      "supersede": [
+        "claim that a separate transitive source-manifest gate is necessarily missing at outer runtime scope",
+        "recommendation to block exact-current A02 execution solely on that basis"
+      ]
+    }
+  ],
+  "current_source_classification": [
+    {
+      "artifact": "tools/run_trigger2_repository_bound_a02_acceptance_v1.py",
+      "status": "CURRENT_OUTER_EXECUTION_BUNDLE_SOURCE_BOUND_RUNTIME_RECEIPT_UNOBSERVED",
+      "observed_git_blob_sha1": "13198fd90913469d90c18b0930061194e3cfcee2",
+      "finding": "RELEVANT_SOURCES includes runner, A02 producer/gate, retained v4, generation/epistemic/reference-labeler sources, trusted pilot generator, EntityOS JCS canonicalizer, authority manifests and focused tests. Before tests, every listed file is checked worktree-vs-HEAD; the receipt records executed HEAD/tree, source bindings, producer Git-object lineage, authority hashes and runtime identity."
+    },
+    {
+      "artifact": "research_entity/claycode/autonomous/GO_VPS_EXECUTION_REQUEST_2026-08-25T1447Z.json v2",
+      "status": "CURRENT_SINGLE_EXECUTION_REQUEST_EXACT_HEAD_TARGET",
+      "finding": "The request explicitly fixes requested_head/requested_tree, forbids substitution of moving main and requires exact source bindings including reference labeler and canonicalizer. This is the correct outer identity boundary for the pending A02 execution."
+    },
+    {
+      "artifact": "tools/trigger2_a02_discriminator_producer_v1.py inner execution receipt",
+      "status": "CURRENT_INNER_SEMANTIC_EXECUTION_RECEIPT_NONPORTABLE_WITHOUT_OUTER_PARENT",
+      "finding": "Its receipt preimage binds producer source/policy/world/prestate/event/result identities but not all dynamically loaded dependency bytes. That is acceptable for a nested inner receipt only if its authoritative execution scope is inherited through an immutable link to the exact outer repository-bound receipt; it is insufficient as a standalone portable source-provenance proof."
+    },
+    {
+      "artifact": "tools/trigger2_hyperposition_reference_labelers_v3.py",
+      "status": "CURRENT_DETERMINISTIC_SEMANTIC_REFERENCE_LOCAL_DIGEST_COMPATIBILITY_ONLY_FOR_CROSS_RUNTIME_IDENTITY",
+      "finding": "Semantic U_state/D_resolve/U_test_order/f_salience_order behavior remains current. Its internal _digest uses Python compact JSON rather than repository RFC8785/JCS, so derivation/canonical-state hashes should not be promoted to portable cross-runtime causal identity without a versioned JCS successor."
+    }
+  ],
+  "new_rule_candidate": {
+    "id": "T2_A02_OUTER_RECEIPT_PARENT_BINDING_RULE_V1",
+    "status": "CURRENT_RESEARCH_REQUIREMENT_CANDIDATE_NONPROMOTING",
+    "rule": "Any future row/evidence object that cites an A02 inner producer execution_receipt_id for execution authenticity must also bind the exact outer CLAY_TRIGGER2_REPOSITORY_BOUND_A02_ACCEPTANCE/v1 receipt identity (or an admitted immutable receipt digest/manifest containing it). The inner receipt alone cannot carry the source/runtime scope that only the outer runner measured.",
+    "minimum_parent_binding": [
+      "outer receipt schema/version",
+      "outer receipt SHA-256 or canonical admitted receipt identity",
+      "executed HEAD/tree",
+      "runtime identity",
+      "source_bindings containing producer/gate/labeler/canonicalizer/generator/v4/tests/authority manifests",
+      "producer Git-object lineage PASS",
+      "focused suite PASS",
+      "dirty_before=false and dirty_after=false"
+    ],
+    "negative_control": "detach/copy a valid-looking inner producer receipt while removing or substituting the outer receipt parent => no runtime/evidence authenticity promotion"
+  },
+  "jcs_convergence_requirement": {
+    "id": "T2_REFERENCE_DIGEST_JCS_CONVERGENCE_GAP_V1",
+    "status": "OPEN_NONBLOCKING_FOR_BOUNDED_EXACT_PYTHON_RUN_BUT_BLOCKING_FOR_PORTABLE_CANONICAL_HASH_CLAIMS",
+    "primary_spec": "RFC 8785",
+    "reuse_authority": "the artefact/MicroEntity/hcu/entry_canonicalization_v1.py",
+    "required_future_change": "Version the labeler identity schema so world/state/event/derivation/canonical-semantic-state hashes use the repository JCS implementation, or explicitly rename legacy hashes as Python-compact compatibility identities and prohibit their use as portable canonical provenance.",
+    "edge_regressions": [
+      "binary64 exponent/fixed rendering",
+      "signed-zero admission policy",
+      "UTF-16 property ordering",
+      "lone-surrogate rejection",
+      "exact I-JSON integer admission"
+    ]
+  },
+  "generation_decision": {
+    "new_positive_rows": 0,
+    "new_hard_negative_rows_admitted": 0,
+    "positive_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "decision": "NO_NEW_ROWS_WITH_REASON",
+    "reason": "A02 exact repository-bound execution is still unobserved and A03 replay-root plus downstream producer/OBSERVED/nuisance/tokenizer/actionability gates remain open. The refined receipt-parent rule changes evidence composition, not training-data authority."
+  },
+  "credits": {
+    "research_delta": 1,
+    "self_revision_delta": 1,
+    "positive_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "trigger2_a02_runtime_credit": 0,
+    "positive_jspace_causal_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0
+  },
+  "next_exact_action": "Do not create another execution request. Execute the already single exact-head A02 repository-bound request and preserve its outer receipt. On PASS, require all later A02 inner-receipt consumers to bind that outer receipt identity before any execution-authenticity promotion; then resolve A03 replay-root and remaining positive-row gates. Separately migrate/namespace v3 compact digests before making portable canonical-hash claims."
+}

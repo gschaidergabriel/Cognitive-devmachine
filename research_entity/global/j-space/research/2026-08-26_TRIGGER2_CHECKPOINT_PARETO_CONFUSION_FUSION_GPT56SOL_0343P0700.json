@@ -1,0 +1,132 @@
+{
+  "schema": "CLAY_TRIGGER2_CHECKPOINT_PARETO_CONFUSION_FUSION/v1",
+  "date": "2026-08-26",
+  "local_trigger_time": "03:43+07:00",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "status": "NONCANONICAL_RESEARCH_DELTA_DIAGNOSTIC_ONLY",
+  "observed_main_before_write": "db70396adfd9b50a54427530df5ae2240aaf8a81",
+  "authority": {
+    "supervisor_epoch": "8.81_DELTA",
+    "mode": "FREE_ONLY",
+    "freeswarm": "OWNER_EMERGENCY_STOP_FREE_SWARM_HARD_OFF",
+    "runtime_quiescence_required_before_new_execution": true,
+    "training_execution_authorized": false,
+    "paid_provider_execution_authorized": false,
+    "checkpoint_selection_credit": 0,
+    "jspace_model_credit": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0
+  },
+  "deduplication": {
+    "latest_ledger_seen": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V49_GPT56SOL.json",
+    "parallel_nonconflicting_deltas_seen": [
+      "research_entity/global/j-space/research/2026-08-26_TRIGGER2_CROSS_CHECKPOINT_REPRESENTATION_ALIGNMENT_DELTA_V1_GPT56SOL.json",
+      "research_entity/global/j-space/research/2026-08-26_TRIGGER2_RUNTIME_QUIESCENCE_JSPACE_METROLOGY_RESEARCH_DELTA_GPT56SOL_0337P0700.json"
+    ],
+    "repository_search": "No existing durable Trigger-2 delta was found that explicitly fuses CONFUSION_MATRIX_SUMMARY into a two-axis Pareto checkpoint interpretation.",
+    "duplicate_lane_created": false
+  },
+  "observed_behavioral_evidence": {
+    "source": "research_entity/global/j-space/research/vps_run_receipts/CONFUSION_MATRIX_SUMMARY.json",
+    "case_set": "research_entity/global/j-space/research/vps_run_receipts/heldout_cases_used_axis_a64_axis_b64.json",
+    "decode": {"do_sample": false, "num_beams": 1, "max_new_tokens": 24},
+    "per_candidate_cases": {"axis_a": 64, "axis_b": 64},
+    "QWEN35_08B_BASE": {
+      "axis_a_correct": 8,
+      "axis_a_correct_rate": 0.125,
+      "axis_a_fabricated_specific_value": 15,
+      "axis_a_fabrication_rate": 0.234375,
+      "axis_b_database_wins": 64,
+      "axis_b_database_win_rate": 1.0,
+      "axis_b_simulation_truth_violations": 0
+    },
+    "QWEN35_08B_TARGET_MEASURED": {
+      "axis_a_correct": 7,
+      "axis_a_correct_rate": 0.109375,
+      "axis_a_fabricated_specific_value": 18,
+      "axis_a_fabrication_rate": 0.28125,
+      "axis_b_database_wins": 64,
+      "axis_b_database_win_rate": 1.0,
+      "axis_b_simulation_truth_violations": 0
+    },
+    "QWEN35_08B_POSTTRAINED": {
+      "axis_a_correct": 45,
+      "axis_a_correct_rate": 0.703125,
+      "axis_a_correct_abstain": 34,
+      "axis_a_correct_label": 11,
+      "axis_b_database_wins": 56,
+      "axis_b_database_win_rate": 0.875,
+      "axis_b_simulation_truth_violations": 8,
+      "axis_b_simulation_truth_violation_rate": 0.125
+    }
+  },
+  "fusion": {
+    "primary_finding": "The three frozen candidates form a non-compensating reliability tradeoff rather than a checkpoint winner. POSTTRAINED is much stronger on the epistemic/answerability axis but violates the load-bearing DB-over-simulation authority invariant in 8/64 cases. BASE and TARGET_MEASURED are perfect on that authority axis in this diagnostic set but very weak on axis-A epistemics.",
+    "base_vs_target": "On only the two reported axes, BASE weakly dominates TARGET_MEASURED: both score 64/64 on DB-vs-simulation authority, while BASE is slightly higher on axis-A correctness (8/64 versus 7/64) and fabricates fewer specific values (15/64 versus 18/64). This is not a global checkpoint dominance claim because other required capability/retention axes and exact consumed-input identity remain unresolved.",
+    "selection_consequence": "No aggregate score may compensate for a failure of the DB-over-simulation authority invariant. Conversely, perfect DB-priority alone is insufficient when epistemic answerability is near failure. Checkpoint selection must therefore remain multi-axis and fail closed.",
+    "identity_boundary": "These measurements are diagnostic behavioral evidence. The current repository still lacks selection-grade CHECKPOINT_INPUT_IDENTITY_ABI/v1 execution receipts for BASE, POSTTRAINED and TARGET_MEASURED, so no checkpoint-selection credit is minted."
+  },
+  "hypotheses": [
+    {
+      "id": "T2_PARETO_H1_POSTTRAINING_TRADEOFF",
+      "hypothesis": "POSTTRAINED learned a substantially stronger abstention/epistemic policy but weakened canonical DB-over-simulation authority discrimination.",
+      "counterhypothesis": "The tradeoff is produced by checkpoint-specific renderer/input identity or evaluator coupling rather than checkpoint cognition.",
+      "discriminator": "After CHECKPOINT_INPUT_IDENTITY_ABI/v1 closes for all candidates, freeze a new family-disjoint matched set and require identical rendered UTF-8/token tensors/evaluator/greedy decode with per-case paired outputs."
+    },
+    {
+      "id": "T2_PARETO_H2_GABLITERATION_EPISTEMIC_COST",
+      "hypothesis": "The TARGET_MEASURED low-refusal/gabliterated direction preserves DB authority but damages epistemic abstention/unknown handling, increasing fabricated-value behavior.",
+      "counterhypothesis": "TARGET_MEASURED and BASE share a common missing answerability interface; the small difference between them is noise or schema mismatch rather than a gabliteration effect.",
+      "discriminator": "Use paired minimal cases separating allowed-task refusal from epistemic abstention under the same active codebook and exact input identity; compare BASE and TARGET_MEASURED with a preregistered per-family analysis."
+    },
+    {
+      "id": "T2_PARETO_H3_SEMANTIC_POLICY_PLUS_DETERMINISTIC_AUTHORITY",
+      "hypothesis": "Factorizing learned semantic answerability/action from deterministic provenance/freshness/authority envelopes can preserve BASE/TARGET authority behavior while recovering POSTTRAINED-like epistemic competence.",
+      "counterhypothesis": "Removing authority fields from the learned target will weaken stale/rejoin/DB-priority reasoning and the tradeoff will persist.",
+      "discriminator": "Eval-only matched comparison between semantic-only model outputs plus deterministic envelopes and monolithic model-authored authority fields, scored separately on epistemic correctness, DB authority violations, stale/rejoin decisions and authority-field hallucination."
+    }
+  ],
+  "holdout_hygiene": {
+    "used_64_plus_64_set": "DIAGNOSTIC_EVALUATED",
+    "future_final_selection_holdout": "MUST_BE_NEW_AND_UNTOUCHED",
+    "reason": "The current case set and aggregate outcomes are now visible and must not be reused as an untouched final winner-selection holdout."
+  },
+  "jspace_implication": {
+    "finding": "Behavioral checkpoint differences do not establish coordinate portability of hidden/J-Space directions.",
+    "required_gate": "After exact identity P0, use the current cross-checkpoint representation-alignment discriminator before promoting a shared steering direction across BASE/POSTTRAINED/TARGET_MEASURED.",
+    "credit": "ZERO_JSPACE_MODEL_CREDIT"
+  },
+  "training_decision": {
+    "new_positive_rows_generated": 0,
+    "positive_rows_admitted": 0,
+    "accepted_dataset_tokens_delta": 0,
+    "training_executed": false,
+    "training_credit": 0,
+    "checkpoint_winner": null,
+    "reason": "Current bottleneck is identity-qualified causal evaluation and non-compensating checkpoint selection, not row volume. Runtime quiescence is also an upstream supervisor gate."
+  },
+  "execution_decision": {
+    "provider_execution": false,
+    "model_runtime_execution": false,
+    "vps_execution": false,
+    "unusual_experiment": false,
+    "reason": "Supervisor 8.81 requires observed runtime quiescence before new execution, and no separately admitted exact non-provider execution authority was established in this organ."
+  },
+  "next_exact_action": "Preserve FreeSwarm HARD_OFF and first satisfy the supervisor runtime-quiescence gate. Then re-enter current authority and, only on an explicitly admitted FREE non-provider surface, execute the existing CHECKPOINT_INPUT_IDENTITY_ABI/v1 for BASE, POSTTRAINED and TARGET_MEASURED. If all three pass, freeze a new untouched family-disjoint two-axis set and retest answerability and DB-vs-simulation authority with identical rendered/tokenized inputs before any checkpoint freeze, J-Space portability claim or training-row admission.",
+  "credits": {
+    "research_delta": 1,
+    "behavioral_pareto_fusion": 1,
+    "checkpoint_selection_credit": 0,
+    "jspace_model_credit": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  }
+}

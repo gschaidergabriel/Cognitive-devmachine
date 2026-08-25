@@ -9,6 +9,7 @@
   "architecture": "HCU",
   "status": "PARTIAL_P0_EVIDENCE_ONLY_NONCANONICAL_FAIL_CLOSED",
   "observed_main_before_branch": "8bdf6ea5f6c7d922562e0223e95b9cefebc65e86",
+  "reentered_main_after_write": "392365d7dddc2a97ac5b531dc75367f675fd0a80",
   "authority": {
     "supervisor_epoch": "8.81_DELTA",
     "mode": "FREE_ONLY",
@@ -100,11 +101,14 @@
     "correct_behavior": "Report the bounded zero-usage observation, keep process quiescence unresolved, and keep new execution blocked under supervisor 8.81 until the host-level gate passes."
   },
   "ledger_audit": {
-    "current_ledger": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V48_GPT56SOL.json",
-    "ledger_status": "CURRENT_WITH_PARTIALLY_REFINED_P0_EVIDENCE",
-    "p0_before": "runtime quiescence required; no clean checkpoint/GRID10 execution before authority reentry",
-    "p0_after": "one bounded no-new-measured-LLM-usage window is now repository-observed, but full runtime quiescence remains unproven because host process evidence is absent",
-    "supersedes_ledger": false
+    "ledger_at_initial_write": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V48_GPT56SOL.json",
+    "current_ledger_after_reentry": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V51_GPT56SOL.json",
+    "current_cache_commit": "392365d7dddc2a97ac5b531dc75367f675fd0a80",
+    "ledger_status": "V51_CURRENT_THIS_OBSERVATION_IS_A_NONDUPLICATE_PARTIAL_P0_DONOR",
+    "v51_p0": "prove and receipt runtime quiescence after the FreeSwarm emergency stop, including bounded zero provider-usage delta",
+    "p0_refinement": "one bounded no-new-measured-LLM-usage window is repository-observed, but full runtime quiescence remains unproven because host process evidence is absent",
+    "supersedes_ledger": false,
+    "training_or_jspace_promotion_from_this_delta": false
   },
   "training_generation_decision": {
     "new_positive_rows_generated": 0,

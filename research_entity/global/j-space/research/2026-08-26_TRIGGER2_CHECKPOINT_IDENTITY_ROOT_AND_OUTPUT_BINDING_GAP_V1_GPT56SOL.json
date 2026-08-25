@@ -1,0 +1,119 @@
+{
+  "schema": "CLAY_TRIGGER2_CHECKPOINT_IDENTITY_ROOT_AND_OUTPUT_BINDING_GAP/v1",
+  "date": "2026-08-26",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "status": "CURRENT_RESEARCH_DELTA_NONPROMOTING_SUCCESSOR_DYNAMIC",
+  "authority_snapshot": {
+    "observed_main_before_write": "74d379503f5b3b4afe73d551a30de21ce7de5a68",
+    "supervisor_epoch": "8.81_DELTA",
+    "mode": "FREE_ONLY",
+    "freeswarm": "OWNER_EMERGENCY_STOP_FREE_SWARM_HARD_OFF",
+    "training_execution_authorized": false,
+    "paid_provider_execution_authorized": false,
+    "checkpoint_selection_credit": 0,
+    "jspace_model_credit": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0
+  },
+  "deduplication": {
+    "current_ledger": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V48_GPT56SOL.json",
+    "parallel_current_delta": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_CHECKPOINT_CONSUMPTION_ATTESTATION_GAP_V1_GPT56SOL.json",
+    "repository_search_result": "NO_EXISTING_EXACT_DELTA_FOUND_FOR_CALLER_SUPPLIED_IDENTITY_RECEIPT_ROOT_OF_TRUST_PLUS_FORWARD_OUTPUT_DIGEST_SCOPE",
+    "scope_separation": "The parallel consumption-attestation delta asks whether opened manifest-bound shards prove the exact loaded model state. This delta asks who authenticates the identity receipt used as the expected manifest and whether the observed forward is cryptographically bound to a specific output."
+  },
+  "observed_source": {
+    "probe": "tools/trigger2_qwen35_checkpoint_input_identity_probe_v1.py",
+    "blob_sha1_observed": "960783307dd2fe696f55884278715442624480d3",
+    "identity_root_observations": [
+      "parent mode accepts --identity-receipt as a caller-supplied path",
+      "the probe records identity_receipt_sha256 but does not compare it to an externally expected canonical receipt digest",
+      "the probe requires candidate_id equality and identity_complete=true, then treats file_manifest rows as the expected file hashes",
+      "_verify_manifest validates local files against the supplied file_manifest rows but does not independently authenticate those rows against a canonical registry inside this probe",
+      "file_manifest_sha256 is copied into checkpoint_bundle_identity but is not recomputed and checked by this probe"
+    ],
+    "forward_output_observations": [
+      "the child executes one torch.no_grad forward over the recorded input_ids and attention_mask",
+      "the receipt records logits shape and the last-position top1 token id",
+      "the probe does not record a cryptographic digest of the complete output tensor or a generated-output byte/token digest",
+      "the probe does not construct one model_call_id that seals expected identity-root digest + loaded-state identity + rendered/token input identity + output digest"
+    ],
+    "bounded_reclassification": "V1 is strong source machinery for opened-manifest-bound checkpoint/input eligibility. Its standalone PASS is not self-authenticating canonical checkpoint provenance unless a higher-level repository-bound runner pins the exact identity-receipt digest, and its forward evidence is occurrence/top1 evidence rather than full output-identity evidence."
+  },
+  "relation_to_v48": {
+    "v48_valid_delta": "V48 correctly avoids duplicating the existing CHECKPOINT_INPUT_IDENTITY_ABI/v1 source and withholds all runtime/selection/training credit.",
+    "v48_narrowing_required": "The phrase selection-grade consumed identity should remain conditional on an externally pinned identity root plus the separately identified loaded-model-state consumption gap. Full causal model-call lineage additionally requires output identity beyond top1 metadata.",
+    "does_not_require_throwing_away_v1": true
+  },
+  "hypothesis_fusion": {
+    "hypothesis": "A minimal repository-bound execution wrapper can preserve V1 and close the identity-root gap by pinning candidate_id + exact identity-receipt SHA-256 + probe source blob/commit + frozen local snapshot identity before execution. A separate v2 model-call receipt should add loaded-state reconciliation and output digest only where downstream checkpoint selection, J-Space causality or NODE_RESULT lineage needs complete call identity.",
+    "counterhypothesis": "If the existing future execution request already pins the exact committed identity-receipt file hash and a separate matched evaluator independently binds model outputs, modifying V1 itself would duplicate authority and unnecessarily couple checkpoint eligibility to downstream evaluation semantics.",
+    "decision_rule": "Do not redesign V1 until the exact repository-bound runner is inspected. Require the runner to carry the root-of-trust; only add an expected-receipt argument to V1 if no higher-level exact pin exists. Require full output digest only for scopes that claim exact model-call/output lineage, not merely that a forward occurred."
+  },
+  "fail_closed_negatives": [
+    {
+      "id": "IR-001_FORGED_SELF_CONSISTENT_IDENTITY_RECEIPT",
+      "construction": "Create a different local checkpoint bundle and a self-consistent caller-supplied identity receipt with candidate_id unchanged, identity_complete=true and manifest rows matching the substituted bundle.",
+      "required": "A credit-eligible repository-bound wrapper must reject because the identity-receipt digest/path is not the preregistered canonical pin, even if V1 local manifest checks pass."
+    },
+    {
+      "id": "IR-002_MANIFEST_DIGEST_FIELD_MUTATION",
+      "construction": "Mutate file_manifest_sha256 while leaving manifest rows/local files unchanged.",
+      "required": "Either recompute and reject inside the probe or make clear that the external canonical identity-receipt hash is the authority; copied metadata must not be treated as independently verified."
+    },
+    {
+      "id": "IR-003_RECEIPT_TRANSPLANT",
+      "construction": "Supply a valid identity receipt from a different admitted candidate or revision while attempting to preserve an expected candidate label through caller-controlled metadata.",
+      "required": "candidate/revision/root digest mismatch rejects before selection credit."
+    },
+    {
+      "id": "OUT-001_SAME_TOP1_DIFFERENT_LOGITS",
+      "construction": "Two forwards share shape and top1 token id but have different complete logits tensors.",
+      "required": "They must remain distinguishable whenever the claimed scope is exact model-output identity; top1 equality is not output identity."
+    },
+    {
+      "id": "OUT-002_OUTPUT_TRANSPLANT",
+      "construction": "Attach an output receipt from another checkpoint/input call with compatible shape/top1.",
+      "required": "A causal model-call receipt must reject unless output digest is sealed to exact input identity and exact consumed model-state identity."
+    }
+  ],
+  "recommended_contract_split": {
+    "CHECKPOINT_INPUT_IDENTITY_ABI_v1": "eligibility/input evidence: exact externally pinned identity receipt + manifest/opened-shard evidence + renderer/token tensor identity + observed forward occurrence",
+    "CHECKPOINT_MODEL_STATE_CONSUMPTION_ABI_v2": "loaded-state evidence: deterministic in-memory parameter/buffer state digest independently reconciled to admitted checkpoint identity",
+    "MODEL_CALL_LINEAGE_ABI_v1": "causal call evidence: exact runtime + externally authenticated checkpoint identity + consumed model-state digest + rendered/token input digest + complete declared output digest + call id",
+    "downstream_rule": "NODE_RESULT/J-Space/matched-evaluation receipts may reference MODEL_CALL_LINEAGE_ABI but model output never mints membership, freshness, DB, EffectGate or provider authority."
+  },
+  "execution_decision": {
+    "model_runtime_executed_this_delta": false,
+    "provider_execution_used": false,
+    "vps_execution_used": false,
+    "paid_execution_used": false,
+    "unusual_experiment_executed": false,
+    "reason": "This is deterministic source/provenance audit only. FreeSwarm remains owner-emergency-stop HARD OFF and no separately admitted model-runtime execution surface was invoked."
+  },
+  "training_decision": {
+    "new_positive_rows_generated": 0,
+    "positive_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "training_executed": false,
+    "training_credit": 0,
+    "checkpoint_winner": null
+  },
+  "credits": {
+    "research_delta": 1,
+    "identity_root_scope_delta": 1,
+    "output_binding_scope_delta": 1,
+    "checkpoint_input_identity_runtime_credit": 0,
+    "checkpoint_selection_credit": 0,
+    "jspace_model_credit": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  },
+  "next_exact_action": "Before any three-candidate CHECKPOINT_INPUT_IDENTITY_ABI execution, inspect or create exactly one repository-bound non-provider runner that pins the canonical identity-receipt SHA-256 for BASE, POSTTRAINED and TARGET_MEASURED plus exact probe source identity. Fuse that root with the parallel loaded-model-state consumption discriminator. Add full output digest/model_call_id only for the later matched-evaluation/J-Space/NODE_RESULT causal-lineage scope. Keep FreeSwarm HARD OFF, checkpoint winner null, accepted_dataset_tokens=0 and training credit=0."
+}

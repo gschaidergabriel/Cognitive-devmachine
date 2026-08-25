@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v4",
+  "command_id": "fr1-jspace06-llamacpp-eval-hooks",
+  "op": "exec",
+  "cwd": "/cache/clay-qwen06-native/llama.cpp",
+  "timeout_seconds": 180,
+  "command": "set -euo pipefail; echo llama_head=$(git rev-parse HEAD); echo '=== public/include candidates ==='; grep -RInE 'eval_callback|cb_eval|set_eval|tensor.*callback|get_embeddings_ith|get_embeddings_seq|set_adapter_cvec|cvec' include src common 2>/dev/null | head -n 220"
+}

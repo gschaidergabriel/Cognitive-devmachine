@@ -8,6 +8,12 @@ on:
       - 'free swarm/update_root_results.py'
       - 'tools/run_6000_free_swarm_supervisor.sh'
       - 'tools/activate_6000_free_swarm.sh'
+      - 'tools/run_6000_free_swarm_fast.py'
+      - 'tools/run_free_evidence_forge_safe.py'
+      - 'tools/run_free_evidence_forge_backfill.py'
+      - 'tools/free_swarm_historical_backfill.py'
+      - 'tools/free_swarm_backfill_scheduler.py'
+      - 'tests/test_free_swarm_historical_backfill.py'
   workflow_dispatch:
 
 permissions:
@@ -64,8 +70,6 @@ jobs:
           target="$(git -C "$LIVE" rev-parse origin/main)"
           dirty="$(git -C "$LIVE" status --porcelain=v1)"
           if [[ -n "$dirty" ]]; then
-            # Runtime dashboards are reproducible from /artifacts; never erase any
-            # other operator/developer edits in order to force a deployment.
             unknown_dirty="$(printf '%s\n' "$dirty" | grep -Ev '^[ MARC?]{2} (free swarm/(README.md|LIVE_METRICS.json|DISTILLERY_LIVE.json|FORGE_LIVE.json|SYSTEM_ANALYSIS_LIVE.json|FABRIC_6000_LIVE.json)|000_FREE_SWARM_LIVE_DASHBOARD.md)$' || true)"
             if [[ -n "$unknown_dirty" ]]; then
               python3 - <<PY > "$OUT/result.json"
@@ -93,16 +97,45 @@ jobs:
           fi
           after="$(git -C "$LIVE" rev-parse HEAD)"
 
+          # Root-cause regression gate: exhaustive historical replay/dedupe must
+          # pass before the producer fabric is restarted. This is local-only and
+          # credential-blind; failure leaves the old runtime stopped rather than
+          # silently resuming token production without conversion.
+          python3 -m pytest -q "$LIVE/tests/test_free_swarm_historical_backfill.py" \
+            > "$OUT/backfill-tests.log" 2>&1
+          python3 -m py_compile \
+            "$LIVE/tools/free_swarm_historical_backfill.py" \
+            "$LIVE/tools/free_swarm_backfill_scheduler.py" \
+            "$LIVE/tools/run_free_evidence_forge_backfill.py" \
+            "$LIVE/tools/run_free_evidence_forge_safe.py" \
+            "$LIVE/tools/run_6000_free_swarm_fast.py" \
+            > "$OUT/backfill-compile.log" 2>&1
+
           python3 "$LIVE/tools/free_provider_admission.py" --json > "$OUT/admission.json"
           bash "$LIVE/tools/activate_6000_free_swarm.sh" > "$OUT/activate.log" 2>&1
 
-          # Execute the reconciliation hook explicitly after the fresh supervisor
-          # launch as well as relying on the supervisor's own 15-second loop.
           python3 "$LIVE/free swarm/update_root_results.py" \
             --repo "$LIVE" --artifacts "$ART" > "$OUT/reconcile-first.log" 2>&1 || true
           sleep 20
           python3 "$LIVE/free swarm/update_root_results.py" \
             --repo "$LIVE" --artifacts "$ART" > "$OUT/reconcile-second.log" 2>&1 || true
+
+          # Capture backfill truth directly from the one Forge SQLite authority.
+          LIVE="$LIVE" ART="$ART" python3 - <<'PY' > "$OUT/backfill-status.json"
+          import json, os, sqlite3, sys
+          from pathlib import Path
+          live=Path(os.environ['LIVE']); art=Path(os.environ['ART'])
+          sys.path.insert(0,str(live/'tools'))
+          from free_swarm_historical_backfill import backfill_metrics
+          db=art/'forge/forge.sqlite3'
+          if not db.exists():
+              print(json.dumps({'schema':'CLAY_HISTORICAL_BACKFILL_RUNTIME/v1','status':'FORGE_DB_MISSING','runtime_credit':0},indent=2))
+          else:
+              con=sqlite3.connect(db,timeout=5)
+              try: m=backfill_metrics(con)
+              finally: con.close()
+              print(json.dumps({'schema':'CLAY_HISTORICAL_BACKFILL_RUNTIME/v1','status':'OBSERVED','metrics':m,'runtime_credit':'COMPONENT_BACKFILL_ONLY'},indent=2))
+          PY
 
           cp "$ART/RUNTIME_RECONCILIATION.json" "$OUT/runtime_reconciliation.json" 2>/dev/null || true
           cp "$ART/SUPERVISOR_6000.json" "$OUT/supervisor_6000.json" 2>/dev/null || true
@@ -120,6 +153,7 @@ jobs:
               except Exception:return {}
           rec=load('runtime_reconciliation.json')
           sysa=load('system_analysis.json')
+          bf=load('backfill-status.json')
           rt=sysa.get('runtime') or rec.get('runtime') or {}
           auth=rt.get('authority_alignment') or {}
           print(json.dumps({
@@ -133,12 +167,13 @@ jobs:
               'local_model':rt.get('local_model'),
               'authority_alignment':auth,
               'provider_admission':rt.get('provider_admission'),
+              'historical_backfill':bf,
               'actions':rec.get('actions'),
               'provider_secret_values_inspected':False,
               'paid_fallback_attempt_count':0,
               'together_used':False,
               'runtime_credit':0,
-              'credit_note':'Operational recovery evidence only. Provider/HCU/J-Space/training credit still requires exact execution receipts.',
+              'credit_note':'Operational recovery/backfill evidence only. Extracted candidates remain noncanonical and require Forge receipts.',
           },indent=2))
           PY
 
@@ -147,6 +182,7 @@ jobs:
         shell: bash
         run: |
           cat /tmp/clay-runtime-reconcile-871/result.json 2>/dev/null || true
+          cat /tmp/clay-runtime-reconcile-871/backfill-status.json 2>/dev/null || true
 
       - name: Upload sanitized recovery evidence
         if: always()
@@ -157,6 +193,9 @@ jobs:
             /tmp/clay-runtime-reconcile-871/preflight.json
             /tmp/clay-runtime-reconcile-871/result.json
             /tmp/clay-runtime-reconcile-871/admission.json
+            /tmp/clay-runtime-reconcile-871/backfill-status.json
+            /tmp/clay-runtime-reconcile-871/backfill-tests.log
+            /tmp/clay-runtime-reconcile-871/backfill-compile.log
             /tmp/clay-runtime-reconcile-871/runtime_reconciliation.json
             /tmp/clay-runtime-reconcile-871/supervisor_6000.json
             /tmp/clay-runtime-reconcile-871/supervisor_compat.json

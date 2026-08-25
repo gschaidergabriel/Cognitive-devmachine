@@ -1,0 +1,120 @@
+name: GO877 collective metrics freshness gate
+
+on:
+  issues:
+    types: [opened]
+
+permissions:
+  contents: write
+  issues: read
+
+jobs:
+  freshness:
+    if: github.repository == 'gschaidergabriel/clay-global-research-entity' && github.event.issue.title == '[CLAY-DISPATCH] collective metrics freshness' && github.event.issue.user.login == 'gschaidergabriel'
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 15
+    steps:
+      - name: Checkout exact candidate branch
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: gpt56sol/go877-collective-metrics-freshness-v2-20260825-0943
+          fetch-depth: 0
+          clean: true
+          persist-credentials: true
+
+      - name: Execute exact freshness regressions inside clay-direct-dev
+        shell: bash
+        run: |
+          set -euo pipefail
+          CANDIDATE_SHA="$(git rev-parse HEAD)"
+          INSIDE="/tmp/clay-go877-${GITHUB_RUN_ID}"
+          OUT="/tmp/clay-go877-${GITHUB_RUN_ID}.log"
+          RECEIPT="/tmp/clay-go877-${GITHUB_RUN_ID}.json"
+          runtime=''
+          mode=''
+
+          if command -v docker >/dev/null 2>&1 && docker inspect clay-direct-dev >/dev/null 2>&1; then
+            runtime='docker'; mode='direct'
+          elif command -v sudo >/dev/null 2>&1 && sudo -n docker inspect clay-direct-dev >/dev/null 2>&1; then
+            runtime='docker'; mode='sudo'
+          elif command -v podman >/dev/null 2>&1 && podman inspect clay-direct-dev >/dev/null 2>&1; then
+            runtime='podman'; mode='direct'
+          elif command -v sudo >/dev/null 2>&1 && sudo -n podman inspect clay-direct-dev >/dev/null 2>&1; then
+            runtime='podman'; mode='sudo'
+          elif command -v incus >/dev/null 2>&1 && incus info clay-direct-dev >/dev/null 2>&1; then
+            runtime='incus'; mode='direct'
+          elif command -v lxc >/dev/null 2>&1 && lxc info clay-direct-dev >/dev/null 2>&1; then
+            runtime='lxc'; mode='direct'
+          else
+            echo 'CLAY_GO877=BLOCKED_SANDBOX_NOT_DISCOVERED' | tee "$OUT"
+            exit 72
+          fi
+
+          exec_container() {
+            if [[ "$runtime" == docker || "$runtime" == podman ]]; then
+              if [[ "$mode" == sudo ]]; then sudo -n "$runtime" exec clay-direct-dev "$@"; else "$runtime" exec clay-direct-dev "$@"; fi
+            else
+              "$runtime" exec clay-direct-dev -- "$@"
+            fi
+          }
+
+          copy_tree() {
+            if [[ "$runtime" == docker || "$runtime" == podman ]]; then
+              exec_container sh -lc "rm -rf '$INSIDE' && mkdir -p '$INSIDE'"
+              if [[ "$mode" == sudo ]]; then sudo -n "$runtime" cp "$GITHUB_WORKSPACE/." "clay-direct-dev:$INSIDE/"; else "$runtime" cp "$GITHUB_WORKSPACE/." "clay-direct-dev:$INSIDE/"; fi
+            else
+              exec_container sh -lc "rm -rf '$INSIDE' && mkdir -p '$INSIDE'"
+              tar -C "$GITHUB_WORKSPACE" -cf - . | "$runtime" exec clay-direct-dev -- sh -lc "tar -C '$INSIDE' -xf -"
+            fi
+          }
+
+          cleanup() { exec_container sh -lc "rm -rf '$INSIDE'" >/dev/null 2>&1 || true; }
+          trap cleanup EXIT
+          copy_tree
+
+          set +e
+          exec_container sh -lc "set -eu; cd '$INSIDE'; python3 -m unittest tests.test_go_collective_metrics_v1 tests.test_go_collective_metrics_freshness_v1" >"$OUT" 2>&1
+          RC=$?
+          set -e
+          cat "$OUT"
+
+          RUNTIME="$runtime" MODE="$mode" RC="$RC" CANDIDATE_SHA="$CANDIDATE_SHA" OUT="$OUT" python3 - <<'PY' > "$RECEIPT"
+          import datetime, hashlib, json, os, pathlib, platform
+          log = pathlib.Path(os.environ['OUT']).read_bytes()
+          print(json.dumps({
+              'schema':'COLLECTIVE_METRICS_FRESHNESS_RECEIPT/v1',
+              'generated_at':datetime.datetime.now(datetime.timezone.utc).isoformat(),
+              'candidate_sha':os.environ['CANDIDATE_SHA'],
+              'transport':'SELF_HOSTED_LINUX_X64_TO_CLAY_DIRECT_DEV',
+              'sandbox':'clay-direct-dev',
+              'container_runtime':os.environ['RUNTIME'],
+              'runtime_mode':os.environ['MODE'],
+              'host_platform':platform.platform(),
+              'command':'python3 -m unittest tests.test_go_collective_metrics_v1 tests.test_go_collective_metrics_freshness_v1',
+              'exit_status':int(os.environ['RC']),
+              'test_log_sha256':hashlib.sha256(log).hexdigest(),
+              'status':'PASS' if int(os.environ['RC']) == 0 else 'FAIL',
+              'secret_values_recorded':False,
+              'provider_calls_performed':0,
+              'runtime_credit_added':0,
+              'scope':'COLLECTIVE_METRICS_FRESHNESS_AND_ORDERING_COMPONENT_ONLY',
+              'whole_entityos_hcu_credit':0,
+          }, indent=2, sort_keys=True))
+          PY
+
+          mkdir -p /tmp/clay-go877-main
+          rm -rf /tmp/clay-go877-main/* /tmp/clay-go877-main/.git 2>/dev/null || true
+          git clone --no-checkout "${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}.git" /tmp/clay-go877-main
+          git -C /tmp/clay-go877-main checkout main
+          mkdir -p /tmp/clay-go877-main/research_entity/continuity/receipts
+          cp "$RECEIPT" "/tmp/clay-go877-main/research_entity/continuity/receipts/2026-08-25_GO877_COLLECTIVE_METRICS_FRESHNESS_${GITHUB_RUN_ID}.json"
+          git -C /tmp/clay-go877-main config user.name 'clay-go877-runner'
+          git -C /tmp/clay-go877-main config user.email 'clay-go877-runner@users.noreply.github.com'
+          git -C /tmp/clay-go877-main add research_entity/continuity/receipts/
+          git -C /tmp/clay-go877-main commit -m "evidence(metrics): GO877 freshness ${GITHUB_RUN_ID} [skip ci]"
+          for attempt in 1 2 3 4 5; do
+            git -C /tmp/clay-go877-main pull --rebase origin main && git -C /tmp/clay-go877-main push origin HEAD:main && break
+            sleep $((attempt * 2))
+          done
+
+          exit "$RC"

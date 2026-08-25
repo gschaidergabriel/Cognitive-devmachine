@@ -1,0 +1,27 @@
+{
+  "schema": "ENTITYOS_HCU_SOURCE_REVIEW_RECEIPT/v1",
+  "date": "2026-08-25",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "authority_epoch": "8.78",
+  "execution_mode": "FREE_ONLY",
+  "canonical_main_observed": "7e00fa055c03fc76b0cedc2d3ad1b3466d271d13",
+  "review_target": "gschaidergabriel/clay-global-research-entity#1966",
+  "review_target_head_observed": "6bb6af60010968e9bd97f21cf80e66ca5cdffe28",
+  "source_blockers": [
+    "publish_delta does not recompute or validate lease_id, allowing structurally forged current-state lease objects",
+    "NODE_RESULT emission is not bound to boot.selected_task_id and current-result validation does not recompute result identity",
+    "coordinator healthy/load values are carried by candidate NodeDescriptor instead of separately admitted runtime-status authority",
+    "local json.dumps canonicalizer duplicates the retained HCU RFC8785/JCS identity authority",
+    "snapshot/lease/result identities lack generation and policy binding plus previous-snapshot commit chain",
+    "process-local mutable S1 has no multi-process atomic persistence/CAS or crash/rejoin evidence"
+  ],
+  "coordination_comment_id": 5406617331,
+  "request_changes_review_attempt": "GITHUB_REJECTED_422_SELF_REVIEW_NOT_PERMITTED",
+  "evidence_class": "SOURCE_REVIEW_ONLY",
+  "runtime_credit_delta": 0,
+  "jspace_model_credit_delta": 0,
+  "training_credit_delta": 0,
+  "whole_product_credit_delta": 0,
+  "next_exact_gate": "Fuse one implementation using retained HCU JCS plus digest-validated selection/result/lease, separately trusted runtime health/load authority, generation/policy/snapshot-chain binding, scoped S1 writes, then exact-source persistence/concurrency/crash-rejoin tests."
+}

@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
-"""Generate preregistration-grade cross-task structural J-Space cases.
+"""Generate a cross-task structural J-Space successor caseset.
 
 Execution-free. Semantic class stays evaluator-side. Model prompts contain only
 opaque formal demonstrations and probes. The design is exactly factorial in
 semantic target x opaque output code x query polarity, with independent
-replication and task-family separation.
+replication and task-family separation. Source-level prompt length is matched
+across semantic targets inside every code x polarity x replicate stratum;
+exact tokenizer/last-token-position equality remains a runtime fail-closed gate.
 """
 from __future__ import annotations
 import argparse, hashlib, json, re
@@ -53,50 +55,62 @@ def _bank(prefix: str, family: str, replicate: int) -> list[str]:
 
 
 def _imp(target: str, pol: int, z: list[str]) -> str:
-    a,b,c,d = z[:4]; q=c; nq=f"!{c}"; ask=nq if pol else q
-    if target == "AFFIRMATIVE": body=f"{a};{a}>{b};{b}>{'!'+c if pol else c}"
-    elif target == "NEGATIVE": body=f"{a};{a}>{b};{b}>{c if pol else '!'+c}"
-    else: body=f"{a};{a}>{b};{d}"
+    a,b,c,d,e = z[:5]
+    ask = f"{a}>{c}" if not pol else f"{c}>{a}"
+    aff = f"{a}>{b};{b}>{c};{d}>{e}" if not pol else f"{c}>{b};{b}>{a};{d}>{e}"
+    neg = f"{c}>{b};{b}>{a};{d}>{e}" if not pol else f"{a}>{b};{b}>{c};{d}>{e}"
+    neu = f"{a}>{b};{d}>{c};{d}>{e}"
+    body = aff if target == "AFFIRMATIVE" else neg if target == "NEGATIVE" else neu
     return f"{{{body}?{ask}}}"
 
 
 def _temp(target: str, pol: int, z: list[str]) -> str:
-    a,b,c,d = z[:4]; q=f"{a}<{c}"; nq=f"!({q})"; ask=nq if pol else q
-    if target == "AFFIRMATIVE": body=f"{a}<{b};{b}<{c}" if not pol else f"{c}<{b};{b}<{a}"
-    elif target == "NEGATIVE": body=f"{c}<{b};{b}<{a}" if not pol else f"{a}<{b};{b}<{c}"
-    else: body=f"{a}<{b};{d}<{c}"
+    a,b,c,d,e = z[:5]
+    ask = f"{a}<{c}" if not pol else f"{c}<{a}"
+    aff = f"{a}<{b};{b}<{c};{d}<{e}" if not pol else f"{c}<{b};{b}<{a};{d}<{e}"
+    neg = f"{c}<{b};{b}<{a};{d}<{e}" if not pol else f"{a}<{b};{b}<{c};{d}<{e}"
+    neu = f"{a}<{b};{d}<{c};{d}<{e}"
+    body = aff if target == "AFFIRMATIVE" else neg if target == "NEGATIVE" else neu
     return f"[{body}??{ask}]"
 
 
 def _set(target: str, pol: int, z: list[str]) -> str:
-    e,s,t,u = z[:4]; q=f"{e}@{t}"; nq=f"!{q}"; ask=nq if pol else q
-    if target == "AFFIRMATIVE": body=f"{e}@{s};{s}^{t}" if not pol else f"!{e}@{s};{s}^{t}"
-    elif target == "NEGATIVE": body=f"!{e}@{s};{s}^{t}" if not pol else f"{e}@{s};{s}^{t}"
-    else: body=f"{e}@{s};{s}^{u}"
+    e,s,t,u = z[:4]
+    ask = f"{e}@{t}" if not pol else f"{e}#{t}"
+    aff = f"{e}@{s};{s}^{t}" if not pol else f"{e}@{s};{s}%{t}"
+    neg = f"{e}@{s};{s}%{t}" if not pol else f"{e}@{s};{s}^{t}"
+    neu = f"{e}@{s};{s}^{u}"
+    body = aff if target == "AFFIRMATIVE" else neg if target == "NEGATIVE" else neu
     return f"<{body}::{ask}>"
 
 
 def _route(target: str, pol: int, z: list[str]) -> str:
-    a,b,c,d = z[:4]; q=f"{a}~{c}"; nq=f"!{q}"; ask=nq if pol else q
-    if target == "AFFIRMATIVE": body=f"{a}~{b};{b}~{c}" if not pol else f"{c}~{b};{b}~{a}"
-    elif target == "NEGATIVE": body=f"{c}~{b};{b}~{a}" if not pol else f"{a}~{b};{b}~{c}"
-    else: body=f"{a}~{b};{d}~{c}"
+    a,b,c,d,e = z[:5]
+    ask = f"{a}~{c}" if not pol else f"{c}~{a}"
+    aff = f"{a}~{b};{b}~{c};{d}~{e}" if not pol else f"{c}~{b};{b}~{a};{d}~{e}"
+    neg = f"{c}~{b};{b}~{a};{d}~{e}" if not pol else f"{a}~{b};{b}~{c};{d}~{e}"
+    neu = f"{a}~{b};{d}~{c};{d}~{e}"
+    body = aff if target == "AFFIRMATIVE" else neg if target == "NEGATIVE" else neu
     return f"({body}|?{ask})"
 
 
 def _inherit(target: str, pol: int, z: list[str]) -> str:
-    e,a,b,c = z[:4]; q=f"{e}:{b}"; nq=f"!{q}"; ask=nq if pol else q
-    if target == "AFFIRMATIVE": body=f"{e}:{a};{a}/{b}" if not pol else f"!{e}:{a};{a}/{b}"
-    elif target == "NEGATIVE": body=f"!{e}:{a};{a}/{b}" if not pol else f"{e}:{a};{a}/{b}"
-    else: body=f"{e}:{a};{a}/{c}"
+    e,a,b,c = z[:4]
+    ask = f"{e}:{b}" if not pol else f"{e}#{b}"
+    aff = f"{e}/{a};{a}:{b}" if not pol else f"{e}/{a};{a}#{b}"
+    neg = f"{e}/{a};{a}#{b}" if not pol else f"{e}/{a};{a}:{b}"
+    neu = f"{e}/{a};{a}:{c}"
+    body = aff if target == "AFFIRMATIVE" else neg if target == "NEGATIVE" else neu
     return f"%{body}%{ask}%"
 
 
 def _balance(target: str, pol: int, z: list[str]) -> str:
-    a,b,c,d = z[:4]; q=f"{a}={c}"; nq=f"!{q}"; ask=nq if pol else q
-    if target == "AFFIRMATIVE": body=f"{a}={b};{b}={c}" if not pol else f"{a}!={b};{b}={c}"
-    elif target == "NEGATIVE": body=f"{a}!={b};{b}={c}" if not pol else f"{a}={b};{b}={c}"
-    else: body=f"{a}={b};{d}={c}"
+    a,b,c,d = z[:4]
+    ask = f"{a}={c}" if not pol else f"{a}#{c}"
+    aff = f"{a}={b};{b}={c}" if not pol else f"{a}={b};{b}#{c}"
+    neg = f"{a}={b};{b}#{c}" if not pol else f"{a}={b};{b}={c}"
+    neu = f"{a}={b};{d}={c}"
+    body = aff if target == "AFFIRMATIVE" else neg if target == "NEGATIVE" else neu
     return f"${body}$?${ask}$"
 
 
@@ -107,7 +121,8 @@ RENDERERS: dict[str, Callable[[str,int,list[str]],str]] = {
 
 
 def _demo(mapping: dict[str,str], family: str, prefix: str, rep: int) -> str:
-    render=RENDERERS[family]; chunks=[]
+    render=RENDERERS[family]
+    chunks=[]
     for i,t in enumerate(TARGETS):
         pol=(i+rep)%2
         z=_bank(prefix+"dm", family, rep+i)
@@ -139,18 +154,29 @@ def build_family(split: str, family: str) -> dict[str,Any]:
          cid=f"{split.lower()}-{family.lower()}-t{ti}-c{ci}-p{pol}-r{rep}"
          cases.append({
            "schema":CASE_SCHEMA,"case_id":cid,"split":split,"task_family":family,
-           "semantic_target":target,"output_code_identity":code,"probe_query_negated":bool(pol),
+           "semantic_target":target,"output_code_identity":code,
+           "probe_query_negated":bool(pol),"probe_query_polarity":"COMPLEMENT" if pol else "PRIMARY",
            "replicate":rep,"polarity_pair_id":f"{split.lower()}-{family.lower()}-t{ti}-c{ci}-r{rep}",
-           "prompt":prompt,"prompt_sha256":_psha(prompt),"codebook":mapping,
-           "model_facing_explicit_semantic_labels":False,
+           "prompt":prompt,"prompt_sha256":_psha(prompt),"prompt_utf8_bytes":len(prompt.encode("utf-8")),
+           "codebook":mapping,"model_facing_explicit_semantic_labels":False,
          })
     cells={}
+    strata={}
     for c in cases:
       k=(c["semantic_target"],c["output_code_identity"],c["probe_query_negated"])
       cells[k]=cells.get(k,0)+1
+      sk=(c["output_code_identity"],c["probe_query_negated"],c["replicate"])
+      strata.setdefault(sk,{})[c["semantic_target"]]=c["prompt_utf8_bytes"]
     expected={(t,c,bool(p)) for t in TARGETS for c in CODES for p in POLARITIES}
     assert set(cells)==expected and set(cells.values())=={len(REPLICATES)}, cells
-    return {"task_family":family,"split":split,"case_count":len(cases),"cell_counts":{"|".join(map(str,k)):v for k,v in sorted(cells.items())},"cases":cases}
+    if any(len(set(v.values())) != 1 for v in strata.values()):
+        raise AssertionError("TARGET_SURFACE_LENGTH_NOT_MATCHED")
+    return {
+        "task_family":family,"split":split,"case_count":len(cases),
+        "cell_counts":{"|".join(map(str,k)):v for k,v in sorted(cells.items())},
+        "target_surface_length_matched_within_code_polarity_replicate":True,
+        "cases":cases,
+    }
 
 
 def build_bundle() -> dict[str,Any]:
@@ -171,9 +197,14 @@ def build_bundle() -> dict[str,Any]:
         "cases_per_family":len(TARGETS)*len(CODES)*len(POLARITIES)*len(REPLICATES),
         "calibration_task_families":list(CAL_FAMILIES),"holdout_task_families":list(HOLD_FAMILIES),
         "semantic_target_model_facing":False,"gain_selection_on_holdout":False,
+        "source_level_target_surface_length_matching":True,
+        "exact_tokenizer_position_gate_required_before_runtime_promotion":True,
       },
       "calibration":cal,"holdout":hold,
-      "lexical_disjointness":{"content_overlap":overlap,"pass":not overlap,"calibration_vocab_sha256":_sha(sorted(cal_vocab)),"holdout_vocab_sha256":_sha(sorted(hold_vocab))},
+      "lexical_disjointness":{
+        "content_overlap":overlap,"pass":not overlap,
+        "calibration_vocab_sha256":_sha(sorted(cal_vocab)),"holdout_vocab_sha256":_sha(sorted(hold_vocab)),
+      },
       "runtime_credit_minted":False,"holdout_opened_by_generator":False,"model_executed":False,
     }
     out["bundle_sha256"]=_sha(out)

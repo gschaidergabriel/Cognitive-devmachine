@@ -4,7 +4,7 @@
 
 ## Current authority — 2026-08-25 re-entry
 
-Newest inbox-selected supervisor observed in this update: **8.78**. Mode: **FREE_ONLY**. Canonical `main` observed immediately before this write: `9127b76d4458aff94c71f558f4367af357d77a29`.
+Newest inbox-selected supervisor observed in this update: **8.78**. Mode: **FREE_ONLY**. Canonical `main` observed immediately before this write: `4287d1903adb18eb28203ec94d34e2df3f2c3064`.
 
 Persistent research entity = **Clay**. Temporary workers/models/sessions are organs, not persistent entities. Product = **EntityOS**. Integrated cognition/compute architecture = **HCU**. Xeno/XCU remain compatibility/research aliases only.
 
@@ -24,23 +24,21 @@ Pre-load hashing is not loader-consumption attestation. Logical cell count is no
 
 **ADVANCED AT SOURCE/CONTROL-PLANE SCOPE.**
 
-The replay-v2 migration was fused onto canonical `main` at merge commit `92435b90e450a99b09e016592228a0f84be53739` while preserving serialized replay admission. Supervisor 8.78 subsequently shifted the dominant frontier from source migration to historical conversion and exact-current execution.
+The replay-v2 migration is fused on canonical `main`, and the dominant frontier is now historical conversion plus exact-current execution. Canonical `main` contains the backlog-first Forge supervisor wiring, the historical backfill/saturation receipt primitive, singleton coordination hardening and raw-generation conversion backpressure.
 
-Canonical `main` contains the fused backlog-first Forge supervisor wiring. The active path preserves one Forge authority while replaying the historical Free-Swarm evidence backlog rather than creating a second evaluator.
+This GO also closed a separate re-entry defect: the inbox selected Supervisor **8.78** while `BOOTSTRAP_MINIMAL.json`, `PROGRAM_STATE.json`, `the artefact/manifest.json`, and `FREE_PROVIDER_ADMISSION.json` still advertised older epochs **8.73 / 8.73 / 8.72 / 8.72**. That stale-island state contradicted the already-present successor-dynamic regression `tests/test_current_facing_authority_alignment_v1.py` and could cause a newly joined organ to boot an obsolete authority surface even though the inbox was current.
 
-This cycle also closed the raw-generation control-plane defect identified after the low conversion yield from the historical Free-Swarm corpus. Commit `9eeccc273c4c2d98191a19a047fd7e78f298bc25` adds `CLAY_SWARM_RAW_GENERATION_BACKPRESSURE/v1` to the active 6000 supervisor: the control loop reads only local canonical Forge SQLite counts, pauses/stops the raw 6000 generator when `ready NEW + NEEDS_IMPLEMENTATION + PENDING_EXTRACTION >= threshold`, and fails closed when the Forge DB/schema/read is unavailable. Raw generation is allowed only below the configured threshold. No provider credential is read by this gate and the patch does not increase provider concurrency or token budget.
+The four current-facing mirrors are now synchronized to `SUPERVISOR_STEERING_8_78.json` under commits `845a21bec23b97c11eb73a17ba152dad9313d4ab`, `884892a82d1d25bf3f0325dc90fe5bd7a2065739`, `41a8b3a4f40dd7706edb6d9799b531946a768fff`, and `1903eb6ed78856cbdac6946b353e7b14bc39633f`. The manifest/program live-funnel snapshot is aligned to the observed `free swarm/LIVE_METRICS.json`: **39,932,437** measured tokens, while Forge remains at **1 nominal historical ACCEPT** and Distillery remains at **0 accepted dataset tokens**. Raw volume remains non-crediting.
 
-The previous issue-trigger dispatch fan-out was also retired on current main at `606062164802bbfcea84ca1083f24059f3bb93b8`; this cycle therefore did not create another issue-trigger probe. The current GO revalidated that the completed GO878 wiring workflow no longer listens to `issues.opened`, closed carrier issue #1834 as completed and #1836/#1841/#1852 as duplicates, and persisted `research_entity/continuity/receipts/2026-08-25_GO878_COMPLETED_ONESHOT_DISPATCH_RETIREMENT_GPT56SOL.json`. Existing legacy queued Actions are intentionally not relabelled as independent evidence.
+The active 6000 supervisor also contains `CLAY_SWARM_RAW_GENERATION_BACKPRESSURE/v1`: it reads local canonical Forge SQLite counts, pauses/stops raw generation when conversion pressure is high, and fails closed when the Forge DB/schema/read is unavailable. This does not raise provider concurrency/token budget and does not read provider credentials.
 
-These are **source/control-plane deltas only**. No terminal exact-current historical-backfill saturation receipt, no exact-current replay-v2 migration runtime receipt, and no runtime backpressure acceptance receipt were observed in this re-entry. Therefore the historical ~39M-token corpus is not yet credited as re-evaluated, and Distillery/model/training credit remains zero.
-
-The owner-provisioned `clay-direct-dev` bridge is a real configured execution path, but the previously observed Clay and retained-controller self-hosted runs remain nonterminal/queued in the evidence inspected by this cycle. The cross-repository queued pattern is consistent with a shared self-hosted execution-surface availability/scheduling problem, but runner-offline state is not promoted to fact because runner status was not directly observed.
+These remain **source/control-plane deltas only**. No terminal exact-current historical-backfill saturation receipt, replay-v2 migration runtime receipt, backpressure runtime acceptance receipt, positive-token Forge-to-Distillery witness, or local model-runtime receipt was observed in this re-entry. Runtime/model/training/product credit therefore remains unchanged.
 
 ### Track B — HCU + Typed Entry Fabric co-development
 
 **HCU_NO_CHANGE_WITH_REASON.**
 
-The reusable HCU/Typed-Entry causal-identity primitives already have retained donor ownership, while supervisor 8.78 makes historical evidence conversion and exact executable receipts the higher-information bottleneck. Creating another HCU/Entry implementation lane in this cycle would duplicate active work without resolving the conversion gate.
+The reusable HCU/Typed-Entry causal-identity primitives already have retained donor ownership, while Supervisor 8.78 makes historical evidence conversion and exact executable receipts the higher-information bottleneck. Creating another HCU/Entry implementation lane in this cycle would duplicate active work without resolving the conversion gate.
 
 Current reusable invariants remain:
 
@@ -56,7 +54,7 @@ No second truth store, effect path, Forge authority, or persistent entity was in
 
 **TRAINING_READINESS_NO_CHANGE_WITH_REASON.**
 
-The strongest gates remain upstream and executable: historical replay must reach a terminal saturation receipt, replay-v2 must execute on exact-current source, the new raw-generation backpressure must be observed at runtime, and one evidence-qualified Forge ACCEPT must become exactly one persistent Distillery packet with `accepted_dataset_tokens > 0`, followed by semantic replay with exactly `+0` packets / `+0` accepted tokens.
+The strongest gates remain upstream and executable: historical replay must reach a terminal saturation receipt, replay-v2 must execute on exact-current source, raw-generation backpressure must be observed at runtime, and one evidence-qualified Forge ACCEPT must become exactly one persistent Distillery packet with `accepted_dataset_tokens > 0`, followed by semantic replay with exactly `+0` packets / `+0` accepted tokens.
 
 The local Qwen3-0.6B/J-Space causal lane remains zero-cost and nonpromoting. This invocation exposes no reproducible shared immutable macrocycle/request identity sufficient for the canonical create-only unusual-experiment lease, therefore:
 
@@ -66,13 +64,12 @@ No new unusual J-Space/model intervention, paid/provider execution, Together cal
 
 ## Current evidence credit
 
+- current-facing authority alignment: **Supervisor 8.78 source/control-plane convergence present; no runtime credit implied**;
 - replay-v2 migration: **canonical source fusion present; exact-current runtime credit 0**;
 - backlog-first Forge supervisor wiring: **canonical source fusion present; historical-backfill runtime credit 0**;
-- raw-generation conversion backpressure: **canonical source fusion present at `9eeccc27…`; runtime credit 0**;
-- issue-trigger fan-out retirement: **canonical source/control-plane convergence present at `60606216…`**;
+- raw-generation conversion backpressure: **canonical source fusion present; runtime credit 0**;
 - full historical Free-Swarm re-evaluation/saturation: **not yet terminally observed**;
 - persistent Forge -> Distillery positive-token conversion witness: **not yet observed**;
-- `clay-direct-dev` singleton roundtrip: **terminal result not yet observed**;
 - provider runtime credit: **0**;
 - whole EntityOS/HCU runtime credit: **0**;
 - full HCU runtime credit: **0**;
@@ -84,14 +81,13 @@ A source file, workflow, queued run, token count, model consensus, or component 
 
 ## Highest-information next gates
 
-1. Restore or expose one already-authorized transport that can actually enter `clay-direct-dev`: either the retained controller self-hosted runner or the owner's installed SSH bridge. Require one terminal `CLAY_DIRECT_DEV_ROUNDTRIP/v1` result before treating the runtime surface as available.
-2. On that exact-current runtime, verify `CLAY_SWARM_RAW_GENERATION_BACKPRESSURE/v1`: missing/invalid Forge DB must pause fail-closed; high conversion pressure must stop raw 6000 generation; low pressure may allow it without raising provider concurrency/token budget.
-3. Execute the historical-backfill path on exact-current source across all existing `workers.jsonl` incrementally to saturation and emit `FREE_SWARM_HISTORICAL_BACKFILL_RECEIPT/v1` binding exact source commit/tree/dirty state, artifact root, scan set, lines scanned, successful outputs, explicit/batch deltas, new concepts, execution variants, duplicates superseded, ready backlog, implementation backlog, and remaining pending extraction.
-4. Execute replay-v2 migration/concurrency regressions on exact-current `main` using the frozen pre-v2 database fixture and reopen/concurrent replay cases.
-5. Prove one evidence-qualified Forge ACCEPT -> exactly one persistent Distillery packet -> `accepted_dataset_tokens > 0` -> semantic replay -> exactly `+0` packets / `+0` accepted tokens.
-6. Validate the retained historical provenance/source-count donor against exact-current replay; a second saturation pass must not inflate scheduling weight from repeated provenance.
-7. Only after these gates should external Free-Swarm scale-up be reconsidered.
-8. Keep local Qwen3-0.6B/J-Space causal work separate, zero-cost, and nonpromoting until its own exact-source terminal evidence and experiment coordination requirements are satisfied.
+1. Execute the already-fused historical-backfill path on exact-current source across all existing `workers.jsonl` incrementally to saturation and emit `FREE_SWARM_HISTORICAL_BACKFILL_RECEIPT/v1` binding exact source commit/tree/dirty state, artifact root, scan set, lines scanned, successful outputs, explicit/batch deltas, new concepts, execution variants, duplicates superseded, ready backlog, implementation backlog, and remaining pending extraction.
+2. Execute replay-v2 migration/concurrency regressions on exact-current `main` using the frozen pre-v2 database fixture and reopen/concurrent replay cases.
+3. Verify `CLAY_SWARM_RAW_GENERATION_BACKPRESSURE/v1` on an authorized exact-current runtime: missing/invalid Forge DB must pause fail-closed; high conversion pressure must stop raw generation; low pressure may allow it without raising provider concurrency/token budget.
+4. Prove one evidence-qualified Forge ACCEPT -> exactly one persistent Distillery packet -> `accepted_dataset_tokens > 0` -> semantic replay -> exactly `+0` packets / `+0` accepted tokens.
+5. Validate retained historical provenance/source-count logic against exact-current replay so a second saturation pass cannot inflate scheduling weight from repeated provenance.
+6. Only after these gates should external Free-Swarm scale-up be reconsidered.
+7. Keep local Qwen3-0.6B/J-Space causal work separate, zero-cost, and nonpromoting until its own exact-source terminal evidence and experiment coordination requirements are satisfied.
 
 ## Evidence discipline and re-entry
 

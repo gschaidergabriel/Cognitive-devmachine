@@ -1,0 +1,95 @@
+{
+  "schema": "CLAY_FORSCHUNGSRUN_1_NATIVE_CVEC_TOKEN_SCOPE/v1",
+  "date": "2026-08-25",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "user_trigger": "forschungsrun 1",
+  "persistent_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "stage": "ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP",
+  "authority_epoch_observed": "8.78",
+  "execution_mode": "FREE_ONLY",
+  "canonical_main_observed_before_write": "e2fe24ff7b346cc17310be9f8c74fcc512fcc82a",
+  "scope": "QWEN3_0_6B_NATIVE_CVEC_INTERVENTION_SCOPE_EQUIVALENCE",
+  "observed_source": {
+    "pytorch_executor": {
+      "path": "tools/trigger1_local_qwen06_midlayer_causal_execute.py",
+      "blob_sha": "213a4551cde23762412fb30043118745e448ea34",
+      "intervention": "hidden[:, -1, :] = hidden[:, -1, :] + vector",
+      "scope": "LAST_TOKEN_ONLY_AT_SELECTED_BLOCK_OUTPUT"
+    },
+    "native_harness": {
+      "path": "tools/trigger1_native_llamacpp_cvec_logits.cpp",
+      "behavior": "passes the full prompt token batch to llama_decode after llama_set_adapter_cvec"
+    },
+    "pinned_llama_cpp": {
+      "commit": "bb4caa7540188872173c44d161602d9271386413",
+      "adapter_behavior": "llama_adapter_cvec::apply_to performs ggml_add(ctx, cur, layer_dir)",
+      "qwen3_behavior": "build_cvec(cur, il) is applied to the post-FFN residual tensor before the next transformer layer",
+      "ggml_behavior": "binary add permits the 1D source tensor to repeat/broadcast across higher dimensions of the layer tensor",
+      "native_scope_inference": "ALL_PROMPT_TOKEN_POSITIONS_PRESENT_IN_THE_DECODE_BATCH"
+    }
+  },
+  "finding": "The current native llama.cpp cvec path and the credited PyTorch forward-hook path are aligned in model family, hidden dimension, layer identity and additive residual direction, but they are not intervention-equivalent in token scope: PyTorch perturbs only the last token while native cvec broadcasts the layer vector across the prompt-token residual tensor.",
+  "epistemic_boundary": "A positive native cvec result may retain native model-specific causal component credit, but it must not be described as a strict replication of the PyTorch last-token intervention unless token-scope equivalence is separately demonstrated.",
+  "hypothesis": {
+    "id": "H1_SCOPE_INVARIANT",
+    "statement": "The selected internal direction is sufficiently robust that LAST_TOKEN_ONLY and ALL_PROMPT_TOKENS interventions preserve the same directional and matched-control specificity pattern."
+  },
+  "counterhypothesis": {
+    "id": "H0_SCOPE_MEDIATED_EFFECT",
+    "statement": "Native success depends materially on broadcasting the vector across earlier prompt-token states, so agreement with the PyTorch witness is mediated by a different intervention mechanism rather than strict carrier replication."
+  },
+  "cheapest_high_information_discriminator": {
+    "phase_0": "No new unusual experiment before canonical create-only atomic coordination.",
+    "matched_conditions": [
+      "PyTorch LAST_TOKEN_ONLY",
+      "PyTorch ALL_PROMPT_TOKENS",
+      "native llama.cpp ALL_PROMPT_TOKENS_CVEC"
+    ],
+    "freeze": [
+      "exact source model/checkpoint/tokenizer",
+      "exact GGUF and llama.cpp build/commit",
+      "basis vector identity",
+      "layer",
+      "gain",
+      "prompt/mapping families",
+      "six matched controls",
+      "metric and thresholds before holdout"
+    ],
+    "comparison_1": "PyTorch LAST_TOKEN_ONLY vs PyTorch ALL_PROMPT_TOKENS isolates token-scope effect without changing model weights/runtime family.",
+    "comparison_2": "PyTorch ALL_PROMPT_TOKENS vs native cvec isolates runtime/quantization/carrier transfer with intervention scope better matched.",
+    "classification_rule": "If comparison_1 materially diverges while comparison_2 agrees, classify native success as BROADCAST_SCOPE_CARRIER_REPLICATION, not LAST_TOKEN_INTERVENTION_REPLICATION."
+  },
+  "external_research_context": [
+    {
+      "source": "Rimsky et al., Steering Llama 2 via Contrastive Activation Addition, ACL 2024 / arXiv:2312.06681",
+      "relevance": "CAA explicitly treats where steering is added across token positions as part of the intervention design rather than a semantically irrelevant implementation detail."
+    },
+    {
+      "source": "Kang et al., Prompt-Activation Duality: Improving Activation Steering via Attention-Level Interventions, arXiv:2605.10664",
+      "relevance": "Shows that token-level steering and accumulation through stored states can materially alter long-horizon behavior, reinforcing that intervention scope must be bound in causal receipts."
+    },
+    {
+      "source": "Dang and Ngo, Selective Steering: Norm-Preserving Control Through Discriminative Layer Selection, Findings of ACL 2026",
+      "relevance": "Shows additive steering sensitivity to intervention geometry/layer norms, supporting stricter separation of carrier semantics from broad causal promotion."
+    }
+  ],
+  "coordination": {
+    "durable_issue": 1925,
+    "unusual_experiment_executed_by_this_organ": false,
+    "unusual_experiment_status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "Standalone research trigger exposes no canonical shared immutable macrocycle/request identity or successful create-only lease."
+  },
+  "credit_change": {
+    "new_runtime_credit": 0,
+    "existing_native_component_credit_revoked": false,
+    "jspace_model_runtime_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "training_credit": 0,
+    "canonical_semantics_promotion": false
+  },
+  "next_exact_action": "Add deterministic intervention-scope metadata/regressions to the native and PyTorch promotion receipts, then implement a PyTorch ALL_PROMPT_TOKENS matched carrier control; execute the three-way scope discriminator only after canonical atomic unusual-experiment coordination succeeds."
+}

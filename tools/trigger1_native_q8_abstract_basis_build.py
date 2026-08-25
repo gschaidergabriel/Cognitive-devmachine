@@ -1,0 +1,232 @@
+#!/usr/bin/env python3
+"""Build a native Q8 J-Space basis from the frozen abstract-relational calibration design.
+
+Unlike the predecessor basis builder, this source contains no approval/refusal/permission
+semantic prompts. It consumes exactly the six matched nonce-lexicon structural triplets
+frozen in trigger1_abstract_relational_design_v1.json, verifies their structural labels
+with trigger1_abstract_state_case_gate_v1, captures native Q8 layer-input-21 states with
+no intervention, resolves simplex rank, and emits target cvec geometry.
+
+This is calibration-only. It never opens the factorial holdout and never mints semantic,
+J-Space model-runtime, HCU, EntityOS, training, BASE or effect credit.
+"""
+from __future__ import annotations
+
+import argparse
+import datetime as dt
+import hashlib
+import json
+from pathlib import Path
+import subprocess
+from typing import Any
+
+import numpy as np
+
+from tools import trigger1_abstract_state_case_gate_v1 as abstract_gate
+from tools import trigger1_native_q8_jspace_basis_build as base
+
+SCHEMA = "CLAY_TRIGGER1_QWEN06_Q8_ABSTRACT_RELATIONAL_BASIS/v1"
+PACKET_SCHEMA = "JSPACE_NATIVE_Q8_ABSTRACT_RELATIONAL_BASIS/v1"
+
+
+def sha_file(path: Path) -> str:
+    h = hashlib.sha256()
+    with path.open("rb") as fh:
+        for chunk in iter(lambda: fh.read(8 * 1024 * 1024), b""):
+            h.update(chunk)
+    return h.hexdigest()
+
+
+def load_design(path: Path) -> tuple[dict[str, Any], list[dict[str, Any]], set[str]]:
+    design = json.loads(path.read_text(encoding="utf-8"))
+    if not isinstance(design, dict) or design.get("schema") != abstract_gate.DESIGN_SCHEMA:
+        raise RuntimeError("ABSTRACT_DESIGN_SCHEMA_INVALID")
+    declared = design.get("design_sha256")
+    core = {k: v for k, v in design.items() if k != "design_sha256"}
+    recomputed = base.canonical_sha(core)
+    if declared != recomputed:
+        raise RuntimeError("ABSTRACT_DESIGN_SHA256_MISMATCH")
+    failures: list[str] = []
+    lexicon = abstract_gate._check_basis(design, failures)
+    if failures:
+        raise RuntimeError("ABSTRACT_BASIS_DESIGN_INVALID:" + ",".join(sorted(set(failures))))
+    rows = design["basis_calibration"]["rows"]
+    joined = "\n".join(str(r["prompt"]) for r in rows).upper()
+    for forbidden in ("AFFIRMATIVE", "NEGATIVE", "NEUTRAL", "\nKEY ", " A=", " B=", " C="):
+        if forbidden in joined:
+            raise RuntimeError(f"ABSTRACT_BASIS_MODEL_FACING_LABEL_OR_CODE_LEAK:{forbidden}")
+    return design, rows, lexicon
+
+
+def main() -> int:
+    ap = argparse.ArgumentParser(description=__doc__)
+    ap.add_argument("--output-dir", required=True)
+    ap.add_argument("--llama-root", required=True)
+    ap.add_argument("--gguf", required=True)
+    ap.add_argument("--capture-harness", required=True)
+    ap.add_argument("--design-json", required=True)
+    args = ap.parse_args()
+
+    out = Path(args.output_dir).resolve()
+    out.mkdir(parents=True, exist_ok=True)
+    llama_root = Path(args.llama_root).resolve()
+    gguf = Path(args.gguf).resolve()
+    harness = Path(args.capture_harness).resolve()
+    design_path = Path(args.design_json).resolve()
+    result_path = out / "trigger1_native_q8_abstract_basis_result.json"
+    started = dt.datetime.now(dt.timezone.utc).isoformat()
+
+    source = {
+        "repo_head": subprocess.check_output(["git", "-C", str(base.ROOT), "rev-parse", "HEAD"], text=True, timeout=10).strip(),
+        "repo_tree": subprocess.check_output(["git", "-C", str(base.ROOT), "rev-parse", "HEAD^{tree}"], text=True, timeout=10).strip(),
+        "executor_sha256": sha_file(Path(__file__)),
+        "capture_harness_sha256": sha_file(harness),
+        "design_file_sha256": sha_file(design_path),
+    }
+
+    try:
+        actual_llama = subprocess.check_output(["git", "-C", str(llama_root), "rev-parse", "HEAD"], text=True, timeout=10).strip()
+        if actual_llama != base.LLAMA_CPP_COMMIT:
+            raise RuntimeError(f"LLAMA_CPP_COMMIT_MISMATCH:{actual_llama}")
+        actual_gguf = sha_file(gguf)
+        if actual_gguf != base.MODEL_GGUF_SHA256:
+            raise RuntimeError(f"GGUF_SHA256_MISMATCH:{actual_gguf}")
+
+        design, rows, payload_lexicon = load_design(design_path)
+        (out / "native-q8-abstract-basis-design.json").write_text(
+            json.dumps({
+                "schema": "CLAY_TRIGGER1_NATIVE_Q8_ABSTRACT_BASIS_DESIGN/v1",
+                "source_design_sha256": design["design_sha256"],
+                "matched_family_count": 6,
+                "rows": rows,
+                "payload_lexicon": sorted(payload_lexicon),
+                "model_facing_metadata_class_names_absent": True,
+                "model_facing_output_code_identities_absent": True,
+                "state_semantics": "STRUCTURAL_DIRECT_REVERSE_ABSENT",
+                "capture_layer_inp": base.NATIVE_STATE_LAYER_INP,
+                "corresponding_cvec_injection_layer": base.INJECTION_LAYER,
+            }, indent=2, sort_keys=True, ensure_ascii=False) + "\n",
+            encoding="utf-8",
+        )
+
+        header, observations = base.run_capture(
+            harness=harness, gguf=gguf, llama_root=llama_root, out=out, rows=rows
+        )
+        rank_payload = base.build_rank_payload(rows, observations)
+        rank_input_path = out / "native-q8-abstract-simplex-input.json"
+        rank_input_path.write_text(json.dumps(rank_payload, indent=2, sort_keys=True, ensure_ascii=False) + "\n", encoding="utf-8")
+        rank_result = base.ranker.analyze(rank_payload)
+        (out / "native-q8-abstract-simplex-rank.json").write_text(
+            json.dumps(rank_result, indent=2, sort_keys=True, ensure_ascii=False) + "\n", encoding="utf-8"
+        )
+        if rank_result.get("verdict") == "UNRESOLVED":
+            raise RuntimeError("ABSTRACT_NATIVE_Q8_SIMPLEX_RANK_UNRESOLVED")
+
+        geometry = base.native_geometry(rows, observations, rank_result)
+        cvec_dir = out / "native-q8-abstract-cvec-basis"
+        cvec_dir.mkdir(parents=True, exist_ok=True)
+        axis_receipts = {"H1": base.write_cvec(cvec_dir / "axis-h1.cvec.f32le", geometry["axis_h1"])}
+        if geometry["axis_h2"] is not None:
+            axis_receipts["H2"] = base.write_cvec(cvec_dir / "axis-h2.cvec.f32le", geometry["axis_h2"])
+        target_receipts = {
+            name: base.write_cvec(cvec_dir / f"target-{name.lower()}.cvec.f32le", geometry["geometry_vectors"][name])
+            for name in base.CLASSES
+        }
+
+        packet = {
+            "schema": PACKET_SCHEMA,
+            "carrier": "Qwen/Qwen3-0.6B-GGUF:Q8_0",
+            "gguf_sha256": actual_gguf,
+            "llama_cpp_commit": actual_llama,
+            "native_capture_harness_sha256": source["capture_harness_sha256"],
+            "source_design_sha256": design["design_sha256"],
+            "source_design_file_sha256": source["design_file_sha256"],
+            "rank_input_sha256": sha_file(rank_input_path),
+            "rank_analysis_receipt_sha256": rank_result["analysis_receipt_sha256"],
+            "dimension": base.N_EMBD,
+            "injection_layer": base.INJECTION_LAYER,
+            "native_state_layer_inp": base.NATIVE_STATE_LAYER_INP,
+            "rank": geometry["rank"],
+            "rank_verdict": geometry["rank_verdict"],
+            "basis_semantics": "equal-family within-family-centered native Q8 structural relational direct/reverse/absent geometry over six lexically matched nonce families",
+            "basis_payload_lexicon": sorted(payload_lexicon),
+            "target_variable_lexical_content": "STRUCTURAL_ONLY",
+            "model_facing_semantic_labels_absent": True,
+            "model_facing_output_code_identities_absent": True,
+            "axis_h1_sha256_f32le": base.vector_sha_f32(geometry["axis_h1"]),
+            "axis_h2_sha256_f32le": base.vector_sha_f32(geometry["axis_h2"]) if geometry["axis_h2"] is not None else None,
+            "semantic_coordinates": geometry["semantic_coordinates"],
+            "shared_geometry_scale": geometry["shared_geometry_scale"],
+            "target_vectors": {
+                name: {
+                    "vector_sha256_f32le": base.vector_sha_f32(geometry["geometry_vectors"][name]),
+                    "vector_l2": float(np.linalg.norm(geometry["geometry_vectors"][name])),
+                    "coordinates": geometry["semantic_coordinates"][name],
+                }
+                for name in base.CLASSES
+            },
+            "common_gain_required_for_actuation": True,
+            "gain_selected_here": False,
+            "holdout_opened": False,
+            "intervention_executed": False,
+        }
+        packet["basis_packet_sha256"] = base.canonical_sha(packet)
+        (out / "native-q8-abstract-jspace-basis.json").write_text(
+            json.dumps(packet, indent=2, sort_keys=True, ensure_ascii=False) + "\n", encoding="utf-8"
+        )
+
+        result = {
+            "schema": SCHEMA,
+            "status": "PASS_NATIVE_Q8_ABSTRACT_BASIS_READY_FOR_CALIBRATION",
+            "started_at": started,
+            "finished_at": dt.datetime.now(dt.timezone.utc).isoformat(),
+            "source": source,
+            "capture_header": header,
+            "source_design_sha256": design["design_sha256"],
+            "payload_lexicon": sorted(payload_lexicon),
+            "rank_analysis": rank_result,
+            "basis_packet": packet,
+            "axis_cvec_receipts": axis_receipts,
+            "target_cvec_receipts": target_receipts,
+            "holdout_opened": False,
+            "intervention_executed": False,
+            "canonical_credit_minted": False,
+            "jspace_model_runtime_credit": False,
+            "training_credit": False,
+            "whole_entityos_hcu_credit": False,
+            "evidence_boundary": "Calibration-only native Q8 abstract structural basis reconstruction. No factorial holdout is opened and no semantic/J-Space/HCU/EntityOS/training credit is minted.",
+        }
+        result["result_sha256"] = base.canonical_sha(result)
+        result_path.write_text(json.dumps(result, indent=2, sort_keys=True, ensure_ascii=False) + "\n", encoding="utf-8")
+        print(json.dumps({
+            "schema": SCHEMA,
+            "status": result["status"],
+            "rank": packet["rank"],
+            "rank_verdict": packet["rank_verdict"],
+            "basis_packet_sha256": packet["basis_packet_sha256"],
+            "result_sha256": result["result_sha256"],
+        }, sort_keys=True))
+        return 0
+    except Exception as exc:
+        blocked = {
+            "schema": SCHEMA,
+            "status": "BLOCKED_NATIVE_Q8_ABSTRACT_BASIS_BUILD",
+            "started_at": started,
+            "finished_at": dt.datetime.now(dt.timezone.utc).isoformat(),
+            "source": source,
+            "reason": f"{type(exc).__name__}:{str(exc)[:2000]}",
+            "holdout_opened": False,
+            "intervention_executed": False,
+            "canonical_credit_minted": False,
+            "jspace_model_runtime_credit": False,
+            "training_credit": False,
+            "whole_entityos_hcu_credit": False,
+        }
+        blocked["result_sha256"] = base.canonical_sha(blocked)
+        result_path.write_text(json.dumps(blocked, indent=2, sort_keys=True, ensure_ascii=False) + "\n", encoding="utf-8")
+        print(json.dumps({"schema": SCHEMA, "status": blocked["status"], "reason": blocked["reason"]}, sort_keys=True))
+        return 3
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

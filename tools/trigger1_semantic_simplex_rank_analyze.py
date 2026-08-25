@@ -215,7 +215,7 @@ def _signflip_test(
         p_value = extreme / float(total)
         mode = "EXACT_ALL_N_U_SIGN_FLIPS"
         samples = total
-        theoretical_min_p = 2.0 / float(total) if observed > 1e-12 else 1.0
+        theoretical_min_p = min(1.0, 2.0 / float(total))
     else:
         seed = int(payload_sha256[:16], 16)
         rng = np.random.default_rng(seed)
@@ -344,7 +344,8 @@ def analyze(payload: dict[str, Any]) -> dict[str, Any]:
         and min_lofo_cosine >= required_cosine
     )
     rank1_pass = (
-        h2_ratio <= rank1_max
+        not exact_underpowered
+        and h2_ratio <= rank1_max
         and all(float(row["h2_to_h1_ratio"]) <= rank1_max for row in lofo_rows)
         and float(signflip["p_value"]) > alpha
     )

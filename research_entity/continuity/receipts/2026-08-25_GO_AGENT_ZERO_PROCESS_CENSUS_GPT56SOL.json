@@ -7,19 +7,23 @@
   "product": "EntityOS",
   "architecture": "HCU_XENO_DYNAMIC_GRID",
   "canonical_base_main": "310289774c72bba3a8439a312a1f4d748e99bab8",
+  "reentry_main_after_writes": "89464586081bb88db2022675a84c678dfc24af48",
   "owner_target_commit": "72bc01e5562391528cd3a91c2851f77ad33ebf00",
   "owner_target": "UNBOUNDED_AGENT_ZERO_COGNITIVE_GRID",
   "authority_resolution": {
     "fixed_grid10_final_target": "SUPERSEDED",
     "grid10_allowed_role": "TEST_FIXTURE_BENCHMARK_DEBUG_ONLY",
-    "current_go_frontier": "AGENT_ZERO_PROCESS_CENSUS_THEN_COGNITIVE_PROCESS_ABI"
+    "current_go_frontier": "AGENT_ZERO_PROCESS_CENSUS_THEN_COGNITIVE_PROCESS_ABI",
+    "current_supervisor_schema": "8.78",
+    "current_supervisor_reentry_commit": "89464586081bb88db2022675a84c678dfc24af48"
   },
   "coordination": {
     "shared_immutable_macrocycle_id": null,
     "unusual_experiment_status": "COORDINATION_BLOCKED_ZERO_NEW_UNUSUAL_EXPERIMENTS",
     "new_unusual_experiments_run": 0,
-    "overlap_check": "NO_OPEN_PROCESS_CENSUS_PR_FOUND_AT_BRANCH_CREATION",
-    "runtime_donor_lanes": [1966, 1967]
+    "overlap_check": "NO_OPEN_PROCESS_CENSUS_PR_FOUND_AT_BRANCH_CREATION; PR1970_LATER_OPENED_ON_THIS_EXACT_BRANCH_AND_IS_THE_SINGLE_CENSUS_LANE",
+    "runtime_donor_lanes": [1966, 1967],
+    "census_lane": 1970
   },
   "work": {
     "process_count": 20,
@@ -67,14 +71,26 @@
   "go_tracks": {
     "track_a_entityos_executable_convergence": "ADVANCED_BY_FUNCTIONAL_AGENT_ZERO_PROCESS_CENSUS_AND_EXPLICIT_ACCEPTANCE_SPINE",
     "track_b_hcu_typed_entry_co_development": "ADVANCED_BY_PROCESS_DISTRIBUTION_STATE_AUTHORITY_AND_COORDINATOR_BOUNDARY_FIELDS_READY_FOR_ABI",
-    "track_c_jspace_gwt_training_readiness_free_only": "ADVANCED_BY_GRID_SIZE_INDEPENDENT_PROCESS_FAMILY_TARGETS_AND_EXPLICIT_DISTRIBUTED_GWT_JSPACE_GAPS_WITH_ZERO_MODEL_OR_TRAINING_CREDIT"
+    "track_c_jspace_gwt_training_readiness_free_only": "ADVANCED_BY_GRID_SIZE_INDEPENDENT_PROCESS_FAMILY_TARGETS_PLUS_PRESERVED_FROZEN_V1_NEGATIVE_COUNTEREVIDENCE; ZERO_MODEL_SEMANTICS_OR_TRAINING_PROMOTION_CREDIT"
+  },
+  "current_supervisor_negative_evidence": {
+    "source_commit": "89464586081bb88db2022675a84c678dfc24af48",
+    "frozen_v1_structural_native_discriminator": "EXECUTED",
+    "native_internal_state_actuation": "PASS_COMPONENT_MECHANISM",
+    "abstract_behavioral_discriminator": "FAIL",
+    "observed_summary": "baseline_and_matched_hit_rates_both_1_of_3; matched_mean_delta_negative; state_specific_causal_diagonal_negative",
+    "interpretation": "COUNTEREVIDENCE_AGAINST_SUFFICIENCY_OF_FROZEN_V1_SEMANTIC_VECTOR_CONTROLLER_AT_BOUND_IDENTITY_NOT_AGAINST_ALL_SUCCESSOR_JSPACE_CONTROLLERS",
+    "holdout_rule": "DO_NOT_RERUN_OR_RETUNE_FROZEN_V1_ON_ITS_HOLDOUT",
+    "successor_gate": "SEPARATELY_VERSION_AND_PREREGISTER_BEFORE_FRESH_HOLDOUT",
+    "promotion_credit": 0
   },
   "negative_evidence": [
     "PR1966 current hardening previously exposed adapter/boot API drift and forged-lease integration risks; no promotion credit granted",
     "PR1967 is retained as a coordination/authentication donor, not a competing canonical runtime lane",
     "fixed GRID10 final-target assumptions are stale after owner commit 72bc01e5562391528cd3a91c2851f77ad33ebf00",
-    "no end-to-end Agent Zero equivalence run was executed",
-    "no paid/provider/model/network experiment was executed"
+    "frozen Qwen3-0.6B structural native v1 produced internal-state actuation but failed its abstract behavioral discriminator; do not post-hoc retune on its holdout",
+    "no end-to-end Agent Zero equivalence run was executed by this organ",
+    "no paid/provider/model/network experiment was executed by this organ"
   ],
   "credits": {
     "whole_entityos_hcu_runtime": 0,

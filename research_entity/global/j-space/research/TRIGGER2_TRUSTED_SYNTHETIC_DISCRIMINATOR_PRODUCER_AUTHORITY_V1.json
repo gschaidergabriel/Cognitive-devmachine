@@ -1,0 +1,39 @@
+{
+  "schema": "CLAY_TRIGGER2_TRUSTED_SYNTHETIC_DISCRIMINATOR_PRODUCER_AUTHORITY/v1",
+  "status": "CURRENT_SOURCE_AUTHORITY_CANDIDATE_NONPROMOTING",
+  "purpose": "Pin one deterministic synthetic discriminator producer/policy for the bounded T2_GP_PILOT_DB_MATCH_V1 proof lane so admissible/executed/receipt identity are recomputed rather than trusted from candidate rows.",
+  "producer": {
+    "repo_path": "tools/trigger2_trusted_synthetic_discriminator_producer_v1.py",
+    "source_sha256": "c3d5cfdfc259f1832f8e3bbfcbcf2be5cd4a1aa1f52664a4272a7d8416fdf7c4",
+    "producer_schema_or_version": "CLAY_TRIGGER2_TRUSTED_SYNTHETIC_DISCRIMINATOR_PRODUCER/v1"
+  },
+  "policy": {
+    "schema": "CLAY_TRIGGER2_SYNTHETIC_DISCRIMINATOR_POLICY/v1",
+    "policy_id": "T2_SYNTHETIC_COMPLETE_COMPETITOR_DISCRIMINATOR/v1",
+    "required_epistemic_type": "SYNTHETIC_PROOF",
+    "require_test_declared_in_world": true,
+    "require_allowed_outcome": true,
+    "require_complete_live_pair_coverage": true,
+    "require_noncanonical_fences": true
+  },
+  "allowed_cases": {
+    "T2_GP_PILOT_DB_MATCH_V1": {
+      "world_id": "t2gp:world:db-match:v1",
+      "event_id": "t2gp:event:db-match:v1",
+      "test_id": "db_probe",
+      "epistemic_type": "SYNTHETIC_PROOF",
+      "world_sha256": "244a152921ea08fd66adc8430a1ff04dbd0318e994a45d9a11761858284282d9",
+      "state_before_sha256": "7b2248741a1d3f0c999cf4a1c9ce00ea92b4ce93d8585a611b8e65038576c83c",
+      "event_semantic_sha256": "918d0ba4911a42444e064eb5e40168aaa18da1cf84bf685324d5d5f34c3dd8c9",
+      "full_event_sha256": "372d48f2862401ecaaf1d9edcf4fc3eed99977f45ecc0bb7afd4414113360ad4",
+      "discriminator_spec_sha256": "e8beaca57d5190cf22c51dd545c823752bf7c3996b3dc5e7f1cd1b59dcebde93"
+    }
+  },
+  "authority_fences": {
+    "canonical_truth_allowed": false,
+    "direct_effect_authority": false,
+    "training_eligible": false,
+    "accepted_dataset_tokens_minted": 0,
+    "training_credit_minted": 0
+  }
+}

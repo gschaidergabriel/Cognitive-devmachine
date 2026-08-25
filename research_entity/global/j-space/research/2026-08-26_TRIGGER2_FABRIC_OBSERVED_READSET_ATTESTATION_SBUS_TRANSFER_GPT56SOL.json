@@ -1,0 +1,93 @@
+{
+  "schema": "CLAY_TRIGGER2_FABRIC_OBSERVED_READSET_ATTESTATION_TRANSFER/v1",
+  "date": "2026-08-26",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "status": "NONCANONICAL_RESEARCH_DELTA_CANDIDATE_ONLY",
+  "authority_epoch_observed": "8.81_DELTA",
+  "execution": {
+    "provider_or_model_execution": false,
+    "vps_execution": false,
+    "free_swarm_emergency_stop_preserved": true,
+    "paid_execution": false
+  },
+  "external_primary_method_evidence": [
+    {
+      "source": "S-Bus: Automatic Read-Set Reconstruction for Multi-Agent LLM State Coordination",
+      "authors": "Sajjad Khan",
+      "date": "2026-05-16",
+      "url": "https://arxiv.org/abs/2605.17076",
+      "classification": "EXTERNAL_PRIMARY_METHOD_EVIDENCE_NOT_CLAY_RUNTIME_EVIDENCE",
+      "relevant_claim": "S-Bus uses a server-side DeliveryLog of observed GET operations to reconstruct per-agent read sets at commit time rather than trusting agent self-report; its Observable-Read Isolation safety applies only to the observable read projection and explicitly preserves a hidden-read coverage boundary."
+    }
+  ],
+  "current_clay_gap": {
+    "id": "NODE_RESULT_CONSUMED_READ_IDENTITY_NOT_INDEPENDENTLY_OBSERVED",
+    "observation": "Current physical GRID10 source can bind process PID, barrier liveness, exact S1 generation/epoch/digest and immutable packet digest, while a self-authored packet/read receipt would still be weaker than an independently observed record of what bytes/read-set the producer actually consumed.",
+    "why_material": "A producer could in principle compute a payload from an unobserved/stale read and then emit internally consistent current metadata unless exact source/runtime instrumentation makes that impossible or independently observable."
+  },
+  "transfer_hypothesis": {
+    "name": "FABRIC_OBSERVED_READSET_LEDGER",
+    "claim": "Move consumed-read attestation out of NODE_RESULT self-report and into deterministic fabric/runtime observation. For every admitted ordinary-node read path, record the exact delivered snapshot/read-set identity before cognition; bind the resulting read_receipt_id to node membership identity, process identity and the eventual packet_digest at cohort admission.",
+    "candidate_fields": [
+      "read_receipt_id",
+      "source_membership_id",
+      "producer_process_identity",
+      "generation",
+      "state_epoch",
+      "state_digest",
+      "read_api_or_query_contract_id",
+      "ordered_read_object_or_row_digests",
+      "delivery_time_or_monotonic_sequence",
+      "producer_source_hash_or_runtime_identity",
+      "bound_result_packet_digest"
+    ],
+    "authority": "DETERMINISTIC_FABRIC_OBSERVATION_ONLY; model output cannot mint or edit the ledger"
+  },
+  "critical_difference_from_sbus": {
+    "sbus_topology": "HTTP-observable shared-state reads with explicitly incomplete hidden-read coverage in some workloads",
+    "clay_target": "A much narrower Typed Entry/S1 read ABI can aim to make every cognition-relevant admitted read traverse one deterministic observer, reducing or eliminating the hidden-read class for the bounded runtime contract.",
+    "warning": "If ordinary Xeno code retains unrestricted direct SQLite/file/memory access outside the observed ABI, unobserved reads remain possible and FABRIC_OBSERVED_READSET_LEDGER must report PARTIAL_COVERAGE rather than full consumed-input attestation."
+  },
+  "design_options": [
+    {
+      "name": "OBSERVED_READ_FACADE",
+      "mechanism": "Serve all allowed S1 snapshot/read operations through one deterministic read facade that logs exact returned object/row digests; NODE_RESULT receives only a read_receipt_id and cannot invent its contents.",
+      "strength": "Strongest clean authority separation if direct bypass is prevented by the runtime capability boundary.",
+      "cost": "Changes current direct-read process path and requires a bypass-negative test."
+    },
+    {
+      "name": "SOURCE_BOUND_SQLITE_READ_INSTRUMENTATION",
+      "mechanism": "Keep direct read-only SQLite but bind exact producer source/runtime plus deterministic trace/read-set instrumentation and a parent-observed receipt channel.",
+      "strength": "Smaller migration from current physical GRID10 harness.",
+      "cost": "Harder to prove that all cognition-relevant reads are observed; trace callbacks alone may not establish consumed returned-byte identity."
+    }
+  ],
+  "counterhypothesis": "For bounded physical GRID10 component credit, exact source hash + ten live read-only SQLite transactions + same snapshot identity + parent PID/packet binding may already be sufficient; a generic observed-read ledger may only be necessary before stronger model/J-Space or production-grade consumed-input claims.",
+  "cheapest_high_information_discriminator": {
+    "name": "DECLARED_CURRENT_CONSUMED_STALE_BYPASS_NEGATIVE",
+    "test": "Construct a test-only producer path that is allowed to compute from a stale/unobserved snapshot while emitting otherwise current-looking declared metadata. The existing acceptance should fail if current source binding already excludes this path; otherwise the fabric-observed read ledger must detect a read_receipt/current-snapshot mismatch before batch admission.",
+    "promotion_rule": "Do not add general consumed-input attestation credit unless a bypass-negative proves that unobserved cognition-relevant reads cannot enter the admitted path or are detected fail-closed."
+  },
+  "training_eval_reinjection": {
+    "new_positive_training_rows": 0,
+    "accepted_dataset_tokens_added": 0,
+    "hard_negative": "A self-reported read receipt or current-looking packet metadata is not independent proof of the bytes/state actually consumed.",
+    "positive_behavior": "Preserve UNKNOWN unless consumed input is source-bound or independently observed; distinguish observation metadata from observed delivery evidence."
+  },
+  "credits": {
+    "research_delta": 1,
+    "physical_grid10_runtime_credit": 0,
+    "jspace_model_credit": 0,
+    "training_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0,
+    "canonical_truth_credit": 0,
+    "effect_authority_credit": 0
+  },
+  "next_exact_action": "After current atomic same-cohort and membership-source binding is source-reviewed, add one bypass-negative around the exact producer read path. If it can emit a current-looking result from an unobserved/stale read, implement OBSERVED_READ_FACADE first; if exact source/runtime binding already excludes the path, retain this ledger as the next stronger model/J-Space consumed-input gate rather than inflating current component scope."
+}

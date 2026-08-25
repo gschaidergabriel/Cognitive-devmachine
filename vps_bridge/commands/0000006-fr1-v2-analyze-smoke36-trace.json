@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v4",
+  "command_id": "fr1-v2-analyze-smoke36-trace-20260825",
+  "op": "exec",
+  "cwd": "/workspace/qwen06-fr1-v2repo",
+  "timeout_seconds": 120,
+  "command": "python3 - <<'PY'\nimport collections,json,statistics\np='/workspace/qwen06-fr1-current/blind-v2-smoke36/blind_cumulative_dialogue.jsonl'\nrows=[json.loads(x) for x in open(p) if x.strip()]\npol=collections.Counter(r['execution_policy'] for r in rows)\nsel=[r for r in rows if r['execution_policy']=='CONTROLLER_POLICY']\nby=collections.defaultdict(list)\nfor r in sel: by[r['semantic_target']].append(r['delta_vs_baseline'])\nout={'rows':len(rows),'policy_counts':dict(pol),'controller_policy_turns':len(sel),'controller_selected_equals_executed_fraction':sum(r['controller_selected_action']==r['executed_action'] for r in sel)/len(sel) if sel else None,'controller_policy_positive_fraction':sum(r['delta_vs_baseline']>0 for r in sel)/len(sel) if sel else None,'controller_policy_mean_delta':statistics.fmean(r['delta_vs_baseline'] for r in sel) if sel else None,'policy_by_target':{k:{'n':len(v),'mean_delta':statistics.fmean(v),'positive_fraction':sum(x>0 for x in v)/len(v)} for k,v in sorted(by.items())}}\nprint(json.dumps(out,sort_keys=True))\nPY"
+}

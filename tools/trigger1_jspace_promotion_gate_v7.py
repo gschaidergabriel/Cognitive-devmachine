@@ -34,10 +34,12 @@ def adjudicate(candidate: dict[str, Any]) -> dict[str, Any]:
     base_scientific = base.get("scientifically_independent_vector_candidate") is True
     base_owner = base.get("owner_trigger1_goal_credit_candidate") is True
     base_modular = base.get("modular_hcu_jspace_control_candidate") is True
+    base_full_native = base.get("full_native_jspace_vector_control_candidate") is True
 
     scientific = bool(base_scientific and factor_ok)
     owner = bool(base_owner and factor_ok)
     modular = bool(base_modular and factor_ok)
+    full_native = bool(base_full_native and factor_ok)
 
     failures = sorted(set(
         list(base.get("v5_specificity_failures", []))
@@ -57,6 +59,7 @@ def adjudicate(candidate: dict[str, Any]) -> dict[str, Any]:
         "owner_trigger1_goal_credit_candidate": owner,
         "owner_trigger1_direct_free_api_model_credit_candidate": owner,
         "modular_hcu_jspace_control_candidate": modular,
+        "full_native_jspace_vector_control_candidate": full_native,
         "v7_failures": failures,
         "canonical_credit_minted": False,
         "canonical_semantics_promotion": False,
@@ -69,8 +72,9 @@ def adjudicate(candidate: dict[str, Any]) -> dict[str, Any]:
             "case-row evidence binding. A positive candidate must survive all upstream scientific/modularity controls "
             "and must reconstruct a complete exactly balanced semantic-target x output-code factorial from per-case "
             "six-control receipt digests, with the holdout interaction analysis bound to the exact reconstructed holdout "
-            "receipt. This is adjudication only and mints no canonical semantics, runtime, HCU, EntityOS, training, BASE, "
-            "or real-effect credit."
+            "receipt. The inherited full-native vector-control candidate is gated by the same case-bound evidence rather "
+            "than passing through from v6 on summary declarations alone. This is adjudication only and mints no canonical "
+            "semantics, runtime, HCU, EntityOS, training, BASE, or real-effect credit."
         ),
     }
 
@@ -84,6 +88,7 @@ def adjudicate_file(path: Path) -> dict[str, Any]:
             "scientifically_independent_vector_candidate": False,
             "owner_trigger1_goal_credit_candidate": False,
             "modular_hcu_jspace_control_candidate": False,
+            "full_native_jspace_vector_control_candidate": False,
             "evidence_bound_semantic_factorial_candidate": False,
             "canonical_credit_minted": False,
             "v7_failures": [f"CANDIDATE_FILE_INVALID:{type(exc).__name__}"],
@@ -94,6 +99,7 @@ def adjudicate_file(path: Path) -> dict[str, Any]:
             "scientifically_independent_vector_candidate": False,
             "owner_trigger1_goal_credit_candidate": False,
             "modular_hcu_jspace_control_candidate": False,
+            "full_native_jspace_vector_control_candidate": False,
             "evidence_bound_semantic_factorial_candidate": False,
             "canonical_credit_minted": False,
             "v7_failures": ["CANDIDATE_OBJECT_REQUIRED"],
@@ -118,6 +124,9 @@ def scan_batch(batch_dir: Path) -> dict[str, Any]:
         ),
         "modular_hcu_jspace_control_candidate": any(
             row.get("modular_hcu_jspace_control_candidate") is True for row in verdicts
+        ),
+        "full_native_jspace_vector_control_candidate": any(
+            row.get("full_native_jspace_vector_control_candidate") is True for row in verdicts
         ),
         "canonical_credit_minted": False,
         "verdicts": verdicts,

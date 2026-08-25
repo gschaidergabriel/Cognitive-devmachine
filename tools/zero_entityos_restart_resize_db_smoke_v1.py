@@ -5,6 +5,9 @@ This fixture intentionally separates durable S0 and cognitive S1/S2 storage:
 - S0 is a file-backed SQLite DB owned by deterministic CanonicalStateAuthority.
 - grid cognition gets an SQLite engine-level read-only S0 connection.
 - S1/S2 live in an in-memory DB and disappear on module/grid restart.
+- DB_WRITE_PROPOSAL/v2 binds the S0 object epoch observed by cognition.
+- canonical admission uses BEGIN IMMEDIATE + compare-and-admit, so a same-generation
+  stale proposal cannot overwrite a newer S0 value.
 
 No model, Claude Code, provider, tool, network or real-effect execution occurs.
 """
@@ -18,7 +21,7 @@ import sqlite3
 import tempfile
 from typing import Any
 
-SMOKE_SCHEMA = "RESTART_RESIZE_DB_BOUNDARY_SMOKE/v1"
+SMOKE_SCHEMA = "RESTART_RESIZE_DB_BOUNDARY_SMOKE/v2"
 
 
 class BoundaryError(ValueError):
@@ -34,11 +37,12 @@ def digest(value: Any) -> str:
 
 
 class CanonicalStateAuthority:
-    """Sole deterministic writer used by this component fixture."""
+    """Sole deterministic S0 writer used by this component fixture."""
 
     def __init__(self, path: Path):
         self.path = Path(path)
-        self.con = sqlite3.connect(self.path)
+        # Autocommit permits an explicit BEGIN IMMEDIATE around the compare+commit section.
+        self.con = sqlite3.connect(self.path, isolation_level=None)
         self.con.row_factory = sqlite3.Row
         self.con.executescript(
             """
@@ -57,11 +61,12 @@ class CanonicalStateAuthority:
               source_result_id TEXT NOT NULL,
               generation INTEGER NOT NULL,
               object_key TEXT NOT NULL,
+              expected_s0_epoch INTEGER NOT NULL,
+              committed_s0_epoch INTEGER NOT NULL,
               value_digest TEXT NOT NULL
             );
             """
         )
-        self.con.commit()
 
     def close(self) -> None:
         self.con.close()
@@ -73,7 +78,6 @@ class CanonicalStateAuthority:
             "INSERT OR REPLACE INTO canonical_state VALUES(?,?,?,?,?,?)",
             (key, text, value_digest, provenance, generation, epoch),
         )
-        self.con.commit()
         return value_digest
 
     def get(self, key: str) -> dict[str, Any] | None:
@@ -91,48 +95,82 @@ class CanonicalStateAuthority:
 
     def snapshot_digest(self) -> str:
         rows = self.con.execute(
-            "SELECT object_key,value_json,value_digest,provenance,generation,epoch FROM canonical_state ORDER BY object_key"
+            "SELECT object_key,value_json,value_digest,provenance,generation,epoch "
+            "FROM canonical_state ORDER BY object_key"
         ).fetchall()
         return digest([dict(row) for row in rows])
 
     def admit_proposal(self, proposal: dict[str, Any], *, current_generation: int, epoch: int) -> str:
-        if proposal.get("schema") != "DB_WRITE_PROPOSAL/v1":
+        if proposal.get("schema") != "DB_WRITE_PROPOSAL/v2":
             raise BoundaryError("PROPOSAL_SCHEMA_INVALID")
         if proposal.get("canonical_commit") is not False:
             raise BoundaryError("PROPOSAL_SELF_COMMIT_FORBIDDEN")
         if proposal.get("generation") != current_generation:
             raise BoundaryError("STALE_GENERATION_WRITE_PROPOSAL_REJECTED")
-        expected = digest(proposal["value"])
-        if proposal.get("value_digest") != expected:
+
+        value_digest = digest(proposal["value"])
+        if proposal.get("value_digest") != value_digest:
             raise BoundaryError("PROPOSAL_VALUE_DIGEST_MISMATCH")
-        admission_id = "dba-" + digest(
-            {
-                "proposal_id": proposal["proposal_id"],
-                "generation": current_generation,
-                "epoch": epoch,
-                "value_digest": expected,
-            }
-        )[:24]
-        self.seed(
-            proposal["object_key"],
-            proposal["value"],
-            provenance=f"proposal:{proposal['proposal_id']}",
-            generation=current_generation,
-            epoch=epoch,
-        )
-        self.con.execute(
-            "INSERT INTO admission_log VALUES(?,?,?,?,?,?)",
-            (
-                admission_id,
-                proposal["proposal_id"],
-                proposal["source_result_id"],
-                current_generation,
-                proposal["object_key"],
-                expected,
-            ),
-        )
-        self.con.commit()
-        return admission_id
+
+        expected_s0_epoch = proposal.get("expected_s0_epoch")
+        if (
+            isinstance(expected_s0_epoch, bool)
+            or not isinstance(expected_s0_epoch, int)
+            or expected_s0_epoch < 0
+        ):
+            raise BoundaryError("EXPECTED_S0_EPOCH_INVALID")
+
+        self.con.execute("BEGIN IMMEDIATE")
+        try:
+            row = self.con.execute(
+                "SELECT epoch FROM canonical_state WHERE object_key=?",
+                (proposal["object_key"],),
+            ).fetchone()
+            current_s0_epoch = 0 if row is None else int(row["epoch"])
+            if current_s0_epoch != expected_s0_epoch:
+                raise BoundaryError("STALE_S0_EPOCH_WRITE_PROPOSAL_REJECTED")
+            if isinstance(epoch, bool) or not isinstance(epoch, int) or epoch <= current_s0_epoch:
+                raise BoundaryError("NEW_S0_EPOCH_NOT_MONOTONIC")
+
+            admission_id = "dba-" + digest(
+                {
+                    "proposal_id": proposal["proposal_id"],
+                    "generation": current_generation,
+                    "expected_s0_epoch": expected_s0_epoch,
+                    "committed_s0_epoch": epoch,
+                    "value_digest": value_digest,
+                }
+            )[:24]
+
+            self.con.execute(
+                "INSERT OR REPLACE INTO canonical_state VALUES(?,?,?,?,?,?)",
+                (
+                    proposal["object_key"],
+                    canonical_json(proposal["value"]),
+                    value_digest,
+                    f"proposal:{proposal['proposal_id']}",
+                    current_generation,
+                    epoch,
+                ),
+            )
+            self.con.execute(
+                "INSERT INTO admission_log VALUES(?,?,?,?,?,?,?,?)",
+                (
+                    admission_id,
+                    proposal["proposal_id"],
+                    proposal["source_result_id"],
+                    current_generation,
+                    proposal["object_key"],
+                    expected_s0_epoch,
+                    epoch,
+                    value_digest,
+                ),
+            )
+            self.con.execute("COMMIT")
+            return admission_id
+        except Exception:
+            self.con.execute("ROLLBACK")
+            raise
 
 
 @dataclass(frozen=True)
@@ -148,7 +186,7 @@ class GridConfig:
 
 
 class CognitiveGridRuntime:
-    """Variable-N cognitive side with read-only S0 and disposable S1/S2."""
+    """Variable-N cognitive side with engine-level read-only S0 and disposable S1/S2."""
 
     def __init__(self, canonical_db: Path, config: GridConfig):
         self.config = config
@@ -199,6 +237,10 @@ class CognitiveGridRuntime:
     def read_s0(self, key: str) -> Any | None:
         row = self.s0.execute("SELECT value_json FROM canonical_state WHERE object_key=?", (key,)).fetchone()
         return json.loads(row[0]) if row else None
+
+    def read_s0_epoch(self, key: str) -> int:
+        row = self.s0.execute("SELECT epoch FROM canonical_state WHERE object_key=?", (key,)).fetchone()
+        return 0 if row is None else int(row["epoch"])
 
     def attempt_direct_s0_write(self, key: str, value: Any) -> bool:
         """Return True only when SQLite itself rejects cognitive direct S0 mutation."""
@@ -265,10 +307,11 @@ class CognitiveGridRuntime:
 
     def propose_db_write(self, result: dict[str, Any], key: str, value: Any) -> dict[str, Any]:
         proposal = {
-            "schema": "DB_WRITE_PROPOSAL/v1",
+            "schema": "DB_WRITE_PROPOSAL/v2",
             "source_result_id": result["result_id"],
             "generation": self.config.generation,
             "object_key": key,
+            "expected_s0_epoch": self.read_s0_epoch(key),
             "value": value,
             "value_digest": digest(value),
             "canonical_commit": False,
@@ -317,6 +360,13 @@ class CognitiveGridRuntime:
         return out
 
 
+def _rebased_copy(proposal: dict[str, Any], *, proposal_id: str, expected_s0_epoch: int) -> dict[str, Any]:
+    fresh = dict(proposal)
+    fresh["proposal_id"] = proposal_id
+    fresh["expected_s0_epoch"] = expected_s0_epoch
+    return fresh
+
+
 def run_restart_resize_smoke(db_path: Path) -> dict[str, Any]:
     authority = CanonicalStateAuthority(db_path)
     try:
@@ -333,6 +383,17 @@ def run_restart_resize_smoke(db_path: Path) -> dict[str, Any]:
             work1 = grid1.enqueue("ZECP03", {"goal_ref": "goal", "evidence_ref": "evidence/ref"})
             result1 = grid1.execute(work1)
             proposal = grid1.propose_db_write(result1, "memory/admitted", {"summary": "bounded"})
+            if proposal["expected_s0_epoch"] != 0:
+                raise BoundaryError("NEW_OBJECT_EXPECTED_EPOCH_NOT_ZERO")
+
+            # A and B intentionally observe the same object epoch. A may win; B must fail
+            # even though its generation remains current.
+            authority.seed("memory/race", {"winner": "base"}, provenance="fixture:race", generation=generation, epoch=7)
+            race_a = grid1.propose_db_write(result1, "memory/race", {"winner": "A"})
+            race_b = grid1.propose_db_write(result1, "memory/race", {"winner": "B"})
+            if race_a["expected_s0_epoch"] != 7 or race_b["expected_s0_epoch"] != 7:
+                raise BoundaryError("RACE_PROPOSALS_DID_NOT_BIND_SHARED_OBSERVED_EPOCH")
+
             if authority.get("memory/admitted") is not None:
                 raise BoundaryError("PROPOSAL_MUTATED_S0_BEFORE_ADMISSION")
             effect_candidate = grid1.propose_effect(result1, {"kind": "fixture-noop"})
@@ -342,12 +403,34 @@ def run_restart_resize_smoke(db_path: Path) -> dict[str, Any]:
             grid1.close()
 
         admission_id = authority.admit_proposal(proposal, current_generation=generation, epoch=2)
+        race_a_admission_id = authority.admit_proposal(race_a, current_generation=generation, epoch=8)
+
+        same_generation_stale_rejected = False
+        try:
+            authority.admit_proposal(race_b, current_generation=generation, epoch=9)
+        except BoundaryError as exc:
+            same_generation_stale_rejected = str(exc) == "STALE_S0_EPOCH_WRITE_PROPOSAL_REJECTED"
+        if not same_generation_stale_rejected:
+            raise BoundaryError("SAME_GENERATION_STALE_EPOCH_NOT_REJECTED")
+        race_after_a = authority.get("memory/race")
+        if race_after_a is None or race_after_a["value"] != {"winner": "A"} or race_after_a["epoch"] != 8:
+            raise BoundaryError("STALE_REJECTION_DID_NOT_PRESERVE_WINNER")
+
+        # Once B explicitly rebases to the observed winner epoch, it may commit at a newer epoch.
+        race_b_rebased = _rebased_copy(race_b, proposal_id="dbp-race-b-rebased", expected_s0_epoch=8)
+        race_b_rebased_admission_id = authority.admit_proposal(
+            race_b_rebased, current_generation=generation, epoch=9
+        )
+        race_after_rebase = authority.get("memory/race")
+        if race_after_rebase is None or race_after_rebase["value"] != {"winner": "B"} or race_after_rebase["epoch"] != 9:
+            raise BoundaryError("FRESH_REBASE_DID_NOT_COMMIT")
+
         s0_after_admission = authority.snapshot_digest()
         if s0_before == s0_after_admission:
             raise BoundaryError("ADMITTED_DURABLE_PROPOSAL_DID_NOT_CHANGE_S0")
 
         stale = dict(proposal)
-        stale["proposal_id"] = "dbp-stale"
+        stale["proposal_id"] = "dbp-stale-generation"
         stale["generation"] = generation - 1
         stale_rejected = False
         try:
@@ -366,6 +449,8 @@ def run_restart_resize_smoke(db_path: Path) -> dict[str, Any]:
                 raise BoundaryError("S0_GOAL_NOT_REBUILT")
             if grid20.read_s0("memory/admitted") != {"summary": "bounded"}:
                 raise BoundaryError("ADMITTED_MEMORY_NOT_PERSISTENT")
+            if grid20.read_s0("memory/race") != {"winner": "B"}:
+                raise BoundaryError("REBASING_RESULT_NOT_PERSISTENT")
             if authority.snapshot_digest() != s0_after_admission:
                 raise BoundaryError("S0_CHANGED_DURING_RESTART_RESIZE")
             work20 = grid20.enqueue("ZECP18", {"resume_from": "memory/admitted"})
@@ -388,8 +473,11 @@ def run_restart_resize_smoke(db_path: Path) -> dict[str, Any]:
             "checks": {
                 "S0_ENGINE_LEVEL_READONLY_FROM_COGNITION": True,
                 "DB_PROPOSAL_DOES_NOT_SELF_COMMIT": True,
+                "DB_PROPOSAL_BINDS_EXPECTED_S0_EPOCH": True,
                 "DETERMINISTIC_PROPOSAL_ADMISSION_SUCCEEDS": True,
                 "STALE_GENERATION_WRITE_REJECTED": True,
+                "SAME_GENERATION_STALE_S0_EPOCH_WRITE_REJECTED": True,
+                "FRESH_S0_EPOCH_REBASE_SUCCEEDS": True,
                 "S1_S2_DISCARDED_ON_RESTART": True,
                 "S0_PERSISTS_ACROSS_RESTART_AND_N_RESIZE": True,
                 "DIFFERENT_PROCESS_ROUTES_AFTER_RESTART": True,
@@ -400,6 +488,10 @@ def run_restart_resize_smoke(db_path: Path) -> dict[str, Any]:
                 "s0_before_digest": s0_before,
                 "s0_after_admission_digest": s0_after_admission,
                 "admission_id": admission_id,
+                "race_a_admission_id": race_a_admission_id,
+                "race_b_same_generation_stale_rejected": same_generation_stale_rejected,
+                "race_b_rebased_admission_id": race_b_rebased_admission_id,
+                "race_final_epoch": race_after_rebase["epoch"],
                 "s1_pre_restart": s1_pre_restart,
                 "s1_after_restart": s1_after_restart,
                 "process_before": result1["process_id"],
@@ -409,6 +501,7 @@ def run_restart_resize_smoke(db_path: Path) -> dict[str, Any]:
             },
             "credit_boundary": {
                 "db_simulation_boundary_component_runtime": 1,
+                "s0_epoch_cas_component_runtime": 1,
                 "variable_grid_model_runtime": 0,
                 "claude_code_bridge_runtime": 0,
                 "global_jspace_causal_runtime": 0,

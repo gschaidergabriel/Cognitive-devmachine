@@ -1,0 +1,58 @@
+{
+  "schema": "CLAY_GO_REENTRY_RECEIPT/v1",
+  "observed_at": "2026-08-25T10:30:00+07:00",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority": {
+    "supervisor": "8.78",
+    "mode": "FREE_ONLY",
+    "supervisor_inbox_sha": "34ccbba3ca261b5f54b62d137157035721f941af",
+    "steering_sha": "162de4936a76cbf47179cf5aecdff8b9a9bc7361"
+  },
+  "reentry_main_before_write": "e78fdbd27a3dceaac961aebfbb4d638d65cdea82",
+  "observed": {
+    "backlog_first_forge_is_active_supervisor_entrypoint": true,
+    "backlog_first_entrypoint": "tools/run_free_evidence_forge_backfill.py",
+    "raw_generation_still_unconditionally_restarted_in_supervisor_loop": true,
+    "active_supervisor_path": "tools/run_6000_free_swarm_supervisor.sh",
+    "active_supervisor_blob": "cdbe6a4da423b2fb35fe988adc04397407360c3f",
+    "existing_exact_source_backpressure_patcher": "tools/apply_go878_raw_generation_backpressure.py",
+    "patcher_expected_target_blob": "cdbe6a4da423b2fb35fe988adc04397407360c3f",
+    "patcher_target_matches_current_supervisor_blob": true,
+    "forge_candidate_schema_supports_patcher_queries": true,
+    "forge_candidate_fields_observed": ["ready", "state"],
+    "forge_states_relevant_to_pressure": ["NEW", "NEEDS_IMPLEMENTATION"]
+  },
+  "finding": "Supervisor 8.78 priority-1 backlog-first Forge wiring is now present, but priority-4 conversion backpressure is not yet active in the supervisor control loop. The already-fused exact-source patcher is still applicable because its expected target blob exactly equals the current supervisor blob. Therefore the highest-information nonduplicate next source action is to apply that existing patcher once, not create another backpressure implementation.",
+  "hypothesis": "Applying the existing exact-source patcher will stop raw Free-Swarm generation whenever ready + implementation + pending-extraction conversion pressure is at or above the configured threshold, shifting local zero-cost capacity toward historical conversion without increasing external concurrency.",
+  "counterhypothesis": "The patcher may be source-compatible but operationally wrong if the live Forge DB differs from the observed canonical candidates schema, if the historical_chunks table/state semantics differ, or if stopping the 6000 process loses needed conversion workers. Runtime promotion therefore requires an exact-current bounded acceptance receipt, not source inspection.",
+  "acceptance": [
+    "apply tools/apply_go878_raw_generation_backpressure.py exactly once while target blob still matches",
+    "bash -n tools/run_6000_free_swarm_supervisor.sh passes after patch",
+    "negative fixture: missing/invalid Forge DB => raw generation paused fail-closed",
+    "high-pressure fixture => start_6000 not running and RAW_GENERATION_BACKPRESSURE action PAUSE_RAW_GENERATION_BACKPRESSURE",
+    "low-pressure fixture => raw generation allowed without increasing configured provider concurrency or token budget",
+    "backlog-first run_free_evidence_forge_backfill.py remains the single Forge authority",
+    "runtime receipt binds exact source commit/tree/dirty state plus pressure counts and action"
+  ],
+  "go_tracks": {
+    "A": "ADVANCED_BY_EXACT_CURRENT_REENTRY_AND_SINGLE_FUSION_GATE_IDENTIFICATION",
+    "B": "HCU_NO_CHANGE_WITH_REASON: retained HCU/Typed Entry lanes already own causal primitives; duplicating them while conversion/backpressure is the supervisor priority would lower information gain",
+    "C": "TRAINING_READINESS_NO_CHANGE_WITH_REASON: Qwen3-0.6B midlayer causal lane remains source-ready but terminal exact-source runtime receipt is absent; no unusual intervention is authorized from this turn"
+  },
+  "coordination": {
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "No shared immutable reproducible macrocycle/request identity is exposed to this organ; this work is ordinary source review and convergence coordination only."
+  },
+  "credit": {
+    "whole_entityos_runtime": 0,
+    "full_hcu_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "provider_runtime_added": 0,
+    "backpressure_runtime_credit_added": 0
+  },
+  "next_exact_action": "Apply the existing exact-source go878 raw-generation backpressure patcher to the single active supervisor while blob cdbe6a4da423b2fb35fe988adc04397407360c3f still matches, execute deterministic pressure fixtures, then re-enter current main before any runtime-credit claim."
+}

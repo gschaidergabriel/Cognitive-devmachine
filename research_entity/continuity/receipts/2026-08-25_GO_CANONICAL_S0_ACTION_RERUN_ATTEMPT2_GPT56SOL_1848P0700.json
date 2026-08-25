@@ -1,0 +1,46 @@
+{
+  "schema": "CLAY_GO_CANONICAL_S0_ACTION_RERUN/v1",
+  "date": "2026-08-25",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "trigger": "go",
+  "target_directive": "research_entity/global/XENO_HCU_GO_TARGET_ARCHITECTURE_OWNER_DIRECTIVE_2026-08-25.md",
+  "frontier_source": "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
+  "repo_main_observed_before_action": {
+    "head": "32454388b1c23c5c2d1f15951a6b487ccaaf36ad",
+    "tree": "357a184430cf2866759a5a158da35d443cfed255"
+  },
+  "frontier": "EXECUTE_EXACT_PATCHED_CANONICAL_S0_SOURCE_ON_ADMISSIBLE_FREE_SURFACE",
+  "action": {
+    "kind": "GITHUB_ACTION_JOB_RERUN",
+    "workflow_run_id": 32838833189,
+    "prior_job_id": 97773616431,
+    "workflow": ".github/workflows/entityos-canonical-s0-epoch-cas.yml",
+    "bound_head": "bb67d0a1d4983f9836b785bca25f952c1d0f22f9",
+    "rerun_request_accepted": true,
+    "run_attempt": 2
+  },
+  "observed_result": {
+    "status": "completed",
+    "conclusion": "failure",
+    "run_started_at": "2026-08-25T11:49:10Z",
+    "updated_at": "2026-08-25T11:49:18Z",
+    "duration_seconds_approx": 8,
+    "jobs_query_after_rerun": [],
+    "classification": "REPEATED_ZERO_JOB_OR_PRE_STEP_GITHUB_ACTION_INFRASTRUCTURE_FAILURE",
+    "scientific_runtime_credit": 0,
+    "canonical_s0_runtime_credit": 0,
+    "xeno_runtime_credit": 0,
+    "grid10_runtime_credit": 0,
+    "hcu_runtime_credit": 0
+  },
+  "finding": "A second explicit rerun was accepted by GitHub Actions but again terminated as failure within seconds and exposed no runnable jobs through the run-jobs query. This independently reproduces the previously observed GitHub Actions pre-step/runner allocation failure class. It does not falsify the patched S0 epoch-CAS source and cannot mint runtime credit.",
+  "decision": "DO_NOT_REPATCH_CLOSED_S0_SOURCE_GAP. Treat GitHub Actions ubuntu-latest as currently non-admissible for runtime credit until the zero-job/pre-step class is resolved. Preserve the exact patched source and seek another FREE execution surface with repository/head/tree/source-hash binding; only after canonical S0 execution PASS or a documented hard free-surface blocker move to executing Xeno autonomous-boot and NODE_RESULT/coordinator harnesses.",
+  "authority": {
+    "free_only": true,
+    "paid_fallback": false,
+    "together_used": false,
+    "frank_harness_modified": false
+  }
+}

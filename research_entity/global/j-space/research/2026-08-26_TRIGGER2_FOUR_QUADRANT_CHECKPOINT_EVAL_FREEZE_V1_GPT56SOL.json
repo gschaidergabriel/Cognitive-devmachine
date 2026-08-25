@@ -1,0 +1,74 @@
+{
+  "schema": "CLAY_TRIGGER2_FOUR_QUADRANT_CHECKPOINT_EVAL_FREEZE_CONTRACT/v1",
+  "date": "2026-08-26",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "supervisor_epoch": "8.82",
+  "mode": "FREE_ONLY",
+  "status": "FROZEN_SOURCE_ONLY_UNOPENED_NO_MODEL_OUTPUTS",
+  "generator": {
+    "path": "tools/trigger2_four_quadrant_checkpoint_eval_v1.py",
+    "sha256": "430f7c5b60d69dfd382e315ebd7b4cae083f5fa3754f89c52f3ca071b9bde884",
+    "seed": 202608260405,
+    "frozen_manifest_sha256": "9e9a2a421cdaa9207783060b6b127fa4ca26bf25d9415b22730812f31229d57d"
+  },
+  "tests": {
+    "path": "tests/test_trigger2_four_quadrant_checkpoint_eval_v1.py",
+    "sha256": "ac28e117e8abf75c4010d81fbf8cd93cbf325b84d17c6fede918b7be6b02df1d",
+    "local_py_compile": "PASS",
+    "local_pytest": "8/8 PASS",
+    "scope": "LOCAL_DETERMINISTIC_SOURCE_COMPONENT_ONLY_NOT_QWEN_RUNTIME"
+  },
+  "design": {
+    "total_cases": 512,
+    "matched_family_count": 256,
+    "cases_per_quadrant": 128,
+    "critical_axes": {
+      "EPISTEMIC_ANSWERABILITY": 256,
+      "DB_VS_SIMULATION_AUTHORITY": 256
+    },
+    "prospective_cumulative_cases_per_axis": [64, 128, 256],
+    "block_law": "B1=64 cases/axis; if preregistered decision remains unresolved open B2 for cumulative 128; if still unresolved open B3 for cumulative 256. No family, grader, renderer policy, margin, or label changes after candidate outputs are observed.",
+    "quadrants": [
+      "Q1 ANSWERABLE_FROM_CURRENT_BOUND_EVIDENCE -> ANSWER_CURRENT_EVIDENCE",
+      "Q2 UNANSWERABLE_MISSING_EVIDENCE -> ABSTAIN_UNKNOWN",
+      "Q3 CURRENT_VALID_DB_VS_NONCANONICAL_SIMULATION -> TRUST_CURRENT_DB_OVER_SIM",
+      "Q4 STALE_WRONG_GENERATION_UNBOUND_OR_CONTRADICTED_DB -> REJECT_STALE_DB_AND_REREAD; simulation still cannot mint fact"
+    ],
+    "constant_decision_baseline_max_accuracy": 0.25,
+    "full_raw_output_requirement": "Future candidate runs must persist complete raw model output plus SHA-256; excerpts alone are insufficient.",
+    "exact_grader": "Strict one-object JSON schema XENO_EVAL_DECISION/v1; exact decision/action/answer matching; extra fields reject.",
+    "renderer_rule": "This freeze is a logical-case manifest. Final winner credit still requires exact renderer-arm identity and the existing Xeno/ClayCode renderer transportability gate."
+  },
+  "anti_leakage": [
+    "all cases are generated from new T2FQ family IDs and are not candidate-output-opened in this cycle",
+    "matched family roots couple Q1/Q2 and Q3/Q4 while expansion blocks use disjoint family roots",
+    "Q2 model input excludes audit-only hidden truth",
+    "case order is deterministically shuffled so position does not encode quadrant/block",
+    "constant-label/always-DB/always-abstain style decision shortcuts cannot exceed 25% global decision accuracy",
+    "surface-only and position/order challengers remain mandatory once exact renderers materialize the logical cases"
+  ],
+  "execution": {
+    "provider_called": false,
+    "model_runtime_executed": false,
+    "vps_executed": false,
+    "training_executed": false,
+    "unusual_experiment_executed": false,
+    "reason": "Supervisor 8.82 keeps runtime quiescence unresolved; this cycle is source-only."
+  },
+  "credits": {
+    "research_delta": 1,
+    "evaluation_freeze_source": 1,
+    "local_deterministic_tests": "8/8_PASS_NONPROMOTING",
+    "checkpoint_selection_credit": 0,
+    "jspace_model_credit": 0,
+    "training_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  },
+  "next_exact_action": "P0 remains exact live-host runtime-quiescence receipt. After quiescence and re-entry of current execution authority, execute existing checkpoint/model-state identity ABI on frozen candidates. Only then materialize B1 through the exact admitted renderer arms, persist full raw outputs, grade with this frozen source, and keep checkpoint_winner null unless the already-preregistered practical margins and renderer-interaction policy were frozen before unblinding."
+}

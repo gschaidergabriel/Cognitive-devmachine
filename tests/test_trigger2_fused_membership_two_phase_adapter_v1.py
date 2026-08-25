@@ -219,3 +219,37 @@ def test_wrapper_validates_before_delegating_to_existing_fused_coordinator():
     with pytest.raises(AdapterError, match="^PROOF_ENVELOPE_DIGEST_MISMATCH$"):
         atomic_fused_two_phase_commit(fake2, envelopes=bad, marker="no")
     assert fake2.calls == 0
+
+
+def test_wrapper_traverses_changing_sequence_once_and_delegates_validated_snapshot():
+    clean = [upgraded(i) for i in range(1, 11)]
+    second_pass = deepcopy(clean)
+    second_pass[0]["envelope_digest"] = "0" * 64
+
+    class TwoPassSequence:
+        def __init__(self):
+            self.iterations = 0
+        def __len__(self):
+            return len(clean)
+        def __iter__(self):
+            self.iterations += 1
+            return iter(clean if self.iterations == 1 else second_pass)
+
+    class FakeFabric:
+        def __init__(self):
+            self.calls = 0
+            self.seen = None
+        def atomic_fused_cohort_commit(self, *, envelopes):
+            self.calls += 1
+            self.seen = envelopes
+            return {"cohort_id": "existing-fused-authority"}
+
+    source = TwoPassSequence()
+    fake = FakeFabric()
+    out = atomic_fused_two_phase_commit(fake, envelopes=source)
+
+    assert source.iterations == 1
+    assert fake.calls == 1
+    assert fake.seen == clean
+    assert fake.seen is not clean
+    assert out["two_phase_validation"]["pass"] is True

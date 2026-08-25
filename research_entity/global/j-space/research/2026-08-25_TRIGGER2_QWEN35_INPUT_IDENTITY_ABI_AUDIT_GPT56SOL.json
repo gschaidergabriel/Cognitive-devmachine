@@ -1,0 +1,136 @@
+{
+  "schema": "CLAY_TRIGGER2_QWEN35_INPUT_IDENTITY_ABI_AUDIT/v1",
+  "date": "2026-08-25",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "owner_target": "VARIABLE COGNITIVE GRID + PERSISTENT DATABASE + CLAUDE CODE",
+  "mode": "FREE_ONLY",
+  "canonical_main_observed_before_delta": "f83c4234e9a3c646a1a86b48770170d1cc4cbb66",
+  "supervisor_epoch": "8.78",
+  "predecessor_audit": "f83c4234e9a3c646a1a86b48770170d1cc4cbb66",
+  "scope": "Narrow successor audit of Qwen3.5-0.8B checkpoint/input/loader identity for model-selection validity. This does not reopen the already-recorded P0 OBSERVED-producer-auth or P1 ordered-history-provenance findings and creates no training rows.",
+  "material_finding": {
+    "id": "P2_CHECKPOINT_INPUT_IDENTITY_NOT_CLOSED",
+    "status": "NEEDS_REVISION_BEFORE_FULL_MATCHED_BASELINE_CREDIT",
+    "claim": "The current three measured candidate records are useful checkpoint snapshot/load evidence, but identity_complete=true and loader_consumption_observed=true are too strong for checkpoint-selection comparability because the exact loader-consumed weight files and the model-visible prompt-rendering/token-input identity are not bound in the current receipts.",
+    "observed_evidence": [
+      "research_entity/global/j-space/research/trigger2_qwen35_08b_checkpoint_candidates_v2.json has schema v3 and marks BASE, POSTTRAINED and TARGET_MEASURED identity_complete=true and selection_eligible=true, while consumed_identity_match remains null for all three.",
+      "The same registry leaves chat_template_sha256 null for BASE, POSTTRAINED and TARGET_MEASURED. TARGET_MEASURED additionally leaves the top-level weights_sha256 and tokenizer_sha256 null even though its checkpoint manifest contains concrete weight/tokenizer artifacts.",
+      "TARGET_MEASURED checkpoint manifest contains two distinct weight artifacts: model.safetensors and model.safetensors-00001-of-00001.safetensors, plus model.safetensors.index.json. The current loader receipt does not identify which concrete weight file set was actually consumed.",
+      "The loader probes record local_dir, loader_consumption_observed=true, used_chat_template=true, runtime metadata and a generation smoke test, but do not record resolved weight filenames+digests, resolved chat-template bytes, rendered prompt bytes, input_ids tensor digest/dtype/shape, or a consumed_identity_match proof.",
+      "The TARGET_MEASURED 8-case pilot is explicitly nonpromoting and already shows genuine behavioral risk: both abstain_unknown cases failed, the fictional Zorvex Dynamics prompt elicited fabricated precise market facts/sources, ONLY-JSON added a Markdown fence, and the one-sentence Hyperposition request expanded beyond one sentence."
+    ]
+  },
+  "external_method_inputs_noncanonical": [
+    {
+      "source": "Hugging Face Transformers chat templating documentation",
+      "url": "https://huggingface.co/docs/transformers/chat_templating",
+      "translation": "Different chat templates can emit different control tokens even for related models and materially change performance; therefore a matched checkpoint comparison must bind the resolved template and actual rendered/tokenized model input rather than only the user-visible prompt string.",
+      "project_credit": 0
+    },
+    {
+      "source": "Hugging Face Transformers writing chat templates documentation",
+      "url": "https://huggingface.co/docs/transformers/en/chat_templating_writing",
+      "translation": "The tokenizer chat_template attribute is the executed Jinja program used by apply_chat_template; hash the resolved template text and its rendered output/input IDs for reproducibility.",
+      "project_credit": 0
+    },
+    {
+      "source": "SLSA v1.2 Build Provenance",
+      "url": "https://slsa.dev/spec/v1.2/build-provenance",
+      "translation": "Use the same general provenance principle already adopted for Trigger-2 producer authentication: identity should bind the concrete execution inputs/dependencies and subject, not merely a directory or pre-load manifest.",
+      "project_credit": 0
+    }
+  ],
+  "lifecycle_reclassification": [
+    {
+      "artifact": "research_entity/global/j-space/research/trigger2_qwen35_08b_checkpoint_candidates_v2.json schema v3",
+      "previous_status": "identity_complete=true / selection_eligible=true for BASE, POSTTRAINED, TARGET_MEASURED",
+      "new_status": "NEEDS_REVISION_FOR_SELECTION_IDENTITY_ABI",
+      "preserve": "checkpoint snapshot manifests, immutable revisions, config/tokenizer manifest hashes, resource/load smoke evidence",
+      "revision_reason": "selection identity is not closed until actual consumed weight set and model-visible prompt/token ABI are bound"
+    },
+    {
+      "artifact": "f83c4234 reentry-audit lifecycle entry Qwen3.5-0.8B BASE/POSTTRAINED/TARGET_MEASURED identities current identity_complete=true",
+      "new_status": "SUPERSEDED_FOR_SELECTION_SCOPE_BY_THIS_NARROW_SUCCESSOR_DELTA",
+      "preserve": "all bounded snapshot/load evidence and zero-credit boundary",
+      "revision_reason": "deep follow-up found an unresolved consumed-byte + prompt-render identity gap not represented in the predecessor audit"
+    },
+    {
+      "artifact": "19d01875/c6c416207 Qwen3.5 loader/checkpoint receipts",
+      "new_status": "CURRENT_SNAPSHOT_MANIFEST_AND_LOAD_SMOKE_EVIDENCE_ONLY",
+      "credit": "NO_CHECKPOINT_SELECTION_OR_CAUSAL_JSPACE_CREDIT"
+    },
+    {
+      "artifact": "TARGET_MEASURED 8-case minimal pilot",
+      "new_status": "CURRENT_DIAGNOSTIC_NEGATIVE_AND_POSITIVE_BEHAVIOR_EVIDENCE_NONPROMOTING",
+      "credit": "NO_WINNER_NO_SELECTION_NO_TRAINING"
+    }
+  ],
+  "required_checkpoint_input_identity_abi_v1": {
+    "checkpoint_bundle": [
+      "candidate_id",
+      "repo",
+      "immutable_revision",
+      "checkpoint_file_manifest_sha256",
+      "config_sha256",
+      "tokenizer_json_sha256",
+      "tokenizer_config_sha256",
+      "special_tokens/config inputs that affect rendering/tokenization"
+    ],
+    "loader_consumption": [
+      "resolved weight file path set in deterministic order",
+      "SHA-256 of every actually consumed weight/index file",
+      "loader resolution mode/source proving why those files were selected",
+      "model class",
+      "trust_remote_code setting",
+      "dtype/device/loading options",
+      "transformers/torch/python versions",
+      "consumed_identity_match=true only after resolved consumed files match the admitted checkpoint bundle"
+    ],
+    "prompt_rendering": [
+      "canonical messages object digest",
+      "resolved tokenizer.chat_template text SHA-256 or explicit NO_TEMPLATE state",
+      "apply_chat_template parameters including add_generation_prompt/continue_final_message",
+      "rendered UTF-8 prompt SHA-256",
+      "input_ids tensor SHA-256",
+      "input_ids dtype and shape",
+      "attention mask/tensor digest where material",
+      "generation configuration and deterministic seed/decode parameters"
+    ],
+    "comparison_modes": {
+      "NATIVE_BUNDLE_ARM": "Compare deployable checkpoint+tokenizer+native-template bundles while binding every input/rendering difference explicitly.",
+      "CANONICAL_RENDER_ARM": "Where tokenizer/model compatibility permits, add a separately preregistered canonical rendering arm to help distinguish weight effects from chat-template/tokenization effects. Do not silently force one template onto incompatible checkpoints."
+    }
+  },
+  "hypothesis": {
+    "claim": "Some apparent checkpoint behavioral differences may be attributable to native prompt-template/tokenization/runtime ABI differences rather than model weights alone.",
+    "counterhypothesis": "The observed candidate differences are dominated by weight/posttraining differences and remain stable after exact prompt/token/loader identity control.",
+    "discriminator": "Run the same preregistered case families across BASE, POSTTRAINED and TARGET_MEASURED only after CHECKPOINT_INPUT_IDENTITY_ABI/v1 is complete; report both native-bundle and, where valid, canonical-render results with per-axis exact-surface and semantic scores."
+  },
+  "priority_order_preserved": [
+    "P0 close OBSERVED evidence producer authentication and execute adversarial closure repository-bound",
+    "P1 close producer-authorized immutable genesis plus complete ordered nonempty history",
+    "P2 complete CHECKPOINT_INPUT_IDENTITY_ABI/v1 then run full matched all-three baseline",
+    "P3 only after P2 selection rules, run causal J-Space interventions with preregistered controls"
+  ],
+  "training_decision": {
+    "new_rows": 0,
+    "positive_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "checkpoint_selection_credit": 0,
+    "causal_jspace_credit": 0,
+    "decision": "NO_NEW_ROWS_THIS_DELTA",
+    "reason": "The highest-information work is closing provenance/identity and matched-evaluation validity; additional candidate rows would not resolve these gates."
+  },
+  "next_exact_vps_action": "Implement a repository-bound CHECKPOINT_INPUT_IDENTITY_ABI/v1 probe for BASE, POSTTRAINED and TARGET_MEASURED that records actual resolved/consumed weight files and digests plus resolved chat-template/rendered-prompt/input_ids identity; fail closed if consumed_identity_match is not true. Reclassify the current registry accordingly before starting the full matched-baseline run. Preserve the current 8-case pilot as nonpromoting diagnostic evidence and do not use it to select a winner.",
+  "credits": {
+    "whole_entityos": 0,
+    "whole_hcu": 0,
+    "jspace_model": 0,
+    "training": 0,
+    "checkpoint_selection": 0
+  }
+}

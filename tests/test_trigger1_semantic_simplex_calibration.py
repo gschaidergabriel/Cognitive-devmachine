@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import copy
 from pathlib import Path
 import sys
 import unittest
@@ -125,6 +126,22 @@ class Trigger1SemanticSimplexCalibrationTests(unittest.TestCase):
         self.assertEqual(first["input_sha256"], second["input_sha256"])
         self.assertEqual(first["null"], second["null"])
         self.assertEqual(first["decision"], second["decision"])
+
+    def test_gate_threshold_edits_do_not_redraw_null_permutations(self):
+        first_payload = base_payload(rank2_families())
+        second_payload = copy.deepcopy(first_payload)
+        second_payload["rank_gate"]["rank1_ratio_max"] = 0.05
+        second_payload["rank_gate"]["rank2_ratio_min"] = 0.60
+        second_payload["rank_gate"]["min_h1_family_cosine"] = 0.80
+        second_payload["rank_gate"]["min_h2_family_cosine"] = 0.80
+
+        first = simplex.adjudicate(first_payload)
+        second = simplex.adjudicate(second_payload)
+
+        self.assertNotEqual(first["input_sha256"], second["input_sha256"])
+        self.assertEqual(first["null"]["seed_sha256"], second["null"]["seed_sha256"])
+        self.assertEqual(first["null"]["sigma2_threshold"], second["null"]["sigma2_threshold"])
+        self.assertEqual(first["null"]["max_sigma2"], second["null"]["max_sigma2"])
 
 
 if __name__ == "__main__":

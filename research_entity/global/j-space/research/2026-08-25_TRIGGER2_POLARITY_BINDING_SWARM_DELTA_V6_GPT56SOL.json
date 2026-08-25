@@ -1,5 +1,5 @@
 {
-  "schema": "CLAY_TRIGGER2_POLARITY_BINDING_SWARM_DELTA/v6",
+  "schema": "CLAY_TRIGGER2_POLARITY_BINDING_SWARM_DELTA/v6.1",
   "date": "2026-08-25",
   "organ": "GPT-5.6 Sol / ChatGPT organ",
   "trigger": "triggerwort 2",
@@ -10,7 +10,8 @@
   "authority": {
     "supervisor_epoch": "8.78",
     "execution_mode": "FREE_ONLY",
-    "main_observed_before_delta": "4e9b58bdd1a017e4f25e61554016463a797c586d",
+    "main_observed_initially": "4e9b58bdd1a017e4f25e61554016463a797c586d",
+    "main_reentered_after_parallel_work": "a4f82706b3be90e5b7178755f13d8e19b211bdba",
     "active_trigger2_pr": 1956,
     "active_branch": "research/trigger2-qwen35-08b-hcu-fullft-20260825",
     "paid_training_executed": false,
@@ -33,7 +34,7 @@
       "diagonal_advantage": -0.051,
       "absolute_behavioral_effect_semantic": 0.052,
       "absolute_behavioral_effect_nuisance": 0.155,
-      "training_implication": "internal transport is a hard negative for semantic behavioral-control promotion when the held-out behavior does not move and nuisance controls dominate"
+      "training_implication": "internal transport is a hard negative for semantic behavioral-control promotion when held-out behavior does not move and nuisance controls dominate"
     },
     "claude_t05": {
       "verdict": "INCOMPLETE",
@@ -41,7 +42,7 @@
     },
     "claude_t06": {
       "verdict": "FAIL_SCIENTIFIC",
-      "training_implication": "self-declared independence, format-only receipt hashes, candidate-level rather than family-level control completeness, and unwired lesion/rescue checks must be explicit rejection examples"
+      "training_implication": "self-declared independence, format-only receipt hashes, candidate-level rather than family-level control completeness, and unwired lesion/rescue checks are explicit rejection examples"
     },
     "polarity_correction": {
       "finding": "query polarity was not orthogonal to semantic target/output code in the earlier nine-case design; code C was always unnegated",
@@ -60,36 +61,45 @@
       "HARNESS_COMPATIBILITY_REVIEWER",
       "FINAL_INTEGRATOR"
     ],
-    "consensus": "add polarity as an independently crossed model-visible factor, preserve Claude failures as hard negatives, and do not admit data before ABI/tokenizer/materialization/split gates"
+    "consensus": "factor polarity explicitly, preserve Claude failures as hard negatives, avoid duplicate generator authority, and do not admit data before ABI/tokenizer/materialization/split gates"
   },
-  "durable_delta": {
-    "generator": {
+  "parallel_reentry_correction": {
+    "initial_local_donor": {
       "path": "research_entity/claycode/TRIGGER2_DYNAMIC_BINDING_SEED_GENERATOR_V3.py",
-      "commit": "1e4dd5d142092e73b02940d3b00e9c75ee9f7e01",
-      "scope": "PRE_MATERIALIZATION_DESIGN_MATRIX_ONLY",
+      "created_commit": "1e4dd5d142092e73b02940d3b00e9c75ee9f7e01",
       "rows": 144,
-      "factorial": "4_templates x 6_S3 x 3_semantic_classes x 2_query_polarities",
-      "self_audit": {
-        "status": "PASS_LOCAL_STATIC",
-        "target_code_polarity_cells": 18,
-        "rows_per_target_code_polarity_cell": 8,
-        "rows_per_template_target_code_polarity_cell": 2,
-        "s3_count_each": 24,
-        "codebook_display_order_count_each": 24,
-        "target_line_positions": [48, 48, 48],
-        "class_symbol_mi_bits": 0.0,
-        "class_polarity_mi_bits": 0.0,
-        "symbol_polarity_mi_bits": 0.0,
-        "symbol_target_position_mi_bits": 0.0,
-        "class_target_position_mi_bits": 0.0,
-        "generated_design_jsonl_sha256": "35653c8fc6de52f1134982477ea95e496b5c9a0ba00d905c6a88ad4e64443e01"
-      },
-      "important_boundary": "A/B/C are logical placeholders only; all rows are trainable=false and split=UNASSIGNED_PRE_MATERIALIZATION. Full S3 is an upstream design oracle, not a direct TRAIN split when unseen-permutation evaluation is claimed."
+      "scope": "PRE_MATERIALIZATION_DESIGN_ONLY"
     },
+    "newer_main_retained_successor": {
+      "path": "tools/trigger2_dynamic_codebook_binding_template_generator_v3.py",
+      "main": "a4f82706b3be90e5b7178755f13d8e19b211bdba",
+      "rows": 864,
+      "factorial": "4 templates x 6 realized S3 mappings x 3 base semantic states x 2 query polarities x 6 display orders",
+      "polarity_semantics": "DIRECT keeps the base outcome; INVERTED swaps ALLOW/DENY and preserves unresolved ABSTAIN",
+      "boundaries": "METHOD_ONLY logical aliases; training_eligible=false; positive_jspace_label=false; exact ABI/tokenizer/materialization/split gates remain required",
+      "main_test": "tests/test_trigger2_dynamic_codebook_binding_template_generator_v3.py",
+      "main_test_commit": "a4f82706b3be90e5b7178755f13d8e19b211bdba",
+      "source_tests_observed": 8,
+      "important_guards": [
+        "full 864-row factorial",
+        "explicit polarity semantics",
+        "target tamper rejection",
+        "visible prompt mapping-drift rejection",
+        "private metadata leak rejection",
+        "render digest tamper rejection",
+        "missing polarity half rejection",
+        "positive J-Space label tamper rejection"
+      ]
+    },
+    "action": "The weaker 144-row duplicate donor was deleted from the Trigger-2 branch at commit 9319f058168b613fe13fa2d730a3d14fa4959a1f instead of creating a competing generator authority.",
+    "conclusion": "Use the main 864-row v3 template generator as the retained polarity-factorial source path; salvage only nonduplicate hard-negative/evidence review rows from this organ."
+  },
+  "durable_nonduplicate_delta": {
     "hard_negative_delta": {
       "path": "research_entity/claycode/TRIGGER2_SWARM_BINDING_DATASET_DELTA_V5.jsonl",
       "commit": "8258017dd86bcda67d35a78747b17d81b7636ba7",
       "rows": 9,
+      "status": "CANDIDATE_NOT_ADMITTED",
       "families": [
         "query-polarity factorial confound",
         "exact internal-transport vs behavior dissociation",
@@ -100,10 +110,12 @@
         "per-family control completeness",
         "unwired lesion/rescue rejection",
         "dead required-field producer/consumer mismatch"
-      ],
-      "status": "CANDIDATE_NOT_ADMITTED"
+      ]
     },
-    "coordination_observation": "A parallel organ created TRIGGER2_SWARM_BINDING_DATASET_DELTA_V4.jsonl between discovery and write. The attempted V4 write was not overwritten; this organ re-read the branch, preserved the parallel rows, and wrote nonduplicate material to V5."
+    "coordination": [
+      "A parallel organ created TRIGGER2_SWARM_BINDING_DATASET_DELTA_V4.jsonl between discovery and write; it was preserved and nonduplicate rows were moved to V5.",
+      "A newer main polarity generator/test landed during this run; the local duplicate generator was retired after reentry rather than retained in parallel."
+    ]
   },
   "external_research_method_inputs": [
     {
@@ -112,28 +124,36 @@
     },
     {
       "source": "Google Research, Symbol tuning improves in-context learning in language models",
-      "impact": "arbitrary/flipped label following is relevant evidence that symbol remapping can be trained, but it does not establish this model's J-Space mechanism"
+      "impact": "arbitrary/flipped label following supports training-time symbol-remapping as a method candidate, not this model's J-Space causal mechanism"
     },
     {
       "source": "Buzeta et al., Seeing to Generalize: How Visual Data Corrects Binding Shortcuts, 2026",
       "impact": "treat positional/surface binding shortcuts as explicit adversarial hypotheses; method input only"
     }
   ],
+  "current_parallel_main_delta": {
+    "multi_hop_audit": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_MULTIHOP_BINDING_DISTRACTOR_GENERATOR_V1_AUDIT_GPT56SOL.json",
+    "reported_factorial_rows": 1728,
+    "reported_depths": [1, 2, 3, 4],
+    "reported_distractor_chains_per_episode": 2,
+    "reported_static_tests": "8/8 PASS at source-equivalent deterministic scope",
+    "credit_boundary": "candidate_train_ready=false; accepted_dataset_tokens=0; training=0; positive Qwen3.5 J-Space control=0"
+  },
   "counterhypotheses": [
     {
       "id": "HC_POLARITY_SURFACE_MEMORIZATION",
-      "claim": "The model can learn separate direct/negated templates rather than a polarity-invariant router.",
+      "claim": "The model can memorize direct/inverted wording instead of learning a compositional polarity-aware router.",
       "falsifier": "fresh lexical/template families with exact target-code-polarity balance and polarity-stratified accuracy"
     },
     {
       "id": "HC_CODEBOOK_POSITION_SHORTCUT",
       "claim": "The model follows target-line position or display order rather than the realized mapping.",
-      "falsifier": "counterbalanced target positions plus mapping swaps where display order is fixed but the required atom changes"
+      "falsifier": "fully crossed display order plus mapping swaps where nuisance structure is fixed but the correct atom changes"
     },
     {
       "id": "HC_FULL_S3_TRAIN_LEAK",
-      "claim": "A full-S3 design matrix can masquerade as unseen-permutation generalization data.",
-      "falsifier": "keep the 144-row matrix upstream only; materialize split-specific S3 policies over many accepted atom triplets and recompute post-split MI"
+      "claim": "A full-S3 method matrix can masquerade as unseen-permutation generalization data.",
+      "falsifier": "keep method matrices upstream only; materialize predeclared split-specific S3 policies over many accepted atom triplets and recompute post-split MI"
     },
     {
       "id": "HC_SPECIALIZATION_FORGETTING",
@@ -145,8 +165,8 @@
     "exact accepted 46-atom ABI inventory and member identities",
     "pinned selected Qwen3.5-0.8B tokenizer identity and single-token atom verification",
     "frozen forbidden semantic-lexeme inventory",
-    "frozen family/provenance split policy and unseen-atom/permutation partitions",
-    "evidence-bound materializer using the retained canonical generator path",
+    "frozen family/provenance split policy and unseen-atom/permutation/template partitions",
+    "one retained evidence-bound materializer consuming the canonical method generators",
     "post-materialization generic plus specialized binding gates",
     "fresh sealed holdouts not used for generator/model/hyperparameter selection",
     "same-model positive Qwen3.5 J-Space causal evidence before any positive semantic-control label"
@@ -161,5 +181,5 @@
     "full_hcu_runtime_credit": 0,
     "whole_entityos_hcu_runtime_credit": 0
   },
-  "next_exact_action": "Converge the retained Trigger-2 materializer/gate path on the new polarity-factorial design: obtain the exact 46-atom ABI plus pinned tokenizer, preregister family/atom/permutation/template partitions, materialize split-specific rows across many accepted atom triplets, recompute class-symbol and polarity shortcut statistics after split assignment, run generic and specialized fail-closed gates, then run mapping-swap/polarity-stratified behavioral baselines without opening the sealed holdout."
+  "next_exact_action": "Fuse the retained main polarity-factorial and multi-hop/distractor method generators into one evidence-bound materializer only after obtaining the exact 46-atom ABI plus pinned tokenizer; preregister family/atom/permutation/template partitions, materialize split-specific counterfactual bundles, recompute shortcut MI after split assignment, run generic and specialized fail-closed gates, and establish zero-cost baseline behavior without opening the sealed holdout."
 }

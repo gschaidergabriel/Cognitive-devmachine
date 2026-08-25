@@ -1,0 +1,180 @@
+{
+  "schema": "CLAY_FORSCHUNGSRUN_1_MATCHED_TRIPLET_BLOCKED_SEMANTIC_SIMPLEX/v1",
+  "date": "2026-08-25",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "user_trigger": "forschungsrun 1",
+  "persistent_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "stage": "ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP",
+  "authority_epoch_observed": "8.78",
+  "execution_mode": "FREE_ONLY",
+  "canonical_main_observed_before_write": "68e149835a77de8ef1f9c9a0b15b9f589a009153",
+  "scope": "QWEN3_0_6B_JSPACE_SEMANTIC_SIMPLEX_SCENARIO_FAMILY_DECONFOUND_AND_BLOCKED_CAUSAL_DESIGN",
+  "observed_parent_research": {
+    "promotion_gate_fusion_commit": "68e149835a77de8ef1f9c9a0b15b9f589a009153",
+    "semantic_simplex_commit": "e69593213dbb7d4677651d68528491609f33cd07",
+    "semantic_target_gate_commit": "ba543040700a06efb9a537380c453eee0c30f3b8",
+    "lexical_deconfound_commit": "25907c4413c264d40067f56bc1b5417341b80a76",
+    "parent_discriminator": "LABEL_FREE_TARGET_X_CODE_COUNTERBALANCED_SCOPE_MATCHED_NORM_CALIBRATED_NATIVE_CVEC/v1",
+    "credit_boundary": {
+      "whole_entityos_hcu_runtime_credit": 0,
+      "full_hcu_runtime_credit": 0,
+      "jspace_model_runtime_credit": 0,
+      "training_credit": 0,
+      "canonical_semantics_promotion": false
+    }
+  },
+  "new_material_confound": {
+    "id": "H0_SCENARIO_FAMILY_GEOMETRY_MASQUERADING_AS_SEMANTIC_SIMPLEX",
+    "finding": "Label-free and lexically disjoint class families are still insufficient if AFFIRMATIVE, NEGATIVE and NEUTRAL examples come from different scenario/domain families. Global class centroids can then encode scenario-family/domain/style differences rather than the requested semantic state.",
+    "why_the_current_rank_test_is_vulnerable": [
+      "For three global class centroids, centered rank is at most two by construction; observing a second singular component does not identify its cause.",
+      "If scenario families are not matched across semantic targets, class identity is partially or fully aliased with scenario/domain identity.",
+      "A class-assignment permutation null that ignores scenario blocks can destroy both semantic and scenario structure and therefore produce an anti-conservative null for semantic rank.",
+      "A stable intervention can still exploit a reproducible scenario-family axis and appear class-selective on similarly constructed evaluation data."
+    ],
+    "counterhypothesis": "The apparent one- or two-dimensional semantic control geometry is primarily a matched-dataset construction artifact: topic, phrasing, entailment form, response prior or scenario family creates the dominant latent directions, while true semantic state contributes little or no reusable causal signal.",
+    "falsifier": "After within-scenario matched triplet construction, within-family centering, blocked permutation, fresh family holdout and independently rotated output-code mappings, a stable class-selective one- or two-dimensional intervention subspace remains and nuisance controls do not reproduce it."
+  },
+  "external_primary_inputs": [
+    {
+      "source": "Panickssery et al. (2023/2024), Steering Llama 2 via Contrastive Activation Addition",
+      "arxiv": "2312.06681",
+      "source_direct": "CAA constructs steering vectors from averaged residual-stream differences between paired positive and negative examples.",
+      "protocol_implication": "Prefer matched within-scenario semantic contrasts over unrelated class centroids so shared scenario content cancels before estimating a direction."
+    },
+    {
+      "source": "Tan et al. (2024), Analyzing the Generalization and Reliability of Steering Vectors",
+      "arxiv": "2407.12404",
+      "source_direct": "Reports substantial in-distribution variability, spurious biases and prompt-change brittleness for steering vectors.",
+      "protocol_implication": "Scenario/domain and prompt-family variation must be treated as a blocking/generalization factor rather than pooled away."
+    },
+    {
+      "source": "Braun et al. (2025), Understanding (Un)Reliability of Steering Vectors in Language Models",
+      "arxiv": "2505.22637",
+      "source_direct": "Reports that higher cosine coherence among training activation differences predicts more effective steering and that effect direction can vary across samples.",
+      "protocol_implication": "Measure coherence of within-family semantic contrasts and preserve per-family signs instead of relying only on pooled global means."
+    },
+    {
+      "source": "Wu, Zhao, Chen (2026), When Is a Steerable Concept Representation Real?",
+      "arxiv": "2608.08159",
+      "source_direct": "Shows steering conclusions can change with activation scaling, readout metric and operating point; residual-norm-comparable intervention and held-out operating-point selection materially change interpretation.",
+      "protocol_implication": "Keep residual-norm calibration and frozen calibration-only operating-point selection in the blocked successor."
+    },
+    {
+      "source": "Belrose et al. (2023), LEACE: Perfect linear concept erasure in closed form",
+      "arxiv": "2306.03819",
+      "source_direct": "Provides a closed-form way to remove a linearly decodable nuisance concept while minimizing representation change under its stated objective.",
+      "protocol_implication": "Optional diagnostic only: estimate a code/label nuisance subspace on calibration data and test whether semantic effects survive nuisance erasure; erasure itself does not prove semantics."
+    }
+  ],
+  "successor_discriminator": {
+    "name": "MATCHED_TRIPLET_BLOCKED_SEMANTIC_SIMPLEX_NATIVE_CVEC/v1",
+    "phase_0_freeze": [
+      "Pin exact Qwen3-0.6B source checkpoint/tokenizer, exact GGUF, llama.cpp commit/build, native harness and layer/site identity.",
+      "Freeze token-scope conditions and residual-norm-relative gain selection on calibration only.",
+      "Freeze semantic target definitions, output-code rotation schedule, primary metric, rank threshold, coherence threshold and off-target drift threshold before opening holdout."
+    ],
+    "phase_1_matched_triplet_dataset": {
+      "unit": "scenario_family",
+      "requirement": "Every scenario family supplies AFFIRMATIVE, NEGATIVE and NEUTRAL variants derived from the same underlying content skeleton, with target identity stored in metadata rather than exposed as pole labels.",
+      "controls": [
+        "Keep entities, topic/domain, approximate length, syntactic template and response format as matched as possible across the three target variants.",
+        "Rotate lexical realizations independently across scenario families so no single phrase or synonym becomes the semantic key.",
+        "Use independently rotated A/B/C output-code mappings inside each semantic triplet.",
+        "Keep basis/calibration/holdout scenario families disjoint."
+      ],
+      "negative_example": "Do not build AFFIRMATIVE from one topic family, NEGATIVE from another and NEUTRAL from a third, even if all are label-free."
+    },
+    "phase_2_within_family_representation_geometry": {
+      "family_centering": "For family f with activations h_fA,h_fN,h_fU, compute m_f=(h_fA+h_fN+h_fU)/3 and d_fC=h_fC-m_f. Global topic/style offsets cancel before semantic rank estimation.",
+      "family_helmert_contrasts": [
+        "a_f = h_fA - 0.5*(h_fN+h_fU)",
+        "b_f = h_fN - h_fU"
+      ],
+      "aggregation": "Estimate cross-family directions with equal family weighting; report raw and unit-normalized family contrasts so high-norm families cannot silently dominate.",
+      "coherence": "Report leave-one-family-out cosine/principal-angle stability and the distribution of family-specific signed effects, not only the pooled direction.",
+      "rank_test": "Estimate one-vs-two-dimensional semantic rank from the stacked within-family centered contrasts. Use a permutation null that permutes semantic labels only within each scenario family and preserves family membership, code mapping and split identity.",
+      "holdout_transfer": "Fit the candidate subspace on basis/calibration families only, then measure held-out projection energy, principal angles and class-selective causal effects on unopened scenario families."
+    },
+    "phase_3_blocked_native_causal_matrix": {
+      "interventions": [
+        "BASELINE",
+        "CLASS_DIRECTION",
+        "SIGN_FLIP",
+        "NULL_VECTOR",
+        "ORTHOGONAL_SAME_NORM",
+        "PERMUTED_SAME_NORM",
+        "LABEL_ONLY_NUISANCE_VECTOR"
+      ],
+      "matrix": "Within each holdout scenario family, D_f[i,j] is the mapped-target logit-margin change for requested semantic class j under intervention i minus its matched baseline. Aggregate D with equal family weights.",
+      "primary_positive_pattern": "Class direction i produces a preregistered diagonal/selective advantage for class i across held-out scenario families; SIGN_FLIP reverses the selective pattern; null/orthogonal/permuted/label-only nuisance controls do not reproduce it.",
+      "generic_compliance_rejection": "Broad positive uplift across all requested classes, or uplift tied to output-code identity rather than semantic target, rejects semantic specificity.",
+      "family_confound_rejection": "An effect that disappears after within-family matching/centering or is carried by one scenario family is classified as scenario-family confounding, not J-Space semantic control."
+    },
+    "phase_4_scope_and_measurement": [
+      "Compare PyTorch LAST_TOKEN_ONLY, PyTorch ALL_PROMPT_TOKENS and native llama.cpp ALL_PROMPT_TOKENS_CVEC without calling them strict replications unless intervention scope matches.",
+      "Express intervention magnitude relative to local residual norm at the intervention site and freeze the operating point on calibration only.",
+      "Keep output readout, scenario-family construction, codebook mapping and threshold selection sealed from holdout."
+    ],
+    "phase_5_optional_nuisance_erasure_diagnostic": [
+      "On calibration only, estimate a linear nuisance subspace for output-code/label-form or other declared nuisance factors.",
+      "Apply an exactly documented orthogonalization/LEACE-style diagnostic to ask whether class-selective effects survive nuisance removal.",
+      "Treat survival as robustness evidence only; nuisance erasure cannot mint semantic truth and can itself remove entangled true signal."
+    ]
+  },
+  "promotion_rules": {
+    "must_pass": [
+      "Matched semantic triplets exist within every scenario family in calibration and holdout.",
+      "Semantic-label permutation null is blocked within scenario family.",
+      "Basis/calibration/holdout scenario families are disjoint.",
+      "Output-code mapping is independently counterbalanced within semantic targets and scenario families.",
+      "At least one candidate semantic dimension exceeds the blocked null and transfers to fresh families.",
+      "A second dimension is promoted only if it independently exceeds the blocked null and improves held-out class-selective causal fit.",
+      "Per-family causal signs/coherence satisfy preregistered thresholds rather than only pooled significance.",
+      "Native causal matrix shows target-specific selectivity under matched baseline subtraction.",
+      "SIGN_FLIP and same-norm nuisance controls behave as preregistered.",
+      "Residual-norm and operating-point calibration are frozen before holdout."
+    ],
+    "fail_closed_cases": [
+      "Only global class centroids are reported without within-family matched contrasts.",
+      "Semantic classes are aliased with scenario/domain families.",
+      "Permutation ignores scenario-family blocks.",
+      "Rank-2 geometry is observed but causal rank does not transfer to holdout.",
+      "Effect exists only for one family or one lexical realization.",
+      "Generic requested-code uplift explains the result.",
+      "Token-scope mismatch is presented as strict replication.",
+      "Gain or threshold is selected after holdout inspection."
+    ]
+  },
+  "information_gain_assessment": {
+    "why_high_value": "This discriminator can simultaneously distinguish true semantic geometry from scenario/domain confounding, determine whether one or two semantic dimensions are warranted, and convert pooled steering success into a family-generalizing causal claim.",
+    "why_cheaper_than_new_model_work": "It reuses the already pinned Qwen3-0.6B/native cvec lane and changes experimental design/analysis before any new paid training or provider execution.",
+    "expected_outcomes": {
+      "rank1_survives": "Retain a one-dimensional semantic control model at bounded component scope.",
+      "rank2_survives": "Promote only a two-dimensional semantic subspace hypothesis at bounded component scope, still not canonical semantics.",
+      "geometry_survives_but_causality_fails": "Representation structure is correlational/noncausal at the tested site.",
+      "effect_collapses_after_blocking": "Previous semantic signal was materially scenario-family/dataset confounded.",
+      "family_specific_only": "Treat as brittle local control, not reusable Global J-Space semantic geometry."
+    }
+  },
+  "unusual_experiment": {
+    "executed_by_this_organ": false,
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "This standalone research trigger exposes no canonical shared immutable macrocycle/request identity and no successful create-only atomic lease. Web/source research and durable protocol fusion are ordinary non-intervention work."
+  },
+  "execution_and_credit": {
+    "runtime_executed_by_this_organ": false,
+    "new_runtime_credit": 0,
+    "provider_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "training_credit": 0,
+    "canonical_semantics_promotion": false
+  },
+  "research_delta": "Forschungsrun 1 identified a second-order confound not closed by label-free lexical deconfounding alone: semantic target can remain aliased with scenario/domain family. The successor design therefore upgrades the semantic-simplex test to matched within-scenario triplets, family centering, within-family blocked permutation, equal-family weighting and held-out causal-matrix transfer. This prevents a rank-1/rank-2 scenario manifold from being misreported as reusable semantic J-Space geometry.",
+  "next_exact_action": "Implement candidate/regression schema support for matched scenario triplets and blocked semantic-rank evidence before the next native cvec promotion attempt; execute the intervention only after canonical unusual-experiment lease coordination is available."
+}

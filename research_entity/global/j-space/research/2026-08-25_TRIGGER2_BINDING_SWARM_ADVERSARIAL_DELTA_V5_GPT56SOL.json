@@ -1,0 +1,155 @@
+{
+  "schema": "CLAY_TRIGGER2_BINDING_SWARM_ADVERSARIAL_DELTA/v5",
+  "date": "2026-08-25",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "research_mode": "ROLE_SEPARATED_ADVERSARIAL_SWARM_REVIEW_NOT_INDEPENDENT_MODEL_REPLICATION",
+  "authority_reentry": {
+    "canonical_main": "f548a1cac683b3e9d3dabf2936c0e201f4e3324d",
+    "canonical_main_message": "research: add order-crossed trigger2 binding generator v2",
+    "supervisor_epoch_last_verified": "8.78",
+    "execution_mode": "FREE_ONLY",
+    "active_trigger2_pr": 1956,
+    "active_trigger2_branch": "research/trigger2-qwen35-08b-hcu-fullft-20260825",
+    "pr_head_observed_after_parallel_updates": "1ea27edd3ddacabcd34921f5f9d73b51691cca98",
+    "pr_mergeable_observed": false,
+    "training_executed": false,
+    "provider_preflight_executed": false
+  },
+  "evidence_inputs": [
+    "research_entity/global/j-space/research/2026-08-25_TRIGGER2_CLAUDE_XENO_VECTOR_EVIDENCE_INGEST_V1_GPT56SOL.json",
+    "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_78.json",
+    "research_entity/global/XENO_HCU_GO_TARGET_ARCHITECTURE_OWNER_DIRECTIVE_2026-08-25.md",
+    "research_entity/global/j-space/research/2026-08-25_TRIGGER2_BINDING_SWARM_REVIEW_V4_GPT56SOL.json",
+    "tools/trigger2_dynamic_codebook_binding_gate_v1.py",
+    "tools/trigger2_dynamic_codebook_binding_template_generator_v2.py@f548a1cac683b3e9d3dabf2936c0e201f4e3324d"
+  ],
+  "preserved_measured_interpretation": {
+    "primary_missing_function": "context-dependent episodic binding/routing from already readable semantics through an episode-local codebook to the correct output symbol",
+    "do_not_reteach_as_primary": [
+      "basic semantic readability already measured strong at supplied snapshot/family",
+      "raw symbol-axis writeout already measured strong at supplied scope",
+      "carrier HRR/MAP capacity already measured sufficient through supplied k<=16 scope"
+    ],
+    "qwen3_06b_positive_jspace_label_transfer_to_qwen35": "FORBIDDEN",
+    "qwen35_positive_jspace_runtime_credit": 0
+  },
+  "parallel_progress_integrated": {
+    "canonical_generator_v2": "tools/trigger2_dynamic_codebook_binding_template_generator_v2.py",
+    "rows_logical_template_only": 432,
+    "factorial": "4_templates_x_6_realized_S3_mappings_x_3_semantic_classes_x_6_display_orders",
+    "evidence_class": "METHOD_ONLY",
+    "positive_jspace_labels": 0,
+    "materialization_required": true,
+    "atom_surface": "ATOM_A/B/C_PLACEHOLDERS_ONLY",
+    "important_delta": "display order is now independently crossed, removing the residual deterministic codebook-position shortcut identified by second-order review"
+  },
+  "swarm_roles": [
+    "EVIDENCE_BOUNDARY_REVIEWER",
+    "CAUSAL_BINDING_REVIEWER",
+    "LEAKAGE_RED_TEAM",
+    "STATISTICAL_REVIEWER",
+    "ABI_PROVENANCE_REVIEWER",
+    "RETENTION_REVIEWER",
+    "HARNESS_COMPATIBILITY_REVIEWER",
+    "FINAL_INTEGRATOR"
+  ],
+  "new_adversarial_findings": [
+    {
+      "id": "HOLDOUT_PERM_VALIDATION_CONTAMINATION",
+      "severity": "CRITICAL",
+      "observed_in": "tools/trigger2_dynamic_codebook_binding_gate_v1.py",
+      "finding": "v1 compared HOLDOUT_PERM only with TRAIN_CORE permutations. The same nominal holdout permutation could appear in VALIDATION and still pass the unseen-permutation isolation condition.",
+      "fix": "v2 compares HOLDOUT_PERM against every TRAIN and VALIDATION permutation."
+    },
+    {
+      "id": "HOLDOUT_SYMBOL_VALIDATION_CONTAMINATION",
+      "severity": "CRITICAL",
+      "observed_in": "tools/trigger2_dynamic_codebook_binding_gate_v1.py",
+      "finding": "v1 compared HOLDOUT_SYMBOL atoms only with TRAIN_CORE atoms. A nominal unseen atom could appear in validation and still pass.",
+      "fix": "v2 requires holdout atoms to be disjoint from all pre-holdout TRAIN and VALIDATION rows."
+    },
+    {
+      "id": "PROVENANCE_SHA_FORMAT_WITHOUT_BYTE_ATTESTATION",
+      "severity": "HIGH",
+      "observed_in": "tools/trigger2_dynamic_codebook_binding_gate_v1.py",
+      "finding": "v1 checked provenance digest fields only against a lowercase 64-hex regex. That proves string shape, not the bytes actually consumed by the candidate materializer/gate.",
+      "fix": "v2 requires exact ABI manifest, atom inventory, generator source, forbidden-lexeme inventory, model-identity and tokenizer-identity artifacts and recomputes SHA-256 over their exact bytes."
+    },
+    {
+      "id": "MULTIPLE_CODEBOOK_SPAN_AMBIGUITY",
+      "severity": "HIGH",
+      "observed_in": "tools/trigger2_dynamic_codebook_binding_gate_v1.py",
+      "finding": "v1 searched one codebook span but did not explicitly require exactly one authoritative span.",
+      "fix": "v2 requires exactly one [CODEBOOK] span and checks the realized mapping inside it."
+    },
+    {
+      "id": "HOLDOUT_TEMPLATE_ID_PREHOLDOUT_ALIAS",
+      "severity": "HIGH",
+      "finding": "Protecting only a literal T5 id is narrower than the semantic requirement that every HOLDOUT_TEMPLATE family remain absent before holdout.",
+      "fix": "v2 collects every template id used by HOLDOUT_TEMPLATE and rejects any occurrence in TRAIN or VALIDATION."
+    }
+  ],
+  "writes": [
+    {
+      "path": "tools/trigger2_dynamic_codebook_binding_gate_v2.py",
+      "commit": "9f28fa151f519407d97c848ce90e22bdec46473c",
+      "scope": "SOURCE_ONLY_NOT_EXECUTED_BY_THIS_ORGAN",
+      "claims": [
+        "pre-holdout permutation isolation",
+        "pre-holdout atom isolation",
+        "holdout-template id isolation",
+        "exact provenance byte-hash binding",
+        "model/tokenizer identity digest binding",
+        "exactly-one-codebook-span requirement"
+      ]
+    },
+    {
+      "path": "research_entity/claycode/TRIGGER2_SWARM_BINDING_DATASET_DELTA_V3.jsonl",
+      "commit": "451bc0dfb24ea2d4cf78ac522dfd05ab071f6b3c",
+      "candidate_rows": 4,
+      "status": "CANDIDATE_NOT_ADMITTED",
+      "families": [
+        "holdout permutation validation leak",
+        "holdout symbol validation leak",
+        "provenance hash format-vs-byte identity",
+        "multiple codebook span ambiguity"
+      ]
+    }
+  ],
+  "review_of_new_rows": {
+    "drafts": 4,
+    "survived_role_separated_review": 4,
+    "admitted_training_rows": 0,
+    "accepted_dataset_tokens_delta": 0,
+    "reason": "These are source-level hard-negative/meta-review candidates. They teach failure recognition but have not passed canonical Forge/Distillery evidence-qualified admission."
+  },
+  "external_primary_source_refresh": {
+    "qwen35_08b_base": "Official Qwen model card still describes Qwen3.5-0.8B-Base as a pretrained-only checkpoint intended for fine-tuning/research and reports a 24-layer, hidden-size-1024 hybrid text stack with vision encoder.",
+    "training_consequence": "No ancestry-only transfer of Qwen3-0.6B layer/vector coordinates into positive Qwen3.5-0.8B labels. Exact Qwen3.5 model/tokenizer/processor/weight identity remains a materialization/evaluation boundary."
+  },
+  "counterhypotheses_preserved": [
+    "The apparent binding gap may still partly be a template-position/codebook-order shortcut rather than missing general routing; crossed display-order generator v2 directly pressures this.",
+    "A binder-focused fine-tune may improve episode routing while degrading retained general/protocol competence; retention floors remain required.",
+    "Static hidden-state transport can remain noncausal for behavior; behavioral binding success and same-model intervention evidence must remain separate gates.",
+    "A source-level gate can itself encode a flawed holdout definition; holdout isolation must cover calibration/validation exposure, not merely gradient-training exposure."
+  ],
+  "credits": {
+    "research_design_delta": 1,
+    "source_gate_v2_delta": 1,
+    "new_candidate_hard_negative_rows": 4,
+    "canonical_dataset_write": 0,
+    "accepted_dataset_tokens": 0,
+    "qwen35_jspace_runtime_credit": 0,
+    "qwen35_training_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "canonical_semantics_promotion": false
+  },
+  "integration_warning": "PR #1956 was observed mergeable=false after rapid parallel main/branch movement. Do not force-merge stale authority. Rebase/fuse the useful v2 gate and V3 hard negatives onto current main only after exact conflict review.",
+  "next_exact_action": "Fuse tools/trigger2_dynamic_codebook_binding_gate_v2.py with current-main tools/trigger2_dynamic_codebook_binding_template_generator_v2.py through one evidence-bound materializer candidate. Supply the exact accepted 46-atom inventory/ABI manifest, forbidden-lexeme inventory, Qwen3.5 model identity and tokenizer identity as immutable byte-bound inputs; construct a split where TRAIN remains class-symbol independent while HOLDOUT_PERM/HOLDOUT_SYMBOL/HOLDOUT_TEMPLATE are absent from every pre-holdout surface; run only deterministic source/static candidate validation. Preserve accepted_dataset_tokens=0 until canonical Forge/Distillery admission proves otherwise."
+}

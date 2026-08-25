@@ -9,7 +9,7 @@ Implements the noncanonical PHYSICAL_GRID10_SINGLE_SCOPE_ATOMIC_COHORT_BASE cand
 - one SQLite transaction records all ten members, writes one GLOBAL summary, and advances
   S1 exactly once;
 - original NODE_RESULT observation identities remain unchanged;
-- replay is idempotent with zero second state delta;
+- exact replay is idempotent with zero second state delta;
 - tamper, substituted cohort, stale-start and duplicate identities fail closed.
 
 This is an isolated deterministic acceptance candidate only. Source or local PASS does not
@@ -50,22 +50,39 @@ def identity_from_packet(packet: dict[str, Any]) -> tuple[int, int, str]:
 def canonical_members(
     packets: list[dict[str, Any]], proof: dict[str, Any]
 ) -> list[dict[str, Any]]:
-    ready_by_node = {str(row["node_id"]): row for row in proof["ready"]}
+    ready_rows = proof.get("ready")
+    if not isinstance(ready_rows, list) or len(ready_rows) != N:
+        raise FabricError("COHORT_READY_PROOF_INVALID")
+    ready_by_node = {str(row["node_id"]): row for row in ready_rows}
+    if len(ready_by_node) != N:
+        raise FabricError("COHORT_READY_NODE_ID_DUPLICATE")
+
     members: list[dict[str, Any]] = []
     for packet in packets:
         node_id = str(packet["source_node_id"])
         ready = ready_by_node.get(node_id)
         if ready is None:
             raise FabricError("COHORT_READY_BINDING_MISSING")
+        producer_pid = int(packet["payload"]["process_pid"])
+        ready_pid = int(ready["pid"])
+        if producer_pid != ready_pid:
+            raise FabricError("COHORT_PID_PACKET_BINDING_MISMATCH")
+        packet_identity = identity_from_packet(packet)
+        ready_identity = (
+            int(ready["generation"]),
+            int(ready["state_epoch"]),
+            str(ready["state_digest"]),
+        )
+        if packet_identity != ready_identity:
+            raise FabricError("COHORT_READY_PACKET_SNAPSHOT_MISMATCH")
         members.append(
             {
                 "source_node_id": node_id,
                 "packet_digest": str(packet["packet_digest"]),
-                "producer_pid": int(packet["payload"]["process_pid"]),
-                "ready_pid": int(ready["pid"]),
-                "generation": int(packet["generation"]),
-                "state_epoch": int(packet["state_epoch"]),
-                "state_digest": str(packet["state_digest"]),
+                "producer_pid": producer_pid,
+                "generation": packet_identity[0],
+                "state_epoch": packet_identity[1],
+                "state_digest": packet_identity[2],
             }
         )
     return sorted(members, key=lambda row: (row["source_node_id"], row["packet_digest"]))
@@ -151,17 +168,12 @@ class AtomicCohortFabric(ExactSnapshotFabric):
             raise FabricError("COHORT_MIXED_SNAPSHOT")
         if not proof.get("explicit_read_transaction"):
             raise FabricError("COHORT_READ_TRANSACTION_PROOF_MISSING")
+        if not proof.get("all_hold_readonly_s1_fd_at_barrier"):
+            raise FabricError("COHORT_READONLY_S1_FD_PROOF_MISSING")
         if not proof.get("writer_free_full_probe"):
             raise FabricError("COHORT_WRITER_FREE_PROOF_MISSING")
 
-        current = self.snapshot()
         expected_identity = (expected_generation, expected_epoch, expected_digest)
-        if identity_from_snapshot(current) != expected_identity:
-            raise FabricError("COHORT_START_SNAPSHOT_STALE")
-
-        # Deterministic coordinator authority is checked before any write transaction.
-        self._lease_row(lease, token, SCOPE)
-
         packet_digests: list[str] = []
         source_nodes: list[str] = []
         producer_pids: list[int] = []
@@ -183,8 +195,14 @@ class AtomicCohortFabric(ExactSnapshotFabric):
             }
             if packet.get("packet_digest") != dg(core):
                 raise FabricError("COHORT_PACKET_DIGEST_MISMATCH")
+            node_id = str(packet["source_node_id"])
+            row = self.con.execute(
+                "SELECT capability,healthy FROM nodes WHERE node_id=?", (node_id,)
+            ).fetchone()
+            if row is None or int(row["healthy"]) != 1 or row["capability"] != "reason":
+                raise FabricError("COHORT_MEMBER_RUNTIME_MEMBERSHIP_INVALID")
             packet_digests.append(str(packet["packet_digest"]))
-            source_nodes.append(str(packet["source_node_id"]))
+            source_nodes.append(node_id)
             producer_pids.append(int(packet["payload"]["process_pid"]))
 
         if len(set(packet_digests)) != N:
@@ -194,6 +212,8 @@ class AtomicCohortFabric(ExactSnapshotFabric):
         if len(set(producer_pids)) != N:
             raise FabricError("COHORT_DUPLICATE_PROCESS_IDENTITY")
 
+        # This also verifies every packet PID and snapshot against its exact barrier-ready row.
+        members = canonical_members(packets, proof)
         derived_cohort_id = derive_cohort_id(
             packets=packets,
             proof=proof,
@@ -202,11 +222,24 @@ class AtomicCohortFabric(ExactSnapshotFabric):
         if derived_cohort_id != expected_cohort_id:
             raise FabricError("COHORT_ID_BINDING_MISMATCH")
 
+        # Exact replay is checked BEFORE requiring the historical starting snapshot to still
+        # be current. Replay causes no mutation, so the already-admitted cohort remains
+        # idempotent even though S1 necessarily advanced during the original commit.
         existing = self.con.execute(
             "SELECT * FROM cohort_admissions WHERE cohort_id=?",
             (derived_cohort_id,),
         ).fetchone()
         if existing is not None:
+            stored_digests = json.loads(existing["member_digests_json"])
+            requested_digests = [row["packet_digest"] for row in members]
+            if (
+                int(existing["start_generation"]) != expected_generation
+                or int(existing["start_epoch"]) != expected_epoch
+                or str(existing["start_digest"]) != expected_digest
+                or int(existing["member_count"]) != N
+                or stored_digests != requested_digests
+            ):
+                raise FabricError("COHORT_REPLAY_BINDING_MISMATCH")
             return {
                 "cohort_id": derived_cohort_id,
                 "replay": True,
@@ -214,7 +247,13 @@ class AtomicCohortFabric(ExactSnapshotFabric):
                 "resulting_epoch": int(existing["resulting_epoch"]),
             }
 
-        members = canonical_members(packets, proof)
+        current = self.snapshot()
+        if identity_from_snapshot(current) != expected_identity:
+            raise FabricError("COHORT_START_SNAPSHOT_STALE")
+
+        # Deterministic coordinator authority is required for a new state transition.
+        self._lease_row(lease, token, SCOPE)
+
         ordered_packet_digests = [row["packet_digest"] for row in members]
         summary_payload = {
             "schema": "GRID10_COHORT_SUMMARY/v1",
@@ -227,6 +266,7 @@ class AtomicCohortFabric(ExactSnapshotFabric):
                 "epoch": expected_epoch,
                 "state_digest": expected_digest,
             },
+            "observation_relabelled_as_current": False,
         }
         summary_digest = dg(summary_payload)
 
@@ -253,7 +293,7 @@ class AtomicCohortFabric(ExactSnapshotFabric):
             merged = {
                 "previous": json.loads(scope_row["summary_json"]),
                 "latest": summary_payload,
-                "source_schema": "GRID10_ATOMIC_COHORT/v1",
+                "source_schema": COHORT_SCHEMA,
             }
             self.con.execute(
                 "UPDATE scopes SET summary_json=?,evidence_count=evidence_count+?,"
@@ -267,11 +307,9 @@ class AtomicCohortFabric(ExactSnapshotFabric):
                     SCOPE,
                 ),
             )
-            for packet, member in zip(
-                sorted(packets, key=lambda p: (p["source_node_id"], p["packet_digest"])),
-                members,
-                strict=True,
-            ):
+            packet_by_digest = {str(p["packet_digest"]): p for p in packets}
+            for member in members:
+                packet = packet_by_digest[member["packet_digest"]]
                 self.con.execute(
                     "INSERT INTO admitted_results VALUES(?,?,?,?,?)",
                     (
@@ -399,6 +437,7 @@ def run() -> dict[str, Any]:
                 proof["distinct_os_pids"] == N
                 and proof["all_alive_at_barrier"]
                 and proof["same_snapshot_identity"]
+                and proof["all_hold_readonly_s1_fd_at_barrier"]
                 and proof["writer_free_full_probe"]
             )
             tests["A2_EXACT_COHORT_PACKET_SET_COMMITTED"] = bool(
@@ -488,7 +527,7 @@ def run() -> dict[str, Any]:
                     expected_epoch=start.epoch,
                     expected_digest=start.state_digest,
                 ),
-                "COHORT_READY_BINDING_MISSING",
+                "COHORT_MEMBER_RUNTIME_MEMBERSHIP_INVALID",
             )
         finally:
             fabric.close()
@@ -499,6 +538,11 @@ def run() -> dict[str, Any]:
             "pass": passed,
             "tests": tests,
             "contract_scope": "TEST_ONLY_SINGLE_SCOPE_ATOMIC_SAME_COHORT_GRID10_CANDIDATE",
+            "known_boundary": (
+                "Producer packets are source-bound to the current physical-v2 child path and exact "
+                "barrier snapshot/PID evidence; a stronger independent consumed-read attestation "
+                "remains a later discriminator and is not claimed by this fixture."
+            ),
             "promotion": "BLOCKED_PENDING_EXACT_CURRENT_REVIEW_AND_REPOSITORY_BOUND_RUNTIME_AUTHORITY",
             "credit_boundary": {
                 "source_or_local_acceptance_only": True,

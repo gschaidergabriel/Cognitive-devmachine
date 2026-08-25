@@ -1,0 +1,57 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "authority_epoch": "8.78",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "canonical_main_observed_before_fusion": "56fbd116759941a60e635fe2034fd8daba49e6be",
+  "pull_request": 1909,
+  "pull_request_head_after_fusion": "ba469a89e851675776ca1a647ce3ecb011bd64dd",
+  "superseded_pull_request": 1892,
+  "coordination": {
+    "duplicate_liveness_pr_created": false,
+    "existing_liveness_pr_reused": true,
+    "superseded_telemetry_pr_closed_unmerged": true,
+    "new_unusual_experiments": 0,
+    "unusual_experiment_status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_experiment_reason": "no shared reproducible immutable macrocycle/request identity exposed to this organ"
+  },
+  "observed": [
+    "Supervisor 8.78 current inbox identifies historical extraction liveness as the highest-priority blocker",
+    "free_swarm_backfill_scheduler uses the 6000 fabric as historical extraction transport and redirects reservable slots to old-output extraction",
+    "the original backpressure gate counted PENDING_EXTRACTION in stop pressure and could self-stop that transport",
+    "a parallel main repair kept the fabric unconditionally alive, preventing deadlock but also bypassing READY/NEEDS_IMPLEMENTATION stop pressure after pending extraction is exhausted",
+    "PR 1909 already contained the correct tri-state core and regressions, so this organ fused only nonduplicate hardening into that PR"
+  ],
+  "fused_delta": [
+    "pending_extraction > 0 keeps the 6000 extraction transport alive",
+    "pending_extraction == 0 restores READY + NEEDS_IMPLEMENTATION threshold backpressure against renewed raw scale-up",
+    "missing/invalid Forge DB remains fail-closed",
+    "strict pending-only XFAIL is converted into a normal regression and a threshold+pending liveness regression is present",
+    "read-only Forge SQLite connection is closed in finally on every opened-connection path",
+    "latest backpressure/liveness decision is exported in SUPERVISOR_6000.json",
+    "policy telemetry states that pending extraction never self-stops its transport"
+  ],
+  "go_tracks": {
+    "track_a": "ADVANCED: EntityOS active control plane now has a converged tri-state liveness/backpressure design in the single retained PR lane",
+    "track_b": "ADVANCED_AT_DETERMINISTIC_CONTROL_EVIDENCE_BOUNDARY: the single supervisor preserves fail-closed admission while separating extraction transport liveness from ordinary conversion stop pressure; no second canonical state/effect authority is introduced",
+    "track_c": "ADVANCED_AT_DATASET_READINESS_BOUNDARY: historical extraction can continue toward bounded saturation without self-deadlock, directly unblocking the data path required before J-Space/model/training promotion"
+  },
+  "evidence": {
+    "source_diff_inspected": true,
+    "regression_source_present": true,
+    "test_execution_observed_on_fused_head": false,
+    "runtime_execution_observed_on_fused_head": false,
+    "automatic_workflow_runs_observed_on_fused_head_at_receipt_time": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "artefact_readme": "NO_CHANGE_WITH_REASON: canonical main is moving multiple times per minute and current-facing artefact documentation is being updated by parallel canonical workers; this organ avoids overwriting a moving README from a stale branch snapshot. The bounded PR plus this receipt carry the durable delta.",
+  "next_exact_gate": "execute exact-current syntax and tests/test_go_878_raw_generation_backpressure.py, then bounded FREE_ONLY supervisor acceptance proving fail-closed unknown DB, pending-only and pending+threshold transport liveness, pending-zero threshold stop, and matching SUPERVISOR_6000.json decision telemetry"
+}

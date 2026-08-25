@@ -1,0 +1,108 @@
+{
+  "schema": "COGNITIVE_PROCESS_ABI/v1",
+  "status": "CANDIDATE_SOURCE_CONTRACT_NOT_RUNTIME_CREDIT",
+  "authority": {
+    "product": "EntityOS",
+    "architecture": "HCU",
+    "owner_target_path": "research_entity/global/OWNER_CORRECTION_ZERO_ENTITYOS_COGNITIVE_GRID_DB_CLAUDECODE_GLOBAL_JSPACE_2026-08-25.md",
+    "grid_law": "VARIABLE_N_RUNTIME_PARAMETER_GRID10_ONLY_A_BENCHMARK_CONFIGURATION",
+    "census_dependency": "AGENT_ZERO_DISTRIBUTED_COGNITIVE_PROCESS_CENSUS/v1@PR1971"
+  },
+  "purpose": "Bind Zero/EntityOS cognitive process semantics to size-independent typed work, shared database state, routing, execution, workspace re-entry, Claude Code handoff, and deterministic truth/effect boundaries.",
+  "epistemic_law": "FACT_UNKNOWN_PLUS_METHOD_PRESENT_NE_FACT_PRESENT",
+  "state_classes": {
+    "S0": "CANONICAL_DURABLE_DATABASE_STATE_AND_DETERMINISTIC_AUTHORITY",
+    "S1": "LIVE_SHARED_COGNITIVE_WORKSPACE_STATE_NONCANONICAL_UNLESS_EXPLICITLY_ADMITTED",
+    "S2": "EPHEMERAL_LOCAL_CANDIDATE_SIMULATION_OR_PROJECTION"
+  },
+  "packet_types": {
+    "CognitiveWorkUnit": {
+      "required": ["abi", "work_id", "causal_event_id", "admission_id", "generation", "process_id", "parent_work_ids", "input_refs", "required_state_epoch", "capability_scope_ref", "budget", "completion_contract", "provenance"],
+      "rules": ["process_id MUST be AZP01..AZP20", "capability claims inside model/workspace payloads cannot broaden capability_scope_ref", "generation and required_state_epoch are mandatory fail-closed bindings"]
+    },
+    "RouteLease": {
+      "required": ["route_id", "work_id", "generation", "executor_class", "executor_id", "capability_scope_ref", "issued_state_epoch", "expires_at", "policy_digest"],
+      "rules": ["stale generation or expired lease rejects execution", "route selection grants no new capability"]
+    },
+    "CognitiveResult": {
+      "required": ["result_id", "work_id", "process_id", "generation", "executor_id", "route_id", "input_digest", "output_class", "candidate_payload_ref", "evidence_refs", "uncertainty", "provenance"],
+      "output_class": ["CANDIDATE", "MEASUREMENT", "PROJECTION", "UNKNOWN", "WRITE_PROPOSAL", "EFFECT_PROPOSAL"],
+      "rules": ["result cannot directly mutate S0", "UNKNOWN cannot be normalized to false", "model consensus does not promote output_class"]
+    },
+    "WorkspacePacket": {
+      "required": ["workspace_episode_id", "workspace_epoch", "causal_event_id", "generation", "candidate_result_ids", "selection_id", "broadcast_refs", "reentry_refs", "selection_provenance"],
+      "rules": ["selection is atomic per OPEN workspace epoch", "workspace recurrence cannot mint truth", "stale epoch re-entry fails closed"]
+    },
+    "DbWriteProposal": {
+      "required": ["proposal_id", "causal_event_id", "generation", "expected_state_epoch", "write_kind", "target_ref", "candidate_value_ref", "evidence_refs", "provenance", "admission_policy_ref"],
+      "rules": ["proposal is not a write", "only deterministic admission may mutate canonical database state", "conflicting epoch must reject or re-evaluate"]
+    },
+    "ClaudeCodeBridgePacket": {
+      "required": ["bridge_id", "direction", "causal_event_id", "generation", "workspace_epoch", "typed_state_refs", "compressed_context_ref", "tool_capability_scope_ref", "request_or_result_ref", "provenance"],
+      "direction": ["GRID_TO_CLAUDE_CODE", "CLAUDE_CODE_TO_GRID"],
+      "rules": ["Claude Code is strong model/tool partner, not canonical truth authority", "no activation-level Global J-Space claim without exposed causal evidence", "returned text/tool output re-enters as candidate/evidence-bound state"]
+    },
+    "JSpaceMeasurement": {
+      "required": ["measurement_id", "causal_event_id", "generation", "model_identity", "runtime_identity", "hook_or_interface_identity", "measurement_kind", "value_ref", "causal_test_ref", "credit_scope"],
+      "rules": ["missing exact model/runtime/interface identity => UNKNOWN", "text handoff alone cannot be relabeled activation-level coupling", "credit_scope must remain component-bounded"]
+    },
+    "EffectProposal": {
+      "required": ["effect_proposal_id", "causal_event_id", "generation", "requested_effect_type", "payload_ref", "capability_scope_ref", "evidence_refs", "provenance"],
+      "rules": ["proposal never executes directly", "EffectGate and EffectJournal remain the only real-effect authority", "unknown external outcome is never blindly replayed"]
+    }
+  },
+  "process_binding": {
+    "AZP01": ["CognitiveWorkUnit", "CognitiveResult"],
+    "AZP02": ["CognitiveWorkUnit", "CognitiveResult", "DbWriteProposal"],
+    "AZP03": ["CognitiveWorkUnit", "CognitiveResult"],
+    "AZP04": ["CognitiveWorkUnit", "CognitiveResult"],
+    "AZP05": ["CognitiveWorkUnit", "RouteLease", "CognitiveResult"],
+    "AZP06": ["CognitiveWorkUnit", "RouteLease", "CognitiveResult"],
+    "AZP07": ["CognitiveWorkUnit", "CognitiveResult"],
+    "AZP08": ["WorkspacePacket", "CognitiveResult"],
+    "AZP09": ["JSpaceMeasurement", "CognitiveResult"],
+    "AZP10": ["CognitiveWorkUnit", "CognitiveResult"],
+    "AZP11": ["EffectProposal", "CognitiveResult"],
+    "AZP12": ["EffectProposal", "CognitiveResult"],
+    "AZP13": ["CognitiveWorkUnit", "CognitiveResult"],
+    "AZP14": ["DbWriteProposal", "CognitiveResult"],
+    "AZP15": ["CognitiveWorkUnit", "CognitiveResult"],
+    "AZP16": ["CognitiveWorkUnit", "CognitiveResult"],
+    "AZP17": ["CognitiveWorkUnit", "CognitiveResult"],
+    "AZP18": ["CognitiveWorkUnit", "RouteLease", "CognitiveResult"],
+    "AZP19": ["CognitiveWorkUnit", "CognitiveResult"],
+    "AZP20": ["CognitiveWorkUnit", "WorkspacePacket", "ClaudeCodeBridgePacket", "CognitiveResult"]
+  },
+  "cross_process_invariants": [
+    "semantic process identity is independent of module identity and grid size N",
+    "same module/runtime may execute different AZP process_ids when route/capability bindings permit",
+    "durable exact data is stored in S0 database rather than reconstructed merely for persistence",
+    "cognitive/model/workspace/J-Space outputs never mint canonical truth",
+    "all canonical S0 mutations are deterministic admitted writes or EffectGate/EffectJournal effects",
+    "replay-stable causal_event_id is distinct from transport/admission_id",
+    "generation, state epoch, provenance, route, executor and input digest are end-to-end bound",
+    "restart/rejoin must not create a new causal event or self-grant coordinator/effect authority",
+    "Claude Code handoff is typed and causally re-entered; prompt presence alone is not Global J-Space evidence",
+    "no fixed personality or permanent role is required for any module"
+  ],
+  "first_executable_discriminator": {
+    "name": "VARIABLE_ROLE_REJOIN_ABI_SMOKE",
+    "steps": [
+      "admit one causal event with two dependent CognitiveWorkUnits using different AZP process_ids",
+      "route both sequentially to the same admitted executor/runtime identity",
+      "persist only deterministic S0 state between steps",
+      "restart executor between steps and rejoin using generation/state-epoch bindings",
+      "emit causally bound CognitiveResults and one WorkspacePacket re-entry",
+      "attempt stale-generation, self-granted-capability and direct-S0-write variants and require rejection"
+    ],
+    "pass": "same runtime executes two cognitive process types across restart with exact causal continuity and all three fail-closed negatives rejected",
+    "credit": "ABI_MULTI_PROCESS_REJOIN_COMPONENT_ONLY"
+  },
+  "credit": {
+    "whole_entityos_hcu": 0,
+    "full_hcu": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  }
+}

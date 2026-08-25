@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import copy
 import unittest
 
 from tools import trigger1_cross_task_abstract_control_gate_v3 as gate
@@ -15,14 +14,21 @@ def binding(rank: int = 2) -> dict:
         {"axis_id": f"q{i}", "vector_sha256": SHA_A if i % 2 == 0 else SHA_B}
         for i in range(rank)
     ]
-    return {
+    core = {
         "schema": gate.NUISANCE_SCHEMA,
+        "producer_schema": gate.EXPECTED_NUISANCE_PRODUCER_SCHEMA,
         "fit_split": "CALIBRATION",
         "frozen_before_holdout": True,
-        "receipt_sha256": SHA_A,
+        "basis_method": gate.EXPECTED_NUISANCE_BASIS_METHOD,
+        "basis_order": "REQUIRED_NUISANCE_FAMILIES_THEN_SOURCE_INDEX",
         "rank": rank,
         "axes": axes,
+        "v1_result_sha256": SHA_A,
+        "nuisance_source_receipt_sha256": SHA_B,
+        "basis_max_abs_gram_error": 0.0,
+        "basis_max_input_row_span_residual_l2": 0.0,
     }
+    return {**core, "receipt_sha256": gate._canonical_sha(core)}
 
 
 def row(control: str, margin: float, axis_id: str | None = None) -> dict:
@@ -121,6 +127,16 @@ class RankCompleteNuisanceGateV3Test(unittest.TestCase):
         failures: list[str] = []
         gate._prepare_rank_complete_nuisance(candidate, failures)
         self.assertIn("NUISANCE_SUBSPACE_AXIS_COUNT_RANK_MISMATCH", failures)
+        self.assertIn("NUISANCE_SUBSPACE_RECEIPT_HASH_MISMATCH", failures)
+
+    def test_tampered_binding_receipt_fails_closed(self):
+        b = binding(1)
+        b["basis_max_abs_gram_error"] = 1e-4
+        candidate = {"nuisance_subspace": b, "holdout_causal_rows": [row("NUISANCE", 0.1, "q0")]}
+        failures: list[str] = []
+        gate._prepare_rank_complete_nuisance(candidate, failures)
+        self.assertIn("NUISANCE_SUBSPACE_ORTHONORMALITY_NOT_ATTESTED", failures)
+        self.assertIn("NUISANCE_SUBSPACE_RECEIPT_HASH_MISMATCH", failures)
 
     def test_adjudicate_never_mints_credit_on_malformed_candidate(self):
         out = gate.adjudicate({"schema": gate.ATTESTATION_SCHEMA})

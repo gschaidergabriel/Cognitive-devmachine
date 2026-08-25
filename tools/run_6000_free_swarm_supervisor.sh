@@ -235,8 +235,11 @@ reconcile_6000_admission(){
 }
 
 raw_generation_allowed(){
-  # Supervisor 8.78 conversion-pressure gate. This process is credential blind:
+  # Supervisor 8.78 transport/backpressure gate. This process is credential blind:
   # it reads only the local canonical Forge DB and writes one local status record.
+  # Pending historical extraction is carried by the same 6000 fabric, so it must
+  # keep that transport alive; free_swarm_backfill_scheduler suppresses ordinary
+  # raw-research prompts while extraction packets remain reservable.
   python3 - <<'PY'
 import datetime,json,os,sqlite3
 from pathlib import Path
@@ -268,15 +271,24 @@ try:
    pending=0
    if 'historical_chunks' in tables:
     pending=int(con.execute("SELECT COUNT(*) FROM historical_chunks WHERE state='PENDING_EXTRACTION'").fetchone()[0])
-   pressure=ready+implementation+pending
-   allowed=pressure < threshold
+   ready_implementation_pressure=ready+implementation
+   pressure=ready_implementation_pressure+pending
+   transport_required=pending > 0
+   if transport_required:
+    allowed=True
+    action='KEEP_EXTRACTION_TRANSPORT'
+   else:
+    allowed=ready_implementation_pressure < threshold
+    action='ALLOW_RAW_GENERATION' if allowed else 'PAUSE_RAW_GENERATION_BACKPRESSURE'
    status.update({
     'state':'OBSERVED',
     'ready_backlog':ready,
     'implementation_backlog':implementation,
     'pending_extraction':pending,
+    'ready_implementation_pressure':ready_implementation_pressure,
     'conversion_pressure':pressure,
-    'action':'ALLOW_RAW_GENERATION' if allowed else 'PAUSE_RAW_GENERATION_BACKPRESSURE',
+    'extraction_transport_required':transport_required,
+    'action':action,
    })
   con.close()
 except Exception as exc:

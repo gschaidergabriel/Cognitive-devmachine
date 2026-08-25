@@ -9,6 +9,7 @@ from tools.trigger2_fused_membership_two_phase_adapter_v1 import (
     AdapterError,
     attach_two_phase_authority,
     atomic_fused_two_phase_commit,
+    atomic_fused_two_phase_source_fixture_commit,
     validate_two_phase_cohort,
 )
 from tools.trigger2_grid10_fused_physical_membership_cohort_acceptance_v1 import (
@@ -66,8 +67,6 @@ def _packet(start, node_id: str, task: dict, pid: int) -> dict:
 
 
 def _phase_authority(packet: dict, membership: dict, idx: int) -> dict:
-    # Equal call/output content across members is intentional: invocation multiplicity is
-    # carried by launch + executor observation, not by content/evidence digest inequality.
     body = {
         "schema": PHASE_SCHEMA,
         "raw_node_result_packet_digest": packet["packet_digest"],
@@ -99,8 +98,6 @@ def _phase_authority(packet: dict, membership: dict, idx: int) -> dict:
 
 
 def _synthetic_source_proof(start, envelopes: list[dict]) -> dict:
-    # This is deliberately a deterministic source-path fixture, NOT physical GRID10 evidence.
-    # The real FusedFabric commit code is exercised, but no OS-process/procfs claim is minted.
     return {
         "all_alive_at_barrier": True,
         "distinct_os_pids": N,
@@ -140,32 +137,24 @@ def _structural_members(envelopes: list[dict]) -> list[dict]:
 def _fixture(tmp_path, label: str):
     fabric = FusedFabric(tmp_path / f"{label}.sqlite")
     node_ids = [f"x{i:02d}" for i in range(1, N + 1)]
-    memberships = {
-        node_id: fabric.runtime_register_node(node_id, "reason")
-        for node_id in node_ids
-    }
+    memberships = {node_id: fabric.runtime_register_node(node_id, "reason") for node_id in node_ids}
     fabric.seed_scope(SCOPE)
     for i in range(N):
         fabric.seed_task(f"t{i:02d}", SCOPE, 100 - i, "reason", {"q": i})
     lease, token = fabric.elect_coordinator(SCOPE)
     start = fabric.snapshot()
     membership_start = fabric.membership_snapshot()
-
     tasks = {task["task_id"]: task for task in start.tasks}
-    base_envelopes: list[dict] = []
-    extended_envelopes: list[dict] = []
+    base_envelopes = []
+    extended_envelopes = []
     for idx, node_id in enumerate(node_ids, 1):
         task = tasks[f"t{idx - 1:02d}"]
         packet = _packet(start, node_id, task, 9000 + idx)
         membership = memberships[node_id]
         base = fabric.make_envelope(packet, membership["membership_id"])
-        extended = attach_two_phase_authority(
-            base,
-            _phase_authority(packet, membership, idx),
-        )
+        extended = attach_two_phase_authority(base, _phase_authority(packet, membership, idx))
         base_envelopes.append(base)
         extended_envelopes.append(extended)
-
     proof = _synthetic_source_proof(start, extended_envelopes)
     cohort_id = fabric.derive_cohort_id(
         _structural_members(extended_envelopes),
@@ -173,49 +162,21 @@ def _fixture(tmp_path, label: str):
         expected_identity=snapshot_identity(start),
         membership_digest=membership_start["digest"],
     )
-    return {
-        "fabric": fabric,
-        "lease": lease,
-        "token": token,
-        "start": start,
-        "membership_start": membership_start,
-        "base_envelopes": base_envelopes,
-        "extended_envelopes": extended_envelopes,
-        "proof": proof,
-        "cohort_id": cohort_id,
-    }
+    return {"fabric": fabric, "lease": lease, "token": token, "start": start, "membership_start": membership_start, "base_envelopes": base_envelopes, "extended_envelopes": extended_envelopes, "proof": proof, "cohort_id": cohort_id}
 
 
 def _commit(fx, envelopes: list[dict]):
     start = fx["start"]
-    return atomic_fused_two_phase_commit(
-        fx["fabric"],
-        envelopes=envelopes,
-        lease=fx["lease"],
-        token=fx["token"],
-        proof=fx["proof"],
-        expected_generation=start.generation,
-        expected_epoch=start.epoch,
-        expected_digest=start.state_digest,
-        expected_membership_digest=fx["membership_start"]["digest"],
-        expected_cohort_id=fx["cohort_id"],
+    return atomic_fused_two_phase_source_fixture_commit(
+        fx["fabric"], envelopes=envelopes, lease=fx["lease"], token=fx["token"], proof=fx["proof"],
+        expected_generation=start.generation, expected_epoch=start.epoch, expected_digest=start.state_digest,
+        expected_membership_digest=fx["membership_start"]["digest"], expected_cohort_id=fx["cohort_id"],
     )
 
 
 def _reseal_phase(phase: dict) -> dict:
     out = deepcopy(phase)
-    body = {
-        key: out[key]
-        for key in out
-        if key
-        not in (
-            "authority_envelope_sha256",
-            "model_generated",
-            "canonical_truth",
-            "effect_authority",
-            "credit_boundary",
-        )
-    }
+    body = {key: out[key] for key in out if key not in ("authority_envelope_sha256", "model_generated", "canonical_truth", "effect_authority", "credit_boundary")}
     out["authority_envelope_sha256"] = canonical_sha256(body)
     return out
 
@@ -234,44 +195,39 @@ def test_resealed_two_phase_authority_is_persisted_by_real_fusedfabric_and_repla
         forward_validation = validate_two_phase_cohort(fx["extended_envelopes"])
         reverse_validation = validate_two_phase_cohort(list(reversed(fx["extended_envelopes"])))
         assert forward_validation["validation_digest_sha256"] == reverse_validation["validation_digest_sha256"]
-
-        reverse_cohort_id = fabric.derive_cohort_id(
-            _structural_members(list(reversed(fx["extended_envelopes"]))),
-            lease=fx["lease"],
-            expected_identity=snapshot_identity(fx["start"]),
-            membership_digest=fx["membership_start"]["digest"],
-        )
+        reverse_cohort_id = fabric.derive_cohort_id(_structural_members(list(reversed(fx["extended_envelopes"]))), lease=fx["lease"], expected_identity=snapshot_identity(fx["start"]), membership_digest=fx["membership_start"]["digest"])
         assert reverse_cohort_id == fx["cohort_id"]
-
         first = _commit(fx, fx["extended_envelopes"])
+        assert first["physical_witness_admitted"] is False
+        assert first["source_fixture_receipt"]["evidence_class"] == "SOURCE_FIXTURE_ONLY"
+        assert first["source_fixture_receipt"]["physical_grid10_runtime_credit"] == 0
         fused = first["fused_coordinator_receipt"]
-        assert fused["replay"] is False
-        assert fused["state_delta"] == 1
-        assert fused["cohort_id"] == fx["cohort_id"]
-
-        row = fabric.con.execute(
-            "SELECT envelope_digests_json FROM fused_cohort_admissions WHERE cohort_id=?",
-            (fx["cohort_id"],),
-        ).fetchone()
-        assert row is not None
-        canonical_members = sorted(
-            _structural_members(fx["extended_envelopes"]),
-            key=lambda member: (
-                member["source_node_id"],
-                member["node_result_digest"],
-                member["source_membership_id"],
-            ),
-        )
+        assert fused["replay"] is False and fused["state_delta"] == 1 and fused["cohort_id"] == fx["cohort_id"]
+        row = fabric.con.execute("SELECT envelope_digests_json FROM fused_cohort_admissions WHERE cohort_id=?", (fx["cohort_id"],)).fetchone()
+        canonical_members = sorted(_structural_members(fx["extended_envelopes"]), key=lambda member: (member["source_node_id"], member["node_result_digest"], member["source_membership_id"]))
         persisted = json.loads(row["envelope_digests_json"])
         assert persisted == [member["envelope_digest"] for member in canonical_members]
-        assert persisted != [
-            envelope["envelope_digest"] for envelope in fx["base_envelopes"]
-        ]
-
-        replay = _commit(fx, fx["extended_envelopes"])["fused_coordinator_receipt"]
-        assert replay["replay"] is True
-        assert replay["state_delta"] == 0
+        assert persisted != [envelope["envelope_digest"] for envelope in fx["base_envelopes"]]
+        replay_result = _commit(fx, fx["extended_envelopes"])
+        assert replay_result["source_fixture_receipt"]["evidence_class"] == "SOURCE_FIXTURE_ONLY"
+        replay = replay_result["fused_coordinator_receipt"]
+        assert replay["replay"] is True and replay["state_delta"] == 0
         assert fabric.snapshot().epoch == fx["start"].epoch + 1
+    finally:
+        fabric.close()
+
+
+def test_all_true_synthetic_source_proof_cannot_enter_physical_adapter_or_mutate(tmp_path):
+    fx = _fixture(tmp_path, "raw-proof-physical-reject")
+    fabric: FusedFabric = fx["fabric"]
+    try:
+        start = fx["start"]
+        before_epoch = fabric.snapshot().epoch
+        with pytest.raises(AdapterError, match="^RAW_PHYSICAL_COHORT_PROOF_NOT_ADMITTED$"):
+            atomic_fused_two_phase_commit(fabric, envelopes=fx["extended_envelopes"], lease=fx["lease"], token=fx["token"], proof=fx["proof"], expected_generation=start.generation, expected_epoch=start.epoch, expected_digest=start.state_digest, expected_membership_digest=fx["membership_start"]["digest"], expected_cohort_id=fx["cohort_id"])
+        assert fabric.snapshot().epoch == before_epoch
+        assert fabric.con.execute("SELECT COUNT(*) AS n FROM fused_cohort_admissions").fetchone()["n"] == 0
+        assert fabric.con.execute("SELECT COUNT(*) AS n FROM admitted_results").fetchone()["n"] == 0
     finally:
         fabric.close()
 
@@ -282,24 +238,14 @@ def test_transplanted_membership_authority_fails_before_real_fusedfabric_mutatio
     try:
         before_epoch = fabric.snapshot().epoch
         bad = deepcopy(fx["extended_envelopes"])
-        phase = deepcopy(
-            bad[0]["authority_extensions"]["two_phase_model_call_authority"]
-        )
+        phase = deepcopy(bad[0]["authority_extensions"]["two_phase_model_call_authority"])
         phase["source_node_admission_id"] = bad[1]["source_membership_id"]
         bad[0]["authority_extensions"]["two_phase_model_call_authority"] = _reseal_phase(phase)
         bad[0] = _reseal_proof(bad[0])
-
         with pytest.raises(AdapterError, match="^TWO_PHASE_ADMISSION_MEMBERSHIP_ID_MISMATCH$"):
             _commit(fx, bad)
-
         assert fabric.snapshot().epoch == before_epoch
-        assert (
-            fabric.con.execute("SELECT COUNT(*) AS n FROM fused_cohort_admissions").fetchone()["n"]
-            == 0
-        )
-        assert (
-            fabric.con.execute("SELECT COUNT(*) AS n FROM admitted_results").fetchone()["n"]
-            == 0
-        )
+        assert fabric.con.execute("SELECT COUNT(*) AS n FROM fused_cohort_admissions").fetchone()["n"] == 0
+        assert fabric.con.execute("SELECT COUNT(*) AS n FROM admitted_results").fetchone()["n"] == 0
     finally:
         fabric.close()

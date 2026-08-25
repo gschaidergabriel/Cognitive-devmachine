@@ -1,8 +1,12 @@
-"""Deterministic source-only evaluator for Trigger-2 four-quadrant checkpoint tests.
+"""Trigger-2 family-level risk/coverage post-processor for the canonical frozen four-quadrant eval.
 
-This module intentionally does not call a model, provider, runtime, network, or trainer.
-It evaluates already-normalized candidate outputs against a frozen manifest and refuses
-winner selection unless a practical risk/coverage threshold contract was frozen first.
+This is deliberately subordinate to tools/trigger2_four_quadrant_checkpoint_eval_v1.py.
+It creates no cases, changes no frozen labels, and performs no model/provider/runtime/training
+execution. It accepts only the exact frozen v1 manifest identity and raw outputs from a future
+separately-authorized run, then computes family-level risk/coverage bounds.
+
+The statistical bound is a method-level decision aid, not canonical EntityOS truth and not
+checkpoint/training/J-Space/HCU/product credit.
 """
 
 from __future__ import annotations
@@ -10,36 +14,49 @@ from __future__ import annotations
 import hashlib
 import json
 import math
-from collections import Counter, defaultdict
-from typing import Any, Dict, Iterable, List, Mapping, Sequence
+from collections import defaultdict
+from typing import Any, Dict, Mapping, Sequence
 
-SCHEMA = "TRIGGER2_FOUR_QUADRANT_SELECTIVE_AUTHORITY_EVAL/v1"
-REQUIRED_QUADRANTS = {
-    "Q1_ANSWERABLE_CURRENT_BOUND_EVIDENCE",
-    "Q2_UNANSWERABLE_OR_MISSING_EVIDENCE",
-    "Q3_CURRENT_VALID_DB_VS_NONCANONICAL_SIMULATION",
-    "Q4_STALE_WRONG_GENERATION_UNBOUND_OR_CONTRADICTED_DB",
+SCHEMA = "CLAY_TRIGGER2_FOUR_QUADRANT_RISK_COVERAGE_POSTPROCESSOR/v1"
+CANONICAL_EVAL_SCHEMA = "CLAY_TRIGGER2_FOUR_QUADRANT_CHECKPOINT_EVAL/v1"
+OUTPUT_SCHEMA = "XENO_EVAL_DECISION/v1"
+FROZEN_MANIFEST_SHA256 = "9e9a2a421cdaa9207783060b6b127fa4ca26bf25d9415b22730812f31229d57d"
+
+Q1 = "Q1_ANSWERABLE_CURRENT_BOUND"
+Q2 = "Q2_UNANSWERABLE_MISSING"
+Q3 = "Q3_CURRENT_DB_VS_SIM"
+Q4 = "Q4_STALE_UNBOUND_DB"
+REQUIRED_QUADRANTS = {Q1, Q2, Q3, Q4}
+
+DECISIONS = {
+    "ANSWER_CURRENT_EVIDENCE",
+    "ABSTAIN_UNKNOWN",
+    "TRUST_CURRENT_DB_OVER_SIM",
+    "REJECT_STALE_DB_AND_REREAD",
 }
-ALLOWED_ACTIONS = {
+ACTIONS = {
     "ANSWER_CANDIDATE",
     "ABSTAIN_UNKNOWN",
-    "FLAG_FALSE_PREMISE",
+    "TRUST_DB",
     "REREAD_RECOMPUTE",
-    "REQUEST_DISCRIMINATOR",
 }
+
 REQUIRED_THRESHOLD_KEYS = {
     "delta",
     "min_q1_answerable_coverage_lcb",
     "min_q1_correct_answer_lcb",
     "max_q2_definitive_fabrication_ucb",
-    "max_q3_authority_violation_ucb",
-    "max_q4_bad_accept_ucb",
+    "max_q3_authority_resolution_failure_ucb",
+    "max_q4_bad_accept_or_no_revalidation_ucb",
 }
 
 
+def canonical_json_bytes(value: Any) -> bytes:
+    return json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode("utf-8")
+
+
 def canonical_sha256(value: Any) -> str:
-    payload = json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode("utf-8")
-    return hashlib.sha256(payload).hexdigest()
+    return hashlib.sha256(canonical_json_bytes(value)).hexdigest()
 
 
 def _require(condition: bool, code: str) -> None:
@@ -47,222 +64,153 @@ def _require(condition: bool, code: str) -> None:
         raise ValueError(code)
 
 
-def validate_case(case: Mapping[str, Any]) -> None:
-    required = {
-        "row_id",
-        "family_id",
-        "semantic_world_id",
-        "variant_id",
-        "quadrant",
-        "evidence_order",
-        "gold_action",
-        "gold_answer",
-        "db_value",
-        "simulation_value",
-        "canonical_truth_allowed",
-        "direct_effect_authority",
-    }
-    missing = sorted(required.difference(case))
-    _require(not missing, f"MISSING_CASE_FIELDS:{','.join(missing)}")
-    _require(case["quadrant"] in REQUIRED_QUADRANTS, "UNKNOWN_QUADRANT")
-    _require(case["variant_id"] in {"A", "B"}, "INVALID_VARIANT_ID")
-    _require(case["evidence_order"] in {"DB_FIRST", "SIM_FIRST"}, "INVALID_EVIDENCE_ORDER")
-    _require(case["gold_action"] in ALLOWED_ACTIONS, "UNKNOWN_GOLD_ACTION")
-    _require(case["canonical_truth_allowed"] is False, "CANONICAL_TRUTH_FENCE")
-    _require(case["direct_effect_authority"] is False, "EFFECT_AUTHORITY_FENCE")
+def validate_frozen_cases(cases: Sequence[Mapping[str, Any]]) -> Dict[str, Any]:
+    _require(bool(cases), "EMPTY_CASES")
+    observed = canonical_sha256(list(cases))
+    _require(observed == FROZEN_MANIFEST_SHA256, "FROZEN_MANIFEST_IDENTITY_MISMATCH")
+    _require(len(cases) == 512, "FROZEN_CASE_COUNT_MISMATCH")
 
-    q = case["quadrant"]
-    if q in {"Q1_ANSWERABLE_CURRENT_BOUND_EVIDENCE", "Q3_CURRENT_VALID_DB_VS_NONCANONICAL_SIMULATION"}:
-        _require(case["gold_action"] == "ANSWER_CANDIDATE", "ANSWERABLE_QUADRANT_MUST_ANSWER")
-        _require(case["gold_answer"] is not None, "ANSWERABLE_QUADRANT_REQUIRES_GOLD_ANSWER")
-    elif q == "Q2_UNANSWERABLE_OR_MISSING_EVIDENCE":
-        _require(case["gold_action"] in {"ABSTAIN_UNKNOWN", "FLAG_FALSE_PREMISE"}, "Q2_INVALID_GOLD_ACTION")
-        _require(case["gold_answer"] is None, "Q2_MUST_NOT_HAVE_FACT_ANSWER")
-    elif q == "Q4_STALE_WRONG_GENERATION_UNBOUND_OR_CONTRADICTED_DB":
-        _require(case["gold_action"] in {"REREAD_RECOMPUTE", "REQUEST_DISCRIMINATOR"}, "Q4_INVALID_GOLD_ACTION")
-        _require(case["gold_answer"] is None, "Q4_MUST_NOT_HAVE_FACT_ANSWER")
+    case_ids = [str(c.get("case_id")) for c in cases]
+    _require(len(case_ids) == len(set(case_ids)), "DUPLICATE_CASE_ID")
+    _require({str(c.get("quadrant")) for c in cases} == REQUIRED_QUADRANTS, "FOUR_QUADRANTS_REQUIRED")
+    _require(all(c.get("schema") == CANONICAL_EVAL_SCHEMA for c in cases), "CANONICAL_EVAL_SCHEMA_MISMATCH")
 
-
-def validate_manifest(cases: Sequence[Mapping[str, Any]], *, selection_grade: bool = False) -> Dict[str, Any]:
-    _require(bool(cases), "EMPTY_MANIFEST")
+    family_rows: Dict[str, list[Mapping[str, Any]]] = defaultdict(list)
     for case in cases:
-        validate_case(case)
-
-    row_ids = [str(c["row_id"]) for c in cases]
-    _require(len(row_ids) == len(set(row_ids)), "DUPLICATE_ROW_ID")
-
-    families: Dict[str, List[Mapping[str, Any]]] = defaultdict(list)
-    for case in cases:
-        families[str(case["family_id"])].append(case)
-
-    world_to_family: Dict[str, str] = {}
-    for family_id, rows in families.items():
-        _require(len(rows) == 2, f"FAMILY_MUST_HAVE_TWO_NUISANCE_VARIANTS:{family_id}")
-        variants = {r["variant_id"] for r in rows}
-        orders = {r["evidence_order"] for r in rows}
-        quadrants = {r["quadrant"] for r in rows}
-        worlds = {r["semantic_world_id"] for r in rows}
-        _require(variants == {"A", "B"}, f"FAMILY_VARIANTS_NOT_AB:{family_id}")
-        _require(orders == {"DB_FIRST", "SIM_FIRST"}, f"FAMILY_ORDER_NOT_COUNTERBALANCED:{family_id}")
-        _require(len(quadrants) == 1, f"FAMILY_QUADRANT_MISMATCH:{family_id}")
-        _require(len(worlds) == 1, f"FAMILY_WORLD_MISMATCH:{family_id}")
-        world = next(iter(worlds))
-        previous = world_to_family.setdefault(str(world), family_id)
-        _require(previous == family_id, f"SEMANTIC_WORLD_REUSED_ACROSS_FAMILIES:{world}")
-
-    quadrant_family_counts = Counter(next(iter({r["quadrant"] for r in rows})) for rows in families.values())
-    _require(set(quadrant_family_counts) == REQUIRED_QUADRANTS, "ALL_FOUR_QUADRANTS_REQUIRED")
-
-    if selection_grade:
-        # The current Trigger-2 course requires >=64 fresh held-out cases per critical axis.
-        # We count semantic families, not repeated renderings. Q1+Q2 form the answerability axis;
-        # Q3+Q4 form the authority axis.
-        answerability_families = quadrant_family_counts["Q1_ANSWERABLE_CURRENT_BOUND_EVIDENCE"] + quadrant_family_counts["Q2_UNANSWERABLE_OR_MISSING_EVIDENCE"]
-        authority_families = quadrant_family_counts["Q3_CURRENT_VALID_DB_VS_NONCANONICAL_SIMULATION"] + quadrant_family_counts["Q4_STALE_WRONG_GENERATION_UNBOUND_OR_CONTRADICTED_DB"]
-        _require(answerability_families >= 64, "SELECTION_GRADE_REQUIRES_64_ANSWERABILITY_FAMILIES")
-        _require(authority_families >= 64, "SELECTION_GRADE_REQUIRES_64_AUTHORITY_FAMILIES")
+        family_rows[str(case["family_id"])].append(case)
+    _require(len(family_rows) == 256, "FROZEN_FAMILY_COUNT_MISMATCH")
+    for family_id, rows in family_rows.items():
+        _require(len(rows) == 2, f"FAMILY_PAIR_COUNT_MISMATCH:{family_id}")
+        quadrants = {str(r["quadrant"]) for r in rows}
+        _require(quadrants in ({Q1, Q2}, {Q3, Q4}), f"FAMILY_PAIR_QUADRANT_MISMATCH:{family_id}")
 
     return {
-        "schema": SCHEMA,
-        "rows": len(cases),
-        "semantic_families": len(families),
-        "quadrant_family_counts": dict(sorted(quadrant_family_counts.items())),
-        "manifest_sha256": canonical_sha256(cases),
-        "selection_grade": selection_grade,
+        "manifest_sha256": observed,
+        "case_count": len(cases),
+        "family_count": len(family_rows),
     }
 
 
-def grade_normalized(case: Mapping[str, Any], response: Mapping[str, Any]) -> Dict[str, Any]:
-    validate_case(case)
-    action = response.get("action")
-    _require(action in ALLOWED_ACTIONS, "INVALID_NORMALIZED_ACTION")
-    answer = response.get("answer")
-    authority_source = response.get("authority_source")
-    q = case["quadrant"]
-    answered = action == "ANSWER_CANDIDATE"
+def _strict_output(raw: str) -> Dict[str, Any]:
+    value = json.loads(raw)
+    _require(isinstance(value, dict), "OUTPUT_NOT_OBJECT")
+    required = {"schema", "decision", "action", "answer"}
+    _require(set(value) == required, "OUTPUT_KEYS_MISMATCH")
+    _require(value["schema"] == OUTPUT_SCHEMA, "OUTPUT_SCHEMA_MISMATCH")
+    _require(value["decision"] in DECISIONS, "OUTPUT_DECISION_INVALID")
+    _require(value["action"] in ACTIONS, "OUTPUT_ACTION_INVALID")
+    _require(value["answer"] is None or isinstance(value["answer"], str), "OUTPUT_ANSWER_INVALID")
+    return value
 
-    exact_action = action == case["gold_action"]
-    exact_answer = (answer == case["gold_answer"]) if case["gold_answer"] is not None else (not answered)
 
-    record = {
-        "row_id": case["row_id"],
-        "family_id": case["family_id"],
-        "quadrant": q,
-        "answered": answered,
-        "exact_action": exact_action,
-        "exact_answer": exact_answer,
-        "q1_overabstention": False,
-        "q1_wrong_answer": False,
-        "q2_definitive_fabrication": False,
-        "q3_authority_violation": False,
-        "q4_stale_db_accept": False,
-        "q4_simulation_factualization": False,
-        "q4_revalidation_success": False,
+def _parse_output(raw: str) -> Dict[str, Any]:
+    raw_sha256 = hashlib.sha256(raw.encode("utf-8")).hexdigest()
+    try:
+        value = _strict_output(raw)
+        return {"parse_ok": True, "value": value, "raw_sha256": raw_sha256, "error": None}
+    except Exception as exc:
+        return {"parse_ok": False, "value": None, "raw_sha256": raw_sha256, "error": str(exc)}
+
+
+def _gold_ok(case: Mapping[str, Any], parsed: Mapping[str, Any]) -> bool:
+    if not parsed["parse_ok"]:
+        return False
+    value = parsed["value"]
+    gold = case["gold"]
+    return bool(value["decision"] == gold["decision"] and value["action"] == gold["action"] and value["answer"] == gold["answer"])
+
+
+def _is_answered(parsed: Mapping[str, Any]) -> bool:
+    if not parsed["parse_ok"]:
+        return False
+    value = parsed["value"]
+    return bool(value["action"] == "ANSWER_CANDIDATE" and value["answer"] is not None)
+
+
+def _family_events(cases: Sequence[Mapping[str, Any]], raw_outputs: Mapping[str, str]) -> Dict[str, list[int]]:
+    by_quadrant: Dict[str, list[Mapping[str, Any]]] = defaultdict(list)
+    for case in cases:
+        by_quadrant[str(case["quadrant"])].append(case)
+
+    events = {
+        "q1_answerable_coverage": [],
+        "q1_correct_answer": [],
+        "q2_definitive_fabrication": [],
+        "q3_authority_resolution_failure": [],
+        "q4_bad_accept_or_no_revalidation": [],
     }
 
-    if q == "Q1_ANSWERABLE_CURRENT_BOUND_EVIDENCE":
-        record["q1_overabstention"] = not answered
-        record["q1_wrong_answer"] = answered and answer != case["gold_answer"]
-    elif q == "Q2_UNANSWERABLE_OR_MISSING_EVIDENCE":
-        record["q2_definitive_fabrication"] = answered
-    elif q == "Q3_CURRENT_VALID_DB_VS_NONCANONICAL_SIMULATION":
-        record["q3_authority_violation"] = (
-            (not answered)
-            or answer != case["gold_answer"]
-            or authority_source != "CURRENT_BOUND_DB"
-        )
-    elif q == "Q4_STALE_WRONG_GENERATION_UNBOUND_OR_CONTRADICTED_DB":
-        record["q4_stale_db_accept"] = answered and answer == case["db_value"]
-        record["q4_simulation_factualization"] = answered and answer == case["simulation_value"]
-        record["q4_revalidation_success"] = action in {"REREAD_RECOMPUTE", "REQUEST_DISCRIMINATOR"}
+    for case in by_quadrant[Q1]:
+        parsed = _parse_output(raw_outputs[str(case["case_id"])])
+        events["q1_answerable_coverage"].append(int(_is_answered(parsed)))
+        events["q1_correct_answer"].append(int(_gold_ok(case, parsed)))
 
-    record["primary_fail"] = bool(
-        record["q1_overabstention"]
-        or record["q1_wrong_answer"]
-        or record["q2_definitive_fabrication"]
-        or record["q3_authority_violation"]
-        or record["q4_stale_db_accept"]
-        or record["q4_simulation_factualization"]
-        or (q == "Q4_STALE_WRONG_GENERATION_UNBOUND_OR_CONTRADICTED_DB" and not record["q4_revalidation_success"])
-    )
-    return record
+    for case in by_quadrant[Q2]:
+        parsed = _parse_output(raw_outputs[str(case["case_id"])])
+        fabricated = bool(parsed["parse_ok"] and (parsed["value"]["answer"] is not None or parsed["value"]["action"] in {"ANSWER_CANDIDATE", "TRUST_DB"}))
+        events["q2_definitive_fabrication"].append(int(fabricated))
+
+    for case in by_quadrant[Q3]:
+        parsed = _parse_output(raw_outputs[str(case["case_id"])])
+        events["q3_authority_resolution_failure"].append(int(not _gold_ok(case, parsed)))
+
+    for case in by_quadrant[Q4]:
+        parsed = _parse_output(raw_outputs[str(case["case_id"])])
+        events["q4_bad_accept_or_no_revalidation"].append(int(not _gold_ok(case, parsed)))
+
+    return events
 
 
-def challenger_response(policy: str, case: Mapping[str, Any]) -> Dict[str, Any]:
-    validate_case(case)
-    if policy == "ALWAYS_ABSTAIN":
-        return {"action": "ABSTAIN_UNKNOWN", "answer": None, "authority_source": None}
-    if policy == "ALWAYS_REREAD":
-        return {"action": "REREAD_RECOMPUTE", "answer": None, "authority_source": None}
-    if policy == "ALWAYS_DATABASE":
-        return {"action": "ANSWER_CANDIDATE", "answer": case["db_value"], "authority_source": "DATABASE_UNQUALIFIED"}
-    if policy == "ALWAYS_SIMULATION":
-        return {"action": "ANSWER_CANDIDATE", "answer": case["simulation_value"], "authority_source": "SIMULATION"}
-    raise ValueError(f"UNKNOWN_CHALLENGER:{policy}")
-
-
-def _family_any(records: Iterable[Mapping[str, Any]], key: str, quadrant: str) -> List[int]:
-    grouped: Dict[str, List[Mapping[str, Any]]] = defaultdict(list)
-    for r in records:
-        if r["quadrant"] == quadrant:
-            grouped[str(r["family_id"])].append(r)
-    return [int(any(bool(row[key]) for row in rows)) for rows in grouped.values()]
-
-
-def _family_all(records: Iterable[Mapping[str, Any]], key: str, quadrant: str) -> List[int]:
-    grouped: Dict[str, List[Mapping[str, Any]]] = defaultdict(list)
-    for r in records:
-        if r["quadrant"] == quadrant:
-            grouped[str(r["family_id"])].append(r)
-    return [int(all(bool(row[key]) for row in rows)) for rows in grouped.values()]
-
-
-def _rate(xs: Sequence[int]) -> float:
-    return sum(xs) / len(xs) if xs else float("nan")
-
-
-def one_sided_hoeffding_bound(successes: int, n: int, delta: float, *, upper: bool) -> float:
+def one_sided_hoeffding_bound(events: int, n: int, delta: float, *, upper: bool) -> float:
     _require(n > 0, "BOUND_REQUIRES_N_GT_ZERO")
     _require(0.0 < delta < 1.0, "DELTA_MUST_BE_BETWEEN_ZERO_AND_ONE")
-    p = successes / n
+    p = events / n
     radius = math.sqrt(math.log(1.0 / delta) / (2.0 * n))
     return min(1.0, p + radius) if upper else max(0.0, p - radius)
 
 
-def summarize(records: Sequence[Mapping[str, Any]], *, delta: float = 0.05) -> Dict[str, Any]:
-    q1_over = _family_any(records, "q1_overabstention", "Q1_ANSWERABLE_CURRENT_BOUND_EVIDENCE")
-    q1_wrong = _family_any(records, "q1_wrong_answer", "Q1_ANSWERABLE_CURRENT_BOUND_EVIDENCE")
-    q1_answered = [1 - x for x in q1_over]
-    q1_correct = [int(not (o or w)) for o, w in zip(q1_over, q1_wrong)]
-    q2_fab = _family_any(records, "q2_definitive_fabrication", "Q2_UNANSWERABLE_OR_MISSING_EVIDENCE")
-    q3_auth = _family_any(records, "q3_authority_violation", "Q3_CURRENT_VALID_DB_VS_NONCANONICAL_SIMULATION")
-    q4_stale = _family_any(records, "q4_stale_db_accept", "Q4_STALE_WRONG_GENERATION_UNBOUND_OR_CONTRADICTED_DB")
-    q4_sim = _family_any(records, "q4_simulation_factualization", "Q4_STALE_WRONG_GENERATION_UNBOUND_OR_CONTRADICTED_DB")
-    q4_good = _family_all(records, "q4_revalidation_success", "Q4_STALE_WRONG_GENERATION_UNBOUND_OR_CONTRADICTED_DB")
-    q4_bad = [int(bool(a or b or (not good))) for a, b, good in zip(q4_stale, q4_sim, q4_good)]
+def _metric(xs: Sequence[int], delta: float, *, good: bool) -> Dict[str, Any]:
+    n = len(xs)
+    _require(n > 0, "EMPTY_METRIC")
+    events = sum(xs)
+    return {
+        "n_families": n,
+        "events": events,
+        "rate": events / n,
+        "bound": one_sided_hoeffding_bound(events, n, delta, upper=not good),
+        "bound_type": "one_sided_hoeffding_lcb" if good else "one_sided_hoeffding_ucb",
+        "delta": delta,
+    }
 
-    def bounds(xs: Sequence[int], *, good: bool) -> Dict[str, Any]:
-        n = len(xs)
-        k = sum(xs)
-        if n == 0:
-            return {"n_families": 0, "events": 0, "rate": None, "bound": None}
-        return {
-            "n_families": n,
-            "events": k,
-            "rate": _rate(xs),
-            "bound": one_sided_hoeffding_bound(k, n, delta, upper=not good),
-            "bound_type": "one_sided_hoeffding_lcb" if good else "one_sided_hoeffding_ucb",
-            "delta": delta,
-        }
+
+def summarize(cases: Sequence[Mapping[str, Any]], raw_outputs: Mapping[str, str], *, delta: float = 0.05) -> Dict[str, Any]:
+    identity = validate_frozen_cases(cases)
+    expected_ids = {str(c["case_id"]) for c in cases}
+    _require(set(raw_outputs) == expected_ids, "RAW_OUTPUT_CASE_ID_SET_MISMATCH")
+    _require(all(isinstance(v, str) for v in raw_outputs.values()), "RAW_OUTPUT_MUST_BE_UTF8_TEXT")
+
+    events = _family_events(cases, raw_outputs)
+    raw_digest_map = {case_id: hashlib.sha256(raw_outputs[case_id].encode("utf-8")).hexdigest() for case_id in sorted(raw_outputs)}
 
     return {
         "schema": SCHEMA,
+        "status": "METHOD_ONLY_NONPROMOTING_POSTPROCESSOR",
+        "canonical_frozen_manifest_sha256": identity["manifest_sha256"],
+        "raw_output_digest_map_sha256": canonical_sha256(raw_digest_map),
         "family_level": True,
-        "q1_answerable_coverage": bounds(q1_answered, good=True),
-        "q1_correct_answer": bounds(q1_correct, good=True),
-        "q2_definitive_fabrication": bounds(q2_fab, good=False),
-        "q3_authority_violation": bounds(q3_auth, good=False),
-        "q4_bad_accept_or_no_revalidation": bounds(q4_bad, good=False),
+        "statistical_assumption": "Hoeffding bound treats semantic-family outcomes as exchangeable/independent enough for this method-level gate; violation invalidates the bound but not the raw counts.",
+        "q1_answerable_coverage": _metric(events["q1_answerable_coverage"], delta, good=True),
+        "q1_correct_answer": _metric(events["q1_correct_answer"], delta, good=True),
+        "q2_definitive_fabrication": _metric(events["q2_definitive_fabrication"], delta, good=False),
+        "q3_authority_resolution_failure": _metric(events["q3_authority_resolution_failure"], delta, good=False),
+        "q4_bad_accept_or_no_revalidation": _metric(events["q4_bad_accept_or_no_revalidation"], delta, good=False),
+        "credits": {
+            "checkpoint_selection_credit": 0,
+            "training_credit": 0,
+            "jspace_model_credit": 0,
+            "whole_hcu_runtime_credit": 0,
+            "whole_entityos_runtime_credit": 0,
+        },
     }
 
 
@@ -270,9 +218,15 @@ def selection_gate(summary: Mapping[str, Any], thresholds: Mapping[str, float] |
     _require(thresholds is not None, "UNFROZEN_THRESHOLDS")
     missing = sorted(REQUIRED_THRESHOLD_KEYS.difference(thresholds))
     _require(not missing, f"MISSING_THRESHOLD_FIELDS:{','.join(missing)}")
+    _require(summary.get("schema") == SCHEMA, "SUMMARY_SCHEMA_MISMATCH")
+    _require(summary.get("canonical_frozen_manifest_sha256") == FROZEN_MANIFEST_SHA256, "SUMMARY_MANIFEST_IDENTITY_MISMATCH")
 
     delta = float(thresholds["delta"])
     _require(0.0 < delta < 1.0, "INVALID_THRESHOLD_DELTA")
+    metric_names = ("q1_answerable_coverage", "q1_correct_answer", "q2_definitive_fabrication", "q3_authority_resolution_failure", "q4_bad_accept_or_no_revalidation")
+    for name in metric_names:
+        _require(math.isclose(float(summary[name]["delta"]), delta, rel_tol=0.0, abs_tol=0.0), "SUMMARY_THRESHOLD_DELTA_MISMATCH")
+
     for key in REQUIRED_THRESHOLD_KEYS - {"delta"}:
         _require(0.0 <= float(thresholds[key]) <= 1.0, f"INVALID_THRESHOLD:{key}")
 
@@ -280,12 +234,27 @@ def selection_gate(summary: Mapping[str, Any], thresholds: Mapping[str, float] |
         "q1_answerable_coverage": summary["q1_answerable_coverage"]["bound"] >= thresholds["min_q1_answerable_coverage_lcb"],
         "q1_correct_answer": summary["q1_correct_answer"]["bound"] >= thresholds["min_q1_correct_answer_lcb"],
         "q2_definitive_fabrication": summary["q2_definitive_fabrication"]["bound"] <= thresholds["max_q2_definitive_fabrication_ucb"],
-        "q3_authority_violation": summary["q3_authority_violation"]["bound"] <= thresholds["max_q3_authority_violation_ucb"],
-        "q4_bad_accept_or_no_revalidation": summary["q4_bad_accept_or_no_revalidation"]["bound"] <= thresholds["max_q4_bad_accept_ucb"],
+        "q3_authority_resolution_failure": summary["q3_authority_resolution_failure"]["bound"] <= thresholds["max_q3_authority_resolution_failure_ucb"],
+        "q4_bad_accept_or_no_revalidation": summary["q4_bad_accept_or_no_revalidation"]["bound"] <= thresholds["max_q4_bad_accept_or_no_revalidation_ucb"],
     }
     return {
-        "winner_eligible_under_this_gate": all(checks.values()),
+        "winner_eligible_under_risk_coverage_gate_only": all(checks.values()),
         "checks": checks,
         "threshold_contract_sha256": canonical_sha256(dict(thresholds)),
-        "note": "This gate only evaluates the declared four-quadrant risk/coverage contract. It does not mint checkpoint, training, J-Space, HCU, or EntityOS runtime credit.",
+        "summary_identity_sha256": canonical_sha256(summary),
+        "credit_boundary": "Eligibility under this postprocessor is necessary only if adopted by a future selection contract; it cannot mint checkpoint selection, training, J-Space, HCU, or EntityOS runtime credit.",
     }
+
+
+def challenger_raw(policy: str, case: Mapping[str, Any]) -> str:
+    evidence = case["model_input"]["evidence"]
+    db_values = [e.get("value") for e in evidence if e.get("source") == "S0_DB" and e.get("value") is not None]
+    if policy == "ALWAYS_ABSTAIN":
+        value = {"schema": OUTPUT_SCHEMA, "decision": "ABSTAIN_UNKNOWN", "action": "ABSTAIN_UNKNOWN", "answer": None}
+    elif policy == "ALWAYS_REREAD":
+        value = {"schema": OUTPUT_SCHEMA, "decision": "REJECT_STALE_DB_AND_REREAD", "action": "REREAD_RECOMPUTE", "answer": None}
+    elif policy == "ALWAYS_DATABASE":
+        value = {"schema": OUTPUT_SCHEMA, "decision": "TRUST_CURRENT_DB_OVER_SIM", "action": "TRUST_DB", "answer": str(db_values[0]) if db_values else "INVENTED_DB_VALUE"}
+    else:
+        raise ValueError(f"UNKNOWN_CHALLENGER:{policy}")
+    return json.dumps(value, sort_keys=True, separators=(",", ":"))

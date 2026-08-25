@@ -9,7 +9,8 @@ scientific-independence and disjoint-holdout evidence is present.
 Hosted prompt/completion traffic alone can never satisfy a positive verdict.
 A vector can establish low-level mechanism evidence without establishing the owner
 Trigger-1 goal when its construction leaks the evaluated output readout or the exact
-output-label identities used by the evaluation.
+output-label identities used by the evaluation. Token-output promotion evidence must
+also counterbalance the requested semantic target itself, not only the A/B/C codebook.
 """
 from __future__ import annotations
 
@@ -47,6 +48,7 @@ TERMINAL_OUTPUT_SITE_MARKERS = (
     "final_norm:output",
     "final_layer_norm:output",
 )
+REQUIRED_SEMANTIC_TARGETS = {"AFFIRMATIVE", "NEGATIVE", "NEUTRAL"}
 
 
 def _sha256(value: Any) -> bool:
@@ -184,13 +186,43 @@ def _identity_evidence(candidate: dict[str, Any]) -> tuple[bool, list[str]]:
     return not failures, failures
 
 
+def _semantic_target_counterbalance_evidence(
+    calibration: dict[str, Any], holdout: dict[str, Any]
+) -> tuple[bool, list[str]]:
+    """Require requested semantics to vary independently of output-code labels.
+
+    A/B/C codebook counterbalancing alone cannot distinguish semantic steering from a
+    generic instruction-compliance or correct-code-emission boost if every case requests
+    the same semantic target. Trigger-1 goal promotion therefore requires the semantic
+    target itself to be counterbalanced across AFFIRMATIVE/NEGATIVE/NEUTRAL in both
+    calibration and fresh holdout, plus a declared treatment-by-semantic-target test.
+    """
+    failures: list[str] = []
+    for split_name, split in (("CALIBRATION", calibration), ("HOLDOUT", holdout)):
+        if split.get("semantic_target_counterbalanced") is not True:
+            failures.append(f"{split_name}_SEMANTIC_TARGET_COUNTERBALANCE_REQUIRED")
+        targets = split.get("semantic_targets")
+        if not isinstance(targets, list) or not targets:
+            failures.append(f"{split_name}_SEMANTIC_TARGETS_REQUIRED")
+            continue
+        normalized = {str(value).strip().upper() for value in targets}
+        if normalized != REQUIRED_SEMANTIC_TARGETS:
+            failures.append(f"{split_name}_SEMANTIC_TARGET_SET_MUST_BE_AFFIRMATIVE_NEGATIVE_NEUTRAL")
+    if holdout.get("semantic_target_interaction_test") is not True:
+        failures.append("HOLDOUT_SEMANTIC_TARGET_INTERACTION_TEST_REQUIRED")
+    return not failures, failures
+
+
 def _scientific_independence_evidence(candidate: dict[str, Any]) -> tuple[bool, list[str]]:
-    """Guard Trigger-1 goal credit against output-readout and label-identity leakage."""
+    """Guard Trigger-1 goal credit against output-readout, label, and target confounds."""
     failures: list[str] = []
     derivation = candidate.get("vector_derivation")
+    calibration = candidate.get("calibration")
     holdout = candidate.get("holdout")
     if not isinstance(derivation, dict):
         return False, ["VECTOR_DERIVATION_EVIDENCE_REQUIRED"]
+    if not isinstance(calibration, dict):
+        calibration = {}
     if not isinstance(holdout, dict):
         holdout = {}
 
@@ -219,8 +251,12 @@ def _scientific_independence_evidence(candidate: dict[str, Any]) -> tuple[bool, 
     metric_uses_output_tokens = holdout.get("metric_uses_output_tokens")
     if not isinstance(metric_uses_output_tokens, bool):
         failures.append("HOLDOUT_METRIC_OUTPUT_TOKEN_MODALITY_REQUIRED")
-    elif metric_uses_output_tokens and holdout.get("label_mapping_counterbalanced") is not True:
-        failures.append("TOKEN_OUTPUT_METRIC_REQUIRES_COUNTERBALANCED_LABEL_MAPPING")
+    elif metric_uses_output_tokens:
+        if holdout.get("label_mapping_counterbalanced") is not True:
+            failures.append("TOKEN_OUTPUT_METRIC_REQUIRES_COUNTERBALANCED_LABEL_MAPPING")
+        semantic_ok, semantic_failures = _semantic_target_counterbalance_evidence(calibration, holdout)
+        if not semantic_ok:
+            failures.extend(semantic_failures)
 
     return not failures, failures
 
@@ -329,7 +365,8 @@ def adjudicate(candidate: dict[str, Any]) -> dict[str, Any]:
             "zero-cost API boundary, a non-terminal intervention site with downstream model computation, "
             "and scientific independence: the steering direction may not be constructed from the exact "
             "output-head/readout weights or evaluation output-label identities, may not use holdout data, "
-            "and token-output metrics require counterbalanced label mapping."
+            "and token-output metrics require both output-code and requested-semantic-target counterbalance "
+            "plus a treatment-by-semantic-target interaction test."
         ),
     }
 

@@ -1,0 +1,30 @@
+{
+  "schema": "CLAY_ORDINARY_DISPATCH_CLAIM/v1",
+  "dispatch_class": "free-swarm-historical-backfill-v1",
+  "dispatch_key": "free-swarm-historical-backfill-v1-g0001",
+  "retry_generation": 1,
+  "claim_kind": "ADMITTED_SINGLETON_CREATE_ONCE",
+  "execution_claim": true,
+  "claimed_by_organ": "GPT-5.6-Sol",
+  "trigger_owner": "CLAIMING_ORGAN_ONLY",
+  "trigger_state": "PENDING_EXACTLY_ONE_OWNER_TRIGGER",
+  "canonical_spec": "research_entity/continuity/ordinary_dispatch_specs/free-swarm-historical-backfill-v1.json",
+  "canonical_workflow": ".github/workflows/go878-historical-backfill-runtime.yml",
+  "canonical_capsule": "tools/run_free_swarm_historical_backfill_capsule_878.py",
+  "predecessor_dispatch_key": "free-swarm-historical-backfill-v1-g0000",
+  "predecessor_terminal_result_observed": false,
+  "generation_advance_reason": "EXPLICIT_INFRASTRUCTURE_AND_PROBE_SEMANTIC_CHANGE_AFTER_LEGACY_FANOUT_QUARANTINE: typed singleton transport restored for future generations; completion semantics changed to two explicit exhaustive zero-novel confirmations with >=64 finite ceiling; extraction liveness repaired; exact-current saturation and raw-generation-backpressure regressions now gate the capsule in the same clay-direct-dev workflow",
+  "workflow_preflight_commit": "fa095d198cb96974c6afdbaf75e7e4998cd62134",
+  "required_preflight_tests": [
+    "tests/test_free_swarm_backfill_exhaustiveness_878.py",
+    "tests/test_go_878_raw_generation_backpressure.py"
+  ],
+  "result_path": "research_entity/continuity/ordinary_dispatch_results/free-swarm-historical-backfill-v1-g0001.json",
+  "runtime_pass_claim": false,
+  "independent_replication_credit": 0,
+  "provider_or_model_network_io_authorized": false,
+  "paid_or_unknown_monetary_execution_authorized": false,
+  "together_authorized": false,
+  "rule": "THIS CREATE_ONCE CLAIM ADMITS AT MOST ONE OWNER-CREATED TYPED ISSUE TRIGGER FOR GENERATION 1. ALL OTHER ORGANS MUST TREAT THE CLAIM AS OWNED AND MUST NOT CREATE AN EQUIVALENT TRIGGER. RUNTIME CREDIT REQUIRES THE CANONICAL SEMANTIC RESULT.",
+  "protocol": "research_entity/continuity/ORDINARY_DISPATCH_IDEMPOTENCY_PROTOCOL.md"
+}

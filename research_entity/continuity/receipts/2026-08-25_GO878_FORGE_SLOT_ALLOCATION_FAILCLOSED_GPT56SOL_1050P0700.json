@@ -1,0 +1,46 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "authority_epoch": "8.78",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol ChatGPT organ",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "observed_canonical_main_before_delta": "2d8cc5f6ecbf15a1ebdf607774d6ca9591f2f48a",
+  "source_commits": [
+    "577ffc823dbb142277fb13d10757645e9307c63a",
+    "2a7599a4a50be8ba7768c53bd641c58a183f8554",
+    "007a759779f3cfeacff6d6f79d72e5e06360aa96"
+  ],
+  "observed_current_main_after_reentry": "007a759779f3cfeacff6d6f79d72e5e06360aa96",
+  "delta": {
+    "hypothesis": "Keeping the shared 6000 fabric alive is safe only if prompt-slot allocation independently fails closed when canonical Forge state is unknown or conversion pressure forbids ordinary research.",
+    "counterhypothesis": "Supervisor process-level state splitting alone is sufficient because an empty packet list always means the historical queue is valid and empty.",
+    "counterevidence": "free_swarm_historical_backfill.load_backfill_packets maps missing DB/schema/read failures to an empty list, so empty packets are not evidence that ordinary raw research is authorized.",
+    "mechanism": "free_swarm_backfill_scheduler now reads credential-blind canonical Forge control state before packet allocation; unknown state produces FORGE_ALLOCATION_STATE_UNKNOWN HOLD, conversion pressure produces FORGE_CONVERSION_BACKPRESSURE HOLD, pending extraction repurposes the fabric slot, and only a readable below-threshold empty backlog permits the ordinary prompt.",
+    "files": [
+      "tools/free_swarm_backfill_scheduler.py",
+      "tests/test_free_swarm_backfill_scheduler_878.py"
+    ]
+  },
+  "current_supervisor_state_split_observed": {
+    "pending_extraction": "KEEP_EXTRACTION_TRANSPORT",
+    "non_extraction_ready_implementation_pressure": "PAUSE_RAW_GENERATION_BACKPRESSURE",
+    "unknown_forge": "PAUSE_RAW_GENERATION_FAIL_CLOSED",
+    "source_regression_xfail_remaining_for_state_split": false
+  },
+  "evidence_scope": "SOURCE_AND_REGRESSION_DEFINITION_ONLY",
+  "tests_executed_by_this_organ_on_authorized_exact_current_surface": false,
+  "runtime_credit_added": 0,
+  "historical_backfill_runtime_credit_added": 0,
+  "provider_runtime_credit_added": 0,
+  "whole_entityos_hcu_runtime_credit_added": 0,
+  "jspace_model_runtime_credit_added": 0,
+  "training_credit_added": 0,
+  "unusual_experiment": "NONE",
+  "coordination": "No new issue-trigger executor or duplicate implementation lane was created; existing clay-direct-dev roundtrip is non-invasive and was not repurposed into a generic command runner.",
+  "track_a": "ADVANCED_SOURCE_CONTROL_PLANE_FAILCLOSED_SLOT_ALLOCATION",
+  "track_b": "ADVANCED_REUSABLE_TYPED_CONTROL_PROVENANCE_BOUNDARY",
+  "track_c": "TRAINING_READINESS_NO_CHANGE_WITH_REASON: no new model-specific J-Space/native llama.cpp execution was performed; this delta only removes an upstream dataset/transport allocation ambiguity.",
+  "next_exact_action": "Run tests/test_go_878_raw_generation_backpressure.py and tests/test_free_swarm_backfill_scheduler_878.py on one already-authorized exact-current clay-direct-dev executor, then continue terminal historical saturation and Forge-to-Distillery positive-token witness without creating another dispatch lane."
+}

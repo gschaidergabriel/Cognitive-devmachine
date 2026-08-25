@@ -1,0 +1,82 @@
+{
+  "schema": "CLAY_TRIGGER2_ATOMIC_COHORT_REPLAY_ORDERING_GAP/v1",
+  "date": "2026-08-26",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "status": "NONCANONICAL_SOURCE_AUDIT_FAIL_CLOSED",
+  "source_under_audit": {
+    "path": "tools/trigger2_grid10_atomic_cohort_batch_acceptance_v1.py",
+    "introducing_commit": "08b842b29d9f211f07a663d0dc2e5c711f3bc3b0",
+    "intended_property": "identical admitted cohort replay is idempotent with state_delta=0"
+  },
+  "finding": {
+    "id": "ATOMIC_COHORT_REPLAY_LOOKUP_UNREACHABLE_AFTER_SUCCESS",
+    "severity": "SOURCE_LEVEL_ACCEPTANCE_BLOCKER",
+    "observation": "atomic_cohort_commit() compares current S1 identity with the original expected starting identity before it queries cohort_admissions for an existing cohort. The first successful batch advances S1 from k to k+1. Therefore an exact replay of that admitted cohort with expected start k fails COHORT_START_SNAPSHOT_STALE before the existing-cohort replay branch can run.",
+    "affected_test": "A5_IDENTICAL_COHORT_REPLAY_ZERO_DELTA",
+    "expected_actual_result_under_current_control_flow": "the second atomic_cohort_commit call raises FabricError(COHORT_START_SNAPSHOT_STALE); the source-local run cannot satisfy all tests as written",
+    "credit_effect": "No atomic same-cohort source PASS or runtime promotion may be inferred from source presence. Existing zero credits remain zero."
+  },
+  "minimal_safe_repair": {
+    "rule": "Separate exact replay recognition from new-admission freshness validation.",
+    "order": [
+      "Validate replay request structure and recompute immutable packet digests/member identities/cohort_id from supplied exact cohort evidence.",
+      "If cohort_id already exists, require stored start generation/epoch/digest, coordinator lease identity, member count and exact canonical member packet-digest set to equal the replay request.",
+      "Return the historical receipt with replay=true and state_delta=0 without mutating S1, even though current S1 may be later than the cohort start.",
+      "Only if cohort_id does not already exist, require current S1 identity == expected starting identity and then execute the one-CAS new admission path."
+    ],
+    "security_boundary": "Do not move the existing lookup ahead of all packet/evidence validation without replacement checks. Otherwise a caller could present a known cohort_id with altered packet bodies and obtain a false replay acknowledgement. Replay identity must be derived from and checked against the exact immutable evidence set.",
+    "currentness_boundary": "A replay receipt confirms that the exact historical cohort was already admitted. It does not assert that the cohort observations are current at replay time."
+  },
+  "required_regressions": [
+    {
+      "id": "AR-001_EXACT_REPLAY_AFTER_K_PLUS_1",
+      "setup": "Admit one valid cohort at S_k -> S_k+1, then replay the exact same cohort evidence.",
+      "expected": "replay=true, state_delta=0, no epoch change"
+    },
+    {
+      "id": "AR-002_REPLAY_AFTER_LATER_UNRELATED_ADVANCE",
+      "setup": "After successful cohort admission, advance S1 again through an unrelated valid deterministic mutation, then replay the original exact cohort.",
+      "expected": "historical idempotent replay receipt with zero state delta; no claim that original observations are current"
+    },
+    {
+      "id": "AR-003_MUTATED_BODY_WITH_OLD_PACKET_DIGEST",
+      "setup": "Mutate one packet payload but retain its old packet_digest and request the known cohort_id.",
+      "expected": "FAIL_CLOSED_PACKET_DIGEST_OR_REPLAY_IDENTITY_MISMATCH"
+    },
+    {
+      "id": "AR-004_SUBSTITUTED_MEMBER_SET",
+      "setup": "Reuse an admitted cohort_id but substitute one member/process/packet while preserving member_count.",
+      "expected": "FAIL_CLOSED_REPLAY_MEMBER_SET_MISMATCH"
+    },
+    {
+      "id": "AR-005_REPLAY_WRONG_START_IDENTITY",
+      "setup": "Present exact members but caller-declared expected generation/epoch/digest differs from the stored cohort admission start identity.",
+      "expected": "FAIL_CLOSED_REPLAY_START_IDENTITY_MISMATCH"
+    }
+  ],
+  "training_eval_reinjection": {
+    "new_positive_training_rows": 0,
+    "accepted_dataset_tokens_added": 0,
+    "concept": "IDEMPOTENT_HISTORICAL_REPLAY_NEQ_CURRENT_OBSERVATION",
+    "candidate_eval_behavior": "Recognize exact prior admission without reapplying an effect or relabeling the old observation as current; altered evidence must not inherit replay credit from a known identifier.",
+    "admission": "CANDIDATE_EVAL_ONLY_NOT_TRAINING_ELIGIBLE"
+  },
+  "authority": {
+    "supervisor_epoch": "8.81_DELTA",
+    "mode": "FREE_ONLY",
+    "provider_execution_performed": false,
+    "training_execution_performed": false,
+    "runtime_execution_performed": false,
+    "physical_grid10_runtime_credit": 0,
+    "jspace_model_credit": 0,
+    "training_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  },
+  "next_exact_action": "Repair replay/new-admission ordering with exact evidence revalidation and add AR-001..AR-005 before treating the atomic same-cohort candidate as source-PASS eligible."
+}

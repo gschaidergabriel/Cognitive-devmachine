@@ -689,6 +689,19 @@
     "counterhypothesis": "Endpoint and credential binding make response model identity redundant; falsified for receipt provenance because a contradictory provider model claim was ignored while the requested model was recorded as if verified.",
     "uncertainty": "The cross-provider v0.1 adapter still accepts omission of the response model field for compatibility; an Ubuntu NVIDIA live receipt is required before tightening the field from conditional to mandatory."
   },
+  "response_object_provenance": {
+    "checked_at": "2026-08-25",
+    "claim": "When a non-streaming provider response includes a top-level object field, the success discriminator must be the exact built-in string chat.completion before content can reach VERIFIED or DONE. Explicit error discriminators remain separately classified as provider_error.",
+    "sources": [
+      "https://docs.nvidia.com/nim/large-language-models/2.0.10/reference/api-reference.html",
+      "https://docs.nvidia.com/nim/large-language-models/2.0.0/get-started/quickstart.html"
+    ],
+    "external_evidence": "NVIDIA documents Chat Completions, text Completions and Responses as distinct API surfaces; its documented Chat Completions response uses object=chat.completion.",
+    "internal_measurement": "A status-200 response explicitly labeled object=text_completion previously returned success and reached VERIFIED and DONE when its inner choice was shaped like a chat message.",
+    "executable_evidence": "test_non_chat_response_object_cannot_reach_verified_state",
+    "counterhypothesis": "A Chat-compatible inner choice is sufficient provenance regardless of an explicit top-level object discriminator; falsified because the adapter verified a response that identified itself as a different response type.",
+    "uncertainty": "The cross-provider v0.1 adapter still accepts omission of the response object field for compatibility; an Ubuntu NVIDIA live receipt is required before making the discriminator mandatory."
+  },
   "pending_http_results": {
     "checked_at": "2026-08-13",
     "claim": "For NVIDIA Chat Completions, HTTP 200 is fulfilled while HTTP 202 is pending and requires requestId polling; a 202 response cannot reach VERIFIED/DONE or trigger a blind replay of the original request.",

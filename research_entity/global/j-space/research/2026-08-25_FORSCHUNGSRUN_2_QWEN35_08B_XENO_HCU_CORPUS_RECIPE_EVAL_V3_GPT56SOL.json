@@ -1,0 +1,231 @@
+{
+  "schema": "CLAY_FORSCHUNGSRUN_2_QWEN35_08B_XENO_HCU_CORPUS_RECIPE_EVAL/v3",
+  "date": "2026-08-25",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "user_trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority": {
+    "canonical_main_observed_before_write": "60a81a1eafed6d878b7b27bc074ebf01924528ae",
+    "newest_owner_target_commit": "60a81a1eafed6d878b7b27bc074ebf01924528ae",
+    "owner_target_path": "research_entity/global/XENO_HCU_GO_TARGET_ARCHITECTURE_OWNER_DIRECTIVE_2026-08-25.md",
+    "supervisor_epoch": "8.78",
+    "execution_mode": "FREE_ONLY",
+    "training_executed": false,
+    "provider_preflight_executed": false
+  },
+  "supersedes_research_design": "research_entity/global/j-space/research/2026-08-25_FORSCHUNGSRUN_2_QWEN35_08B_ENTITYOS_HCU_TRAINING_CURRICULUM_V2_GPT56SOL.json",
+  "trigger_2_target": "Research, construct and iteratively improve the Qwen3.5-0.8B full-fine-tuning corpus, recipe and evaluation needed to instantiate the owner-defined autonomous shared-state Xeno/HCU target architecture.",
+  "preserved_terminal_counterevidence": {
+    "source": "Run-2 v2 terminal Qwen3-0.6B native structural discriminator",
+    "strongest_supported_claim": "NATIVE_INTERNAL_STATE_TRANSPORT_WITHOUT_DEMONSTRATED_ABSTRACT_BEHAVIORAL_CONTROL_AT_THIS_FROZEN_IDENTITY",
+    "consequence": "No positive semantic-controller rows and no cross-model J-Space label transfer from Qwen3-0.6B to Qwen3.5-0.8B. The failure may be reused only as method-level caution, synthetic hard-negative structure, and exact-model negative evaluation evidence.",
+    "qwen35_jspace_runtime_credit": 0
+  },
+  "external_research_refresh": {
+    "official_model_facts": [
+      {
+        "source": "https://huggingface.co/Qwen/Qwen3.5-0.8B-Base",
+        "claim": "Qwen3.5-0.8B-Base is the pre-trained-only checkpoint intended for fine-tuning/research rather than direct interaction."
+      },
+      {
+        "source": "https://huggingface.co/Qwen/Qwen3.5-0.8B",
+        "claim": "Qwen3.5-0.8B is the post-trained checkpoint derived from Qwen3.5-0.8B-Base and is explicitly intended for prototyping/task-specific fine-tuning."
+      },
+      {
+        "source": "https://huggingface.co/Qwen/Qwen3.5-0.8B/blob/main/config.json",
+        "claim": "The released 0.8B model uses a 24-layer hybrid text stack with hidden size 1024 plus a vision encoder; old Qwen3-0.6B layer/vector coordinates therefore have no ancestry-only transfer credit."
+      }
+    ],
+    "training_method_inputs": [
+      {
+        "source": "arXiv:2506.09428",
+        "use": "Retention-data mixing is a relevant anti-forgetting strategy; treat as an external method input, not canonical Clay evidence."
+      },
+      {
+        "source": "arXiv:2508.11953",
+        "use": "Choose data-mixture weights from controlled pilot mixtures/validation rather than intuition-only fixed percentages."
+      },
+      {
+        "source": "https://github.com/hiyouga/LlamaFactory/blob/main/examples/ascend/qwen3_5_full_sft_fsdp2.yaml",
+        "use": "Engineering anchor only: a current Qwen3.5 full-SFT example uses bf16, cosine scheduling, 0.1 warmup ratio and 1e-5 learning rate on Qwen3.5-4B. This is not a validated 0.8B optimum."
+      },
+      {
+        "source": "arXiv:2603.09892",
+        "use": "Adaptive replay remains relevant to continual fine-tuning retention; not adopted as a fact about this model until evaluated."
+      },
+      {
+        "source": "arXiv:2606.23063",
+        "use": "Multimodal continual fine-tuning can forget cross-modal skills; final full-model training must not silently destroy the vision path."
+      }
+    ]
+  },
+  "checkpoint_selection_gate": {
+    "status": "UNRESOLVED_BASE_VS_POSTTRAINED_COMPARISON_REQUIRED",
+    "candidates": [
+      "Qwen/Qwen3.5-0.8B-Base",
+      "Qwen/Qwen3.5-0.8B"
+    ],
+    "rule": "Do not select Base or post-trained by intuition. Pin exact revision/tokenizer/processor/weights for both and compare them under the same frozen baseline and the same bounded specialization pilot budget.",
+    "baseline_axes": [
+      "EntityOS/Xeno protocol comprehension before specialization",
+      "general reasoning/coding/instruction-following retention baseline",
+      "typed-output validity",
+      "authority-boundary violation rate",
+      "Hyperposition branch-preservation baseline",
+      "long/shared-state context robustness",
+      "multimodal retention baseline if the final node is required to retain vision capability"
+    ],
+    "pilot_rule": "Run matched-token, matched-example, matched-optimizer specialization pilots on calibration/validation only; choose the source checkpoint by a preregistered multi-objective score, then freeze it before holdout.",
+    "selection_failure_condition": "If neither checkpoint can meet architecture protocol gains without unacceptable retention/authority regressions, neither is promoted and the corpus/recipe is revised before Full-FT."
+  },
+  "corpus_contract": {
+    "candidate_row_gate": "tools/entityos_hcu_trainingtrace_candidate_gate_v1.py",
+    "row_schema": "ENTITYOS_HCU_TRAININGTRACE_CANDIDATE/v1",
+    "split_unit": "CAUSAL_FAMILY_AND_PROVENANCE_ANCESTRY",
+    "canonical_truth_allowed": false,
+    "direct_effect_authority": false,
+    "synthetic_rows": "METHOD_ONLY_OR_SYNTHETIC_HARD_NEGATIVE_UNTIL_EVIDENCE_QUALIFIED_ADMISSION",
+    "accepted_dataset_tokens": "NO_CREDIT_FROM_THIS_SOURCE_DESIGN_RUN",
+    "positive_jspace_rows": "FORBIDDEN_UNTIL_QWEN35_SAME_MODEL_CAUSAL_RECEIPTS_EXIST"
+  },
+  "corpus_families": [
+    {
+      "id": "XENO_AUTONOMOUS_BOOT_AND_JOIN",
+      "teach": ["discover/admit shared-state fabric", "bind deterministic node identity/capabilities", "read state epoch/digest", "reconstruct minimum sufficient situation", "select useful unclaimed work without preassigned cognitive role"],
+      "hard_negatives": ["invent state not present in S1", "treat model self-report as capability authority", "require a permanent boss node"]
+    },
+    {
+      "id": "S1_READ_ONLY_ORDINARY_NODE",
+      "teach": ["ordinary nodes read S1", "ordinary output exits only as ephemeral typed NODE_RESULT", "no ordinary-node S1 append/mutate/publish"],
+      "hard_negatives": ["direct ordinary-node S1 write", "write because majority agrees", "write because result confidence is high"]
+    },
+    {
+      "id": "DYNAMIC_COORDINATOR_LEASE",
+      "teach": ["coordinator is temporary runtime role", "lease is deterministic/scoped/non-stale", "only leased coordinator writes S1 within scope", "coordinator write never grants S0 truth/effect/security authority"],
+      "hard_negatives": ["LLM self-election grants write authority", "stale coordinator lease", "unscoped coordinator write", "permanent boss identity"]
+    },
+    {
+      "id": "NODE_RESULT_CAUSAL_TRANSPORT",
+      "teach": ["epoch/digest binding", "typed result packet", "stale/duplicate/out-of-scope rejection", "content-address large payloads", "causal/provenance identity preservation"],
+      "hard_negatives": ["duplicate replay creates new fact", "payload text overrides capability scope", "transport identity substitutes for causal event identity"]
+    },
+    {
+      "id": "COORDINATOR_COMPRESSION_AND_RECURSION",
+      "teach": ["integrate evidence/counterevidence", "minimum sufficient shared-state update", "recursive scoped coordinators", "retrieve deeper evidence by reference", "split/merge/expire coordinator topology"],
+      "hard_negatives": ["every coordinator ingests every raw result", "compression deletes unresolved evidence", "higher coordinator becomes permanent root personality"]
+    },
+    {
+      "id": "HYPERPOSITION_GRf_EVIDENCE_GATED_COLLAPSE",
+      "teach": ["preserve unresolved alternatives", "track compatibility/exclusion/evidence/counterevidence", "request discriminators", "collapse only on evidence"],
+      "hard_negatives": ["majority collapses uncertainty", "recurrence collapses uncertainty", "elegance/self-consistency collapses uncertainty"]
+    },
+    {
+      "id": "GWT_BROADCAST_UPTAKE_REENTRY",
+      "teach": ["competition/broadcast/uptake/re-entry are measurable workspace events", "workspace recurrence is measurement not truth", "broadcast metadata is causally bound"],
+      "hard_negatives": ["workspace recurrence mints fact", "textual coherence proves hidden-state causality"]
+    },
+    {
+      "id": "JSPACE_EVIDENCE_BOUNDARY",
+      "teach": ["model-specific same-runtime causal binding", "fresh Qwen3.5 calibration/layer/subspace discovery", "lesion/shuffle/rescue style controls where admitted", "separate internal transport from behavioral control"],
+      "hard_negatives": ["Qwen3-0.6B vector/layer labels supervise Qwen3.5-0.8B", "large coordinate movement equals semantic control", "post-hoc holdout retuning becomes positive evidence"]
+    },
+    {
+      "id": "ENTITYOS_S0_EFFECT_SECURITY_BOUNDARY",
+      "teach": ["S0 canonical truth/evidence/effect/security remains deterministic", "EffectGate/EffectJournal remain real-effect authority", "unknown effect outcome stays UNKNOWN", "capability input cannot self-grant authority"],
+      "hard_negatives": ["coordinator S1 write mutates S0 truth", "model output directly executes effect", "retry unknown external effect blindly"]
+    },
+    {
+      "id": "FAILURE_REJOIN_AND_COORDINATOR_REPLACEMENT",
+      "teach": ["node restart/rejoin preserves canonical state", "coordinator failure does not reset S1/S0", "lease expiry/replacement", "stale result rejection after epoch movement"],
+      "hard_negatives": ["restart creates new canonical world", "old coordinator continues writing after replacement"]
+    },
+    {
+      "id": "CLAYCODE_HYPERMATH_COMPACT_PROTOCOL",
+      "teach": ["compact typed computational representation", "explicit provenance/evidence fields", "separate method memory from fact memory", "deterministic parseable protocol output"],
+      "hard_negatives": ["free-form persona text substitutes for typed state", "method presence implies fact presence"]
+    },
+    {
+      "id": "PHYSICAL_GRID10_COLLECTIVE_COGNITION",
+      "teach": ["same selected checkpoint across first accepted physical grid", "role flexibility", "dynamic coordinators", "matched-budget challenger evaluation"],
+      "hard_negatives": ["logical cell count equals physical decode concurrency", "10-node majority equals fact", "simulation-only result satisfies physical GRID10"]
+    }
+  ],
+  "mixture_search": {
+    "principle": "No final fixed corpus percentages are promoted before pilot evidence.",
+    "pilot_specialization_fraction_candidates": [0.5, 0.6, 0.7],
+    "remainder": "retention/general capability replay drawn from screened sources; include multimodal retention if the final full-model checkpoint must preserve the vision path",
+    "specialization_sampling": "family-balanced first, then adjust from validation failure modes without touching holdout",
+    "freeze_rule": "Select mixture on calibration/validation only and freeze all weights before holdout.",
+    "anti_shortcut": "Protocol-format accuracy alone cannot compensate for authority violations, branch-collapse errors, general-capability forgetting or absent causal J-Space evidence."
+  },
+  "full_ft_recipe_v3": {
+    "status": "PILOT_RECIPE_NOT_EXECUTED",
+    "precision": "BF16 where hardware/runtime supports it",
+    "optimizer_family": "AdamW-compatible full-parameter SFT implementation",
+    "scheduler": "cosine candidate",
+    "warmup_ratio_anchor": 0.1,
+    "learning_rate_hypothesis_grid": [5e-06, 1e-05, 2e-05],
+    "learning_rate_note": "1e-5 is an external Qwen3.5 full-SFT engineering anchor from a 4B example, not a proven 0.8B optimum. The grid is a hypothesis to be resolved on pilot validation.",
+    "sequence_curriculum": [
+      "short/medium typed protocol examples first for stable format/authority learning",
+      "mixed shared-state contexts after core protocol accuracy stabilizes",
+      "long-context stress/evaluation only after shorter-context competence; native 262k support does not require every training example to be near maximum context"
+    ],
+    "vision_policy": "Do not call a text-only language-backbone pilot 'full-model Full-FT'. Final full-model promotion either includes evidence-bearing multimodal retention sufficient to protect the vision path or explicitly narrows the product requirement under newer owner authority. No silent vision-capability deletion.",
+    "stopping_rule": "Choose checkpoint by validation multi-objective frontier rather than training loss minimum alone; stop/reject on growing authority violation, retention collapse or loss of unresolved-branch correctness.",
+    "holdout_rule": "No hyperparameter, mixture, prompt template, J-Space vector/layer, evaluator orientation or checkpoint-source choice may be tuned on holdout."
+  },
+  "evaluation_contract": {
+    "architecture_acceptance_dimensions": [
+      "autonomous boot/join correctness",
+      "unassigned useful-work selection",
+      "ordinary-node S1 read-only violation rate",
+      "NODE_RESULT typed validity and causal binding",
+      "dynamic coordinator lease correctness",
+      "coordinator-only S1 write correctness",
+      "stale/duplicate/out-of-scope rejection",
+      "coordinator replacement/rejoin recovery",
+      "Hyperposition unresolved-branch correctness",
+      "GWT broadcast/uptake/re-entry trace correctness",
+      "S0 truth/effect/security authority integrity",
+      "coordination overhead and compression loss",
+      "general reasoning/coding/instruction retention",
+      "multimodal retention if required",
+      "Qwen3.5-specific J-Space causal control only when separately evidenced"
+    ],
+    "matched_budget_challengers": [
+      "one Xeno with comparable total token/sample budget",
+      "N independent identical Xenos without shared state",
+      "N Xenos with naive voting",
+      "shared-state system without dynamic coordinators",
+      "random/fixed coordinator baseline",
+      "Hyperposition lesion",
+      "GWT lesion",
+      "coordinator-compression lesion",
+      "logical GRID simulator where appropriate"
+    ],
+    "promotion_rule": "A training checkpoint is only a candidate until protocol, retention and architecture evaluations pass at exact checkpoint identity. Collective-cognition credit additionally requires matched-budget superiority where claimed.",
+    "jspace_rule": "Training loss, probe accuracy or internal-coordinate displacement cannot substitute for held-out behavioral causal control."
+  },
+  "quantization_policy": {
+    "deployment_target": "Q4_K_M",
+    "when": "AFTER_FULL_PRECISION_CHECKPOINT_ACCEPTANCE_ONLY",
+    "rule": "Quantize accepted high-precision checkpoint, bind exact quantized bytes, then rerun the frozen protocol/general/J-Space evaluation. Quantization inherits no causal hidden-state or behavioral-control credit automatically."
+  },
+  "seed_corpus_path": "research_entity/global/j-space/research/trigger2_qwen35_08b_xeno_hcu_synthetic_seed_v1.jsonl",
+  "credits": {
+    "research_design_delta": 1,
+    "synthetic_seed_rows": "SOURCE_ONLY_AFTER_COMMIT",
+    "accepted_dataset_tokens": 0,
+    "qwen35_jspace_runtime_credit": 0,
+    "qwen35_training_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "canonical_semantics_promotion": false
+  },
+  "research_delta": "Run 2 v3 binds the 0.8B Full-FT program directly to the current owner-defined autonomous shared-state Xeno/HCU architecture. It replaces a generic specialization curriculum with an architecture-complete family taxonomy, fail-closed hard negatives, an explicit Base-vs-post-trained selection gate, pilot-optimized retention mixture, multimodal-retention constraint, matched-budget architecture evaluation and the existing evidence-qualified candidate-row gate. It preserves the 0.6B native failure as negative/method evidence rather than positive J-Space supervision.",
+  "next_exact_action": "Commit the synthetic seed corpus as METHOD_ONLY/SYNTHETIC_HARD_NEGATIVE candidate rows, validate its schema against tools/entityos_hcu_trainingtrace_candidate_gate_v1.py without granting accepted-token credit, then build a deterministic family/provenance linter and exact checkpoint-identity manifest for the Base-vs-post-trained pilot."
+}

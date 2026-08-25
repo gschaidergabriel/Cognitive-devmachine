@@ -1,0 +1,124 @@
+{
+  "schema": "CLAY_TRIGGER2_RUN_RECEIPT/v1",
+  "run_id": "2-20260825-2220-gpt56sol-a02-test-contract-repair",
+  "date": "2026-08-25",
+  "local_time_context": "Asia/Phnom_Penh",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU_VARIABLE_COGNITIVE_GRID",
+  "supervisor_epoch": "8.78",
+  "mode": "FREE_ONLY",
+  "authority_reentry": {
+    "uploaded_bootstrap_epoch": "8.63",
+    "uploaded_bootstrap_status": "STALE_AS_CURRENT_AUTHORITY_USEFUL_BOOTSTRAP_DONOR",
+    "current_bootstrap": "research_entity/continuity/BOOTSTRAP_MINIMAL.json",
+    "latest_numbered_training_ledger_observed": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V19_GPT56SOL.json",
+    "canonical_main_observed_before_receipt_write": "4163f45dc12e52cda7a564f1ce06f1d7dcaceffe",
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0
+  },
+  "audit_before_generation": {
+    "performed": true,
+    "training_examples_audited": true,
+    "measurements_audited": true,
+    "evidence_audited": true,
+    "hypotheses_audited": true,
+    "target_architecture_audited": true,
+    "open_parallel_work_audited": true,
+    "positive_data_gate": "CLOSED"
+  },
+  "artifact_lifecycle_delta": [
+    {
+      "artifact": "tests/test_trigger2_a02_discriminator_producer_auth_gate_v1.py",
+      "predecessor_status": "NEEDS_REVISION_STALE_AUTH_BINDING_AFTER_GATE_HARDENING",
+      "status": "CURRENT_SOURCE_TEST_REPAIRED_EXECUTION_UNOBSERVED",
+      "provenance": "repair commit 1df97f7b8ac851180ef5c82971275360b5c937b7",
+      "predecessor": "baseline producer binding without source_lineage and policy_jcs_sha256",
+      "successor": "baseline and adversarial mutations bound to current authority fields",
+      "revision_reason": "The hardened A02 auth gate requires exact source_lineage and full policy_jcs_sha256 in discriminator_producer_binding_evaluator_only, while the prior baseline test still constructed the older binding shape and therefore could not be a valid positive fixture."
+    },
+    {
+      "artifact": "tools/trigger2_a02_discriminator_producer_v1.py + TRIGGER2_A02_DISCRIMINATOR_PRODUCER_AUTHORITY_V1.json + tools/trigger2_a02_discriminator_producer_auth_gate_v1.py",
+      "status": "CURRENT_SOURCE_CONTRACT_CLOSED_RUNTIME_EXECUTION_UNOBSERVED",
+      "revision_reason": "Current main binds producer bytes/schema/source lineage and full policy JCS digest. Exact-current repository-bound execution remains unobserved."
+    },
+    {
+      "artifact": "tools/trigger2_binding_router_factorial_generator_v3.py",
+      "status": "BLOCKED_QUARANTINED_FROM_DIRECT_TRAINING",
+      "revision_reason": "Conditional/model-visible nuisance leakage remains dispositive."
+    },
+    {
+      "artifact": "000_CLAY_ENTITYOS_HCU_FAST_BOOTSTRAP_SOURCE_CURRENT_2026-08-24 supervisor 8.63",
+      "status": "STALE_AS_CURRENT_AUTHORITY_USEFUL_BOOTSTRAP_DONOR",
+      "successor": "BOOTSTRAP_MINIMAL 8.78 + Supervisor 8.78 + current owner target"
+    }
+  ],
+  "source_repair": {
+    "commit": "1df97f7b8ac851180ef5c82971275360b5c937b7",
+    "path": "tests/test_trigger2_a02_discriminator_producer_auth_gate_v1.py",
+    "changes": [
+      "baseline producer binding now includes authority source_lineage",
+      "baseline producer binding now includes full authority policy_jcs_sha256",
+      "positive fixture asserts producer_source_lineage_verified and policy_digest_verified",
+      "new source-lineage swap mutation must reject",
+      "new policy-digest swap mutation must reject"
+    ],
+    "execution_observed_exact_current": false,
+    "credit_effect": "SOURCE_TEST_REPAIR_ONLY_ZERO_RUNTIME_ZERO_TRAINING_CREDIT"
+  },
+  "external_method_inputs": [
+    {
+      "source": "RFC 8785 JSON Canonicalization Scheme",
+      "classification": "SOURCE_DIRECT_METHOD_INPUT",
+      "project_implication": "Stable canonical serialization is appropriate for digest-bound policy and subject identity; canonicalization alone does not prove execution."
+    },
+    {
+      "source": "in-toto Attestation Framework/Statement specification",
+      "classification": "SOURCE_DIRECT_METHOD_INPUT",
+      "project_implication": "Execution evidence should bind immutable subjects/materials by cryptographic digest rather than transport assertions alone."
+    },
+    {
+      "source": "SLSA Build Provenance v1.2-rc2",
+      "classification": "SOURCE_DIRECT_METHOD_INPUT",
+      "project_implication": "A stronger exact-current A02 runtime receipt should bind repository HEAD/tree and relevant source/policy digests together with invocation/run/builder identity, preserving execution provenance separately from source correctness."
+    }
+  ],
+  "hypothesis": "After source-level A02 authority closure, the highest-information next gate is an exact-current clean-checkout execution attestation that binds HEAD/tree/relevant source hashes/full policy digest and invocation context; more training rows cannot compensate for missing execution provenance.",
+  "counterhypothesis": "Exact source and policy digests are sufficient; invocation/run identity adds no material evidence.",
+  "counterhypothesis_status": "REJECTED_FOR_RUNTIME_PROMOTION",
+  "counterhypothesis_reason": "Source and policy identity establish what should execute, not that the claimed exact suite actually executed in the admitted environment. Trigger-2 runtime promotion explicitly requires observed exact-current execution rather than source existence.",
+  "generation_decision": {
+    "new_positive_rows": 0,
+    "new_hard_negative_rows_admitted": 0,
+    "positive_rows_admitted": 0,
+    "decision": "NO_NEW_ROWS_WITH_REASON",
+    "reason": "The current bottleneck is exact executable provenance/evidence closure. Existing candidate and hard-negative families already cover the relevant semantic failure modes; additional rows would increase volume without trustworthy training readiness."
+  },
+  "unusual_experiment": {
+    "attempted": false,
+    "status": "NO_UNUSUAL_EXPERIMENT",
+    "reason": "This cycle used ordinary authority audit, source inspection, nonduplicate regression repair and external method research only."
+  },
+  "next_exact_actions": [
+    "Execute the exact-current A02 producer-auth adversarial mutation suite plus retained v4 ordering/zero-credit suite from a clean admitted zero-cost repository checkout.",
+    "Persist a receipt binding exact HEAD, tree, all relevant source hashes, full policy JCS digest, exact command/test selection and invocation/run identity.",
+    "Only after that PASS continue to immutable nonempty-history producer authority and authenticated OBSERVED evidence producer closure.",
+    "Then rebind the native seed to the single retained successor and run rendered family/provenance/tokenizer ABI, role-typed nuisance, READ/BIND_ROUTE/WRITE and causal-actionability gates before any positive pilot."
+  ],
+  "credits": {
+    "research_audit_delta": 1,
+    "source_test_repair_delta": 1,
+    "external_method_delta": 1,
+    "training_rows_added": 0,
+    "positive_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "positive_jspace_causal_credit": 0,
+    "trigger2_a02_runtime_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v4",
+  "command_id": "fr2-gate-v4-regression-gpt56sol-20260825-1317p0700",
+  "op": "exec",
+  "cwd": "/workspace/clay-global-research-entity",
+  "timeout_seconds": 300,
+  "command": "set -euo pipefail; PIN=ac62b7f4a37c7d7b35a0979dec9fe0cc40c4824b; PY=/cache/clay-qwen06/venv/bin/python; WORK=/tmp/fr2-gate-v4-regression-gpt56sol-20260825-1317p0700; cd /workspace/clay-global-research-entity; git fetch origin main; rm -rf \"$WORK\"; git worktree add --detach \"$WORK\" \"$PIN\"; cleanup(){ git -C /workspace/clay-global-research-entity worktree remove --force \"$WORK\" >/dev/null 2>&1 || true; }; trap cleanup EXIT; cd \"$WORK\"; test \"$(git rev-parse HEAD)\" = \"$PIN\"; \"$PY\" -m py_compile tools/trigger1_cross_task_abstract_control_gate_v2.py tools/trigger1_cross_task_abstract_control_gate_v3.py tools/trigger1_cross_task_abstract_control_gate_v4.py tests/test_trigger1_cross_task_abstract_control_gate_v4.py; \"$PY\" -m unittest -v tests.test_trigger1_cross_task_abstract_control_gate_v4"
+}

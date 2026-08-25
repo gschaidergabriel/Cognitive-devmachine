@@ -1,0 +1,39 @@
+{
+  "schema": "CLAY_666_CAUSAL_BISIMULATION_MODEL_CALL_IDENTITY_SYNTHETIC/v1",
+  "date": "2026-08-26",
+  "trigger": "666",
+  "organ": "e50 / GPT-5.6 Sol ChatGPT organ",
+  "canonical_parent": "1dc4585ed38fcc3f147f913d534a809a92d98669",
+  "supervisor_epoch": "8.82",
+  "evidence_class": "EXACT_SYNTHETIC_MECHANISM_TEST_NOT_MODEL_RUNTIME",
+  "current_content_digest": "47e1816a51bc29b7ad1736f0d20c783c5830e09b4ab4dc988537d630c45bbce6",
+  "mutated_output_content_digest": "2859518cd3e01486be97c13692f33f35835b0590473af1a338f85563df86e8f4",
+  "event_a_id": "169db009b16748740218d8cc9d491ad89cb3141adc44458454406b98597f166f",
+  "event_b_id": "bf26f43b491fa4e66aa8bccef0113c431eeec277512af0aaf6929fb0339f085c",
+  "event_a_replay_id": "169db009b16748740218d8cc9d491ad89cb3141adc44458454406b98597f166f",
+  "event_a_mutated_output_id": "2c8265d6e1046a218803a3742d0a77d1ccb97272afcaafd38836de0aa6b28b11",
+  "assertions": {
+    "distinct_occurrences_with_identical_content_collide_under_content_digest": true,
+    "distinct_occurrences_separate_under_event_id": true,
+    "same_occurrence_exact_replay_is_stable": true,
+    "same_occurrence_changed_output_is_conflict": true,
+    "same_top1_different_full_output_changes_content_digest": true
+  },
+  "interpretation": "The current source-equivalent model-call binding is suitable as a deterministic content identity but cannot alone distinguish two separate causal occurrences with byte-identical bound inputs/runtime/output. A separate occurrence identity can preserve replay idempotence while separating distinct executions and detecting same-event/different-content conflicts.",
+  "counterhypothesis": "If every downstream NODE_RESULT/J-Space/evaluation consumer already binds an immutable enclosing execution-occurrence receipt carrying event/admission/route/plan/cell/attempt identity and enforces replay conflict semantics, the gap is already closed outside the model-call digest and the required delta is naming/contract clarification rather than a new authority.",
+  "execution": {
+    "provider_calls": 0,
+    "model_runtime_calls": 0,
+    "vps_calls": 0,
+    "training_calls": 0,
+    "unusual_experiment": false
+  },
+  "credits": {
+    "model_call_runtime": 0,
+    "physical_grid10": 0,
+    "jspace_model": 0,
+    "training": 0,
+    "whole_hcu": 0,
+    "whole_entityos": 0
+  }
+}

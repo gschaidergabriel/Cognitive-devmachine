@@ -1,0 +1,132 @@
+{
+  "schema": "CLAY_TRIGGER2_N64_PREEXPOSURE_CONFIRMATORY_QUARANTINE/v1",
+  "date": "2026-08-26",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "status": "APPEND_ONLY_RESEARCH_DELTA_NONPROMOTING",
+  "observed_main_before_write": "18b350df4e4c238a07b89d3117d9564dca1ece14",
+  "authority": {
+    "supervisor_epoch": "8.81_DELTA",
+    "mode": "FREE_ONLY",
+    "free_swarm_provider_routes": "OWNER_EMERGENCY_STOP_HARD_OFF",
+    "runtime_quiescence_required_before_new_execution": true,
+    "training_execution_authorized": false,
+    "checkpoint_selection_credit": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0
+  },
+  "dedup_against_current_main": {
+    "current_ledger": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V52_GPT56SOL.json",
+    "existing_family_dependence_delta": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_FAMILY_DEPENDENCE_SELECTION_DELTA_V1_GPT56SOL.json",
+    "existing_statistical_contract": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_CHECKPOINT_DECISION_STATISTICAL_PREREGISTRATION_V1_GPT56SOL.json",
+    "new_delta": "temporal exposure ordering: the N64 outcomes predate the later selection rubric/statistical contract, so those later rules are prospective only and cannot retroactively confer confirmatory winner credit on the already-visible N64 block"
+  },
+  "temporal_evidence_order": [
+    {
+      "event": "N64_CHECKPOINT_OUTPUTS_COMMITTED",
+      "commit": "7e4d6b3806deba0e6edcd7bade04e03e6bdb1c4d",
+      "committed_at_utc": "2026-08-25T20:21:05Z",
+      "scope": "64 Axis-A and 64 Axis-B cases per candidate for BASE, POSTTRAINED and TARGET_MEASURED"
+    },
+    {
+      "event": "CHECKPOINT_SELECTION_RUBRIC_COMMITTED",
+      "commit": "fde71d00e4deabdf0893b931ca963eb2ffa0d8e7",
+      "committed_at_utc": "2026-08-25T20:41:50Z",
+      "relation": "later than N64 outcome exposure"
+    },
+    {
+      "event": "STATISTICAL_DECISION_PREREGISTRATION_COMMITTED",
+      "commit": "8bdf6ea5f6c7d922562e0223e95b9cefebc65e86",
+      "committed_at_utc": "2026-08-25T20:41:57Z",
+      "relation": "later than N64 outcome exposure"
+    }
+  ],
+  "epistemic_correction": {
+    "n64_status": "EXPLORATORY_PREEXPOSED_DIAGNOSTIC_ONLY",
+    "n64_confirmatory_selection_credit": 0,
+    "later_statistical_contract_status": "PROSPECTIVE_METHOD_DONOR_ONLY_FOR_UNOPENED_SUCCESSOR_BLOCKS",
+    "reason": "Repository visibility of outcomes predates the decision rules. This does not prove that any human inspected the results, but it means independence from those outcomes cannot be established for rules frozen afterward. Fail closed on confirmatory selection credit while retaining the observations as exploratory evidence.",
+    "anti_goodhart": "Do not retroactively call the N64 block preregistered, do not freeze practical margins after exposure and apply them as if independent, and do not use nominal N=64 as a winner rule."
+  },
+  "exploratory_n64_findings_retained": {
+    "POSTTRAINED": {
+      "unknowable_specific_abstain_correct": "34/34",
+      "epistemic_label_correct": "11/30",
+      "db_vs_simulation_database_wins": "56/64"
+    },
+    "BASE": {
+      "unknowable_specific_abstain_correct": "8/34",
+      "epistemic_label_correct": "0/30",
+      "db_vs_simulation_database_wins": "64/64"
+    },
+    "TARGET_MEASURED": {
+      "unknowable_specific_abstain_correct": "1/34",
+      "epistemic_label_correct": "6/30",
+      "db_vs_simulation_database_wins": "64/64"
+    },
+    "interpretation": "The observed block is a strong Pareto-split diagnostic: POSTTRAINED leads on abstention/epistemic correctness, while BASE and TARGET_MEASURED lead on this DB-vs-simulation authority family. No final checkpoint winner follows from this block."
+  },
+  "methodology_boundaries": [
+    "The N64 commit documented heuristic keyword/regex grading and a VPS-local eval_candidate.py rather than a selection-grade committed evaluator source/digest.",
+    "The held-out manifest uses template/slot variation and Axis-B cycles a small set of template pairs; family dependence is already separately recognized in current main.",
+    "The current family-aware delta correctly keeps the diagnostic N64 result nonpromotable; this artifact adds the independent temporal pre-exposure reason."
+  ],
+  "hypotheses": [
+    {
+      "id": "H_PREEXPOSURE_1_PARETO_SPLIT_REPLICATES",
+      "hypothesis": "A genuinely unopened family-disjoint paired block will reproduce the qualitative checkpoint tradeoff: POSTTRAINED stronger on epistemic abstention, TARGET_MEASURED/BASE stronger on canonical DB-over-simulation authority.",
+      "counterhypothesis": "The apparent split is materially driven by renderer/template/grader/family effects and will shrink or reorder under exact identity and a frozen prospective evaluation stack.",
+      "discriminator": "After runtime quiescence and CHECKPOINT_INPUT_IDENTITY_ABI eligibility, freeze practical margins, deterministic evaluator digest, renderer/tokenizer/runtime identities and an unopened family-disjoint manifest before any candidate output exists; then run the exact same paired items across candidates."
+    },
+    {
+      "id": "H_PREEXPOSURE_2_REPAIR_DISTANCE_ASYMMETRY",
+      "hypothesis": "POSTTRAINED plus targeted authority-priority adaptation may be a shorter repair path than TARGET_MEASURED plus abstention repair.",
+      "counterhypothesis": "Baseline error counts do not predict adaptation difficulty or retention cost; TARGET_MEASURED may remain the better training substrate once broader Xeno requirements are measured.",
+      "discriminator": "Only after positive-row admission and explicit training authority open, compare equal-token/equal-step candidate-specific micro-adaptations on a separate untouched dual-axis holdout with catastrophic-error, retention and renderer-transport gates."
+    }
+  ],
+  "prospective_successor_contract": {
+    "must_be_frozen_before_candidate_outputs": [
+      "practical superiority/noninferiority margins and tie/Pareto policy",
+      "deterministic evaluator source plus digest",
+      "immutable family_id/template_id manifest and any downsampling policy",
+      "exact renderer/tokenizer/input/runtime identities",
+      "expansion/stopping rules",
+      "catastrophic-error taxonomy"
+    ],
+    "inference": "Use item pairing plus family-aware clustered/hierarchical uncertainty where family dependence exists; retain the existing McNemar/Holm logic only at the scope justified by the frozen family structure.",
+    "after_opening_rule": "No candidate-specific prompt repair, scorer change, margin change, family substitution or stopping-rule change may mint winner credit from the opened block."
+  },
+  "training_reinjection": {
+    "current_n64_role": "DEVELOPMENT_AND_FAILURE_TAXONOMY_EVIDENCE_ONLY",
+    "positive_training_rows_from_n64": 0,
+    "checkpoint_winner": null,
+    "curriculum_implication": "Epistemic abstention/label precision and canonical DB-vs-simulation authority remain separate load-bearing axes. A future training curriculum must repair one without silently degrading the other; no single aggregate score should collapse the tradeoff."
+  },
+  "execution_decision": {
+    "model_runtime_executed_this_delta": false,
+    "provider_execution_this_delta": false,
+    "vps_execution_this_delta": false,
+    "training_executed_this_delta": false,
+    "unusual_experiment_attempted": false,
+    "reason": "Supervisor 8.81 requires runtime quiescence before new execution; this is repository evidence-order correction only."
+  },
+  "credits": {
+    "research_delta": 1,
+    "temporal_methodology_correction": 1,
+    "n64_exploratory_evidence_retained": 1,
+    "n64_confirmatory_selection_credit": 0,
+    "checkpoint_selection_credit": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "jspace_model_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  },
+  "next_exact_action": "Do not execute while runtime quiescence is unresolved. After quiescence and exact checkpoint/input identity, freeze margins, deterministic evaluator, family-aware manifest and a genuinely unopened paired selection block before any candidate inference. Only prospective evidence from that sealed block may contribute confirmatory checkpoint-selection credit; preserve the current N64 block as exploratory only."
+}

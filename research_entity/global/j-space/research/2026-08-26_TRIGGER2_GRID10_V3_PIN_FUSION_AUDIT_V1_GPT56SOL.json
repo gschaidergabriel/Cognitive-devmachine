@@ -1,0 +1,113 @@
+{
+  "schema": "CLAY_TRIGGER2_GRID10_V3_PIN_FUSION_AUDIT/v1",
+  "date": "2026-08-26",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "status": "CURRENT_FAIL_CLOSED_RESEARCH_AUDIT_NONPROMOTING",
+  "observed_main_before_write": "7333ad32b43f59a593cd3abb90ca9d7b30495011",
+  "authority": {
+    "supervisor_epoch": "8.81_DELTA",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "architecture": "HCU",
+    "freeswarm_provider_admission": "OWNER_EMERGENCY_STOP_HARD_OFF",
+    "training_execution_authorized": false,
+    "paid_provider_execution_authorized": false,
+    "physical_grid10_runtime_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0,
+    "jspace_model_credit": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0
+  },
+  "audited_pin": {
+    "commit": "7333ad32b43f59a593cd3abb90ca9d7b30495011",
+    "path": "research_entity/execution_requests/2026-08-26_TRIGGER2_PHYSICAL_GRID10_PROOF_V3_HELD_S1_PIN_31F9C62_GPT56SOL_0215P0700.json",
+    "pinned_source": "31f9c628cd6c9ecf44da062b283f3cfa3c35963c",
+    "pinned_tree": "a06a3055eff40ae2cec0606059504208d4e5837c",
+    "entrypoint": "tools/xeno_physical_grid10_proof_v3.py",
+    "declared_status": "PINNED_SOURCE_READY_AUTORUN_BLOCKED_BY_CURRENT_FREESWARM_EMERGENCY_STOP"
+  },
+  "observed_source_fact": {
+    "classification": "V3_HELD_S1_PHYSICAL_PROOF_IS_STRONGER_THAN_V2_BUT_NOT_YET_THE_SINGLE_FUSED_CURRENT_ADMISSION_CONTRACT",
+    "details": [
+      "31f9c6 v3 proves ten simultaneously-live Popen processes, held read-only SQLite transactions, procfs O_RDONLY attachment, shared generation/epoch/state_digest identity, writer-free window and parent/child/packet PID binding.",
+      "31f9c6 explicitly delegates the existing v2 consumed-snapshot/strict-result/coordinator path for the remainder of the acceptance logic.",
+      "The same-cohort fan-in problem identified by current Trigger-2 research is therefore not automatically closed merely by held-S1 physical proof: physical cohort evidence and coordinator-consumed evidence still require one explicit causal admission contract.",
+      "Current main separately contains stronger nonduplicate candidates for atomic same-cohort fan-in and deterministic membership authority, but source presence in separate fixtures is not composition evidence."
+    ]
+  },
+  "current_donors": [
+    {
+      "commit": "08b842b29d9f211f07a663d0dc2e5c711f3bc3b0",
+      "artifact": "tools/trigger2_grid10_atomic_cohort_batch_acceptance_v1.py",
+      "contribution": "ten-process exact same-cohort immutable packet/PID/snapshot set; one atomic coordinator-authorized S1 transition; disjoint/tampered/replay negatives",
+      "remaining_boundary": "does not itself establish the newer monotonic node-membership admission identity contract"
+    },
+    {
+      "commit": "e80722242b3113820263e5d87b8a7b74fa06b3ca",
+      "artifact": "tools/trigger2_node_membership_admission_acceptance_v1.py",
+      "contribution": "monotonic membership admission id, current registration/health/generation checks, re-registration invalidation and ghost/unhealthy fail-closed negatives",
+      "remaining_boundary": "component fixture; explicitly does not prove cryptographic/physical process authentication or ten-process cohort integration"
+    },
+    {
+      "commit": "6ee058cf6a421debb0e7206043850ae56cdc484e",
+      "artifact": "tools/trigger2_grid10_atomic_cohort_fanin_pilot_v1.py",
+      "contribution": "single atomic cohort fan-in contract with separate membership_generation/membership_digest authority and locked recheck",
+      "remaining_boundary": "deterministic source pilot; not the exact ten-Popen held-S1 consumed-snapshot physical path"
+    },
+    {
+      "commit": "31f9c628cd6c9ecf44da062b283f3cfa3c35963c",
+      "artifact": "tools/xeno_physical_grid10_proof_v3.py",
+      "contribution": "held read transaction + O_RDONLY exact-S1 attachment + physical concurrency + consumed-snapshot proof",
+      "remaining_boundary": "does not by source identity alone prove fusion with the atomic membership-bound same-cohort admission contract"
+    }
+  ],
+  "hypothesis": "A credit-eligible physical GRID10 base path should use the exact ten simultaneously-live held-S1 cohort packets as the immutable evidence set, bind each source to deterministic current membership/health authority and parent-observed process identity, validate consumed-snapshot receipts against the one starting S1 identity, and commit the entire cohort through one coordinator-authorized atomic fan-in or an equally explicit provenance-preserving derivation protocol.",
+  "counterhypothesis": "Held-S1 physical proof plus separately tested atomic fan-in and membership fixtures may be sufficient by compositional reasoning without a fused exact-source executable. This audit rejects that promotion rule because executable evidence at one component boundary does not prove cross-component causal composition or rule out a splice between different cohorts/authority identities.",
+  "fail_closed_decision": {
+    "pin_7333ad_execution_credit_eligibility": "BLOCKED_PENDING_FUSED_EXACT_SOURCE_CONTRACT",
+    "autonomous_freeswarm_execution": "HARD_OFF",
+    "provider_preflight_or_retry": "FORBIDDEN_BY_EMERGENCY_STOP",
+    "positive_training_admission": "BLOCKED",
+    "checkpoint_winner": null,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "physical_grid10_runtime_credit": 0
+  },
+  "required_fusion_acceptance": [
+    "exactly ten simultaneously-live distinct parent-observed OS child PIDs",
+    "each exact cohort member remains attached O_RDONLY to the exact isolated S1 DB and holds the read transaction that produced its NODE_RESULT through the barrier",
+    "the coordinator-consumed packet digests are exactly the barrier cohort packet digests; no disjoint fresh process cohort substitution",
+    "each NODE_RESULT consumed-snapshot/read-receipt identity binds producer PID, original snapshot, selected task digest and payload digest without relabeling",
+    "each source is bound to deterministic current membership identity; unregistered, unhealthy, superseded/re-registered and stale membership identities reject before admitted_results mutation",
+    "membership authority remains deterministic/fabric-owned and outside model-authored semantic authority",
+    "complete cohort validates against one S1 starting identity and one membership starting identity",
+    "one atomic coordinator-authorized fan-in advances S1 once while preserving every original observation packet digest unchanged",
+    "transport arrival order cannot alter semantic authority; canonical cohort ordering is digest/causal identity based",
+    "disjoint-cohort substitution, omitted/unused member, packet tamper, membership tamper, stale S1, stale membership, duplicate/replay and coordinator-lease negatives fail closed",
+    "no S0 truth, effect authority, whole-HCU, whole-EntityOS, J-Space-model or training credit is minted by component PASS"
+  ],
+  "cheapest_high_information_discriminator": {
+    "name": "ONE_FUSED_PHYSICAL_MEMBERSHIP_BOUND_ATOMIC_COHORT_ACCEPTANCE",
+    "method": "Fuse/reuse the four current donors into one exact executable acceptance source rather than adding another conceptual contract. Execute nothing until the source is current and current authority permits a separately admitted non-provider executor.",
+    "pass_scope": "PHYSICAL_GRID10_FUSED_COMPONENT_REVIEW_ONLY",
+    "failure_interpretation": "A source or runtime failure identifies which causal boundary remains open; infrastructure/emergency-stop unavailability is not a scientific negative."
+  },
+  "training_course_reinjection": {
+    "model_target": "semantic cognitive transition only",
+    "deterministic_external_authority_fields": [
+      "process/PID liveness",
+      "membership admission and health",
+      "snapshot freshness/CAS",
+      "cohort sealing",
+      "provider admission",
+      "effect authority"
+    ],
+    "new_positive_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "training_executed": false
+  },
+  "next_exact_action": "Create or fuse one exact-source ten-process held-S1 + consumed-snapshot + membership-bound + atomic same-cohort acceptance contract from the existing current donors; add ghost/unhealthy/superseded-membership, disjoint-cohort, omitted-member, packet-tamper, stale-S1/stale-membership and replay negatives. Re-enter current authority afterward. Only then consider a new separately-authorized non-provider repository-bound pin; keep the current 7333ad pin non-credit-eligible meanwhile."
+}

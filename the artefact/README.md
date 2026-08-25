@@ -4,7 +4,7 @@
 
 ## Current authority — 2026-08-25 re-entry
 
-Newest inbox-selected supervisor observed in this update: **8.78**. Mode: **FREE_ONLY**. Canonical `main` observed immediately before this write: `33aeb8a22034c61dfe1b85df93bfeb99b54375fb`.
+Newest inbox-selected supervisor observed in this update: **8.78**. Mode: **FREE_ONLY**. Canonical `main` observed immediately before this write: `e89abd132938faae48659361c83a95a6c61717bd`.
 
 Persistent research entity = **Clay**. Temporary workers/models/sessions are organs, not persistent entities. Product = **EntityOS**. Integrated cognition/compute architecture = **HCU**. Xeno/XCU remain compatibility/research aliases only.
 
@@ -31,6 +31,8 @@ This GO also closed a separate re-entry defect: the inbox selected Supervisor **
 The four current-facing mirrors are now synchronized to `SUPERVISOR_STEERING_8_78.json` under commits `845a21bec23b97c11eb73a17ba152dad9313d4ab`, `884892a82d1d25bf3f0325dc90fe5bd7a2065739`, `41a8b3a4f40dd7706edb6d9799b531946a768fff`, and `1903eb6ed78856cbdac6946b353e7b14bc39633f`. The manifest/program live-funnel snapshot is aligned to the observed `free swarm/LIVE_METRICS.json`: **39,932,437** measured tokens, while Forge remains at **1 nominal historical ACCEPT** and Distillery remains at **0 accepted dataset tokens**. Raw volume remains non-crediting.
 
 The active 6000 supervisor also contains `CLAY_SWARM_RAW_GENERATION_BACKPRESSURE/v1`: it reads local canonical Forge SQLite counts, pauses/stops raw generation when conversion pressure is high, and fails closed when the Forge DB/schema/read is unavailable. This does not raise provider concurrency/token budget and does not read provider credentials.
+
+A second completed one-shot dispatch surface was closed in this GO: `.github/workflows/go878-wire-backfill-supervisor.yml` no longer listens to title-only `issues.opened` events after its source target had already converged. Commit `606062164802bbfcea84ca1083f24059f3bb93b8` leaves the old capsule manual-only; issue #1834 was closed completed and #1836/#1841/#1852 duplicate. The bounded receipt is `research_entity/continuity/receipts/2026-08-25_GO878_COMPLETED_ONESHOT_DISPATCH_RETIREMENT_GPT56SOL.json`. Existing queued legacy Actions remain scheduler evidence only and receive zero independent replication credit.
 
 These remain **source/control-plane deltas only**. No terminal exact-current historical-backfill saturation receipt, replay-v2 migration runtime receipt, backpressure runtime acceptance receipt, positive-token Forge-to-Distillery witness, or local model-runtime receipt was observed in this re-entry. Runtime/model/training/product credit therefore remains unchanged.
 
@@ -68,6 +70,7 @@ No new unusual J-Space/model intervention, paid/provider execution, Together cal
 - replay-v2 migration: **canonical source fusion present; exact-current runtime credit 0**;
 - backlog-first Forge supervisor wiring: **canonical source fusion present; historical-backfill runtime credit 0**;
 - raw-generation conversion backpressure: **canonical source fusion present; runtime credit 0**;
+- completed one-shot GO878 issue-trigger retirement: **canonical source/control-plane convergence present; runtime credit 0**;
 - full historical Free-Swarm re-evaluation/saturation: **not yet terminally observed**;
 - persistent Forge -> Distillery positive-token conversion witness: **not yet observed**;
 - provider runtime credit: **0**;

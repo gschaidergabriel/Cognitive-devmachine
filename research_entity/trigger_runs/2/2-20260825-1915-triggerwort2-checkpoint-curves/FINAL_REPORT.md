@@ -18,6 +18,7 @@ The important sequence was:
 1. `c05fd30...`: v3 binder already quarantined; semantic Hyperposition cross-cutting correction present.
 2. `d0e4d640...`: current Trigger-2 version ledger and vector-control non-identifiability delta discovered; a locally drafted competing registry was immediately abandoned as a merge candidate.
 3. `5d17c10e...`: exact-current training revision audit discovered that ledger v2 itself is already `RECHECK_REQUIRED` because Hyperposition gate/labeler dependencies diverged and a successor ledger v3 is required.
+4. `9999d6fa...`: derivation-bound Hyperposition gate adversarial tests landed. They enforce exact source binding, recomputation after event mutation, evaluator-only metadata, `training_eligible=false`, and zero training credit. This strengthens the D/E convergence lane but does not replace the longitudinal capability/checkpoint-curve requirement added here.
 
 This report therefore does **not** create another version ledger or semantic authority.
 
@@ -25,7 +26,7 @@ This report therefore does **not** create another version ledger or semantic aut
 
 - `tools/trigger2_binding_router_factorial_generator_v3.py`: QUARANTINE; direct training blocked by supervisor 8.78 conditional nuisance leakage.
 - semantic Hyperposition cross-cutting contract: remains current training ontology.
-- Hyperposition reference-labeler/gate family: dependency/schema convergence is P0 before D/E transition admission.
+- Hyperposition reference-labeler/gate family: dependency/schema convergence is P0 before D/E transition admission; derivation-bound gate tests are now a current donor toward that convergence.
 - cognitive-process trajectory generator: retrofit required; incomplete current census and missing universal Hyperposition carrier.
 - variable-N training: unseen-N OOD families are required; N must not become a classifier shortcut.
 - J-Space: representation decodability and causal use remain separate acceptance axes.

@@ -1,4 +1,4 @@
-name: GO877 collective metrics freshness dispatch
+name: GO878 historical backfill supervisor gate
 
 on:
   issues:
@@ -9,12 +9,13 @@ permissions:
   issues: read
 
 jobs:
-  implement-and-test:
-    if: github.repository == 'gschaidergabriel/clay-global-research-entity' && github.event.issue.title == '[CLAY-DISPATCH] collective metrics freshness v1' && github.event.issue.user.login == 'gschaidergabriel'
+  wire-test-backfill:
+    if: github.repository == 'gschaidergabriel/clay-global-research-entity' && github.event.issue.title == '[CLAY-DISPATCH] historical backfill 8.78' && github.event.issue.user.login == 'gschaidergabriel'
     runs-on: [self-hosted, Linux, X64]
-    timeout-minutes: 20
+    timeout-minutes: 30
     env:
-      BRANCH: go877/collective-metrics-freshness-gpt56sol-20260825
+      BRANCH: go878/historical-backfill-supervisor-gpt56sol-20260825
+      ARTIFACT_ROOT: /artifacts/clay-entityos-swarm
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
@@ -23,475 +24,237 @@ jobs:
           clean: true
           persist-credentials: true
 
-      - name: Re-enter current main and create fixed work branch
+      - name: Re-enter exact current main
         shell: bash
         run: |
           set -euo pipefail
           git fetch origin main
           git switch --detach origin/main
           git switch -C "$BRANCH"
-          git config user.name 'clay-go877-runner'
-          git config user.email 'clay-go877-runner@users.noreply.github.com'
-          git status --short
-          git rev-parse HEAD > /tmp/go877-base-head
+          git config user.name 'clay-go878-runner'
+          git config user.email 'clay-go878-runner@users.noreply.github.com'
+          git rev-parse HEAD > /tmp/go878-base-head
+          test -z "$(git status --porcelain=v1)"
 
-      - name: Apply freshness fail-closed delta
+      - name: Wire backlog-first Forge into single supervisor path
         shell: bash
         run: |
           set -euo pipefail
           python3 - <<'PY'
           from pathlib import Path
 
-          src_path = Path('free swarm/go_collective_metrics.py')
-          test_path = Path('tests/test_go_collective_metrics_v1.py')
-          src = src_path.read_text(encoding='utf-8')
-          tests = test_path.read_text(encoding='utf-8')
+          supervisor = Path('tools/run_6000_free_swarm_supervisor.sh')
+          activation = Path('tools/activate_6000_free_swarm.sh')
+          test = Path('tests/test_6000_safe_forge_wiring_872.py')
+          s = supervisor.read_text(encoding='utf-8')
+          a = activation.read_text(encoding='utf-8')
 
-          if 'FRESHNESS_RECEIPT_SCHEMA = "COLLECTIVE_METRICS_FRESHNESS_RECEIPT/v1"' in src:
-              raise SystemExit('FRESHNESS_DELTA_ALREADY_PRESENT_OR_PARALLEL_WORK_LANDED')
-
-          old_import = 'import math\nfrom pathlib import Path\n'
-          new_import = 'import math\nimport os\nfrom pathlib import Path\n'
-          if old_import not in src:
-              raise SystemExit('IMPORT_ANCHOR_MISSING')
-          src = src.replace(old_import, new_import, 1)
-
-          anchor = '''def sha256_json(value: Any) -> str:\n    data = json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode()\n    return hashlib.sha256(data).hexdigest()\n\n\n'''
-          if anchor not in src:
-              raise SystemExit('SHA256_ANCHOR_MISSING')
-
-          insertion = r'''FRESHNESS_RECEIPT_SCHEMA = "COLLECTIVE_METRICS_FRESHNESS_RECEIPT/v1"
-SOURCE_SNAPSHOT_SCHEMA = "CLAY_GO_COLLECTIVE_SOURCE_SNAPSHOT/v1"
-SNAPSHOT_MAX_SKEW_SECONDS = 120.0
-
-
-def _epoch_key(value: Any) -> tuple[int, ...]:
-    text = str(value or "").strip()
-    if not text:
-        return ()
-    try:
-        return tuple(int(part) for part in text.split("."))
-    except ValueError:
-        return ()
-
-
-def _stable_json_source(path: Path) -> tuple[dict[str, Any] | None, str | None, str | None]:
-    try:
-        first = path.read_bytes()
-        second = path.read_bytes()
-    except OSError as exc:
-        return None, None, f"READ_ERROR:{type(exc).__name__}"
-    if first != second:
-        return None, None, "INPUT_CHANGED_DURING_SNAPSHOT"
-    digest = hashlib.sha256(first).hexdigest()
-    try:
-        value = json.loads(first.decode("utf-8"))
-    except Exception as exc:
-        return None, digest, f"JSON_ERROR:{type(exc).__name__}"
-    if not isinstance(value, dict):
-        return None, digest, "JSON_OBJECT_REQUIRED"
-    return value, digest, None
-
-
-def capture_live_snapshot(repo: Path, max_skew_seconds: float = SNAPSHOT_MAX_SKEW_SECONDS) -> dict[str, Any]:
-    paths = {
-        "swarm": repo / "free swarm/LIVE_METRICS.json",
-        "forge": repo / "free swarm/FORGE_LIVE.json",
-        "distillery": repo / "free swarm/DISTILLERY_LIVE.json",
-        "authority": repo / "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
-    }
-    values: dict[str, dict[str, Any]] = {}
-    hashes: dict[str, str] = {}
-    errors: dict[str, str] = {}
-    for name, path in paths.items():
-        value, digest, error = _stable_json_source(path)
-        if digest:
-            hashes[name] = digest
-        if error:
-            errors[name] = error
-        elif value is not None:
-            values[name] = value
-
-    authority = values.get("authority") or {}
-    authority_epoch = str(authority.get("schema_version") or "")
-    times: dict[str, str] = {}
-    parsed: dict[str, dt.datetime] = {}
-    for name in ("swarm", "forge", "distillery"):
-        value = values.get(name) or {}
-        raw = value.get("generated_at")
-        ts = parse_ts(raw)
-        if ts is None:
-            errors[name] = errors.get(name) or "GENERATED_AT_REQUIRED"
-        else:
-            times[name] = str(raw)
-            parsed[name] = ts
-    if not _epoch_key(authority_epoch):
-        errors["authority"] = errors.get("authority") or "AUTHORITY_EPOCH_REQUIRED"
-
-    skew = None
-    if len(parsed) == 3:
-        skew = (max(parsed.values()) - min(parsed.values())).total_seconds()
-        if skew > max_skew_seconds:
-            errors["snapshot"] = f"SOURCE_SKEW_EXCEEDS_BOUND:{skew:.6f}>{max_skew_seconds:.6f}"
-
-    swarm = values.get("swarm") or {}
-    forge = values.get("forge") or {}
-    distillery = values.get("distillery") or {}
-    workers = swarm.get("workers") if isinstance(swarm.get("workers"), dict) else {}
-    metrics = {
-        "swarm": {
-            "generated_at": times.get("swarm"),
-            "worker_records": inum(workers.get("worker_records")),
-            "exact_usage_rows": inum(workers.get("exact_usage_rows")),
-            "input_tokens": inum(workers.get("input_tokens")),
-            "output_tokens": inum(workers.get("output_tokens")),
-            "total_tokens": inum(workers.get("total_tokens")),
-        },
-        "forge": {
-            "generated_at": times.get("forge"),
-            "discovery_hits": inum(forge.get("discovery_hits")),
-            "evaluations": inum(forge.get("evaluations")),
-            "accepted_deltas": inum(forge.get("accepted_deltas")),
-        },
-        "distillery": {
-            "generated_at": times.get("distillery"),
-            "collected_source_tokens": inum(distillery.get("collected_source_tokens")),
-            "accepted_packets": inum(distillery.get("accepted_packets")),
-            "accepted_dataset_tokens": inum(distillery.get("accepted_dataset_tokens")),
-        },
-    }
-    identity_payload = {
-        "schema": SOURCE_SNAPSHOT_SCHEMA,
-        "authority_epoch": authority_epoch,
-        "source_sha256": hashes,
-        "source_generated_at": times,
-        "metrics": metrics,
-    }
-    snapshot_id = sha256_json(identity_payload)
-    return {
-        **identity_payload,
-        "snapshot_id": snapshot_id,
-        "status": "READY" if not errors else "UNMEASURED",
-        "errors": errors,
-        "max_skew_seconds_allowed": max_skew_seconds,
-        "observed_skew_seconds": skew,
-    }
-
-
-def _published_source_times(published: dict[str, Any]) -> dict[str, dt.datetime]:
-    snap = published.get("source_snapshot")
-    raw: dict[str, Any] = {}
-    if isinstance(snap, dict):
-        value = snap.get("source_generated_at")
-        if isinstance(value, dict):
-            raw = value
-    if not raw:
-        source = published.get("source_metrics")
-        if isinstance(source, dict):
-            raw = {
-                "swarm": source.get("free_swarm_live_metrics_generated_at"),
-                "forge": source.get("forge_generated_at"),
-                "distillery": source.get("distillery_generated_at"),
-            }
-    out: dict[str, dt.datetime] = {}
-    for name in ("swarm", "forge", "distillery"):
-        ts = parse_ts(raw.get(name))
-        if ts is not None:
-            out[name] = ts
-    return out
-
-
-def publication_decision(existing: dict[str, Any], proposed_snapshot: dict[str, Any]) -> str:
-    if proposed_snapshot.get("status") != "READY":
-        return "BLOCKED_PROPOSED_SNAPSHOT_UNMEASURED"
-    proposed_epoch = _epoch_key(proposed_snapshot.get("authority_epoch"))
-    if not proposed_epoch:
-        return "BLOCKED_PROPOSED_AUTHORITY_UNKNOWN"
-    if not existing:
-        return "PUBLISH_NO_EXISTING"
-    existing_epoch = _epoch_key(existing.get("authority_epoch"))
-    if existing_epoch and existing_epoch > proposed_epoch:
-        return "BLOCKED_EXISTING_NEWER_AUTHORITY"
-    if not existing_epoch or existing_epoch < proposed_epoch:
-        return "PUBLISH_NEWER_AUTHORITY"
-
-    proposed_times = {
-        name: parse_ts((proposed_snapshot.get("source_generated_at") or {}).get(name))
-        for name in ("swarm", "forge", "distillery")
-    }
-    existing_times = _published_source_times(existing)
-    if any(proposed_times.get(name) is None for name in proposed_times):
-        return "BLOCKED_PROPOSED_SOURCE_TIME_UNKNOWN"
-    if len(existing_times) != 3:
-        return "PUBLISH_FORMAT_UPGRADE_WITH_CURRENT_AUTHORITY"
-    older = any(proposed_times[name] < existing_times[name] for name in proposed_times)
-    newer = any(proposed_times[name] > existing_times[name] for name in proposed_times)
-    if older and newer:
-        return "BLOCKED_INCOMPARABLE_PARTIAL_SNAPSHOT"
-    if older:
-        return "BLOCKED_OLDER_WRITER_CANNOT_REGRESS"
-    if newer:
-        return "PUBLISH_NEWER_BOUNDED_SNAPSHOT"
-    existing_snap = existing.get("source_snapshot")
-    existing_id = existing_snap.get("snapshot_id") if isinstance(existing_snap, dict) else None
-    if existing_id and existing_id != proposed_snapshot.get("snapshot_id"):
-        return "BLOCKED_SAME_WATERMARK_DIFFERENT_SNAPSHOT"
-    return "PUBLISH_IDEMPOTENT_SAME_SNAPSHOT"
-
-
-def assess_published_freshness(published: dict[str, Any], live_snapshot: dict[str, Any]) -> dict[str, Any]:
-    if live_snapshot.get("status") != "READY":
-        return {"state": "UNMEASURED", "reason": "LIVE_SNAPSHOT_UNMEASURED"}
-    if _epoch_key(published.get("authority_epoch")) != _epoch_key(live_snapshot.get("authority_epoch")):
-        return {"state": "HISTORICAL", "reason": "AUTHORITY_EPOCH_MISMATCH"}
-    published_times = _published_source_times(published)
-    live_times = {
-        name: parse_ts((live_snapshot.get("source_generated_at") or {}).get(name))
-        for name in ("swarm", "forge", "distillery")
-    }
-    if len(published_times) != 3 or any(ts is None for ts in live_times.values()):
-        return {"state": "UNMEASURED", "reason": "BOUND_SOURCE_TIMES_REQUIRED"}
-    if any(live_times[name] > published_times[name] for name in live_times):
-        return {"state": "STALE", "reason": "NEWER_LIVE_INPUT_THAN_AGGREGATE"}
-    if any(live_times[name] < published_times[name] for name in live_times):
-        return {"state": "UNMEASURED", "reason": "AGGREGATE_AHEAD_OF_CURRENT_INPUT"}
-    snap = published.get("source_snapshot")
-    published_id = snap.get("snapshot_id") if isinstance(snap, dict) else None
-    if not published_id or published_id != live_snapshot.get("snapshot_id"):
-        return {"state": "UNMEASURED", "reason": "SNAPSHOT_ID_MISMATCH_OR_MISSING"}
-    return {"state": "FRESH", "reason": "EXACT_BOUNDED_SNAPSHOT_MATCH"}
-
-
-def stable_result_digest(result: dict[str, Any]) -> str:
-    volatile = {"generated_at", "published_at", "measurement_digest_sha256", "publication"}
-    def clean(value: Any) -> Any:
-        if isinstance(value, dict):
-            return {k: clean(v) for k, v in value.items() if k not in volatile}
-        if isinstance(value, list):
-            return [clean(v) for v in value]
-        return value
-    return sha256_json(clean(result))
-
-
-def publish_json_fail_closed(path: Path, result: dict[str, Any], repo: Path) -> dict[str, Any]:
-    try:
-        import fcntl
-    except Exception:
-        return {"status": "BLOCKED", "reason": "POSIX_FILE_LOCK_REQUIRED"}
-    path.parent.mkdir(parents=True, exist_ok=True)
-    lock_path = path.with_name(path.name + ".lock")
-    with lock_path.open("a+", encoding="utf-8") as lock:
-        fcntl.flock(lock.fileno(), fcntl.LOCK_EX)
-        latest = capture_live_snapshot(repo)
-        proposed = result.get("source_snapshot")
-        if not isinstance(proposed, dict) or latest.get("status") != "READY":
-            return {"status": "BLOCKED", "reason": "LIVE_OR_PROPOSED_SNAPSHOT_UNMEASURED"}
-        if latest.get("snapshot_id") != proposed.get("snapshot_id"):
-            return {"status": "BLOCKED", "reason": "INPUT_ADVANCED_BEFORE_PUBLICATION", "latest_snapshot_id": latest.get("snapshot_id")}
-        existing = read_json(path) if path.exists() else {}
-        decision = publication_decision(existing, proposed)
-        if decision.startswith("BLOCKED_"):
-            return {"status": "BLOCKED", "reason": decision}
-        if decision == "PUBLISH_IDEMPOTENT_SAME_SNAPSHOT":
-            old_digest = existing.get("measurement_digest_sha256")
-            new_digest = result.get("measurement_digest_sha256")
-            if old_digest == new_digest and old_digest:
-                return {"status": "IDEMPOTENT_NO_WRITE", "reason": "SAME_SNAPSHOT_SAME_RESULT_DIGEST"}
-            return {"status": "BLOCKED", "reason": "SAME_SNAPSHOT_DIFFERENT_RESULT_DIGEST"}
-        tmp = path.with_name(path.name + f".tmp-{os.getpid()}")
-        tmp.write_text(json.dumps(result, indent=2, sort_keys=True, ensure_ascii=False) + "\n", encoding="utf-8")
-        os.replace(tmp, path)
-        return {"status": "PUBLISHED", "reason": decision, "snapshot_id": proposed.get("snapshot_id")}
-
-
+          if 'local x="$ROOT/tools/run_free_evidence_forge_backfill.py"' in s:
+              raise SystemExit('BACKFILL_WIRING_ALREADY_PRESENT_OR_PARALLEL_WORK_LANDED')
+          old = '''start_forge(){
+  local x="$ROOT/tools/run_free_evidence_forge_safe.py"; [[ -f "$x" ]] || return 0
+  # The active 6000 lane must never keep the shell-capable legacy Forge alive.
+  # Retire any pre-fix process before starting the argv-only, secret-free,
+  # bubblewrap-gated successor. A zero-match is the normal steady state.
+  while IFS= read -r pid; do
+    [[ -n "$pid" ]] && kill "$pid" 2>/dev/null || true
+  done < <(pgrep -f '[r]un_free_evidence_forge.py' || true)
+  pgrep -f '[r]un_free_evidence_forge_safe.py' >/dev/null 2>&1 && return 0
+  nohup python3 "$x" --hours 24 --sleep-seconds 20 --discovery-parallel 8 --local-parallel 4 --e2b-parallel 20 >"$STATE_DIR/forge.log" 2>&1 </dev/null &
+  echo $! >"$STATE_DIR/forge.pid"
+}
 '''
-          src = src.replace(anchor, anchor + insertion, 1)
-
-          config_anchor = '''    if config.get("schema") != "CLAY_GO_COLLECTIVE_METRICS_CONFIG/v1":\n        raise SystemExit("GO_METRICS_CONFIG_REQUIRED")\n\n    workers = explicit_worker_rows(repo)\n'''
-          config_replacement = '''    if config.get("schema") != "CLAY_GO_COLLECTIVE_METRICS_CONFIG/v1":\n        raise SystemExit("GO_METRICS_CONFIG_REQUIRED")\n\n    source_snapshot = capture_live_snapshot(repo)\n    if source_snapshot.get("status") != "READY":\n        raise SystemExit("GO_COLLECTIVE_METRICS_SOURCE_SNAPSHOT_UNMEASURED:" + json.dumps(source_snapshot.get("errors") or {}, sort_keys=True))\n\n    workers = explicit_worker_rows(repo)\n'''
-          if config_anchor not in src:
-              raise SystemExit('MAIN_SNAPSHOT_ANCHOR_MISSING')
-          src = src.replace(config_anchor, config_replacement, 1)
-
-          result_anchor = '''        "config_sha256": sha256_json(config),\n        "worker_record_count": len(workers),\n        "aggregate": aggregate(workers, config),\n'''
-          result_replacement = '''        "authority_epoch": source_snapshot["authority_epoch"],\n        "config_sha256": sha256_json(config),\n        "source_snapshot": source_snapshot,\n        "source_metrics": source_snapshot["metrics"],\n        "worker_record_count": len(workers),\n        "aggregate": aggregate(workers, config),\n'''
-          if result_anchor not in src:
-              raise SystemExit('RESULT_ANCHOR_MISSING')
-          src = src.replace(result_anchor, result_replacement, 1)
-
-          md_anchor = '''    md = markdown(result)\n\n    out_json = args.output_json or (repo / "free swarm/GO_COLLECTIVE_METRICS.json")\n    out_md = args.output_md or (repo / "free swarm/GO_COLLECTIVE_METRICS.md")\n    out_json.write_text(json.dumps(result, indent=2, sort_keys=True, ensure_ascii=False) + "\\n", encoding="utf-8")\n    out_md.write_text(md, encoding="utf-8")\n\n    if args.update_readme:\n        readme = repo / "free swarm/README.md"\n        current = readme.read_text(encoding="utf-8") if readme.exists() else "# Free Swarm\\n"\n        readme.write_text(replace_block(current, md), encoding="utf-8")\n'''
-          md_replacement = '''    result["freshness"] = assess_published_freshness(result, source_snapshot)\n    result["measurement_digest_sha256"] = stable_result_digest(result)\n    md = markdown(result)\n\n    out_json = args.output_json or (repo / "free swarm/GO_COLLECTIVE_METRICS.json")\n    out_md = args.output_md or (repo / "free swarm/GO_COLLECTIVE_METRICS.md")\n    publication = publish_json_fail_closed(out_json, result, repo)\n    if publication.get("status") not in {"PUBLISHED", "IDEMPOTENT_NO_WRITE"}:\n        print(json.dumps(publication, sort_keys=True))\n        return 3\n    if publication.get("status") == "PUBLISHED":\n        out_md.write_text(md, encoding="utf-8")\n        if args.update_readme:\n            readme = repo / "free swarm/README.md"\n            current = readme.read_text(encoding="utf-8") if readme.exists() else "# Free Swarm\\n"\n            readme.write_text(replace_block(current, md), encoding="utf-8")\n'''
-          if md_anchor not in src:
-              raise SystemExit('PUBLICATION_ANCHOR_MISSING')
-          src = src.replace(md_anchor, md_replacement, 1)
-
-          if 'import tempfile\n' not in tests:
-              tests = tests.replace('from pathlib import Path\nimport unittest\n', 'from pathlib import Path\nimport tempfile\nimport unittest\n', 1)
-          test_insert_anchor = '\n\nif __name__ == "__main__":\n    unittest.main()\n'
-          if test_insert_anchor not in tests:
-              raise SystemExit('TEST_INSERT_ANCHOR_MISSING')
-          new_tests = r'''
-
-    def _snapshot(self, epoch="8.77", base="2026-08-25T02:33:48+00:00", offset=0):
-        import datetime as _dt
-        start = _dt.datetime.fromisoformat(base)
-        times = {name: (start + _dt.timedelta(seconds=offset + i)).isoformat() for i, name in enumerate(("swarm", "forge", "distillery"))}
-        payload = {
-            "schema": metrics.SOURCE_SNAPSHOT_SCHEMA,
-            "authority_epoch": epoch,
-            "source_sha256": {"swarm": "a" * 64, "forge": "b" * 64, "distillery": "c" * 64, "authority": "d" * 64},
-            "source_generated_at": times,
-            "metrics": {"swarm": {}, "forge": {}, "distillery": {}},
-        }
-        return {**payload, "snapshot_id": metrics.sha256_json(payload), "status": "READY", "errors": {}}
-
-    def test_newer_live_input_marks_aggregate_stale(self):
-        published_snapshot = self._snapshot(offset=0)
-        published = {"authority_epoch": "8.77", "source_snapshot": published_snapshot}
-        live = self._snapshot(offset=10)
-        out = metrics.assess_published_freshness(published, live)
-        self.assertEqual(out["state"], "STALE")
-        self.assertEqual(out["reason"], "NEWER_LIVE_INPUT_THAN_AGGREGATE")
-
-    def test_authority_epoch_mismatch_is_historical(self):
-        published_snapshot = self._snapshot(epoch="8.76")
-        published = {"authority_epoch": "8.76", "source_snapshot": published_snapshot}
-        live = self._snapshot(epoch="8.77")
-        out = metrics.assess_published_freshness(published, live)
-        self.assertEqual(out, {"state": "HISTORICAL", "reason": "AUTHORITY_EPOCH_MISMATCH"})
-
-    def test_older_writer_cannot_regress_newer_publication(self):
-        newer = self._snapshot(offset=20)
-        existing = {"authority_epoch": "8.77", "source_snapshot": newer}
-        older = self._snapshot(offset=0)
-        self.assertEqual(metrics.publication_decision(existing, older), "BLOCKED_OLDER_WRITER_CANNOT_REGRESS")
-
-    def test_same_bounded_inputs_have_identical_result_digest(self):
-        snap = self._snapshot()
-        a = {"schema": metrics.SCHEMA, "generated_at": "2026-08-25T02:40:00+00:00", "authority_epoch": "8.77", "source_snapshot": snap, "aggregate": {"x": 1}}
-        b = {"schema": metrics.SCHEMA, "generated_at": "2026-08-25T02:41:00+00:00", "authority_epoch": "8.77", "source_snapshot": snap, "aggregate": {"x": 1}}
-        self.assertEqual(metrics.stable_result_digest(a), metrics.stable_result_digest(b))
-
-    def test_swarm_forge_distillery_share_one_bounded_snapshot_identity(self):
-        with tempfile.TemporaryDirectory() as td:
-            repo = Path(td)
-            (repo / "free swarm").mkdir(parents=True)
-            (repo / "research_entity/claycode/autonomous").mkdir(parents=True)
-            (repo / "free swarm/LIVE_METRICS.json").write_text(json.dumps({
-                "generated_at": "2026-08-25T02:33:48+00:00",
-                "workers": {"worker_records": 10, "exact_usage_rows": 9, "input_tokens": 100, "output_tokens": 20, "total_tokens": 120},
-            }))
-            (repo / "free swarm/FORGE_LIVE.json").write_text(json.dumps({
-                "generated_at": "2026-08-25T02:33:49+00:00", "discovery_hits": 3, "evaluations": 2, "accepted_deltas": 1,
-            }))
-            (repo / "free swarm/DISTILLERY_LIVE.json").write_text(json.dumps({
-                "generated_at": "2026-08-25T02:33:50+00:00", "collected_source_tokens": 44, "accepted_packets": 1, "accepted_dataset_tokens": 7,
-            }))
-            (repo / "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json").write_text(json.dumps({"schema_version": "8.77"}))
-            snap = metrics.capture_live_snapshot(repo, max_skew_seconds=5.0)
-            self.assertEqual(snap["status"], "READY")
-            self.assertEqual(snap["authority_epoch"], "8.77")
-            self.assertEqual(snap["metrics"]["swarm"]["total_tokens"], 120)
-            self.assertEqual(snap["metrics"]["forge"]["accepted_deltas"], 1)
-            self.assertEqual(snap["metrics"]["distillery"]["accepted_dataset_tokens"], 7)
-            self.assertEqual(set(snap["source_generated_at"]), {"swarm", "forge", "distillery"})
-            self.assertEqual(len(snap["snapshot_id"]), 64)
+          new = '''start_forge(){
+  local x="$ROOT/tools/run_free_evidence_forge_backfill.py"; [[ -f "$x" ]] || return 0
+  # One Forge authority only: retire both the shell-capable legacy entrypoint and
+  # the pre-backfill safe entrypoint before starting the backlog-first successor.
+  while IFS= read -r pid; do
+    [[ -n "$pid" ]] && kill "$pid" 2>/dev/null || true
+  done < <(pgrep -f '[r]un_free_evidence_forge.py|[r]un_free_evidence_forge_safe.py' || true)
+  pgrep -f '[r]un_free_evidence_forge_backfill.py' >/dev/null 2>&1 && return 0
+  nohup python3 "$x" --hours 24 --sleep-seconds 5 --questions-per-cycle 2 --backpressure-questions-per-cycle 0 --backpressure-threshold 1 --discovery-parallel 4 --local-parallel 4 --e2b-parallel 20 >"$STATE_DIR/forge.log" 2>&1 </dev/null &
+  echo $! >"$STATE_DIR/forge.pid"
+}
 '''
-          tests = tests.replace(test_insert_anchor, new_tests + test_insert_anchor, 1)
+          if old not in s:
+              raise SystemExit('SUPERVISOR_START_FORGE_ANCHOR_MISSING')
+          s = s.replace(old, new, 1)
+          s = s.replace("'forge_running':running('run_free_evidence_forge_safe.py')", "'forge_running':running('run_free_evidence_forge_backfill.py')")
+          s = s.replace("LEGACY_FORGE_TERMINATED; SAFE_FORGE_ONLY", "LEGACY_AND_PREBACKFILL_FORGE_TERMINATED; BACKLOG_FIRST_SAFE_FORGE_ONLY")
+          supervisor.write_text(s, encoding='utf-8')
 
-          src_path.write_text(src, encoding='utf-8')
-          test_path.write_text(tests, encoding='utf-8')
+          compile_anchor = '  tools/run_free_evidence_forge_safe.py \\\n  tools/forge_evidence_credit_871.py \\\n'
+          compile_replacement = '  tools/run_free_evidence_forge_safe.py \\\n  tools/free_swarm_historical_backfill.py \\\n  tools/run_free_evidence_forge_backfill.py \\\n  tools/forge_evidence_credit_871.py \\\n'
+          if compile_anchor not in a:
+              raise SystemExit('ACTIVATION_COMPILE_ANCHOR_MISSING')
+          a = a.replace(compile_anchor, compile_replacement, 1)
+          a = a.replace(" 'tools/run_free_evidence_forge_safe.py',\n", " 'tools/run_free_evidence_forge_safe.py',\n 'tools/run_free_evidence_forge_backfill.py',\n")
+          activation.write_text(a, encoding='utf-8')
+
+          test.write_text('''from pathlib import Path\nimport unittest\n\n\nROOT = Path(__file__).resolve().parents[1]\nSUPERVISOR = ROOT / "tools/run_6000_free_swarm_supervisor.sh"\nACTIVATION = ROOT / "tools/activate_6000_free_swarm.sh"\n\n\nclass BacklogFirstForge6000Wiring878(unittest.TestCase):\n    def test_active_6000_supervisor_uses_single_backlog_first_forge(self):\n        text = SUPERVISOR.read_text(encoding="utf-8")\n        start = text.index("start_forge(){")\n        end = text.index("\\n}\\n\\nrefresh_root_results", start) + 3\n        block = text[start:end]\n        self.assertIn('local x="$ROOT/tools/run_free_evidence_forge_backfill.py"', block)\n        self.assertIn("pgrep -f '[r]un_free_evidence_forge.py|[r]un_free_evidence_forge_safe.py'", block)\n        self.assertIn("kill \\\"$pid\\\"", block)\n        self.assertIn("pgrep -f '[r]un_free_evidence_forge_backfill.py'", block)\n        self.assertNotIn('local x="$ROOT/tools/run_free_evidence_forge_safe.py"', block)\n        self.assertIn('--backpressure-threshold 1', block)\n        self.assertIn('--backpressure-questions-per-cycle 0', block)\n\n    def test_supervisor_status_exposes_backfill_and_legacy_process_state(self):\n        text = SUPERVISOR.read_text(encoding="utf-8")\n        self.assertIn("'forge_running':running('run_free_evidence_forge_backfill.py')", text)\n        self.assertIn("'legacy_forge_running':running('run_free_evidence_forge.py')", text)\n        self.assertIn("'forge_execution_policy':'CLAY_FORGE_EXECUTION_ADMISSION/v1'", text)\n        self.assertIn("BACKLOG_FIRST_SAFE_FORGE_ONLY", text)\n\n    def test_activation_preflights_backfill_and_cleans_old_forge(self):\n        text = ACTIVATION.read_text(encoding="utf-8")\n        for required in (\n            "tools/forge_execution_admission_871.py",\n            "tools/run_free_evidence_forge_safe_871.py",\n            "tools/run_free_evidence_forge_safe.py",\n            "tools/free_swarm_historical_backfill.py",\n            "tools/run_free_evidence_forge_backfill.py",\n            "tools/forge_evidence_credit_871.py",\n            "tools/ingest_forge_accepts_into_distillery.py",\n            "tools/run_forge_distillery_bridge_loop.py",\n        ):\n            self.assertIn(required, text)\n        self.assertIn("bash -n tools/run_6000_free_swarm_supervisor.sh", text)\n\n\nif __name__ == "__main__":\n    unittest.main()\n''', encoding='utf-8')
           PY
 
-      - name: Execute deterministic freshness regressions
-        id: tests
+      - name: Add exact historical-backfill receipt runner
         shell: bash
         run: |
           set -euo pipefail
-          python3 -m py_compile 'free swarm/go_collective_metrics.py' tests/test_go_collective_metrics_v1.py
-          python3 tests/test_go_collective_metrics_v1.py -v 2>&1 | tee /tmp/go877-freshness-tests.log
-          sha256sum /tmp/go877-freshness-tests.log | awk '{print $1}' > /tmp/go877-test-log-sha
+          cat > tools/run_free_swarm_historical_backfill_receipt_878.py <<'PY'
+          #!/usr/bin/env python3
+          from __future__ import annotations
+          import argparse
+          import hashlib
+          import json
+          from pathlib import Path
+          import sqlite3
+          import subprocess
+          from typing import Any
 
-      - name: Commit source and test delta
+          import run_free_evidence_forge_safe_871 as safe
+          from free_swarm_historical_backfill import backfill_metrics, ensure_schema, ingest_artifact_history
+
+          base = safe.base
+          SCHEMA = "FREE_SWARM_HISTORICAL_BACKFILL_RECEIPT/v1"
+
+          def git(*args: str) -> str:
+              return subprocess.check_output(["git", *args], text=True).strip()
+
+          def sha256_file(path: Path) -> str:
+              h = hashlib.sha256()
+              with path.open("rb") as fh:
+                  for chunk in iter(lambda: fh.read(1024 * 1024), b""):
+                      h.update(chunk)
+              return h.hexdigest()
+
+          def scalar(con: sqlite3.Connection, sql: str, args: tuple[Any, ...] = ()) -> int:
+              row = con.execute(sql, args).fetchone()
+              return int((row or [0])[0] or 0)
+
+          def snapshot(con: sqlite3.Connection) -> dict[str, int]:
+              return {
+                  "concepts": scalar(con, "SELECT COUNT(DISTINCT concept_id) FROM candidates WHERE concept_id IS NOT NULL"),
+                  "variants": scalar(con, "SELECT COUNT(DISTINCT variant_id) FROM candidates WHERE variant_id IS NOT NULL"),
+                  "duplicates_superseded": scalar(con, "SELECT COUNT(*) FROM candidates WHERE state='DUPLICATE_SUPERSEDED'"),
+                  "ready_backlog": scalar(con, "SELECT COUNT(*) FROM candidates WHERE ready=1 AND state='NEW'"),
+                  "implementation_backlog": scalar(con, "SELECT COUNT(*) FROM candidates WHERE state='NEEDS_IMPLEMENTATION'"),
+                  "explicit_links": scalar(con, "SELECT COUNT(*) FROM candidate_sources WHERE extraction_mode='EXPLICIT_WORKER_DELTA'"),
+                  "batch_links": scalar(con, "SELECT COUNT(*) FROM candidate_sources WHERE extraction_mode='HISTORICAL_BATCH'"),
+              }
+
+          def main() -> int:
+              ap = argparse.ArgumentParser()
+              ap.add_argument("--artifact-root", type=Path, default=base.ARTIFACT_ROOT)
+              ap.add_argument("--output", type=Path, required=True)
+              ap.add_argument("--max-lines-per-pass", type=int, default=50000)
+              ap.add_argument("--max-passes", type=int, default=256)
+              args = ap.parse_args()
+              root = args.artifact_root.resolve()
+              files = sorted(root.rglob("workers.jsonl")) if root.exists() else []
+              scan_set = [{"path": str(p), "size": p.stat().st_size, "sha256": sha256_file(p)} for p in files]
+
+              con = base.connect()
+              ensure_schema(con)
+              before = snapshot(con)
+              totals = {"passes": 0, "lines_scanned": 0, "successful_outputs": 0, "candidate_variants_added": 0, "chunks_added": 0, "batches_seen": 0}
+              saturated = False
+              try:
+                  for _ in range(max(1, args.max_passes)):
+                      stats = ingest_artifact_history(con, root, max_new_lines=max(1, args.max_lines_per_pass))
+                      totals["passes"] += 1
+                      for key in ("lines_seen", "successful_outputs", "candidate_variants_added", "chunks_added", "batches_seen"):
+                          target = "lines_scanned" if key == "lines_seen" else key
+                          totals[target] += int(stats.get(key, 0))
+                      if int(stats.get("lines_seen", 0)) == 0:
+                          saturated = True
+                          break
+                  after = snapshot(con)
+                  metrics = backfill_metrics(con)
+              finally:
+                  con.close()
+
+              dirty = git("status", "--porcelain=v1")
+              receipt = {
+                  "schema": SCHEMA,
+                  "authority_epoch": "8.78",
+                  "program": "ENTITYOS_HCU",
+                  "product": "EntityOS",
+                  "architecture": "HCU",
+                  "mode": "FREE_ONLY",
+                  "source_commit": git("rev-parse", "HEAD"),
+                  "source_tree": git("rev-parse", "HEAD^{tree}"),
+                  "source_dirty": bool(dirty),
+                  "source_dirty_porcelain": dirty.splitlines()[:100],
+                  "artifact_root": str(root),
+                  "artifact_scan_set": scan_set,
+                  "artifact_scan_file_count": len(scan_set),
+                  "saturation": {"source_scan_saturated": saturated, **totals},
+                  "recovered": {
+                      "explicit_deltas_recovered": max(0, after["explicit_links"] - before["explicit_links"]),
+                      "batch_deltas_recovered": max(0, after["batch_links"] - before["batch_links"]),
+                      "new_concepts": max(0, after["concepts"] - before["concepts"]),
+                      "new_execution_variants": max(0, after["variants"] - before["variants"]),
+                      "duplicates_superseded": max(0, after["duplicates_superseded"] - before["duplicates_superseded"]),
+                  },
+                  "backlog": {
+                      "ready_backlog": after["ready_backlog"],
+                      "implementation_backlog": after["implementation_backlog"],
+                      "remaining_pending_extraction": int(metrics.get("pending_extraction") or 0),
+                  },
+                  "historical_metrics": metrics,
+                  "network_calls": 0,
+                  "provider_model_calls": 0,
+                  "runtime_credit_scope": "HISTORICAL_BACKFILL_COMPONENT_ONLY",
+                  "credits": {"entityos_whole": 0, "hcu_full": 0, "jspace_model": 0, "training": 0, "provider_runtime": 0},
+                  "status": "PASS" if saturated and not dirty and len(scan_set) > 0 else "NONPASS",
+              }
+              args.output.parent.mkdir(parents=True, exist_ok=True)
+              args.output.write_text(json.dumps(receipt, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+              print(json.dumps({"status": receipt["status"], "files": len(scan_set), **totals, **receipt["recovered"], **receipt["backlog"]}, sort_keys=True))
+              return 0 if receipt["status"] == "PASS" else 2
+
+          if __name__ == "__main__":
+              raise SystemExit(main())
+          PY
+          chmod +x tools/run_free_swarm_historical_backfill_receipt_878.py
+
+      - name: Run source and fail-closed wiring regressions
         shell: bash
         run: |
           set -euo pipefail
-          git add 'free swarm/go_collective_metrics.py' tests/test_go_collective_metrics_v1.py
-          git commit -m 'metrics: fail closed on stale collective snapshots'
-          git rev-parse HEAD > /tmp/go877-source-head
+          python3 -m py_compile \
+            tools/free_swarm_historical_backfill.py \
+            tools/run_free_evidence_forge_backfill.py \
+            tools/run_free_swarm_historical_backfill_receipt_878.py \
+            tests/test_6000_safe_forge_wiring_872.py
+          bash -n tools/run_6000_free_swarm_supervisor.sh
+          bash -n tools/activate_6000_free_swarm.sh
+          python3 -m unittest -v tests.test_6000_safe_forge_wiring_872
+          git diff --check
 
-      - name: Emit bounded freshness receipt
+      - name: Commit exact executable source before runtime receipt
+        shell: bash
+        run: |
+          set -euo pipefail
+          git add tools/run_6000_free_swarm_supervisor.sh tools/activate_6000_free_swarm.sh tests/test_6000_safe_forge_wiring_872.py tools/run_free_swarm_historical_backfill_receipt_878.py
+          git commit -m 'forge: wire backlog-first historical backfill supervisor'
+          git rev-parse HEAD > /tmp/go878-source-head
+          test -z "$(git status --porcelain=v1)"
+
+      - name: Execute full historical source replay to scan saturation
         shell: bash
         run: |
           set -euo pipefail
           mkdir -p research_entity/continuity/receipts
-          BASE_HEAD="$(cat /tmp/go877-base-head)" SOURCE_HEAD="$(cat /tmp/go877-source-head)" TEST_LOG_SHA="$(cat /tmp/go877-test-log-sha)" python3 - <<'PY'
-          import json, os
-          from pathlib import Path
-          receipt = {
-            "schema": "COLLECTIVE_METRICS_FRESHNESS_RECEIPT/v1",
-            "authority_epoch": "8.77",
-            "program": "ENTITYOS_HCU",
-            "product": "EntityOS",
-            "architecture": "HCU",
-            "mode": "FREE_ONLY",
-            "trigger": "go",
-            "organ": "GPT-5.6-Sol",
-            "base_main_observed_at_execution": os.environ["BASE_HEAD"],
-            "exact_source_commit": os.environ["SOURCE_HEAD"],
-            "executor": "SELF_HOSTED_LINUX_X64_OWNER_VPS_RUNNER",
-            "tests": {
-              "command": "python3 tests/test_go_collective_metrics_v1.py -v",
-              "expected_cases": 11,
-              "status": "PASS",
-              "log_sha256": os.environ["TEST_LOG_SHA"],
-              "required_freshness_cases": [
-                "newer live input than aggregate => STALE",
-                "authority epoch mismatch => HISTORICAL",
-                "older writer cannot regress newer publication",
-                "same bounded inputs => identical measurement digest",
-                "Swarm + Forge + Distillery share one bounded source snapshot identity"
-              ]
-            },
-            "delta": {
-              "publisher": "free swarm/go_collective_metrics.py",
-              "source_snapshot_schema": "CLAY_GO_COLLECTIVE_SOURCE_SNAPSHOT/v1",
-              "stable_double_read": True,
-              "bounded_source_skew_seconds": 120,
-              "atomic_posix_file_lock": True,
-              "prepublication_live_recapture": True,
-              "out_of_order_writer_regression_block": True,
-              "same_snapshot_different_digest_fail_closed": True,
-              "legacy_8_71_output_classifiable_as_historical_or_format-upgrade input": True
-            },
-            "go_tracks": {
-              "track_a": "ADVANCED: canonical collective metrology can no longer silently publish an older snapshot after newer live inputs",
-              "track_b": "ADVANCED: reusable typed bounded source-snapshot identity binds Swarm/Forge/Distillery measurements to one authority epoch",
-              "track_c": "ADVANCED_AT_TRAINING_READINESS_METROLOGY_SCOPE: dataset-token readiness cannot be promoted from stale or cross-epoch aggregate state; J-Space/model/training runtime credit remains zero"
-            },
-            "coordination": {
-              "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
-              "unusual_interventions_executed": 0,
-              "pr1771_replay_v2_lane": "SEPARATE_BLOCKER_RETAINED"
-            },
-            "credits": {
-              "provider_runtime_credit": 0,
-              "entityos_hcu_whole_runtime_credit": 0,
-              "hcu_full_runtime_credit": 0,
-              "jspace_model_runtime_credit": 0,
-              "training_credit": 0,
-              "whole_product_pass": False
-            },
-            "next_exact_gate": "Re-enter main and supervisor; review/merge this nonduplicate freshness lane if still current, then execute PR1771 replay-v2 migration receipt before live Forge->Distillery dataset conversion credit."
-          }
-          p = Path('research_entity/continuity/receipts/2026-08-25_GO877_COLLECTIVE_METRICS_FRESHNESS_GPT56SOL.json')
-          p.write_text(json.dumps(receipt, indent=2, sort_keys=True) + '\n', encoding='utf-8')
-          PY
-          git add research_entity/continuity/receipts/2026-08-25_GO877_COLLECTIVE_METRICS_FRESHNESS_GPT56SOL.json
-          git commit -m 'evidence: record collective metrics freshness regression'
+          python3 tools/run_free_swarm_historical_backfill_receipt_878.py \
+            --artifact-root "$ARTIFACT_ROOT" \
+            --max-lines-per-pass 50000 \
+            --max-passes 256 \
+            --output research_entity/continuity/receipts/2026-08-25_GO878_FREE_SWARM_HISTORICAL_BACKFILL_GPT56SOL.json \
+            | tee /tmp/go878-backfill-summary.log
 
-      - name: Push bounded work branch
+      - name: Commit receipt and push bounded branch
         shell: bash
         run: |
           set -euo pipefail
-          git push origin "HEAD:$BRANCH"
+          git add research_entity/continuity/receipts/2026-08-25_GO878_FREE_SWARM_HISTORICAL_BACKFILL_GPT56SOL.json
+          git commit -m 'evidence: record historical backfill saturation receipt'
+          git push --force-with-lease origin "HEAD:$BRANCH"

@@ -1,0 +1,114 @@
+{
+  "schema": "CLAY_GO_WORKER_METRICS/v1",
+  "macrocycle_id": "MACROCYCLE_ID_UNRESOLVED",
+  "macrocycle_grouping_forbidden": true,
+  "macrocycle_identity_reason": "No shared immutable request/macrocycle id is exposed to this organ. The available user-trigger time is minute precision only, so it is not used as a canonical grouping identity or unusual-experiment lease key.",
+  "worker_id": "gpt56sol-20260825t0942p0700-go878-backfill-line-identity",
+  "organ": "GPT-5.6 Sol",
+  "source_class": "chatgpt_project_worker",
+  "model": "GPT-5.6 Sol",
+  "provider": "OpenAI ChatGPT",
+  "trigger": "go",
+  "trigger_time_local_minute_only": "2026-08-25T09:42+07:00",
+  "authority_epoch_observed": "8.78",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "source_refs": {
+    "canonical_main_first_observed": "3ec74051b9622fe4c2f9402b18d618e8c733b710",
+    "canonical_main_before_metrics_write": "fd22ad11abdcbf51a5e68e3c00eef538f3d675f4",
+    "supervisor_inbox": "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
+    "supervisor_steering": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_78.json",
+    "backfill_source_pre_line_fix_blob": "f095ec12ab28aa5df87b1762b2cc19afca592365",
+    "backfill_test_pre_line_fix_blob": "702c2e42fe6e4881ef7a08b67f6b8b0b567ac8b4",
+    "patcher_commit": "055ed7f46be8d739e9bb599b6ba1e8253c409fca",
+    "initial_gate_commit": "597e09abe8815554e7372f05059528470b5d997c",
+    "successor_reentry_adapter_commit": "471718cba9bcb626fa64f013f7fd535dfd75cdf7",
+    "successor_reentry_gate_commit": "bfdbc20b7134b8f73f0e8897dc29e16b8cc6ffc6",
+    "parallel_batch_causal_binding_commit": "329350ac5bd19e3d0500667dd680b07b434f8a6c",
+    "transport_discriminator_commit": "fd22ad11abdcbf51a5e68e3c00eef538f3d675f4"
+  },
+  "evidence_lineage": [
+    "chatgpt:gpt56sol:go878:current-source-review",
+    "github:current-main",
+    "github:historical-backfill-source",
+    "python-local:minimal-causal-reproduction"
+  ],
+  "input_tokens": null,
+  "output_tokens": null,
+  "total_tokens": null,
+  "token_usage_status": "UNKNOWN_CHATGPT_USAGE_NOT_EXPOSED_TO_WORKER",
+  "emitted_delta_ids": [
+    "GO878_BACKFILL_ABSOLUTE_LINE_CHECKPOINT_PATCHER",
+    "GO878_BACKFILL_LINE_IDENTITY_SANDBOX_GATE",
+    "GO878_BACKFILL_LINE_IDENTITY_SUCCESSOR_REENTRY"
+  ],
+  "accepted_verified_delta_ids": [],
+  "accepted_delta_count": 0,
+  "verification": {
+    "current_source_bug_observed": "source_event_identity includes line_no while ingest_artifact_history resumes from persisted byte_offset and resets local_line to zero on every invocation",
+    "minimal_causal_reproduction": {
+      "rows": 3,
+      "one_shot_equals_buggy_resumed_identity_vector": false,
+      "one_shot_equals_cumulative_line_identity_vector": true,
+      "classification": "DETERMINISTIC_MINIMAL_REPRODUCTION_ONLY_NOT_EXACT_REPO_SUITE"
+    },
+    "proposed_fix": "persist cumulative absolute line_no with byte offset; deterministically recover legacy offset-only checkpoints from the exact complete-line byte prefix; reset offset and line together on inode/truncation movement",
+    "exact_source_selfhosted_regression": "QUEUED_NONTERMINAL",
+    "bridge_roundtrip": "QUEUED_NONTERMINAL",
+    "historical_backfill_runtime": "NOT_TERMINAL",
+    "provider_runtime_credit": 0,
+    "hcu_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_runtime_credit": 0
+  },
+  "tests_passed": null,
+  "tests_failed": null,
+  "negative_tests_passed": null,
+  "negative_tests_failed": null,
+  "static_checks_passed": null,
+  "static_checks_failed": null,
+  "benchmark_non_regression": null,
+  "reproducible_runs": null,
+  "maintainability_score": null,
+  "provenance_score": null,
+  "cross_mode_reuse_score": null,
+  "metrics": {
+    "token_quality_efficiency": "UNKNOWN_EXACT_TOKEN_USAGE_AND_ACCEPTED_VERIFIED_UTILITY_UNAVAILABLE",
+    "code_quality_score": "UNKNOWN_TERMINAL_EXACT_SOURCE_TEST_COVERAGE_BELOW_REQUIRED_THRESHOLD",
+    "verified_innovation_score": "CANDIDATE_ONLY_NOT_RUNTIME_VERIFIED",
+    "capability_information_latency_ratio": "UNKNOWN_NO_TERMINAL_DOWNSTREAM_CONSUMPTION_ACK",
+    "hcu_architecture_attainment_confidence": "UNCALIBRATED_NOT_REFORECAST_WITHOUT_NEW_TERMINAL_HCU_MILESTONE_EVIDENCE"
+  },
+  "innovation": {
+    "verified": false,
+    "status": "CANDIDATE_INNOVATION_ONLY",
+    "candidate": "Make historical source-event identity independent of incremental max_new_lines scheduling by binding the persistent byte checkpoint to a cumulative absolute line checkpoint with deterministic legacy recovery.",
+    "external_prior_art_check": "Python binary stream documentation confirms persisted tell/seek positions are restorable; no external source was treated as proof of Clay-specific correctness.",
+    "measured_effect": "Minimal reproduction changes one-shot-vs-resumed identity equality from false under reset-local-line behavior to true under cumulative-line behavior; exact repository suite remains queued."
+  },
+  "performance_index": null,
+  "evidence_emitted_at": "2026-08-25T03:01:21Z",
+  "first_downstream_consumed_at": null,
+  "information_latency_status": "UNKNOWN_SELFHOSTED_EXECUTION_AND_CONSUMPTION_NONTERMINAL",
+  "hcu_forecast": {
+    "event": "HCU_TARGET_100_GO",
+    "forecast_probability": null,
+    "classification": "UNCALIBRATED_WITHHELD_NO_NEW_TERMINAL_HCU_MILESTONE_RESOLUTION"
+  },
+  "anti_goodhart": {
+    "raw_token_growth_as_progress_rejected": true,
+    "queued_workflow_as_execution_rejected": true,
+    "source_or_test_presence_as_runtime_pass_rejected": true,
+    "parallel_same_repo_changes_as_independent_replication_rejected": true,
+    "missing_scores_left_unknown": true,
+    "whole_product_credit_from_component_work_rejected": true
+  },
+  "go_tracks": {
+    "track_a": "ADVANCED_SOURCE_AND_COORDINATION: backlog-first Forge is now wired in canonical supervisor source; a replay-stable historical line checkpoint defect was isolated and exact successor-bound repair gates were added, but execution is nonterminal because the authorized self-hosted transport is queued.",
+    "track_b": "HCU_NO_CHANGE_WITH_REASON: the measured bottleneck is historical conversion/provenance plus unavailable executable transport; adding another HCU/Typed Entry implementation lane would duplicate retained work and would not close the current executable gate.",
+    "track_c": "TRAINING_READINESS_NO_CHANGE_WITH_REASON: the Qwen/J-Space source lane remains nonpromoting and no canonical unusual-experiment lease is available; historical conversion and exact executable evidence must close first."
+  },
+  "next_bottleneck": "RESTORE_OR_EXPOSE_ONE_ALREADY_AUTHORIZED_TERMINAL_TRANSPORT_INTO_CLAY_DIRECT_DEV_THEN_EXECUTE_LINE_IDENTITY_REPLAY_V2_FRESHNESS_AND_HISTORICAL_BACKFILL_GATES_BEFORE_FORGE_TO_DISTILLERY_1_TO_1_TO_GT0_TO_REPLAY_PLUS0"
+}

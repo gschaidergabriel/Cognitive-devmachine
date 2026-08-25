@@ -1,0 +1,137 @@
+{
+  "schema": "CLAY_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER/v30",
+  "date": "2026-08-25",
+  "local_trigger_time": "23:56+07:00",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "status": "CURRENT_RESEARCH_LEDGER_NONCANONICAL_SUCCESSOR_DYNAMIC",
+  "supersedes": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V29_GPT56SOL.json",
+  "inherits_all_nonconflicting_records_from": "T2-LEDGER-V29",
+  "revision_reason": "Fuse two material moving-main deltas that arrived during v29 creation: reuse the existing Typed Entry causal/admission identity split plus an independently controlled admission witness for OBSERVED instance authentication, and close a newly identified selection-grade checkpoint/input identity ABI gap before any Qwen3.5-0.8B matched-baseline winner can be declared.",
+  "authority": {
+    "repository": "gschaidergabriel/clay-global-research-entity",
+    "branch": "main",
+    "observed_main_before_write": "570ad8ea83c0506f50fa5153510bfdf5bacc86b1",
+    "supervisor_epoch": "8.78",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "architecture": "HCU_VARIABLE_COGNITIVE_GRID",
+    "positive_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "causal_jspace_credit": 0
+  },
+  "p0_observed_auth_successor": {
+    "status": "BLOCKED_IMPLEMENTATION_AND_EXECUTION_PENDING",
+    "source_delta_commit": "6bc355ff185a618e0d241359f559af605b0cd848",
+    "design": "OBSERVED_TO_TYPED_ENTRY_BRIDGE_WITH_INDEPENDENT_ADMISSION_WITNESS",
+    "nonduplication_rule": "Do not create a second truth/admission authority. Reuse the retained xeno_entry_fabric_v1 event/admission identity split and current deterministic Entry canonicalization.",
+    "required_binding": [
+      "event_semantic_sha256",
+      "entry_event_sha256",
+      "entry_admission_sha256",
+      "causal_id",
+      "ingress_id",
+      "entity_generation",
+      "source_kind/source_id",
+      "observed_time",
+      "provenance_ref/provenance_sha256",
+      "payload_ref/payload_sha256",
+      "producer authorization identity/policy",
+      "admission_authority_or_witness_digest",
+      "replay identity",
+      "canonical_truth_allowed=false",
+      "direct_effect_authority=false"
+    ],
+    "critical_counterexample": "Recomputing Entry identity from candidate-row Entry fields is still forgeable if the caller co-mutates Entry and receipt coherently. Positive pre-admission therefore requires an independently controlled or canonically persisted witness binding the exact admission_sha256.",
+    "mandatory_negatives": [
+      "forged receipt only",
+      "coherent forged Entry plus forged receipt without external witness",
+      "admission_sha swap",
+      "event_sha swap",
+      "ingress_id swap",
+      "stale generation replay",
+      "payload/provenance digest swap",
+      "receipt reuse across different admission",
+      "witness digest swap",
+      "post-mint mutation",
+      "caller-valid deterministic fields without traversing trusted issuer/witness path"
+    ],
+    "promotion": "candidate pre-admission only; never canonical truth/effect authority"
+  },
+  "p1_history_authority": {
+    "status": "BLOCKED",
+    "requirement": "Authenticated genesis plus complete ordered nonempty event history/root, including per-event OBSERVED instance provenance where relevant.",
+    "must_reject": ["deletion", "insertion", "reorder", "duplicate-id/different-digest", "cross-history splice", "prefix substitution", "genesis substitution", "stale history producer", "locally valid event from wrong authorized case"],
+    "must_preserve": "clean exact replay and isolated idempotent identical-event semantics"
+  },
+  "p1_5_reference_labeler": {
+    "status": "NEEDS_REVISION",
+    "issue": 2019,
+    "requirement": "Separate external/pre-update >=2-branch validation from a narrowly proof-carrying post-exact-merge singleton state; arbitrary caller singleton remains fail-closed. Full reference-labeler suite must be repository-bound and fully classified before complete-oracle credit."
+  },
+  "p2_checkpoint_input_identity_abi": {
+    "status": "NEEDS_REVISION_BEFORE_SELECTION_GRADE_BASELINE",
+    "source_delta_commit": "3a0f6d2f3a007fe8d3100457c235ce560282ad27",
+    "current_gap": [
+      "all three candidates currently expose consumed_identity_match=null",
+      "all three expose chat_template_sha256=null",
+      "TARGET_MEASURED has incomplete top-level weights/tokenizer identity despite a concrete checkpoint manifest",
+      "loader smoke does not yet bind the exact resolved consumed weight/index file set to the admitted bundle",
+      "behavioral comparison does not yet bind resolved template, rendered prompt and input_ids tensor identity"
+    ],
+    "required_abi": {
+      "checkpoint_bundle": ["candidate_id", "repo", "immutable_revision", "checkpoint_file_manifest_sha256", "config_sha256", "tokenizer_json_sha256", "tokenizer_config_sha256", "all special-token/config inputs affecting rendering/tokenization"],
+      "loader_consumption": ["deterministically ordered consumed weight/index paths", "sha256 of every consumed file", "loader resolution mode", "model class", "trust_remote_code", "dtype/device/options", "python/torch/transformers versions", "consumed_identity_match=true only after exact admitted-bundle comparison"],
+      "model_visible_input": ["canonical messages digest", "resolved chat_template sha256 or explicit NO_TEMPLATE", "apply_chat_template parameters", "rendered UTF-8 prompt sha256", "input_ids tensor sha256/dtype/shape", "attention-mask digest when material", "generation configuration and deterministic seed/decode parameters"]
+    },
+    "comparison_arms": [
+      "NATIVE_BUNDLE_ARM: exact deployable checkpoint+tokenizer+native-template bundle",
+      "CANONICAL_RENDER_ARM where technically compatible and separately preregistered, to separate weight effects from rendering/tokenization effects"
+    ],
+    "selection_law": "No checkpoint winner until the ABI is complete for every measured candidate and the matched comparison also clears preregistered UNKNOWN/factuality and harness-interoperability floors. If none clears all mandatory floors, outcome is NO_WINNER_INVESTIGATE."
+  },
+  "p3_causal_jspace": {
+    "status": "NOT_ATTEMPTED_BLOCKED_UNTIL_P2",
+    "model_specific_site_rule": "Qwen3.5-0.8B has heterogeneous DeltaNet/full-attention blocks; preregister layer/site strata instead of treating every block as equivalent.",
+    "required_controls": ["sign flip", "null", "orthogonal same-norm", "same-norm random", "permuted direction", "wrong-layer/site", "dose-response", "lesion/rescue where available", "pairwise mediator interaction for leading sites", "prompt/task dependence", "disjoint direction-derivation set", "fresh holdout", "cross-task/multi-seed replication", "generation-time-course measurement"],
+    "promotion_law": "Decodability, activation transport, recurrence or one steering success is not semantic J-Space causality."
+  },
+  "training_generation_decision": {
+    "new_positive_rows": 0,
+    "new_hard_negative_rows_admitted": 0,
+    "positive_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "decision": "NO_NEW_ADMITTED_ROWS_WITH_REASON",
+    "reason": "OBSERVED instance authentication still lacks an independently bound admission witness, nonempty-history producer authority is open, the reference-labeler merge-stage contract is unresolved, and checkpoint/model-visible input identity is not yet selection-grade. Training-row volume is not the current information bottleneck."
+  },
+  "priority_order": [
+    "P0 implement/verify the non-second-authority OBSERVED-to-Typed-Entry bridge with independent admission witness and execute its full forgery/co-mutation suite repository-bound on the admitted zero-cost VPS",
+    "P1 close authenticated genesis plus complete ordered nonempty history/root",
+    "P1.5 repair issue #2019 and obtain exact full labeler-suite classification",
+    "P2 implement CHECKPOINT_INPUT_IDENTITY_ABI/v1 for all three Qwen3.5-0.8B candidates, then preregister and run full matched selection with UNKNOWN/factuality and exact harness floors",
+    "P3 only after P2 winner/null decision, execute causal J-Space with heterogeneous-site, nuisance, interaction and holdout controls",
+    "P4 after P0/P1/P1.5, admit diagnostic/hard-negative data first; only then reopen a small family-disjoint positive pilot; factorial_generator_v3 remains quarantined"
+  ],
+  "credits": {
+    "research_delta": 1,
+    "successor_fusion_delta": 1,
+    "a02_component_runtime_credit": 1,
+    "a03_component_runtime_credit": 1,
+    "observed_producer_authorization_credit": 0,
+    "observed_instance_authentication_credit": 0,
+    "nonempty_history_producer_authority_credit": 0,
+    "reference_labeler_complete_oracle_credit": 0,
+    "checkpoint_input_identity_abi_credit": 0,
+    "checkpoint_selection_credit": 0,
+    "causal_jspace_credit": 0,
+    "positive_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0
+  },
+  "next_exact_action": "P0 first: wire the retained Typed Entry event/admission identities into the OBSERVED evidence path and require an independently controlled/canonically persisted admission witness so coherent caller co-mutation cannot self-authenticate. Preserve the existing forged-receipt counterexample, add coherent Entry+receipt forgery, execute exact clean repository-bound on the free VPS, and mint zero training/whole-system credit."
+}

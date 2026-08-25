@@ -3,7 +3,11 @@
   "status": "SOURCE_ONLY_NO_TRAINING_CREDIT",
   "target_model_class": "Qwen3.5-0.8B-class",
   "topology": "VARIABLE_N",
-  "derived_from_census": "ZERO_ENTITYOS_COGNITIVE_PROCESS_CENSUS/v1",
+  "derived_from_census": {
+    "schema": "ZERO_ENTITYOS_COGNITIVE_PROCESS_CENSUS/v1",
+    "path": "research_entity/global/ZERO_ENTITYOS_COGNITIVE_PROCESS_CENSUS_v1.json",
+    "canonical_process_ids": "ZECP01..ZECP20"
+  },
   "families": [
     "process_state_interpretation",
     "db_retrieval",

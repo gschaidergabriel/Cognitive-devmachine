@@ -1,6 +1,6 @@
 {
   "schema": "CLAY_FREE_SWARM_SYSTEM_ANALYSIS/v3",
-  "generated_at": "2026-08-25T13:39:20.992464+00:00",
+  "generated_at": "2026-08-25T13:54:27.093417+00:00",
   "runtime": {
     "supervisor": "STOPPED/QUARANTINED",
     "go_swarm": "RUNNING",
@@ -65,7 +65,7 @@
   },
   "distillery": {
     "schema": "CLAY_RESEARCH_DISTILLERY_STATUS/v1",
-    "generated_at": "2026-08-25T13:38:12.941353+00:00",
+    "generated_at": "2026-08-25T13:53:36.847678+00:00",
     "collected_source_tokens": 11621,
     "accepted_dataset_tokens": 0,
     "dataset_yield": 0.0,
@@ -111,7 +111,7 @@
     "model_output_tokens": 1455,
     "shared_provider_budget": {
       "schema": "CLAY_SHARED_PROVIDER_BUDGET/v1",
-      "generated_at": "2026-08-25T13:38:12.941967+00:00",
+      "generated_at": "2026-08-25T13:53:36.848164+00:00",
       "providers": {
         "arxiv": {
           "max_inflight": 1,
@@ -213,13 +213,13 @@
           "max_inflight": 16,
           "active_leases": 0,
           "min_interval_s": 0.5,
-          "cooldown_seconds": 9.990023136138916,
-          "total_requests": 1014,
+          "cooldown_seconds": 9.99271559715271,
+          "total_requests": 1105,
           "total_success": 134,
-          "total_429": 879,
+          "total_429": 970,
           "total_errors": 0,
           "last_status": "429",
-          "last_observed_at": "2026-08-25T13:38:12.932028+00:00"
+          "last_observed_at": "2026-08-25T13:53:36.840906+00:00"
         },
         "semantic_scholar": {
           "max_inflight": 1,
@@ -249,22 +249,22 @@
     },
     "db_bytes": 933888,
     "top_questions": [
-      "What minimum state serialization format is required for cross-provider identity preservation?",
-      "Can NVIDIA Developer Program credentials be cryptographically bound to specific free-prototyping routes at call time, or is provider-global admission the only available binding?",
-      "How does generation fencing interact with different model's context window management?",
-      "Can the current identity chaining mechanism scale to 6000 logical workers without performance degradation?",
-      "Wie kann die Lösung auf der AWS-Plattform konfiguriert werden, um die Skalierbarkeit zu maximieren?",
-      "Wie kann die Lösung auf der AWS-Plattform getestet und bewertet werden?",
-      "Wie kann loader_tx_id über Forks hinweg eindeutig und unveränderlich bleiben?",
-      "Which sparse MoE routing entropy metric (token-level vs sequence-level) causally predicts downstream task performance on HCU-style logical cells?",
-      "Does global broadcast intervention (ablation/patching) in GWT architectures produce measurable causal effects distinct from attention head ablation?",
-      "Can typed effect handlers provide deterministic replay guarantees for LLM tool chains under FREE_ONLY rate-limited inference?"
+      "Does NVIDIA NIM/Developer Program expose a credential-scoped free-tier metadata endpoint that distinguishes free vs paid access per API key without incurring inference cost?",
+      "How does the caching layer affect the overall system latency?",
+      "What are the optimal parameters for the periodic quota status updates?",
+      "Does the current typed entry validator emit a cryptographic commitment (hash) that survives to the JIT emission point, or is validation state ephemeral?",
+      "Does the Groq credential+model rate-header binding have an equivalent coarse-validation gap for model-specific free-tier eligibility?",
+      "What is the minimal set of typed-entry invariants that, if violated, must deterministically reject at loader boundary vs. degrade gracefully at model execution?",
+      "Does the NVIDIA credential binding implement per-credential API entitlement verification or only static policy matching?",
+      "Does adaptive routing weight recalculation with recovery bonus improve overall swarm latency without increasing provider-level 429 rates?",
+      "Can the quota status cache be effectively shared across multiple sandbox environments?",
+      "What are the optimal parameters for the HYBRID model?"
     ],
     "candidate_states": {}
   },
   "evidence_forge": {
     "schema": "CLAY_FREE_EVIDENCE_FORGE_STATUS/v1",
-    "generated_at": "2026-08-25T13:39:19.916811+00:00",
+    "generated_at": "2026-08-25T13:54:26.095615+00:00",
     "candidate_states": {
       "ACCEPTED": 1,
       "NEEDS_IMPLEMENTATION": 65,
@@ -288,7 +288,7 @@
     "peak_parallel_tasks": 0,
     "shared_provider_budget": {
       "schema": "CLAY_SHARED_PROVIDER_BUDGET/v1",
-      "generated_at": "2026-08-25T13:39:19.917451+00:00",
+      "generated_at": "2026-08-25T13:54:26.096228+00:00",
       "providers": {
         "arxiv": {
           "max_inflight": 1,
@@ -390,13 +390,13 @@
           "max_inflight": 16,
           "active_leases": 0,
           "min_interval_s": 0.5,
-          "cooldown_seconds": 3.8712942600250244,
-          "total_requests": 1020,
+          "cooldown_seconds": 1.2936718463897705,
+          "total_requests": 1109,
           "total_success": 134,
-          "total_429": 885,
+          "total_429": 974,
           "total_errors": 0,
           "last_status": "429",
-          "last_observed_at": "2026-08-25T13:39:13.788744+00:00"
+          "last_observed_at": "2026-08-25T13:54:17.390002+00:00"
         },
         "semantic_scholar": {
           "max_inflight": 1,
@@ -433,6 +433,6 @@
     "measured_total_sonnet5_equivalent_usd": 148.830648,
     "verified_historical_savings_usd": null,
     "nominal_avoided_if_zero_cost_usd": 148.830648,
-    "repo_output_only_proxy_usd": 131.8546
+    "repo_output_only_proxy_usd": 132.01345
   }
 }

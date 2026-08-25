@@ -46,10 +46,21 @@
     "credentials_read_added": false,
     "unusual_experiment": false
   },
+  "verification": {
+    "scope": "LOCAL_RECONSTRUCTED_DONOR_LOGIC_ONLY_NOT_ENTITYOS_RUNTIME",
+    "result": "PASS",
+    "checks": [
+      "patcher Python syntax compiled",
+      "patcher applied exactly once to a synthetic source containing the current unsafe semantic anchor",
+      "transformed source and appended regression module compiled",
+      "mismatched digest path returned successful=0 and persisted TEXT_SHA256_MISMATCH with the exact claimed and recomputed digests"
+    ],
+    "runtime_credit": 0
+  },
   "three_tracks": {
     "track_a": {
       "status": "ADVANCED_EVIDENCE_IDENTITY_FAIL_CLOSED_DONOR",
-      "delta": "Prepared a nonduplicate merge-friendly guard that prevents unverified historical worker digest claims from minting causal/provenance identities before saturation credit."
+      "delta": "Prepared and reconstructed-tested a nonduplicate merge-friendly guard that prevents unverified historical worker digest claims from minting causal/provenance identities before saturation credit."
     },
     "track_b": {
       "status": "HCU_NO_CHANGE_WITH_REASON",

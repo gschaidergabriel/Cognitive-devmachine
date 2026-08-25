@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v4",
+  "command_id": "fr2-structural-result-compact-20260825-1316",
+  "op": "exec",
+  "cwd": "/workspace",
+  "timeout_seconds": 60,
+  "command": "set -euo pipefail; F=/workspace/vps_bridge/results/fr2-structural-native-execute-builddir-20260825-1314/trigger1_structural_native_abstract_result.json; test -s \"$F\"; /cache/clay-qwen06/venv/bin/python - \"$F\" <<'PY'\nimport json,sys\nr=json.load(open(sys.argv[1]))\nkeys=['schema','status','result_sha256','source_head','model','gguf_sha256','llama_cpp_commit','native_api','native_token_scope','injection_layer','primary_layer_input','downstream_layer_input','case_bundle_sha256','lexical_disjointness','calibration_case_count','holdout_case_count','gain_scores','selected_gain_calibration_only','behavior','behavioral_causal_matrix','downstream_transport','behavior_pass','downstream_transport_pass','abstract_native_discriminator_pass','holdout_opened_only_after_calibration_residualizer_and_gain_frozen','external_provider_used','canonical_credit_minted','canonical_semantics_promotion','jspace_model_runtime_credit','whole_hcu_credit','whole_entityos_hcu_credit','training_credit','evidence_boundary']\nprint(json.dumps({k:r.get(k) for k in keys},sort_keys=True,separators=(',',':')))\nPY"
+}

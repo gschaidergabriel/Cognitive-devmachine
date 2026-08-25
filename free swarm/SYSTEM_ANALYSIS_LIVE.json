@@ -1,13 +1,13 @@
 {
   "schema": "CLAY_FREE_SWARM_SYSTEM_ANALYSIS/v3",
-  "generated_at": "2026-08-25T07:51:12.677156+00:00",
+  "generated_at": "2026-08-25T08:06:18.630851+00:00",
   "runtime": {
     "supervisor": "STOPPED/QUARANTINED",
     "go_swarm": "RUNNING",
     "distillery": "RUNNING",
     "evidence_forge": "RUNNING",
     "dashboard": "RUNNING",
-    "local_model": "BUILDING/BOOTSTRAPPING",
+    "local_model": "NOT_READY",
     "provider_admission": {
       "admitted_free_providers": [
         "groq",
@@ -65,7 +65,7 @@
   },
   "distillery": {
     "schema": "CLAY_RESEARCH_DISTILLERY_STATUS/v1",
-    "generated_at": "2026-08-25T07:51:10.658082+00:00",
+    "generated_at": "2026-08-25T08:06:16.669058+00:00",
     "collected_source_tokens": 11621,
     "accepted_dataset_tokens": 0,
     "dataset_yield": 0.0,
@@ -86,7 +86,7 @@
     "model_output_tokens": 1455,
     "shared_provider_budget": {
       "schema": "CLAY_SHARED_PROVIDER_BUDGET/v1",
-      "generated_at": "2026-08-25T07:51:10.662028+00:00",
+      "generated_at": "2026-08-25T08:06:16.669897+00:00",
       "providers": {
         "arxiv": {
           "max_inflight": 1,
@@ -224,22 +224,22 @@
     },
     "db_bytes": 864256,
     "top_questions": [
-      "Does Gemma-2-2B INT4 quantization on CPU (llama.cpp) establish FREE_ONLY 0.8B readiness baseline with InferenceReceipt provenance?",
-      "Wie standardisiert man provider_key_id across heterogeneous free providers?",
-      "Welches minimale Signatur‑Algorithmus‑Set liefert niedrige Latenz und ausreichende Integrität?",
-      "How can we statically determine the longest dependency chain in the Hyperposition resolution process in the presence of dynamic control flow and indirect jumps?",
-      "Kann die Modell‑Hash‑Komponente weggelassen werden, wenn request_id und provider‑Kontext ausreichend sind?",
-      "Can provider-native security features be composed into a defense-in-depth architecture without code duplication?",
-      "What is the minimum viable signature set for local pre-validation that doesn't introduce latency?",
-      "Can model-specific J-Space causal vectors be normalized for cross-model causal comparison without minting spurious training credit?",
-      "Which single causal mechanism from GWT/MoE/credential-binding literature most parsimoniously explains HCU typed-entry convergence when isolated in a minimal reproduction?",
-      "How to dynamically adjust rate limits across providers while maintaining zero-cost operation?"
+      "Wie kann ein A/B-Test die kausale Wirkung von HCU-Interventionen von reinem Token-Volumen unterscheiden, ohne reale Modelle auszuführen?",
+      "Can model-instance causal provenance be established without provider cooperation (credential introspection)?",
+      "Can the introduced challenge-response protocol be efficiently integrated with the existing admission boundary receipt mechanism?",
+      "Wie kann die Ausführung des FREE_SWARM_ADMISSION_BOUNDARY_RECEIPT/v1 weiterhin verbessert werden?",
+      "Can model-specific J-Space causal credit be minted from FREE_LANE receipts without access to model weight tensors (only hashes)?",
+      "Does GRID10 logical cell mapping require per-model execution trace semantics or only aggregate throughput?",
+      "Wie kann die Effektivität der dynamischen Zulassungskontrolle im EntityOS/HCU-System gemessen werden?",
+      "What constitutes valid identity for supervisor lease ownership?",
+      "Whether J-Space causal graph structure is isomorphic enough across Nemotron model variants to allow checkpoint recovery without semantic drift, or if model-specific causal topology requires per-model checkpoint schemas",
+      "What exact state variables in the GWT prototype's admission engine define 'cost-free' per credential vs per provider, and where is the route-price revalidation gate before network I/O?"
     ],
     "candidate_states": {}
   },
   "evidence_forge": {
     "schema": "CLAY_FREE_EVIDENCE_FORGE_STATUS/v1",
-    "generated_at": "2026-08-25T07:51:11.861348+00:00",
+    "generated_at": "2026-08-25T08:06:17.589723+00:00",
     "candidate_states": {
       "ACCEPTED": 1,
       "NEEDS_IMPLEMENTATION": 65,
@@ -263,7 +263,7 @@
     "peak_parallel_tasks": 0,
     "shared_provider_budget": {
       "schema": "CLAY_SHARED_PROVIDER_BUDGET/v1",
-      "generated_at": "2026-08-25T07:51:11.862480+00:00",
+      "generated_at": "2026-08-25T08:06:17.590622+00:00",
       "providers": {
         "arxiv": {
           "max_inflight": 1,
@@ -408,6 +408,6 @@
     "measured_total_sonnet5_equivalent_usd": 148.830648,
     "verified_historical_savings_usd": null,
     "nominal_avoided_if_zero_cost_usd": 148.830648,
-    "repo_output_only_proxy_usd": 126.30636
+    "repo_output_only_proxy_usd": 126.30757
   }
 }

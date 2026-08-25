@@ -1,0 +1,92 @@
+{
+  "schema": "CLAY_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER/v42",
+  "date": "2026-08-26",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "status": "CURRENT_RESEARCH_LEDGER_NONCANONICAL_SUCCESSOR_DYNAMIC",
+  "supersedes": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V41_GPT56SOL.json",
+  "inherits_all_nonconflicting_records_from": "T2-LEDGER-V41",
+  "observed_main_before_write": "b7fcdbe6a9639b9ad3953e32abe2f623de35f90c",
+  "authority": {
+    "supervisor_epoch": "8.81_DELTA",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "architecture": "HCU",
+    "freeswarm_provider_admission": "OWNER_EMERGENCY_STOP_HARD_OFF",
+    "training_execution_authorized": false,
+    "paid_provider_execution_authorized": false
+  },
+  "revision_reason": "V41 predates the exact atomic-cohort replay-ordering blocker at b7fcdbe6. The new source audit proves that the atomic batch candidate checks current start-snapshot freshness before existing-cohort lookup, making exact idempotent historical replay unreachable after the first successful S1 transition. V42 reinjects that failure into the training/evaluation course and keeps all promotion zero-credit.",
+  "artifact_lifecycle_delta": [
+    {
+      "artifact": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V41_GPT56SOL.json",
+      "status": "SUPERSEDED",
+      "successor": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V42_GPT56SOL.json",
+      "reason": "later exact replay-ordering source blocker materially changes the atomic cohort candidate"
+    },
+    {
+      "artifact": "atomic same-cohort batch executable candidate",
+      "status": "NEEDS_REVISION_SOURCE_ACCEPTANCE_BLOCKED",
+      "blocker": "ATOMIC_COHORT_REPLAY_LOOKUP_UNREACHABLE_AFTER_SUCCESS",
+      "source_audit": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_ATOMIC_COHORT_REPLAY_ORDERING_GAP_V1_GPT56SOL.json",
+      "reason": "first successful cohort advances S1, while exact replay checks stale current-start identity before checking the stored cohort; intended idempotent replay branch cannot be reached"
+    },
+    {
+      "artifact": "preserved-evidence same-cohort v3 path",
+      "status": "CURRENT_COMPLEMENTARY_SOURCE_CANDIDATE_NOT_RUNTIME_CREDITED",
+      "reason": "remains useful independent comparator; its claim scope must not be silently equated with atomic batch semantics"
+    },
+    {
+      "artifact": "proof-carrying NODE_RESULT provenance/membership donor",
+      "status": "CURRENT_NONCANONICAL_REUSE_DONOR",
+      "source_commit": "4f37585bf20fe60e8651d979d6cfdb9f5dc098d1",
+      "reason": "unique value remains deterministic fabric sealing of membership/process/snapshot authority while model emits semantic candidate payload only"
+    },
+    {
+      "artifact": "positive training admission",
+      "status": "BLOCKED_ZERO",
+      "reason": "runtime/provenance/checkpoint/J-Space/lineage gates remain open and autonomous FreeSwarm provider execution is owner-stopped"
+    }
+  ],
+  "runtime_failure_reinjection": {
+    "concept": "IDEMPOTENT_HISTORICAL_REPLAY_NEQ_CURRENT_OBSERVATION",
+    "positive_behavior": "After exact immutable evidence revalidation, recognize an already-admitted historical cohort with replay=true and state_delta=0 without claiming the old observations are current.",
+    "hard_negatives": [
+      "known cohort_id with mutated packet body",
+      "known cohort_id with substituted member set",
+      "known cohort_id with wrong stored start identity",
+      "historical replay that reapplies a state change",
+      "historical replay that relabels old observation identity as current"
+    ],
+    "admission": "CANDIDATE_EVAL_ONLY_NOT_TRAINING_ELIGIBLE"
+  },
+  "required_regressions_before_atomic_candidate_source_pass": [
+    "AR-001 exact replay immediately after k->k+1 returns replay=true state_delta=0",
+    "AR-002 exact replay after unrelated later S1 advance remains historical-idempotent with zero state delta",
+    "AR-003 mutated body retaining old digest fails closed",
+    "AR-004 substituted member/process/packet set fails closed",
+    "AR-005 caller-declared start identity differing from stored admission identity fails closed"
+  ],
+  "training_generation_decision": {
+    "decision": "NO_NEW_ADMITTED_ROWS_WITH_REASON",
+    "new_positive_rows_generated": 0,
+    "positive_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "training_executed": false,
+    "training_credit": 0,
+    "checkpoint_winner": null
+  },
+  "credits": {
+    "research_delta": 1,
+    "physical_grid10_runtime_credit": 0,
+    "checkpoint_selection_credit": 0,
+    "jspace_representation_level_credit": 0,
+    "jspace_model_credit": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  },
+  "next_exact_action": "Repair replay/new-admission ordering by fully revalidating exact immutable cohort evidence before historical replay recognition, while applying current-start freshness only to previously unseen cohort_id; run AR-001..AR-005, then close NODE_RESULT membership/source authentication. Do not invoke owner-stopped FreeSwarm providers and do not admit positive training rows meanwhile."
+}

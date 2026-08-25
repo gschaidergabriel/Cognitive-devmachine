@@ -1,0 +1,42 @@
+{
+  "schema": "CLAY_GO_RESEARCH_DELTA_RECEIPT/v1",
+  "observed_at": "2026-08-25T10:40:00+07:00",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority": {
+    "inbox_selected_supervisor": "8.78",
+    "mode": "FREE_ONLY"
+  },
+  "successor_of": "research_entity/continuity/receipts/2026-08-25_GO_878_BACKPRESSURE_LIVENESS_REGRESSION_GPT56SOL_1037P0700.json",
+  "observed_source": {
+    "liveness_fix_commit": "cf7fc88cdb07c0cbb079562d91dca928e89b9645",
+    "test_successor_commit": "479ead488b21cfebc5a3a14de4799b337377e4e6",
+    "test_path": "tests/test_go_878_raw_generation_backpressure.py"
+  },
+  "finding": "The active supervisor now treats raw_generation_allowed as a credential-blind pressure signal while unconditionally preserving the shared 6000 fabric, because that same fabric carries historical extraction. The earlier strict expected-failure is therefore promoted into a normal liveness regression: pending-only extraction pressure may emit PAUSE_RAW_GENERATION_BACKPRESSURE telemetry, but must not cause the supervisor control loop to stop the extraction transport.",
+  "deterministic_reconstructed_gate_check": {
+    "result": "5 passed",
+    "scope": "RECONSTRUCTED_EXACT_CURRENT_GATE_AND_CONTROL_SNIPPET_TEST_LOGIC_ONLY",
+    "canonical_runtime_credit": 0
+  },
+  "three_tracks": {
+    "A": "ADVANCED: source-level conversion backpressure now preserves historical extraction liveness, and a successor regression makes the no-deadlock invariant explicit.",
+    "B": "ADVANCED_BY_PARALLEL_PROVENANCE_CONVERGENCE: current main also contains replay/source-count and line-identity hardening so repeated provenance cannot manufacture scheduling weight.",
+    "C": "ADVANCED_BY_PARALLEL_MODEL_COMPONENT_EVIDENCE: repository-bound Qwen3-0.6B nonterminal hidden-state specificity evidence exists at 8acce46e7989fa0cf6e7cf368f2731c2f18ce7c2; full J-Space/HCU/training credit remains zero."
+  },
+  "coordination": {
+    "unusual_experiment_by_this_organ": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "provider_or_paid_execution_by_this_organ": false
+  },
+  "credits": {
+    "whole_entityos_hcu_runtime": 0,
+    "full_hcu_runtime": 0,
+    "full_jspace_model_runtime": 0,
+    "model_specific_nonterminal_causal_component": true,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_action": "Run the canonical singleton historical-backfill generation on an admitted exact-current zero-cost execution surface, require terminal repository-bound saturation/identity evidence, then close Forge ACCEPT -> exactly one Distillery packet -> accepted_dataset_tokens > 0 -> semantic replay +0 before any whole-path promotion."
+}

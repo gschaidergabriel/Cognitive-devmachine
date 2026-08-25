@@ -7,13 +7,14 @@
   "status": "CURRENT_RESEARCH_LEDGER_NONCANONICAL",
   "supersedes": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V10_GPT56SOL.json",
   "inherits_all_nonconflicting_records_from": "T2-LEDGER-V10",
-  "revision_reason": "V10 correctly adds the epistemic-update P0. This successor adds one orthogonal model-selection correction discovered by exact source audit: tools/trigger2_qwen35_checkpoint_candidates_gate_v1.py admits only official Base/post-trained candidates even though the Trigger-2 target constraint requires an abliterated approximately-0.8B model. Eight nonpromoting counterexamples are registered; no positive training data or credit is minted.",
+  "revision_reason": "V10 correctly adds the epistemic-update P0. This successor adds one orthogonal model-selection correction discovered by exact source audit: tools/trigger2_qwen35_checkpoint_candidates_gate_v1.py admits only official Base/post-trained candidates even though the Trigger-2 target constraint requires an abliterated approximately-0.8B model. Eight nonpromoting counterexamples are registered; no positive training data or credit is minted. Post-write reentry additionally corrected the current protocol pointer from v4 to the already-landed v5 successor without changing the substantive model-selection finding.",
   "authority": {
     "supervisor_epoch": "8.78",
     "mode": "FREE_ONLY",
     "product": "EntityOS",
     "architecture": "HCU",
-    "current_protocol": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_CURRENT_PROTOCOL_V4_GPT56SOL.json",
+    "current_protocol": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_CURRENT_PROTOCOL_V5_GPT56SOL.json",
+    "current_protocol_commit_observed_on_reentry": "531d1ae1afc30d034be72ff3b3b2ae180792e4ee",
     "trigger2_target_model_constraint": "ABLITERATED_APPROX_0_8B_TARGET_MODEL_REQUIRED",
     "training_executed": false,
     "accepted_dataset_tokens": 0,
@@ -88,7 +89,7 @@
     "training_credit": 0
   },
   "current_frontier": {
-    "deterministic_label_frontier": "Preserve V10's generation-provenance + typed epistemic-evidence + replay/event/discriminator proof requirements; execute exact-current mutation tests and rebind native seed to one retained gate before positive generation.",
+    "deterministic_label_frontier": "Preserve V10 and protocol-v5 generation-provenance + typed epistemic-evidence + replay/event/discriminator proof requirements; execute exact-current mutation tests and rebind native seed to one retained gate before positive generation.",
     "model_frontier": "Replace the current control-only checkpoint gate with an abliterated TARGET-aware successor, freeze at least two target candidates to exact byte manifests, then run a matched FREE_ONLY local pilot without final-holdout leakage.",
     "next_exact_action": "Advance both independent prerequisites without mixing their authority: exact deterministic positive-label proof execution, and immutable abliterated target checkpoint selection. Generate only a small positive family-disjoint pilot after both gates pass; no corpus scaling or training promotion yet."
   },

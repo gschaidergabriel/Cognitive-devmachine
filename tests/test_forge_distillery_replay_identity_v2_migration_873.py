@@ -1,3 +1,4 @@
+# GO878 exact-current replay-v2 execution trigger; semantic test behavior unchanged.
 import importlib.util
 import json
 from pathlib import Path

@@ -1,8 +1,10 @@
 {
   "schema": "CLAY_TRIGGER2_HYPERPOSITION_REFERENCE_LABELER_CONTRACT/v1",
-  "contract_version": "1.0.0-candidate",
+  "contract_version": "1.0.1-candidate",
   "date": "2026-08-25",
   "status": "CANDIDATE_REFERENCE_SEMANTICS_REQUIRES_TESTS_BEFORE_POSITIVE_ROW_ADMISSION",
+  "supersedes_candidate_revision": "1.0.0-candidate",
+  "revision_reason": "Fail-closed identity validation added after adversarial audit: unknown target branch IDs, duplicate branch IDs, merge-ID collisions, invalid PASS targets and conflicting relation reuse for the same evidence/causal ancestry must not silently yield training labels.",
   "purpose": "Provide deterministic training-label semantics for semantic Hyperposition / GRF without inventing calibrated probabilities or allowing model judgement to mint facts.",
   "authority_boundary": {
     "canonical_truth_allowed": false,
@@ -18,34 +20,44 @@
     "notes": [
       "sigma is epistemic state, not probability.",
       "projection visibility is not branch existence.",
-      "branch order and branch_id are nuisance/evaluator identity unless intentionally task-visible."
+      "branch order and branch_id are nuisance/evaluator identity unless intentionally task-visible.",
+      "branch_id must be a non-empty unique string inside one Hyperposition state; duplicates fail closed."
     ]
   },
   "typed_observation_relation": {
     "enum": ["SUPPORTS","COUNTERS","FALSIFIES","IRRELEVANT","UNKNOWN_RELATION"],
     "required_fields": ["evidence_id","causal_ancestry_id","independence_group","relation","target_branch_ids","provenance"],
     "optional_fields": ["equivalence_certificate","new_branch_payload"],
-    "hard_rule": "The reference labeler never infers relation from free text. Dataset generators/evidence admission must provide relation mechanically or from an independently adjudicated source."
+    "hard_rule": "The reference labeler never infers relation from free text. Dataset generators/evidence admission must provide relation mechanically or from an independently adjudicated source.",
+    "identity_rules": [
+      "Every target_branch_id must resolve to an existing current branch or the labeler fails closed.",
+      "For evidence-bearing SUPPORTS/COUNTERS/FALSIFIES relations, evidence_id, causal_ancestry_id, independence_group and provenance must be non-empty strings.",
+      "A repeated evidence_id or causal_ancestry_id with the same relation is replay/idempotence, not independent evidence.",
+      "A repeated evidence_id or causal_ancestry_id with a conflicting relation is an inconsistent label source and fails closed pending explicit adjudication/versioning."
+    ]
   },
   "labelers": {
     "U_state": {
-      "version": "1.0.0-candidate",
+      "version": "1.0.1-candidate",
       "input": "Hyperposition branch set H_t + typed observation relation",
       "output": "H_t+1 with deterministic branch-local changes",
       "rules": [
-        "Duplicate evidence with same evidence_id or same causal_ancestry_id already attached to the target branch does not add independent support/counterevidence.",
+        "Duplicate evidence with same evidence_id or same causal_ancestry_id and the same relation already attached to the target branch does not add independent support/counterevidence.",
+        "If the same evidence_id or causal_ancestry_id is reused with a different relation, fail closed rather than silently treating it as replay.",
+        "Any target_branch_id not present in the current branch set fails closed rather than becoming a silent no-op.",
         "IRRELEVANT or UNKNOWN_RELATION does not change epistemic support; preserve branch and mark unresolved where applicable.",
         "SUPPORTS appends evidence to E_plus only once per causal ancestry; branch becomes SUPPORTED_UNRESOLVED unless already FALSIFIED.",
         "COUNTERS appends evidence to E_minus only once per causal ancestry; branch becomes WEAKENED_UNRESOLVED unless already FALSIFIED.",
         "FALSIFIES records the falsifier/evidence and sets branch sigma=FALSIFIED when the branch context K=APPLIES; if K=UNKNOWN, preserve unresolved and record pending falsifier context rather than deleting the branch.",
         "K=DOES_NOT_APPLY may set projection_visibility=FILTERED_CONTEXT but never deletes the branch.",
         "Branches merge only when an explicit equivalence_certificate states semantic equivalence under the current validity scope T; vector/embedding similarity, wording similarity, majority or recurrence are insufficient.",
-        "A new counterhypothesis branch is added only when new_branch_payload is explicit and generator/admission semantics declare that branch creation is warranted; no free-form branch invention by the labeler.",
+        "merge_to_branch_id must not collide with a surviving non-merged branch.",
+        "A new counterhypothesis branch is added only when new_branch_payload is explicit, has a non-empty unique branch_id, and generator/admission semantics declare that branch creation is warranted; no free-form branch invention by the labeler.",
         "No update alone sets RESOLVED_PASS; resolution is delegated to D_resolve."
       ]
     },
     "D_resolve": {
-      "version": "1.0.0-candidate",
+      "version": "1.0.1-candidate",
       "input": "updated branch set after U_state",
       "output": "PASS(selected_branch_id) or UNRESOLVED",
       "decision_table": [
@@ -66,7 +78,7 @@
           "result": "UNRESOLVED"
         }
       ],
-      "postcondition": "Only the selected branch may receive sigma=RESOLVED_PASS in the training target; D_resolve still does not mint canonical truth."
+      "postcondition": "Only the selected branch may receive sigma=RESOLVED_PASS in the training target; a PASS application naming zero or multiple existing branches fails closed; D_resolve still does not mint canonical truth."
     },
     "U_test_order": {
       "version": "1.0.0-candidate",
@@ -107,7 +119,12 @@
   },
   "required_invariants": [
     "branch permutation invariance",
-    "duplicate/ancestry evidence idempotence",
+    "duplicate/ancestry evidence idempotence only when relation semantics agree",
+    "conflicting relation reuse for one evidence/causal ancestry fails closed",
+    "unknown target branch identity fails closed",
+    "duplicate branch identity fails closed",
+    "merge target collision fails closed",
+    "PASS application to an unknown/non-unique branch fails closed",
     "projection filtering is not deletion",
     "majority is not collapse",
     "salience is not truth/probability",
@@ -125,9 +142,10 @@
   ],
   "training_admission_gate": {
     "positive_D_E_rows_allowed_after": [
-      "reference implementation matches this contract",
-      "unit/property tests pass",
+      "reference implementation matches this contract revision",
+      "unit/property tests pass on exact committed bytes",
       "branch-permutation and ancestry-idempotence tests pass",
+      "unknown-target, duplicate-branch, merge-collision, invalid-resolution-target and contradictory-ancestry fail-closed regressions pass",
       "counterfactual family generation proves target changes only when discriminating input changes",
       "model-visible formatter hides evaluator metadata and relation labels not intended as inputs",
       "swarm review finds no truth/authority shortcut"

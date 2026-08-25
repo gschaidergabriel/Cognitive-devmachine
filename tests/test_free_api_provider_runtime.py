@@ -279,6 +279,7 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
                     "object": "chat.completion",
                     "model": "mock-model",
                     "choices": [{
+                        "index": 0,
                         "finish_reason": "stop",
                         "message": {
                             "role": "assistant", "content": "mock-ok"
@@ -342,7 +343,7 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             def __enter__(self): return self
             def __exit__(self, *args): pass
             def read(self, limit):
-                return b'{"object":"chat.completion","model":"mock","choices":[{"finish_reason":"stop","message":{"role":"assistant","content":"ok"}}]}'
+                return b'{"object":"chat.completion","model":"mock","choices":[{"index":0,"finish_reason":"stop","message":{"role":"assistant","content":"ok"}}]}'
 
         empty_body_size = len(json.dumps({
             "model": "mock",
@@ -604,6 +605,7 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
                     "object": "chat.completion",
                     "model": "mock",
                     "choices": [{
+                        "index": 0,
                         "finish_reason": "stop",
                         "message": {
                             "role": "assistant", "content": "mock-ok"
@@ -653,6 +655,7 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
                     "object": "chat.completion",
                     "model": "mock",
                     "choices": [{
+                        "index": 0,
                         "finish_reason": "stop",
                         "message": {
                             "role": "assistant", "content": "mock-ok"
@@ -691,6 +694,7 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
                     "object": "chat.completion",
                     "model": "mock",
                     "choices": [{
+                        "index": 0,
                         "finish_reason": "stop",
                         "message": {
                             "role": "assistant", "content": "mock-ok"
@@ -724,6 +728,7 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
                     "object": "chat.completion",
                     "model": "mock",
                     "choices": [{
+                        "index": 0,
                         "finish_reason": "stop",
                         "message": {"role": "assistant", "content": "ok"},
                     }]
@@ -886,6 +891,7 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
                     "object": "chat.completion",
                     "model": "mock",
                     "choices": [{
+                        "index": 0,
                         "finish_reason": "stop",
                         "message": {"role": "assistant", "content": "ok"},
                     }]
@@ -920,7 +926,7 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             def __enter__(self): return self
             def __exit__(self, *args): pass
             def read(self, limit):
-                return b'{"object":"chat.completion","model":"mock","choices":[{"finish_reason":"stop","message":{"role":"assistant","content":"ok"}}]}'
+                return b'{"object":"chat.completion","model":"mock","choices":[{"index":0,"finish_reason":"stop","message":{"role":"assistant","content":"ok"}}]}'
 
         captured = {}
 
@@ -1367,7 +1373,7 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             def read(self, limit):
                 return (
                     b'{"object":"chat.completion","model":"mock",'
-                    b'"choices":[{"finish_reason":"length",'
+                    b'"choices":[{"index":0,"finish_reason":"length",'
                     b'"message":{"role":"assistant","content":"partial"}}]}'
                 )
 
@@ -2067,7 +2073,7 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
 
         finite_body = (
             b'{"object":"chat.completion","model":"mock",'
-            b'"choices":[{"finish_reason":"stop","message":{'
+            b'"choices":[{"index":0,"finish_reason":"stop","message":{'
             b'"role":"assistant","content":"finite-ok"}}],'
             b'"usage":{"ratio":1e300}}'
         )
@@ -3032,7 +3038,7 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             def read(self, limit):
                 return (
                     b'{"object":"chat.completion","model":"mock",'
-                    b'"choices":[{"finish_reason":"stop","message":'
+                    b'"choices":[{"index":0,"finish_reason":"stop","message":'
                     b'{"role":"assistant","content":"ok"}}]}'
                 )
 
@@ -3170,7 +3176,7 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             def read(self, limit):
                 return (
                     b'{"object":"chat.completion","model":"mock",'
-                    b'"choices":[{"finish_reason":"stop","message":'
+                    b'"choices":[{"index":0,"finish_reason":"stop","message":'
                     b'{"role":"assistant","content":"ok"}}]}'
                 )
 

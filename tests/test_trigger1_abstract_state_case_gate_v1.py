@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import copy
 import hashlib
-import json
 from pathlib import Path
 import sys
 import unittest
@@ -12,10 +11,11 @@ TOOLS = ROOT / "tools"
 if str(TOOLS) not in sys.path:
     sys.path.insert(0, str(TOOLS))
 
+import trigger1_abstract_relational_design_v1 as designer
 import trigger1_abstract_state_case_gate_v1 as gate
 import trigger1_v7_factorial_case_evidence as producer
 
-DESIGN_PATH = ROOT / "research_entity/global/j-space/prereg/trigger1_abstract_relational_design_v1.json"
+EXPECTED_DESIGN_SHA256 = "e4840576910ebbb2ec1764fd4fc4733b119edd23fef99d464f42241c2838d5fa"
 
 
 def candidate_from_design(design: dict) -> dict:
@@ -29,9 +29,10 @@ def candidate_from_design(design: dict) -> dict:
 
 class Trigger1AbstractStateCaseGateTests(unittest.TestCase):
     def setUp(self) -> None:
-        self.design = json.loads(DESIGN_PATH.read_text(encoding="utf-8"))
+        self.design = designer.build_design()
 
     def test_frozen_design_and_producer_plans_pass(self):
+        self.assertEqual(self.design["design_sha256"], EXPECTED_DESIGN_SHA256)
         verdict = gate.validate(candidate_from_design(self.design))
         self.assertTrue(verdict["pass"], verdict["failures"])
         self.assertEqual(verdict["payload_lexicon_overlaps"]["basis_x_calibration"], [])

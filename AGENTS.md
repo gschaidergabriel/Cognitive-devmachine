@@ -9,19 +9,26 @@ Read first, in this order:
 1. `CLAY_EXECUTION_AUTHORITY.md`
 2. `research_entity/claycode/autonomous/SUPERVISOR_INBOX.json`
 3. the exact steering file selected by that inbox
-4. `research_entity/continuity/BOOTSTRAP_MINIMAL.json`
-5. `research_entity/rooms/PROGRAM_STATE.json`
-6. `research_entity/claycode/CLAYCODE_ALL_WORKERS_EXECUTION_DIRECTIVE.md`
-7. `governance/CLAY_VPS_SANDBOX_BRIDGE_CURRENT.md`
-8. `the artefact/README.md`
-9. task-relevant current or compatibility implementation files.
+4. `research_entity/00_CURRENT/NOW.md`, then only the needed `INDEX.tsv` / `ACTIVE.tsv` / `latest/<direction>.md`
+5. `research_entity/continuity/BOOTSTRAP_MINIMAL.json`
+6. `research_entity/rooms/PROGRAM_STATE.json`
+7. `research_entity/claycode/CLAYCODE_ALL_WORKERS_EXECUTION_DIRECTIVE.md`
+8. `governance/CLAY_VPS_SANDBOX_BRIDGE_CURRENT.md`
+9. `the artefact/README.md`
+10. task-relevant current or compatibility implementation files.
 
-Newest explicit owner authority outranks stale cached supervisor/bootstrap text where they conflict.
+`research_entity/00_CURRENT` is a token-efficient generated navigation/cache layer, not authority. Newest explicit owner authority, current supervisor steering and exact executable evidence outrank it.
 
 Current system: **EntityOS**.  
 Current integrated cognition/compute architecture: **HCU**.
 
 `Xeno` may remain as a transitional implementation compatibility codename and `XCU` as a transitional/research alias for HCU. Historical `Mini Entity`, `MicroEntity`, `mini_*`, `MINI_*`, ClayVerse and Frank names remain valid provenance where exact migration has not occurred. They do not define competing current systems.
+
+## Fast-result writeback — mandatory
+
+Every agent that produces a material research/architecture/runtime/training result must emit a tiny append-only `CLAY_FAST_RESULT/v1` receipt for each materially affected research direction before the lane is considered informationally complete. Use `python3 tools/clay_current_emit_v1.py ...`, cite the exact deep evidence artifact, and include relevant branch/PR/issue/request refs. Do not hand-edit generated `NOW.md`, `INDEX.tsv`, `ACTIVE.tsv`, `RECENT.tsv`, `MANIFEST.json` or `latest/*`.
+
+The receipt is a synthesis/navigation delta only. It cannot mint truth, runtime credit, checkpoint selection, training admission or whole-product acceptance.
 
 ## VPS sandbox — mandatory current interpretation
 
@@ -45,7 +52,7 @@ If a track cannot safely advance, record the no-change reason plus the next disc
 
 Build reusable HCU machine primitives shared by:
 
-- `GRID10` — simple 10 logical-cell baseline;
+- `GRID10` — current first concrete physical 10-process acceptance target; logical GRID simulation remains a compatibility/baseline surface;
 - `COGSIM10` — request-scoped cognition simulation;
 - `WM_TEST` — bounded noncanonical world-model experiment;
 - `NESTED_SIM` — selective world-model -> virtual computer -> simulated AI -> candidate-action experiment;

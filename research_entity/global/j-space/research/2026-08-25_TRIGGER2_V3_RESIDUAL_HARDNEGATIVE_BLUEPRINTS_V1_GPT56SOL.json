@@ -1,0 +1,145 @@
+{
+  "schema": "CLAY_TRIGGER2_V3_RESIDUAL_HARDNEGATIVE_BLUEPRINTS/v1",
+  "version": "1.0.0",
+  "date": "2026-08-25",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU_VARIABLE_COGNITIVE_GRID",
+  "status": "CURRENT_CANDIDATE_BLUEPRINTS_NONPROMOTING",
+  "authority": {
+    "canonical_repository": "gschaidergabriel/clay-global-research-entity",
+    "branch_fork_main": "a16a64c7aaae0126f3b2bf044818ee050ddee1a6",
+    "supervisor_epoch": "8.78",
+    "mode": "FREE_ONLY",
+    "training_executed": false,
+    "accepted_dataset_tokens_minted": 0
+  },
+  "purpose": "Turn exact-current residual failures found after the converged semantic-Hyperposition v3 labeler/gate landed into reusable adversarial training blueprints. These examples train against circular independence, mutable event identity, inadmissible discrimination, ontology assertion and GRF evidence-type collapse; they are not materialized dataset rows and mint no training credit.",
+  "source_evidence": [
+    "tools/trigger2_hyperposition_reference_labelers_v3.py @ commit 2247a67f9ddcae78791cebefce38a18ee76400b0",
+    "tests/test_trigger2_hyperposition_reference_labelers_v3.py @ commit 027682afa12351f1c45c26fd46afe5ba96f7e9b6",
+    "tools/trigger2_semantic_hyperposition_gate_v3.py @ commit 112d4a7c9d990b791b29e7ca085f9bb26e5f9d5d",
+    "research_entity/global/j-space/research/2026-08-25_TRIGGER2_POST_V3_LABELER_INDEPENDENCE_GATE_AUDIT_GPT56SOL.json @ commit 189e22e780da144f431218ae695df13f5750d900",
+    "research_entity/global/j-space/research/2026-08-25_TRIGGER2_HYPERPOSITION_LABELER_V3_ADVERSARIAL_AUDIT_V1_GPT56SOL.json @ commit bdde0ef5078c627f9fc805941a50c132ae9d43cb",
+    "research_entity/global/j-space/research/2026-08-25_TRIGGER2_LABELER_BLOCKER_HARDNEGATIVE_BLUEPRINTS_V1_GPT56SOL.json"
+  ],
+  "lifecycle": {
+    "predecessor_blueprint_set": "2026-08-25_TRIGGER2_LABELER_BLOCKER_HARDNEGATIVE_BLUEPRINTS_V1_GPT56SOL.json",
+    "predecessor_status": "CURRENT_DONOR_RETAIN",
+    "organ_local_stale_review_commit": "00b0a27873ffe60157d436b2aada99d49904dae7",
+    "organ_local_stale_review_status": "SUPERSEDED_BY_V3_MAIN_CONVERGENCE_DO_NOT_PROMOTE",
+    "revision_reason": "The earlier organ-local review was forked before labeler v3, gate v3 and the v3 adversarial audits landed. Only residual failure modes still supported by current-main v3 evidence are carried forward here."
+  },
+  "global_contract": {
+    "semantic_hyperposition_carrier_required": true,
+    "canonical_truth_allowed": false,
+    "direct_effect_authority": false,
+    "synthetic_task_resolution_type": "RESOLVED_WITHIN_SYNTHETIC_WORLD",
+    "causal_world_resolution_type_must_remain_distinct": true,
+    "model_visible_excludes": [
+      "evaluator verdict",
+      "reference hashes",
+      "branch IDs as answer labels",
+      "split/family metadata",
+      "hard-negative family ID",
+      "independence certificate verdict"
+    ],
+    "training_eligibility": "FALSE_UNTIL_MATERIALIZED_BY_SOURCE_BOUND_SUCCESSOR_AND_ALL_NUISANCE_FAMILY_SPLIT_GATES_PASS"
+  },
+  "examples": [
+    {
+      "example_id": "T2-HN-V3-001",
+      "family": "INDEPENDENCE_MUST_BE_DERIVED",
+      "phase": "E_D",
+      "semantic_hyperposition_state": "A new-looking event has unseen event_id, ancestry, payload_key and independence_group. Its input object simply sets independence_qualified=true.",
+      "prompt_blueprint": "May the event receive independent evidence credit because all collision checks are clean and the event says independence_qualified=true?",
+      "correct_target": "NO, not from that boolean alone. Independent credit is itself an epistemic label. Derive or certificate-verify it from immutable dependence history/formal generator provenance; otherwise retain the observation without independent-evidence promotion.",
+      "anti_shortcut": "A boolean naming the target property is not its proof.",
+      "source_blocker": "V3_INDEPENDENCE_QUALIFICATION_STILL_CALLER_CONTROLLED",
+      "status": "CANDIDATE_HARD_NEGATIVE"
+    },
+    {
+      "example_id": "T2-HN-V3-002",
+      "family": "EVENT_ID_IMMUTABLE_DIGEST",
+      "phase": "E_D",
+      "semantic_hyperposition_state": "event_id=e7 already exists. A second object reuses e7 but changes observed_outcome or payload/provenance while keeping the same ID.",
+      "prompt_blueprint": "Treat the second object as an idempotent replay solely because event_id matches?",
+      "correct_target": "REJECT AS IDENTITY CORRUPTION. Exact replay requires the same event ID bound to the same canonical immutable event digest. Same ID plus a changed payload, outcome, provenance, test, ancestry or epistemic identity must fail closed rather than becoming a no-op replay.",
+      "anti_shortcut": "ID equality is not event equality.",
+      "source_blocker": "V3_EXACT_EVENT_ID_MUTATION_CAN_BE_HIDDEN_AS_REPLAY",
+      "status": "CANDIDATE_HARD_NEGATIVE"
+    },
+    {
+      "example_id": "T2-HN-V3-003",
+      "family": "DISCRIMINATOR_ADMISSION_BEFORE_COLLAPSE",
+      "phase": "D",
+      "semantic_hyperposition_state": "A formal discriminator predicts unique outcomes and its supplied observation leaves one supported survivor, but there is no source-bound admissibility/execution/observation receipt for the test.",
+      "prompt_blueprint": "Resolve the Hyperposition because the formal predictions separate all current branches?",
+      "correct_target": "NOT YET. Pair separation is only one requirement. Collapse requires the declared synthetic-world law that the registered test is admissible/executable or an explicit source-bound admissibility and execution/observation receipt. Otherwise preserve the alternatives.",
+      "anti_shortcut": "Information gain does not manufacture permission, execution or observation.",
+      "source_blocker": "V3_DISCRIMINATOR_ADMISSIBILITY_EXECUTION_NOT_EXPLICIT",
+      "status": "CANDIDATE_HARD_NEGATIVE"
+    },
+    {
+      "example_id": "T2-HN-V3-004",
+      "family": "ONTOLOGY_NOT_ROW_LABEL",
+      "phase": "D_E_PREPARATION",
+      "semantic_hyperposition_state": "A test-world specification directly declares mismatch_effect=FALSIFIES for every nonmatching outcome without a typed decisive-claim rule explaining why mismatch is decisive rather than merely counterevidence.",
+      "prompt_blueprint": "Is deterministic use of mismatch_effect enough to make FALSIFIES a fully derived reference label?",
+      "correct_target": "ONLY IF THE FORMAL ONTOLOGY ITSELF IS THE EXPLICIT SOURCE-BOUND PROOF LAW AND IS MUTATION-TESTED. Otherwise derive decisiveness from typed claim/test semantics; a relation name moved into world metadata can still be an asserted label.",
+      "anti_shortcut": "Moving the answer upstream does not automatically derive it.",
+      "source_blocker": "V3_MISMATCH_EFFECT_IS_FORMAL_WORLD_ASSERTION_NOT_DERIVED_DECISIVENESS",
+      "status": "CANDIDATE_HARD_NEGATIVE"
+    },
+    {
+      "example_id": "T2-HN-V3-005",
+      "family": "GRF_OBSERVED_REQUIRES_TYPED_RECEIPT",
+      "phase": "E_GRf",
+      "semantic_hyperposition_state": "A state is UNKNOWN/HYPOTHESIS. A transition helper receives evidence_qualified_observation=true but no typed evidence receipt is bound to that boolean.",
+      "prompt_blueprint": "Promote the state to OBSERVED because evidence_qualified_observation=true?",
+      "correct_target": "NO. OBSERVED is a typed epistemic promotion. Require a source-bound observation/proof receipt whose provenance and qualification are recomputed. Keep UNKNOWN distinct from ZERO, ABSENT and FAIL.",
+      "anti_shortcut": "Evidence qualification cannot be self-certified by a naked boolean.",
+      "source_blocker": "V3_EPISTEMIC_OBSERVED_PROMOTION_GUARD_STILL_ACCEPTS_BOOLEAN_EVIDENCE_QUALIFICATION",
+      "status": "CANDIDATE_HARD_NEGATIVE"
+    },
+    {
+      "example_id": "T2-HN-V3-006",
+      "family": "SYNTHETIC_VS_CAUSAL_RESOLUTION_TYPE",
+      "phase": "PIPELINE_ADMISSION",
+      "semantic_hyperposition_state": "A deterministic synthetic episode reaches RESOLVED_WITHIN_SYNTHETIC_WORLD. A generic gate field offers RESOLVED_BY_EVIDENCE, which is reserved for admitted measured/verified causal evidence.",
+      "prompt_blueprint": "Normalize both statuses to RESOLVED_BY_EVIDENCE because both indicate a selected branch?",
+      "correct_target": "REJECT. Preserve the epistemic type boundary. Synthetic task resolution is method/curriculum supervision and cannot be rewritten as admitted causal/world evidence, canonical truth or effect authority.",
+      "anti_shortcut": "Shared control-flow shape does not erase evidence type.",
+      "source_blocker": "SYNTHETIC_CAUSAL_RESOLUTION_TYPE_COLLAPSE",
+      "status": "CANDIDATE_HARD_NEGATIVE"
+    }
+  ],
+  "swarm_review": {
+    "DATASET_ARCHITECT": "PASS_AS_BLUEPRINT_ONLY: six cases are exact-current residual failure families and add no invented positive D/E labels.",
+    "HYPERPOSITION_REVIEWER": "PASS_WITH_BLOCK: all cases preserve unresolved alternatives until evidence/admission semantics actually close them.",
+    "EVIDENCE_IDENTITY_REVIEWER": "PASS: event replay and independent-credit roots are explicitly separated and require immutable provenance.",
+    "ADVERSARIAL_SHORTCUT_HUNTER": "PASS_AS_DESIGN: answer-like booleans, relation names, IDs and resolution aliases are identified as shortcut surfaces; model-visible descendants must redact evaluator metadata and counterbalance lexical forms.",
+    "GRF_REVIEWER": "PASS: UNKNOWN/OBSERVED promotion remains typed and cannot be confused with zero/absence/failure.",
+    "FINAL_ARBITER": "ADMIT AS VERSIONED RESEARCH/CANDIDATE HARD-NEGATIVE BLUEPRINTS ONLY. MATERIALIZED_ROWS=0; ACCEPTED_DATASET_TOKENS=0; TRAINING_CREDIT=0."
+  },
+  "external_method_alignment": [
+    "Symbol-tuning evidence motivates arbitrary/episode-local output codebooks so fixed label semantics cannot become the shortcut.",
+    "Order-sensitivity evidence motivates branch/demo permutation groups and consistent semantic targets across serialization order.",
+    "Probe-methodology cautions keep J-Space decodability distinct from causal use.",
+    "Variable-binding mechanistic work motivates checkpoint/depth/distractor/remapped-symbol tests rather than aggregate accuracy alone."
+  ],
+  "next_exact_action": "Do not open a second implementation lane for independence: an active research/trigger2-derived-independence-gate-20260825-1937 branch already targets that blocker. Fuse/review that lane against labeler v3 + semantic gate v3, then add same-event/different-digest, forged-independence and admissibility/execution mutation tests before any positive D/E materialization.",
+  "credits": {
+    "research_training_delta": 1,
+    "new_hardnegative_blueprints": 6,
+    "materialized_training_rows": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "positive_jspace_causal_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0
+  }
+}

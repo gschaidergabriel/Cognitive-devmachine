@@ -59,6 +59,36 @@ class RestartResizeDBSmokeTests(unittest.TestCase):
                 grid.close()
                 authority.close()
 
+    def test_read_epoch_stays_fresh_after_rejected_direct_write(self):
+        """Regression: a failed direct-write attempt must not pin the read-only
+        S0 connection to a stale pre-attempt snapshot. See
+        attempt_direct_s0_write's rollback -- without it, subsequent epoch
+        reads on the same connection silently kept returning 0 even after
+        another connection committed a newer epoch."""
+        with tempfile.TemporaryDirectory() as td:
+            path = Path(td) / "s0.sqlite3"
+            authority = CanonicalStateAuthority(path)
+            authority.seed("goal", {"g": 1}, provenance="test", generation=1, epoch=1)
+            grid = CognitiveGridRuntime(path, GridConfig(n=1, generation=1))
+            try:
+                self.assertTrue(grid.attempt_direct_s0_write("illegal/first", {"x": 1}))
+                self.assertEqual(0, grid.read_s0_epoch("shared/key"))
+                authority.seed("shared/key", {"winner": "base"}, provenance="test", generation=1, epoch=7)
+                self.assertEqual(
+                    7,
+                    grid.read_s0_epoch("shared/key"),
+                    "read-only connection must observe the freshly committed epoch, "
+                    "not a stale snapshot pinned by the earlier rejected write attempt",
+                )
+                result = grid.execute(grid.enqueue("ZECP15", {"x": 1}))
+                proposal_a = grid.propose_db_write(result, "shared/key", {"winner": "A"})
+                proposal_b = grid.propose_db_write(result, "shared/key", {"winner": "B"})
+                self.assertEqual(7, proposal_a["expected_s0_epoch"])
+                self.assertEqual(7, proposal_b["expected_s0_epoch"])
+            finally:
+                grid.close()
+                authority.close()
+
     def test_restart_drops_s1_but_preserves_s0(self):
         with tempfile.TemporaryDirectory() as td:
             path = Path(td) / "s0.sqlite3"

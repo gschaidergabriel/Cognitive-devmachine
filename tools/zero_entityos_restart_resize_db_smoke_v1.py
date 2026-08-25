@@ -253,6 +253,13 @@ class CognitiveGridRuntime:
             self.s0.commit()
         except sqlite3.OperationalError as exc:
             if "readonly" in str(exc).lower() or "read-only" in str(exc).lower():
+                # A failed DML statement still opens an implicit transaction (python
+                # sqlite3 legacy transaction handling begins one before any DML, even
+                # one that then raises). Without an explicit rollback, this read-only
+                # connection stays pinned to its pre-attempt snapshot and silently
+                # stops observing subsequent committed writes from the S0 writer
+                # connection -- rollback releases that stale snapshot immediately.
+                self.s0.rollback()
                 return True
             raise
         return False

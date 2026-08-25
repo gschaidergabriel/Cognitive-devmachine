@@ -1,0 +1,112 @@
+{
+  "schema": "GLOBAL_WORKSPACE_PROTOCOL/v1",
+  "status": "CURRENT_OWNER_ALIGNED_COMPONENT_CONTRACT_NOT_JSPACE_CAUSAL_CREDIT",
+  "authority": {
+    "owner_target": "VARIABLE_COGNITIVE_GRID_PLUS_PERSISTENT_DATABASE_PLUS_CLAUDE_CODE",
+    "process": "ZECP10_GLOBAL_WORKSPACE_COMPETITION_BROADCAST_REENTRY",
+    "state_class": "S1_LIVE_SHARED_NONCANONICAL_WORKSPACE",
+    "truth_authority": "NONE",
+    "effect_authority": "NONE",
+    "canonical_state_authority": "EXTERNAL_DETERMINISTIC_S0_ONLY",
+    "grid_size_law": "N_IS_RUNTIME_PARAMETER_NOT_WORKSPACE_SEMANTICS",
+    "supervisor_epoch": "8.78",
+    "execution_mode": "FREE_ONLY"
+  },
+  "inputs": {
+    "candidate_result": {
+      "required": [
+        "causal_event_id",
+        "admission_id",
+        "generation",
+        "work_id",
+        "process_id",
+        "result_id",
+        "result_class",
+        "result_digest",
+        "salience_score",
+        "uncertainty",
+        "provenance_ref"
+      ],
+      "allowed_result_class": ["CANDIDATE", "PROJECTION", "MEASUREMENT"],
+      "salience_score": "INTEGER_ROUTING_SIGNAL_NOT_TRUTH_PROBABILITY"
+    }
+  },
+  "competition": {
+    "partition_key": ["causal_event_id", "generation", "workspace_epoch"],
+    "eligibility": "SAME_CAUSAL_EVENT_AND_GENERATION_ONLY",
+    "ordering": ["salience_score_DESC", "result_digest_ASC"],
+    "winner_semantics": "ATTENTION_SELECTION_ONLY_NOT_FACT_PROMOTION",
+    "tie_semantics": "DETERMINISTIC_TIE_BREAK_WITH_TIED_ALTERNATIVES_PRESERVED",
+    "majority_semantics": "MAJORITY_RECURRENCE_OR_REPETITION_NEVER_MINTS_TRUTH"
+  },
+  "broadcast": {
+    "target_identity": "COGNITIVE_PROCESS_ID_NOT_PHYSICAL_EXECUTOR_ID",
+    "required": [
+      "causal_event_id",
+      "generation",
+      "workspace_epoch",
+      "selection_id",
+      "selected_result_id",
+      "selected_result_digest",
+      "target_process_ids",
+      "broadcast_digest"
+    ],
+    "authority": "NONCANONICAL_S1_DELIVERY_ONLY"
+  },
+  "reentry": {
+    "schema": "WORKSPACE_REENTRY/v1",
+    "required": [
+      "source_result_id",
+      "source_process_id",
+      "causal_event_id",
+      "from_workspace_epoch",
+      "to_workspace_epoch",
+      "reentry_payload_ref",
+      "reentry_digest",
+      "observed_downstream_change"
+    ],
+    "observed_downstream_change": ["TRUE", "FALSE", "UNKNOWN"],
+    "delivery_rule": "DELIVERY_OR_PRESENCE_DOES_NOT_PROVE_CAUSAL_USE",
+    "jspace_credit_rule": "ZERO_UNLESS_SEPARATE_MODEL_SPECIFIC_INTERVENTION_EVIDENCE_CLOSES_CAUSAL_GATE"
+  },
+  "restart_rebuild": {
+    "workspace_persistence": "DISCARDABLE_S1",
+    "rebuild_from": ["S0_STATE_REFS", "ADMITTED_CANDIDATE_RESULTS", "CURRENT_CAUSAL_EVENT", "CURRENT_GENERATION"],
+    "forbidden_recovery_authority": ["STALE_WORKSPACE_CACHE", "MODEL_MEMORY", "WORKSPACE_WINNER"],
+    "requirement": "REBUILD_MUST_NOT_CHANGE_SELECTION_SEMANTICS_SOLELY_BECAUSE_GRID_N_CHANGED"
+  },
+  "hard_fences": [
+    "WORKSPACE_WINNER_NEVER_CONFERS_CANONICAL_TRUTH",
+    "WORKSPACE_MAJORITY_NEVER_CONFERS_CANONICAL_TRUTH",
+    "WORKSPACE_RECURRENCE_NEVER_CONFERS_CANONICAL_TRUTH",
+    "WORKSPACE_CANNOT_COMMIT_S0",
+    "WORKSPACE_CANNOT_EXECUTE_REAL_EFFECT",
+    "WORKSPACE_CANNOT_BROADEN_CAPABILITY",
+    "STALE_GENERATION_FAILS_CLOSED",
+    "CROSS_CAUSAL_EVENT_COMPETITION_FAILS_CLOSED",
+    "UNKNOWN_REMAINS_DISTINCT_FROM_FALSE",
+    "BROADCAST_DELIVERY_NEVER_IMPLIES_JSPACE_CAUSAL_CREDIT",
+    "PHYSICAL_EXECUTOR_IDENTITY_NEVER_DEFINES_PROCESS_IDENTITY"
+  ],
+  "acceptance_discriminators": [
+    "GW-D1-DETERMINISTIC-SELECTION-INVARIANT-TO-INPUT-ORDER",
+    "GW-D2-SELECTION-INVARIANT-TO-GRID-N",
+    "GW-D3-TIED-ALTERNATIVES-PRESERVED",
+    "GW-D4-CROSS-EVENT-OR-STALE-GENERATION-REJECTED",
+    "GW-D5-BROADCAST-TARGETS-PROCESS-IDS-NOT-EXECUTOR-IDS",
+    "GW-D6-REENTRY-PRESENCE-KEEPS-JSPACE-CAUSAL-CREDIT-ZERO",
+    "GW-D7-RESTART-REBUILDS-S1-WITHOUT-S0-OR-EFFECT-AUTHORITY",
+    "GW-D8-UNKNOWN-DISTINCT-FROM-FALSE"
+  ],
+  "credit_boundary": {
+    "global_workspace_source_contract": 1,
+    "global_workspace_component_runtime": 0,
+    "global_jspace_causal_runtime": 0,
+    "claude_code_bridge_runtime": 0,
+    "trained_08b_variable_grid_runtime": 0,
+    "whole_entityos_hcu_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_gate_if_component_passes": "CLAUDE_CODE_BRIDGE_WITH_OBSERVABLE_REENTRY_BINDING"
+}

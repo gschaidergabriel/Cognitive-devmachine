@@ -1,9 +1,10 @@
 {
-  "schema": "TRIGGER2_TARGET_LOCK/v1",
+  "schema": "TRIGGER2_TARGET_LOCK/v1.1",
   "date": "2026-08-25",
   "trigger": "2",
   "program": "EntityOS + HCU",
   "implementation_codename": "Xeno",
+  "node_identity": "XENO_MICROENTITY_NODE",
   "training_target_parameter_class": "0.8B_ONLY",
   "model_family": "Qwen3.5-0.8B",
   "allowed_pretrain_selection_candidates": [
@@ -12,19 +13,56 @@
   ],
   "paid_full_ft_jobs_planned": 1,
   "paid_full_ft_models_trained": 1,
-  "selection_rule": "Zero-cost baseline comparison may choose exactly one 0.8B checkpoint; only that checkpoint may enter the first serious full fine-tune.",
+  "selection_rule": "Zero-cost baseline comparison may choose exactly one Qwen3.5-0.8B checkpoint; only that checkpoint may enter the first serious full fine-tune.",
   "excluded_training_targets": [
     "Qwen3-0.6B",
     "all non-0.8B alternatives unless a newer explicit owner instruction supersedes this lock"
   ],
   "training_method_target": "FULL_SUPERVISED_FINE_TUNING",
+  "single_node_target": {
+    "composition": "ONE_FINE_TUNED_QWEN3_5_0_8B_PLUS_DETERMINISTIC_XENO_RUNTIME_SHELL",
+    "must_be_fully_operational_standalone": true,
+    "must_support_any_grid_role": true,
+    "must_not_be_a_second_truth_or_effect_authority": true
+  },
+  "grid10_target": {
+    "node_count_total": 10,
+    "node_type": "XENO_MICROENTITY_NODE",
+    "checkpoint_policy": "SAME_FINE_TUNED_0_8B_CHECKPOINT_UNLESS_LATER_EXPLICITLY_RESEARCHED_OTHERWISE",
+    "physical_runtime_instances_required_for_final_grid_acceptance": true,
+    "logical_grid10_remains_test_baseline_only": true,
+    "collective_identity": "FIRST_COGNITIVE_HYPERPOSITION_COMPUTING_UNIT",
+    "required_collective_planes": [
+      "TYPED_INTERCONNECT",
+      "SEMANTIC_HYPERPOSITION",
+      "GLOBAL_JSPACE",
+      "GWT_WORKSPACE",
+      "ROLE_AND_BRANCH_COORDINATION",
+      "PROVENANCE_GENERATION_FENCING",
+      "FAILURE_REJOIN_RECOVERY",
+      "ACTION_CANDIDATE_TO_EFFECT_BOUNDARY"
+    ],
+    "majority_vote_is_truth": false,
+    "single_node_pass_is_grid_pass": false
+  },
+  "training_data_must_cover": [
+    "SINGLE_NODE_FULL_MODEL_FACING_XENO_FUNCTIONALITY",
+    "ROLE_FLEXIBLE_GRID10_COORDINATION",
+    "PEER_PACKET_COMPREHENSION_AND_GENERATION",
+    "DISTRIBUTED_HYPERPOSITION_BRANCH_PRESERVATION",
+    "GLOBAL_GWT_BROADCAST_UPTAKE_REENTRY",
+    "HOMOGENEOUS_MODEL_JSPACE_TRANSFER_RESEARCH",
+    "CONSENSUS_TRAP_AND_CORRELATED_ERROR_NEGATIVES",
+    "NODE_FAILURE_STALE_REPLAY_REJOIN",
+    "MATCHED_BUDGET_SINGLE_VS_GRID10_EVALUATION"
+  ],
   "deployment_after_training": {
     "primary": "GGUF_Q4_K_M",
     "references": ["FULL_PRECISION", "GGUF_Q8_0", "GGUF_Q5_K_M"],
-    "law": "Quantization happens after full fine-tuning and must pass frozen quality/authority/J-Space/Hyperposition regression gates."
+    "law": "Quantization happens after full fine-tuning and must pass frozen single-node plus physical-GRID10 quality/authority/J-Space/Hyperposition regression gates."
   },
   "dataset_policy": "LIVING_VERSIONED_UNTIL_PRE_JOB_FREEZE",
-  "semantic_hyperposition": "MANDATORY_MODEL_FACING_CAPABILITY_AND_RESEARCH_TRACK",
-  "full_xeno_model_functionality": "MANDATORY_FUNCTION_TO_DATA_AND_EVAL_COVERAGE",
+  "semantic_hyperposition": "MANDATORY_MODEL_AND_GRID_CAPABILITY_AND_RESEARCH_TRACK",
+  "full_xeno_model_functionality": "MANDATORY_SINGLE_NODE_AND_GRID10_FUNCTION_TO_DATA_AND_EVAL_COVERAGE",
   "paid_job_creation_on_trigger_alone": false
 }

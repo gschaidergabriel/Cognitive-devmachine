@@ -90,3 +90,19 @@ A source file, workflow, queued run, token count, model consensus, or component 
 ## Evidence discipline and re-entry
 
 Negative evidence is first-class. Infrastructure/auth/quota/runner/log failure is not automatically product/science failure. Component evidence is not whole-product acceptance. Current source can outrank an older inbox statement when an admitted later merge has already closed that source blocker; runtime credit still requires executable evidence at exact identity.
+
+## GO 8.78 — live Distillery distinct-execution replay discriminator
+
+**ADVANCED AT SOURCE/REGRESSION SCOPE; RUNTIME UNEXECUTED.**
+
+Canonical `main` was re-entered at `cbe1fed983b5747244d6057bcc139d1d19213048`. The stale/nonmergeable donor PR #1761 contained one still-missing positive separation arm for the existing live Forge -> Distillery semantic-replay regression. Its semantic delta was transplanted onto a fresh current-main successor branch instead of reviving stale branch authority.
+
+The added regression requires two evidence-qualified evaluations that differ in stable execution identity (`worker_sha`) to remain separately admissible: both must promote new packets, their replay identities and packet IDs must differ, and the second genuinely distinct execution must produce a positive first token delta while its own semantic replay and measured-conflict controls remain exactly zero-delta.
+
+This closes the opposite failure mode to replay inflation: **deduplication must not over-collapse distinct measured executions**. The primitive is reusable HCU/Typed-Entry-adjacent causal-identity evidence discipline and protects future J-Space/training-bearing Distillery packets from false deduplication.
+
+Durable source delta commit: `80452205975eef0e348b8712abb9f40944d079fb`. Receipt: `research_entity/continuity/receipts/2026-08-25_GO_878_LIVE_DISTILLERY_DISTINCT_EXECUTION_SUCCESSOR_GPT56SOL.json`.
+
+The retained controller probe `32803694800` was still `queued` in this cycle. No second runtime dispatch was created because it would duplicate the already-observed generation-0 transport discriminator without increasing information while the self-hosted path remains nonterminal. Therefore exact-head test execution, `clay-direct-dev` roundtrip, provider/model runtime, whole EntityOS/HCU, full HCU, J-Space model and training credit all remain zero.
+
+Next exact gate: restore one authorized transport into `clay-direct-dev`, execute the focused live semantic-replay regression on exact successor/current source, and fuse only if the distinct-execution positive arm remains green together with semantic-replay `+0` and measured-conflict `+0` guards.

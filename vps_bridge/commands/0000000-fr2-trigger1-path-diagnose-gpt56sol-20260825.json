@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v4",
+  "command_id": "fr2-trigger1-path-diagnose-gpt56sol-20260825",
+  "op": "exec",
+  "cwd": "/workspace",
+  "timeout_seconds": 600,
+  "command": "set -euo pipefail; echo DIAG_BEGIN; echo PWD=$(pwd); echo DISK; df -h /workspace /cache 2>/dev/null || true; echo GGUF_CANDIDATES; find /cache /srv /workspace /opt /root -maxdepth 8 -type f -name '*.gguf' -size +500M -size -900M -printf '%s %p\\n' 2>/dev/null | sort -n | head -100; echo LLAMA_ROOTS; find /cache /srv /workspace /opt /root -maxdepth 7 -type d -name 'llama.cpp' -print 2>/dev/null | head -50; echo PYTHON_CANDIDATES; for p in /cache/clay-qwen06/venv/bin/python /srv/claylab/cache/clay-qwen06/venv/bin/python /workspace/.venv/bin/python; do if test -x \"$p\"; then \"$p\" --version 2>&1 | sed \"s#^#$p #\"; fi; done; echo ACTIVE_STRUCTURAL; pgrep -af '[t]rigger1_structural_native_abstract_execute.py' || true; echo EXACT_HASH_MATCHES; while IFS= read -r f; do h=$(sha256sum \"$f\" | awk '{print $1}'); if test \"$h\" = '9465e63a22add5354d9bb4b99e90117043c7124007664907259bd16d043bb031'; then echo \"$h $f\"; fi; done < <(find /cache /srv /workspace /opt /root -maxdepth 8 -type f -name '*.gguf' -size +500M -size -900M 2>/dev/null | head -100); echo LLAMA_PIN_MATCHES; while IFS= read -r d; do h=$(git -C \"$d\" rev-parse HEAD 2>/dev/null || true); if test \"$h\" = 'bb4caa7540188872173c44d161602d9271386413'; then echo \"$h $d\"; fi; done < <(find /cache /srv /workspace /opt /root -maxdepth 7 -type d -name 'llama.cpp' 2>/dev/null | head -50); echo DIAG_END"
+}

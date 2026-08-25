@@ -31,7 +31,8 @@ COMMIT_RE = re.compile(r"^[0-9a-f]{40}$")
 MAX_CHUNK_CHARS = 14_000
 CHUNK_OVERLAP = 800
 MAX_BATCH_DELTAS = 12
-MAX_PASSES = 3
+MIN_EXHAUSTIVE_ZERO_CONFIRMATIONS = 2
+MAX_PASSES = 64
 
 VOLATILE_VARIANT_KEYS = {
     "delta_id", "repair_of_candidate_hash", "repair_of_delta_id",
@@ -350,6 +351,13 @@ def _batch_binding(con: sqlite3.Connection, value: dict[str, Any]) -> tuple[str,
 
 
 def _record_batch_progress(con: sqlite3.Connection, envelope: dict[str, Any], novel_count: int) -> None:
+    """Advance extraction state only from an exact next-pass, bounded batch envelope.
+
+    Saturation is deliberately conservative: only an explicitly exhaustive zero-novel
+    pass contributes to the confirmation streak, and two consecutive confirmations are
+    required. Non-exhaustive/missing signals and any novel result reset the streak. The
+    finite pass ceiling is a visible stall state, never semantic saturation.
+    """
     binding = _batch_binding(con, envelope)
     values = envelope.get("deltas")
     if binding is None or not isinstance(values, list) or len(values) > MAX_BATCH_DELTAS:
@@ -361,15 +369,20 @@ def _record_batch_progress(con: sqlite3.Connection, envelope: dict[str, Any], no
     ).fetchone()
     if not row:
         return
-    zero = int(row[0] or 0) + 1 if novel_count == 0 else 0
+    explicitly_exhaustive = envelope.get("exhaustive") is True
+    zero = (
+        int(row[0] or 0) + 1
+        if explicitly_exhaustive and int(novel_count) == 0
+        else 0
+    )
     state = "PENDING_EXTRACTION"
-    if passes >= 2 and zero >= 1 and envelope.get("exhaustive") is True:
+    if zero >= MIN_EXHAUSTIVE_ZERO_CONFIRMATIONS:
         state = "SATURATED"
     elif passes >= MAX_PASSES:
         state = "MAX_PASSES_REACHED"
     con.execute(
         "UPDATE historical_chunks SET extraction_passes=?,consecutive_zero_novel=?,last_novel_count=?,last_extracted_at=?,state=? WHERE chunk_id=?",
-        (passes, zero, novel_count, now(), state, chunk_id),
+        (passes, zero, int(novel_count), now(), state, chunk_id),
     )
 
 

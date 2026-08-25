@@ -1,0 +1,30 @@
+module entityos.cognitive.authority.v1
+
+// Executable pure decision kernel for CLAYCODE_COGNITIVE_PROTOCOL/v1.
+// No DB, effect, tool, provider, network, model, async, or recovery I/O exists here.
+// Those stay outside the pure compiler behind COGNITIVE_PROCESS_ABI/v1 authority boundaries.
+
+fn valid_process_id(process:Int)->Bool=(process>=1)&&(process<=20)
+fn valid_grid_n(n:Int)->Bool=n>0
+fn generation_matches(current_generation:Int,packet_generation:Int)->Bool=current_generation==packet_generation
+fn semantic_process_identity(process:Int,n:Int)->Int=process
+
+// DB_VS_SIMULATION_BOUNDARY/v1 integer projection used only by this pure gate: S0=0, S1=1, S2=2.
+fn state_class_valid(state_class:Int)->Bool=(state_class>=0)&&(state_class<=2)
+fn state_class_is_canonical(state_class:Int)->Bool=state_class==0
+fn workspace_state_can_mint_truth(state_class:Int)->Bool=false
+fn local_cognition_can_mint_truth(state_class:Int)->Bool=false
+fn direct_cognitive_db_commit_allowed(process:Int)->Bool=false
+fn db_write_proposal_process(process:Int)->Bool=process==15
+
+// ZECP16 proposes effects. Only deterministic ZECP17 owns EffectGate/EffectJournal real-effect authority.
+fn effect_proposal_process(process:Int)->Bool=process==16
+fn real_effect_authority_process(process:Int)->Bool=process==17
+fn direct_cognitive_effect_allowed(process:Int)->Bool=false
+fn unknown_effect_blind_replay_allowed(outcome_class:Int)->Bool=false
+
+// Workspace and Claude/J-Space surfaces are candidate/reentry/measurement channels, never direct truth authority.
+fn workspace_process(process:Int)->Bool=process==10
+fn claude_bridge_process(process:Int)->Bool=(process==13)||(process==14)
+fn claude_direct_canonical_write_allowed(process:Int)->Bool=false
+fn jspace_direct_truth_allowed(process:Int)->Bool=false

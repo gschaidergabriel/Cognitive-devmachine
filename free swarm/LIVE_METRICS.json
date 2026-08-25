@@ -1,27 +1,27 @@
 {
   "schema": "CLAY_FREE_SWARM_METRICS/v1",
-  "generated_at": "2026-08-25T01:03:13.362945+00:00",
+  "generated_at": "2026-08-25T01:18:19.435463+00:00",
   "workers": {
-    "worker_records": 13064,
+    "worker_records": 13132,
     "worker_files": 12,
-    "average_concurrency": 3.9709516199135613,
+    "average_concurrency": 3.9235825705563787,
     "peak_concurrency": 136,
-    "observed_seconds": 54923.678472,
-    "exact_usage_rows": 5205,
-    "input_tokens": 29366980,
-    "output_tokens": 8065890,
-    "total_tokens": 37432870,
+    "observed_seconds": 55826.640847,
+    "exact_usage_rows": 5254,
+    "input_tokens": 29638323,
+    "output_tokens": 8142190,
+    "total_tokens": 37780513,
     "models": [
       {
         "provider": "nvidia",
         "model": "nvidia/nemotron-3-super-120b-a12b",
-        "requests": 4053,
-        "success": 3097,
-        "rate_limits": 516,
+        "requests": 4115,
+        "success": 3143,
+        "rate_limits": 532,
         "errors": 440,
-        "input_tokens": 17378442,
-        "output_tokens": 4956155,
-        "total_tokens": 22334597
+        "input_tokens": 17635323,
+        "output_tokens": 5029755,
+        "total_tokens": 22665078
       },
       {
         "provider": "nvidia",
@@ -37,9 +37,9 @@
       {
         "provider": "openrouter",
         "model": "openrouter/free",
-        "requests": 280,
+        "requests": 281,
         "success": 115,
-        "rate_limits": 105,
+        "rate_limits": 106,
         "errors": 60,
         "input_tokens": 640932,
         "output_tokens": 224021,
@@ -180,35 +180,35 @@
       {
         "provider": "groq",
         "model": "openai/gpt-oss-20b",
-        "requests": 201,
-        "success": 46,
-        "rate_limits": 35,
+        "requests": 203,
+        "success": 47,
+        "rate_limits": 36,
         "errors": 120,
-        "input_tokens": 246240,
-        "output_tokens": 43938,
-        "total_tokens": 290178
+        "input_tokens": 250941,
+        "output_tokens": 44838,
+        "total_tokens": 295779
       },
       {
         "provider": "groq",
         "model": "openai/gpt-oss-120b",
-        "requests": 185,
-        "success": 43,
+        "requests": 186,
+        "success": 44,
         "rate_limits": 20,
         "errors": 122,
-        "input_tokens": 237354,
-        "output_tokens": 41489,
-        "total_tokens": 278843
+        "input_tokens": 242056,
+        "output_tokens": 42389,
+        "total_tokens": 284445
       },
       {
         "provider": "groq",
         "model": "qwen/qwen3.6-27b",
-        "requests": 180,
-        "success": 42,
-        "rate_limits": 16,
+        "requests": 182,
+        "success": 43,
+        "rate_limits": 17,
         "errors": 122,
-        "input_tokens": 232570,
-        "output_tokens": 40100,
-        "total_tokens": 272670
+        "input_tokens": 237629,
+        "output_tokens": 41000,
+        "total_tokens": 278629
       },
       {
         "provider": "nvidia",
@@ -568,11 +568,11 @@
   },
   "corpus": {
     "text_files": 9969,
-    "characters": 48642409,
-    "approx_tokens_4chars": 12160602,
+    "characters": 48641913,
+    "approx_tokens_4chars": 12160478,
     "sonnet5_input_usd_per_mtok": 2.0,
     "sonnet5_output_usd_per_mtok": 10.0,
-    "output_only_equivalent_usd": 121.60602,
+    "output_only_equivalent_usd": 121.60478,
     "pricing_basis": "Claude Sonnet 5 introductory through 2026-08-31: $2/M input + $10/M output; standard after: $3/M + $15/M"
   }
 }

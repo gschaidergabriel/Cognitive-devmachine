@@ -4,8 +4,13 @@
 When the Forge historical-extraction queue is non-empty, logical research calls
 are repurposed as bounded extraction passes over old worker outputs. This preserves
 the 6000 fabric as the extraction transport while preventing new raw-research scale
-from competing with the historical conversion backlog. Once no extraction packet is
-available, the ordinary prompt path resumes automatically.
+from competing with the historical conversion backlog. Once a *verified available*
+Forge queue is empty, the ordinary prompt path resumes automatically.
+
+Availability is part of the control boundary: missing, unreadable, schema-incomplete,
+or internally unschedulable Forge state must never be collapsed into the same `[]`
+as a valid empty backlog. Those states fail closed before an ordinary provider prompt
+can be returned.
 
 This changes allocation, not evidence authority: extracted deltas remain noncanonical
 and still traverse the same Forge validation path.
@@ -15,6 +20,7 @@ from __future__ import annotations
 import json
 import os
 from pathlib import Path
+import sqlite3
 import sys
 import threading
 import time
@@ -33,6 +39,7 @@ FORGE_DB = ARTIFACT_ROOT / "forge/forge.sqlite3"
 CACHE_SECONDS = 3.0
 LEASE_SECONDS = 240.0
 MAX_PACKET_CACHE = 2048
+_REQUIRED_TABLES = {"candidates", "candidate_sources", "historical_chunks", "historical_outputs"}
 
 _lock = threading.Lock()
 _cache_at = 0.0
@@ -40,13 +47,67 @@ _cache: list[dict[str, Any]] = []
 _leases: dict[str, float] = {}
 
 
+class ForgeBackfillUnavailable(RuntimeError):
+    """Fail-closed control-plane state; never reinterpret as an empty backlog."""
+
+
+def _forge_pending_count() -> int:
+    """Return schedulable pending chunks or fail closed on unavailable/incoherent state."""
+    if not FORGE_DB.is_file():
+        raise ForgeBackfillUnavailable("FORGE_DB_MISSING_FAIL_CLOSED")
+    con: sqlite3.Connection | None = None
+    try:
+        con = sqlite3.connect(f"file:{FORGE_DB}?mode=ro", uri=True, timeout=2.0)
+        tables = {str(row[0]) for row in con.execute("SELECT name FROM sqlite_master WHERE type='table'")}
+        missing = sorted(_REQUIRED_TABLES - tables)
+        if missing:
+            raise ForgeBackfillUnavailable("FORGE_SCHEMA_INCOMPLETE_FAIL_CLOSED:" + ",".join(missing))
+        pending_total = int(
+            con.execute("SELECT COUNT(*) FROM historical_chunks WHERE state='PENDING_EXTRACTION'").fetchone()[0]
+        )
+        pending_schedulable = int(
+            con.execute(
+                "SELECT COUNT(*) FROM historical_chunks WHERE state='PENDING_EXTRACTION' AND extraction_passes<?",
+                (int(historical_backfill_core.MAX_PASSES),),
+            ).fetchone()[0]
+        )
+        if pending_total != pending_schedulable:
+            raise ForgeBackfillUnavailable(
+                f"FORGE_PENDING_UNSCHEDULABLE_FAIL_CLOSED:total={pending_total}:schedulable={pending_schedulable}"
+            )
+        return pending_schedulable
+    except ForgeBackfillUnavailable:
+        raise
+    except Exception as exc:
+        raise ForgeBackfillUnavailable(f"FORGE_DB_READ_FAILED_FAIL_CLOSED:{type(exc).__name__}") from exc
+    finally:
+        if con is not None:
+            con.close()
+
+
 def _packets() -> list[dict[str, Any]]:
     global _cache_at, _cache
+    # Validate on every prompt entry, including cache hits. A stale cached packet set
+    # must not keep provider traffic alive after the local canonical Forge DB vanishes
+    # or becomes incoherent.
+    pending = _forge_pending_count()
     now = time.monotonic()
+    if pending == 0:
+        with _lock:
+            _cache_at = now
+            _cache = []
+        return []
     with _lock:
-        if now - _cache_at < CACHE_SECONDS:
+        if now - _cache_at < CACHE_SECONDS and _cache:
             return list(_cache)
     rows = load_backfill_packets(FORGE_DB, limit=MAX_PACKET_CACHE)
+    if not rows:
+        # The compatibility loader intentionally collapses exceptions into []. Since
+        # canonical state says schedulable pending work exists, [] is not a valid empty
+        # queue here; fail closed instead of falling through to ordinary raw prompting.
+        raise ForgeBackfillUnavailable(
+            f"FORGE_PACKET_LOAD_EMPTY_WITH_PENDING_FAIL_CLOSED:pending={pending}"
+        )
     with _lock:
         _cache_at = now
         _cache = rows
@@ -77,12 +138,15 @@ def install(base: Any) -> None:
     previous = base.worker_prompt
 
     def backlog_prompt(protocol: str, role: str, task: str, state_context: str, serial: int) -> str:
+        # Reserve first. This validates Forge availability before the ordinary prompt
+        # is even constructed, ensuring unavailable/invalid state cannot be silently
+        # reinterpreted as permission for raw research.
+        packet = _reserve(serial)
         original = previous(protocol, role, task, state_context, serial)
         # Liveness rule: the same fabric carries historical extraction, therefore
         # keep it alive and devote every reservable slot to conversion while the
         # historical queue is non-empty. Ordinary raw research resumes only when
-        # the queue itself is empty, not merely when all visible chunks are leased.
-        packet = _reserve(serial)
+        # the verified queue itself is empty, not merely when chunks are leased.
         if packet is None:
             if _packets():
                 return original + """

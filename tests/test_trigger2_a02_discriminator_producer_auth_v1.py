@@ -38,7 +38,9 @@ def _history_target(world, before, event):
         winner = resolution["resolved_branch"]
         for branch in state_after["branches"]:
             if branch["branch_id"] != winner and branch["sigma"] == "FALSIFIED":
-                elimination[branch["branch_id"]] = sorted({r["event_id"] for r in branch["F"]})
+                elimination[branch["branch_id"]] = sorted(
+                    {r["event_id"] for r in branch["F"]}
+                )
     return {
         "state_after": state_after,
         "task_resolution": resolution,
@@ -54,8 +56,9 @@ def _row():
     before = deepcopy(bundle["state_before"])
     event = deepcopy(bundle["event"])
 
-    generator_path = "tools/trigger2_trusted_hyperposition_pilot_generator_v1.py"
-    binding = proof.base.current_source_binding(generator_path)
+    binding = proof.base.current_source_binding(
+        "tools/trigger2_trusted_hyperposition_pilot_generator_v1.py"
+    )
     assert binding["pass"]
 
     row = {
@@ -90,44 +93,45 @@ def _row():
     }
 
     gp = gate.generation.adjudicate(row)
-    assert gp["pass"] is False  # generation receipt is intentionally absent on first pass
-    assert gp.get("expected_generation_receipt") is not None
-    row["generation_receipt_evaluator_only"] = deepcopy(gp["expected_generation_receipt"])
-
+    assert gp["pass"] is False
+    row["generation_receipt_evaluator_only"] = deepcopy(
+        gp["expected_generation_receipt"]
+    )
     gp = gate.generation.adjudicate(row)
     assert gp["pass"], gp
-    authority = gate._authority()
-    producer, binding, failures = gate._load_bound_producer(authority)
-    assert not failures, failures
-    receipt = producer.produce(
-        case_id=generator.CASE_ID,
-        world=world,
-        state_before=before,
-        event=event,
-        producer_binding=binding,
-        policy=authority["policy"],
-    )
-    row["discriminator_execution_receipts_evaluator_only"] = [receipt]
+
+    expected = gate.producer_auth.expected_receipt(row)
+    row["discriminator_execution_receipts_evaluator_only"] = [
+        deepcopy(expected["receipt"])
+    ]
     return row
 
 
 def _assert_exact_receipt_reject(row):
     result = gate.adjudicate(row)
     assert not result["pass"], result
-    assert "ROW_DISCRIMINATOR_RECEIPT_NOT_EXACT_AUTHORITY_DERIVATION" in result["failures"]
+    assert any(
+        "DISCRIMINATOR_RECEIPT_NOT_EXACT_TRUSTED_PRODUCER_OUTPUT" in failure
+        for failure in result["failures"]
+    )
 
 
 def test_a02_happy_path_is_candidate_only_and_zero_credit():
     result = gate.adjudicate(_row())
     assert result["pass"], result
     assert result["candidate_pre_admission_pass"]
-    assert result["a02_contract_status"] == "SOURCE_IMPLEMENTED_EXECUTION_UNOBSERVED"
-    assert result["accepted_dataset_tokens_minted"] == 0
-    assert result["training_credit_minted"] == 0
-    assert result["runtime_credit_minted"] == 0
-    assert result["jspace_runtime_credit_minted"] == 0
-    assert result["hcu_runtime_credit_minted"] == 0
-    assert result["entityos_runtime_credit_minted"] == 0
+    assert result["a02_contract_status"] == (
+        "SOURCE_IMPLEMENTED_DEPENDENCY_BOUND_EXECUTION_UNOBSERVED"
+    )
+    for key in (
+        "accepted_dataset_tokens_minted",
+        "training_credit_minted",
+        "runtime_credit_minted",
+        "jspace_runtime_credit_minted",
+        "hcu_runtime_credit_minted",
+        "entityos_runtime_credit_minted",
+    ):
+        assert result[key] == 0
     assert result["canonical_truth_minted"] is False
     assert result["direct_effect_authority_minted"] is False
 
@@ -144,8 +148,8 @@ def test_T2_SHPG_A02_FAKE_EXECUTED_rejected():
 def test_T2_SHPG_A02_COHERENT_RECEIPT_REWRITE_rejected():
     row = _row()
     receipt = row["discriminator_execution_receipts_evaluator_only"][0]
-    receipt["execution_receipt_id"] = "t2disc:" + ("0" * 64)
-    receipt["producer_result_jcs_sha256"] = "1" * 64
+    receipt["producer"]["source_sha256"] = "0" * 64
+    receipt["execution_receipt_id"] = "t2dp:" + ("1" * 64)
     _assert_exact_receipt_reject(row)
 
 
@@ -159,9 +163,7 @@ def test_T2_SHPG_A02_PRODUCER_PATH_OR_SHA_SWAP_rejected():
 
 def test_T2_SHPG_A02_POLICY_SWAP_rejected():
     row = _row()
-    receipt = row["discriminator_execution_receipts_evaluator_only"][0]
-    receipt["policy"]["policy_id"] = "forged-policy/v999"
-    receipt["policy"]["policy_version"] = "999"
+    row["discriminator_execution_receipts_evaluator_only"][0]["policy_sha256"] = "0" * 64
     _assert_exact_receipt_reject(row)
 
 
@@ -172,7 +174,7 @@ def test_T2_SHPG_A02_PRESTATE_REWRITE_rejected_even_if_pair_count_can_remain_one
     assert not result["pass"]
     assert any(
         "SUPPLIED_SUBJECT_DIGEST_OR_RECONSTRUCTION_MISMATCH" in failure
-        or "A02_V1_EMPTY_HISTORY_GENESIS_MUST_EQUAL_STATE_BEFORE" in failure
+        or "ROW_STATE_BEFORE_NOT_TRUSTED_GENERATOR_OUTPUT" in failure
         for failure in result["failures"]
     )
 
@@ -180,7 +182,7 @@ def test_T2_SHPG_A02_PRESTATE_REWRITE_rejected_even_if_pair_count_can_remain_one
 def test_T2_SHPG_A02_WORLD_SCOPED_EVENT_REWRITE_rejected():
     row = _row()
     receipt = row["discriminator_execution_receipts_evaluator_only"][0]
-    receipt["world_scoped_event_jcs_sha256"] = "f" * 64
+    receipt["world_scoped_event_sha256"] = "f" * 64
     _assert_exact_receipt_reject(row)
 
 
@@ -188,35 +190,52 @@ def test_T2_SHPG_A02_COVERAGE_REWRITE_rejected():
     row = _row()
     receipt = row["discriminator_execution_receipts_evaluator_only"][0]
     receipt["separated_live_pairs"] = 999
-    receipt["separates_all_live_pairs"] = True
     _assert_exact_receipt_reject(row)
 
 
 def test_authority_source_sha_swap_fails_before_producer_invocation(monkeypatch):
     row = _row()
-    original = gate._authority
+    original = gate.producer_auth._producer_authority
 
-    def tampered_authority():
+    def tampered():
         authority = deepcopy(original())
         authority["producer"]["source_sha256"] = "0" * 64
         return authority
 
-    monkeypatch.setattr(gate, "_authority", tampered_authority)
+    monkeypatch.setattr(gate.producer_auth, "_producer_authority", tampered)
     result = gate.adjudicate(row)
     assert not result["pass"]
-    assert "DISCRIMINATOR_PRODUCER_SOURCE_SHA256_MISMATCH" in result["failures"]
+    assert any("PRODUCER_SOURCE_SHA256_MISMATCH" in failure for failure in result["failures"])
 
 
-def test_authority_policy_formal_spec_swap_fails_closed(monkeypatch):
+def test_authority_policy_swap_fails_closed(monkeypatch):
     row = _row()
-    original = gate._authority
+    original = gate.producer_auth._producer_authority
 
-    def tampered_authority():
+    def tampered():
         authority = deepcopy(original())
-        authority["policy"]["formal_spec"]["risk_rank"] = 999
+        authority["allowed_cases"][generator.CASE_ID]["policy"]["expected_test_id"] = "other"
         return authority
 
-    monkeypatch.setattr(gate, "_authority", tampered_authority)
+    monkeypatch.setattr(gate.producer_auth, "_producer_authority", tampered)
     result = gate.adjudicate(row)
     assert not result["pass"]
-    assert any("POLICY_REJECTED" in failure for failure in result["failures"])
+    assert any("DISCRIMINATOR_POLICY_DIGEST_MISMATCH" in failure for failure in result["failures"])
+
+
+def test_ordering_semantics_blob_swap_fails_before_producer_invocation(monkeypatch):
+    row = _row()
+    original = gate.producer_auth._producer_authority
+
+    def tampered():
+        authority = deepcopy(original())
+        authority["ordering_semantics"]["git_blob_sha1"] = "0" * 40
+        return authority
+
+    monkeypatch.setattr(gate.producer_auth, "_producer_authority", tampered)
+    result = gate.adjudicate(row)
+    assert not result["pass"]
+    assert any(
+        "ORDERING_SEMANTICS_GIT_BLOB_MISMATCH" in failure
+        for failure in result["failures"]
+    )

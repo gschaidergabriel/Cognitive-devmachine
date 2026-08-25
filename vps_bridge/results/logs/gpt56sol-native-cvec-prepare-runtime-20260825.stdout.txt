@@ -1,0 +1,34 @@
+PREPARE_NATIVE=PASS
+llama_cpp_commit=bb4caa7540188872173c44d161602d9271386413
+gguf_sha256=9465e63a22add5354d9bb4b99e90117043c7124007664907259bd16d043bb031
+gguf_bytes=639446688
+llama_cli_sha256=9d08841a5b2d04cd3ec0d13d23f0c453893f03026ff21ff0b4f8ecda647a1514
+llama_server_sha256=56bc3ce0147dbdc86d1ce678d3f169e75542ca60b636a108c614c0d1dce8a96d
+abea60c662c51589d079845686b15ba50e77124c7aa43db40575dcc59809819f  /cache/clay-qwen06-native/build/bin/libllama.so.0.2.0
+--- cvec api ---
+716:    LLAMA_API int32_t llama_set_adapter_cvec(
+--- tokenize/decode/logits api ---
+240:    // Input data for llama_encode/llama_decode
+247:    //            (if set to NULL, the token position will be tracked automatically by llama_encode/llama_decode)
+353:        uint32_t n_batch;               // logical maximum batch size that can be submitted to llama_decode
+385:        // if it returns true, execution of llama_decode() will be aborted
+643:    // Returns true if the model contains a decoder that requires llama_decode() call
+936:    // The position of the tokens will be tracked automatically by llama_decode
+960:    // In contrast to llama_decode() - this call does not use KV cache.
+981:    LLAMA_API int32_t llama_decode(
+1005:    // If true, all model tensors are activated during llama_decode() to load and cache their weights.
+1020:    // Token logits obtained from the last call to llama_decode()
+1025:    // TODO: deprecate in favor of llama_get_logits_ith() (ref: https://github.com/ggml-org/llama.cpp/pull/14853#issuecomment-3113143522)
+1032:    LLAMA_API float * llama_get_logits_ith(struct llama_context * ctx, int32_t i);
+1163:    LLAMA_API int32_t llama_tokenize(
+1185:    /// @details Convert the provided tokens into text (inverse of llama_tokenize()).
+1249:    //        llama_decode(ctx, batch);
+1524:    //    const auto * logits = llama_get_logits_ith(ctx, idx);
+1534:    //LLAMA_API void llama_decode_with_sampler(struct llama_context * ctx, struct llama_sampler * smpl, struct llama_batch batch, ...);
+--- resources ---
+965M	/cache/clay-qwen06-native
+               total        used        free      shared  buff/cache   available
+Mem:            15Gi       5.8Gi       2.1Gi       2.4Mi       8.0Gi       9.8Gi
+Swap:             0B          0B          0B
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/sda1       193G   46G  147G  24% /cache

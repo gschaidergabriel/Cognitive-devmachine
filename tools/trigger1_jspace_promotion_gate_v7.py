@@ -33,10 +33,12 @@ def adjudicate(candidate: dict[str, Any]) -> dict[str, Any]:
     base_scientific = base.get("scientifically_independent_vector_candidate") is True
     base_owner = base.get("owner_trigger1_goal_credit_candidate") is True
     base_modular = base.get("modular_hcu_jspace_control_candidate") is True
+    base_full_native = base.get("full_native_jspace_vector_control_candidate") is True
 
     scientific = bool(base_scientific and factor_ok)
     owner = bool(base_owner and factor_ok)
     modular = bool(base_modular and factor_ok)
+    full_native = bool(base_full_native and base_modular and factor_ok)
 
     failures = sorted(set(
         list(base.get("v5_specificity_failures", []))
@@ -57,6 +59,7 @@ def adjudicate(candidate: dict[str, Any]) -> dict[str, Any]:
         "owner_trigger1_goal_credit_candidate": owner,
         "owner_trigger1_direct_free_api_model_credit_candidate": owner,
         "modular_hcu_jspace_control_candidate": modular,
+        "full_native_jspace_vector_control_candidate": full_native,
         "v7_failures": failures,
         "canonical_credit_minted": False,
         "canonical_semantics_promotion": False,
@@ -68,8 +71,10 @@ def adjudicate(candidate: dict[str, Any]) -> dict[str, Any]:
             "v7 composes promotion-v6 through modularity-v2 and independent semantic-factorial case-row binding. "
             "A positive candidate must survive upstream scientific controls, reconstruct/digest-bind modularity family "
             "rows, and reconstruct the balanced semantic-target x output-code factorial from per-case six-control "
-            "receipt digests with holdout interaction binding. External runtime receipt authenticity is still a separate "
-            "boundary. This adjudicator mints no canonical semantics, runtime, HCU, EntityOS, training, BASE, or effect credit."
+            "receipt digests with holdout interaction binding. The strongest inherited full-native vector-control "
+            "candidate is additionally gated by both evidence-bound modularity and case-bound factorial evidence. "
+            "External runtime receipt authenticity is still a separate boundary. This adjudicator mints no canonical "
+            "semantics, runtime, HCU, EntityOS, training, BASE, or effect credit."
         ),
     }
 
@@ -83,6 +88,7 @@ def adjudicate_file(path: Path) -> dict[str, Any]:
             "scientifically_independent_vector_candidate": False,
             "owner_trigger1_goal_credit_candidate": False,
             "modular_hcu_jspace_control_candidate": False,
+            "full_native_jspace_vector_control_candidate": False,
             "evidence_bound_semantic_factorial_candidate": False,
             "canonical_credit_minted": False,
             "v7_failures": [f"CANDIDATE_FILE_INVALID:{type(exc).__name__}"],
@@ -93,6 +99,7 @@ def adjudicate_file(path: Path) -> dict[str, Any]:
             "scientifically_independent_vector_candidate": False,
             "owner_trigger1_goal_credit_candidate": False,
             "modular_hcu_jspace_control_candidate": False,
+            "full_native_jspace_vector_control_candidate": False,
             "evidence_bound_semantic_factorial_candidate": False,
             "canonical_credit_minted": False,
             "v7_failures": ["CANDIDATE_OBJECT_REQUIRED"],
@@ -117,6 +124,9 @@ def scan_batch(batch_dir: Path) -> dict[str, Any]:
         ),
         "modular_hcu_jspace_control_candidate": any(
             row.get("modular_hcu_jspace_control_candidate") is True for row in verdicts
+        ),
+        "full_native_jspace_vector_control_candidate": any(
+            row.get("full_native_jspace_vector_control_candidate") is True for row in verdicts
         ),
         "canonical_credit_minted": False,
         "verdicts": verdicts,

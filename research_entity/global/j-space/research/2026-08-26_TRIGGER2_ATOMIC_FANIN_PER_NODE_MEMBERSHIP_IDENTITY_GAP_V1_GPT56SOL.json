@@ -1,0 +1,72 @@
+{
+  "schema": "CLAY_TRIGGER2_ATOMIC_FANIN_PER_NODE_MEMBERSHIP_IDENTITY_GAP/v1",
+  "date": "2026-08-26",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority_epoch": "8.81_DELTA",
+  "mode": "FREE_ONLY",
+  "status": "CURRENT_SOURCE_GAP_NONCANONICAL_RESEARCH_DELTA",
+  "observed_main_before_write": "a425f44d828baea8901024d1a8e4699f9db340ee",
+  "credit_boundary": {
+    "physical_grid10_runtime_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0,
+    "jspace_model_credit": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0
+  },
+  "source_evidence": {
+    "atomic_fanin": {
+      "path": "tools/trigger2_grid10_atomic_cohort_fanin_pilot_v1.py",
+      "finding": "The pilot uses one global membership_generation plus a digest of the visible nodes table. runtime_register_node bumps that generation only when the visible (capability, healthy) tuple changes. Re-registering the same logical node with the same capability and health can therefore leave membership identity unchanged.",
+      "consequence": "An old packet can remain membership-equivalent across a restart/rejoin event if the visible row is unchanged, even though the newer selected membership contract requires a successor per-node admission revision."
+    },
+    "membership_acceptance": {
+      "path": "tools/trigger2_node_membership_admission_acceptance_v1.py",
+      "finding": "Every registration creates a new serial-derived membership_id and revokes the previously active membership for that node, even if S1 and visible capability/health are unchanged."
+    },
+    "membership_contract": {
+      "path": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_NODE_MEMBERSHIP_ADMISSION_CONTRACT_CANDIDATE_V1_GPT56SOL.json",
+      "selected_candidate": "SEPARATE_RUNTIME_MEMBERSHIP_AUTHORITY_WITH_PER_NODE_ADMISSION_REVISION",
+      "important_reason": "A global membership-generation-only rule falsely stales unrelated nodes, while per-node admission identity distinguishes restart/rejoin from continuity without folding runtime authority into cognitive S1."
+    }
+  },
+  "gap": {
+    "id": "ATOMIC_FANIN_GLOBAL_MEMBERSHIP_CLOCK_CONFLICTS_WITH_PER_NODE_ADMISSION_REVISION",
+    "severity": "P0_BEFORE_REUSABLE_FANIN_PROMOTION",
+    "description": "The current atomic fan-in pilot and the newer per-node membership authority contract do not yet share one identity model. The fan-in pilot can miss same-state re-registration and globally invalidates unrelated nodes when membership_generation changes; the selected contract requires exact source_node_admission_id/revision and only stales the affected source admission.",
+    "not_a_model_problem": true,
+    "authority_owner": "DETERMINISTIC_RUNTIME_FABRIC"
+  },
+  "cheapest_high_information_discriminator": {
+    "name": "SAME_STATE_REREGISTRATION_PLUS_UNRELATED_NODE_CHANGE_PAIR",
+    "positive_control": "Create cohort packets for x01..x10 with active per-node admission identities; integrate only while every exact source admission remains current.",
+    "negative_a": "Re-register x01 with identical logical_node_id, capability and healthy state, producing a successor admission revision without changing cognitive S1. Reuse the old x01 packet. Expected: reject old x01 admission as stale/superseded before cohort mutation.",
+    "negative_b": "Change/re-register unrelated x11 while x01..x10 admissions remain unchanged. Expected: do not falsely stale valid x01..x10 packets merely because an unrelated membership changed.",
+    "negative_c": "Transplant x01 packet semantic payload onto x02 source_node_admission_id or process witness. Expected: reject source binding.",
+    "negative_d": "Use a valid old admission id after process restart/rejoin with a new process witness. Expected: reject superseded admission/process-instance binding.",
+    "acceptance": "The cohort contract must bind each exact packet digest to a current per-node admission id/revision and, where physical credit is claimed, to the corresponding process-instance witness. All membership checks occur before admitted_results or derived summary mutation."
+  },
+  "hypothesis": "Replacing the atomic fan-in pilot's global membership clock with per-node admission revisions will close restart/rejoin ambiguity and reduce false global staleness while preserving deterministic authority outside the model.",
+  "counterhypothesis": "A global membership generation/digest is simpler and sufficient for a bounded ten-node fixture because any membership change should invalidate the whole cohort.",
+  "counterhypothesis_test": "Compare the two mechanisms on the paired negatives above. If unrelated x11 changes invalidate x01..x10 under the global clock but not under the per-node contract, global invalidation is over-broad. If same-state x01 re-registration fails to invalidate the old packet under the global clock, it is under-sensitive at the same time. Both failures together falsify the global-clock design for reusable EntityOS/HCU fan-in semantics.",
+  "training_eval_reinjection": {
+    "new_positive_training_rows": 0,
+    "new_admitted_rows": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "model_target_rule": "The model must not mint or guess source_node_admission_id, admission revision, membership authority, PID/process witness or freshness. Model-visible semantics may reference typed runtime status, but the deterministic fabric owns and verifies authority fields.",
+    "candidate_eval_families": [
+      "SAME_NODE_SAME_VISIBLE_STATE_REREGISTRATION_OLD_ADMISSION_REJECT",
+      "UNRELATED_NODE_MEMBERSHIP_CHANGE_NO_FALSE_STALENESS",
+      "LOGICAL_NODE_ADMISSION_TRANSPLANT_REJECT",
+      "PROCESS_WITNESS_ADMISSION_MISMATCH_REJECT"
+    ]
+  },
+  "runtime_pin_effect": "Do not broaden physical GRID10 promotion from any current pin to reusable membership-authenticated fan-in credit until the pin/source contract binds the selected per-node admission identity semantics. Existing pinned proof may still be evaluated only at its explicitly declared narrower scope and current execution authority; FreeSwarm autonomous execution remains HARD OFF.",
+  "next_exact_action": "Fuse per-node node_admission_id/revision from the membership acceptance contract into the atomic cohort fan-in acceptance path and add the same-state re-registration plus unrelated-node-change paired regressions. Preserve exact packet/process/snapshot evidence and keep the integration source-only until an exact authorized repository-bound runtime receipt exists."
+}

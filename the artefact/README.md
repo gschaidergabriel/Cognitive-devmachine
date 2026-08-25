@@ -4,7 +4,7 @@
 
 ## Current authority — 2026-08-25 re-entry
 
-Newest inbox-selected supervisor observed in this update: **8.78**. Mode: **FREE_ONLY**. Canonical `main` observed immediately before this write: `e27a483b2030ff538c7b7d642e5dfc885236545e`.
+Newest inbox-selected supervisor observed in this update: **8.78**. Mode: **FREE_ONLY**. Canonical `main` observed immediately before this GO branch was refreshed: `9239370999c192328f33eb47fa3bbb7e88ab39a7`.
 
 Persistent research entity = **Clay**. Temporary workers/models/sessions are organs, not persistent entities. Product = **EntityOS**. Integrated cognition/compute architecture = **HCU**. Xeno/XCU remain compatibility/research aliases only.
 
@@ -18,43 +18,49 @@ Current owner/supervisor authority permits zero-cost local Linux and authorized 
 
 Pre-load hashing is not loader-consumption attestation. Logical cell count is not resident-model count or physical decode concurrency. Global J-Space/GWT remains a model-specific causal hypothesis.
 
-## GO 8.78 — historical conversion / executable evidence frontier
+## GO 8.78 — historical conversion / active Forge wiring correction
 
 ### Track A — EntityOS executable convergence
 
-**ADVANCED AT SOURCE/CONTROL-PLANE SCOPE.**
+**ADVANCED ON GO BRANCH AT SOURCE/CONTROL-PLANE SCOPE; NOT YET CANONICAL MAIN.**
 
-The replay-v2 migration was fused onto canonical `main` at merge commit `92435b90e450a99b09e016592228a0f84be53739` while preserving serialized replay admission. Supervisor 8.78 subsequently shifted the dominant frontier from source migration to historical conversion and exact-current execution.
+Supervisor 8.78 identifies the highest-priority blocker as wiring the already-existing historical backlog-first Forge entrypoint into the **single active Forge supervisor path**. Exact source inspection on canonical base `9239370999c192328f33eb47fa3bbb7e88ab39a7` found a concrete activation gap:
 
-Canonical `main` now also contains the fused backlog-first Forge supervisor wiring. The active path is intended to preserve one Forge authority while replaying the historical Free-Swarm evidence backlog rather than creating a second evaluator.
+- `tools/run_free_evidence_forge_backfill.py` exists on `main` and layers historical replay/backfill onto the safe Forge authority;
+- `tools/run_24h_entityos_swarm_supervisor.sh` still selected `tools/run_free_evidence_forge_safe.py` in `start_forge()`;
+- the supervisor status surface also reported `forge_running` by probing the predecessor safe entrypoint.
 
-This is **source fusion only**. No terminal exact-current historical-backfill saturation receipt and no exact-current replay-v2 migration runtime receipt were observed in this re-entry. Therefore the historical ~39M-token corpus is not yet credited as re-evaluated, and Distillery/model/training credit remains zero.
+Therefore the earlier README statement that backlog-first supervisor wiring was already fused on canonical `main` was too strong. The source existed, but the canonical 24h supervisor had not selected it.
 
-The owner-provisioned `clay-direct-dev` bridge is a real configured execution path, but generation-0 roundtrip dispatches accumulated duplicate queued triggers. Canonical coordination defines a singleton ordinary-dispatch identity `clay-direct-dev-roundtrip-v1-g0000` and quarantines legacy fan-out. This cycle added a stronger transport discriminator rather than another Clay executor: the retained `gschaidergabriel/Dr.-Unterweger` controller workflow was retriggered at controller commit `6ad6af25038f8b7be07e660b2c47ea14a9de7c5f`, and its plain `runs-on: self-hosted` sandbox probe run `32803694800` was also observed `queued`. Together with Clay runs `32802727269`, `32803251965`, and `32803325959` remaining queued, this weakens the narrow hypothesis that Clay-repository labels alone are the blocker and points instead to a repo-spanning self-hosted execution-surface availability/scheduling problem. Runner-offline state is not claimed as fact because runner status was not directly observable.
+This GO branch, `go878-wire-historical-backfill-forge-20260825-1031`, closes that source/control-plane gap by selecting `run_free_evidence_forge_backfill.py` as the single active Forge entrypoint, retiring predecessor Forge processes before activation, binding `SUPERVISOR.json` to the backlog-first process identity, and adding focused regression assertions.
+
+Current branch commits at this update:
+
+- `302a866552622c1952fb2b12acd9d8dc3cb9ec6a` — supervisor wiring;
+- `bcc4e096e4fc26102281bc434542411584dd344f` — regression source;
+- `371233e58911d1cdb280e6410e38a4a33c81fb4d` — bounded GO receipt.
+
+This is still **source/control-plane evidence only**. No terminal exact-branch test run, no historical-backfill saturation receipt, and no exact-current replay-v2 migration runtime receipt are claimed by this update.
 
 ### Track B — HCU + Typed Entry Fabric co-development
 
-**ADVANCED AT CAUSAL-IDENTITY / EVIDENCE-ADMISSION SCOPE.**
+**ADVANCED AT EVIDENCE-ADMISSION / SINGLE-AUTHORITY CONTROL SCOPE.**
 
-The current reusable invariants now include:
+The reusable invariant strengthened in this cycle is the causal/evidence boundary feeding HCU and training data:
 
-- replay/measured identity preimage changes require explicit schema succession rather than silent reinterpretation;
-- replay lookup, conflict classification, packet insertion, and accepted-token mutation remain serialized;
-- historical replay must preserve original execution identity and Goodman-style evidence-family collapse;
-- model-generated historical batch references are input, never authority; a current exact-source patcher exists to bind batch proposals/progress to canonical `(chunk_id, source_event_id, next extraction_pass)` and to reject foreign/stale/future bindings before promotion;
-- repeated historical processing must not be allowed to manufacture evidence weight merely by replaying one execution.
+`historical worker output -> deterministic backfill admission -> one Forge authority -> evidence-qualified candidate -> Distillery`
 
-A newly isolated draft donor, PR **#1851**, addresses the last point for Forge scheduling metadata by reconciling `source_count` to unique historical `source_event_id` provenance. It is deliberately **not canonical yet**: focused deterministic unit tests pass locally, but exact-current `clay-direct-dev` execution plus historical saturation/replay evidence is still required before fusion.
+The activation repair prevents a source-present historical evidence path from remaining disconnected while a predecessor evaluator keeps consuming only the prior path. It also explicitly retires predecessor Forge processes before activating the backlog-first wrapper, preserving one evaluator authority rather than creating a competing state/evidence path.
 
-No second truth store, effect path, Forge authority, or persistent entity was introduced.
+Concurrent donor/hardening lanes reviewed rather than duplicated include PR #1879 (historical saturation semantics), PR #1877 (replay-idempotent source support), PR #1851 (source-count/provenance reconciliation), PR #1856 (collective metrics freshness), and PR #1263 (retained HCU/J-Space donor lane).
 
 ### Track C — Global J-Space/GWT + zero-cost local model readiness
 
 **TRAINING_READINESS_NO_CHANGE_WITH_REASON.**
 
-The strongest gates are upstream and executable: historical replay must reach a terminal saturation receipt, replay-v2 must execute on exact-current source, and one evidence-qualified Forge ACCEPT must become exactly one persistent Distillery packet with `accepted_dataset_tokens > 0`, followed by semantic replay with exactly `+0` packets / `+0` accepted tokens.
+The strongest current gates remain upstream and executable: the historical corpus must actually pass through the single backlog-first Forge path to a terminal saturation receipt; replay-v2 must execute on exact-current source; and one evidence-qualified Forge ACCEPT must become exactly one persistent Distillery packet with `accepted_dataset_tokens > 0`, followed by semantic replay with exactly `+0` packets / `+0` accepted tokens.
 
-The local Qwen3-0.6B/J-Space causal lane remains zero-cost and nonpromoting. This invocation exposes no reproducible shared immutable macrocycle/request identity sufficient for the canonical create-only unusual-experiment lease, therefore:
+The local Qwen3-0.6B/J-Space causal lane remains zero-cost and nonpromoting. This invocation exposed no reproducible shared immutable macrocycle/request identity sufficient for the canonical create-only unusual-experiment lease, therefore:
 
 `COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT`
 
@@ -62,12 +68,10 @@ No new unusual J-Space/model intervention, paid/provider execution, Together cal
 
 ## Current evidence credit
 
+- active backlog-first Forge wiring on this GO branch: **source/control-plane delta present; exact-branch executed-test credit pending**;
 - replay-v2 migration: **canonical source fusion present; exact-current runtime credit 0**;
-- backlog-first Forge supervisor wiring: **canonical source fusion present; historical-backfill runtime credit 0**;
 - full historical Free-Swarm re-evaluation/saturation: **not yet terminally observed**;
 - persistent Forge -> Distillery positive-token conversion witness: **not yet observed**;
-- `clay-direct-dev` singleton roundtrip: **terminal result not yet observed**;
-- retained controller self-hosted sandbox probe `32803694800`: **queued / nonterminal; transport diagnosis only**;
 - provider runtime credit: **0**;
 - whole EntityOS/HCU runtime credit: **0**;
 - full HCU runtime credit: **0**;
@@ -79,14 +83,14 @@ A source file, workflow, queued run, token count, model consensus, or component 
 
 ## Highest-information next gates
 
-1. Restore or expose one already-authorized transport that can actually enter `clay-direct-dev`: either the retained controller self-hosted runner or the owner's installed SSH bridge. Require one terminal `CLAY_DIRECT_DEV_ROUNDTRIP/v1` result before treating the runtime surface as available.
-2. Execute the historical-backfill path on exact-current source across all existing `workers.jsonl` incrementally to saturation and emit `FREE_SWARM_HISTORICAL_BACKFILL_RECEIPT/v1` binding exact source commit/tree/dirty state, artifact root, scan set, lines scanned, successful outputs, explicit/batch deltas, new concepts, execution variants, duplicates superseded, ready backlog, implementation backlog, and remaining pending extraction.
-3. Execute replay-v2 migration/concurrency regressions on exact-current `main` using the frozen pre-v2 database fixture and reopen/concurrent replay cases.
-4. Prove one evidence-qualified Forge ACCEPT -> exactly one persistent Distillery packet -> `accepted_dataset_tokens > 0` -> semantic replay -> exactly `+0` packets / `+0` accepted tokens.
-5. Validate draft PR #1851 against exact-current historical replay; a second saturation pass must not inflate source-count scheduling weight from repeated provenance.
-6. Only after these gates should external Free-Swarm scale-up be reconsidered.
-7. Keep local Qwen3-0.6B/J-Space causal work separate, zero-cost, and nonpromoting until its own exact-source terminal evidence and experiment coordination requirements are satisfied.
+1. Execute the focused supervisor-wiring regression and relevant historical-backfill tests on the exact GO branch.
+2. If green, fuse the branch into refreshed canonical `main` without weakening the concurrent saturation/provenance hardening lanes.
+3. On the fused exact source, execute the historical-backfill path across all existing `workers.jsonl` incrementally to saturation and emit `FREE_SWARM_HISTORICAL_BACKFILL_RECEIPT/v1` binding exact source commit/tree/dirty state, artifact root, scan set, lines scanned, successful outputs, explicit/batch deltas, new concepts, execution variants, duplicates superseded, ready backlog, implementation backlog, and remaining pending extraction.
+4. Execute replay-v2 migration/concurrency regressions on exact-current `main` using the frozen pre-v2 database fixture and reopen/concurrent replay cases.
+5. Prove one evidence-qualified Forge ACCEPT -> exactly one persistent Distillery packet -> `accepted_dataset_tokens > 0` -> semantic replay -> exactly `+0` packets / `+0` accepted tokens.
+6. Only after those conversion gates should additional raw Free-Swarm generation be scaled.
+7. Keep local Qwen3-0.6B/J-Space causal work separate, zero-cost, and nonpromoting until its own exact-source terminal evidence and experiment-coordination requirements are satisfied.
 
 ## Evidence discipline and re-entry
 
-Negative evidence is first-class. Infrastructure/auth/quota/runner/log failure is not automatically product/science failure. Component evidence is not whole-product acceptance. Current source can outrank an older inbox statement when an admitted later merge has already closed that source blocker; runtime credit still requires executable evidence at exact identity.
+Negative evidence is first-class. Infrastructure/auth/quota/runner/log failure is not automatically product/science failure. Component evidence is not whole-product acceptance. Current source can outrank an older summary only at the exact scope it proves; runtime credit still requires executable evidence at exact identity.

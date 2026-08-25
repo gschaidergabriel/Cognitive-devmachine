@@ -48,6 +48,10 @@ def _digest(value: Any) -> str:
     ).hexdigest()
 
 
+def _source_sha256() -> str:
+    return sha256(Path(__file__).resolve().read_bytes()).hexdigest()
+
+
 def _event_semantic_payload(event: Any) -> dict[str, Any] | None:
     if not isinstance(event, dict):
         return None
@@ -99,7 +103,11 @@ def produce(world: Any, state_before: Any, event: Any, policy: Any) -> dict[str,
 
     event_digest = event_semantic_sha256(event) if isinstance(event, dict) else None
     test_id = event.get("test_id") if isinstance(event, dict) else None
-    test_spec = world.get("tests", {}).get(test_id) if isinstance(world, dict) and isinstance(world.get("tests"), dict) else None
+    test_spec = (
+        world.get("tests", {}).get(test_id)
+        if isinstance(world, dict) and isinstance(world.get("tests"), dict)
+        else None
+    )
 
     if isinstance(event, dict) and event.get("epistemic_type") != "SYNTHETIC_PROOF":
         failures.append("EPISTEMIC_TYPE_NOT_SYNTHETIC_PROOF")
@@ -126,17 +134,31 @@ def produce(world: Any, state_before: Any, event: Any, policy: Any) -> dict[str,
             failures.append("U_TEST_ORDER_EXCEPTION:" + type(exc).__name__)
         else:
             if not isinstance(ordering, dict) or not ordering.get("pass"):
-                failures.append("U_TEST_ORDER_REJECTED:" + str(ordering.get("failure") if isinstance(ordering, dict) else None))
+                failures.append(
+                    "U_TEST_ORDER_REJECTED:"
+                    + str(ordering.get("failure") if isinstance(ordering, dict) else None)
+                )
             else:
                 rows = ordering.get("ordering")
-                if not isinstance(rows, list) or len(rows) != 1 or not isinstance(rows[0], dict):
+                if (
+                    not isinstance(rows, list)
+                    or len(rows) != 1
+                    or not isinstance(rows[0], dict)
+                ):
                     failures.append("U_TEST_ORDER_SINGLE_RESULT_REQUIRED")
                 else:
                     ordering_row = rows[0]
-                    if not isinstance(ordering_row.get("separated_live_pairs"), int) or ordering_row.get("separated_live_pairs", 0) <= 0:
-                        failures.append("DISCRIMINATOR_MUST_SEPARATE_AT_LEAST_ONE_LIVE_PAIR")
+                    if (
+                        not isinstance(ordering_row.get("separated_live_pairs"), int)
+                        or ordering_row.get("separated_live_pairs", 0) <= 0
+                    ):
+                        failures.append(
+                            "DISCRIMINATOR_MUST_SEPARATE_AT_LEAST_ONE_LIVE_PAIR"
+                        )
                     if ordering_row.get("separates_all_live_pairs") is not True:
-                        failures.append("DISCRIMINATOR_COMPLETE_LIVE_PAIR_COVERAGE_REQUIRED")
+                        failures.append(
+                            "DISCRIMINATOR_COMPLETE_LIVE_PAIR_COVERAGE_REQUIRED"
+                        )
 
     failures = sorted(set(failures))
     if failures:
@@ -150,21 +172,38 @@ def produce(world: Any, state_before: Any, event: Any, policy: Any) -> dict[str,
             "training_credit_minted": 0,
         }
 
+    producer_source_sha = _source_sha256()
+    policy_sha = _digest(policy)
     discriminator_spec = {
         "test_id": test_id,
         "test_spec": test_spec,
         "policy": policy,
     }
+    world_scoped_event = {
+        "world_id": world.get("world_id"),
+        "event_semantic_sha256": event_digest,
+        "test_id": test_id,
+        "observed_outcome": event.get("observed_outcome"),
+    }
+    producer_result = {
+        "admissible": True,
+        "executed": True,
+        "separated_live_pairs": ordering_row["separated_live_pairs"],
+        "separates_all_live_pairs": ordering_row["separates_all_live_pairs"],
+    }
     binding = {
         "producer_schema": PRODUCER_SCHEMA,
+        "producer_source_sha256": producer_source_sha,
+        "policy_sha256": policy_sha,
         "world_id": world.get("world_id"),
         "world_sha256": _digest(world),
         "state_before_sha256": _digest(state_before),
         "event_semantic_sha256": event_digest,
+        "world_scoped_event_sha256": _digest(world_scoped_event),
+        "test_id": test_id,
         "discriminator_spec_sha256": _digest(discriminator_spec),
         "observed_outcome": event.get("observed_outcome"),
-        "separated_live_pairs": ordering_row["separated_live_pairs"],
-        "separates_all_live_pairs": ordering_row["separates_all_live_pairs"],
+        "producer_result_sha256": _digest(producer_result),
     }
     receipt = {
         "schema": RECEIPT_SCHEMA,
@@ -179,8 +218,12 @@ def produce(world: Any, state_before: Any, event: Any, policy: Any) -> dict[str,
         "separated_live_pairs": ordering_row["separated_live_pairs"],
         "separates_all_live_pairs": ordering_row["separates_all_live_pairs"],
         "producer_schema": PRODUCER_SCHEMA,
+        "producer_source_sha256": producer_source_sha,
+        "policy_sha256": policy_sha,
         "state_before_sha256": binding["state_before_sha256"],
+        "world_scoped_event_sha256": binding["world_scoped_event_sha256"],
         "discriminator_spec_sha256": binding["discriminator_spec_sha256"],
+        "producer_result_sha256": binding["producer_result_sha256"],
     }
     return {
         "schema": PRODUCER_SCHEMA,
@@ -196,7 +239,9 @@ def produce(world: Any, state_before: Any, event: Any, policy: Any) -> dict[str,
 
 
 if __name__ == "__main__":
-    print({
-        "schema": PRODUCER_SCHEMA,
-        "status": "TRUSTED_SOURCE_CANDIDATE_NONPROMOTING",
-    })
+    print(
+        {
+            "schema": PRODUCER_SCHEMA,
+            "status": "TRUSTED_SOURCE_CANDIDATE_NONPROMOTING",
+        }
+    )

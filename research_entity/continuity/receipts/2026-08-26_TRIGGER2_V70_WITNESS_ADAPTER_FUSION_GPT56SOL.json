@@ -14,18 +14,19 @@
     "training_execution_authorized": false
   },
   "reentry": {
-    "main_at_final_prewrite_refresh": "ae6ab6ae5a827bef314b3df0363fe6d187dbe996",
-    "branch_base_before_parallel_main_movement": "806c60d8929ad0933aa93c6e76eaf422b9def62e",
+    "intermediate_main_observed": "ae6ab6ae5a827bef314b3df0363fe6d187dbe996",
+    "final_rebase_parent": "8855081ffdf3ece204fe77e11ee9f5d36f680185",
+    "final_rebase_parent_tree": "40d30ecd7b798f0c90266bef9d7811a24df0f932",
+    "fusion_commit": "26c5361c15716d32c4f85448840e6eef01d35fd6",
     "branch": "trigger2-v67-physical-witness-boundary-gpt56sol",
     "pull_request": 2044,
-    "parallel_main_changes_since_base": 3,
-    "overlap_adjudication": "NO_CURRENT_MAIN_ADAPTER_INTEGRATION_FOUND; CURRENT_MAIN_ADAPTER_STILL_DELEGATES_RAW_COMMIT_KWARGS_TO_LEGACY_FUSEDFABRIC"
+    "overlap_adjudication": "NO_CURRENT_MAIN_ADAPTER_INTEGRATION_FOUND; MAIN_ADAPTER_AT_FINAL_REBASE_PARENT_STILL_DELEGATED_RAW_COMMIT_KWARGS_TO_LEGACY_FUSEDFABRIC"
   },
   "problem": {
     "id": "CALLER_FORGEABLE_PHYSICAL_COHORT_PROOF_DICTIONARY",
     "scope_advanced": "RAW_DICT_PHYSICAL_REACHABILITY_AT_RETAINED_TWO_PHASE_ADAPTER",
     "whole_physical_boundary_closed": false,
-    "observation": "The retained two-phase adapter on current main delegates arbitrary commit kwargs, including proof mappings, to FusedFabric.atomic_fused_cohort_commit. The retained deterministic source fixture intentionally constructs an all-true synthetic proof.",
+    "observation": "The retained two-phase adapter on the final rebase parent delegates arbitrary commit kwargs, including proof mappings, to FusedFabric.atomic_fused_cohort_commit. The retained deterministic source fixture intentionally constructs an all-true synthetic proof.",
     "counterhypothesis": "The raw proof mapping could be considered trusted internal data by convention.",
     "adjudication": "Convention is insufficient for a fail-closed promotion boundary. The current V70 witness donor already makes mapping-only evidence structurally insufficient, so the retained adapter should consume that donor instead of forwarding a raw physical proof."
   },
@@ -57,7 +58,8 @@
   "validation": {
     "prepared_python_syntax_compile": "PASS",
     "repository_pytest": "NOT_EXECUTED_LOCAL_CONTAINER_NETWORK_DNS_UNAVAILABLE_FOR_PRIVATE_REPO_CLONE",
-    "github_workflows": {
+    "prior_pr_head_workflows": {
+      "head": "cdeb9612213b2990ed3f9fea6f91e4ae56fada6f",
       "research_entity_identity_guard": "FAILURE_WITH_ZERO_STEPS_AND_RUNNER_ID_0",
       "research_entity_verify": "FAILURE_WITH_ZERO_STEPS_AND_RUNNER_ID_0",
       "classification": "WORKFLOW_RUNNER_OR_PRESTEP_INFRASTRUCTURE_FAILURE_UNTIL_PROVEN_OTHERWISE_NOT_PRODUCT_TEST_FAILURE"

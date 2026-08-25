@@ -1,9 +1,10 @@
 {
   "schema":"CLAY_CURRENT_MANIFEST/v1",
-  "cache_head":"c72c7397c0f4968bc86a70c62f8de386a101dc22",
-  "generated_at":"seed-after-merge",
+  "cache_head":"2e9709042ae8be26ea327ce370ae91c5cbec2f16",
+  "generated_at":"manual-seed-plus-fast-result-reconciliation",
   "selected":{
     "authority-supervisor":{"receipt_id":"BASELINE:authority-supervisor","source_receipt":"BASELINE.json","status":"CURRENT"},
+    "research-current-index":{"receipt_id":"20260826T032200P0700-research-current-index-gpt56sol","source_receipt":"research_entity/00_CURRENT/updates/research-current-index/20260826T032200P0700-research-current-index-gpt56sol.json","status":"CURRENT_INFRASTRUCTURE"},
     "entityos-runtime":{"receipt_id":"BASELINE:entityos-runtime","source_receipt":"BASELINE.json","status":"PARTIAL_COMPONENT_PASS"},
     "hcu-grid":{"receipt_id":"BASELINE:hcu-grid","source_receipt":"BASELINE.json","status":"SOURCE_READY_RUNTIME_UNOBSERVED"},
     "zero-xeno-runtime":{"receipt_id":"BASELINE:zero-xeno-runtime","source_receipt":"BASELINE.json","status":"PARTIAL_COMPONENT_PASS"},
@@ -16,5 +17,5 @@
     "evidence-lineage":{"receipt_id":"BASELINE:evidence-lineage","source_receipt":"BASELINE.json","status":"CURRENT_GUARDED"},
     "free-swarm-distillery":{"receipt_id":"BASELINE:free-swarm-distillery","source_receipt":"BASELINE.json","status":"HARD_OFF_BLOCKED"}
   },
-  "automation_note":"Worker emitter is the primary automatic update path. GitHub-hosted refresh workflow run 32894361197 failed before producing cache files; workflow remains a backup until runner infrastructure is repaired."
+  "automation_note":"Mandatory worker emitter is the primary distributed automatic update path. GitHub-hosted refresh workflow is a redundant backup; first observed run 32894361197 did not produce successful executor evidence and therefore is not sole maintenance authority."
 }

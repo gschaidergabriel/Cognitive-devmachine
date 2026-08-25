@@ -1020,8 +1020,10 @@ def _execute_chat_locked(
                 raise ValueError(
                     "response_choice_fields_not_supported_by_text_adapter"
                 )
-            if "index" in choice and (
-                type(choice["index"]) is not int or choice["index"] != 0
+            if (
+                "index" not in choice
+                or type(choice["index"]) is not int
+                or choice["index"] != 0
             ):
                 raise ValueError("response_choice_index_not_supported")
             for metadata_field in ("logprobs", "stop_reason", "token_ids"):

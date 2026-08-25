@@ -1,0 +1,52 @@
+{
+  "schema_version": "ENTITYOS_HCU_COGNITIVE_TRAINING_READINESS/v1",
+  "status": "SOURCE_ONLY_NO_TRAINING_CREDIT",
+  "target_model_class": "Qwen3.5-0.8B-class",
+  "topology": "VARIABLE_N",
+  "derived_from_census": "ZERO_ENTITYOS_COGNITIVE_PROCESS_CENSUS/v1",
+  "families": [
+    "process_state_interpretation",
+    "db_retrieval",
+    "db_write_proposal",
+    "db_vs_simulation_discrimination",
+    "planning",
+    "replanning",
+    "decomposition",
+    "uncertainty",
+    "alternatives",
+    "evidence_reconciliation",
+    "workspace_competition",
+    "workspace_broadcast",
+    "workspace_reentry",
+    "variable_n_invariance",
+    "claude_code_handoff",
+    "claude_code_return",
+    "jspace_observation",
+    "jspace_control",
+    "failure_restart_rejoin"
+  ],
+  "hard_negatives": [
+    "model_output_claims_canonical_fact",
+    "majority_vote_claims_truth",
+    "grid_size_changes_semantic_process_identity",
+    "cell_id_claims_persistent_entity",
+    "generated_memory_claims_database_fact",
+    "stale_generation_is_accepted",
+    "effect_proposal_claims_effect_committed",
+    "unknown_effect_outcome_is_blindly_replayed",
+    "claude_code_text_session_claims_activation_access",
+    "jspace_measurement_claims_semantic_truth",
+    "provider_label_claims_zero_cost_authority"
+  ],
+  "split_requirements": {
+    "family_level_split": true,
+    "model_family_provenance_fail_closed": true,
+    "goodman_collapse_shared_ancestry": true,
+    "holdout_must_remain_unopened_until_preregistered_successor": true
+  },
+  "execution": {
+    "paid_training": "FORBIDDEN_CURRENT_FREE_ONLY",
+    "training_credit": 0,
+    "allowed_now": "SOURCE_DATASET_RECIPE_AND_ZERO_COST_LOCAL_PREPARATION_ONLY"
+  }
+}

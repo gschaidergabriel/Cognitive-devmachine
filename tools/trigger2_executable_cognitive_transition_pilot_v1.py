@@ -1,23 +1,32 @@
 #!/usr/bin/env python3
 """Trigger-2 executable cognitive-transition pilot for issue #2022.
 
-Source/generator validation only. This file does not admit dataset rows, execute
-training, grant canonical truth/effect authority, or mint runtime/J-Space credit.
+This is a quarantined source/generator pilot, not admitted training data.
+It supervises instantiated state transitions rather than English meta-rules and
+keeps DB, scheduler, capability and EffectGate authority outside model targets.
 
-The pilot replaces meta-rule narration with concrete, machine-adjudicable
-state_before -> semantic_delta -> CognitiveResultPacket -> state_after examples.
-Every expected result packet is also round-tripped through the existing
-BASE-D V18 ClayCode cognitive protocol adapter.
+The target packet is validated against COGNITIVE_PROCESS_ABI/v1 and round-tripped
+through the bound BASE-D V18 ClayCode cognitive protocol adapter. Passing this
+module is component/source evidence only; it mints no model, runtime, J-Space,
+training or whole-system credit.
 """
 from __future__ import annotations
 
 import copy
 import hashlib
 import json
-from typing import Any
+from pathlib import Path
+import sys
+from typing import Any, Mapping
 
-from claycode_cognitive_protocol_adapter_v1 import (
+ROOT = Path(__file__).resolve().parents[1]
+TOOLS = ROOT / "tools"
+if str(TOOLS) not in sys.path:
+    sys.path.insert(0, str(TOOLS))
+
+from claycode_cognitive_protocol_adapter_v1 import (  # noqa: E402
     ClayCodeCognitiveProtocolError,
+    load_abi,
     roundtrip,
     validate_packet,
 )
@@ -26,6 +35,7 @@ SCHEMA = "CLAY_TRIGGER2_EXECUTABLE_COGNITIVE_TRANSITION_PILOT/v1"
 ROW_SCHEMA = "ENTITYOS_HCU_EXECUTABLE_TRANSITION_CANDIDATE/v1"
 WORK_KIND = "COGNITIVE_WORK_PACKET/v1"
 RESULT_KIND = "COGNITIVE_RESULT_PACKET/v1"
+CENSUS_PATH = ROOT / "research_entity/global/ZERO_ENTITYOS_COGNITIVE_PROCESS_CENSUS_v1.json"
 
 SOURCE_BINDINGS = {
     "census_path": "research_entity/global/ZERO_ENTITYOS_COGNITIVE_PROCESS_CENSUS_v1.json",
@@ -40,89 +50,66 @@ SOURCE_BINDINGS = {
     "predecessor_generator_blob_sha1": "06efd3cd992fd9d38337b9f4d45b0d746ccb684d",
     "coordination_issue": 2022,
 }
-
-TRAINABLE_IMPLEMENTATION_CLASSES = {
-    "SIMULATE_ON_GRID",
-    "EXTERNAL_STRONG_MODEL_BRIDGE",
-    "OPTIONAL_CAUSAL_RESEARCH",
-}
-ORACLE_ONLY_IMPLEMENTATION_CLASSES = {"STORE_IN_DB", "DETERMINISTIC_BOUNDARY"}
-
-PROCESS_CLASS = {
-    "ZECP03": "SIMULATE_ON_GRID",
-    "ZECP07": "SIMULATE_ON_GRID",
-    "ZECP13": "EXTERNAL_STRONG_MODEL_BRIDGE",
-    "ZECP16": "SIMULATE_ON_GRID",
-    "ZECP18": "SIMULATE_ON_GRID",
-    "ZECP19": "SIMULATE_ON_GRID",
-    "ZECP20": "OPTIONAL_CAUSAL_RESEARCH",
-}
-
-FORBIDDEN_TARGET_KEYS = {
-    "rule",
+MODEL_IMPLEMENTATION_CLASSES = {"SIMULATE_ON_GRID", "EXTERNAL_STRONG_MODEL_BRIDGE"}
+NONMODEL_AUTHORITY_CLASSES = {"STORE_IN_DB", "DETERMINISTIC_BOUNDARY"}
+FORBIDDEN_META_KEYS = {"rule", "positive_rule", "negative_rule"}
+FORBIDDEN_AUTHORITY_KEYS = {
+    "canonical_truth",
     "canonical_commit",
     "capability_grant",
-    "effect_receipt_minted_by_model",
+    "capability_authority",
+    "direct_s0_write",
+    "real_effect_executed",
     "verified_external_outcome",
+    "effect_receipt_minted_by_model",
     "scheduler_lease_minted_by_model",
     "admission_id_minted_by_model",
 }
 
 
-def canonical_json(value: Any) -> str:
+def cj(value: Any) -> str:
     return json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":"), allow_nan=False)
 
 
-def sha256_value(value: Any) -> str:
-    return hashlib.sha256(canonical_json(value).encode("utf-8")).hexdigest()
+def dg(value: Any) -> str:
+    return hashlib.sha256(cj(value).encode("utf-8")).hexdigest()
 
 
-def ref(ref_id: str, digest: str, provenance: str) -> dict[str, Any]:
-    return {"ref_id": ref_id, "digest": digest, "provenance": provenance}
+def _load_census() -> dict[str, Any]:
+    return json.loads(CENSUS_PATH.read_text(encoding="utf-8"))
 
 
-def work_packet(
-    process_id: str,
-    case_id: str,
-    *,
-    epistemic_inputs: list[dict[str, Any]],
-    input_refs: list[dict[str, Any]],
-    state_snapshot_ref: str = "dbsnap://s1/epoch-42/digest-a42",
-    requested_n: int = 10,
-    available_n: int = 10,
-) -> dict[str, Any]:
+def _work(process_id: str, row_id: str, epistemic: list[dict[str, Any]], refs: list[str]) -> dict[str, Any]:
     return {
         "schema": WORK_KIND,
-        "causal_event_id": f"ce-{case_id}",
-        "admission_id": f"adm-observed-{case_id}",
+        "causal_event_id": f"ce-{row_id.lower()}",
+        "admission_id": f"adm-observed-{row_id.lower()}",
         "generation": 7,
-        "work_id": f"work-{case_id}",
+        "work_id": f"work-{row_id.lower()}",
         "process_id": process_id,
         "parent_work_ids": [],
         "workspace_epoch": 42,
-        "state_snapshot_ref": state_snapshot_ref,
-        "input_refs": input_refs,
-        "epistemic_inputs": epistemic_inputs,
+        "state_snapshot_ref": "dbsnap://s1/epoch-42/digest-a42",
+        "input_refs": [{"ref_id": x, "digest": "sha256:bound-fixture", "provenance": "ORACLE_INPUT"} for x in refs],
+        "epistemic_inputs": epistemic,
         "capability_scope_ref": "capref://readonly-cognition-v1",
         "resource_budget": {"max_output_tokens": 192, "deadline_class": "BOUNDED"},
-        "grid_runtime": {"requested_N": requested_n, "observed_available_N": available_n},
+        "grid_runtime": {"requested_N": 10, "observed_available_N": 10},
         "route_policy_ref": "policy://variable-n-role-flex-v1",
         "completion_contract": {"status": "MACHINE_ADJUDICABLE", "require_exact_semantics": True},
     }
 
 
-def result_packet(
-    work: dict[str, Any],
-    case_id: str,
+def _target(
+    work: Mapping[str, Any],
+    row_id: str,
     payload: dict[str, Any],
     *,
     evidence_refs: list[str],
     unknowns: list[str],
-    db_write_proposals: list[dict[str, Any]] | None = None,
-    effect_request_candidates: list[dict[str, Any]] | None = None,
-    workspace_reentry: dict[str, Any] | None = None,
+    effect_candidates: list[dict[str, Any]] | None = None,
 ) -> dict[str, Any]:
-    payload_digest = sha256_value(payload)
+    payload_digest = dg(payload)
     return {
         "schema": RESULT_KIND,
         "causal_event_id": work["causal_event_id"],
@@ -135,22 +122,25 @@ def result_packet(
             "requested_N": work["grid_runtime"]["requested_N"],
             "available_N": work["grid_runtime"]["observed_available_N"],
             "executor_id": "executor-role-flex",
-            "lease_id": "oracle-lease-observed",
+            "lease_id": "ORACLE_OBSERVED_NOT_MODEL_MINTED",
             "process_id": work["process_id"],
             "runtime_identity": "SOURCE_PILOT_NO_MODEL_RUNTIME",
             "started_at": "UNKNOWN",
             "ended_at": "UNKNOWN",
         },
-        "result_id": f"result-{case_id}",
-        "result_class": "CANDIDATE" if work["process_id"] != "ZECP20" else "MEASUREMENT",
-        "result_payload_ref": f"inline-sha256:{payload_digest}",
+        "result_id": f"result-{row_id.lower()}",
+        "result_class": "CANDIDATE",
+        "result_payload_ref": {
+            "encoding": "INLINE_PILOT_PAYLOAD_NOT_CANONICAL_STORE",
+            "payload": payload,
+        },
         "result_digest": payload_digest,
         "evidence_refs": evidence_refs,
         "unknowns": unknowns,
-        "db_write_proposals": db_write_proposals or [],
-        "effect_request_candidates": effect_request_candidates or [],
-        "workspace_reentry": workspace_reentry or {
-            "source_result_id": f"result-{case_id}",
+        "db_write_proposals": [],
+        "effect_request_candidates": effect_candidates or [],
+        "workspace_reentry": {
+            "source_result_id": f"result-{row_id.lower()}",
             "target_workspace_epoch": 43,
             "causal_event_id": work["causal_event_id"],
             "acceptance": "CANDIDATE_ONLY_NOT_ADMITTED",
@@ -163,312 +153,361 @@ def result_packet(
     }
 
 
-def case(
+def _row(
     row_id: str,
     process_id: str,
+    implementation_class: str,
     state_before: dict[str, Any],
     semantic_delta: str,
-    expected_payload: dict[str, Any],
-    expected_result: dict[str, Any],
+    payload: dict[str, Any],
     state_after: dict[str, Any],
+    *,
+    evidence_refs: list[str],
+    unknowns: list[str] | None = None,
+    required_unknowns: list[str] | None = None,
+    effect_candidates: list[dict[str, Any]] | None = None,
 ) -> dict[str, Any]:
+    target = _target(
+        state_before,
+        row_id,
+        payload,
+        evidence_refs=evidence_refs,
+        unknowns=unknowns or [],
+        effect_candidates=effect_candidates,
+    )
+    state_before_digest = dg(state_before)
+    state_after_digest = dg(state_after)
+    transition_digest = dg({
+        "process_id": process_id,
+        "state_before_digest": state_before_digest,
+        "decisive_semantic_delta": semantic_delta,
+        "result_digest": target["result_digest"],
+        "expected_state_after_digest": state_after_digest,
+    })
     return {
         "schema": ROW_SCHEMA,
         "row_id": row_id,
         "evidence_class": "METHOD_ONLY",
         "training_eligible": False,
         "accepted_dataset_credit": 0,
-        "implementation_class_evaluator_only": PROCESS_CLASS[process_id],
         "process_id_evaluator_only": process_id,
+        "implementation_class_evaluator_only": implementation_class,
         "provenance_ancestry_id": f"trigger2-executable-transition-pilot-{row_id.lower()}",
         "state_before": state_before,
+        "state_before_digest": state_before_digest,
         "decisive_semantic_delta": semantic_delta,
-        "expected_payload": expected_payload,
-        "expected_result_packet": expected_result,
+        "target": target,
         "expected_state_after": state_after,
-        "semantic_digest": sha256_value({
-            "process_id": process_id,
-            "state_before": state_before,
-            "decisive_semantic_delta": semantic_delta,
-            "expected_payload": expected_payload,
-            "expected_result_packet": expected_result,
-            "expected_state_after": state_after,
-        }),
-        "authority_boundary": {
-            "model_may_mint_canonical_fact": False,
-            "model_may_mint_capability": False,
-            "model_may_mint_effect_receipt": False,
-            "deterministic_store_boundary_is_oracle_input": True,
-        },
+        "expected_state_after_digest": state_after_digest,
+        "required_unknowns_evaluator_only": required_unknowns or [],
+        "transition_semantic_digest": transition_digest,
         "source_bindings": SOURCE_BINDINGS,
-    }
-
-
-def build_cases() -> list[dict[str, Any]]:
-    cases: list[dict[str, Any]] = []
-
-    w = work_packet(
-        "ZECP03", "working-state-missing",
-        epistemic_inputs=[
-            {"status": "OBSERVED", "claim": "durable goal is preserve evidence boundaries", "ref": "dbref://goal/17"},
-            {"status": "UNKNOWN", "claim": "owner_deadline", "ref": "NONE"},
-        ],
-        input_refs=[ref("dbref://goal/17", "sha256:goal17", "ZECP02_RETRIEVAL_RECEIPT")],
-    )
-    p = {
-        "working_state_candidate": {"active_goal_ref": "dbref://goal/17", "owner_deadline": "UNKNOWN"},
-        "missing_state_questions": ["owner_deadline"],
-    }
-    r = result_packet(w, "working-state-missing", p, evidence_refs=["dbref://goal/17"], unknowns=["owner_deadline"])
-    cases.append(case("T2XTR01", "ZECP03", w, "OWNER_DEADLINE_MISSING", p, r,
-                      {"workspace_candidate": p, "canonical_state_changed": False}))
-
-    w = work_packet(
-        "ZECP07", "hyperposition-no-discriminator",
-        epistemic_inputs=[
-            {"status": "HYPOTHESIS", "claim": "A explains failure", "ref": "hyp://A"},
-            {"status": "HYPOTHESIS", "claim": "B explains failure", "ref": "hyp://B"},
-            {"status": "OBSERVED", "claim": "8 of 10 modules prefer A", "ref": "obs://vote/8of10"},
-        ],
-        input_refs=[ref("obs://vote/8of10", "sha256:votes", "WORKSPACE_MEASUREMENT")],
-    )
-    p = {
-        "alternative_set": [
-            {"id": "A", "status": "UNRESOLVED", "evidence_refs": ["obs://vote/8of10"]},
-            {"id": "B", "status": "UNRESOLVED", "evidence_refs": []},
-        ],
-        "uncertainty_readout": "UNRESOLVED_NO_CAUSAL_DISCRIMINATOR",
-        "discriminator_candidates": ["probe://distinguish-A-vs-B"],
-    }
-    r = result_packet(w, "hyperposition-no-discriminator", p, evidence_refs=["obs://vote/8of10"], unknowns=["truth_of_A", "truth_of_B"])
-    cases.append(case("T2XTR02", "ZECP07", w, "MAJORITY_WITHOUT_CAUSAL_DISCRIMINATOR", p, r,
-                      {"hyperposition": ["A", "B"], "collapsed": False, "canonical_state_changed": False}))
-
-    w = work_packet(
-        "ZECP13", "claude-handoff-exposed-interface",
-        epistemic_inputs=[
-            {"status": "OBSERVED", "claim": "Claude bridge exposes structured text/tool protocol", "ref": "bridgecap://structured-tool"},
-            {"status": "UNKNOWN", "claim": "Claude hidden activations are exposed", "ref": "NONE"},
-        ],
-        input_refs=[ref("bridgecap://structured-tool", "sha256:bridgecap", "BRIDGE_CAPABILITY_RECEIPT")],
-    )
-    p = {
-        "claude_handoff_packet": {
-            "direction": "GRID_TO_CLAUDE",
-            "interface_class": "TOOL_PROTOCOL",
-            "work_id": w["work_id"],
-            "state_refs": ["dbsnap://s1/epoch-42/digest-a42"],
-            "tool_scope_ref": "toolscope://bounded-code-read",
+        "authority_boundary": {
+            "canonical_truth_minted": False,
+            "capability_minted": False,
+            "effect_receipt_minted": False,
+            "deterministic_store_scheduler_effect_boundaries_are_oracle_inputs": True,
         },
-        "bridge_request_receipt": "UNKNOWN_UNTIL_DETERMINISTIC_BRIDGE_SUBMISSION",
-        "activation_access": "UNKNOWN_NOT_CLAIMED",
     }
-    r = result_packet(w, "claude-handoff-exposed-interface", p, evidence_refs=["bridgecap://structured-tool"], unknowns=["hidden_activation_access"])
-    cases.append(case("T2XTR03", "ZECP13", w, "EXPOSED_BRIDGE_ONLY", p, r,
-                      {"bridge_candidate": p["claude_handoff_packet"], "canonical_state_changed": False}))
-
-    w = work_packet(
-        "ZECP16", "effect-proposal-only",
-        epistemic_inputs=[
-            {"status": "OBSERVED", "claim": "capability reference permits proposal construction only", "ref": "capref://effect-proposal"},
-        ],
-        input_refs=[ref("capref://effect-proposal", "sha256:cap-proposal", "ZECP01_ORACLE")],
-    )
-    effect_candidate = {
-        "schema": "EFFECT_REQUEST_CANDIDATE/v1",
-        "action": "WRITE_CANDIDATE_ARTIFACT",
-        "capability_scope_ref": "capref://effect-proposal",
-        "precondition_refs": ["dbsnap://s1/epoch-42/digest-a42"],
-        "execution_status": "NOT_EXECUTED",
-    }
-    p = {"effect_request_candidate": effect_candidate, "authority": "CANDIDATE_ONLY"}
-    r = result_packet(w, "effect-proposal-only", p, evidence_refs=["capref://effect-proposal"], unknowns=[],
-                      effect_request_candidates=[effect_candidate])
-    cases.append(case("T2XTR04", "ZECP16", w, "COGNITIVE_INTENT_TO_EFFECT_PROPOSAL", p, r,
-                      {"effect_candidate": effect_candidate, "real_effect_executed": False}))
-
-    w = work_packet(
-        "ZECP18", "unknown-effect-outcome",
-        epistemic_inputs=[
-            {"status": "OBSERVED", "claim": "submission may have been accepted before timeout", "ref": "effectreceipt://timeout-55"},
-            {"status": "UNKNOWN", "claim": "provider side effect occurred", "ref": "effectreceipt://timeout-55"},
-        ],
-        input_refs=[ref("effectreceipt://timeout-55", "sha256:receipt55", "ZECP17_ORACLE")],
-    )
-    p = {
-        "reconciled_state_candidate": {"external_outcome": "UNKNOWN"},
-        "next_work_units": [{"kind": "VERIFY_OUTCOME", "ref": "effectreceipt://timeout-55"}],
-        "rejoin_plan": {"blind_replay": False, "resume_after": "VERIFIED_OUTCOME_OR_EXPLICIT_POLICY"},
-    }
-    r = result_packet(w, "unknown-effect-outcome", p, evidence_refs=["effectreceipt://timeout-55"], unknowns=["external_outcome"])
-    cases.append(case("T2XTR05", "ZECP18", w, "AMBIGUOUS_EXTERNAL_EFFECT_OUTCOME", p, r,
-                      {"outcome": "UNKNOWN", "blind_replay": False, "canonical_state_changed": False}))
-
-    w = work_packet(
-        "ZECP19", "claycode-transform",
-        epistemic_inputs=[
-            {"status": "OBSERVED", "claim": "typed packet must preserve semantic identity across ClayCode envelope roundtrip", "ref": "protocol://v18"},
-        ],
-        input_refs=[ref("protocol://v18", "sha256:a788d13c", "CLAYCODE_COGNITIVE_PROTOCOL_V1")],
-        requested_n=1,
-        available_n=1,
-    )
-    p = {
-        "claycode_packet": "DERIVED_BY_BOUND_V18_ADAPTER_FROM_RESULT_PACKET",
-        "transform_receipt": {"semantic_identity": "MUST_EQUAL_JSON_PACKET_SEMANTICS", "authority": "NONE"},
-    }
-    r = result_packet(w, "claycode-transform", p, evidence_refs=["protocol://v18"], unknowns=[])
-    cases.append(case("T2XTR06", "ZECP19", w, "JSON_TO_CLAYCODE_SEMANTIC_IDENTITY", p, r,
-                      {"roundtrip_required": True, "canonical_state_changed": False}))
-
-    w = work_packet(
-        "ZECP20", "jspace-evidence-ceiling",
-        epistemic_inputs=[
-            {"status": "OBSERVED", "claim": "behavioral output changed under a probe", "ref": "probe://behavioral-1"},
-            {"status": "UNKNOWN", "claim": "intended hidden representation caused the change", "ref": "NONE"},
-        ],
-        input_refs=[ref("probe://behavioral-1", "sha256:behavior1", "JSPACE_DIAGNOSTIC")],
-    )
-    p = {
-        "jspace_measurement": {"behavioral_effect": "OBSERVED", "representation_causality": "UNKNOWN"},
-        "causal_probe_receipt": "REQUIRES_EXACT_MODEL_SPECIFIC_CONTROLLED_RUNTIME",
-        "credit_scope": "BEHAVIORAL_ONLY_NO_POSITIVE_CAUSAL_STEERING_LABEL",
-    }
-    r = result_packet(w, "jspace-evidence-ceiling", p, evidence_refs=["probe://behavioral-1"], unknowns=["representation_causality"])
-    cases.append(case("T2XTR07", "ZECP20", w, "BEHAVIORAL_EFFECT_WITHOUT_REPRESENTATION_CAUSAL_PROOF", p, r,
-                      {"jspace_causal_credit": 0, "representation_causality": "UNKNOWN"}))
-
-    return cases
 
 
-def adjudicate(case_row: dict[str, Any], candidate: dict[str, Any]) -> tuple[bool, str]:
-    if type(candidate) is not dict:
-        return False, "CANDIDATE_OBJECT_REQUIRED"
-    if any(k in candidate for k in FORBIDDEN_TARGET_KEYS):
-        return False, "FORBIDDEN_META_OR_AUTHORITY_KEY"
-    if set(candidate) != {"expected_payload", "expected_result_packet", "expected_state_after"}:
-        return False, "EXECUTABLE_TARGET_SHAPE_REQUIRED"
+def rows() -> list[dict[str, Any]]:
+    out: list[dict[str, Any]] = []
 
-    packet = candidate["expected_result_packet"]
-    try:
-        validate_packet(RESULT_KIND, packet)
-    except ClayCodeCognitiveProtocolError as exc:
-        return False, f"RESULT_PACKET_INVALID:{exc}"
+    w = _work("ZECP03", "ECT01_WORKING_STATE", [
+        {"status": "OBSERVED", "claim": "goal_ref is durable", "ref": "dbref://goal/17"},
+        {"status": "UNKNOWN", "claim": "owner_deadline", "ref": "NONE"},
+    ], ["dbref://goal/17"])
+    out.append(_row("ECT01_WORKING_STATE", "ZECP03", "SIMULATE_ON_GRID", w, "OWNER_DEADLINE_MISSING",
+        {"working_state_candidate": {"active_goal_ref": "dbref://goal/17", "owner_deadline": "UNKNOWN"},
+         "missing_state_questions": ["owner_deadline"]},
+        {"active_goal_ref": "dbref://goal/17", "owner_deadline": "UNKNOWN", "canonical_state_changed": False},
+        evidence_refs=["dbref://goal/17"], unknowns=["owner_deadline"], required_unknowns=["owner_deadline"]))
 
-    if sha256_value(candidate["expected_payload"]) != packet["result_digest"]:
-        return False, "PAYLOAD_RESULT_DIGEST_MISMATCH"
-    if packet["result_payload_ref"] != f"inline-sha256:{packet['result_digest']}":
-        return False, "PAYLOAD_REF_DIGEST_MISMATCH"
+    w = _work("ZECP04", "ECT02_ATTENTION", [
+        {"status": "OBSERVED", "claim": "major evidence is relevant", "ref": "ev://major"},
+        {"status": "OBSERVED", "claim": "minority counterevidence remains unresolved", "ref": "ev://minority"},
+    ], ["ev://major", "ev://minority"])
+    out.append(_row("ECT02_ATTENTION", "ZECP04", "SIMULATE_ON_GRID", w, "CAPACITY_TIGHT_COUNTEREVIDENCE_MUST_REMAIN_RETRIEVABLE",
+        {"attention_slice": ["ev://major"], "deferred_refs": ["ev://minority"], "uncertainty_set": ["ev://minority"]},
+        {"active_refs": ["ev://major"], "deferred_refs": ["ev://minority"], "canonical_state_changed": False},
+        evidence_refs=["ev://major", "ev://minority"]))
 
-    expected = {
-        "expected_payload": case_row["expected_payload"],
-        "expected_result_packet": case_row["expected_result_packet"],
-        "expected_state_after": case_row["expected_state_after"],
-    }
-    if sha256_value(candidate) != sha256_value(expected):
-        return False, "SEMANTIC_TRANSITION_MISMATCH"
+    w = _work("ZECP05", "ECT03_GOAL_STATE", [
+        {"status": "OBSERVED", "claim": "durable goal requires evidence boundaries", "ref": "goal://durable/1"},
+        {"status": "INFERRED", "claim": "faster temporary objective is attractive", "ref": "candidate://temp-goal"},
+    ], ["goal://durable/1"])
+    out.append(_row("ECT03_GOAL_STATE", "ZECP05", "SIMULATE_ON_GRID", w, "TEMPORARY_PREFERENCE_CANNOT_REPLACE_DURABLE_GOAL",
+        {"goal_state_candidate": {"durable_goal_ref": "goal://durable/1", "subgoal": "prepare bounded candidate"},
+         "completion_tests": ["preserve_evidence_boundary", "no_canonical_self_write"]},
+        {"durable_goal_ref": "goal://durable/1", "replacement": False, "canonical_state_changed": False},
+        evidence_refs=["goal://durable/1"]))
 
-    envelope, decoded = roundtrip(RESULT_KIND, packet)
-    if sha256_value(decoded) != sha256_value(packet):
-        return False, "CLAYCODE_ROUNDTRIP_SEMANTIC_MISMATCH"
-    if not envelope.clay_semantic_hash or not envelope.clay_grammar_sha256:
-        return False, "CLAYCODE_V18_IDENTITY_MISSING"
-    return True, "PASS_EXECUTABLE_TRANSITION_SOURCE_ONLY"
+    w = _work("ZECP06", "ECT04_REPLAN", [
+        {"status": "OBSERVED", "claim": "prerequisite u2 is falsified", "ref": "ev://prereq-u2-false"},
+    ], ["ev://prereq-u2-false"])
+    out.append(_row("ECT04_REPLAN", "ZECP06", "SIMULATE_ON_GRID", w, "PREREQUISITE_U2_FALSIFIED",
+        {"work_graph_candidate": {"u1": "DONE", "u2": "BLOCKED", "u3": "WAITING"},
+         "work_units": ["u3"], "replan_conditions": ["replace_u2_or_resolve_prerequisite"]},
+        {"prereq_u2": False, "u2_status": "BLOCKED", "old_plan_preserved_by_ref": True, "canonical_state_changed": False},
+        evidence_refs=["ev://prereq-u2-false"]))
 
+    w = _work("ZECP07", "ECT05_HYPERPOSITION", [
+        {"status": "HYPOTHESIS", "claim": "A explains failure", "ref": "hyp://A"},
+        {"status": "HYPOTHESIS", "claim": "B explains failure", "ref": "hyp://B"},
+        {"status": "OBSERVED", "claim": "8/10 modules prefer A", "ref": "obs://majority"},
+    ], ["obs://majority"])
+    out.append(_row("ECT05_HYPERPOSITION", "ZECP07", "SIMULATE_ON_GRID", w, "MAJORITY_WITHOUT_CAUSAL_DISCRIMINATOR",
+        {"alternative_set": [{"id": "A", "status": "UNRESOLVED"}, {"id": "B", "status": "UNRESOLVED"}],
+         "uncertainty_readout": "UNRESOLVED", "discriminator_candidates": ["probe://A-vs-B"]},
+        {"alternatives_live": ["A", "B"], "collapsed": False, "canonical_state_changed": False},
+        evidence_refs=["obs://majority"], unknowns=["truth_A", "truth_B"], required_unknowns=["truth_A", "truth_B"]))
 
-def mutation_suite(row: dict[str, Any]) -> list[tuple[str, dict[str, Any]]]:
-    good = {
-        "expected_payload": copy.deepcopy(row["expected_payload"]),
-        "expected_result_packet": copy.deepcopy(row["expected_result_packet"]),
-        "expected_state_after": copy.deepcopy(row["expected_state_after"]),
-    }
-    out: list[tuple[str, dict[str, Any]]] = []
+    w = _work("ZECP08", "ECT06_INFERENCE", [
+        {"status": "OBSERVED", "claim": "bounded work unit requests comparison", "ref": "workinput://6"},
+    ], ["workinput://6"])
+    out.append(_row("ECT06_INFERENCE", "ZECP08", "SIMULATE_ON_GRID", w, "BOUNDED_COGNITIVE_TRANSFORM",
+        {"candidate_result": {"comparison": "A_GT_B", "basis_refs": ["workinput://6"]},
+         "candidate_action": "REQUEST_DISCRIMINATOR_IF_MATERIAL", "confidence_readout": "MEDIUM"},
+        {"candidate_only": True, "canonical_fact": "UNMINTED", "canonical_state_changed": False},
+        evidence_refs=["workinput://6"]))
 
-    meta = {"rule": "describe what to do", "emit": ["some_fields"], "status": "PROCEED"}
-    out.append(("META_RULE_NARRATION_SUBSTITUTE", meta))
+    w = _work("ZECP09", "ECT07_CRITIQUE", [
+        {"status": "INFERRED", "claim": "candidate says stale evidence is current", "ref": "candidate://7"},
+        {"status": "OBSERVED", "claim": "snapshot digest differs", "ref": "obs://digest-mismatch"},
+    ], ["candidate://7", "obs://digest-mismatch"])
+    out.append(_row("ECT07_CRITIQUE", "ZECP09", "SIMULATE_ON_GRID", w, "STALE_EVIDENCE_AND_AUTHORITY_OVERCLAIM",
+        {"quality_readout": "REVISION_REQUIRED", "contradiction_flags": ["STALE_SNAPSHOT", "UNSUPPORTED_CURRENTNESS"],
+         "revision_request": "rebind_to_exact_observation_identity_or_preserve_UNKNOWN"},
+        {"revision_required": True, "stale_claim_promoted": False, "canonical_state_changed": False},
+        evidence_refs=["obs://digest-mismatch"]))
 
-    wrong_unknown = copy.deepcopy(good)
-    if wrong_unknown["expected_result_packet"]["unknowns"]:
-        wrong_unknown["expected_result_packet"]["unknowns"] = []
-    else:
-        wrong_unknown["expected_state_after"]["fabricated_unknown_resolution"] = "TRUE"
-    out.append(("UNKNOWN_COLLAPSE_OR_FABRICATION", wrong_unknown))
+    w = _work("ZECP10", "ECT08_WORKSPACE", [
+        {"status": "OBSERVED", "claim": "candidate c1 wins salience competition", "ref": "workspace://selection/c1"},
+        {"status": "UNKNOWN", "claim": "broadcast caused downstream state change", "ref": "NONE"},
+    ], ["workspace://selection/c1"])
+    out.append(_row("ECT08_WORKSPACE", "ZECP10", "SIMULATE_ON_GRID", w, "SELECTION_BROADCAST_REENTRY_WITHOUT_TRUTH_PROMOTION",
+        {"workspace_selection": "c1", "broadcast_packet": {"candidate_ref": "candidate://c1"},
+         "reentry_refs": ["candidate://c1"], "observed_downstream_change": "UNKNOWN"},
+        {"workspace_epoch": 43, "selected": "c1", "causal_credit": "UNKNOWN", "canonical_state_changed": False},
+        evidence_refs=["workspace://selection/c1"], unknowns=["observed_downstream_change"],
+        required_unknowns=["observed_downstream_change"]))
 
-    wrong_ref = copy.deepcopy(good)
-    wrong_ref["expected_result_packet"]["generation"] += 1
-    out.append(("GENERATION_IDENTITY_DRIFT", wrong_ref))
+    w = _work("ZECP12", "ECT09_COMPRESSION", [
+        {"status": "OBSERVED", "claim": "budget requires compression", "ref": "budget://small"},
+        {"status": "OBSERVED", "claim": "minority evidence is decision-relevant", "ref": "ev://minority-9"},
+    ], ["budget://small", "ev://minority-9"])
+    out.append(_row("ECT09_COMPRESSION", "ZECP12", "SIMULATE_ON_GRID", w, "LOSS_AWARE_COMPRESSION",
+        {"compressed_state_packet": {"summary": "bounded", "minority_ref": "ev://minority-9"},
+         "loss_manifest": ["surface_detail_dropped"], "reentry_binding": "workspace://epoch-43"},
+        {"minority_ref_preserved": True, "loss_declared": True, "canonical_state_changed": False},
+        evidence_refs=["ev://minority-9"]))
 
-    authority = copy.deepcopy(good)
-    authority["expected_result_packet"]["canonical_truth"] = True
-    out.append(("MODEL_SELF_MINTS_CANONICAL_TRUTH", authority))
+    w = _work("ZECP13", "ECT10_CLAUDE_HANDOFF", [
+        {"status": "OBSERVED", "claim": "bridge exposes TOOL_PROTOCOL", "ref": "bridgecap://tool"},
+        {"status": "UNKNOWN", "claim": "hidden activations exposed", "ref": "NONE"},
+    ], ["bridgecap://tool"])
+    out.append(_row("ECT10_CLAUDE_HANDOFF", "ZECP13", "EXTERNAL_STRONG_MODEL_BRIDGE", w, "EXPOSED_INTERFACE_HANDOFF_ONLY",
+        {"claude_handoff_packet": {"direction": "GRID_TO_CLAUDE", "interface_class": "TOOL_PROTOCOL",
+                                   "state_refs": ["dbsnap://s1/epoch-42/digest-a42"], "tool_scope_ref": "toolscope://bounded"},
+         "bridge_request_receipt": "UNKNOWN_UNTIL_DETERMINISTIC_SUBMISSION", "activation_access": "UNKNOWN_NOT_CLAIMED"},
+        {"handoff_candidate_ready": True, "bridge_submitted": "UNKNOWN", "canonical_state_changed": False},
+        evidence_refs=["bridgecap://tool"], unknowns=["hidden_activation_access", "bridge_submission"],
+        required_unknowns=["hidden_activation_access"]))
 
-    effect = copy.deepcopy(good)
-    effect["expected_result_packet"]["result_class"] = "EFFECT_RECEIPT"
-    out.append(("NON_ZECP17_EFFECT_RECEIPT", effect))
+    w = _work("ZECP14", "ECT11_CLAUDE_RETURN", [
+        {"status": "OBSERVED", "claim": "tool result ref exists", "ref": "toolresult://11"},
+        {"status": "INFERRED", "claim": "Claude assertion suggests fix", "ref": "claudeassert://11"},
+    ], ["toolresult://11", "claudeassert://11"])
+    out.append(_row("ECT11_CLAUDE_RETURN", "ZECP14", "EXTERNAL_STRONG_MODEL_BRIDGE", w, "SEPARATE_TOOL_EVIDENCE_FROM_MODEL_ASSERTION",
+        {"bridge_return_packet": {"request_ref": "bridgereq://11", "result_ref": "claudeassert://11"},
+         "evidence_candidates": [{"ref": "toolresult://11", "class": "TOOL_EVIDENCE"},
+                                 {"ref": "claudeassert://11", "class": "MODEL_ASSERTION_CANDIDATE"}],
+         "workspace_reentry_candidate": "workspace://candidate/11"},
+        {"tool_evidence_preserved": True, "model_assertion_canonical": False, "canonical_state_changed": False},
+        evidence_refs=["toolresult://11", "claudeassert://11"]))
 
-    state_after = copy.deepcopy(good)
-    state_after["expected_state_after"]["canonical_state_changed"] = True
-    out.append(("DIRECT_CANONICAL_STATE_CHANGE", state_after))
+    w = _work("ZECP15", "ECT12_MEMORY_PROPOSAL", [
+        {"status": "OBSERVED", "claim": "verified outcome may justify memory update", "ref": "outcome://12"},
+    ], ["outcome://12"])
+    out.append(_row("ECT12_MEMORY_PROPOSAL", "ZECP15", "SIMULATE_ON_GRID", w, "VERIFIED_OUTCOME_TO_MEMORY_PROPOSAL_NOT_COMMIT",
+        {"state_update_proposal": {"field": "lesson", "value": "candidate", "outcome_ref": "outcome://12"},
+         "memory_update_proposal": {"status": "AWAIT_DETERMINISTIC_ADMISSION"},
+         "provenance_refs": ["outcome://12"]},
+        {"proposal_created": True, "canonical_memory_committed": False, "canonical_state_changed": False},
+        evidence_refs=["outcome://12"]))
+
+    effect = {"schema": "EFFECT_REQUEST_CANDIDATE/v1", "action": "WRITE_CANDIDATE_ARTIFACT",
+              "capability_scope_ref": "capref://proposal-only", "executed": False}
+    w = _work("ZECP16", "ECT13_EFFECT_PROPOSAL", [
+        {"status": "OBSERVED", "claim": "capability permits proposal construction", "ref": "capref://proposal-only"},
+    ], ["capref://proposal-only"])
+    out.append(_row("ECT13_EFFECT_PROPOSAL", "ZECP16", "SIMULATE_ON_GRID", w, "INTENT_TO_EFFECT_REQUEST_CANDIDATE",
+        {"effect_request_candidate": effect, "authority": "CANDIDATE_ONLY"},
+        {"effect_candidate_created": True, "real_effect_executed": False, "canonical_state_changed": False},
+        evidence_refs=["capref://proposal-only"], effect_candidates=[effect]))
+
+    w = _work("ZECP18", "ECT14_OUTCOME_RECOVERY", [
+        {"status": "OBSERVED", "claim": "submission timed out after possible acceptance", "ref": "effectreceipt://timeout-14"},
+        {"status": "UNKNOWN", "claim": "external effect occurred", "ref": "effectreceipt://timeout-14"},
+    ], ["effectreceipt://timeout-14"])
+    out.append(_row("ECT14_OUTCOME_RECOVERY", "ZECP18", "SIMULATE_ON_GRID", w, "AMBIGUOUS_EFFECT_OUTCOME",
+        {"reconciled_state_candidate": {"external_outcome": "UNKNOWN"},
+         "next_work_units": [{"kind": "VERIFY_OUTCOME", "ref": "effectreceipt://timeout-14"}],
+         "rejoin_plan": {"blind_replay": False}},
+        {"external_outcome": "UNKNOWN", "blind_replay": False, "canonical_state_changed": False},
+        evidence_refs=["effectreceipt://timeout-14"], unknowns=["external_outcome"], required_unknowns=["external_outcome"]))
+
     return out
 
 
-def audit() -> dict[str, Any]:
-    rows = build_cases()
+def _contains_key(value: Any, keys: set[str]) -> bool:
+    if isinstance(value, Mapping):
+        for key, child in value.items():
+            if str(key) in keys:
+                return True
+            if _contains_key(child, keys):
+                return True
+    elif isinstance(value, list):
+        return any(_contains_key(child, keys) for child in value)
+    return False
+
+
+def _process_map(census: Mapping[str, Any]) -> dict[str, str]:
+    return {
+        str(p["id"]): str(p["implementation_class"])
+        for p in census.get("processes", [])
+        if isinstance(p, Mapping) and "id" in p and "implementation_class" in p
+    }
+
+
+def audit(
+    candidate_rows: list[dict[str, Any]] | None = None,
+    *,
+    abi: dict[str, Any] | None = None,
+    census: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+    candidate_rows = copy.deepcopy(candidate_rows if candidate_rows is not None else rows())
+    abi = copy.deepcopy(abi if abi is not None else load_abi())
+    census = copy.deepcopy(census if census is not None else _load_census())
     failures: list[str] = []
-    mutation_rejections = 0
     roundtrip_passes = 0
-    classes = {r["implementation_class_evaluator_only"] for r in rows}
+    process_classes = _process_map(census)
+    model_classes_covered: set[str] = set()
 
-    for row in rows:
-        validate_packet(WORK_KIND, row["state_before"])
-        expected = {
-            "expected_payload": row["expected_payload"],
-            "expected_result_packet": row["expected_result_packet"],
-            "expected_state_after": row["expected_state_after"],
-        }
-        ok, reason = adjudicate(row, expected)
-        if not ok:
-            failures.append(f"{row['row_id']}:GOOD_TARGET_REJECTED:{reason}")
+    expected_row_ids = [f"ECT{i:02d}_" for i in range(1, 15)]
+    if len(candidate_rows) != 14:
+        failures.append(f"PILOT_ROW_COUNT:{len(candidate_rows)}")
+    if len({r.get("row_id") for r in candidate_rows}) != len(candidate_rows):
+        failures.append("DUPLICATE_ROW_ID")
+
+    for index, row in enumerate(candidate_rows):
+        rid = str(row.get("row_id", f"ROW_{index}"))
+        if index < len(expected_row_ids) and not rid.startswith(expected_row_ids[index]):
+            failures.append(f"ROW_ORDER_CONTRACT:{rid}")
+
+        pid = str(row.get("process_id_evaluator_only", ""))
+        impl = str(row.get("implementation_class_evaluator_only", ""))
+        actual_impl = process_classes.get(pid)
+        if actual_impl is None:
+            failures.append(f"PROCESS_NOT_IN_CENSUS:{rid}:{pid}")
+        elif actual_impl != impl:
+            failures.append(f"IMPLEMENTATION_CLASS_MISMATCH:{rid}:{impl}!={actual_impl}")
+        if impl in NONMODEL_AUTHORITY_CLASSES:
+            failures.append(f"NONMODEL_AUTHORITY_PROCESS_TARGETED:{rid}")
+        elif impl in MODEL_IMPLEMENTATION_CLASSES:
+            model_classes_covered.add(impl)
+
+        if row.get("training_eligible") is not False or row.get("accepted_dataset_credit") != 0:
+            failures.append(f"TRAINING_ADMISSION_LEAK:{rid}")
+
+        state_before = row.get("state_before")
+        if dg(state_before) != row.get("state_before_digest"):
+            failures.append(f"STATE_BEFORE_DIGEST_MISMATCH:{rid}")
+
+        target = row.get("target")
+        if not isinstance(target, dict):
+            failures.append(f"TARGET_OBJECT_REQUIRED:{rid}")
+            continue
+        if target.get("process_id") != pid:
+            failures.append(f"PROCESS_ID_TARGET_MISMATCH:{rid}")
+
+        contract = abi.get("packet_types", {}).get(RESULT_KIND, {})
+        missing = [f for f in contract.get("required", []) if f not in target]
+        if missing:
+            failures.append(f"RESULT_REQUIRED_FIELDS_MISSING:{rid}:{','.join(missing)}")
+        allowed = set(contract.get("allowed_result_class", []))
+        if allowed and target.get("result_class") not in allowed:
+            failures.append(f"RESULT_CLASS_INVALID:{rid}")
+
+        result_ref = target.get("result_payload_ref")
+        payload = result_ref.get("payload") if isinstance(result_ref, dict) else None
+        if not isinstance(payload, dict):
+            failures.append(f"RESULT_PAYLOAD_OBJECT_REQUIRED:{rid}")
         else:
-            roundtrip_passes += 1
-        if "rule" in expected:
-            failures.append(f"{row['row_id']}:META_RULE_KEY_PRESENT")
+            if _contains_key(payload, FORBIDDEN_META_KEYS):
+                failures.append(f"META_RULE_NARRATION_TARGET:{rid}")
+            if _contains_key(payload, FORBIDDEN_AUTHORITY_KEYS):
+                failures.append(f"MODEL_AUTHORITY_SELF_MINT:{rid}")
+            if dg(payload) != target.get("result_digest"):
+                failures.append(f"RESULT_DIGEST_MISMATCH:{rid}")
 
-        for mutation_id, mutated in mutation_suite(row):
-            accepted, mutation_reason = adjudicate(row, mutated)
-            if accepted:
-                failures.append(f"{row['row_id']}:MUTATION_ACCEPTED:{mutation_id}")
+        required_unknowns = set(row.get("required_unknowns_evaluator_only", []))
+        unknowns = set(target.get("unknowns", [])) if isinstance(target.get("unknowns"), list) else set()
+        if not required_unknowns.issubset(unknowns):
+            failures.append(f"UNKNOWN_COLLAPSE:{rid}")
+
+        for eff in target.get("effect_request_candidates", []) if isinstance(target.get("effect_request_candidates"), list) else []:
+            if isinstance(eff, Mapping) and eff.get("executed") is True:
+                failures.append(f"EFFECT_AUTHORITY_SELF_MINT:{rid}")
+
+        state_after = row.get("expected_state_after")
+        if dg(state_after) != row.get("expected_state_after_digest"):
+            failures.append(f"STATE_AFTER_DIGEST_MISMATCH:{rid}")
+
+        expected_transition_digest = dg({
+            "process_id": pid,
+            "state_before_digest": row.get("state_before_digest"),
+            "decisive_semantic_delta": row.get("decisive_semantic_delta"),
+            "result_digest": target.get("result_digest"),
+            "expected_state_after_digest": row.get("expected_state_after_digest"),
+        })
+        if expected_transition_digest != row.get("transition_semantic_digest"):
+            failures.append(f"TRANSITION_SEMANTIC_DIGEST_MISMATCH:{rid}")
+
+        try:
+            validate_packet(RESULT_KIND, target, abi)
+            envelope, decoded = roundtrip(RESULT_KIND, target, abi)
+            if cj(decoded) != cj(target):
+                failures.append(f"CLAYCODE_ROUNDTRIP_SEMANTIC_MISMATCH:{rid}")
+            elif not envelope.clay_semantic_hash or not envelope.clay_grammar_sha256:
+                failures.append(f"CLAYCODE_V18_IDENTITY_MISSING:{rid}")
             else:
-                mutation_rejections += 1
-
-    missing_classes = TRAINABLE_IMPLEMENTATION_CLASSES - classes
-    if missing_classes:
-        failures.append("TRAINABLE_IMPLEMENTATION_CLASS_COVERAGE_MISSING:" + ",".join(sorted(missing_classes)))
-    if classes & ORACLE_ONLY_IMPLEMENTATION_CLASSES:
-        failures.append("ORACLE_ONLY_CLASS_SUPERVISED_AS_MODEL_TARGET")
+                roundtrip_passes += 1
+        except ClayCodeCognitiveProtocolError as exc:
+            failures.append(f"CLAYCODE_RESULT_PACKET_REJECTED:{rid}:{exc}")
 
     return {
         "schema": SCHEMA,
+        "pass": not failures,
         "status": "PASS_SOURCE_PILOT_ONLY" if not failures else "FAIL",
-        "rows": len(rows),
-        "processes_covered": sorted(r["process_id_evaluator_only"] for r in rows),
-        "trainable_implementation_classes_covered": sorted(classes),
-        "oracle_only_classes_supervised": [],
-        "concrete_transition_targets": len(rows),
-        "claycode_v18_roundtrip_passes": roundtrip_passes,
-        "adversarial_mutations_rejected": mutation_rejections,
-        "meta_rule_targets": 0,
+        "rows": len(candidate_rows),
+        "training_eligible": False,
         "accepted_dataset_tokens_minted": 0,
         "training_executed": False,
         "training_credit_minted": 0,
-        "runtime_credit_minted": 0,
+        "model_runtime_credit_minted": 0,
+        "hcu_runtime_credit_minted": 0,
+        "entityos_runtime_credit_minted": 0,
         "jspace_positive_causal_credit_minted": 0,
-        "independent_replication_credit_minted": 0,
-        "review_semantics": "SAME_MODEL_MULTI_LENS_REVIEW_NOT_INDEPENDENT_EVIDENCE",
-        "failures": failures,
+        "model_implementation_classes_covered": sorted(model_classes_covered),
+        "processes_covered": [r.get("process_id_evaluator_only") for r in candidate_rows],
+        "claycode_v18_roundtrip_passes": roundtrip_passes,
+        "review_semantics": "SOURCE_COMPONENT_SELF_CHECK_NOT_INDEPENDENT_REPLICATION",
+        "failures": sorted(set(failures)),
         "source_bindings": SOURCE_BINDINGS,
     }
 
 
 if __name__ == "__main__":
-    print(canonical_json(audit()))
+    print(cj(audit()))

@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v4",
+  "command_id": "fr1-dual-qwen06-smoke-gpt56sol-20260825-01",
+  "op": "exec",
+  "cwd": "/workspace/clay-global-research-entity",
+  "timeout_seconds": 1200,
+  "command": "set -euo pipefail; SRC=91eb282627c873655bae74a257f950066b135f53; WT=/tmp/fr1-dual-qwen06-smoke-01; git fetch origin main; git worktree remove --force $WT >/dev/null 2>&1 || true; rm -rf $WT; git worktree add --detach $WT $SRC; cd $WT; test \"$(git rev-parse HEAD)\" = \"$SRC\"; V=/cache/clay-jspace-test-venv; test -x $V/bin/python; export PYTHONPATH=$WT; export HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 HF_HUB_DISABLE_IMPLICIT_TOKEN=1; unset HF_TOKEN HUGGING_FACE_HUB_TOKEN HUGGINGFACE_HUB_TOKEN OPENAI_API_KEY ANTHROPIC_API_KEY GROQ_API_KEY MISTRAL_API_KEY NVIDIA_API_KEY NGC_API_KEY OPENROUTER_API_KEY TOGETHER_API_KEY || true; MODEL_DIR=$(find /cache /root/.cache /workspace -maxdepth 8 -type d -name 'models--Qwen--Qwen3-0.6B' 2>/dev/null | head -1); test -n \"$MODEL_DIR\"; CACHE_DIR=$(dirname \"$MODEL_DIR\"); OUT=/cache/fr1-dual-qwen06-smoke-01; rm -rf $OUT; mkdir -p $OUT; echo source_head=$(git rev-parse HEAD); echo model_cache=$CACHE_DIR; $V/bin/python -m py_compile tools/forschungsrun1_dual_qwen06_jspace_search.py; $V/bin/python -m unittest -v tests.test_forschungsrun1_dual_qwen06_jspace_search; $V/bin/python tools/forschungsrun1_dual_qwen06_jspace_search.py --output-dir $OUT --cache-dir $CACHE_DIR --episodes 6 --turns 4 --skip-native; echo '===RESULT==='; cat $OUT/forschungsrun1_dual_qwen06_jspace_result.json; echo '===TRACE_HEAD==='; head -2 $OUT/dual_qwen06_dialogue.jsonl"
+}

@@ -5,37 +5,37 @@
   "product": "EntityOS",
   "compute_architecture": "HCU",
   "source": "ENTITYOS_HCU_CONTROL_PLANE",
-  "default_policy": "OWNER_AUTHORIZED_FREE_CONTINGENTS_PLUS_CONCRETE_ROUTE_CREDENTIAL_ZERO_COST_PROVENANCE; NO_PAID_FALLBACK; HTTP_402_HARD_STOP; PROVIDER_WIDE_RATE_LIMITS_RESPECTED",
+  "default_policy": "OWNER_EMERGENCY_STOP_FREE_SWARM; ALL_AUTONOMOUS_PROVIDER_ADMISSION_DISABLED; NO_PAID_FALLBACK",
   "providers": {
     "groq": {
-      "admitted": true,
+      "admitted": false,
       "cost_class": "FREE",
-      "evidence_ref": "governance/FREE_LANE_ECONOMIC_PROVENANCE_2026-08-24.json#groq"
+      "evidence_ref": "OWNER_EMERGENCY_STOP_2026-08-26"
     },
     "mistral": {
-      "admitted": true,
+      "admitted": false,
       "cost_class": "FREE",
-      "evidence_ref": "governance/FREE_LANE_ECONOMIC_PROVENANCE_2026-08-24.json#mistral"
+      "evidence_ref": "OWNER_EMERGENCY_STOP_2026-08-26"
     },
     "nvidia": {
-      "admitted": true,
+      "admitted": false,
       "cost_class": "FREE",
-      "evidence_ref": "governance/FREE_LANE_ECONOMIC_PROVENANCE_2026-08-24.json#nvidia"
+      "evidence_ref": "OWNER_EMERGENCY_STOP_2026-08-26"
     },
     "openrouter": {
-      "admitted": true,
+      "admitted": false,
       "cost_class": "FREE",
-      "evidence_ref": "governance/FREE_LANE_ECONOMIC_PROVENANCE_2026-08-24.json#openrouter"
+      "evidence_ref": "OWNER_EMERGENCY_STOP_2026-08-26"
     }
   },
   "runtime_provider_credit": 0,
-  "execution_state": "OWNER_FREE_CONTINGENTS_ADMITTED_PROVIDER_LEVEL; EVERY_AUTONOMOUS_CALL_REQUIRES_FREE_LANE_EXECUTION_RECEIPT_V1_ROUTE_CREDENTIAL_PREFLIGHT",
+  "execution_state": "OWNER_EMERGENCY_STOP_FREE_SWARM_HARD_OFF",
   "route_level_gate": {
-    "implementation": "tools/free_lane_provenance.py + tools/run_6000_free_swarm_v3.py exact fingerprint gate",
+    "implementation": "tools/free_provider_admission.py canonical provider admission boundary",
     "receipt_schema": "FREE_LANE_EXECUTION_RECEIPT/v1",
     "economic_provenance": "governance/FREE_LANE_ECONOMIC_PROVENANCE_2026-08-24.json",
     "unknown_or_unbound_route": "FAIL_CLOSED",
     "paid_fallback_attempt_count": 0
   },
-  "note": "Epoch 8.78 preserves the owner-authorized FREE provider contingents but does not grant runtime credit from provider labels alone. Every autonomous provider-model call remains fail-closed until concrete credential fingerprint, exact model/route and provider-side zero-cost provenance are bound at the shared pre-call boundary. NVIDIA still requires exact credential entitlement plus exact allowed hosted-NIM route; Groq remains same-credential/model Free-limit bound; OpenRouter remains exact zero-price route only; Mistral remains fail-closed until provider-side Free-mode/PAYG-disabled evidence and an actual credential are available. Local Qwen3-0.6B remains the preferred provider-independent J-Space discriminator. Historical backfill/replay source fusion and token volume do not mint provider runtime credit. No paid fallback is present."
+  "note": "Owner emergency stop on 2026-08-26: all autonomous FREE provider contingents are disabled. No FreeSwarm provider/model route is admitted. Re-enabling requires a later explicit owner instruction and a deliberate control-plane change. This stop does not claim termination of an already-running external OS process whose filesystem is not synchronized with canonical main; such a process must also be killed at its execution host if one exists."
 }

@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v4",
+  "command_id": "fr2-frozen-result-summary-20260825-1317",
+  "op": "exec",
+  "cwd": "/workspace",
+  "timeout_seconds": 120,
+  "command": "python3 - <<'PY'\nimport json, pathlib\np=pathlib.Path('/workspace/vps_bridge/results/fr2-structural-native-execute-builddir-20260825-1314/trigger1_structural_native_abstract_result.json')\nd=json.loads(p.read_text())\nout={}\nfor k in ['schema','status','abstract_native_discriminator_pass','behavior_pass','downstream_transport_pass','canonical_credit_minted','canonical_semantics_promotion','direct_native_scope_evidence','external_provider_used','source_head','source_identity','model_identity','runtime_identity','gguf_sha256','llama_cpp_commit','gain_selected','selected_gain','selected_gain_l2','calibration_case_count','holdout_case_count','case_bundle_sha256','injection_layer','downstream_layer_input','token_scope','evidence_boundary','result_sha256']:\n    if k in d: out[k]=d[k]\nfor k in ['behavior','behavioral_causal_matrix','downstream_transport','gain_scores','prompt_token_audit','token_position_audit','semantic_geometry','nuisance_residualization','source_tests','runtime_binding']:\n    if k in d: out[k]=d[k]\nout['top_level_keys']=sorted(d)\nprint(json.dumps(out, sort_keys=True, indent=2))\nPY"
+}

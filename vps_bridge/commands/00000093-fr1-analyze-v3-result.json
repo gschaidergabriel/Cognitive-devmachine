@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v4",
+  "command_id": "fr1-analyze-v3-result-20260825",
+  "op": "exec",
+  "cwd": "/workspace/qwen06-fr1-v2repo",
+  "timeout_seconds": 120,
+  "command": "set -euo pipefail; export PYTHONPATH=/workspace/qwen06-fr1-v2repo; IN=/workspace/qwen06-fr1-current/blind-v3-robust126/forschungsrun1_dual_qwen06_blind_robust_result.json; OUT=/workspace/qwen06-fr1-current/blind-v3-robust126/robust-analysis.json; test -s \"$IN\"; /cache/clay-qwen06/venv/bin/python tools/forschungsrun1_dual_qwen06_robust_analyze.py \"$IN\" --output \"$OUT\""
+}

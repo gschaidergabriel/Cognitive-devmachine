@@ -16,7 +16,8 @@ SPEC.loader.exec_module(MOD)
 
 class LiveAuthorityProtocolTests(unittest.TestCase):
     def make_root(self, *, inbox_epoch="9.01", steering_epoch="9.01", admission_epoch="9.01",
-                  paid_fallback=0, implementation="tools/free_lane_provenance.py + exact gate"):
+                  paid_fallback=0, implementation="tools/free_lane_provenance.py + exact gate",
+                  successor_shape=False, drop_successor_invariant=None):
         td = tempfile.TemporaryDirectory()
         root = Path(td.name)
         auto = root / "research_entity/claycode/autonomous"
@@ -29,18 +30,35 @@ class LiveAuthorityProtocolTests(unittest.TestCase):
             "integrated_cognition_compute_architecture": "HCU",
             "steering": steering_rel,
         }
-        steering = {
-            "schema_version": steering_epoch,
-            "active_program": "ENTITYOS_HCU",
-            "product": "EntityOS",
-            "integrated_cognition_compute_architecture": "HCU",
-            "free_only": {
-                "enabled": True,
-                "no_paid_fallback": True,
-                "together_forbidden": True,
-                "unknown_or_unlisted_route": "FAIL_CLOSED",
-            },
-        }
+        if successor_shape:
+            invariants = [
+                "FREE_ONLY_NO_PAID_FALLBACK_TOGETHER_FORBIDDEN",
+                "PAID_SUBSCRIPTION_UNKNOWN_FAIL_CLOSED",
+                "EXECUTABLE_EVIDENCE_OUTRANKS_MODEL_CONSENSUS",
+            ]
+            if drop_successor_invariant in invariants:
+                invariants.remove(drop_successor_invariant)
+            steering = {
+                "schema_version": steering_epoch,
+                "program": "ENTITYOS_HCU",
+                "product": "EntityOS",
+                "integrated_cognition_compute_architecture": "HCU",
+                "mode": "FREE_ONLY",
+                "hard_invariants": invariants,
+            }
+        else:
+            steering = {
+                "schema_version": steering_epoch,
+                "active_program": "ENTITYOS_HCU",
+                "product": "EntityOS",
+                "integrated_cognition_compute_architecture": "HCU",
+                "free_only": {
+                    "enabled": True,
+                    "no_paid_fallback": True,
+                    "together_forbidden": True,
+                    "unknown_or_unlisted_route": "FAIL_CLOSED",
+                },
+            }
         admission = {
             "schema": "ENTITYOS_HCU_FREE_PROVIDER_ADMISSION/v1",
             "authority_epoch": admission_epoch,
@@ -63,7 +81,6 @@ class LiveAuthorityProtocolTests(unittest.TestCase):
     def test_protocol_requires_no_legacy_worker_directive(self):
         td, root = self.make_root()
         self.addCleanup(td.cleanup)
-        # No CLAYCODE_ALL_WORKERS_EXECUTION_DIRECTIVE*.md exists in this fixture.
         protocol = MOD.build_protocol(root)
         self.assertTrue(protocol.startswith(MOD.PROTOCOL_BEGIN))
         self.assertTrue(protocol.endswith(MOD.PROTOCOL_END))
@@ -75,6 +92,30 @@ class LiveAuthorityProtocolTests(unittest.TestCase):
         td, root = self.make_root(admission_epoch="9.00")
         self.addCleanup(td.cleanup)
         with self.assertRaisesRegex(MOD.AuthorityProtocolError, "PROVIDER_ADMISSION_EPOCH_MISMATCH"):
+            MOD.resolve_current_authority(root)
+
+    def test_successor_supervisor_shape_is_accepted_only_with_explicit_hard_invariants(self):
+        td, root = self.make_root(successor_shape=True)
+        self.addCleanup(td.cleanup)
+        authority = MOD.resolve_current_authority(root)
+        self.assertEqual(authority["free_only_form"], "SUCCESSOR_HARD_INVARIANTS")
+
+        td2, root2 = self.make_root(
+            successor_shape=True,
+            drop_successor_invariant="PAID_SUBSCRIPTION_UNKNOWN_FAIL_CLOSED",
+        )
+        self.addCleanup(td2.cleanup)
+        with self.assertRaisesRegex(MOD.AuthorityProtocolError, "STEERING_UNKNOWN_COST_HARD_INVARIANT_MISSING"):
+            MOD.resolve_current_authority(root2)
+
+    def test_conflicting_program_fields_fail_closed(self):
+        td, root = self.make_root(successor_shape=True)
+        self.addCleanup(td.cleanup)
+        steering_path = root / "research_entity/claycode/autonomous/SUPERVISOR_STEERING_9_01.json"
+        steering = json.loads(steering_path.read_text(encoding="utf-8"))
+        steering["active_program"] = "OTHER"
+        steering_path.write_text(json.dumps(steering), encoding="utf-8")
+        with self.assertRaisesRegex(MOD.AuthorityProtocolError, "PROGRAM_FIELDS_CONFLICT"):
             MOD.resolve_current_authority(root)
 
     def test_composed_route_implementation_is_accepted(self):
@@ -111,6 +152,8 @@ class LiveAuthorityProtocolTests(unittest.TestCase):
         protocol = MOD.build_protocol(ROOT)
         self.assertEqual(authority["epoch"], protocol.split("current_supervisor_epoch=", 1)[1].splitlines()[0])
         self.assertEqual(authority["receipt_schema"], "FREE_LANE_EXECUTION_RECEIPT/v1")
+        self.assertEqual(authority["epoch"], "8.78")
+        self.assertEqual(authority["free_only_form"], "SUCCESSOR_HARD_INVARIANTS")
 
 
 if __name__ == "__main__":

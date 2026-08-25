@@ -1,13 +1,13 @@
 {
   "schema": "CLAY_FREE_SWARM_SYSTEM_ANALYSIS/v3",
-  "generated_at": "2026-08-25T08:51:40.858270+00:00",
+  "generated_at": "2026-08-25T09:06:47.163936+00:00",
   "runtime": {
     "supervisor": "STOPPED/QUARANTINED",
     "go_swarm": "RUNNING",
     "distillery": "RUNNING",
     "evidence_forge": "RUNNING",
     "dashboard": "RUNNING",
-    "local_model": "NOT_READY",
+    "local_model": "BUILDING/BOOTSTRAPPING",
     "provider_admission": {
       "admitted_free_providers": [
         "groq",
@@ -65,7 +65,7 @@
   },
   "distillery": {
     "schema": "CLAY_RESEARCH_DISTILLERY_STATUS/v1",
-    "generated_at": "2026-08-25T08:51:38.909766+00:00",
+    "generated_at": "2026-08-25T09:06:45.629100+00:00",
     "collected_source_tokens": 11621,
     "accepted_dataset_tokens": 0,
     "dataset_yield": 0.0,
@@ -86,7 +86,7 @@
     "model_output_tokens": 1455,
     "shared_provider_budget": {
       "schema": "CLAY_SHARED_PROVIDER_BUDGET/v1",
-      "generated_at": "2026-08-25T08:51:38.910551+00:00",
+      "generated_at": "2026-08-25T09:06:45.629757+00:00",
       "providers": {
         "arxiv": {
           "max_inflight": 1,
@@ -224,22 +224,22 @@
     },
     "db_bytes": 864256,
     "top_questions": [
-      "Does GRID10 logical cell mapping require per-model execution trace semantics or only aggregate throughput?",
-      "Wie kann die Effektivität der dynamischen Zulassungskontrolle im EntityOS/HCU-System gemessen werden?",
-      "What constitutes valid identity for supervisor lease ownership?",
-      "Whether J-Space causal graph structure is isomorphic enough across Nemotron model variants to allow checkpoint recovery without semantic drift, or if model-specific causal topology requires per-model checkpoint schemas",
-      "What exact state variables in the GWT prototype's admission engine define 'cost-free' per credential vs per provider, and where is the route-price revalidation gate before network I/O?",
-      "Can the sandbox maintain consistent low‑latency access to free providers under sustained load, or does provider‑specific rate‑limiting inevitably introduce latency and errors?",
-      "Does NVIDIA's Developer Program free tier enforce per-credential or per-account concurrency limits that differ from the published max_concurrency=256?",
-      "Can policy code hash be pinned to a git commit hash without introducing deployment coupling that defeats dynamic policy updates?",
-      "Can FREE providers scale with EntityOS/HCU under high workload?",
-      "What are the optimal parameters for the HCU architecture?"
+      "Does the FREE status of a provider truly eliminate any monetary or credit cost beyond request throttling?",
+      "Can a deterministic negative‑control burst reliably expose hidden usage limits on free provider tiers?",
+      "What minimal credential validation pattern achieves economic safety without blocking legitimate free-prototyping access?",
+      "Is there a measurable difference in request success rates between free and paid provider tiers for the same workload?",
+      "What are the specific steps needed to prepare the local research model for execution?",
+      "How can the system be verified to be correctly set up for the execution of the local research model?",
+      "What are the potential risks and challenges associated with the execution of the local research model?",
+      "What are the potential risks associated with relying on free providers?",
+      "How can the security of the system be ensured while utilizing free providers?",
+      "What are the most effective methods for implementing additional security measures?"
     ],
     "candidate_states": {}
   },
   "evidence_forge": {
     "schema": "CLAY_FREE_EVIDENCE_FORGE_STATUS/v1",
-    "generated_at": "2026-08-25T08:51:39.775224+00:00",
+    "generated_at": "2026-08-25T09:06:44.532332+00:00",
     "candidate_states": {
       "ACCEPTED": 1,
       "NEEDS_IMPLEMENTATION": 65,
@@ -263,7 +263,7 @@
     "peak_parallel_tasks": 0,
     "shared_provider_budget": {
       "schema": "CLAY_SHARED_PROVIDER_BUDGET/v1",
-      "generated_at": "2026-08-25T08:51:39.775983+00:00",
+      "generated_at": "2026-08-25T09:06:44.533041+00:00",
       "providers": {
         "arxiv": {
           "max_inflight": 1,
@@ -408,6 +408,6 @@
     "measured_total_sonnet5_equivalent_usd": 148.830648,
     "verified_historical_savings_usd": null,
     "nominal_avoided_if_zero_cost_usd": 148.830648,
-    "repo_output_only_proxy_usd": 126.33924
+    "repo_output_only_proxy_usd": 126.33976
   }
 }

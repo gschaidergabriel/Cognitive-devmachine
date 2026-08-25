@@ -1,0 +1,434 @@
+{
+  "schema": "COGNITIVE_PROCESS_ABI/v1",
+  "status": "CANDIDATE_SOURCE_CONTRACT_NOT_RUNTIME_CREDIT",
+  "authority": {
+    "canonical_repo": "gschaidergabriel/clay-global-research-entity",
+    "base_main_sha": "08ac607b528257a2ffaac49387f3277479cb9e61",
+    "owner_target_path": "research_entity/global/OWNER_CORRECTION_ZERO_ENTITYOS_COGNITIVE_GRID_DB_CLAUDECODE_GLOBAL_JSPACE_2026-08-25.md",
+    "owner_target": "VARIABLE_COGNITIVE_GRID_PLUS_PERSISTENT_DATABASE_PLUS_CLAUDE_CODE",
+    "supervisor_inbox_path": "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
+    "supervisor_epoch_observed": "8.78",
+    "donor_census_pr": "gschaidergabriel/clay-global-research-entity#1971",
+    "donor_census_schema": "AGENT_ZERO_DISTRIBUTED_COGNITIVE_PROCESS_CENSUS/v1",
+    "donor_census_status": "OPEN_DONOR_NOT_CANONICAL_MAIN",
+    "grid_size_law": "VARIABLE_N_RUNTIME_PARAMETER_NOT_SEMANTIC_IDENTITY",
+    "database_law": "SIMULATE_COGNITION_STORE_DURABLE_DATA",
+    "claude_code_role": "STRONG_MODEL_TOOL_CODE_EXECUTION_PARTNER",
+    "free_only": true
+  },
+  "semantic_process_ids": [
+    "AZP01",
+    "AZP02",
+    "AZP03",
+    "AZP04",
+    "AZP05",
+    "AZP06",
+    "AZP07",
+    "AZP08",
+    "AZP09",
+    "AZP10",
+    "AZP11",
+    "AZP12",
+    "AZP13",
+    "AZP14",
+    "AZP15",
+    "AZP16",
+    "AZP17",
+    "AZP18",
+    "AZP19",
+    "AZP20"
+  ],
+  "state_planes": {
+    "S0": {
+      "name": "CANONICAL_DURABLE_DATABASE_STATE",
+      "authority": "DETERMINISTIC_ONLY",
+      "examples": [
+        "durable_memory",
+        "canonical_task_project_state",
+        "historical_events_results",
+        "evidence_provenance_refs",
+        "long_lived_goals_config",
+        "indexes",
+        "checkpoints",
+        "exact_ids_epochs_digests"
+      ],
+      "model_direct_write": false
+    },
+    "S1": {
+      "name": "COGNITIVE_WORKSPACE_CANDIDATE_STATE",
+      "authority": "NONCANONICAL_CANDIDATE_PROJECTION",
+      "examples": [
+        "working_state",
+        "plans",
+        "hypotheses",
+        "alternatives",
+        "candidate_memory_updates",
+        "workspace_broadcasts",
+        "route_candidates"
+      ]
+    },
+    "S2": {
+      "name": "BOUNDED_SIMULATION_STATE",
+      "authority": "NONCANONICAL_EXPERIMENTAL_PROJECTION",
+      "examples": [
+        "counterfactuals",
+        "nested_simulation",
+        "world_model_test"
+      ]
+    }
+  },
+  "common_envelope_required": [
+    "abi",
+    "packet_type",
+    "causal_event_id",
+    "admission_id",
+    "generation",
+    "process_id",
+    "work_id",
+    "parent_work_id",
+    "source_state_digest",
+    "provenance_refs",
+    "capability_ref",
+    "route_id",
+    "executor_class",
+    "executor_id",
+    "grid_instance_id",
+    "module_instance_id",
+    "resource_budget",
+    "payload_digest"
+  ],
+  "semantic_identity": {
+    "work_id_inputs": [
+      "causal_event_id",
+      "process_id",
+      "semantic_payload_digest",
+      "dependency_identity"
+    ],
+    "forbidden_identity_inputs": [
+      "grid_n",
+      "module_instance_id",
+      "physical_host",
+      "decode_lane",
+      "retry_transport_id"
+    ],
+    "rule": "THE_SAME_SEMANTIC_WORK_REMAINS_THE_SAME_WORK_WHEN_GRID_N_OR_MODULE_PLACEMENT_CHANGES"
+  },
+  "packet_types": {
+    "COGNITIVE_WORK/v1": {
+      "purpose": "Typed size-independent cognitive work unit routed to any admitted compatible module.",
+      "required_payload": [
+        "semantic_payload",
+        "preconditions",
+        "dependency_ids",
+        "completion_tests",
+        "desired_evidence"
+      ],
+      "may_write": [
+        "S1"
+      ],
+      "must_not_write": [
+        "S0"
+      ],
+      "effect_authority": "NONE"
+    },
+    "COGNITIVE_RESULT/v1": {
+      "purpose": "Candidate result from a cognitive process; never truth/effect authority.",
+      "required_payload": [
+        "claim_class",
+        "result",
+        "evidence_refs",
+        "uncertainty",
+        "completion_test_results"
+      ],
+      "claim_classes": [
+        "OBSERVED_REF",
+        "INFERENCE",
+        "HYPOTHESIS",
+        "COUNTERHYPOTHESIS",
+        "UNKNOWN"
+      ],
+      "may_write": [
+        "S1"
+      ],
+      "must_not_write": [
+        "S0"
+      ],
+      "effect_authority": "NONE"
+    },
+    "DB_READ_REQUEST/v1": {
+      "purpose": "Bounded deterministic retrieval request against durable state.",
+      "required_payload": [
+        "query_class",
+        "query",
+        "read_scope",
+        "consistency_epoch"
+      ],
+      "may_write": [],
+      "must_not_write": [
+        "S0",
+        "S1",
+        "S2"
+      ],
+      "effect_authority": "NONE"
+    },
+    "DB_WRITE_PROPOSAL/v1": {
+      "purpose": "Proposal to change durable state; deterministic admission must decide.",
+      "required_payload": [
+        "mutation_class",
+        "proposed_value",
+        "evidence_refs",
+        "expected_generation",
+        "precondition_digest"
+      ],
+      "may_write": [
+        "S1"
+      ],
+      "must_not_write": [
+        "S0"
+      ],
+      "effect_authority": "PROPOSE_ONLY"
+    },
+    "WORKSPACE_BROADCAST/v1": {
+      "purpose": "Global-workspace broadcast with explicit uptake/re-entry tracking.",
+      "required_payload": [
+        "workspace_episode_id",
+        "broadcast_id",
+        "content_ref",
+        "content_digest",
+        "candidate_class",
+        "competition_score",
+        "source_process_id"
+      ],
+      "may_write": [
+        "S1"
+      ],
+      "must_not_write": [
+        "S0"
+      ],
+      "effect_authority": "NONE"
+    },
+    "CLAUDE_BRIDGE_REQUEST/v1": {
+      "purpose": "Compact handoff from grid workspace to Claude Code through the strongest actually exposed interface.",
+      "required_payload": [
+        "workspace_episode_id",
+        "transfer_id",
+        "interface_class",
+        "state_slice_digest",
+        "state_slice",
+        "requested_operation",
+        "reentry_test_id"
+      ],
+      "interface_classes": [
+        "TYPED_TEXT",
+        "STRUCTURED_TOOL_SESSION",
+        "OTHER_EXACTLY_EVIDENCED"
+      ],
+      "may_write": [],
+      "must_not_write": [
+        "S0"
+      ],
+      "effect_authority": "NONE"
+    },
+    "CLAUDE_BRIDGE_RETURN/v1": {
+      "purpose": "Claude Code return packet, still candidate state until deterministic admission/reconciliation.",
+      "required_payload": [
+        "workspace_episode_id",
+        "transfer_id",
+        "interface_class",
+        "return_digest",
+        "return_payload",
+        "tool_result_refs",
+        "reentry_test_id"
+      ],
+      "may_write": [
+        "S1"
+      ],
+      "must_not_write": [
+        "S0"
+      ],
+      "effect_authority": "PROPOSE_ONLY"
+    },
+    "EFFECT_PROPOSAL/v1": {
+      "purpose": "Typed candidate real-effect request that must pass the deterministic EffectGate/EffectJournal path.",
+      "required_payload": [
+        "effect_request_id",
+        "effect_class",
+        "effect_payload_digest",
+        "requested_capability",
+        "idempotency_key",
+        "expected_generation"
+      ],
+      "may_write": [
+        "S1"
+      ],
+      "must_not_write": [
+        "S0"
+      ],
+      "effect_authority": "PROPOSE_ONLY"
+    }
+  },
+  "database_vs_simulation_boundary": {
+    "durable_if_any": [
+      "must_survive_module_restart_or_grid_resize",
+      "must_be_exact_queryable_or_replayable",
+      "is_canonical_task_project_memory_or_evidence_state",
+      "is_counter_id_epoch_digest_or_checkpoint",
+      "is_effect_or_outcome_journal_material"
+    ],
+    "simulate_if_all": [
+      "ephemeral_cognitive_working_state",
+      "safe_to_regenerate_from_bound_evidence_and_state",
+      "not_required_as_canonical_fact_or_effect_record"
+    ],
+    "ambiguity_rule": "FAIL_CLOSED_TO_S1_CANDIDATE_OR_EXPLICIT_UNKNOWN_NEVER_SILENTLY_PROMOTE_TO_S0"
+  },
+  "routing_and_rejoin": {
+    "executor_binding_required": true,
+    "capability_self_grant_forbidden": true,
+    "stale_generation_rejected": true,
+    "restart_rule": "MODULE_RESTART_MAY_CHANGE_MODULE_INSTANCE_ID_BUT_MUST_NOT_CHANGE_SEMANTIC_WORK_ID",
+    "rejoin_required_fields": [
+      "prior_module_instance_id",
+      "new_module_instance_id",
+      "last_acknowledged_work_id",
+      "state_checkpoint_ref",
+      "generation",
+      "rejoin_reason"
+    ],
+    "duplicate_result_rule": "SAME_WORK_ID_MULTIPLE_RESULTS_REMAIN_DISTINCT_CANDIDATES_UNTIL_DETERMINISTIC_RECONCILIATION"
+  },
+  "claude_code_bridge": {
+    "truth_boundary": "CLAUDE_OUTPUT_IS_CANDIDATE_OR_TOOL_RESULT_REFERENCE_NOT_CANONICAL_TRUTH_BY_ITSELF",
+    "interface_claim_ceiling": "OBSERVABLE_TEXT_TOOL_SESSION_OR_OTHER_EXACTLY_EVIDENCED_INTERFACE",
+    "activation_access_claim": "FORBIDDEN_UNLESS_EXACT_MODEL_RUNTIME_INTERFACE_AND_CAUSAL_EVIDENCE_ARE_BOUND",
+    "reentry_receipt_schema": "GLOBAL_WORKSPACE_REENTRY_RECEIPT/v1",
+    "reentry_receipt_required": [
+      "causal_event_id",
+      "workspace_episode_id",
+      "transfer_id",
+      "reentry_test_id",
+      "pre_transfer_workspace_digest",
+      "transferred_state_digest",
+      "claude_interface_class",
+      "claude_return_digest",
+      "post_return_workspace_digest",
+      "downstream_decision_or_work_ref",
+      "matched_control_ref",
+      "measured_delta",
+      "off_target_regression",
+      "evidence_class"
+    ],
+    "causal_credit_rule": "TRANSFER_PRESENCE_OR_TEXT_SIMILARITY_IS_INSUFFICIENT; CREDIT_REQUIRES_PREDECLARED_MATCHED_CONTROL_AND_MEASURED_DOWNSTREAM_REENTRY_DELTA"
+  },
+  "jspace": {
+    "status": "EMPIRICAL_CAUSAL_HYPOTHESIS",
+    "allowed_claim_levels": [
+      "NONE",
+      "OBSERVABLE_WORKSPACE_REENTRY",
+      "MODEL_SPECIFIC_CAUSAL"
+    ],
+    "model_specific_required_for_deep_claims": true,
+    "majority_or_recurrence_mints_truth": false,
+    "frozen_v1_negative_evidence_preserved": true,
+    "successor_rule": "SEPARATELY_VERSIONED_PREREGISTERED_SUCCESSOR_BEFORE_FRESH_HOLDOUT"
+  },
+  "effect_boundary": {
+    "only_real_effect_path": [
+      "EFFECT_PROPOSAL/v1",
+      "EffectGate",
+      "EffectJournal"
+    ],
+    "model_or_module_direct_effect_forbidden": true,
+    "unknown_effect_outcome": "UNKNOWN_UNTIL_VERIFIED_NO_BLIND_REPLAY",
+    "capability_authority_source": "DETERMINISTIC_CANONICAL_AUTHORITY_ONLY"
+  },
+  "acceptance_discriminators": [
+    {
+      "id": "ABI-D1-VARIABLE-N-SEMANTIC-STABILITY",
+      "test": "Replay the same semantic work definition at grid_n=10 and grid_n=20 with different module placement.",
+      "pass": "work_id and process semantics remain identical while route/executor diagnostics may differ."
+    },
+    {
+      "id": "ABI-D2-DB-VS-SIMULATION",
+      "test": "Present state that must survive module restart plus an ephemeral hypothesis.",
+      "pass": "durable state is routed to deterministic DB admission; hypothesis remains S1/S2 and cannot become S0 by model claim."
+    },
+    {
+      "id": "ABI-D3-RESTART-REJOIN",
+      "test": "Restart the executor after work admission and rejoin with a new module_instance_id.",
+      "pass": "stale generation or self-granted capability is rejected; valid rejoin preserves work_id and checkpoint lineage."
+    },
+    {
+      "id": "ABI-D4-CLAUDE-REENTRY",
+      "test": "Transfer a predeclared workspace slice to Claude Code and compare downstream uptake against a matched no-transfer/control condition.",
+      "pass": "reentry credit only when the bound receipt shows a measured downstream delta without unacceptable off-target regression."
+    },
+    {
+      "id": "ABI-D5-EFFECT-FENCE",
+      "test": "Return a cognitive/Claude result that requests a real effect.",
+      "pass": "result remains candidate until EFFECT_PROPOSAL -> EffectGate -> EffectJournal; direct execution is rejected."
+    },
+    {
+      "id": "ABI-D6-JSPACE-CLAIM-CEILING",
+      "test": "Attempt to label text/session-level transfer as activation-level or model-internal J-Space causality.",
+      "pass": "claim is rejected unless exact model/runtime causal evidence is bound."
+    }
+  ],
+  "owner_target_coverage": {
+    "1_variable_grid_reproduces_cognitive_loop": [
+      "COGNITIVE_WORK/v1",
+      "COGNITIVE_RESULT/v1",
+      "routing_and_rejoin"
+    ],
+    "2_module_count_varies_without_semantic_identity_change": [
+      "semantic_identity",
+      "ABI-D1-VARIABLE-N-SEMANTIC-STABILITY"
+    ],
+    "3_durable_data_lives_in_database": [
+      "state_planes.S0",
+      "database_vs_simulation_boundary"
+    ],
+    "4_grid_uses_db_without_fact_hypothesis_confusion": [
+      "DB_READ_REQUEST/v1",
+      "DB_WRITE_PROPOSAL/v1",
+      "ABI-D2-DB-VS-SIMULATION"
+    ],
+    "5_claude_code_integrated": [
+      "CLAUDE_BRIDGE_REQUEST/v1",
+      "CLAUDE_BRIDGE_RETURN/v1"
+    ],
+    "6_grid_claude_communication_compact_reliable_useful": [
+      "payload_digest",
+      "state_slice_digest",
+      "GLOBAL_WORKSPACE_REENTRY_RECEIPT/v1"
+    ],
+    "7_shared_workspace_causal_reentry": [
+      "WORKSPACE_BROADCAST/v1",
+      "GLOBAL_WORKSPACE_REENTRY_RECEIPT/v1",
+      "ABI-D4-CLAUDE-REENTRY"
+    ],
+    "8_jspace_claims_do_not_exceed_evidence": [
+      "jspace",
+      "ABI-D6-JSPACE-CLAIM-CEILING"
+    ],
+    "9_old_monolithic_zero_not_required": [
+      "semantic_process_ids",
+      "VARIABLE_N_RUNTIME_PARAMETER_NOT_SEMANTIC_IDENTITY"
+    ],
+    "10_08b_specialized_low_refusal_capability_retained": [
+      "ABI_is_model_agnostic_training_surface_only",
+      "no_training_credit_from_source_contract"
+    ]
+  },
+  "credit_boundary": {
+    "source_contract_credit": true,
+    "unit_test_credit_if_executed_exact_source": true,
+    "distributed_runtime_credit": 0,
+    "claude_bridge_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0,
+    "training_credit": 0
+  },
+  "next_exact_gate": "IMPLEMENT_MINIMAL_VARIABLE_GRID_ABI_EXECUTOR_WITH_IN_MEMORY_OR_SQLITE_TEST_STATE_THAT_RUNS_TWO_PROCESS_TYPES_AT_N_1_AND_N_2_PRESERVES_WORK_ID_ACROSS_RESTART_AND_EMITS_REENTRY_RECEIPT_STUB_WITH_ZERO_CAUSAL_CREDIT_UNTIL_MATCHED_CONTROL_EXISTS"
+}

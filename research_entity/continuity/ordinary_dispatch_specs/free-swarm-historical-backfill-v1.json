@@ -7,11 +7,34 @@
   "transport": "SELF_HOSTED_LINUX_X64",
   "retry_generation": 0,
   "current_dispatch_key": "free-swarm-historical-backfill-v1-g0000",
+  "dispatch_state": "LEGACY_FANOUT_QUARANTINED_NO_CANONICAL_RESULT",
+  "active_trigger_authorized": false,
   "generation_rule": "INCREMENT_ONLY_AFTER_TERMINAL_RESULT_REQUIRING_DELIBERATE_RETRY_OR_EXPLICIT_INFRASTRUCTURE_OR_PROBE_SEMANTIC_CHANGE; NEW_GO_ALONE_MUST_NOT_INCREMENT",
-  "identity_excludes": ["go_text", "macrocycle_id", "timestamp", "issue_number", "workflow_run_id", "branch_name", "unrelated_main_sha", "organ_model_session_identity"],
+  "identity_excludes": [
+    "go_text",
+    "macrocycle_id",
+    "timestamp",
+    "issue_number",
+    "workflow_run_id",
+    "branch_name",
+    "unrelated_main_sha",
+    "organ_model_session_identity"
+  ],
   "canonical_workflow": ".github/workflows/go878-historical-backfill-runtime.yml",
+  "canonical_workflow_state": "RETIRED_FROM_MAIN_AS_DUPLICATE_BEFORE_TERMINAL_CANONICAL_RESULT",
+  "canonical_workflow_retirement_commit": "481772fd6dccc91aeefe8193e99857e53d23b687",
   "canonical_capsule": "tools/run_free_swarm_historical_backfill_capsule_878.py",
   "claim_path_template": "research_entity/continuity/ordinary_dispatch_claims/{dispatch_key}.json",
   "result_path_template": "research_entity/continuity/ordinary_dispatch_results/{dispatch_key}.json",
+  "current_result_observed": false,
+  "next_retry_generation_candidate": 1,
+  "next_retry_reason": "EXPLICIT_INFRASTRUCTURE_AND_PROBE_SEMANTIC_CHANGE_REQUIRED: the generation-0 canonical workflow was retired before a canonical terminal result, and historical saturation semantics must be fail-closed before a successor trigger is admitted",
+  "next_retry_blockers": [
+    "FUSE_EXACT_CURRENT_HISTORICAL_SATURATION_HARDENING",
+    "REQUIRE_EXHAUSTIVE_TRUE_PLUS_TWO_CONSECUTIVE_ZERO_NOVEL_CONFIRMATIONS_FOR_SATURATED",
+    "RAISE_OR_REPLACE_THE_THREE_PASS_SEMANTIC_TRUNCATION_WITH_BOUNDED_FAIL_CLOSED_COMPLETION",
+    "CREATE_GENERATION_1_CLAIM_BEFORE_EXACTLY_ONE_SUCCESSOR_TRIGGER",
+    "SUCCESSOR_WORKFLOW_MUST_VALIDATE_TYPED_DISPATCH_KEY_AND_SKIP_IF_SEMANTIC_RESULT_EXISTS"
+  ],
   "protocol": "research_entity/continuity/ORDINARY_DISPATCH_IDEMPOTENCY_PROTOCOL.md"
 }

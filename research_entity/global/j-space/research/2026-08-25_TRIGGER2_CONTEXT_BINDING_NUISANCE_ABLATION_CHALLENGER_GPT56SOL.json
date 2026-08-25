@@ -1,0 +1,108 @@
+{
+  "schema": "CLAY_TRIGGER2_CONTEXT_BINDING_NUISANCE_ABLATION_CHALLENGER/v1",
+  "date": "2026-08-25",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority": {
+    "branch_base_main": "d536bed57620e49fbb5f24fdcfcd6677d35d825b",
+    "supervisor_epoch": "8.78",
+    "mode": "FREE_ONLY",
+    "training_executed": false,
+    "provider_preflight_executed": false,
+    "paid_provider_used": false,
+    "unusual_experiment": "NOT_USED_DETERMINISTIC_DATASET_AUDIT_ONLY"
+  },
+  "motivation": {
+    "parent_reentry_commit": "8ae0a47d34b0be3d088ca146fdc35952d2808c10",
+    "parent_rule": "Zero marginal MI / apparent randomization is not sufficient; the retained fully-crossed successor binder must also survive an explicit nuisance-only challenger and semantic-evidence ablation challenger.",
+    "target": "retained tools/trigger2_context_binding_generator_v2.py blueprint"
+  },
+  "exact_source_identity": {
+    "retained_generator_path": "tools/trigger2_context_binding_generator_v2.py",
+    "retained_generator_git_blob_sha1": "a9661ae3e6b96d0b3a0594d817ec311574ed4e04",
+    "retained_generator_sha256": "d56452335443b9767a4e794a099d50bac745f877edb8df051c58b6d3005b7076",
+    "challenger_path": "tools/trigger2_context_binding_nuisance_challenger_v1.py",
+    "challenger_commit": "527ee1bc1ab968d4f8246cff26bbce21770f8e22",
+    "challenger_git_blob_sha1": "f70fa9aad6f359ed145b15ab340a7f29cc3e3d53",
+    "challenger_sha256": "55b59df369db248f4fe5108c3f0e3872e40ca924157ccc2e937649634bd33962",
+    "test_path": "tests/test_trigger2_context_binding_nuisance_challenger_v1.py",
+    "test_commit": "ad2055b21f3921613a346d0da63159cdce1f8d07",
+    "test_git_blob_sha1": "2cecb7dd8e10095f312bf74c906fd8563db2c092",
+    "test_sha256": "408f25629df4a40c05448cabad5dcdd91dd21e1cdb023af33460b7ed5aad9e39",
+    "byte_binding_method": "For generator, challenger and test, exact local bytes were converted to Git blob SHA-1 and matched against GitHub fetch_file blob identities before the recorded deterministic run."
+  },
+  "challenger_method": {
+    "model_visible_input_under_test": "row.prompt only, matching the generator's model_visible_fields contract",
+    "semantic_ablation": "Replace exactly the EVIDENCE span between EVIDENCE and PROPOSITION with <EVIDENCE_ABLATED>; keep codebook, proposition, query/polarity and all other model-visible nuisance surface unchanged.",
+    "nuisance_only_decoder": "Bayes-optimal exact-signature majority lookup over the ablated model-visible prompt. If the realized nuisance surface carries class/target information, this upper bound rises above 1/3.",
+    "acceptance": [
+      "base generator validator PASS",
+      "ablated semantic-class exact-lookup accuracy == 1/3",
+      "ablated target-slot exact-lookup accuracy == 1/3",
+      "every ablated signature contains all three classes with equal counts",
+      "every ablated signature contains all three target slots with equal counts",
+      "full unablated prompt signatures remain label-specific at source-blueprint scope",
+      "audit metadata remains outside model-visible projection"
+    ],
+    "important_boundary": "Exact-signature chance is a strong deterministic realized-dataset check for this nuisance surface, but it is not a proof against every generalized nuisance function and does not prove that a trained model will use the intended semantic mechanism."
+  },
+  "exact_local_deterministic_result": {
+    "surface": "LOCAL_DETERMINISTIC_CONTAINER",
+    "generator_rows": 2592,
+    "base_generator_pass": true,
+    "challenger_pass": true,
+    "challenger_failures": [],
+    "unit_tests": 7,
+    "unit_tests_pass": 7,
+    "unit_tests_fail": 0,
+    "metrics": {
+      "chance": 0.3333333333333333,
+      "full_prompt_exact_lookup_semantic_class_accuracy": 1.0,
+      "ablated_prompt_exact_lookup_semantic_class_accuracy": 0.3333333333333333,
+      "full_prompt_exact_lookup_target_slot_accuracy": 1.0,
+      "ablated_prompt_exact_lookup_target_slot_accuracy": 0.3333333333333333,
+      "semantic_ablation_drop_class_accuracy": 0.6666666666666667,
+      "semantic_ablation_drop_target_accuracy": 0.6666666666666667,
+      "ablated_signature_groups": 288,
+      "ablated_class_support_min": 3,
+      "ablated_class_support_max": 3,
+      "ablated_target_support_min": 3,
+      "ablated_target_support_max": 3,
+      "ablated_class_groups_exactly_balanced": true,
+      "ablated_target_groups_exactly_balanced": true
+    },
+    "adversarial_regressions": [
+      "nonsemantic class-correlated tag -> challenger FAIL",
+      "nonsemantic target-correlated tag -> challenger FAIL",
+      "missing one semantic-class support family -> challenger FAIL",
+      "audit metadata added to model-visible fields -> challenger FAIL",
+      "missing EVIDENCE span -> fail closed"
+    ]
+  },
+  "swarm_adjudication": {
+    "AdversarialShortcutHunter": "PASS_AT_BLUEPRINT_SCOPE: nuisance-only exact-signature decoder is forced to chance on realized 2592-row v2 blueprint and injected nuisance tags are detected.",
+    "StatisticalReviewer": "PASS_AT_BLUEPRINT_SCOPE: both semantic-class and target-slot nuisance lookup equal 1/3 exactly; every ablated signature has balanced support 3/3.",
+    "DatasetArchitect": "RETAIN_V2_BLUEPRINT; rerun this challenger after exact ABI atom rendering and final serialization.",
+    "MechanisticReviewer": "NO_INTERNAL_MECHANISM_CREDIT: dataset ablation does not establish post-FT J-Space causality or semantic mechanism installation.",
+    "ABIProvenanceReviewer": "PRODUCTION_BLOCKED: blueprint still contains ABI slots and no final checkpoint-local 46-atom tokenizer-bound split materialization was exercised.",
+    "FinalArbiter": "PROMOTE_NUISANCE_ABLATION_CHALLENGER_AS_A_REQUIRED_DATASET_GATE; DO_NOT_PROMOTE_TRAINING_READY."
+  },
+  "evidence_boundary": {
+    "scope": "EXACT_SOURCE_LOCAL_DETERMINISTIC_BLUEPRINT_DATASET_AUDIT",
+    "final_abi_atom_rows_tested": false,
+    "canonical_dataset_admission_executed": false,
+    "model_runtime_executed": false,
+    "model_training_executed": false,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "qwen35_jspace_runtime_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "canonical_semantics_promotion": false
+  },
+  "next_exact_action": "Wire this challenger into the retained Trigger-2 dataset acceptance path and rerun it on final serialized rows after exact checkpoint-local 46-atom ABI materialization, immutable split-specific atom pools and sealed lexical families. Add a second generalized nuisance learner only if it tests information not already eliminated by identical ablated signatures."
+}

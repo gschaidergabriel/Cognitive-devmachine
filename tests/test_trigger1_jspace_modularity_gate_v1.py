@@ -40,13 +40,15 @@ def rank1_candidate() -> dict:
         "modularity_evidence": {
             "sentinel_set_preregistered": True,
             "sentinel_set_receipt_sha256": HEX64,
-            "sentinel_behavior_count": 5,
+            "sentinel_behaviors": sorted(gate.REQUIRED_SENTINELS),
+            "sentinel_behavior_count": len(gate.REQUIRED_SENTINELS),
             "heldout_scenario_family_count": 4,
             "cross_effect_matrix_test": True,
             "cross_effect_matrix_receipt_sha256": HEX64,
             "equal_family_weighting": True,
             "per_family_signed_cross_effects_recorded": True,
             "per_family_cross_effect_stability_test": True,
+            "target_selectivity_preserved_across_families": True,
             "cross_effect_thresholds_selected_on_calibration_only": True,
             "cross_effect_thresholds_frozen_before_holdout": True,
             "cross_effect_threshold_receipt_sha256": HEX64,
@@ -71,7 +73,11 @@ def rank2_candidate() -> dict:
         "combination_grid_frozen_before_holdout": True,
         "combination_grid_receipt_sha256": HEX64,
         "composition_model_fit_on_calibration_only": True,
+        "composition_model_receipt_sha256": HEX64,
+        "same_residual_norm_relative_dose": True,
+        "combined_intervention_receipt_sha256": HEX64,
         "heldout_compositional_residual_test": True,
+        "compositional_residual_metric_sha256": HEX64,
         "target_and_sentinel_endpoints_included": True,
         "per_family_residuals_recorded": True,
         "compositional_residual_receipt_sha256": HEX64,
@@ -79,6 +85,7 @@ def rank2_candidate() -> dict:
         "preregistered_max_abs_standardized_compositional_residual": 0.15,
         "compositional_residuals_within_preregistered_bounds": True,
         "systematic_sign_interaction_missed_by_model": False,
+        "family_consistency_pass": True,
     }
     return candidate
 
@@ -94,6 +101,19 @@ class Trigger1JSpaceModularityGateV1Tests(unittest.TestCase):
         self.assertEqual("BOUNDED_MODULAR_CONTROL_CANDIDATE", verdict["modularity_classification"])
         self.assertFalse(verdict["canonical_credit_minted"])
 
+    def test_required_sentinel_identities_and_three_holdout_families_are_fail_closed(self):
+        candidate = rank1_candidate()
+        candidate["modularity_evidence"]["sentinel_behaviors"] = ["GENERIC_INSTRUCTION_CODE_COMPLIANCE"]
+        candidate["modularity_evidence"]["sentinel_behavior_count"] = 1
+        candidate["modularity_evidence"]["heldout_scenario_family_count"] = 2
+
+        ok, failures = gate._cross_effect_evidence(candidate)
+
+        self.assertFalse(ok)
+        self.assertIn("REQUIRED_SENTINEL_BEHAVIOR_SET_MISSING", failures)
+        self.assertIn("SUFFICIENT_SENTINEL_BEHAVIOR_COUNT_REQUIRED", failures)
+        self.assertIn("AT_LEAST_THREE_HELDOUT_SCENARIO_FAMILIES_REQUIRED", failures)
+
     def test_large_structured_sentinel_cross_effect_blocks_modularity(self):
         candidate = rank1_candidate()
         candidate["modularity_evidence"]["max_abs_standardized_sentinel_drift"] = 0.40
@@ -105,6 +125,15 @@ class Trigger1JSpaceModularityGateV1Tests(unittest.TestCase):
         self.assertFalse(verdict["modular_jspace_control_candidate"])
         self.assertEqual("ENTANGLED_CONTROL_WITH_STRUCTURED_CROSS_EFFECTS", verdict["modularity_classification"])
         self.assertIn("SENTINEL_CROSS_EFFECT_EXCEEDS_PREREGISTERED_BOUND", verdict["modularity_failures"])
+
+    def test_target_selectivity_must_remain_family_stable(self):
+        candidate = rank1_candidate()
+        candidate["modularity_evidence"]["target_selectivity_preserved_across_families"] = False
+
+        ok, failures = gate._cross_effect_evidence(candidate)
+
+        self.assertFalse(ok)
+        self.assertIn("TARGET_SELECTIVITY_NOT_FAMILY_STABLE", failures)
 
     def test_forecast_cannot_fit_on_holdout_or_select_holdout_thresholds(self):
         candidate = rank1_candidate()
@@ -118,6 +147,18 @@ class Trigger1JSpaceModularityGateV1Tests(unittest.TestCase):
         self.assertIn("SIDE_EFFECT_FORECAST_MUST_NOT_SELECT_HOLDOUT_THRESHOLDS", failures)
         self.assertIn("SIDE_EFFECT_FORECAST_MUST_NOT_FIT_ON_HOLDOUT_OUTCOMES", failures)
 
+    def test_rank_decision_must_be_bound_and_frozen_before_holdout(self):
+        candidate = rank1_candidate()
+        candidate["semantic_subspace"]["rank_decision_receipt_sha256"] = None
+        candidate["semantic_subspace"]["rank_selected_before_holdout"] = False
+
+        ok, failures, rank = gate._composition_evidence(candidate)
+
+        self.assertEqual(1, rank)
+        self.assertFalse(ok)
+        self.assertIn("SEMANTIC_SUBSPACE_RANK_DECISION_RECEIPT_REQUIRED", failures)
+        self.assertIn("SEMANTIC_SUBSPACE_RANK_MUST_BE_SELECTED_BEFORE_HOLDOUT", failures)
+
     def test_rank2_requires_explicit_composition_evidence(self):
         candidate = rank1_candidate()
         candidate["semantic_subspace"]["rank"] = 2
@@ -128,6 +169,20 @@ class Trigger1JSpaceModularityGateV1Tests(unittest.TestCase):
         self.assertFalse(verdict["composition_controls_pass"])
         self.assertFalse(verdict["modular_jspace_control_candidate"])
         self.assertIn("RANK2_COMPOSITION_EVIDENCE_REQUIRED", verdict["modularity_failures"])
+
+    def test_rank2_requires_norm_matched_dose_and_exact_combined_receipts(self):
+        candidate = rank2_candidate()
+        candidate["composition_evidence"]["same_residual_norm_relative_dose"] = False
+        candidate["composition_evidence"]["composition_model_receipt_sha256"] = None
+        candidate["composition_evidence"]["combined_intervention_receipt_sha256"] = None
+
+        ok, failures, rank = gate._composition_evidence(candidate)
+
+        self.assertEqual(2, rank)
+        self.assertFalse(ok)
+        self.assertIn("RANK2_COMPOSITION_DOSE_MUST_BE_NORM_MATCHED", failures)
+        self.assertIn("RANK2_COMPOSITION_MODEL_RECEIPT_REQUIRED", failures)
+        self.assertIn("RANK2_COMBINED_INTERVENTION_RECEIPT_REQUIRED", failures)
 
     def test_rank2_compositional_residual_must_stay_within_frozen_bound(self):
         candidate = rank2_candidate()

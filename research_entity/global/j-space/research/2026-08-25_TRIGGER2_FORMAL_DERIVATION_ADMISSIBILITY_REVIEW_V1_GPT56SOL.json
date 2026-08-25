@@ -1,0 +1,238 @@
+{
+  "schema": "CLAY_TRIGGER2_FORMAL_DERIVATION_ADMISSIBILITY_REVIEW/v1",
+  "version": "1.0.0",
+  "date": "2026-08-25",
+  "trigger": "triggerwort 2",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "persistent_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU_VARIABLE_COGNITIVE_GRID",
+  "status": "CURRENT_RESEARCH_REVIEW_NONPROMOTING",
+  "authority_snapshot": {
+    "repository": "gschaidergabriel/clay-global-research-entity",
+    "branch_fork": "ba3fa7ed0e3e01db27a90567dfa6fd4e3713c84b",
+    "supervisor_epoch": "8.78",
+    "execution_mode": "FREE_ONLY",
+    "training_executed": false,
+    "accepted_dataset_tokens_minted": 0
+  },
+  "scope": "Adversarial review of the rapidly converged formal-world -> Hyperposition label path. This artifact adds candidate hard negatives and lifecycle dispositions only; it does not admit a dataset or mint model/runtime/training credit.",
+  "audited_artifacts": [
+    {
+      "path": "tools/trigger2_hyperposition_reference_labelers_v2.py",
+      "observed_blob_sha": "78164abd07553f1732e28a5e6297158f9a833b2e",
+      "role": "CURRENT_CANDIDATE_HYPERPOSITION_REFERENCE_LABELER"
+    },
+    {
+      "path": "tools/trigger2_hyperposition_formal_relation_deriver_v1.py",
+      "observed_blob_sha": "e438e9ccfc211c8ec8eb74b6dab32f86e41bfae8",
+      "role": "FORMAL_PREDICTED_OUTCOME_DERIVER_FOR_V1_LABELER_LANE"
+    },
+    {
+      "path": "tools/trigger2_formal_world_relation_deriver_v1.py",
+      "observed_blob_sha": "e870a2333bc0c6e4e2cda74d716dac2afc85eaf4",
+      "role": "FINITE_ATOM_FORMAL_WORLD_DERIVER_CANDIDATE"
+    },
+    {
+      "path": "tools/trigger2_hyperposition_causal_label_chain_v1.py",
+      "observed_commit": "73df5291e92178529a6bc75347574dd931e23d00",
+      "role": "FORMAL_OUTCOME_TO_V1_REFERENCE_LABEL_CHAIN"
+    },
+    {
+      "path": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_LABELER_BLOCKER_HARDNEGATIVE_BLUEPRINTS_V1_GPT56SOL.json",
+      "observed_blob_sha": "dc20408bb8ccb3c9056378d018dec2d69de1fb2b",
+      "role": "PREDECESSOR_HARD_NEGATIVE_BLUEPRINT_SET"
+    }
+  ],
+  "external_method_inputs": [
+    {
+      "source": "Wei et al., Symbol tuning improves in-context learning in language models, EMNLP 2023, DOI 10.18653/v1/2023.emnlp-main.61",
+      "classification": "METHOD_INPUT",
+      "implication": "Keep episode-local labels/codebooks arbitrary enough that the model must infer mappings rather than exploit fixed semantic label priors."
+    },
+    {
+      "source": "Xiang et al., Addressing Order Sensitivity of In-Context Demonstration Examples in Causal Language Models, Findings ACL 2024, DOI 10.18653/v1/2024.findings-acl.386",
+      "classification": "METHOD_INPUT",
+      "implication": "Treat demonstration/branch serialization order as a nuisance and preserve permutation-consistency tests rather than assuming order invariance."
+    },
+    {
+      "source": "Belinkov, Probing Classifiers: Promises, Shortcomings, and Advances, Computational Linguistics 2022, DOI 10.1162/coli_a_00422",
+      "classification": "METHOD_CAUTION",
+      "implication": "Readability/decodability of a latent state is not by itself evidence that the model causally uses that state; keep J-Space representation and causal-use acceptance separate."
+    },
+    {
+      "source": "Wu, Geiger, Milliere, How Do Transformers Learn Variable Binding in Symbolic Programs?, arXiv:2505.20896 / ICML 2025",
+      "classification": "METHOD_INPUT",
+      "implication": "Checkpoint evaluation should distinguish shallow routing heuristics from systematic variable-binding transfer across depth, distractors and remapped symbols."
+    }
+  ],
+  "findings": [
+    {
+      "id": "T2-FD-A01",
+      "severity": "P0",
+      "finding": "The v1-lane formal outcome deriver computes SUPPORT/FALSIFY relations before checking whether the discriminator is admissible and observable. Its resolve_context blocks immediate resolution, but the downstream v1 updater can already mutate branch validity to FALSIFIED.",
+      "evidence": "tools/trigger2_hyperposition_formal_relation_deriver_v1.py derives branch_relations solely from predicted_outcome_by_branch versus observed_outcome; executed_and_admissible only changes decision_role/all_other_branches_explicitly_falsified. tools/trigger2_hyperposition_reference_labelers_v1.py applies FALSIFY during U_update before D_resolve considers discriminator admissibility.",
+      "risk": "INADMISSIBLE_STATE_POISONING: an inadmissible or non-observable event can poison backing Hyperposition state and influence a later otherwise-admissible resolution.",
+      "required_successor": "Fail closed before semantic mutation: inadmissible/non-observable discriminator outcomes may be retained only as non-authoritative audit/provenance observations and must not emit state-changing SUPPORT/FALSIFY relations. Add a two-step regression proving an inadmissible event cannot pre-falsify competitors for a later event.",
+      "training_status": "BLOCK_POSITIVE_D_E_ADMISSION_ON_THIS_PATH"
+    },
+    {
+      "id": "T2-FD-A02",
+      "severity": "P0",
+      "finding": "The newer finite-atom formal-world deriver improves semantic derivation, but derive_discriminator still emits SUPPORTS/FALSIFIES branch_relations even when test_admissible=false; adequate_unique_resolution is false, yet the receipt remains state-poisonable if consumed naively by labeler v2.",
+      "evidence": "tools/trigger2_formal_world_relation_deriver_v1.py derives adequate_unique from test.admissible but constructs branch_relations independently of that adequacy flag.",
+      "required_successor": "Define a typed separation between observational partition metadata and admissible state-transition relations. A gate/adapter must refuse to feed inadmissible discriminator relations into u_state.",
+      "training_status": "CURRENT_CANDIDATE_DERIVER_REQUIRES_ADMISSIBILITY_ADAPTER"
+    },
+    {
+      "id": "T2-FD-A03",
+      "severity": "P0",
+      "finding": "Two overlapping formal derivation primitives now coexist with different schemas and target labeler generations: trigger2_hyperposition_formal_relation_deriver_v1.py is v1-lane predicted-outcome based, while trigger2_formal_world_relation_deriver_v1.py is a finite-atom/v2-oriented candidate.",
+      "risk": "A self-consistent generator/gate pair can pass while using a different semantic derivation authority from the current corpus target.",
+      "required_successor": "Registry vNext must select one canonical derivation path or one explicit lossless compatibility boundary; mark the other SUPERSEDED_DONOR/COMPATIBILITY_ONLY. Gates must bind exact deriver + labeler source identities rather than import whichever sibling exists.",
+      "training_status": "RECHECK_REQUIRED_DUAL_DERIVER_CONVERGENCE"
+    },
+    {
+      "id": "T2-FD-A04",
+      "severity": "P0",
+      "finding": "The causal label chain committed at 73df5291 binds to trigger2_hyperposition_reference_labelers_v1 while current main also contains the stronger v2 event-vs-correlation identity semantics. Its canonical evidence ID is derived from independence_group+payload_key, so distinct correlated events can collapse back into the v1 exact-dedup key.",
+      "risk": "A newly derived relation can still regress evidence identity/audit semantics even though labeler v2 was added specifically to preserve distinct correlated observations without independent credit.",
+      "required_successor": "Rebind the causal label chain only after one current labeler authority is frozen; preserve evidence_event_id separately from correlation ancestry/dependence identity and prove exact replay idempotence plus correlated-event retention.",
+      "training_status": "STALE_DEPENDENCY_REBIND_REQUIRED"
+    },
+    {
+      "id": "T2-FD-A05",
+      "severity": "P1",
+      "finding": "Labeler v2 rejects exact event-ID reuse when relation or correlation ancestry changes, but its stored evidence record does not retain the formal deriver event_digest. Thus a same-ID replay with the same relation/ancestry but changed payload cannot be detected by labeler state alone.",
+      "evidence": "tools/trigger2_hyperposition_reference_labelers_v2.py _record stores event id, ancestry, independence group, provenance, relation and independent_credit, but not event_digest. tools/trigger2_formal_world_relation_deriver_v1.py can detect digest collisions only when an external event_registry is supplied and maintained.",
+      "required_successor": "Bind immutable event digest in the admitted evidence record or require a persistent exact event registry at the gate/DB boundary; add same-ID/same-relation/same-ancestry/payload-mutation rejection tests.",
+      "training_status": "IDENTITY_HARDENING_REQUIRED_BEFORE_ADMISSION"
+    },
+    {
+      "id": "T2-FD-A06",
+      "severity": "P1",
+      "finding": "Eliminating every enumerated competitor does not establish that the surviving branch exhausts the task-world possibilities unless coverage/exhaustivity for the declared resolution scope is explicit.",
+      "risk": "Training may learn 'last branch standing = truth' even when a missing branch or out-of-model possibility should remain UNKNOWN.",
+      "required_successor": "Add an explicit branch-set coverage/exhaustivity certificate for task-local unique resolution or classify the result as SELECTED_SURVIVOR_WITHIN_ENUMERATED_SET and preserve an UNKNOWN/other branch.",
+      "training_status": "COVERAGE_SEMANTICS_REQUIRED_FOR_STRONG_RESOLUTION_TARGETS"
+    }
+  ],
+  "artifact_lifecycle_delta": [
+    {
+      "artifact": "tools/trigger2_hyperposition_reference_labelers_v2.py",
+      "state": "CURRENT_CANDIDATE_REQUIRES_EVENT_DIGEST_BINDING",
+      "predecessor": "tools/trigger2_hyperposition_reference_labelers_v1.py",
+      "successor": "v2 hardening or v3 only after exact convergence",
+      "revision_reason": "Improved exact-event/correlation semantics remain useful; immutable payload identity is not retained in branch evidence records."
+    },
+    {
+      "artifact": "tools/trigger2_hyperposition_formal_relation_deriver_v1.py",
+      "state": "QUARANTINE_FOR_POSITIVE_STATE_TRANSITIONS",
+      "predecessor": null,
+      "successor": "canonical converged derivation path with admissibility-before-mutation",
+      "revision_reason": "Can emit FALSIFY relations from inadmissible/non-observable tests."
+    },
+    {
+      "artifact": "tools/trigger2_formal_world_relation_deriver_v1.py",
+      "state": "CURRENT_CANDIDATE_ADAPTER_REQUIRED",
+      "predecessor": null,
+      "successor": "canonical converged derivation path",
+      "revision_reason": "Finite-atom observation derivation is stronger, but discriminator receipts must not become state transitions when inadmissible."
+    },
+    {
+      "artifact": "tools/trigger2_hyperposition_causal_label_chain_v1.py",
+      "state": "STALE_DEPENDENCY_REBIND_REQUIRED",
+      "predecessor": null,
+      "successor": "label-chain successor bound to the selected current labeler/deriver identities",
+      "revision_reason": "Imports v1 labeler and regresses distinct-event versus correlation-ancestry preservation."
+    },
+    {
+      "artifact": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_LABELER_BLOCKER_HARDNEGATIVE_BLUEPRINTS_V1_GPT56SOL.json",
+      "state": "CURRENT_PREDECESSOR_BLUEPRINT_SET",
+      "predecessor": null,
+      "successor": "this review's HN-DERIV-013..018 additions",
+      "revision_reason": "Existing 12 examples remain useful; new exact-current deriver/admissibility failure modes require additional families."
+    }
+  ],
+  "candidate_hard_negative_blueprints": [
+    {
+      "example_id": "T2-HN-DERIV-013",
+      "family": "ADMISSIBILITY_BEFORE_STATE_MUTATION",
+      "phase": "D_E",
+      "prompt_blueprint": "A deterministic test's outcome would falsify branches b1 and b2, but the test is explicitly inadmissible. The resolver refuses immediate PASS. May the updater still write b1/b2=FALSIFIED into backing Hyperposition state for later use?",
+      "correct_target": "NO. Inadmissibility must fail closed before semantic state mutation, not only at the final resolver. Preserve the branch state; at most retain the event as non-authoritative audit/provenance outside evidence-strength/validity transitions.",
+      "anti_shortcut": "Blocking immediate resolution is insufficient if the same event can poison later state.",
+      "training_eligible": false
+    },
+    {
+      "example_id": "T2-HN-DERIV-014",
+      "family": "OBSERVABILITY_BEFORE_STATE_MUTATION",
+      "phase": "D_E",
+      "prompt_blueprint": "A formal test table predicts distinct outcomes, but the test is marked observable=false. A caller supplies an apparent observed value matching b0. Should the training target support b0 and falsify the others?",
+      "correct_target": "REJECT AS A STATE TRANSITION. A non-observable test cannot contribute an observed discriminator result. Keep the task Hyperposition unresolved and record the attempted event only as non-authoritative metadata if needed.",
+      "anti_shortcut": "A syntactically present observed_outcome is not evidence when the declared test is not observable.",
+      "training_eligible": false
+    },
+    {
+      "example_id": "T2-HN-DERIV-015",
+      "family": "IMMUTABLE_EVENT_PAYLOAD_IDENTITY",
+      "phase": "E_D",
+      "prompt_blueprint": "Evidence event e7 was previously stored with ancestry a1 and relation SUPPORTS. A replay reuses e7, a1 and SUPPORTS but changes the underlying observed atoms/payload while preserving the visible relation. Treat it as an idempotent replay?",
+      "correct_target": "NO. The event identity must bind an immutable payload/event digest. Same ID plus changed payload is an identity collision and must fail closed even when relation and ancestry happen to remain unchanged.",
+      "anti_shortcut": "Relation equality is not payload identity.",
+      "training_eligible": false
+    },
+    {
+      "example_id": "T2-HN-DERIV-016",
+      "family": "FORMAL_PREDICTION_ROOT_PROVENANCE",
+      "phase": "D_E_PREPARATION",
+      "prompt_blueprint": "A generator declares predicted_outcome_by_branch for a discriminator and a deterministic deriver faithfully converts those predictions into SUPPORT/FALSIFY labels. No executable rule, finite-atom semantics or verified derivation receipt explains where the predictions came from. Is the result now a reference label?",
+      "correct_target": "NOT YET. Moving the asserted label one field upstream does not close the reference chain. Bind predicted outcomes to formal task-world rules/claims or another independently verifiable deterministic derivation source, then hash/version that source and input.",
+      "anti_shortcut": "Deterministic transformation of asserted metadata is not independent labeling.",
+      "training_eligible": false
+    },
+    {
+      "example_id": "T2-HN-DERIV-017",
+      "family": "ONE_DERIVATION_AUTHORITY",
+      "phase": "PIPELINE_ADMISSION",
+      "prompt_blueprint": "Two source-current derivers produce internally consistent but differently typed Hyperposition observations for the same episode, each coupled to a different labeler schema. Both local tests pass. May both feed the mixed training corpus?",
+      "correct_target": "NO. Select one canonical derivation+labeler contract or prove one explicit lossless compatibility adapter. Otherwise mark one lane donor/superseded and fail closed on mixed-schema admission.",
+      "anti_shortcut": "Two green self-consistent islands are not one semantic authority.",
+      "training_eligible": false
+    },
+    {
+      "example_id": "T2-HN-DERIV-018",
+      "family": "ENUMERATED_SET_IS_NOT_EXHAUSTIVE_TRUTH",
+      "phase": "D",
+      "prompt_blueprint": "A discriminator falsifies every currently enumerated branch except b0, but the task contract never states that the branch set is exhaustive for the resolution scope. Resolve b0 as the unique true branch?",
+      "correct_target": "NO STRONG TRUTH CLAIM. Either require an explicit coverage/exhaustivity certificate or keep an UNKNOWN/other alternative. At most classify b0 as the surviving candidate within the enumerated set; canonical truth remains unavailable.",
+      "anti_shortcut": "Last enumerated branch standing is not proof that no unenumerated alternative exists.",
+      "training_eligible": false
+    }
+  ],
+  "swarm_review": {
+    "DATASET_ARCHITECT": "PASS_AS_NONPROMOTING_BLUEPRINT_DELTA: examples add exact-current failure modes not covered by the predecessor set.",
+    "HYPERPOSITION_REVIEWER": "BLOCK_POSITIVE_D_E: admissibility must precede state mutation and branch-set coverage must be explicit for strong unique-resolution labels.",
+    "EVIDENCE_IDENTITY_REVIEWER": "REVISE: exact event ID must bind immutable payload/digest, not relation+ancestry only.",
+    "ADVERSARIAL_SHORTCUT_HUNTER": "REVISE: two derivation schemas can become self-consistent shortcut islands unless a single current contract or lossless adapter is selected.",
+    "FINAL_ARBITER": "ADMIT THIS FILE AS VERSIONED RESEARCH/HARD-NEGATIVE BLUEPRINT ONLY; DO NOT COUNT AS MATERIALIZED TRAINING ROWS."
+  },
+  "next_exact_actions": [
+    "Add a fail-closed regression in each candidate derivation path proving inadmissible/non-observable tests cannot mutate branch evidence or validity.",
+    "Converge the two formal derivation primitives and current Hyperposition labeler into one source/hash-bound contract or explicit lossless adapter.",
+    "Persist event_digest at the evidence/gate/DB identity boundary and test same-ID payload mutation.",
+    "Require branch-set coverage/exhaustivity semantics or retain an explicit UNKNOWN/other branch before strong task-local unique resolution.",
+    "Only after those gates pass, materialize HN-DERIV-013..018 and positive D/E trajectories into counterbalanced family-split candidate rows."
+  ],
+  "credits": {
+    "research_revision_delta": 1,
+    "new_hardnegative_blueprints": 6,
+    "materialized_training_rows": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "jspace_positive_causal_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  }
+}

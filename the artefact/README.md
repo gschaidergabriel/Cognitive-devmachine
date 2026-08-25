@@ -4,7 +4,7 @@
 
 ## Current authority — 2026-08-25 re-entry
 
-Newest inbox-selected supervisor observed in this update: **8.78**. Mode: **FREE_ONLY**. Canonical `main` observed immediately before this write: `884892a82d1d25bf3f0325dc90fe5bd7a2065739`.
+Newest inbox-selected supervisor observed in this update: **8.78**. Mode: **FREE_ONLY**. Canonical `main` observed immediately before this branch write: `25ce07e151749b7814e20f778f3034a7ca1e7370`.
 
 Persistent research entity = **Clay**. Temporary workers/models/sessions are organs, not persistent entities. Product = **EntityOS**. Integrated cognition/compute architecture = **HCU**. Xeno/XCU remain compatibility/research aliases only.
 
@@ -32,9 +32,13 @@ This cycle also closed the raw-generation control-plane defect identified after 
 
 The previous issue-trigger dispatch fan-out was also retired on current main at `606062164802bbfcea84ca1083f24059f3bb93b8`; this cycle therefore did not create another issue-trigger probe.
 
+A separate current-facing authority drift was found after `BOOTSTRAP_MINIMAL`, `PROGRAM_STATE`, and `FREE_PROVIDER_ADMISSION` had already advanced to supervisor **8.78**: `the artefact/manifest.json` still selected **8.72** at multiple successor-dynamic authority fields. Branch `go878/manifest-authority-sync-gpt56sol-20260825-1036` repairs that stale island without changing execution/effect authority or granting runtime credit. Receipt: `research_entity/continuity/receipts/2026-08-25_GO878_MANIFEST_AUTHORITY_REENTRY_GPT56SOL.json`.
+
 These are **source/control-plane deltas only**. No terminal exact-current historical-backfill saturation receipt, no exact-current replay-v2 migration runtime receipt, and no runtime backpressure acceptance receipt were observed in this re-entry. Therefore the historical ~39M-token corpus is not yet credited as re-evaluated, and Distillery/model/training credit remains zero.
 
-The owner-provisioned `clay-direct-dev` bridge is a real configured execution path, but the previously observed Clay and retained-controller self-hosted runs remain nonterminal/queued in the evidence inspected by this cycle. The cross-repository queued pattern is consistent with a shared self-hosted execution-surface availability/scheduling problem, but runner-offline state is not promoted to fact because runner status was not directly observed.
+The owner-provisioned `clay-direct-dev` bridge is a real configured execution path, but the inspected Clay roundtrip run `32802727269` and retained-controller self-hosted probe `32803694800` remain queued/nonterminal. The cross-repository queued pattern is consistent with a shared self-hosted execution-surface availability/scheduling problem, but runner-offline state is not promoted to fact because runner status was not directly observed.
+
+A second source-level discriminator is now explicit: the producer-side historical extraction prompt fix alone does not close the historical-conversion correctness gate if consumer progress semantics can still promote `SATURATED` without explicit conservative exhaustiveness evidence. PR **#1879** is the existing successor lane for that completion-policy repair; this cycle does not duplicate or merge it without exact-current executed evidence.
 
 ### Track B — HCU + Typed Entry Fabric co-development
 
@@ -66,6 +70,7 @@ No new unusual J-Space/model intervention, paid/provider execution, Together cal
 
 ## Current evidence credit
 
+- current-facing manifest authority sync: **source branch present; runtime credit not applicable; fusion pending**;
 - replay-v2 migration: **canonical source fusion present; exact-current runtime credit 0**;
 - backlog-first Forge supervisor wiring: **canonical source fusion present; historical-backfill runtime credit 0**;
 - raw-generation conversion backpressure: **canonical source fusion present at `9eeccc27…`; runtime credit 0**;
@@ -84,14 +89,16 @@ A source file, workflow, queued run, token count, model consensus, or component 
 
 ## Highest-information next gates
 
-1. Restore or expose one already-authorized transport that can actually enter `clay-direct-dev`: either the retained controller self-hosted runner or the owner's installed SSH bridge. Require one terminal `CLAY_DIRECT_DEV_ROUNDTRIP/v1` result before treating the runtime surface as available.
-2. On that exact-current runtime, verify `CLAY_SWARM_RAW_GENERATION_BACKPRESSURE/v1`: missing/invalid Forge DB must pause fail-closed; high conversion pressure must stop raw 6000 generation; low pressure may allow it without raising provider concurrency/token budget.
-3. Execute the historical-backfill path on exact-current source across all existing `workers.jsonl` incrementally to saturation and emit `FREE_SWARM_HISTORICAL_BACKFILL_RECEIPT/v1` binding exact source commit/tree/dirty state, artifact root, scan set, lines scanned, successful outputs, explicit/batch deltas, new concepts, execution variants, duplicates superseded, ready backlog, implementation backlog, and remaining pending extraction.
-4. Execute replay-v2 migration/concurrency regressions on exact-current `main` using the frozen pre-v2 database fixture and reopen/concurrent replay cases.
-5. Prove one evidence-qualified Forge ACCEPT -> exactly one persistent Distillery packet -> `accepted_dataset_tokens > 0` -> semantic replay -> exactly `+0` packets / `+0` accepted tokens.
-6. Validate the retained historical provenance/source-count donor against exact-current replay; a second saturation pass must not inflate scheduling weight from repeated provenance.
-7. Only after these gates should external Free-Swarm scale-up be reconsidered.
-8. Keep local Qwen3-0.6B/J-Space causal work separate, zero-cost, and nonpromoting until its own exact-source terminal evidence and experiment coordination requirements are satisfied.
+1. Fuse the 8.78 artifact-manifest authority mirror only if it still applies after re-entering current `main`; execute `tests/test_current_facing_authority_alignment_v1.py` on an admitted zero-cost surface before claiming test PASS.
+2. Restore or expose one already-authorized transport that can actually enter `clay-direct-dev`: either the retained controller self-hosted runner or the owner's installed SSH bridge. Require one terminal `CLAY_DIRECT_DEV_ROUNDTRIP/v1` result before treating the runtime surface as available.
+3. On that exact-current runtime, verify `CLAY_SWARM_RAW_GENERATION_BACKPRESSURE/v1`: missing/invalid Forge DB must pause fail-closed; high conversion pressure must stop raw 6000 generation; low pressure may allow it without raising provider concurrency/token budget.
+4. Execute the historical-backfill path on exact-current source across all existing `workers.jsonl` incrementally to saturation and emit `FREE_SWARM_HISTORICAL_BACKFILL_RECEIPT/v1` binding exact source commit/tree/dirty state, artifact root, scan set, lines scanned, successful outputs, explicit/batch deltas, new concepts, execution variants, duplicates superseded, ready backlog, implementation backlog, and remaining pending extraction.
+5. Execute replay-v2 migration/concurrency regressions on exact-current `main` using the frozen pre-v2 database fixture and reopen/concurrent replay cases.
+6. Prove one evidence-qualified Forge ACCEPT -> exactly one persistent Distillery packet -> `accepted_dataset_tokens > 0` -> semantic replay -> exactly `+0` packets / `+0` accepted tokens.
+7. Validate the retained historical provenance/source-count donor against exact-current replay; a second saturation pass must not inflate scheduling weight from repeated provenance.
+8. Rebase/execute PR #1879 or its admitted successor so `SATURATED` cannot be minted from missing/nonexhaustive or a single zero-novel extraction result.
+9. Only after these gates should external Free-Swarm scale-up be reconsidered.
+10. Keep local Qwen3-0.6B/J-Space causal work separate, zero-cost, and nonpromoting until its own exact-source terminal evidence and experiment coordination requirements are satisfied.
 
 ## Evidence discipline and re-entry
 

@@ -4,7 +4,7 @@
 
 ## Current authority — 2026-08-25 re-entry
 
-Newest inbox-selected supervisor observed in this update: **8.78**. Mode: **FREE_ONLY**. Canonical `main` observed immediately before this write: `4287d1903adb18eb28203ec94d34e2df3f2c3064`.
+Newest inbox-selected supervisor observed in this update: **8.78**. Mode: **FREE_ONLY**. Canonical `main` observed immediately before this write: `33aeb8a22034c61dfe1b85df93bfeb99b54375fb`.
 
 Persistent research entity = **Clay**. Temporary workers/models/sessions are organs, not persistent entities. Product = **EntityOS**. Integrated cognition/compute architecture = **HCU**. Xeno/XCU remain compatibility/research aliases only.
 
@@ -88,6 +88,16 @@ A source file, workflow, queued run, token count, model consensus, or component 
 5. Validate retained historical provenance/source-count logic against exact-current replay so a second saturation pass cannot inflate scheduling weight from repeated provenance.
 6. Only after these gates should external Free-Swarm scale-up be reconsidered.
 7. Keep local Qwen3-0.6B/J-Space causal work separate, zero-cost, and nonpromoting until its own exact-source terminal evidence and experiment coordination requirements are satisfied.
+
+## GO 8.78 — exact-current saturation-semantics re-entry delta
+
+A later exact-current inspection narrowed the historical-conversion defect without creating another executor or donor lane. On canonical `main` observed at `9239370999c192328f33eb47fa3bbb7e88ab39a7`, `tools/free_swarm_backfill_scheduler.py` already had the explicit fail-closed `exhaustive=<true|false>` producer contract. The remaining defect was in `tools/free_swarm_historical_backfill.py`: `MAX_PASSES = 3`, and `_record_batch_progress()` could mark a chunk `SATURATED` after only one explicit exhaustive zero-novel follow-up once `passes >= 2`.
+
+This can turn incomplete bounded extraction into a false fixed point when a historical chunk contains more materially distinct deltas than the first few extraction passes expose. The selected successor law is: require two consecutive zero-novel passes that each explicitly assert `exhaustive=true`; missing/non-exhaustive signals remain pending/reset; a finite ceiling of at least 64 ends as `MAX_PASSES_REACHED`, never semantic `SATURATED`.
+
+Existing PR **#1879** already carries the relevant donor idea, so no duplicate PR was created. Current-main review comment `5404741720` records that its scheduler placeholder assertion is stale against canonical main and must be adapted rather than merged unchanged. The durable research receipt is `research_entity/continuity/receipts/2026-08-25_GO_878_BACKFILL_EXHAUSTIVENESS_REENTRY_GPT56SOL.json`, committed at `b6f5c6952bd8962f14c155c9dfca4345946b4939`.
+
+This review grants **zero** historical-backfill runtime, whole EntityOS/HCU, full-HCU, J-Space model, provider, training, or whole-product credit. No deterministic PR regression execution, historical saturation runtime result, unusual experiment, provider/model execution, Together call, or paid path was performed by this organ.
 
 ## Evidence discipline and re-entry
 

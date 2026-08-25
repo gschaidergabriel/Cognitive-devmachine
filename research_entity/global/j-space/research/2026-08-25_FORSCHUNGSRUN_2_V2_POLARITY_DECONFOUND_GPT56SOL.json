@@ -1,0 +1,97 @@
+{
+  "schema": "CLAY_FORSCHUNGSRUN_2_V2_POLARITY_DECONFOUND/v1",
+  "date": "2026-08-25",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "user_trigger": "forschungsrun 2",
+  "persistent_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority_epoch_observed": "8.78",
+  "execution_mode": "FREE_ONLY",
+  "canonical_main_observed_before_write": "23308181f631fbf1c7a19b4584a9c825cc90196e",
+  "scope": "STATIC_METHOD_DECONFOUND_SUCCESSOR_FOR_QWEN3_0_6B_STRUCTURAL_LABEL_FREE_NATIVE_CVEC_GATE",
+  "observed_runtime_boundary": {
+    "native_llamacpp_cvec_component_runtime_credit": 1,
+    "structural_label_free_native_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0,
+    "training_credit": 0,
+    "canonical_semantics_promotion": false
+  },
+  "existing_runtime_transport": {
+    "structural_run_id": 32810213066,
+    "structural_run_status_observed": "queued",
+    "recovery_run_id": 32811360359,
+    "recovery_run_status_observed": "queued",
+    "scientific_negative_from_queue": false,
+    "duplicate_dispatch_created_by_this_organ": false,
+    "historical_transport_evidence": "HOSTINGER_RUNNER_SCOPE_TOMOGRAPHY_31342664415.json records high-confidence repository-scope mismatch evidence for the active Hostinger runner; current queue state remains infrastructure/transport evidence, not a scientific result."
+  },
+  "unique_finding": {
+    "id": "R2_B8_QUERY_POLARITY_COUNT_CONFOUND",
+    "severity": "CRITICAL_FOR_LABEL_INDEPENDENT_PROMOTION",
+    "source_path": "tools/trigger1_structural_label_free_cases.py",
+    "source_blob_sha_observed": "66bb2f5cfccad602ee9c759961a369ab2c61be41",
+    "observation": "V1 uses exactly three scenarios and probe polarity = (scenario + target_index) % 2. Therefore polarity is only set-balanced, not count-balanced by evaluator-side semantic class.",
+    "v1_per_split_counts": {
+      "AFFIRMATIVE": {"query_not_negated": 2, "query_negated": 1},
+      "NEGATIVE": {"query_not_negated": 1, "query_negated": 2},
+      "NEUTRAL": {"query_not_negated": 2, "query_negated": 1}
+    },
+    "implication": "The model-facing ! marker remains statistically correlated with evaluator-side class. A structural pass from V1 cannot by itself establish complete label-independent deconfounding.",
+    "test_gap": "tests/test_trigger1_structural_label_free_cases.py only checks that each class sees the set {False, True}; it does not assert equal counts, so the residual correlation passes the existing regression."
+  },
+  "successor_v2": {
+    "source_path": "tools/trigger1_structural_label_free_cases_v2.py",
+    "source_commit": "83fca9efa6a128effc53a5d52eca6ed230125764",
+    "test_path": "tests/test_trigger1_structural_label_free_cases_v2.py",
+    "test_commit": "e08c52c0728d4ebefeeaad1327bb4dd09ee20ecf",
+    "schema": "CLAY_TRIGGER1_STRUCTURAL_LABEL_FREE_CASESET/v2",
+    "design": "EXACT_3_SEMANTIC_TARGET_X_3_OPAQUE_CODE_X_2_QUERY_POLARITY_FACTORIAL_PER_SPLIT",
+    "case_count_per_split": 18,
+    "scenarios_per_split": 6,
+    "each_target_code_cell_replication": 2,
+    "each_target_code_has_both_polarities": true,
+    "each_target_polarity_count": 3,
+    "probe_lexical_identity_shared_across_targets_within_scenario": true,
+    "calibration_holdout_content_vocabulary_disjoint": true,
+    "model_facing_explicit_semantic_labels": false,
+    "bundle_sha256_local_deterministic": "34016c95b339b8751c79b53f813f7f5b95a013703c3dd56f506870e04c1451d3"
+  },
+  "verification": {
+    "command": "PYTHONPATH=. python3 -m unittest -v tests/test_trigger1_structural_label_free_cases_v2.py",
+    "result": "5_OF_5_PASS",
+    "scope": "LOCAL_DETERMINISTIC_SOURCE_LOGIC_ONLY",
+    "model_executed": false,
+    "holdout_model_intervention_executed": false,
+    "runtime_credit_minted": false
+  },
+  "parallel_research_fusion": {
+    "concurrent_receipt": "research_entity/global/j-space/research/2026-08-25_FORSCHUNGSRUN_2_STRUCTURAL_PROMOTION_GATE_AUDIT_GPT56SOL.json",
+    "relationship": "COMPLEMENTARY_NON_DUPLICATE",
+    "already_identified_blockers": [
+      "R2_B1_GAIN_PREREGISTRATION_DRIFT",
+      "R2_B2_GEOMETRIC_COHERENCE_GATE_MISSING",
+      "R2_B3_PASS_RULE_DOES_NOT_REQUIRE_PER_TARGET_POSITIVITY",
+      "R2_B4_SIGN_FLIP_REVERSAL_NOT_ENFORCED",
+      "R2_B5_OFF_TARGET_REGRESSION_ABSENT",
+      "R2_B6_ONE_SYNTHETIC_TASK_GRAMMAR_NOT_CROSS_DOMAIN_ABSTRACTION",
+      "R2_B7_EFFECTIVE_SAMPLE_SIZE_TOO_SMALL_FOR_STRONG_PROMOTION"
+    ],
+    "new_blocker_added_here": "R2_B8_QUERY_POLARITY_COUNT_CONFOUND"
+  },
+  "queued_v1_reclassification": {
+    "if_pass": "BOUNDED_STRUCTURAL_NATIVE_COMPONENT_EVIDENCE_WITH_RESIDUAL_QUERY_POLARITY_CONFOUND_AND_OTHER_RUN2_PROMOTION_BLOCKERS; NO_CANONICAL_SEMANTIC_JSPACE_PROMOTION",
+    "if_fail": "PRESERVE_AS_EXACT_NEGATIVE_EVIDENCE_AT_EXECUTED_SOURCE_IDENTITY",
+    "if_queued": "TRANSPORT_BLOCKER_ONLY_NO_SCIENTIFIC_CREDIT"
+  },
+  "source_freeze_note": "The already-dispatched workflow checks out ref main at execution time rather than its dispatch SHA. This means exact execution identity must be recorded and reviewed; adding V2 files does not alter V1 generator code, but the resulting full-tree source head can differ from the dispatch head.",
+  "unusual_experiment": {
+    "new_unusual_intervention_executed_by_this_organ": false,
+    "reason": "Standalone Forschungsrun 2 has no canonical shared go macrocycle identity/atomic unusual-experiment lease, and supervisor 8.78 explicitly says not to spawn duplicate self-hosted experiments while the existing exact runs are queued."
+  },
+  "research_delta": "Forschungsrun 2 found a previously unrecorded residual class shortcut in the supposedly counterbalanced structural V1 cases: with three scenarios the query-negation marker is correlated with class by count. A non-destructive V2 successor now enforces an exact 3x3x2 target/code/polarity factorial, shared probe lexical identity across targets within scenario, and exact count regressions. This complements the concurrent Run2 B1-B7 promotion audit without modifying or reinterpreting the frozen V1 runtime lane.",
+  "next_exact_action": "Keep the already queued V1 run for bounded component evidence only. Do not promote canonical semantic J-Space from it. Before any successor model intervention, compose the V2 exact-polarity cases with the Run2 cross-task-family geometry, fixed-gain, per-target-positive, bidirectional sign-flip and off-target gates; execute only after an admitted execution transport and required unusual-experiment coordination are available."
+}

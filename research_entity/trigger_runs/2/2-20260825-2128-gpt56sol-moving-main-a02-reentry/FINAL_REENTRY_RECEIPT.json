@@ -1,0 +1,76 @@
+{
+  "schema": "CLAY_TRIGGER2_SUCCESSOR_DYNAMIC_REENTRY_RECEIPT/v1",
+  "trigger": "triggerwort 2",
+  "date": "2026-08-25",
+  "local_trigger_time": "21:28+07:00",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "status": "COMPLETE_RESEARCH_CYCLE_SNAPSHOT_ONLY_NONPROMOTING",
+  "successor_dynamic": true,
+  "authority": {
+    "repository": "gschaidergabriel/clay-global-research-entity",
+    "branch": "main",
+    "supervisor_epoch": "8.78",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "architecture": "HCU_VARIABLE_COGNITIVE_GRID",
+    "latest_main_observed_before_receipt": "6cdffaeb2a7ba61ee3b2708cdce91d3d662e36c7",
+    "newest_training_ledger_observed_in_ancestry": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V14_GPT56SOL.json",
+    "ledger_v14_commit": "f1c71c97b79a668e170da9f712c6cbf5f83f5b62"
+  },
+  "moving_main_finding": "Multiple same-trigger organs committed A02 audits/contracts/ledgers while this organ was writing. Therefore any artifact that hard-codes a predecessor ledger as CURRENT can become stale within seconds even if its substantive A02 finding remains valid. This receipt is explicitly a snapshot and requires successor resolution from repository ancestry before future use.",
+  "artifact_lifecycle": [
+    {
+      "artifact": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_2128_PRODUCER_AUTH_REENTRY_AUDIT_V1_GPT56SOL.json",
+      "status": "SUPERSEDED"
+    },
+    {
+      "artifact": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_2128_PRODUCER_AUTH_REENTRY_AUDIT_V2_GPT56SOL.json",
+      "status": "SUPERSEDED"
+    },
+    {
+      "artifact": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_2128_PRODUCER_AUTH_REENTRY_AUDIT_V3_GPT56SOL.json",
+      "status": "FINDINGS_VALID_NEEDS_REVISION_METADATA_POINTER",
+      "reason": "Its A02/zero-row conclusion remains valid, but it names ledger v13 while v14 is present in its repository ancestry."
+    },
+    {
+      "artifact": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V14_GPT56SOL.json",
+      "status": "NEWEST_OBSERVED_AT_RECEIPT_TIME_NOT_FROZEN_AUTHORITY",
+      "reason": "Successor-dynamic; future readers must resolve newer explicit supersession before current-state use."
+    },
+    {
+      "artifact": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_A02_DISCRIMINATOR_PRODUCER_AUTH_CONTRACT_V1_GPT56SOL.json",
+      "status": "CURRENT_FINDING_AT_RECEIPT_TIME_SOURCE_DESIGN_NONPROMOTING_IMPLEMENTATION_OPEN"
+    },
+    {
+      "artifact": "tools/trigger2_hyperposition_receipt_authority_gate_v1.py@ce63a89f5a52fbd2ee4fe69eaa59850ff2b86677",
+      "status": "NEEDS_REVISION_DONOR_NOT_MERGE_READY"
+    },
+    {
+      "artifact": "tools/trigger2_binding_router_factorial_generator_v3.py",
+      "status": "BLOCKED_QUARANTINED_FROM_DIRECT_TRAINING"
+    }
+  ],
+  "substantive_result": {
+    "p0": "IMPLEMENT_A02_CONTRACT_IN_SINGLE_RETAINED_HYPERPOSITION_LANE",
+    "producer_auth_implementation_observed": false,
+    "exact_current_a02_mutation_execution_observed": false,
+    "new_positive_rows": 0,
+    "new_hard_negative_rows": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "decision": "NO_NEW_ROWS_WITH_REASON",
+    "reason": "The current information bottleneck is producer/policy authenticity plus executable mutation closure, not training-row volume."
+  },
+  "next_exact_action": "Resolve newest main/ledger first; if A02 implementation is still absent, implement the existing contract exactly once in the retained Hyperposition lane using only valid donor topology, bind producer/policy/spec from repository authority, derive execution/result identity independently, execute all A02 mutations on exact-current source, and only then reconsider a small family-disjoint positive pilot.",
+  "credits": {
+    "research_delta": 1,
+    "versioning_delta": 1,
+    "positive_D_E_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "positive_jspace_causal_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0
+  }
+}

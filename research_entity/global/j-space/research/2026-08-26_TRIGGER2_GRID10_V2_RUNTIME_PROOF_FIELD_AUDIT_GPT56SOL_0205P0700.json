@@ -1,0 +1,75 @@
+{
+  "schema": "CLAY_TRIGGER2_GRID10_V2_RUNTIME_PROOF_FIELD_AUDIT/v1",
+  "date": "2026-08-26",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "status": "CURRENT_NONCANONICAL_SOURCE_AUDIT",
+  "authority": {
+    "supervisor": "8.81_DELTA",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "architecture": "HCU"
+  },
+  "audited_source": {
+    "path": "tools/xeno_physical_grid10_acceptance_v2.py",
+    "commit": "0011673f34bc55b838f52420376df6d68e40d9be",
+    "current_execution_request": "research_entity/execution_requests/2026-08-26_TRIGGER2_PHYSICAL_GRID10_V2_VPS_EXECUTION_PIN_0011673_GPT56SOL_0205P0700.json"
+  },
+  "finding": "Two P1 result booleans are source assertions rather than independently measured runtime facts: proof.explicit_read_transaction is assigned literal true and proof.writer_free_interval is assigned literal true. The first is strongly supported by the reviewed ro_snapshot implementation because it executes BEGIN on a read-only SQLite connection. The second is supported only by reviewed control-flow/isolation assumptions in this harness, not by a dynamic database-level observation that no other connection committed during the barrier interval.",
+  "evidence": {
+    "dynamic_fields": [
+      "distinct_os_pids",
+      "all_alive_at_barrier",
+      "pid_binding_ok",
+      "same_snapshot_identity",
+      "interval_overlap_ok",
+      "ready rows",
+      "finished timestamps"
+    ],
+    "source_asserted_fields": [
+      "explicit_read_transaction=true",
+      "writer_free_interval=true"
+    ],
+    "source_basis_for_explicit_read_transaction": "ro_snapshot opens mode=ro SQLite, executes BEGIN, then reads epoch/generation/tasks/scopes/leases inside that transaction",
+    "source_basis_for_writer_free_interval": "parent seeds before spawning; ordinary child DB handles are mode=ro; parent performs no intentional S1 writes during the release-barrier interval",
+    "measurement_gap": "No live observer connection, PRAGMA data_version/change counter, journal/WAL evidence, or equivalent runtime mechanism is sampled across the barrier to independently demonstrate zero committed writers."
+  },
+  "classification": {
+    "P1_EXPLICIT_READ_TRANSACTION": "SOURCE_BOUND_PROPERTY_RUNTIME_BOOLEAN_SELF_ASSERTED",
+    "P1_WRITER_FREE_BARRIER_INTERVAL": "SOURCE_CONTROL_FLOW_PROPERTY_RUNTIME_BOOLEAN_SELF_ASSERTED",
+    "P1_ONE_SHARED_READ_ONLY_S1_SNAPSHOT": "DYNAMIC_PACKET_IDENTITY_OBSERVATION",
+    "physical_grid10_v2_whole_component_credit": "REVIEW_REQUIRED_AFTER_EXACT_RUNTIME_RECEIPT",
+    "whole_hcu_credit": 0,
+    "whole_entityos_credit": 0,
+    "jspace_model_credit": 0,
+    "training_credit": 0
+  },
+  "hypothesis": "Because the v2 acceptance runs against a fresh isolated temporary S1 database, exact source hashes plus ordinary-child mode=ro plus parent control flow may be sufficient to treat writer-free interval as a bounded source+runtime construction property even without an independent database-level counter.",
+  "counterhypothesis": "A boolean named as a runtime proof must itself be dynamically established; otherwise an accidental future writer, helper, trigger, or refactor can leave writer_free_interval=true while violating the property. Source review alone is too brittle for successor-dynamic acceptance.",
+  "cheapest_high_information_discriminator": {
+    "preferred_future_repair": "Keep a parent observer SQLite connection open before child spawn; sample PRAGMA data_version or an equivalent commit-sensitive database signal immediately before the concurrent window and immediately before release, and fail if it changes. Bind the observed values into the proof object. Also derive explicit_read_transaction from an instrumented child receipt or rename it as a source assertion.",
+    "why": "This converts the self-seeded boolean into a fail-closed runtime observation without introducing a second state authority or model-dependent logic."
+  },
+  "training_eval_reinjection": {
+    "concept": "DECLARED_OR_SELF_ASSERTED_PROOF_FIELD_NEQ_INDEPENDENT_MEASUREMENT",
+    "hard_negatives": [
+      "a proof JSON contains writer_free_interval=true, therefore no writer existed",
+      "a test boolean is true because the implementation hardcodes it, therefore the measured property passed",
+      "shared snapshot digests alone prove no transient or external commit happened during the whole overlap interval",
+      "source review is promoted to whole-HCU runtime evidence"
+    ],
+    "positive_behavior": [
+      "classify source assertions separately from dynamic observations",
+      "require successor-dynamic runtime instrumentation when the claim depends on a mutable execution fact",
+      "keep component credit bounded even when exact source identity is known"
+    ],
+    "admission": "CANDIDATE_EVAL_ONLY_NOT_TRAINING_ELIGIBLE"
+  },
+  "execution_decision": {
+    "existing_vps_request": "DO_NOT_DUPLICATE",
+    "existing_vps_request_may_run": true,
+    "credit_review_note": "If the exact pinned v2 runtime returns PASS, preserve the receipt. During credit review, treat the two self-asserted fields according to this audit rather than silently upgrading them to independent measurements. A successor can harden them without erasing the historical v2 run."
+  },
+  "epistemic_boundary": "Source audit only. No VPS execution, unusual experiment, training, provider call, canonical state mutation, or effect occurred in this artifact."
+}

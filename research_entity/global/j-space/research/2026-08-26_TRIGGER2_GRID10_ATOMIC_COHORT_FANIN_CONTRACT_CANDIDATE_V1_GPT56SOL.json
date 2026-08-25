@@ -1,0 +1,163 @@
+{
+  "schema": "CLAY_TRIGGER2_GRID10_ATOMIC_COHORT_FANIN_CONTRACT_CANDIDATE/v1",
+  "date": "2026-08-26",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority_epoch": "8.81_DELTA",
+  "mode": "FREE_ONLY",
+  "status": "NONCANONICAL_PROTOCOL_CANDIDATE_NOT_RUNTIME_ADMITTED_NOT_TRAINING_ADMITTED",
+  "observed_main_before_write": "b4160a6e889c3e58c59810c003d4cc4db2eed76c",
+  "authority_and_execution_fences": {
+    "owner_emergency_free_provider_stop_observed": true,
+    "free_swarm_provider_admission": "DISABLED_BY_CURRENT_MAIN",
+    "paid_provider_execution": "FORBIDDEN",
+    "together": "FORBIDDEN",
+    "provider_or_model_execution_performed_by_this_delta": false,
+    "vps_execution_performed_by_this_delta": false,
+    "canonical_truth_authority_added": false,
+    "effect_authority_added": false
+  },
+  "problem": {
+    "id": "GRID10_EXACT_SNAPSHOT_SEQUENTIAL_FANIN_IMPOSSIBILITY",
+    "source_findings": [
+      "The repaired physical-liveness path can produce ten simultaneous NODE_RESULT packets from one exact snapshot.",
+      "The current exact-current per-packet admission rule requires each packet epoch/digest to equal current S1.",
+      "Each successful coordinator_commit advances global S1 epoch.",
+      "Therefore after admitting one untouched packet from a same-snapshot cohort, the remaining untouched cohort packets become stale under the current rule.",
+      "Using a later sequential process cohort to obtain fresh packets proves a different property and splices physical-concurrency evidence from one cohort to admission evidence from another."
+    ]
+  },
+  "decision": {
+    "selected_candidate": "ATOMIC_COHORT_BATCH_COMMIT_FOR_PHYSICAL_GRID10_BASE",
+    "selection_status": "RESEARCH_DESIGN_CANDIDATE_ONLY",
+    "why": [
+      "It preserves exact observation provenance without silently rewriting old NODE_RESULT epoch/digest fields.",
+      "It allows the exact ten simultaneously live process packets to be the exact evidence set consumed by the coordinator path.",
+      "It changes S1 once for one bounded cohort instead of forcing N mutually incompatible exact-current per-packet commits.",
+      "It keeps arbitration, lease validation, batch ordering, deduplication and CAS in deterministic fabric code rather than teaching a model a second authority system."
+    ],
+    "counterhypothesis": "If product acceptance only intends two separately named component properties—physical concurrent liveness and sequential fresh-result admission—same-cohort fan-in is unnecessary. In that case the current split proof should be explicitly narrowed and must not be called an integrated physical GRID10 result path."
+  },
+  "base_acceptance_scope": {
+    "name": "PHYSICAL_GRID10_SINGLE_SCOPE_ATOMIC_COHORT_BASE",
+    "node_processes": 10,
+    "scope": "GLOBAL_ONLY_FOR_BASE_ACCEPTANCE",
+    "coordinators": 1,
+    "reason_for_single_scope_base": "A single scope isolates the physical same-cohort fan-in invariant. Multi-scope/multi-coordinator semantics are a later independent gate and must not be smuggled into base acceptance through global-epoch ambiguity.",
+    "resident_weight_copy_count": "SEPARATE_MEASUREMENT",
+    "physical_decode_concurrency": "SEPARATE_MEASUREMENT"
+  },
+  "required_order": [
+    "1. Seed deterministic S1 fixture and runtime membership.",
+    "2. Elect one valid temporary coordinator for GLOBAL before ordinary cohort observation; lease creation is therefore already part of the cohort snapshot identity.",
+    "3. Start ten independent ordinary Xeno OS processes with distinct runtime membership/process identities.",
+    "4. Freeze S1 writers for the bounded cohort-read interval and require all ten children to hold explicit read transactions against one identical generation+epoch+digest snapshot.",
+    "5. Each child emits one immutable NODE_RESULT/v1 plus producer/read attestation bound to node membership identity, OS process identity, consumed snapshot identity, consumed task/read-set identity and payload digest.",
+    "6. Parent verifies all ten processes were simultaneously live at one barrier and binds each exact packet_digest to the corresponding live process identity before release.",
+    "7. After collecting the exact same ten packets, but before any S1 mutation, deterministic fabric validates the complete cohort as one set against the same expected starting snapshot and the already-present valid GLOBAL coordinator lease.",
+    "8. Deterministic coordinator integration derives one cohort summary candidate from exactly the ten admitted packet digests in deterministic order.",
+    "9. One atomic S1 transaction commits the cohort result: validate expected start epoch/digest again, insert all ten result identities under one cohort/batch identity, update the GLOBAL S1 summary once, and advance global epoch exactly once.",
+    "10. Original NODE_RESULT observation epoch/digest values remain immutable historical provenance. Only the derived cohort summary receives the new post-commit S1 epoch.",
+    "11. Replay of the same cohort/batch identity is idempotent or rejected without a second S1 state transition."
+  ],
+  "candidate_identity_contract": {
+    "cohort_id_derivation_inputs": [
+      "schema/version",
+      "generation",
+      "starting_state_epoch",
+      "starting_state_digest",
+      "scope",
+      "coordinator_lease_id",
+      "ordered exact packet_digest set",
+      "ordered runtime membership/process identity set"
+    ],
+    "ordering_rule": "DETERMINISTIC_CANONICAL_ORDER_BY_SOURCE_NODE_ID_THEN_PACKET_DIGEST",
+    "packet_count": 10,
+    "duplicate_packet_digest": "REJECT",
+    "duplicate_process_identity": "REJECT",
+    "node_membership_ambiguity": "REJECT",
+    "mixed_snapshot_identity": "REJECT",
+    "mixed_scope": "REJECT_IN_BASE_CONTRACT",
+    "stale_starting_snapshot_before_batch_commit": "REJECT_AND_RECOMPUTE_FROM_NEW_COHORT",
+    "silent_packet_rebase": "FORBIDDEN"
+  },
+  "candidate_atomic_commit_semantics": {
+    "precondition": "current S1 generation+epoch+digest exactly equals the cohort starting identity and the referenced GLOBAL coordinator lease is still valid and bound to that starting snapshot/generation policy",
+    "transaction": [
+      "BEGIN IMMEDIATE or equivalent single deterministic write transaction",
+      "recheck current starting identity inside transaction",
+      "recheck cohort_id and every packet/read/process binding",
+      "recheck packet set size=10 and uniqueness",
+      "compute deterministic summary candidate from immutable packet set",
+      "write one GLOBAL summary candidate with provenance containing cohort_id and exact packet digests",
+      "record all ten result identities as members of the same cohort admission",
+      "advance S1 epoch once",
+      "COMMIT"
+    ],
+    "postcondition": "one bounded S1 candidate-state transition attributable to the exact ten-process cohort; no S0 truth and no real-effect authority"
+  },
+  "mandatory_negative_regressions": [
+    "TEN_SEQUENTIAL_PROCESSES_CANNOT_SATISFY_SIMULTANEOUS_COHORT",
+    "BARRIER_COHORT_PACKETS_REPLACED_BY_SECOND_PROCESS_COHORT_REJECTED",
+    "UNUSED_COHORT_PACKET_TAMPER_MUST_CHANGE_OR_FAIL_COHORT_ID_AND_SUMMARY",
+    "ONE_CHILD_EXIT_BEFORE_BARRIER_REJECTED",
+    "PID_OR_RUNTIME_MEMBERSHIP_BINDING_MISMATCH_REJECTED",
+    "DUPLICATE_PID_OR_DUPLICATE_PACKET_REJECTED",
+    "ONE_CHILD_DIFFERENT_SNAPSHOT_REJECTED",
+    "EXTERNAL_S1_WRITE_BETWEEN_COHORT_READ_AND_BATCH_COMMIT_REJECTED",
+    "REVOKED_OR_WRONG_SCOPE_COORDINATOR_LEASE_REJECTED",
+    "MIXED_SCOPE_COHORT_REJECTED_IN_BASE_ACCEPTANCE",
+    "PACKET_PAYLOAD_OR_READ_RECEIPT_TAMPER_REJECTED",
+    "DECLARED_CURRENT_BUT_CONSUMED_STALE_REJECTED",
+    "PER_PACKET_FALLBACK_AFTER_FIRST_BATCH_MEMBER_FORBIDDEN",
+    "IDENTICAL_COHORT_REPLAY_CAUSES_ZERO_SECOND_STATE_DELTA",
+    "COMPONENT_PASS_CANNOT_PROMOTE_WHOLE_HCU_ENTITYOS_JSPACE_OR_TRAINING"
+  ],
+  "later_independent_gates": [
+    "multi-scope atomic fan-in semantics",
+    "multiple simultaneous scoped coordinators",
+    "coordinator crash/replacement during active cohort formation",
+    "ordinary node restart/rejoin with new process identity",
+    "load/fan-in/contention measurements",
+    "recursive coordinator compression",
+    "Hyperposition branch preservation",
+    "GWT broadcast uptake and causal re-entry",
+    "model-specific J-Space representation/intervention evidence"
+  ],
+  "trigger2_training_eval_reinjection": {
+    "accepted_training_tokens_added": 0,
+    "new_positive_training_rows": 0,
+    "evaluation_concepts_to_add_or_strengthen": [
+      "same-cohort evidence vs proof splicing",
+      "immutable observation provenance vs current derived summary",
+      "atomic fan-in vs sequential exact-current admission",
+      "stale observation must not be relabeled current",
+      "process/node/membership identity separation",
+      "component evidence scope vs whole-product credit"
+    ],
+    "model_must_not_learn_as_authority": [
+      "lease grant permission",
+      "CAS authorization",
+      "batch admission authorization",
+      "canonical truth mutation",
+      "real effect authorization"
+    ],
+    "model_side_target": "Given typed deterministic outcomes, preserve evidence age/provenance, request recomputation when batch preconditions fail, and reason over the current coordinator summary without claiming that old NODE_RESULT observations themselves became current."
+  },
+  "promotion_fence": {
+    "protocol_status": "CANDIDATE_ONLY_UNTIL_IMPLEMENTED_AND_EXECUTABLY_FALSIFIED",
+    "new_runtime_pin": "BLOCKED_UNTIL_SOURCE_PLUS_NEGATIVE_REGRESSIONS_EXIST_AND_CURRENT_AUTHORITY_REENTRY_ACCEPTS_THE_CONTRACT",
+    "physical_grid10_runtime_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "jspace_model_credit": 0,
+    "training_credit": 0,
+    "canonical_truth_credit": 0,
+    "effect_authority_credit": 0
+  },
+  "next_exact_action": "Implement one test-only deterministic successor that realizes this single-scope atomic cohort contract using the exact ten packets from the simultaneous barrier cohort, with disjoint-cohort, packet-tamper, stale-before-batch and replay negatives. Do not create a new runtime execution pin until that source is current, self-falsifying, deduplicated against parallel work and re-reviewed under current owner/supervisor authority."
+}

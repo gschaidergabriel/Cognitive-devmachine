@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v4",
+  "command_id": "fr1-jspace06-rank-diagnostic-1c12778",
+  "op": "exec",
+  "cwd": "/workspace/clay-global-research-entity",
+  "timeout_seconds": 300,
+  "command": "set -euo pipefail; test \"$(git rev-parse HEAD)\" = 1c12778fb46bdc58a898add000104aaa96ea22f3; P=/workspace/qwen06-fr1-current/native-q8-basis-1c12778/native-q8-simplex-rank.json; /cache/clay-qwen06/venv/bin/python -c 'import json; p=json.load(open(\"/workspace/qwen06-fr1-current/native-q8-basis-1c12778/native-q8-simplex-rank.json\")); print(json.dumps(p,sort_keys=True))'"
+}

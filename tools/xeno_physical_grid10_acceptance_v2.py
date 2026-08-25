@@ -3,7 +3,10 @@
 
 This successor is intentionally fail-closed relative to v1:
 - proves ten simultaneously live, distinct OS node processes with a barrier;
-- binds every ordinary-node observation to an exact (generation, epoch, digest);
+- proves each barrier process still holds a read-only file descriptor to the same S1 DB;
+- binds every ordinary-node observation to one explicit read transaction and exact
+  (generation, epoch, digest) snapshot identity;
+- measures the authoritative S1 identity before, at, and after the concurrency window;
 - rejects stale epoch or digest instead of relabeling stale evidence as current;
 - keeps ordinary nodes read-only and coordinator writes non-canonical.
 
@@ -16,6 +19,7 @@ import argparse
 import json
 import os
 from pathlib import Path
+import sqlite3
 import subprocess
 import sys
 import tempfile
@@ -34,46 +38,69 @@ SCHEMA = "XENO_PHYSICAL_GRID10_ACCEPTANCE/v2"
 N = 10
 
 
-def ro_snapshot(path: Path) -> dict[str, Any]:
-    """Reuse Fabric's exact digest definition through a read-only SQLite view."""
-    import sqlite3
-
-    con = sqlite3.connect(f"file:{path}?mode=ro", uri=True)
-    con.row_factory = sqlite3.Row
-    try:
-        # Explicit read transaction: all SELECTs below belong to one stable SQLite snapshot.
-        # mode=ro alone is not an atomic-snapshot proof.
-        con.execute("BEGIN")
-        epoch = int(con.execute("SELECT v FROM meta WHERE k='epoch'").fetchone()[0])
-        generation = int(con.execute("SELECT v FROM meta WHERE k='generation'").fetchone()[0])
-        tasks = tuple(dict(r) for r in con.execute("SELECT * FROM tasks ORDER BY task_id"))
-        scopes = tuple(dict(r) for r in con.execute("SELECT * FROM scopes ORDER BY scope"))
-        leases = tuple(
-            dict(r)
-            for r in con.execute(
-                "SELECT lease_id,node_id,scope,generation,granted_epoch,valid "
-                "FROM leases ORDER BY lease_id"
-            )
+def _snapshot_from_open_read_transaction(con: sqlite3.Connection) -> dict[str, Any]:
+    """Read every covered S1 field from the caller's already-open read transaction."""
+    epoch = int(con.execute("SELECT v FROM meta WHERE k='epoch'").fetchone()[0])
+    generation = int(con.execute("SELECT v FROM meta WHERE k='generation'").fetchone()[0])
+    tasks = tuple(dict(r) for r in con.execute("SELECT * FROM tasks ORDER BY task_id"))
+    scopes = tuple(dict(r) for r in con.execute("SELECT * FROM scopes ORDER BY scope"))
+    leases = tuple(
+        dict(r)
+        for r in con.execute(
+            "SELECT lease_id,node_id,scope,generation,granted_epoch,valid "
+            "FROM leases ORDER BY lease_id"
         )
-        digest = dg(
-            {
-                "epoch": epoch,
-                "generation": generation,
-                "tasks": tasks,
-                "scopes": scopes,
-                "leases": leases,
-            }
-        )
-        return {
+    )
+    digest = dg(
+        {
             "epoch": epoch,
             "generation": generation,
-            "state_digest": digest,
             "tasks": tasks,
             "scopes": scopes,
             "leases": leases,
         }
-    finally:
+    )
+    return {
+        "epoch": epoch,
+        "generation": generation,
+        "state_digest": digest,
+        "tasks": tasks,
+        "scopes": scopes,
+        "leases": leases,
+    }
+
+
+def open_ro_snapshot(path: Path) -> tuple[sqlite3.Connection, dict[str, Any]]:
+    """Open a read-only DB connection and retain its explicit read transaction."""
+    con = sqlite3.connect(f"file:{path}?mode=ro", uri=True)
+    con.row_factory = sqlite3.Row
+    try:
+        # SQLite snapshot stability belongs to a read transaction, not merely a connection.
+        con.execute("BEGIN")
+        snapshot = _snapshot_from_open_read_transaction(con)
+        return con, snapshot
+    except Exception:
         con.close()
+        raise
+
+
+def ro_snapshot(path: Path) -> dict[str, Any]:
+    """Take one exact read-transaction snapshot and close it after all covered SELECTs."""
+    con, snapshot = open_ro_snapshot(path)
+    try:
+        return snapshot
+    finally:
+        if con.in_transaction:
+            con.rollback()
+        con.close()
+
+
+def _identity(snapshot: dict[str, Any]) -> tuple[int, int, str]:
+    return (
+        int(snapshot["generation"]),
+        int(snapshot["epoch"]),
+        str(snapshot["state_digest"]),
+    )
 
 
 class ExactSnapshotFabric(Fabric):
@@ -91,7 +118,12 @@ class ExactSnapshotFabric(Fabric):
         current = self.snapshot()
         if packet.get("generation") != current.generation:
             raise FabricError("RESULT_STALE_GENERATION")
-        if packet.get("state_epoch") != current.epoch:
+        packet_epoch = packet.get("state_epoch")
+        if not isinstance(packet_epoch, int):
+            raise FabricError("RESULT_STATE_EPOCH_INVALID")
+        if packet_epoch > current.epoch:
+            raise FabricError("RESULT_FUTURE_EPOCH")
+        if packet_epoch < current.epoch:
             raise FabricError("RESULT_STALE_EPOCH")
         if packet.get("state_digest") != current.state_digest:
             raise FabricError("RESULT_STALE_DIGEST")
@@ -124,55 +156,64 @@ def child_node(
     barrier_dir: Path | None,
 ) -> int:
     started_ns = time.time_ns()
-    snapshot = ro_snapshot(db)
-    task = _choose_task(snapshot, scope)
-    selected_scope = scope or ("GLOBAL" if task is None else str(task["scope"]))
-    payload = {
-        "node": node_id,
-        "task_id": None if task is None else task["task_id"],
-        "observation": f"result:{node_id}",
-        "useful": task is not None,
-        "process_pid": os.getpid(),
-    }
-    core = {
-        "schema": "NODE_RESULT/v1",
-        "source_kind": "ORDINARY_NODE",
-        "source_node_id": node_id,
-        "scope": selected_scope,
-        "generation": snapshot["generation"],
-        "state_epoch": snapshot["epoch"],
-        "state_digest": snapshot["state_digest"],
-        "payload": payload,
-    }
-    packet = {**core, "packet_digest": dg(core), "s1_write_intent": False}
-
-    if barrier_dir is not None:
-        ready_dir = barrier_dir / "ready"
-        ready_dir.mkdir(parents=True, exist_ok=True)
-        ready_ns = time.time_ns()
-        ready = {
-            "node_id": node_id,
-            "pid": os.getpid(),
-            "started_ns": started_ns,
-            "ready_ns": ready_ns,
+    con, snapshot = open_ro_snapshot(db)
+    try:
+        task = _choose_task(snapshot, scope)
+        selected_scope = scope or ("GLOBAL" if task is None else str(task["scope"]))
+        payload = {
+            "node": node_id,
+            "task_id": None if task is None else task["task_id"],
+            "observation": f"result:{node_id}",
+            "useful": task is not None,
+            "process_pid": os.getpid(),
+        }
+        core = {
+            "schema": "NODE_RESULT/v1",
+            "source_kind": "ORDINARY_NODE",
+            "source_node_id": node_id,
+            "scope": selected_scope,
             "generation": snapshot["generation"],
             "state_epoch": snapshot["epoch"],
             "state_digest": snapshot["state_digest"],
+            "payload": payload,
         }
-        tmp = ready_dir / f".{node_id}.{os.getpid()}.tmp"
-        dst = ready_dir / f"{node_id}.json"
-        tmp.write_text(cj(ready), encoding="utf-8")
-        tmp.replace(dst)
+        packet = {**core, "packet_digest": dg(core), "s1_write_intent": False}
 
-        release = barrier_dir / "release"
-        deadline = time.monotonic() + 20.0
-        while not release.exists():
-            if time.monotonic() >= deadline:
-                raise SystemExit("BARRIER_RELEASE_TIMEOUT")
-            time.sleep(0.01)
+        if barrier_dir is not None:
+            ready_dir = barrier_dir / "ready"
+            ready_dir.mkdir(parents=True, exist_ok=True)
+            ready_ns = time.time_ns()
+            ready = {
+                "node_id": node_id,
+                "pid": os.getpid(),
+                "started_ns": started_ns,
+                "ready_ns": ready_ns,
+                "generation": snapshot["generation"],
+                "state_epoch": snapshot["epoch"],
+                "state_digest": snapshot["state_digest"],
+                "ro_transaction_open": bool(con.in_transaction),
+                "db_path": str(db.resolve()),
+            }
+            tmp = ready_dir / f".{node_id}.{os.getpid()}.tmp"
+            dst = ready_dir / f"{node_id}.json"
+            tmp.write_text(cj(ready), encoding="utf-8")
+            tmp.replace(dst)
 
-    print(cj(packet), flush=True)
-    return 0
+            # Crucial v2 proof invariant: keep the same read-only connection and read
+            # transaction alive until the parent has observed all ten children at barrier.
+            release = barrier_dir / "release"
+            deadline = time.monotonic() + 20.0
+            while not release.exists():
+                if time.monotonic() >= deadline:
+                    raise SystemExit("BARRIER_RELEASE_TIMEOUT")
+                time.sleep(0.01)
+
+        print(cj(packet), flush=True)
+        return 0
+    finally:
+        if con.in_transaction:
+            con.rollback()
+        con.close()
 
 
 def expect_error(fn, code: str) -> None:
@@ -205,6 +246,46 @@ def spawn_one(script: Path, db: Path, node_id: str, scope: str) -> dict[str, Any
     return json.loads(cp.stdout.strip().splitlines()[-1])
 
 
+def _procfs_readonly_db_fds(pid: int, db: Path) -> list[int]:
+    """Return Linux procfs FDs that are open O_RDONLY on the exact S1 database path."""
+    proc_fd = Path("/proc") / str(pid) / "fd"
+    proc_fdinfo = Path("/proc") / str(pid) / "fdinfo"
+    if not proc_fd.is_dir() or not proc_fdinfo.is_dir():
+        return []
+
+    wanted = db.resolve()
+    matches: list[int] = []
+    for fd_path in proc_fd.iterdir():
+        try:
+            target_text = os.readlink(fd_path)
+            if target_text.endswith(" (deleted)"):
+                target_text = target_text[: -len(" (deleted)")]
+            target = Path(target_text)
+            if not target.is_absolute():
+                target = (fd_path.parent / target).resolve()
+            else:
+                target = target.resolve()
+            if target != wanted:
+                continue
+
+            flags_line = None
+            for line in (proc_fdinfo / fd_path.name).read_text(
+                encoding="utf-8", errors="replace"
+            ).splitlines():
+                if line.startswith("flags:"):
+                    flags_line = line.split(":", 1)[1].strip()
+                    break
+            if flags_line is None:
+                continue
+            flags = int(flags_line, 8)
+            if (flags & os.O_ACCMODE) == os.O_RDONLY:
+                matches.append(int(fd_path.name))
+        except (FileNotFoundError, PermissionError, OSError, ValueError):
+            # Fail closed through an empty/missing binding in the aggregate proof.
+            continue
+    return sorted(matches)
+
+
 def concurrent_probe(
     script: Path,
     db: Path,
@@ -213,8 +294,14 @@ def concurrent_probe(
     barrier_dir: Path,
 ) -> tuple[list[dict[str, Any]], dict[str, Any]]:
     (barrier_dir / "ready").mkdir(parents=True, exist_ok=True)
+
+    # Authoritative identity before any child begins its snapshot transaction.
+    s1_before = ro_snapshot(db)
+
     procs: list[subprocess.Popen[str]] = []
+    parent_launch_ns: dict[str, int] = {}
     for node_id, scope in zip(ids, scopes, strict=True):
+        parent_launch_ns[node_id] = time.time_ns()
         procs.append(
             subprocess.Popen(
                 [
@@ -248,7 +335,7 @@ def concurrent_probe(
         time.sleep(0.01)
 
     ready_rows = [json.loads(p.read_text(encoding="utf-8")) for p in ready_files]
-    pids = [p.pid for p in procs]
+    pids = [int(p.pid) for p in procs]
     all_alive_at_barrier = all(p.poll() is None for p in procs)
     ready_pid_by_node = {r["node_id"]: int(r["pid"]) for r in ready_rows}
     process_pid_by_node = {
@@ -256,39 +343,85 @@ def concurrent_probe(
     }
     pid_binding_ok = ready_pid_by_node == process_pid_by_node
 
-    released_ns = time.time_ns()
-    (barrier_dir / "release").write_text(str(released_ns), encoding="utf-8")
-
-    packets: list[dict[str, Any]] = []
-    finished_ns: dict[str, int] = {}
-    for node_id, proc in zip(ids, procs, strict=True):
-        out, err = proc.communicate(timeout=20)
-        finished_ns[node_id] = time.time_ns()
-        if proc.returncode != 0:
-            raise RuntimeError(f"{node_id} rc={proc.returncode} stderr={err.strip()}")
-        packets.append(json.loads(out.strip().splitlines()[-1]))
+    # Linux/Ubuntu proof that the barrier processes are not merely alive: each still owns
+    # an O_RDONLY descriptor for the exact S1 SQLite database while blocked at the barrier.
+    readonly_db_fds = {
+        node_id: _procfs_readonly_db_fds(int(proc.pid), db)
+        for node_id, proc in zip(ids, procs, strict=True)
+    }
+    procfs_available = Path("/proc").is_dir()
+    all_hold_readonly_s1_fd = (
+        procfs_available
+        and len(readonly_db_fds) == len(ids)
+        and all(readonly_db_fds[node_id] for node_id in ids)
+    )
+    all_child_transactions_report_open = all(
+        r.get("ro_transaction_open") is True for r in ready_rows
+    )
 
     shared_identities = {
         (int(r["generation"]), int(r["state_epoch"]), str(r["state_digest"]))
         for r in ready_rows
     }
+
+    # Re-read S1 while all ten children are blocked with their read transactions open.
+    # Equality with the pre-window monotonic epoch/digest identity is observed evidence that
+    # no S1 write advanced the covered state during acquisition.
+    s1_at_barrier = ro_snapshot(db)
+    writer_free_until_barrier = _identity(s1_before) == _identity(s1_at_barrier)
+
+    released_ns = time.time_ns()
+    (barrier_dir / "release").write_text(str(released_ns), encoding="utf-8")
+
+    packets: list[dict[str, Any]] = []
+    parent_observed_exit_ns: dict[str, int] = {}
+    for node_id, proc in zip(ids, procs, strict=True):
+        out, err = proc.communicate(timeout=20)
+        parent_observed_exit_ns[node_id] = time.time_ns()
+        if proc.returncode != 0:
+            raise RuntimeError(f"{node_id} rc={proc.returncode} stderr={err.strip()}")
+        packets.append(json.loads(out.strip().splitlines()[-1]))
+
+    s1_after = ro_snapshot(db)
+    writer_free_full_probe = (
+        _identity(s1_before)
+        == _identity(s1_at_barrier)
+        == _identity(s1_after)
+    )
     interval_overlap_ok = all(
-        int(r["started_ns"]) <= released_ns <= finished_ns[r["node_id"]]
+        int(r["started_ns"])
+        <= released_ns
+        <= parent_observed_exit_ns[r["node_id"]]
         for r in ready_rows
     )
+    packet_pid_binding_ok = all(
+        int(packet["payload"]["process_pid"])
+        == process_pid_by_node[packet["source_node_id"]]
+        for packet in packets
+    )
+
     proof = {
         "distinct_os_pids": len(set(pids)),
         "all_alive_at_barrier": all_alive_at_barrier,
         "pid_binding_ok": pid_binding_ok,
+        "packet_pid_binding_ok": packet_pid_binding_ok,
         "same_snapshot_identity": len(shared_identities) == 1,
-        "explicit_read_transaction": True,
-        "writer_free_interval": True,
+        "explicit_read_transaction": all_child_transactions_report_open,
+        "procfs_available": procfs_available,
+        "readonly_s1_fd_binding": readonly_db_fds,
+        "all_hold_readonly_s1_fd_at_barrier": all_hold_readonly_s1_fd,
+        "writer_free_until_barrier": writer_free_until_barrier,
+        "writer_free_full_probe": writer_free_full_probe,
+        "s1_identity_before": _identity(s1_before),
+        "s1_identity_at_barrier": _identity(s1_at_barrier),
+        "s1_identity_after": _identity(s1_after),
         "shared_snapshot_identities": sorted(shared_identities),
         "released_ns": released_ns,
         "interval_overlap_ok": interval_overlap_ok,
         "pids": pids,
+        "parent_launch_ns": parent_launch_ns,
         "ready": ready_rows,
-        "finished_ns": finished_ns,
+        "parent_observed_exit_ns": parent_observed_exit_ns,
     }
     return packets, proof
 
@@ -315,14 +448,29 @@ def run() -> dict[str, Any]:
 
             concurrent_packets, proof = concurrent_probe(script, db, ids, scopes, barrier)
             tests["P1_TEN_DISTINCT_OS_PIDS"] = proof["distinct_os_pids"] == N
-            tests["P1_ALL_TEN_SIMULTANEOUSLY_LIVE"] = bool(proof["all_alive_at_barrier"])
+            tests["P1_ALL_TEN_SIMULTANEOUSLY_LIVE"] = bool(
+                proof["all_alive_at_barrier"]
+            )
             tests["P1_PARENT_CHILD_PID_BINDING"] = bool(proof["pid_binding_ok"])
+            tests["P1_PACKET_PID_BINDING"] = bool(proof["packet_pid_binding_ok"])
             tests["P1_PROCESS_INTERVALS_OVERLAP_RELEASE_BARRIER"] = bool(
                 proof["interval_overlap_ok"]
             )
-            tests["P1_EXPLICIT_READ_TRANSACTION"] = bool(proof["explicit_read_transaction"])
-            tests["P1_WRITER_FREE_BARRIER_INTERVAL"] = bool(proof["writer_free_interval"])
-            tests["P1_ONE_SHARED_READ_ONLY_S1_SNAPSHOT"] = bool(proof["same_snapshot_identity"])
+            tests["P1_EXPLICIT_READ_TRANSACTION_HELD_AT_BARRIER"] = bool(
+                proof["explicit_read_transaction"]
+            )
+            tests["P1_ALL_TEN_HOLD_READONLY_S1_FD_AT_BARRIER"] = bool(
+                proof["all_hold_readonly_s1_fd_at_barrier"]
+            )
+            tests["P1_WRITER_FREE_S1_IDENTITY_THROUGH_BARRIER"] = bool(
+                proof["writer_free_until_barrier"]
+            )
+            tests["P1_WRITER_FREE_S1_IDENTITY_FULL_PROBE"] = bool(
+                proof["writer_free_full_probe"]
+            )
+            tests["P1_ONE_SHARED_READ_ONLY_S1_SNAPSHOT"] = bool(
+                proof["same_snapshot_identity"]
+            )
             tests["P2_ORDINARY_RESULTS_ARE_NONWRITING"] = all(
                 p.get("s1_write_intent") is False for p in concurrent_packets
             )

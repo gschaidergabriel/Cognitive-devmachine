@@ -2,9 +2,15 @@ from __future__ import annotations
 
 import sqlite3
 from pathlib import Path
+import sys
 from types import SimpleNamespace
 
-import tools.free_swarm_backfill_scheduler as scheduler
+ROOT = Path(__file__).resolve().parents[1]
+TOOLS = ROOT / "tools"
+if str(TOOLS) not in sys.path:
+    sys.path.insert(0, str(TOOLS))
+
+import free_swarm_backfill_scheduler as scheduler
 
 
 def _reset(monkeypatch, tmp_path: Path) -> Path:

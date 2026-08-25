@@ -1,0 +1,185 @@
+{
+  "schema": "CLAY_TRIGGER2_XENO_HANDOFF_RESEARCH_FUSION_DELTA/v2",
+  "date": "2026-08-25",
+  "local_time": "2026-08-25T19:27:21+07:00",
+  "trigger": "triggerwort 2 requested via user instruction to run 2 after ingest",
+  "persistent_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "status": "RESEARCH_FUSION_AND_SOURCE_DESIGN_ONLY_NOT_TRAINING_CREDIT",
+  "authority": {
+    "supervisor_epoch": "8.78",
+    "mode": "FREE_ONLY",
+    "observed_main_before_write": "854ba61345573dfd0f0452e328f783cf80109a61",
+    "training_executed": false,
+    "accepted_dataset_tokens_minted": 0,
+    "runtime_credit_minted": 0
+  },
+  "new_user_handoff": {
+    "file": "XENO_UEBERGABE_CHATGPT_2026-08-25.pdf",
+    "sha256": "599021e18493128339d135b184e89ddccd0d38df4c351f3a3d9a2e3805593e2d",
+    "bytes": 1078586,
+    "pages": 43,
+    "model_snapshot_stated": "Goekdeniz-Guelmez/Josiefied-Qwen3.5-0.8B-gabliterated-v1@591852bda6e1979f59e4b0f5ee2919697b12e936",
+    "source_scope": "Measured training scope + vector-language specification + measurement report; local ABI files themselves are not present in this repository via this handoff."
+  },
+  "source_findings_ingested": {
+    "capabilities": {
+      "A_context_invariance": {"measured": 0.525, "target": 0.90},
+      "B_runtime_codebook_binding": {"measured": 0.361, "chance": 0.333, "target": 0.90},
+      "C_symbolic_inference": {"measured": 0.222, "chance": 0.333, "permutation_p": 0.665, "target": 0.80},
+      "D_hyperposition": {"best_reported_probe": 0.556, "best_layer": 11, "permutation_p": 0.050, "interpretation": "suggestive_not_proven", "target": 0.80},
+      "E_GRF_epistemic_typing": {"measured": null, "target": 0.90}
+    },
+    "hyperposition_carrier": "H(Q)={h_i}; h_i=(v_i,K_i,E_i+,E_i-,F_i,T_i,A_i,sigma_i)",
+    "curriculum_source_order": ["D_BASELINE", "C1_C6", "A", "B", "E", "D", "INTEGRATED_A_B_C_D_E"],
+    "reconciled_with_owner_correction": "Hyperposition carrier/schema is present from the first integrated trainable episode; full D update/resolve optimization remains late after C/A/B/E prerequisites.",
+    "D_P2_status": "QUARANTINE_AS_MEASUREMENT_CLAIM: open-vs-resolved probe is lexically confounded because filler sentences are class-predictive; rebuild with lexically indistinguishable matched variants.",
+    "D_P1_status": "WEAK_SIGNAL_ONLY: full-prompt branch-set probe beats evidence-only control across six layers but n is small and best p=0.050.",
+    "reference_labeler_requirement": ["U_update", "D_resolve", "U_d_test_order_ordinal", "f_salience_rank_ordinal"],
+    "GRF_type_laws": [
+      "OBSERVED must not be derived from HYPOTHESIS without evidence",
+      "UNKNOWN is not ZERO or ABSENT",
+      "PREDICTION is not OBSERVATION",
+      "MEASUREMENT_ERROR is not absence",
+      "COUNTERHYPOTHESIS must be generatable/retained",
+      "CONTRADICTION is a typed object, not an automatic collapse",
+      "FALSIFIER must be nameable"
+    ],
+    "acceptance_meta_law": "Every claimed effect requires a matched control arm that rules out trivial explanation; declarations/flags are not substitutes for computed checks.",
+    "C1_go_no_go": "Use C1 as cheap pipeline/model go-no-go. If C1 fails after verified training/eval plumbing, stop that curriculum attempt, but do not infer a fundamental 0.8B scale impossibility until a larger positive control and pipeline sanity check are run.",
+    "ABI": {
+      "primary_write_layer": 23,
+      "secondary_read_layers": [19, 21],
+      "full_attention_layers_reported": [3, 7, 11, 15, 19, 23],
+      "hidden_size": 1024,
+      "vocab_size": 248320,
+      "semantic_representation": "learned low-rank subspace; rank-3 working specification, not a fixed universal semantic vector",
+      "working_space": "centered_and_whitened",
+      "symbol_atoms": 46,
+      "roles": 64,
+      "role_seed": 20260825,
+      "binding": "HRR in whitened space",
+      "declared_safe_binding_count": 16,
+      "codec_precision": "external whitening/unwhitening artifacts float64; do not silently convert",
+      "hash_rule": "Every later measurement/training receipt must bind exact ABI manifest and model checkpoint hashes."
+    },
+    "appendix_scope_reconciliation": "Appendix B's 'train exactly A+B' is treated as a narrow ABI-binding component assignment. It does not override the document's full A-E integrated training scope."
+  },
+  "external_research_checked": [
+    {
+      "source": "Hugging Face target checkpoint config.json",
+      "finding": "Target config independently confirms hidden_size=1024, vocab_size=248320, 24 text layers, tied embeddings, bfloat16 model dtype and full_attention_interval=4 with full-attention layers 3/7/11/15/19/23.",
+      "implication": "Architecture-specific layer assumptions are corroborated, but learned-circuit location after fine-tuning remains empirical."
+    },
+    {
+      "source": "Yin & Steinhardt, ICML 2025, Which Attention Heads Matter for In-Context Learning?",
+      "finding": "Across tested models, few-shot ICL depends primarily on function-vector heads, with induction and FV mechanisms related.",
+      "implication": "Do not turn the source report's induction-head explanation for B into a required mechanism. Treat it as a hypothesis; accept behavior/state invariants and establish learned mechanism by ablation/lesion/rescue."
+    },
+    {
+      "source": "Zhao et al., ICLR 2025, Beyond Single Concept Vector",
+      "finding": "Single concept vectors can be unstable; concept-subspace modeling is more robust.",
+      "implication": "Supports subspace-aware measurement directionally, but exact rank 3 remains target-checkpoint-specific evidence."
+    },
+    {
+      "source": "Khayatan et al., ICCV 2025, Analyzing Finetuning Representation Shift",
+      "finding": "Fine-tuning can shift internal concept representations.",
+      "implication": "Add checkpoint-by-checkpoint ABI/representation drift audits; pre-fine-tune semantic subspaces, whitening statistics and steering geometry cannot be assumed invariant."
+    }
+  ],
+  "new_research_deductions": [
+    {
+      "id": "ABI_DRIFT_IS_A_TRAINING_ACCEPTANCE_AXIS",
+      "rule": "At baseline and each selected checkpoint re-measure semantic decodability/rank, centering/whitening statistics, atom response/crosstalk, codec cycle error, write margin/damage and cross-template transfer; bind results to checkpoint hash + ABI manifest hash.",
+      "reason": "The training objective changes hidden representations. A base-model ABI measurement cannot silently certify a tuned checkpoint."
+    },
+    {
+      "id": "SYMBOL_BASIS_AND_STATE_CODEC_DRIFT_ARE_SEPARATE",
+      "rule": "Track unembedding/symbol-basis stability separately from hidden-state mean/whitening/subspace stability.",
+      "reason": "The target config ties word embeddings; if embeddings/unembedding are trained, atom rows can drift. Even if they are frozen, hidden-state distributions can drift."
+    },
+    {
+      "id": "FLOAT64_EXTERNAL_CODEC_VS_BFLOAT16_MODEL_BOUNDARY",
+      "rule": "Measure the end-to-end precision boundary explicitly: float64 encode/HRR/decode outside the model, declared cast/injection into model dtype at the ABI boundary, then downstream symbol/semantic damage.",
+      "reason": "A float64 external codec cycle guarantee does not by itself prove a bfloat16 injection/reentry path is lossless."
+    },
+    {
+      "id": "MECHANISM_NEUTRAL_BINDING_ACCEPTANCE",
+      "rule": "B passes on unseen codebook permutations/symbols/forms plus double-dissociation and causal circuit diagnostics; no specific induction-head implementation is required a priori.",
+      "reason": "Current literature provides multiple mechanistic accounts for ICL/binding."
+    },
+    {
+      "id": "P2_MATCHED_CONTROL_REBUILD_REQUIRED",
+      "rule": "No D open-vs-resolved credit until lexical, length, syntax, branch count and evidence-count nuisance factors are matched/crossed and a lexical-only control remains at chance.",
+      "reason": "The handoff explicitly invalidates the current P2 due to a filler-token shortcut."
+    },
+    {
+      "id": "EVIDENCE_INDEPENDENCE_MUST_SURVIVE_REPACKAGING",
+      "rule": "Independent evidence contribution is keyed to causal/dependence identity, not file/source/worker ancestry count; same payload/dependence group repackaged under a new ancestry remains non-independent.",
+      "reason": "Current-source audit still finds multiplicity leakage in the retained labeler lane; the v2 donor added in this cycle tests this exact failure."
+    },
+    {
+      "id": "UPSTREAM_LABEL_DERIVATION_IS_PART_OF_THE_LABELER",
+      "rule": "A transition target is not deterministic merely because U/D execute deterministically after caller-supplied SUPPORT/COUNTER/FALSIFY or decision-role labels. Those relations/roles must themselves be derived from formal synthetic-world semantics or a source-bound proof certificate.",
+      "reason": "Otherwise the labeler only moves the unverified label assertion one step upstream."
+    }
+  ],
+  "current_repo_reentry": {
+    "crosscutting_contract": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_SEMANTIC_HYPERPOSITION_CROSSCUTTING_CONTRACT_V1_GPT56SOL.json",
+    "version_ledger": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V1_GPT56SOL.json",
+    "retained_current_labeler_lane": "tools/trigger2_hyperposition_reference_labelers_v1.py",
+    "retained_current_labeler_audit": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_CURRENT_HYPERPOSITION_LABELER_CAUSAL_CHAIN_AUDIT_V2_GPT56SOL.json",
+    "new_cycle_donor_labeler_v2": {
+      "path": "tools/trigger2_semantic_hyperposition_reference_labelers_v2.py",
+      "commit": "575f20d60f733f6b95319883442308ba2035528f",
+      "tests_commit": "512ce0c57dd720adefe9adf824e0006bc0f59fae",
+      "status": "CANDIDATE_SUCCESSOR_DONOR_NOT_CANONICAL_TRAINING_ADMISSION",
+      "specific_delta": "full h_i validation + (independence_group,payload_key) repackaging dedup + ordinal discriminator/salience + GRF guard"
+    },
+    "parallel_D_E_generator": {
+      "path": "tools/trigger2_hyperposition_reference_seed_v1.py",
+      "commit": "068cf027910728613fd8bf282567fae072b52e2c",
+      "status": "SOURCE_DESIGN_ONLY_TRAINING_ELIGIBLE_FALSE"
+    },
+    "gate_v2_issue_detected": {
+      "path": "tools/trigger2_semantic_hyperposition_gate_v2.py",
+      "status": "RECHECK_REQUIRED",
+      "finding": "At this inspected main, gate v2 imports tools/trigger2_semantic_hyperposition_reference_labelers_v1.py, but that path is absent after duplicate-lane convergence. Do not claim executable gate-v2 credit until a successor binds an existing labeler and exact-source tests pass."
+    }
+  },
+  "triggerwort_2_behavior_added": [
+    "Ingest each new Claude Code handoff as versioned evidence with file hash and explicit measured/inferred/unmeasured status.",
+    "Refresh exact current main/supervisor and de-duplicate parallel workers before creating a competing source lane.",
+    "Run semantic-Hyperposition corpus audit before adding volume.",
+    "Treat A+B ABI-binding corpus as COMPONENT_ONLY unless embedded in the full A-E Hyperposition operating frame.",
+    "Quarantine confounded measurements (currently D-P2) rather than using them as curriculum targets or progress evidence.",
+    "Require deterministic label derivation all the way from formal synthetic-world semantics to branch relation/decision role to U/D target; caller-supplied semantic labels are not a complete reference labeler.",
+    "Require evidence/dependence-group repackaging invariance and Goodman-style ancestry collapse.",
+    "Require checkpoint ABI_DRIFT_AUDIT and exact checkpoint+ABI hash binding before any tuned checkpoint inherits vector-language claims.",
+    "Require matched-control acceptance for every measured effect; a logged assertion/flag is not a computed test.",
+    "Keep B mechanism-neutral: induction/FV/other circuit is a post-training causal measurement question, not a data-label assumption.",
+    "Before model-scale failure claims, use C1 verified-pipeline go/no-go plus a larger-model positive control.",
+    "Continue staged C->A->B->E->D losses while Hyperposition carrier/schema remains present from the first integrated episode.",
+    "No final mixed-corpus promotion until branch permutation, nuisance conditional-independence, lexical/template/generator holdouts, D anti-collapse, E epistemic typing, double dissociation and <=2pp retention all pass."
+  ],
+  "credits": {
+    "research_delta": 1,
+    "source_design_delta": 1,
+    "training_executed": false,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_actions": [
+    "Supersede/fix the broken semantic Hyperposition gate-v2 import with an exact-source successor rather than restoring a removed duplicate lane.",
+    "Bind branch_relations and decision_role to deterministic formal-world derivation receipts.",
+    "Generate the C1 Hyperposition-native preflight corpus with lexical/generator holdouts and freeze its eval before training.",
+    "Rebuild D-P2 with lexically indistinguishable matched variants and a lexical-only control arm.",
+    "Add checkpoint ABI drift measurement schema and receipts before any fine-tune checkpoint is considered vector-ABI compatible.",
+    "Run exact committed labeler/gate/generator regressions on an admitted free deterministic surface and bind source hashes."
+  ]
+}

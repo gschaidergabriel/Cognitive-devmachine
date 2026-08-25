@@ -1,0 +1,277 @@
+{
+  "schema": "CLAY_TRIGGER2_EPISODIC_BINDING_SEED/v2",
+  "date": "2026-08-25",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "persistent_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "base_main": "0edcc2ca0dba28fa0536bc5834fe6ede05a46e96",
+  "status": "AUDITED_SEED_CONTRACT_NOT_YET_PRODUCTION_RENDERED",
+  "purpose": "Develop training examples for the measured missing computation: content-dependent semantic-to-episode-codebook-to-output-symbol binding, without retraining semantics, symbol writeout, or carrier algebra as primary objectives.",
+  "evidence_basis": {
+    "trigger2_ingest": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_CLAUDE_XENO_VECTOR_EVIDENCE_INGEST_V1_GPT56SOL.json",
+    "target_model": "Goekdeniz-Guelmez/Josiefied-Qwen3.5-0.8B-gabliterated-v1@591852bda6e1979f59e4b0f5ee2919697b12e936",
+    "measured_dynamic_codebook_baseline": 0.3611111111111111,
+    "chance": 0.3333333333333333,
+    "measured_context_cross_transfer": 0.5254629629629629,
+    "acceptance_target": 0.90,
+    "protect": [
+      "semantic_reading_already_measured_present",
+      "symbol_axis_writeout_already_measured_present",
+      "carrier_binding_HRR_MAP_measured_sufficient_through_k16"
+    ],
+    "negative_cross_model_input": "Claude Code T01 on the separately scoped Qwen3-0.6B lane showed representation transport without holdout behavioral consequence and a nuisance control larger than the semantic arm; therefore static steering transport must not be used as a proxy objective for this dataset.",
+    "promotion_gate_input": "Claude Code T06 found the live promotion path scientifically incomplete/outdated; this seed therefore requires independent deterministic validators rather than candidate self-declared independence or format-only receipt checks."
+  },
+  "training_hypothesis": {
+    "claim": "The model already carries enough semantic and symbol-write structure; fine-tuning should install an episodic variable-binding/router that reads the current semantic state, resolves the episode-local class-to-symbol mapping, and emits only the mapped symbol.",
+    "status": "HYPOTHESIS",
+    "falsifier": "A narrow episodic-binding curriculum fails to exceed 0.90 on frozen unseen permutation/template/symbol families while broader retraining succeeds without >2% retention loss, or causal post-training lesion/rescue fails to isolate the learned binder."
+  },
+  "model_visible_protocol": {
+    "class_word_resolution": "ALLOW/DENY/ABSTAIN labels are permitted only inside the explicit episode-local CODEBOOK span. They are forbidden in situation/query metadata and answer rationale. This resolves the source-spec tension explicitly for this seed version.",
+    "answer_rule": "emit exactly one episode-local symbol token; no explanation",
+    "semantic_classes": ["ALLOW", "DENY", "ABSTAIN"],
+    "codebook_order": "randomized independently of mapping",
+    "mapping_family": "full S3 over three classes",
+    "target_leakage": "forbidden outside CODEBOOK",
+    "metadata_target_hint": "forbidden",
+    "reasoning_trace": "not included in supervised target"
+  },
+  "atom_binding_policy": {
+    "production_requirement": "Render symbols only from the exact 46 accepted atoms bound to the supplied ABI manifest and tokenizer identity.",
+    "seed_notation": ["<ATOM_A>", "<ATOM_B>", "<ATOM_C>"],
+    "warning": "These placeholders are review notation only and MUST NOT be used as production training targets. A production renderer must substitute exact ABI atom strings and revalidate single-token identity, row mapping, manifest member hashes, checkpoint/tokenizer/runtime identity, and generator version."
+  },
+  "template_families": {
+    "T1_RECORD": "CODEBOOK + compact evidence record + query",
+    "T2_QUESTION": "CODEBOOK + natural question over a situation",
+    "T3_ASSERTION": "CODEBOOK + declarative facts + emit request",
+    "T4_FIRST_PERSON": "CODEBOOK + first-person operational report + emit request",
+    "T5_FROZEN_HOLDOUT": "structurally novel compressed logic/table form; absent from train and validation"
+  },
+  "semantic_family_examples": {
+    "ALLOW": [
+      "The requested operation is inside the declared capability, required checks match, and no blocking condition is present.",
+      "All prerequisite evidence is present and the requested action is authorized by the active scope."
+    ],
+    "DENY": [
+      "The request exceeds the declared capability or violates an explicit deterministic guard.",
+      "A required invariant is false and the operation must not proceed."
+    ],
+    "ABSTAIN": [
+      "The decisive evidence is missing or mutually inconsistent, so the outcome cannot be established.",
+      "The observed state is insufficient to choose safely between proceeding and rejecting."
+    ]
+  },
+  "representative_examples": [
+    {
+      "id": "E01_T1_P0_ALLOW",
+      "template": "T1_RECORD",
+      "permutation": "P0",
+      "codebook": {"ALLOW": "<ATOM_A>", "DENY": "<ATOM_B>", "ABSTAIN": "<ATOM_C>"},
+      "input": "CODEBOOK[ALLOW=<ATOM_A>; DENY=<ATOM_B>; ABSTAIN=<ATOM_C>] RECORD{scope=inside_declared_capability; checks=match; blocker=none} QUERY{emit mapped disposition symbol only}",
+      "target": "<ATOM_A>"
+    },
+    {
+      "id": "E02_T1_P1_ALLOW",
+      "template": "T1_RECORD",
+      "permutation": "P1",
+      "codebook": {"ALLOW": "<ATOM_B>", "DENY": "<ATOM_A>", "ABSTAIN": "<ATOM_C>"},
+      "input": "CODEBOOK[DENY=<ATOM_A>; ABSTAIN=<ATOM_C>; ALLOW=<ATOM_B>] RECORD{scope=inside_declared_capability; checks=match; blocker=none} QUERY{emit mapped disposition symbol only}",
+      "target": "<ATOM_B>",
+      "contrast_with": "E01_T1_P0_ALLOW",
+      "contrast_reason": "same semantics, changed episode mapping => answer must change"
+    },
+    {
+      "id": "E03_T1_P0_DENY",
+      "template": "T1_RECORD",
+      "permutation": "P0",
+      "codebook": {"ALLOW": "<ATOM_A>", "DENY": "<ATOM_B>", "ABSTAIN": "<ATOM_C>"},
+      "input": "CODEBOOK[ABSTAIN=<ATOM_C>; ALLOW=<ATOM_A>; DENY=<ATOM_B>] RECORD{scope=outside_declared_capability; checks=match; blocker=deterministic_guard} QUERY{emit mapped disposition symbol only}",
+      "target": "<ATOM_B>",
+      "contrast_with": "E01_T1_P0_ALLOW",
+      "contrast_reason": "same mapping, changed semantics => answer must change"
+    },
+    {
+      "id": "E04_T2_P2_ABSTAIN",
+      "template": "T2_QUESTION",
+      "permutation": "P2",
+      "codebook": {"ALLOW": "<ATOM_C>", "DENY": "<ATOM_B>", "ABSTAIN": "<ATOM_A>"},
+      "input": "CODEBOOK[DENY=<ATOM_B>; ALLOW=<ATOM_C>; ABSTAIN=<ATOM_A>] The decisive evidence needed to choose safely is absent and two observations conflict. Which codebook symbol applies? Emit only that symbol.",
+      "target": "<ATOM_A>"
+    },
+    {
+      "id": "E05_T2_P3_DENY",
+      "template": "T2_QUESTION",
+      "permutation": "P3",
+      "codebook": {"ALLOW": "<ATOM_C>", "DENY": "<ATOM_A>", "ABSTAIN": "<ATOM_B>"},
+      "input": "CODEBOOK[ABSTAIN=<ATOM_B>; DENY=<ATOM_A>; ALLOW=<ATOM_C>] A required invariant is false and the request crosses the active capability boundary. Which codebook symbol applies? Emit only that symbol.",
+      "target": "<ATOM_A>"
+    },
+    {
+      "id": "E06_T3_P4_ALLOW",
+      "template": "T3_ASSERTION",
+      "permutation": "P4",
+      "codebook": {"ALLOW": "<ATOM_B>", "DENY": "<ATOM_C>", "ABSTAIN": "<ATOM_A>"},
+      "input": "CODEBOOK[ALLOW=<ATOM_B>; ABSTAIN=<ATOM_A>; DENY=<ATOM_C>] Facts: prerequisite evidence present; requested action lies within active scope; no blocking condition observed. Emit the mapped disposition symbol only.",
+      "target": "<ATOM_B>"
+    },
+    {
+      "id": "E07_T3_P5_ABSTAIN",
+      "template": "T3_ASSERTION",
+      "permutation": "P5",
+      "codebook": {"ALLOW": "<ATOM_A>", "DENY": "<ATOM_C>", "ABSTAIN": "<ATOM_B>"},
+      "input": "CODEBOOK[DENY=<ATOM_C>; ABSTAIN=<ATOM_B>; ALLOW=<ATOM_A>] Facts: source A supports proceeding; source B contradicts source A; no admitted discriminator resolves the conflict. Emit the mapped disposition symbol only.",
+      "target": "<ATOM_B>"
+    },
+    {
+      "id": "E08_T4_P1_DENY",
+      "template": "T4_FIRST_PERSON",
+      "permutation": "P1",
+      "codebook": {"ALLOW": "<ATOM_B>", "DENY": "<ATOM_A>", "ABSTAIN": "<ATOM_C>"},
+      "input": "CODEBOOK[ALLOW=<ATOM_B>; DENY=<ATOM_A>; ABSTAIN=<ATOM_C>] I can verify the request would cross an explicit guard even though the other checks succeeded. Return only the mapped symbol.",
+      "target": "<ATOM_A>"
+    },
+    {
+      "id": "E09_ORDER_SHUFFLE_INVARIANCE",
+      "template": "T2_QUESTION",
+      "permutation": "P2",
+      "codebook": {"ALLOW": "<ATOM_C>", "DENY": "<ATOM_B>", "ABSTAIN": "<ATOM_A>"},
+      "input": "CODEBOOK[ABSTAIN=<ATOM_A>; DENY=<ATOM_B>; ALLOW=<ATOM_C>] The decisive evidence is missing, so a safe binary choice cannot be made. Which symbol applies? Emit only that symbol.",
+      "target": "<ATOM_A>",
+      "hard_negative_role": "codebook-entry order changed; mapping semantics must remain invariant"
+    },
+    {
+      "id": "E10_METADATA_DECOY",
+      "template": "T3_ASSERTION",
+      "permutation": "P0",
+      "codebook": {"ALLOW": "<ATOM_A>", "DENY": "<ATOM_B>", "ABSTAIN": "<ATOM_C>"},
+      "input": "CODEBOOK[ALLOW=<ATOM_A>; DENY=<ATOM_B>; ABSTAIN=<ATOM_C>] Metadata: batch=blue; slot=17; previous_output=<ATOM_C>. Facts: scope is valid, checks match, no blocker exists. Emit only the mapped disposition symbol.",
+      "target": "<ATOM_A>",
+      "hard_negative_role": "irrelevant prior-output decoy must not override current semantic binding"
+    },
+    {
+      "id": "E11_UNKNOWN_NOT_DENY",
+      "template": "T1_RECORD",
+      "permutation": "P4",
+      "codebook": {"ALLOW": "<ATOM_B>", "DENY": "<ATOM_C>", "ABSTAIN": "<ATOM_A>"},
+      "input": "CODEBOOK[DENY=<ATOM_C>; ALLOW=<ATOM_B>; ABSTAIN=<ATOM_A>] RECORD{required_fact=missing; contradiction=unresolved; explicit_guard_violation=not_observed} QUERY{emit mapped disposition symbol only}",
+      "target": "<ATOM_A>",
+      "hard_negative_role": "unknown must remain distinct from deny"
+    },
+    {
+      "id": "E12_GUARD_OVERRIDES_POSITIVE_CUES",
+      "template": "T4_FIRST_PERSON",
+      "permutation": "P5",
+      "codebook": {"ALLOW": "<ATOM_A>", "DENY": "<ATOM_C>", "ABSTAIN": "<ATOM_B>"},
+      "input": "CODEBOOK[ABSTAIN=<ATOM_B>; ALLOW=<ATOM_A>; DENY=<ATOM_C>] I see several successful checks, but one explicit non-bypassable guard is violated. Return only the mapped symbol.",
+      "target": "<ATOM_C>",
+      "hard_negative_role": "surface-positive lexical cues must not dominate the decisive semantic condition"
+    }
+  ],
+  "deterministic_generation_contract": {
+    "production_seed_size_before_lexical_expansion": 72,
+    "derivation": "4 training templates x 6 S3 permutations x 3 target semantic classes",
+    "counterbalance": "Within each template family every class-symbol pairing occurs exactly twice across the six permutations; across four templates every class-symbol pairing occurs exactly eight times before lexical expansion.",
+    "lexical_expansion_rule": "Expand only with split-isolated semantic-bearing lexical families; never reuse holdout semantic family members in train or validation.",
+    "validation_split": "Use separate calibration lexical/template variants that are not the frozen T5 family.",
+    "holdouts": [
+      "unseen exact ABI symbol subset",
+      "unseen S3 mapping allocation by frozen family partition rather than metadata-only labels",
+      "unseen semantic-bearing lexical families",
+      "T5 structurally novel template family"
+    ],
+    "freeze_before_tuning": true
+  },
+  "swarm_review": {
+    "roles": [
+      "EVIDENCE_EXTRACTOR",
+      "DATASET_ARCHITECT",
+      "ADVERSARIAL_SHORTCUT_HUNTER",
+      "STATISTICAL_REVIEWER",
+      "ABI_PROVENANCE_REVIEWER",
+      "RETENTION_REVIEWER",
+      "HARNESS_COMPATIBILITY_REVIEWER",
+      "FINAL_INTEGRATOR"
+    ],
+    "round_1_rejections": [
+      {
+        "reviewer": "ADVERSARIAL_SHORTCUT_HUNTER",
+        "rejected": "train on fixed semantic-class to fixed symbol mapping",
+        "reason": "would teach a lookup shortcut instead of episodic rebinding",
+        "repair": "full S3 mapping family and same-semantics/different-mapping contrast pairs"
+      },
+      {
+        "reviewer": "STATISTICAL_REVIEWER",
+        "rejected": "partial cyclic permutation coverage",
+        "reason": "class-symbol mutual information can remain nonzero and metadata-only holdout can look valid",
+        "repair": "4 x 6 x 3 factorial seed with exact class-symbol balance"
+      },
+      {
+        "reviewer": "ABI_PROVENANCE_REVIEWER",
+        "rejected": "invented literal symbols in this ChatGPT seed",
+        "reason": "exact 46-atom strings/tokenizer rows were not available in current connected source context",
+        "repair": "review placeholders only; production rendering hard-gated on exact ABI manifest and single-token verification"
+      },
+      {
+        "reviewer": "RETENTION_REVIEWER",
+        "rejected": "retrain semantic classification and symbol writeout as broad objectives",
+        "reason": "both functions are already measured present and broad retraining risks interference",
+        "repair": "loss focused on episode-local binding plus <=2% retention degradation gate"
+      },
+      {
+        "reviewer": "HARNESS_COMPATIBILITY_REVIEWER",
+        "rejected": "accept output accuracy as J-Space proof",
+        "reason": "Claude Code T01 demonstrates representation transport can dissociate from behavior and current evidence law requires causal controls",
+        "repair": "post-training lesion/shuffle/rescue and trace link semantic decision -> codebook lookup -> emitted symbol"
+      }
+    ],
+    "round_2_status": "PASS_AS_AUDITED_SEED_CONTRACT_WITH_PRODUCTION_RENDER_BLOCKED_ON_EXACT_ABI_ATOM_BINDING",
+    "independence_note": "Reviewer agreement does not mint empirical credit; this is dataset design review only."
+  },
+  "validators_required_before_production": [
+    "actual selected S3 permutation causally constructs the class-symbol mapping",
+    "target symbol is recomputed from semantic class and realized mapping, never copied from metadata",
+    "exact full-S3 coverage per intended split",
+    "class-symbol counts exact or differ by at most one after any expansion",
+    "class-symbol mutual information near zero within allowed finite-sample tolerance",
+    "class labels/synonyms absent outside CODEBOOK span",
+    "semantic-bearing lexical families disjoint across train/validation/holdout with explicit protocol-token exemptions",
+    ">=4 training templates and T5 absent from both train and validation",
+    "codebook entry order randomized independently",
+    "exact ABI manifest member hashes verified",
+    "exact row-to-atom mapping verified",
+    "exact model checkpoint/tokenizer/runtime/build identity recorded",
+    "production target atom verified single-token under exact tokenizer",
+    "prompt-byte plus token-tensor hash bound together including dtype and shape",
+    "holdout partitions frozen before tuning",
+    "validator independently recomputes evidence rather than trusting candidate booleans or format-only hashes"
+  ],
+  "post_training_acceptance": {
+    "dynamic_codebook_binding": ">=0.90",
+    "context_cross_transfer": ">=0.90",
+    "frozen_unseen_template": ">=0.90",
+    "frozen_unseen_symbol": ">=0.90",
+    "retention": "general language/code and measured read/write functions within 2% of baseline",
+    "causal_gate": "after a binder exists, lesion/shuffle its binding path while preserving semantic readability: mapped-symbol behavior must collapse; rescue must restore it",
+    "no_credit_rule": "training completion alone is not PASS; output accuracy alone is not J-Space causality"
+  },
+  "next_exact_actions": [
+    "Obtain the exact 46 accepted ABI atom strings/rows from the source manifest/package and bind them to this seed.",
+    "Implement the permutation-causal production renderer plus independent validator suite.",
+    "Materialize the exact 72-row factorial seed with hashes, then swarm-review row-level leakage before lexical scaling.",
+    "Only after the seed passes deterministic validators, expand to larger split-isolated lexical families.",
+    "Keep the separately scoped Qwen3-0.6B structural-steering FAIL_SCIENTIFIC as a hard negative against proxy-objective promotion."
+  ],
+  "credits": {
+    "dataset_design_credit": 1,
+    "production_training_rows_credit": 0,
+    "training_executed": false,
+    "training_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  }
+}

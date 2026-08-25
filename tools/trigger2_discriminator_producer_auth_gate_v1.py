@@ -1,14 +1,12 @@
 #!/usr/bin/env python3
 """Repository-authorized discriminator producer authenticity gate for Trigger-2 A02.
 
-This gate closes the bounded pilot exploit where discriminator receipts could carry
-``admissible=true``, ``executed=true`` and an arbitrary receipt identifier. It resolves
-producer/policy authority from repository source, verifies exact producer bytes, binds
-the already generation-pinned world/state/event subjects, invokes the deterministic
-producer, and requires the transported receipt to equal the recomputed producer result.
+Closes the bounded-pilot exploit where a candidate row could self-assert discriminator
+admission/execution. Producer, source lineage, policy and bounded-case identities are
+resolved from repository authority; the deterministic producer is invoked and the
+transported receipt must exactly equal the recomputed result.
 
-SOURCE/CANDIDATE PRE-ADMISSION ONLY. PASS mints zero dataset/training/runtime/J-Space/
-HCU/EntityOS/canonical-truth/direct-effect credit.
+SOURCE/CANDIDATE PRE-ADMISSION ONLY. PASS mints zero broader credit.
 """
 from __future__ import annotations
 
@@ -41,12 +39,7 @@ def _authority() -> dict[str, Any]:
 
 def _digest(value: Any) -> str:
     return sha256(
-        json.dumps(
-            value,
-            sort_keys=True,
-            separators=(",", ":"),
-            ensure_ascii=False,
-        ).encode("utf-8")
+        json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode("utf-8")
     ).hexdigest()
 
 
@@ -58,17 +51,9 @@ def _event_semantic_payload(event: Any) -> dict[str, Any] | None:
     if not isinstance(event, dict):
         return None
     keys = (
-        "schema",
-        "event_id",
-        "correlation_ancestry_id",
-        "independence_group",
-        "payload_key",
-        "provenance",
-        "epistemic_type",
-        "test_id",
-        "observed_outcome",
-        "canonical_truth_allowed",
-        "direct_effect_authority",
+        "schema", "event_id", "correlation_ancestry_id", "independence_group",
+        "payload_key", "provenance", "epistemic_type", "test_id",
+        "observed_outcome", "canonical_truth_allowed", "direct_effect_authority",
     )
     if any(key not in event for key in keys):
         return None
@@ -92,6 +77,8 @@ def _result(failures: list[str], **extra: Any) -> dict[str, Any]:
         "entityos_runtime_credit_minted": 0,
         "canonical_truth_minted": False,
         "direct_effect_authority_minted": False,
+        "row_carried_producer_binding_is_authority": False,
+        "row_carried_policy_binding_is_authority": False,
         "row_carried_admissible_is_authority": False,
         "row_carried_executed_is_authority": False,
         "row_carried_execution_receipt_id_is_authority": False,
@@ -125,6 +112,10 @@ def adjudicate(row: Any) -> dict[str, Any]:
     producer_authority = authority.get("producer")
     if not isinstance(producer_authority, dict):
         return _result(failures + ["PRODUCER_AUTHORITY_OBJECT_REQUIRED"])
+    for key in ("repo_path", "source_sha256", "producer_schema_or_version", "source_commit_sha", "branch_base_main_sha"):
+        if not isinstance(producer_authority.get(key), str) or not producer_authority.get(key):
+            failures.append("PRODUCER_AUTHORITY_LINEAGE_FIELD_REQUIRED:" + key)
+
     expected_path = producer_authority.get("repo_path")
     if not isinstance(expected_path, str) or not expected_path:
         return _result(failures + ["EXPECTED_PRODUCER_PATH_REQUIRED"])
@@ -140,14 +131,31 @@ def adjudicate(row: Any) -> dict[str, Any]:
     if actual_source_sha != producer_authority.get("source_sha256"):
         failures.append("EXPECTED_PRODUCER_SOURCE_SHA256_MISMATCH")
     try:
-        producer = _load_module(
-            producer_path,
-            "trigger2_trusted_synthetic_discriminator_for_a02",
-        )
+        producer = _load_module(producer_path, "trigger2_trusted_synthetic_discriminator_for_a02")
     except Exception as exc:
         return _result(failures + ["EXPECTED_PRODUCER_IMPORT_FAILED:" + type(exc).__name__])
     if getattr(producer, "PRODUCER_SCHEMA", None) != producer_authority.get("producer_schema_or_version"):
         failures.append("EXPECTED_PRODUCER_SCHEMA_MISMATCH")
+
+    policy = authority.get("policy")
+    policy_sha = _digest(policy)
+    if policy_sha != authority.get("policy_sha256"):
+        failures.append("AUTHORITY_POLICY_SHA256_MISMATCH")
+
+    expected_row_producer_binding = {
+        "repo_path": expected_path,
+        "source_sha256": actual_source_sha,
+        "producer_schema_or_version": producer_authority.get("producer_schema_or_version"),
+        "source_commit_sha": producer_authority.get("source_commit_sha"),
+    }
+    if row.get("discriminator_producer_binding_evaluator_only") != expected_row_producer_binding:
+        failures.append("ROW_PRODUCER_BINDING_NOT_EXACT_CURRENT_AUTHORITY")
+    expected_row_policy_binding = {
+        "policy_id": policy.get("policy_id") if isinstance(policy, dict) else None,
+        "policy_sha256": policy_sha,
+    }
+    if row.get("discriminator_policy_binding_evaluator_only") != expected_row_policy_binding:
+        failures.append("ROW_POLICY_BINDING_NOT_EXACT_CURRENT_AUTHORITY")
 
     case_id = row.get("generation_case_id_evaluator_only")
     cases = authority.get("allowed_cases")
@@ -168,11 +176,12 @@ def adjudicate(row: Any) -> dict[str, Any]:
     event_semantic_sha = _digest(semantic_payload) if semantic_payload is not None else None
     test_id = event.get("test_id")
     test_spec = world.get("tests", {}).get(test_id) if isinstance(world.get("tests"), dict) else None
-    policy = authority.get("policy")
-    spec_sha = _digest({
+    spec_sha = _digest({"test_id": test_id, "test_spec": test_spec, "policy": policy})
+    world_scoped_event_sha = _digest({
+        "world_id": world.get("world_id"),
+        "event_semantic_sha256": event_semantic_sha,
         "test_id": test_id,
-        "test_spec": test_spec,
-        "policy": policy,
+        "observed_outcome": event.get("observed_outcome"),
     })
 
     expected_pairs = {
@@ -180,10 +189,12 @@ def adjudicate(row: Any) -> dict[str, Any]:
         "EVENT_ID_NOT_AUTHORIZED": (event.get("event_id"), case.get("event_id")),
         "TEST_ID_NOT_AUTHORIZED": (test_id, case.get("test_id")),
         "EPISTEMIC_TYPE_NOT_AUTHORIZED": (event.get("epistemic_type"), case.get("epistemic_type")),
+        "OBSERVED_OUTCOME_NOT_AUTHORIZED": (event.get("observed_outcome"), case.get("observed_outcome")),
         "WORLD_SHA256_NOT_AUTHORIZED": (world_sha, case.get("world_sha256")),
         "STATE_BEFORE_SHA256_NOT_AUTHORIZED": (state_sha, case.get("state_before_sha256")),
         "EVENT_FULL_SHA256_NOT_AUTHORIZED": (event_full_sha, case.get("full_event_sha256")),
         "EVENT_SEMANTIC_SHA256_NOT_AUTHORIZED": (event_semantic_sha, case.get("event_semantic_sha256")),
+        "WORLD_SCOPED_EVENT_SHA256_NOT_AUTHORIZED": (world_scoped_event_sha, case.get("world_scoped_event_sha256")),
         "DISCRIMINATOR_SPEC_SHA256_NOT_AUTHORIZED": (spec_sha, case.get("discriminator_spec_sha256")),
     }
     for failure, (actual, expected) in expected_pairs.items():
@@ -205,6 +216,15 @@ def adjudicate(row: Any) -> dict[str, Any]:
                 expected_receipt = producer_result.get("receipt")
                 if not isinstance(expected_receipt, dict):
                     failures.append("PRODUCER_RECEIPT_OBJECT_REQUIRED")
+                else:
+                    if expected_receipt.get("producer_source_sha256") != actual_source_sha:
+                        failures.append("PRODUCER_RESULT_SOURCE_SHA256_MISMATCH")
+                    if expected_receipt.get("policy_sha256") != policy_sha:
+                        failures.append("PRODUCER_RESULT_POLICY_SHA256_MISMATCH")
+                    if expected_receipt.get("world_scoped_event_sha256") != world_scoped_event_sha:
+                        failures.append("PRODUCER_RESULT_WORLD_SCOPED_EVENT_SHA256_MISMATCH")
+                    if expected_receipt.get("discriminator_spec_sha256") != spec_sha:
+                        failures.append("PRODUCER_RESULT_SPEC_SHA256_MISMATCH")
 
     transported = row.get("discriminator_execution_receipts_evaluator_only")
     matches = []
@@ -222,6 +242,8 @@ def adjudicate(row: Any) -> dict[str, Any]:
 
     return _result(
         failures,
+        expected_producer_binding=expected_row_producer_binding,
+        expected_policy_binding=expected_row_policy_binding,
         expected_producer_path=expected_path,
         expected_producer_source_sha256=actual_source_sha,
         producer_invoked=producer_result is not None,
@@ -230,13 +252,11 @@ def adjudicate(row: Any) -> dict[str, Any]:
         bound_world_sha256=world_sha,
         bound_state_before_sha256=state_sha,
         bound_event_semantic_sha256=event_semantic_sha,
+        bound_world_scoped_event_sha256=world_scoped_event_sha,
         bound_discriminator_spec_sha256=spec_sha,
         synthetic_execution_only=True,
     )
 
 
 if __name__ == "__main__":
-    print({
-        "schema": SCHEMA,
-        "status": "SOURCE_ONLY_A02_CANDIDATE_PRE_ADMISSION",
-    })
+    print({"schema": SCHEMA, "status": "SOURCE_ONLY_A02_CANDIDATE_PRE_ADMISSION"})

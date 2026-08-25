@@ -1,0 +1,187 @@
+{
+  "schema": "CLAY_TRIGGER2_HYPERPOSITION_BYTE_VISIBILITY_AND_BRANCH_ROLE_AUDIT/v1",
+  "date": "2026-08-25",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU_VARIABLE_COGNITIVE_GRID",
+  "mode": "FREE_ONLY",
+  "authority": {
+    "canonical_main_reentered": "854ba61345573dfd0f0452e328f783cf80109a61",
+    "supervisor_epoch": "8.78",
+    "owner_target": "research_entity/global/OWNER_CORRECTION_ZERO_ENTITYOS_COGNITIVE_GRID_DB_CLAUDECODE_GLOBAL_JSPACE_2026-08-25.md",
+    "active_trigger2_pr": "#1956",
+    "active_trigger2_pr_head_observed": "4e52db88b47e6e6da053ae6949ce8321fae9682a",
+    "training_executed": false,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0
+  },
+  "new_material_findings": [
+    {
+      "id": "UNIVERSAL_GATE_V1_METADATA_TRUST_GAP",
+      "severity": "HIGH",
+      "status": "CONFIRMED_SOURCE_AUDIT",
+      "finding": "Current PR gate lineage v1-v3 relies on model_input_in_rendered_prompt/supervision_in_target declarations for visibility; v2/v3 materially strengthen state semantics and causal derivation but still do not byte-compare canonical model_input against actual prompt or parsed supervision against actual target.",
+      "source": "tools/trigger2_semantic_hyperposition_universal_gate_v3.py (successor lineage v1-v3)",
+      "consequence": "Use gate v4 as the byte-grounded successor layer over v3; v3 remains the causal derivation/state validator."
+    },
+    {
+      "id": "DECISION_ROLE_IS_GLOBAL_BUT_EVIDENCE_EFFECT_IS_BRANCH_RELATIVE",
+      "severity": "CRITICAL",
+      "status": "NEW_SCHEMA_RESEARCH_DELTA",
+      "finding": "Current reference-labeler v1 stores one decision_role on the shared evidence object while branch_relations independently map that evidence to SUPPORT/COUNTER/FALSIFY/NO_EFFECT per branch. A single decisive discriminator can support one branch and contradict/falsify another, so its decision role is branch-relative. One global DECISIVE_SUPPORT/DECISIVE_CONTRADICTION field cannot faithfully encode both roles simultaneously.",
+      "source": "tools/trigger2_hyperposition_reference_labelers_v1.py",
+      "consequence": "Successor schema should derive/store decision role per (evidence_event, branch), or derive decisive support/contradiction directly from branch relation + discriminator receipt rather than a global caller field."
+    },
+    {
+      "id": "CAUSAL_DERIVATION_CHAIN_REMAINS_BLOCKER",
+      "severity": "CRITICAL",
+      "status": "CONFIRMED_CURRENT_MAIN",
+      "finding": "Current main audit reduces the old D/E blocker from missing labelers to an unbound causal derivation chain: task-world semantics must mechanically derive branch relations/decision roles, discriminator execution/admissibility and separation before training admission.",
+      "source": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_CURRENT_HYPERPOSITION_LABELER_CAUSAL_CHAIN_AUDIT_V2_GPT56SOL.json",
+      "consequence": "No D/E positive-volume expansion or training promotion before derivation receipts and admission integration."
+    }
+  ],
+  "implemented_source_design_delta": {
+    "gate_v4": {
+      "path": "tools/trigger2_semantic_hyperposition_universal_gate_v4.py",
+      "sha256_local": "7f5a4e998db974145278a54ab64cab5f32523403fe846d59a4a5c80973c27955",
+      "status": "CURRENT_CANDIDATE_SUCCESSOR_LAYER",
+      "predecessor": "tools/trigger2_semantic_hyperposition_universal_gate_v3.py",
+      "closes": [
+        "canonical model_input bytes must be embedded in actual prompt",
+        "parsed actual target must contain exact canonical Hyperposition supervision",
+        "render hashes bind input and supervision",
+        "version/provenance/status fields required",
+        "semantic-skeleton split leakage gate",
+        "branch permutation twin invariance",
+        "trainable rows additionally require causal label source identities and forbid caller-asserted branch relations/decision roles"
+      ],
+      "credit_boundary": "SOURCE_DATA_DESIGN_GATE_ONLY"
+    },
+    "example_skeletons": {
+      "path": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_HYPERPOSITION_NATIVE_EXAMPLE_SKELETONS_V1_GPT56SOL.json",
+      "sha256_local": "4d22df3724188591822e5670891c67fb09ab6390a0509e38f32ffdfe768af8b4",
+      "status": "BLOCKED_RESEARCH_CANDIDATES",
+      "examples": 10,
+      "training_eligible": false,
+      "coverage": [
+        "majority/recurrence not truth",
+        "projection not deletion",
+        "falsifier/replan",
+        "DB fact vs guess",
+        "GWT recurrence not evidence",
+        "Claude return evidence split",
+        "unknown effect no blind replay",
+        "reopen stale resolution",
+        "variable-N identity",
+        "dynamic codebook binding inside Hyperposition"
+      ],
+      "materialization_rule": "At least two opaque branch permutation twins per skeleton; formal task-world derivation; v3 causal gate + v4 byte/version gate before training eligibility."
+    }
+  },
+  "pilot_coverage": [
+    "majority/recurrence not truth",
+    "projection not deletion",
+    "falsifier/replan",
+    "DB fact vs guess",
+    "GWT recurrence not evidence",
+    "Claude return evidence split",
+    "unknown effect no blind replay",
+    "reopen stale resolution",
+    "variable-N identity",
+    "dynamic codebook binding inside Hyperposition"
+  ],
+  "artifact_disposition": [
+    {
+      "artifact": "tools/trigger2_binding_router_factorial_generator_v3.py",
+      "status": "BLOCKED_FOR_DIRECT_TRAINING",
+      "predecessor": null,
+      "successor": "v2 full-cross nuisance schedule + useful v3 proof/router donors",
+      "revision_reason": "conditional nuisance leakage: 0/127 signatures retain all target classes; 110/127 uniquely identify one class"
+    },
+    {
+      "artifact": "tools/trigger2_context_binding_generator_v2.py",
+      "status": "RETROFIT_REQUIRED",
+      "predecessor": "retained context binding v1",
+      "successor": "Hyperposition-native materializer composition",
+      "revision_reason": "strong nuisance controls but flat semantic state; must execute S->M->Y inside H(Q)"
+    },
+    {
+      "artifact": "tools/trigger2_cognitive_process_trajectory_generator_v1.py",
+      "status": "RETROFIT_REQUIRED",
+      "predecessor": null,
+      "successor": "Hyperposition-native census trajectory successor",
+      "revision_reason": "208 flat rows; universal H_before/H_after operating frame absent"
+    },
+    {
+      "artifact": "tools/trigger2_hyperposition_reference_labelers_v1.py",
+      "status": "CURRENT_COMPONENT_BLOCKED_FOR_TRAINING_ADMISSION",
+      "predecessor": "tools/trigger2_semantic_hyperposition_reference_labelers_v1.py",
+      "successor": "branch-relative role + task-world derivation successor or compatible derivation layer",
+      "revision_reason": "primitives improved, but upstream relation/decision-role/discriminator derivation is caller metadata; branch-relative decision-role mismatch remains"
+    },
+    {
+      "artifact": "tools/trigger2_semantic_hyperposition_universal_gate_v1.py",
+      "status": "SUPERSEDED",
+      "predecessor": null,
+      "successor": "v2 -> v3 -> proposed v4",
+      "revision_reason": "v2/v3 add stronger semantic/causal checks; v4 additionally closes actual prompt/target byte-binding and dataset version/permutation gates"
+    },
+    {
+      "artifact": "tools/trigger2_semantic_hyperposition_universal_gate_v3.py",
+      "status": "CURRENT_PREDECESSOR_COMPONENT",
+      "predecessor": "v2",
+      "successor": "tools/trigger2_semantic_hyperposition_universal_gate_v4.py",
+      "revision_reason": "Strong causal derivation gate, but still trusts visibility/supervision declaration flags rather than proving rendered prompt/target bytes and lacks the requested dataset artifact-version/permutation registry layer."
+    },
+    {
+      "artifact": "2026-08-25_TRIGGER2_HYPERPOSITION_NATIVE_EXAMPLE_SKELETONS_V1_GPT56SOL.json",
+      "status": "BLOCKED_RESEARCH_CANDIDATES",
+      "predecessor": "flat Trigger-2 donor families + semantic Hyperposition seed v1",
+      "successor": "v3/v4-native rendered pilot after causal derivation layer",
+      "revision_reason": "10 architecture-aligned example skeletons retained without minting trainable D/E labels from caller metadata"
+    }
+  ],
+  "external_research_delta": [
+    {
+      "source": "Wu, Geiger, Milliere, How Do Transformers Learn Variable Binding in Symbolic Programs, ICML 2025 / arXiv:2505.20896",
+      "class": "PRIMARY_RESEARCH_METHOD_INPUT",
+      "training_consequence": "Expect a heuristic-before-systematic phase; require frozen OOD binding tests and causal interventions rather than train accuracy alone."
+    },
+    {
+      "source": "Sahoo et al., Linear Probes Detect Task Format, Not Reasoning Mode in Language Model Hidden States, arXiv:2606.02907",
+      "class": "CURRENT_RESEARCH_METHOD_INPUT",
+      "training_consequence": "Decodability must be residualized/deconfounded against format/template/length and paired with random-direction causal controls."
+    },
+    {
+      "source": "Khorasani et al., Inference Time Causal Probing in LLMs, arXiv:2605.07631",
+      "class": "CURRENT_RESEARCH_METHOD_INPUT",
+      "training_consequence": "Evaluate causal interventions with both completeness and selectivity; intended state change without off-target preservation is not enough."
+    }
+  ],
+  "new_training_rules": [
+    "HYPERPOSITION_BYTE_VISIBILITY_NOT_METADATA_ASSERTION",
+    "TARGET_SUPERVISION_MUST_EQUAL_PARSED_CANONICAL_H_AFTER_OBJECT",
+    "DECISION_ROLE_MUST_BE_BRANCH_RELATIVE_OR_MECHANICALLY_DERIVED_FROM_BRANCH_RELATION_AND_DISCRIMINATOR_RECEIPT",
+    "TASKWORLD_TO_TARGET_CAUSAL_DERIVATION_RECEIPT_REQUIRED_BEFORE_D_E_TRAINING_ADMISSION",
+    "BRANCH_ID_AND_ORDER_PERMUTATION_EQUIVARIANCE_REQUIRED",
+    "SEMANTIC_SKELETON_AND_PROVENANCE_ANCESTRY_DEFINE_SPLIT_BEFORE_RENDERING",
+    "PROBE_ACCURACY_REQUIRES_FORMAT_DECONFOUNDING_AND_CAUSAL_SELECTIVITY_CONTROLS",
+    "V3_CAUSAL_DERIVATION_GATE_AND_V4_BYTE_BINDING_GATE_MUST_BOTH_PASS_FOR_FINAL_TRAINABLE_RENDERING"
+  ],
+  "credits": {
+    "research_revision_delta": 1,
+    "new_source_design_training_rows": 0,
+    "training_eligible_rows": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0,
+    "new_training_example_skeletons": 10
+  },
+  "next_exact_action": "Land gate-v4 successor into the active Trigger-2 lane without duplicating v3; then implement the formal task-world derivation layer with branch-relative evidence effects/roles and exact discriminator receipts, regenerate a small v3/v4-native pilot, and only after both gates pass consider D/E scaling."
+}

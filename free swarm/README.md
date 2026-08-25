@@ -60,7 +60,7 @@ Zweck: **Aktivität → ausführbarer Patch/Test → reproduzierbare Architektur
 
 <!-- RESEARCH_DISTILLERY_AUTO:BEGIN -->
 ## AUTO — Research Distillery / kumuliertes Wissens-Dataset
-Aktualisiert: `2026-08-25T15:09:58.763916+00:00`
+Aktualisiert: `2026-08-25T15:25:11.367408+00:00`
 
 **1. wichtigste Quote — Entity-Dataset-Yield:** `0 / 11,621 = 0.000%`  
 Kompressionsfaktor Quelltokens : akzeptierte Dataset-Tokens: **UNKNOWN**.
@@ -112,7 +112,7 @@ GO-Worker emittieren `OPEN_RESEARCH_QUESTIONS_JSON`; die Distillery zerlegt Frag
 
 <!-- SYSTEM_ANALYSIS_AUTO:BEGIN -->
 ## AUTO — Gesamtsystem, GO-Fluss, Script-Auswertung und Sonnet-Vergleich
-Aktualisiert: `2026-08-25T15:09:59.474402+00:00`
+Aktualisiert: `2026-08-25T15:25:12.038978+00:00`
 
 ### 1. Wichtigster Effizienzindikator — was geht im Durchschnitt wieder an `go`?
 **Source → GO Pass-through: 0.000%.** Definition: `accepted dataset-token yield × average distinct accepted-packet coverage delivered to GO macrocycles`.
@@ -151,16 +151,16 @@ Bei 0 akzeptierten Dataset-Tokens ist Source→GO exakt 0%; fehlende Reinjection
 - truth/effect/capability boundaries and falsification
 
 **Top offene Forschungsfragen aus der laufenden Queue:**
-- What is the optimal balance between static and adaptive validation components?
-- How does token validation impact different model architectures differently?
-- Can we automatically update validation patterns from provider error streams without manual labeling?
-- How can we accurately predict the optimal concurrency limit based on system metrics and workload characteristics?
-- What are the potential limitations and edge cases of the proposed approach?
-- What is the minimal typed-entry schema that exercises the full loader->model->J-Space path without requiring whole-model causal credit?
-- Was sind die Ursachen für die Diskrepanz zwischen Chunk-Sammlung und Paket-Akzeptanz?
-- Wie kann die Diskrepanz behoben werden?
-- Welche Auswirkungen hat die Diskrepanz auf die Gesamtsystemleistung?
-- What is the optimal binding granularity for each workload?
+- Does NVIDIA's API expose per-credential quota headers consistently across NIM and Developer Program endpoints, or is header presence itself a reliable signal of free-tier eligibility?
+- How can we ensure that the collected data is relevant and of high quality?
+- How does the increased concurrency affect the HCU's ability to handle complex requests?
+- What are the optimal parameters for the inference engine optimization?
+- Which minimal GWT implementation produces a measurable causal trace (not correlation) on free-tier CPU?
+- Can Typed Assembly Language style verification be applied to LLM token routing decisions?
+- Does MoE expert-choice routing generalize to GRID10 logical cells without learned gating?
+- What is the minimal credential-binding proof that a concrete NVIDIA API key is free-tier bound (not just provider-global statement)?
+- Does NVIDIA expose a programmatic API key capability/introspection endpoint for free-tier model eligibility, or must capability manifests be maintained out-of-band?
+- Does the current loader implementation expose a credential-binding hook at the model-execution boundary, or must the typed-entry provenance be threaded through the entire HCU execution fabric?
 
 ### 5. Fortschritts-Funnel
 | Stufe | Wert |
@@ -192,7 +192,7 @@ Preisannahme: **Claude Sonnet 5 introductory through 2026-08-31: $2/M input + $1
 | Free-Swarm Usage | 31,313,649 input + 8,618,788 output | **$148.82** |
 | Distillery Modellarbeit | 460 input + 1,455 output | **$0.0155** |
 | zusammen, gemessener LLM-Tokenmix | — | **$148.83** |
-| persistenter Repo-Korpus, Output-only Proxy | 13,233,362 Proxy-Tokens | **$132.33** |
+| persistenter Repo-Korpus, Output-only Proxy | 13,262,720 Proxy-Tokens | **$132.63** |
 
 **Nominal vermiedene Sonnet-Kosten, falls diese Calls tatsächlich $0 kosteten: $148.83. Verifiziert gespart: UNKNOWN.** Die aktuelle typed Authority verbietet die nachträgliche FREE-Klassifikation historischer Provider-Traffic; der Korpuswert ist ebenfalls nur ein Neu-Erzeugungsproxy.
 
@@ -205,7 +205,7 @@ Dieser komplette Block ist Pflichtbestandteil des Publishers. Kompakte Tabellen 
 
 <!-- FREE_SWARM_AUTO:BEGIN -->
 ## AUTO — Live-Auswertung
-Aktualisiert: `2026-08-25T15:09:57.236350+00:00`
+Aktualisiert: `2026-08-25T15:25:10.024852+00:00`
 
 | Kennzahl | Wert |
 |---|---:|
@@ -219,8 +219,8 @@ Aktualisiert: `2026-08-25T15:09:57.236350+00:00`
 | Evident akzeptierte Architektur-Deltas | 0 |
 | Nominal/historisch akzeptierte Architektur-Deltas | 1 |
 | Legacy/unqualifizierte nominale Accepts | 1 |
-| Repo-Korpus-Proxy Tokens (4 Zeichen/Token) | 13233362 |
-| Sonnet-5 Output-only Äquivalent des Repo-Proxys | $132.33 |
+| Repo-Korpus-Proxy Tokens (4 Zeichen/Token) | 13262720 |
+| Sonnet-5 Output-only Äquivalent des Repo-Proxys | $132.63 |
 
 ### Modelle
 | Provider | Modell | Requests | Success | 429 | Input | Output | Total |
@@ -286,8 +286,8 @@ Innovativstes Modell: **NO EVIDENCE YET**
 | GPT/ChatGPT | 0 | UNKNOWN | UNKNOWN% |
 
 ### Research-Entity-Output / Sonnet-Kostenproxy
-API-exakte historische Gesamttokens aller früheren Organe bleiben **UNKNOWN**, solange keine vollständige historische Usage-Buchhaltung existiert. Der messbare persistente Repo-Korpus umfasst aktuell 10435 Textdateien / 52933450 Zeichen ≈ **13233362 Tokens** bei der ausdrücklich nur als Proxy verwendeten 4-Zeichen-Näherung.
-Hypothetische reine Output-Neuerzeugung dieses Proxy-Korpus mit Claude Sonnet 5: **$132.33** zum derzeit geltenden Output-Tarif von $10/M Tokens. Input-/Caching-/Toolkosten sind darin nicht enthalten.
+API-exakte historische Gesamttokens aller früheren Organe bleiben **UNKNOWN**, solange keine vollständige historische Usage-Buchhaltung existiert. Der messbare persistente Repo-Korpus umfasst aktuell 10446 Textdateien / 53050879 Zeichen ≈ **13262720 Tokens** bei der ausdrücklich nur als Proxy verwendeten 4-Zeichen-Näherung.
+Hypothetische reine Output-Neuerzeugung dieses Proxy-Korpus mit Claude Sonnet 5: **$132.63** zum derzeit geltenden Output-Tarif von $10/M Tokens. Input-/Caching-/Toolkosten sind darin nicht enthalten.
 <!-- FREE_SWARM_AUTO:END -->
 
 

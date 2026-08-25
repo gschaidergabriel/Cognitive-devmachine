@@ -1,6 +1,6 @@
 {
   "schema": "CLAY_FREE_SWARM_SYSTEM_ANALYSIS/v3",
-  "generated_at": "2026-08-25T15:09:59.474402+00:00",
+  "generated_at": "2026-08-25T15:25:12.038978+00:00",
   "runtime": {
     "supervisor": "STOPPED/QUARANTINED",
     "go_swarm": "RUNNING",
@@ -65,7 +65,7 @@
   },
   "distillery": {
     "schema": "CLAY_RESEARCH_DISTILLERY_STATUS/v1",
-    "generated_at": "2026-08-25T15:09:45.020811+00:00",
+    "generated_at": "2026-08-25T15:25:04.033844+00:00",
     "collected_source_tokens": 11621,
     "accepted_dataset_tokens": 0,
     "dataset_yield": 0.0,
@@ -111,7 +111,7 @@
     "model_output_tokens": 1455,
     "shared_provider_budget": {
       "schema": "CLAY_SHARED_PROVIDER_BUDGET/v1",
-      "generated_at": "2026-08-25T15:09:45.021363+00:00",
+      "generated_at": "2026-08-25T15:25:04.034391+00:00",
       "providers": {
         "arxiv": {
           "max_inflight": 1,
@@ -213,13 +213,13 @@
           "max_inflight": 16,
           "active_leases": 0,
           "min_interval_s": 0.5,
-          "cooldown_seconds": 9.990587949752808,
-          "total_requests": 1554,
+          "cooldown_seconds": 9.992828130722046,
+          "total_requests": 1644,
           "total_success": 134,
-          "total_429": 1419,
+          "total_429": 1509,
           "total_errors": 0,
           "last_status": "429",
-          "last_observed_at": "2026-08-25T15:09:45.012075+00:00"
+          "last_observed_at": "2026-08-25T15:25:04.027295+00:00"
         },
         "semantic_scholar": {
           "max_inflight": 1,
@@ -249,16 +249,16 @@
     },
     "db_bytes": 933888,
     "top_questions": [
-      "What is the optimal balance between static and adaptive validation components?",
-      "How does token validation impact different model architectures differently?",
-      "Can we automatically update validation patterns from provider error streams without manual labeling?",
-      "How can we accurately predict the optimal concurrency limit based on system metrics and workload characteristics?",
-      "What are the potential limitations and edge cases of the proposed approach?",
-      "What is the minimal typed-entry schema that exercises the full loader->model->J-Space path without requiring whole-model causal credit?",
-      "Was sind die Ursachen für die Diskrepanz zwischen Chunk-Sammlung und Paket-Akzeptanz?",
-      "Wie kann die Diskrepanz behoben werden?",
-      "Welche Auswirkungen hat die Diskrepanz auf die Gesamtsystemleistung?",
-      "What is the optimal binding granularity for each workload?"
+      "Does NVIDIA's API expose per-credential quota headers consistently across NIM and Developer Program endpoints, or is header presence itself a reliable signal of free-tier eligibility?",
+      "How can we ensure that the collected data is relevant and of high quality?",
+      "How does the increased concurrency affect the HCU's ability to handle complex requests?",
+      "What are the optimal parameters for the inference engine optimization?",
+      "Which minimal GWT implementation produces a measurable causal trace (not correlation) on free-tier CPU?",
+      "Can Typed Assembly Language style verification be applied to LLM token routing decisions?",
+      "Does MoE expert-choice routing generalize to GRID10 logical cells without learned gating?",
+      "What is the minimal credential-binding proof that a concrete NVIDIA API key is free-tier bound (not just provider-global statement)?",
+      "Does NVIDIA expose a programmatic API key capability/introspection endpoint for free-tier model eligibility, or must capability manifests be maintained out-of-band?",
+      "Does the current loader implementation expose a credential-binding hook at the model-execution boundary, or must the typed-entry provenance be threaded through the entire HCU execution fabric?"
     ],
     "candidate_states": {}
   },
@@ -433,6 +433,6 @@
     "measured_total_sonnet5_equivalent_usd": 148.830648,
     "verified_historical_savings_usd": null,
     "nominal_avoided_if_zero_cost_usd": 148.830648,
-    "repo_output_only_proxy_usd": 132.33362
+    "repo_output_only_proxy_usd": 132.6272
   }
 }

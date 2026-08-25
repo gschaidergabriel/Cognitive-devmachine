@@ -1,0 +1,271 @@
+{
+  "schema": "CLAY_TRIGGER2_QWEN35_08B_JSPACE_CAUSAL_INTERVENTION/v2_fixed_instrumentation",
+  "candidate_id": "QWEN35_08B_JOSIEFIED_GABLITERATED_MEASURED",
+  "fix_description": "representation_divergence now captured via a detached copy of the hidden state taken INSIDE the forward hook immediately after mutation, on a dedicated single forward pass over the eval prompt -- not via a downstream output_hidden_states=True call on model.generate(), which did not reflect the hook's mutation for this architecture's decoder stack. Behavioral generation is measured separately (same hook, but during an actual model.generate() call), per source doc SS12.6.",
+  "trace_identity": {
+    "checkpoint_revision": "591852bda6e1979f59e4b0f5ee2919697b12e936",
+    "hidden_size": 1024,
+    "target_layer_idx": 11,
+    "wrong_layer_idx": 8,
+    "num_hidden_layers": 24,
+    "torch_version": "2.13.0+cpu",
+    "n_contrastive_pairs": 6,
+    "vector_extraction_method": "mean(pos_last_token_hidden) - mean(neg_last_token_hidden) at layer output, via output_hidden_states forward pass (unchanged from v1)",
+    "representation_capture_method_v2": "detached hidden state captured inside the forward_hook on module output, on a dedicated non-generation forward pass over a fixed probe text"
+  },
+  "vector_norm_1x": 0.8028075098991394,
+  "eval_prompt": "Consider this statement: 'The record shows the door was locked.' Is this best treated as a real observed fact or a simulated hypothetical? Answer with one word: REAL or SIMULATED, then one sentence why.",
+  "forward_probe_text_for_representation_capture": "The record shows the door was locked.",
+  "self_consistency_check": {
+    "note": "baseline representation compared to itself, expect l2=0.0 cosine=1.0 exactly -- validates the capture mechanism itself before trusting other conditions",
+    "l2_distance": 0.0,
+    "cosine_similarity": 1.0
+  },
+  "off_target_check": {
+    "baseline_output": "19",
+    "plus_vector_1x_output": "19"
+  },
+  "conditions": [
+    {
+      "condition": "BASELINE",
+      "layer_idx": null,
+      "mode": "none",
+      "generation_seconds": 100.4306218624115,
+      "behavioral_output": "**REAL**\n\n*One sentence why:*\n\"The record shows the door was locked\" is best treated as **REAL** because it reflects an actual, verifiable event\u2014likely captured by a security",
+      "behavioral_lexical_score": {
+        "fact_words": 4,
+        "sim_words": 0,
+        "lean": "FACT"
+      },
+      "representation_divergence": {
+        "l2_distance": 0.0,
+        "cosine_similarity": 1.0
+      },
+      "behavioral_primary_label_v2": {
+        "primary_label": "REAL",
+        "method": "explicit_bold_label_match"
+      }
+    },
+    {
+      "condition": "PLUS_VECTOR_1x",
+      "layer_idx": 11,
+      "mode": "add",
+      "generation_seconds": 29.614874124526978,
+      "behavioral_output": "**REAL**\n\n*The statement is best treated as a **real observed fact**\u2014specifically, it describes an unambiguous, verifiable event captured by the record (e.g., a door lock",
+      "behavioral_lexical_score": {
+        "fact_words": 4,
+        "sim_words": 0,
+        "lean": "FACT"
+      },
+      "representation_divergence": {
+        "l2_distance": 0.8028075098991394,
+        "cosine_similarity": 0.9417438507080078
+      },
+      "behavioral_primary_label_v2": {
+        "primary_label": "REAL",
+        "method": "explicit_bold_label_match"
+      }
+    },
+    {
+      "condition": "SIGN_FLIP",
+      "layer_idx": 11,
+      "mode": "add",
+      "generation_seconds": 31.09309196472168,
+      "behavioral_output": "**SIMULATED**\n\n*Why?* If the door were truly locked, the record would likely show a **real, unvarnished, or even more extreme** scenario\u2014perhaps the door",
+      "behavioral_lexical_score": {
+        "fact_words": 2,
+        "sim_words": 1,
+        "lean": "FACT"
+      },
+      "representation_divergence": {
+        "l2_distance": 0.8028074502944946,
+        "cosine_similarity": 0.9344777464866638
+      },
+      "behavioral_primary_label_v2": {
+        "primary_label": "SIMULATED",
+        "method": "explicit_bold_label_match"
+      }
+    },
+    {
+      "condition": "NULL_VECTOR",
+      "layer_idx": 11,
+      "mode": "add",
+      "generation_seconds": 29.782578706741333,
+      "behavioral_output": "**REAL**\n\n*One sentence why:*\n\"The record shows the door was locked\" is best treated as **REAL** because it reflects an actual, verifiable event\u2014likely captured by a security",
+      "behavioral_lexical_score": {
+        "fact_words": 4,
+        "sim_words": 0,
+        "lean": "FACT"
+      },
+      "representation_divergence": {
+        "l2_distance": 0.0,
+        "cosine_similarity": 1.0
+      },
+      "behavioral_primary_label_v2": {
+        "primary_label": "REAL",
+        "method": "explicit_bold_label_match"
+      }
+    },
+    {
+      "condition": "ORTHOGONAL_SAME_NORM",
+      "layer_idx": 11,
+      "mode": "add",
+      "generation_seconds": 21.41733193397522,
+      "behavioral_output": "**REAL**\n\n*The record shows the door was locked\u2014because the door *was* locked, not because we imagined it.*",
+      "behavioral_lexical_score": {
+        "fact_words": 2,
+        "sim_words": 1,
+        "lean": "FACT"
+      },
+      "representation_divergence": {
+        "l2_distance": 0.8028075098991394,
+        "cosine_similarity": 0.936040461063385
+      },
+      "behavioral_primary_label_v2": {
+        "primary_label": "REAL",
+        "method": "explicit_bold_label_match"
+      }
+    },
+    {
+      "condition": "PERMUTED_SAME_NORM",
+      "layer_idx": 11,
+      "mode": "add",
+      "generation_seconds": 31.544726371765137,
+      "behavioral_output": "**REAL**\n\nThe statement *\"The record shows the door was locked\"* is best treated as **REAL** because it describes an observable, verifiable event in the real world\u2014something that can be",
+      "behavioral_lexical_score": {
+        "fact_words": 4,
+        "sim_words": 0,
+        "lean": "FACT"
+      },
+      "representation_divergence": {
+        "l2_distance": 0.8028075098991394,
+        "cosine_similarity": 0.937529981136322
+      },
+      "behavioral_primary_label_v2": {
+        "primary_label": "REAL",
+        "method": "explicit_bold_label_match"
+      }
+    },
+    {
+      "condition": "WRONG_LAYER",
+      "layer_idx": 8,
+      "mode": "add",
+      "generation_seconds": 23.24590563774109,
+      "behavioral_output": "**REAL**\n\n*The record confirms the door is locked\u2014this is an observable, verifiable fact, not a simulation or hypothetical.*",
+      "behavioral_lexical_score": {
+        "fact_words": 4,
+        "sim_words": 2,
+        "lean": "FACT"
+      },
+      "representation_divergence": {
+        "l2_distance": 1.3463813066482544,
+        "cosine_similarity": 0.7962689995765686
+      },
+      "behavioral_primary_label_v2": {
+        "primary_label": "REAL",
+        "method": "explicit_bold_label_match"
+      }
+    },
+    {
+      "condition": "LESION",
+      "layer_idx": 11,
+      "mode": "lesion",
+      "generation_seconds": 30.50618839263916,
+      "behavioral_output": "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!",
+      "behavioral_lexical_score": {
+        "fact_words": 0,
+        "sim_words": 0,
+        "lean": "TIE"
+      },
+      "representation_divergence": {
+        "l2_distance": 2.169232130050659,
+        "cosine_similarity": 0.0
+      },
+      "behavioral_primary_label_v2": {
+        "primary_label": "AMBIGUOUS",
+        "method": "fallback_keyword"
+      }
+    },
+    {
+      "condition": "LESION_THEN_RESCUE",
+      "layer_idx": 11,
+      "mode": "add_after_lesion_note",
+      "generation_seconds": 33.43775129318237,
+      "behavioral_output": "**REAL**\n\n*The statement is best treated as a **real observed fact**\u2014specifically, it describes an unambiguous, verifiable event captured by the record (e.g., a door lock",
+      "behavioral_lexical_score": {
+        "fact_words": 4,
+        "sim_words": 0,
+        "lean": "FACT"
+      },
+      "representation_divergence": {
+        "l2_distance": 0.8028075098991394,
+        "cosine_similarity": 0.9417438507080078
+      },
+      "note": "RESCUE re-applies the steering vector in a fresh forward/generate pass after LESION; tests whether the FACT-lean baseline is recoverable, not a literal same-pass lesion+patch.",
+      "behavioral_primary_label_v2": {
+        "primary_label": "REAL",
+        "method": "explicit_bold_label_match"
+      }
+    },
+    {
+      "condition": "MAGNITUDE_0.5x",
+      "layer_idx": 11,
+      "mode": "add",
+      "generation_seconds": 32.467084884643555,
+      "behavioral_output": "**REAL**\n\n*The statement is best treated as a **real observed fact** because it describes an actual, verifiable event in the world\u2014specifically, the state of the door being locked",
+      "behavioral_lexical_score": {
+        "fact_words": 4,
+        "sim_words": 0,
+        "lean": "FACT"
+      },
+      "representation_divergence": {
+        "l2_distance": 0.4014037549495697,
+        "cosine_similarity": 0.9839409589767456
+      },
+      "behavioral_primary_label_v2": {
+        "primary_label": "REAL",
+        "method": "explicit_bold_label_match"
+      }
+    },
+    {
+      "condition": "MAGNITUDE_2x",
+      "layer_idx": 11,
+      "mode": "add",
+      "generation_seconds": 30.858105182647705,
+      "behavioral_output": "**REAL**\n\n**Source:** The statement is a factual observation from the record, indicating the absence of any physical or digital evidence of locking. No further details are provided, suggesting it\u2019s a definitive",
+      "behavioral_lexical_score": {
+        "fact_words": 4,
+        "sim_words": 0,
+        "lean": "FACT"
+      },
+      "representation_divergence": {
+        "l2_distance": 1.6056150197982788,
+        "cosine_similarity": 0.8220809698104858
+      },
+      "behavioral_primary_label_v2": {
+        "primary_label": "REAL",
+        "method": "explicit_bold_label_match"
+      }
+    },
+    {
+      "condition": "MAGNITUDE_4x",
+      "layer_idx": 11,
+      "mode": "add",
+      "generation_seconds": 29.892666816711426,
+      "behavioral_output": " **F**\n **SOURCE**\n **ID**\n **ACTION**\n **VER**\n **F**\n **WORD**\n **SOURCE**\n **ID**\n **ACTION**\n",
+      "behavioral_lexical_score": {
+        "fact_words": 0,
+        "sim_words": 0,
+        "lean": "TIE"
+      },
+      "representation_divergence": {
+        "l2_distance": 3.2112300395965576,
+        "cosine_similarity": 0.6079674363136292
+      },
+      "behavioral_primary_label_v2": {
+        "primary_label": "AMBIGUOUS",
+        "method": "fallback_keyword"
+      }
+    }
+  ]
+}

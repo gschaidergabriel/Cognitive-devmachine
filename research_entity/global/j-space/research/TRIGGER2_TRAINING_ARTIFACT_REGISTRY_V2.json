@@ -1,0 +1,135 @@
+{
+  "schema": "CLAY_TRIGGER2_TRAINING_ARTIFACT_REGISTRY/v2",
+  "registry_version": "2.0.0",
+  "date": "2026-08-25",
+  "supersedes": "research_entity/global/j-space/research/TRIGGER2_TRAINING_ARTIFACT_REGISTRY_V1.json",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "target_model_family": "Qwen3.5-0.8B",
+  "authority": {
+    "latest_main_observed": "c05fd30f34b118efa14e625323f50971c5dcd7c4",
+    "supervisor_epoch": "8.78",
+    "owner_target": "research_entity/global/XENO_HCU_GO_TARGET_ARCHITECTURE_OWNER_DIRECTIVE_2026-08-25.md",
+    "semantic_hyperposition_contract": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_SEMANTIC_HYPERPOSITION_CROSSCUTTING_CONTRACT_V1_GPT56SOL.json",
+    "protocol": "research_entity/global/j-space/research/TRIGGER2_RESEARCH_AUDIT_VERSIONING_PROTOCOL_V1.md",
+    "revision_queue": "research_entity/global/j-space/research/TRIGGER2_REVISION_QUEUE_V1.json"
+  },
+  "current_artifacts": [
+    {
+      "artifact_id": "HP_LABELER_CONTRACT_V1",
+      "path": "research_entity/global/j-space/research/TRIGGER2_HYPERPOSITION_REFERENCE_LABELER_CONTRACT_V1.json",
+      "version": "1.0.0-candidate",
+      "state": "CURRENT_CANDIDATE",
+      "capabilities": ["D_SEMANTIC_HYPERPOSITION","E_GRF_TYPE_DISCRIMINATOR_TEST_SELECTION"],
+      "notes": "Deterministic typed-state semantics; no free-text truth inference; open salience/test-order semantics remain research questions."
+    },
+    {
+      "artifact_id": "HP_LABELER_IMPL_V1",
+      "path": "tools/trigger2_hyperposition_reference_labelers_v1.py",
+      "version": "1.0.0-candidate",
+      "sha256": "075bec5f8e1a238e297be18b38005857d69ce1cafaecf95fdba245c55a393567",
+      "state": "CURRENT_CANDIDATE_LOCAL_PROPERTY_SMOKE_ONLY",
+      "validation": "2026-08-25_TRIGGER2_HYPERPOSITION_LABELER_LOCAL_VALIDATION_V1_GPT56SOL.json"
+    },
+    {
+      "artifact_id": "TRAININGTRACE_GATE_V1",
+      "path": "tools/entityos_hcu_trainingtrace_candidate_gate_v1.py",
+      "state": "SUPERSEDED_FOR_TRIGGER2_SYNTHETIC_RESOLUTION_USE_CASE_BUT_RETAINS_HISTORICAL_PROVENANCE",
+      "reason": "Cannot represent mechanically resolved synthetic Hyperposition positives without causal evidence class."
+    },
+    {
+      "artifact_id": "TRAININGTRACE_GATE_V2",
+      "path": "tools/entityos_hcu_trainingtrace_candidate_gate_v2.py",
+      "version": "2.0.0-candidate",
+      "state": "CURRENT_CANDIDATE_TESTS_WRITTEN_NOT_REPO_EXECUTED",
+      "change": "Adds SYNTHETIC_DETERMINISTIC_LABEL with exact labeler/generator hashes, synthetic_world=true, source_real_world_claim=false; does not relax J-Space causal requirements."
+    },
+    {
+      "artifact_id": "HP_NATIVE_MICROSEED_GENERATOR_MANIFEST_V1",
+      "path": "research_entity/global/j-space/research/TRIGGER2_HYPERPOSITION_NATIVE_MICROSEED_GENERATOR_MANIFEST_V1.json",
+      "version": "1.0.0",
+      "sha256": "27a9952946a8ae7eb11f0a9ca780b6fd80f3aa75e7290eeb345b3ddc62e14dfa",
+      "state": "CURRENT_CANDIDATE"
+    },
+    {
+      "artifact_id": "HP_NATIVE_MICROSEED_V1",
+      "path": "research_entity/global/j-space/research/trigger2_hyperposition_native_microseed_v1.jsonl",
+      "version": "1.0.0",
+      "sha256": "52bd5de5ec80cd8d15b1554be77796eafb2afac96c9fb697fb0f00376d72225b",
+      "rows": 6,
+      "state": "CURRENT_CANDIDATE_NOT_TRAINING_ADMITTED",
+      "capability_families": [
+        "HP_SUPPORT_PRESERVE_F01",
+        "HP_COUNTER_PRESERVE_F01",
+        "HP_FALSIFIER_RESOLVE_F01",
+        "HP_UNKNOWN_CONTEXT_F01",
+        "GRF_TEST_ORDER_F01",
+        "GRF_SALIENCE_NOT_TRUTH_F01"
+      ],
+      "next_revision": "Expand to counterbalanced branch permutations, lexical/surface families, evidence-ancestry variants, discriminator variants and frozen split families after gate-v2 exact test execution."
+    }
+  ],
+  "known_revisions": [
+    {
+      "artifact": "Trigger-2 binding-router factorial v3",
+      "state": "REJECTED_LEAKAGE",
+      "reason": "Supervisor 8.78 higher-order nuisance leakage"
+    },
+    {
+      "artifact": "trigger2_qwen35_08b_xeno_hcu_synthetic_seed_v1.jsonl",
+      "state": "REVIEW_REQUIRED",
+      "reason": "Hyperposition cross-cutting ontology retrofit"
+    },
+    {
+      "artifact": "trigger2_qwen35_08b_integrated_cognitive_trajectory_seed_v4.jsonl",
+      "state": "REVIEW_REQUIRED",
+      "reason": "trajectory semantics useful; full latent Hyperposition before/after tuple missing"
+    },
+    {
+      "artifact": "trigger2_qwen35_08b_evidence_boundary_seed_v2.jsonl",
+      "state": "REVIEW_REQUIRED",
+      "reason": "evidence semantics useful; older simplified Hyperposition representation"
+    },
+    {
+      "artifact": "dynamic episodic binding families",
+      "state": "REVIEW_REQUIRED_AND_TOKEN_MATERIALIZATION_BLOCKED",
+      "reason": "Hyperposition frame retrofit plus checkpoint/tokenizer/ABI binding"
+    },
+    {
+      "artifact": "C1 preflight interpretation",
+      "state": "REVIEW_REQUIRED",
+      "reason": "no movement is diagnostic but does not alone identify model size as cause"
+    }
+  ],
+  "xeno_capability_status": {
+    "C_SYMBOLIC_SEMANTIC_CLASS": "EXISTING_DESIGN_REVIEW_REQUIRED_UNDER_HP_FRAME",
+    "A_CONTEXT_INVARIANCE": "EXISTING_DESIGN_REVIEW_REQUIRED_UNDER_HP_FRAME",
+    "B_EPISODE_LOCAL_OPAQUE_BINDING": "REQUIRED_EXISTING_DESIGN_NEEDS_HP_RETROFIT_AND_ABI_BINDING",
+    "D_SEMANTIC_HYPERPOSITION": "LABELER_AND_6_ROW_NATIVE_MICROSEED_CANDIDATE_CREATED_NOT_ADMITTED",
+    "E_GRF_TYPE_DISCRIMINATOR_TEST_SELECTION": "CANDIDATE_ORDERING_LABELERS_CREATED_NEEDS_SEMANTIC_REVIEW_AND_SCALE",
+    "AUTONOMOUS_BOOT_JOIN_WORK_SELECTION": "EXISTING_SEEDS_REVIEW_REQUIRED_UNDER_HP_FRAME",
+    "S1_READ_ONLY_NODE_RESULT": "EXISTING_SEEDS_REVIEW_REQUIRED_UNDER_HP_FRAME",
+    "DYNAMIC_COORDINATOR_LEASE": "EXISTING_SEEDS_REVIEW_REQUIRED_UNDER_HP_FRAME",
+    "COORDINATOR_INTEGRATION_COMPRESSION_CAS": "EXISTING_SEEDS_REVIEW_REQUIRED_UNDER_HP_FRAME",
+    "RECURSIVE_COORDINATION": "EXISTING_SEEDS_REVIEW_REQUIRED_UNDER_HP_FRAME",
+    "GWT_SHARED_STATE_REENTRY": "EXISTING_SEEDS_REVIEW_REQUIRED_UNDER_HP_FRAME",
+    "JSPACE_CAUSAL_ONLY_WHERE_EVIDENCED": "NEGATIVE_BOUNDARY_DATA_EXISTS_POSITIVE_CAUSAL_CREDIT_ZERO",
+    "CLAYCODE_HYPERMATH_PROTOCOL": "COVERAGE_EXISTS_BUT_REQUIRES_FULL_CURRICULUM_AUDIT",
+    "AUTHORITY_EPISTEMIC_INTEGRITY": "STRONG_EXISTING_HARD_NEGATIVE_COVERAGE_REQUIRES_HP_PROJECTION_AUDIT",
+    "GENERAL_CAPABILITY_RETENTION": "EVAL_REQUIRED_NOT_YET_PROVEN"
+  },
+  "scientific_method_updates": {
+    "C1": "GO_INVESTIGATE_NO_GO with positive controls, not automatic model-size verdict",
+    "mixed_training": "allowed only with checkpoint-specific capability vector and retention curves",
+    "emergence": "EMERGENT_CANDIDATE until training-overlap/ancestry/leakage excluded",
+    "versioning": "major.minor.patch plus exact content hash plus dependency/supersession graph",
+    "labeling": "positive supervised state targets require deterministic/adjudicated source; pairwise/listwise ordering replaces fabricated scalar utility when calibration absent"
+  },
+  "credits": {
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "jspace_positive_causal_credit": 0,
+    "whole_xeno_hcu_runtime_credit": 0
+  },
+  "next_exact_action": "Execute exact gate-v2 + labeler tests, then generate a fully counterbalanced Hyperposition-native successor corpus and batch-retrofit the highest-value existing Xeno process/binding families through the same latent ontology."
+}

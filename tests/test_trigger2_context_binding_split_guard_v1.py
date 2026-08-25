@@ -58,6 +58,31 @@ class Trigger2ContextBindingSplitGuardTests(unittest.TestCase):
         self.assertIn("TEMPLATE_FAMILY_OVERLAP:TRAIN:HOLDOUT", joined)
         self.assertIn("HOLDOUT_ATOM_REUSE:TRAIN:HOLDOUT", joined)
 
+    def test_recognizes_current_codebook_delimiter_families(self):
+        prompts = [
+            "CODEBOOK\nALLOW -> x\nDENY -> y\nABSTAIN -> z\nEND_CODEBOOK\ncase-a",
+            "<CODEBOOK>ALLOW=>x;DENY=>y;ABSTAIN=>z</CODEBOOK>\ncase-b",
+            "CODEBOOK_BEGIN ALLOW -> x; DENY -> y; ABSTAIN -> z CODEBOOK_END\ncase-c",
+        ]
+        surfaces = [guard.model_visible_semantic_surface(x) for x in prompts]
+        self.assertIn("case-a", surfaces[0])
+        self.assertIn("case-b", surfaces[1])
+        self.assertIn("case-c", surfaces[2])
+
+    def test_missing_atom_identity_fails_closed(self):
+        rows = []
+        for split, template in (("TRAIN", "ta"), ("VALIDATION", "va"), ("HOLDOUT", "ha")):
+            rows.append({
+                "split": split,
+                "family_id": f"f-{split}",
+                "provenance_ancestry_id": f"p-{split}",
+                "curriculum": {"template_family": template},
+                "prompt": f"<CODEBOOK>ALLOW=>x;DENY=>y;ABSTAIN=>z</CODEBOOK>\n{split}-only-surface",
+            })
+        result = guard.adjudicate(rows)
+        self.assertFalse(result["pass"])
+        self.assertTrue(any(x.startswith("ATOM_IDENTITY_MISSING:HOLDOUT") for x in result["failures"]))
+
     def test_rejects_missing_split(self):
         result = guard.adjudicate([
             row("TRAIN", "train_a", "train text", [1, 2, 3], "f-train"),

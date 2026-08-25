@@ -1,6 +1,6 @@
 {
   "schema": "CLAY_FREE_SWARM_SYSTEM_ANALYSIS/v3",
-  "generated_at": "2026-08-25T07:05:53.734264+00:00",
+  "generated_at": "2026-08-25T07:21:00.225205+00:00",
   "runtime": {
     "supervisor": "STOPPED/QUARANTINED",
     "go_swarm": "RUNNING",
@@ -65,7 +65,7 @@
   },
   "distillery": {
     "schema": "CLAY_RESEARCH_DISTILLERY_STATUS/v1",
-    "generated_at": "2026-08-25T07:05:52.345620+00:00",
+    "generated_at": "2026-08-25T07:20:57.698911+00:00",
     "collected_source_tokens": 11621,
     "accepted_dataset_tokens": 0,
     "dataset_yield": 0.0,
@@ -86,7 +86,7 @@
     "model_output_tokens": 1455,
     "shared_provider_budget": {
       "schema": "CLAY_SHARED_PROVIDER_BUDGET/v1",
-      "generated_at": "2026-08-25T07:05:52.346293+00:00",
+      "generated_at": "2026-08-25T07:20:57.699629+00:00",
       "providers": {
         "arxiv": {
           "max_inflight": 1,
@@ -224,22 +224,22 @@
     },
     "db_bytes": 864256,
     "top_questions": [
-      "What is the minimal set of typed-entry invariants that, if violated, must deterministically reject at loader boundary vs. degrade gracefully at model execution?",
-      "Does the NVIDIA credential binding implement per-credential API entitlement verification or only static policy matching?",
-      "Does adaptive routing weight recalculation with recovery bonus improve overall swarm latency without increasing provider-level 429 rates?",
-      "Can the quota status cache be effectively shared across multiple sandbox environments?",
-      "What are the optimal parameters for the HYBRID model?",
-      "How does the HYBRID model perform under different workload scenarios?",
-      "How can credential/model/route binding be economically enforced for NVIDIA's free tier without provider-specific entitlement metadata?",
-      "What are the security implications of using a HYBRID model for provider admission?",
-      "Does Nemotron-3-ULTRA 550B sparse MoE expert routing (128 experts, top-4) causally map to GRID10 logical cells without model consensus?",
-      "Does the current J-Space admission gate (credit=0) have any executable surface to accept a causal envelope, or is the entire J-Space path a stub?"
+      "Does NVIDIA expose a per-credential API to verify free-tier vs paid entitlement at admission time, or must we rely on provider-side free-mode binding?",
+      "What is the exact quota limit for the NVIDIA free tier, and is it sufficient for the planned J-Space calibration experiments?",
+      "Are there any hidden costs or rate limits on the OpenRouter free routes that would make them unusable in practice?",
+      "Has Mistral officially confirmed their free tier status, and what models are included in it?",
+      "Is there a way to automate the verification of provider status to ensure the allowlist stays up-to-date without manual checking?",
+      "How can cryptographic lease binding be ensured without violating FREE_ONLY latency constraints?",
+      "What causal graph structures optimally balance counterevidence expressiveness and computational efficiency in hyperposition-preserving models?",
+      "Can negative evidence anchors be compressed without losing discriminative power for adversarial pattern detection?",
+      "Does NVIDIA Developer Program API expose per-credential authorized model lists, or is model access uniformly granted per tier?",
+      "What specific statistical thresholds should be used for outlier detection in the distillery data?"
     ],
     "candidate_states": {}
   },
   "evidence_forge": {
     "schema": "CLAY_FREE_EVIDENCE_FORGE_STATUS/v1",
-    "generated_at": "2026-08-25T07:05:52.565227+00:00",
+    "generated_at": "2026-08-25T07:20:58.975625+00:00",
     "candidate_states": {
       "ACCEPTED": 1,
       "NEEDS_IMPLEMENTATION": 65,
@@ -263,7 +263,7 @@
     "peak_parallel_tasks": 0,
     "shared_provider_budget": {
       "schema": "CLAY_SHARED_PROVIDER_BUDGET/v1",
-      "generated_at": "2026-08-25T07:05:52.565984+00:00",
+      "generated_at": "2026-08-25T07:20:58.979429+00:00",
       "providers": {
         "arxiv": {
           "max_inflight": 1,
@@ -408,6 +408,6 @@
     "measured_total_sonnet5_equivalent_usd": 148.830648,
     "verified_historical_savings_usd": null,
     "nominal_avoided_if_zero_cost_usd": 148.830648,
-    "repo_output_only_proxy_usd": 125.92735
+    "repo_output_only_proxy_usd": 126.10615
   }
 }

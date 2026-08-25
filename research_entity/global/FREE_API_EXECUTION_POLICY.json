@@ -697,16 +697,20 @@
   },
   "response_object_provenance": {
     "checked_at": "2026-08-25",
-    "claim": "When a non-streaming provider response includes a top-level object field, the success discriminator must be the exact built-in string chat.completion before content can reach VERIFIED or DONE. Explicit error discriminators remain separately classified as provider_error.",
+    "claim": "Every non-streaming provider success response must contain the exact built-in top-level discriminator object=chat.completion before content can reach VERIFIED or DONE. Explicit error discriminators remain separately classified as provider_error.",
     "sources": [
       "https://docs.nvidia.com/nim/large-language-models/2.0.10/reference/api-reference.html",
-      "https://docs.nvidia.com/nim/large-language-models/2.0.0/get-started/quickstart.html"
+      "https://docs.nvidia.com/nim/large-language-models/2.0.0/get-started/quickstart.html",
+      "https://docs.vllm.ai/en/v0.16.0/api/vllm/entrypoints/openai/chat_completion/protocol/"
     ],
-    "external_evidence": "NVIDIA documents Chat Completions, text Completions and Responses as distinct API surfaces; its documented Chat Completions response uses object=chat.completion.",
-    "internal_measurement": "A status-200 response explicitly labeled object=text_completion previously returned success and reached VERIFIED and DONE when its inner choice was shaped like a chat message.",
-    "executable_evidence": "test_non_chat_response_object_cannot_reach_verified_state",
-    "counterhypothesis": "A Chat-compatible inner choice is sufficient provenance regardless of an explicit top-level object discriminator; falsified because the adapter verified a response that identified itself as a different response type.",
-    "uncertainty": "The cross-provider v0.1 adapter still accepts omission of the response object field for compatibility; an Ubuntu NVIDIA live receipt is required before making the discriminator mandatory."
+    "external_evidence": "NVIDIA documents Chat Completions, text Completions and Responses as distinct vLLM-backed API surfaces and directs full response-schema questions to vLLM. The official vLLM ChatCompletionResponse defines object as the fixed Literal chat.completion with that serialized default.",
+    "internal_measurement": "Both a status-200 response explicitly labeled object=text_completion and one omitting object entirely previously returned success and reached VERIFIED and DONE when their inner choices were shaped like chat messages.",
+    "executable_evidence": [
+      "test_non_chat_response_object_cannot_reach_verified_state",
+      "test_missing_response_object_cannot_reach_verified_state"
+    ],
+    "counterhypothesis": "A Chat-compatible inner choice is sufficient provenance without an asserted top-level discriminator; falsified because the adapter promoted an unasserted response type into VERIFIED while the backend schema emits a fixed chat.completion literal.",
+    "uncertainty": "No Ubuntu NVIDIA live receipt is available on this host; compatibility is supported by the official NVIDIA/vLLM contract and executable local boundary tests rather than a live provider measurement."
   },
   "pending_http_results": {
     "checked_at": "2026-08-13",

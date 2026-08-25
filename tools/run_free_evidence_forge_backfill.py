@@ -3,13 +3,18 @@
 
 Layers historical replay/extraction and backlog-aware scheduling on top of the
 current bubblewrap-gated Forge authority without creating a second evaluator.
+Every status write carries an exact runtime identity envelope so a fresh LIVE file
+cannot be mistaken for evidence from a stale or alternate Forge writer.
 """
 from __future__ import annotations
 
 import argparse
 import asyncio
+import hashlib
 import os
+from pathlib import Path
 import shutil
+import subprocess
 import time
 
 import run_free_evidence_forge_safe_871 as safe
@@ -19,6 +24,52 @@ from free_swarm_historical_backfill import backfill_metrics, ensure_schema, inge
 base = safe.base
 _ORIGINAL_CONNECT = base.connect
 _ORIGINAL_METRICS = base.metrics
+_ENTRYPOINT = Path(__file__).resolve()
+_PROCESS_GENERATION_ID = f"pid:{os.getpid()}:start_ns:{time.time_ns()}"
+
+
+def _entrypoint_sha256() -> str:
+    try:
+        return hashlib.sha256(_ENTRYPOINT.read_bytes()).hexdigest()
+    except OSError:
+        return "UNREADABLE"
+
+
+def _source_identity() -> dict[str, str | None]:
+    try:
+        root = Path(__file__).resolve().parents[1]
+        head = subprocess.check_output(
+            ["git", "-C", str(root), "rev-parse", "HEAD"],
+            text=True,
+            stderr=subprocess.DEVNULL,
+            timeout=3,
+        ).strip()
+        tree = subprocess.check_output(
+            ["git", "-C", str(root), "rev-parse", "HEAD^{tree}"],
+            text=True,
+            stderr=subprocess.DEVNULL,
+            timeout=3,
+        ).strip()
+        return {"head": head, "tree": tree}
+    except Exception:
+        return {"head": None, "tree": None}
+
+
+_RUNTIME_SOURCE_IDENTITY = _source_identity()
+_RUNTIME_ENTRYPOINT_SHA256 = _entrypoint_sha256()
+
+
+def runtime_identity() -> dict[str, object]:
+    return {
+        "schema": "CLAY_FORGE_RUNTIME_IDENTITY/v1",
+        "runtime_entrypoint_path": str(_ENTRYPOINT),
+        "runtime_entrypoint_sha256": _RUNTIME_ENTRYPOINT_SHA256,
+        "source_commit": _RUNTIME_SOURCE_IDENTITY.get("head"),
+        "source_tree": _RUNTIME_SOURCE_IDENTITY.get("tree"),
+        "process_generation_identity": _PROCESS_GENERATION_ID,
+        "supervisor_generation_or_start_nonce": os.getenv("CLAY_SUPERVISOR_GENERATION_NONCE"),
+        "status_writer_schema_version": "BACKLOG_FIRST_FORGE_STATUS/v2",
+    }
 
 
 def connect():
@@ -45,6 +96,7 @@ def ingest_worker_candidates(con, max_lines_per_file: int = 0) -> int:
 
 def metrics(con, peak_parallel: int = 0):
     out = _ORIGINAL_METRICS(con, peak_parallel)
+    out["runtime_identity"] = runtime_identity()
     out["historical_backfill"] = backfill_metrics(con)
     out["ready_backlog"] = int(con.execute("SELECT COUNT(*) FROM candidates WHERE ready=1 AND state='NEW'").fetchone()[0])
     out["implementation_backlog"] = int(con.execute("SELECT COUNT(*) FROM candidates WHERE state='NEEDS_IMPLEMENTATION'").fetchone()[0])

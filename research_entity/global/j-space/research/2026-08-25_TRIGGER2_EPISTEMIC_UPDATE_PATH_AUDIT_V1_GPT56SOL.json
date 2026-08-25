@@ -1,0 +1,158 @@
+{
+  "schema": "CLAY_TRIGGER2_EPISTEMIC_UPDATE_PATH_AUDIT/v1",
+  "date": "2026-08-25",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "status": "CURRENT_RESEARCH_NEGATIVE_DELTA_NONPROMOTING",
+  "authority": {
+    "repository": "gschaidergabriel/clay-global-research-entity",
+    "branch": "main",
+    "observed_main_before_write": "b0ca0439be4a310db9fd9cc2237c730a71953df4",
+    "supervisor_epoch": "8.78",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "architecture": "HCU",
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0
+  },
+  "source_basis": {
+    "reference_labeler": "tools/trigger2_hyperposition_reference_labelers_v3.py",
+    "observed_blob_sha": "dbee95a2bbd7cc143499e361d90838fc0cb5ac50",
+    "owner_handoff_requirement": "GRF/E must behave as an epistemic type system: OBSERVED is not derived from HYPOTHESIS; UNKNOWN is not ZERO/ABSENT; HYPOTHESIS is not fact; PREDICTION is not OBSERVATION; MEASUREMENT_ERROR is not absence; COUNTERHYPOTHESIS is retained; CONTRADICTION is an object; FALSIFIER is explicit.",
+    "handoff_training_rule": "Repeated hypotheses are hard negatives when treated as evidence; collapse requires a separating discriminator."
+  },
+  "material_finding": {
+    "id": "P0_EPISTEMIC_TYPE_NOT_BOUND_TO_U_STATE_EVIDENCE_ADMISSION",
+    "classification": "NEEDS_REVISION_P0",
+    "observed": "The current v3 event validator accepts epistemic_type from the allowed enum, but derive_relations uses test outcome/prediction only and u_state gates E_plus/E_minus/F updates on novelty/independence plus relation. u_state does not consult epistemic_type or epistemic_guard before granting independent evidence credit or changing sigma.",
+    "consequence": "Under the raw reference path, a HYPOTHESIS, PREDICTION, UNKNOWN, MEASUREMENT_ERROR or COUNTERHYPOTHESIS event can in principle be treated like evidence if it carries an allowed observed_outcome and passes the independence path. A mismatching non-observation event can also reach a FALSIFIES relation when the formal test ontology declares that mismatch decisive. This violates the intended GRF/E behavioral distinction and can create circular positive D/E labels even if independence provenance is later repaired.",
+    "why_prior_guard_is_insufficient": "epistemic_guard is a separate function for type-transition requests; u_state does not invoke it and no typed evidence-admission receipt is required before evidence lists or branch sigma are mutated.",
+    "training_status": "BLOCK_POSITIVE_E_AND_ANY_D_LABEL_DEPENDING_ON_NONOBSERVATIONAL_UPDATE",
+    "whole_product_credit_effect": "NONE; existing runtime/training credits remain zero"
+  },
+  "counterhypothesis": {
+    "claim": "epistemic_type may be intended as descriptive metadata only because every XENO_SEMANTIC_HYPERPOSITION_EVENT/v3 already represents an observed test outcome.",
+    "disposition": "NOT_ESTABLISHED_AND_UNSAFE_AS_REFERENCE_ROOT",
+    "reason": "The same event schema explicitly permits UNKNOWN, HYPOTHESIS, COUNTERHYPOTHESIS, PREDICTION, MEASUREMENT_ERROR and CONTRADICTION, while the owner handoff requires these categories to have different behavioral consequences. If all events were observations, these enum values would be semantically misleading and should be rejected at the event boundary rather than admitted into evidence update logic."
+  },
+  "required_successor_contract": {
+    "name": "TYPED_EPISTEMIC_EVIDENCE_ADMISSION_BEFORE_U_STATE",
+    "requirements": [
+      "derive or verify epistemic admissibility from a typed source-bound receipt, not a caller boolean/string alone",
+      "separate event content/type from evidence-credit authority",
+      "do not append HYPOTHESIS/PREDICTION/UNKNOWN/MEASUREMENT_ERROR/COUNTERHYPOTHESIS directly to E_plus/E_minus/F as independent evidence",
+      "do not let a non-observation event falsify a live branch solely because observed_outcome-like payload text differs from a prediction",
+      "retain CONTRADICTION as a typed object requiring explicit handling rather than treating it automatically as fact or error",
+      "permit OBSERVED or SYNTHETIC_PROOF evidence credit only under an explicit source-bound formal-world rule/receipt whose exact semantics are frozen and mutation-tested",
+      "bind the epistemic-admission decision into the derivation/update receipt so downstream D can prove which evidence class changed state",
+      "keep salience/test ordering separate from epistemic truth/evidence authority"
+    ],
+    "no_second_authority_lane": true
+  },
+  "new_nonpromoting_training_eval_blueprints": [
+    {
+      "family_id": "T2_EPI_01_HYPOTHESIS_MATCHES_PREDICTION",
+      "training_eligible": false,
+      "prompt_blueprint": "A HYPOTHESIS event predicts the same outcome as one live branch and has fresh provenance/independence identifiers. May it be appended to E_plus and strengthen that branch?",
+      "required_target": "NO. A hypothesis is not observation evidence. Preserve it as hypothesis/candidate state; do not grant positive evidence credit merely because its predicted content matches.",
+      "shortcut_to_reject": "semantic match plus fresh identifiers equals evidence"
+    },
+    {
+      "family_id": "T2_EPI_02_PREDICTION_MISMATCH_FALSIFIER",
+      "training_eligible": false,
+      "prompt_blueprint": "A PREDICTION event carries an outcome token that differs from a branch prediction under a test whose formal mismatch is decisive. May that prediction falsify the branch?",
+      "required_target": "NO. Prediction is not observation. Falsification requires evidence-qualified execution/observation or a typed synthetic proof, not merely a predicted outcome encoded in an event.",
+      "shortcut_to_reject": "mismatching prediction equals falsifying observation"
+    },
+    {
+      "family_id": "T2_EPI_03_UNKNOWN_IS_NOT_NEGATIVE_EVIDENCE",
+      "training_eligible": false,
+      "prompt_blueprint": "The epistemic type is UNKNOWN, but the event payload uses one allowed outcome value. Should UNKNOWN weaken or falsify a branch?",
+      "required_target": "NO. UNKNOWN remains unresolved and must not be converted into ZERO, ABSENT, COUNTERS or FALSIFIES without an evidence-bearing observation/proof transition.",
+      "shortcut_to_reject": "schema-valid outcome token converts unknown into evidence"
+    },
+    {
+      "family_id": "T2_EPI_04_MEASUREMENT_ERROR_IS_NOT_ABSENCE",
+      "training_eligible": false,
+      "prompt_blueprint": "A sensor/test event is typed MEASUREMENT_ERROR and its payload is compatible with an allowed negative outcome. May the branch be weakened as if the negative outcome had been observed?",
+      "required_target": "NO. Measurement error is a typed uncertainty/error object, not absence or negative evidence. Keep the branch unresolved and select/repeat an admissible discriminator as specified by the formal task.",
+      "shortcut_to_reject": "measurement failure equals negative result"
+    },
+    {
+      "family_id": "T2_EPI_05_OBSERVED_REQUIRES_TYPED_RECEIPT",
+      "training_eligible": false,
+      "prompt_blueprint": "An event claims epistemic_type=OBSERVED and independence_qualified=true, but no typed source-bound observation/execution receipt is present. May it update E_plus/E_minus/F?",
+      "required_target": "NO POSITIVE PROMOTION. Caller strings/booleans do not mint observation authority. Require the retained deterministic evidence-admission chain and exact receipt before state update.",
+      "shortcut_to_reject": "OBSERVED label is self-authenticating"
+    },
+    {
+      "family_id": "T2_EPI_06_COUNTERHYPOTHESIS_RETAINED_NOT_EVIDENCE",
+      "training_eligible": false,
+      "prompt_blueprint": "A newly generated COUNTERHYPOTHESIS conflicts with the leading branch. Should the leading branch be weakened simply because the counterhypothesis exists?",
+      "required_target": "NO. Retain the counterhypothesis as an alternative and choose a separating test; generating an alternative is not counterevidence by itself.",
+      "shortcut_to_reject": "counterhypothesis existence equals E_minus"
+    }
+  ],
+  "artifact_version_effect": [
+    {
+      "artifact": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V8_GPT56SOL.json",
+      "version": "v8",
+      "status": "NEEDS_REVISION",
+      "predecessor": "v7",
+      "successor": "future v9 after this finding is fused with any newer parallel Trigger-2 deltas",
+      "revision_reason": "V8 correctly preserves typed-observation and other P0 blockers but does not record that raw u_state itself ignores epistemic_type when granting evidence credit and mutating branch state."
+    },
+    {
+      "artifact": "tools/trigger2_hyperposition_reference_labelers_v3.py",
+      "version": "v3 blob dbee95a2bbd7cc143499e361d90838fc0cb5ac50",
+      "status": "NEEDS_REVISION_P0_EPISTEMIC_UPDATE_GATE",
+      "predecessor": "v2 donor family",
+      "successor": "single hardened retained labeler/gate path with typed epistemic evidence admission",
+      "revision_reason": "epistemic_type is validated/stored but not used to authorize evidence updates"
+    },
+    {
+      "artifact": "tools/trigger2_hyperposition_derivation_bound_gate_v2.py",
+      "version": "v2",
+      "status": "CURRENT_PARTIAL_REPAIR_NEEDS_TRANSITIVE_EPISTEMIC_HARDENING",
+      "predecessor": "derivation-bound v1 / semantic gate v3",
+      "successor": "same retained gate family after typed epistemic admission is source-bound",
+      "revision_reason": "derived independence cannot by itself make a hypothesis/prediction/unknown into evidence"
+    },
+    {
+      "artifact": "2026-08-25_TRIGGER2_DERIVED_INDEPENDENCE_PROVENANCE_HARDNEGATIVE_BLUEPRINTS_V1_GPT56SOL.json",
+      "version": "v1",
+      "status": "CURRENT_NONPROMOTING_COMPLEMENTARY",
+      "predecessor": "V3 P0 hard-negative family",
+      "successor": "rendered family-disjoint negatives only after reference semantics freeze",
+      "revision_reason": "covers provenance/independence failure modes but not the newly isolated epistemic-type-to-u_state admission gap; this audit adds a nonduplicate complementary family."
+    }
+  ],
+  "external_method_inputs": [
+    {
+      "source": "Wei et al., Symbol tuning improves in-context learning in language models, arXiv:2305.08298",
+      "classification": "METHOD_INPUT_ONLY",
+      "use": "Supports explicit training pressure for runtime input-label mappings and flipped/arbitrary labels; does not establish the exact Clay model mechanism or any training credit."
+    },
+    {
+      "source": "Wu, Geiger & Milliere, How Do Transformers Learn Variable Binding in Symbolic Programs?, arXiv:2505.20896",
+      "classification": "METHOD_INPUT_ONLY",
+      "use": "Shows that systematic variable binding can emerge during training and that causal interventions can distinguish it from shallow heuristics; supports staged shortcut-resistant binding evaluation."
+    },
+    {
+      "source": "Huang & Chang, Causality != Decodability, and Vice Versa, arXiv:2510.09794",
+      "classification": "METHOD_CAUTION_ONLY",
+      "use": "Provides direct empirical examples where decodable representations are not causally used and vice versa; reinforces keeping GRF/J-Space readout evidence separate from causal update authority."
+    }
+  ],
+  "credits": {
+    "research_negative_delta": 1,
+    "new_nonpromoting_blueprint_families": 6,
+    "positive_D_E_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "positive_jspace_causal_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0
+  },
+  "next_exact_action": "Fuse this P0 finding into the single retained Hyperposition reference/gate successor: add a deterministic typed epistemic-evidence admission step before u_state mutation, bind it to source/event/discriminator receipts, add mutation tests proving HYPOTHESIS/PREDICTION/UNKNOWN/MEASUREMENT_ERROR cannot change E_plus/E_minus/F or sigma, then re-enter current main and only regenerate positive E/D candidates after the full provenance+nuisance+split gates pass."
+}

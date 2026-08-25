@@ -234,9 +234,13 @@ reconcile_6000_admission(){
   fi
 }
 
-raw_generation_allowed(){
-  # Supervisor 8.78 conversion-pressure gate. This process is credential blind:
-  # it reads only the local canonical Forge DB and writes one local status record.
+fabric_generation_allowed(){
+  # Supervisor 8.78 tri-state liveness gate. The 6000 fabric is also the only
+  # transport used by the historical-extraction scheduler. Therefore a pending
+  # extraction queue keeps the fabric alive even when the ordinary conversion
+  # backlog is high; reservable slots are redirected to historical extraction by
+  # free_swarm_backfill_scheduler. When no historical extraction remains, READY +
+  # NEEDS_IMPLEMENTATION pressure can stop the fabric to prevent new raw scale-up.
   python3 - <<'PY'
 import datetime,json,os,sqlite3
 from pathlib import Path
@@ -246,41 +250,52 @@ state_root=Path('/artifacts/clay-entityos-swarm')
 db=state_root/'forge/forge.sqlite3'
 status_path=state_root/'RAW_GENERATION_BACKPRESSURE.json'
 status={
- 'schema':'CLAY_SWARM_RAW_GENERATION_BACKPRESSURE/v1',
+ 'schema':'CLAY_SWARM_RAW_GENERATION_BACKPRESSURE/v2',
  'observed_at':datetime.datetime.now(datetime.timezone.utc).isoformat(),
  'threshold':threshold,
  'source':'FORGE_SQLITE_CANONICAL_LOCAL_STATE',
  'external_provider_calls':0,
  'credentials_read':False,
+ 'stop_pressure_terms':'READY_PLUS_NEEDS_IMPLEMENTATION_WHEN_PENDING_EXTRACTION_ZERO',
 }
 allowed=False
+con=None
 try:
  if not db.exists():
-  status.update({'state':'UNKNOWN_FORGE_DB','action':'PAUSE_RAW_GENERATION_FAIL_CLOSED'})
+  status.update({'state':'UNKNOWN_FORGE_DB','action':'PAUSE_FABRIC_FAIL_CLOSED'})
  else:
   con=sqlite3.connect(f'file:{db}?mode=ro',uri=True,timeout=2.0)
   tables={str(r[0]) for r in con.execute("SELECT name FROM sqlite_master WHERE type='table'")}
   if 'candidates' not in tables:
-   status.update({'state':'UNKNOWN_CANDIDATE_TABLE','action':'PAUSE_RAW_GENERATION_FAIL_CLOSED'})
+   status.update({'state':'UNKNOWN_CANDIDATE_TABLE','action':'PAUSE_FABRIC_FAIL_CLOSED'})
   else:
    ready=int(con.execute("SELECT COUNT(*) FROM candidates WHERE ready=1 AND state='NEW'").fetchone()[0])
    implementation=int(con.execute("SELECT COUNT(*) FROM candidates WHERE state='NEEDS_IMPLEMENTATION'").fetchone()[0])
    pending=0
    if 'historical_chunks' in tables:
     pending=int(con.execute("SELECT COUNT(*) FROM historical_chunks WHERE state='PENDING_EXTRACTION'").fetchone()[0])
-   pressure=ready+implementation+pending
-   allowed=pressure < threshold
+   pressure=ready+implementation
+   if pending > 0:
+    allowed=True
+    action='KEEP_EXTRACTION_TRANSPORT_ALIVE'
+   else:
+    allowed=pressure < threshold
+    action='ALLOW_RAW_GENERATION' if allowed else 'PAUSE_RAW_GENERATION_BACKPRESSURE'
    status.update({
     'state':'OBSERVED',
     'ready_backlog':ready,
     'implementation_backlog':implementation,
     'pending_extraction':pending,
     'conversion_pressure':pressure,
-    'action':'ALLOW_RAW_GENERATION' if allowed else 'PAUSE_RAW_GENERATION_BACKPRESSURE',
+    'total_backlog_observed':pressure+pending,
+    'extraction_transport_required':bool(pending),
+    'action':action,
    })
-  con.close()
 except Exception as exc:
- status.update({'state':'READ_FAILED','action':'PAUSE_RAW_GENERATION_FAIL_CLOSED','error_class':type(exc).__name__})
+ status.update({'state':'READ_FAILED','action':'PAUSE_FABRIC_FAIL_CLOSED','error_class':type(exc).__name__})
+finally:
+ if con is not None:
+  con.close()
 tmp=status_path.with_suffix('.json.tmp')
 tmp.write_text(json.dumps(status,indent=2,sort_keys=True)+'\n',encoding='utf-8')
 tmp.replace(status_path)
@@ -337,12 +352,11 @@ while (( $(date +%s) < DEADLINE )); do
   start_forge
   stop_legacy_go_swarm
   reconcile_6000_admission
-  # Conversion pressure is recorded here, but the shared 6000 fabric must stay
-  # alive because it is also the historical-extraction transport. Raw-research
-  # slots are suppressed inside free_swarm_backfill_scheduler while packets exist;
-  # killing this process would deadlock the backlog it is meant to drain.
-  raw_generation_allowed || true
-  start_6000
+  if fabric_generation_allowed; then
+    start_6000
+  else
+    stop_6000
+  fi
   refresh_root_results
 
   NOW=$(date +%s); REMAINING=$((DEADLINE-NOW))
@@ -367,6 +381,8 @@ def latest_fabric():
 fabric=latest_fabric()
 try: admission_binding=Path('$ADMISSION_BINDING_FILE').read_text().strip()
 except OSError: admission_binding=None
+try: raw_backpressure=json.loads(Path('$STATE_DIR/RAW_GENERATION_BACKPRESSURE.json').read_text())
+except Exception: raw_backpressure={'state':'UNOBSERVED','action':'PAUSE_FABRIC_FAIL_CLOSED'}
 print(json.dumps({
  'schema':'CLAY_6000_SWARM_SUPERVISOR/v4',
  'observed_at':datetime.datetime.now(datetime.timezone.utc).isoformat(),
@@ -377,18 +393,19 @@ print(json.dumps({
  'provider_credential_scope':'SWARM_CHILD_ONLY',
  'fabric_admission_binding':admission_binding,
  'fabric_running':running('run_6000_free_swarm_fast.py'),
+ 'raw_generation_backpressure':raw_backpressure,
  'distillery_running':running('run_research_distillery_local.py'),
  'forge_running':running('run_free_evidence_forge_backfill.py'),
  'legacy_safe_forge_running':running('run_free_evidence_forge_safe.py'),
  'legacy_forge_running':running('run_free_evidence_forge.py'),
  'forge_entrypoint':'tools/run_free_evidence_forge_backfill.py',
- 'forge_backpressure_policy':'BACKLOG_FIRST; DISCOVERY_ZERO_WHILE_PRESSURE_GTE_64',
+ 'forge_backpressure_policy':'BACKLOG_FIRST; PENDING_EXTRACTION_PRESERVES_EXTRACTION_TRANSPORT; READY_PLUS_NEEDS_IMPLEMENTATION_CAN_PAUSE_ONLY_AFTER_PENDING_ZERO',
  'forge_execution_policy':'CLAY_FORGE_EXECUTION_ADMISSION/v1',
  'dashboard_running':running('free swarm/evaluate.py.*--watch'),
  'local_model_ready':health(),
  'fabric':fabric,
  'shared_quota':snapshot(),
- 'revocation_policy':'CREDENTIAL_BLIND_CONTROL_PARENT; SWARM_CHILD_ONLY_SECRET_SCOPE; RESTART_CHILD_ON_ADMISSION_OR_ECONOMIC_PROVENANCE_BINDING_CHANGE; REQUEST_PATH_REVALIDATES_CURRENT_ROUTE_CREDENTIAL_AUTHORITY_BEFORE_NETWORK; LEGACY_FORGE_TERMINATED; BACKLOG_FIRST_SAFE_FORGE_ONLY'
+ 'revocation_policy':'CREDENTIAL_BLIND_CONTROL_PARENT; SWARM_CHILD_ONLY_SECRET_SCOPE; RESTART_CHILD_ON_ADMISSION_OR_ECONOMIC_PROVENANCE_BINDING_CHANGE; REQUEST_PATH_REVALIDATES_CURRENT_ROUTE_CREDENTIAL_AUTHORITY_BEFORE_NETWORK; LEGACY_FORGE_TERMINATED; BACKLOG_FIRST_SAFE_FORGE_ONLY; PENDING_EXTRACTION_NEVER_SELF_STOPS_EXTRACTION_TRANSPORT'
 },indent=2))
 PY
   mv "$STATE_DIR/SUPERVISOR_6000.json.tmp" "$STATE_DIR/SUPERVISOR_6000.json"

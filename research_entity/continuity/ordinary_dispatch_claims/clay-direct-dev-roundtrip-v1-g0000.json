@@ -1,0 +1,18 @@
+{
+  "schema": "CLAY_ORDINARY_DISPATCH_CLAIM/v1",
+  "dispatch_key": "clay-direct-dev-roundtrip-v1-g0000",
+  "dispatch_class": "clay-direct-dev-roundtrip-v1",
+  "retry_generation": 0,
+  "state": "LEGACY_FANOUT_QUARANTINED_NO_NEW_TRIGGER",
+  "canonical_probe_contract": "CLAY_DIRECT_DEV_ROUNDTRIP/v1",
+  "canonical_issue_for_lineage_only": 1773,
+  "observed_duplicate_issue_range": "1773-1792",
+  "legacy_runs_may_already_exist": true,
+  "new_issue_authorized_by_this_claim": false,
+  "no_new_trigger_until_generation_advance": true,
+  "generation_advance_requires": "TERMINAL_RESULT_REQUIRING_DELIBERATE_RETRY_OR_EXPLICIT_INFRASTRUCTURE_OR_PROBE_SEMANTIC_CHANGE",
+  "coordination_finding": "Issue-triggered probe fan-out stampede existed before this claim. This quarantine claim prevents well-behaved organs from creating any additional generation-0 trigger.",
+  "runtime_credit": 0,
+  "scientific_replication_credit": 0,
+  "protocol": "research_entity/continuity/ORDINARY_DISPATCH_IDEMPOTENCY_PROTOCOL.md"
+}

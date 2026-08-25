@@ -10,7 +10,10 @@ permissions:
 
 jobs:
   probe:
-    if: github.repository == 'gschaidergabriel/clay-global-research-entity' && github.event.issue.title == '[CLAY-DISPATCH] clay-direct-dev roundtrip' && github.event.issue.user.login == 'gschaidergabriel'
+    if: github.repository == 'gschaidergabriel/clay-global-research-entity' && github.event.issue.title == '[CLAY-DISPATCH] clay-direct-dev roundtrip' && github.event.issue.user.login == 'gschaidergabriel' && contains(github.event.issue.body || '', 'dispatch_schema: CLAY_ORDINARY_DISPATCH/v1')
+    concurrency:
+      group: clay-direct-dev-roundtrip-v1
+      cancel-in-progress: false
     runs-on: [self-hosted, Linux, X64]
     timeout-minutes: 15
     steps:
@@ -21,21 +24,84 @@ jobs:
           clean: true
           persist-credentials: true
 
-      - name: Discover and enter clay-direct-dev
+      - name: Validate semantic dispatch singleton
+        id: dispatch
         shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json, os, pathlib, re
+
+          event = json.loads(pathlib.Path(os.environ['GITHUB_EVENT_PATH']).read_text())
+          body = str((event.get('issue') or {}).get('body') or '')
+          fields = {}
+          for line in body.splitlines():
+              if ':' not in line:
+                  continue
+              k, v = line.split(':', 1)
+              k = k.strip()
+              if k in {'dispatch_schema', 'dispatch_key'} and k not in fields:
+                  fields[k] = v.strip()
+
+          if fields.get('dispatch_schema') != 'CLAY_ORDINARY_DISPATCH/v1':
+              raise SystemExit('invalid or missing dispatch_schema')
+          key = fields.get('dispatch_key', '')
+          if not re.fullmatch(r'clay-direct-dev-roundtrip-v1-g[0-9]{4}', key):
+              raise SystemExit('invalid or missing dispatch_key')
+
+          spec_path = pathlib.Path('research_entity/continuity/ordinary_dispatch_specs/clay-direct-dev-roundtrip-v1.json')
+          spec = json.loads(spec_path.read_text())
+          expected = str(spec.get('current_dispatch_key') or '')
+          generated = f"{spec['dispatch_class']}-g{int(spec['retry_generation']):04d}"
+          if expected != generated:
+              raise SystemExit('dispatch spec key/generation mismatch')
+          if key != expected:
+              raise SystemExit(f'stale/noncanonical dispatch key: {key} != {expected}')
+
+          claim_path = pathlib.Path(f'research_entity/continuity/ordinary_dispatch_claims/{key}.json')
+          if not claim_path.is_file():
+              raise SystemExit('create-only dispatch claim missing')
+          claim = json.loads(claim_path.read_text())
+          if claim.get('dispatch_key') != key or claim.get('dispatch_class') != spec.get('dispatch_class'):
+              raise SystemExit('dispatch claim identity mismatch')
+          if claim.get('new_issue_authorized_by_this_claim') is False:
+              raise SystemExit('claim is quarantine-only; no new issue is authorized for this generation')
+
+          result_path = pathlib.Path(f'research_entity/continuity/ordinary_dispatch_results/{key}.json')
+          skip = result_path.is_file()
+          with open(os.environ['GITHUB_OUTPUT'], 'a', encoding='utf-8') as out:
+              out.write(f'dispatch_key={key}\n')
+              out.write(f'skip={str(skip).lower()}\n')
+              out.write(f'result_path={result_path.as_posix()}\n')
+          if skip:
+              print(f'ALREADY_SATISFIED {key} -> {result_path}')
+          else:
+              print(f'ADMITTED_SINGLETON {key}')
+          PY
+
+      - name: Discover and enter clay-direct-dev
+        if: steps.dispatch.outputs.skip != 'true'
+        shell: bash
+        env:
+          DISPATCH_KEY: ${{ steps.dispatch.outputs.dispatch_key }}
         run: |
           set -euo pipefail
           mkdir -p /tmp/clay-direct-dev-probe
           python3 - <<'PY' > /tmp/clay-direct-dev-probe/base.json
-          import json, os, platform, socket
+          import json, os, platform, socket, subprocess
+          event=json.load(open(os.environ['GITHUB_EVENT_PATH'],encoding='utf-8'))
           print(json.dumps({
             'schema':'CLAY_DIRECT_DEV_ROUNDTRIP/v1',
+            'dispatch_schema':'CLAY_ORDINARY_DISPATCH/v1',
+            'dispatch_key':os.environ['DISPATCH_KEY'],
+            'issue_number':(event.get('issue') or {}).get('number'),
             'runner_name':os.environ.get('RUNNER_NAME','unknown'),
             'runner_os':os.environ.get('RUNNER_OS','unknown'),
             'runner_arch':os.environ.get('RUNNER_ARCH','unknown'),
             'runner_hostname':socket.gethostname(),
             'runner_platform':platform.platform(),
-            'github_sha':os.environ.get('GITHUB_SHA',''),
+            'event_sha':os.environ.get('GITHUB_SHA',''),
+            'checkout_head':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),
             'run_id':os.environ.get('GITHUB_RUN_ID',''),
           },indent=2,sort_keys=True))
           PY
@@ -43,7 +109,6 @@ jobs:
           runtime=''
           exec_prefix=()
           found='false'
-          detail=''
 
           try_runtime() {
             local rt="$1"
@@ -92,21 +157,52 @@ jobs:
             'discovery_output':pathlib.Path('/tmp/clay-direct-dev-probe/discovery.txt').read_text(errors='replace') if pathlib.Path('/tmp/clay-direct-dev-probe/discovery.txt').exists() else None,
             'secret_values_recorded':False,
             'scope':'non-invasive bridge/sandbox roundtrip only; no model intervention',
+            'whole_entityos_hcu_runtime_credit':0,
           })
           print(json.dumps(base,indent=2,sort_keys=True))
           PY
 
-      - name: Persist receipt
+      - name: Persist singleton receipt and result
+        if: steps.dispatch.outputs.skip != 'true'
         shell: bash
+        env:
+          DISPATCH_KEY: ${{ steps.dispatch.outputs.dispatch_key }}
         run: |
           set -euo pipefail
-          mkdir -p research_entity/runtime/tool_results
-          target="research_entity/runtime/tool_results/clay-direct-dev-roundtrip-${GITHUB_RUN_ID}.json"
+          mkdir -p research_entity/runtime/tool_results research_entity/continuity/ordinary_dispatch_results
+          target="research_entity/runtime/tool_results/clay-direct-dev-roundtrip-${DISPATCH_KEY}.json"
+          result="research_entity/continuity/ordinary_dispatch_results/${DISPATCH_KEY}.json"
+
+          git fetch origin main
+          if git show "origin/main:${result}" >/dev/null 2>&1; then
+            echo "ALREADY_SATISFIED_REMOTE ${DISPATCH_KEY}"
+            exit 0
+          fi
+
           cp /tmp/clay-direct-dev-probe/receipt.json "$target"
+          TARGET="$target" RESULT="$result" python3 - <<'PY' > "$result"
+          import json, os, pathlib
+          receipt=json.loads(pathlib.Path('/tmp/clay-direct-dev-probe/receipt.json').read_text())
+          print(json.dumps({
+            'schema':'CLAY_ORDINARY_DISPATCH_RESULT/v1',
+            'dispatch_key':receipt['dispatch_key'],
+            'dispatch_class':'clay-direct-dev-roundtrip-v1',
+            'status':receipt['status'],
+            'issue_number':receipt.get('issue_number'),
+            'run_id':receipt.get('run_id'),
+            'event_sha':receipt.get('event_sha'),
+            'checkout_head':receipt.get('checkout_head'),
+            'receipt_path':os.environ['TARGET'],
+            'runtime_credit':'ROUNDTRIP_COMPONENT_ONLY' if receipt['status']=='PASS' else 0,
+            'whole_entityos_hcu_runtime_credit':0,
+            'retry_requires_generation_advance':True,
+          },indent=2,sort_keys=True))
+          PY
+
           git config user.name 'clay-direct-dev-runner'
           git config user.email 'clay-direct-dev-runner@users.noreply.github.com'
-          git add "$target"
-          git commit -m "evidence(vps): clay-direct-dev roundtrip ${GITHUB_RUN_ID} [skip ci]"
+          git add "$target" "$result"
+          git commit -m "evidence(vps): singleton clay-direct-dev ${DISPATCH_KEY} [skip ci]"
           for attempt in 1 2 3 4 5 6; do
             git pull --rebase origin main && git push origin HEAD:main && exit 0
             sleep $((attempt * 3))

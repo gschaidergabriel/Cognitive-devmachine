@@ -1,0 +1,102 @@
+#!/usr/bin/env python3
+"""Backlog scheduler for historical Free-Swarm output re-evaluation.
+
+When the Forge historical-extraction queue is non-empty, most logical research
+calls are temporarily repurposed as bounded extraction passes over old worker
+outputs. New research still receives a minority of slots. This changes allocation,
+not evidence authority: extracted deltas remain noncanonical and still traverse the
+same Forge validation path.
+"""
+from __future__ import annotations
+
+import json
+import os
+from pathlib import Path
+import threading
+import time
+from typing import Any
+
+from free_swarm_historical_backfill import load_backfill_packets
+
+ARTIFACT_ROOT = Path(os.getenv("CLAY_SWARM_ARTIFACT_ROOT", "/artifacts/clay-entityos-swarm"))
+FORGE_DB = ARTIFACT_ROOT / "forge/forge.sqlite3"
+CACHE_SECONDS = 3.0
+LEASE_SECONDS = 240.0
+MAX_PACKET_CACHE = 2048
+
+_lock = threading.Lock()
+_cache_at = 0.0
+_cache: list[dict[str, Any]] = []
+_leases: dict[str, float] = {}
+
+
+def _packets() -> list[dict[str, Any]]:
+    global _cache_at, _cache
+    now = time.monotonic()
+    with _lock:
+        if now - _cache_at < CACHE_SECONDS:
+            return list(_cache)
+    rows = load_backfill_packets(FORGE_DB, limit=MAX_PACKET_CACHE)
+    with _lock:
+        _cache_at = now
+        _cache = rows
+    return list(rows)
+
+
+def _reserve(serial: int) -> dict[str, Any] | None:
+    now = time.monotonic()
+    rows = _packets()
+    if not rows:
+        return None
+    with _lock:
+        expired = [key for key, until in _leases.items() if until <= now]
+        for key in expired:
+            _leases.pop(key, None)
+        start = serial % len(rows)
+        for offset in range(len(rows)):
+            row = rows[(start + offset) % len(rows)]
+            chunk_id = str(row.get("historical_chunk_id") or "")
+            if not chunk_id or _leases.get(chunk_id, 0.0) > now:
+                continue
+            _leases[chunk_id] = now + LEASE_SECONDS
+            return row
+    return None
+
+
+def install(base: Any) -> None:
+    previous = base.worker_prompt
+
+    def backlog_prompt(protocol: str, role: str, task: str, state_context: str, serial: int) -> str:
+        original = previous(protocol, role, task, state_context, serial)
+        # Spend roughly 75% on conversion while historical backlog exists.
+        if serial % 4 == 0:
+            return original
+        packet = _reserve(serial)
+        if packet is None:
+            return original
+        payload = json.dumps(packet, ensure_ascii=False, separators=(",", ":"))
+        return original + f"""
+
+HISTORICAL FREE-SWARM BACKFILL OVERRIDE
+{payload}
+
+BACKFILL LAW
+- This is an old successful worker-output chunk, not current truth and not execution authority.
+- Re-read the complete supplied chunk. Extract EVERY materially distinct EntityOS/HCU architecture delta
+  actually supported by its text. Do not collapse distinct mechanisms merely because they share a topic.
+- Do not invent missing source bytes, measurements, patches, or PASS states.
+- A candidate without an executable patch is still useful: emit it with ready_for_forge=false so it enters
+  the implementation queue instead of being discarded.
+- Dedupe against known_concept_ids conceptually; do not emit paraphrase-only duplicates.
+- Preserve counterhypotheses as separate candidates only when they imply a different executable discriminator.
+- Return at most 8 deltas in this pass. If more remain, exhaustive=false; the chunk will be scheduled again.
+- This extraction pass grants ZERO acceptance credit. Every emitted delta still goes through the one canonical Forge.
+
+For this call, replace the ordinary single ARCHITECTURE_DELTA_JSON line with exactly:
+ARCHITECTURE_DELTA_BATCH_JSON={{"historical_source_event_id":"{packet.get('historical_source_event_id')}","historical_chunk_id":"{packet.get('historical_chunk_id')}","extraction_pass":{int(packet.get('extraction_pass') or 1)},"exhaustive":true,"deltas":[<0..8 normal architecture-delta objects>]}}
+Then emit the normal OPEN_RESEARCH_QUESTIONS_JSON line.
+Each delta object must use the normal schema and include the same historical_source_event_id,
+historical_chunk_id and extraction_pass fields. Use ready_for_forge=true only with a real unified diff,
+declared target_files and bounded test_commands.
+"""
+    base.worker_prompt = backlog_prompt

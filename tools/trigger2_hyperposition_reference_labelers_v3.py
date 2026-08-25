@@ -525,6 +525,126 @@ def project_state(world: Any, state: Any) -> dict[str, Any]:
     )
 
 
+def _validate_state_after_merge(
+    state: Any, world: dict[str, Any], pre_merge_branches: list[dict[str, Any]]
+) -> str | None:
+    """Proof-carrying validation for the state u_state produces immediately after
+    _merge_exact_equivalents. Never reachable from any external caller: only
+    u_state constructs pre_merge_branches, and only from its own already-validated
+    (>=2 branch) pre-merge state within the same call. A caller-supplied
+    allow_singleton flag is never sufficient authority by itself here -- every
+    claim the singleton makes about its own provenance is independently
+    recomputed against pre_merge_branches, not trusted from serialized fields.
+    """
+    if not isinstance(state, dict) or state.get("schema") != STATE_SCHEMA:
+        return "STATE_SCHEMA_MISMATCH"
+    if state.get("canonical_truth_allowed") is not False:
+        return "STATE_CANONICAL_TRUTH_MUST_BE_FALSE"
+    if state.get("direct_effect_authority") is not False:
+        return "STATE_DIRECT_EFFECT_AUTHORITY_MUST_BE_FALSE"
+    if not _nonempty(state.get("query_id")):
+        return "STATE_QUERY_ID_REQUIRED"
+    branches = state.get("branches")
+    if not isinstance(branches, list):
+        return "STATE_BRANCHES_MUST_BE_LIST"
+    if len(branches) >= 2:
+        seen: set[str] = set()
+        for branch in branches:
+            err = _validate_branch(branch, world)
+            if err:
+                return err
+            bid = branch["branch_id"]
+            if bid in seen:
+                return "DUPLICATE_BRANCH_ID"
+            seen.add(bid)
+        return None
+    if len(branches) != 1:
+        return "STATE_REQUIRES_AT_LEAST_TWO_BRANCHES"
+
+    if not isinstance(pre_merge_branches, list) or len(pre_merge_branches) < 2:
+        return "SINGLETON_REQUIRES_PRE_MERGE_STATE_WITH_AT_LEAST_TWO_BRANCHES"
+    if world.get("merge_policy", "NONE") != "EXACT_FORMAL_SEMANTIC_SIGNATURE":
+        return "SINGLETON_REQUIRES_EXACT_FORMAL_SEMANTIC_SIGNATURE_MERGE_POLICY"
+
+    singleton = branches[0]
+    err = _validate_branch(singleton, world)
+    if err:
+        return err
+
+    merged_from = singleton.get("merged_from_branch_ids")
+    if not isinstance(merged_from, list) or len(set(merged_from)) < 2:
+        return "SINGLETON_WITNESS_REQUIRES_AT_LEAST_TWO_DISTINCT_PREDECESSOR_IDS"
+    if len(merged_from) != len(set(merged_from)):
+        return "SINGLETON_WITNESS_PREDECESSOR_IDS_MUST_BE_UNIQUE"
+    if merged_from != sorted(merged_from):
+        return "SINGLETON_WITNESS_PREDECESSOR_IDS_MUST_BE_SORTED"
+
+    pre_by_id = {b["branch_id"]: b for b in pre_merge_branches}
+    missing = [bid for bid in merged_from if bid not in pre_by_id]
+    if missing:
+        return "SINGLETON_WITNESS_PREDECESSOR_NOT_IN_VALIDATED_PRE_MERGE_STATE"
+
+    predecessor_sigs = {_semantic_signature(pre_by_id[bid]) for bid in merged_from}
+    if len(predecessor_sigs) != 1:
+        return "SINGLETON_WITNESS_PREDECESSORS_NOT_EXACTLY_EQUIVALENT"
+    expected_sig = next(iter(predecessor_sigs))
+
+    output_sig = _semantic_signature(singleton)
+    if output_sig != expected_sig:
+        return "SINGLETON_OUTPUT_SIGNATURE_MISMATCH"
+
+    a_block = singleton.get("A")
+    if not isinstance(a_block, dict):
+        return "SINGLETON_A_BLOCK_REQUIRED"
+    if a_block.get("merge_policy") != "EXACT_FORMAL_SEMANTIC_SIGNATURE":
+        return "SINGLETON_A_MERGE_POLICY_MISMATCH"
+    if a_block.get("semantic_signature_sha256") != expected_sig:
+        return "SINGLETON_A_SIGNATURE_MISMATCH"
+
+    merged_origins = a_block.get("merged_origins")
+    if not isinstance(merged_origins, list) or len(merged_origins) != len(merged_from):
+        return "SINGLETON_MERGED_ORIGINS_COUNT_MISMATCH"
+    expected_origins_sorted = sorted(
+        (pre_by_id[bid]["A"] for bid in merged_from), key=lambda a: json.dumps(a, sort_keys=True)
+    )
+    actual_origins_sorted = sorted(merged_origins, key=lambda a: json.dumps(a, sort_keys=True))
+    if expected_origins_sorted != actual_origins_sorted:
+        return "SINGLETON_MERGED_ORIGINS_CONTENT_MISMATCH"
+
+    return None
+
+
+def _project_state_after_merge(
+    world: Any, state: Any, pre_merge_branches: list[dict[str, Any]]
+) -> dict[str, Any]:
+    """Internal projection path used only by u_state immediately after a
+    genuine _merge_exact_equivalents transition. Not part of the public API:
+    external callers must keep using project_state, which stays strict and
+    always rejects a singleton state via _validate_state."""
+    werr = _validate_world(world)
+    if werr:
+        return _fail(werr)
+    serr = _validate_state_after_merge(state, world, pre_merge_branches)
+    if serr:
+        return _fail(serr)
+    out = deepcopy(state)
+    visible: list[str] = []
+    hidden: list[str] = []
+    for branch in out["branches"]:
+        branch["projection_visibility"] = _context_applies(branch["K"], world["context"])
+        (visible if branch["projection_visibility"] else hidden).append(branch["branch_id"])
+    return _ok(
+        labeler="project_state",
+        projected_state=out,
+        visible_branch_ids=sorted(visible),
+        projected_out_branch_ids=sorted(hidden),
+        branch_count_before=len(state["branches"]),
+        branch_count_after=len(out["branches"]),
+        branch_deletion_performed=False,
+        rule="PROJECTION_IS_NONDESTRUCTIVE_CONTEXT_VIEW",
+    )
+
+
 def u_state(world: Any, state: Any, event: Any) -> dict[str, Any]:
     derived = derive_relations(world, state, event)
     if not derived.get("pass"):
@@ -579,8 +699,12 @@ def u_state(world: Any, state: Any, event: Any) -> dict[str, Any]:
     born: list[str] = []
     if independent and not exact_replay:
         out["branches"], born = _apply_branch_birth_rules(out["branches"], world, event)
+    pre_merge_branches = deepcopy(out["branches"])
     out["branches"] = _merge_exact_equivalents(out["branches"], world)
-    projection = project_state(world, out)
+    if len(out["branches"]) == 1 and len(pre_merge_branches) >= 2:
+        projection = _project_state_after_merge(world, out, pre_merge_branches)
+    else:
+        projection = project_state(world, out)
     if not projection.get("pass"):
         return projection
     out = projection["projected_state"]

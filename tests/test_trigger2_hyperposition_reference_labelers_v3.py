@@ -311,3 +311,124 @@ def test_epistemic_unknown_cannot_self_promote_to_observed():
 def test_unknown_test_or_invalid_outcome_fails_closed():
     assert lab.derive_relations(world(), state(), event(test="missing"))["pass"] is False
     assert lab.derive_relations(world(), state(), event(outcome="MAYBE"))["pass"] is False
+
+
+def test_singleton_pre_state_directly_submitted_is_always_rejected():
+    single = state([branch("a", "SAME", "YES")])
+    w = world(merge="EXACT_FORMAL_SEMANTIC_SIGNATURE")
+    assert lab._validate_state(single, w) == "STATE_REQUIRES_AT_LEAST_TWO_BRANCHES"
+    assert lab.project_state(w, single)["pass"] is False
+
+
+def test_project_state_public_api_rejects_forged_singleton_with_merged_from_ids():
+    forged = branch("a", "SAME", "YES")
+    forged["merged_from_branch_ids"] = ["a", "b"]
+    forged["A"] = {
+        "merge_policy": "EXACT_FORMAL_SEMANTIC_SIGNATURE",
+        "semantic_signature_sha256": lab._semantic_signature(forged),
+        "merged_origins": [{"origin": "test"}, {"origin": "test"}],
+    }
+    single = state([forged])
+    w = world(merge="EXACT_FORMAL_SEMANTIC_SIGNATURE")
+    result = lab.project_state(w, single)
+    assert result["pass"] is False
+    assert result["failure"] == "STATE_REQUIRES_AT_LEAST_TWO_BRANCHES"
+
+
+def test_merge_singleton_fails_closed_under_merge_policy_none():
+    b1 = branch("a", "SAME", "YES")
+    b2 = branch("b", "SAME", "YES")
+    pre = [b1, b2]
+    single = state([copy.deepcopy(b1)])
+    single["branches"][0]["merged_from_branch_ids"] = ["a", "b"]
+    single["branches"][0]["A"] = {
+        "merge_policy": "EXACT_FORMAL_SEMANTIC_SIGNATURE",
+        "semantic_signature_sha256": lab._semantic_signature(b1),
+        "merged_origins": [b1["A"], b2["A"]],
+    }
+    w = world(merge="NONE")
+    err = lab._validate_state_after_merge(single, w, pre)
+    assert err == "SINGLETON_REQUIRES_EXACT_FORMAL_SEMANTIC_SIGNATURE_MERGE_POLICY"
+
+
+def test_merge_witness_rejects_non_equivalent_predecessors():
+    b1 = branch("a", "SAME", "YES")
+    b2 = branch("b", "DIFFERENT", "NO")
+    pre = [b1, b2]
+    singleton = copy.deepcopy(b1)
+    singleton["merged_from_branch_ids"] = ["a", "b"]
+    singleton["A"] = {
+        "merge_policy": "EXACT_FORMAL_SEMANTIC_SIGNATURE",
+        "semantic_signature_sha256": lab._semantic_signature(b1),
+        "merged_origins": [b1["A"], b2["A"]],
+    }
+    single = state([singleton])
+    w = world(merge="EXACT_FORMAL_SEMANTIC_SIGNATURE")
+    err = lab._validate_state_after_merge(single, w, pre)
+    assert err == "SINGLETON_WITNESS_PREDECESSORS_NOT_EXACTLY_EQUIVALENT"
+
+
+def test_merge_witness_rejects_predecessor_id_substitution():
+    b1 = branch("a", "SAME", "YES")
+    b2 = branch("b", "SAME", "YES")
+    b3 = branch("c", "SAME", "YES")
+    pre = [b1, b2]  # "c" was never part of the validated pre-merge state
+    singleton = copy.deepcopy(b1)
+    singleton["merged_from_branch_ids"] = ["a", "c"]
+    singleton["A"] = {
+        "merge_policy": "EXACT_FORMAL_SEMANTIC_SIGNATURE",
+        "semantic_signature_sha256": lab._semantic_signature(b1),
+        "merged_origins": [b1["A"], b3["A"]],
+    }
+    single = state([singleton])
+    w = world(merge="EXACT_FORMAL_SEMANTIC_SIGNATURE")
+    err = lab._validate_state_after_merge(single, w, pre)
+    assert err == "SINGLETON_WITNESS_PREDECESSOR_NOT_IN_VALIDATED_PRE_MERGE_STATE"
+
+
+def test_merge_witness_rejects_semantic_signature_substitution():
+    b1 = branch("a", "SAME", "YES")
+    b2 = branch("b", "SAME", "YES")
+    pre = [b1, b2]
+    singleton = copy.deepcopy(b1)
+    singleton["merged_from_branch_ids"] = ["a", "b"]
+    singleton["A"] = {
+        "merge_policy": "EXACT_FORMAL_SEMANTIC_SIGNATURE",
+        "semantic_signature_sha256": "forged-signature-not-recomputed",
+        "merged_origins": [b1["A"], b2["A"]],
+    }
+    single = state([singleton])
+    w = world(merge="EXACT_FORMAL_SEMANTIC_SIGNATURE")
+    err = lab._validate_state_after_merge(single, w, pre)
+    assert err == "SINGLETON_A_SIGNATURE_MISMATCH"
+
+
+def test_merge_witness_rejects_merged_origins_content_mismatch():
+    b1 = branch("a", "SAME", "YES")
+    b2 = branch("b", "SAME", "YES")
+    pre = [b1, b2]
+    singleton = copy.deepcopy(b1)
+    singleton["merged_from_branch_ids"] = ["a", "b"]
+    singleton["A"] = {
+        "merge_policy": "EXACT_FORMAL_SEMANTIC_SIGNATURE",
+        "semantic_signature_sha256": lab._semantic_signature(b1),
+        "merged_origins": [{"origin": "forged"}, {"origin": "also-forged"}],
+    }
+    single = state([singleton])
+    w = world(merge="EXACT_FORMAL_SEMANTIC_SIGNATURE")
+    err = lab._validate_state_after_merge(single, w, pre)
+    assert err == "SINGLETON_MERGED_ORIGINS_CONTENT_MISMATCH"
+
+
+def test_merge_witness_accepts_genuine_exact_merge_singleton_directly():
+    b1 = branch("a", "SAME", "YES")
+    b2 = branch("b", "SAME", "YES")
+    pre = [b1, b2]
+    merged = lab._merge_exact_equivalents(
+        [copy.deepcopy(b1), copy.deepcopy(b2)], world(merge="EXACT_FORMAL_SEMANTIC_SIGNATURE")
+    )
+    assert len(merged) == 1
+    single = state(merged)
+    w = world(merge="EXACT_FORMAL_SEMANTIC_SIGNATURE")
+    err = lab._validate_state_after_merge(single, w, pre)
+    assert err is None

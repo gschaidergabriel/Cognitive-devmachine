@@ -37,10 +37,10 @@ MAX_PROVIDER_BASE_URL_CHARACTERS = 2_048
 MAX_LOCAL_TEST_FLAG_CHARACTERS = 1
 MAX_PAYMENT_LATCH_ENTRIES = 1_024
 # Under the closed alternating schema, 54,792 minimal messages with a leading
-# system message occupy 1,999,970 bytes including separators and the smallest
+# system message occupy 1,999,978 bytes including separators and the smallest
 # valid model. The next valid cardinality already exceeds the transport cap.
 MAX_TEXT_CHAT_MESSAGES = 54_792
-TEXT_CHAT_REQUEST_ENVELOPE_BYTES = 66
+TEXT_CHAT_REQUEST_ENVELOPE_BYTES = 74
 TEXT_CHAT_MESSAGE_ENVELOPE_BYTES = 27
 JSON_LIST_SEPARATOR_BYTES = 2
 MAX_PROVIDER_COOLDOWN_SECONDS = 86_400
@@ -819,6 +819,7 @@ def _execute_chat_locked(
             "model": model,
             "messages": request_messages,
             "stream": False,
+            "n": 1,
             "max_tokens": MAX_PROVIDER_OUTPUT_TOKENS,
         },
         ensure_ascii=True,
@@ -986,8 +987,8 @@ def _execute_chat_locked(
                 object_pairs_hook=_reject_duplicate_json_names,
             )
             choices = payload["choices"]
-            if not isinstance(choices, list) or not choices:
-                raise ValueError("response_choices_must_be_nonempty_list")
+            if not isinstance(choices, list) or len(choices) != 1:
+                raise ValueError("response_choices_must_contain_exactly_one_choice")
             choice = choices[0]
             if not isinstance(choice, dict):
                 raise ValueError("response_choice_must_be_object")

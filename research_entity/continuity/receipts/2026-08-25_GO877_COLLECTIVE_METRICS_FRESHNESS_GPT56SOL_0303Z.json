@@ -1,0 +1,86 @@
+{
+  "schema": "COLLECTIVE_METRICS_FRESHNESS_RECEIPT/v1",
+  "receipt_class": "SOURCE_AND_LOCAL_DETERMINISTIC_TEST_EVIDENCE",
+  "recorded_at": "2026-08-25T03:03:02Z",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority_epoch": "8.77",
+  "trigger": "go",
+  "macrocycle_identity": "MACROCYCLE_ID_UNRESOLVED",
+  "coordination": {
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_SHARED_REPRODUCIBLE_TRIGGER_ID",
+    "new_unusual_experiments_executed": 0
+  },
+  "canonical_main_reentered": "af44a85393d683fe42cd65a52fdc6fd38391920b",
+  "pr": 1854,
+  "branch": "go877/metrics-freshness-isolated-gpt56sol-20260825-0942",
+  "tested_branch_head_before_receipt": "f6e5abbcdb7902de9cb3351cb1884990bd5764bb",
+  "source_identity": {
+    "free swarm/go_collective_freshness.py": "5715388154233571e0ced60a49aaf5c07c70d0ae",
+    "free swarm/go_collective_metrics.py": "414585cf44dcf215bb81862b3e5a94f1c2c48d2a",
+    "free swarm/go_collective_metrics_core_v1.py": "f1ed5cc154a0a51cb5b6c211174c4830352d58dc",
+    "tests/test_go_collective_metrics_freshness_877.py": "ab6eef9a09c09c78c16e9227e7b8f1e707a0ec90"
+  },
+  "core_preservation": {
+    "status": "BYTE_IDENTICAL_GIT_BLOB_REUSE",
+    "canonical_main_prechange_collector_blob": "f1ed5cc154a0a51cb5b6c211174c4830352d58dc",
+    "branch_core_blob": "f1ed5cc154a0a51cb5b6c211174c4830352d58dc"
+  },
+  "tests": {
+    "test_file_blob_reproduced_exactly": true,
+    "test_file_blob": "ab6eef9a09c09c78c16e9227e7b8f1e707a0ec90",
+    "helper_blob_reproduced_exactly": true,
+    "helper_blob": "5715388154233571e0ced60a49aaf5c07c70d0ae",
+    "unittest": {
+      "command": "python3 -m unittest -v tests/test_go_collective_metrics_freshness_877.py",
+      "passed": 8,
+      "failed": 0,
+      "errors": 0,
+      "scope": "LOCAL_DETERMINISTIC_UNIT_ONLY"
+    },
+    "wrapper_py_compile": {
+      "blob": "414585cf44dcf215bb81862b3e5a94f1c2c48d2a",
+      "status": "PASS",
+      "scope": "SYNTAX_ONLY"
+    }
+  },
+  "regressions_covered": [
+    "newer canonical input marks prior aggregate stale",
+    "authority epoch mismatch is historical",
+    "older writer finishing after newer writer is rejected",
+    "identical bounded inputs produce identical result digest",
+    "same-snapshot semantic divergence is rejected",
+    "equal-time different snapshot identity is rejected",
+    "Swarm/Forge/Distillery exposed fields share one bounded snapshot identity",
+    "locked publication is idempotent and receipt digest validation detects tampering"
+  ],
+  "github_actions_negative_evidence": {
+    "run_id": 32803535625,
+    "job_id": 97669061003,
+    "workflow": "Research Entity Identity Guard",
+    "conclusion": "failure",
+    "steps": [],
+    "runner_id": 0,
+    "classification": "INFRASTRUCTURE_RUNNER_STARTUP_FAILURE_NOT_PRODUCT_TEST_FAILURE"
+  },
+  "live_publication": {
+    "COLLECTIVE_METRICS_FRESHNESS_RECEIPT_commit_marker_observed_on_canonical_live_path": false,
+    "exact_current_publisher_execution_observed": false,
+    "next_gate": "EXECUTE_EXACT_CURRENT_GATED_COLLECTOR_AGAINST_ONE_STABLE_BOUND_SWARM_FORGE_DISTILLERY_SNAPSHOT_AND_VALIDATE_RECEIPT"
+  },
+  "go_tracks": {
+    "A": "ADVANCED_ENTITYOS_EXECUTABLE_CONVERGENCE_VIA_METRICS_FRESHNESS_PUBLISHER_GATE",
+    "B": "HCU_NO_CHANGE_WITH_REASON__SUPERVISOR_8_77_ORDERS_METRICS_FRESHNESS_AND_CONVERSION_EVIDENCE_BEFORE_NEXT_DIRECT_HCU_PRIMITIVE",
+    "C": "TRAINING_READINESS_NO_CHANGE_WITH_REASON__DISTILLERY_ACCEPTED_DATASET_TOKENS_REMAIN_ZERO_AND_PR1771_EXACT_CURRENT_REPLAY_GATE_REMAINS_UPSTREAM"
+  },
+  "credit": {
+    "whole_entityos_hcu_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "canonical_semantics_promotion": false,
+    "base_work_package_promotion": false
+  },
+  "evidence_boundary": "SOURCE_PLUS_EXACT_BLOB_LOCAL_UNIT_EVIDENCE_ONLY__NOT_CANONICAL_LIVE_PUBLISHER_RUNTIME"
+}

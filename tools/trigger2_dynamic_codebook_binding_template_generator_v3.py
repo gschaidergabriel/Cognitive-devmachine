@@ -2,7 +2,8 @@
 """Trigger-2 dynamic codebook binding template generator v3.
 
 v3 fuses the preregistered query-polarity factor into the retained order-crossed
-v2 donor while preserving a single-symbol output contract.
+v2 donor while preserving a single-symbol output contract and binding every
+model-visible render to the exact hidden factorial state used to derive it.
 
 Factorial:
 4 templates x 6 realized S3 mappings x 3 base semantic states
@@ -23,11 +24,14 @@ canonical-truth or training credit.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
+import math
 import re
 from collections import Counter, defaultdict
 from itertools import permutations
 from pathlib import Path
+from typing import Iterable
 
 CLASSES = ("ALLOW", "DENY", "ABSTAIN")
 ATOMS = ("ATOM_A", "ATOM_B", "ATOM_C")
@@ -53,10 +57,16 @@ SOURCE_ANCESTRY = (
     "claude-xeno-vector-evidence:"
     "a2babae93dfe39e4e452a06bd8b848337f29766e38c422f05fb395126229b05c"
 )
+SCHEMA = "TRIGGER2_DYNAMIC_CODEBOOK_BINDING_TEMPLATE/v3"
+SELFTEST_SCHEMA = "TRIGGER2_DYNAMIC_CODEBOOK_BINDING_TEMPLATE_SELFTEST/v3"
+OUTPUT_CONTRACT = "EXACTLY_ONE_EPISODE_LOCAL_SYMBOL"
+POLARITY_RULE = "TRIGGER2_POLARITY_SWAP_ALLOW_DENY_PRESERVE_ABSTAIN/v1"
 
 
 def effective_class(base_class: str, polarity: str) -> str:
     if polarity == "DIRECT":
+        if base_class not in CLASSES:
+            raise ValueError(base_class)
         return base_class
     if polarity != "INVERTED":
         raise ValueError(polarity)
@@ -122,6 +132,16 @@ def prompt_for(
     raise ValueError(template)
 
 
+def visible_render_sha256(prompt: str, target: str) -> str:
+    payload = json.dumps(
+        {"prompt": prompt, "target": target},
+        ensure_ascii=False,
+        sort_keys=True,
+        separators=(",", ":"),
+    )
+    return hashlib.sha256(payload.encode("utf-8")).hexdigest()
+
+
 def outside_codebook(prompt: str) -> str:
     prompt = re.sub(
         r"CODEBOOK_BEGIN\n.*?\nCODEBOOK_END",
@@ -138,6 +158,23 @@ def outside_codebook(prompt: str) -> str:
     return prompt
 
 
+def mutual_information(xs: Iterable[str], ys: Iterable[str]) -> float:
+    pairs = list(zip(xs, ys))
+    if not pairs:
+        return 0.0
+    n = len(pairs)
+    cx = Counter(x for x, _ in pairs)
+    cy = Counter(y for _, y in pairs)
+    cxy = Counter(pairs)
+    result = 0.0
+    for (x, y), count in cxy.items():
+        pxy = count / n
+        px = cx[x] / n
+        py = cy[y] / n
+        result += pxy * math.log2(pxy / (px * py))
+    return result
+
+
 def build_rows() -> list[dict]:
     rows: list[dict] = []
     for template in TEMPLATES:
@@ -150,8 +187,9 @@ def build_rows() -> list[dict]:
                     for polarity in POLARITIES:
                         target_class = effective_class(base_class, polarity)
                         target = mapping[target_class]
+                        prompt = prompt_for(template, mapping, order, scenario, polarity)
                         rows.append({
-                            "schema": "TRIGGER2_DYNAMIC_CODEBOOK_BINDING_TEMPLATE/v3",
+                            "schema": SCHEMA,
                             "evidence_class": "METHOD_ONLY",
                             "reality_level": "R2",
                             "family_id": f"DYNAMIC_CODEBOOK_BINDING_{template}",
@@ -159,18 +197,20 @@ def build_rows() -> list[dict]:
                             "mapping_variant_id": f"P{permutation_i}",
                             "display_order_variant_id": f"O{order_i}",
                             "query_polarity": polarity,
+                            "polarity_rule": POLARITY_RULE,
                             "provenance_ancestry_id": SOURCE_ANCESTRY,
                             "split": "TRAIN_TEMPLATE_ONLY",
                             "selected_using_holdout": False,
                             "class_word_policy": "CODEBOOK_ONLY_ALLOWED_CANDIDATE",
-                            "model_visible_prompt_template": prompt_for(
-                                template, mapping, order, scenario, polarity
-                            ),
+                            "output_contract": OUTPUT_CONTRACT,
+                            "model_visible_prompt_template": prompt,
                             "target_template": target,
+                            "model_visible_render_sha256": visible_render_sha256(prompt, target),
                             "materialization_required": True,
                             "training_eligible": False,
                             "hard_negative_channel": False,
                             "materializer_private": {
+                                "template_family": template,
                                 "base_semantic_class": base_class,
                                 "effective_target_class": target_class,
                                 "realized_mapping": mapping,
@@ -183,6 +223,7 @@ def build_rows() -> list[dict]:
                                 "atom_triplet_independence_required": True,
                                 "counterfactual_family_must_not_cross_split": True,
                                 "polarity_pair_must_stay_same_split": True,
+                                "model_visible_serializer_must_emit_only_prompt_and_target": True,
                             },
                             "canonical_truth_allowed": False,
                             "direct_effect_authority": False,
@@ -208,6 +249,11 @@ def validate(rows: list[dict]) -> dict:
     class_symbol_order_polarity = Counter()
     target_position_polarity = Counter()
     leaks: list[str] = []
+    target_list: list[str] = []
+    order_list: list[str] = []
+    polarity_list: list[str] = []
+    combined_nuisance_list: list[str] = []
+    effective_class_list: list[str] = []
 
     for row in rows:
         if (
@@ -224,8 +270,13 @@ def validate(rows: list[dict]) -> dict:
             or row["direct_effect_authority"] is not False
         ):
             raise AssertionError("authority boundary")
+        if row["output_contract"] != OUTPUT_CONTRACT:
+            raise AssertionError("output-contract drift")
+        if row["polarity_rule"] != POLARITY_RULE:
+            raise AssertionError("polarity-rule drift")
 
         private = row["materializer_private"]
+        template = private["template_family"]
         base_class = private["base_semantic_class"]
         target_class = private["effective_target_class"]
         mapping = private["realized_mapping"]
@@ -243,6 +294,11 @@ def validate(rows: list[dict]) -> dict:
             raise AssertionError("display order is not a class permutation")
 
         visible = row["model_visible_prompt_template"]
+        expected_visible = prompt_for(template, mapping, order, SCENARIOS[base_class], polarity)
+        if visible != expected_visible:
+            raise AssertionError("visible prompt not derived from hidden factorial state")
+        if row["model_visible_render_sha256"] != visible_render_sha256(visible, target):
+            raise AssertionError("model-visible render digest mismatch")
         for forbidden in (
             "base_semantic_class",
             "effective_target_class",
@@ -276,6 +332,11 @@ def validate(rows: list[dict]) -> dict:
             (base_class, polarity, target, row["display_order_variant_id"])
         ] += 1
         target_position_polarity[(polarity, target, position)] += 1
+        target_list.append(target)
+        order_list.append(row["display_order_variant_id"])
+        polarity_list.append(polarity)
+        combined_nuisance_list.append(row["display_order_variant_id"] + "|" + polarity)
+        effective_class_list.append(target_class)
 
     if leaks:
         raise AssertionError(f"class words outside codebook: {leaks[:3]}")
@@ -289,7 +350,7 @@ def validate(rows: list[dict]) -> dict:
         inverted = members["INVERTED"]
         d = direct["materializer_private"]
         i = inverted["materializer_private"]
-        for key in ("base_semantic_class", "realized_mapping", "display_order"):
+        for key in ("template_family", "base_semantic_class", "realized_mapping", "display_order"):
             if d[key] != i[key]:
                 raise AssertionError(f"pair nuisance mismatch:{pair_id}:{key}")
         if direct["mapping_variant_id"] != inverted["mapping_variant_id"]:
@@ -318,26 +379,26 @@ def validate(rows: list[dict]) -> dict:
         raise AssertionError(f"effective counts {effective_class_counts}")
     if set(target_counts.values()) != {288}:
         raise AssertionError(f"target counts {target_counts}")
-
-    if len(polarity_target_counts) != 6 or any(
-        v != 144 for v in polarity_target_counts.values()
-    ):
+    if len(polarity_target_counts) != 6 or any(v != 144 for v in polarity_target_counts.values()):
         raise AssertionError("polarity-target not exactly independent")
-    if len(base_polarity_target_counts) != 18 or any(
-        v != 48 for v in base_polarity_target_counts.values()
-    ):
+    if len(base_polarity_target_counts) != 18 or any(v != 48 for v in base_polarity_target_counts.values()):
         raise AssertionError("base-polarity-target not exactly crossed")
-    if len(class_symbol_order_polarity) != 108 or any(
-        v != 8 for v in class_symbol_order_polarity.values()
-    ):
+    if len(class_symbol_order_polarity) != 108 or any(v != 8 for v in class_symbol_order_polarity.values()):
         raise AssertionError("base-polarity-target-display-order not exactly crossed")
-    if len(target_position_polarity) != 18 or any(
-        v != 48 for v in target_position_polarity.values()
-    ):
+    if len(target_position_polarity) != 18 or any(v != 48 for v in target_position_polarity.values()):
         raise AssertionError("polarity-target-position not exactly balanced")
 
+    mi = {
+        "target_vs_display_order": mutual_information(target_list, order_list),
+        "target_vs_query_polarity": mutual_information(target_list, polarity_list),
+        "target_vs_display_order_and_polarity": mutual_information(target_list, combined_nuisance_list),
+        "effective_class_vs_target_symbol": mutual_information(effective_class_list, target_list),
+    }
+    if any(abs(v) > 1e-12 for v in mi.values()):
+        raise AssertionError(f"nonzero target shortcut MI: {mi}")
+
     return {
-        "schema": "TRIGGER2_DYNAMIC_CODEBOOK_BINDING_TEMPLATE_SELFTEST/v3",
+        "schema": SELFTEST_SCHEMA,
         "status": "PASS",
         "scope": "SOURCE_TEMPLATE_ONLY_NO_ACCEPTED_DATASET_OR_RUNTIME_CREDIT",
         "rows": 864,
@@ -355,6 +416,10 @@ def validate(rows: list[dict]) -> dict:
         "base_polarity_target_exact_cross": True,
         "base_polarity_target_display_order_exact_cross": True,
         "polarity_target_display_position_exact_balance": True,
+        "mutual_information_bits": mi,
+        "model_visible_prompt_factorial_derivation_bound": True,
+        "model_visible_render_digest_bound": True,
+        "model_visible_private_metadata_leak": 0,
         "positive_jspace_labels": 0,
         "hard_negative_rows": 0,
         "training_eligible_rows": 0,
@@ -362,6 +427,7 @@ def validate(rows: list[dict]) -> dict:
         "materialization_blocker": (
             "EXACT_ACCEPTED_46_ABI_ATOM_MANIFEST_CHECKPOINT_TOKENIZER_AND_SPLIT_BINDING_REQUIRED"
         ),
+        "holdout_generated": False,
     }
 
 
@@ -370,7 +436,6 @@ def main() -> None:
     parser.add_argument("--output", type=Path)
     parser.add_argument("--self-test", action="store_true")
     args = parser.parse_args()
-
     rows = build_rows()
     report = validate(rows)
     if args.output:

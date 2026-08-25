@@ -9,12 +9,12 @@ permissions:
   issues: read
 
 concurrency:
-  group: go878-backfill-line-identity
+  group: free-swarm-backfill-line-identity-v1
   cancel-in-progress: false
 
 jobs:
   repair-and-test:
-    if: github.repository == 'gschaidergabriel/clay-global-research-entity' && github.event.issue.title == '[CLAY-DISPATCH] GO878 repair backfill line identity' && github.event.issue.user.login == 'gschaidergabriel'
+    if: "github.repository == 'gschaidergabriel/clay-global-research-entity' && github.event.issue.title == '[CLAY-DISPATCH] GO878 repair backfill line identity' && github.event.issue.user.login == 'gschaidergabriel' && contains(github.event.issue.body || '', 'dispatch_schema: CLAY_ORDINARY_DISPATCH/v1')"
     runs-on: [self-hosted, Linux, X64]
     timeout-minutes: 20
     steps:
@@ -25,8 +25,66 @@ jobs:
           clean: true
           persist-credentials: true
 
-      - name: Patch and regress only inside clay-direct-dev
+      - name: Validate semantic dispatch singleton
+        id: dispatch
         shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json, os, pathlib, re
+
+          event = json.loads(pathlib.Path(os.environ['GITHUB_EVENT_PATH']).read_text())
+          body = str((event.get('issue') or {}).get('body') or '')
+          fields = {}
+          for line in body.splitlines():
+              if ':' not in line:
+                  continue
+              k, v = line.split(':', 1)
+              k = k.strip()
+              if k in {'dispatch_schema', 'dispatch_key'} and k not in fields:
+                  fields[k] = v.strip()
+
+          if fields.get('dispatch_schema') != 'CLAY_ORDINARY_DISPATCH/v1':
+              raise SystemExit('invalid or missing dispatch_schema')
+          key = fields.get('dispatch_key', '')
+          if not re.fullmatch(r'free-swarm-backfill-line-identity-v1-g[0-9]{4}', key):
+              raise SystemExit('invalid or missing dispatch_key')
+
+          spec_path = pathlib.Path('research_entity/continuity/ordinary_dispatch_specs/free-swarm-backfill-line-identity-v1.json')
+          spec = json.loads(spec_path.read_text())
+          expected = str(spec.get('current_dispatch_key') or '')
+          generated = f"{spec['dispatch_class']}-g{int(spec['retry_generation']):04d}"
+          if expected != generated:
+              raise SystemExit('dispatch spec key/generation mismatch')
+          if key != expected:
+              raise SystemExit(f'stale/noncanonical dispatch key: {key} != {expected}')
+
+          claim_path = pathlib.Path(f'research_entity/continuity/ordinary_dispatch_claims/{key}.json')
+          if not claim_path.is_file():
+              raise SystemExit('create-only dispatch claim missing')
+          claim = json.loads(claim_path.read_text())
+          if claim.get('dispatch_key') != key or claim.get('dispatch_class') != spec.get('dispatch_class'):
+              raise SystemExit('dispatch claim identity mismatch')
+          if claim.get('new_issue_authorized_by_this_claim') is False:
+              raise SystemExit('claim is quarantine-only; no new issue is authorized for this generation')
+
+          result_path = pathlib.Path(f'research_entity/continuity/ordinary_dispatch_results/{key}.json')
+          skip = result_path.is_file()
+          with open(os.environ['GITHUB_OUTPUT'], 'a', encoding='utf-8') as out:
+              out.write(f'dispatch_key={key}\n')
+              out.write(f'skip={str(skip).lower()}\n')
+              out.write(f'result_path={result_path.as_posix()}\n')
+          if skip:
+              print(f'ALREADY_SATISFIED {key} -> {result_path}')
+          else:
+              print(f'ADMITTED_SINGLETON {key}')
+          PY
+
+      - name: Patch and regress only inside clay-direct-dev
+        if: steps.dispatch.outputs.skip != 'true'
+        shell: bash
+        env:
+          DISPATCH_KEY: ${{ steps.dispatch.outputs.dispatch_key }}
         run: |
           set -euo pipefail
           scratch="/tmp/clay-go878-lineid-${GITHUB_RUN_ID}"
@@ -76,14 +134,15 @@ jobs:
           "${prefix[@]}" cp "clay-direct-dev:$scratch/tools/free_swarm_historical_backfill.py" "$GITHUB_WORKSPACE/tools/free_swarm_historical_backfill.py"
           "${prefix[@]}" cp "clay-direct-dev:$scratch/tests/test_free_swarm_historical_backfill.py" "$GITHUB_WORKSPACE/tests/test_free_swarm_historical_backfill.py"
 
-          RUNTIME="$runtime" HOST_TMP="$host_tmp" python3 - <<'PY'
+          RUNTIME="$runtime" HOST_TMP="$host_tmp" DISPATCH_KEY="$DISPATCH_KEY" python3 - <<'PY'
           import datetime, hashlib, json, os, pathlib, subprocess
           ws=pathlib.Path(os.environ['GITHUB_WORKSPACE'])
-          def sha256(path): return hashlib.sha256(path.read_bytes()).hexdigest()
           def blob(rel): return subprocess.check_output(['git','hash-object',rel], cwd=ws, text=True).strip()
           log=(pathlib.Path(os.environ['HOST_TMP'])/'tests.txt').read_bytes()
           receipt={
             'schema':'FREE_SWARM_BACKFILL_LINE_IDENTITY_RECEIPT/v1',
+            'dispatch_schema':'CLAY_ORDINARY_DISPATCH/v1',
+            'dispatch_key':os.environ['DISPATCH_KEY'],
             'generated_at':datetime.datetime.now(datetime.timezone.utc).isoformat(),
             'github_run_id':os.environ.get('GITHUB_RUN_ID'),
             'github_sha_trigger':os.environ.get('GITHUB_SHA'),
@@ -94,7 +153,7 @@ jobs:
             'test_log_sha256':hashlib.sha256(log).hexdigest(),
             'test_command':'python3 -m pytest -q tests/test_free_swarm_historical_backfill.py',
             'status':'PASS',
-            'invariants':[ 
+            'invariants':[
               'one-shot and incrementally resumed scans assign identical absolute line/source_event_id pairs',
               'legacy offset-only checkpoint deterministically recovers completed absolute line count',
               'truncation/inode movement resets offset and line checkpoint together',
@@ -108,7 +167,7 @@ jobs:
             'training_credit_added':0,
             'scope':'HISTORICAL_BACKFILL_PROVENANCE_IDENTITY_COMPONENT_ONLY',
           }
-          target=ws/'research_entity/runtime/tool_results'/f"go878-backfill-line-identity-{os.environ['GITHUB_RUN_ID']}.json"
+          target=ws/'research_entity/runtime/tool_results'/f"go878-backfill-line-identity-{os.environ['DISPATCH_KEY']}.json"
           target.parent.mkdir(parents=True,exist_ok=True)
           target.write_text(json.dumps(receipt,indent=2,sort_keys=True)+'\n')
           PY
@@ -116,19 +175,45 @@ jobs:
           "${prefix[@]}" exec clay-direct-dev sh -lc "rm -rf '$scratch'"
           rm -rf "$host_tmp"
 
-      - name: Persist exact tested source and bounded receipt
+      - name: Persist exact tested source and semantic singleton result
+        if: steps.dispatch.outputs.skip != 'true'
         shell: bash
+        env:
+          DISPATCH_KEY: ${{ steps.dispatch.outputs.dispatch_key }}
         run: |
           set -euo pipefail
-          git diff --check
-          if git diff --quiet -- tools/free_swarm_historical_backfill.py tests/test_free_swarm_historical_backfill.py && ! git status --porcelain=v1 research_entity/runtime/tool_results/ | grep -q .; then
-            echo 'No delta: parallel work already converged.'
+          target="research_entity/runtime/tool_results/go878-backfill-line-identity-${DISPATCH_KEY}.json"
+          result="research_entity/continuity/ordinary_dispatch_results/${DISPATCH_KEY}.json"
+          mkdir -p "$(dirname "$result")"
+
+          git fetch origin main
+          if git show "origin/main:${result}" >/dev/null 2>&1; then
+            echo "ALREADY_SATISFIED_REMOTE ${DISPATCH_KEY}"
             exit 0
           fi
+
+          TARGET="$target" RESULT="$result" DISPATCH_KEY="$DISPATCH_KEY" python3 - <<'PY' > "$result"
+          import json, os, pathlib
+          receipt=json.loads(pathlib.Path(os.environ['TARGET']).read_text())
+          print(json.dumps({
+            'schema':'CLAY_ORDINARY_DISPATCH_RESULT/v1',
+            'dispatch_key':os.environ['DISPATCH_KEY'],
+            'dispatch_class':'free-swarm-backfill-line-identity-v1',
+            'status':receipt['status'],
+            'run_id':receipt.get('github_run_id'),
+            'event_sha':receipt.get('github_sha_trigger'),
+            'receipt_path':os.environ['TARGET'],
+            'runtime_credit':'HISTORICAL_BACKFILL_PROVENANCE_IDENTITY_COMPONENT_ONLY' if receipt['status']=='PASS' else 0,
+            'whole_entityos_hcu_runtime_credit':0,
+            'retry_requires_generation_advance':True,
+          },indent=2,sort_keys=True))
+          PY
+
+          git diff --check
           git config user.name 'clay-go878-line-identity-runner'
           git config user.email 'clay-go878-line-identity-runner@users.noreply.github.com'
-          git add tools/free_swarm_historical_backfill.py tests/test_free_swarm_historical_backfill.py research_entity/runtime/tool_results/
-          git commit -m "backfill: stabilize resumed source-event identity ${GITHUB_RUN_ID} [skip ci]"
+          git add tools/free_swarm_historical_backfill.py tests/test_free_swarm_historical_backfill.py "$target" "$result"
+          git commit -m "backfill: stabilize resumed source-event identity ${DISPATCH_KEY} [skip ci]"
           for attempt in 1 2 3 4 5 6; do
             if git pull --rebase origin main && git push origin HEAD:main; then exit 0; fi
             git rebase --abort 2>/dev/null || true

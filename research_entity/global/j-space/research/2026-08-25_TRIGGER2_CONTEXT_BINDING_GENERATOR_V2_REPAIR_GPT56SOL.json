@@ -1,0 +1,96 @@
+{
+  "schema": "CLAY_TRIGGER2_CONTEXT_BINDING_GENERATOR_V2_REPAIR/v1",
+  "date": "2026-08-25",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority": {
+    "branch_base_main": "5e153b6096ff3eaa6cd3fdfb59cc53e03ce92a78",
+    "supervisor_epoch": "8.78",
+    "mode": "FREE_ONLY",
+    "training_executed": false,
+    "provider_preflight_executed": false,
+    "paid_provider_used": false,
+    "unusual_experiment": "NOT_USED_DETERMINISTIC_SOURCE_DATASET_TEST_ONLY"
+  },
+  "parent_negative": {
+    "source_commit": "e6c71a0ab10e1d15326a93a3030269ff3e9cb0e4",
+    "verdict": "REJECT_FOR_DIRECT_TRAINING_UNTIL_SHORTCUT_FIXED",
+    "critical_finding": "CODEBOOK_ORDER_BASE_CLASS_PERFECT_SHORTCUT",
+    "meaning": "v1 cycled display order with row_index, making order perfectly predictive of base class within polarity and allowing a model to bypass SITUATION semantics."
+  },
+  "repair": {
+    "source_path": "tools/trigger2_context_binding_generator_v2.py",
+    "source_commit": "1f7539d6043f6e49d865f99eeba12fafdbae8a83",
+    "source_git_blob_sha1": "0e5efcfaab30f238ade69868245087e06dcd3139",
+    "source_sha256": "e1f96fb6daa16186b9b5ea0f703e12333fb454d7df77df660efb9e8c876f37dc",
+    "test_path": "tests/test_trigger2_context_binding_generator_v2.py",
+    "test_commit": "f6842494825916ca3b9356f2d0a69c503e1e91c0",
+    "test_git_blob_sha1": "0c5ad77380066429532fe7b1e49e298b1533881d",
+    "test_sha256": "27e1c73bd43353ce3bc46f19a08ff9141b76784c99d96664563e9308b19cddfc",
+    "changes": [
+      "Every fixed semantic/S3-mapping cell is crossed with all six codebook display orders.",
+      "Every fixed semantic/display-order cell is crossed with all six S3 mappings.",
+      "Situation text and lexical-variant identity remain fixed across display-order and S3-remap counterfactuals.",
+      "Validator requires complete six-order cells and complete six-mapping cells.",
+      "Validator requires order invariance of target and semantic surface.",
+      "Validator computes empirical mutual information for display order versus base class, target class and polarity and fails if nonzero beyond 1e-12 bits.",
+      "Class words outside the codebook and any episode atom outside the codebook are fail-closed leakage errors.",
+      "Rejected ABI atom 'or', missing observed token IDs and non-single-token production atoms are rejected before generation."
+    ],
+    "rows_per_atom_block": 864,
+    "factorization": "6 S3 mappings x 4 semantic template families x 2 query polarities x 3 base classes x 6 display orders"
+  },
+  "exact_source_local_validation": {
+    "surface": "LOCAL_DETERMINISTIC_CONTAINER",
+    "branch_source_blob_verified_equal_to_local_tested_source": true,
+    "branch_test_blob_verified_equal_to_local_tested_test": true,
+    "verification_method": "Git blob SHA-1 computed from exact local bytes matched GitHub fetch_file blob SHA for both source and test.",
+    "unit_tests": 10,
+    "unit_tests_pass": 10,
+    "unit_tests_fail": 0,
+    "demo_rows": 864,
+    "audit_status": "PASS",
+    "semantic_cells": 144,
+    "mapping_counterfactual_cells": 144,
+    "display_order_mutual_information_bits": {
+      "order_vs_base_class_bits": 0.0,
+      "order_vs_target_class_bits": 0.0,
+      "order_vs_polarity_bits": 0.0
+    },
+    "negative_tests": [
+      "drop one display-order variant -> FAIL",
+      "wrong target -> FAIL",
+      "metadata-only S3 mutation -> FAIL",
+      "class-word leak outside codebook -> FAIL",
+      "atom leak outside codebook -> FAIL",
+      "rejected 'or' atom -> pre-generation rejection",
+      "unbound token identity -> pre-generation rejection"
+    ]
+  },
+  "evidence_boundary": {
+    "scope": "SOURCE_CANDIDATE_AND_LOCAL_DETERMINISTIC_TEST_ONLY",
+    "real_46_atom_manifest_used": false,
+    "canonical_dataset_admission_executed": false,
+    "model_training_executed": false,
+    "model_runtime_executed": false,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "qwen35_jspace_runtime_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "canonical_semantics_promotion": false
+  },
+  "swarm_reviewer_adjudication": {
+    "shortcut_hunter": "PASS_FOR_THE_SPECIFIC_V1_DISPLAY_ORDER_CONFOUND: exact full factorial crossing removes that shortcut.",
+    "statistical_reviewer": "PASS_AT_DEMO_SOURCE_SCOPE: display-order mutual information with base/target/polarity is exactly 0.0 bits in the 864-row synthetic demo block.",
+    "causal_pair_reviewer": "PASS_AT_SOURCE_SCOPE: semantic surface is held fixed across order and mapping interventions.",
+    "abi_provenance_reviewer": "BLOCKED_FOR_PRODUCTION: exact measured 46-atom manifest/tokenizer/row identities are not yet materialized here.",
+    "mechanistic_reviewer": "UNRESOLVED: behavioral SFT success would still not prove installation of an internal J-Space mechanism.",
+    "final_integrator": "PROMOTE_V2_AS_SOURCE_CANDIDATE_ONLY; KEEP_DIRECT_TRAINING_BLOCKED_UNTIL_REAL_ATOM_AND_SPLIT_PROVENANCE_GATES_PASS."
+  },
+  "next_exact_action": "Materialize the exact measured 46 accepted one-token ABI atoms with tokenizer and provenance identities, deterministically freeze train/validation/holdout atom and lexical ancestry pools, run v2 on the real-atom TRAIN tranche, then run row gate + family/provenance split + class-symbol/order MI/leak audits before Forge/Distillery admission or any matched Qwen3.5 pilot."
+}

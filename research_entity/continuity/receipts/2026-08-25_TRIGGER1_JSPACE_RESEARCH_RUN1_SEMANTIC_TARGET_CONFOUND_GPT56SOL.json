@@ -1,0 +1,92 @@
+{
+  "schema": "clay-research-receipt/v1",
+  "date": "2026-08-25",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "forschungsrun_1",
+  "authority_epoch": "8.78",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "canonical_main_observed_before_branch": "966473caf712a214ac9828a4ac90793ad4ca60ee",
+  "scope": "TRIGGER1_QWEN3_06B_NATIVE_CVEC_SEMANTIC_SPECIFICITY_PROMOTION_GUARD",
+  "observed": {
+    "native_component_evidence": "Qwen3-0.6B native llama.cpp llama_set_adapter_cvec matched-control fresh-holdout component PASS already exists at exact GGUF/build/vector identities; it does not mint whole EntityOS/HCU, full HCU, J-Space model, training, whole-product or canonical-semantics credit.",
+    "current_experiment_source": "tools/trigger1_local_qwen06_native_semantic_counterbalanced_execute.py",
+    "current_promotion_gate": "tools/trigger1_jspace_promotion_gate.py",
+    "source_gap": "The current semantic-counterbalanced executor rotates A/B/C output-code mappings but requests AFFIRMATIVE in every calibration and fresh-holdout case. Promotion gate v4 requires counterbalanced token-label mapping but does not independently require variation/balance of the requested semantic target.",
+    "scientific_risk": "A vector that improves generic instruction adherence, requested-answer compliance, confidence/task engagement or code emission could therefore imitate AFFIRMATIVE-specific causal steering under an all-AFFIRMATIVE evaluation."
+  },
+  "hypothesis": {
+    "id": "H1_AFFIRMATIVE_SPECIFIC_INTERNAL_CAUSAL_DIRECTION",
+    "statement": "The selected internal direction has a semantic-target-specific causal effect: positive steering preferentially increases AFFIRMATIVE target margin rather than generic requested-answer compliance.",
+    "prediction": "Under independently balanced requested semantic targets AFFIRMATIVE/NEGATIVE/NEUTRAL and independently counterbalanced A/B/C output-code mappings, +VECTOR produces a treatment-by-semantic-target interaction consistent with the declared semantic direction; matched null/orthogonal/permuted controls do not reproduce it and SIGN_FLIP shows the declared opposite directional pattern."
+  },
+  "counterhypothesis": {
+    "id": "H0_GENERIC_INSTRUCTION_COMPLIANCE_OR_CODE_EMISSION",
+    "statement": "The observed native cvec uplift is partly or wholly generic instruction-following/requested-code compliance rather than AFFIRMATIVE-specific semantic causality.",
+    "prediction": "+VECTOR improves mapped requested-code margin similarly across AFFIRMATIVE, NEGATIVE and NEUTRAL targets, or the target-specific interaction disappears when semantic targets are balanced."
+  },
+  "external_research_inputs": [
+    {
+      "source": "https://arxiv.org/abs/2410.12877",
+      "claim_class": "SOURCE_DIRECT",
+      "finding": "Activation steering can directly improve instruction-following and format/constraint adherence, making generic compliance a live alternative explanation rather than a purely theoretical nuisance."
+    },
+    {
+      "source": "https://arxiv.org/abs/2308.10248",
+      "claim_class": "SOURCE_DIRECT",
+      "finding": "Activation Addition establishes that residual-stream interventions can causally steer high-level output properties, supporting direct intervention as the correct mechanism-testing family."
+    },
+    {
+      "source": "https://arxiv.org/abs/2505.22637",
+      "claim_class": "SOURCE_DIRECT",
+      "finding": "Steering effects can be high-variance or opposite to the desired behavior; coherent activation-difference geometry predicts reliability, so mean uplift alone is insufficient."
+    },
+    {
+      "source": "https://arxiv.org/abs/2608.02957",
+      "claim_class": "SOURCE_DIRECT",
+      "finding": "Highly discriminative steering directions can produce inverted behavioral control, reinforcing the distinction between representation detection and causal control."
+    }
+  ],
+  "cheapest_high_information_discriminator": {
+    "design": "Balance requested semantic targets independently from output-code labels: cross AFFIRMATIVE/NEGATIVE/NEUTRAL target requests with rotated A/B/C codebooks; freeze layer, orientation, gain, prompts, metric and thresholds on calibration before opening a disjoint holdout.",
+    "primary_estimand": "treatment_by_requested_semantic_target_interaction",
+    "controls": [
+      "BASELINE",
+      "+VECTOR",
+      "SIGN_FLIP",
+      "NULL_VECTOR",
+      "ORTHOGONAL_SAME_NORM",
+      "PERMUTED_SAME_NORM"
+    ],
+    "specificity_pass_condition": "Positive steering shows the preregistered semantic-target interaction on fresh holdout while null remains baseline-like and same-norm nuisance directions do not reproduce the interaction.",
+    "generic_compliance_result": "Comparable uplift across all requested semantic targets or no target-specific interaction; preserve native mechanism component credit but reject semantic-specific promotion."
+  },
+  "durable_delta": {
+    "branch": "research/trigger1-semantic-target-confound-20260825",
+    "guard": "tools/trigger1_jspace_semantic_target_gate_v1.py",
+    "guard_schema": "CLAY_TRIGGER1_JSPACE_SEMANTIC_TARGET_GATE/v1",
+    "guard_behavior": "Composes the current promotion gate and may only demote scientific/owner-goal promotion. For token-output metrics it requires an explicit balanced list of at least two requested semantic targets; predecessor mechanism credit is preserved.",
+    "tests": "tests/test_trigger1_jspace_semantic_target_gate_v1.py",
+    "test_cases_defined": 5,
+    "test_execution_credit": 0
+  },
+  "execution": {
+    "new_model_intervention_executed": false,
+    "new_unusual_experiment_executed": false,
+    "provider_model_call": false,
+    "credential_read": false,
+    "paid_or_together_use": false,
+    "reason": "This run performs source-grounded research and a deterministic promotion-guard delta. A fresh semantic-target-balanced native model intervention is a new scientific experiment and remains subject to canonical coordination/lease and admitted exact-runtime execution."
+  },
+  "credit": {
+    "existing_native_llamacpp_cvec_component_runtime_credit_preserved": true,
+    "new_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0,
+    "training_credit": 0,
+    "canonical_semantics_promotion": false
+  },
+  "next_exact_action": "First execute the new guard regressions on exact branch source. Then revise the semantic-counterbalanced native executor so requested semantic targets are balanced independently of A/B/C label mappings and emit explicit requested_semantic_targets evidence. Only after canonical unusual-experiment coordination succeeds, run the frozen six-control native llama.cpp holdout and submit its candidate through both the predecessor promotion gate and the semantic-target successor guard."
+}

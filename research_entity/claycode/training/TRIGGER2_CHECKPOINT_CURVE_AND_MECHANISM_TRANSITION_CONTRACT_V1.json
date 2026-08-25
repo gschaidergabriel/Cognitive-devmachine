@@ -1,0 +1,159 @@
+{
+  "schema": "CLAY_TRIGGER2_CHECKPOINT_CURVE_AND_MECHANISM_TRANSITION_CONTRACT/v1",
+  "date": "2026-08-25",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU_VARIABLE_COGNITIVE_GRID",
+  "authority": {
+    "canonical_main_reentered": "5d17c10e28264c5bb90be24089effc4318265ae3",
+    "supervisor_epoch": "8.78",
+    "mode": "FREE_ONLY",
+    "owner_target": "research_entity/global/OWNER_CORRECTION_ZERO_ENTITYOS_COGNITIVE_GRID_DB_CLAUDECODE_GLOBAL_JSPACE_2026-08-25.md",
+    "exact_current_revision_audit": "CLAY_TRIGGER2_EXACT_CURRENT_TRAINING_REVISION_AUDIT/v1",
+    "ledger_v2_status": "RECHECK_REQUIRED_PENDING_LEDGER_V3",
+    "training_executed": false,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0
+  },
+  "role": "Operationalize the exact-current audit rule CAPABILITY_FAMILY_CHECKPOINT_CURVES_REQUIRED; AGGREGATE_CONVERGENCE_IS_INSUFFICIENT without creating a new semantic or versioning authority.",
+  "research_basis": [
+    {
+      "source": "Wu, Geiger & Milliere, How Do Transformers Learn Variable Binding in Symbolic Programs?, ICML 2025 / arXiv:2505.20896",
+      "direct_finding": "The studied Transformer passed through random prediction, a shallow early-assignment heuristic, and a later systematic dereferencing mechanism; causal interventions supported the later mechanism interpretation.",
+      "project_implication": "A Qwen3.5 binder pilot must preserve longitudinal checkpoints and explicit heuristic baselines; endpoint accuracy cannot identify the learned mechanism."
+    },
+    {
+      "source": "Xue et al., Why Supervised Fine-Tuning Fails to Learn, ACL 2026",
+      "direct_finding": "The current-main audit cites this work for the risk that aggregate convergence hides systematically unlearned subsets.",
+      "project_implication": "Track capability-family curves separately rather than only aggregate train/validation loss."
+    },
+    {
+      "source": "Braun et al., Understanding (Un)Reliability of Steering Vectors in Language Models, arXiv:2505.22637",
+      "direct_finding": "Steering effects vary across prompts/samples; coherence and separability of activation differences predict better reliability.",
+      "project_implication": "J-Space/vector-control curves need held-out prompt-family sign stability, geometry/coherence and off-target controls."
+    },
+    {
+      "source": "Sankaranarayanan et al., Surgical Activation Steering via Generative Causal Mediation, arXiv:2602.16080",
+      "direct_finding": "In their tested tasks/models, causal-mediation component selection outperformed correlational probe baselines for sparse steering.",
+      "project_implication": "Decodability curves nominate representations; causal promotion remains a separate intervention axis."
+    }
+  ],
+  "preregistered_checkpoint_schedule": {
+    "rule": "Freeze the schedule before the pilot and before inspecting final holdout behavior. Values are normalized optimizer progress, not fixed step counts.",
+    "default_candidates": [0.0, 0.01, 0.03, 0.1, 0.25, 0.5, 0.75, 1.0],
+    "allowed_reduction": "A resource-constrained pilot may use a strict preregistered subset, but must retain baseline, at least two interior early/mid checkpoints, and final checkpoint.",
+    "event_triggered_extra": "Optional saves at preregistered validation thresholds; thresholds and metric names must be frozen before training and may not use final holdout.",
+    "forbidden": [
+      "choosing checkpoints after seeing holdout behavior",
+      "reporting only the best checkpoint",
+      "discarding a heuristic-dominant checkpoint from provenance",
+      "using holdout failures to change the schedule"
+    ]
+  },
+  "capability_family_curves": [
+    {
+      "family": "C_SYMBOLIC_INFERENCE",
+      "metrics": ["fixed-label semantic state accuracy", "unseen fantasy vocabulary", "depth transfer", "distractor robustness"],
+      "shortcut_controls": ["surface-template lookup", "predicate-frequency baseline", "position-only baseline"]
+    },
+    {
+      "family": "A_CONTEXT_INVARIANCE",
+      "metrics": ["cross-surface semantic transfer", "minimal paraphrase invariance", "fresh generator-family transfer"],
+      "shortcut_controls": ["template ID", "lexical family", "serialization style"]
+    },
+    {
+      "family": "B_EPISODE_LOCAL_BINDING",
+      "metrics": ["semantic-class correctness before codebook", "episode-local atom correctness", "unseen codebook permutation", "proof-depth/topology transfer", "codebook-flip sensitivity", "semantic-state-flip sensitivity"],
+      "shortcut_controls": ["record/focus position", "codebook display order", "symbol/slot frequency", "template/lexical family", "semantic-ablated exact model-visible nuisance signature", "learned nuisance-only challenger on disjoint families"]
+    },
+    {
+      "family": "E_GRF_EPISTEMIC_TYPING",
+      "metrics": ["OBSERVED/HYPOTHESIS/UNKNOWN typing", "unknown-vs-zero/null/error discrimination", "same-ancestry non-independence", "discriminator adequacy"],
+      "shortcut_controls": ["evidence count without ancestry", "source count", "verdict-token frequency", "majority/recurrence"]
+    },
+    {
+      "family": "D_SEMANTIC_HYPERPOSITION",
+      "metrics": ["branch-set retrieval", "branch permutation invariance", "branch-local E_plus/E_minus/F/T/A/sigma attachment", "non-discriminating update preservation", "localized discriminating update", "projection-not-deletion", "task-local resolution typing"],
+      "shortcut_controls": ["branch ID/order", "salience", "evidence count", "recurrence/majority", "resolution-token frequency", "template family"]
+    },
+    {
+      "family": "VARIABLE_N_ZERO_ENTITYOS_COGNITION",
+      "metrics": ["process identity across N", "DB-vs-simulation decision", "Claude handoff/return", "workspace re-entry", "restart/rejoin", "low-refusal retention"],
+      "shortcut_controls": ["N value", "node identity", "fixed coordinator label", "historical module name"],
+      "holdout_requirement": "At least one smaller and one larger unseen N relative to training values; exact values freeze in split manifest."
+    }
+  ],
+  "binding_mechanism_phase_labels": {
+    "purpose": "Diagnostic labels for the learning trajectory, never canonical truth.",
+    "labels": [
+      "RANDOM_OR_UNDERFIT",
+      "HEURISTIC_DOMINANT",
+      "SYSTEMATIC_BINDER_CANDIDATE",
+      "CAUSAL_BINDER_SUPPORTED"
+    ],
+    "systematic_candidate_minimum": [
+      "intended binding metrics generalize on frozen unseen families",
+      "model-visible semantic-ablation exact-signature lookup is at episode-local chance",
+      "learned nuisance-only challenger remains within preregistered tolerance",
+      "codebook/state minimal-pair sensitivities have the expected direction",
+      "no opened-holdout tuning"
+    ],
+    "causal_supported_additional": "Exact-model/runtime intervention evidence must satisfy the current J-Space/representation causal gate; behavioral success alone cannot enter this state."
+  },
+  "jspace_curve_and_promotion_axis": [
+    {
+      "level": "J0_OBSERVED",
+      "meaning": "Exact hidden-state/activation capture at exact checkpoint/runtime identity."
+    },
+    {
+      "level": "J1_DECODABLE",
+      "meaning": "Held-out probe above permutation/null baseline.",
+      "claim_limit": "representation measurement only"
+    },
+    {
+      "level": "J2_GEOMETRICALLY_COHERENT",
+      "meaning": "Direction/coherence/separability stable across preregistered prompt families and checkpoints.",
+      "claim_limit": "still not causal semantic use"
+    },
+    {
+      "level": "J3_INTERVENTION_EFFECT",
+      "meaning": "Intended behavior/state changes more than random/orthogonal/permuted same-norm controls at exact identity.",
+      "claim_limit": "bounded model-specific causal effect"
+    },
+    {
+      "level": "J4_DOUBLE_DISSOCIATION_RESCUE",
+      "meaning": "Semantic and binding lesions separate predicted functions; rescue restores the lesioned function while off-target floors remain intact.",
+      "claim_limit": "model-specific mechanism evidence; never canonical state/effect authority"
+    }
+  ],
+  "checkpoint_receipt_minimum_fields": [
+    "training_run_id",
+    "checkpoint_id",
+    "optimizer_progress_fraction",
+    "base_checkpoint_digest",
+    "current_checkpoint_digest",
+    "tokenizer_digest",
+    "dataset_manifest_digest",
+    "split_manifest_digest",
+    "labeler_digest",
+    "generator_digest",
+    "gate_digest",
+    "capability_family_metrics",
+    "heuristic_baseline_metrics",
+    "retention_metrics",
+    "jspace_measurement_level",
+    "opened_holdout=false",
+    "training_credit_scope"
+  ],
+  "promotion_rule": "Never promote from aggregate endpoint accuracy. Require a frozen family-by-checkpoint matrix showing intended capabilities emerging while preregistered shortcuts remain below tolerance; preserve negative/intermediate checkpoints. J-Space causal language requires the separate intervention level at exact identity.",
+  "nonclaims": [
+    "No Qwen3.5-0.8B training or checkpoint exists from this contract.",
+    "No mechanism transition has been observed for the target model.",
+    "No J-Space vector, subspace or causal mechanism is promoted.",
+    "No ledger v3 is created here; version-ledger authority remains a separate convergence task identified by the exact-current audit.",
+    "No accepted dataset tokens or training credit are minted."
+  ],
+  "next_exact_action": "When the canonical Hyperposition schema/gate/labeler dependency converges, bind this contract into the frozen training recipe and receipt schema; then run the exact serialized binder nuisance gates before admitting the smallest authorized zero-cost pilot."
+}

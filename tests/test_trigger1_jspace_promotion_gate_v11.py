@@ -11,7 +11,7 @@ if str(TOOLS) not in sys.path:
     sys.path.insert(0, str(TOOLS))
 
 import trigger1_jspace_promotion_gate_v11 as gate
-from test_trigger1_jspace_abstract_deconfound_scope_gate import valid_candidate
+from tests.test_trigger1_jspace_abstract_deconfound_scope_gate import valid_candidate
 
 
 class PromotionV11Test(unittest.TestCase):

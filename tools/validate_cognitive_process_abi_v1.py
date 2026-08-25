@@ -21,9 +21,13 @@ def validate(value: dict[str, Any]) -> dict[str, Any]:
         _fail("CLAUDE_CODE_ROLE_MISMATCH")
     if authority.get("free_only") is not True:
         _fail("FREE_ONLY_REQUIRED")
+    if authority.get("canonical_census_schema") != "ZERO_ENTITYOS_COGNITIVE_PROCESS_CENSUS/v1":
+        _fail("CANONICAL_CENSUS_SCHEMA_MISMATCH")
+    if authority.get("canonical_census_main_sha") != authority.get("reentered_canonical_main_sha"):
+        _fail("CANONICAL_CENSUS_REENTRY_SHA_MISMATCH")
 
     process_ids = value.get("semantic_process_ids")
-    expected = [f"AZP{i:02d}" for i in range(1, 21)]
+    expected = [f"ZECP{i:02d}" for i in range(1, 21)]
     if process_ids != expected:
         _fail("PROCESS_ID_SET_MISMATCH")
 

@@ -2,7 +2,7 @@
 
 Status: `CURRENT_BLOCKED_ADMISSION`
 
-Trigger-2 **V60** is the current research-ledger successor under Supervisor **8.83**. This is a cache pointer only; newest explicit owner/supervisor authority and exact executable evidence outrank it.
+Trigger-2 **V61** is the current research-ledger successor under Supervisor **8.83**. This is a cache pointer only; newest explicit owner/supervisor authority and exact executable evidence outrank it.
 
 ## P0 — runtime quiescence actively failed
 
@@ -20,41 +20,41 @@ Pinned quiescence lane:
 
 The 512-case / 256-family four-quadrant logical manifest remains frozen and model outputs remain unopened. No checkpoint winner exists and checkpoint-selection credit remains `0`.
 
-## Model-call → NODE_RESULT lineage — V60 exact-call cohort discriminator
+## Model-call → NODE_RESULT lineage — V61 semantic correction
 
-The retained temporal-causality direction remains:
+Retained source direction:
 
-- `tools/trigger2_node_result_model_call_two_phase_authority_v1.py` — commit `56e8cc09f0c1b8e1fd99ab091154c3f3a6382b17`
-- `tests/test_trigger2_node_result_model_call_two_phase_authority_v1.py` — commit `e287fcc5e73277dd8bc5119c11f2b97b5dde9616`
+- `tools/trigger2_node_result_model_call_two_phase_authority_v1.py` — introducing commit `56e8cc09f0c1b8e1fd99ab091154c3f3a6382b17`
+- exact committed fixture bytes aligned at `8f9789e49d6806d8d508233712fec3aa85d4e620`
+- exact-byte deterministic source validation receipt: `research_entity/continuity/receipts/2026-08-26_TRIGGER2_TWO_PHASE_SOURCE_VALIDATION_GPT56SOL.json` — commit `e9292ea7857877ec1da972d43ee21e745a00fc66`
 
-The two-phase pattern correctly separates:
+The receipt binds exact source/test bytes and records `py_compile PASS` plus `9 passed in 0.03s` on a local deterministic source fixture. It is not repository CI, model runtime, physical GRID10 runtime, training, or EntityOS/HCU acceptance.
 
-1. **pre-call launch descriptor** — cohort plan, GRID cell, node, node-admission identity/revision, runtime generation, controller-observed PID, candidate, rendered-input identity and source identity;
-2. **post-call executor observation** — exact launch descriptor plus the existing source-bound model-call identity, model-output identity, ABI-v2 receipt identity and executor-observed PID;
-3. **derived authority envelope** — immutable authority-free NODE_RESULT plus those phase-separated deterministic commitments.
+The retained two-phase pattern separates:
 
-V60 adds a narrower cohort-level finding. `derive_authority_cohort_id` currently enforces uniqueness for cell, node, PID, launch descriptor, executor observation and raw NODE_RESULT packet, but not for the exact `source_bound_model_call_identity_sha256` or `source_node_admission_id`.
+1. **pre-call invocation precommit** — `launch_descriptor_sha256` binds cohort plan, GRID cell, node, membership incarnation, runtime generation, PID, candidate, rendered input and source identity;
+2. **post-call invocation observation** — `executor_observation_sha256` binds that launch to the existing source-bound model-call content/evidence identity, model-output identity and ABI-v2 receipt;
+3. **derived invocation provenance** — authority envelope over exact launch + post-call observation + immutable authority-free NODE_RESULT evidence.
 
-That means two distinct cells can theoretically carry two distinct launch descriptors and two distinct post-call observations while both reference the **same exact model call**. Distinct observation wrappers do not prove distinct model invocations. If a cohort member claims an independently attributed model invocation, exact call identity must be injective across those members. Intentional one-call fan-out would need an explicit one-call/many-consumer representation instead of being counted as multiple independent calls.
+### Critical V61 correction: call content is not invocation identity
 
-Source-only audit:
+Direct ABI/source inspection falsified V60's blind call-digest injectivity hypothesis. `source_bound_model_call_identity_sha256` commits model/input/runtime/output/source evidence, but the current schema does **not** contain HCU causal-event, GRID-cell, membership-incarnation, process-instance or launch identity. Therefore it is best treated as **model-call content/evidence identity**, not as a guaranteed unique invocation-event identifier.
 
-- `research_entity/global/j-space/research/2026-08-26_TRIGGER2_TWO_PHASE_COHORT_EXACT_CALL_UNIQUENESS_AUDIT_V1_GPT56SOL.json` — commit `2c3881c17d68d1dcbc35fd4fefa79ce3b233c71f`
+Two independently launched deterministic invocations may validly have equal call-content and equal output identities while remaining distinct causal invocations through distinct launch and executor-observation identities. Conversely, reusing one launch or one executor observation across cells must fail closed. Intentional one-invocation fan-out requires explicit consumer/fanout identities and must not mint multiple execution credit.
 
-Pinned regression:
+Audit:
 
-- `tests/test_trigger2_two_phase_cohort_exact_call_uniqueness_regression_v1.py` — commit `c3c8b8b714edfd605ac60e1b57df84a4cba1f635`
+- `research_entity/global/j-space/research/2026-08-26_TRIGGER2_MODEL_CALL_CONTENT_VS_INVOCATION_IDENTITY_AUDIT_V1_GPT56SOL.json` — commit `71b7b10dafc715930948cc12cbc5f39277fdc322`
 
-The regression preserves these distinctions:
+The falsified V60 regression was removed at commit `9b97e703397044bc9b7dcf9033ac9df8b76494f4`. Its corrected semantic successor is:
 
-- two distinct exact calls form a valid cohort;
-- identical `model_output_identity_sha256` remains allowed for distinct exact calls;
-- strict xfail: one exact `source_bound_model_call_identity_sha256` projected into two distinct cells must eventually reject with `AUTHORITY_COHORT_MODEL_CALL_DUPLICATE`;
-- strict xfail: one `source_node_admission_id` projected onto two distinct nodes must eventually reject or be independently cross-validated against node identity.
+- `tests/test_trigger2_two_phase_call_content_vs_invocation_semantics_v1.py` — commit `4b705e086d65fe5b9cf4a7d1119b517deabf8cb3`
 
-No repository CI execution is claimed for this new regression yet. No model/provider/runtime/training promotion follows from source structure.
+This successor encodes equal call-content across independent invocation authorities as allowed, while preserving replay/alias rejection for reused launch or executor-observation identity. A remaining membership-provenance discriminator is whether one `source_node_admission_id` can be projected onto two distinct nodes without an explicit multiplexing contract.
 
-## Training target remains binding/routing, not generic language tuning
+No execution claim is made for this new semantic test file yet.
+
+## Training target remains binding/routing
 
 Historical measured Trigger-2 baseline remains approximately:
 
@@ -68,9 +68,9 @@ The primary measured trainable deficit remains `CONTEXT_DEPENDENT_VARIABLE_BINDI
 
 ## Next source-only gate
 
-Patch only the retained two-phase cohort reducer so `source_bound_model_call_identity_sha256` and `source_node_admission_id` are one-to-one across independently attributed cohort members, then convert the two strict xfails into passing regressions. After that, integrate the retained two-phase authority envelope with `PROOF_CARRYING_NODE_RESULT/v1` and the fused GRID10 membership/cohort path without changing raw model cognition or creating a second authority schema.
+Freeze the call-content-versus-invocation semantic contract in the fused path, then integrate the retained two-phase invocation authority with `PROOF_CARRYING_NODE_RESULT/v1` and the fused GRID10 membership/cohort source. Cross-validate node-admission identity/revision, node, process and generation against the proof-carrying membership envelope instead of relying on wrapper fields alone. Do not add artificial nonces to the call-content digest merely to force uniqueness.
 
-P0 runtime quiescence still outranks this source work for any execution promotion.
+P0 runtime quiescence still outranks all source work for any execution promotion.
 
 ## Credits remain zero at promotion scope
 
@@ -83,6 +83,6 @@ P0 runtime quiescence still outranks this source work for any execution promotio
 - whole HCU runtime credit: `0`
 - whole EntityOS runtime credit: `0`
 
-Current ledger: `research_entity/global/j-space/research/2026-08-26_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V60_GPT56SOL.json`
+Current ledger: `research_entity/global/j-space/research/2026-08-26_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V61_GPT56SOL.json`
 
 Supervisor: `research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_83_DELTA_2026-08-26T0435P0700_GPT56SOL.json`

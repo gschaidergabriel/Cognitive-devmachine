@@ -1,0 +1,51 @@
+{
+  "schema": "CLAY_TRIGGER2_RUN_REENTRY_ADDENDUM/v1",
+  "run_id": "2-20260825-2220-gpt56sol-a02-test-contract-repair",
+  "date": "2026-08-25",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "status": "REENTERED_AFTER_PARALLEL_CONVERGENCE_NONPROMOTING",
+  "base_receipt": "research_entity/trigger_runs/2/2-20260825-2220-gpt56sol-a02-test-contract-repair/RUN_RECEIPT.json",
+  "base_receipt_commit": "44fb4b9e62726b1579becb18a04a8b2a29c20d27",
+  "main_observed_before_addendum": "c3d6561c429efb4f684a4946cb0606ea780067cd",
+  "reentry_delta": [
+    {
+      "artifact": "tools/trigger2_a02_discriminator_producer_auth_gate_v1.py",
+      "previous_run_view": "SOURCE_CONTRACT_CLOSED_RUNTIME_EXECUTION_UNOBSERVED",
+      "intermediate_reclassification": "NEEDS_REVISION_REPOSITORY_OBJECT_LINEAGE_PROOF",
+      "current_source_status": "CURRENT_GIT_OBJECT_BOUND_SOURCE_IMPLEMENTATION_EXECUTION_UNOBSERVED",
+      "parallel_successor_commit": "064055e34a871eeadc55540a3b9fd44004991034",
+      "reason": "Parallel main implemented real Git commit existence, commit:path byte binding, ancestry and executed HEAD/path verification rather than accepting a syntactically valid source_commit_sha."
+    },
+    {
+      "artifact": "tests/test_trigger2_a02_discriminator_producer_auth_gate_v1.py",
+      "current_source_status": "CURRENT_GIT_OBJECT_LINEAGE_MUTATION_SUITE_EXECUTION_UNOBSERVED",
+      "parallel_successor_commit": "c3d6561c429efb4f684a4946cb0606ea780067cd",
+      "reason": "Current source now includes real-lineage resolution, well-formed nonexistent-commit rejection and wrong-path binding rejection in addition to the policy/source-lineage row mutations contributed by this run."
+    },
+    {
+      "artifact": "tools/run_trigger2_repository_bound_a02_acceptance_v1.py",
+      "status": "CURRENT_ACCEPTANCE_RUNNER_SOURCE_EXECUTION_UNOBSERVED",
+      "parallel_successor_commit": "809606ced6501401df66698c4572806f2ae3c1dd",
+      "reason": "A dedicated runner now binds clean worktree, origin repository, HEAD/tree, relevant HEAD blobs, A02 authority/policy and producer historical lineage before executing the exact A02 plus retained-v4 pytest suites. Runner existence is not a run."
+    }
+  ],
+  "dedup_action": "NO_COMPETING_GIT_LINEAGE_PATCH_OR_ACCEPTANCE_RUNNER_CREATED_AFTER_PARALLEL_SUCCESSOR_OBSERVED",
+  "execution_evidence": {
+    "exact_current_repository_bound_execution_observed": false,
+    "workflow_runs_observed_for_c3d6561": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "positive_jspace_causal_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0
+  },
+  "remaining_frontier": [
+    "Execute tools/run_trigger2_repository_bound_a02_acceptance_v1.py at one exact admitted zero-cost clean checkout and persist its exact output with invocation identity.",
+    "Resolve A03 generation-authority historical replay root before nonempty-history promotion.",
+    "Authenticate OBSERVED evidence producer, then rebind the native seed and run rendered family/provenance/tokenizer/nuisance/actionability/J-Space causal gates."
+  ],
+  "generation_decision": "NO_NEW_ROWS_WITH_REASON",
+  "generation_reason": "Source convergence improved provenance strength but no repository-bound execution receipt has been observed; positive-data admission remains upstream-blocked."
+}

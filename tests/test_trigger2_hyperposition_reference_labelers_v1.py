@@ -62,6 +62,29 @@ class LabelersV1(unittest.TestCase):
         twice = U_update(once, obs)
         self.assertEqual(len(twice[0]["E_plus"]), 1)
 
+    def test_distinct_event_same_ancestry_is_preserved_as_correlated_observation(self):
+        bs = branches()
+        support = {
+            "schema": OBS_SCHEMA,
+            "evidence": ev("e-support", "src:shared", "g-shared"),
+            "branch_relations": {"b0": "SUPPORT", "b1": "NO_EFFECT", "b2": "NO_EFFECT"},
+        }
+        counter = {
+            "schema": OBS_SCHEMA,
+            "evidence": ev("e-counter", "src:shared", "g-shared"),
+            "branch_relations": {"b0": "COUNTER", "b1": "NO_EFFECT", "b2": "NO_EFFECT"},
+        }
+        after_support = U_update(bs, support)
+        after_counter = U_update(after_support, counter)
+        self.assertEqual([x["evidence_id"] for x in after_counter[0]["E_plus"]], ["e-support"])
+        self.assertEqual([x["evidence_id"] for x in after_counter[0]["E_minus"]], ["e-counter"])
+        self.assertEqual(after_counter[0]["E_plus"][0]["provenance_ancestry_id"], "src:shared")
+        self.assertEqual(after_counter[0]["E_minus"][0]["provenance_ancestry_id"], "src:shared")
+        self.assertEqual(after_counter[0]["E_plus"][0]["independence_group"], "g-shared")
+        self.assertEqual(after_counter[0]["E_minus"][0]["independence_group"], "g-shared")
+        r = D_resolve(after_counter, {"context_id": "c", "discriminator_executed": True, "discriminator_admissible": True, "resolution_scope": "TASK_LOCAL_SYNTHETIC_OR_ADMITTED_EVIDENCE"})
+        self.assertEqual(r["status"], "UNRESOLVED")
+
     def test_falsifier_does_not_resolve_without_executed_discriminator(self):
         bs = branches()
         obs = {

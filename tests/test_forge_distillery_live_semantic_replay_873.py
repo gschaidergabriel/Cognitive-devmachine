@@ -80,6 +80,39 @@ class LiveSemanticReplay873(unittest.TestCase):
                 first["after"]["accepted_dataset_tokens_counter"],
             )
 
+    def test_genuinely_different_execution_identity_is_separately_admissible(self):
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            first_gate = root / "first.json"
+            second_gate = root / "second.json"
+            db = root / "distillery.sqlite3"
+
+            first_eval = helpers.qualified_evaluation()
+            self.write_gate(first_gate, first_eval)
+            first = promotion.promote(first_gate, helpers.SOURCE, db, **helpers.workflow_context())
+
+            distinct_eval = helpers.qualified_evaluation()
+            distinct_eval["worker_sha"] = "c" * 64
+            distinct_eval["delta_id"] = "distinct-measured-execution-envelope"
+            distinct_eval["evaluated_at"] = "2026-08-25T00:02:00+00:00"
+            self.write_gate(second_gate, distinct_eval)
+            second = promotion.promote(second_gate, helpers.SOURCE, db, **helpers.workflow_context())
+
+            self.assertEqual(first["outcome"], "PROMOTED_NEW_PACKET")
+            self.assertEqual(second["outcome"], "PROMOTED_NEW_PACKET")
+            self.assertNotEqual(
+                first["execution_replay_identity_sha256"],
+                second["execution_replay_identity_sha256"],
+            )
+            self.assertNotEqual(first["after"]["packet_id"], second["after"]["packet_id"])
+            self.assertGreater(second["first_token_delta"], 0)
+            self.assertEqual(second["replay_token_delta"], 0)
+            self.assertEqual(second["measured_conflict_token_delta"], 0)
+            self.assertGreater(
+                second["after"]["accepted_dataset_tokens_counter"],
+                first["after"]["accepted_dataset_tokens_counter"],
+            )
+
 
 if __name__ == "__main__":
     unittest.main()

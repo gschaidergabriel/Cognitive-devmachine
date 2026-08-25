@@ -1,0 +1,125 @@
+name: GO878 historical backfill source-support followup
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'tools/free_swarm_historical_backfill.py'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: go878-backfill-source-support
+  cancel-in-progress: false
+
+jobs:
+  source-support:
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: main
+          fetch-depth: 0
+          clean: true
+          persist-credentials: true
+
+      - name: Require cumulative line identity predecessor
+        id: predecessor
+        shell: bash
+        run: |
+          set -euo pipefail
+          if grep -Fq 'SELECT inode,byte_offset,file_size,line_no FROM backfill_files' tools/free_swarm_historical_backfill.py \
+             && grep -Fq 'absolute_line += 1' tools/free_swarm_historical_backfill.py; then
+            echo 'ready=true' >> "$GITHUB_OUTPUT"
+          else
+            echo 'ready=false' >> "$GITHUB_OUTPUT"
+            echo 'GO878_SOURCE_SUPPORT=WAITING_FOR_LINE_IDENTITY_PREDECESSOR'
+          fi
+
+      - name: Repair replay-idempotent source support in clay-direct-dev
+        if: steps.predecessor.outputs.ready == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          scratch="/tmp/clay-go878-source-support-${GITHUB_RUN_ID}"
+          host_tmp="/tmp/clay-go878-source-support-host-${GITHUB_RUN_ID}"
+          rm -rf "$host_tmp"; mkdir -p "$host_tmp"
+          runtime=''; prefix=()
+          if command -v docker >/dev/null 2>&1 && docker inspect clay-direct-dev >/dev/null 2>&1; then runtime='docker'; prefix=(docker)
+          elif command -v sudo >/dev/null 2>&1 && sudo -n docker inspect clay-direct-dev >/dev/null 2>&1; then runtime='sudo-docker'; prefix=(sudo -n docker)
+          elif command -v podman >/dev/null 2>&1 && podman inspect clay-direct-dev >/dev/null 2>&1; then runtime='podman'; prefix=(podman)
+          elif command -v sudo >/dev/null 2>&1 && sudo -n podman inspect clay-direct-dev >/dev/null 2>&1; then runtime='sudo-podman'; prefix=(sudo -n podman)
+          else echo 'GO878_SOURCE_SUPPORT=BLOCKED_SANDBOX_NOT_DISCOVERED' >&2; exit 72; fi
+
+          "${prefix[@]}" exec clay-direct-dev sh -lc "rm -rf '$scratch'; mkdir -p '$scratch'"
+          "${prefix[@]}" cp "$GITHUB_WORKSPACE/." "clay-direct-dev:$scratch"
+          set +e
+          "${prefix[@]}" exec clay-direct-dev sh -lc "set -eu; cd '$scratch'; python3 tools/apply_go878_backfill_source_count.py --repo '$scratch'; python3 -m py_compile tools/free_swarm_historical_backfill.py; python3 -m pytest -q tests/test_free_swarm_historical_backfill.py" >"$host_tmp/tests.txt" 2>&1
+          rc=$?
+          set -e
+          cat "$host_tmp/tests.txt"
+          [[ "$rc" -eq 0 ]] || exit "$rc"
+          "${prefix[@]}" cp "clay-direct-dev:$scratch/tools/free_swarm_historical_backfill.py" "$GITHUB_WORKSPACE/tools/free_swarm_historical_backfill.py"
+          "${prefix[@]}" cp "clay-direct-dev:$scratch/tests/test_free_swarm_historical_backfill.py" "$GITHUB_WORKSPACE/tests/test_free_swarm_historical_backfill.py"
+          "${prefix[@]}" exec clay-direct-dev sh -lc "rm -rf '$scratch'" || true
+
+          if git diff --quiet -- tools/free_swarm_historical_backfill.py tests/test_free_swarm_historical_backfill.py; then
+            echo 'GO878_SOURCE_SUPPORT=ALREADY_CONVERGED'
+            rm -rf "$host_tmp"
+            exit 0
+          fi
+
+          RUNTIME="$runtime" HOST_TMP="$host_tmp" python3 - <<'PY'
+          import datetime, hashlib, json, os, pathlib, subprocess
+          ws = pathlib.Path(os.environ['GITHUB_WORKSPACE'])
+          def blob(rel):
+              return subprocess.check_output(['git','hash-object',rel],cwd=ws,text=True).strip()
+          log = (pathlib.Path(os.environ['HOST_TMP'])/'tests.txt').read_bytes()
+          receipt = {
+              'schema':'FREE_SWARM_BACKFILL_SOURCE_SUPPORT_RECEIPT/v1',
+              'generated_at':datetime.datetime.now(datetime.timezone.utc).isoformat(),
+              'github_run_id':os.environ.get('GITHUB_RUN_ID'),
+              'github_sha_trigger':os.environ.get('GITHUB_SHA'),
+              'sandbox':'clay-direct-dev','container_runtime':os.environ.get('RUNTIME'),
+              'source_blob_after':blob('tools/free_swarm_historical_backfill.py'),
+              'test_blob_after':blob('tests/test_free_swarm_historical_backfill.py'),
+              'test_log_sha256':hashlib.sha256(log).hexdigest(),
+              'test_command':'python3 -m pytest -q tests/test_free_swarm_historical_backfill.py',
+              'status':'PASS',
+              'invariants':[
+                  'source_count counts distinct source_event_id observations only',
+                  'replaying the same causal source cannot inflate source_count',
+                  'distinct causal source events increment support exactly once each',
+                  'detailed chunk/extractor provenance remains append-only in candidate_sources',
+              ],
+              'external_provider_calls':0,'external_model_calls':0,'secrets_recorded':False,
+              'runtime_credit_added':0,'whole_entityos_hcu_credit_added':0,'jspace_model_credit_added':0,'training_credit_added':0,
+              'scope':'HISTORICAL_BACKFILL_SOURCE_SUPPORT_COMPONENT_ONLY'
+          }
+          target = ws/'research_entity/runtime/tool_results'/f"go878-backfill-source-support-{os.environ['GITHUB_RUN_ID']}.json"
+          target.parent.mkdir(parents=True,exist_ok=True)
+          target.write_text(json.dumps(receipt,indent=2,sort_keys=True)+'\n',encoding='utf-8')
+          PY
+          rm -rf "$host_tmp"
+
+      - name: Persist tested source-support successor
+        if: steps.predecessor.outputs.ready == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          git diff --check
+          if git diff --quiet -- tools/free_swarm_historical_backfill.py tests/test_free_swarm_historical_backfill.py; then
+            exit 0
+          fi
+          git config user.name 'clay-go878-source-support-runner'
+          git config user.email 'clay-go878-source-support-runner@users.noreply.github.com'
+          git add tools/free_swarm_historical_backfill.py tests/test_free_swarm_historical_backfill.py research_entity/runtime/tool_results/
+          git commit -m "backfill: make source support replay-idempotent ${GITHUB_RUN_ID} [skip ci]"
+          for attempt in 1 2 3 4 5 6; do
+            if git pull --rebase origin main && git push origin HEAD:main; then exit 0; fi
+            git rebase --abort 2>/dev/null || true
+            sleep $((attempt * 3))
+          done
+          exit 1

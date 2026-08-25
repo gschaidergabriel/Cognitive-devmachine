@@ -8,6 +8,8 @@ digests into the exact evidence envelope consumed by
 trigger1_semantic_factorial_evidence_gate_v1.
 
 It must never synthesize runtime receipts and it refuses legacy AFFIRMATIVE-only 1x3 data.
+Runtime rows must also echo the exact deterministic case identity; case_id alone is not a
+sufficient binding between an observed receipt and its planned semantic-factorial cell.
 """
 from __future__ import annotations
 
@@ -30,6 +32,14 @@ TARGETS = evidence_gate.TARGETS
 CODES = evidence_gate.CODES
 CONTROLS = evidence_gate.REQUIRED_CONTROLS
 SPLITS = ("CALIBRATION", "HOLDOUT")
+CASE_IDENTITY_FIELDS = (
+    "case_id",
+    "seed",
+    "prompt_sha256",
+    "semantic_target",
+    "output_code_identity",
+    "split_family_id",
+)
 
 
 class EvidenceBuildError(ValueError):
@@ -42,6 +52,10 @@ def canonical_sha(value: Any) -> str:
 
 def _prompt_sha(text: str) -> str:
     return hashlib.sha256(text.encode("utf-8")).hexdigest()
+
+
+def _case_identity(row: dict[str, Any]) -> str:
+    return canonical_sha({key: row.get(key) for key in CASE_IDENTITY_FIELDS})
 
 
 def _mapping_for(target: str, target_code: str, variant: int) -> dict[str, str]:
@@ -88,7 +102,7 @@ def build_plan(split: str) -> dict[str, Any]:
             ordinal += 1
             mapping = _mapping_for(target, target_code, target_index + code_index + (0 if split == "CALIBRATION" else 1))
             prompt = _prompt(split, ordinal, target, target_code, mapping)
-            cases.append({
+            case = {
                 "case_id": f"{split.lower()}-{target.lower()}-{target_code.lower()}-v1",
                 "seed": seed_base + ordinal,
                 "semantic_target": target,
@@ -97,7 +111,9 @@ def build_plan(split: str) -> dict[str, Any]:
                 "prompt": prompt,
                 "prompt_sha256": _prompt_sha(prompt),
                 "split_family_id": family_id,
-            })
+            }
+            case["case_identity_sha256"] = _case_identity(case)
+            cases.append(case)
     plan_core = {
         "schema": PLAN_SCHEMA,
         "split": split,
@@ -105,6 +121,7 @@ def build_plan(split: str) -> dict[str, Any]:
         "semantic_targets": list(TARGETS),
         "output_codes": list(CODES),
         "required_controls": list(CONTROLS),
+        "case_identity_fields": list(CASE_IDENTITY_FIELDS),
         "case_count": len(cases),
         "cases": cases,
         "model_executed": False,
@@ -122,6 +139,7 @@ def expand_runtime_cases(plan: dict[str, Any], candidate_key: str) -> list[dict[
         for control in CONTROLS:
             expanded.append({
                 "case_id": case["case_id"],
+                "case_identity_sha256": case["case_identity_sha256"],
                 "seed": case["seed"],
                 "semantic_target": case["semantic_target"],
                 "target_label": case["output_code_identity"],
@@ -149,6 +167,8 @@ def _validate_plan(plan: Any) -> None:
         raise EvidenceBuildError("PLAN_MUST_NOT_PRETEND_RUNTIME_RECEIPTS")
     if plan.get("model_executed") is not False:
         raise EvidenceBuildError("PLAN_MUST_BE_EXECUTION_FREE")
+    if plan.get("case_identity_fields") != list(CASE_IDENTITY_FIELDS):
+        raise EvidenceBuildError("PLAN_CASE_IDENTITY_FIELDS_MISMATCH")
     observed = {(row.get("semantic_target"), row.get("output_code_identity")) for row in cases}
     expected = {(target, code) for target in TARGETS for code in CODES}
     if observed != expected:
@@ -168,10 +188,12 @@ def _validate_plan(plan: Any) -> None:
             raise EvidenceBuildError(f"PLAN_CODEBOOK_INVALID:{row.get('case_id')}")
         if mapping[row["output_code_identity"]] != row["semantic_target"]:
             raise EvidenceBuildError(f"PLAN_TARGET_CODEBOOK_MISMATCH:{row.get('case_id')}")
+        if row.get("case_identity_sha256") != _case_identity(row):
+            raise EvidenceBuildError(f"PLAN_CASE_IDENTITY_MISMATCH:{row.get('case_id')}")
 
 
 def bind_runtime_receipts(plan: dict[str, Any], runtime_rows: list[dict[str, Any]]) -> dict[str, Any]:
-    """Bind real observed per-control receipt digests; never fabricate missing controls."""
+    """Bind observed per-control receipts only after exact planned-case identity replay."""
     _validate_plan(plan)
     if not isinstance(runtime_rows, list):
         raise EvidenceBuildError("RUNTIME_ROWS_LIST_REQUIRED")
@@ -185,6 +207,12 @@ def bind_runtime_receipts(plan: dict[str, Any], runtime_rows: list[dict[str, Any
         receipt = row.get("runtime_receipt_sha256")
         if case_id not in expected_by_case:
             raise EvidenceBuildError(f"RUNTIME_ROW_UNKNOWN_CASE:{case_id}")
+        expected_case = expected_by_case[case_id]
+        if row.get("case_identity_sha256") != expected_case["case_identity_sha256"]:
+            raise EvidenceBuildError(f"RUNTIME_ROW_CASE_IDENTITY_MISMATCH:{case_id}")
+        for field in CASE_IDENTITY_FIELDS:
+            if row.get(field) != expected_case.get(field):
+                raise EvidenceBuildError(f"RUNTIME_ROW_CASE_FIELD_MISMATCH:{case_id}:{field}")
         if control not in CONTROLS:
             raise EvidenceBuildError(f"RUNTIME_ROW_UNKNOWN_CONTROL:{control}")
         if not isinstance(receipt, str) or len(receipt) != 64:
@@ -245,6 +273,7 @@ def bind_runtime_receipts(plan: dict[str, Any], runtime_rows: list[dict[str, Any
         "case_rows": case_rows,
         "semantic_factorial_receipt_sha256": receipt,
         "source_plan_sha256": plan["plan_sha256"],
+        "runtime_case_identity_binding": True,
     }
     derived, failures = evidence_gate.derive_split_receipt(split, split_name)
     if failures or derived is None or derived["receipt_sha256"] != receipt:

@@ -13,6 +13,7 @@ import shutil
 import time
 
 import run_free_evidence_forge_safe_871 as safe
+from free_swarm_backfill_provenance import reconcile_candidate_source_counts
 from free_swarm_historical_backfill import backfill_metrics, ensure_schema, ingest_artifact_history
 
 base = safe.base
@@ -33,9 +34,11 @@ def ingest_worker_candidates(con, max_lines_per_file: int = 0) -> int:
         base.ARTIFACT_ROOT,
         max_new_lines=int(os.getenv("CLAY_FORGE_BACKFILL_MAX_NEW_LINES", "50000")),
     )
+    reconciled = reconcile_candidate_source_counts(con)
     base.bump(con, "historical_backfill_lines", stats["lines_seen"])
     base.bump(con, "historical_backfill_successful_outputs", stats["successful_outputs"])
     base.bump(con, "historical_backfill_candidate_variants_added", stats["candidate_variants_added"])
+    base.bump(con, "historical_backfill_source_counts_reconciled", reconciled)
     con.commit()
     return int(stats["candidate_variants_added"])
 

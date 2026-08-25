@@ -48,6 +48,10 @@ def test_control_loop_preserves_extraction_transport_and_honors_non_extraction_b
     assert "'external_provider_calls':0" in text
     assert "'credentials_read':False" in text
     assert "CLAY_SWARM_RAW_GENERATION_BACKPRESSURE/v1" in text
+    assert "finally:\n if con is not None:\n  con.close()" in text
+    assert "'raw_generation_backpressure':raw_backpressure" in text
+    assert "PENDING_EXTRACTION_PRESERVES_EXTRACTION_TRANSPORT" in text
+    assert "PENDING_EXTRACTION_NEVER_SELF_STOPS_EXTRACTION_TRANSPORT" in text
 
 
 def test_missing_forge_db_pauses_fail_closed(tmp_path: Path):

@@ -10,8 +10,9 @@ second apparent causal/provenance identity.
 This patcher is deliberately successor-dynamic: parallel GO878 work is already
 modifying the same backfill file, so it binds to one exact unsafe semantic anchor
 instead of a whole-file blob. It refuses to guess if that anchor moved or if an
-equivalent guard is already present. It adds no provider/model/network execution and
-mints no runtime, HCU, J-Space, training, or whole-product credit.
+equivalent guard is already present. Digest mismatches are preserved as bounded
+append-only negative evidence before the row is rejected. It adds no provider/model/
+network execution and mints no runtime, HCU, J-Space, training, or whole-product credit.
 """
 from __future__ import annotations
 
@@ -23,7 +24,7 @@ TEST_REL = "tests/test_free_swarm_historical_backfill.py"
 
 UNSAFE = '''    text_sha = str(row.get("text_sha256") or sha_text(text))\n    event_id = source_event_identity(row, source_path, line_no, text_sha)\n    proposals, batches = explicit_deltas(text)\n'''
 
-SAFE = '''    computed_text_sha = sha_text(text)\n    claimed_text_sha = str(row.get("text_sha256") or "").strip().lower()\n    if claimed_text_sha and claimed_text_sha != computed_text_sha:\n        # Receipt-provided hashes are evidence claims, never identity authority.\n        # Reject the complete row before event/chunk/candidate/batch mutation.\n        return {"successful": 0, "candidates_added": 0, "chunks_added": 0, "batches": 0}\n    # Canonicalize the verified/missing claim so every downstream provenance use\n    # receives the digest of the bytes we actually parsed, not caller spelling.\n    row = dict(row)\n    row["text_sha256"] = computed_text_sha\n    text_sha = computed_text_sha\n    event_id = source_event_identity(row, source_path, line_no, text_sha)\n    proposals, batches = explicit_deltas(text)\n'''
+SAFE = '''    computed_text_sha = sha_text(text)\n    claimed_text_sha = str(row.get("text_sha256") or "").strip().lower()\n    if claimed_text_sha and claimed_text_sha != computed_text_sha:\n        # Receipt-provided hashes are evidence claims, never identity authority.\n        # Preserve the exact negative observation, then reject before any event,\n        # chunk, candidate, candidate-source, or batch-progress mutation.\n        con.execute(\n            "CREATE TABLE IF NOT EXISTS backfill_integrity_rejections("\n            "rejection_id TEXT PRIMARY KEY,source_path TEXT NOT NULL,line_no INTEGER NOT NULL,"\n            "reason TEXT NOT NULL,claimed_text_sha256 TEXT NOT NULL,computed_text_sha256 TEXT NOT NULL,"\n            "worker_id TEXT,worker_serial TEXT,observed_at TEXT NOT NULL)"\n        )\n        rejection_id = sha_text(canonical({\n            "source_path": source_path,\n            "line_no": line_no,\n            "reason": "TEXT_SHA256_MISMATCH",\n            "claimed_text_sha256": claimed_text_sha,\n            "computed_text_sha256": computed_text_sha,\n            "worker_id": row.get("worker_id"),\n            "worker_serial": row.get("worker_serial"),\n        }))\n        con.execute(\n            "INSERT OR IGNORE INTO backfill_integrity_rejections("\n            "rejection_id,source_path,line_no,reason,claimed_text_sha256,computed_text_sha256,"\n            "worker_id,worker_serial,observed_at) VALUES(?,?,?,?,?,?,?,?,?)",\n            (rejection_id, source_path, line_no, "TEXT_SHA256_MISMATCH", claimed_text_sha,\n             computed_text_sha, str(row.get("worker_id") or ""),\n             str(row.get("worker_serial") or ""), now()),\n        )\n        return {"successful": 0, "candidates_added": 0, "chunks_added": 0, "batches": 0}\n    # Canonicalize the verified/missing claim so every downstream provenance use\n    # receives the digest of the bytes we actually parsed, not caller spelling.\n    row = dict(row)\n    row["text_sha256"] = computed_text_sha\n    text_sha = computed_text_sha\n    event_id = source_event_identity(row, source_path, line_no, text_sha)\n    proposals, batches = explicit_deltas(text)\n'''
 
 REGRESSION = r'''
 
@@ -41,6 +42,10 @@ def test_worker_text_digest_claim_cannot_mint_false_historical_identity() -> Non
     assert con.execute("SELECT COUNT(*) FROM historical_chunks").fetchone()[0] == 0
     assert con.execute("SELECT COUNT(*) FROM candidates").fetchone()[0] == 0
     assert con.execute("SELECT COUNT(*) FROM candidate_sources").fetchone()[0] == 0
+    rejected = con.execute(\n        "SELECT reason,claimed_text_sha256,computed_text_sha256 FROM backfill_integrity_rejections"\n    ).fetchone()
+    assert rejected["reason"] == "TEXT_SHA256_MISMATCH"
+    assert rejected["claimed_text_sha256"] == "0" * 64
+    assert rejected["computed_text_sha256"] == bf.sha_text(text)
 
 
 def test_worker_text_digest_missing_claim_uses_observed_text_digest() -> None:

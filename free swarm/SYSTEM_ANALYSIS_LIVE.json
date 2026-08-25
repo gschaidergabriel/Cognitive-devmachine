@@ -1,6 +1,6 @@
 {
   "schema": "CLAY_FREE_SWARM_SYSTEM_ANALYSIS/v3",
-  "generated_at": "2026-08-25T17:56:18.106303+00:00",
+  "generated_at": "2026-08-25T18:11:24.224058+00:00",
   "runtime": {
     "supervisor": "STOPPED/QUARANTINED",
     "go_swarm": "RUNNING",
@@ -65,7 +65,7 @@
   },
   "distillery": {
     "schema": "CLAY_RESEARCH_DISTILLERY_STATUS/v1",
-    "generated_at": "2026-08-25T17:55:54.083569+00:00",
+    "generated_at": "2026-08-25T18:11:14.160912+00:00",
     "collected_source_tokens": 11621,
     "accepted_dataset_tokens": 0,
     "dataset_yield": 0.0,
@@ -111,7 +111,7 @@
     "model_output_tokens": 1455,
     "shared_provider_budget": {
       "schema": "CLAY_SHARED_PROVIDER_BUDGET/v1",
-      "generated_at": "2026-08-25T17:55:54.084092+00:00",
+      "generated_at": "2026-08-25T18:11:14.161408+00:00",
       "providers": {
         "arxiv": {
           "max_inflight": 1,
@@ -213,13 +213,13 @@
           "max_inflight": 16,
           "active_leases": 0,
           "min_interval_s": 0.5,
-          "cooldown_seconds": 9.992127656936646,
-          "total_requests": 2535,
+          "cooldown_seconds": 9.992911338806152,
+          "total_requests": 2625,
           "total_success": 134,
-          "total_429": 2400,
+          "total_429": 2490,
           "total_errors": 0,
           "last_status": "429",
-          "last_observed_at": "2026-08-25T17:55:54.076297+00:00"
+          "last_observed_at": "2026-08-25T18:11:14.154337+00:00"
         },
         "semantic_scholar": {
           "max_inflight": 1,
@@ -249,16 +249,16 @@
     },
     "db_bytes": 983040,
     "top_questions": [
-      "Which external causal attribution method (integrated gradients, attention ablation, causal mediation analysis) transfers to model-specific J-Space/GWT with ≤8B params on free-tier inference?",
-      "What are the latest model output validation techniques in similar architectures?",
-      "Can LiteVerify be enhanced with AI-driven incremental validation for higher security?",
-      "Welche konkreten OpenRouter-Provider wurden genutzt und wie ist ihre Kostenklasse?",
-      "How to effectively scale EntityOS/HCU with FREE_ONLY providers?",
-      "What are the limitations of FREE_ONLY providers for EntityOS/HCU development?",
-      "Can the typed entry fabric be extended to automatically fallback to another provider (e.g., groq) when a GATE_TIMEOUT occurs while preserving deterministic causal identity?",
-      "Existieren in der aktuellen Codebasis unerwartete Provider-Endpunkte oder Credential-Pfade?",
-      "Wie skaliert die Admission-Prüfung mit N+1 Providern (z.B. 10 vs. 600)?",
-      "Wie kann die FREE_SWARM_ADMISSION_BOUNDARY_RECEIPT/v1 exakt geprüft werden, um sicherzustellen, dass secret_lookup_count und network_attempt_count tatsächlich null sind, ohne zusätzliche Netzwerk‑ oder Schlüssel‑Lookups?"
+      "Welche Rolle spielt die canonical typed provider admission bei der Verhinderung von unbefugtem Netzwerkzugriff?",
+      "Wie können die Grenzen zwischen logischen Modulen, residenten Modellzahlen und physischer Dekodierkonkurrenz effektiv verwaltet werden?",
+      "How can we ensure that the Free Swarm is not vulnerable to unadmitted external provider traffic?",
+      "What are the implications of the canonical typed provider admission gap on the security of the Free Swarm?",
+      "How can we optimize the execution of the FREE_SWARM_ADMISSION_BOUNDARY_RECEIPT/v1 on the current exact source with secret and socket tripwires?",
+      "Wie kann die genaue Prüfung von `secret_lookup_count` und `network_attempt_count` im Admission‑Receipt automatisiert und in das go‑Contract‑Gate integriert werden?",
+      "How to implement cryptographic verification for Vercel sandbox API responses?",
+      "What is the minimal provider admission evidence required for mixed free/paid workflows?",
+      "What is the minimal jspace_vector dimensionality that preserves causal attribution across model switches without conflating architecture effects with provenance gaps?",
+      "Should FREE_PROVIDER_ADMISSION track disabled_models separately for audit trail, or is removal sufficient?"
     ],
     "candidate_states": {}
   },
@@ -433,6 +433,6 @@
     "measured_total_sonnet5_equivalent_usd": 148.830648,
     "verified_historical_savings_usd": null,
     "nominal_avoided_if_zero_cost_usd": 148.830648,
-    "repo_output_only_proxy_usd": 135.11318
+    "repo_output_only_proxy_usd": 135.2508
   }
 }

@@ -1,0 +1,88 @@
+{
+  "schema": "CLAY_TRIGGER2_GPT56SOL_CONVERGENCE_RECEIPT/v1",
+  "date_local": "2026-08-26",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "supervisor_observed": "8.81",
+  "canonical_main_before_receipt": "7333ad32b43f59a593cd3abb90ca9d7b30495011",
+  "work_scope": [
+    "Trigger-2 checkpoint source-integrity/selection semantics",
+    "Trigger-2 executable-transition authority masking",
+    "coordination/reentry under fast-moving parallel main"
+  ],
+  "completed": [
+    {
+      "issue": 2021,
+      "finding": "Parallel gate-v3 conflated legacy comparison intent with matched-baseline participation even though consumed identity and exact model-visible input identity were unresolved.",
+      "repair_commit": "d7d43699998ea10e536b1e67abaa8a4499799cec",
+      "test_commit": "e3da862cc2d7357fcdc7f0d913950483ae92d395",
+      "source_path": "tools/trigger2_qwen35_checkpoint_candidates_gate_v3.py",
+      "source_git_blob_after_repair": "af0aec6394da7107da6a9888902479eaa31908c9",
+      "test_path": "tests/test_trigger2_qwen35_checkpoint_candidates_gate_v3.py",
+      "test_git_blob_after_repair": "cb94607c8f1f06172dfcbcf742d9d129fb0fcbfc",
+      "semantic_delta": [
+        "legacy selection_eligible is participation intent only",
+        "matched_baseline_participation_eligible remains false while consumed_identity_match is null",
+        "selection_input_identity_complete remains false until exact input ABI is bound",
+        "target normalized weight set preserves model.safetensors, one-shard safetensors, and index instead of inventing one consumed hash",
+        "Qwen3.5 architecture is normalized from config.text_config",
+        "base snapshot explicitly distinguishes no standalone chat-template file from unresolved runtime-resolved template identity"
+      ],
+      "selection_ready": false,
+      "checkpoint_winner": null
+    },
+    {
+      "issue": 2022,
+      "finding": "Executable-transition pilot still placed deterministic scheduler/admission/lease/digest fields in the supervised target despite model_visible_fields excluding those inputs.",
+      "adapter_commit": "8de55437359484935c235b52fa0c2585d745ae3d",
+      "test_commit": "212853327e235f69eb0724e9f4f15baa7b8874d0",
+      "source_path": "tools/trigger2_executable_transition_authority_mask_v1.py",
+      "source_git_blob": "dd2d08b97c8da550551c6fe295b93f350114eb9c",
+      "test_path": "tests/test_trigger2_executable_transition_authority_mask_v1.py",
+      "test_git_blob": "da7e43b6e54b0b793d02da468e99af6c61767176",
+      "semantic_delta": [
+        "bound oracle envelope is model input, not predicted authority",
+        "model target contains learned cognitive body only",
+        "result/reentry IDs and digests are deterministic post-wrap",
+        "lease/admission/process/runtime authority keys are forbidden in model target recursively",
+        "rows remain candidate eval only and training_eligible=false"
+      ]
+    }
+  ],
+  "observed_execution": {
+    "github_commit_status_checks_for_e3da862": [],
+    "github_workflow_runs_for_e3da862": [],
+    "repository_integration_test_execution": "UNOBSERVED",
+    "private_local_syntax_compile": "PASS_FOR_4_GENERATED_SOURCE_TEXTS",
+    "private_local_mock_adapter_audit": "PASS_SINGLE_SYNTHETIC_ROW_ONLY",
+    "evidence_boundary": "Private local syntax/mock checks are not repository-bound runtime acceptance and mint no project runtime/training credit."
+  },
+  "current_execution_coordination": {
+    "freeswarm_emergency_stop_observed": true,
+    "current_grid10_pin_commit": "7333ad32b43f59a593cd3abb90ca9d7b30495011",
+    "grid10_pin_status": "PINNED_SOURCE_READY_AUTORUN_BLOCKED_BY_CURRENT_FREESWARM_EMERGENCY_STOP",
+    "autonomous_execution_requested_by_this_organ": false,
+    "reason": "Do not route new execution through a hard-disabled supervisor; preserve exact source and wait for separately admitted executor/new authority."
+  },
+  "credits": {
+    "accepted_dataset_tokens": 0,
+    "checkpoint_selection_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0,
+    "training_credit": 0
+  },
+  "unresolved": [
+    "#2021 exact loader-consumed file/options attestation",
+    "#2021 exact model-visible input identity: resolved template/render/input_ids/attention/generation bindings",
+    "#2021 observed repository-bound regression execution",
+    "#2022 integrate authority-masked view with per-process semantic transition relation validators",
+    "#2022 add self-consistent-but-semantically-wrong target+state_after mutations",
+    "physical GRID10 v3 exact free VPS execution remains blocked by current FreeSwarm emergency stop"
+  ],
+  "next_exact_action": "Without using the disabled FreeSwarm executor, keep checkpoint selection closed; next source discriminator is per-process semantic transition relation validation on the authority-masked executable-transition view, while #2021 awaits exact consumed/input identity attestation."
+}

@@ -2,9 +2,17 @@ from __future__ import annotations
 
 import unittest
 
+from tools.run_zero_entityos_variable_grid_fixture_v1 import (
+    WorkIdentity,
+    claude_reentry_fixture,
+)
 from tools.zero_entityos_reentry_evidence_gate_v1 import (
     ReentryEvidenceError,
     normalize_reentry_evidence,
+)
+from tools.zero_entityos_variable_grid_fixture_v1 import (
+    RuntimeConfig,
+    VariableGridFixture,
 )
 
 
@@ -108,6 +116,49 @@ class GateTests(unittest.TestCase):
                 source_metadata={"runtime_credit": "OBSERVED_INTERFACE"},
                 measurement=bad,
             )
+
+    def test_current_class_fixture_stub_is_downgraded(self):
+        census = {
+            "schema": "ZERO_ENTITYOS_COGNITIVE_PROCESS_CENSUS/v1",
+            "processes": [
+                {
+                    "id": "ZECP14",
+                    "implementation_class": "EXTERNAL_STRONG_MODEL_BRIDGE",
+                }
+            ],
+        }
+        abi = {"schema": "COGNITIVE_PROCESS_ABI/v1"}
+        rt = VariableGridFixture(census, abi, RuntimeConfig(requested_n=1, available_n=1))
+        try:
+            admission = rt.admit_task({"task": "reentry-gate-integration"})
+            raw = rt.stub_claude_roundtrip(
+                admission, "work-integration-1", 7, ["db:fixture:state"]
+            )
+            self.assertEqual("TRUE", raw["reentry"]["observed_downstream_change"])
+            got = normalize_reentry_evidence(
+                raw["reentry"], source_metadata=raw["result"]
+            )
+            self.assertEqual("UNKNOWN", got["observed_downstream_change"])
+            self.assertEqual(0, got["causal_credit"])
+        finally:
+            rt.close()
+
+    def test_current_runner_synthetic_fixture_is_downgraded(self):
+        work = WorkIdentity(
+            causal_event_id="fixture-event-001",
+            admission_id="fixture-admission-001",
+            generation=1,
+            work_id="fixture-work-001",
+            process_id="ZECP06",
+        )
+        raw = claude_reentry_fixture(work, {"candidate": "A"})
+        self.assertEqual("TRUE", raw["reentry"]["observed_downstream_change"])
+        got = normalize_reentry_evidence(
+            raw["reentry"], source_metadata=raw["return"]
+        )
+        self.assertEqual("UNKNOWN", got["observed_downstream_change"])
+        self.assertEqual(0, got["causal_credit"])
+        self.assertEqual(0, got["global_jspace_causal_credit"])
 
 
 if __name__ == "__main__":

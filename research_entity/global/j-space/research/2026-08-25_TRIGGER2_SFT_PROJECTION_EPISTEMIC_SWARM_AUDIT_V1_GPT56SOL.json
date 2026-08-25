@@ -1,0 +1,139 @@
+{
+  "architecture": "HCU",
+  "authority": {
+    "dataset_commit": "7790da50d0a9ae26572c4fa34ca58bcf6f2a5bb5",
+    "mode": "FREE_ONLY",
+    "paid_provider_used": false,
+    "source_gate_reviewed": {
+      "git_blob_sha": "e4d6f90aeca6262564544fe90f0dfeada61ad56f",
+      "introduced_at": "224584165674ef483c1ee42e4d4a7aec4519d90a",
+      "path": "tools/trigger2_sft_projection_gate_v1.py"
+    },
+    "source_test_reviewed": {
+      "git_blob_sha": "f0145368c73426fc93cad1c4832c1fab23621243",
+      "observed_at": "7790da50d0a9ae26572c4fa34ca58bcf6f2a5bb5",
+      "path": "tests/test_trigger2_sft_projection_gate_v1.py"
+    },
+    "supervisor_epoch": "8.78",
+    "training_executed": false,
+    "unusual_experiment": "NOT_USED_SOURCE_AND_DATASET_REVIEW_ONLY"
+  },
+  "credits": {
+    "accepted_dataset_tokens": 0,
+    "candidate_training_rows": 18,
+    "full_hcu_runtime_credit": 0,
+    "qwen35_jspace_runtime_credit": 0,
+    "research_design_delta": 1,
+    "training_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0
+  },
+  "dataset": {
+    "canonical_truth_allowed_rows": 0,
+    "direct_effect_authority_rows": 0,
+    "families": 9,
+    "family_split_crossings": 0,
+    "path": "research_entity/global/j-space/research/trigger2_sft_projection_epistemic_seed_v1.jsonl",
+    "provenance_ancestry_split_crossings": 0,
+    "rows": 18,
+    "selected_using_holdout_rows": 0,
+    "sha256": "e8e84ff38dc579bd97cf96f44e3cf1be8c88486e488480290ecdcee4ad2e5435",
+    "split_counts": {
+      "HOLDOUT": 6,
+      "TRAIN": 8,
+      "VALIDATION": 4
+    },
+    "status": "CANDIDATE_NOT_ADMITTED"
+  },
+  "date": "2026-08-25",
+  "hypothesis": {
+    "counterhypothesis": "The projection stage may intentionally be thin because a retained upstream verifier guarantees every input; in that architecture local recomputation would duplicate authority and add complexity.",
+    "discriminator": "Resolve and bind the single retained upstream materialization verifier. Prove it recomputes exact ABI-manifest membership, tokenizer token IDs, symbol partition, counterbalance and receipt hashes; then demonstrate the projection stage consumes only receipts from that verifier. If no such reachable verifier exists, v1 is not fail-closed for untrusted/materialized input.",
+    "primary": "The Qwen3.5-0.8B specialization should explicitly learn a VERIFY_BEFORE_PROJECT invariant: model-visible training projection is downstream of exact materialization evidence and must not treat hash-shaped strings, booleans, IDs, or self-minted receipts as proof."
+  },
+  "new_source_observations": [
+    {
+      "finding": "The v1 projection gate validates four evidence identities only as 64-hex strings; it does not recompute the digests over referenced artifacts.",
+      "id": "OBS-PROJ-01",
+      "reality_level": "R0_SOURCE_OBSERVED"
+    },
+    {
+      "finding": "The v1 projection gate consumes *_verified booleans as input assertions and does not independently derive tokenizer single-token status, symbol-partition visibility, real-atom counterbalance, or rejected-atom exclusion.",
+      "id": "OBS-PROJ-02",
+      "reality_level": "R0_SOURCE_OBSERVED"
+    },
+    {
+      "finding": "The v1 projection gate checks only triplet injectivity, target membership in that triplet, and literal exclusion of 'or'; it does not load the exact 46-atom ABI manifest to prove accepted-atom membership.",
+      "id": "OBS-PROJ-03",
+      "reality_level": "R0_SOURCE_OBSERVED"
+    },
+    {
+      "finding": "The current unit test intentionally expects PASS with arbitrary atom strings xu/ze/qi and every required hash set to the same synthetic 64-character value. This confirms that v1 is a projection/visibility guard rather than an independent materialization verifier.",
+      "id": "OBS-PROJ-04",
+      "reality_level": "R0_SOURCE_OBSERVED"
+    },
+    {
+      "finding": "The tool explicitly returns canonical_dataset_admission=false, accepted_dataset_tokens_minted=0, and training_credit_minted=false, preserving a correct no-credit boundary even on projection PASS.",
+      "id": "OBS-PROJ-05",
+      "reality_level": "R0_SOURCE_OBSERVED"
+    }
+  ],
+  "next_exact_action": "Discover the retained exact materialization verifier/receipt producer, or implement one only after its canonical ABI/tokenizer/partition receipt schemas are resolved. Then run it on a small real 46-atom sample, cross-bind the resulting receipt into projection v1/v2, and only afterward attempt Forge->Distillery positive-yield admission.",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "persistent_entity": "Clay",
+  "product": "EntityOS",
+  "program": "ENTITYOS_HCU",
+  "research_return": {
+    "architecture_implication": "Preserve exactly one upstream materialization-evidence authority and keep the projection tool a pure visibility/filter boundary. Do not let projection receipts recursively authenticate their own unchecked inputs.",
+    "companion_invariant": "PROJECTED_FOR_MODEL_VISIBILITY != CANONICALLY_ADMITTED_FOR_TRAINING",
+    "harness_implication_for_future_go": "A future Xeno harness/trainer should bind row -> generator -> exact ABI manifest bytes -> atom membership -> exact tokenizer identity/token IDs -> split-symbol manifest -> materialization receipt -> projection -> Forge/Distillery admission -> training/checkpoint evaluation as separate, inspectable links.",
+    "new_invariant": "CLAIM_SHAPED_METADATA + TRUE_FLAGS != VERIFIED_MATERIALIZATION"
+  },
+  "schema": "TRIGGER2_SFT_PROJECTION_EPISTEMIC_SWARM_AUDIT/v1",
+  "swarm_review": [
+    {
+      "result": "Reviewed exact current v1 gate source and its tests; separated visibility behavior from upstream materialization verification.",
+      "role": "SOURCE_PATH_REVIEWER",
+      "verdict": "PASS_WITH_SCOPE"
+    },
+    {
+      "result": "Hash-shape fields and self-declared verification booleans can satisfy v1 without the gate independently observing the referenced manifest/tokenizer/partition/receipt bytes.",
+      "role": "ADVERSARIAL_SELF_AUTHENTICATION_REVIEWER",
+      "verdict": "GAP_FOUND"
+    },
+    {
+      "result": "Arbitrary distinct symbols other than literal 'or' can pass the local triplet predicate; exact 46-atom membership is not established here.",
+      "role": "ABI_MEMBERSHIP_REVIEWER",
+      "verdict": "GAP_FOUND"
+    },
+    {
+      "result": "Nonempty counterfactual_family_id and a partition hash claim do not establish realized family topology or split-symbol disjointness; those remain upstream/family-level obligations.",
+      "role": "SPLIT_AND_COUNTERFACTUAL_REVIEWER",
+      "verdict": "METHOD_GAP"
+    },
+    {
+      "result": "v1 correctly refuses canonical dataset/training credit; the discovered gap concerns evidence authentication before model-visible projection, not credit inflation inside the tool.",
+      "role": "CREDIT_BOUNDARY_REVIEWER",
+      "verdict": "PASS"
+    },
+    {
+      "result": "Nine new families are confined to one split each; provenance ancestry IDs do not cross splits; holdout rows were authored as separate families and were not used to tune train answers.",
+      "role": "LEAKAGE_AND_SPLIT_REVIEWER",
+      "verdict": "PASS_FOR_NEW_SEED"
+    },
+    {
+      "result": "Keep the 18-row seed as candidate supervision for evidence-chain reasoning. Do not materialize accepted tokens from it until canonical admission.",
+      "role": "FINAL_INTEGRATOR",
+      "verdict": "ACCEPT_AS_NONCANONICAL_TRAINING_RESEARCH_DELTA"
+    }
+  ],
+  "trigger": "triggerwort 2",
+  "validation": {
+    "candidate_schema_reconstruction": "PASS",
+    "family_split_crossings": 0,
+    "local_static_json_validation": "PASS",
+    "official_repo_candidate_gate_runtime": "NOT_RUN",
+    "official_repo_family_split_linter_runtime": "NOT_RUN",
+    "provenance_ancestry_split_crossings": 0,
+    "reason": "This cycle used connected GitHub source inspection and deterministic local JSON/schema checks; no admitted EntityOS/HCU runtime execution was performed."
+  }
+}

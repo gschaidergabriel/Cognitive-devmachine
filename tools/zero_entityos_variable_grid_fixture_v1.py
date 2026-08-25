@@ -252,7 +252,12 @@ class VariableGridFixture:
         return candidate_id
 
     def stub_claude_roundtrip(self, admission: dict, work_id: str, workspace_epoch: int, state_refs: Iterable[str]) -> dict:
-        """Deterministic bridge fixture. This is explicitly NOT a Claude Code invocation."""
+        """Deterministic bridge fixture. This is explicitly NOT a Claude Code invocation.
+
+        Because no Claude Code call or downstream comparator executes here, the re-entry
+        record must preserve downstream change as UNKNOWN. Presence of a stubbed return
+        is transport-shape evidence only and can never itself become causal J-Space evidence.
+        """
         bridge_request = {
             "schema": "CLAUDE_CODE_BRIDGE_PACKET/v1",
             "bridge_id": "bridge-" + digest({"work_id": work_id, "direction": "GRID_TO_CLAUDE"})[:20],
@@ -287,7 +292,7 @@ class VariableGridFixture:
             "to_workspace_epoch": workspace_epoch + 1,
             "reentry_payload_ref": bridge_result["payload_ref"],
             "reentry_digest": bridge_result["payload_digest"],
-            "observed_downstream_change": "TRUE",
+            "observed_downstream_change": "UNKNOWN",
         }
         reentry_id = "re-" + digest(reentry)[:24]
         self.con.execute(
@@ -296,7 +301,7 @@ class VariableGridFixture:
                VALUES(?,?,?,?,?,?,?,?)""",
             (
                 reentry_id, source_result_id, "ZECP14", admission["causal_event_id"],
-                workspace_epoch, workspace_epoch + 1, bridge_result["payload_digest"], "TRUE",
+                workspace_epoch, workspace_epoch + 1, bridge_result["payload_digest"], "UNKNOWN",
             ),
         )
         self.con.commit()

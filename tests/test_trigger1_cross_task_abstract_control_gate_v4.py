@@ -5,6 +5,32 @@ from tools import trigger1_cross_task_abstract_control_gate_v3 as v3
 from tools import trigger1_cross_task_abstract_control_gate_v4 as g
 
 
+SHA_A = "a" * 64
+SHA_B = "b" * 64
+
+
+def nuisance_binding(rank=2):
+    axes = [
+        {"axis_id": f"q{i}", "vector_sha256": SHA_A if i % 2 == 0 else SHA_B}
+        for i in range(rank)
+    ]
+    core = {
+        "schema": v3.NUISANCE_SCHEMA,
+        "producer_schema": v3.EXPECTED_NUISANCE_PRODUCER_SCHEMA,
+        "fit_split": "CALIBRATION",
+        "frozen_before_holdout": True,
+        "basis_method": v3.EXPECTED_NUISANCE_BASIS_METHOD,
+        "basis_order": "REQUIRED_NUISANCE_FAMILIES_THEN_SOURCE_INDEX",
+        "rank": rank,
+        "axes": axes,
+        "v1_result_sha256": SHA_A,
+        "nuisance_source_receipt_sha256": SHA_B,
+        "basis_max_abs_gram_error": 0.0,
+        "basis_max_input_row_span_residual_l2": 0.0,
+    }
+    return {**core, "receipt_sha256": v3._canonical_sha(core)}
+
+
 def valid():
     basis = []
     vecs = [[1.0, 0.1, 0.0], [1.0, 0.08, 0.02], [1.0, 0.12, -0.01]]
@@ -51,7 +77,7 @@ def valid():
                             {
                                 **common,
                                 "control": "NUISANCE",
-                                "nuisance_axis_id": "n0",
+                                "nuisance_axis_id": "q0",
                                 "target_margin": -0.05,
                             }
                         )
@@ -59,7 +85,7 @@ def valid():
                             {
                                 **common,
                                 "control": "NUISANCE",
-                                "nuisance_axis_id": "n1",
+                                "nuisance_axis_id": "q1",
                                 "target_margin": 0.0,
                             }
                         )
@@ -117,17 +143,7 @@ def valid():
             "loo_cosine_q95": 0.2,
             "derived_from_preregistered_class_assignment_permutations": True,
         },
-        "nuisance_subspace": {
-            "schema": g.NUISANCE_SCHEMA,
-            "fit_split": "CALIBRATION",
-            "frozen_before_holdout": True,
-            "receipt_sha256": "a" * 64,
-            "rank": 2,
-            "axes": [
-                {"axis_id": "n0", "vector_sha256": "b" * 64},
-                {"axis_id": "n1", "vector_sha256": "c" * 64},
-            ],
-        },
+        "nuisance_subspace": nuisance_binding(2),
         "holdout_causal_rows": causal,
         "off_target_rows": off,
     }
@@ -210,16 +226,16 @@ class GateV4Tests(unittest.TestCase):
                 and row["requested_code"] == "C"
                 and row["probe_polarity"] == "NEGATED"
                 and row["replicate_id"] == "r1"
-                and row.get("nuisance_axis_id") == "n0"
+                and row.get("nuisance_axis_id") == "q0"
             ):
                 row["proof_topology_id"] = "hidden-axis-topology"
                 break
-        # V3 delegates only the worst nuisance margin (n1 here), so n0's topology
+        # V3 delegates only the worst nuisance margin (q1 here), so q0's topology
         # mismatch does not survive into its v2 comparison.
         self.assertTrue(v3.adjudicate(as_v3(x))["cross_task_abstract_native_control_pass"])
         out = g.adjudicate(x)
         self.assertFalse(out["cross_task_abstract_native_control_pass"])
-        self.assertTrue(any("NUISANCE@n0" in f for f in out["failures"]))
+        self.assertTrue(any("NUISANCE@q0" in f for f in out["failures"]))
 
 
 if __name__ == "__main__":

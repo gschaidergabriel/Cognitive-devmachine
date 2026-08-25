@@ -1,0 +1,169 @@
+{
+  "schema": "CLAY_FORSCHUNGSRUN_2_PROSPECTIVE_POSTHOC_SOURCE_BINDING/v1",
+  "date": "2026-08-25",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "user_trigger": "forschungsrun 2",
+  "persistent_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority_epoch_observed": "8.78",
+  "execution_mode": "FREE_ONLY",
+  "canonical_main_observed_before_branch": "aa9607f0d4d1b394a720d693a1656f81876bccf0",
+  "scope": "PROSPECTIVE_DATA_BLIND_POST_RUNTIME_ADJUDICATION_AND_COMPLETE_FROZEN_SOURCE_BINDING_FOR_ALREADY_QUEUED_STRUCTURAL_NATIVE_QWEN3_0_6B_RUN",
+  "execution": {
+    "new_model_intervention_executed": false,
+    "duplicate_dispatch_created": false,
+    "paid_or_external_provider_used": false,
+    "queued_structural_run_id": 32810213066,
+    "queued_structural_run_head": "77f30f11b0102a2f1fd279edfafccf2bfcb22679",
+    "queued_structural_run_status_observed": "queued",
+    "queued_job_id": 97688005492,
+    "scientific_negative_inferred_from_queue": false
+  },
+  "material_findings": [
+    {
+      "id": "R2_B11_FROZEN_SOURCE_AUDIT_OMITTED_NATIVE_HARNESSES",
+      "classification": "PROVENANCE_CRITICAL_SOURCE_BINDING_GAP",
+      "statement": "The queued workflow compiles two native C++ harnesses from the checkout used at execution time, but the prior Run-2 frozen-source drift audit enumerated only the case generator, nuisance residualizer, structural executor and workflow. The layer-capture and cvec-logit harness blob identities were not included in that frozen-source set.",
+      "implication": "A future edit to either harness before the queued self-hosted job starts could alter measurement or intervention behavior while the narrower frozen-source audit still reported its enumerated files unchanged. The exact runtime source_head must therefore be checked against the frozen blob identities of both native harnesses in addition to generator, residualizer, executor and workflow.",
+      "observed_current_harness_blobs": {
+        "tools/trigger1_native_llamacpp_layer_capture.cpp": "bfe014a67e6c5420c1e20a94f2da37616dcf94ed",
+        "tools/trigger1_native_llamacpp_cvec_logits.cpp": "c9f649b8a803ff999b07e9c40c90f5f92e08c86d"
+      },
+      "current_drift_observation": "No harness path appears in the dispatch-head-to-aa9607f0 compare file set, so this is a prospective provenance closure, not evidence that harness drift has already occurred."
+    },
+    {
+      "id": "R2_B12_EXECUTOR_LOCAL_PASS_CAN_BE_STRICTLY_REANALYZED_WITHOUT_RERUN",
+      "classification": "EVIDENCE_SALVAGE_AND_PRECOMMITMENT_OPPORTUNITY",
+      "statement": "The persisted runtime artifact is designed to include the raw holdout logits, raw downstream captures, structural case bundle and residualized layer-24 vectors. Those bytes are sufficient to re-derive per-target behavioral and downstream statistics independently of the executor's weaker aggregate PASS boolean.",
+      "implication": "Before any held-out result is observed, a separate deterministic adjudicator can prospectively freeze stricter rules: every target must show positive matched effect, negative sign-flip reversal, target-specific diagonal advantage, and dominance over matched controls; downstream target coordinates must show the same bidirectional and specificity pattern. This cannot repair missing task families or missing controls, but it prevents a pooled local PASS from being mistaken for stronger evidence."
+    }
+  ],
+  "prospective_adjudicator": {
+    "path": "tools/trigger1_structural_native_posthoc_gate_v1.py",
+    "schema": "CLAY_TRIGGER1_STRUCTURAL_NATIVE_POSTHOC_GATE/v1",
+    "data_blind_precommitment": "The gate is committed while workflow 32810213066 remains queued and before its held-out runtime result is observed by this organ.",
+    "source_binding": {
+      "tools/trigger1_structural_label_free_cases.py": "66bb2f5cfccad602ee9c759961a369ab2c61be41",
+      "tools/trigger1_nuisance_residualize.py": "aeec098dfa26b93d3edc376ec69fd846220184d7",
+      "tools/trigger1_structural_native_abstract_execute.py": "0711e07609c2f402db9762cf9495c31cae7888e8",
+      "tools/trigger1_native_llamacpp_layer_capture.cpp": "bfe014a67e6c5420c1e20a94f2da37616dcf94ed",
+      "tools/trigger1_native_llamacpp_cvec_logits.cpp": "c9f649b8a803ff999b07e9c40c90f5f92e08c86d",
+      ".github/workflows/clay-trigger1-structural-native-abstract-run.yml": "25f24c8dd99790390b5c31e44b692ae18230a596"
+    },
+    "runtime_identity_binding": {
+      "model": "Qwen/Qwen3-0.6B-GGUF:Q8_0",
+      "gguf_sha256": "9465e63a22add5354d9bb4b99e90117043c7124007664907259bd16d043bb031",
+      "llama_cpp_commit": "bb4caa7540188872173c44d161602d9271386413",
+      "native_api": "llama_set_adapter_cvec",
+      "native_token_scope": "ALL_PROMPT_TOKENS",
+      "injection_layer": 20,
+      "primary_layer_input": 21,
+      "downstream_layer_input": 24
+    },
+    "raw_artifact_binding": [
+      "manifest file sha256/byte-size verification",
+      "executor canonical result_sha256 recomputation",
+      "case-bundle canonical sha256 recomputation and exact 3x3 target x code holdout universe",
+      "lexical-disjointness assertion",
+      "raw holdout logit reanalysis",
+      "raw holdout downstream-capture reanalysis"
+    ],
+    "strict_behavioral_rule_per_target": [
+      "matched mean target-code margin delta > 0",
+      "every matched holdout case target-code margin delta > 0",
+      "sign-flip mean target-code margin delta < 0",
+      "every sign-flip holdout case target-code margin delta < 0",
+      "matched mean delta exceeds the mean absolute effect of each null/orthogonal/permuted/nuisance control family",
+      "target-specific diagonal advantage over off-target semantic interventions > 0"
+    ],
+    "strict_downstream_rule_per_target": [
+      "matched target-coordinate mean > 0",
+      "every matched downstream target-coordinate effect > 0",
+      "sign-flip target-coordinate mean < 0",
+      "every sign-flip downstream target-coordinate effect < 0",
+      "matched target-coordinate mean exceeds both matched off-axis absolute mean and control target-coordinate absolute mean"
+    ],
+    "bounded_candidate_rule": "All artifact/source/runtime identity checks and all strict behavioral/downstream rules must pass, and the frozen executor itself must have emitted PASS_ABSTRACT_NATIVE_DISCRIMINATOR.",
+    "nonpromotion": [
+      "canonical_semantics_promotion remains false",
+      "J-Space model runtime credit remains 0",
+      "whole HCU credit remains 0",
+      "whole EntityOS/HCU credit remains 0",
+      "training credit remains 0"
+    ]
+  },
+  "gates_this_adjudicator_deliberately_cannot_close": [
+    "Run-1 fixed-gain-32 design because the queued executor calibration-selects gain",
+    "preregistered geometric coherence and class-assignment permutation-null gate",
+    "off-target regression task family",
+    "cross-task-family abstraction beyond the single F/R/Q synthetic grammar",
+    "within-cell replication because the queued holdout has one case per target x code cell",
+    "rank-complete nuisance-subspace causal coverage when nuisance rank > 1",
+    "v12 six-family abstract challenge/runtime binding",
+    "global workspace/J-Space coordination beyond this bounded component"
+  ],
+  "counterhypotheses": [
+    {
+      "id": "H0_LOCAL_PASS_IS_POOLED_ARTIFACT",
+      "statement": "A positive aggregate local PASS may be driven by only a subset of semantic targets or cases.",
+      "falsifier": "The prospective posthoc gate requires every target and every matched case to move in the preregistered positive direction and every sign-flip case to reverse."
+    },
+    {
+      "id": "H0_SOURCE_DRIFT_IN_UNBOUND_NATIVE_HARNESS",
+      "statement": "A future run could execute changed native measurement/intervention harness code despite the narrower frozen-source audit remaining green.",
+      "falsifier": "Resolve runtime source_head in Git and require exact frozen Git blob IDs for both native harnesses plus generator, residualizer, executor and workflow."
+    },
+    {
+      "id": "H0_STRICT_POSTHOC_GATE_OVERSTATES_GENERALITY",
+      "statement": "Even a strict per-target bidirectional pass within one synthetic grammar is still task-specific steering rather than global semantic J-Space.",
+      "falsifier": "Not falsified by this run; the gate hard-codes the claim boundary and leaves cross-task-family, geometry, off-target, v12 and global-workspace promotion blockers explicit."
+    }
+  ],
+  "external_research_context": [
+    {
+      "source": "Causal Abstraction: A Theoretical Foundation for Mechanistic Interpretability",
+      "arxiv": "2301.04709",
+      "use": "Contextual support for treating activation steering as an intervention whose interpretability claim depends on causal faithfulness rather than correlation alone."
+    },
+    {
+      "source": "Interpretability at Scale: Identifying Causal Mechanisms in Alpaca",
+      "arxiv": "2305.08809",
+      "use": "Contextual support for requiring causal alignments to generalize across unseen inputs/instructions rather than accepting one narrow task family."
+    },
+    {
+      "source": "Activation Scaling for Steering and Interpreting Language Models",
+      "arxiv": "2410.04962",
+      "use": "Contextual support for evaluating interventions jointly on effectiveness and faithfulness/specificity, including reversal rather than only one-direction gain."
+    },
+    {
+      "source": "Beyond Single Concept Vector: Modeling Concept Subspace in LLMs with Gaussian Distribution",
+      "arxiv": "2410.00153",
+      "use": "Contextual support for treating single-vector concept estimates as potentially data/training-sensitive and motivating subspace robustness."
+    },
+    {
+      "source": "Enhancing Cross-task Transfer of Large Language Models via Activation Steering",
+      "arxiv": "2507.13236",
+      "use": "Contextual evidence that cross-task activation transfer is empirically testable and should be evaluated on unseen tasks rather than inferred from within-task steering."
+    },
+    {
+      "source": "Cross-Architecture Steering Transfer in Language Models: A Systematic Empirical Study",
+      "arxiv": "2608.05164",
+      "use": "Contextual warning that functional steering transfer degrades at very small model scales, strengthening the need for exact Qwen3-0.6B model-specific validation."
+    }
+  ],
+  "local_validation": {
+    "python_compile": "PASS",
+    "unit_tests": "4/4 PASS",
+    "tests_cover": [
+      "strict behavioral pass under fully bidirectional synthetic fixture",
+      "rejection of non-reversing sign flip",
+      "strict downstream pass and sign reversal",
+      "canonical result hash and runtime-scope binding"
+    ],
+    "evidence_scope": "LOCAL_DETERMINISTIC_SOURCE_TEST_ONLY_NOT_MODEL_RUNTIME_EVIDENCE"
+  },
+  "research_delta": "Forschungsrun 2 adds a prospective data-blind salvage gate for the already queued structural native experiment and closes an omitted provenance boundary: both native C++ harness blob identities are part of the scientific source and must be frozen/bound. The gate independently re-derives per-target bidirectional behavior and downstream transport from raw persisted bytes, while explicitly refusing semantic/J-Space promotion and preserving all missing cross-task, geometry, off-target, replication, nuisance-rank and v12 gates.",
+  "next_exact_action": "Keep workflow 32810213066 as the single queued structural execution. Restore the existing free self-hosted runner slot without a duplicate dispatch. When the exact runtime artifact is persisted, run the prospective posthoc gate against its committed runtime directory and source_head; preserve FAIL as counterevidence and treat PASS only as bounded strict structural-native component evidence."
+}

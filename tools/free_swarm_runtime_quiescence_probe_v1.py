@@ -138,7 +138,12 @@ def provider_usage_snapshot(path: Path) -> dict[str, Any]:
     }
 
 
-def provider_budget_snapshot(path: Path, *, now: float | None = None) -> dict[str, Any]:
+def provider_budget_snapshot(
+    path: Path,
+    *,
+    now: float | None = None,
+    providers: Iterable[str] | None = None,
+) -> dict[str, Any]:
     """Read the shared quota gate directly without mutating/expiring any rows.
 
     ``total_requests`` is incremented by free_swarm_quota.acquire() before a provider
@@ -150,6 +155,8 @@ def provider_budget_snapshot(path: Path, *, now: float | None = None) -> dict[st
     if not path.exists() or not path.is_file():
         raise ProbeError(f"shared provider budget DB unavailable: {path}")
     current = time.time() if now is None else float(now)
+    provider_filter = tuple(sorted({str(x) for x in providers or () if str(x)}))
+    provider_filter_set = set(provider_filter)
     try:
         con = sqlite3.connect(f"file:{path}?mode=ro", uri=True, timeout=2)
         try:
@@ -159,8 +166,11 @@ def provider_budget_snapshot(path: Path, *, now: float | None = None) -> dict[st
             ).fetchall()
             if not rows:
                 raise ProbeError("shared provider budget DB has no provider_state rows")
-            providers: dict[str, dict[str, int]] = {}
+            provider_counters: dict[str, dict[str, int]] = {}
             for provider, requests, success, rate, errors in rows:
+                provider_name = str(provider)
+                if provider_filter_set and provider_name not in provider_filter_set:
+                    continue
                 values = {
                     "total_requests": requests,
                     "total_success": success,
@@ -169,7 +179,9 @@ def provider_budget_snapshot(path: Path, *, now: float | None = None) -> dict[st
                 }
                 if any(not isinstance(v, int) or v < 0 for v in values.values()):
                     raise ProbeError(f"shared provider budget has invalid counters for {provider!r}")
-                providers[str(provider)] = values
+                provider_counters[provider_name] = values
+            if provider_filter_set and not provider_counters:
+                raise ProbeError("shared provider budget DB has no rows for canonical provider set")
             lease_rows = con.execute(
                 "SELECT lease_id,provider,owner,acquired_at,expires_at "
                 "FROM leases WHERE expires_at > ? ORDER BY provider,lease_id",
@@ -182,7 +194,7 @@ def provider_budget_snapshot(path: Path, *, now: float | None = None) -> dict[st
     except Exception as exc:
         raise ProbeError(f"cannot read shared provider budget DB {path}: {exc}") from exc
 
-    counters = {"providers": providers}
+    counters = {"providers": provider_counters}
     unexpired = [
         {
             "lease_id": str(lease_id),
@@ -192,9 +204,11 @@ def provider_budget_snapshot(path: Path, *, now: float | None = None) -> dict[st
             "expires_at": float(expires_at),
         }
         for lease_id, provider, owner, acquired_at, expires_at in lease_rows
+        if not provider_filter_set or str(provider) in provider_filter_set
     ]
     return {
         "path": str(path),
+        "provider_filter": list(provider_filter),
         "counter_sha256": canonical_sha256(counters),
         "counters": counters,
         "unexpired_leases": unexpired,
@@ -311,7 +325,10 @@ def build_receipt(args: argparse.Namespace) -> dict[str, Any]:
     admission = admission_state(admission_path)
     start_wall = time.time()
     usage_before = provider_usage_snapshot(metrics_path)
-    budget_before = provider_budget_snapshot(provider_budget_db, now=start_wall)
+    canonical_provider_names = tuple(sorted(admission.get("provider_admitted", {}).keys()))
+    budget_before = provider_budget_snapshot(
+        provider_budget_db, now=start_wall, providers=canonical_provider_names
+    )
     samples: list[dict[str, Any]] = []
 
     end_at = time.monotonic() + args.window_seconds
@@ -328,7 +345,9 @@ def build_receipt(args: argparse.Namespace) -> dict[str, Any]:
 
     usage_after = provider_usage_snapshot(metrics_path)
     end_wall = time.time()
-    budget_after = provider_budget_snapshot(provider_budget_db, now=end_wall)
+    budget_after = provider_budget_snapshot(
+        provider_budget_db, now=end_wall, providers=canonical_provider_names
+    )
     decision = evaluate(
         admission,
         usage_before,

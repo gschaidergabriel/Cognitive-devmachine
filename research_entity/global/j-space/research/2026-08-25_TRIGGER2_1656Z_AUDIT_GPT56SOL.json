@@ -1,0 +1,186 @@
+{
+  "schema": "CLAY_TRIGGER2_TRAINING_AUDIT_DELTA/v1",
+  "created_utc": "2026-08-25T16:56:00Z",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "trigger": "triggerwort 2",
+  "repository": "gschaidergabriel/clay-global-research-entity",
+  "observed_main_before_write": "2b1a80c03ead467e7ad360924c88fe117f6ae1f9",
+  "authority_epoch": "8.78",
+  "program": "ENTITYOS_HCU",
+  "mode": "FREE_ONLY",
+  "purpose": "Audit the newest training, executable, model and lineage evidence before any new Trigger-2 data generation; classify lifecycle state; freeze unsafe positive-row production; and specify the next evidence-bearing closure gates.",
+  "decision": "NO_NEW_POSITIVE_TRAINING_ROWS_THIS_CYCLE",
+  "decision_reason": "Executable counterevidence at 90b7b7735f078a6cc10438b5d3d8f92f98df8db7 proves that the current OBSERVED evidence validator accepts a caller-forged receipt whose source/provenance/receipt_id are arbitrary strings. Nonempty ordered-history producer authority also remains incomplete. Generating positive rows before these gates close would create training-adjacent data whose epistemic provenance cannot be independently reconstructed and authenticated.",
+  "observed_evidence": {
+    "canonical_head": "2b1a80c03ead467e7ad360924c88fe117f6ae1f9",
+    "latest_supervisor_delta_commit": "4f94188b8320de139f998d7a8ae6301cf08b3b56",
+    "a02_repository_bound_component_receipt_commit": "17aae5f404417e657ffd16521a4f0b118361ceec",
+    "a03_and_history_observed_auth_commit": "90b7b7735f078a6cc10438b5d3d8f92f98df8db7",
+    "branch_birth_fix_commit": "f20c024a5a4a264ab44573a6698051a331f1faf9",
+    "qwen_checkpoint_loader_identity_commit": "19d01875a513fa861bf35e3db84a61b827496725",
+    "qwen_track_b_receipts_commit": "c6c416207354f1e5d60924535357ed91c20365c5",
+    "a03_status": "OUTER_REPLAY_ROOT_SUFFICIENT_COMPONENT_ONLY",
+    "history_structural_replay_status": "PARTIAL_STRUCTURAL_CLOSURE",
+    "observed_evidence_producer_auth_status": "EXECUTABLE_COUNTEREXAMPLE_CONFIRMED_OPEN",
+    "native_seed_status": "ELIGIBLE_FOR_NEXT_GATE_NOT_ADMITTED",
+    "branch_birth_status": "SOURCE_REPAIR_CURRENT_COMPONENT_ONLY",
+    "qwen35_08b_identity_complete_candidates": 3,
+    "qwen35_08b_loader_consumption_observed_candidates": 3,
+    "matched_baseline_status": "PARTIAL_TARGET_MEASURED_ONLY_8_CASE_SINGLE_SEED",
+    "causal_jspace_status": "NOT_ATTEMPTED",
+    "multi_seed_status": "NOT_ATTEMPTED",
+    "hcu_variable_n_status": "NOT_ATTEMPTED"
+  },
+  "lifecycle": [
+    {
+      "artifact": "000_CLAY_ENTITYOS_HCU_FAST_BOOTSTRAP_SOURCE_CURRENT_2026-08-24",
+      "status": "SUPERSEDED_FOR_CURRENT_AUTHORITY",
+      "successor": "research_entity/continuity/BOOTSTRAP_MINIMAL.json@schema_8.78 + current supervisor selection",
+      "reason": "The cache itself declares GitHub/newer authority superior; current authority now permits zero-cost clay-direct-dev VPS sandbox execution whereas the older cache described VPS testing as forbidden. Retain only as historical operating cache/provenance."
+    },
+    {
+      "artifact": "research_entity/continuity/BOOTSTRAP_MINIMAL.json",
+      "status": "CURRENT",
+      "version": "8.78",
+      "reason": "Current authority surface resolves EntityOS/HCU and FREE_ONLY execution including admitted zero-cost VPS sandbox development."
+    },
+    {
+      "artifact": "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
+      "status": "NEEDS_REVISION_FOR_FRONTIER_DETAILS",
+      "version": "8.78",
+      "successor_context": "4f94188b8320de139f998d7a8ae6301cf08b3b56",
+      "reason": "The inbox text still describes some repository-bound Trigger-2 executions as pending; later executable receipts and the 8.78 steering delta close A02/A03 at component scope and reprioritize the open blockers. Do not discard the inbox; interpret it with later exact executable evidence and steering."
+    },
+    {
+      "artifact": "A03 generation-authority replay-root",
+      "status": "CURRENT",
+      "version": "v1 component receipt",
+      "predecessor": "OPEN_A03_REPLAY_ROOT_QUESTION",
+      "successor": null,
+      "reason": "Authority mutation test rejected stale rows; current gate design is executable-closed at component scope only."
+    },
+    {
+      "artifact": "branch-birth evidence semantics in trigger2_hyperposition_reference_labelers_v3.py",
+      "status": "CURRENT",
+      "version": "f20c024a5",
+      "predecessor": "allow_empty_evidence_skipped_validation",
+      "reason": "Branch birth now requires E_plus/E_minus/F to be exactly empty and has explicit negative/positive regression tests. The unrelated exact-semantic-merge test failure remains separate and must not be hidden."
+    },
+    {
+      "artifact": "OBSERVED evidence producer authentication",
+      "status": "BLOCKED",
+      "version": "current _validate_observation_receipt",
+      "successor": "TRIGGER2_OBSERVED_EVIDENCE_PRODUCER_AUTHORITY_V1 + instance admission envelope + adversarial execution receipt",
+      "reason": "Executable forged-receipt acceptance proves caller-controlled strings can impersonate evidence provenance."
+    },
+    {
+      "artifact": "immutable genesis + complete ordered nonempty history producer authority",
+      "status": "BLOCKED",
+      "successor": "deterministically producer-authorized genesis/history chain with exact replay",
+      "reason": "Deletion/insertion/reorder/id-conflict fail closed structurally, but full history content provenance is not yet bound to an authorized producer chain."
+    },
+    {
+      "artifact": "tools/trigger2_binding_router_factorial_generator_v3.py",
+      "status": "BLOCKED",
+      "reason": "Keep quarantined from direct training until conditional nuisance leakage and full cross/family independence gates are satisfied."
+    },
+    {
+      "artifact": "native seed successor ancestry",
+      "status": "CURRENT_NOT_ADMITTED",
+      "version": "V26 reachable ledger",
+      "reason": "Successor-dynamic ancestry lint passes but upstream producer/history authority gates remain open."
+    },
+    {
+      "artifact": "Qwen3.5-0.8B checkpoint candidate registry",
+      "status": "CURRENT",
+      "version": "v3",
+      "reason": "BASE, POSTTRAINED and TARGET_MEASURED identities plus loader consumption are observed at pinned revisions. This is readiness evidence, not checkpoint-selection or J-Space credit."
+    },
+    {
+      "artifact": "Qwen3.5-0.8B matched baseline",
+      "status": "NEEDS_REVISION",
+      "reason": "Only TARGET_MEASURED received an 8-case single-seed minimal pilot. Full cross-candidate matched baselines, calibration/holdout discipline and worst-bucket rules are still unexecuted. The pilot's two abstain_unknown failures are negative evidence that must be preserved."
+    }
+  ],
+  "external_research_translation": {
+    "classification": "DESIGN_INPUT_NOT_PROJECT_RUNTIME_EVIDENCE",
+    "sources": [
+      "https://slsa.dev/spec/v1.2/",
+      "https://slsa.dev/spec/v1.2/source-requirements",
+      "https://github.com/in-toto/attestation/blob/main/spec/v1/statement.md",
+      "https://github.com/secure-systems-lab/dsse/blob/master/envelope.proto",
+      "https://arxiv.org/abs/2410.04962"
+    ],
+    "producer_auth_lesson": "Bind an observation instance to a trusted producer identity/version plus immutable subject/input digests and invocation/admission context; a source label or receipt id alone is not authority.",
+    "signature_lesson": "If cryptographic attestation is later introduced, sign the typed payload/envelope; never treat a key-id hint or self-declared producer string as authentication. Key/authority management remains a separate explicit policy surface.",
+    "jspace_lesson": "Activation transport or output steering alone does not establish the intended internal causal semantics; intervention evaluation must include effectiveness, off-target faithfulness/minimality and strong controls."
+  },
+  "required_observed_evidence_authority_design": {
+    "non_second_truth_store_rule": "The registry is an allowlisted producer-attestation authority only. It must not decide event truth, branch semantics, canonical state or effects. Those remain derived by the existing deterministic evaluator and canonical state/effect authorities.",
+    "authority_object_minimum": [
+      "producer_id",
+      "producer_version_or_epoch",
+      "producer_repo_path_or_runtime_identity",
+      "producer_source_sha256_or_consumed_artifact_digest",
+      "policy_digest",
+      "allowed_source_namespace",
+      "allowed_provenance_namespace",
+      "status_current_or_revoked"
+    ],
+    "instance_envelope_minimum": [
+      "schema",
+      "producer_id",
+      "producer_version_or_epoch",
+      "event_id",
+      "event_semantic_sha256",
+      "causal_event_id",
+      "admission_id",
+      "generation",
+      "source_payload_sha256",
+      "invocation_or_context_digest",
+      "parent_receipt_digest_or_explicit_none",
+      "policy_digest",
+      "subject_digest",
+      "receipt_nonce_or_replay_identity",
+      "canonical_truth_allowed_false",
+      "direct_effect_authority_false"
+    ],
+    "verification_rule": "Recompute the semantic/subject digests and resolve producer identity from the repository-bound authority. Reject unknown/revoked producer, stale epoch/version, digest mismatch, missing parent when required, duplicate nonce with different subject, replay under changed admission/generation, cross-producer substitution, or caller-provided authority bits.",
+    "cryptography": "NOT_REQUIRED_TO_CLOSE_THE_DETERMINISTIC_LOCAL_GATE_IF_THE_PRODUCER_AUTHORITY_AND_INSTANCE_ENVELOPE_ARE_REPOSITORY_BOUND_AND_INDEPENDENTLY_RECOMPUTED. If signatures are used later, they supplement rather than replace deterministic subject/context binding."
+  },
+  "adversarial_acceptance_matrix": [
+    "arbitrary producer_id -> reject",
+    "forged source/provenance/receipt_id with otherwise valid event digest -> reject",
+    "subject/source-payload digest substitution -> reject",
+    "event semantic digest substitution -> reject",
+    "admission_id substitution -> reject",
+    "generation substitution -> reject",
+    "policy digest substitution -> reject",
+    "stale producer source/version/epoch -> reject",
+    "cross-producer envelope substitution -> reject",
+    "replayed envelope under new admission/generation -> reject",
+    "same replay identity with different subject -> reject",
+    "missing required parent receipt -> reject",
+    "source-code-valid but runtime-instance-forged receipt -> reject",
+    "exact authorized producer + exact independently recomputed envelope -> pass candidate pre-admission only"
+  ],
+  "training_and_model_order": [
+    "P0 close OBSERVED evidence producer authority and execute the forged-receipt regression bundle on exact current clean VPS checkout",
+    "P1 extend the same producer-authority concept across immutable genesis and complete ordered nonempty history; execute splice/prefix/deletion/insertion/reorder/duplicate-id-different-digest adversarial cases",
+    "P2 rebind native seed to the single retained successor and admit no positive row until P0+P1 exact executable closure",
+    "P3 only then generate a small diagnostic positive/negative ordered-history pilot and pass deterministic admission",
+    "P4 execute preregistered FULL matched baseline across BASE, POSTTRAINED and TARGET_MEASURED with identical prompts/decoding/runtime family splits; preserve abstain_unknown as a mandatory worst-bucket axis",
+    "P5 select no checkpoint unless preregistered aggregate and worst-bucket criteria pass without final-holdout leakage",
+    "P6 causal J-Space only after selection: sign flip, zero/null, orthogonal, norm-matched random/permuted controls, dose-response, lesion/rescue where available, fresh holdout and cross-task replication",
+    "P7 physical GRID10/variable-N measurement remains separate from logical-cell count and from J-Space semantic credit"
+  ],
+  "new_training_examples_generated": 0,
+  "positive_rows_admitted": 0,
+  "accepted_dataset_tokens": 0,
+  "training_credit": 0,
+  "checkpoint_selection_credit": 0,
+  "causal_jspace_credit": 0,
+  "whole_hcu_runtime_credit": 0,
+  "whole_entityos_runtime_credit": 0,
+  "next_exact_action": "Implement the deterministic OBSERVED producer-authority registry + instance envelope as a successor gate without creating a second semantic authority; add the adversarial matrix; then execute the exact clean repository-bound suite on the admitted zero-cost clay-direct-dev VPS and preserve pre-repair counterexample plus post-repair receipt."
+}

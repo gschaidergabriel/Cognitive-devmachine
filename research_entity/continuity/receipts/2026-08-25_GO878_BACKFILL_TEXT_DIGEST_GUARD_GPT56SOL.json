@@ -11,22 +11,26 @@
     "mode": "FREE_ONLY",
     "canonical_repository": "gschaidergabriel/clay-global-research-entity",
     "branch_base_main": "458ce8278b445771b10b5263e90f86bfc8a75461",
+    "last_reentry_main": "0d92862a761c95480c755ea5396d8722c0eab8ad",
     "paid_fallback": "FORBIDDEN",
     "together": "FORBIDDEN"
   },
   "observed": {
     "backfill_source_path": "tools/free_swarm_historical_backfill.py",
-    "backfill_source_blob_at_base": "5cb0045f5c355170372efd4f08c033b33c91fbed",
-    "unsafe_semantics_still_present_at_base": true,
+    "backfill_source_blob_at_last_reentry": "5cb0045f5c355170372efd4f08c033b33c91fbed",
+    "unsafe_semantics_still_present_at_last_reentry": true,
     "unsafe_semantics": "_ingest_worker_row accepts row.text_sha256 as the source-event and downstream worker provenance digest without recomputing it from row.text",
     "parallel_source_count_replay_guard": "FUSED_SEPARATE_LANE",
-    "parallel_absolute_line_identity_guard": "SUCCESSOR_MOVING_SEPARATE_LANE",
-    "duplicate_digest_guard_found_on_main_before_r2": false
+    "parallel_absolute_line_identity_guard": "SOURCE_SUCCESSOR_PRESENT_NOT_YET_ACTIVE_BACKFILL_AUTHORITY",
+    "duplicate_digest_guard_found_on_main_before_r2": false,
+    "qwen06_native_llamacpp_cvec": "PASS_FRESH_HOLDOUT_MATCHED_CONTROLS_NATIVE_COMPONENT",
+    "qwen06_native_cvec_promotion": "BLOCKED_PENDING_LABEL_INDEPENDENT_COUNTERBALANCED_DISCRIMINATOR"
   },
   "hypothesis": "Historical receipt digest claims must be verified against the exact parsed text before they participate in source_event_id, historical_outputs, chunk, candidate-source, or batch-progress identity. Otherwise a corrupt or forged digest can split one physical observation into a second apparent provenance identity.",
   "counterhypothesis": "If every workers.jsonl producer were permanently trusted to emit an exact immutable text_sha256, recomputation would be redundant. That assumption is rejected because historical replay treats worker/model records as evidence input rather than canonical authority and must survive corruption, stale writers, and replay migration.",
   "delta": {
     "path": "tools/apply_go878_backfill_text_digest_guard.py",
+    "pull_request": 1917,
     "kind": "SUCCESSOR_DYNAMIC_FAIL_CLOSED_DONOR_PATCHER",
     "behavior": [
       "recompute SHA-256 from exact parsed text",
@@ -53,26 +57,27 @@
   "three_tracks": {
     "track_a": "ADVANCED_EVIDENCE_IDENTITY_FAIL_CLOSED_DONOR",
     "track_b": "HCU_NO_CHANGE_WITH_REASON: no duplicate HCU implementation; digest binding is retained as a reusable Typed Entry ingress invariant",
-    "track_c": "ADVANCED_BY_CURRENT_REENTRY_EVIDENCE: Qwen3-0.6B nonterminal causal component PASS plus native-cvec control/layer-slot successor work; full native cvec/J-Space/HCU/training credit remains zero"
+    "track_c": "ADVANCED: Qwen3-0.6B native llama.cpp llama_set_adapter_cvec fresh-holdout matched-control component PASS is now repository-bound; canonical-semantics promotion, full J-Space, full HCU and training remain unproven"
   },
   "coordination": {
-    "new_unusual_experiments_executed": 0,
+    "new_unusual_experiments_executed_by_this_organ": 0,
     "unusual_experiment_status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
-    "reason": "No shared immutable reproducible go macrocycle/request identity exposed to this organ."
+    "reason": "No shared immutable reproducible go macrocycle/request identity exposed to this organ. The native cvec PASS was observed from independently completed repository evidence, not newly executed by this organ."
   },
   "readme": {
     "status": "NO_CHANGE_WITH_REASON",
     "reason": "the artefact/README.md is moving under parallel GO878 fusion; current-facing parallel writes were not clobbered."
   },
   "credit": {
-    "historical_backfill_runtime_credit_added": 0,
-    "provider_runtime_credit_added": 0,
+    "historical_backfill_runtime_credit_added_by_this_donor": 0,
+    "provider_runtime_credit_added_by_this_donor": 0,
     "whole_entityos_hcu_runtime_credit": 0,
     "hcu_full_runtime_credit": 0,
-    "native_llamacpp_cvec_runtime_credit": 0,
+    "qwen06_native_llamacpp_cvec_component_runtime_credit_observed": true,
+    "canonical_semantics_promotion": false,
     "full_jspace_model_runtime_credit": 0,
     "training_credit": 0,
     "whole_product_pass": false
   },
-  "next_exact_action": "Fuse the digest guard only after/with stable absolute-line replay identity, run focused exact-source historical-backfill regressions on an authorized zero-cost surface, then require terminal saturation replay before broader historical evidence credit."
+  "next_exact_action": "Fuse the digest guard only after/with stable absolute-line replay identity, run focused exact-source historical-backfill regressions on an authorized zero-cost surface, then require terminal saturation replay before broader historical evidence credit. Separately construct the label-independent counterbalanced native-cvec discriminator before any J-Space/canonical promotion."
 }

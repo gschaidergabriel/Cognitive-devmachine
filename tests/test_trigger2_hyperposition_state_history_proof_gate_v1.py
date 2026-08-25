@@ -1,8 +1,13 @@
 from __future__ import annotations
 
 from copy import deepcopy
+import json
+from pathlib import Path
 
 from tools import trigger2_hyperposition_state_history_proof_gate_v1 as proof
+from tools import trigger2_observed_evidence_producer_v1 as observed_producer
+
+REPO = Path(__file__).resolve().parents[1]
 
 
 def _test_spec():
@@ -230,22 +235,156 @@ def test_observed_event_requires_typed_evidence_receipt():
     assert "OBSERVED_EVENT_REQUIRES_EXACTLY_ONE_TYPED_EVIDENCE_RECEIPT" in result["failures"]
 
 
-def test_observed_event_typed_receipt_can_pass():
+def _observed_authority_policy():
+    return json.loads(
+        (REPO / "research_entity/global/j-space/research/TRIGGER2_OBSERVED_EVIDENCE_PRODUCER_AUTHORITY_V1.json")
+        .read_text(encoding="utf-8")
+    )["policy"]
+
+
+def _authorized_admission():
+    return {"admission_id": "T2_OBS_ADMISSION_SYNTHETIC_PILOT_V1", "generation": 1}
+
+
+def _observed_row_with_authenticated_receipt(*, source_payload=None, admission=None, tamper=None):
+    """Build an OBSERVED-epistemic row whose typed evidence receipt is authenticated via
+    the trusted producer/policy/admission scope, not a caller-typed string bundle."""
+    row = _row(epistemic="OBSERVED")
+    event = row["synthetic_test_event_evaluator_only"]
+    digest = proof.event_semantic_sha256(event)
+    payload = source_payload if source_payload is not None else {"synthetic_db_row": "value-1"}
+    adm = admission if admission is not None else _authorized_admission()
+    receipt = observed_producer.produce(
+        causal_event_id=event["event_id"],
+        event_semantic_sha256=digest,
+        observed_value=event["observed_outcome"],
+        source_payload=payload,
+        admission=adm,
+        policy=_observed_authority_policy(),
+        observed_time="2026-08-25T00:00:00Z",
+    )
+    if tamper is not None:
+        receipt = tamper(dict(receipt))
+    row["typed_observation_evidence_receipts_evaluator_only"] = [receipt]
+    row["observed_evidence_source_payloads_evaluator_only"] = {event["event_id"]: payload}
+    row["observed_evidence_admissions_evaluator_only"] = {event["event_id"]: adm}
+    return row
+
+
+def test_observed_event_authenticated_receipt_passes():
+    row = _observed_row_with_authenticated_receipt()
+    result = proof.adjudicate(row)
+    assert result["pass"], result
+
+
+def test_observed_event_caller_forged_receipt_fails_closed():
+    """The exact gap Track A confirmed: a schema-valid, well-typed but caller-forged
+    receipt (fabricated source/provenance/receipt_id, no producer authentication) must
+    now be rejected rather than accepted."""
     row = _row(epistemic="OBSERVED")
     event = row["synthetic_test_event_evaluator_only"]
     row["typed_observation_evidence_receipts_evaluator_only"] = [{
         "schema": proof.OBSERVATION_RECEIPT_SCHEMA,
-        "receipt_id": "obs:e1",
+        "receipt_id": "obs:forged",
         "event_id": event["event_id"],
         "event_semantic_sha256": proof.event_semantic_sha256(event),
-        "source": "synthetic-test-source",
-        "provenance": "synthetic:test",
+        "source": "totally-forged-source",
+        "provenance": "totally-forged-provenance",
         "observed_time": "2026-08-25T00:00:00Z",
         "canonical_truth_allowed": False,
         "direct_effect_authority": False,
     }]
+    row["observed_evidence_source_payloads_evaluator_only"] = {event["event_id"]: {"synthetic_db_row": "value-1"}}
+    row["observed_evidence_admissions_evaluator_only"] = {event["event_id"]: _authorized_admission()}
     result = proof.adjudicate(row)
-    assert result["pass"], result
+    assert not result["pass"]
+    assert any("OBSERVED_PRODUCER_AUTH" in f for f in result["failures"])
+
+
+def test_observed_event_missing_source_payload_fails_closed():
+    row = _observed_row_with_authenticated_receipt()
+    event = row["synthetic_test_event_evaluator_only"]
+    row["observed_evidence_source_payloads_evaluator_only"] = {}
+    result = proof.adjudicate(row)
+    assert not result["pass"]
+    assert "OBSERVED_EVIDENCE_SOURCE_PAYLOAD_REQUIRED" in result["failures"]
+
+
+def test_observed_event_wrong_source_payload_fails_closed():
+    row = _observed_row_with_authenticated_receipt()
+    event = row["synthetic_test_event_evaluator_only"]
+    row["observed_evidence_source_payloads_evaluator_only"] = {event["event_id"]: {"synthetic_db_row": "TAMPERED"}}
+    result = proof.adjudicate(row)
+    assert not result["pass"]
+    assert any("OBSERVED_PRODUCER_AUTH" in f for f in result["failures"])
+
+
+def test_observed_event_wrong_admission_id_fails_closed():
+    row = _observed_row_with_authenticated_receipt()
+    event = row["synthetic_test_event_evaluator_only"]
+    row["observed_evidence_admissions_evaluator_only"] = {
+        event["event_id"]: {"admission_id": "UNAUTHORIZED_ADMISSION", "generation": 1}
+    }
+    result = proof.adjudicate(row)
+    assert not result["pass"]
+    assert any("OBSERVED_PRODUCER_AUTH" in f for f in result["failures"])
+
+
+def test_observed_event_wrong_admission_generation_fails_closed():
+    row = _observed_row_with_authenticated_receipt()
+    event = row["synthetic_test_event_evaluator_only"]
+    row["observed_evidence_admissions_evaluator_only"] = {
+        event["event_id"]: {"admission_id": "T2_OBS_ADMISSION_SYNTHETIC_PILOT_V1", "generation": 99}
+    }
+    result = proof.adjudicate(row)
+    assert not result["pass"]
+    assert any("OBSERVED_PRODUCER_AUTH" in f for f in result["failures"])
+
+
+def test_observed_event_stale_authority_producer_hash_fails_closed(monkeypatch):
+    """If the authority's pinned producer source hash drifts from the actual file on
+    disk, the gate must fail closed rather than silently trust either side."""
+    authority_path = REPO / "research_entity/global/j-space/research/TRIGGER2_OBSERVED_EVIDENCE_PRODUCER_AUTHORITY_V1.json"
+    original = json.loads(authority_path.read_text(encoding="utf-8"))
+    tampered = deepcopy(original)
+    tampered["producer"]["source_sha256"] = "0" * 64
+    authority_path.write_text(json.dumps(tampered), encoding="utf-8")
+    try:
+        row = _observed_row_with_authenticated_receipt()
+        result = proof.adjudicate(row)
+    finally:
+        authority_path.write_text(json.dumps(original, indent=2) + "\n", encoding="utf-8")
+    assert not result["pass"]
+    assert any("EXPECTED_OBSERVED_PRODUCER_SOURCE_SHA256_MISMATCH" in f for f in result["failures"])
+
+
+def test_observed_event_reused_receipt_id_with_changed_observed_value_fails_closed():
+    """A receipt authenticated for one observed_value must not validate against a row
+    that silently changed the event's observed_outcome afterward -- the receipt is bound
+    to the exact observed value, not just the event id."""
+    row = _observed_row_with_authenticated_receipt()
+    event = row["synthetic_test_event_evaluator_only"]
+    event["observed_outcome"] = "B" if event["observed_outcome"] != "B" else "A"
+    result = proof.adjudicate(row)
+    assert not result["pass"]
+    # mutating observed_outcome also changes the event's own semantic digest, so this is
+    # caught by digest binding as well as producer-receipt mismatch -- either failure mode
+    # proves the reused-receipt-with-changed-payload case is closed.
+    assert any(
+        "OBSERVED_PRODUCER_AUTH" in f or "EVENT_DIGEST_REGISTRY_MISMATCH" in f or "DISCRIMINATOR_OUTCOME_MISMATCH" in f
+        for f in result["failures"]
+    )
+
+
+def test_observed_event_missing_discriminator_receipt_fails_closed():
+    """PDF-required negative case: an OBSERVED event still needs its own discriminator
+    execution receipt (the 'parent' admissibility proof) -- evidence authentication does
+    not substitute for it."""
+    row = _observed_row_with_authenticated_receipt()
+    row["discriminator_execution_receipts_evaluator_only"] = []
+    result = proof.adjudicate(row)
+    assert not result["pass"]
+    assert "DISCRIMINATOR_EXECUTION_RECEIPT_REQUIRED" in result["failures"]
 
 
 def test_missing_state_history_claim_fails_closed():

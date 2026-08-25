@@ -105,7 +105,6 @@ def adjudicate(row: Any) -> dict[str, Any]:
         "positive_D_E_promotion_ready": False,
         "remaining_p0": [
             "exact-current deterministic execution of the A02 mutation suite is required",
-            "OBSERVED evidence producer authentication is required before OBSERVED positives",
             "native seed must be rebound to this one retained successor before any pilot regeneration",
             "rendered nuisance/full-cross-or-conditional-MI/family-provenance/tokenizer-ABI gates remain required",
         ],
@@ -115,6 +114,12 @@ def adjudicate(row: Any) -> dict[str, Any]:
             "authority as the single current event (T2_GP_PILOT_HIST_CHAIN_V1 case); a nonempty history "
             "not produced by an authorized case fails GENERATION_CASE_NOT_AUTHORIZED / subject-digest "
             "mismatch closed, proven by tests/test_trigger2_genesis_history_producer_authority_v1.py",
+            "OBSERVED evidence producer authentication: trigger2_hyperposition_state_history_proof_gate_v1's "
+            "_validate_observation_receipt now recomputes the expected receipt via "
+            "trigger2_observed_evidence_producer_auth_gate_v1 against one pinned producer/policy/admission "
+            "authority instead of trusting caller-typed source/provenance/receipt_id strings; a fully forged "
+            "receipt now fails OBSERVED_PRODUCER_AUTH:OBSERVED_RECEIPT_NOT_EXACTLY_RECOMPUTED, proven by "
+            "tests/test_trigger2_hyperposition_state_history_proof_gate_v1.py",
         ],
         "canonical_dataset_admission": False,
         "accepted_dataset_tokens_minted": 0,

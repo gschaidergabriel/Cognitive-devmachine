@@ -37,8 +37,13 @@ def _load_sibling(filename: str, module_name: str):
     return module
 
 
+OBSERVED_PRODUCER_AUTH_GATE_FILENAME = "trigger2_observed_evidence_producer_auth_gate_v1.py"
+
 base = _load_sibling(BASE_GATE_FILENAME, "trigger2_hp_derivation_gate_v2_for_history")
 lab = base.lab
+observed_producer_auth = _load_sibling(
+    OBSERVED_PRODUCER_AUTH_GATE_FILENAME, "trigger2_observed_producer_auth_for_history"
+)
 
 
 def _digest(obj: Any) -> str:
@@ -193,7 +198,10 @@ def _validate_discriminator_receipt(world: Any, state: Any, event: Any, receipt:
     return sorted(set(failures))
 
 
-def _validate_observation_receipt(event: Any, receipts: Any, event_digest: str) -> list[str]:
+def _validate_observation_receipt(
+    event: Any, receipts: Any, event_digest: str,
+    source_payloads: Any = None, admissions: Any = None,
+) -> list[str]:
     if event.get("epistemic_type") != "OBSERVED":
         return []
     if not isinstance(receipts, list):
@@ -214,6 +222,31 @@ def _validate_observation_receipt(event: Any, receipts: Any, event_digest: str) 
     for key in ("source", "provenance", "observed_time", "receipt_id"):
         if not isinstance(rec.get(key), str) or not rec.get(key):
             failures.append("OBSERVATION_RECEIPT_FIELD_REQUIRED:" + key)
+
+    # Producer authentication: schema/digest/fences alone were confirmed accepted for a fully
+    # caller-forged receipt (arbitrary source/provenance/receipt_id). Require independent
+    # recomputation against the one authorized producer/policy/admission scope instead of
+    # trusting these caller strings.
+    event_id = event.get("event_id")
+    source_payload_map = source_payloads if isinstance(source_payloads, dict) else {}
+    admission_map = admissions if isinstance(admissions, dict) else {}
+    if event_id not in source_payload_map:
+        failures.append("OBSERVED_EVIDENCE_SOURCE_PAYLOAD_REQUIRED")
+    if event_id not in admission_map:
+        failures.append("OBSERVED_EVIDENCE_ADMISSION_REQUIRED")
+    if event_id in source_payload_map and event_id in admission_map:
+        auth_result = observed_producer_auth.adjudicate(
+            claimed_receipt=rec,
+            causal_event_id=event_id,
+            event_semantic_sha256=event_digest,
+            observed_value=event.get("observed_outcome"),
+            source_payload=source_payload_map.get(event_id),
+            admission=admission_map.get(event_id),
+            observed_time=rec.get("observed_time"),
+        )
+        if not auth_result.get("pass"):
+            failures.extend("OBSERVED_PRODUCER_AUTH:" + x for x in auth_result.get("failures", []))
+
     return sorted(set(failures))
 
 
@@ -273,6 +306,8 @@ def adjudicate(row: Any) -> dict[str, Any]:
     digest_registry = row.get("event_digest_registry_evaluator_only")
     disc_receipts = row.get("discriminator_execution_receipts_evaluator_only")
     obs_receipts = row.get("typed_observation_evidence_receipts_evaluator_only", [])
+    obs_source_payloads = row.get("observed_evidence_source_payloads_evaluator_only", {})
+    obs_admissions = row.get("observed_evidence_admissions_evaluator_only", {})
 
     ok, genesis_failures = _genesis_is_clean(genesis)
     if not ok:
@@ -298,7 +333,7 @@ def adjudicate(row: Any) -> dict[str, Any]:
             if digest is None:
                 continue
             failures.extend(_validate_discriminator_receipt(world, replay_state, event, receipt_map.get(event.get("event_id")), digest))
-            failures.extend(_validate_observation_receipt(event, obs_receipts, digest))
+            failures.extend(_validate_observation_receipt(event, obs_receipts, digest, obs_source_payloads, obs_admissions))
             independence, update, step_failures = _derive_and_apply(world, replay_state, event)
             failures.extend(step_failures)
             if update is None or not update.get("pass"):
@@ -329,7 +364,7 @@ def adjudicate(row: Any) -> dict[str, Any]:
         failures.extend(ds)
         if current_digest is not None:
             failures.extend(_validate_discriminator_receipt(world, supplied_before, current_event, receipt_map.get(current_event.get("event_id")), current_digest))
-            failures.extend(_validate_observation_receipt(current_event, obs_receipts, current_digest))
+            failures.extend(_validate_observation_receipt(current_event, obs_receipts, current_digest, obs_source_payloads, obs_admissions))
             independence, update, step_failures = _derive_and_apply(world, supplied_before, current_event)
             current_independence = independence
             failures.extend(step_failures)

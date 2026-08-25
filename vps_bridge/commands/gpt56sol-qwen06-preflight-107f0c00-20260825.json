@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v3",
+  "command_id": "gpt56sol-qwen06-preflight-107f0c00-20260825",
+  "op": "exec",
+  "cwd": "/workspace",
+  "command": "set -euo pipefail; echo BRIDGE_ROUNDTRIP=PASS; echo user=$(id -un); echo uid=$(id -u); echo host=$(hostname); echo pwd=$(pwd); echo python=$(python3 --version 2>&1 || true); echo nproc=$(nproc); free -h || true; df -h / /workspace /cache 2>/dev/null || df -h; echo '--- workspace ---'; find /workspace -maxdepth 2 -type d -name 'clay-global-research-entity' -print 2>/dev/null | head -5; echo '--- git ---'; if [ -d /workspace/clay-global-research-entity/.git ]; then git -C /workspace/clay-global-research-entity status --short --branch; git -C /workspace/clay-global-research-entity rev-parse HEAD; fi; echo '--- cache ---'; du -sh /cache 2>/dev/null || true",
+  "timeout_seconds": 120
+}

@@ -1,0 +1,163 @@
+{
+  "schema": "CLAY_TRIGGER2_RUNTIME_QUIESCENCE_JSPACE_METROLOGY_RESEARCH_DELTA/v1",
+  "date": "2026-08-26",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "status": "NONCANONICAL_RESEARCH_DELTA_EVAL_ONLY",
+  "observed_main_before_write": "5cf690be978ee8ce98b819e6004478f39c68d6b8",
+  "authority": {
+    "supervisor_epoch": "8.81_DELTA",
+    "mode": "FREE_ONLY",
+    "supervisor_inbox": "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
+    "steering": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_81_DELTA_2026-08-26T0249P0700_GPT56SOL.json",
+    "free_swarm_emergency_stop": true,
+    "provider_routes_admitted": false,
+    "runtime_quiescence_required_before_new_execution": true,
+    "training_credit": 0,
+    "accepted_dataset_tokens": 0
+  },
+  "observed_project_state": [
+    {
+      "id": "R0_GRID10_SOURCE_READY_RUNTIME_UNOBSERVED",
+      "classification": "R0_OBSERVED_REPOSITORY",
+      "finding": "The fused physical GRID10 source now uses overlapping Popen children, ten distinct parent-observed OS PIDs, one shared read-only S1 snapshot barrier and atomic cohort fan-in, and is repository-pinned; no exact clean runtime receipt is currently credited."
+    },
+    {
+      "id": "R0_EMERGENCY_STOP_SOURCE_RUNTIME_DRIFT",
+      "classification": "R0_OBSERVED_SUPERVISOR",
+      "finding": "FREE_PROVIDER_ADMISSION is HARD_OFF, yet post-stop telemetry observed legacy FreeSwarm supervisor/Forge/Distillery/dashboard processes. Declarative source hard-off is therefore not equivalent to observed host quiescence."
+    },
+    {
+      "id": "R0_TRAINING_ADMISSION_CLOSED",
+      "classification": "R0_OBSERVED_CURRENT_TRIGGER2",
+      "finding": "Positive Trigger-2 training admission remains closed, accepted_dataset_tokens remain 0 and no checkpoint winner is selected."
+    },
+    {
+      "id": "R0_JSPACE_REPRESENTATION_CREDIT_BLOCKED",
+      "classification": "R0_OBSERVED_CURRENT_TRIGGER2",
+      "finding": "A behavioral steering effect exists at small declared scope, but representation-level credit remains blocked because prior representation-divergence instrumentation did not capture an architecture-valid post-intervention hidden state."
+    }
+  ],
+  "nonduplicate_research_gap": {
+    "name": "DECLARED_CONTROL_STATE_VS_OBSERVED_RUNTIME_STATE_AND_CAUSAL_STEERING_METROLOGY",
+    "classification": "R1_INFERENCE_FROM_CURRENT_EVIDENCE",
+    "finding": "Trigger-2 already has explicit eval families for stale observation identity, consumed-snapshot attestation and transport-arrival causality. The new control-plane failure is structurally adjacent but distinct: a canonical policy/configuration transition can be correct while already-running processes remain live. This creates a general epistemic class where desired/declarative state must not be mistaken for observed runtime state. In parallel, J-Space behavioral effects must not be upgraded to representation-level causal claims without measuring the intervened forward pass itself.",
+    "boundary": "Both are proof-scope problems. The model may learn to classify evidence and abstain from overclaiming, but deterministic runtime/process observation and model-internal instrumentation remain the authorities for execution and representation claims."
+  },
+  "external_method_evidence": [
+    {
+      "source": "Wu, Geiger, Milliere (ICML 2025), How Do Transformers Learn Variable Binding in Symbolic Programs?",
+      "classification": "EXTERNAL_PRIMARY_METHOD_EVIDENCE",
+      "finding": "Training passes through a shallow-heuristic phase before systematic variable dereferencing emerges; causal interventions localize routing through residual-stream and attention computations.",
+      "trigger2_implication": "Do not accept dynamic-binding competence from balanced accuracy alone. Require full mapping permutation/OOD controls and, where feasible, causal mechanism tests."
+    },
+    {
+      "source": "Margalit et al. (2026), Governed Shared Memory for Multi-Agent LLM Systems, arXiv:2606.24535",
+      "classification": "EXTERNAL_PRIMARY_ARCHITECTURE_INPUT",
+      "finding": "Shared-memory systems exhibit stale propagation and provenance collapse and benefit from explicit supersession and provenance controls.",
+      "trigger2_implication": "Keep observation freshness/provenance explicit and fail closed on stale propagation; shared visibility is not proof of current truth."
+    },
+    {
+      "source": "Chao et al. (2026), STALE: Can LLM Agents Know When Their Memories Are No Longer Valid?, arXiv:2605.06527",
+      "classification": "EXTERNAL_PRIMARY_EVAL_INPUT",
+      "finding": "Models can retrieve updated evidence yet still accept stale premises or fail to adapt behavior; the benchmark separates state resolution, premise resistance and policy adaptation.",
+      "trigger2_implication": "Add matched stale-premise resistance and state-update application checks to Xeno epistemic retention; retrieval/current metadata alone is insufficient."
+    },
+    {
+      "source": "Doan, Le, Nguyen (Findings of EACL 2026), Causal Activation Steering via Sparse Mediation",
+      "classification": "EXTERNAL_PRIMARY_JSPACE_METHOD_EVIDENCE",
+      "finding": "Activation steering can be framed as causal mediation and evaluated with targeted mediating subspaces and off-target controls.",
+      "trigger2_implication": "J-Space steering evaluation should separate behavior change, mediator/site specificity and off-target preservation rather than treating one steering success as representation-level causality."
+    },
+    {
+      "source": "Yu et al. (2026), Can We Break LLMs Out of Self-Loops? Fine-Grained Reasoning Control with Activation Steering, arXiv:2607.18100",
+      "classification": "EXTERNAL_PRIMARY_JSPACE_RESEARCH_INPUT",
+      "finding": "Hidden-state intervention can alter latent reasoning-state transitions and reduce self-loop failures under a state-indexed steering controller.",
+      "trigger2_implication": "Supports testing J-Space as a causal control interface, but only with exact model/site/vector identity, intervention controls and downstream measured state; it does not establish Clay-specific causality."
+    }
+  ],
+  "hypotheses": [
+    {
+      "id": "H_T2_Q1_DECLARED_VS_OBSERVED_RUNTIME",
+      "hypothesis": "A separate Trigger-2 epistemic eval family that distinguishes declarative control state from observed runtime state will reduce proof-scope overclaiming without contaminating core cognitive SFT.",
+      "counterhypothesis": "This distinction belongs entirely in deterministic operations and training/evaluating it in the model wastes capacity or creates brittle vocabulary matching.",
+      "discriminator": "Keep eval-only first. Present family-disjoint matched pairs such as POLICY_HARD_OFF plus live_processes_gt_0 versus POLICY_HARD_OFF plus observed_zero_processes plus zero_usage_delta_window. Measure whether frozen checkpoint candidates overclaim quiescence. Promote to training only if a reproducible model-side failure remains after typed evidence rendering."
+    },
+    {
+      "id": "H_T2_Q2_STALE_PREMISE_RESISTANCE",
+      "hypothesis": "Explicit observation identity plus stale-premise resistance evaluation will detect failures missed by simple freshness-field recognition.",
+      "counterhypothesis": "Exact deterministic packet freshness gates make model-side stale-premise tests redundant.",
+      "discriminator": "Hold deterministic gates constant and compare matched cognitive prompts where the current evidence is present but the query embeds a stale presupposition. Score state resolution, premise resistance and downstream action adaptation separately."
+    },
+    {
+      "id": "H_T2_Q3_JSPACE_CAUSAL_METROLOGY",
+      "hypothesis": "Capturing post-intervention hidden state in the same intervened forward pass, with sign-flip/null/orthogonal/permuted/wrong-layer controls, will separate genuine site-specific J-Space mediation from behavioral steering artifacts.",
+      "counterhypothesis": "The observed behavioral effect is sufficient for the product interface even if representation-level mediation cannot be localized; extra metrology may add cost without product value.",
+      "discriminator": "Rerun the exact frozen model/site/vector/input set with forward-hook capture of the downstream intervened state. Require reproducible target behavior effect plus control separation and off-target retention before representation-level credit. Keep behavioral-only credit separate if localization fails."
+    },
+    {
+      "id": "H_T2_Q4_BINDING_PHASE_TRANSITION",
+      "hypothesis": "The current Xeno dynamic-binding weakness is likely to exhibit a phase transition from lexical/codebook shortcuts to systematic binding, so curriculum evaluation must inspect intermediate checkpoints and not only final accuracy.",
+      "counterhypothesis": "At 0.8B scale and the intended compact ClayCode protocol, the mechanism may remain a stable shallow router and still satisfy production needs without the same developmental signature seen in symbolic-program experiments.",
+      "discriminator": "During future allowed training, freeze periodic checkpoints and evaluate full S3 codebook permutations, family-disjoint OOD mappings, shallow nuisance challengers and exact rendered/tokenized inputs. Look for a qualitative transition in systematicity; do not require mechanistic similarity to external papers as a promotion condition."
+    }
+  ],
+  "candidate_eval_families": [
+    {
+      "id": "T2Q_RUNTIME_STATE_ATTESTATION",
+      "status": "EVAL_ONLY",
+      "positive_evidence_pattern": "desired_policy_state plus observed process state plus bounded post-change usage delta plus exact host/time/source identity",
+      "hard_negatives": [
+        "configuration says OFF therefore processes are stopped",
+        "stop command submitted therefore target process exited",
+        "provider admission disabled therefore no legacy caller can still issue traffic",
+        "one zero-process sample without bounded observation is treated as durable quiescence"
+      ]
+    },
+    {
+      "id": "T2Q_STALE_PREMISE_RESISTANCE",
+      "status": "EVAL_ONLY",
+      "axes": ["state_resolution", "premise_resistance", "policy_adaptation"],
+      "hard_negative": "retrieve new evidence but answer as though the stale premise were still current"
+    },
+    {
+      "id": "T2Q_JSPACE_MEDIATION_METROLOGY",
+      "status": "MODEL_SPECIFIC_CAUSAL_EVAL_ONLY",
+      "controls": ["baseline", "target_vector", "sign_flip", "null", "orthogonal_same_norm", "permuted_same_norm", "wrong_layer", "off_target_behavior"],
+      "required_binding": "exact checkpoint plus tokenizer plus renderer plus input plus intervention site plus vector hash plus forward-hook measurement path"
+    }
+  ],
+  "training_generation_decision": {
+    "decision": "NO_NEW_ADMITTED_POSITIVE_ROWS_WITH_REASON",
+    "new_positive_rows_generated": 0,
+    "positive_rows_admitted": 0,
+    "accepted_dataset_tokens_delta": 0,
+    "training_executed": false,
+    "training_credit": 0,
+    "candidate_eval_materialization_allowed": true,
+    "reason": "Current owner emergency-stop runtime quiescence is unproven, physical GRID10 runtime remains unobserved, checkpoint selection is unresolved and positive Distillery admission remains zero. The highest-information work is eval/metrology refinement, not row growth."
+  },
+  "next_priority_order": [
+    "P0 keep all FreeSwarm/provider execution hard-off until external runtime quiescence is actually observed and receipted; this research artifact does not execute host actions",
+    "P1 after quiescence and authority reentry, execute only the exact repaired repository-bound physical GRID10 pin and retain component-scope credit",
+    "P1 run selection-grade exact-identity matched checkpoint evaluation on abstention and DB-vs-simulation authority axes before checkpoint winner selection",
+    "P1 repair J-Space post-intervention representation capture and rerun causal controls; separate behavioral from representation credit",
+    "P1 converge one nuisance-independent dynamic-binding successor with model-visible codebook integrity, semantic ablation and permutation equivariance",
+    "P2 reopen one evidence-qualified Forge-to-Distillery witness only after upstream gates, requiring accepted_dataset_tokens greater than zero and idempotent replay plus zero"
+  ],
+  "credits": {
+    "research_delta": 1,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "checkpoint_selection_credit": 0,
+    "jspace_behavioral_research_delta_preserved": 1,
+    "jspace_representation_level_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  }
+}

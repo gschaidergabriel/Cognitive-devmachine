@@ -1,0 +1,44 @@
+{
+  "schema_version": "1.0",
+  "event_id": "delta-666-20260826T0400p0700-causal-bisimulation-model-call-identity",
+  "created_at": "2026-08-26T04:00:00+07:00",
+  "trigger": "666",
+  "organ": "e50 / GPT-5.6 Sol ChatGPT organ",
+  "persistent_entity": "Clay",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "supervisor_epoch": "8.82",
+  "source_field": "field-666-20260826T0400p0700-causal-bisimulation-model-call-identity-09c2ea75",
+  "status": "ROUTED_NONPROMOTING_RESEARCH_DELTA",
+  "finding": "Current CLAY_TRIGGER2_MODEL_CALL_BINDING/v2 is source-observed as a deterministic content binding. Unless an enclosing immutable execution receipt already supplies occurrence identity, two genuinely distinct model-call events with identical checkpoint/input/runtime/output collapse to one digest. Preserve content equivalence separately from causal occurrence identity.",
+  "supported_mechanism": "model_call_content_digest + separately bound canonical model_call_event_id/occurrence receipt",
+  "counterhypothesis": "Existing downstream InferenceReceipt/NODE_RESULT/J-Space lineage may already bind an immutable occurrence receipt strongly enough; audit before adding any successor identity field or authority.",
+  "exact_synthetic_result": {
+    "distinct_event_identical_content_collides_under_content_digest": true,
+    "distinct_event_separates_under_event_id": true,
+    "same_event_exact_replay_stable": true,
+    "same_event_changed_output_conflict_detected": true
+  },
+  "cross_connections": [
+    "research_entity/emergent_fields/fields/EF-20260809-002-REENTRY-CAUSAL-IDENTIFIABILITY/FINDINGS.md",
+    "research_entity/trigger_runs/666/666-20260809T1648p0700-chatgpt-secondary-sti/FINAL_REPORT.md",
+    "gschaidergabriel/clay-global-research-entity#1891"
+  ],
+  "specialist_sink": "Trigger-2 model-call identity / retained HCU InferenceReceipt-J-Space causal chain",
+  "next_discriminator": "Audit current exact execution/InferenceReceipt/NODE_RESULT/J-Space source for an already-existing event/admission/route/engine/load/GRID/attempt occurrence binding and same-event/different-content replay-conflict rejection. Only introduce one successor occurrence field if that audit fails.",
+  "execution_boundary": {
+    "free_swarm": "OWNER_EMERGENCY_STOP_HARD_OFF",
+    "runtime_quiescence": "NOT_PROVEN",
+    "model_runtime": "NOT_EXECUTED",
+    "provider_runtime": "NOT_EXECUTED",
+    "training": "NOT_EXECUTED"
+  },
+  "credits": {
+    "model_call_runtime": 0,
+    "physical_grid10": 0,
+    "jspace_model": 0,
+    "training": 0,
+    "whole_hcu": 0,
+    "whole_entityos": 0
+  }
+}

@@ -1,0 +1,122 @@
+{
+  "schema": "CLAY_FORSCHUNGSRUN1_NATIVE_Q8_JSPACE_BASIS_READY/v1",
+  "recorded_at_utc": "2026-08-25T04:21:00Z",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "user_trigger": "forschungsrun 1",
+  "persistent_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority_epoch": "8.78",
+  "execution_mode": "FREE_ONLY",
+  "canonical_main_observed_before_receipt": "ee13495d25b3ca189b270f466c8a827747d32a43",
+  "user_goal": "Use the VPS to make Qwen3-0.6B genuinely controllable through model-internal J-Space vectors rather than merely demonstrating another output-level or imported-vector effect.",
+  "observed_prior_runtime_evidence": {
+    "native_llama_cpp_cvec_component_pass": true,
+    "carrier": "Qwen/Qwen3-0.6B-GGUF:Q8_0",
+    "gguf_sha256": "9465e63a22add5354d9bb4b99e90117043c7124007664907259bd16d043bb031",
+    "llama_cpp_commit": "bb4caa7540188872173c44d161602d9271386413",
+    "native_api": "llama_set_adapter_cvec",
+    "dimension": 1024,
+    "injection_layer": 20,
+    "prior_scope": "bounded single-axis native causal component evidence using a full-precision-derived source vector",
+    "full_jspace_vector_control_established": false,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0
+  },
+  "new_exact_llamacpp_discovery": {
+    "pinned_api": [
+      "llama_set_embeddings_layer_inp(ctx, layer, true)",
+      "llama_get_embeddings_layer_inp(ctx, layer)"
+    ],
+    "buffer_semantics": "contiguous [n_tokens, n_embd] layer-input rows in the pinned commit",
+    "qwen3_graph_semantics": "t_layer_inp[il] is captured before layer il; build_cvec(cur, il) runs after layer il and the result becomes inpL for il+1",
+    "exact_coordinate_mapping": "cvec injection at layer 20 is immediately observable at layer-input 21; layer-input 24 is a valid later nonterminal transport endpoint",
+    "llamacpp_patch_required": false
+  },
+  "durable_source_delta": {
+    "native_layer_capture_harness": {
+      "path": "tools/trigger1_native_llamacpp_layer_capture.cpp",
+      "commit": "4e356e595f88aa256e51fb2e8a47662a75cee6a9",
+      "purpose": "capture native Q8_0 layer-input activations with optional cvec and optional later downstream layer from the same decode"
+    },
+    "native_q8_basis_builder": {
+      "path": "tools/trigger1_native_q8_jspace_basis_build.py",
+      "commit": "0ad1a8b3ecfa69907d4357b07668c51358a10e97",
+      "purpose": "calibration-only native target-carrier basis reconstruction from six matched semantic triplets; deterministic 1D/2D rank decision; geometry-preserving three-state cvec emission"
+    },
+    "native_q8_basis_tests": {
+      "path": "tests/test_trigger1_native_q8_jspace_basis_build.py",
+      "commit": "ee13495d25b3ca189b270f466c8a827747d32a43",
+      "purpose": "lock six complete model-facing label/code-free triplets, exact cvec layer-20 byte block, rank-1 geometry, rank-2 orthonormal geometry, zero-sum semantic target vectors and fail-closed unresolved-rank behavior",
+      "runtime_execution_claimed": false
+    },
+    "promotion_gate_v6_transport_dual_readout": {
+      "path": "tools/trigger1_jspace_promotion_gate_v6.py",
+      "commit": "9c8a1be9d1b3a65370a05c3fa986147448b41d62"
+    },
+    "promotion_gate_v6_tests": {
+      "path": "tests/test_trigger1_jspace_promotion_gate_v6.py",
+      "commit": "d9c2d98ad21550c0f5fa256cbfb4ad0dc1285896"
+    }
+  },
+  "native_q8_basis_design": {
+    "matched_semantic_families": 6,
+    "rows": 18,
+    "why_six": "exact all-family sign-flip inference has 2^6 assignments and can reach alpha=0.05; three-family designs cannot",
+    "model_facing_metadata_class_names": "ABSENT_BY_SOURCE_INVARIANT",
+    "model_facing_output_code_identities": "ABSENT_BY_SOURCE_INVARIANT",
+    "capture_layer_inp": 21,
+    "corresponding_cvec_injection_layer": 20,
+    "rank_analyzer": "tools/trigger1_semantic_simplex_rank_analyze.py",
+    "rank_outcomes": [
+      "ONE_DIMENSIONAL_SUPPORTED",
+      "TWO_DIMENSIONAL_REQUIRED",
+      "UNRESOLVED_FAIL_CLOSED"
+    ],
+    "three_state_control": "class-centered native Q8 semantic centroids are projected into the admitted 1D/2D subspace and normalized by one shared geometry scale, preserving relative target geometry; a single common gain remains calibration-only and is not selected by the basis builder"
+  },
+  "vps_transport_state": {
+    "authorized_sandbox": "clay-direct-dev",
+    "owner_zero_cost_execution_authorized": true,
+    "existing_forschungsrun_workflow": "gschaidergabriel/Dr.-Unterweger:.github/workflows/clay-forschungsrun1-qwen06-jspace-vps.yml",
+    "existing_observable_replication_run_id": 32807990676,
+    "existing_observable_replication_job_id": 97681710412,
+    "latest_observed_job_status": "queued",
+    "latest_observed_runner_id": null,
+    "self_hosted_runner_state": "INTENTIONALLY_QUARANTINED_OFFLINE_DURING_LEGACY_QUEUE_DRAIN",
+    "legacy_matching_jobs_in_quarantine_audit": 31,
+    "new_vps_decode_executed_by_this_organ_after_new_basis_code": false,
+    "interpretation": "transport/coordination block only; not negative scientific evidence about Qwen or J-Space"
+  },
+  "experiment_coordination": {
+    "new_unusual_intervention_executed": false,
+    "new_holdout_opened": false,
+    "new_native_three_state_cvec_intervention_executed": false,
+    "reason": "the current self-hosted VPS lane is quarantined, and no successful canonical create-only unusual-experiment lease for a new stronger intervention was available to this organ"
+  },
+  "current_scientific_hypothesis": "Qwen3-0.6B Q8_0 contains a low-dimensional semantic decision geometry at the layer-21 input that can be reconstructed in the target carrier and causally translated by layer-20 cvec interventions into target-specific downstream state and behavior.",
+  "counterhypotheses": [
+    "the prior single-axis effect is a transferred full-precision actuator that does not reflect native Q8 target-carrier geometry",
+    "the apparent semantic axis is mostly scenario/lexical nuisance and will fail matched-family centering or sign-flip rank metrology",
+    "the native geometry is genuinely two-dimensional, so a one-vector controller is structurally insufficient",
+    "cvec changes logits but the semantic displacement does not survive to an independent later nonterminal layer",
+    "likelihood changes but actual emitted decisions do not agree",
+    "target vectors cause generic output perturbation rather than a class-selective causal matrix"
+  ],
+  "next_exact_executable_gate": {
+    "precondition": "self-hosted quarantine terminal/cancelled enough for an admitted clay-direct-dev run; stronger intervention additionally requires canonical unusual-experiment lease",
+    "calibration_observation_first": "compile tools/trigger1_native_llamacpp_layer_capture.cpp against pinned llama.cpp including src/llama-ext.h; execute tools/trigger1_native_q8_jspace_basis_build.py on exact GGUF; require resolved 1D/2D rank and exact native basis receipts",
+    "then_calibration": "select one common cvec gain without holdout and verify carrier-local norms/subspace stability",
+    "then_admitted_holdout": "run target-specific AFFIRMATIVE/NEGATIVE/NEUTRAL cvec matrix plus sign/null/orthogonal/permuted controls; capture layer-input 24 downstream transport; collect context-valid likelihood and emitted-decision readouts; bind per-case factorial evidence; adjudicate through current v7 successor chain",
+    "promotion_rule": "do not call the model fully J-Space-controlled unless representation rank, downstream transport rank and behavioral causal rank agree and native target-carrier geometry passes"
+  },
+  "credit_change_this_receipt": {
+    "new_vps_runtime_credit": 0,
+    "new_jspace_model_runtime_credit": 0,
+    "new_training_credit": 0,
+    "new_whole_entityos_hcu_runtime_credit": 0,
+    "canonical_semantics_promotion": false
+  }
+}

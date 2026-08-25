@@ -28,21 +28,7 @@ class GoCollectiveMetricsFreshnessV1Tests(unittest.TestCase):
         steering = {"schema_version": "8.77", "program": "ENTITYOS_HCU", "product": "EntityOS"}
         self._write("research_entity/claycode/autonomous/SUPERVISOR_INBOX.json", inbox)
         self._write("research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_77.json", steering)
-        self._surface(
-            "LIVE_METRICS.json",
-            "2026-08-25T02:00:00Z",
-            {"workers": {"worker_records": 3, "exact_usage_rows": 3, "input_tokens": 7, "output_tokens": 3, "total_tokens": 10}},
-        )
-        self._surface(
-            "FORGE_LIVE.json",
-            "2026-08-25T02:00:01Z",
-            {"discovery_hits": 2, "evaluations": 1, "accepted_deltas": 0},
-        )
-        self._surface(
-            "DISTILLERY_LIVE.json",
-            "2026-08-25T02:00:02Z",
-            {"collected_source_tokens": 11, "collected_chunks": 2, "accepted_packets": 0, "accepted_dataset_tokens": 0},
-        )
+        self._set_snapshot("2026-08-25T02:00:00Z", 10, 1, 0)
 
     def tearDown(self):
         self.tmp.cleanup()
@@ -55,6 +41,37 @@ class GoCollectiveMetricsFreshnessV1Tests(unittest.TestCase):
     def _surface(self, name: str, generated_at: str, extra: dict):
         value = {"generated_at": generated_at, **extra}
         self._write(f"free swarm/{name}", value)
+
+    def _set_snapshot(self, base: str, tokens: int, forge_evaluations: int, accepted_dataset_tokens: int):
+        base_ts = fresh.parse_ts(base)
+        self._surface(
+            "LIVE_METRICS.json",
+            fresh.iso(base_ts),
+            {
+                "workers": {
+                    "worker_records": 3,
+                    "exact_usage_rows": 3,
+                    "input_tokens": max(tokens - 3, 0),
+                    "output_tokens": min(tokens, 3),
+                    "total_tokens": tokens,
+                }
+            },
+        )
+        self._surface(
+            "FORGE_LIVE.json",
+            fresh.iso(base_ts + fresh.dt.timedelta(seconds=1)),
+            {"discovery_hits": 2, "evaluations": forge_evaluations, "accepted_deltas": 0},
+        )
+        self._surface(
+            "DISTILLERY_LIVE.json",
+            fresh.iso(base_ts + fresh.dt.timedelta(seconds=2)),
+            {
+                "collected_source_tokens": 11,
+                "collected_chunks": 2,
+                "accepted_packets": 1 if accepted_dataset_tokens else 0,
+                "accepted_dataset_tokens": accepted_dataset_tokens,
+            },
+        )
 
     def _candidate(self, **extra) -> dict:
         return {
@@ -71,6 +88,7 @@ class GoCollectiveMetricsFreshnessV1Tests(unittest.TestCase):
         self.assertEqual(ids, {snap["snapshot_id"]})
         self.assertEqual({row["name"] for row in snap["surfaces"]}, {"swarm", "forge", "distillery"})
         self.assertEqual(snap["authority"]["authority_epoch"], "8.77")
+        self.assertLessEqual(snap["snapshot_skew_seconds"], fresh.MAX_SNAPSHOT_SKEW_SECONDS)
         source = snap["source_metrics"]
         self.assertEqual(source["bounded_snapshot_id"], snap["snapshot_id"])
         self.assertEqual(source["swarm_snapshot_id"], snap["snapshot_id"])
@@ -86,16 +104,21 @@ class GoCollectiveMetricsFreshnessV1Tests(unittest.TestCase):
         first_decision = fresh.publication_decision(first, older, None)
         current = fresh.attach_freshness(first, older, first_decision)
 
-        self._surface(
-            "LIVE_METRICS.json",
-            "2026-08-25T02:10:00Z",
-            {"workers": {"worker_records": 4, "exact_usage_rows": 4, "input_tokens": 14, "output_tokens": 6, "total_tokens": 20}},
-        )
+        self._set_snapshot("2026-08-25T02:10:00Z", 20, 2, 0)
         newer = fresh.build_snapshot(self.repo)
         decision = fresh.publication_decision(self._candidate(), newer, current)
         self.assertEqual(decision["action"], "PUBLISH")
         self.assertEqual(decision["current_state"], "STALE_INPUT_SNAPSHOT")
         self.assertEqual(decision["reason"], "CURRENT_PUBLICATION_STALE_INPUT")
+
+    def test_temporally_unbounded_source_set_fails_closed(self):
+        self._surface(
+            "LIVE_METRICS.json",
+            "2026-08-25T02:10:00Z",
+            {"workers": {"worker_records": 4, "exact_usage_rows": 4, "input_tokens": 14, "output_tokens": 6, "total_tokens": 20}},
+        )
+        with self.assertRaisesRegex(fresh.FreshnessError, "INPUT_SNAPSHOT_SKEW_EXCEEDED"):
+            fresh.build_snapshot(self.repo)
 
     def test_authority_epoch_mismatch_fails_closed(self):
         self._write(
@@ -107,11 +130,7 @@ class GoCollectiveMetricsFreshnessV1Tests(unittest.TestCase):
 
     def test_older_writer_finishing_after_newer_writer_cannot_regress_latest(self):
         old_snapshot = fresh.build_snapshot(self.repo)
-        self._surface(
-            "LIVE_METRICS.json",
-            "2026-08-25T03:00:00Z",
-            {"workers": {"worker_records": 5, "exact_usage_rows": 5, "input_tokens": 20, "output_tokens": 10, "total_tokens": 30}},
-        )
+        self._set_snapshot("2026-08-25T03:00:00Z", 30, 3, 0)
         new_snapshot = fresh.build_snapshot(self.repo)
         candidate = self._candidate()
         new_decision = fresh.publication_decision(candidate, new_snapshot, None)
@@ -169,6 +188,11 @@ class GoCollectiveMetricsFreshnessV1Tests(unittest.TestCase):
         with self.assertRaisesRegex(fresh.FreshnessError, "INPUT_MISSING:forge"):
             fresh.build_snapshot(self.repo)
 
+    def test_lock_file_is_outside_repository(self):
+        output = self.repo / "free swarm/GO_COLLECTIVE_METRICS.json"
+        lock_path = fresh._lock_path(output)
+        self.assertFalse(lock_path.is_relative_to(self.repo))
+
     def test_publish_replaces_legacy_source_metrics_and_emits_scoped_receipt(self):
         candidate_path = self.repo / "candidate.json"
         candidate_path.write_text(json.dumps(self._candidate(source_metrics={"total_tokens": 1})) + "\n", encoding="utf-8")
@@ -187,6 +211,27 @@ class GoCollectiveMetricsFreshnessV1Tests(unittest.TestCase):
         self.assertEqual(published["freshness"]["snapshot"]["snapshot_id"], published["source_metrics"]["bounded_snapshot_id"])
         self.assertEqual(stored_receipt["scope"], "COLLECTIVE_METRICS_FRESHNESS_AND_BOUND_SNAPSHOT_PUBLICATION_ONLY")
         self.assertEqual(stored_receipt["runtime_credit_added"], 0)
+
+    def test_publish_candidate_binds_json_and_markdown_under_one_decision(self):
+        output = self.repo / "published.json"
+        output_md = self.repo / "published.md"
+        receipt_path = self.repo / "receipt.json"
+        receipt = fresh.publish_candidate(
+            self.repo,
+            self._candidate(),
+            output,
+            receipt_path,
+            output_md_path=output_md,
+            markdown_text="# metrics\n",
+        )
+        published = json.loads(output.read_text(encoding="utf-8"))
+        marker = output_md.read_text(encoding="utf-8").splitlines()[0]
+        snapshot_id = published["freshness"]["snapshot"]["snapshot_id"]
+        result_digest = published["freshness"]["result_digest_sha256"]
+        self.assertEqual(receipt["decision"]["action"], "PUBLISH")
+        self.assertIn(snapshot_id, marker)
+        self.assertIn(result_digest, marker)
+        self.assertIn("authority_epoch=8.77", marker)
 
 
 if __name__ == "__main__":

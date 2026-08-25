@@ -1,5 +1,7 @@
 import copy
 
+import pytest
+
 from tools.trigger2_hyperposition_reference_labelers_v1 import (
     apply_resolution,
     d_resolve,
@@ -49,6 +51,25 @@ def test_support_is_idempotent_by_causal_ancestry():
     assert len(twice["branches"][0]["E_plus"]) == 1
 
 
+def test_conflicting_relation_on_same_causal_ancestry_fails_closed():
+    state = {"branches": [branch("A"), branch("B")]}
+    once = u_state(state, observation("SUPPORTS", ["A"], evidence_id="e1", ancestry="a1"))
+    with pytest.raises(ValueError, match="conflicting relation"):
+        u_state(once, observation("COUNTERS", ["A"], evidence_id="e2", ancestry="a1"))
+
+
+def test_unknown_target_branch_fails_closed_instead_of_silent_noop():
+    state = {"branches": [branch("A"), branch("B")]}
+    with pytest.raises(ValueError, match="unknown target branch"):
+        u_state(state, observation("SUPPORTS", ["TYPO_BRANCH"]))
+
+
+def test_duplicate_branch_identity_fails_closed():
+    state = {"branches": [branch("A"), branch("A")]}
+    with pytest.raises(ValueError, match="duplicate branch_id"):
+        d_resolve(state)
+
+
 def test_counterevidence_weakens_but_does_not_falsify():
     state = {"branches": [branch("A")]}
     out = u_state(state, observation("COUNTERS", ["A"]))
@@ -86,6 +107,12 @@ def test_d_resolve_passes_only_unique_live_applicable_branch():
     assert {b["branch_id"]: b["sigma"] for b in out["branches"]}["A"] == "RESOLVED_PASS"
 
 
+def test_apply_resolution_rejects_unknown_selected_branch():
+    state = {"branches": [branch("A"), branch("B", sigma="FALSIFIED")]}
+    with pytest.raises(ValueError, match="select exactly one existing branch"):
+        apply_resolution(state, {"resolution": "PASS", "selected_branch_id": "TYPO_BRANCH"})
+
+
 def test_unknown_context_blocks_resolution():
     state = {"branches": [branch("A"), branch("B", K="UNKNOWN", sigma="WEAKENED_UNRESOLVED")]}
     assert d_resolve(state)["resolution"] == "UNRESOLVED"
@@ -111,6 +138,25 @@ def test_merge_requires_explicit_equivalence_and_matching_semantics():
     merged = u_state(state, obs)
     assert len(merged["branches"]) == 1
     assert merged["branches"][0]["merged_from_branch_ids"] == ["A", "B"]
+
+
+def test_merge_target_cannot_collide_with_nonmerged_branch():
+    state = {
+        "branches": [
+            branch("A", v="same"),
+            branch("B", v="same"),
+            branch("C", v="other"),
+        ]
+    }
+    obs = observation("IRRELEVANT", [])
+    obs["equivalence_certificate"] = {
+        "equivalent": True,
+        "branch_ids": ["A", "B"],
+        "merge_to_branch_id": "C",
+        "certificate_id": "eq-collision",
+    }
+    with pytest.raises(ValueError, match="collides"):
+        u_state(state, obs)
 
 
 def test_test_order_prefers_actual_branch_separation_over_cheaper_nondiscriminator():

@@ -64,7 +64,7 @@ def _sha256_bytes(data: bytes) -> str:
 
 def file_sha256(path: Path) -> str:
     try:
-        return _sha256_bytes(path.read_bytes()).hexdigest()
+        return _sha256_bytes(path.read_bytes())
     except Exception as exc:
         raise ProbeError(f"cannot hash {path}: {exc}") from exc
 

@@ -1,0 +1,105 @@
+{
+  "schema": "CLAY_TRIGGER2_GRID10_COHORT_ADMISSION_IDENTITY_GAP/v1",
+  "date": "2026-08-26",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "status": "NONCANONICAL_RESEARCH_DELTA_CANDIDATE_EVAL_ONLY",
+  "observed_main_before_write": "0011673f34bc55b838f52420376df6d68e40d9be",
+  "authority": {
+    "supervisor_epoch": "8.81_DELTA",
+    "mode": "FREE_ONLY",
+    "training_execution_authorized": false,
+    "paid_provider_execution_authorized": false,
+    "physical_grid10_runtime_credit": 0,
+    "jspace_model_credit": 0,
+    "training_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  },
+  "source_under_audit": {
+    "path": "tools/xeno_physical_grid10_acceptance_v2.py",
+    "introducing_commit": "0011673f34bc55b838f52420376df6d68e40d9be",
+    "schema": "XENO_PHYSICAL_GRID10_ACCEPTANCE/v2"
+  },
+  "observed_closures": [
+    "v2 replaces the old sequential P1 probe with ten Popen children and an all-live release barrier.",
+    "v2 receipts distinct OS PIDs, parent/child PID binding, overlapping process intervals and one shared generation/epoch/state_digest identity for the barrier cohort.",
+    "v2 ExactSnapshotFabric rejects stale generation, stale epoch and stale state_digest for coordinator_commit.",
+    "v2 uses an explicit read transaction in ro_snapshot instead of treating a shared path string as an atomic-snapshot proof.",
+    "These are source-level proof improvements only; no new repository-bound runtime execution at this exact source identity was observed in this Trigger-2 cycle."
+  ],
+  "nonduplicate_gap": {
+    "name": "GRID10_CONCURRENCY_TO_ADMISSION_COHORT_IDENTITY_DISCONTINUITY",
+    "classification": "R0_SOURCE_OBSERVED_PLUS_R1_PROOF_INFERENCE",
+    "finding": "The ten simultaneously live Popen children created by concurrent_probe form the P1 concurrency witness cohort, but their packets are not the packets admitted in P4. After the barrier cohort exits, run() elects coordinators and later calls spawn_one() once per node/scope; those new child processes run sequentially and their freshly read packets are the ones committed. Therefore v2 composes a concurrency proof from cohort C1 with an admission proof from different process instances C2.",
+    "why_it_matters": "A PASS can establish that ten readers were alive concurrently and separately establish that ten fresh result packets can be admitted, without establishing the causal property that the concurrently live GRID10 cohort itself produced the admitted result flow. Logical node_id reuse does not by itself bind OS process identity, process interval and packet digest across the two proof objects.",
+    "proof_splicing_risk": "Ten dummy/diagnostic concurrent readers could satisfy P1 while a distinct sequential producer path satisfies P4. This is stronger evidence than the old sequential-only harness but remains below a same-cohort physical GRID10 integrated-path claim."
+  },
+  "hypothesis": {
+    "claim": "Physical GRID10 integrated-path credit requires a causal identity chain from each member of the simultaneously live process cohort to the exact result packet/evidence object that enters coordinator integration, or an explicit versioned protocol that transforms those exact cohort packets while preserving their original observation identity.",
+    "counterhypothesis": "Stable logical node_id plus equivalent exact-current state semantics are sufficient; OS process continuity from concurrency proof to admitted packet is unnecessary because the process instances are interchangeable realizations of one logical node.",
+    "cheapest_falsifier": "Bind each integrated packet_digest to the barrier cohort's exact pid + process-start identity + observed snapshot identity and prove the integrated packet set equals the concurrency packet set. If the design instead intentionally integrates a derived current summary, require the summary to reference the exact original cohort packet digests and preserve their original observation identity without relabeling them as current."
+  },
+  "adversarial_regressions_required": [
+    {
+      "id": "GCA-001",
+      "name": "DISJOINT_COHORT_NEGATIVE",
+      "setup": "Use ten concurrent barrier processes C1, then generate all admitted results from fresh sequential processes C2 with the same logical node_ids.",
+      "expected": "REJECT_SAME_COHORT_PHYSICAL_GRID10_INTEGRATED_PATH_CLAIM"
+    },
+    {
+      "id": "GCA-002",
+      "name": "PACKET_SET_IDENTITY",
+      "setup": "Record the exact packet_digest set emitted by the barrier cohort and the exact packet_digest/evidence-ref set consumed by coordinator integration.",
+      "expected": "REQUIRE_EXACT_SET_BINDING_OR_EXPLICIT_PROVEN_DERIVATION_PROTOCOL"
+    },
+    {
+      "id": "GCA-003",
+      "name": "PID_PACKET_BINDING",
+      "setup": "For every concurrently live child, bind pid + process-start identity + node_id + consumed snapshot identity + packet_digest.",
+      "expected": "ALL_INTEGRATED_COHORT_MEMBERS_HAVE_ONE_UNAMBIGUOUS_PROCESS_TO_PACKET_CHAIN"
+    },
+    {
+      "id": "GCA-004",
+      "name": "UNUSED_CONCURRENT_PACKET_TAMPER",
+      "setup": "Change a barrier-cohort packet payload while preserving the P1 liveness/snapshot witness shape; if the integrated output is unaffected because P4 uses a new packet, the harness has not established same-cohort causal integration.",
+      "expected": "TAMPER_MUST_AFFECT_OR_FAIL_THE_INTEGRATED_PROOF_OBJECT"
+    }
+  ],
+  "design_options_not_yet_promoted": [
+    {
+      "id": "A_ATOMIC_COHORT_BATCH",
+      "description": "Validate the exact ten cohort packets against one starting S1 snapshot and apply a separately specified deterministic coordinator-authorized batch transaction. This requires an explicit batch-epoch/provenance policy and must not be invented merely to make the test pass."
+    },
+    {
+      "id": "B_PRESERVED_EVIDENCE_TO_CURRENT_SUMMARY",
+      "description": "Keep the ten cohort packets immutable as observations of their original snapshot, then integrate a newly current coordinator summary that references their exact packet digests and original snapshot identity. This requires explicit revalidation/evidence-age semantics and must never silently rewrite the cohort observations as current."
+    }
+  ],
+  "promotion_fence": {
+    "new_runtime_pin_for_v2": "BLOCKED_PENDING_COHORT_TO_ADMISSION_IDENTITY_CLOSURE_OR_EXPLICIT_SUPERVISOR_ACCEPTANCE_OF_SPLIT_PROOF",
+    "positive_training_admission": "BLOCKED",
+    "new_positive_rows": 0,
+    "accepted_dataset_tokens": 0,
+    "checkpoint_winner": null,
+    "physical_grid10_runtime_credit": 0,
+    "jspace_model_credit": 0,
+    "training_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  },
+  "next_exact_action": "Do not create a new physical-GRID10 runtime pin yet. First implement or formally specify the smallest fail-closed same-cohort binding that connects the ten simultaneous Popen process identities and their exact packet digests to the coordinator-consumed evidence set; add the disjoint-cohort and unused-packet-tamper negatives. Only then re-audit consumed-snapshot attestation and decide whether a new exact-source FREE_ONLY runtime request is credit-eligible.",
+  "credits": {
+    "research_delta": 1,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  }
+}

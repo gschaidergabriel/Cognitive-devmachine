@@ -1,0 +1,74 @@
+{
+  "schema": "CLAY_FORSCHUNGSRUN_1_BLOCKED_SEMANTIC_SIMPLEX_ANALYZER/v1",
+  "date": "2026-08-25",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "user_trigger": "forschungsrun 1",
+  "persistent_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority_epoch_observed": "8.78",
+  "execution_mode": "FREE_ONLY",
+  "branch_base": "0215324917078b4abdfeba21967d52ff6a696d90",
+  "latest_main_observed_during_reentry": "165b9912ac28d1a1ce1430bd99f6b9b4956724da",
+  "scope": "QWEN3_0_6B_MATCHED_TRIPLET_BLOCKED_SEMANTIC_SIMPLEX_SOURCE_ANALYSIS",
+  "implemented": {
+    "analyzer": "tools/trigger1_semantic_simplex_blocked_rank_v1.py",
+    "tests": "tests/test_trigger1_semantic_simplex_blocked_rank_v1.py",
+    "input_schema": "CLAY_TRIGGER1_MATCHED_TRIPLET_ACTIVATIONS/v1",
+    "output_schema": "CLAY_TRIGGER1_BLOCKED_SEMANTIC_SIMPLEX_RANK/v1",
+    "decisions": [
+      "ONE_DIMENSIONAL_SUPPORTED",
+      "TWO_DIMENSIONAL_REQUIRED",
+      "UNRESOLVED"
+    ],
+    "core_controls": [
+      "matched AFFIRMATIVE/NEGATIVE/NEUTRAL triplets inside every scenario family",
+      "within-family centering before class geometry estimation",
+      "semantic-label permutations blocked inside scenario family",
+      "counterbalanced A/B/C output-code maps across families",
+      "BASIS/CALIBRATION only; fresh HOLDOUT input rejected",
+      "deterministic permutation seed from canonical packet identity",
+      "cross-family coherence requirement for first and second semantic contrasts",
+      "measurement-only output with all canonical/runtime/training promotion fields forced false or zero"
+    ]
+  },
+  "scientific_reason": {
+    "primary_hypothesis": "A stable one- or two-dimensional semantic subspace remains after scenario-family offsets are cancelled within matched triplets.",
+    "counterhypothesis": "Apparent semantic rank is scenario/domain/style geometry aliased with semantic class and collapses under within-family blocking.",
+    "discriminator": "Compare observed within-family-centered singular values against a null that independently permutes AFFIRMATIVE/NEGATIVE/NEUTRAL labels only inside each scenario family; require cross-family directional coherence in addition to the rank statistic."
+  },
+  "test_evidence": {
+    "source_tests_defined": 5,
+    "cases": [
+      "rank-1 signal survives large scenario-family offsets",
+      "rank-2 signal is distinguishable but remains measurement-only",
+      "fresh HOLDOUT is rejected",
+      "non-counterbalanced code mapping is rejected",
+      "same input produces deterministic result identity"
+    ],
+    "local_equivalent_logic_run": "5_OF_5_PASS",
+    "exact_repository_branch_runtime_observed": false,
+    "classification": "LOCAL_NONCANONICAL_REGRESSION_SIGNAL_ONLY_NOT_ENTITYOS_HCU_RUNTIME_EVIDENCE"
+  },
+  "vps": {
+    "requested_by_owner": true,
+    "executed_by_this_organ": false,
+    "reason": "No SSH/VPS execution connector is available to this organ; no remote-host execution is claimed. Current project authority also remains FREE_ONLY and prior current-facing execution law fails closed on self-hosted/VPS runtime evidence absent a newer admitted execution mode."
+  },
+  "unusual_experiment": {
+    "executed_by_this_organ": false,
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "No shared reproducible canonical macrocycle/request identity plus successful create-only unusual-experiment lease was observed. The implemented analyzer is source-only and consumes already-captured activations."
+  },
+  "credit_change": {
+    "new_runtime_credit": 0,
+    "native_llamacpp_cvec_component_credit_preserved": true,
+    "jspace_model_runtime_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0,
+    "training_credit": 0,
+    "canonical_semantics_promotion": false
+  },
+  "next_exact_action": "After review/fusion, feed only matched label-free BASIS/CALIBRATION activation triplets into the analyzer. Freeze the resulting one- or two-dimensional basis and all thresholds before holdout. Then, only with valid unusual-experiment coordination and an admitted zero-cost runtime surface, execute the corresponding native llama.cpp class-direction x requested-semantic-target cvec matrix on unopened scenario families with sign/null/orthogonal/permuted/label-only nuisance controls, residual-norm binding, explicit token-scope classification, context-bound output-code attestation and dual-readout agreement."
+}

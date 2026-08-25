@@ -1,0 +1,130 @@
+{
+  "schema": "TRIGGER2_PHYSICAL_GRID10_PROOF_CLOSURE_VPS_EXECUTION_REQUEST/v1",
+  "created_local": "2026-08-26T02:08:00+07:00",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "supervisor_epoch": "8.81_DELTA",
+  "mode": "FREE_ONLY",
+  "status": "REQUESTED_NO_RUNTIME_CREDIT",
+  "priority": "P0_CONSUMED_SNAPSHOT_PROOF_CLOSURE",
+  "execution_surface": "clay-direct-dev live free VPS sandbox",
+  "repository": "gschaidergabriel/clay-global-research-entity",
+  "exact_source": {
+    "head": "3ae859b235223286bf2331652327a5ca43e0a048",
+    "tree": "709f7175582e8690933aeb8b9a0629434abf157e",
+    "dirty_required": false,
+    "entrypoint": "tools/xeno_physical_grid10_proof_v2.py",
+    "expected_schema": "XENO_PHYSICAL_GRID10_PROOF_CLOSURE/v2"
+  },
+  "authority_basis": [
+    "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
+    "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_81_DELTA_2026-08-26T0150P0700_GPT56SOL.json",
+    "research_entity/global/TRIGGERWORT_2_CURRENT_TRAINING_COURSE_XENO_HARNESS_2026-08-26.md",
+    "research_entity/global/j-space/research/2026-08-26_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V37_GPT56SOL.json"
+  ],
+  "relationship_to_prior_pin": {
+    "prior_request": "research_entity/execution_requests/2026-08-26_TRIGGER2_PHYSICAL_GRID10_V2_REPOSITORY_BOUND_EXECUTION_PIN_GPT56SOL_0205P0700.json",
+    "prior_source_head": "0011673f34bc55b838f52420376df6d68e40d9be",
+    "classification": "NARROWER_PREDECESSOR_DO_NOT_RUN_IN_PARALLEL_IF_THIS_SUCCESSOR_IS_ACCEPTED",
+    "reason": "The predecessor closes simultaneous-process and stale epoch/digest proof gaps. This successor additionally binds declared NODE_RESULT state to consumed snapshot identity, producer PID, selected-task digest and payload digest, and contains a declared-current/consumed-stale adversarial rejection. One stronger exact-source run is higher information than two overlapping GRID10 runs."
+  },
+  "required_command": "python3 tools/xeno_physical_grid10_proof_v2.py",
+  "source_paths_to_hash": [
+    "tools/xeno_physical_grid10_proof_v2.py",
+    "tools/xeno_self_organizing_fabric_acceptance_v1.py"
+  ],
+  "acceptance_must_bind": [
+    "requested_head == executed_head == 3ae859b235223286bf2331652327a5ca43e0a048",
+    "requested_tree == executed_tree == 709f7175582e8690933aeb8b9a0629434abf157e",
+    "dirty=false",
+    "Python/platform/runtime identity",
+    "sha256 of all project source used by the harness",
+    "stdout sha256",
+    "stderr sha256",
+    "exit code",
+    "full parsed JSON result",
+    "all per-test booleans",
+    "ten observed child PIDs and parent-child PID binding",
+    "all-alive barrier evidence",
+    "shared generation/epoch/state_digest evidence",
+    "read_receipt_digest evidence",
+    "declared-current/consumed-stale rejection evidence"
+  ],
+  "required_properties": [
+    "ten simultaneously alive independent OS node processes",
+    "ten distinct observed child PIDs",
+    "parent-child PID binding exact",
+    "writer freeze active while child snapshots are acquired",
+    "every child snapshot read uses an explicit SQLite transaction",
+    "all ten ordinary nodes share one generation/epoch/state_digest identity",
+    "NODE_RESULT remains s1_write_intent=false",
+    "ordinary direct S1 mutation remains rejected",
+    "stale snapshot/result is rejected",
+    "wrong current state digest is rejected",
+    "declared-current/consumed-stale rewrite is rejected",
+    "consumed task digest is bound to the current snapshot",
+    "read receipt binds producer PID node identity consumed snapshot task digest and payload digest",
+    "fresh exact-snapshot result may pass only through coordinator lease/CAS authority",
+    "no S0 truth or effect authority is minted"
+  ],
+  "hard_negatives_required": [
+    "sequential PID counting cannot satisfy physical GRID10",
+    "same DB path cannot substitute for one shared consumed snapshot identity",
+    "matching generation cannot rescue stale epoch",
+    "matching declared epoch/digest cannot rescue mismatched consumed snapshot fields",
+    "recomputed packet_digest cannot rescue a forged read_receipt_digest",
+    "source/component PASS cannot mint whole-HCU whole-EntityOS J-Space training canonical-truth or effect credit"
+  ],
+  "receipt_required": {
+    "schema": "TRIGGER2_PHYSICAL_GRID10_PROOF_CLOSURE_VPS_RECEIPT/v1",
+    "append_only": true,
+    "must_bind_clean_head_tree": true,
+    "must_bind_source_hashes": true,
+    "must_preserve_raw_failure": true,
+    "must_preserve_infrastructure_vs_logic_classification": true
+  },
+  "credit_before_execution": {
+    "physical_grid10_runtime_credit": 0,
+    "consumed_snapshot_attestation_runtime_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "canonical_semantics_credit": 0
+  },
+  "on_exact_clean_pass": {
+    "eligible_credit": [
+      "PHYSICAL_GRID10_BOUNDED_COMPONENT_REVIEW",
+      "CONSUMED_SNAPSHOT_ATTESTATION_BOUNDED_COMPONENT_REVIEW"
+    ],
+    "still_zero": [
+      "whole_hcu_runtime_credit",
+      "whole_entityos_runtime_credit",
+      "jspace_model_runtime_credit",
+      "training_credit",
+      "canonical_truth_credit",
+      "effect_authority_credit"
+    ],
+    "next_gates": [
+      "controlled load and coordinator contention/fan-in",
+      "coordinator failure/replacement and node restart/rejoin",
+      "recursive compression evidence dereference plus UNKNOWN/Hyperposition branch preservation",
+      "matched-budget challengers",
+      "Hyperposition/GWT re-entry",
+      "checkpoint/J-Space cross-encoding discriminator only after exact model/input identity gates"
+    ]
+  },
+  "fail_closed": [
+    "do not patch execution checkout under this pin",
+    "do not execute against moving main",
+    "do not use paid subscription unknown-cost Together or unlisted provider routes",
+    "do not expose credentials",
+    "do not treat infrastructure/auth/quota/transport failure as scientific negative",
+    "do not grant credit above exact measured component scope"
+  ]
+}

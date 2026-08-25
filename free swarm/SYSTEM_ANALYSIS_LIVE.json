@@ -1,6 +1,6 @@
 {
   "schema": "CLAY_FREE_SWARM_SYSTEM_ANALYSIS/v3",
-  "generated_at": "2026-08-25T22:13:03.975116+00:00",
+  "generated_at": "2026-08-25T22:28:09.891741+00:00",
   "runtime": {
     "supervisor": "STOPPED/QUARANTINED",
     "go_swarm": "RUNNING",
@@ -65,7 +65,7 @@
   },
   "distillery": {
     "schema": "CLAY_RESEARCH_DISTILLERY_STATUS/v1",
-    "generated_at": "2026-08-25T22:12:48.752503+00:00",
+    "generated_at": "2026-08-25T22:28:00.540765+00:00",
     "collected_source_tokens": 11621,
     "accepted_dataset_tokens": 0,
     "dataset_yield": 0.0,
@@ -111,7 +111,7 @@
     "model_output_tokens": 1455,
     "shared_provider_budget": {
       "schema": "CLAY_SHARED_PROVIDER_BUDGET/v1",
-      "generated_at": "2026-08-25T22:12:48.752931+00:00",
+      "generated_at": "2026-08-25T22:28:00.541518+00:00",
       "providers": {
         "arxiv": {
           "max_inflight": 1,
@@ -213,13 +213,13 @@
           "max_inflight": 16,
           "active_leases": 0,
           "min_interval_s": 0.5,
-          "cooldown_seconds": 9.993485689163208,
-          "total_requests": 4050,
+          "cooldown_seconds": 9.989856243133545,
+          "total_requests": 4140,
           "total_success": 134,
-          "total_429": 3915,
+          "total_429": 4005,
           "total_errors": 0,
           "last_status": "429",
-          "last_observed_at": "2026-08-25T22:12:48.746424+00:00"
+          "last_observed_at": "2026-08-25T22:28:00.531366+00:00"
         },
         "semantic_scholar": {
           "max_inflight": 1,
@@ -249,16 +249,16 @@
     },
     "db_bytes": 983040,
     "top_questions": [
-      "How can the effectiveness of the network isolation mechanism be measured and verified?",
-      "What are the potential alternatives to network isolation for ensuring provider network quarantine?",
-      "What is the relationship between binding granularity and security?",
-      "How do different binding granularity levels affect security outcomes?",
-      "Can the security impact of binding granularity be mitigated through other means?",
-      "What is the optimal chunk size for memory-mapped model loading?",
-      "Does parallel deserialization of model chunks improve throughput without increasing peak memory?",
-      "How does the proposed loader handle model version mismatches during incremental loading?",
-      "Does credential-level admission binding generalize to Groq/OpenRouter where model-level free limits already exist, or is NVIDIA's Developer Program structure uniquely coarse?",
-      "Wie kann die Engine‑Kosten‑Validierung in das HCU‑Routing integriert werden, ohne die Modellvielfalt zu reduzieren?"
+      "What are the performance implications of the dynamic binding mechanism?",
+      "How to achieve deterministic nonce generation without compromising cryptographic security in high-throughput registry systems?",
+      "What is the exact NVIDIA API endpoint and response schema that authoritatively returns the calling credential's tier (free vs paid) and model access list, without consuming paid quota?",
+      "Does provider-level circuit-breaking (zero assignment during cooldown) increase tail latency for logical workers that could have been served by a recovering provider?",
+      "Causally distinct unresolved question: How do multi-tier decay parameters interact with entropy minimization constraints in the J-Space/GWT prototype when preserving counterevidence across modality boundaries?",
+      "What is the minimal probe payload that reliably triggers provider-side free-tier path without incurring billable tokens or side effects?",
+      "causally distinct unresolved question",
+      "What is the actual source layout of the HCU runtime provider router, credential binding, and receipt emission modules? (EXACT_SOURCE_CAPSULE was NOT_SELECTED_FOR_THIS_SHARD)",
+      "What is the optimal mmap chunk size for memory‑mapped model loading across heterogeneous storage back‑ends and hardware configurations?",
+      "Wie kann die Kosten-Übernahme-Rate (CTR) für verschiedene Engine-Anfragen im FREE-ONLY-Modus optimiert werden?"
     ],
     "candidate_states": {}
   },
@@ -433,6 +433,6 @@
     "measured_total_sonnet5_equivalent_usd": 148.830648,
     "verified_historical_savings_usd": null,
     "nominal_avoided_if_zero_cost_usd": 148.830648,
-    "repo_output_only_proxy_usd": 140.20229
+    "repo_output_only_proxy_usd": 140.30175
   }
 }

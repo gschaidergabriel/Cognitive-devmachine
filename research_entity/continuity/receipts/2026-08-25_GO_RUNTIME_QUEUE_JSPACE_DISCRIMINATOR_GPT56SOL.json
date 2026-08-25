@@ -1,0 +1,70 @@
+{
+  "schema": "CLAY_GO_RUNTIME_QUEUE_JSPACE_DISCRIMINATOR/v1",
+  "generated_date": "2026-08-25",
+  "authority_epoch": "8.78",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "trigger": "go",
+  "organ": "GPT-5.6-Sol",
+  "canonical_main_observed_before_write": "9239370999c192328f33eb47fa3bbb7e88ab39a7",
+  "coordination": {
+    "shared_immutable_macrocycle_identity": null,
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_experiments_executed": 0,
+    "new_clay_direct_dev_generation0_dispatches_created": 0,
+    "reason": "Generation 0 is canonically quarantined after legacy fan-out; a new go must not create another ordinary-dispatch trigger."
+  },
+  "track_a": {
+    "classification": "SELF_HOSTED_TRANSPORT_QUEUE_BLOCK_CONFIRMED_WITHOUT_NEW_FANOUT",
+    "controller_repo": "gschaidergabriel/Dr.-Unterweger",
+    "controller_probe_run_id": 32803694800,
+    "controller_probe_status_observed": "queued",
+    "clay_historical_backfill_run_id": 32803325959,
+    "clay_historical_backfill_status_observed": "queued",
+    "inference": "The same nonterminal scheduling state across the retained controller and Clay repositories weakens a Clay-repository-label-only explanation and supports a broader self-hosted execution-surface availability/scheduling blocker. Runner-offline state remains unproven because runner status itself was not directly observed.",
+    "runtime_credit_added": 0
+  },
+  "track_b": {
+    "classification": "REPLAY_STABLE_CAUSAL_IDENTITY_REPAIR_EXACT_SOURCE_READY_RUNTIME_BLOCKED",
+    "current_backfill_blob": "f095ec12ab28aa5df87b1762b2cc19afca592365",
+    "observed_bug": "tools/free_swarm_historical_backfill.py persists byte_offset but resets local_line to zero on each incremental ingest_artifact_history resume, while source_event_identity includes line_no. The same physical workers.jsonl row can therefore receive different source_event_id values depending on replay partitioning.",
+    "successor_adapter": "tools/apply_go878_backfill_line_checkpoint_after_batch_guard.py",
+    "adapter_expected_post_batch_guard_blob": "f095ec12ab28aa5df87b1762b2cc19afca592365",
+    "exact_source_match": true,
+    "dependent_donor_pr": "gschaidergabriel/clay-global-research-entity#1851",
+    "dependency_rule": "Do not promote source_count reconciliation until replay-partition-invariant source_event_id is established and regression-tested; otherwise artificial event identities can still inflate scheduling evidence weight.",
+    "next_exact_gate": "Execute the existing line-checkpoint patcher and historical-backfill regression suite inside clay-direct-dev on the exact matching source, persist FREE_SWARM_BACKFILL_LINE_IDENTITY_RECEIPT/v1, then revalidate PR1851 against second-pass replay idempotence.",
+    "runtime_credit_added": 0
+  },
+  "track_c": {
+    "classification": "JSPACE_RESEARCH_DESIGN_ADVANCED_NO_MODEL_INTERVENTION",
+    "current_lane": "Qwen3-0.6B zero-cost local hidden-state/vector specificity testing",
+    "external_prior_art": [
+      {
+        "source": "IBM activation-steering",
+        "url": "https://github.com/IBM/activation-steering",
+        "finding": "The project reports pairwise PCA as its default steering-vector extraction method after a 2025 update, providing a concrete alternative basis estimator to mean contrastive activation addition."
+      },
+      {
+        "source": "Feature Guided Activation Additions",
+        "url": "https://arxiv.org/abs/2501.09929",
+        "finding": "FGAA reports improved steering precision by selecting SAE-space features, but adds representation-learning complexity that is not yet justified for the blocked Qwen3-0.6B lane."
+      }
+    ],
+    "hypothesis": "Before adding SAE machinery, calibration-only selection should compare the current mean contrastive axis against a pairwise-PCA axis under the same BASELINE/+VECTOR/SIGN_FLIP/NULL_VECTOR/ORTHOGONAL_SAME_NORM/PERMUTED_SAME_NORM controls and untouched holdout family.",
+    "counterhypothesis": "On Qwen3-0.6B with the current small contrast set, pairwise PCA may amplify sampling noise or overfit calibration; the simpler mean contrastive vector may remain more stable on untouched holdout.",
+    "cheapest_high_information_discriminator": "Add basis_method as a calibration-only candidate dimension (MEAN_CAA vs PCA_PAIRWISE), freeze all other control/holdout semantics, and compare the minimum specific-direction margin on untouched holdout. Do not execute until canonical unusual-experiment coordination and an authorized working local/VPS runtime surface are available.",
+    "model_runtime_credit_added": 0,
+    "training_credit_added": 0
+  },
+  "credits": {
+    "whole_entityos_hcu_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "provider_runtime": 0
+  },
+  "evidence_boundary": "This receipt records exact current source identity, live GitHub job scheduling state, source-level causal-identity diagnosis, and external research design only. It is not a clay-direct-dev roundtrip PASS, historical-backfill saturation receipt, replay-v2 runtime PASS, J-Space model intervention result, or training evidence."
+}

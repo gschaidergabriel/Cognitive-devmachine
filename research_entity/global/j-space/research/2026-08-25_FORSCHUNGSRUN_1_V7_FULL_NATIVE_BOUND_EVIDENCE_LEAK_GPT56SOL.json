@@ -1,0 +1,91 @@
+{
+  "schema": "CLAY_FORSCHUNGSRUN_1_V7_FULL_NATIVE_BOUND_EVIDENCE_LEAK/v1",
+  "date": "2026-08-25",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "user_trigger": "forschungsrun 1",
+  "persistent_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority_epoch_observed": "8.78",
+  "execution_mode": "FREE_ONLY",
+  "canonical_main_observed_at_final_reentry": "fbf5140fe0db284bc01f707c06ca47af86ac30f1",
+  "research_question": "Does current Trigger-1 promotion-v7 fail closed for its strongest inherited full-native J-Space vector-control candidate when evidence-bound modularity-v2 or case-bound semantic-factorial evidence fails?",
+  "observed_current_source": {
+    "promotion_gate": "tools/trigger1_jspace_promotion_gate_v7.py",
+    "promotion_gate_blob_sha_before_patch": "f2e7a9aed08a42fd9fc0f50387fb4e233db1c188",
+    "modularity_dependency": "trigger1_jspace_modularity_companion_v2",
+    "factorial_dependency": "trigger1_semantic_factorial_evidence_gate_v1",
+    "scientific_candidate_recomputed_with_factorial_gate": true,
+    "owner_candidate_recomputed_with_factorial_gate": true,
+    "modular_candidate_recomputed_with_factorial_gate": true,
+    "full_native_candidate_explicitly_recomputed_before_patch": false,
+    "full_native_candidate_can_pass_through_base_dict_before_patch": true
+  },
+  "counterhypothesis": {
+    "claim": "The inherited full-native candidate may intentionally remain independent of v7 evidence-bound modularity and semantic-factorial reconstruction.",
+    "status": "REJECTED_FOR_CURRENT_V7_PROMOTION_BOUNDARY",
+    "reason": "Current Forschungsrun-1 boundary material requires the full-control path to survive upstream modularity/specificity and case-bound semantic-factorial evidence; allowing the strongest field to bypass those joins is inconsistent with the fail-closed successor semantics."
+  },
+  "discriminator": {
+    "class": "DETERMINISTIC_SOURCE_COMPOSITION_REGRESSION",
+    "unusual_experiment": false,
+    "model_invocation": false,
+    "holdout_opened": false,
+    "expected_fail_before_fix": "A mocked upstream full_native=true remains true when factorial evidence fails because v7 spreads **base and does not overwrite the field.",
+    "required_fix_invariant": "full_native_v7 = upstream_full_native AND evidence_bound_modular_v2 AND case_bound_semantic_factorial"
+  },
+  "write": {
+    "branch": "fix/forschungsrun1-v7-bound-modularity-full-native",
+    "pull_request": 1933,
+    "head_sha_before_this_receipt": "eaa59943ec1e5f83981f62e274714261c6b8659f",
+    "files_changed_before_this_receipt": [
+      "tools/trigger1_jspace_promotion_gate_v7.py",
+      "tests/test_trigger1_jspace_promotion_gate_v7.py"
+    ],
+    "patch_scope": "Explicitly overwrite full_native_jspace_vector_control_candidate with upstream_full_native AND bound_modular AND factorial_pass; fail closed on invalid surfaces; expose batch aggregate; add regression coverage."
+  },
+  "validation": {
+    "isolated_scratch_composition_regressions": "4/4 PASS",
+    "exact_branch_local_clone_test": "BLOCKED_TRANSPORT_DNS",
+    "exact_branch_local_clone_error": "Could not resolve host: github.com",
+    "github_actions": [
+      {
+        "run_id": 32808546888,
+        "workflow": "Research Entity Identity Guard",
+        "conclusion": "failure",
+        "job_steps_observed": 0,
+        "runner_id_observed": 0
+      },
+      {
+        "run_id": 32808546902,
+        "workflow": "Research Entity Verify",
+        "conclusion": "failure",
+        "job_steps_observed": 0,
+        "runner_id_observed": 0
+      }
+    ],
+    "github_actions_failure_classification": "INFRASTRUCTURE_OR_GUARD_START_FAILURE_NOT_CODE_TEST_RESULT",
+    "exact_repository_test_pass_claimed": false
+  },
+  "negative_evidence": [
+    "The local sandbox could not resolve github.com, so an exact cloned-branch unittest run was not obtained.",
+    "Both PR workflows concluded failure before exposing any job steps and with runner_id=0; these runs do not establish a source regression or model failure.",
+    "PR mergeability remains blocked while required checks are failing; source-level acceptance is therefore not claimed."
+  ],
+  "coordination": {
+    "duplicate_pr_1930": "CLOSED_AFTER_CANONICAL_FACTORIAL_COMPOSITION_CONVERGED",
+    "superseded_pr_1931": "CLOSED_AFTER_CANONICAL_V7_MOVED_TO_MODULARITY_V2",
+    "current_single_fix_lane": 1933,
+    "new_unusual_experiment_executed": false,
+    "unusual_experiment_reason": "Standalone Forschungsrun-1 trigger still lacks a canonical shared immutable go/request identity plus successful create-only lease, and current Trigger-1 VPS execution remains separately queue-quarantined."
+  },
+  "credit_change": {
+    "canonical_semantics_promotion": false,
+    "jspace_model_runtime_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "training_credit": 0
+  },
+  "next_exact_action": "Keep PR1933 as the single nonduplicate source repair unless main independently closes the same invariant. Obtain an actually-started exact-source repository test/guard result for the PR. Do not treat zero-step CI failure as code evidence. After the separate runner quarantine is cleared and an admissible unusual-experiment identity/lease exists, execute one exact-current v7-compatible Qwen3-0.6B Q8_0 producer and adjudicate only receipt-bound outputs through the then-current promotion chain."
+}

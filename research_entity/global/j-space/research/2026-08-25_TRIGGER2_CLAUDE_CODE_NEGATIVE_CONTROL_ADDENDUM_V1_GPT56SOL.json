@@ -1,0 +1,130 @@
+{
+  "schema": "CLAY_TRIGGER2_CLAUDE_CODE_NEGATIVE_CONTROL_ADDENDUM/v1",
+  "date": "2026-08-25",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "persistent_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "base_main": "9253acc202df9dc326b13a1510491048e2cb8c8b",
+  "extends": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_DYNAMIC_CODEBOOK_BINDING_SWARM_DELTA_V2_GPT56SOL.json",
+  "source": {
+    "title": "ENTITYOS_CLAUDE_RESULTS_2026-08-25.pdf",
+    "provenance": "user-supplied Claude Code coordinator + delegated-agent results visible through ChatGPT File Library; not yet hashed/copied into canonical repository by this organ",
+    "scope_rule": "Treat findings as source evidence with explicit model/test scope; do not promote them into target-model runtime credit."
+  },
+  "observed_findings": [
+    {
+      "id": "CC_T01_STRUCTURAL_NATIVE",
+      "model_scope": "Qwen3-0.6B pinned GGUF lane, separate from the trigger2 measured Qwen3.5-0.8B target",
+      "status": "FAIL_SCIENTIFIC",
+      "jspace_verdict": "INSTRUMENTATION_CONTROL_PASS_ONLY",
+      "observations": [
+        "holdout lexical overlap with calibration was reported as zero",
+        "the injected semantic vector transported mechanistically to the downstream layer",
+        "holdout target-code hit remained 0.333 matched versus 0.333 baseline on the 3-way task",
+        "reported diagonal advantage was negative",
+        "a nuisance control produced larger absolute behavioral movement than the semantic condition"
+      ],
+      "bounded_inference": "Representation-level transport is not a sufficient training/evaluation objective for behavioral semantic-to-symbol binding.",
+      "forbidden_inference": "This does not prove the Qwen3.5-0.8B trigger2 target has the same failure mechanism."
+    },
+    {
+      "id": "CC_T05_INPUT_IDENTITY",
+      "status": "INCOMPLETE",
+      "observations": [
+        "prompt-byte and token-tensor hashing mechanisms exist",
+        "no single artifact binds both identities together in the tested promotion topology",
+        "token-tensor hashing in the inspected path drops dtype and shape",
+        "the lineage with broader cross-binding was not the live promotion-gate lineage"
+      ],
+      "bounded_inference": "Training/evaluation row provenance should bind prompt bytes and consumed token tensor identity together, including order, dtype and shape, at the lineage that actually makes promotion decisions."
+    },
+    {
+      "id": "CC_T06_PROMOTION_GATE",
+      "status": "FAIL_SCIENTIFIC",
+      "observations": [
+        "the live CI/runner path used an older unversioned promotion gate while later stricter variants existed but were unreachable",
+        "independence in the live path was self-declared by candidate JSON rather than independently measured",
+        "control receipt hashes were format-checked rather than recomputed against source bytes",
+        "matched-control completeness was not enforced per calibration family",
+        "wrong-layer/lesion/rescue evidence was absent from the live decision path"
+      ],
+      "bounded_inference": "A green candidate-owned validator cannot authenticate trigger2 training success. Independent recomputation and the exact live retained gate path are mandatory."
+    }
+  ],
+  "training_design_return": {
+    "keep_current_primary_objective": "episode-local semantic-class -> realized codebook mapping -> exact output atom",
+    "do_not_add_as_primary_objective": [
+      "maximize hidden-state target coordinate",
+      "maximize static vector transport",
+      "maximize candidate-declared independence score",
+      "optimize against format-only receipt validity"
+    ],
+    "new_hard_requirements": [
+      "Every evaluation family reports behavior and internal transport separately; internal transport never substitutes for behavioral binding accuracy.",
+      "Matched nuisance/sham/off-target controls are evaluated per family and must not systematically outperform the intended binding intervention.",
+      "Exact prompt-byte hash and consumed token-tensor hash are cross-bound in one trial identity; token tensor identity includes dtype and shape.",
+      "The promotion validator independently recomputes class-symbol independence, realized S3 mapping, target derivation, receipt/source hashes and matched-control completeness.",
+      "The exact gate called by the live training/evaluation path is version-bound; unreachable stricter validator files receive zero promotion credit.",
+      "Post-training causal evidence requires lesion/shuffle/rescue of the learned binding path while semantic readability is preserved."
+    ]
+  },
+  "adversarial_training_and_eval_pairs_added": [
+    {
+      "id": "PAIR_TRANSPORT_WITHOUT_BINDING",
+      "construction": "Keep a semantically decodable case and successfully transported internal semantic direction, but randomly permute the episode-local codebook after semantic extraction.",
+      "expected": "The model must still derive the output from the current realized codebook. A hidden-state coordinate matching the semantic class but an incorrect output atom is FAIL.",
+      "purpose": "Prevents proxy-objective success from being counted as binding success."
+    },
+    {
+      "id": "PAIR_NUISANCE_OUTPERFORMS_SIGNAL",
+      "construction": "Include a matched nuisance intervention/control that preserves the episode mapping but perturbs an unrelated direction with matched magnitude.",
+      "expected": "The nuisance arm must not exceed the intended binding arm on the preregistered behavioral metric beyond the declared tolerance.",
+      "purpose": "Detects non-specific steering and control failure."
+    },
+    {
+      "id": "PAIR_IDENTITY_SHAPE_COLLISION",
+      "construction": "Use token tensors with identical flattened token values but different declared shape/dtype in a synthetic validator fixture.",
+      "expected": "Trial identity must differ or the malformed/mismatched tensor must be rejected; hash equality from flattened values alone is insufficient.",
+      "purpose": "Hardens consumed-input provenance before any training/evaluation credit."
+    },
+    {
+      "id": "PAIR_SELF_DECLARED_INDEPENDENCE",
+      "construction": "Candidate metadata claims class-symbol independence=true while the realized row distribution is intentionally imbalanced.",
+      "expected": "Independent validator rejects the family after recomputing counts and mutual information.",
+      "purpose": "Prevents candidate-owned booleans from minting scientific credit."
+    },
+    {
+      "id": "PAIR_FORMAT_ONLY_RECEIPT",
+      "construction": "Supply syntactically valid hex64 receipt digests that do not match the referenced prompt/codebook/source bytes.",
+      "expected": "Validator recomputes the hashes and rejects the trial.",
+      "purpose": "Prevents provenance from becoming a cosmetic schema field."
+    },
+    {
+      "id": "PAIR_FAMILY_CONTROL_OMISSION",
+      "construction": "A candidate contains one complete calibration family and one incomplete family missing a required control.",
+      "expected": "Promotion fails for the candidate; completeness is checked per family, not once globally.",
+      "purpose": "Prevents selection-by-omission."
+    }
+  ],
+  "swarm_review": {
+    "EVIDENCE_EXTRACTOR": "accepted T01/T05/T06 findings only at their explicit scopes",
+    "ADVERSARIAL_SHORTCUT_HUNTER": "flagged hidden-state transport as a dangerous proxy objective and self-declared independence as a shortcut",
+    "STATISTICAL_REVIEWER": "requires family-level matched controls and recomputed class-symbol independence",
+    "ABI_PROVENANCE_REVIEWER": "requires prompt+tensor cross-binding including dtype/shape and byte-level receipt recomputation",
+    "RETENTION_REVIEWER": "no change to the narrow binding-only training objective; existing semantic/write abilities remain protected",
+    "HARNESS_COMPATIBILITY_REVIEWER": "requires the same exact live gate path plus lesion/shuffle/rescue instrumentation in future go harness work",
+    "FINAL_INTEGRATOR": "ACCEPT_ADDENDUM_AS_NEGATIVE_CONTROL_DESIGN_INPUT_ONLY"
+  },
+  "credit": {
+    "training_examples_design_delta": 1,
+    "training_executed": false,
+    "training_credit": 0,
+    "qwen3_0_6b_jspace_promotion": false,
+    "qwen3_5_0_8b_jspace_runtime_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  },
+  "next_exact_action": "Fuse these negative-control requirements into the permutation-causal renderer/validator that materializes the canonical 72-row trigger2 seed; do not scale lexical volume until row-level provenance, controls and independent validation pass."
+}

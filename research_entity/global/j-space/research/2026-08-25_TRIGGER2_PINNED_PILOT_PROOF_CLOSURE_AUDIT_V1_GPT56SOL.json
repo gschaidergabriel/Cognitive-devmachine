@@ -1,0 +1,181 @@
+{
+  "schema": "CLAY_TRIGGER2_PINNED_PILOT_PROOF_CLOSURE_AUDIT/v1",
+  "date": "2026-08-25",
+  "local_trigger_time": "20:23+07:00",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU_VARIABLE_COGNITIVE_GRID",
+  "status": "CURRENT_RESEARCH_DELTA_NONPROMOTING",
+  "authority_snapshot": {
+    "repository": "gschaidergabriel/clay-global-research-entity",
+    "branch": "main",
+    "observed_main_before_write": "3bf38a063835bb25d3ee0d00e59bc423c07c3daa",
+    "supervisor_epoch": "8.78",
+    "mode": "FREE_ONLY",
+    "current_protocol": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_CURRENT_PROTOCOL_V5_GPT56SOL.json",
+    "training_ledger": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V11_GPT56SOL.json",
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0
+  },
+  "purpose": "Separate bounded one-case pilot proof closure from general Hyperposition training-proof closure after moving-main convergence. This prevents already source-bound pilot subjects from being incorrectly marked wholly unbound while also preventing source-level progress from being inflated into positive training admission.",
+  "audited_current_inputs": [
+    "tools/trigger2_trusted_hyperposition_pilot_generator_v1.py",
+    "research_entity/global/j-space/research/TRIGGER2_TRUSTED_SYNTHETIC_GENERATOR_AUTHORITY_V1.json",
+    "tools/trigger2_generation_provenance_gate_v1.py",
+    "tools/trigger2_hyperposition_epistemic_preupdate_guard_v1.py",
+    "tools/trigger2_hyperposition_state_history_proof_gate_v1.py",
+    "tools/trigger2_hyperposition_state_history_generation_bound_gate_v3.py",
+    "tests/test_trigger2_generation_bound_hyperposition_gate_v2.py",
+    "tests/test_trigger2_hyperposition_state_history_generation_bound_gate_v3.py",
+    "research_entity/global/j-space/research/2026-08-25_TRIGGER2_STATE_HISTORY_PROOF_GATE_V1_ADVERSARIAL_AUDIT_GPT56SOL.json",
+    "research_entity/global/j-space/research/2026-08-25_TRIGGER2_STATE_HISTORY_PROOF_ENVELOPE_V1_GPT56SOL.json"
+  ],
+  "bounded_pilot_identity": {
+    "case_id": "T2_GP_PILOT_DB_MATCH_V1",
+    "generator_commit": "88e8090f613984d6f407d25fa2910b29e11f1b28",
+    "generator_source_sha256": "a0a83f41685be79bc3dc0b46cac18682e7b6c86d45d93ef92ba0ada985c7c6cb",
+    "event_epistemic_type": "SYNTHETIC_PROOF",
+    "history_shape": "EMPTY_HISTORY_CLEAN_GENESIS_PILOT",
+    "training_eligible": false
+  },
+  "closure_matrix": [
+    {
+      "boundary": "GENERATOR_IDENTITY_AND_DETERMINISTIC_PARAMETERS",
+      "bounded_pilot_status": "SOURCE_BOUND_EXECUTION_UNOBSERVED",
+      "general_training_status": "REQUIRES_AUTHORITY_ENTRY_PER_ALLOWED_CASE_OR_EQUIVALENT",
+      "reason": "Generator path, source digest, source commit, schema, deterministic parameters and materials are pinned by repository authority; generation gate resolves these from authority rather than accepting row path as authority."
+    },
+    {
+      "boundary": "FORMAL_WORLD_CURRENT_EVENT_AND_STATE_BEFORE_ORIGIN",
+      "bounded_pilot_status": "SOURCE_RECONSTRUCTED_EXECUTION_UNOBSERVED",
+      "general_training_status": "OPEN_PER_FUTURE_CASE_UNTIL_RECONSTRUCTED_OR_RECEIPT_BOUND",
+      "reason": "Generation-provenance gate deterministically rebuilds formal_world, dependence registry, current event and state_before and compares admitted JCS hashes/object equality. For this one authority-pinned case, coherent caller substitution of those subjects is source-rejected in the candidate code path."
+    },
+    {
+      "boundary": "SYNTHETIC_PROOF_EPISTEMIC_TYPE_FOR_CURRENT_EVENT",
+      "bounded_pilot_status": "SOURCE_BOUND_TO_TRUSTED_GENERATOR_EXECUTION_UNOBSERVED",
+      "general_training_status": "OPEN_FOR_UNPINNED_SYNTHETIC_PROOF_PRODUCERS",
+      "reason": "The current pilot event is reconstructed as SYNTHETIC_PROOF by the pinned generator and the epistemic guard permits it. This does not establish a general rule that any caller string SYNTHETIC_PROOF is evidence authority."
+    },
+    {
+      "boundary": "GENESIS_AND_ORDERED_HISTORY_ORIGIN",
+      "bounded_pilot_status": "TRIVIAL_CASE_PARTIAL_EMPTY_HISTORY_NO_GENERAL_CREDIT",
+      "general_training_status": "P0_OPEN_IMMUTABLE_HISTORY_COMMITMENT_REQUIRED",
+      "reason": "The trusted generator bundle contains clean genesis plus empty history, but generation-provenance gate v1 authenticates state_before rather than genesis/history as independent reconstructed subjects. The one empty-history case therefore has less attack surface, but no nonempty-history positive family is promotable until genesis/history commitment is authority-bound."
+    },
+    {
+      "boundary": "EVENT_WORLD_SCOPE",
+      "bounded_pilot_status": "INDIRECTLY_SCOPED_BY_PINNED_WORLD_AND_EVENT_SUBJECTS_EXECUTION_UNOBSERVED",
+      "general_training_status": "P0_OPEN_WORLD_SCOPED_EVENT_IDENTITY_REQUIRED",
+      "reason": "For the one case, authority pins world_id and exact formal-world/event subject hashes. The retained event_semantic_sha256 itself omits world identity, so cross-world global replay identity remains too weak for general training proof."
+    },
+    {
+      "boundary": "DISCRIMINATOR_ADMISSION_AND_EXECUTION_PRODUCER_AUTHENTICITY",
+      "bounded_pilot_status": "P0_OPEN_HIGHEST_VALUE_BLOCKER",
+      "general_training_status": "P0_OPEN",
+      "reason": "Current state-history code validates typed receipt shape, event/world binding, u_test_order coverage, admissible=true, executed=true and a nonempty execution_receipt_id, but those execution/admission assertions remain row-carried. Current source tests themselves synthesize those values, proving shape/coverage logic rather than trusted execution provenance."
+    },
+    {
+      "boundary": "OBSERVED_EVIDENCE_PRODUCER_AUTHENTICITY",
+      "bounded_pilot_status": "NOT_EXERCISED_CURRENT_EVENT_IS_SYNTHETIC_PROOF",
+      "general_training_status": "P0_OPEN_BEFORE_ANY_OBSERVED_CASE",
+      "reason": "Typed OBSERVED receipt structure exists, but source/provenance/time strings are not yet independently source-content/qualification-rule authenticated. This does not block the present SYNTHETIC_PROOF case specifically, but it blocks future OBSERVED positive supervision."
+    },
+    {
+      "boundary": "EXACT_CURRENT_DETERMINISTIC_EXECUTION",
+      "bounded_pilot_status": "UNOBSERVED",
+      "general_training_status": "UNOBSERVED",
+      "reason": "Focused Trigger-2 source tests exist, but no admitted exact-current repository-bound execution receipt for the generation->epistemic->replay v3 chain has been observed. Portable GO acceptance runner targets unrelated S0/fabric components and therefore cannot supply this credit."
+    },
+    {
+      "boundary": "FINAL_MODEL_VISIBLE_LEAKAGE_SPLIT_TOKENIZER_ABI",
+      "bounded_pilot_status": "OPEN_BEFORE_DATASET_ADMISSION",
+      "general_training_status": "OPEN",
+      "reason": "Rendered semantic-ablation/nuisance decoder, full-cross or conditional-MI, family/provenance split and tokenizer/ABI gates remain downstream requirements even after proof-source closure."
+    },
+    {
+      "boundary": "ABLITERATED_APPROX_0_8B_TARGET_SELECTION",
+      "bounded_pilot_status": "ORTHOGONAL_OPEN",
+      "general_training_status": "OPEN",
+      "reason": "Measured Josiefied gabliterated snapshot is a TARGET_MEASURED_UNSELECTED candidate; no matched immutable loader-bound winner selection has occurred."
+    }
+  ],
+  "artifact_reclassification_delta": [
+    {
+      "artifact": "tools/trigger2_generation_provenance_gate_v1.py",
+      "status": "CURRENT_BOUNDED_PILOT_SOURCE_PROVENANCE_COMPONENT_EXECUTION_UNOBSERVED",
+      "revision_reason": "Stronger for T2_GP_PILOT_DB_MATCH_V1 than the pre-implementation ledger wording: it reconstructs/pins world, current event and state_before rather than merely checking a caller source hash. No runtime/training promotion follows."
+    },
+    {
+      "artifact": "tools/trigger2_hyperposition_state_history_generation_bound_gate_v3.py",
+      "status": "CURRENT_SUCCESSOR_COMPOSITION_NONPROMOTING_P0_DISCRIMINATOR_PRODUCER_REMAINS",
+      "predecessor": "generation-bound v2 + epistemic preupdate guard",
+      "successor": "same retained composition/gate lane with producer-authenticated discriminator proof and later general history/world-scope closure",
+      "revision_reason": "Generation and epistemic ordering have converged, but current positive pilot still trusts row-carried discriminator execution/admission assertions."
+    },
+    {
+      "artifact": "tests/test_trigger2_generation_bound_hyperposition_gate_v2.py",
+      "status": "CURRENT_SOURCE_MUTATION_SUITE_EXECUTION_UNOBSERVED_NEEDS_A02_PRODUCER_TEST",
+      "revision_reason": "GP01..08 plus preseed/unexecuted checks exist, but a receipt with arbitrary execution_receipt_id plus asserted admissible/executed is still constructed by the test helper; producer authenticity is not tested."
+    },
+    {
+      "artifact": "trigger2-single-gate-v4-gpt56sol-20260825-2023 branch",
+      "status": "SUPERSEDED_DONOR_NOT_OPENED_AS_PR",
+      "predecessor": "f8fd03e7903cd5880de99c63480e7522af5e786d",
+      "successor": "current main state-history/generation-bound v3 lane",
+      "revision_reason": "Moving-main convergence implemented equal or stronger proof semantics; opening a competing PR would create duplicate authority."
+    },
+    {
+      "artifact": "trigger2-generation-provenance-pilot-gpt56sol-20260825-2040 branch",
+      "status": "SUPERSEDED_DONOR_NOT_OPENED_AS_PR",
+      "predecessor": "ab4458512c136ce519cee1885dd982ab52ebed0b",
+      "successor": "current main generation-provenance gate v1 + v3 composition",
+      "revision_reason": "Parallel main landed the canonical retained solution while this donor branch was being developed; it is intentionally not promoted into a duplicate PR."
+    }
+  ],
+  "highest_information_nonduplicate_next_action": {
+    "id": "T2_PINNED_PILOT_A02_DISCRIMINATOR_PRODUCER_AUTH",
+    "ordinary_or_unusual": "ORDINARY_DETERMINISTIC_SOURCE_AND_MUTATION_TEST_WORK",
+    "why_first": "For the already pinned empty-history SYNTHETIC_PROOF DB pilot, generation/world/event/state origin is now source-reconstructed. The nearest remaining positive-pilot exploit is that discriminator admissibility/execution is still asserted by a transported receipt rather than produced/recomputed by a trusted deterministic authority.",
+    "minimum_successor_contract": [
+      "resolve synthetic discriminator producer/policy identity from repository authority rather than candidate row",
+      "bind producer repo path + exact source sha256 + schema/version",
+      "bind immutable world identity and formal discriminator spec digest",
+      "bind pre-state or live semantic branch-set digest used for coverage derivation",
+      "bind world-scoped event semantic digest and observed synthetic outcome",
+      "derive admissibility from pinned policy rather than accept a boolean",
+      "derive execution receipt from deterministic producer invocation/result rather than accept executed=true",
+      "recompute u_test_order or equivalent semantic partition and require complete eliminated-competitor coverage",
+      "keep synthetic execution explicitly synthetic and noncanonical",
+      "mint zero canonical truth/effect/runtime/J-Space/HCU/EntityOS/training credit",
+      "add T2_SHPG_A02 fake-executed and coherent-receipt rewrite mutations"
+    ],
+    "after_source_pass": [
+      "obtain exact-current admitted deterministic execution receipt for the retained v3 chain",
+      "bind genesis/history commitment before any nonempty-history positive case",
+      "authenticate OBSERVED evidence producer before any OBSERVED positive case",
+      "rebind only a small native-seed family to the single retained path",
+      "run rendered nuisance/split/tokenizer gates",
+      "keep model selection orthogonal until immutable matched target pilot"
+    ]
+  },
+  "generation_decision": {
+    "new_positive_rows": 0,
+    "new_hard_negative_rows": 0,
+    "decision": "NO_NEW_ROWS_WITH_REASON",
+    "reason": "Existing hard-negative families already cover the conceptual failure modes. The highest information gain is producer-authenticated discriminator proof for the one source-pinned pilot, not another semantically overlapping example family."
+  },
+  "credits": {
+    "research_delta": 1,
+    "artifact_reclassification_delta": 1,
+    "positive_D_E_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "positive_jspace_causal_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0
+  }
+}

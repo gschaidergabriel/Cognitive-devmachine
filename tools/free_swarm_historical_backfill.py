@@ -306,10 +306,6 @@ def _insert_candidate(con: sqlite3.Connection, *, obj: dict[str, Any], row: dict
     worker_sha = str(row.get("text_sha256") or sha_text(str(row.get("text") or "")))
     if existing:
         candidate_hash = str(existing[0])
-        con.execute(
-            "UPDATE candidates SET source_count=COALESCE(source_count,1)+1,last_seen_at=?,priority=MAX(COALESCE(priority,0),?) WHERE candidate_hash=?",
-            (stamp, actionability_score(str(row.get("text") or ""), str(row.get("role") or "")), candidate_hash),
-        )
         added = False
     else:
         candidate_hash = vid
@@ -320,10 +316,18 @@ def _insert_candidate(con: sqlite3.Connection, *, obj: dict[str, Any], row: dict
             (candidate_hash, str(obj.get("delta_id") or candidate_hash[:16]), str(row.get("provider") or ""), str(row.get("model") or ""), str(row.get("role") or ""), worker_sha, repo_head, raw, int(ready), state, stamp, cid, vid, 1, stamp, stamp, extraction_mode, actionability_score(str(row.get("text") or ""), str(row.get("role") or ""))),
         )
         added = True
+
+    before_source_link = con.total_changes
     con.execute(
         "INSERT OR IGNORE INTO candidate_sources(candidate_hash,source_event_id,chunk_id,extractor_worker_sha,extraction_mode,seen_at) VALUES(?,?,?,?,?,?)",
         (candidate_hash, source_event_id, chunk_id or "", worker_sha, extraction_mode, stamp),
     )
+    source_link_added = con.total_changes > before_source_link
+    if existing:
+        con.execute(
+            "UPDATE candidates SET source_count=COALESCE(source_count,1)+?,last_seen_at=?,priority=MAX(COALESCE(priority,0),?) WHERE candidate_hash=?",
+            (int(source_link_added), stamp, actionability_score(str(row.get("text") or ""), str(row.get("role") or "")), candidate_hash),
+        )
     return added, candidate_hash
 
 

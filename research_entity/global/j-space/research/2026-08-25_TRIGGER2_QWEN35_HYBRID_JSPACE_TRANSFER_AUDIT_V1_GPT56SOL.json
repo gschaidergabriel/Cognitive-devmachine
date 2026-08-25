@@ -1,0 +1,78 @@
+{
+  "schema": "CLAY_TRIGGER2_QWEN35_HYBRID_JSPACE_TRANSFER_AUDIT/v1",
+  "date": "2026-08-25",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "status": "CURRENT_EXTERNAL_RESEARCH_DELTA_NONPROMOTING",
+  "product_target": "EntityOS",
+  "architecture_target": "HCU_VARIABLE_COGNITIVE_GRID",
+  "model_target": "QWEN3.5_APPROX_0_8B_LOW_REFUSAL_ABLITERATED_COGNITIVE_PROCESS_SUBSTRATE",
+  "source_classification": [
+    {
+      "source": "https://huggingface.co/Qwen/Qwen3.5-0.8B-Base",
+      "type": "OFFICIAL_MODEL_CARD_SOURCE_DIRECT",
+      "observed": "The official Qwen3.5-0.8B-Base card describes a 24-layer text model with hidden dimension 1024 and a repeated hybrid layout of three Gated DeltaNet->FFN blocks followed by one Gated Attention->FFN block, repeated six times.",
+      "project_effect": "Qwen3.5 J-Space instrumentation cannot assume a homogeneous all-attention Transformer layer family."
+    },
+    {
+      "source": "https://arxiv.org/abs/2505.20896",
+      "type": "PRIMARY_PAPER_METHOD_DONOR_NOT_TARGET_MODEL_FACT",
+      "observed": "Wu, Geiger and Milliere report a training trajectory from random prediction to a shallow early-assignment heuristic and then systematic variable dereferencing; causal interventions implicate residual-stream memory and attention routing in their studied Transformer.",
+      "project_effect": "Checkpoint-trajectory and causal-intervention methodology is relevant to Hyperposition/DB binding evaluation, but the reported mechanism must not be projected directly onto Qwen3.5's hybrid DeltaNet/attention architecture."
+    },
+    {
+      "source": "https://arxiv.org/abs/2509.22739",
+      "type": "PRIMARY_PAPER_METHOD_DONOR_NOT_TARGET_MODEL_FACT",
+      "observed": "Painless Activation Steering reports reliable gains on behavior tasks but not intelligence-oriented tasks across its evaluated models.",
+      "project_effect": "Activation steering success should remain a diagnostic/control signal rather than evidence that the trained 0.8B substrate acquired the intended cognitive algorithm."
+    }
+  ],
+  "inferences": [
+    {
+      "id": "T2_Q35_HYBRID_BLOCK_TYPE_IDENTIFIABILITY",
+      "reality_level": "R1_INFERRED",
+      "claim": "Any JSPACE_VECTOR_CONTROL_ABI successor for Qwen3.5 should bind intervention/probe identity to exact checkpoint/runtime plus block index and block function class (at minimum DeltaNet-like versus Gated-Attention-like), not layer number alone.",
+      "falsifier": "A target-runtime source inspection or executable trace proving all exposed intervention sites are semantically homogeneous with respect to the claimed ABI."
+    },
+    {
+      "id": "T2_Q35_CHECKPOINT_TRAJECTORY_HEURISTIC_RISK",
+      "reality_level": "R1_INFERRED",
+      "claim": "Final aggregate Hyperposition/DB accuracy can hide shortcut phases or brittle heuristics, so matched checkpoint-trajectory evaluation is required before calling variable binding/systematic state routing learned.",
+      "falsifier": "A preregistered target-model evaluation showing equivalent family-disjoint systematic performance and causal mechanism across the full relevant checkpoint interval without heuristic-stage divergence."
+    },
+    {
+      "id": "T2_Q35_STEERING_IS_NOT_COGNITION",
+      "reality_level": "R1_INFERRED",
+      "claim": "A controllable activation direction is insufficient training evidence for Zero/EntityOS cognitive-process acquisition; steering must be paired with lesion/rescue, held-out semantic families, off-target retention and downstream re-entry evidence.",
+      "falsifier": "A preregistered target-model causal evaluation demonstrating that the steering intervention selectively mediates the required cognitive computation and generalizes beyond the intervention prompts without off-target degradation."
+    }
+  ],
+  "training_eval_delta": [
+    "stratify Qwen3.5 J-Space probes/interventions by exact block function class as well as layer/index",
+    "include checkpoint-trajectory evaluation for Hyperposition variable binding, DB-vs-simulation discrimination and re-entry rather than final-checkpoint-only accuracy",
+    "require family-disjoint semantic tests that distinguish systematic dereferencing/state routing from shallow positional or presentation heuristics",
+    "treat activation steering as diagnostic/causal-probe evidence only until lesion/rescue and downstream task mediation pass",
+    "keep final model selection independent of the final holdout and preserve low-refusal as a separate axis from cognition/retention"
+  ],
+  "artifact_reclassification_delta": [
+    {
+      "artifact_class": "generic all-attention Transformer J-Space mechanism transfer to Qwen3.5-0.8B",
+      "status": "NEEDS_REVISION_METHOD_DONOR_ONLY",
+      "revision_reason": "Official target architecture is hybrid Gated DeltaNet + Gated Attention; mechanism claims require target-model-specific causal evidence."
+    },
+    {
+      "artifact_class": "activation-steering success used as evidence of cognitive-process learning",
+      "status": "BLOCKED_AS_PROMOTION_ARGUMENT",
+      "revision_reason": "Current external evidence supports behavior steering as a useful tool but does not establish intelligence/cognitive-algorithm acquisition."
+    }
+  ],
+  "generation_decision": {
+    "new_positive_rows": 0,
+    "new_hard_negative_rows": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "reason": "This delta changes evaluation design and transfer assumptions, not the current A02 data-generation block."
+  },
+  "next_exact_action": "After A02 exact-current mutation closure, fold block-function-class identity and checkpoint-trajectory shortcut controls into the preregistered Qwen3.5 J-Space/model-selection evaluation before any final training promotion."
+}

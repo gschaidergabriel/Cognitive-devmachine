@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v4",
+  "command_id": "gpt56sol-qwen06-specificity-search-run-20260825",
+  "op": "exec",
+  "cwd": "/workspace/clay-global-research-entity",
+  "timeout_seconds": 1800,
+  "command": "set -euo pipefail; OUT=/workspace/qwen06-gpt56sol-direct/out-specificity; rm -rf $OUT; mkdir -p $OUT; echo source_head=$(git rev-parse HEAD); echo executor_sha256=$(sha256sum tools/trigger1_local_qwen06_specificity_search_execute.py | cut -d ' ' -f1); unset OPENAI_API_KEY OPENAI_API_KEYS ANTHROPIC_API_KEY ANTHROPIC_API_KEYS GROQ_API_KEY GROQ_API_KEYS MISTRAL_API_KEY MISTRAL_API_KEYS NVIDIA_API_KEY NVIDIA_API_KEYS NVIDIA_NIM_API_KEY NGC_API_KEY OPENROUTER_API_KEY OPENROUTER_API_KEYS TOGETHER_API_KEY TOGETHER_API_KEYS HF_TOKEN HUGGING_FACE_HUB_TOKEN HUGGINGFACE_HUB_TOKEN || true; export HF_HUB_DISABLE_IMPLICIT_TOKEN=1 HF_HUB_DISABLE_TELEMETRY=1 TOKENIZERS_PARALLELISM=false OMP_NUM_THREADS=2 MKL_NUM_THREADS=2 HF_HOME=/cache/clay-qwen06/hf; set +e; /cache/clay-qwen06/venv/bin/python tools/trigger1_local_qwen06_specificity_search_execute.py --output-dir $OUT --cache-dir /cache/clay-qwen06/hf; rc=$?; set -e; echo model_exit_code=$rc; test -s $OUT/trigger1_local_qwen06_specificity_search_result.json; echo result_file_sha256=$(sha256sum $OUT/trigger1_local_qwen06_specificity_search_result.json | cut -d ' ' -f1); exit 0"
+}

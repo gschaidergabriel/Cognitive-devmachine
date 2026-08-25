@@ -1,0 +1,95 @@
+{
+  "schema": "CLAY_TRIGGER2_PIDFD_WITNESS_SEMANTIC_ADJUDICATION/v1",
+  "date": "2026-08-26",
+  "trigger": "triggerwort2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "status": "APPEND_ONLY_SOURCE_RESEARCH_NONPROMOTING",
+  "observed_main_before_write": "30211828c163b69098f4d6332407d6d950c0b7e6",
+  "authority": {
+    "supervisor_epoch": "8.84",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "architecture": "HCU",
+    "runtime_quiescence": "ACTIVE_FAIL_POST_STOP_PROVIDER_ATTEMPT_COUNTERS_INCREASING",
+    "provider_routes_admitted": false,
+    "training_execution_authorized": false
+  },
+  "subject": {
+    "candidate": "tools/trigger2_physical_witness_capability_v1.py",
+    "candidate_commit": "8691392d071e345c9388431e26e46ec49df8e339",
+    "candidate_test": "tests/test_trigger2_physical_witness_capability_v1.py",
+    "candidate_test_commit": "6e3ce8b701b9acdd73f9ec068f86e8adbe2d360f"
+  },
+  "observed_positive_delta": [
+    "PhysicalCohortWitness is intentionally non-serializable and constructor-gated by an in-process mint token.",
+    "The capability carries ten pidfds and require_physical_witness checks that those handles remain valid with fstat.",
+    "The candidate checks an explicit S1 inode against caller-supplied readonly binding rows and rejects an explicit synthetic_source_fixture_only flag.",
+    "The source_fixture_receipt shape is explicitly SOURCE_FIXTURE_ONLY and zero-credit for physical/model/training promotion."
+  ],
+  "material_counterevidence": [
+    "mint_barrier_witness itself accepts ready_by_node, readonly_s1_fd_binding, s1_file_identity and required_physical_predicates as ordinary caller-supplied mappings rather than deriving them from the retained observer inside the mint authority boundary.",
+    "pidfd_open proves a live process handle can be acquired for the supplied PID; it does not prove that the supplied ready marker, read receipt, barrier timestamps, transaction state or claimed S1 FD rows came from observing that process.",
+    "The candidate compares each supplied FD row inode to the supplied s1_file_identity inode, but it does not independently read /proc/<pid>/fdinfo or stat the actual S1 path while minting. A coherent caller-fabricated row set therefore remains semantically possible at source/API level.",
+    "The current tests monkeypatch pidfd support, pidfd_open, fstat and close. They establish source structure and nonserialization behavior only; they do not establish an observed procfs-to-S1 causal chain.",
+    "No current code-search evidence shows require_physical_witness integrated into the sole retained FusedFabric.atomic_fused_cohort_commit physical mutation boundary."
+  ],
+  "blocker_decomposition": {
+    "PIDFD_PROCESS_EXISTENCE_CAPABILITY": "USEFUL_DONOR_PRIMITIVE",
+    "PIDFD_TO_EXACT_OBSERVED_NODE_ID_BINDING": "OPEN",
+    "PIDFD_TO_ACTUAL_PROCFS_S1_FD_BINDING": "OPEN",
+    "ACTUAL_S1_FILE_DEVICE_INODE_BINDING": "OPEN",
+    "BARRIER_AND_HELD_TRANSACTION_OBSERVATION_MINTED_INSIDE_TRUST_BOUNDARY": "OPEN",
+    "SOLE_FUSEDFABRIC_PHYSICAL_GATE_INTEGRATION": "OPEN",
+    "SOURCE_FIXTURE_VS_PHYSICAL_COHORT_ID_DISJOINTNESS": "OPEN",
+    "EXACT_CURRENT_EXECUTION": "OPEN"
+  },
+  "hypothesis": "pidfds are valuable as one non-serializable liveness/process-incarnation component of a physical witness, but only if minting owns the observation operation and derives procfs/S1/barrier evidence directly rather than accepting those facts from caller mappings.",
+  "counterhypothesis": "The caller mappings can be treated as trusted because the intended caller is the retained spawn_held_cohort observer.",
+  "adjudication": "Reject the counterhypothesis under fail-closed evidence law until source structure itself constrains minting to the retained observation path. Intent and naming do not prove provenance. pidfd validity alone must not upgrade caller-supplied physical predicates into observed facts.",
+  "preferred_fusion": [
+    "Salvage pidfd handles into the sole retained FusedFabric physical witness path rather than adding a peer facade.",
+    "Open pidfds and read exact /proc/<pid>/fdinfo inside the same observation/mint boundary while the barrier is held.",
+    "Stat the actual canonical S1 DB path inside that boundary and bind device+inode, not a caller-supplied s1_file_identity mapping.",
+    "Bind each pidfd/PID to the exact ready marker, NODE_RESULT producer PID, read-receipt digest, generation/epoch/state digest and observed readonly S1 FD identity before release.",
+    "Hash/identify observer source before invocation and verify consumed/unchanged identity after invocation; a post-hoc source hash alone is not consumed-byte attestation.",
+    "Require the sole retained physical mutation entry to consume this witness capability; raw proof mappings must fail before envelope validation or state mutation.",
+    "Keep an explicit SOURCE_FIXTURE_ONLY entry whose cohort identity and persisted evidence class are disjoint from PHYSICAL_OBSERVED and whose receipts hard-code zero physical credit."
+  ],
+  "minimum_regressions": [
+    "RAW_MAPPING_CANNOT_MINT_PHYSICAL_WITNESS",
+    "LIVE_UNRELATED_PID_WITH_FORGED_FD_ROWS_REJECTED",
+    "S1_DEVICE_OR_INODE_MISMATCH_REJECTED",
+    "PIDFD_READY_MARKER_PROCESS_TRANSPLANT_REJECTED",
+    "READ_RECEIPT_OR_SNAPSHOT_TRANSPLANT_REJECTED",
+    "OBSERVER_SOURCE_IDENTITY_DRIFT_REJECTED",
+    "SOURCE_FIXTURE_AND_PHYSICAL_COHORT_IDS_DISJOINT",
+    "RAW_DICT_CANNOT_REACH_ANY_PUBLIC_PHYSICAL_MUTATION_PATH"
+  ],
+  "execution_this_cycle": {
+    "provider_called": false,
+    "model_runtime_executed": false,
+    "physical_grid10_executed": false,
+    "vps_execution_performed": false,
+    "training_executed": false,
+    "paid_execution": false,
+    "unusual_experiment_executed": false,
+    "work_class": "CURRENT_MAIN_SOURCE_REENTRY_PIDFD_WITNESS_CAUSAL_PROVENANCE_ADJUDICATION"
+  },
+  "credits": {
+    "research_delta": 1,
+    "pidfd_donor_design_credit": 1,
+    "physical_proof_boundary_closed": 0,
+    "repository_ci_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "model_call_runtime_credit": 0,
+    "checkpoint_selection_credit": 0,
+    "jspace_model_credit": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "canonical_semantics_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  },
+  "next_exact_action": "Fuse only the pidfd liveness/incarnation mechanism into the sole retained observation-bound physical witness path, with procfs and actual S1 device/inode derivation performed inside minting; do not treat caller-supplied FD/predicate mappings as physical evidence and do not merge a peer facade as closure."
+}

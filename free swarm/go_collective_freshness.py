@@ -2,7 +2,7 @@
 """Fail-closed freshness/publication primitives for GO collective metrics.
 
 This module is a guard for the existing ``free swarm/GO_COLLECTIVE_METRICS``
-publisher, not a second metrics authority.  It binds one coherent Swarm/Forge/
+publisher, not a second metrics authority. It binds one coherent Swarm/Forge/
 Distillery live snapshot to the inbox-selected supervisor authority, rejects stale
 or mixed inputs, serializes competing writers, and emits a publication receipt.
 
@@ -26,18 +26,9 @@ FRESHNESS_SCHEMA = "CLAY_GO_COLLECTIVE_METRICS_FRESHNESS/v1"
 RECEIPT_SCHEMA = "COLLECTIVE_METRICS_FRESHNESS_RECEIPT/v1"
 
 LIVE_INPUTS = {
-    "swarm": {
-        "path": "free swarm/LIVE_METRICS.json",
-        "schema": "CLAY_FREE_SWARM_METRICS/v1",
-    },
-    "forge": {
-        "path": "free swarm/FORGE_LIVE.json",
-        "schema": "CLAY_FREE_EVIDENCE_FORGE_STATUS/v1",
-    },
-    "distillery": {
-        "path": "free swarm/DISTILLERY_LIVE.json",
-        "state": "LIVE",
-    },
+    "swarm": {"path": "free swarm/LIVE_METRICS.json", "schema": "CLAY_FREE_SWARM_METRICS/v1"},
+    "forge": {"path": "free swarm/FORGE_LIVE.json", "schema": "CLAY_FREE_EVIDENCE_FORGE_STATUS/v1"},
+    "distillery": {"path": "free swarm/DISTILLERY_LIVE.json", "state": "LIVE"},
 }
 
 
@@ -161,14 +152,14 @@ def build_live_snapshot(
 ) -> dict[str, Any]:
     """Capture one coherent current snapshot or fail closed.
 
-    Freshness is a property of the *inputs at publication time*, not of a writer's
-    wall-clock timestamp.  Every source must be recent, near the other sources, and
-    unchanged from its read until the snapshot identity is sealed.
+    Replay identity excludes observation-time ephemera (``observed_at`` and per-input
+    ``age_seconds``), so a retry over unchanged bytes is truly idempotent.
     """
     repo = repo.resolve()
     authority = resolve_current_authority(repo)
     now = (now or dt.datetime.now(dt.timezone.utc)).astimezone(dt.timezone.utc)
     inputs: dict[str, dict[str, Any]] = {}
+    identity_inputs: dict[str, dict[str, Any]] = {}
     fields: dict[str, dict[str, Any]] = {}
     times: list[dt.datetime] = []
     stat_tokens: dict[str, tuple[int, int, int]] = {}
@@ -189,12 +180,9 @@ def build_live_snapshot(
             raise FreshnessError(f"FUTURE_LIVE_INPUT:{name}")
         times.append(ts)
         stat_tokens[rel] = stat_token
-        inputs[name] = {
-            "path": rel,
-            "sha256": _sha256_bytes(raw),
-            "generated_at": ts.isoformat(),
-            "age_seconds": age,
-        }
+        identity_row = {"path": rel, "sha256": _sha256_bytes(raw), "generated_at": ts.isoformat()}
+        identity_inputs[name] = identity_row
+        inputs[name] = {**identity_row, "age_seconds": age}
         for field, value in _extract_fields(name, doc).items():
             fields[field] = {"value": value, "source": name}
 
@@ -202,8 +190,6 @@ def build_live_snapshot(
     if skew > max_snapshot_skew_seconds:
         raise FreshnessError("SHARED_SNAPSHOT_SKEW_EXCEEDED")
 
-    # Detect cross-file tearing: no input may change after it was read while the
-    # remaining members of the shared snapshot are being captured.
     for rel, expected in stat_tokens.items():
         path = repo / rel
         try:
@@ -214,20 +200,24 @@ def build_live_snapshot(
         if actual != expected:
             raise FreshnessError(f"INPUT_CHANGED_DURING_SNAPSHOT:{rel}")
 
-    preimage = {
+    identity_preimage = {
         "schema": SNAPSHOT_SCHEMA,
         "authority": authority,
-        "inputs": inputs,
+        "inputs": identity_inputs,
         "min_input_generated_at": min(times).isoformat(),
         "max_input_generated_at": max(times).isoformat(),
-        "max_age_seconds": max_age_seconds,
-        "max_snapshot_skew_seconds": max_snapshot_skew_seconds,
+        "policy": {
+            "max_age_seconds": max_age_seconds,
+            "max_snapshot_skew_seconds": max_snapshot_skew_seconds,
+            "max_future_skew_seconds": max_future_skew_seconds,
+        },
     }
-    snapshot_id = _sha256_json(preimage)
+    snapshot_id = _sha256_json(identity_preimage)
     for item in fields.values():
         item["snapshot_id"] = snapshot_id
     return {
-        **preimage,
+        **identity_preimage,
+        "inputs": inputs,
         "snapshot_id": snapshot_id,
         "observed_at": now.isoformat(),
         "snapshot_skew_seconds": skew,
@@ -242,6 +232,12 @@ def deterministic_result_digest(result: dict[str, Any]) -> str:
     freshness = payload.get("freshness")
     if isinstance(freshness, dict):
         freshness.pop("assessed_at", None)
+    snapshot = payload.get("bounded_live_snapshot")
+    if isinstance(snapshot, dict):
+        snapshot.pop("observed_at", None)
+        for row in (snapshot.get("inputs") or {}).values():
+            if isinstance(row, dict):
+                row.pop("age_seconds", None)
     return _sha256_json(payload)
 
 
@@ -353,7 +349,6 @@ def publish_bundle(
             _atomic_write_text(out_md, markdown)
             if readme_path is not None and readme_text is not None:
                 _atomic_write_text(readme_path, readme_text)
-            # Receipt is the commit marker and is emitted only after the bound outputs.
             _atomic_write_text(receipt_path, json.dumps(receipt, indent=2, sort_keys=True, ensure_ascii=False) + "\n")
             return receipt
         finally:

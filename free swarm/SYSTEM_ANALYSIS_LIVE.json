@@ -1,6 +1,6 @@
 {
   "schema": "CLAY_FREE_SWARM_SYSTEM_ANALYSIS/v3",
-  "generated_at": "2026-08-25T13:09:01.793003+00:00",
+  "generated_at": "2026-08-25T13:24:09.312909+00:00",
   "runtime": {
     "supervisor": "STOPPED/QUARANTINED",
     "go_swarm": "RUNNING",
@@ -65,7 +65,7 @@
   },
   "distillery": {
     "schema": "CLAY_RESEARCH_DISTILLERY_STATUS/v1",
-    "generated_at": "2026-08-25T13:08:36.697353+00:00",
+    "generated_at": "2026-08-25T13:24:00.570839+00:00",
     "collected_source_tokens": 11621,
     "accepted_dataset_tokens": 0,
     "dataset_yield": 0.0,
@@ -111,7 +111,7 @@
     "model_output_tokens": 1455,
     "shared_provider_budget": {
       "schema": "CLAY_SHARED_PROVIDER_BUDGET/v1",
-      "generated_at": "2026-08-25T13:08:36.697907+00:00",
+      "generated_at": "2026-08-25T13:24:00.571479+00:00",
       "providers": {
         "arxiv": {
           "max_inflight": 1,
@@ -213,13 +213,13 @@
           "max_inflight": 16,
           "active_leases": 0,
           "min_interval_s": 0.5,
-          "cooldown_seconds": 9.990794897079468,
-          "total_requests": 839,
+          "cooldown_seconds": 9.989838600158691,
+          "total_requests": 930,
           "total_success": 134,
-          "total_429": 704,
+          "total_429": 795,
           "total_errors": 0,
           "last_status": "429",
-          "last_observed_at": "2026-08-25T13:08:36.688723+00:00"
+          "last_observed_at": "2026-08-25T13:24:00.561390+00:00"
         },
         "semantic_scholar": {
           "max_inflight": 1,
@@ -249,22 +249,22 @@
     },
     "db_bytes": 864256,
     "top_questions": [
-      "What are the underlying factors contributing to the success characteristics of the openrouter/free model class?",
-      "How do provider-specific optimizations and dataset biases impact the success rates of different model classes during outages?",
-      "Wie kann die Kommunikation zwischen den Komponenten optimiert werden?",
-      "Welche Rolle spielen die Compiler-, VM- und Lader-Engpässe bei der Leistung des Systems?",
-      "Wie kann die Komplexität durch die Implementierung eines neuen Kommunikationsprotokolls minimiert werden?",
-      "Does NVIDIA's Developer Program API expose per-model entitlement for a given credential, or must entitlement be inferred from rate-limit headers on probe requests?",
-      "How can we instrument J‑Space without introducing nondeterministic latency that breaks causal identity?",
-      "What is the minimal set of typed entry fabric hooks required to capture full causal traces for training labels?",
-      "Does workspace entropy reduction correlate with downstream task performance on held-out HCU typed-entry fabrication tasks?",
-      "Can we reuse existing provider‑level tracing infrastructure to avoid custom instrumentation?"
+      "Does the concurrency threshold differ between model variants within the same provider (e.g., nemotron-3-super vs nemotron-mini)?",
+      "Is the threshold stable across time-of-day or provider-side load changes?",
+      "What cryptographic binding methods best preserve identity continuity while allowing parameter updates?",
+      "How does dynamic engine configuration affect cross-provider routing decisions in HCU's federated architecture?",
+      "Wie wirkt sich die Speicher‑Überlastung durch mmap‑basiertes Laden auf stabile Inferenz‑Leistung aus?",
+      "Does NVIDIA's NIM API expose any stable, per-call free-tier confirmation marker (header, response field, rate-limit signature) that distinguishes Developer Program free prototyping from paid usage without provider-side cooperation?",
+      "How does provider-side rate-limit signaling (429 headers, retry-after) causally interact with client-side timeout policy to shift the Pareto frontier?",
+      "Does NVIDIA's API surface a reliable, low-latency signal (HTTP status, header, error code) that distinguishes credential-level free vs paid model access at call time, or is billing purely post-hoc?",
+      "Kann das batch‑basierte Laden die Durchsatz‑Steigerung von groq‑Anfragen signifikant erhöhen, ohne die Latenz zu erhöhen?",
+      "Can the load balancing mechanism be applied to other providers with different architectures?"
     ],
     "candidate_states": {}
   },
   "evidence_forge": {
     "schema": "CLAY_FREE_EVIDENCE_FORGE_STATUS/v1",
-    "generated_at": "2026-08-25T13:08:59.847177+00:00",
+    "generated_at": "2026-08-25T13:24:06.627761+00:00",
     "candidate_states": {
       "ACCEPTED": 1,
       "NEEDS_IMPLEMENTATION": 65,
@@ -288,7 +288,7 @@
     "peak_parallel_tasks": 0,
     "shared_provider_budget": {
       "schema": "CLAY_SHARED_PROVIDER_BUDGET/v1",
-      "generated_at": "2026-08-25T13:08:59.847903+00:00",
+      "generated_at": "2026-08-25T13:24:06.628543+00:00",
       "providers": {
         "arxiv": {
           "max_inflight": 1,
@@ -390,13 +390,13 @@
           "max_inflight": 16,
           "active_leases": 0,
           "min_interval_s": 0.5,
-          "cooldown_seconds": 7.073030233383179,
-          "total_requests": 841,
+          "cooldown_seconds": 3.9328205585479736,
+          "total_requests": 930,
           "total_success": 134,
-          "total_429": 706,
+          "total_429": 795,
           "total_errors": 0,
           "last_status": "429",
-          "last_observed_at": "2026-08-25T13:08:56.920954+00:00"
+          "last_observed_at": "2026-08-25T13:24:00.561390+00:00"
         },
         "semantic_scholar": {
           "max_inflight": 1,
@@ -433,6 +433,6 @@
     "measured_total_sonnet5_equivalent_usd": 148.830648,
     "verified_historical_savings_usd": null,
     "nominal_avoided_if_zero_cost_usd": 148.830648,
-    "repo_output_only_proxy_usd": 130.83709
+    "repo_output_only_proxy_usd": 130.83632
   }
 }

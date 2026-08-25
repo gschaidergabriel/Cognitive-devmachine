@@ -1,0 +1,46 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "authority_epoch": "8.78",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "successor_base": "9eeccc273c4c2d98191a19a047fd7e78f298bc25",
+  "branch": "go878-backpressure-telemetry-hardening-gpt56sol-20260825",
+  "source_commit": "bf112c67c29b786a40cb875622f58988476a1fd9",
+  "coordination": {
+    "parallel_core_fix_landed_on_main": true,
+    "duplicate_core_pr_created": false,
+    "new_unusual_experiments": 0,
+    "unusual_experiment_status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT"
+  },
+  "observed": [
+    "main independently fused the Supervisor-8.78 raw-generation conversion-pressure gate while this organ was working",
+    "the fused gate did not surface its RAW_GENERATION_BACKPRESSURE status inside SUPERVISOR_6000.json",
+    "the fused sqlite connection was closed only on the normal post-query path, not via a finally boundary"
+  ],
+  "delta": [
+    "close the read-only Forge sqlite connection in finally whenever it was opened",
+    "surface RAW_GENERATION_BACKPRESSURE.json as raw_generation_backpressure in SUPERVISOR_6000.json with fail-closed UNOBSERVED fallback",
+    "make the supervisor policy string explicitly state that raw generation pauses while conversion pressure is at or above threshold"
+  ],
+  "go_tracks": {
+    "track_a": "ADVANCED: operator-visible EntityOS supervisor telemetry now reports the active conversion-pressure decision and cleanup is total on error paths",
+    "track_b": "ADVANCED_AT_CONTROL_EVIDENCE_BOUNDARY: deterministic local backlog state is now exported into the single supervisor status surface without creating another HCU/Typed Entry/state authority",
+    "track_c": "ADVANCED_AT_DATASET_READINESS_BOUNDARY: the zero-cost conversion-first policy becomes directly observable, supporting later proof that capacity is redirected toward Forge/Distillery/historical extraction before model/training promotion"
+  },
+  "evidence": {
+    "source_diff_inspected": true,
+    "runtime_execution_observed": false,
+    "test_execution_observed": false,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "artefact_readme": "NO_CHANGE_WITH_REASON: main advanced during this macrocycle and the large README is a moving current-facing surface; this successor branch avoids overwriting it with a stale snapshot. The bounded receipt and PR are the durable delta.",
+  "next_exact_gate": "execute bash syntax plus a repository-bound supervisor regression proving missing/invalid Forge DB => raw_generation_backpressure fail-closed pause, pressure >= threshold => fabric stopped, pressure < threshold => fabric permitted, and the same status object is visible in SUPERVISOR_6000.json"
+}

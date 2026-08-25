@@ -42,7 +42,9 @@ def test_worker_text_digest_claim_cannot_mint_false_historical_identity() -> Non
     assert con.execute("SELECT COUNT(*) FROM historical_chunks").fetchone()[0] == 0
     assert con.execute("SELECT COUNT(*) FROM candidates").fetchone()[0] == 0
     assert con.execute("SELECT COUNT(*) FROM candidate_sources").fetchone()[0] == 0
-    rejected = con.execute(\n        "SELECT reason,claimed_text_sha256,computed_text_sha256 FROM backfill_integrity_rejections"\n    ).fetchone()
+    rejected = con.execute(
+        "SELECT reason,claimed_text_sha256,computed_text_sha256 FROM backfill_integrity_rejections"
+    ).fetchone()
     assert rejected["reason"] == "TEXT_SHA256_MISMATCH"
     assert rejected["claimed_text_sha256"] == "0" * 64
     assert rejected["computed_text_sha256"] == bf.sha_text(text)

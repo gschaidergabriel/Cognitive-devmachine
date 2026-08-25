@@ -1,6 +1,6 @@
 {
   "schema": "CLAY_FREE_SWARM_SYSTEM_ANALYSIS/v3",
-  "generated_at": "2026-08-25T08:06:18.630851+00:00",
+  "generated_at": "2026-08-25T08:21:24.627430+00:00",
   "runtime": {
     "supervisor": "STOPPED/QUARANTINED",
     "go_swarm": "RUNNING",
@@ -65,7 +65,7 @@
   },
   "distillery": {
     "schema": "CLAY_RESEARCH_DISTILLERY_STATUS/v1",
-    "generated_at": "2026-08-25T08:06:16.669058+00:00",
+    "generated_at": "2026-08-25T08:21:21.083231+00:00",
     "collected_source_tokens": 11621,
     "accepted_dataset_tokens": 0,
     "dataset_yield": 0.0,
@@ -86,7 +86,7 @@
     "model_output_tokens": 1455,
     "shared_provider_budget": {
       "schema": "CLAY_SHARED_PROVIDER_BUDGET/v1",
-      "generated_at": "2026-08-25T08:06:16.669897+00:00",
+      "generated_at": "2026-08-25T08:21:21.084021+00:00",
       "providers": {
         "arxiv": {
           "max_inflight": 1,
@@ -224,22 +224,22 @@
     },
     "db_bytes": 864256,
     "top_questions": [
-      "Wie kann ein A/B-Test die kausale Wirkung von HCU-Interventionen von reinem Token-Volumen unterscheiden, ohne reale Modelle auszuführen?",
-      "Can model-instance causal provenance be established without provider cooperation (credential introspection)?",
-      "Can the introduced challenge-response protocol be efficiently integrated with the existing admission boundary receipt mechanism?",
-      "Wie kann die Ausführung des FREE_SWARM_ADMISSION_BOUNDARY_RECEIPT/v1 weiterhin verbessert werden?",
-      "Can model-specific J-Space causal credit be minted from FREE_LANE receipts without access to model weight tensors (only hashes)?",
-      "Does GRID10 logical cell mapping require per-model execution trace semantics or only aggregate throughput?",
-      "Wie kann die Effektivität der dynamischen Zulassungskontrolle im EntityOS/HCU-System gemessen werden?",
-      "What constitutes valid identity for supervisor lease ownership?",
-      "Whether J-Space causal graph structure is isomorphic enough across Nemotron model variants to allow checkpoint recovery without semantic drift, or if model-specific causal topology requires per-model checkpoint schemas",
-      "What exact state variables in the GWT prototype's admission engine define 'cost-free' per credential vs per provider, and where is the route-price revalidation gate before network I/O?"
+      "How to handle credential rotation in admission evidence updates?",
+      "Does the FREE_ONLY credential binding layer expose per-call rate-limit headers to the scheduler, or are they stripped at the provider adapter boundary?",
+      "Does the FREE status of a provider truly eliminate any monetary or credit cost beyond request throttling?",
+      "Can a deterministic negative‑control burst reliably expose hidden usage limits on free provider tiers?",
+      "What minimal credential validation pattern achieves economic safety without blocking legitimate free-prototyping access?",
+      "Is there a measurable difference in request success rates between free and paid provider tiers for the same workload?",
+      "What are the specific steps needed to prepare the local research model for execution?",
+      "How can the system be verified to be correctly set up for the execution of the local research model?",
+      "What are the potential risks and challenges associated with the execution of the local research model?",
+      "What are the potential risks associated with relying on free providers?"
     ],
     "candidate_states": {}
   },
   "evidence_forge": {
     "schema": "CLAY_FREE_EVIDENCE_FORGE_STATUS/v1",
-    "generated_at": "2026-08-25T08:06:17.589723+00:00",
+    "generated_at": "2026-08-25T08:21:22.730150+00:00",
     "candidate_states": {
       "ACCEPTED": 1,
       "NEEDS_IMPLEMENTATION": 65,
@@ -263,7 +263,7 @@
     "peak_parallel_tasks": 0,
     "shared_provider_budget": {
       "schema": "CLAY_SHARED_PROVIDER_BUDGET/v1",
-      "generated_at": "2026-08-25T08:06:17.590622+00:00",
+      "generated_at": "2026-08-25T08:21:22.730915+00:00",
       "providers": {
         "arxiv": {
           "max_inflight": 1,
@@ -408,6 +408,6 @@
     "measured_total_sonnet5_equivalent_usd": 148.830648,
     "verified_historical_savings_usd": null,
     "nominal_avoided_if_zero_cost_usd": 148.830648,
-    "repo_output_only_proxy_usd": 126.30757
+    "repo_output_only_proxy_usd": 126.30801
   }
 }

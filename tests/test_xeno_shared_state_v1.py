@@ -19,6 +19,7 @@ class XenoSharedStateV1Tests(unittest.TestCase):
             epoch=7,
             generation=3,
             scope="grid10/task-alpha",
+            coordinator_policy_digest=digest("c"),
             tasks=[
                 {"task_id": "low", "priority": 1, "required_capabilities": ["reason"], "status": "OPEN"},
                 {"task_id": "high", "priority": 9, "required_capabilities": ["reason"], "status": "OPEN"},
@@ -27,7 +28,7 @@ class XenoSharedStateV1Tests(unittest.TestCase):
             claims=[{"task_id": "claimed", "node_id": "n9"}],
             hyperposition_branches=[{"branch_id": "b1", "state": "UNRESOLVED"}],
             gwt_broadcasts=[{"broadcast_id": "g1"}],
-            provenance_refs=["s0:entity-generation:3"],
+            provenance_refs=["s0:entity-generation:3", "s0:coordinator-policy:c"],
         )
 
     def lease(self, snap, *, ticks=5):
@@ -51,6 +52,7 @@ class XenoSharedStateV1Tests(unittest.TestCase):
         self.assertEqual(plan["s1_access"], "READ_ONLY")
         self.assertEqual(plan["selected_task_id"], "high")
         self.assertEqual(plan["bound_state_digest"], snap["state_digest"])
+        self.assertEqual(plan["coordinator_policy_digest"], snap["coordinator_policy_digest"])
 
     def test_ordinary_node_direct_write_is_rejected(self):
         plan = MOD.autonomous_boot(self.snapshot(), node_id="n2", capabilities=["reason"], now_tick=10)
@@ -58,9 +60,11 @@ class XenoSharedStateV1Tests(unittest.TestCase):
             MOD.reject_direct_s1_write(plan)
 
     def test_coordinator_selection_is_deterministic_and_policy_gated(self):
-        lease = self.lease(self.snapshot())
+        snap = self.snapshot()
+        lease = self.lease(snap)
         self.assertEqual(lease["holder_node_id"], "n1")
         self.assertEqual(lease["selection_rule"], "POLICY_ELIGIBLE_HEALTHY_MIN_LOAD_THEN_NODE_ID")
+        self.assertEqual(lease["coordinator_policy_digest"], snap["coordinator_policy_digest"])
 
     def test_valid_lease_changes_role_but_keeps_direct_write_forbidden(self):
         snap = self.snapshot()
@@ -96,8 +100,9 @@ class XenoSharedStateV1Tests(unittest.TestCase):
         self.assertEqual(auth["write_class"], "S1_CANDIDATE_DELTA_ONLY")
         self.assertFalse(auth["s0_truth_effect_security_authority"])
         self.assertEqual(auth["accepted_result_digests"], [result["result_digest"]])
+        self.assertEqual(auth["coordinator_policy_digest"], snap["coordinator_policy_digest"])
 
-    def test_stale_lease_duplicate_result_and_snapshot_tamper_fail_closed(self):
+    def test_stale_lease_duplicate_result_snapshot_tamper_and_policy_mismatch_fail_closed(self):
         snap = self.snapshot()
         short = self.lease(snap, ticks=1)
         ordinary = MOD.autonomous_boot(snap, node_id="n2", capabilities=["reason"], now_tick=10)
@@ -109,12 +114,23 @@ class XenoSharedStateV1Tests(unittest.TestCase):
                 snap, coordinator_node_id="n1", lease=short, node_results=[result],
                 expected_epoch=7, expected_state_digest=snap["state_digest"], now_tick=11,
             )
+
         lease = self.lease(snap)
         with self.assertRaisesRegex(MOD.XenoSharedStateError, "NODE_RESULT_DUPLICATE"):
             MOD.authorize_s1_write(
                 snap, coordinator_node_id="n1", lease=lease, node_results=[result, result],
                 expected_epoch=7, expected_state_digest=snap["state_digest"], now_tick=11,
             )
+
+        forged_lease = dict(lease)
+        forged_lease["coordinator_policy_digest"] = digest("d")
+        forged_lease["lease_digest"] = MOD.sha256_obj({k: v for k, v in forged_lease.items() if k != "lease_digest"})
+        with self.assertRaisesRegex(MOD.XenoSharedStateError, "LEASE_POLICY_AUTHORITY_MISMATCH"):
+            MOD.authorize_s1_write(
+                snap, coordinator_node_id="n1", lease=forged_lease, node_results=[result],
+                expected_epoch=7, expected_state_digest=snap["state_digest"], now_tick=11,
+            )
+
         snap["tasks"][0]["priority"] = 999
         with self.assertRaisesRegex(MOD.XenoSharedStateError, "S1_DIGEST_MISMATCH"):
             MOD.validate_snapshot(snap)

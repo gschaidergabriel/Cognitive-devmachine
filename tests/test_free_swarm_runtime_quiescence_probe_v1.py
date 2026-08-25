@@ -85,6 +85,10 @@ def make_budget_db(path: Path, *, requests=1, lease_expires_at=None):
         "VALUES('openrouter',3,?,?,?,?)",
         (requests, 1, 0, 0),
     )
+    con.execute(
+        "INSERT INTO provider_state(provider,max_inflight,total_requests,total_success,total_429,total_errors) "
+        "VALUES('github',1,5,5,0,0)"
+    )
     if lease_expires_at is not None:
         con.execute(
             "INSERT INTO leases(lease_id,provider,owner,acquired_at,expires_at) VALUES(?,?,?,?,?)",
@@ -131,20 +135,33 @@ def test_usage_signature_detects_provider_change(tmp_path):
 def test_shared_budget_snapshot_detects_direct_counter_change(tmp_path):
     db = tmp_path / "budget.sqlite3"
     make_budget_db(db, requests=7)
-    before = probe.provider_budget_snapshot(db, now=time.time())
+    before = probe.provider_budget_snapshot(db, now=time.time(), providers=["openrouter"])
     con = sqlite3.connect(db)
     con.execute("UPDATE provider_state SET total_requests=total_requests+1 WHERE provider='openrouter'")
     con.commit(); con.close()
-    after = probe.provider_budget_snapshot(db, now=time.time())
+    after = probe.provider_budget_snapshot(db, now=time.time(), providers=["openrouter"])
     assert before["counter_sha256"] != after["counter_sha256"]
     assert before["counters"]["providers"]["openrouter"]["total_requests"] == 7
     assert after["counters"]["providers"]["openrouter"]["total_requests"] == 8
 
 
+def test_shared_budget_filter_ignores_noncanonical_tool_lane_change(tmp_path):
+    db = tmp_path / "budget.sqlite3"
+    make_budget_db(db, requests=7)
+    before = probe.provider_budget_snapshot(db, now=time.time(), providers=["openrouter"])
+    con = sqlite3.connect(db)
+    con.execute("UPDATE provider_state SET total_requests=total_requests+1 WHERE provider='github'")
+    con.commit(); con.close()
+    after = probe.provider_budget_snapshot(db, now=time.time(), providers=["openrouter"])
+    assert before["counter_sha256"] == after["counter_sha256"]
+    assert before["provider_filter"] == ["openrouter"]
+    assert "github" not in before["counters"]["providers"]
+
+
 def test_shared_budget_snapshot_reports_unexpired_lease(tmp_path):
     db = tmp_path / "budget.sqlite3"
     make_budget_db(db, requests=1, lease_expires_at=time.time() + 60)
-    snap = probe.provider_budget_snapshot(db, now=time.time())
+    snap = probe.provider_budget_snapshot(db, now=time.time(), providers=["openrouter"])
     assert snap["zero_unexpired_leases"] is False
     assert snap["unexpired_leases"][0]["provider"] == "openrouter"
 

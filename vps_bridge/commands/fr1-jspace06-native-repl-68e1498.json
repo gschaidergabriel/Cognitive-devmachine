@@ -1,0 +1,14 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v4",
+  "command_id": "fr1-jspace06-native-repl-68e1498",
+  "op": "exec",
+  "cwd": "/workspace",
+  "timeout_seconds": 1800,
+  "command": "set -euo pipefail; SRC=/workspace/clay-global-research-entity; WT=/workspace/fr1-jspace06-68e1498; OUT=/workspace/qwen06-fr1-68e1498/native-replication; git -C $SRC fetch origin 68e149835a77de8ef1f9c9a0b15b9f589a009153; if [ -e $WT ]; then git -C $SRC worktree remove --force $WT || rm -rf $WT; fi; git -C $SRC worktree add --detach $WT 68e149835a77de8ef1f9c9a0b15b9f589a009153; rm -rf $OUT; mkdir -p $OUT; cd $WT; echo classification=IDENTICAL_INTERVENTION_REPLICATION; echo source_head=$(git rev-parse HEAD); echo executor_sha256=$(sha256sum tools/trigger1_local_qwen06_native_cvec_execute.py | cut -d ' ' -f1); echo harness_source_sha256=$(sha256sum tools/trigger1_native_llamacpp_cvec_logits.cpp | cut -d ' ' -f1); echo harness_binary_sha256=$(sha256sum /cache/clay-qwen06-native/native_cvec_logits | cut -d ' ' -f1); unset OPENAI_API_KEY OPENAI_API_KEYS ANTHROPIC_API_KEY ANTHROPIC_API_KEYS GROQ_API_KEY GROQ_API_KEYS MISTRAL_API_KEY MISTRAL_API_KEYS NVIDIA_API_KEY NVIDIA_API_KEYS NVIDIA_NIM_API_KEY NGC_API_KEY OPENROUTER_API_KEY OPENROUTER_API_KEYS TOGETHER_API_KEY TOGETHER_API_KEYS HF_TOKEN HUGGING_FACE_HUB_TOKEN HUGGINGFACE_HUB_TOKEN || true; export HF_HUB_DISABLE_IMPLICIT_TOKEN=1 HF_HUB_DISABLE_TELEMETRY=1 TOKENIZERS_PARALLELISM=false OMP_NUM_THREADS=2 MKL_NUM_THREADS=2 HF_HOME=/cache/clay-qwen06/hf; /cache/clay-qwen06/venv/bin/python tools/trigger1_local_qwen06_native_cvec_execute.py --output-dir $OUT --cache-dir /cache/clay-qwen06/hf --llama-root /cache/clay-qwen06-native/llama.cpp --gguf /cache/clay-qwen06-native/models/Qwen3-0.6B-Q8_0.gguf --harness /cache/clay-qwen06-native/native_cvec_logits; echo result_file_sha256=$(sha256sum $OUT/trigger1_local_qwen06_native_cvec_result.json | cut -d ' ' -f1); /cache/clay-qwen06/venv/bin/python - <<'PY'
+import json
+p='/workspace/qwen06-fr1-68e1498/native-replication/trigger1_local_qwen06_native_cvec_result.json'
+d=json.load(open(p))
+print(json.dumps({'schema':d.get('schema'),'status':d.get('status'),'selected_gain':d.get('native_calibration',{}).get('selected_gain',d.get('calibration',{}).get('selected_gain')),'calibration_metrics':d.get('native_calibration',d.get('calibration',{})).get('metrics',d.get('native_calibration',{})),'holdout_metrics':d.get('fresh_native_holdout',d.get('holdout',{})).get('metrics',d.get('fresh_native_holdout',d.get('holdout',{}))),'source':d.get('source'),'runtime_identity':d.get('runtime_identity')},sort_keys=True))
+PY
+"
+}

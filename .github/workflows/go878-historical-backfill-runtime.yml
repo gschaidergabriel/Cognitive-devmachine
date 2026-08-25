@@ -90,7 +90,7 @@ jobs:
           print(f'{reason} {key}')
           PY
 
-      - name: Run bounded provider-free backfill capsule in clay-direct-dev
+      - name: Run exact-current regressions and bounded provider-free backfill capsule in clay-direct-dev
         if: steps.dispatch.outputs.skip != 'true'
         shell: bash
         env:
@@ -124,6 +124,13 @@ jobs:
 
           "${prefix[@]}" exec clay-direct-dev sh -lc "rm -rf '$scratch'; mkdir -p '$scratch'"
           "${prefix[@]}" cp "$GITHUB_WORKSPACE/." "clay-direct-dev:$scratch"
+
+          # Exact-current preflight is part of the same admitted singleton and the
+          # capsule is unreachable if either regression fails. This turns the
+          # supervisor's g0001 precondition into executable control flow rather than
+          # a documentation-only promise.
+          "${prefix[@]}" exec clay-direct-dev sh -lc "cd '$scratch' && python3 -m pytest -q tests/test_free_swarm_backfill_exhaustiveness_878.py tests/test_go_878_raw_generation_backpressure.py"
+
           "${prefix[@]}" exec \
             -e CLAY_GO878_SOURCE_SHA="$source_sha" \
             -e CLAY_GO878_SOURCE_TREE="$source_tree" \
@@ -167,6 +174,11 @@ jobs:
               'run_id': os.environ.get('GITHUB_RUN_ID'),
               'event_sha': os.environ.get('GITHUB_SHA'),
               'checkout_head': subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip(),
+              'preflight_regressions': 'PASS_REQUIRED_BY_WORKFLOW_CONTROL_FLOW',
+              'preflight_tests': [
+                  'tests/test_free_swarm_backfill_exhaustiveness_878.py',
+                  'tests/test_go_878_raw_generation_backpressure.py',
+              ],
               'receipt_path': os.environ['TARGET'],
               'runtime_credit': 'HISTORICAL_BACKFILL_INGEST_COMPONENT_ONLY' if receipt['status'] == 'PASS_SATURATED_SCAN_SET' else 0,
               'whole_entityos_hcu_runtime_credit': 0,

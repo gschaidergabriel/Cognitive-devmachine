@@ -18,11 +18,13 @@ import hashlib
 import json
 import os
 from pathlib import Path
+import tempfile
 from typing import Any, Iterator, NamedTuple
 
 SNAPSHOT_SCHEMA = "CLAY_GO_COLLECTIVE_INPUT_SNAPSHOT/v1"
 RECEIPT_SCHEMA = "COLLECTIVE_METRICS_FRESHNESS_RECEIPT/v1"
 PUBLISH_SCHEMA = "CLAY_GO_COLLECTIVE_FRESHNESS_PUBLICATION/v1"
+MAX_SNAPSHOT_SKEW_SECONDS = 120.0
 
 
 class FreshnessError(RuntimeError):
@@ -169,7 +171,7 @@ def _bounded_source_metrics(surfaces: dict[str, Surface], snapshot_id: str) -> d
     }
 
 
-def build_snapshot(repo: Path) -> dict[str, Any]:
+def build_snapshot(repo: Path, *, max_skew_seconds: float = MAX_SNAPSHOT_SKEW_SECONDS) -> dict[str, Any]:
     authority = resolve_authority(repo)
     ordered = [
         _read_surface("swarm", repo / "free swarm/LIVE_METRICS.json", repo),
@@ -178,9 +180,15 @@ def build_snapshot(repo: Path) -> dict[str, Any]:
     ]
     surfaces = {surface.name: surface for surface in ordered}
     timestamps = [parse_ts(surface.generated_at) for surface in ordered]
+    min_ts = min(timestamps)
+    max_ts = max(timestamps)
+    skew_seconds = (max_ts - min_ts).total_seconds()
+    if skew_seconds > float(max_skew_seconds):
+        raise FreshnessError("INPUT_SNAPSHOT_SKEW_EXCEEDED")
     identity_core = {
         "schema": SNAPSHOT_SCHEMA,
         "authority": authority,
+        "max_snapshot_skew_seconds": float(max_skew_seconds),
         "surfaces": [surface.identity() for surface in ordered],
     }
     snapshot_id = sha256_json(identity_core)
@@ -193,8 +201,10 @@ def build_snapshot(repo: Path) -> dict[str, Any]:
         "schema": SNAPSHOT_SCHEMA,
         "snapshot_id": snapshot_id,
         "authority": authority,
-        "min_input_generated_at": iso(min(timestamps)),
-        "max_input_generated_at": iso(max(timestamps)),
+        "min_input_generated_at": iso(min_ts),
+        "max_input_generated_at": iso(max_ts),
+        "snapshot_skew_seconds": skew_seconds,
+        "max_snapshot_skew_seconds": float(max_skew_seconds),
         "surfaces": surface_rows,
         "source_metrics": _bounded_source_metrics(surfaces, snapshot_id),
     }
@@ -311,10 +321,16 @@ def atomic_write(path: Path, data: bytes) -> None:
         os.close(dir_fd)
 
 
+def _lock_path(output_path: Path) -> Path:
+    key = hashlib.sha256(str(output_path.resolve()).encode("utf-8")).hexdigest()[:24]
+    return Path(tempfile.gettempdir()) / f"clay-go-collective-metrics-{key}.lock"
+
+
 @contextmanager
 def publication_lock(output_path: Path) -> Iterator[None]:
-    output_path.parent.mkdir(parents=True, exist_ok=True)
-    lock_path = output_path.with_name(output_path.name + ".lock")
+    """Serialize current-read, decision, snapshot recheck and publication writes."""
+    lock_path = _lock_path(output_path)
+    lock_path.parent.mkdir(parents=True, exist_ok=True)
     with lock_path.open("a+b") as handle:
         fcntl.flock(handle.fileno(), fcntl.LOCK_EX)
         try:
@@ -335,15 +351,31 @@ def _load_current(output_path: Path) -> dict[str, Any] | None:
     return parsed
 
 
-def publish(repo: Path, candidate_path: Path, output_path: Path, receipt_path: Path) -> dict[str, Any]:
-    snapshot_before = build_snapshot(repo)
-    try:
-        candidate = json.loads(candidate_path.read_text(encoding="utf-8"))
-    except Exception as exc:
-        raise FreshnessError("CANDIDATE_UNREADABLE") from exc
+def _bound_markdown(markdown_text: str, snapshot: dict[str, Any], decision: dict[str, Any]) -> bytes:
+    marker = (
+        "<!-- CLAY_GO_COLLECTIVE_FRESHNESS "
+        f"authority_epoch={snapshot['authority']['authority_epoch']} "
+        f"snapshot_id={snapshot['snapshot_id']} "
+        f"result_digest_sha256={decision['result_digest_sha256']} -->\n"
+    )
+    return (marker + markdown_text).encode("utf-8")
+
+
+def publish_candidate(
+    repo: Path,
+    candidate: dict[str, Any],
+    output_path: Path,
+    receipt_path: Path,
+    *,
+    output_md_path: Path | None = None,
+    markdown_text: str | None = None,
+) -> dict[str, Any]:
     if not isinstance(candidate, dict):
         raise FreshnessError("CANDIDATE_NOT_OBJECT")
+    if (output_md_path is None) != (markdown_text is None):
+        raise FreshnessError("MARKDOWN_PROJECTION_ARGUMENT_MISMATCH")
 
+    snapshot_before = build_snapshot(repo)
     with publication_lock(output_path):
         snapshot_locked = build_snapshot(repo)
         if snapshot_locked["snapshot_id"] != snapshot_before["snapshot_id"]:
@@ -359,21 +391,35 @@ def publish(repo: Path, candidate_path: Path, output_path: Path, receipt_path: P
         receipt = {
             "schema": RECEIPT_SCHEMA,
             "generated_at": iso(dt.datetime.now(dt.timezone.utc)),
-            "status": "PASS" if decision["action"] in {"PUBLISH", "NO_CHANGE"} else "FAIL",
+            "status": "PASS",
             "decision": decision,
             "snapshot": snapshot_after,
-            "candidate_path": str(candidate_path),
             "output_path": str(output_path),
+            "output_md_path": str(output_md_path) if output_md_path is not None else None,
             "scope": "COLLECTIVE_METRICS_FRESHNESS_AND_BOUND_SNAPSHOT_PUBLICATION_ONLY",
             "runtime_credit_added": 0,
+            "provider_runtime_credit_added": 0,
+            "jspace_model_runtime_credit_added": 0,
+            "training_credit_added": 0,
+            "whole_entityos_hcu_runtime_credit_added": 0,
         }
 
         if decision["action"] == "PUBLISH":
             published = attach_freshness(candidate, snapshot_after, decision)
-            atomic_write(
-                output_path,
-                json.dumps(published, indent=2, sort_keys=True, ensure_ascii=False).encode("utf-8") + b"\n",
+            json_bytes = json.dumps(published, indent=2, sort_keys=True, ensure_ascii=False).encode("utf-8") + b"\n"
+            if output_md_path is not None and markdown_text is not None:
+                md_bytes = _bound_markdown(markdown_text, snapshot_after, decision)
+                # The JSON is the authoritative surface and becomes visible last.
+                atomic_write(output_md_path, md_bytes)
+                receipt["published_markdown_sha256"] = sha256_bytes(md_bytes)
+            atomic_write(output_path, json_bytes)
+            receipt["published_json_sha256"] = sha256_bytes(json_bytes)
+        else:
+            receipt["published_json_sha256"] = sha256_bytes(output_path.read_bytes()) if output_path.exists() else None
+            receipt["published_markdown_sha256"] = (
+                sha256_bytes(output_md_path.read_bytes()) if output_md_path is not None and output_md_path.exists() else None
             )
+
         atomic_write(
             receipt_path,
             json.dumps(receipt, indent=2, sort_keys=True, ensure_ascii=False).encode("utf-8") + b"\n",
@@ -381,19 +427,64 @@ def publish(repo: Path, candidate_path: Path, output_path: Path, receipt_path: P
         return receipt
 
 
+def publish(
+    repo: Path,
+    candidate_path: Path,
+    output_path: Path,
+    receipt_path: Path,
+    *,
+    candidate_md_path: Path | None = None,
+    output_md_path: Path | None = None,
+) -> dict[str, Any]:
+    try:
+        candidate = json.loads(candidate_path.read_text(encoding="utf-8"))
+    except Exception as exc:
+        raise FreshnessError("CANDIDATE_UNREADABLE") from exc
+    if not isinstance(candidate, dict):
+        raise FreshnessError("CANDIDATE_NOT_OBJECT")
+    markdown_text = None
+    if candidate_md_path is not None:
+        try:
+            markdown_text = candidate_md_path.read_text(encoding="utf-8")
+        except Exception as exc:
+            raise FreshnessError("CANDIDATE_MARKDOWN_UNREADABLE") from exc
+    receipt = publish_candidate(
+        repo,
+        candidate,
+        output_path,
+        receipt_path,
+        output_md_path=output_md_path,
+        markdown_text=markdown_text,
+    )
+    receipt["candidate_path"] = str(candidate_path)
+    if candidate_md_path is not None:
+        receipt["candidate_md_path"] = str(candidate_md_path)
+    return receipt
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--repo", type=Path, default=Path(__file__).resolve().parents[1])
     ap.add_argument("--candidate-json", type=Path, required=True)
+    ap.add_argument("--candidate-md", type=Path, default=None)
     ap.add_argument("--output-json", type=Path, default=None)
+    ap.add_argument("--output-md", type=Path, default=None)
     ap.add_argument("--receipt", type=Path, default=None)
     args = ap.parse_args()
     repo = args.repo.resolve()
     output = args.output_json or (repo / "free swarm/GO_COLLECTIVE_METRICS.json")
+    output_md = args.output_md or ((repo / "free swarm/GO_COLLECTIVE_METRICS.md") if args.candidate_md is not None else None)
     receipt = args.receipt or (
         repo / "research_entity/continuity/receipts/COLLECTIVE_METRICS_FRESHNESS_LATEST.json"
     )
-    result = publish(repo, args.candidate_json, output, receipt)
+    result = publish(
+        repo,
+        args.candidate_json,
+        output,
+        receipt,
+        candidate_md_path=args.candidate_md,
+        output_md_path=output_md,
+    )
     print(json.dumps(result, sort_keys=True))
     return 0
 

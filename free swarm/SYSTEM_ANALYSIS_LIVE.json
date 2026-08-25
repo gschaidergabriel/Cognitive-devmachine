@@ -1,6 +1,6 @@
 {
   "schema": "CLAY_FREE_SWARM_SYSTEM_ANALYSIS/v3",
-  "generated_at": "2026-08-25T12:08:29.041973+00:00",
+  "generated_at": "2026-08-25T12:23:41.667529+00:00",
   "runtime": {
     "supervisor": "STOPPED/QUARANTINED",
     "go_swarm": "RUNNING",
@@ -65,7 +65,7 @@
   },
   "distillery": {
     "schema": "CLAY_RESEARCH_DISTILLERY_STATUS/v1",
-    "generated_at": "2026-08-25T12:08:05.869152+00:00",
+    "generated_at": "2026-08-25T12:23:33.348435+00:00",
     "collected_source_tokens": 11621,
     "accepted_dataset_tokens": 0,
     "dataset_yield": 0.0,
@@ -111,7 +111,7 @@
     "model_output_tokens": 1455,
     "shared_provider_budget": {
       "schema": "CLAY_SHARED_PROVIDER_BUDGET/v1",
-      "generated_at": "2026-08-25T12:08:05.869676+00:00",
+      "generated_at": "2026-08-25T12:23:33.348944+00:00",
       "providers": {
         "arxiv": {
           "max_inflight": 1,
@@ -213,13 +213,13 @@
           "max_inflight": 16,
           "active_leases": 0,
           "min_interval_s": 0.5,
-          "cooldown_seconds": 9.973483085632324,
-          "total_requests": 482,
+          "cooldown_seconds": 9.991707801818848,
+          "total_requests": 573,
           "total_success": 134,
-          "total_429": 347,
+          "total_429": 438,
           "total_errors": 0,
           "last_status": "429",
-          "last_observed_at": "2026-08-25T12:08:05.843235+00:00"
+          "last_observed_at": "2026-08-25T12:23:33.340718+00:00"
         },
         "semantic_scholar": {
           "max_inflight": 1,
@@ -249,22 +249,22 @@
     },
     "db_bytes": 864256,
     "top_questions": [
-      "Which NVIDIA Developer Program credential fields cryptographically bind to specific Nemotron model free-tier quotas, and can this be verified without provider-side cooperation?",
-      "What is the impact of provider-specific constraints on the optimal provider budget allocation strategy?",
-      "How can we effectively incorporate domain-specific knowledge into the allocation algorithm?",
-      "What are the potential benefits and drawbacks of using a reinforcement learning-based approach?",
-      "Whether the NVIDIA provider admission should also enforce per-credential model entitlement checks (not just provider-global free-prototyping statement) as the supervisor inbox demands.",
-      "How can the typed Entry Fabric be compiled and loaded to enable local model execution within current HCU constraints?",
-      "Which single causal primitive — typed-entry effect lattice, J-Space intervention calculus, or sub-1B speculative decode — yields the largest measurable delta on HCU boot latency when composed?",
-      "Does NVIDIA's Developer Program API expose per-credential free-tier entitlement verification, or must we infer from rate-limit headers post-call?",
-      "How can causal credit be established in Global J-Space/GWT without self-report or token volume metrics?",
-      "What minimal HCU logical module allocation is required for deterministic inference of the local research model?"
+      "What are the exact costs incurred by different providers and models?",
+      "How can the FREE_ONLY provider admission be modified to guarantee no costs are incurred?",
+      "How does varying provider concurrency (active vs cooldown) impact the stability of the global J‑Space vectors over time?",
+      "How to automatically synchronize the static NVIDIA free-tier allowlist with provider policy changes without introducing paid/unknown route admission?",
+      "Can a hybrid provider routing strategy (e.g., load‑balancing based on real‑time latency and model capability) improve J‑Space coherence without violating FREE_ONLY constraints?",
+      "What is the minimal set of deterministic normalization primitives required to guarantee cross‑provider J‑Space consistency?",
+      "Does NVIDIA's API provide any programmatic credential introspection (tier field, endpoint, or rate-limit headers) that distinguishes free Developer Program credentials from paid NIM credentials?",
+      "Does the WEIGHTED_SUCCESS_LATENCY_DELTA_V1 scheduler already have implicit circuit-breaking via routing_weight decay, and if so, why is nemotron-3-ultra still receiving traffic at routing_weight=0.0096 despite 22.5% 5xx rate?",
+      "What is the minimum validity window duration that balances security and operational practicality?",
+      "Does NVIDIA's API expose a deterministic per-credential per-model free-tier entitlement endpoint, or must we infer from rate-limit headers / 402 responses after a probe call?"
     ],
     "candidate_states": {}
   },
   "evidence_forge": {
     "schema": "CLAY_FREE_EVIDENCE_FORGE_STATUS/v1",
-    "generated_at": "2026-08-25T12:08:26.343602+00:00",
+    "generated_at": "2026-08-25T12:23:39.821123+00:00",
     "candidate_states": {
       "ACCEPTED": 1,
       "NEEDS_IMPLEMENTATION": 65,
@@ -288,7 +288,7 @@
     "peak_parallel_tasks": 0,
     "shared_provider_budget": {
       "schema": "CLAY_SHARED_PROVIDER_BUDGET/v1",
-      "generated_at": "2026-08-25T12:08:26.344218+00:00",
+      "generated_at": "2026-08-25T12:23:39.821707+00:00",
       "providers": {
         "arxiv": {
           "max_inflight": 1,
@@ -390,13 +390,13 @@
           "max_inflight": 16,
           "active_leases": 0,
           "min_interval_s": 0.5,
-          "cooldown_seconds": 9.76261043548584,
-          "total_requests": 484,
+          "cooldown_seconds": 3.5188956260681152,
+          "total_requests": 573,
           "total_success": 134,
-          "total_429": 349,
+          "total_429": 438,
           "total_errors": 0,
           "last_status": "429",
-          "last_observed_at": "2026-08-25T12:08:26.106840+00:00"
+          "last_observed_at": "2026-08-25T12:23:33.340718+00:00"
         },
         "semantic_scholar": {
           "max_inflight": 1,
@@ -433,6 +433,6 @@
     "measured_total_sonnet5_equivalent_usd": 148.830648,
     "verified_historical_savings_usd": null,
     "nominal_avoided_if_zero_cost_usd": 148.830648,
-    "repo_output_only_proxy_usd": 129.34912
+    "repo_output_only_proxy_usd": 129.4438
   }
 }

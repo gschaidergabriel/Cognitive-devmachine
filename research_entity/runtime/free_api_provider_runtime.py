@@ -994,6 +994,11 @@ def _execute_chat_locked(
                 payload.get("object") == "error" or "error" in payload
             ):
                 raise ProviderReportedError
+            if "object" in payload and (
+                type(payload["object"]) is not str
+                or payload["object"] != "chat.completion"
+            ):
+                raise ValueError("response_object_must_be_chat_completion")
             if "model" in payload and (
                 type(payload["model"]) is not str or payload["model"] != model
             ):

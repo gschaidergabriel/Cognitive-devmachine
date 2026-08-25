@@ -1,0 +1,126 @@
+{
+  "schema": "CLAY_TRIGGER2_ABLITERATED_CHECKPOINT_SELECTION_AUDIT/v1",
+  "date": "2026-08-25",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "status": "CURRENT_RESEARCH_AUDIT_NONPROMOTING",
+  "authority_snapshot": {
+    "repository": "gschaidergabriel/clay-global-research-entity",
+    "branch": "main",
+    "observed_main_before_write": "9c590b6b794514fe38662713ba4da55e3b97b388",
+    "supervisor_epoch": "8.78",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "architecture": "HCU",
+    "trigger2_target_constraint": "ABLITERATED_APPROX_0_8B_TARGET_MODEL_REQUIRED",
+    "training_executed": false,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0
+  },
+  "audited_project_source": {
+    "path": "tools/trigger2_qwen35_checkpoint_candidates_gate_v1.py",
+    "status": "NEEDS_REVISION_ABLITERATED_TARGET_MISSING",
+    "observed_candidates": [
+      "Qwen/Qwen3.5-0.8B-Base",
+      "Qwen/Qwen3.5-0.8B"
+    ],
+    "finding": "The current gate can validate only the official Base and post-trained checkpoints. Neither is an abliterated Trigger-2 target candidate. They remain useful matched controls, but this gate cannot satisfy the Trigger-2 target-model constraint or select a target winner.",
+    "revision_reason": "A structurally exact non-abliterated checkpoint must not silently satisfy an abliterated-target requirement merely because its revision/weights/tokenizer hashes are well bound."
+  },
+  "external_current_availability_inputs": [
+    {
+      "repo": "lew96123/Qwen3.5-0.8B-abliterated",
+      "source": "https://huggingface.co/lew96123/Qwen3.5-0.8B-abliterated",
+      "observed": "Repository currently presents itself as an Apache-2.0 abliterated derivative of Qwen/Qwen3.5-0.8B and exposes Transformers/Safetensors artifacts.",
+      "visible_verified_readme_commit": "20cf8e6ec1246c658299b6b858a3b56880f969b3",
+      "classification": "EXTERNAL_CANDIDATE_REPO_EXISTS_METHOD_INPUT_ONLY",
+      "caveat": "The visible README commit and model-card evaluation claims do not by themselves freeze or attest the exact weight/tokenizer bytes Clay would load."
+    },
+    {
+      "repo": "wangzhang/Qwen3.5-0.8B-abliterated",
+      "source": "https://huggingface.co/wangzhang/Qwen3.5-0.8B-abliterated",
+      "observed": "Repository currently presents itself as an abliterated derivative of Qwen/Qwen3.5-0.8B; its card reports refusal/KL metrics.",
+      "classification": "EXTERNAL_CANDIDATE_REPO_EXISTS_METHOD_INPUT_ONLY",
+      "caveat": "Self-reported refusal/KL numbers are not Clay evaluation evidence and cannot select a winner. Exact immutable checkpoint/tokenizer byte identity is not bound by this audit."
+    },
+    {
+      "repo": "huihui-ai/Huihui-Qwen3.5-0.8B-abliterated",
+      "source": "https://huggingface.co/huihui-ai/Huihui-Qwen3.5-0.8B-abliterated",
+      "observed": "Repository currently presents itself as an Apache-2.0 abliterated Qwen3.5-0.8B derivative and exposes a roughly 1.75 GB Safetensors weight artifact plus tokenizer/config files.",
+      "classification": "EXTERNAL_CANDIDATE_REPO_EXISTS_METHOD_INPUT_ONLY",
+      "caveat": "Current repository existence and an abbreviated visible history identifier are insufficient for exact immutable byte binding."
+    }
+  ],
+  "material_findings": [
+    {
+      "id": "ABLITERATED_TARGET_GATE_GAP",
+      "severity": "P0_MODEL_SELECTION",
+      "classification": "NEEDS_REVISION",
+      "finding": "The existing exact checkpoint gate has no abliterated target candidate and therefore cannot prove compliance with the Trigger-2 model-target constraint.",
+      "required_successor": "Separate TARGET from CONTROL roles. Require every TARGET to be an explicitly abliterated candidate with immutable repository revision plus exact downloaded weight/tokenizer/chat-template/config digests before matched pilot eligibility. Keep official Base/post-trained checkpoints as controls only."
+    },
+    {
+      "id": "MODEL_CARD_ABLITERATED_LABEL_NOT_BYTE_ATTESTATION",
+      "severity": "P0_PROVENANCE",
+      "classification": "FAIL_CLOSED",
+      "finding": "A repository name/tag/model card saying abliterated is source metadata, not proof that the exact bytes later consumed by the loader are those inspected candidate bytes.",
+      "required_successor": "Bind candidate repository revision, file inventory/digests and loader-consumed byte identity. Unknown or mutable main-branch identity remains unresolved."
+    },
+    {
+      "id": "LOW_REFUSAL_NOT_SUFFICIENT_SELECTION_OBJECTIVE",
+      "severity": "P1_GOODHART",
+      "classification": "CURRENT_REQUIREMENT",
+      "finding": "Abliteration/refusal reduction is a target property, not the sole optimization objective. Selecting only for low refusal can destroy cognitive-process, language, protocol, J-Space or off-target behavior.",
+      "required_successor": "Preregister a matched pilot using refusal/low-refusal retention plus task reasoning, DB-vs-simulation, Hyperposition, variable-N invariance, Claude re-entry, ClayCode/protocol, J-Space causal-intervention and off-target regressions."
+    },
+    {
+      "id": "HOLDOUT_SELECTION_LEAK",
+      "severity": "P0_EVALUATION",
+      "classification": "FAIL_CLOSED",
+      "finding": "Using the final structural/J-Space holdout to choose among abliterated checkpoints or tune abliteration strength invalidates later promotion evidence.",
+      "required_successor": "Use matched train/calibration/validation pilot surfaces for selection and keep a separately preregistered untouched holdout for promotion."
+    }
+  ],
+  "successor_gate_contract": {
+    "target_role": "ABLITERATED_ONLY",
+    "control_roles": ["OFFICIAL_BASE_CONTROL", "OFFICIAL_POSTTRAINED_CONTROL"],
+    "required_target_identity": [
+      "repo",
+      "immutable_revision",
+      "weights_sha256",
+      "tokenizer_sha256",
+      "chat_template_sha256",
+      "config_sha256",
+      "file_manifest_sha256"
+    ],
+    "required_before_model_runtime_credit": [
+      "loader_consumption_observed",
+      "consumed_weight_digest_matches_candidate_manifest",
+      "consumed_tokenizer_and_template_digests_match_candidate_manifest",
+      "exact_runtime_build_identity"
+    ],
+    "matched_pilot_requirements": [
+      "same training/example budget if training is compared",
+      "same optimizer/hyperparameter search budget",
+      "same corpus revision",
+      "same calibration/validation split",
+      "final holdout unseen during candidate selection",
+      "refusal/low-refusal objective measured separately from cognition retention",
+      "Hyperposition/J-Space causal and nuisance controls retained",
+      "variable-N and DB/Claude-Code process tests retained"
+    ],
+    "selection_status_until_pass": "UNRESOLVED_MATCHED_ABLITERATED_PILOT_REQUIRED"
+  },
+  "credits": {
+    "research_delta": 1,
+    "model_selection_correction_delta": 1,
+    "external_candidate_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0
+  },
+  "next_exact_action": "Create one successor checkpoint-selection gate that enforces abliterated TARGET versus official CONTROL roles and exact immutable checkpoint/tokenizer/template/config manifests; freeze at least two abliterated target candidates to exact bytes; run a preregistered matched local FREE_ONLY pilot without touching the final holdout; select no winner from model-card refusal claims alone."
+}

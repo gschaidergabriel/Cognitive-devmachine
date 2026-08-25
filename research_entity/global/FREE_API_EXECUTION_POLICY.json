@@ -681,13 +681,19 @@
   },
   "response_model_provenance": {
     "checked_at": "2026-08-25",
-    "claim": "When a non-streaming provider response includes a top-level model field, it must be an exact built-in string equal to the requested model before content can reach VERIFIED or DONE.",
-    "source": "https://docs.nvidia.com/nim/large-language-models/2.0.0/get-started/quickstart.html",
-    "external_evidence": "NVIDIA's documented Chat Completions response echoes the request's model name in the top-level model field alongside object=chat.completion and choices.",
-    "internal_measurement": "A status-200 response that explicitly named other-model while the request and receipt named mock previously returned success and reached VERIFIED and DONE.",
-    "executable_evidence": "test_response_model_mismatch_cannot_reach_verified_state",
-    "counterhypothesis": "Endpoint and credential binding make response model identity redundant; falsified for receipt provenance because a contradictory provider model claim was ignored while the requested model was recorded as if verified.",
-    "uncertainty": "The cross-provider v0.1 adapter still accepts omission of the response model field for compatibility; an Ubuntu NVIDIA live receipt is required before tightening the field from conditional to mandatory."
+    "claim": "Every non-streaming provider success response must contain a top-level model field that is an exact built-in string equal to the requested model before content can reach VERIFIED or DONE.",
+    "sources": [
+      "https://docs.nvidia.com/nim/large-language-models/2.0.10/reference/api-reference.html",
+      "https://docs.vllm.ai/en/v0.16.0/api/vllm/entrypoints/openai/chat_completion/protocol/"
+    ],
+    "external_evidence": "NVIDIA documents that its OpenAI-compatible inference endpoints are provided by the vLLM backend and directs full schema questions to vLLM. The official vLLM ChatCompletionResponse declares model as a required string while object has the fixed chat.completion discriminator.",
+    "internal_measurement": "Both a status-200 response explicitly naming other-model and a response omitting model entirely previously returned success and reached VERIFIED and DONE while the receipt represented the requested model as verified provenance.",
+    "executable_evidence": [
+      "test_response_model_mismatch_cannot_reach_verified_state",
+      "test_missing_response_model_cannot_reach_verified_state"
+    ],
+    "counterhypothesis": "Endpoint binding or a Chat-shaped choice is sufficient to infer response model identity; falsified because the adapter promoted an unasserted model name into a VERIFIED receipt despite the backend schema requiring the field.",
+    "uncertainty": "No Ubuntu NVIDIA live receipt is available on this host; compatibility is supported by the official NVIDIA backend contract and executable local boundary tests rather than a live provider measurement."
   },
   "response_object_provenance": {
     "checked_at": "2026-08-25",

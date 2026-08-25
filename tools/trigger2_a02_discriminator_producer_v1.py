@@ -76,7 +76,7 @@ def _event_semantic_payload(event: dict[str, Any]) -> dict[str, Any]:
     return {k: deepcopy(event[k]) for k in keys}
 
 
-def _policy_fields(policy: Any) -> tuple[str, str, str, dict[str, Any]]:
+def _policy_fields(policy: Any) -> tuple[str, str, str, dict[str, Any], str]:
     if not isinstance(policy, dict):
         raise ValueError("A02_POLICY_OBJECT_REQUIRED")
     policy_id = policy.get("policy_id")
@@ -87,7 +87,8 @@ def _policy_fields(policy: Any) -> tuple[str, str, str, dict[str, Any]]:
         raise ValueError("A02_POLICY_IDENTITY_INVALID")
     if not isinstance(formal_spec, dict):
         raise ValueError("A02_FORMAL_DISCRIMINATOR_SPEC_REQUIRED")
-    return policy_id, policy_version, case_id, formal_spec
+    policy_jcs_sha256 = _jcs_sha256(policy)
+    return policy_id, policy_version, case_id, formal_spec, policy_jcs_sha256
 
 
 def produce(
@@ -99,7 +100,13 @@ def produce(
     policy: Any,
 ) -> dict[str, Any]:
     """Deterministically reconstruct the one authority-scoped synthetic receipt."""
-    policy_id, policy_version, allowed_case_id, formal_spec = _policy_fields(policy)
+    (
+        policy_id,
+        policy_version,
+        allowed_case_id,
+        formal_spec,
+        policy_jcs_sha256,
+    ) = _policy_fields(policy)
     if generation_case_id != allowed_case_id:
         raise ValueError("A02_CASE_NOT_AUTHORIZED")
     if not isinstance(world, dict) or not isinstance(pre_state, dict) or not isinstance(event, dict):
@@ -170,6 +177,7 @@ def produce(
         "producer_source_sha256": producer_source_sha256,
         "policy_id": policy_id,
         "policy_version": policy_version,
+        "policy_jcs_sha256": policy_jcs_sha256,
         "formal_discriminator_spec_jcs_sha256": formal_spec_digest,
         "generation_case_id": generation_case_id,
         "world_jcs_sha256": world_jcs_sha256,
@@ -199,6 +207,7 @@ def produce(
         "policy": {
             "policy_id": policy_id,
             "policy_version": policy_version,
+            "policy_jcs_sha256": policy_jcs_sha256,
         },
         "formal_discriminator_spec_jcs_sha256": formal_spec_digest,
         "generation_case_id": generation_case_id,

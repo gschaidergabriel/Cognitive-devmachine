@@ -1,0 +1,79 @@
+{
+  "schema": "CLAY_TRIGGER2_GENERATOR_CONVERGENCE_REVIEW/v1",
+  "date": "2026-08-25",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority": {
+    "supervisor_epoch": "8.78",
+    "mode": "FREE_ONLY",
+    "canonical_main_observed_before_write": "15e20d3cedec9da8961da8e7059d3afddce364c2"
+  },
+  "review_type": "PARALLEL_SWARM_CONVERGENCE_AND_DUPLICATE_LANE_REMOVAL",
+  "retained_generator": {
+    "path": "tools/trigger2_context_binding_generator_v1.py",
+    "blob_sha": "4af4a384918064e80906089bd0eed98d1e2fc79f",
+    "test_path": "tests/test_trigger2_context_binding_generator_v1.py",
+    "test_blob_sha": "fdb217d663e5beab0af513f0b8246563a802e466",
+    "evidence_commit": "c00eace021e00f3a637aeb8e9181ab3651a8b9cd",
+    "reasons": [
+      "constructs the actual class-to-symbol mapping from the selected S3 permutation rather than trusting permutation metadata",
+      "covers all six S3 mappings",
+      "factorializes four semantic template families and two query polarities",
+      "varies codebook display order across all six orderings",
+      "enforces exact class-symbol counterbalance",
+      "rejects class-word leakage outside the codebook",
+      "fails closed unless production atoms have externally observed token_id and token_count=1",
+      "contains a regression test that catches metadata-only permutation lies",
+      "reported deterministic local validation is 8/8 tests PASS at source-test scope"
+    ]
+  },
+  "duplicate_lane_resolution": {
+    "temporary_duplicate_commit": "333d536165fc7995d5c74dc377bf7a071eec0978",
+    "temporary_duplicate_path": "tools/trigger2_dynamic_codebook_generator_v2.py",
+    "removal_commit": "0d5a3c3c37c9e6f48af2a7ca642794c3cc186c15",
+    "decision": "REMOVED_FROM_MAIN",
+    "reason": "Parallel re-entry showed the retained factorial generator is strictly stronger on mapping causality, polarity factorization, codebook-order coverage and tested fail-closed atom admission. Keeping a second generator would create avoidable corpus-authority drift.",
+    "nonmerged_scratch_idea": "wrong-symbol proposal/rejection hard negatives",
+    "nonmerge_reason": "Do not reopen a duplicate generator merely to preserve authorship. The current Claude live-gate training delta already expands complementary hard-negative families; proposed-symbol hard negatives may be added later only through the retained generator if an ablation shows incremental value."
+  },
+  "swarm_conclusion": {
+    "highest_information_training_target": "CONTENT_DEPENDENT_EPISODIC_SEMANTIC_TO_LOCAL_CODEBOOK_SYMBOL_BINDING_ROUTER",
+    "do_not_primary_retrain": [
+      "already-measured semantic readout",
+      "already-measured symbol-axis writeout",
+      "already-measured HRR/MAP carrier binding capacity"
+    ],
+    "complementary_method_hard_negative_pressure": [
+      "SOURCE_EXISTS != LIVE_DECISION_AUTHORITY",
+      "FORMAT_VALID_HASH != ARTIFACT_IDENTITY",
+      "SELF_DECLARED_INDEPENDENCE != MEASURED_INDEPENDENCE",
+      "INTERNAL_TRANSPORT != BEHAVIORAL_CAUSAL_CONTROL",
+      "SAME_MODEL_FAMILY != SAME_MODEL_SPECIFIC_CAUSAL_RESULT"
+    ]
+  },
+  "production_blocker": {
+    "status": "BLOCKED_ON_EXACT_VERIFIED_ABI_ATOM_MATERIALIZATION",
+    "required": [
+      "exact accepted 46-atom inventory",
+      "exact selected Qwen3.5-0.8B checkpoint/tokenizer identity",
+      "per-atom token_id and token_count=1 revalidation",
+      "disjoint train/validation/frozen-holdout symbol pools",
+      "row-level mapping and manifest provenance",
+      "candidate gate plus family/provenance split linter plus S3/counterbalance/MI/leak validation"
+    ],
+    "rule": "Do not guess or synthesize final ABI atom strings. Placeholder or synthetic symbols remain non-train-ready."
+  },
+  "promotion_boundary": {
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "qwen35_jspace_runtime_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "canonical_semantics_promotion": false
+  },
+  "next_exact_action": "Obtain the exact accepted 46-atom ABI inventory from the measured source package or an equivalent hash-bound canonical export; bind it to the selected checkpoint/tokenizer; materialize a small Stage-A real-atom tranche through tools/trigger2_context_binding_generator_v1.py; run its tests plus row/family/S3/MI/leak/token validators; only then seek the first evidence-qualified accepted dataset tokens."
+}

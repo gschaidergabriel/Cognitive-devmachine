@@ -1,0 +1,95 @@
+{
+  "schema": "CLAY_TRIGGER2_PIDFD_WITNESS_TEMPORAL_BINDING_AUDIT/v1",
+  "date": "2026-08-26",
+  "trigger": "triggerwort2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "status": "APPEND_ONLY_SOURCE_RESEARCH_NONPROMOTING",
+  "observed_main_before_write": "30211828c163b69098f4d6332407d6d950c0b7e6",
+  "authority": {
+    "supervisor_epoch": "8.84",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "architecture": "HCU",
+    "provider_routes_admitted": false,
+    "training_execution_authorized": false
+  },
+  "question": "Can the new pidfd-bearing PhysicalCohortWitness candidate be minted from the exact retained spawn_held_cohort lifecycle without weakening the physical barrier evidence boundary?",
+  "source_identity": {
+    "retained_physical_source": "tools/trigger2_grid10_fused_physical_membership_cohort_acceptance_v1.py",
+    "retained_physical_source_git_blob_sha1": "f566feb3c4aedf8627f8f64428524ddf14044b23",
+    "pidfd_candidate": "tools/trigger2_physical_witness_capability_v1.py",
+    "pidfd_candidate_git_blob_sha1": "167f595cbc9dd5815d91867b62b9741b0397338d"
+  },
+  "observed_lifecycle": [
+    "spawn_held_cohort waits until all children have emitted ready markers while still alive at the common barrier",
+    "the parent observes child PIDs and read-only S1 file descriptors while the barrier is held",
+    "the parent then writes the release file",
+    "only after release does the parent call proc.communicate for every child and obtain each final NODE_RESULT packet",
+    "spawn_held_cohort returns packets and proof only after those communicate calls complete and parent_observed_exit_ns has been recorded"
+  ],
+  "pidfd_candidate_behavior": [
+    "mint_barrier_witness requires ready_by_node, fd bindings, S1 file identity and physical predicates",
+    "mint_barrier_witness calls os.pidfd_open(pid, 0) for every observed PID",
+    "the candidate states that minting must occur while the exact process handles can be opened at the barrier",
+    "require_physical_witness later uses os.fstat(pidfd) only as descriptor-validity checking"
+  ],
+  "new_blocker": {
+    "id": "PIDFD_WITNESS_MINT_AFTER_BARRIER_RELEASE_TEMPORAL_MISMATCH",
+    "status": "SOURCE_INTEGRATION_GAP",
+    "claim": "The current retained observer API returns the data needed by an external mint_barrier_witness caller only after release/communicate, whereas the pidfd candidate needs process handles opened while the cohort is still the exact barrier cohort. A naive post-return integration therefore cannot establish the intended mint-at-barrier provenance and may fail once children have been reaped.",
+    "counterhypothesis": "pidfd_open may still succeed for an exited child while it remains an unreaped zombie, so opening immediately after return could preserve process identity.",
+    "adjudication": "The retained spawn_held_cohort uses subprocess.Popen.communicate, which waits for process termination and performs wait/reaping. Linux pidfd_open documents that post-termination opening is only guaranteed while the process has not been reaped. Therefore the post-return path must not be treated as a reliable barrier-time minting mechanism.",
+    "falsifier": "Demonstrate an exact-current source path that opens and binds pidfds before release/reap while simultaneously binding the exact packet/read-receipt/cohort data later consumed by the sole retained coordinator, without a caller-forgeable reconstruction step."
+  },
+  "linux_semantics": {
+    "pidfd_open_reference": "https://man7.org/linux/man-pages/man2/pidfd_open.2.html",
+    "observed_rule": "pidfd_open returns a stable descriptor for a task; opening after termination is only guaranteed while the child remains a zombie and has not been reaped",
+    "poll_rule": "a pidfd becomes readable when the referenced task exits and produces hangup after reaping; therefore descriptor validity alone is not equivalent to current liveness"
+  },
+  "design_direction": {
+    "preferred": "Move witness minting into the retained barrier observation lifecycle before release rather than minting from a returned proof dictionary.",
+    "minimum_shape": [
+      "while all ten children are held at the barrier, open pidfds and bind the exact process identities",
+      "make the exact NODE_RESULT packet or a cryptographically complete packet commitment available before barrier release, so the witness can bind the same packets later admitted",
+      "bind S1 device/inode plus per-node read-only fd observations and read-receipt/snapshot identity into the witness before release",
+      "only then release children and complete output collection",
+      "on post-release packet collection, require exact equality with the pre-release commitment before any mutation",
+      "route physical admission through the sole retained coordinator with explicit PHYSICAL_OBSERVED evidence class; keep SOURCE_FIXTURE_ONLY disjoint",
+      "do not treat os.fstat(pidfd) as proof that the child is still alive; use pidfd poll/wait semantics only for the claim actually needed"
+    ],
+    "implementation_options": [
+      "extend the child ready marker to include the complete NODE_RESULT packet or packet_digest computed while its read transaction is still held",
+      "or introduce a held-cohort session/context object that exposes a mint callback at the barrier and does not release/reap until the callback has bound the witness"
+    ]
+  },
+  "interaction_with_existing_v67_blocker": {
+    "caller_forgeable_raw_dict_closed": false,
+    "evidence_class_in_cohort_id_closed": false,
+    "evidence_class_persisted_closed": false,
+    "distinct_source_fixture_route_closed": false,
+    "pidfd_candidate_value": "USEFUL_DONOR_PRIMITIVE_NOT_YET_INTEGRATED_CLOSURE"
+  },
+  "execution_this_cycle": {
+    "provider_called": false,
+    "model_runtime_executed": false,
+    "physical_grid10_executed": false,
+    "vps_command_executed": false,
+    "training_executed": false,
+    "paid_execution": false,
+    "unusual_experiment_executed": false,
+    "work_class": "SOURCE_REENTRY_PLUS_PRIMARY_LINUX_PIDFD_SEMANTICS_RESEARCH"
+  },
+  "credits": {
+    "new_source_research_delta": 1,
+    "physical_witness_integration_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "model_call_runtime_credit": 0,
+    "jspace_model_credit": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  },
+  "next_exact_action": "Fuse pidfd acquisition into the live barrier phase itself and bind a pre-release exact NODE_RESULT commitment; then make the sole retained physical coordinator require that observation-bound capability and keep synthetic source-fixture admission explicitly disjoint."
+}

@@ -48,8 +48,10 @@ def _baseline_row():
             "repo_path": p["repo_path"],
             "source_sha256": p["source_sha256"],
             "producer_schema_or_version": p["producer_schema_or_version"],
+            "source_lineage": deepcopy(p["source_lineage"]),
             "policy_id": policy["policy_id"],
             "policy_version": policy["policy_version"],
+            "policy_jcs_sha256": authority["policy_jcs_sha256"],
             "formal_discriminator_spec_jcs_sha256": policy[
                 "formal_discriminator_spec_jcs_sha256"
             ],
@@ -71,6 +73,8 @@ def test_a02_baseline_is_authority_derived_and_zero_credit():
     assert result["pass"] is True
     assert result["a02_producer_auth_pass"] is True
     assert result["producer_source_verified"] is True
+    assert result["producer_source_lineage_verified"] is True
+    assert result["policy_digest_verified"] is True
     assert result["producer_invocation_completed"] is True
     assert result["row_producer_or_policy_fields_authoritative"] is False
     assert result["canonical_dataset_admission"] is False
@@ -112,10 +116,26 @@ def test_t2_shpg_a02_producer_path_or_sha_swap_rejects():
     assert "A02_ROW_PRODUCER_BINDING_NOT_EXACT_AUTHORITY" in result["failures"]
 
 
+def test_t2_shpg_a02_source_lineage_swap_rejects():
+    row = _baseline_row()
+    row["discriminator_producer_binding_evaluator_only"]["source_lineage"][
+        "source_commit_sha"
+    ] = "0" * 40
+    result = _assert_reject(row)
+    assert "A02_ROW_PRODUCER_BINDING_NOT_EXACT_AUTHORITY" in result["failures"]
+
+
 def test_t2_shpg_a02_policy_swap_rejects():
     row = _baseline_row()
     row["discriminator_producer_binding_evaluator_only"]["policy_id"] = "ATTACKER_POLICY"
     row["discriminator_producer_binding_evaluator_only"]["policy_version"] = "999"
+    result = _assert_reject(row)
+    assert "A02_ROW_PRODUCER_BINDING_NOT_EXACT_AUTHORITY" in result["failures"]
+
+
+def test_t2_shpg_a02_policy_digest_swap_rejects():
+    row = _baseline_row()
+    row["discriminator_producer_binding_evaluator_only"]["policy_jcs_sha256"] = "0" * 64
     result = _assert_reject(row)
     assert "A02_ROW_PRODUCER_BINDING_NOT_EXACT_AUTHORITY" in result["failures"]
 

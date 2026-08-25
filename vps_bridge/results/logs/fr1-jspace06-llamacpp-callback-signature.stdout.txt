@@ -1,0 +1,118 @@
+llama_head=bb4caa7540188872173c44d161602d9271386413
+=== llama context params ===
+    //       https://github.com/ggml-org/llama.cpp/pull/7544
+    struct llama_context_params {
+        uint32_t n_ctx;                 // text context, 0 = from model
+        uint32_t n_batch;               // logical maximum batch size that can be submitted to llama_decode
+        uint32_t n_ubatch;              // physical maximum batch size
+        uint32_t n_seq_max;             // max number of sequences (i.e. distinct states for recurrent models)
+        uint32_t n_rs_seq;              // number of recurrent-state snapshots per seq for rollback (0 = no rollback) [EXPERIMENTAL]
+        uint32_t n_outputs_max;         // max outputs in a ubatch (0 = n_batch)
+        uint32_t n_outputs_max_per_seq; // max outputs per sequence (0 = n_outputs_max)
+        int32_t  n_threads;             // number of threads to use for generation
+        int32_t  n_threads_batch;       // number of threads to use for batch processing
+
+        enum llama_context_type      ctx_type;          // set the context type (e.g. MTP)
+        enum llama_rope_scaling_type rope_scaling_type; // RoPE scaling type, from `enum llama_rope_scaling_type`
+        enum llama_pooling_type      pooling_type;      // whether to pool (sum) embedding results by sequence id
+        enum llama_attention_type    attention_type;    // attention type to use for embeddings
+        enum llama_flash_attn_type   flash_attn_type;   // when to enable Flash Attention
+
+        // ref: https://github.com/ggml-org/llama.cpp/pull/2054
+        float    rope_freq_base;   // RoPE base frequency, 0 = from model
+        float    rope_freq_scale;  // RoPE frequency scaling factor, 0 = from model
+        float    yarn_ext_factor;  // YaRN extrapolation mix factor, negative = from model
+        float    yarn_attn_factor; // YaRN magnitude scaling factor
+        float    yarn_beta_fast;   // YaRN low correction dim
+        float    yarn_beta_slow;   // YaRN high correction dim
+        uint32_t yarn_orig_ctx;    // YaRN original context size
+        float    defrag_thold;     // [DEPRECATED] defragment the KV cache if holes/size > thold, <= 0 disabled (default)
+
+        ggml_backend_sched_eval_callback cb_eval;
+        void * cb_eval_user_data;
+
+        enum ggml_type type_k; // data type for K cache [EXPERIMENTAL]
+        enum ggml_type type_v; // data type for V cache [EXPERIMENTAL]
+
+        // Abort callback
+        // if it returns true, execution of llama_decode() will be aborted
+        // currently works only with CPU execution
+        ggml_abort_callback abort_callback;
+        void *              abort_callback_data;
+
+        // Keep the booleans together and at the end of the struct to avoid misalignment during copy-by-value.
+=== callback typedef hits ===
+ggml/src/ggml-backend.cpp:815:    ggml_backend_sched_eval_callback callback_eval;
+ggml/src/ggml-backend.cpp:1989:void ggml_backend_sched_set_eval_callback(ggml_backend_sched_t sched, ggml_backend_sched_eval_callback callback, void * user_data) {
+ggml/include/ggml-backend.h:316:    typedef bool (*ggml_backend_sched_eval_callback)(struct ggml_tensor * t, bool ask, void * user_data);
+ggml/include/ggml-backend.h:354:    GGML_API void                 ggml_backend_sched_set_eval_callback(ggml_backend_sched_t sched, ggml_backend_sched_eval_callback callback, void * user_data);
+include/llama.h:378:        ggml_backend_sched_eval_callback cb_eval;
+src/llama-cparams.h:62:    ggml_backend_sched_eval_callback cb_eval;
+=== qwen3 layer graph ===
+                    );
+
+            Kcur = build_norm(Kcur, model.layers[il].attn_k_norm, NULL, LLM_NORM_RMS, il);
+            cb(Kcur, "Kcur_normed", il);
+
+            Kcur = ggml_rope_ext(
+                    ctx0, Kcur, inp_pos, nullptr,
+                    n_rot, rope_type, n_ctx_orig, freq_base, freq_scale,
+                    ext_factor, attn_factor, beta_fast, beta_slow
+                    );
+
+            cb(Qcur, "Qcur", il);
+            cb(Kcur, "Kcur", il);
+            cb(Vcur, "Vcur", il);
+
+            cur = build_attn(inp_attn,
+                    model.layers[il].wo, model.layers[il].wo_b, model.layers[il].wo_s,
+                    Qcur, Kcur, Vcur, nullptr, nullptr, nullptr, 1.0f/sqrtf(float(n_embd_head)), il);
+        }
+        if (il == n_layer - 1 && inp_out_ids) {
+            cur   = ggml_get_rows(ctx0,   cur, inp_out_ids);
+            inpSA = ggml_get_rows(ctx0, inpSA, inp_out_ids);
+        }
+        ggml_tensor * ffn_inp = ggml_add(ctx0, cur, inpSA);
+        cb(ffn_inp, "ffn_inp", il);
+
+        // feed-forward network
+        cur = build_norm(ffn_inp,
+                model.layers[il].ffn_norm, NULL,
+                LLM_NORM_RMS, il);
+        cb(cur, "ffn_norm", il);
+
+        cur = build_ffn(cur,
+                model.layers[il].ffn_up,   NULL, model.layers[il].ffn_up_s,
+                model.layers[il].ffn_gate, NULL, model.layers[il].ffn_gate_s,
+                model.layers[il].ffn_down, NULL, model.layers[il].ffn_down_s,
+                NULL,
+                LLM_FFN_SILU, LLM_FFN_PAR, il);
+        cb(cur, "ffn_out", il);
+
+        cur = ggml_add(ctx0, cur, ffn_inp);
+
+        cur = build_cvec(cur, il);
+        cb(cur, "l_out", il);
+
+        // input for next layer
+        inpL = cur;
+    }
+    cur = inpL;
+
+    cur = build_norm(cur,
+            model.output_norm, NULL,
+            LLM_NORM_RMS, -1);
+
+    cb(cur, "result_norm", -1);
+    res->t_embd = cur;
+
+    // lm_head
+    cur = build_lora_mm(model.output, cur, model.output_s);
+
+    cb(cur, "result_output", -1);
+=== cb_eval hits ===
+src/llama-context.cpp:139:    cparams.cb_eval           = params.cb_eval;
+src/llama-context.cpp:140:    cparams.cb_eval_user_data = params.cb_eval_user_data;
+src/llama-context.cpp:1354:        ggml_backend_sched_set_eval_callback(sched.get(), cparams.cb_eval, cparams.cb_eval_user_data);
+src/llama-context.cpp:3537:        /*.cb_eval                     =*/ nullptr,
+src/llama-context.cpp:3538:        /*.cb_eval_user_data           =*/ nullptr,

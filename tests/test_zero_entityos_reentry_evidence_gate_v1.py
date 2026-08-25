@@ -16,7 +16,7 @@ from tools.zero_entityos_variable_grid_fixture_v1 import (
 )
 
 
-def reentry():
+def reentry(change="TRUE"):
     return {
         "schema": "WORKSPACE_REENTRY/v1",
         "source_result_id": "res-1",
@@ -26,38 +26,22 @@ def reentry():
         "to_workspace_epoch": 5,
         "reentry_payload_ref": "fixture:return",
         "reentry_digest": "digest-1",
-        "observed_downstream_change": "TRUE",
-    }
-
-
-def measurement(change="TRUE"):
-    return {
-        "schema": "WORKSPACE_REENTRY_CAUSAL_MEASUREMENT/v1",
-        "measurement_id": "m-1",
-        "source_result_id": "res-1",
-        "causal_event_id": "ce-1",
-        "reentry_digest": "digest-1",
-        "intervention_id": "i-1",
-        "matched_control_id": "c-1",
-        "metric_id": "task-delta-v1",
-        "baseline_value": 0.2,
-        "intervention_value": 0.5,
         "observed_downstream_change": change,
-        "off_target_result": "PASS",
-        "observation_surface": "EXPOSED_WORKSPACE_INTERFACE",
     }
 
 
 class GateTests(unittest.TestCase):
-    def test_stubbed_true_is_downgraded(self):
+    def test_stubbed_true_is_downgraded_to_none(self):
         got = normalize_reentry_evidence(
             reentry(), source_metadata={"stubbed": True, "runtime_credit": 0}
         )
+        self.assertEqual("TRUE", got["raw_observed_downstream_change"])
         self.assertEqual("UNKNOWN", got["observed_downstream_change"])
-        self.assertEqual(0, got["causal_credit"])
+        self.assertEqual("NONE", got["causal_credit"])
         self.assertEqual(0, got["global_jspace_causal_credit"])
+        self.assertEqual("PACKET_BINDING_ONLY", got["credit_scope"])
 
-    def test_synthetic_fixture_true_is_downgraded(self):
+    def test_synthetic_fixture_true_is_downgraded_to_none(self):
         got = normalize_reentry_evidence(
             reentry(),
             source_metadata={
@@ -66,56 +50,31 @@ class GateTests(unittest.TestCase):
             },
         )
         self.assertEqual("UNKNOWN", got["observed_downstream_change"])
-        self.assertEqual("PACKET_BINDING_ONLY", got["credit_scope"])
+        self.assertEqual("NONE", got["causal_credit"])
+        self.assertEqual("GLOBAL_WORKSPACE_REENTRY_RECEIPT_CONTRACT/v1", got["positive_promotion_contract"])
 
-    def test_unmeasured_non_synthetic_true_is_downgraded(self):
+    def test_unmeasured_non_synthetic_true_is_still_none(self):
         got = normalize_reentry_evidence(
-            reentry(), source_metadata={"runtime_credit": "OBSERVED_INTERFACE"}
+            reentry(), source_metadata={"runtime_credit": "OBSERVED_INTERFACE_UNMEASURED"}
         )
         self.assertEqual("UNKNOWN", got["observed_downstream_change"])
-        self.assertEqual(0, got["causal_credit"])
+        self.assertEqual("NONE", got["causal_credit"])
+        self.assertEqual("REENTRY_PRESENT_UNMEASURED", got["credit_scope"])
 
-    def test_valid_matched_measurement_scopes_credit_to_observable_reentry(self):
-        got = normalize_reentry_evidence(
-            reentry(),
-            source_metadata={"runtime_credit": "OBSERVED_INTERFACE"},
-            measurement=measurement("TRUE"),
-        )
-        self.assertEqual("TRUE", got["observed_downstream_change"])
-        self.assertEqual(1, got["causal_credit"])
-        self.assertEqual("OBSERVABLE_WORKSPACE_REENTRY_ONLY", got["credit_scope"])
-        self.assertEqual(0, got["global_jspace_causal_credit"])
-
-    def test_unknown_measurement_stays_zero_credit(self):
-        got = normalize_reentry_evidence(
-            reentry(),
-            source_metadata={"runtime_credit": "OBSERVED_INTERFACE"},
-            measurement=measurement("UNKNOWN"),
-        )
-        self.assertEqual("UNKNOWN", got["observed_downstream_change"])
-        self.assertEqual(0, got["causal_credit"])
-
-    def test_mismatched_causal_identity_rejected(self):
-        bad = measurement()
-        bad["causal_event_id"] = "other"
-        with self.assertRaisesRegex(
-            ReentryEvidenceError, "MEASUREMENT_CAUSAL_EVENT_MISMATCH"
-        ):
-            normalize_reentry_evidence(
-                reentry(),
-                source_metadata={"runtime_credit": "OBSERVED_INTERFACE"},
-                measurement=bad,
+    def test_false_and_unknown_are_preserved_as_raw_but_not_promoted(self):
+        for change in ("FALSE", "UNKNOWN"):
+            got = normalize_reentry_evidence(
+                reentry(change), source_metadata={"runtime_credit": "OBSERVED_INTERFACE_UNMEASURED"}
             )
+            self.assertEqual(change, got["raw_observed_downstream_change"])
+            self.assertEqual("UNKNOWN", got["observed_downstream_change"])
+            self.assertEqual("NONE", got["causal_credit"])
 
-    def test_missing_matched_control_rejected(self):
-        bad = measurement()
-        bad["matched_control_id"] = ""
-        with self.assertRaisesRegex(ReentryEvidenceError, "MATCHED_CONTROL_ID_REQUIRED"):
-            normalize_reentry_evidence(
-                reentry(),
-                source_metadata={"runtime_credit": "OBSERVED_INTERFACE"},
-                measurement=bad,
-            )
+    def test_bad_reentry_schema_fails_closed(self):
+        bad = reentry()
+        bad["schema"] = "OTHER/v1"
+        with self.assertRaisesRegex(ReentryEvidenceError, "REENTRY_SCHEMA_MISMATCH"):
+            normalize_reentry_evidence(bad)
 
     def test_current_class_fixture_stub_is_downgraded(self):
         census = {
@@ -139,7 +98,8 @@ class GateTests(unittest.TestCase):
                 raw["reentry"], source_metadata=raw["result"]
             )
             self.assertEqual("UNKNOWN", got["observed_downstream_change"])
-            self.assertEqual(0, got["causal_credit"])
+            self.assertEqual("NONE", got["causal_credit"])
+            self.assertEqual(0, got["global_jspace_causal_credit"])
         finally:
             rt.close()
 
@@ -157,7 +117,7 @@ class GateTests(unittest.TestCase):
             raw["reentry"], source_metadata=raw["return"]
         )
         self.assertEqual("UNKNOWN", got["observed_downstream_change"])
-        self.assertEqual(0, got["causal_credit"])
+        self.assertEqual("NONE", got["causal_credit"])
         self.assertEqual(0, got["global_jspace_causal_credit"])
 
 

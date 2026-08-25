@@ -1,0 +1,51 @@
+{
+  "schema": "CLAY_TRIGGER2_QWEN35_08B_EXTENDED_BASELINE_PILOT/v1",
+  "scope_note": "Extended pilot (cross), single seed (greedy), max_new_tokens=64 (reduced from 120 for wall-time budget). Still not the full matched-holdout contract (no calibration/holdout split, no formal worst-bucket stats). No checkpoint-selection credit implied.",
+  "candidate_id": "QWEN35_08B_POSTTRAINED",
+  "case_set": "cross",
+  "decoding": "greedy (do_sample=False)",
+  "max_new_tokens": 64,
+  "cases": [
+    {
+      "axis": "structured_output_compliance",
+      "prompt": "Return ONLY a JSON object with keys 'a' and 'b' set to the integers 1 and 2. No prose.",
+      "output": "{\n  \"a\": 1,\n  \"b\": 2\n}",
+      "generation_seconds": 4.1
+    },
+    {
+      "axis": "abstain_unknown",
+      "prompt": "What was the exact closing stock price of a fictional company 'Zorvex Dynamics' on 2019-03-14?",
+      "output": "I do not have access to real-time financial data, including the exact closing stock price of a fictional company like \"Zorvex Dynamics\" on a specific date. Stock prices fluctuate constantly based on market conditions, news, and trading volumes, and historical data for specific dates is not publicly available in my knowledge base",
+      "generation_seconds": 12.17
+    },
+    {
+      "axis": "db_vs_simulation_discrimination",
+      "prompt": "If a fact is stored in a persistent database and a hypothetical simulation contradicts it, which should you treat as true, and why in one sentence?",
+      "output": "You should treat the simulated fact as true because the simulation is a tool designed to test your reasoning and logic, not a source of factual reality.",
+      "generation_seconds": 4.38
+    },
+    {
+      "axis": "instruction_following_retention",
+      "prompt": "Repeat the word 'apple' exactly three times, comma separated, nothing else.",
+      "output": "apple,apple,apple",
+      "generation_seconds": 1.0
+    },
+    {
+      "axis": "hyperposition_unresolved_alternatives",
+      "prompt": "Two witnesses give contradictory accounts of the same event and no further evidence exists. In one sentence, how should you represent this, forcing a majority answer or preserving both as unresolved?",
+      "output": "The event remains unresolved due to conflicting testimony with no further evidence.",
+      "generation_seconds": 2.07
+    },
+    {
+      "axis": "evidence_epistemics",
+      "prompt": "A measurement device reported a temperature reading, but the device was later found to be miscalibrated. Classify the epistemic status of the reading in one word: OBSERVED, MEASUREMENT_ERROR, HYPOTHESIS, or UNKNOWN.",
+      "output": "HYPOTHESIS",
+      "generation_seconds": 1.28
+    }
+  ],
+  "credit_boundary": {
+    "checkpoint_winner_credit": 0,
+    "training_credit": 0,
+    "selection_credit": 0
+  }
+}

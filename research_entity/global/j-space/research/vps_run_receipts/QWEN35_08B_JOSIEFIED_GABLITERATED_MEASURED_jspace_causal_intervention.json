@@ -1,0 +1,232 @@
+{
+  "schema": "CLAY_TRIGGER2_QWEN35_08B_JSPACE_CAUSAL_INTERVENTION/v1",
+  "candidate_id": "QWEN35_08B_JOSIEFIED_GABLITERATED_MEASURED",
+  "local_dir": "/root/qwen35-08b-hf-cache/models--Goekdeniz-Guelmez--Josiefied-Qwen3.5-0.8B-gabliterated-v1/snapshots/591852bda6e1979f59e4b0f5ee2919697b12e936",
+  "trace_identity": {
+    "checkpoint_revision": "591852bda6e1979f59e4b0f5ee2919697b12e936",
+    "hidden_size": 1024,
+    "target_layer_idx": 11,
+    "target_layer_role": "full_attention",
+    "wrong_layer_idx": 8,
+    "wrong_layer_role": "linear_attention",
+    "num_hidden_layers": 24,
+    "torch_version": "2.13.0+cpu",
+    "transformers_version": "5.15.1",
+    "python_version": "3.12.3",
+    "random_seed": 0,
+    "n_contrastive_pairs": 6,
+    "vector_extraction_method": "mean(pos_last_token_hidden) - mean(neg_last_token_hidden) at layer output"
+  },
+  "activation_source_policy": "process_execution_boundary_states: last-token hidden state of a complete contrastive sentence pair (fact-framed vs simulation-framed), captured via output_hidden_states forward pass, no generation",
+  "vector_norm_1x": 1.0346,
+  "eval_prompt": "Consider this statement: 'The record shows the door was locked.' Is this best treated as a real observed fact or a simulated hypothetical? Answer with one word: REAL or SIMULATED, then one sentence why.",
+  "off_target_prompt": "What is 12 + 7? Answer with just the number.",
+  "off_target_check": {
+    "baseline_output": "19",
+    "plus_vector_1x_output": "19",
+    "note": "off-target arithmetic answer should be numerically unaffected by the fact-vs-simulation steering vector"
+  },
+  "conditions": [
+    {
+      "condition": "BASELINE",
+      "layer_idx": null,
+      "mode": "none",
+      "generation_seconds": 8.68,
+      "behavioral_output": "REAL\n\nThe statement is best treated as a **REAL** observed fact because the door being locked is a concrete,",
+      "behavioral_lexical_score": {
+        "fact_words": 4,
+        "sim_words": 0,
+        "lean": "FACT"
+      },
+      "representation_divergence": {
+        "l2_distance_from_baseline": 0.0,
+        "cosine_similarity_to_baseline": 1.0
+      }
+    },
+    {
+      "condition": "PLUS_VECTOR_1x",
+      "layer_idx": 11,
+      "mode": "add",
+      "generation_seconds": 9.44,
+      "behavioral_output": "**REAL**\n\nThe record shows the door was locked.\n\n* **Why?**\n  The record is a",
+      "behavioral_lexical_score": {
+        "fact_words": 1,
+        "sim_words": 0,
+        "lean": "FACT"
+      },
+      "representation_divergence": {
+        "l2_distance_from_baseline": 0.0,
+        "cosine_similarity_to_baseline": 1.0
+      }
+    },
+    {
+      "condition": "SIGN_FLIP",
+      "layer_idx": 11,
+      "mode": "add",
+      "generation_seconds": 8.19,
+      "behavioral_output": "<think>\n\n</think>\n\n**SIMULATED**\n\n*Why?* The statement is a hypothetical scenario\u2014no actual door",
+      "behavioral_lexical_score": {
+        "fact_words": 1,
+        "sim_words": 2,
+        "lean": "SIM"
+      },
+      "representation_divergence": {
+        "l2_distance_from_baseline": 0.0,
+        "cosine_similarity_to_baseline": 1.0
+      }
+    },
+    {
+      "condition": "NULL_VECTOR",
+      "layer_idx": 11,
+      "mode": "add",
+      "generation_seconds": 8.96,
+      "behavioral_output": "REAL\n\nThe statement is best treated as a **REAL** observed fact because the door being locked is a concrete,",
+      "behavioral_lexical_score": {
+        "fact_words": 4,
+        "sim_words": 0,
+        "lean": "FACT"
+      },
+      "representation_divergence": {
+        "l2_distance_from_baseline": 0.0,
+        "cosine_similarity_to_baseline": 1.0
+      }
+    },
+    {
+      "condition": "ORTHOGONAL_SAME_NORM",
+      "layer_idx": 11,
+      "mode": "add",
+      "generation_seconds": 9.35,
+      "behavioral_output": "<think>\n\n</think>\n\n**REAL**\n\n**Explanation:**\nThe statement is best treated as a **real observed fact",
+      "behavioral_lexical_score": {
+        "fact_words": 4,
+        "sim_words": 0,
+        "lean": "FACT"
+      },
+      "representation_divergence": {
+        "l2_distance_from_baseline": 0.0,
+        "cosine_similarity_to_baseline": 1.0
+      }
+    },
+    {
+      "condition": "PERMUTED_SAME_NORM",
+      "layer_idx": 11,
+      "mode": "add",
+      "generation_seconds": 0.31,
+      "behavioral_output": "",
+      "behavioral_lexical_score": {
+        "fact_words": 0,
+        "sim_words": 0,
+        "lean": "TIE"
+      },
+      "representation_divergence": {
+        "l2_distance_from_baseline": 0.0,
+        "cosine_similarity_to_baseline": 1.0
+      }
+    },
+    {
+      "condition": "WRONG_LAYER",
+      "layer_idx": 8,
+      "mode": "add",
+      "generation_seconds": 8.58,
+      "behavioral_output": "**REAL or SIMULATED**\n\nThe record shows the door was locked.\n\n---\n### **Why?**",
+      "behavioral_lexical_score": {
+        "fact_words": 1,
+        "sim_words": 1,
+        "lean": "TIE"
+      },
+      "representation_divergence": {
+        "l2_distance_from_baseline": 1.0519,
+        "cosine_similarity_to_baseline": 0.8307
+      }
+    },
+    {
+      "condition": "LESION",
+      "layer_idx": 11,
+      "mode": "lesion",
+      "generation_seconds": 0.32,
+      "behavioral_output": "",
+      "behavioral_lexical_score": {
+        "fact_words": 0,
+        "sim_words": 0,
+        "lean": "TIE"
+      },
+      "representation_divergence": {
+        "l2_distance_from_baseline": 0.0,
+        "cosine_similarity_to_baseline": 1.0
+      }
+    },
+    {
+      "condition": "LESION_THEN_RESCUE",
+      "layer_idx": 11,
+      "mode": "lesion_rescue",
+      "generation_seconds": 9.13,
+      "behavioral_output": "<think>\n\n</think>\n\n**REAL**\n\nThe record shows the door was locked\u2014either through a physical mechanism (e",
+      "behavioral_lexical_score": {
+        "fact_words": 1,
+        "sim_words": 0,
+        "lean": "FACT"
+      },
+      "representation_divergence": {
+        "l2_distance_from_baseline": 0.0,
+        "cosine_similarity_to_baseline": 1.0
+      }
+    },
+    {
+      "condition": "MAGNITUDE_0.5x",
+      "layer_idx": 11,
+      "mode": "add",
+      "generation_seconds": 10.41,
+      "behavioral_output": "REAL\n\nThe statement is best treated as a **REAL** observed fact. The door being locked is a direct,",
+      "behavioral_lexical_score": {
+        "fact_words": 4,
+        "sim_words": 0,
+        "lean": "FACT"
+      },
+      "representation_divergence": {
+        "l2_distance_from_baseline": 0.0,
+        "cosine_similarity_to_baseline": 1.0
+      }
+    },
+    {
+      "condition": "MAGNITUDE_1.0x",
+      "layer_idx": 11,
+      "mode": "add",
+      "generation_seconds": 8.68,
+      "behavioral_output": "**REAL**\n\nThe record shows the door was locked.\n\n* **Why?**\n  The record is a",
+      "behavioral_lexical_score": {
+        "fact_words": 1,
+        "sim_words": 0,
+        "lean": "FACT"
+      },
+      "representation_divergence": {
+        "l2_distance_from_baseline": 0.0,
+        "cosine_similarity_to_baseline": 1.0
+      }
+    },
+    {
+      "condition": "MAGNITUDE_2.0x",
+      "layer_idx": 11,
+      "mode": "add",
+      "generation_seconds": 9.6,
+      "behavioral_output": "The record shows.\n\nThe record is the.\n\n---\n\n**Answer:**\n\n**REAL**\n\nThe record",
+      "behavioral_lexical_score": {
+        "fact_words": 1,
+        "sim_words": 0,
+        "lean": "FACT"
+      },
+      "representation_divergence": {
+        "l2_distance_from_baseline": 0.0,
+        "cosine_similarity_to_baseline": 1.0
+      }
+    }
+  ],
+  "evidence_scope_note": "Small scope by design (1 layer pair, 6 contrastive pairs, lexical-heuristic behavioral scoring, not an LLM judge). Behavioral effect and representation divergence measured and reported SEPARATELY per doc 12.6 - neither alone is sufficient evidence of a reusable causal interface. This is a bounded methodological probe, not a claim of a general J-Space carrier.",
+  "credit_boundary": {
+    "jspace_model_credit": 0,
+    "jspace_causal_credit": 0,
+    "training_credit": 0,
+    "whole_entityos_hcu_credit": 0,
+    "rule": "Probe accuracy / activation steering effects here do NOT promote to J-Space causal credit or checkpoint-selection credit by themselves."
+  },
+  "known_issue_representation_divergence_metric": "The representation_divergence sub-metric (l2_distance/cosine at the eval-prompt readout) reads 0.0/1.0 for same-layer (layer=11) interventions and only shows a nonzero value for the WRONG_LAYER condition (hooked at layer=8). This is inconsistent with the observed BEHAVIORAL differences across conditions (lexical scores clearly differ: BASELINE FACT(4,0) vs SIGN_FLIP SIM(1,2) vs PERMUTED/LESION TIE(0,0) etc, and raw generation text differs per condition), which confirms the forward hook DOES influence the actual generate() computation. The likely cause is that this Qwen3_5 hybrid-attention architecture does not populate output_hidden_states[layer+1] from the same post-hook tensor that register_forward_hook intercepts (possibly a custom hidden_states collection path bypassing the hooked module __call__, or an internal clone/detach before hook-visible mutation). NOT a semantic J-Space claim - a measurement-instrumentation bug in this probe. representation_divergence numbers in this receipt should be treated as UNRELIABLE and excluded from any downstream causal-credit reasoning; only the behavioral_output/behavioral_lexical_score fields are usable evidence, and even those are only a small-scope lexical-heuristic probe, not a validated causal metric."
+}

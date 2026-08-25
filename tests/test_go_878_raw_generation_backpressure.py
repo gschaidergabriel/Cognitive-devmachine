@@ -6,6 +6,8 @@ import subprocess
 import sys
 from pathlib import Path
 
+import pytest
+
 SUPERVISOR = Path(__file__).resolve().parents[1] / "tools" / "run_6000_free_swarm_supervisor.sh"
 
 
@@ -84,3 +86,24 @@ def test_pending_extraction_pressure_cannot_stop_extraction_transport(tmp_path: 
     # carries historical extraction and drains pending_extraction.
     text = SUPERVISOR.read_text(encoding="utf-8")
     assert "raw_generation_allowed || true\n  start_6000" in text
+
+
+@pytest.mark.xfail(
+    strict=True,
+    reason=(
+        "Successor state split required: extraction pressure must keep the shared fabric alive, "
+        "but READY/NEEDS_IMPLEMENTATION pressure with pending_extraction=0 must still pause raw scale."
+    ),
+)
+def test_non_extraction_backlog_pressure_does_not_get_unconditional_fabric_restart(tmp_path: Path):
+    candidates = [(1, "NEW")] * 40 + [(0, "NEEDS_IMPLEMENTATION")] * 24
+    proc, status = _run_gate(tmp_path, candidates=candidates, pending=0)
+    assert proc.returncode == 1
+    assert status["pending_extraction"] == 0
+    assert status["action"] == "PAUSE_RAW_GENERATION_BACKPRESSURE"
+
+    # The current unconditional restart erases this correct pause decision. A
+    # successor controller must branch on *why* the gate failed: preserve the
+    # fabric only for pending extraction, otherwise stop raw-generation scale.
+    text = SUPERVISOR.read_text(encoding="utf-8")
+    assert "raw_generation_allowed || true\n  start_6000" not in text

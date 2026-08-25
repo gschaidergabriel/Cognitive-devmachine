@@ -1,0 +1,208 @@
+{
+  "authority": {
+    "canonical_main_observed_before_write": "0edcc2ca0dba28fa0536bc5834fe6ede05a46e96",
+    "execution_mode": "FREE_ONLY",
+    "provider_preflight_executed": false,
+    "runtime_credit_minted": false,
+    "supervisor_epoch": "8.78",
+    "training_executed": false
+  },
+  "architecture": "HCU",
+  "counterhypotheses_and_falsifiers": [
+    {
+      "falsifier": "A frozen unseen-template/unseen-atom evaluation remains near chance after a small binding curriculum despite preserved semantic read and write-axis performance.",
+      "hypothesis": "The model already carries usable semantic state and a writable symbol axis, but lacks a robust learned operator that binds semantic class to the episode-local codebook and routes it to output.",
+      "id": "H1_BINDING_ROUTER_MISSING",
+      "support": "Consistent with high read/write measurements plus near-chance dynamic codebook output and poor cross-task transfer."
+    },
+    {
+      "falsifier": "Require success on frozen unseen lexical/template families, unseen ABI atoms, randomized codebook order, full S3 mappings, polarity controls and context transfer; reject gains confined to seen templates.",
+      "hypothesis": "Fine-tuning may learn a surface codebook parsing shortcut without installing a reusable context-invariant interface.",
+      "id": "H2_SUPERFICIAL_LOOKUP_ONLY"
+    },
+    {
+      "falsifier": "After real ABI materialization, exact-token-count/last-token-position matched controls eliminate or substantially reduce the gap.",
+      "hypothesis": "Part of the observed gap may come from sequence length, target-token position or tokenizer/output morphology rather than binding itself.",
+      "id": "H3_POSITION_OR_TOKENIZER_CONFOUND"
+    }
+  ],
+  "credits": {
+    "accepted_dataset_tokens": 0,
+    "canonical_semantics_promotion": false,
+    "full_hcu_runtime_credit": 0,
+    "prematerialized_candidate_rows": 108,
+    "qwen35_jspace_runtime_credit": 0,
+    "qwen35_training_credit": 0,
+    "research_design_delta": 1,
+    "whole_entityos_hcu_runtime_credit": 0
+  },
+  "date": "2026-08-25",
+  "deterministic_tools": {
+    "generator_path": "tools/entityos_hcu_dynamic_codebook_seed_generator_v2.py",
+    "generator_sha256": "1600b9b62eff502ea8c0912bfaa159b219aa1e25c5fd04407d67f2da882fa0d9",
+    "linter_path": "tools/entityos_hcu_dynamic_codebook_seed_linter_v1.py",
+    "linter_sha256": "007fb3a8a44d214018b25fda3caa41fe517a70d9b6d8009761fae77e3c93e807",
+    "regeneration_exact_seed_sha256_match": true
+  },
+  "local_source_validation": {
+    "atom_index_split_overlap": {
+      "TRAIN_HOLDOUT": [],
+      "TRAIN_VALIDATION": [],
+      "VALIDATION_HOLDOUT": []
+    },
+    "failures": [],
+    "holdout_class_counts": {
+      "ABSTAIN": 6,
+      "ALLOW": 6,
+      "DENY": 6
+    },
+    "linter_result": "PASS",
+    "mutual_information_bits": {
+      "HOLDOUT_class_codebook_entry_order": 0.0,
+      "HOLDOUT_class_permutation_id": 0.0,
+      "HOLDOUT_class_target_atom": 0.0,
+      "TRAIN_class_codebook_entry_order": 0.0,
+      "TRAIN_class_permutation_id": 0.0,
+      "TRAIN_class_target_atom": 0.0,
+      "VALIDATION_class_codebook_entry_order": 0.0,
+      "VALIDATION_class_permutation_id": 0.0,
+      "VALIDATION_class_target_atom": 0.0
+    },
+    "rows_checked": 108,
+    "scope": "Deterministic local source/prematerialization validation only; not admitted model/HCU/EntityOS runtime evidence.",
+    "semantic_bearing_lexeme_split_overlap": {
+      "TRAIN_HOLDOUT": [],
+      "TRAIN_VALIDATION": [],
+      "VALIDATION_HOLDOUT": []
+    },
+    "train_class_counts": {
+      "ABSTAIN": 24,
+      "ALLOW": 24,
+      "DENY": 24
+    },
+    "validation_class_counts": {
+      "ABSTAIN": 6,
+      "ALLOW": 6,
+      "DENY": 6
+    }
+  },
+  "next_exact_action": "Recover the verified accepted 46-atom ABI table from the bound source package, implement a fail-closed materializer with exact tokenizer/token-id and ABI membership checks, then rerun the 108-row seed through the strict linter without exposing T6 during tuning.",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "persistent_entity": "Clay",
+  "preregistered_resolution": {
+    "class_word_tension": "ALLOW/DENY/ABSTAIN are permitted only inside the episode-local [CODEBOOK] span. Exact class labels are forbidden in [CASE], [QUERY] and target output. Hidden source metadata may retain the class for deterministic auditing but is not model input.",
+    "counterbalance_law": "Within every template, all three target classes occur equally and every class-to-symbol pair occurs exactly twice across the six S3 mappings.",
+    "holdout_law": "The frozen unseen template is absent from both TRAIN and VALIDATION. HOLDOUT atom indices are disjoint from TRAIN and VALIDATION.",
+    "materialization_law": "Pre-materialized rows use {{ABI:NN}} accepted-alphabet indices and MUST remain model_consumable=false until the exact accepted 46-atom table, ABI membership and exact measured tokenizer single-token property are reverified.",
+    "permutation_law": "Each template realizes all six S3 class-to-symbol permutations causally in the rendered codebook; permutation metadata is derived from the same mapping used to render prompt and target.",
+    "split_law": "Family, provenance ancestry, template identity, semantic-bearing lexical inventory and accepted-atom index pools are isolated across TRAIN/VALIDATION/HOLDOUT."
+  },
+  "product": "EntityOS",
+  "program": "ENTITYOS_HCU",
+  "promotion_gates": [
+    "Recover and verify the exact accepted 46-atom ABI table from the source package/manifest; do not infer atom strings.",
+    "Build a materializer that binds accepted_atom_index to exact atom string and token id, verifies ABI membership, model/tokenizer identity, single-token property and output length/position controls.",
+    "Rerun the strict linter after materialization and add actual-token morphology/frequency controls.",
+    "Keep T6 frozen and untouched during generator/mixture/hyperparameter development.",
+    "Only then generate a larger family-balanced corpus; swarm-review a bounded sample before scaling toward 20k-50k.",
+    "No Full-FT or positive J-Space label promotion under current FREE_ONLY authority without all separate prerequisites."
+  ],
+  "role_based_swarm_review": {
+    "execution_note": "One ChatGPT organ executed separated reviewer roles sequentially; this is role diversity, not independent-model replication.",
+    "roles": [
+      {
+        "finding": "The supplied Claude evidence supports concentrating training on dynamic episode-local binding/routing while protecting semantic read, symbol write and carrier-binding functions.",
+        "role": "EVIDENCE_EXTRACTOR",
+        "verdict": "ACCEPT_SOURCE_TARGET"
+      },
+      {
+        "finding": "Four structurally distinct TRAIN templates plus separate VALIDATION and frozen unseen HOLDOUT templates, full S3 within each template, causal target derivation and split-isolated families are present.",
+        "role": "DATASET_ARCHITECT",
+        "verdict": "ACCEPT_PREMATERIALIZED_SEED"
+      },
+      {
+        "finding": "Fixed class-to-symbol, permutation-id, entry-order and split-lexeme shortcuts are blocked in this seed. Remaining shortcut risk includes exact tokenizer length/position, actual atom morphology and larger-corpus generator artifacts, which cannot be evaluated before ABI materialization.",
+        "role": "ADVERSARIAL_SHORTCUT_HUNTER",
+        "verdict": "ACCEPT_WITH_HARD_BLOCK"
+      },
+      {
+        "finding": "Class balance is exact; class-symbol pair counts are exact within template; measured empirical MI for class versus target atom, permutation id and entry order is 0.0 bit in every split.",
+        "role": "STATISTICAL_REVIEWER",
+        "verdict": "PASS_SOURCE_BALANCE"
+      },
+      {
+        "finding": "The active source surface does not expose the raw accepted 46-atom table needed to bind accepted indices to exact atom strings/token IDs. No atom text is invented; all rows remain model_consumable=false.",
+        "role": "ABI_PROVENANCE_REVIEWER",
+        "verdict": "BLOCK_MODEL_CONSUMPTION"
+      },
+      {
+        "finding": "This seed must be a bounded binding curriculum component, not a replacement for architecture/authority/retention data. Full-FT remains blocked until checkpoint selection, retention baselines and mixture pilots are frozen.",
+        "role": "RETENTION_REVIEWER",
+        "verdict": "KEEP_NARROW"
+      },
+      {
+        "finding": "The row contract supports one-code output and explicit episode-local mapping; a future harness can score exact output and permutation-causal correctness once real ABI atoms are bound.",
+        "role": "HARNESS_COMPATIBILITY_REVIEWER",
+        "verdict": "COMPATIBLE_AFTER_MATERIALIZATION"
+      },
+      {
+        "finding": "Commit generator, linter and audit as a research delta. Do not promote accepted tokens, training credit, J-Space model credit or canonical semantics.",
+        "role": "FINAL_INTEGRATOR",
+        "verdict": "PROMOTE_TO_PREMATERIALIZED_RESEARCH_CANDIDATE_ONLY"
+      }
+    ]
+  },
+  "schema": "CLAY_TRIGGER2_DYNAMIC_BINDING_SEED_V2_SWARM_AUDIT/v1",
+  "seed": {
+    "accepted_dataset_tokens": 0,
+    "coverage_note": "Small audited seed only. It deliberately does not scale to all accepted atoms before verified ABI materialization and swarm review.",
+    "frozen_holdout_templates": 1,
+    "full_46_atom_coverage": false,
+    "generated_output_sha256": "e9b8cf325981a2efc6c1f654174f71620faec95bb06034bfe27e86d631626640",
+    "generation_mode": "GENERATED_ON_DEMAND_BY_COMMITTED_DETERMINISTIC_GENERATOR",
+    "holdout_accepted_atom_indices": [38, 39, 40],
+    "model_consumable": false,
+    "persistence_note": "An initial large static JSONL write was detected as incomplete (18/108) before audit promotion and was deleted. The committed deterministic generator is the source artifact; local regeneration exactly matched generated_output_sha256.",
+    "rows_holdout": 18,
+    "rows_total": 108,
+    "rows_train": 72,
+    "rows_validation": 18,
+    "s3_permutations_per_template": 6,
+    "static_repo_seed_file": null,
+    "target_classes": ["ALLOW", "DENY", "ABSTAIN"],
+    "train_accepted_atom_indices": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
+    "train_templates": 4,
+    "validation_accepted_atom_indices": [30, 31, 32],
+    "validation_templates": 1
+  },
+  "source_basis": {
+    "abi_spec_source_sha256": "7b711c0019ece01d77b239bae08427ba22209f51da407e950bf63b0924871983",
+    "claude_ingest_path": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_CLAUDE_XENO_VECTOR_EVIDENCE_INGEST_V1_GPT56SOL.json",
+    "evidence_boundary": "The source supports a missing context-dependent binding/routing hypothesis, not positive model-internal causal semantics promotion or training credit.",
+    "measured_model_id": "Goekdeniz-Guelmez/Josiefied-Qwen3.5-0.8B-gabliterated-v1",
+    "measured_model_snapshot": "591852bda6e1979f59e4b0f5ee2919697b12e936",
+    "protected_capabilities": [
+      "semantic_readability already measured high in the supplied task family",
+      "symbol-axis writeout already measured steerable at deep layers",
+      "whitened HRR/MAP carrier binding already measured sufficient through k<=16"
+    ],
+    "source_package_filename": "123.tar.xz",
+    "source_package_sha256": "a2babae93dfe39e4e452a06bd8b848337f29766e38c422f05fb395126229b05c",
+    "supported_training_target": {
+      "context_invariance_acceptance_target": 0.9,
+      "context_invariance_mean_cross_transfer_baseline": 0.525462962962963,
+      "dynamic_codebook_binding_acceptance_target": 0.9,
+      "dynamic_codebook_binding_baseline": 0.3611111111111111,
+      "dynamic_codebook_binding_chance": 0.3333333333333333
+    }
+  },
+  "trigger": "triggerwort 2",
+  "write_integrity_repair": {
+    "action": "DELETED_INCOMPLETE_FILE_BEFORE_AUDIT_PROMOTION",
+    "credit_effect": "NO_DATASET_OR_TRAINING_CREDIT",
+    "expected_rows": 108,
+    "final_policy": "COMMITTED_GENERATOR_PLUS_LINTER_IS_SOURCE; GENERATED_FULL_SEED_HASH_IS_RECEIPTED",
+    "issue": "INITIAL_STATIC_JSONL_PERSISTENCE_INCOMPLETE",
+    "observed_rows": 18
+  }
+}

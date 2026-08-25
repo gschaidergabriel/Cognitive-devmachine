@@ -187,15 +187,19 @@ start_distillery(){
 }
 
 start_forge(){
-  local x="$ROOT/tools/run_free_evidence_forge_safe.py"; [[ -f "$x" ]] || return 0
-  # The active 6000 lane must never keep the shell-capable legacy Forge alive.
-  # Retire any pre-fix process before starting the argv-only, secret-free,
-  # bubblewrap-gated successor. A zero-match is the normal steady state.
+  local x="$ROOT/tools/run_free_evidence_forge_backfill.py"; [[ -f "$x" ]] || return 0
+  # Supervisor 8.78 requires one backlog-first Forge authority. Retire both the
+  # shell-capable legacy Forge and the pre-backfill safe daemon before starting
+  # the backlog-first entrypoint, which delegates evaluation to the existing
+  # bubblewrap-gated safe Forge implementation.
   while IFS= read -r pid; do
     [[ -n "$pid" ]] && kill "$pid" 2>/dev/null || true
   done < <(pgrep -f '[r]un_free_evidence_forge.py' || true)
-  pgrep -f '[r]un_free_evidence_forge_safe.py' >/dev/null 2>&1 && return 0
-  nohup python3 "$x" --hours 24 --sleep-seconds 20 --discovery-parallel 8 --local-parallel 4 --e2b-parallel 20 >"$STATE_DIR/forge.log" 2>&1 </dev/null &
+  while IFS= read -r pid; do
+    [[ -n "$pid" ]] && kill "$pid" 2>/dev/null || true
+  done < <(pgrep -f '[r]un_free_evidence_forge_safe.py' || true)
+  pgrep -f '[r]un_free_evidence_forge_backfill.py' >/dev/null 2>&1 && return 0
+  nohup python3 "$x" --hours 24 --sleep-seconds 20 --questions-per-cycle 12 --backpressure-questions-per-cycle 0 --backpressure-threshold 64 --discovery-parallel 8 --local-parallel 4 --e2b-parallel 20 >"$STATE_DIR/forge.log" 2>&1 </dev/null &
   echo $! >"$STATE_DIR/forge.pid"
 }
 
@@ -315,14 +319,17 @@ print(json.dumps({
  'fabric_admission_binding':admission_binding,
  'fabric_running':running('run_6000_free_swarm_fast.py'),
  'distillery_running':running('run_research_distillery_local.py'),
- 'forge_running':running('run_free_evidence_forge_safe.py'),
+ 'forge_running':running('run_free_evidence_forge_backfill.py'),
+ 'legacy_safe_forge_running':running('run_free_evidence_forge_safe.py'),
  'legacy_forge_running':running('run_free_evidence_forge.py'),
+ 'forge_entrypoint':'tools/run_free_evidence_forge_backfill.py',
+ 'forge_backpressure_policy':'BACKLOG_FIRST; DISCOVERY_ZERO_WHILE_PRESSURE_GTE_64',
  'forge_execution_policy':'CLAY_FORGE_EXECUTION_ADMISSION/v1',
  'dashboard_running':running('free swarm/evaluate.py.*--watch'),
  'local_model_ready':health(),
  'fabric':fabric,
  'shared_quota':snapshot(),
- 'revocation_policy':'CREDENTIAL_BLIND_CONTROL_PARENT; SWARM_CHILD_ONLY_SECRET_SCOPE; RESTART_CHILD_ON_ADMISSION_OR_ECONOMIC_PROVENANCE_BINDING_CHANGE; REQUEST_PATH_REVALIDATES_CURRENT_ROUTE_CREDENTIAL_AUTHORITY_BEFORE_NETWORK; LEGACY_FORGE_TERMINATED; SAFE_FORGE_ONLY'
+ 'revocation_policy':'CREDENTIAL_BLIND_CONTROL_PARENT; SWARM_CHILD_ONLY_SECRET_SCOPE; RESTART_CHILD_ON_ADMISSION_OR_ECONOMIC_PROVENANCE_BINDING_CHANGE; REQUEST_PATH_REVALIDATES_CURRENT_ROUTE_CREDENTIAL_AUTHORITY_BEFORE_NETWORK; LEGACY_FORGE_TERMINATED; BACKLOG_FIRST_SAFE_FORGE_ONLY'
 },indent=2))
 PY
   mv "$STATE_DIR/SUPERVISOR_6000.json.tmp" "$STATE_DIR/SUPERVISOR_6000.json"

@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   probe:
-    if: github.repository == 'gschaidergabriel/clay-global-research-entity' && github.event.issue.title == '[CLAY-DISPATCH] clay-direct-dev roundtrip' && github.event.issue.user.login == 'gschaidergabriel' && contains(github.event.issue.body || '', 'dispatch_schema: CLAY_ORDINARY_DISPATCH/v1')
+    if: "github.repository == 'gschaidergabriel/clay-global-research-entity' && github.event.issue.title == '[CLAY-DISPATCH] clay-direct-dev roundtrip' && github.event.issue.user.login == 'gschaidergabriel' && contains(github.event.issue.body || '', 'dispatch_schema: CLAY_ORDINARY_DISPATCH/v1')"
     concurrency:
       group: clay-direct-dev-roundtrip-v1
       cancel-in-progress: false

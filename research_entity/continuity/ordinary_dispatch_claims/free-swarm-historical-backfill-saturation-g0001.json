@@ -1,0 +1,17 @@
+{
+  "schema": "CLAY_ORDINARY_DISPATCH_CLAIM/v1",
+  "dispatch_key": "free-swarm-historical-backfill-saturation-g0001",
+  "dispatch_class": "free-swarm-historical-backfill-saturation",
+  "retry_generation": 1,
+  "status": "LEGACY_FANOUT_QUARANTINE_CLAIM",
+  "reason": "Multiple equivalent GO878 historical-backfill issues predate the ordinary-dispatch singleton protocol. This create-only claim quarantines that fan-out and forbids any further equivalent trigger for generation 1.",
+  "legacy_dispatch_examples": [1832, 1834, 1839, 1845, 1846, 1849, 1852, 1857, 1858],
+  "requested_terminal_condition": "Persist one exact-source repository-bound bounded historical-backfill result reaching stable EOF / consecutive zero-new-packet fixed point, then use backlog-first Forge conversion until accepted_dataset_tokens > 0 or a bounded measured stall is recorded.",
+  "canonical_result_path": "research_entity/continuity/ordinary_dispatch_results/free-swarm-historical-backfill-saturation-g0001.json",
+  "coordination_only": true,
+  "authorizes_new_trigger": false,
+  "runtime_credit": 0,
+  "model_credit": 0,
+  "training_credit": 0,
+  "provider_or_paid_authority": "NONE"
+}

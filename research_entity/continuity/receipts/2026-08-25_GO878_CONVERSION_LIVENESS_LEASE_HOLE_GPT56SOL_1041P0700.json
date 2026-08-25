@@ -1,0 +1,53 @@
+{
+  "schema": "CLAY_GO_RESEARCH_DELTA_RECEIPT/v1",
+  "observed_at": "2026-08-25T10:41:00+07:00",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority_epoch": "8.78",
+  "mode": "FREE_ONLY",
+  "canonical_main_observed_before_receipt": "688a1ff4c10378a2eaba1496f35a2ac5836546f8",
+  "source_delta": {
+    "scheduler_commit": "478a0c5f781956bcf824ca5bcdf806e3bec0f728",
+    "regression_commit": "d75900083f2e50d6aa36ba4354d4b4df2603d1f1",
+    "path": "tools/free_swarm_backfill_scheduler.py",
+    "finding": "After process-level liveness was repaired, a smaller raw-generation escape remained: when historical packets existed but every visible packet was leased, _reserve() returned None and the scheduler fell through to the ordinary raw-research prompt. The successor now distinguishes queue-empty from lease-busy and emits a no-delta hold while backlog still exists.",
+    "behavior": "PENDING_BACKFILL_AND_NO_RESERVABLE_PACKET => HISTORICAL_BACKFILL_LEASE_BUSY_HOLD; RAW_PROMPT_ONLY_WHEN_BACKFILL_QUEUE_EMPTY",
+    "second_authority_created": false,
+    "provider_concurrency_increased": false,
+    "paid_execution_added": false
+  },
+  "parallel_fusion_observed": {
+    "supervisor_liveness": "current supervisor keeps the shared 6000 fabric alive while conversion pressure is observed instead of stopping the historical extraction transport",
+    "active_v5_binding_commit": "79b582ec73c7592cdae82c0c9ae83554bccdd0b1",
+    "source_count_provenance_commit": "28f4401489e5d562a219d34e61c765a204916ec1",
+    "causal_event_identity_v2_spec_commit": "d449e956e86c46c11b16687f07debdcb8ab966c4",
+    "replay_v2_exact_blob_local_regression_commit": "9e494c08a3c7095d0fe6b55229bc90c573ed42db",
+    "qwen06_hidden_state_specificity_evidence_commit": "8acce46e7989fa0cf6e7cf368f2731c2f18ce7c2"
+  },
+  "go_tracks": {
+    "A": "ADVANCED: conversion transport remains live, raw prompt lease-hole is closed, active v5 prompt binding is present, and replay-v2 exact-current component regression has executed 3/3 PASS.",
+    "B": "ADVANCED_AT_CAUSAL_PROVENANCE_SCOPE: replay-idempotent source-count reconciliation is wired and additive causal_event_id v2 separates replay-stable causal identity from concrete artifact-root/admission identity without rewriting legacy IDs.",
+    "C": "ADVANCED_AT_MODEL_SPECIFIC_AND_DATASET_SAFETY_SCOPE: Qwen3-0.6B nonterminal hidden-state steering has model-specific controlled component evidence and replay-v2 dataset idempotence is executed; native llama.cpp cvec, J-Space model runtime, training, full HCU and whole-product credit remain zero."
+  },
+  "runtime_evidence_boundary": {
+    "historical_backfill_terminal_saturation_receipt_observed": false,
+    "fresh_backlog_first_forge_runtime_identity_verified": false,
+    "forge_live_observed_but_identity_bound": false,
+    "forge_live_note": "The observed repository FORGE_LIVE status is fresh enough to be operationally interesting but lacks backlog-first fields and exact writer identity, so stale/alternate writer remains plausible.",
+    "persistent_forge_to_distillery_positive_token_witness": false,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "coordination": {
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_experiments_executed_by_this_organ": 0,
+    "new_issue_trigger_probe_created_by_this_organ": false,
+    "reason": "No shared immutable reproducible macrocycle/request identity was exposed to this organ; ordinary source/test/re-entry work only."
+  },
+  "next_exact_action": "Obtain one exact-runtime-identity-bound backlog-first Forge status on the authorized zero-cost runtime, drive historical extraction to terminal FREE_SWARM_HISTORICAL_BACKFILL_RECEIPT/v1 saturation, then run one real evidence-qualified Forge ACCEPT through Distillery and prove exactly one persistent packet with accepted_dataset_tokens > 0 followed by semantic replay with +0 packets/+0 tokens."
+}

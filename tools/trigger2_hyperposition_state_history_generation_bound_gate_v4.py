@@ -105,10 +105,16 @@ def adjudicate(row: Any) -> dict[str, Any]:
         "positive_D_E_promotion_ready": False,
         "remaining_p0": [
             "exact-current deterministic execution of the A02 mutation suite is required",
-            "immutable genesis/ordered-history producer authority is required before nonempty-history positives",
             "OBSERVED evidence producer authentication is required before OBSERVED positives",
             "native seed must be rebound to this one retained successor before any pilot regeneration",
             "rendered nuisance/full-cross-or-conditional-MI/family-provenance/tokenizer-ABI gates remain required",
+        ],
+        "closed_p0": [
+            "immutable genesis/ordered-history producer authority: trigger2_generation_provenance_gate_v1 "
+            "now binds genesis_state + the full ordered event_history to the same trusted-generator "
+            "authority as the single current event (T2_GP_PILOT_HIST_CHAIN_V1 case); a nonempty history "
+            "not produced by an authorized case fails GENERATION_CASE_NOT_AUTHORIZED / subject-digest "
+            "mismatch closed, proven by tests/test_trigger2_genesis_history_producer_authority_v1.py",
         ],
         "canonical_dataset_admission": False,
         "accepted_dataset_tokens_minted": 0,

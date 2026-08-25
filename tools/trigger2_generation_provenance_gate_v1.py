@@ -83,6 +83,14 @@ def _reconstructed_subjects(generator: Any, case_id: str, parameters: Any) -> di
         "event_dependence_registry": bundle["event_dependence_registry"],
         "event": bundle["event"],
         "state_before": bundle["state_before"],
+        # Immutable genesis/ordered-history producer authority (Phase 3): the genesis state
+        # and the full ordered event history that preceded "event" are now part of the same
+        # trusted-generator reconstruction and receipt binding as the single current event
+        # always was. A history that was not produced by the authorized generator/case no
+        # longer passes generation provenance, closing the previously open nonempty-history
+        # content-provenance gap without introducing a second authority.
+        "genesis_state": bundle.get("genesis_state"),
+        "event_history": bundle.get("event_history", []),
     }
 
 
@@ -92,6 +100,8 @@ def _subject_hashes(subjects: dict[str, Any]) -> dict[str, str]:
         "event_dependence_registry_jcs_sha256": _jcs_sha256(subjects["event_dependence_registry"]),
         "event_jcs_sha256": _jcs_sha256(subjects["event"]),
         "state_before_jcs_sha256": _jcs_sha256(subjects["state_before"]),
+        "genesis_state_jcs_sha256": _jcs_sha256(subjects.get("genesis_state")),
+        "event_history_jcs_sha256": _jcs_sha256(subjects.get("event_history", [])),
     }
 
 
@@ -198,6 +208,8 @@ def adjudicate(row: Any) -> dict[str, Any]:
         ),
         "event": row.get("synthetic_test_event_evaluator_only"),
         "state_before": row.get("hyperposition_state_before_evaluator_only"),
+        "genesis_state": row.get("hyperposition_genesis_state_evaluator_only"),
+        "event_history": row.get("synthetic_event_history_evaluator_only", []),
     }
     supplied_hashes = None
     try:
@@ -210,7 +222,10 @@ def adjudicate(row: Any) -> dict[str, Any]:
     if supplied_hashes != reconstructed_hashes:
         failures.append("SUPPLIED_SUBJECT_DIGEST_OR_RECONSTRUCTION_MISMATCH")
     if isinstance(reconstructed, dict):
-        for key in ("formal_world", "event_dependence_registry", "event", "state_before"):
+        for key in (
+            "formal_world", "event_dependence_registry", "event", "state_before",
+            "genesis_state", "event_history",
+        ):
             if supplied_subjects.get(key) != reconstructed.get(key):
                 failures.append("SUPPLIED_SUBJECT_BYTES_NOT_RECONSTRUCTED:" + key)
 

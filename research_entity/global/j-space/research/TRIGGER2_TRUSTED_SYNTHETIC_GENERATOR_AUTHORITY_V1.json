@@ -1,11 +1,11 @@
 {
   "schema": "CLAY_TRIGGER2_TRUSTED_SYNTHETIC_GENERATOR_AUTHORITY/v1",
   "status": "CURRENT_SOURCE_AUTHORITY_CANDIDATE_NONPROMOTING",
-  "purpose": "Pin one deterministic evaluator-subject generator for Trigger-2 generation-provenance property testing without creating training/canonical/runtime credit.",
+  "purpose": "Pin one deterministic evaluator-subject generator for Trigger-2 generation-provenance property testing without creating training/canonical/runtime credit. Now covers both a single current event (T2_GP_PILOT_DB_MATCH_V1) and a genesis-plus-ordered-history-plus-current-event bundle (T2_GP_PILOT_HIST_CHAIN_V1), closing the previously open nonempty-history content-provenance gap under the same one authority.",
   "generator": {
     "repo_path": "tools/trigger2_trusted_hyperposition_pilot_generator_v1.py",
-    "source_sha256": "a0a83f41685be79bc3dc0b46cac18682e7b6c86d45d93ef92ba0ada985c7c6cb",
-    "git_commit_sha": "88e8090f613984d6f407d25fa2910b29e11f1b28",
+    "source_sha256": "3881fe02e37165ccba9e2be7fc84974265c8d4fcf6f3f2dcdd7ebe3e6b57573d",
+    "git_commit_sha": "84ebcb65f82f32428642032ee4023e4ba47acda4",
     "generator_schema_or_version": "CLAY_TRIGGER2_TRUSTED_HYPERPOSITION_PILOT_GENERATOR/v1"
   },
   "allowed_cases": {
@@ -26,12 +26,41 @@
         "formal_world_jcs_sha256": "244a152921ea08fd66adc8430a1ff04dbd0318e994a45d9a11761858284282d9",
         "event_dependence_registry_jcs_sha256": "341040b924d2ac8b4028fca8d55a1cf9f0ffa3b06c966b475baadf66827c20d4",
         "event_jcs_sha256": "372d48f2862401ecaaf1d9edcf4fc3eed99977f45ecc0bb7afd4414113360ad4",
-        "state_before_jcs_sha256": "7b2248741a1d3f0c999cf4a1c9ce00ea92b4ce93d8585a611b8e65038576c83c"
+        "state_before_jcs_sha256": "7b2248741a1d3f0c999cf4a1c9ce00ea92b4ce93d8585a611b8e65038576c83c",
+        "genesis_state_jcs_sha256": "7b2248741a1d3f0c999cf4a1c9ce00ea92b4ce93d8585a611b8e65038576c83c",
+        "event_history_jcs_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
       },
       "semantic_scope": {
         "world_id": "t2gp:world:db-match:v1",
         "query_id": "t2gp:query:db-match:v1",
         "event_id": "t2gp:event:db-match:v1"
+      }
+    },
+    "T2_GP_PILOT_HIST_CHAIN_V1": {
+      "deterministic_parameters": {
+        "schema": "CLAY_TRIGGER2_TRUSTED_HYPERPOSITION_PILOT_PARAMETERS/v1",
+        "case_variant": "HIST_CHAIN",
+        "world_scope": "synthetic_generation_provenance_hist_chain_pilot"
+      },
+      "deterministic_parameters_jcs_sha256": "ef545e1ed5cabde1c0ae23c76ec36ac29795dac18dbcee1053d1d5cc9f787c0a",
+      "materials_manifest": {
+        "schema": "XENO_SYNTHETIC_GENERATION_MATERIALS/v1",
+        "materials": [],
+        "generator_schema": "CLAY_TRIGGER2_TRUSTED_HYPERPOSITION_PILOT_GENERATOR/v1"
+      },
+      "materials_manifest_jcs_sha256": "c618c4c14df17f30fefba6feed79f834cb304e451e393771680865a86e91b373",
+      "subjects": {
+        "formal_world_jcs_sha256": "8724205e0cf995ab85a0fe6c7357fb161d6037d1316506f57981c3f56e05931b",
+        "event_dependence_registry_jcs_sha256": "6dab17c085e3082afd5ceba39b3d4c6e41e1d5c4cd1e9ff244ffa2311cbd7332",
+        "event_jcs_sha256": "0f5ea7d850edcbe3d36cc2e0ddf8eb6a43806f3cf65edabab4621691f77f3099",
+        "state_before_jcs_sha256": "8bdf1848d4d1994f99c9566583ded3afe0fe912b99e4d860ba14f77b0ece3a27",
+        "genesis_state_jcs_sha256": "9ce2311f9c67eaa07662d2dee6db8ddc47522a3b2e542b486de5631699a57ade",
+        "event_history_jcs_sha256": "2ce40ec6222f133faaa5b039a89044d1b40303c5701047909a4dce9f4f5c6761"
+      },
+      "semantic_scope": {
+        "world_id": "t2gp:world:hist-chain:v1",
+        "query_id": "t2gp:query:hist-chain:v1",
+        "event_id": "t2gp:event:hist-chain:step2:v1"
       }
     }
   },

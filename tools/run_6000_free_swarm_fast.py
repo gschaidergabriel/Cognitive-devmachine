@@ -23,6 +23,13 @@ model_health.install_scheduler(fabric_v2)
 import run_6000_free_swarm_v5 as fabric
 model_health.bind_request_observer(fabric)
 import free_swarm_conversion_backpressure_872 as conversion_backpressure
+import free_swarm_backfill_scheduler as historical_backfill
+
+# Wrap the final worker-prompt authority after v2/v3/v5 have installed their own
+# routing/synthesis behavior. While historical backlog exists, roughly 75% of
+# logical calls become extraction/structuring passes over already-paid-for FREE
+# worker output instead of producing more raw research tokens.
+historical_backfill.install(base)
 
 
 def main() -> int:

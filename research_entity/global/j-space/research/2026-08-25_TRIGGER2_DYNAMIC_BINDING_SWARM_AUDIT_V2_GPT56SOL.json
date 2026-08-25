@@ -1,0 +1,52 @@
+{
+  "schema": "CLAY_TRIGGER2_DYNAMIC_BINDING_SWARM_MICROSEED/v2",
+  "date": "2026-08-25",
+  "purpose": "Install the measured missing computation: semantic decision -> episode-local codebook lookup -> symbol emission, without retraining already-present semantic read/symbol write/carrier binding as the primary objective.",
+  "source_evidence_scope": {
+    "measured_model": "Goekdeniz-Guelmez/Josiefied-Qwen3.5-0.8B-gabliterated-v1@591852bda6e1979f59e4b0f5ee2919697b12e936",
+    "binding_baseline": 0.3611111111111111,
+    "context_transfer_baseline": 0.5254629629629629,
+    "target_acceptance": 0.9,
+    "known_measurement_boundary": "Model-specific numerical claims only; this synthetic seed grants no training/J-Space/HCU runtime credit."
+  },
+  "preregistered_class_word_resolution": "ALLOW/DENY/ABSTAIN may appear only inside the explicit CODEBOOK span. CASE and QUERY text must not contain these class tokens. A separately versioned label-free variant may be studied later but is not silently mixed here.",
+  "swarm_roles": [
+    {"role":"GENERATOR","job":"Generate full-S3 episode-local remapping examples across four structurally distinct context families."},
+    {"role":"PERMUTATION_ADVERSARY","job":"Recompute target from realized mapping; reject metadata-only permutations."},
+    {"role":"LEAK_AUDITOR","job":"Reject target-class tokens outside CODEBOOK and provenance/template split leakage."},
+    {"role":"EPISTEMIC_REVIEWER","job":"Check that case semantics preserve EntityOS/HCU authority and UNKNOWN boundaries."},
+    {"role":"STATISTICAL_REVIEWER","job":"Check exact class-symbol counterbalance and full S3 coverage."},
+    {"role":"DISTILLER","job":"Keep only rows passing all reviewers; do not promote placeholders to model-feed-ready data."}
+  ],
+  "train_candidate_rows": 72,
+  "templates_train": ["T1_LEASE","T2_EFFECT","T3_RESULT","T4_HYPER"],
+  "frozen_holdout_template_policy": "A fifth structurally novel template family is reserved and MUST NOT be generated, viewed, or tuned against in this microseed.",
+  "audit": {
+    "full_s3_per_template": true,
+    "exact_class_symbol_counterbalance": true,
+    "class_token_leak_outside_codebook": false,
+    "leak_locations": [],
+    "expected_pair_count_per_template_class_atom": 2,
+    "model_feed_ready": false,
+    "reason_not_feed_ready": "Exact 46 accepted ABI atom strings/row identities are not present in current canonical repo context; placeholders must be compiled only after manifest-bound atom-table verification."
+  },
+  "hard_negative_reviews": [
+    {"id":"NEG_PERM_METADATA_ONLY","expected":"REJECT_GENERATOR","description":"Permutation metadata says S3_1 but target is derived from the unpermuted mapping.","reason":"Permutation must causally construct class-to-symbol mapping; metadata-only permutation recreates the known critical generator defect."},
+    {"id":"NEG_TARGET_LABEL_LEAK","expected":"REJECT_ROW","description":"CASE text literally contains the target class token outside the CODEBOOK span.","reason":"Class labels are allowed only in the preregistered codebook span for this v2 interpretation."},
+    {"id":"NEG_DUP_ANCESTRY_SPLIT","expected":"REJECT_SPLIT","description":"Rows sharing one provenance ancestry are divided across train and frozen holdout.","reason":"Family/provenance ancestry is the split unit; this would leak causal ancestry."},
+    {"id":"NEG_COUNTERBALANCE","expected":"REJECT_DATASET","description":"One class-symbol pair occurs more often than another within a template family.","reason":"This microseed requires exact class-symbol counterbalance under full S3 coverage."},
+    {"id":"NEG_HOLDOUT_TEMPLATE_REUSE","expected":"REJECT_SELECTION","description":"The frozen fifth template is used during validation or prompt iteration.","reason":"Frozen unseen-template family must remain absent from train and validation/hyperparameter selection."}
+  ],
+  "external_method_hypothesis": {
+    "claim": "Attention-mediated routing is a plausible mechanism for the missing dynamic binding, but this is not yet a model-specific fact for the target checkpoint.",
+    "support": "Recent variable-binding work reports learned attention-mediated routing and residual-stream addressable memory in symbolic programs.",
+    "falsifier": "Matched post-training causal tests show equivalent binding without the implicated pathways, or a different module is necessary/sufficient."
+  },
+  "credits": {
+    "training_executed": false,
+    "training_credit": 0,
+    "qwen35_jspace_runtime_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0
+  }
+}

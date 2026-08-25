@@ -1,0 +1,197 @@
+name: GO878 singleton historical Free-Swarm backfill
+
+on:
+  issues:
+    types: [opened]
+
+permissions:
+  contents: write
+  issues: read
+
+concurrency:
+  group: free-swarm-historical-backfill-v1
+  cancel-in-progress: false
+
+jobs:
+  historical-backfill:
+    if: >-
+      github.repository == 'gschaidergabriel/clay-global-research-entity' &&
+      github.event.issue.title == '[CLAY-DISPATCH] GO878 historical backfill' &&
+      github.event.issue.user.login == 'gschaidergabriel' &&
+      contains(github.event.issue.body || '', 'dispatch_schema: CLAY_ORDINARY_DISPATCH/v1')
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: main
+          fetch-depth: 0
+          clean: true
+          persist-credentials: true
+
+      - name: Validate semantic dispatch singleton
+        id: dispatch
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json, os, pathlib, re
+
+          event = json.loads(pathlib.Path(os.environ['GITHUB_EVENT_PATH']).read_text(encoding='utf-8'))
+          issue = event.get('issue') or {}
+          body = str(issue.get('body') or '')
+          fields = {}
+          for line in body.splitlines():
+              if ':' not in line:
+                  continue
+              key, value = line.split(':', 1)
+              key = key.strip()
+              if key in {'dispatch_schema', 'dispatch_key'} and key not in fields:
+                  fields[key] = value.strip()
+
+          if fields.get('dispatch_schema') != 'CLAY_ORDINARY_DISPATCH/v1':
+              raise SystemExit('INVALID_DISPATCH_SCHEMA')
+
+          spec_path = pathlib.Path('research_entity/continuity/ordinary_dispatch_specs/free-swarm-historical-backfill-v1.json')
+          spec = json.loads(spec_path.read_text(encoding='utf-8'))
+          expected = str(spec.get('current_dispatch_key') or '')
+          generated = f"{spec['dispatch_class']}-g{int(spec['retry_generation']):04d}"
+          if expected != generated:
+              raise SystemExit('DISPATCH_SPEC_KEY_GENERATION_MISMATCH')
+          if str(issue.get('title') or '') != str(spec.get('trigger_title') or ''):
+              raise SystemExit('DISPATCH_TITLE_SPEC_MISMATCH')
+
+          key = fields.get('dispatch_key', '')
+          if not re.fullmatch(r'free-swarm-historical-backfill-v1-g[0-9]{4}', key):
+              raise SystemExit('INVALID_DISPATCH_KEY')
+          if key != expected:
+              raise SystemExit(f'STALE_OR_NONCANONICAL_DISPATCH_KEY:{key}:{expected}')
+
+          claim_path = pathlib.Path(f'research_entity/continuity/ordinary_dispatch_claims/{key}.json')
+          if not claim_path.is_file():
+              raise SystemExit('CREATE_ONLY_DISPATCH_CLAIM_MISSING')
+          claim = json.loads(claim_path.read_text(encoding='utf-8'))
+          if claim.get('schema') != 'CLAY_ORDINARY_DISPATCH_CLAIM/v1':
+              raise SystemExit('DISPATCH_CLAIM_SCHEMA_MISMATCH')
+          if claim.get('dispatch_key') != key or claim.get('dispatch_class') != spec.get('dispatch_class'):
+              raise SystemExit('DISPATCH_CLAIM_IDENTITY_MISMATCH')
+
+          result_path = pathlib.Path(f'research_entity/continuity/ordinary_dispatch_results/{key}.json')
+          quarantine = claim.get('claim_kind') == 'LEGACY_FANOUT_QUARANTINE' or claim.get('execution_claim') is False
+          satisfied = result_path.is_file()
+          skip = quarantine or satisfied
+          reason = 'LEGACY_FANOUT_QUARANTINE' if quarantine else ('ALREADY_SATISFIED' if satisfied else 'ADMITTED_SINGLETON')
+
+          with open(os.environ['GITHUB_OUTPUT'], 'a', encoding='utf-8') as out:
+              out.write(f'dispatch_key={key}\n')
+              out.write(f'skip={str(skip).lower()}\n')
+              out.write(f'reason={reason}\n')
+              out.write(f'result_path={result_path.as_posix()}\n')
+          print(f'{reason} {key}')
+          PY
+
+      - name: Run bounded provider-free backfill capsule in clay-direct-dev
+        if: steps.dispatch.outputs.skip != 'true'
+        shell: bash
+        env:
+          DISPATCH_KEY: ${{ steps.dispatch.outputs.dispatch_key }}
+        run: |
+          set -euo pipefail
+          scratch="/tmp/clay-go878-historical-backfill-${GITHUB_RUN_ID}"
+          host_tmp="/tmp/clay-go878-historical-backfill-host-${GITHUB_RUN_ID}"
+          rm -rf "$host_tmp"
+          mkdir -p "$host_tmp"
+
+          runtime=''
+          prefix=()
+          if command -v docker >/dev/null 2>&1 && docker inspect clay-direct-dev >/dev/null 2>&1; then
+            runtime='docker'; prefix=(docker)
+          elif command -v sudo >/dev/null 2>&1 && sudo -n docker inspect clay-direct-dev >/dev/null 2>&1; then
+            runtime='sudo-docker'; prefix=(sudo -n docker)
+          elif command -v podman >/dev/null 2>&1 && podman inspect clay-direct-dev >/dev/null 2>&1; then
+            runtime='podman'; prefix=(podman)
+          elif command -v sudo >/dev/null 2>&1 && sudo -n podman inspect clay-direct-dev >/dev/null 2>&1; then
+            runtime='sudo-podman'; prefix=(sudo -n podman)
+          else
+            echo 'CLAY_DIRECT_DEV_UNREACHABLE' >&2
+            exit 41
+          fi
+
+          source_sha="$(git rev-parse HEAD)"
+          source_tree="$(git rev-parse HEAD^{tree})"
+          dirty_state="$(test -z "$(git status --porcelain=v1)" && echo CLEAN || echo DIRTY)"
+          target="research_entity/runtime/tool_results/free-swarm-historical-backfill-${DISPATCH_KEY}.json"
+
+          "${prefix[@]}" exec clay-direct-dev sh -lc "rm -rf '$scratch'; mkdir -p '$scratch'"
+          "${prefix[@]}" cp "$GITHUB_WORKSPACE/." "clay-direct-dev:$scratch"
+          "${prefix[@]}" exec \
+            -e CLAY_GO878_SOURCE_SHA="$source_sha" \
+            -e CLAY_GO878_SOURCE_TREE="$source_tree" \
+            -e CLAY_GO878_DIRTY_STATE="$dirty_state" \
+            -e CLAY_GO878_TRANSPORT="SELF_HOSTED_LINUX_X64" \
+            -e CLAY_GO878_SANDBOX="clay-direct-dev" \
+            -e CLAY_GO878_RUN_ID="$GITHUB_RUN_ID" \
+            clay-direct-dev sh -lc "cd '$scratch' && python3 tools/run_free_swarm_historical_backfill_capsule_878.py --artifact-root /artifacts/clay-entityos-swarm --max-lines-per-pass 50000 --max-passes 64 --receipt '$scratch/$target'"
+
+          mkdir -p "$(dirname "$target")"
+          "${prefix[@]}" cp "clay-direct-dev:$scratch/$target" "$GITHUB_WORKSPACE/$target"
+          printf '%s\n' "$runtime" > "$host_tmp/runtime.txt"
+          "${prefix[@]}" exec clay-direct-dev sh -lc "rm -rf '$scratch'"
+
+      - name: Persist semantic result exactly once
+        if: steps.dispatch.outputs.skip != 'true'
+        shell: bash
+        env:
+          DISPATCH_KEY: ${{ steps.dispatch.outputs.dispatch_key }}
+        run: |
+          set -euo pipefail
+          target="research_entity/runtime/tool_results/free-swarm-historical-backfill-${DISPATCH_KEY}.json"
+          result="research_entity/continuity/ordinary_dispatch_results/${DISPATCH_KEY}.json"
+          mkdir -p "$(dirname "$result")"
+
+          TARGET="$target" RESULT="$result" python3 - <<'PY' > "$result"
+          import json, os, pathlib, subprocess
+
+          receipt = json.loads(pathlib.Path(os.environ['TARGET']).read_text(encoding='utf-8'))
+          if receipt.get('schema') != 'FREE_SWARM_HISTORICAL_BACKFILL_RECEIPT/v1':
+              raise SystemExit('BACKFILL_RECEIPT_SCHEMA_MISMATCH')
+          if receipt.get('status') not in {'PASS_SATURATED_SCAN_SET', 'FAIL_NOT_SATURATED'}:
+              raise SystemExit('BACKFILL_RECEIPT_STATUS_UNKNOWN')
+          event = json.loads(pathlib.Path(os.environ['GITHUB_EVENT_PATH']).read_text(encoding='utf-8'))
+          print(json.dumps({
+              'schema': 'CLAY_ORDINARY_DISPATCH_RESULT/v1',
+              'dispatch_class': 'free-swarm-historical-backfill-v1',
+              'dispatch_key': os.environ['DISPATCH_KEY'],
+              'status': receipt['status'],
+              'issue_number': (event.get('issue') or {}).get('number'),
+              'run_id': os.environ.get('GITHUB_RUN_ID'),
+              'event_sha': os.environ.get('GITHUB_SHA'),
+              'checkout_head': subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip(),
+              'receipt_path': os.environ['TARGET'],
+              'runtime_credit': 'HISTORICAL_BACKFILL_INGEST_COMPONENT_ONLY' if receipt['status'] == 'PASS_SATURATED_SCAN_SET' else 0,
+              'whole_entityos_hcu_runtime_credit': 0,
+              'jspace_model_runtime_credit': 0,
+              'training_credit': 0,
+              'retry_requires_generation_advance': True,
+          }, indent=2, sort_keys=True))
+          PY
+
+          git fetch origin main
+          if git show "origin/main:${result}" >/dev/null 2>&1; then
+            echo "ALREADY_SATISFIED_REMOTE ${DISPATCH_KEY}"
+            rm -f "$target" "$result"
+            exit 0
+          fi
+
+          git config user.name 'clay-go878-backfill-runner'
+          git config user.email 'clay-go878-backfill-runner@users.noreply.github.com'
+          git add "$target" "$result"
+          git commit -m "evidence(go878): singleton historical backfill ${DISPATCH_KEY} [skip ci]"
+          for attempt in 1 2 3 4 5 6; do
+            if git pull --rebase origin main && git push origin HEAD:main; then
+              exit 0
+            fi
+            git rebase --abort 2>/dev/null || true
+            sleep $((attempt * 3))
+          done
+          exit 1

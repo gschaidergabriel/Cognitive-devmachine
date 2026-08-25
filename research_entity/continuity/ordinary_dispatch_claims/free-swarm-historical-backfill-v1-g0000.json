@@ -6,13 +6,32 @@
   "claim_kind": "LEGACY_FANOUT_QUARANTINE",
   "canonical_spec": "research_entity/continuity/ordinary_dispatch_specs/free-swarm-historical-backfill-v1.json",
   "canonical_workflow": ".github/workflows/go878-historical-backfill-runtime.yml",
+  "canonical_workflow_state": "RETIRED_FROM_MAIN_AS_DUPLICATE_BEFORE_TERMINAL_CANONICAL_RESULT",
+  "canonical_workflow_retirement_commit": "481772fd6dccc91aeefe8193e99857e53d23b687",
   "canonical_capsule": "tools/run_free_swarm_historical_backfill_capsule_878.py",
-  "legacy_trigger_issues_observed": [1845, 1849, 1857, 1858],
-  "related_duplicate_saturation_issues_observed": [1839, 1846],
+  "legacy_trigger_issues_observed": [
+    1845,
+    1849,
+    1857,
+    1858
+  ],
+  "related_duplicate_saturation_issues_observed": [
+    1839,
+    1846
+  ],
   "execution_claim": false,
   "runtime_pass_claim": false,
+  "terminal_canonical_result_observed": false,
+  "active_trigger_authorized": false,
   "independent_replication_credit": 0,
-  "rule": "NO_FURTHER_TRIGGER_FOR_THIS_GENERATION; ANY_ALREADY_QUEUED_EQUIVALENT_RUN_IS_GENEALOGICALLY_IDENTICAL_SCHEDULER_EVIDENCE_UNTIL_ONE_TERMINAL_CANONICAL_RESULT_IS_SELECTED",
+  "rule": "NO_FURTHER_TRIGGER_FOR_THIS_GENERATION; ANY ALREADY-QUEUED EQUIVALENT RUN IS GENEALOGICALLY IDENTICAL SCHEDULER EVIDENCE ONLY. THE RETIRED WORKFLOW PATH MUST NOT BE RESTORED AS GENERATION 0.",
   "result_path": "research_entity/continuity/ordinary_dispatch_results/free-swarm-historical-backfill-v1-g0000.json",
+  "next_retry_generation_candidate": 1,
+  "next_retry_reason": "EXPLICIT_INFRASTRUCTURE_AND_PROBE_SEMANTIC_CHANGE_REQUIRED_AFTER_WORKFLOW_RETIREMENT_WITHOUT_TERMINAL_RESULT",
+  "next_retry_blockers": [
+    "FUSE_EXACT_CURRENT_HISTORICAL_SATURATION_HARDENING",
+    "CREATE_ONLY_GENERATION_1_CLAIM_BEFORE_TRIGGER",
+    "USE_ONE_TYPED_SINGLETON_WORKFLOW_WITH_STABLE_CONCURRENCY_AND_SEMANTIC_RESULT_DEDUPE"
+  ],
   "protocol": "research_entity/continuity/ORDINARY_DISPATCH_IDEMPOTENCY_PROTOCOL.md"
 }

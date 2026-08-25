@@ -79,6 +79,10 @@ def validate_proof_envelope(envelope: Mapping[str, Any]) -> dict[str, Any]:
         raw = validate_node_result(packet)
     except TwoPhaseGateError as exc:
         raise AdapterError(f"NODE_RESULT_TWO_PHASE_VALIDATION_FAILED:{exc}") from exc
+    _require(
+        packet.get("producer_pid") == raw["raw_process_pid"],
+        "NODE_RESULT_PRODUCER_PID_PAYLOAD_MISMATCH",
+    )
 
     core = {key: envelope[key] for key in envelope if key != "envelope_digest"}
     _require(envelope.get("envelope_digest") == dg(core), "PROOF_ENVELOPE_DIGEST_MISMATCH")

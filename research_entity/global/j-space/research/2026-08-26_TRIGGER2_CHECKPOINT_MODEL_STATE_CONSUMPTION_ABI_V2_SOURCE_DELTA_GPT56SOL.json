@@ -1,0 +1,82 @@
+{
+  "schema": "CLAY_TRIGGER2_CHECKPOINT_MODEL_STATE_CONSUMPTION_SOURCE_DELTA/v2",
+  "date": "2026-08-26",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "supervisor_epoch_observed": "8.81_DELTA",
+  "mode": "FREE_ONLY",
+  "status": "SOURCE_READY_EXACT_BLOB_UNIT_TESTED_RUNTIME_UNEXECUTED",
+  "authority_boundary": {
+    "free_swarm": "OWNER_EMERGENCY_STOP_HARD_OFF",
+    "runtime_quiescence": "NOT_PROVEN",
+    "provider_execution": "NOT_PERFORMED",
+    "vps_execution": "NOT_PERFORMED",
+    "model_runtime": "NOT_PERFORMED",
+    "training": "NOT_AUTHORIZED_NOT_PERFORMED"
+  },
+  "problem": "CHECKPOINT_INPUT_IDENTITY_ABI/v1 proves manifest-bound shard paths were opened plus input/forward evidence, but open/openat is not an exact transcript of the in-memory tensor state consumed by a forward, especially under mmap.",
+  "source": {
+    "path": "tools/trigger2_qwen35_checkpoint_model_state_consumption_probe_v2.py",
+    "commit": "6cce48bbe2d7f4576cfe5419ccb29b0785106e17",
+    "git_blob_sha1": "14737671a579cad8c2c691a160d30833397bace2",
+    "sha256": "6b190553e405e6b06267e5e8eaa7c0560d1db403088b8f76457eef4695aa98c8",
+    "mechanisms": [
+      "complete admitted checkpoint-manifest verification before and after load",
+      "strace open/openat retained only as corroborating opened-path evidence",
+      "offline local_files_only model/tokenizer load with trust_remote_code=false",
+      "explicit Transformers disable_mmap request recorded",
+      "default independent full-file-bytes safetensors reconstruction bound to manifest SHA-256",
+      "clean missing/unexpected/mismatched/error loading_info required",
+      "per-tensor dtype/shape/raw-byte digest for checkpoint and complete persistent loaded state",
+      "extra persistent state fails closed unless byte-identical to an admitted checkpoint tensor alias",
+      "loaded-state digest measured before and after one no-grad forward and required stable",
+      "rendered UTF-8, token tensors, runtime, checkpoint state, loaded state and forward output bound into one model-call digest"
+    ],
+    "pass_scope": "SELECTION_GRADE_CONSUMED_MODEL_STATE_COMPONENT_ELIGIBLE_ONLY"
+  },
+  "test": {
+    "path": "tests/test_trigger2_qwen35_checkpoint_model_state_consumption_probe_v2.py",
+    "git_blob_sha1": "f0c740e3b55cf29fbef02c70b7b5d5e0a21fc0f1",
+    "source_blob_exact_match_verified": true,
+    "test_blob_exact_match_verified": true,
+    "py_compile": "PASS",
+    "pytest": "7/7 PASS",
+    "scope": "DETERMINISTIC_EXACT_SOURCE_UNIT_TEST_ONLY_NOT_QWEN_MODEL_RUNTIME",
+    "negative_controls": [
+      "loaded tensor byte mutation",
+      "missing checkpoint key",
+      "unexplained extra persistent state",
+      "non-empty loader error surface",
+      "token-identity transplant changes model-call binding",
+      "post-load persistent state mutation changes state digest"
+    ]
+  },
+  "external_method_evidence": [
+    {
+      "source": "https://huggingface.co/docs/safetensors/api/torch",
+      "finding": "Current safetensors docs expose mmap as default, pread as an alternative and raw-bytes load."
+    },
+    {
+      "source": "https://huggingface.co/docs/transformers/main_classes/model",
+      "finding": "Current Transformers docs expose disable_mmap and output_loading_info."
+    }
+  ],
+  "hypothesis": "Independent manifest-bound tensor reconstruction exactly reconciled to the complete persistent loaded model state, stable across and bound to a forward, closes the v1 opened-path-versus-consumed-state ambiguity at component scope.",
+  "counterhypothesis": "Strict byte/key reconciliation can expose legitimate tied-state or runtime-derived conventions; therefore the first admitted BASE run is a discriminator and any exception must be explicit and negative-tested rather than introduced merely to force PASS.",
+  "credits": {
+    "research_delta": 1,
+    "source_component": 1,
+    "exact_source_unit_test": 1,
+    "checkpoint_model_state_runtime_credit": 0,
+    "checkpoint_selection_credit": 0,
+    "jspace_model_credit": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  },
+  "next_exact_action": "First prove and receipt runtime quiescence and re-enter exact current authority. If and only if an explicit non-provider FREE model execution is then admitted, execute the v2 source against frozen QWEN35_08B_BASE and persist the exact source/runtime receipt. Preserve PASS or FAIL without weakening reconciliation. Only after BASE component PASS run the same semantics on POSTTRAINED and TARGET_MEASURED."
+}

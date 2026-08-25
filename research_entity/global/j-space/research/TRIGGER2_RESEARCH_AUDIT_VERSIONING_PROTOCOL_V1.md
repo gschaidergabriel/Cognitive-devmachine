@@ -42,6 +42,17 @@ The current Xeno target includes at minimum:
 
 No narrow binder benchmark, probe score, architecture prose family, or single aggregate metric may substitute for this whole functionality map.
 
+### Cross-cutting semantic-Hyperposition law
+
+Current main additionally requires semantic Hyperposition to be the operating frame **from the first trainable episode**, not a late prose/module add-on. This is compatible with curriculum staging:
+
+- the latent Hyperposition carrier/schema is present from the beginning;
+- early C/A/B examples may exercise only simple/no-op branch transitions;
+- E typing/discriminator supervision becomes active when labelable;
+- full D update/resolve optimization remains later, after prerequisites are established.
+
+Thus `HYPERPOSITION_SCHEMA_FROM_START` and `FULL_D_OPTIMIZATION_LATER` are both required. Any older corpus that teaches equivalent semantics outside this frame must be reviewed for structural retrofit, not automatically accepted because its local labels are correct.
+
 ## 2. Mandatory Trigger-2 cycle
 
 Every Trigger-2 invocation executes the following loop before adding training rows.
@@ -105,6 +116,7 @@ Never silently overwrite history. A corrected artifact becomes a new version and
 A training artifact MUST be marked `REVIEW_REQUIRED` when any dependency it materially relies on changes, including:
 
 - target-architecture requirement;
+- semantic-Hyperposition cross-cutting contract;
 - source measurement or interpretation;
 - labeler/reference implementation;
 - generator;
@@ -130,6 +142,8 @@ For Hyperposition/GRF training the minimum reference-label layer is:
 4. `f_salience_order` — pairwise/listwise salience ordering distinct from truth probability.
 
 If a required labeler is missing, affected rows are `BLOCKED_LABELER_MISSING`; do not invent labels.
+
+The cross-cutting carrier may still be present in earlier mechanically labelable episodes whose correct transition is identity/no-op/preserve-unresolved. This does not grant positive credit for the missing D/E labelers.
 
 ### T2.7 Cheap preflight discriminator
 
@@ -237,6 +251,7 @@ Every final or near-final candidate training row SHOULD be renderable with the f
 - `known_blockers[]`
 - `reviewed_against_supervisor_epoch`
 - `reviewed_against_owner_target_hash`
+- `reviewed_against_hyperposition_contract_hash`
 
 Metadata that would create a shortcut MUST remain evaluator-only.
 
@@ -256,6 +271,7 @@ The registry must support explicit invalidation edges such as:
 
 - `EVIDENCE_SUPERSEDED`
 - `TARGET_ARCHITECTURE_CHANGED`
+- `HYPERPOSITION_CONTRACT_CHANGED`
 - `LABELER_CHANGED`
 - `GENERATOR_SHORTCUT_FOUND`
 - `TOKENIZER_OR_CHECKPOINT_CHANGED`
@@ -284,6 +300,10 @@ Mixed training is compatible with causal diagnosis only if capability-specific f
 ### 6.4 Versioning is part of scientific validity
 
 Dataset lifecycle state, byte identity, source ancestry and supersession are not bookkeeping extras. Without them, a later Trigger-2 cycle cannot distinguish current supervision from stale, contradicted or contaminated rows.
+
+### 6.5 Semantic Hyperposition is ontology-first, optimization-staged
+
+The newest current-main contract requires the branch/state ontology from corpus start. Trigger-2 therefore audits old rows for whether they operate inside the Hyperposition frame even when their explicit task is C, A or B. Full D behavior is still staged later; structural framing and optimization order are separate concerns.
 
 ## 7. External method anchors (non-canonical)
 

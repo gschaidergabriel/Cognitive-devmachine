@@ -1,24 +1,25 @@
 {
-  "schema_version": "8.76",
-  "latest_cycle": "go-20260825-metrics-freshness-implementation-gap",
+  "schema_version": "8.77",
+  "latest_cycle": "go-20260825-freshness-conversion-backpressure",
   "needs_review": true,
   "active_program": "ENTITYOS_HCU",
   "product": "EntityOS",
   "integrated_cognition_compute_architecture": "HCU",
-  "latest_repo_head_inspected_before_write": "c351aee15e6ace7ef6b776a2dea08c97d27a0e88",
-  "material_finding": "Supervisor 8.75 policy has not yet become executable publisher behavior. Autonomous metrics refreshes advanced the live dashboard through 2026-08-24T20:31Z to 30,746,025 Free-Swarm tokens, 144 Forge evaluations and 1 nominal ACCEPTED delta, but GO_COLLECTIVE_METRICS.json remains frozen at 2026-08-24T13:58:54Z / authority_epoch 8.71 / 7,302,860 tokens / 0 Forge accepts. The current metrics unit tests contain no freshness, authority-epoch, out-of-order writer or stale-supersession regression. This is an implementation gap, not merely a stale file observation.",
+  "latest_repo_head_inspected_before_write": "d2d50e27ec19ed881415f4ccd62826a1485a8b3d",
+  "material_finding": "Supervisor 8.76 freshness policy still has not become executable publisher behavior. The live dashboard advanced to 35,308,070 cumulative Free-Swarm tokens and 1 nominal Forge ACCEPTED delta while Distillery remains at 0 accepted packets / 0 accepted dataset tokens. GO_COLLECTIVE_METRICS.json remains frozen at 2026-08-24T13:58:54Z / authority_epoch 8.71 / 7,302,860 tokens / 0 Forge accepts. PR #1771 remains open. Raw token growth is therefore outrunning verified conversion and must not be treated as progress.",
   "current_frontier": {
     "collective_metrics_freshness": "POLICY_PRESENT_IMPLEMENTATION_AND_EXECUTION_MISSING",
-    "live_dashboard_free_swarm_tokens": 30746025,
+    "live_dashboard_free_swarm_tokens": 35308070,
     "live_dashboard_forge_evaluations": 144,
     "live_dashboard_nominal_forge_accepted": 1,
     "go_collective_metrics_generated_at": "2026-08-24T13:58:54Z",
     "go_collective_metrics_authority_epoch": "8.71",
     "go_collective_metrics_tokens": 7302860,
     "go_collective_metrics_forge_accepted": 0,
+    "distillery_live_accepted_packets": 0,
     "distillery_live_accepted_dataset_tokens": 0,
     "forge_distillery_replay_v1_to_v2_migration": "OPEN_PR1771_HEAD_289b3144a06d0eaa8901b92cc023ef75893b8ba4",
-    "forge_distillery_live_promotion": "BLOCKED_BY_REPLAY_NAMESPACE_MIGRATION",
+    "swarm_scale_state": "BACKPRESSURE_NO_SCALE_UP_UNTIL_FRESHNESS_AND_CONVERSION_GATES_PASS",
     "entityos_whole_runtime_credit": 0,
     "hcu_full_runtime_credit": 0,
     "jspace_model_runtime_credit": 0,
@@ -36,15 +37,14 @@
     "SOURCE_TEST_PRESENCE_IS_NOT_TEST_EXECUTION",
     "SUPERVISOR_POLICY_IS_NOT_IMPLEMENTED_GATE_UNTIL_EXECUTED",
     "STALE_METRICS_MUST_NOT_SUPERSEDE_NEWER_CANONICAL_INPUT_SURFACES",
-    "AUTHORITY_EPOCH_MISMATCH_MUST_BE_HISTORICAL_OR_FAIL_CLOSED",
+    "RAW_TOKEN_OR_WORKER_GROWTH_IS_NOT_VERIFIED_UTILITY",
     "GOODMAN_COLLAPSE_SHARED_MODEL_FAMILY_PIPELINE_AND_ORCHESTRATION_ANCESTRY",
     "NO_CANONICAL_SEMANTICS_PROMOTION_WITHOUT_EXECUTABLE_COUNTEREVIDENCE_AND_REVIEW"
   ],
   "next_focus": [
+    "DO_NOT_SCALE_EXTERNAL_LLM_WORKERS_CONCURRENCY_OR_TOKEN_BUDGETS",
     "IMPLEMENT_FRESHNESS_FAIL_CLOSED_IN_EXISTING_GO_COLLECTIVE_METRICS_PUBLISHER_CONSUMER_PATH",
-    "ADD_AND_EXECUTE_STALE_INPUT_AUTHORITY_EPOCH_OUT_OF_ORDER_WRITER_IDEMPOTENCE_AND_SHARED_SNAPSHOT_TESTS",
-    "EMIT_COLLECTIVE_METRICS_FRESHNESS_RECEIPT_V1",
-    "KEEP_PR1771_REPLAY_V2_MIGRATION_AS_HARD_DATASET_CREDIT_GATE",
+    "EXECUTE_FRESHNESS_REGRESSIONS_AND_EMIT_COLLECTIVE_METRICS_FRESHNESS_RECEIPT_V1",
     "EXECUTE_DISTILLERY_REPLAY_ID_MIGRATION_RECEIPT_V1_ON_EXACT_CURRENT_PR1771_SOURCE",
     "ONLY_THEN_RUN_ONE_FORGE_ACCEPT_TO_ONE_DISTILLERY_PACKET_TO_ACCEPTED_DATASET_TOKENS_GT_ZERO_TO_SEMANTIC_REPLAY_PLUS_ZERO",
     "KEEP_LOCAL_QWEN_JSPACE_FRONTIER_SEPARATE_ZERO_COST_AND_NONPROMOTING",
@@ -59,5 +59,5 @@
     "provider_runtime_credit": 0,
     "training_credit": 0
   },
-  "steering": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_76.json"
+  "steering": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_77.json"
 }

@@ -1,0 +1,11 @@
+RuntimeError("GIT_FAILED: fatal: 'origin/91eb282627c873655bae74a257f950066b135f53' is not a commit and a branch '91eb282627c873655bae74a257f950066b135f53' cannot be created from it\n")
+Traceback (most recent call last):
+  File "/srv/claylab/git-bridge/bridge_daemon.py", line 227, in execute
+    p, meta = operate(s)
+              ^^^^^^^^^^
+  File "/srv/claylab/git-bridge/bridge_daemon.py", line 172, in operate
+    git(WORK, 'checkout', '-B', ref, f'origin/{ref}')
+  File "/srv/claylab/git-bridge/bridge_daemon.py", line 51, in git
+    raise RuntimeError('GIT_FAILED: ' + text(p.stderr)[-6000:])
+RuntimeError: GIT_FAILED: fatal: 'origin/91eb282627c873655bae74a257f950066b135f53' is not a commit and a branch '91eb282627c873655bae74a257f950066b135f53' cannot be created from it
+

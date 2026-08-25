@@ -1,0 +1,17 @@
+{
+  "schema": "CLAY_VPS_RECEIPT/v4",
+  "command_id": "fr1-refetch-analysis-refs-20260825",
+  "command_sha256": "52569675effa4cee6c12598e9a79c2a09474e26dae50ee957028fc2d6b716392",
+  "started_at": "2026-08-25T06:07:24.964929+00:00",
+  "finished_at": "2026-08-25T06:07:26.832347+00:00",
+  "status": "ERROR",
+  "exit_code": 125,
+  "op": "canonical_sync",
+  "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stderr_sha256": "b0a13419f7f1b86f3cad3b206531cc3a1b94a2bd98b14d68388520277457a588",
+  "stdout_tail": "",
+  "stderr_tail": "RuntimeError(\"GIT_FAILED: fatal: 'origin/91eb282627c873655bae74a257f950066b135f53' is not a commit and a branch '91eb282627c873655bae74a257f950066b135f53' cannot be created from it\\n\")\nTraceback (most recent call last):\n  File \"/srv/claylab/git-bridge/bridge_daemon.py\", line 227, in execute\n    p, meta = operate(s)\n              ^^^^^^^^^^\n  File \"/srv/claylab/git-bridge/bridge_daemon.py\", line 172, in operate\n    git(WORK, 'checkout', '-B', ref, f'origin/{ref}')\n  File \"/srv/claylab/git-bridge/bridge_daemon.py\", line 51, in git\n    raise RuntimeError('GIT_FAILED: ' + text(p.stderr)[-6000:])\nRuntimeError: GIT_FAILED: fatal: 'origin/91eb282627c873655bae74a257f950066b135f53' is not a commit and a branch '91eb282627c873655bae74a257f950066b135f53' cannot be created from it\n\n",
+  "meta": {},
+  "execution_boundary": "ROOT_INSIDE_ROOTLESS_PODMAN_OR_EXPLICIT_REPO_CONTROL_OP",
+  "canonical_credit_minted": 0
+}

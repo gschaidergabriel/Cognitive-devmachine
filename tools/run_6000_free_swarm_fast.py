@@ -24,12 +24,18 @@ import run_6000_free_swarm_v5 as fabric
 model_health.bind_request_observer(fabric)
 import free_swarm_conversion_backpressure_872 as conversion_backpressure
 import free_swarm_backfill_scheduler as historical_backfill
+import free_swarm_typed_ingress_wiring_878 as typed_ingress
 
 # Wrap the final worker-prompt authority after v2/v3/v5 have installed their own
 # routing/synthesis behavior. While historical backlog exists, roughly 75% of
 # logical calls become extraction/structuring passes over already-paid-for FREE
 # worker output instead of producing more raw research tokens.
 historical_backfill.install(base)
+
+# Reuse the existing CLAY_ARCHITECTURE_DELTA_INGRESS/v1 classifier at the final
+# successful v5 record boundary. This decorates append-only worker material only;
+# it does not replace v3 network/economic routing, v5 synthesis, or Forge authority.
+typed_ingress.install_live(fabric)
 
 
 def main() -> int:

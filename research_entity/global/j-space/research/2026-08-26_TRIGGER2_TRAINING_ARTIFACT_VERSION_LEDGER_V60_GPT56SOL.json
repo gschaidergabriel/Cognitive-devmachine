@@ -1,0 +1,107 @@
+{
+  "schema": "CLAY_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER/v60",
+  "date": "2026-08-26",
+  "trigger": "triggerwort2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "status": "CURRENT_RESEARCH_LEDGER_NONCANONICAL_SUCCESSOR_DYNAMIC",
+  "supersedes": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V59_GPT56SOL.json",
+  "inherits_all_nonconflicting_records_from": "T2-LEDGER-V59",
+  "observed_main_before_write": "c3c8b8b714edfd605ac60e1b57df84a4cba1f635",
+  "authority": {
+    "supervisor_epoch": "8.83_DELTA",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "architecture": "HCU",
+    "free_swarm_provider_admission": "OWNER_EMERGENCY_STOP_HARD_OFF",
+    "runtime_quiescence": "ACTIVE_FAIL_POST_STOP_PROVIDER_ATTEMPT_COUNTERS_INCREASING",
+    "provider_routes_admitted": false,
+    "training_execution_authorized": false,
+    "checkpoint_winner": null,
+    "accepted_dataset_tokens": 0,
+    "checkpoint_selection_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "jspace_model_credit": 0,
+    "training_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  },
+  "revision_reason": "V59 retained the two-phase pre-call launch -> post-call executor-observation authority pattern. Exact-current source audit then isolated a cohort-level injectivity gap: the reducer makes wrappers unique but does not explicitly make the exact source-bound model-call identity unique. V60 pins the discriminator as a regression against the retained two-phase source without creating another authority implementation.",
+  "two_phase_source": {
+    "path": "tools/trigger2_node_result_model_call_two_phase_authority_v1.py",
+    "source_commit": "56e8cc09f0c1b8e1fd99ab091154c3f3a6382b17",
+    "source_blob_sha1": "26756e6912c89be625a498534c44befecb1f21b2",
+    "status": "RETAINED_SOURCE_DIRECTION"
+  },
+  "exact_call_uniqueness_audit": {
+    "audit_commit": "2c3881c17d68d1dcbc35fd4fefa79ce3b233c71f",
+    "id": "T2_TWO_PHASE_COHORT_EXACT_CALL_UNIQUENESS_NOT_EXPLICITLY_GATED",
+    "observed": "derive_authority_cohort_id enforces uniqueness for cell, node, PID, launch descriptor, executor observation and raw packet but not source_bound_model_call_identity_sha256.",
+    "causal_risk": "Two distinct launch descriptors and two distinct executor observations can reference one exact call C and satisfy all currently enforced wrapper-identity uniqueness checks, allowing one model invocation to be counted as two cell executions.",
+    "boundary_condition": "Intentional one-call fan-out must be represented explicitly as one call with multiple consumer identities, not as multiple independently executed calls."
+  },
+  "regression_delta": {
+    "path": "tests/test_trigger2_two_phase_cohort_exact_call_uniqueness_regression_v1.py",
+    "commit": "c3c8b8b714edfd605ac60e1b57df84a4cba1f635",
+    "status": "SOURCE_REGRESSION_PIN_ADDED_NOT_REPOSITORY_EXECUTED",
+    "controls": [
+      "distinct exact calls form a valid two-member cohort",
+      "identical model_output_identity is allowed when exact call identities are distinct",
+      "strict xfail: one exact source_bound_model_call_identity_sha256 cannot occupy two distinct cells",
+      "strict xfail: one source_node_admission_id cannot occupy two distinct nodes"
+    ],
+    "expected_successor_errors": [
+      "AUTHORITY_COHORT_MODEL_CALL_DUPLICATE",
+      "AUTHORITY_COHORT_NODE_ADMISSION_DUPLICATE"
+    ],
+    "repository_ci_observed": false,
+    "runtime_credit": 0
+  },
+  "hypothesis": {
+    "H60_1": "Exact model-call identity must be injective across a cohort whenever cohort members claim independent cell executions.",
+    "counterhypothesis": "Distinct post-call executor observations are sufficient even if they reference the same exact model call.",
+    "counterassessment": "Distinct observations establish distinct bookkeeping wrappers, not distinct model invocations; they cannot multiply one exact call into two independent cell executions.",
+    "cheapest_next_discriminator": "Patch the retained reducer to include source_bound_model_call_identity_sha256 and source_node_admission_id in cohort uniqueness checks, remove the two strict xfails, and require the new negative fixtures to PASS without changing the cohort identity schema or model-generated payload."
+  },
+  "training_lane": {
+    "primary_measured_deficit": "CONTEXT_DEPENDENT_VARIABLE_BINDING_ROUTING",
+    "historical_context_transfer_baseline": 0.5254629629629629,
+    "historical_dynamic_symbol_hit_baseline": 0.3611111111111111,
+    "chance_three_way": 0.3333333333333333,
+    "direct_training_status": "BLOCKED",
+    "binding_router_factorial_v3": "BLOCKED_FOR_CONDITIONAL_NUISANCE_LEAKAGE",
+    "accepted_dataset_tokens": 0
+  },
+  "execution": {
+    "provider_called_this_cycle": false,
+    "model_runtime_executed_this_cycle": false,
+    "training_executed_this_cycle": false,
+    "vps_execution_performed": false,
+    "paid_execution": false,
+    "unusual_experiment_executed": false,
+    "work_class": "SOURCE_ONLY_REGRESSION_AND_LEDGER_FUSION"
+  },
+  "credits": {
+    "research_delta": 1,
+    "source_audit_credit": 1,
+    "regression_pin_credit": 1,
+    "repository_ci_credit": 0,
+    "model_call_runtime_credit": 0,
+    "checkpoint_selection_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "jspace_model_credit": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  },
+  "next_priority_order": [
+    "P0 owning live host: execute only the pinned FreeSwarm quiescence enforcer and prove zero provider-capable survivors plus bounded zero provider-counter delta without provider probing",
+    "P1 source-only: add exact model-call and node-admission injectivity checks to the retained two-phase cohort reducer and convert the strict xfails to passing regressions",
+    "P1 source-only: integrate the retained two-phase authority envelope with PROOF_CARRYING_NODE_RESULT/v1 and the fused GRID10 membership/cohort path without changing raw cognition",
+    "P1 after quiescence PASS: re-enter newest explicit FREE non-provider execution authority before any model or physical GRID10 promotion",
+    "P2 keep blinded checkpoint evaluation frozen and repair the binding-router nuisance leak before training materialization",
+    "P3 keep Forge-to-Distillery positive admission closed until one exact accepted witness yields accepted_dataset_tokens > 0 and exact replay +0"
+  ],
+  "next_exact_action": "In tools/trigger2_node_result_model_call_two_phase_authority_v1.py, add source_bound_model_call_identity_sha256 and source_node_admission_id to derive_authority_cohort_id injectivity checks; then un-xfail and execute the pinned regression under an admitted deterministic source-test surface. No provider/model/training execution is authorized by V60."
+}

@@ -1,0 +1,116 @@
+{
+  "schema": "CLAY_FORSCHUNGSRUN_1_PROMOTION_GATE_AND_MEASUREMENT_FUSION/v1",
+  "date": "2026-08-25",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "user_trigger": "forschungsrun 1",
+  "persistent_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "stage": "ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP",
+  "authority_epoch_observed": "8.78",
+  "execution_mode": "FREE_ONLY",
+  "canonical_main_observed_before_write": "4f41c24cd48d79a395cc9f992b2abfca28c89c09",
+  "scope": "QWEN3_0_6B_NATIVE_CVEC_TRIGGER1_PROMOTION_GATE_HARDENING_AND_MEASUREMENT_PROTOCOL",
+  "observed_authority": {
+    "supervisor_inbox": "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
+    "required_next_jspace_discriminator": "LABEL_INDEPENDENT_COUNTERBALANCED_NATIVE_CVEC_PROMOTION_DISCRIMINATOR",
+    "native_component_credit": "PRESENT_BOUNDED_COMPONENT_ONLY",
+    "canonical_semantics_promotion": false,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0
+  },
+  "observed_gate_gap": {
+    "path": "tools/trigger1_jspace_promotion_gate.py",
+    "pre_repair_blob_sha": "12d703c5a6fcf66d5a7aa0bef24ef26f91c6727a",
+    "finding": "The v4 promotion gate required output-code label counterbalance for token-output metrics but did not require requested semantic targets themselves to be counterbalanced. Therefore an all-AFFIRMATIVE evaluation could satisfy the declared scientific-independence fields despite the active supervisor explicitly requiring a label-independent/counterbalanced discriminator.",
+    "counterhypothesis": "A positive +VECTOR effect may be generic instruction compliance, confidence, task engagement or requested-code emission rather than AFFIRMATIVE-specific causal semantics."
+  },
+  "implemented_delta": {
+    "gate_commit": "ba543040700a06efb9a537380c453eee0c30f3b8",
+    "gate_path": "tools/trigger1_jspace_promotion_gate.py",
+    "gate_post_repair_blob_sha": "013bfdcd2961723dd731ec0e1982f7fabd59d51c",
+    "test_commit": "e2fe24ff7b346cc17310be9f8c74fcc512fcc82a",
+    "test_path": "tests/test_trigger1_semantic_target_counterbalance.py",
+    "promotion_requirements_added_for_token_output_metrics": [
+      "calibration.semantic_target_counterbalanced == true",
+      "holdout.semantic_target_counterbalanced == true",
+      "calibration.semantic_targets set exactly AFFIRMATIVE/NEGATIVE/NEUTRAL",
+      "holdout.semantic_targets set exactly AFFIRMATIVE/NEGATIVE/NEUTRAL",
+      "holdout.semantic_target_interaction_test == true"
+    ],
+    "credit_effect": "FAIL_CLOSED_ONLY_NO_RUNTIME_CREDIT",
+    "workflow_runtime_observed": false,
+    "workflow_note": "No GitHub workflow run was observed for the regression commit at research time; test source presence is not test execution."
+  },
+  "parallel_fusion": {
+    "lexical_deconfound_commit": "25907c4413c264d40067f56bc1b5417341b80a76",
+    "lexical_deconfound_finding": "Explicit AFFIRMATIVE/NEGATIVE/NEUTRAL pole words and nearby synonyms in basis/evaluation prompts can reconstruct a lexical axis; semantic-target counterbalance alone does not remove this confound. Label-free cross-lexical basis families, a lexical nuisance control, coherence diagnostics and per-family interaction evidence are required before semantic promotion.",
+    "token_scope_commit": "4f41c24cd48d79a395cc9f992b2abfca28c89c09",
+    "token_scope_finding": "The credited PyTorch intervention is last-token-only while native llama.cpp cvec applies the additive direction across prompt-token positions present in the decode batch; agreement is not strict intervention replication until scope is matched.",
+    "low_gain_successor_commit": "8dec2977bd034804f8b1fd09ff9f215f18bf3ef1",
+    "low_gain_scope": "Calibration search domain changed from high gains to 0.25/0.5/1/2/4 only; this does not by itself establish residual-norm comparability or close semantic/lexical/token-scope confounds."
+  },
+  "external_research_inputs": [
+    {
+      "source": "Wu, Zhao, Chen (2026), When Is a Steerable Concept Representation Real? Measurement Confounds in a Cross-Family Audit of Neuroscience Parallels in LLMs, arXiv:2608.08159",
+      "observed_date": "2026-08-25",
+      "relevance": "Reports that apparent steering conclusions can depend jointly on raw activation units, readout metric and operating point; residual-norm-comparable interventions and held-out operating-point selection materially change interpretation.",
+      "protocol_delta": "Record residual-norm-relative intervention magnitude and freeze operating point on calibration before holdout; do not interpret a merely smaller raw gain as calibrated intervention strength."
+    },
+    {
+      "source": "Braun et al. (2025), Understanding (Un)Reliability of Steering Vectors in Language Models, arXiv:2505.22637",
+      "observed_date": "2026-08-25",
+      "relevance": "Finds high per-sample steering variance and that higher cosine coherence among activation differences predicts more effective steering.",
+      "protocol_delta": "Require cross-family direction-coherence diagnostics and preserve per-family directional signs rather than accepting only a pooled mean."
+    },
+    {
+      "source": "Tan et al. (2024), Analyzing the Generalization and Reliability of Steering Vectors, arXiv:2407.12404",
+      "observed_date": "2026-08-25",
+      "relevance": "Reports spurious-bias and prompt/generalization brittleness in steering vectors.",
+      "protocol_delta": "Use fresh lexical/domain holdout families and explicit off-target tasks."
+    }
+  ],
+  "fused_next_discriminator": {
+    "name": "LABEL_FREE_TARGET_X_CODE_COUNTERBALANCED_SCOPE_MATCHED_NORM_CALIBRATED_NATIVE_CVEC/v1",
+    "preregister_before_holdout": [
+      "exact Qwen3-0.6B source checkpoint/tokenizer and exact GGUF",
+      "exact llama.cpp commit/build and native harness",
+      "nonterminal layer and token-scope condition",
+      "vector construction rule and lexical nuisance projection/control rule",
+      "residual-norm-relative gain/operating-point rule selected on calibration only",
+      "semantic-target x output-code factorial/counterbalance",
+      "six existing controls plus LABEL_ONLY_NUISANCE_VECTOR",
+      "cross-family cosine/permutation-null coherence gate",
+      "treatment-by-semantic-target interaction metric",
+      "off-target drift threshold"
+    ],
+    "matched_scope_conditions": [
+      "PyTorch LAST_TOKEN_ONLY",
+      "PyTorch ALL_PROMPT_TOKENS",
+      "native llama.cpp ALL_PROMPT_TOKENS_CVEC"
+    ],
+    "semantic_design": "Requested target varies across affirmative-like, negative-like and neutral-like states independently of A/B/C code identity; model-facing basis prompts are label-free and lexically disjoint across families.",
+    "primary_positive_pattern": "+VECTOR produces the preregistered target-specific interaction on every fresh lexical family; SIGN_FLIP reverses that interaction; null/orthogonal/permuted/label-only nuisance controls do not reproduce it.",
+    "generic_compliance_rejection": "A similar requested-code uplift across semantic targets rejects semantic specificity even if aggregate correctness increases.",
+    "scope_classification": "If last-token and all-token interventions materially diverge, native cvec evidence is classified by its broadcast scope and cannot be presented as strict last-token replication.",
+    "measurement_classification": "A positive effect obtained only at uncalibrated raw gains or only after holdout-sensitive operating-point selection is not promotion evidence."
+  },
+  "unusual_experiment": {
+    "executed_by_this_organ": false,
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "This standalone research trigger exposes no canonical shared immutable macrocycle/request identity and no successful create-only atomic lease. Source review, fail-closed gate repair, regression source and research fusion are ordinary non-intervention work."
+  },
+  "credit_change": {
+    "new_runtime_credit": 0,
+    "existing_native_llamacpp_cvec_component_credit_revoked": false,
+    "jspace_model_runtime_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "training_credit": 0,
+    "canonical_semantics_promotion": false
+  },
+  "research_delta": "Forschungsrun 1 moved the active Trigger-1 boundary from output-code counterbalancing toward a stricter causal design that independently controls requested semantics, lexical reconstruction, intervention token scope, vector coherence and norm/operating-point calibration. The semantic-target confound is now fail-closed in the promotion gate at source level; the stronger label-free/scope/norm experiment remains unexecuted until canonical unusual-experiment coordination exists.",
+  "next_exact_action": "Implement the label-free target-x-code successor with explicit residual-norm and token-scope metadata/regressions, then execute only after a canonical create-only unusual-experiment lease; do not promote the existing all-AFFIRMATIVE semantic executor through Trigger-1 goal credit."
+}

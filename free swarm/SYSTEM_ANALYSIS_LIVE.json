@@ -1,13 +1,13 @@
 {
   "schema": "CLAY_FREE_SWARM_SYSTEM_ANALYSIS/v3",
-  "generated_at": "2026-08-25T11:53:19.847504+00:00",
+  "generated_at": "2026-08-25T12:08:29.041973+00:00",
   "runtime": {
     "supervisor": "STOPPED/QUARANTINED",
     "go_swarm": "RUNNING",
     "distillery": "RUNNING",
     "evidence_forge": "RUNNING",
     "dashboard": "RUNNING",
-    "local_model": "BUILDING/BOOTSTRAPPING",
+    "local_model": "NOT_READY",
     "provider_admission": {
       "admitted_free_providers": [
         "groq",
@@ -65,7 +65,7 @@
   },
   "distillery": {
     "schema": "CLAY_RESEARCH_DISTILLERY_STATUS/v1",
-    "generated_at": "2026-08-25T11:52:25.138227+00:00",
+    "generated_at": "2026-08-25T12:08:05.869152+00:00",
     "collected_source_tokens": 11621,
     "accepted_dataset_tokens": 0,
     "dataset_yield": 0.0,
@@ -111,7 +111,7 @@
     "model_output_tokens": 1455,
     "shared_provider_budget": {
       "schema": "CLAY_SHARED_PROVIDER_BUDGET/v1",
-      "generated_at": "2026-08-25T11:52:25.138759+00:00",
+      "generated_at": "2026-08-25T12:08:05.869676+00:00",
       "providers": {
         "arxiv": {
           "max_inflight": 1,
@@ -213,13 +213,13 @@
           "max_inflight": 16,
           "active_leases": 0,
           "min_interval_s": 0.5,
-          "cooldown_seconds": 9.991740942001343,
-          "total_requests": 391,
+          "cooldown_seconds": 9.973483085632324,
+          "total_requests": 482,
           "total_success": 134,
-          "total_429": 256,
+          "total_429": 347,
           "total_errors": 0,
           "last_status": "429",
-          "last_observed_at": "2026-08-25T11:52:25.130563+00:00"
+          "last_observed_at": "2026-08-25T12:08:05.843235+00:00"
         },
         "semantic_scholar": {
           "max_inflight": 1,
@@ -249,22 +249,22 @@
     },
     "db_bytes": 864256,
     "top_questions": [
-      "What are the security implications of automated fallbacks?",
-      "Does J-Space causal graph isomorphism under replay constitute sufficient evidence for model-specific causal credit, or does it merely prove HCU pipeline determinism?",
-      "Which upstream causal principle—hierarchical MoE routing, GWT broadcasting, or capability-typed entry—most parsimoniously explains HCU/Typed Entry/J-Space convergence under FREE_ONLY economic provenance?",
-      "Can the ProviderMonitor component be extended to support multiple fallback strategies?",
-      "Does synthetic cognition intervention token efficacy transfer across model architectures (nemotron vs qwen vs gpt-oss) or is it model-specific causal circuitry?",
-      "How can the auto-detect mechanism be extended to support multiple engine types (e.g., containerized vs. bare-metal) without manual configuration?",
-      "What is the impact of periodic auto-discovery on HCU scaling when the logical worker count approaches the 6000-worker limit?",
-      "What are the minimum requirements for running local engine tests in the VPS bridge?",
-      "How can we verify the effectiveness of the proposed health checks?",
-      "Do 402 Payment Required errors occur in FREE_ONLY mode when providers have both free and paid tiers?"
+      "Which NVIDIA Developer Program credential fields cryptographically bind to specific Nemotron model free-tier quotas, and can this be verified without provider-side cooperation?",
+      "What is the impact of provider-specific constraints on the optimal provider budget allocation strategy?",
+      "How can we effectively incorporate domain-specific knowledge into the allocation algorithm?",
+      "What are the potential benefits and drawbacks of using a reinforcement learning-based approach?",
+      "Whether the NVIDIA provider admission should also enforce per-credential model entitlement checks (not just provider-global free-prototyping statement) as the supervisor inbox demands.",
+      "How can the typed Entry Fabric be compiled and loaded to enable local model execution within current HCU constraints?",
+      "Which single causal primitive — typed-entry effect lattice, J-Space intervention calculus, or sub-1B speculative decode — yields the largest measurable delta on HCU boot latency when composed?",
+      "Does NVIDIA's Developer Program API expose per-credential free-tier entitlement verification, or must we infer from rate-limit headers post-call?",
+      "How can causal credit be established in Global J-Space/GWT without self-report or token volume metrics?",
+      "What minimal HCU logical module allocation is required for deterministic inference of the local research model?"
     ],
     "candidate_states": {}
   },
   "evidence_forge": {
     "schema": "CLAY_FREE_EVIDENCE_FORGE_STATUS/v1",
-    "generated_at": "2026-08-25T11:53:18.145752+00:00",
+    "generated_at": "2026-08-25T12:08:26.343602+00:00",
     "candidate_states": {
       "ACCEPTED": 1,
       "NEEDS_IMPLEMENTATION": 65,
@@ -288,7 +288,7 @@
     "peak_parallel_tasks": 0,
     "shared_provider_budget": {
       "schema": "CLAY_SHARED_PROVIDER_BUDGET/v1",
-      "generated_at": "2026-08-25T11:53:18.146351+00:00",
+      "generated_at": "2026-08-25T12:08:26.344218+00:00",
       "providers": {
         "arxiv": {
           "max_inflight": 1,
@@ -390,13 +390,13 @@
           "max_inflight": 16,
           "active_leases": 0,
           "min_interval_s": 0.5,
-          "cooldown_seconds": 8.866349935531616,
-          "total_requests": 396,
+          "cooldown_seconds": 9.76261043548584,
+          "total_requests": 484,
           "total_success": 134,
-          "total_429": 261,
+          "total_429": 349,
           "total_errors": 0,
           "last_status": "429",
-          "last_observed_at": "2026-08-25T11:53:17.012756+00:00"
+          "last_observed_at": "2026-08-25T12:08:26.106840+00:00"
         },
         "semantic_scholar": {
           "max_inflight": 1,
@@ -433,6 +433,6 @@
     "measured_total_sonnet5_equivalent_usd": 148.830648,
     "verified_historical_savings_usd": null,
     "nominal_avoided_if_zero_cost_usd": 148.830648,
-    "repo_output_only_proxy_usd": 129.0592
+    "repo_output_only_proxy_usd": 129.34912
   }
 }

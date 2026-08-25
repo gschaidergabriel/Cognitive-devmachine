@@ -2,13 +2,13 @@
 
 Status: `CURRENT_BLOCKED_ADMISSION`
 
-Trigger-2 **V62** is the current research-ledger successor under Supervisor **8.83**. This is a cache pointer only; newest explicit owner/supervisor authority and exact executable evidence outrank it.
+Trigger-2 **V63** is the current research-ledger successor under Supervisor **8.83**. This is a cache pointer only; newest explicit owner/supervisor authority and exact executable evidence outrank it.
 
 ## P0 — runtime quiescence actively failed
 
-Owner FreeSwarm remains `HARD_OFF`. Latest retained V59 telemetry recorded OpenRouter `total_requests=4140`, `total_429=4005`, `total_success=134` and `go_swarm=RUNNING`, i.e. +357 requests and +357 429s relative to the Supervisor 8.83 snapshot. Provider/model/training execution remains closed.
+Owner FreeSwarm remains `HARD_OFF`. Latest retained committed telemetry reports OpenRouter `total_requests=4140`, `total_429=4005`, `total_success=134` and `go_swarm=RUNNING`, i.e. `+357/+357` request/429 drift relative to the already-failing Supervisor 8.83 snapshot. Provider/model/training execution remains closed.
 
-Required closure remains owning-host identification and termination/quarantine of every provider-capable survivor, zero survivors, a bounded no-restart interval, and zero provider-counter delta without issuing a provider probe.
+Required closure remains owning-host identification and termination/quarantine of every provider-capable survivor without issuing a provider probe, zero provider-capable survivors, a bounded no-restart interval, and zero provider-counter delta. Only after that may current FREE non-provider execution authority be re-entered.
 
 Pinned quiescence lane:
 
@@ -20,51 +20,41 @@ Pinned quiescence lane:
 
 The 512-case / 256-family four-quadrant logical manifest remains frozen and model outputs remain unopened. No checkpoint winner exists and checkpoint-selection credit remains `0`.
 
-## V62 — two-phase invocation authority validated at source-fixture scope
+## V63 — membership incarnation gap closed at source structure
 
-Retained source direction:
+The retained two-phase invocation-authority source remains `tools/trigger2_node_result_model_call_two_phase_authority_v1.py`. Exact committed source-fixture validation from the prior stage remains bounded to `py_compile PASS` plus `9 passed in 0.03s`; it is not repository CI, provider/model runtime, physical GRID10, training, HCU or EntityOS acceptance.
 
-- `tools/trigger2_node_result_model_call_two_phase_authority_v1.py` — commit `56e8cc09f0c1b8e1fd99ab091154c3f3a6382b17`
-- exact fixture bytes aligned at `8f9789e49d6806d8d508233712fec3aa85d4e620`
-- source validation receipt `research_entity/continuity/receipts/2026-08-26_TRIGGER2_TWO_PHASE_SOURCE_VALIDATION_GPT56SOL.json` — commit `e9292ea7857877ec1da972d43ee21e745a00fc66`
+V63 closes the remaining V62 cohort-level membership-incarnation source gap:
 
-The receipt binds exact committed source/test bytes and records `py_compile PASS` plus `9 passed in 0.03s` on a local deterministic source fixture. Scope remains source/component only: no repository CI, provider/model runtime, actual pre-call freeze attestation, physical GRID10, training, HCU or EntityOS promotion.
+- source commit `1d9f5abfd032b01d5296f2d9a1ec68c669e981e1` adds `source_node_admission_id` to cohort-level uniqueness and rejects duplicate incarnation with `AUTHORITY_COHORT_NODE_ADMISSION_DUPLICATE`;
+- regression commit `b8e0f7a98a9aeafbf9a14f87797351b996c92044` promotes the former strict xfail `test_one_node_admission_identity_cannot_be_projected_onto_two_nodes` into an ordinary regression expectation;
+- no exact CI execution/status was observed for those new commits here, so runtime and repository-CI credit remain `0`.
 
-The architecture is now explicitly phase-separated:
+The V61/V62 semantic correction is preserved: `source_bound_model_call_identity_sha256` is model-call **content/evidence identity**, not guaranteed unique invocation-event identity. Independent deterministic invocations may share equal call-content and output identities; invocation multiplicity is carried by distinct pre-call launch descriptors plus post-call executor observations. Reusing one launch or one executor observation across cells remains fail-closed. Intentional one-invocation fan-out requires explicit consumer identities and must not mint duplicate execution credit.
 
-1. **pre-call launch authority** — `launch_descriptor_sha256` binds plan/cell/node/membership generation/process/candidate/input/source facts available before execution;
-2. **post-call executor observation** — `executor_observation_sha256` binds that exact launch to model-call content/evidence, output and ABI receipt after execution;
-3. **derived invocation provenance** — deterministic authority envelope around the immutable, authority-free `NODE_RESULT` packet.
+Duplicate PR `#2039` was closed unmerged as superseded after the same minimal membership-incarnation rule and regression were already present on current `main`; this preserves a single implementation lane.
 
-## V62 semantic result — call content != invocation identity
+## Next source discriminator — proof-carrying membership ↔ two-phase invocation fusion
 
-The V60 hypothesis that `source_bound_model_call_identity_sha256` must be unique across independent invocations was falsified at the schema level and its regression was retired at `9b97e703397044bc9b7dcf9033ac9df8b76494f4`.
+The next source target is now:
 
-Corrected test source:
+`proof-carrying membership/admission incarnation -> pre-call launch -> call evidence -> post-call executor observation -> immutable NODE_RESULT -> two-phase authority envelope -> cohort reducer -> fused GRID10 coordinator persistence`
 
-- `tests/test_trigger2_two_phase_call_content_vs_invocation_semantics_v1.py` — commit `4b705e086d65fe5b9cf4a7d1119b517deabf8cb3`
+Before fused persistence, cross-validate all of the following against existing `PROOF_CARRYING_NODE_RESULT/v1` membership evidence rather than trusting wrapper fields alone:
 
-Current semantics:
+- `source_node_admission_id` ↔ proof `source_membership_id`;
+- admission revision/incarnation ↔ admitted membership revision/serial;
+- controller node ↔ membership node ↔ raw `NODE_RESULT.source_node_id`;
+- controller PID ↔ proof producer PID ↔ raw result process PID;
+- runtime generation ↔ admitted membership/current generation;
+- raw node-result packet digest ↔ proof node-result digest;
+- whole cohort fails closed when any one member is stale, transplanted, duplicated or inconsistent.
 
-- two independently attributed invocations may share equal call-content and output identities;
-- reusing one launch descriptor across cells fails closed;
-- reusing one executor observation across cells fails closed;
-- equal model output does not collapse distinct invocation authority;
-- intentional one-invocation fan-out must use explicit consumer identities and must not mint multiple execution credit.
-
-## Remaining source discriminator
-
-The remaining strict xfail is membership provenance: one `source_node_admission_id` must not silently represent two independent node memberships in one cohort unless an explicit multiplexing/fanout contract exists.
-
-Next source target is therefore:
-
-`membership/admission incarnation -> pre-call launch -> call evidence -> post-call executor observation -> immutable NODE_RESULT -> two-phase authority envelope -> cohort reducer -> fused GRID10 coordinator`
-
-Cross-validate admission identity/revision, node, process and generation against the existing proof-carrying membership evidence rather than relying on wrapper fields alone.
+Do **not** introduce another peer NODE_RESULT/model-call authority schema; compose the retained two-phase invocation authority with the existing proof-carrying membership authority and then bind the composed digest into fused cohort identity, persistence and replay checks.
 
 ## Training target remains binding/routing
 
-Historical measured Trigger-2 baseline remains approximately context-transfer `0.5254629629629629`, dynamic-symbol hit `0.3611111111111111`, versus three-way chance `1/3`. The primary measured deficit remains `CONTEXT_DEPENDENT_VARIABLE_BINDING_ROUTING`; direct training remains blocked, and the leaky binding-router factorial generator must not be materialized into training data.
+Historical measured Trigger-2 baseline remains approximately context-transfer `0.5254629629629629`, dynamic-symbol hit `0.3611111111111111`, versus three-way chance `1/3`. The primary measured deficit remains `CONTEXT_DEPENDENT_VARIABLE_BINDING_ROUTING`; direct training remains blocked and the leaky binding-router factorial generator must not be materialized into training data.
 
 ## Credits remain zero at promotion scope
 
@@ -77,6 +67,6 @@ Historical measured Trigger-2 baseline remains approximately context-transfer `0
 - whole HCU runtime credit: `0`
 - whole EntityOS runtime credit: `0`
 
-Current ledger: `research_entity/global/j-space/research/2026-08-26_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V62_GPT56SOL.json`
+Current ledger: `research_entity/global/j-space/research/2026-08-26_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V63_GPT56SOL.json`
 
 Supervisor: `research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_83_DELTA_2026-08-26T0435P0700_GPT56SOL.json`

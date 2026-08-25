@@ -80,9 +80,18 @@ def install(base: Any) -> None:
         # Liveness rule: the same fabric carries historical extraction, therefore
         # keep it alive and devote every reservable slot to conversion while the
         # historical queue is non-empty. Ordinary raw research resumes only when
-        # no extraction packet can be reserved.
+        # the queue itself is empty, not merely when all visible chunks are leased.
         packet = _reserve(serial)
         if packet is None:
+            if _packets():
+                return original + """
+
+HISTORICAL FREE-SWARM BACKFILL HOLD
+- Historical extraction backlog still exists, but all currently visible chunks are leased to sibling calls.
+- Do NOT perform the ordinary research task and do NOT emit ARCHITECTURE_DELTA_JSON.
+- Emit exactly NO_DELTA=HISTORICAL_BACKFILL_LEASE_BUSY, then OPEN_RESEARCH_QUESTIONS_JSON=[] .
+- This hold is allocation control only and grants zero evidence or acceptance credit.
+"""
             return original
         payload = json.dumps(packet, ensure_ascii=False, separators=(",", ":"))
         return original + f"""

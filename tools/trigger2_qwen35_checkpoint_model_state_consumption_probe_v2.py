@@ -152,14 +152,14 @@ def _model_state_records(model: Any) -> dict[str, dict[str, Any]]:
 
 
 def _checkpoint_state_records(local_dir: Path, identity: dict[str, Any], backend: str) -> tuple[dict[str, dict[str, Any]], list[dict[str, Any]]]:
-    if backend not in {"mmap", "pread"}:
+    if backend not in {"bytes", "mmap", "pread"}:
         raise ProbeError("UNSUPPORTED_SAFETENSORS_BACKEND")
     try:
         import safetensors
-        from safetensors.torch import load_file
+        from safetensors.torch import load, load_file
     except Exception as exc:
         raise ProbeError(f"SAFETENSORS_IMPORT_FAILED:{type(exc).__name__}:{exc}") from exc
-    if "backend" not in inspect.signature(load_file).parameters:
+    if backend != "bytes" and "backend" not in inspect.signature(load_file).parameters:
         raise ProbeError("SAFETENSORS_BACKEND_PARAMETER_REQUIRED_FOR_V2:" + str(getattr(safetensors, "__version__", "UNKNOWN")))
     manifest = _manifest_map(identity)
     records: dict[str, dict[str, Any]] = {}
@@ -167,7 +167,15 @@ def _checkpoint_state_records(local_dir: Path, identity: dict[str, Any], backend
     for rel in _weight_shards(local_dir, identity):
         if not rel.endswith(".safetensors"):
             raise ProbeError(f"V2_REQUIRES_SAFETENSORS_SHARD:{rel}")
-        tensors = load_file(str(local_dir / rel), device="cpu", backend=backend)
+        shard_path = local_dir / rel
+        if backend == "bytes":
+            raw_file = shard_path.read_bytes()
+            if _sha256_bytes(raw_file) != manifest[rel]["sha256"]:
+                raise ProbeError(f"INDEPENDENT_SHARD_BYTES_MANIFEST_MISMATCH:{rel}")
+            tensors = load(raw_file)
+            del raw_file
+        else:
+            tensors = load_file(str(shard_path), device="cpu", backend=backend)
         keys: list[str] = []
         for name in sorted(tensors):
             if name in records:
@@ -389,7 +397,7 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--child-output")
     p.add_argument("--render-mode", choices=["canonical", "native"], default="canonical")
     p.add_argument("--canonical-prompt", default=DEFAULT_CANONICAL_PROMPT)
-    p.add_argument("--checkpoint-backend", choices=["pread", "mmap"], default="pread")
+    p.add_argument("--checkpoint-backend", choices=["bytes", "pread", "mmap"], default="bytes")
     g = p.add_mutually_exclusive_group(); g.add_argument("--disable-mmap", dest="disable_mmap", action="store_true"); g.add_argument("--enable-mmap", dest="disable_mmap", action="store_false")
     p.set_defaults(disable_mmap=True)
     p.add_argument("--timeout-seconds", type=int, default=900)

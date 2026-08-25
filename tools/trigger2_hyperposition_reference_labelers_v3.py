@@ -16,7 +16,8 @@ The module also converges the strongest retained v2 properties:
 - optional merging uses exact declared semantic signature, never embedding similarity;
 - discriminator ranking derives pair separation from branch predictions;
 - salience is attention ordering only, never truth/probability/evidence strength;
-- task-local resolution never mints canonical truth or real-effect authority.
+- task-local resolution never mints canonical truth or real-effect authority;
+- IN/NOT_IN context predicates require explicit JSON-array operands and fail closed structurally.
 
 PURE SYNTHETIC/CURRICULUM REFERENCE LOGIC. No canonical dataset admission, runtime, J-Space,
 HCU, EntityOS, provider, effect or training credit is created by this file or its outputs.
@@ -139,9 +140,12 @@ def _validate_context_predicate(pred: Any) -> bool:
     for clause in clauses:
         if not isinstance(clause, dict):
             return False
-        if not _nonempty(clause.get("key")) or clause.get("op") not in ALLOWED_CONTEXT_OP:
+        op = clause.get("op")
+        if not _nonempty(clause.get("key")) or op not in ALLOWED_CONTEXT_OP:
             return False
-        if clause.get("op") != "EXISTS" and "value" not in clause:
+        if op != "EXISTS" and "value" not in clause:
+            return False
+        if op in {"IN", "NOT_IN"} and not isinstance(clause.get("value"), list):
             return False
     return True
 

@@ -1,0 +1,18 @@
+{
+  "schema": "CLAY_ORDINARY_DISPATCH_CLAIM/v1",
+  "dispatch_key": "free-swarm-backfill-line-identity-v1-g0000",
+  "dispatch_class": "free-swarm-backfill-line-identity-v1",
+  "retry_generation": 0,
+  "state": "LEGACY_FANOUT_QUARANTINED_NO_NEW_TRIGGER",
+  "canonical_probe_contract": "FREE_SWARM_BACKFILL_LINE_IDENTITY_RECEIPT/v1",
+  "canonical_issue_for_lineage_only": 1869,
+  "observed_duplicate_issues": [1869, 1870, 1874],
+  "legacy_runs_may_already_exist": true,
+  "new_issue_authorized_by_this_claim": false,
+  "no_new_trigger_until_generation_advance": true,
+  "generation_advance_requires": "TERMINAL_RESULT_REQUIRING_DELIBERATE_RETRY_OR_EXPLICIT_INFRASTRUCTURE_OR_PROBE_SEMANTIC_CHANGE",
+  "coordination_finding": "The line-identity repair inherited the same issue-trigger fan-out failure mode as the earlier clay-direct-dev probe. Generation 0 is quarantined so additional go organs cannot legitimately create more equivalent triggers while legacy queued runs remain unresolved.",
+  "runtime_credit": 0,
+  "scientific_replication_credit": 0,
+  "protocol": "research_entity/continuity/ORDINARY_DISPATCH_IDEMPOTENCY_PROTOCOL.md"
+}

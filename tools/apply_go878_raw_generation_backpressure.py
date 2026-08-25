@@ -2,14 +2,19 @@
 """Exact-source Supervisor-8.78 raw-generation backpressure repair.
 
 Supervisor 8.78 requires zero-cost capacity to move away from new raw generation while
-historical conversion pressure is above threshold. The current 6000 supervisor applies
-BACKLOG_FIRST only inside Forge discovery, yet still unconditionally calls start_6000().
-This patcher closes that control-plane gap without increasing any provider concurrency,
-reading credentials, or creating another Forge/effect authority.
+historical conversion pressure is above threshold. The original go878 patcher attempted
+to enforce this by stopping the entire 6000 fabric whenever conversion pressure was high.
 
-The patch is deliberately pinned to the exact inspected supervisor blob and fail-closes
-on source movement. Applying this file is source work only; runtime credit requires a
-later admitted exact-source execution receipt.
+That is unsafe on the current architecture: ``run_6000_free_swarm_fast.py`` installs
+``free_swarm_backfill_scheduler`` into the same fabric, so the 6000 process is also the
+current historical-extraction transport. Stopping it while ``pending_extraction`` is part
+of the pressure term can freeze the very backlog the gate is meant to drain.
+
+This tool therefore fail-closes while that co-location is present. It remains pinned to
+the exact inspected supervisor/fabric blobs so a later successor may deliberately split
+raw generation from historical conversion and then replace this guard with a liveness-
+preserving control. Applying source changes is never runtime credit; exact-current
+execution evidence is still required.
 """
 from __future__ import annotations
 
@@ -19,6 +24,8 @@ import subprocess
 
 TARGET_REL = "tools/run_6000_free_swarm_supervisor.sh"
 EXPECTED_TARGET_BLOB = "cdbe6a4da423b2fb35fe988adc04397407360c3f"
+FABRIC_REL = "tools/run_6000_free_swarm_fast.py"
+EXPECTED_FABRIC_BLOB = "b9d24b3bf063210626869222f14787b170a2d38a"
 
 
 def git_blob(repo: Path, rel: str) -> str:
@@ -30,6 +37,28 @@ def replace_once(text: str, old: str, new: str, label: str) -> str:
     if count != 1:
         raise SystemExit(f"PATCH_MARKER_{label}_COUNT_{count}")
     return text.replace(old, new, 1)
+
+
+def assert_fabric_stop_is_liveness_safe(repo: Path) -> None:
+    """Reject process-level stop while the same process owns historical extraction."""
+    fabric = repo / FABRIC_REL
+    observed = git_blob(repo, FABRIC_REL)
+    if observed != EXPECTED_FABRIC_BLOB:
+        raise SystemExit(
+            f"SWARM_FABRIC_MOVED_FAIL_CLOSED:expected={EXPECTED_FABRIC_BLOB}:observed={observed}"
+        )
+    text = fabric.read_text(encoding="utf-8")
+    carries_backfill = (
+        "import free_swarm_backfill_scheduler as historical_backfill" in text
+        and "historical_backfill.install(base)" in text
+    )
+    if carries_backfill:
+        raise SystemExit(
+            "GO878_BACKPRESSURE_UNSAFE_EXTRACTION_LIVENESS_FAIL_CLOSED:"
+            "6000_fabric_is_current_historical_backfill_transport;"
+            "do_not_stop_fabric_on_pressure_that_includes_pending_extraction;"
+            "split_or_prompt_gate_raw_generation_first"
+        )
 
 
 RAW_GENERATION_GATE = r'''raw_generation_allowed(){
@@ -113,6 +142,7 @@ def main() -> int:
         raise SystemExit(
             f"SWARM_SUPERVISOR_MOVED_FAIL_CLOSED:expected={EXPECTED_TARGET_BLOB}:observed={observed}"
         )
+    assert_fabric_stop_is_liveness_safe(repo)
     target.write_text(patch(target.read_text(encoding="utf-8")),encoding="utf-8")
     subprocess.run(["bash","-n",str(target)],check=True)
     print("GO878_RAW_GENERATION_BACKPRESSURE_PATCHED")

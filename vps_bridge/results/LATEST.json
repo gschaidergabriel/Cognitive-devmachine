@@ -1,17 +1,20 @@
 {
   "schema": "CLAY_VPS_RECEIPT/v4",
-  "command_id": "fr1-v2-analyze-smoke36-trace-20260825",
-  "command_sha256": "9fa827cf63514f64ae91a29ae9dd1593a1d0415aa9d365842793368a86eb268f",
-  "started_at": "2026-08-25T04:53:11.579645+00:00",
-  "finished_at": "2026-08-25T04:53:11.738817+00:00",
+  "command_id": "fr1-refetch-v3-refs-20260825",
+  "command_sha256": "e98029b723f1a0edbf72071fe6348bcf53cd20e4a794e70113467e53f497c4ab",
+  "started_at": "2026-08-25T04:55:32.868778+00:00",
+  "finished_at": "2026-08-25T04:55:34.635805+00:00",
   "status": "PASS",
   "exit_code": 0,
-  "op": "exec",
-  "stdout_sha256": "78deaf3bbde4aba5086b24d38d3ffed6c2e59574de636a09836d70372db76bd2",
+  "op": "canonical_sync",
+  "stdout_sha256": "7c79ca5ac65640eb026ce6b28358a5ae3776b04aa5b188084ee9f63b6087f163",
   "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-  "stdout_tail": "{\"controller_policy_mean_delta\": 0.0, \"controller_policy_positive_fraction\": 0.0, \"controller_policy_turns\": 5, \"controller_selected_equals_executed_fraction\": 1.0, \"policy_by_target\": {\"AFFIRMATIVE\": {\"mean_delta\": 0.0, \"n\": 2, \"positive_fraction\": 0.0}, \"NEGATIVE\": {\"mean_delta\": 0.0, \"n\": 2, \"positive_fraction\": 0.0}, \"NEUTRAL\": {\"mean_delta\": 0.0, \"n\": 1, \"positive_fraction\": 0.0}}, \"policy_counts\": {\"CONTROLLER_POLICY\": 5, \"DETERMINISTIC_GLOBAL_EXPLORATION\": 1, \"FORCED_GLOBAL_COVERAGE\": 30}, \"rows\": 36}\n",
+  "stdout_tail": "91eb282627c873655bae74a257f950066b135f53\n",
   "stderr_tail": "",
-  "meta": {},
+  "meta": {
+    "head": "91eb282627c873655bae74a257f950066b135f53",
+    "ref": "91eb282627c873655bae74a257f950066b135f53"
+  },
   "execution_boundary": "ROOT_INSIDE_ROOTLESS_PODMAN_OR_EXPLICIT_REPO_CONTROL_OP",
   "canonical_credit_minted": 0
 }

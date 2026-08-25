@@ -6,27 +6,33 @@
   "owner_target": "research_entity/global/XENO_HCU_GO_TARGET_ARCHITECTURE_OWNER_DIRECTIVE_2026-08-25.md",
   "base_main_sha": "b4fd53bba8efd960d7a99bef5d842b8ddefe88bd",
   "branch": "go-878-xeno-shared-state-autonomous-boot-gpt56sol",
+  "pull_request": 1967,
   "source": {
     "path": "tools/xeno_shared_state_v1.py",
-    "git_blob_sha": "fc9c492eaf2af08e989027efd2cd7805d896c977",
-    "source_equivalent_sha256": "7ed553cec78fda30e88cf0f8b2e86fcae6952eb6a203bdc789fbf79af5445886"
+    "git_blob_sha": "e1e7ca26aa990402d02c7a67b3f522c75376ace3",
+    "source_equivalent_sha256": "e2d2f19899c8a34d45ed5a3f06d5f1952d8ecf7b5593c96f5eb8b3e069db0857"
   },
   "regression": {
     "path": "tests/test_xeno_shared_state_v1.py",
-    "git_blob_sha": "0506ff2eaca67daba3d3a79826db385f6eadeb11",
-    "source_equivalent_sha256": "a0f1b5209768a52c5f8e6619947d1a5d002aa61e1ef79420921b97cbf38fb7f4",
-    "source_equivalent_unittest": "8/8 PASS",
+    "git_blob_sha": "8f98309164ba6c07c6ac4f2323431989362c947d",
+    "source_equivalent_sha256": "11286c7b3bd096309b957af7261aafd4c1b7ea618a7af5791c3617d969892129",
+    "source_equivalent_unittest": "11/11 PASS",
     "py_compile": "PASS",
-    "ordinary_node_sqlite_write_negative": "PASS_EXPECTED_SQLITE_OPERATIONALERROR"
+    "ordinary_node_sqlite_write_negative": "PASS_EXPECTED_SQLITE_OPERATIONALERROR",
+    "replaced_coordinator_commit_negative": "PASS_EXPECTED_LEASE_REJECTED",
+    "forged_result_auth_negative": "PASS_EXPECTED_REJECTED",
+    "two_controller_replacement": "PASS"
   },
   "implemented_owner_path": [
     "AUTONOMOUS_BOOT_SOURCE_PRIMITIVE",
     "SHARED_STATE_READ_PATH_SOURCE_PRIMITIVE",
     "ORDINARY_NODE_SQLITE_MODE_RO_ENFORCEMENT",
-    "NODE_RESULT_V1_EPHEMERAL_PACKET",
+    "NODE_RESULT_V1_NODE_ADMISSION_BOUND_SIGNED_PACKET",
     "DYNAMIC_COORDINATOR_LEASE_SOURCE_PRIMITIVE",
-    "COORDINATOR_ONLY_S1_CAS_WRITE_SOURCE_PRIMITIVE",
-    "STALE_AND_DUPLICATE_RESULT_REJECTION"
+    "ATOMIC_COORDINATOR_LEASE_PLUS_S1_CAS_WRITE",
+    "ATOMIC_COORDINATOR_LEASE_PLUS_RESULT_ADMISSION",
+    "STALE_DUPLICATE_FORGED_RESULT_REJECTION",
+    "COORDINATOR_REPLACEMENT_FENCE"
   ],
   "authority_fences": {
     "s1_is_canonical_truth": false,
@@ -35,10 +41,15 @@
     "effect_authority": false,
     "ordinary_node_direct_s1_write_api": false,
     "ordinary_node_controller_handle_present": false,
-    "ordinary_node_authority_secret_present": false,
+    "ordinary_node_controller_authority_secret_present": false,
     "ordinary_node_sqlite_connection_mode": "ro+query_only",
+    "ordinary_node_result_signing_key_scope": "NODE_RESULT_ONLY_DERIVED_KEY",
     "coordinator_requires_deterministic_capability_policy": true,
-    "node_admission_hmac_bound": true
+    "coordinator_lease_validation_and_s1_write_atomic": true,
+    "coordinator_lease_validation_and_result_admission_atomic": true,
+    "node_admission_hmac_bound": true,
+    "node_result_admission_id_bound": true,
+    "node_result_auth_mac_bound": true
   },
   "coordination": {
     "overlap_search": "NO_OPEN_AUTONOMOUS_BOOT_SHARED_STATE_IMPLEMENTATION_PR_FOUND; TRIGGER2_PR1956_IS_TRAINING_ONLY",
@@ -55,7 +66,7 @@
     "training": 0,
     "whole_product_pass": false
   },
-  "hypothesis": "A deterministic S1 fabric with signed admission, SQLite-enforced ordinary read-only sessions, typed result packets and lease/CAS coordinator writes is sufficient to make the first owner-priority boot/read/write authority chain executable at component source scope without creating a second truth/effect authority.",
-  "counterhypothesis": "The component can pass isolated tests yet fail under real multi-process contention, restart/rejoin, recursive coordinator scopes, filesystem permission deployment or physical GRID10 transport; therefore no integrated runtime or architecture-value credit is granted.",
-  "next_exact_gate": "Run the exact PR branch regression on an admitted exact-source runtime, then prove multi-process coordinator replacement/rejoin and concurrent lease/CAS contention before integrating this primitive into the physical Xeno process boot path."
+  "hypothesis": "A deterministic S1 fabric with signed admission, SQLite-enforced ordinary read-only sessions, node-bound signed result packets and atomic lease/CAS coordinator writes can implement the first owner-priority boot/read/result/lease/write authority chain at component source scope without creating a second truth/effect authority.",
+  "counterhypothesis": "The component can pass isolated and two-controller tests yet still fail under true multi-process crash/rejoin, filesystem deployment permissions, recursive coordinator scopes or physical GRID10 transport; therefore no integrated runtime or architecture-value credit is granted.",
+  "next_exact_gate": "Run the exact PR branch regression on an admitted exact-source runtime, then add process-level crash/rejoin and live Xeno boot transport before progressing to physical GRID10."
 }

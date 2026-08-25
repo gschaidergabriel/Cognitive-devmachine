@@ -129,10 +129,10 @@ class BackfillExhaustiveness878Tests(unittest.TestCase):
         self.assertGreaterEqual(backfill.MAX_PASSES, MAX_EXHAUSTIVE_PASSES)
         self.assertGreater(backfill.MAX_PASSES, 3)
 
-    def test_scheduler_does_not_hardcode_exhaustive_true(self):
+    def test_scheduler_requires_explicit_exhaustive_decision(self):
         source = (TOOLS / "free_swarm_backfill_scheduler.py").read_text(encoding="utf-8")
         self.assertNotIn('"exhaustive":true', source)
-        self.assertIn('"exhaustive":<EXHAUSTIVE_BOOLEAN>', source)
+        self.assertIn('"exhaustive":<true|false>', source)
         self.assertIn("two consecutive zero-novel passes", source)
 
 

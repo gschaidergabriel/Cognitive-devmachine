@@ -6,6 +6,10 @@ This module is NOT a durable truth store. It validates and binds a caller-suppli
 that snapshot, emits typed NODE_RESULT/v1 packets, deterministically leases a coordinator,
 and authorizes only lease-scoped CAS S1 candidate writes. It never writes S0 and never
 creates truth/effect/security authority.
+
+The S1 snapshot must carry a coordinator-policy digest derived from external deterministic
+S0/policy authority. A lease is valid only against that exact policy digest, preventing
+an unrelated/self-asserted coordinator policy from being silently substituted at write time.
 """
 from __future__ import annotations
 
@@ -61,6 +65,7 @@ def _without(obj: Mapping[str, Any], key: str) -> dict[str, Any]:
 
 
 def build_snapshot(*, epoch: int, generation: int, scope: str,
+                   coordinator_policy_digest: str,
                    tasks: list[dict[str, Any]], claims: list[dict[str, Any]] | None = None,
                    hyperposition_branches: list[dict[str, Any]] | None = None,
                    gwt_broadcasts: list[dict[str, Any]] | None = None,
@@ -70,6 +75,7 @@ def build_snapshot(*, epoch: int, generation: int, scope: str,
         "epoch": epoch,
         "generation": generation,
         "scope": scope,
+        "coordinator_policy_digest": _digest(coordinator_policy_digest, "S1_COORDINATOR_POLICY_DIGEST_REQUIRED"),
         "tasks": tasks,
         "claims": claims or [],
         "hyperposition_branches": hyperposition_branches or [],
@@ -87,6 +93,7 @@ def validate_snapshot(snapshot: Mapping[str, Any]) -> dict[str, Any]:
     _need(type(obj.get("epoch")) is int and obj["epoch"] >= 0, "S1_EPOCH_INVALID")
     _need(type(obj.get("generation")) is int and obj["generation"] >= 0, "S1_GENERATION_INVALID")
     _text(obj.get("scope"), "S1_SCOPE_REQUIRED")
+    _digest(obj.get("coordinator_policy_digest"), "S1_COORDINATOR_POLICY_DIGEST_REQUIRED")
     for field in ("tasks", "claims", "hyperposition_branches", "gwt_broadcasts", "provenance_refs"):
         _need(isinstance(obj.get(field), list), "S1_" + field.upper() + "_LIST_REQUIRED")
     _need(bool(obj["provenance_refs"]), "S1_PROVENANCE_REQUIRED")
@@ -124,6 +131,7 @@ def _validate_lease(snapshot: Mapping[str, Any], lease: Mapping[str, Any], *, no
     if expected_holder is not None:
         _need(obj.get("holder_node_id") == expected_holder, "LEASE_HOLDER_MISMATCH")
     _need(obj.get("scope") == snapshot["scope"], "LEASE_SCOPE_MISMATCH")
+    _need(obj.get("coordinator_policy_digest") == snapshot["coordinator_policy_digest"], "LEASE_POLICY_AUTHORITY_MISMATCH")
     _need(obj.get("bound_generation") == snapshot["generation"], "LEASE_GENERATION_STALE")
     _need(obj.get("bound_epoch") == snapshot["epoch"], "LEASE_EPOCH_STALE")
     _need(obj.get("bound_state_digest") == snapshot["state_digest"], "LEASE_STATE_STALE")
@@ -163,6 +171,7 @@ def autonomous_boot(snapshot: Mapping[str, Any], *, node_id: str, capabilities: 
         "role": role,
         "capabilities": sorted(caps),
         "scope": snap["scope"],
+        "coordinator_policy_digest": snap["coordinator_policy_digest"],
         "bound_generation": snap["generation"],
         "bound_epoch": snap["epoch"],
         "bound_state_digest": snap["state_digest"],
@@ -189,6 +198,7 @@ def make_node_result(boot_plan: Mapping[str, Any], *, result_id: str, payload_re
         "source_node_id": boot_plan["node_id"],
         "source_role": boot_plan["role"],
         "scope": boot_plan["scope"],
+        "coordinator_policy_digest": boot_plan["coordinator_policy_digest"],
         "bound_generation": boot_plan["bound_generation"],
         "bound_epoch": boot_plan["bound_epoch"],
         "bound_state_digest": boot_plan["bound_state_digest"],
@@ -226,6 +236,7 @@ def select_coordinator(snapshot: Mapping[str, Any], *, candidates: Sequence[Mapp
         "lease_id": lease_id,
         "holder_node_id": holder,
         "scope": snap["scope"],
+        "coordinator_policy_digest": snap["coordinator_policy_digest"],
         "bound_generation": snap["generation"],
         "bound_epoch": snap["epoch"],
         "bound_state_digest": snap["state_digest"],
@@ -260,6 +271,7 @@ def authorize_s1_write(snapshot: Mapping[str, Any], *, coordinator_node_id: str,
         result_digest = _digest(result.get("result_digest"), "RESULT_DIGEST_REQUIRED")
         _need(sha256_obj(_without(result, "result_digest")) == result_digest, "RESULT_DIGEST_MISMATCH")
         _need(result.get("scope") == snap["scope"], "NODE_RESULT_SCOPE_MISMATCH")
+        _need(result.get("coordinator_policy_digest") == snap["coordinator_policy_digest"], "NODE_RESULT_POLICY_AUTHORITY_MISMATCH")
         _need(result.get("bound_generation") == snap["generation"], "NODE_RESULT_GENERATION_STALE")
         _need(result.get("bound_epoch") == snap["epoch"], "NODE_RESULT_EPOCH_STALE")
         _need(result.get("bound_state_digest") == snap["state_digest"], "NODE_RESULT_STATE_STALE")
@@ -270,6 +282,7 @@ def authorize_s1_write(snapshot: Mapping[str, Any], *, coordinator_node_id: str,
         "coordinator_node_id": coordinator_node_id,
         "lease_id": lease_obj["lease_id"],
         "scope": snap["scope"],
+        "coordinator_policy_digest": snap["coordinator_policy_digest"],
         "expected_generation": snap["generation"],
         "expected_epoch": snap["epoch"],
         "expected_state_digest": snap["state_digest"],

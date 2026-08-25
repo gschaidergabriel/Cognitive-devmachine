@@ -1,0 +1,168 @@
+{
+  "schema": "CLAY_TRIGGER2_HYPERPOSITION_SCHEMA_CONVERGENCE_DELTA/v1",
+  "date": "2026-08-25",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "status": "RESEARCH_DELTA_NONAUTHORITATIVE_CONVERGENCE_MAP",
+  "authority_snapshot": {
+    "canonical_main_reentered": "2a2469832e89ce4e830a22cdffe3a0b41999863f",
+    "supervisor_epoch": "8.78",
+    "execution_mode": "FREE_ONLY",
+    "owner_target": "VARIABLE COGNITIVE GRID + PERSISTENT DATABASE + CLAUDE CODE + strongest causally supported Global J-Space/workspace bridge",
+    "active_trigger2_pr": 1956,
+    "active_trigger2_branch": "research/trigger2-qwen35-08b-hcu-fullft-20260825"
+  },
+  "exact_sources_compared": [
+    {
+      "path": "tools/trigger2_hyperposition_reference_labelers_v2.py",
+      "ref": "main",
+      "blob_sha": "78164abd07553f1732e28a5e6297158f9a833b2e",
+      "current_disposition": "CURRENT_CANDIDATE_SOURCE_REFERENCE__SINGLE_SCHEMA_CONVERGENCE_REQUIRED"
+    },
+    {
+      "path": "tools/trigger2_hyperposition_reference_labelers_v1.py",
+      "ref": "main",
+      "blob_sha": "5f1fba475e64421635016abc1b341dcfbb04b605",
+      "current_disposition": "PREDECESSOR_STILL_CONSUMED_BY_CAUSAL_CHAIN"
+    },
+    {
+      "path": "tools/trigger2_hyperposition_causal_label_chain_v1.py",
+      "ref": "main",
+      "blob_sha": "fa26308e9e386a79155c9fa2020a107d0303f797",
+      "current_disposition": "STALE_DEPENDENCY_REBIND_REQUIRED"
+    },
+    {
+      "path": "tools/trigger2_semantic_hyperposition_universal_gate_v3.py",
+      "ref": "research/trigger2-qwen35-08b-hcu-fullft-20260825",
+      "blob_sha": "f62dbcdeda6abe4cd1c6fb79f4529412f004043e",
+      "current_disposition": "CURRENT_BRANCH_SOURCE_CANDIDATE_UNEXECUTED"
+    }
+  ],
+  "new_exact_mismatch_findings": [
+    {
+      "id": "T2_SCHEMA_F1_BRANCH_IDENTITY_NAME_SPLIT",
+      "severity": "P0_SCHEMA_CONVERGENCE",
+      "finding": "The causal-chain/v1 labeler contract uses branch_id and long-form semantic field names; gate v3 uses id plus compact v/K/E_plus/E_minus/F/T/A/sigma; main labeler v2 uses branch_id with compact v/K/T/A and lifecycle sigma. A version-string-only rebind cannot be correct.",
+      "required_resolution": "Choose one canonical branch serialization and implement explicit versioned migration rather than permissive aliasing inside training admission."
+    },
+    {
+      "id": "T2_SCHEMA_F2_SIGMA_SEMANTIC_COLLISION",
+      "severity": "P0_LABEL_SEMANTICS",
+      "finding": "Gate v3 interprets sigma as epistemic type (OBSERVED/HYPOTHESIS/UNKNOWN/etc.), while main labeler v2 uses sigma as branch lifecycle/update status (LIVE_UNRESOLVED/SUPPORTED_UNRESOLVED/WEAKENED_UNRESOLVED/FALSIFIED/RESOLVED_PASS). These are different variables and must not share one field in the final training schema.",
+      "required_resolution": "Retain sigma for one explicitly versioned meaning and add a separate field for the other dimension. Candidate normalization: sigma_epistemic plus branch_status, or sigma=epistemic plus explicit branch_status. Do not silently map between them."
+    },
+    {
+      "id": "T2_SCHEMA_F3_EVIDENCE_IDENTITY_NAME_AND_SCOPE_SPLIT",
+      "severity": "P0_CAUSAL_PROVENANCE",
+      "finding": "Gate v3 expects evidence_id + provenance_ancestry_id + independence_group + epistemic_type; main labeler v2 records evidence_event_id + correlation_ancestry_id + independence_group + provenance + relation + independent_credit; causal chain derives a semantic evidence_id from dependence-group/payload identity while separately retaining source_event_id/raw_causal_source_id.",
+      "required_resolution": "Canonical schema must separately encode causal event identity, semantic evidence identity if used, correlation/provenance ancestry, independence group, provenance, epistemic type, relation and independent-update credit. Do not collapse event identity into semantic-content identity."
+    },
+    {
+      "id": "T2_SCHEMA_F4_CAUSAL_CHAIN_API_NOT_COMPATIBLE_WITH_MAIN_V2",
+      "severity": "P0_DEPENDENCY_REBIND",
+      "finding": "Causal chain v1 calls validate_branch_set, OBS_SCHEMA, TEST_SCHEMA and label_transition from the predecessor v1 API. The observed main v2 exposes a different u_state/d_resolve/u_test_order/f_salience_order style API and different state/evidence semantics. Replacing only the import target would fail or, worse, encourage semantic shims that hide incompatibility.",
+      "required_resolution": "Refactor the chain around one retained canonical transition interface and regenerate chain tests/receipts at exact hashes."
+    },
+    {
+      "id": "T2_SCHEMA_F5_GATE_AND_LABELER_MUST_SHARE_ONE_STATE_MODEL",
+      "severity": "P0_TRAINING_ADMISSION",
+      "finding": "A row cannot be admitted merely because a labeler emits a target and a separate gate accepts a structurally similar frame. Labeler output, rendered model-visible H_before/H_after, derivation receipt and gate must bind the same canonical schema/version and exact identities.",
+      "required_resolution": "Admission receipt must bind labeler blob, causal-world evaluator/chain blob, frame schema, gate blob, generator blob, split manifest and rendered prompt/target digests."
+    }
+  ],
+  "convergence_candidate_not_authority": {
+    "branch_state_dimensions": [
+      "id = stable opaque branch identity",
+      "v = semantic value/candidate",
+      "K = context predicate/scope",
+      "E_plus and E_minus = typed evidence collections",
+      "F = falsifier/counterevidence structure",
+      "T = validity/time/generation scope",
+      "A = origin/provenance ancestry",
+      "sigma_epistemic = OBSERVED/HYPOTHESIS/UNKNOWN/etc.",
+      "branch_status = LIVE_UNRESOLVED/SUPPORTED_UNRESOLVED/WEAKENED_UNRESOLVED/FALSIFIED/RESOLVED_PASS"
+    ],
+    "evidence_identity_dimensions": [
+      "evidence_event_id = immutable causal/admission event identity",
+      "semantic_evidence_id = optional derived content/semantic identity, never a substitute for event identity",
+      "correlation_or_provenance_ancestry_id",
+      "independence_group",
+      "provenance",
+      "epistemic_type",
+      "derived_relation",
+      "independent_for_update"
+    ],
+    "resolution_dimensions": [
+      "status",
+      "resolved_branch_id when admissibly derived",
+      "derivation_receipt identity",
+      "discriminator evaluation identity",
+      "reopen_policy",
+      "precondition_ids",
+      "output_projection explicitly separated from semantic collapse"
+    ],
+    "joint_state_rule": "Explicit joint-world/compatibility representation remains required where coupled alternatives exist; implicit Cartesian completion stays forbidden."
+  },
+  "ephemeral_duplicate_lane_disposition": {
+    "created_then_removed_paths": [
+      "tools/trigger2_semantic_hyperposition_reference_labelers_v2.py",
+      "tests/test_trigger2_semantic_hyperposition_reference_labelers_v2.py"
+    ],
+    "create_commits": [
+      "4e52db88b47e6e6da053ae6949ce8321fae9682a",
+      "a574ee20cf7bc51ab5c464cd3ee02032b42ff348"
+    ],
+    "remove_commits": [
+      "769b478a0b2503f96e59d827e6236755b6622ccd",
+      "a59d96ef0db06bc6c0683ff812db4738d63d9238"
+    ],
+    "status": "SUPERSEDED_AND_REMOVED_AFTER_MOVING_MAIN_REENTRY",
+    "reason": "Main had already advanced to a different labeler-v2/causal-chain convergence lane. Keeping the branch-local implementation would create a second semantic labeler authority.",
+    "donor_only_findings": [
+      "reject caller-supplied effect/winner/separation labels",
+      "derive relation and unique resolution from branch predictions plus observed outcome",
+      "treat non-unique predicted outcome partitions as UNRESOLVED",
+      "fail closed on inadmissible discriminators",
+      "preserve branch-order invariance and truth/effect authority fences"
+    ],
+    "local_prototype_regression": {
+      "result": "13/13 PASS",
+      "scope": "LOCAL_DETERMINISTIC_DONOR_PROTOTYPE_ONLY",
+      "exact_committed_training_or_runtime_credit": 0
+    }
+  },
+  "artifact_revision_delta": [
+    {
+      "artifact": "tools/trigger2_hyperposition_reference_labelers_v2.py",
+      "status": "CURRENT_CANDIDATE_SOURCE_REFERENCE",
+      "successor_condition": "single-schema convergence with causal chain + universal gate + generator",
+      "revision_reason": "Newest retained main labeler candidate, but its state/evidence ontology is not yet the same as gate v3 or the chain's v1 dependency."
+    },
+    {
+      "artifact": "tools/trigger2_hyperposition_causal_label_chain_v1.py",
+      "status": "STALE_DEPENDENCY_REBIND_REQUIRED",
+      "predecessor_dependency": "tools/trigger2_hyperposition_reference_labelers_v1.py",
+      "successor_condition": "refactor against retained canonical schema/labeler and rerun exact tests",
+      "revision_reason": "Formal derivation logic is valuable, but its direct labeler dependency is stale and API-incompatible with the current candidate v2."
+    },
+    {
+      "artifact": "tools/trigger2_semantic_hyperposition_universal_gate_v3.py",
+      "status": "CURRENT_BRANCH_SOURCE_CANDIDATE_UNEXECUTED",
+      "successor_condition": "canonical schema binding + exact repository execution receipt",
+      "revision_reason": "Strong fail-closed gate, but cannot become training authority until it shares the exact retained state/evidence semantics with labeler and chain."
+    }
+  ],
+  "next_exact_action": "Freeze one canonical Hyperposition state/evidence schema first; then refactor the formal causal label chain and retained labeler to that schema, bind gate v3 or its successor to the identical schema, and run exact-source mutation/property tests before generating any positive D/E row.",
+  "credits": {
+    "research_schema_convergence_delta": 1,
+    "materialized_training_rows": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "qwen35_jspace_causal_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  }
+}

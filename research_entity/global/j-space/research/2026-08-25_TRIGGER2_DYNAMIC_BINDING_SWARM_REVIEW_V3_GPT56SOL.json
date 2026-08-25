@@ -1,0 +1,140 @@
+{
+  "schema": "CLAY_TRIGGER2_DYNAMIC_BINDING_SWARM_REVIEW/v3",
+  "date": "2026-08-25",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority": {
+    "canonical_main_observed_before_write": "9253acc202df9dc326b13a1510491048e2cb8c8b",
+    "supervisor_epoch": "8.78",
+    "execution_mode": "FREE_ONLY",
+    "training_executed": false,
+    "provider_preflight_executed": false,
+    "unusual_experiment": "NOT_USED_SOURCE_REVIEW_ONLY"
+  },
+  "reviewed_upstream": {
+    "path": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_DYNAMIC_CODEBOOK_BINDING_SWARM_DELTA_V2_GPT56SOL.json",
+    "commit": "9253acc202df9dc326b13a1510491048e2cb8c8b",
+    "evidence_ingest": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_CLAUDE_XENO_VECTOR_EVIDENCE_INGEST_V1_GPT56SOL.json",
+    "source_package_sha256": "a2babae93dfe39e4e452a06bd8b848337f29766e38c422f05fb395126229b05c"
+  },
+  "swarm_review": {
+    "roles": [
+      "EVIDENCE_BOUNDARY_REVIEWER",
+      "ADVERSARIAL_SHORTCUT_HUNTER",
+      "STATISTICAL_BALANCE_REVIEWER",
+      "CAUSAL_FAMILY_SPLIT_REVIEWER",
+      "HARNESS_COMPATIBILITY_REVIEWER",
+      "FINAL_INTEGRATOR"
+    ],
+    "accepted_upstream_properties": [
+      "The curriculum targets dynamic episode-local semantic-to-symbol routing rather than reteaching already-strong semantic readout or carrier algebra.",
+      "The 4-template x 6-S3 x 3-class seed gives a clean 72-row minimum causal design before lexical-family replication.",
+      "The realized S3 mapping, not the logged permutation id, is required to construct the target.",
+      "Codebook display order is explicitly separated from semantic-to-symbol mapping.",
+      "T5 unseen-template, unseen-symbol and retention holdouts are intended to be frozen before tuning.",
+      "Synthetic/source-design rows remain non-promoting and mint zero accepted-dataset/model/J-Space/training/HCU/product credit."
+    ],
+    "residual_risks": [
+      {
+        "severity": "HIGH",
+        "id": "ACTUAL_ATOM_IDENTITY_BALANCE_UNDERSPECIFIED",
+        "finding": "S3 slot balance over ATOM_A/B/C does not by itself prove balance over the actual 46 accepted tokenizer atoms if triplets are redrawn across rows or families.",
+        "failure_mode": "A real token identity can become correlated with hidden class, target status, template, codebook position or split even while slot-level S3 counts are perfect.",
+        "required_fix": "Materialize atom assignments in deterministic counterbalanced blocks and validate empirical independence using actual atom identities/token ids, not placeholders. At minimum report class<->target_atom, template<->target_atom, codebook_position<->atom and split<->atom contingency tables plus mutual information; fail closed on non-preregistered imbalance."
+      },
+      {
+        "severity": "HIGH",
+        "id": "COUNTERFACTUAL_FAMILY_SPLIT_ATOMICITY",
+        "finding": "The design correctly requires paired causal counterfactuals, but their materialized split identity must be atomic at the full counterfactual-family/provenance ancestry level.",
+        "failure_mode": "If one member of a CODEBOOK_FLIP/SEMANTIC_FLIP/ORDER_SHUFFLE family reaches train while its near-duplicate counterpart reaches validation or holdout, the benchmark can leak despite lexical disjointness checks.",
+        "required_fix": "Assign one immutable causal_family_id/provenance_ancestry_id before split and force every derived counterfactual/paraphrase/order variant of that base episode into the same split."
+      },
+      {
+        "severity": "HIGH",
+        "id": "UNSEEN_SYMBOL_MEANS_UNSEEN_ANYWHERE",
+        "finding": "An unseen-symbol holdout is only valid if reserved atom identities are absent from all model-visible training codebooks, not merely absent as training targets.",
+        "failure_mode": "A holdout atom shown repeatedly as a non-target codebook entry is not symbol-unseen even if it never appears as the correct training answer.",
+        "required_fix": "Freeze a reserved atom pool before materialization and reject every train/validation row containing a reserved holdout atom anywhere in model-visible text or serialized codebook fields."
+      },
+      {
+        "severity": "MEDIUM",
+        "id": "LABELLED_CODEBOOK_FAMILY_SCOPE",
+        "finding": "ALLOW/DENY/ABSTAIN inside the codebook is a valid preregistered resolution for the current source tension, but it tests binding with stable semantic class names.",
+        "failure_mode": "A model may improve on the labelled family without learning a more general episode-local variable-binding operation needed outside those exact labels.",
+        "required_fix": "Keep the labelled 72-row seed as the first controlled family, then add a separately versioned label-free/episodic-alias family only after the labelled seed passes. Do not mix the two before the first baseline is frozen."
+      }
+    ],
+    "verdict": "UPSTREAM_V2_ACCEPTED_AS_SOURCE_DESIGN_WITH_REQUIRED_V3_MATERIALIZATION_GATES"
+  },
+  "adversarial_training_pair_expansion": [
+    {
+      "id": "ATOM_ID_FLIP_PAIR",
+      "purpose": "Block actual-token identity shortcuts.",
+      "construction": "Keep semantic case, template, S3 relation and display order fixed; consistently substitute the three real ABI atoms with a disjoint accepted triplet. The target must follow the rematerialized mapping."
+    },
+    {
+      "id": "TARGET_ATOM_CLASS_ROTATION_FAMILY",
+      "purpose": "Force the same actual atom identity to serve different semantic classes across episodes.",
+      "construction": "Across a preregistered block, rotate each training atom through ALLOW, DENY and ABSTAIN target roles as evenly as the finite design permits while preserving exact causal mapping."
+    },
+    {
+      "id": "NONTARGET_EXPOSURE_BALANCE_FAMILY",
+      "purpose": "Prevent target-vs-distractor frequency leakage.",
+      "construction": "Balance each training atom's appearances as target and as non-target codebook entry; do not let a subset become target-heavy."
+    },
+    {
+      "id": "DISPLAY_POSITION_ATOM_SHUFFLE_PAIR",
+      "purpose": "Separate atom identity from codebook position.",
+      "construction": "Keep realized semantic-to-atom mapping fixed while independently permuting codebook display order; target remains invariant."
+    },
+    {
+      "id": "FULL_COUNTERFACTUAL_SPLIT_LOCK",
+      "purpose": "Prevent near-duplicate leakage.",
+      "construction": "All codebook-flip, semantic-flip, display-order, lexical-paraphrase and distractor variants derived from one base episode share one immutable family/provenance split assignment."
+    },
+    {
+      "id": "TRUE_UNSEEN_ATOM_HOLDOUT",
+      "purpose": "Measure genuine unseen-symbol routing.",
+      "construction": "Reserved holdout atoms are never present anywhere in model-visible train or validation codebooks; they first appear in frozen holdout episodes."
+    },
+    {
+      "id": "LABEL_FREE_ALIAS_FAMILY_LATER",
+      "purpose": "Test whether the learned operation generalizes beyond fixed ALLOW/DENY/ABSTAIN names.",
+      "construction": "After the labelled seed is frozen/evaluated, define episode-local aliases or demonstrations that establish three roles without canonical class words, then remap those roles to accepted atoms. Keep this as a separately versioned family."
+    }
+  ],
+  "validator_delta": [
+    "ACTUAL_ATOM_IDENTITY_TABLES: compute class/target/template/position/split x actual atom identity counts.",
+    "ACTUAL_ATOM_MI: compute empirical mutual information using actual atom ids; slot-only ATOM_A/B/C statistics are insufficient.",
+    "TARGET_NONTARGET_EXPOSURE_BALANCE: reject systematic atom target-frequency skew outside preregistered finite-design tolerance.",
+    "COUNTERFACTUAL_FAMILY_SPLIT_LOCK: all descendants of one causal base episode must share split.",
+    "HOLDOUT_ATOM_GLOBAL_ABSENCE: reserved unseen atoms must be absent from every model-visible train/validation codebook position.",
+    "ALIAS_FAMILY_VERSION_SEPARATION: labelled and label-free binding families cannot silently share a benchmark version or holdout."
+  ],
+  "research_return": {
+    "new_training_rule": "Counterbalancing must be performed over realized token identities as well as abstract S3 slots; an abstractly balanced codebook can still leak through the concrete vocabulary.",
+    "new_harness_rule": "The future harness must trace actual atom/token identity, target/non-target exposure and causal-family split identity in addition to realized mapping and display order.",
+    "new_falsifier": "If performance collapses when actual atom identities and labelled class names are held out despite success on slot-balanced labelled episodes, the model likely learned a narrower lexical remapping shortcut rather than a robust variable-binding operation.",
+    "anti_goodhart": "Aggregate remapping accuracy cannot compensate for leakage through atom frequency, position, family crossover or prior exposure of supposedly unseen symbols."
+  },
+  "credits": {
+    "research_review_delta": 1,
+    "new_materialized_training_rows": 0,
+    "accepted_dataset_tokens": 0,
+    "qwen35_jspace_runtime_credit": 0,
+    "qwen35_training_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "canonical_semantics_promotion": false
+  },
+  "next_exact_actions": [
+    "Obtain/bind the exact 46 accepted ABI atom identities and tokenizer ids at the existing source-package/manifest identity.",
+    "Materialize the 72-row labelled seed only with deterministic actual-atom counterbalancing and atomic counterfactual-family split assignment.",
+    "Run slot-level S3, actual-atom exposure/MI, leakage, provenance, unseen-symbol-global-absence and family-split validators before lexical-family scaling.",
+    "After the labelled seed is frozen and evaluated, add the separately versioned label-free alias family as a generalization discriminator rather than silently mixing it into the first baseline."
+  ]
+}

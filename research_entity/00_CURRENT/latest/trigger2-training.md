@@ -2,7 +2,7 @@
 
 Status: `CURRENT_BLOCKED_ADMISSION`
 
-Trigger-2 **V57** is the current research-ledger successor under Supervisor **8.83**. This is a cache pointer only; newest explicit owner/supervisor authority and exact executable evidence outrank it.
+Trigger-2 **V58** is the current research-ledger successor under Supervisor **8.83**. This is a cache pointer only; newest explicit owner/supervisor authority and exact executable evidence outrank it.
 
 ## P0 — runtime quiescence actively failed
 
@@ -16,23 +16,31 @@ Pinned quiescence lane:
 
 ## Checkpoint-selection governance — frozen source-only
 
-The 512-case / 256-family four-quadrant logical manifest remains frozen and model outputs remain unopened. Practical risk/coverage thresholds and the block-aware B1/B2/B3 postprocessor are frozen. Renderer interaction is also frozen pre-unblinding: Q3/Q4 use deterministic parity-balanced `DB_FIRST` / `SIM_FIRST` renderer-view arms, with no mutation of logical world, gold, family, block or primary grader.
+The 512-case / 256-family four-quadrant logical manifest remains frozen and model outputs remain unopened. Practical risk/coverage thresholds and the block-aware B1/B2/B3 postprocessor are frozen. Renderer interaction remains frozen pre-unblinding. No checkpoint winner exists and checkpoint-selection credit remains `0`.
 
-No checkpoint winner exists and checkpoint-selection credit remains `0`.
+## Model-call → NODE_RESULT lineage — V58 fusion
 
-## Model-call identity — V57 source integration delta
+V57 established one repository/source-bound model-call identity. Parallel source work then produced two overlapping NODE_RESULT model-call gates.
 
-Existing `CHECKPOINT_MODEL_STATE_CONSUMPTION_ABI/v2` already binds exact checkpoint/loaded state, rendered/token input, runtime identity and full last-token-logit output identity at source/component scope.
+Retained source direction:
 
-V57 adds:
+- `tools/trigger2_node_result_model_call_lineage_gate_v1.py` — commit `f859f9a9f25f3eefa562fcf62c5b49a5d7ade92d`
+- `tests/test_trigger2_node_result_model_call_lineage_gate_v1.py` — commit `296177af63a378f5bb5fcda4f56ce9e8aae413cc`
 
-- `tools/trigger2_model_call_repository_bound_gate_v1.py` — commit `59bca56ea474a49a673cde7d5dff6e8fd6905c2d`
-- `tests/test_trigger2_model_call_repository_bound_gate_v1.py` — commit `3934aca7c57deba0656773140cc1dadf3dbe9e28`
-- integration audit: `research_entity/global/j-space/research/2026-08-26_TRIGGER2_MODEL_CALL_TO_HCU_LINEAGE_INTEGRATION_AUDIT_V1_GPT56SOL.json` — commit `5ca1396f2842942946e3ef5aec2ee68cdbbe7493`
+This lane is retained because it reuses the existing `source_bound_model_call_identity_sha256` and composes with the already-existing `PROOF_CARRYING_NODE_RESULT/v1` authority envelope. It binds event/admission, route, engine, GRID plan/cell, membership/process authority, immutable NODE_RESULT packet, exact model call/output, and source identity into one controller lineage and provides cohort-level fail-closed validation.
 
-The new gate recomputes the ABI-v2 call binding, requires a precommitted clean canonical repository identity (`HEAD`, tree, source path, Git blob, source SHA-256, `dirty=false`) and derives one source-bound call identity. Local deterministic source validation was `8/8 PASS`; this is not repository CI and not model-runtime evidence.
+Donor-only duplicate:
 
-The primary remaining source gap is now explicit: current NODE_RESULT/atomic-cohort provenance binds packet/process/snapshot/cohort evidence but does not yet reference the exact source-bound `model_call_identity` and `model_output_identity`, nor the complete route/engine/cell chain end-to-end. Do **not** invent a second call-ID authority. The next source-only successor should reference the existing exact call identity from the deterministic NODE_RESULT authority envelope and reject call/packet/cell/source transplants.
+- `tools/trigger2_node_result_model_call_authority_envelope_v1.py` — commit `2d7f69f3175d13b8cae139f4c0275ea3ba2d9a27`
+- `tests/test_trigger2_node_result_model_call_authority_envelope_v1.py` — commit `163afb499dcafd8839ed68a14de24fc7b1cd76b0`
+
+The donor gate is not a peer authority: it independently constructs a second `NODE_RESULT_AUTHORITY_ENVELOPE/v2` path from the raw packet. Preserve unique negative-test ideas, but future source integration should advance only the retained lineage gate and collapse the donor executable path after coverage is salvaged.
+
+No exact committed test execution or CI status was observed for these new commits in this run, so source presence is not runtime/test PASS.
+
+## Next source-only gate
+
+Wire only the retained lineage gate into the current atomic/fused NODE_RESULT cohort path without changing the model-generated semantic payload. Confirm/salvage process/source/cohort transplant negatives from the donor tests, then archive/remove the donor executable path so one provenance authority remains.
 
 ## Credits remain zero at promotion scope
 
@@ -45,6 +53,6 @@ The primary remaining source gap is now explicit: current NODE_RESULT/atomic-coh
 - whole HCU runtime credit: `0`
 - whole EntityOS runtime credit: `0`
 
-Current ledger: `research_entity/global/j-space/research/2026-08-26_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V57_GPT56SOL.json`
+Current ledger: `research_entity/global/j-space/research/2026-08-26_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V58_GPT56SOL.json`
 
 Supervisor: `research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_83_DELTA_2026-08-26T0435P0700_GPT56SOL.json`

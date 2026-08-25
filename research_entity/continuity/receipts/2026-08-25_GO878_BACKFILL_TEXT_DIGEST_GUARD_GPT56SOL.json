@@ -1,0 +1,76 @@
+{
+  "schema": "CLAY_GO_RESEARCH_DELTA_RECEIPT/v1",
+  "date": "2026-08-25",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol / ChatGPT project organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority": {
+    "supervisor_epoch_observed": "8.78",
+    "mode": "FREE_ONLY",
+    "canonical_repository": "gschaidergabriel/clay-global-research-entity",
+    "branch_base_main": "cdd5dbe9b97aa173c2abda9eb5af3b8f9a54be43",
+    "paid_fallback": "FORBIDDEN",
+    "together": "FORBIDDEN"
+  },
+  "observed": {
+    "backfill_source_path": "tools/free_swarm_historical_backfill.py",
+    "backfill_source_blob_at_base": "f095ec12ab28aa5df87b1762b2cc19afca592365",
+    "unsafe_semantics": "_ingest_worker_row accepts row.text_sha256 as the source-event and downstream worker provenance digest without recomputing it from row.text",
+    "parallel_source_count_replay_guard": "FUSED_OR_ACTIVE_SEPARATE_LANE",
+    "parallel_absolute_line_identity_guard": "ACTIVE_SEPARATE_LANE",
+    "duplicate_digest_guard_pr_found_before_write": false
+  },
+  "hypothesis": "Historical receipt digest claims must be verified against the exact parsed text before they participate in source_event_id, historical_outputs, chunk, candidate-source, or batch-progress identity. Otherwise a corrupt or forged digest can split one physical observation into a second apparent provenance identity.",
+  "counterhypothesis": "If every workers.jsonl producer were permanently trusted to emit an exact immutable text_sha256, recomputation would be redundant. That assumption is rejected at this boundary because historical replay explicitly treats worker/model records as evidence input rather than canonical authority and must survive corruption, stale writers, and replay migration.",
+  "delta": {
+    "path": "tools/apply_go878_backfill_text_digest_guard.py",
+    "kind": "SUCCESSOR_DYNAMIC_FAIL_CLOSED_DONOR_PATCHER",
+    "behavior": [
+      "recompute SHA-256 from the exact parsed text",
+      "reject a row before event/chunk/candidate/batch mutation when a supplied text_sha256 disagrees",
+      "when the claim is missing or equivalent modulo hex case, canonicalize downstream provenance to the computed lower-case digest",
+      "refuse to apply if the unsafe semantic anchor moved or an equivalent guard already exists"
+    ],
+    "regressions_prepared": [
+      "forged digest cannot mint historical output, chunk, candidate, candidate-source, or batch-side provenance",
+      "missing digest deterministically uses the observed text digest",
+      "case-equivalent verified digest is canonicalized before downstream candidate-source provenance"
+    ],
+    "provider_network_io_added": false,
+    "credentials_read_added": false,
+    "unusual_experiment": false
+  },
+  "three_tracks": {
+    "track_a": {
+      "status": "ADVANCED_EVIDENCE_IDENTITY_FAIL_CLOSED_DONOR",
+      "delta": "Prepared a nonduplicate merge-friendly guard that prevents unverified historical worker digest claims from minting causal/provenance identities before saturation credit."
+    },
+    "track_b": {
+      "status": "HCU_NO_CHANGE_WITH_REASON",
+      "reason": "The highest-information current blocker is integrity of the historical evidence funnel. Creating another HCU/Typed Entry implementation lane would duplicate retained donor work; this digest law is instead a reusable ingress invariant for later Typed Entry convergence."
+    },
+    "track_c": {
+      "status": "ADVANCED_BY_CURRENT_REENTRY_EVIDENCE_NOT_THIS_INTERVENTION",
+      "delta": "Canonical history now contains a Qwen3-0.6B nonterminal internal-vector specificity PASS at commit 8acce46e7989fa0cf6e7cf368f2731c2f18ce7c2. This is model-specific causal component evidence only; native llama.cpp cvec, full J-Space, full HCU, training and whole-product credit remain unproven."
+    }
+  },
+  "coordination": {
+    "new_unusual_experiments_executed": 0,
+    "unusual_experiment_status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "No shared immutable reproducible go macrocycle/request identity was exposed to this organ; ordinary source review and donor hardening only."
+  },
+  "credit": {
+    "historical_backfill_runtime_credit_added": 0,
+    "provider_runtime_credit_added": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "qwen_nonterminal_internal_vector_component_credit_observed": true,
+    "native_llamacpp_cvec_runtime_credit": 0,
+    "full_jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_action": "After the absolute-line identity successor lands, apply this digest guard against exact-current source, run the focused historical-backfill regressions on an authorized zero-cost surface, then require saturation replay to preserve one physical worker observation as one stable causal/provenance identity. In parallel, keep source-count reconciliation gated on stable replay identity."
+}

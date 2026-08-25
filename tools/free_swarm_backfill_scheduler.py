@@ -5,7 +5,8 @@ When the Forge historical-extraction queue is non-empty, logical research calls
 are repurposed as bounded extraction passes over old worker outputs. This preserves
 the 6000 fabric as the extraction transport while preventing new raw-research scale
 from competing with the historical conversion backlog. Once no extraction packet is
-available, the ordinary prompt path resumes automatically.
+available, the ordinary prompt path resumes automatically only when canonical Forge
+state is readable and conversion pressure is below its configured threshold.
 
 This changes allocation, not evidence authority: extracted deltas remain noncanonical
 and still traverse the same Forge validation path.
@@ -15,6 +16,7 @@ from __future__ import annotations
 import json
 import os
 from pathlib import Path
+import sqlite3
 import sys
 import threading
 import time
@@ -37,7 +39,66 @@ MAX_PACKET_CACHE = 2048
 _lock = threading.Lock()
 _cache_at = 0.0
 _cache: list[dict[str, Any]] = []
+_control_at = 0.0
+_control: dict[str, Any] = {"state": "UNOBSERVED"}
 _leases: dict[str, float] = {}
+
+
+def _forge_control_state() -> dict[str, Any]:
+    """Return cached canonical Forge allocation state without reading credentials.
+
+    Empty backlog and unreadable/invalid Forge state are intentionally distinct.
+    Ordinary provider-backed research is permitted only from an OBSERVED state.
+    """
+    global _control_at, _control
+    now = time.monotonic()
+    with _lock:
+        if now - _control_at < CACHE_SECONDS:
+            return dict(_control)
+
+    threshold = max(1, int(os.getenv("CLAY_SWARM_RAW_GENERATION_BACKPRESSURE_THRESHOLD", "64")))
+    state: dict[str, Any] = {
+        "state": "UNKNOWN_FORGE_DB",
+        "threshold": threshold,
+        "raw_research_allowed": False,
+    }
+    con: sqlite3.Connection | None = None
+    try:
+        if FORGE_DB.exists():
+            con = sqlite3.connect(f"file:{FORGE_DB}?mode=ro", uri=True, timeout=0.5)
+            tables = {str(row[0]) for row in con.execute("SELECT name FROM sqlite_master WHERE type='table'")}
+            if "candidates" not in tables:
+                state["state"] = "UNKNOWN_CANDIDATE_TABLE"
+            elif "historical_chunks" not in tables:
+                state["state"] = "UNKNOWN_HISTORICAL_CHUNKS_TABLE"
+            else:
+                ready = int(con.execute("SELECT COUNT(*) FROM candidates WHERE ready=1 AND state='NEW'").fetchone()[0])
+                implementation = int(con.execute("SELECT COUNT(*) FROM candidates WHERE state='NEEDS_IMPLEMENTATION'").fetchone()[0])
+                pending = int(con.execute("SELECT COUNT(*) FROM historical_chunks WHERE state='PENDING_EXTRACTION'").fetchone()[0])
+                conversion_pressure = ready + implementation
+                state.update({
+                    "state": "OBSERVED",
+                    "ready_backlog": ready,
+                    "implementation_backlog": implementation,
+                    "pending_extraction": pending,
+                    "conversion_pressure": conversion_pressure,
+                    "raw_research_allowed": pending == 0 and conversion_pressure < threshold,
+                })
+    except Exception as exc:
+        state = {
+            "state": "READ_FAILED",
+            "threshold": threshold,
+            "raw_research_allowed": False,
+            "error_class": type(exc).__name__,
+        }
+    finally:
+        if con is not None:
+            con.close()
+
+    with _lock:
+        _control_at = now
+        _control = dict(state)
+    return dict(state)
 
 
 def _packets() -> list[dict[str, Any]]:
@@ -78,6 +139,22 @@ def install(base: Any) -> None:
 
     def backlog_prompt(protocol: str, role: str, task: str, state_context: str, serial: int) -> str:
         original = previous(protocol, role, task, state_context, serial)
+        control = _forge_control_state()
+
+        # Fail closed before packet lookup. load_backfill_packets historically maps
+        # missing DB/schema/read failures and a genuinely empty backlog to the same
+        # [] value; that ambiguity must never manufacture permission for raw research.
+        if control.get("state") != "OBSERVED":
+            state = str(control.get("state") or "UNKNOWN")
+            return original + f"""
+
+FREE-SWARM FORGE STATE HOLD
+- Canonical Forge allocation state is {state}; ordinary raw research is NOT authorized from unknown state.
+- Keep the shared 6000 process available as transport, but do NOT perform the ordinary research task and do NOT emit ARCHITECTURE_DELTA_JSON.
+- Emit exactly NO_DELTA=FORGE_ALLOCATION_STATE_UNKNOWN, then OPEN_RESEARCH_QUESTIONS_JSON=[] .
+- This hold is allocation control only and grants zero evidence, provider-runtime, acceptance or canonical credit.
+"""
+
         # Liveness rule: the same fabric carries historical extraction, therefore
         # keep it alive and devote every reservable slot to conversion while the
         # historical queue is non-empty. Ordinary raw research resumes only when
@@ -92,6 +169,15 @@ HISTORICAL FREE-SWARM BACKFILL HOLD
 - Do NOT perform the ordinary research task and do NOT emit ARCHITECTURE_DELTA_JSON.
 - Emit exactly NO_DELTA=HISTORICAL_BACKFILL_LEASE_BUSY, then OPEN_RESEARCH_QUESTIONS_JSON=[] .
 - This hold is allocation control only and grants zero evidence or acceptance credit.
+"""
+            if not bool(control.get("raw_research_allowed")):
+                return original + """
+
+FREE-SWARM CONVERSION BACKPRESSURE HOLD
+- Canonical Forge state is readable, but conversion backlog is at/above the configured raw-research threshold.
+- Keep the shared 6000 process available for conversion/extraction work; do NOT perform the ordinary research task and do NOT emit ARCHITECTURE_DELTA_JSON.
+- Emit exactly NO_DELTA=FORGE_CONVERSION_BACKPRESSURE, then OPEN_RESEARCH_QUESTIONS_JSON=[] .
+- This hold is allocation control only and grants zero evidence, provider-runtime, acceptance or canonical credit.
 """
             return original
         payload = json.dumps(packet, ensure_ascii=False, separators=(",", ":"))

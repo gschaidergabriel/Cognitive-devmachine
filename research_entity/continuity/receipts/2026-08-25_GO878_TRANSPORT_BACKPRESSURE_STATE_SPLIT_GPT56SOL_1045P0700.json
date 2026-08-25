@@ -1,0 +1,66 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "authority_epoch": "8.78",
+  "persistent_research_entity": "Clay",
+  "temporary_worker_role": "ORGAN_NOT_ENTITY",
+  "organ": "GPT-5.6 Sol ChatGPT organ",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "trigger": "go",
+  "observed_base_main_before_successor_port": "02cea956a9f60c091ec87a58a205b5f68b0bcab2",
+  "finding": {
+    "classification": "BACKFILL_TRANSPORT_BACKPRESSURE_STATE_SPLIT",
+    "initial_contradiction": "PENDING_EXTRACTION was counted in stop pressure even though the 6000 fabric is also the historical extraction transport.",
+    "intermediate_overcorrection_observed": "A later canonical edit ignored raw_generation_allowed and unconditionally restarted the 6000 fabric. This restored extraction liveness but erased ready/NEEDS_IMPLEMENTATION backpressure when pending extraction was zero.",
+    "successor_invariant": "pending_extraction > 0 keeps the shared fabric alive; pending_extraction == 0 restores ready+NEEDS_IMPLEMENTATION backpressure; missing/invalid Forge state remains fail-closed.",
+    "counterhypothesis": "Always keeping the fabric alive is sufficient because the extraction scheduler suppresses ordinary raw prompts.",
+    "counterhypothesis_rejected_at_source_scope": "When pending_extraction == 0, the extraction scheduler has no packet to reserve, so unconditional fabric restart bypasses the intended ready/implementation raw-scale backpressure."
+  },
+  "canonical_writes": [
+    {
+      "commit": "b27318a223771519dfd84796dc0f9518fdb84f9c",
+      "path": "tools/run_6000_free_swarm_supervisor.sh",
+      "scope": "single-supervisor transport/backpressure state split"
+    },
+    {
+      "commit": "abeb4a7ff0c7829ae4574015657026a50223332e",
+      "path": "tests/test_go_878_raw_generation_backpressure.py",
+      "scope": "normative regressions for extraction liveness, non-extraction backpressure, and fail-closed unknown state"
+    }
+  ],
+  "coordination": {
+    "stale_pr": 1909,
+    "stale_pr_state": "CLOSED_SUPERSEDED",
+    "reason": "main advanced across the same supervisor file; force-merging the stale branch risked overwriting newer convergence",
+    "shared_reproducible_macrocycle_id": "UNAVAILABLE_TO_THIS_ORGAN",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT"
+  },
+  "evidence": {
+    "source_inspection": "PASS_AT_WRITTEN_SOURCE_SCOPE",
+    "regression_source_present": true,
+    "test_execution": "NOT_EXECUTED_BY_THIS_ORGAN",
+    "runtime_acceptance": "NOT_CLAIMED",
+    "authorized_self_hosted_bridge_terminal_result": "NOT_OBSERVED",
+    "provider_or_paid_execution": "NONE",
+    "together_execution": "NONE"
+  },
+  "go_tracks": {
+    "track_a": "ADVANCED_ENTITYOS_EXECUTABLE_CONTROL_PLANE_CONVERGENCE",
+    "track_b": "HCU_NO_CHANGE_WITH_REASON: retained HCU/Typed-Entry donor work already exists and the supervisor liveness contradiction was the higher-information executable bottleneck; no duplicate HCU authority was created",
+    "track_c": "TRAINING_READINESS_NO_CHANGE_WITH_REASON: current supervisor credits one bounded Qwen3-0.6B hidden-state component result, but this organ performed no new unusual model/J-Space intervention because no reproducible shared macrocycle identity was available; native llama.cpp cvec and whole J-Space/HCU/training credit remain pending"
+  },
+  "runtime_credit": {
+    "historical_backfill_runtime": 0,
+    "distillery_replay_v2_runtime": 0,
+    "qwen06_hidden_state_component_runtime_credit_observed_from_current_supervisor": 1,
+    "native_llamacpp_cvec_runtime": 0,
+    "jspace_model_runtime": 0,
+    "hcu_full_runtime": 0,
+    "entityos_whole_runtime": 0,
+    "training": 0,
+    "provider_runtime": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Execute the updated raw-generation/backfill state-split regressions on an admitted exact-current zero-cost execution surface, then continue bounded historical extraction toward a terminal saturation receipt without granting broader runtime credit from source presence alone."
+}

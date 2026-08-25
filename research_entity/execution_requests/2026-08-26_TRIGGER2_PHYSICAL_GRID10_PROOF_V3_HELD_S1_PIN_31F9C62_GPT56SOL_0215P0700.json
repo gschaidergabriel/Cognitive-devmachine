@@ -1,0 +1,155 @@
+{
+  "schema": "TRIGGER2_PHYSICAL_GRID10_PROOF_CLOSURE_VPS_EXECUTION_REQUEST/v2",
+  "created_local": "2026-08-26T02:15:14+07:00",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "supervisor_epoch": "8.81_DELTA",
+  "mode": "FREE_ONLY",
+  "status": "PINNED_SOURCE_READY_AUTORUN_BLOCKED_BY_CURRENT_FREESWARM_EMERGENCY_STOP",
+  "execution_surface": "clay-direct-dev live free VPS sandbox",
+  "autonomous_execution_requested": false,
+  "autonomous_execution_blocker": {
+    "current_main_observed": "34cde26849a31b852b677a38f2c426c75d881bcf",
+    "commit_message": "Emergency stop: hard-disable FreeSwarm supervisor",
+    "affected_runtime": "tools/run_6000_free_swarm_supervisor.sh",
+    "interpretation": "Do not use the disabled FreeSwarm supervisor to auto-launch this pin. Preserve the exact source gate for a separately admitted executor or a newer explicit authority change."
+  },
+  "free_only": true,
+  "paid_provider_forbidden": true,
+  "together_forbidden": true,
+  "repository": "gschaidergabriel/clay-global-research-entity",
+  "exact_source": {
+    "head": "31f9c628cd6c9ecf44da062b283f3cfa3c35963c",
+    "tree": "a06a3055eff40ae2cec0606059504208d4e5837c",
+    "branch": "trigger2-grid10-proof-v3-held-s1-20260826",
+    "dirty_required": false,
+    "entrypoint": "tools/xeno_physical_grid10_proof_v3.py",
+    "expected_schema": "XENO_PHYSICAL_GRID10_PROOF_CLOSURE/v3"
+  },
+  "required_command": "python3 tools/xeno_physical_grid10_proof_v3.py",
+  "source_paths_to_hash": [
+    "tools/xeno_physical_grid10_proof_v3.py",
+    "tools/xeno_physical_grid10_proof_v2.py",
+    "tools/xeno_self_organizing_fabric_acceptance_v1.py"
+  ],
+  "known_source_identity": {
+    "tools/xeno_physical_grid10_proof_v3.py": {
+      "git_blob_sha": "14f0975edf85e849bd8571adaecd7e82164954a4",
+      "content_sha256": "c2a058046878b871072abd2305cd9951406565662f0915c7a6551541908ecae7"
+    },
+    "tools/xeno_physical_grid10_proof_v2.py": {
+      "git_blob_sha": "a597ce039540e9e55f444b4441fbbb65300e910a",
+      "content_sha256": "MUST_BE_COMPUTED_AND_RECEIPTED_BY_EXECUTOR"
+    },
+    "tools/xeno_self_organizing_fabric_acceptance_v1.py": {
+      "content_sha256": "MUST_BE_COMPUTED_AND_RECEIPTED_BY_EXECUTOR"
+    }
+  },
+  "relationship_to_prior_pins": [
+    {
+      "request": "research_entity/execution_requests/2026-08-26_TRIGGER2_PHYSICAL_GRID10_PROOF_V2_VPS_EXECUTION_PIN_3AE859B_GPT56SOL_0208P0700.json",
+      "source_head": "3ae859b235223286bf2331652327a5ca43e0a048",
+      "classification": "SUPERSEDED_FOR_NEXT_EXECUTION_BY_V3_HELD_S1_PROOF",
+      "reason": "v2 binds consumed snapshot identity but closes the read transaction before its release barrier; v3 retains that exact read transaction and externally observes an O_RDONLY S1 fd for every live child."
+    },
+    {
+      "source_head": "d70db2bcf1495e0c5d243d0f0c146a3226408728",
+      "classification": "DONOR_FUSED_NOT_SEPARATELY_PINNED",
+      "reason": "The d70 acceptance-v2 repair supplied held read-transaction, procfs O_RDONLY fd and measured writer-free identity mechanics; v3 fuses those mechanics into the stronger consumed-snapshot proof line."
+    },
+    {
+      "source_head": "fbab5960980166f51047264775f102f2df22b292",
+      "classification": "DIAGNOSTIC_ONLY_ZERO_PHYSICAL_GRID10_CREDIT"
+    }
+  ],
+  "acceptance_must_bind": [
+    "requested_head == executed_head == 31f9c628cd6c9ecf44da062b283f3cfa3c35963c",
+    "requested_tree == executed_tree == a06a3055eff40ae2cec0606059504208d4e5837c",
+    "dirty=false",
+    "Ubuntu/Linux runtime identity",
+    "Python and sqlite3 runtime identity",
+    "sha256 of every project source imported by the harness",
+    "stdout sha256",
+    "stderr sha256",
+    "exit code",
+    "full parsed JSON result and every test boolean",
+    "ten Popen child PIDs and exact parent/child/packet PID binding",
+    "per-process start ready release and parent-observed-exit timestamps",
+    "per-process /proc/<pid>/fd and fdinfo O_RDONLY binding to the exact isolated S1 SQLite file while all ten are blocked at the same barrier",
+    "all ten child read transactions open at the ready barrier",
+    "one shared generation/epoch/state_digest identity",
+    "writer-freeze identity before at-barrier independent-observer and after-child-exit equality",
+    "read_receipt_digest consumed-snapshot task-digest and payload-digest evidence",
+    "declared-current/consumed-stale rejection evidence"
+  ],
+  "required_properties": [
+    "ten simultaneously live independent OS node processes",
+    "ten distinct observed child PIDs",
+    "all ten remain read-only attached to the exact same isolated S1 DB at barrier time",
+    "all ten retain the exact SQLite read transactions that produced their NODE_RESULT observations through barrier release",
+    "all ten observation identities match exactly on generation state_epoch and state_digest",
+    "deterministic writer freeze is active and observed S1 identity remains stable across the full physical concurrency window",
+    "NODE_RESULT remains s1_write_intent=false",
+    "ordinary direct S1 mutation remains rejected",
+    "stale snapshot/result is rejected",
+    "wrong current state digest is rejected",
+    "declared-current/consumed-stale rewrite is rejected",
+    "consumed task digest is bound to the current snapshot",
+    "read receipt binds producer PID node identity consumed snapshot task digest and payload digest",
+    "fresh exact-snapshot result may pass only through coordinator lease/CAS authority",
+    "no S0 truth or effect authority is minted"
+  ],
+  "fail_closed": [
+    "do not auto-run through the currently hard-disabled FreeSwarm supervisor",
+    "if /proc PID/fd proof is unavailable unreadable or lacks one O_RDONLY exact-DB fd per child physical attach proof fails",
+    "if any child transaction is not open at the barrier physical attach proof fails",
+    "if any PID binding differs independent-process proof fails",
+    "if S1 identity differs across freeze/barrier/independent observer/child-exit points writer-free proof fails",
+    "do not mutate or relabel old packet state identity to make it current",
+    "do not run predecessor pins in parallel with this successor",
+    "do not patch the execution checkout under this pin; create a new source commit and a new pin",
+    "do not use paid subscription unknown-cost Together or unlisted provider routes",
+    "do not expose credentials",
+    "do not turn infrastructure/auth/quota/transport failure into a scientific negative",
+    "do not grant credit above exact measured component scope"
+  ],
+  "credit_before_execution": {
+    "source_repair_present": true,
+    "repository_bound_execution_observed": false,
+    "physical_grid10_runtime_credit": 0,
+    "consumed_snapshot_attestation_runtime_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "canonical_semantics_credit": 0
+  },
+  "on_exact_clean_pass": {
+    "eligible_credit": [
+      "PHYSICAL_GRID10_BOUNDED_COMPONENT_REVIEW",
+      "CONSUMED_SNAPSHOT_ATTESTATION_BOUNDED_COMPONENT_REVIEW",
+      "HELD_READONLY_S1_ATTACHMENT_BOUNDED_COMPONENT_REVIEW"
+    ],
+    "still_zero": [
+      "whole_hcu_runtime_credit",
+      "whole_entityos_runtime_credit",
+      "jspace_model_runtime_credit",
+      "training_credit",
+      "canonical_truth_credit",
+      "effect_authority_credit"
+    ],
+    "next_gates": [
+      "controlled load and coordinator contention/fan-in",
+      "coordinator failure/replacement and ordinary-node restart/rejoin",
+      "recursive compression evidence dereference plus UNKNOWN/Hyperposition branch preservation",
+      "matched-budget challengers",
+      "Hyperposition/GWT re-entry",
+      "checkpoint/J-Space cross-encoding discriminator only after exact model/input identity gates"
+    ]
+  }
+}

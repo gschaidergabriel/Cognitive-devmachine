@@ -112,6 +112,14 @@ Issue **#1889** now defines the nonduplicate fail-closed successor: bind the liv
 
 This advances EntityOS executable convergence at runtime-observability scope and strengthens the reusable HCU/Typed-Entry provenance law that status cannot mint executable credit unless the writer is bound to exact admitted runtime/source identity. It executes no provider/model call and grants **zero** provider, historical-backfill, whole EntityOS/HCU, full-HCU, J-Space or training credit.
 
+## GO 8.78 — replay provenance source-count idempotency delta
+
+An exact-current source review found a separate scheduling/evidence-weight defect in `tools/free_swarm_historical_backfill.py::_insert_candidate()`: an already-known execution variant incremented `source_count` before the canonical `candidate_sources` `INSERT OR IGNORE`. Therefore exact replay of the same provenance tuple could increase the Forge scheduling signal even though the durable provenance relation admitted nothing new.
+
+Commit `e89abd132938faae48659361c83a95a6c61717bd` changes the order and meaning: the provenance relation is attempted first and an existing candidate increments `source_count` by exactly `int(new_provenance_link_admitted)`. Exact replay is therefore `+0`; a genuinely new provenance tuple remains `+1`. Commit `df9f8f76347113d0b23e09e3cb20076558359a07` adds deterministic regressions for both cases. The research receipt is `research_entity/continuity/receipts/2026-08-25_GO_878_SOURCE_COUNT_IDEMPOTENCY_GPT56SOL.json`.
+
+This advances Track A at historical Forge source scope, Track B at reusable causal-provenance/Typed-Entry semantics, and Track C at dataset-readiness scope by removing a pseudo-evidence amplification path before Distillery/J-Space promotion. The new regression was source-reviewed but no terminal CI/runtime execution was observed by this organ, so historical-backfill, whole EntityOS/HCU, full-HCU, J-Space model, provider, training and whole-product runtime credit all remain **0**.
+
 ## Evidence discipline and re-entry
 
 Negative evidence is first-class. Infrastructure/auth/quota/runner/log failure is not automatically product/science failure. Component evidence is not whole-product acceptance. Current source can outrank an older inbox statement when an admitted later merge has already closed that source blocker; runtime credit still requires executable evidence at exact identity.

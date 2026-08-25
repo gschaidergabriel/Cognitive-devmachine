@@ -160,9 +160,11 @@ def deterministic_null_sigma2(
                 semantic_class: family[permutation[position]]
                 for position, semantic_class in enumerate(CLASSES)
             })
-        # A globally identical identity assignment is not a null intervention.
-        if all(index == 0 for index in selected):
-            permutation = PERMUTATIONS[1]
+        # A globally identical relabeling preserves cross-family semantic alignment and
+        # therefore is not a valid null intervention, regardless of which permutation it is.
+        if len(set(selected)) == 1:
+            forced_index = (selected[0] + 1) % len(PERMUTATIONS)
+            permutation = PERMUTATIONS[forced_index]
             family = families[-1]
             permuted[-1] = {
                 semantic_class: family[permutation[position]]

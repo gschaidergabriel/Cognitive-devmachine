@@ -1,0 +1,279 @@
+HEAD is now at 8e370c819 Merge pull request #1952 from gschaidergabriel/gpt56sol/trigger1-observable-pr-dispatch
+{"result_sha256": "1486f27de96fa2aeb6c0b52800fdf9852a0b9e50761b17ba38c647d424d82532", "status": "FAIL_ABSTRACT_NATIVE_DISCRIMINATOR"}
+RESULT_BEGIN
+{
+  "abstract_native_discriminator_pass": false,
+  "behavior": {
+    "baseline_hit_rate": 0.3333333333333333,
+    "matched_hit_rate": 0.3333333333333333,
+    "matched_mean_delta": -0.05239439010620117,
+    "matched_median_delta": -0.044203758239746094,
+    "nuisance_mean_abs_delta": 0.15475596321953666,
+    "null_mean_abs_delta": 0.0,
+    "orthogonal_mean_abs_delta": 0.05602190229627821,
+    "permuted_mean_abs_delta": 0.050500075022379555,
+    "signflip_mean_delta": 0.023727999793158636
+  },
+  "behavior_pass": false,
+  "behavioral_causal_matrix": {
+    "diagonal_advantage": -0.05098181300693088,
+    "diagonal_each_positive": false,
+    "diagonal_mean": -0.05239439010620117,
+    "mean_delta_matrix_intervention_x_requested_target": {
+      "AFFIRMATIVE": {
+        "AFFIRMATIVE": -0.035849412282307945,
+        "NEGATIVE": -0.04583930969238281,
+        "NEUTRAL": 0.013754685719807943
+      },
+      "NEGATIVE": {
+        "AFFIRMATIVE": 0.03700685501098633,
+        "NEGATIVE": -0.02981726328531901,
+        "NEUTRAL": -0.04833682378133138
+      },
+      "NEUTRAL": {
+        "AFFIRMATIVE": 0.02088642120361328,
+        "NEGATIVE": 0.014052708943684896,
+        "NEUTRAL": -0.09151649475097656
+      }
+    },
+    "off_diagonal_mean": -0.0014125770992702907
+  },
+  "calibration_case_count": 9,
+  "canonical_credit_minted": false,
+  "canonical_semantics_promotion": false,
+  "case_bundle_sha256": "758197e52259e8ed07e0a952763b02d05be3bdb48c78bfe2b7400c331dd309e3",
+  "cross_scope_mechanistic_identity_claimed": false,
+  "cvec_receipts": {
+    "nuisance": {
+      "l2": 4.0,
+      "path": "/workspace/vps_bridge/results/fr2-structural-native-execute-builddir-20260825-1314/holdout-nuisance.cvec.f32le",
+      "sha256": "71eceac5fb18c1dbe4166035c55a126cf1e3a9015fceb7fd101a42b13b1b1744",
+      "vector_sha256": "ebec763387718f9aa4cc4da5960d0e3dd280b32386bf2e9b347841f5da98aed6"
+    },
+    "null": {
+      "l2": 0.0,
+      "path": "/workspace/vps_bridge/results/fr2-structural-native-execute-builddir-20260825-1314/holdout-null.cvec.f32le",
+      "sha256": "7c98d2da7afa2bdee9765910c81cb588e14781b77538fb54df84f7e7039e4348",
+      "vector_sha256": "ad7facb2586fc6e966c004d7d1d16b024f5805ff7cb47c7a85dabd8b48892ca7"
+    },
+    "orthogonal": {
+      "AFFIRMATIVE": {
+        "l2": 4.0,
+        "path": "/workspace/vps_bridge/results/fr2-structural-native-execute-builddir-20260825-1314/holdout-orth-affirmative.cvec.f32le",
+        "sha256": "1b2c11338e9325855d79f1b7111782c4d09c73223dfd37436beed4dbaee1c9fb",
+        "vector_sha256": "0e4993973f929934444fd04b4b48e3a3be0d8dfc94894e12d5ba1f990ce662d7"
+      },
+      "NEGATIVE": {
+        "l2": 4.0,
+        "path": "/workspace/vps_bridge/results/fr2-structural-native-execute-builddir-20260825-1314/holdout-orth-negative.cvec.f32le",
+        "sha256": "eae71872089da93b8e1f3a3cb7db5f18d5a24fbbc0d5075551303605daafbbd7",
+        "vector_sha256": "968e6aed7bb938040330ed043147751dccc5f90ccf29419125915a002f4e61be"
+      },
+      "NEUTRAL": {
+        "l2": 4.0,
+        "path": "/workspace/vps_bridge/results/fr2-structural-native-execute-builddir-20260825-1314/holdout-orth-neutral.cvec.f32le",
+        "sha256": "ffda5dc7905f159d3e289b1f6ed077a30d3b0e30bbed291f8ce1cb9dfc8ebd63",
+        "vector_sha256": "1b5fe37cd109c159b395f338aa2161c45fb47d31c9b3bb7141e87ee3be8b4580"
+      }
+    },
+    "permuted": {
+      "AFFIRMATIVE": {
+        "l2": 4.0,
+        "path": "/workspace/vps_bridge/results/fr2-structural-native-execute-builddir-20260825-1314/holdout-perm-affirmative.cvec.f32le",
+        "sha256": "c7f4213d1aeaa787c5efd3c416c13942d2da61fb4127be65d738f5e94cb0a829",
+        "vector_sha256": "cf3d1763678e9eee016a6e5fdaeb92951503ed5964d94ad57ad012d4b849a4d6"
+      },
+      "NEGATIVE": {
+        "l2": 4.0,
+        "path": "/workspace/vps_bridge/results/fr2-structural-native-execute-builddir-20260825-1314/holdout-perm-negative.cvec.f32le",
+        "sha256": "15df6929dcffa869f60c151809f7d968408d71bac8d63753ecf81f91d748853b",
+        "vector_sha256": "1cfeb4aa783bf463bf1bcd9c7f639b7e7e77299931cf0650219d05eca80f96aa"
+      },
+      "NEUTRAL": {
+        "l2": 4.0,
+        "path": "/workspace/vps_bridge/results/fr2-structural-native-execute-builddir-20260825-1314/holdout-perm-neutral.cvec.f32le",
+        "sha256": "e91a14b97d84f97623ad500ba80d62403ff5891e8584623edf763a9cdb0679bc",
+        "vector_sha256": "dd381c32ed90da911f41017e12794a9c4bb7d28c8f5af9a8f31d37ea2019ace1"
+      }
+    },
+    "semantic": {
+      "AFFIRMATIVE": {
+        "l2": 3.999999999999999,
+        "path": "/workspace/vps_bridge/results/fr2-structural-native-execute-builddir-20260825-1314/holdout-sem-affirmative.cvec.f32le",
+        "sha256": "74e2760ab225cef6e44dd5204016aa86d22640438b47b89d7daf9dfd305a05a1",
+        "vector_sha256": "2c6aa7f8fe2942e47f6b690b44d2c25100e46ef812f71277d615031278eb4303"
+      },
+      "NEGATIVE": {
+        "l2": 3.999999999999999,
+        "path": "/workspace/vps_bridge/results/fr2-structural-native-execute-builddir-20260825-1314/holdout-sem-negative.cvec.f32le",
+        "sha256": "e94e24623b0a6672c41b1ed2a131a7eb61574169a2b400ec6cb51a541c47e9f5",
+        "vector_sha256": "518c39d14a7367390dd7eeeb792cc7211ad0f5e14b6eb7c580dd6a089aa7295a"
+      },
+      "NEUTRAL": {
+        "l2": 4.0,
+        "path": "/workspace/vps_bridge/results/fr2-structural-native-execute-builddir-20260825-1314/holdout-sem-neutral.cvec.f32le",
+        "sha256": "6a8234b712a6a0826c34d8060d5ebb6190be84c686d23c673c5e2a39941a47b0",
+        "vector_sha256": "4304cbecfd6baee41b0863ede4404beb8a3e38dc640c0907a8a35540ae4e414b"
+      }
+    },
+    "signflip": {
+      "AFFIRMATIVE": {
+        "l2": 3.999999999999999,
+        "path": "/workspace/vps_bridge/results/fr2-structural-native-execute-builddir-20260825-1314/holdout-sign-affirmative.cvec.f32le",
+        "sha256": "2e4c9aaa79bffaede6d6295ad88997a2f56cfeff87bd6152e3008c6e4ed13d26",
+        "vector_sha256": "caa1459aa1b2a7dbfa121b15cb149f95bec7f3ddc36eed33c650f0f91a2cc7ff"
+      },
+      "NEGATIVE": {
+        "l2": 3.999999999999999,
+        "path": "/workspace/vps_bridge/results/fr2-structural-native-execute-builddir-20260825-1314/holdout-sign-negative.cvec.f32le",
+        "sha256": "0c7afd49bd504fc0a126c77d3a0d4570385f24de4a3f2108c19ecb4639160949",
+        "vector_sha256": "d238c06fb32a19aeae56670b6430c9be818a43f817ff6340492828c1b5d1229a"
+      },
+      "NEUTRAL": {
+        "l2": 4.0,
+        "path": "/workspace/vps_bridge/results/fr2-structural-native-execute-builddir-20260825-1314/holdout-sign-neutral.cvec.f32le",
+        "sha256": "bf3bc82081adec7764eb769141741f45b6cd6ad73589f9c7cff6cab5421eedc5",
+        "vector_sha256": "d5acba0f1eff215887051670613aa2a543994ae5cefad3de9f520cb13c44eabe"
+      }
+    }
+  },
+  "direct_native_scope_evidence": true,
+  "downstream_layer_input": 24,
+  "downstream_transport": {
+    "control_target_coordinate_abs_mean": 0.2542696726289941,
+    "matched_offaxis_abs_mean": 2.1243034394154026,
+    "matched_target_coordinate_mean": 4.247913097378004,
+    "matched_target_coordinate_median": 4.229854116295517,
+    "signflip_target_coordinate_mean": -4.173776259142458
+  },
+  "downstream_transport_pass": true,
+  "evidence_boundary": "Direct native ALL_PROMPT_TOKENS cvec on structural label-free lexically-disjoint holdout after calibration-only nuisance residualization and gain selection. PASS is strong component evidence only; FAIL is preserved as falsifying evidence.",
+  "external_provider_used": false,
+  "gain_grid": [
+    4.0,
+    8.0,
+    16.0,
+    24.0,
+    32.0
+  ],
+  "gain_scores": {
+    "16": {
+      "mean_delta_vs_baseline": -0.15851879119873047,
+      "median_delta_vs_baseline": -0.1058797836303711,
+      "target_code_hit_rate": 0.3333333333333333
+    },
+    "24": {
+      "mean_delta_vs_baseline": -0.2730394999186198,
+      "median_delta_vs_baseline": -0.12933731079101562,
+      "target_code_hit_rate": 0.3333333333333333
+    },
+    "32": {
+      "mean_delta_vs_baseline": -0.3467859692043728,
+      "median_delta_vs_baseline": -0.1819915771484375,
+      "target_code_hit_rate": 0.2222222222222222
+    },
+    "4": {
+      "mean_delta_vs_baseline": -0.030612415737575956,
+      "median_delta_vs_baseline": -0.049861907958984375,
+      "target_code_hit_rate": 0.3333333333333333
+    },
+    "8": {
+      "mean_delta_vs_baseline": -0.07702954610188802,
+      "median_delta_vs_baseline": -0.09584903717041016,
+      "target_code_hit_rate": 0.3333333333333333
+    }
+  },
+  "gguf_sha256": "9465e63a22add5354d9bb4b99e90117043c7124007664907259bd16d043bb031",
+  "headers": {
+    "calibration_capture": {
+      "capture_semantics": "LAYER_INPUT_ROWS_N_TOKENS_X_N_EMBD",
+      "cvec_semantics": "CVEC_AFTER_LAYER_IL_VISIBLE_AT_LAYER_INPUT_IL_PLUS_1",
+      "n_embd": 1024,
+      "n_layer": 28,
+      "schema": "CLAY_LLAMA_CPP_LAYER_CAPTURE_HEADER/v1"
+    },
+    "calibration_logits": {
+      "schema": "CLAY_LLAMA_CPP_CVEC_LOGIT_HARNESS_HEADER/v1",
+      "token_ids": {
+        "A": 32,
+        "B": 33,
+        "C": 34
+      },
+      "token_texts": {
+        "A": "A",
+        "B": "B",
+        "C": "C"
+      }
+    },
+    "holdout_capture": {
+      "capture_semantics": "LAYER_INPUT_ROWS_N_TOKENS_X_N_EMBD",
+      "cvec_semantics": "CVEC_AFTER_LAYER_IL_VISIBLE_AT_LAYER_INPUT_IL_PLUS_1",
+      "n_embd": 1024,
+      "n_layer": 28,
+      "schema": "CLAY_LLAMA_CPP_LAYER_CAPTURE_HEADER/v1"
+    },
+    "holdout_logits": {
+      "schema": "CLAY_LLAMA_CPP_CVEC_LOGIT_HARNESS_HEADER/v1",
+      "token_ids": {
+        "A": 32,
+        "B": 33,
+        "C": 34
+      },
+      "token_texts": {
+        "A": "A",
+        "B": "B",
+        "C": "C"
+      }
+    }
+  },
+  "holdout_case_count": 9,
+  "holdout_opened_only_after_calibration_residualizer_and_gain_frozen": true,
+  "injection_layer": 20,
+  "jspace_model_runtime_credit": 0,
+  "layer21_residualizer": {
+    "nuisance_subspace_rank": 8,
+    "post_projection_max_abs_nuisance_cosine": 9.540979117872439e-17,
+    "projected_semantic_vector_sha256": {
+      "AFFIRMATIVE": "6b9ee3b34377487a4a256fdd17757bf1072ba7c60d7498ef32b215ac0122e7f2",
+      "NEGATIVE": "87072ebc01a95b6f127eabbd041a6abde320a5f163c5dc6a6fc7996b46ccf8dc",
+      "NEUTRAL": "647d938a0f81b699aaaa130f9cfff412a448777da419807fa099e2457934b7d3"
+    },
+    "result_sha256": "9a72e224ec2e300f8bd76fe7e7d7d1f4e13723e86bd206513b6b1a6af063387c",
+    "retained_semantic_subspace_norm_fraction": 0.9942836148891943
+  },
+  "layer24_downstream_estimator": {
+    "nuisance_subspace_rank": 8,
+    "post_projection_max_abs_nuisance_cosine": 8.326672684688674e-17,
+    "result_sha256": "99b116f887445f3e8f4b6045ae528ef499ed0cb9e2b199371b278dbeb9ff3537",
+    "retained_semantic_subspace_norm_fraction": 0.9966947861230568
+  },
+  "legacy_last_token_witness_used_as_causal_identity_premise": false,
+  "lexical_disjointness": {
+    "audit_sha256": "a02ef9fa05085394e6d08c73c77296b80e8768e97ce262c9a91c05244abb28b2",
+    "basis_holdout_lexically_disjoint": true,
+    "calibration_content_vocabulary_sha256": "064844bd682b0132403c43af72385e132b43daa2445000a7e82ccb76d5906f7a",
+    "content_overlap": [],
+    "content_overlap_count": 0,
+    "holdout_content_vocabulary_sha256": "1ffbb56cd070b6c51b6c8d61d508873d3d539020e6361681d746b5920dc5b708"
+  },
+  "llama_cpp_commit": "bb4caa7540188872173c44d161602d9271386413",
+  "model": "Qwen/Qwen3-0.6B-GGUF:Q8_0",
+  "native_api": "llama_set_adapter_cvec",
+  "native_token_scope": "ALL_PROMPT_TOKENS",
+  "nuisance_families": [
+    "CANONICAL_LABEL_LEXEME",
+    "SEMANTIC_SYNONYM_LEXICON",
+    "GENERIC_INSTRUCTION_COMPLIANCE",
+    "OUTPUT_CODE_IDENTITY"
+  ],
+  "primary_layer_input": 21,
+  "result_sha256": "1486f27de96fa2aeb6c0b52800fdf9852a0b9e50761b17ba38c647d424d82532",
+  "schema": "CLAY_TRIGGER1_STRUCTURAL_NATIVE_ABSTRACT_RUNTIME/v1",
+  "selected_gain_calibration_only": 4.0,
+  "source_head": "8e370c819d687bdba39345be384359f49bc605fb",
+  "status": "FAIL_ABSTRACT_NATIVE_DISCRIMINATOR",
+  "training_credit": 0,
+  "whole_entityos_hcu_credit": 0,
+  "whole_hcu_credit": 0
+}
+RESULT_END

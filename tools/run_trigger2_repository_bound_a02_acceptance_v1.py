@@ -32,6 +32,8 @@ GENERATION_AUTHORITY_REL = Path(
 )
 TESTS = [
     Path("tests/test_trigger2_a02_discriminator_producer_auth_gate_v1.py"),
+    Path("tests/test_trigger2_a02_discriminator_producer_auth_git_lineage_adversarial_v1.py"),
+    Path("tests/test_run_trigger2_repository_bound_a02_acceptance_v1.py"),
     Path("tests/test_trigger2_hyperposition_state_history_generation_bound_gate_v4.py"),
 ]
 RELEVANT_SOURCES = [

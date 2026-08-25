@@ -7,6 +7,8 @@ on:
       - "tools/forge_evidence_credit_871.py"
       - "tests/test_forge_distillery_replay_identity_873.py"
       - "tests/test_forge_distillery_replay_restart_873.py"
+      - "tests/test_forge_distillery_replay_identity_v2_migration_873.py"
+      - "tests/test_forge_distillery_concurrent_replay_873.py"
       - ".github/workflows/go873-distillery-replay-restart-regression.yml"
   workflow_dispatch:
 
@@ -20,8 +22,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Compile bridge and regressions
-        run: python3 -m py_compile tools/ingest_forge_accepts_into_distillery.py tools/forge_evidence_credit_871.py tests/test_forge_distillery_replay_identity_873.py tests/test_forge_distillery_replay_restart_873.py
+        run: python3 -m py_compile tools/ingest_forge_accepts_into_distillery.py tools/forge_evidence_credit_871.py tests/test_forge_distillery_replay_identity_873.py tests/test_forge_distillery_replay_restart_873.py tests/test_forge_distillery_replay_identity_v2_migration_873.py tests/test_forge_distillery_concurrent_replay_873.py
       - name: Replay identity regression
         run: python3 -m unittest -q tests.test_forge_distillery_replay_identity_873
       - name: Process restart semantic replay regression
         run: python3 -m unittest -q tests.test_forge_distillery_replay_restart_873
+      - name: Replay identity v2 migration regression
+        run: python3 -m unittest -q tests.test_forge_distillery_replay_identity_v2_migration_873
+      - name: Concurrent replay regression
+        run: python3 -m unittest -q tests.test_forge_distillery_concurrent_replay_873

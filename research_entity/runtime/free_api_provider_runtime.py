@@ -631,6 +631,10 @@ class ProviderOutputTruncated(ValueError):
     """The provider explicitly stopped because its output limit was reached."""
 
 
+class ProviderReportedError(ValueError):
+    """A syntactically valid HTTP 200 body explicitly reports an error."""
+
+
 def _open_no_redirect(request: urllib.request.Request, timeout: int):
     return urllib.request.build_opener(_NoRedirectHandler()).open(
         request, timeout=timeout
@@ -986,6 +990,10 @@ def _execute_chat_locked(
                 parse_float=_parse_finite_json_float,
                 object_pairs_hook=_reject_duplicate_json_names,
             )
+            if type(payload) is dict and (
+                payload.get("object") == "error" or "error" in payload
+            ):
+                raise ProviderReportedError
             choices = payload["choices"]
             if not isinstance(choices, list) or len(choices) != 1:
                 raise ValueError("response_choices_must_contain_exactly_one_choice")
@@ -1075,6 +1083,11 @@ def _execute_chat_locked(
         content = None
         outcome = "provider_output_truncated"
         cooldown_seconds = 0
+        retryable = False
+    except ProviderReportedError:
+        content = None
+        outcome = "provider_error"
+        cooldown_seconds = 15
         retryable = False
     except (
         json.JSONDecodeError,

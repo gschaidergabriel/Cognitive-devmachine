@@ -5,11 +5,14 @@
   "probe_contract": "FREE_SWARM_HISTORICAL_BACKFILL_RECEIPT/v1",
   "sandbox": "clay-direct-dev",
   "transport": "SELF_HOSTED_LINUX_X64",
-  "retry_generation": 0,
-  "current_dispatch_key": "free-swarm-historical-backfill-v1-g0000",
-  "dispatch_state": "LEGACY_FANOUT_QUARANTINED_NO_CANONICAL_RESULT",
-  "active_trigger_authorized": false,
+  "retry_generation": 1,
+  "current_dispatch_key": "free-swarm-historical-backfill-v1-g0001",
+  "dispatch_state": "GENERATION_1_SELECTED_CREATE_ONLY_CLAIM_REQUIRED",
+  "active_trigger_authorized": true,
   "generation_rule": "INCREMENT_ONLY_AFTER_TERMINAL_RESULT_REQUIRING_DELIBERATE_RETRY_OR_EXPLICIT_INFRASTRUCTURE_OR_PROBE_SEMANTIC_CHANGE; NEW_GO_ALONE_MUST_NOT_INCREMENT",
+  "generation_advance_reason": "EXPLICIT_INFRASTRUCTURE_AND_PROBE_SEMANTIC_CHANGE: generation 0 was legacy-fanout quarantined without a canonical result; the typed singleton workflow was reintroduced for future generations, historical completion semantics were changed to two explicit exhaustive zero-novel confirmations with a >=64 finite non-PASS ceiling, extraction-transport liveness was repaired, and exact-current regression preflight is now a mandatory control-flow fence before the provider-free capsule",
+  "predecessor_dispatch_key": "free-swarm-historical-backfill-v1-g0000",
+  "predecessor_state": "LEGACY_FANOUT_QUARANTINED_NO_CANONICAL_RESULT",
   "identity_excludes": [
     "go_text",
     "macrocycle_id",
@@ -21,21 +24,23 @@
     "organ_model_session_identity"
   ],
   "canonical_workflow": ".github/workflows/go878-historical-backfill-runtime.yml",
-  "canonical_workflow_state": "PRESENT_TYPED_SINGLETON_FUTURE_ADMITTED_GENERATIONS_ONLY",
+  "canonical_workflow_state": "PRESENT_TYPED_SINGLETON_WITH_EXACT_CURRENT_REGRESSION_PREFLIGHT",
   "canonical_workflow_reintroduced_commit": "9e9818aee8c63de19ada063dadb087bfc24d8631",
+  "canonical_workflow_preflight_commit": "fa095d198cb96974c6afdbaf75e7e4998cd62134",
   "legacy_workflow_retirement_commit": "481772fd6dccc91aeefe8193e99857e53d23b687",
   "canonical_capsule": "tools/run_free_swarm_historical_backfill_capsule_878.py",
   "claim_path_template": "research_entity/continuity/ordinary_dispatch_claims/{dispatch_key}.json",
   "result_path_template": "research_entity/continuity/ordinary_dispatch_results/{dispatch_key}.json",
   "current_result_observed": false,
-  "next_retry_generation_candidate": 1,
-  "next_retry_reason": "EXPLICIT_INFRASTRUCTURE_AND_PROBE_SEMANTIC_CHANGE_PRESENT_BUT_RUNTIME_REGRESSION_STILL_REQUIRED: generation-0 remains quarantined; the typed singleton workflow and shared fail-closed exhaustiveness/liveness source have been restored for a future admitted successor, but exact-current regression/runtime evidence is not yet observed",
-  "next_retry_blockers": [
-    "EXECUTE_EXACT_CURRENT_HISTORICAL_SATURATION_AND_LIVENESS_REGRESSIONS",
-    "VERIFY_EXHAUSTIVE_TRUE_PLUS_TWO_CONSECUTIVE_ZERO_NOVEL_CONFIRMATIONS_FOR_SATURATED_ON_THE_MUTATION_CAPABLE_PATHS",
-    "VERIFY_MAX_PASSES_REACHED_REMAINS_NON_PASS_AND_PENDING_EXTRACTION_KEEPS_THE_SHARED_EXTRACTION_TRANSPORT_ALIVE",
-    "CREATE_GENERATION_1_CLAIM_BEFORE_EXACTLY_ONE_SUCCESSOR_TRIGGER",
-    "SUCCESSOR_TRIGGER_MUST_USE_CLAY_ORDINARY_DISPATCH_V1_AND_SKIP_IF_THE_SEMANTIC_RESULT_ALREADY_EXISTS"
+  "preflight_tests": [
+    "tests/test_free_swarm_backfill_exhaustiveness_878.py",
+    "tests/test_go_878_raw_generation_backpressure.py"
+  ],
+  "preflight_law": "THE PROVIDER_FREE HISTORICAL CAPSULE MUST BE UNREACHABLE UNLESS BOTH EXACT_CURRENT REGRESSION SUITES PASS INSIDE THE SAME ADMITTED CLAY_DIRECT_DEV SINGLETON",
+  "remaining_admission_gates": [
+    "CREATE_ONLY_GENERATION_1_CLAIM_BEFORE_TRIGGER",
+    "EXACTLY_ONE_OWNER_TRIGGER_FOR_FREE_SWARM_HISTORICAL_BACKFILL_V1_G0001",
+    "SKIP_IF_THE_SEMANTIC_RESULT_ALREADY_EXISTS"
   ],
   "protocol": "research_entity/continuity/ORDINARY_DISPATCH_IDEMPOTENCY_PROTOCOL.md"
 }

@@ -1,0 +1,39 @@
+{
+  "schema": "CLAY_QWEN06_JSPACE_SCOPE_TRANSPORT_SOURCE_DELTA/v1",
+  "date": "2026-08-25",
+  "organ": "GPT-5.6 Sol",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "authority_epoch_observed": "8.78",
+  "mode": "FREE_ONLY",
+  "canonical_main_observed_after_source_work": "cd0091662986a5e2ec2cdb8e3bb95c9a46085f9a",
+  "retained_donor_pr": 1263,
+  "scope": "SOURCE_AND_RESEARCH_DESIGN_ONLY",
+  "deltas": [
+    {"commit": "b301157c8ac1598207f3689d027ace06c7e667e1", "role": "scope-matched split-prefill research specification"},
+    {"commit": "531b8c158d5c7a59ba164884a9c016554b929abc", "role": "native cvec explicit token-scope harness donor"},
+    {"commit": "a35c435370e2a4952b92bf63ed63b0eea8d7b33c", "role": "scope source regressions"},
+    {"commit": "f75652e4093b247c212cfc9e6b073edebae9f0e7", "role": "downstream transport-tap research specification"},
+    {"commit": "6ab551ca5423646d6a6abb6a1f0ec240b9937568", "role": "native raw downstream layer-input extraction harness donor"},
+    {"commit": "e2bf7ae552c1371993b7a4d8a36a22e7632a43f9", "role": "transport tap source regressions"}
+  ],
+  "mechanistic_findings": [
+    "Pinned llama.cpp cvec is additive and one-shot full-prompt decode broadcasts the 1D control direction over prompt-token rows.",
+    "Pinned llama.cpp batch semantics permit a same-context split-prefill carrier: natural prefix decode, then cvec enablement, then exactly one final prompt-token decode.",
+    "Pinned llama.cpp staging API exposes layer-input taps that can extract raw downstream nonterminal activations without modifying the Qwen3 graph.",
+    "A split-prefill no-cvec baseline is mandatory because decode partitioning itself may create numeric drift.",
+    "Downstream transport must be adjudicated by an independently derived probe/subspace, not by reusing the intervention vector as its own readout."
+  ],
+  "current_scientific_boundary": "Existing native llama.cpp cvec runtime evidence remains bounded causal component evidence. Strict semantic J-Space promotion remains blocked pending scenario-blocked label-independent semantic derivation, semantic-target x output-code counterbalance, residual-norm calibration, lexical/scenario deconfounding, explicit token-scope evidence, independent downstream transport, context-valid dual output readout, nuisance controls and fresh holdout.",
+  "runtime_executed_by_this_delta": false,
+  "source_tests_executed_by_this_delta": false,
+  "credits": {
+    "additional_native_runtime": 0,
+    "jspace_model_runtime": 0,
+    "full_hcu": 0,
+    "whole_entityos_hcu": 0,
+    "training": 0,
+    "canonical_semantics": false
+  },
+  "next_exact_source_gate": "Fuse a Python orchestrator/adjudicator for the explicit-scope native harness and raw downstream taps into the strict scenario-blocked target-by-code counterbalanced residual-norm-calibrated discriminator; execute only after current atomic unusual-experiment coordination is valid."
+}

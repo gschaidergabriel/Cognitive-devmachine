@@ -1,0 +1,152 @@
+{
+  "schema": "CLAY_TRIGGER2_CONTEXT_BINDING_CURRICULUM_GENERATOR/v1",
+  "date": "2026-08-25",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority": {
+    "canonical_main_observed_before_generator_write": "0edcc2ca0dba28fa0536bc5834fe6ede05a46e96",
+    "generator_commit": "263030e5991a4323fbabedfb29d2ec34e8bbb115",
+    "test_commit": "c1daa662baefac35dca49b77d62e92658432361f",
+    "supervisor_epoch": "8.78",
+    "mode": "FREE_ONLY",
+    "owner_target": "research_entity/global/XENO_HCU_GO_TARGET_ARCHITECTURE_OWNER_DIRECTIVE_2026-08-25.md"
+  },
+  "source_evidence": {
+    "claude_xeno_ingest": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_CLAUDE_XENO_VECTOR_EVIDENCE_INGEST_V1_GPT56SOL.json",
+    "measured_model": "Goekdeniz-Guelmez/Josiefied-Qwen3.5-0.8B-gabliterated-v1@591852bda6e1979f59e4b0f5ee2919697b12e936",
+    "observed_binding_baselines": {
+      "cross_template_mean_L19": 0.5254629629629629,
+      "codebook_symbol_hit": 0.3611111111111111,
+      "codebook_symbol_chance": 0.3333333333333333
+    },
+    "preserved_capabilities": {
+      "semantic_readability": "0.94-1.00 from approximately L6 onward on the measured lexically separated family",
+      "symbol_write_L23_hit": 1.0,
+      "carrier_binding_HRR_MAP_whitened_k_le_16": 1.0
+    },
+    "interpretation": "The highest-value training target is context-dependent semantic-to-episode-local-symbol binding/routing while preserving already-observed semantic readout, symbol writeout, and carrier-space binding capacity."
+  },
+  "hypothesis": "A factorial curriculum that forces the model to derive the output symbol from the actual episode-local S3 codebook across templates, codebook orders, lexical realizations, and query polarity can install the missing dynamic binding/routing computation more directly than retraining semantic recognition or applying one static steering direction.",
+  "strongest_counterhypothesis": "The measured failure may reflect a deeper architecture/runtime limitation or a measurement/template artifact rather than a trainable binding deficiency; synthetic codebook SFT could improve surface mapping accuracy while leaving the intended internal mechanism absent or brittle OOD.",
+  "falsifiers": [
+    "Matched pilot improves in-template accuracy but not frozen unseen-template/permutation/symbol-family transfer.",
+    "Class-symbol association or lexical cues predict targets above the episode-local mapping after counterbalancing.",
+    "Improvement disappears when codebook order, symbols, or query polarity are changed.",
+    "Post-FT causal tests show no new context-dependent routing mechanism despite behavioral gains.",
+    "Retention or authority-boundary regressions exceed the preregistered acceptance budget."
+  ],
+  "swarm_review": {
+    "roles": [
+      "generator architect",
+      "causal-evidence reviewer",
+      "leakage/Goodman reviewer",
+      "shortcut adversary",
+      "training-dynamics reviewer",
+      "architecture-boundary reviewer"
+    ],
+    "findings": [
+      "The prior synthetic seed mainly teaches architecture protocol and does not directly target the newly measured semantic-to-codebook-symbol binding deficit.",
+      "The supplied Claude generator had a critical metadata-only permutation failure; the new generator reconstructs and validates the actual mapping from atom triplet plus S3 permutation.",
+      "Complete class-symbol counterbalancing must be exact within each generated block, not a loose relative-deviation threshold.",
+      "Literal ALLOW/DENY/ABSTAIN leakage is allowed only inside the episode-local CODEBOOK span for this generator version.",
+      "Query polarity is factorialized so a lexical target-class shortcut cannot solve all cases.",
+      "Four structurally distinct semantic families are balanced to attack the measured context-invariance failure.",
+      "Production generation must fail closed unless atom text, observed token_id, and token_count=1 are supplied externally; synthetic demo atoms mint no model/tokenizer fact."
+    ],
+    "self_discovered_validator_failure": {
+      "initial_test_status": "FAIL",
+      "failure": "The first local validator version could accept a false s3_permutation metadata field when prompt and mapping metadata remained mutually consistent.",
+      "repair": "Validator now deterministically reconstructs class->symbol mapping from atom_triplet plus s3_permutation and emits S3_PERMUTATION_NOT_CAUSAL on mismatch.",
+      "post_repair_status": "8/8 local deterministic unit tests PASS"
+    }
+  },
+  "generator": {
+    "path": "tools/trigger2_context_binding_generator_v1.py",
+    "test_path": "tests/test_trigger2_context_binding_generator_v1.py",
+    "generator_local_sha256": "cd3d5e106dc491387bfbe0e787167b55de44440186254669fb7f8dbdfc92576a",
+    "test_local_sha256": "a49be2e6efd738a3113d233fc2bdebd7d948c9da9838ae5d90fa150d72e23149",
+    "rows_per_atom_block": 144,
+    "factorization": "6 actual S3 mappings x 4 template families x 2 query polarities x 3 base semantic classes",
+    "template_families": ["procedural", "evidence", "state", "counterfactual"],
+    "query_polarities": ["DIRECT", "INVERTED"],
+    "classes": ["ALLOW", "DENY", "ABSTAIN"],
+    "target_format": "exactly one episode-local codebook symbol",
+    "counterbalance": "exact class-symbol equality within each selected three-atom block",
+    "codebook_order": "varied across all six orderings in deterministic seeded generation",
+    "production_atom_requirement": "externally observed text + token_id + token_count=1",
+    "production_atom_source_expected": "the 46 accepted orthogonalized contrast-centered atoms from the measured Claude XENO ABI package; rejected atom 'or' must not be admitted"
+  },
+  "deterministic_local_validation": {
+    "scope": "LOCAL_SOURCE_TEST_ONLY_NOT_ENTITYOS_RUNTIME",
+    "unit_tests": 8,
+    "unit_tests_pass": 8,
+    "unit_tests_fail": 0,
+    "demo_rows_per_block": 144,
+    "demo_audit_pass": true,
+    "demo_s3_groups": 8,
+    "demo_s3_groups_complete": 8,
+    "demo_codebook_order_variants": 6,
+    "demo_template_counts_each": 36,
+    "demo_polarity_counts_each": 72,
+    "demo_target_class_counts_each": 48,
+    "demo_atoms": "SYNTHETIC_ONLY_NOT_MEASURED_TOKENIZER_FACT"
+  },
+  "example_shapes": [
+    {
+      "mapping": {"ALLOW": "ATOM_A", "DENY": "ATOM_B", "ABSTAIN": "ATOM_C"},
+      "situation": "Every required precondition is explicitly satisfied and the requested step is within scope.",
+      "query": "Should the operation proceed under the stated rule?",
+      "target_class": "ALLOW",
+      "target": "ATOM_A"
+    },
+    {
+      "mapping": {"ALLOW": "ATOM_A", "DENY": "ATOM_B", "ABSTAIN": "ATOM_C"},
+      "situation": "All mandatory checks are present, current, and compatible with proceeding.",
+      "query": "Should the operation be stopped under the stated rule?",
+      "target_class": "DENY",
+      "target": "ATOM_B"
+    },
+    {
+      "mapping": {"ALLOW": "ATOM_C", "DENY": "ATOM_A", "ABSTAIN": "ATOM_B"},
+      "situation": "The measurement needed for the requested conclusion is absent.",
+      "query": "Does the evidence establish the queried conclusion?",
+      "target_class": "ABSTAIN",
+      "target": "ATOM_B"
+    }
+  ],
+  "external_method_inputs": [
+    {
+      "source": "Wu, Geiger, Milliere, ICML 2025, How Do Transformers Learn Variable Binding in Symbolic Programs?, PMLR 267",
+      "use": "Supports the plausibility that transformers can learn systematic dynamic variable binding/routing from synthetic dereference tasks with distractors; does not prove this Qwen3.5 checkpoint will learn the desired mechanism."
+    },
+    {
+      "source": "Hsu et al., arXiv:2604.24693, Contextual Linear Activation Steering of Language Models",
+      "use": "Supports treating context-dependent control as distinct from fixed global steering strength; external method evidence only, not Clay causal credit."
+    }
+  ],
+  "open_gates": [
+    "Materialize the measured 46-atom tokenizer-bound alphabet as a provenance-bound machine-readable input without inventing token IDs from the current ingest summary.",
+    "Run the generator on the real accepted atom set and pass the existing candidate-row gate plus family/provenance split linter.",
+    "Expand semantic lexical banks into split-isolated causal families; freeze validation/holdout families before mixture or checkpoint selection.",
+    "Add dedicated unseen-symbol and unseen-template holdouts using distinct provenance ancestry rather than sampling siblings across splits.",
+    "Measure class-symbol mutual information and non-codebook lexical predictors on emitted rows in addition to exact count balance.",
+    "Only then use the two pinned Qwen3.5-0.8B checkpoint candidates in the preregistered matched free/local pilot; do not select Base vs post-trained from source metadata alone.",
+    "After behavioral gains, require same-model causal tests before claiming J-Space mechanism installation."
+  ],
+  "credits": {
+    "research_design_delta": 1,
+    "generator_source_candidate": 1,
+    "local_source_tests": "8/8 PASS",
+    "accepted_dataset_tokens": 0,
+    "qwen35_jspace_runtime_credit": 0,
+    "qwen35_training_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "canonical_semantics_promotion": false
+  },
+  "next_exact_action": "Recover or materialize the exact measured 46 accepted one-token atom identities from the Claude XENO package into a provenance-bound atom manifest, then generate the first real-atom TRAIN tranche with this v1 generator and run both row-level and family/provenance leakage gates before any model pilot."
+}

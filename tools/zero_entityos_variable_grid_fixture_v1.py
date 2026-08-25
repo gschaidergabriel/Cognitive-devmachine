@@ -171,14 +171,8 @@ class VariableGridFixture:
                VALUES(?,?,?,?,?,?,?,?,?)""",
             (
                 work_id,
-                admission["causal_event_id"],
-                admission["admission_id"],
-                admission["generation"],
-                process_id,
-                canonical_json(payload),
-                payload_digest,
-                workspace_epoch,
-                "READY",
+                admission["causal_event_id"], admission["admission_id"], admission["generation"],
+                process_id, canonical_json(payload), payload_digest, workspace_epoch, "READY",
             ),
         )
         self.con.commit()
@@ -190,9 +184,7 @@ class VariableGridFixture:
         return f"fixture-executor-{slot:04d}"
 
     def execute_ready(self) -> list[dict]:
-        rows = self.con.execute(
-            "SELECT * FROM work_queue WHERE status='READY' ORDER BY work_id"
-        ).fetchall()
+        rows = self.con.execute("SELECT * FROM work_queue WHERE status='READY' ORDER BY work_id").fetchall()
         results = []
         for row in rows:
             process_id = row["process_id"]
@@ -218,18 +210,12 @@ class VariableGridFixture:
                 """INSERT INTO result_log
                    (result_id,work_id,process_id,executor_id,result_class,result_json,semantic_digest)
                    VALUES(?,?,?,?,?,?,?)""",
-                (
-                    result_id, row["work_id"], process_id, executor_id,
-                    semantic_result["result_class"], canonical_json(semantic_result), semantic_digest,
-                ),
+                (result_id, row["work_id"], process_id, executor_id,
+                 semantic_result["result_class"], canonical_json(semantic_result), semantic_digest),
             )
             self.con.execute("UPDATE work_queue SET status='DONE' WHERE work_id=?", (row["work_id"],))
-            results.append({
-                "result_id": result_id,
-                "executor_id": executor_id,
-                "semantic": semantic_result,
-                "semantic_digest": semantic_digest,
-            })
+            results.append({"result_id": result_id, "executor_id": executor_id,
+                            "semantic": semantic_result, "semantic_digest": semantic_digest})
         self.con.commit()
         return results
 
@@ -251,8 +237,13 @@ class VariableGridFixture:
         self.con.commit()
         return candidate_id
 
-    def stub_claude_roundtrip(self, admission: dict, work_id: str, workspace_epoch: int, state_refs: Iterable[str]) -> dict:
-        """Deterministic bridge fixture. This is explicitly NOT a Claude Code invocation."""
+    def stub_claude_roundtrip(self, admission: dict, work_id: str, workspace_epoch: int,
+                              state_refs: Iterable[str]) -> dict:
+        """Deterministic bridge-shape fixture; explicitly NOT a Claude invocation.
+
+        A stub proves packet/re-entry identity only. Because no matched downstream
+        intervention/control is run here, downstream causal change MUST remain UNKNOWN.
+        """
         bridge_request = {
             "schema": "CLAUDE_CODE_BRIDGE_PACKET/v1",
             "bridge_id": "bridge-" + digest({"work_id": work_id, "direction": "GRID_TO_CLAUDE"})[:20],
@@ -287,25 +278,23 @@ class VariableGridFixture:
             "to_workspace_epoch": workspace_epoch + 1,
             "reentry_payload_ref": bridge_result["payload_ref"],
             "reentry_digest": bridge_result["payload_digest"],
-            "observed_downstream_change": "TRUE",
+            "observed_downstream_change": "UNKNOWN",
+            "causal_credit": 0,
+            "measurement_reason": "STUB_ONLY_NO_MATCHED_DOWNSTREAM_INTERVENTION_CONTROL",
         }
         reentry_id = "re-" + digest(reentry)[:24]
         self.con.execute(
             """INSERT INTO workspace_reentry
                (reentry_id,source_result_id,source_process_id,causal_event_id,from_workspace_epoch,to_workspace_epoch,payload_digest,observed_downstream_change)
                VALUES(?,?,?,?,?,?,?,?)""",
-            (
-                reentry_id, source_result_id, "ZECP14", admission["causal_event_id"],
-                workspace_epoch, workspace_epoch + 1, bridge_result["payload_digest"], "TRUE",
-            ),
+            (reentry_id, source_result_id, "ZECP14", admission["causal_event_id"],
+             workspace_epoch, workspace_epoch + 1, bridge_result["payload_digest"], "UNKNOWN"),
         )
         self.con.commit()
         return {"request": bridge_request, "result": bridge_result, "reentry": reentry}
 
     def semantic_fingerprint(self) -> str:
-        rows = self.con.execute(
-            "SELECT result_json FROM result_log ORDER BY work_id"
-        ).fetchall()
+        rows = self.con.execute("SELECT result_json FROM result_log ORDER BY work_id").fetchall()
         return digest([json.loads(r[0]) for r in rows])
 
     def count(self, table: str) -> int:

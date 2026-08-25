@@ -1,0 +1,143 @@
+name: Trigger1 structural native observable PR run
+
+on:
+  pull_request:
+    types: [opened]
+
+permissions:
+  contents: write
+  pull-requests: read
+
+concurrency:
+  group: clay-trigger1-structural-native-abstract-v1
+  cancel-in-progress: false
+
+jobs:
+  execute:
+    if: >-
+      github.repository == 'gschaidergabriel/clay-global-research-entity' &&
+      github.event.pull_request.title == '[CLAY-DISPATCH] Trigger1 structural native abstract PR run' &&
+      github.event.pull_request.user.login == 'gschaidergabriel' &&
+      contains(github.event.pull_request.body || '', 'dispatch_schema: CLAY_TRIGGER1_STRUCTURAL_NATIVE_ABSTRACT_PR/v1') &&
+      contains(github.event.pull_request.body || '', 'dispatch_nonce: 20260825T1140P0700_GPT56SOL_PR')
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 180
+    steps:
+      - name: Checkout current main
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: main
+          fetch-depth: 0
+          clean: true
+          persist-credentials: true
+
+      - name: Detect already persisted identical run
+        id: preflight
+        shell: bash
+        run: |
+          set -euo pipefail
+          existing="$(find research_entity/runtime/tool_results -maxdepth 2 -type f -name trigger1_structural_native_abstract_result.json -print -quit 2>/dev/null || true)"
+          if [[ -n "$existing" ]]; then
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            echo "existing=$existing" >> "$GITHUB_OUTPUT"
+            cat "$existing"
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Validate exact source
+        if: steps.preflight.outputs.skip != 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -z "$(git status --porcelain=v1)"
+          python3 -m py_compile tools/trigger1_structural_label_free_cases.py tools/trigger1_nuisance_residualize.py tools/trigger1_structural_native_abstract_execute.py
+          python3 -m unittest -v tests.test_trigger1_structural_label_free_cases tests.test_trigger1_nuisance_residualize
+          git rev-parse HEAD > "${RUNNER_TEMP}/source-head.txt"
+          git rev-parse 'HEAD^{tree}' > "${RUNNER_TEMP}/source-tree.txt"
+
+      - name: Execute native Q8 structural discriminator
+        if: steps.preflight.outputs.skip != 'true'
+        id: experiment
+        shell: bash
+        run: |
+          set -u
+          host_out="${RUNNER_TEMP}/trigger1-structural-native-${GITHUB_RUN_ID}"
+          mkdir -p "$host_out"
+          source_head="$(cat "${RUNNER_TEMP}/source-head.txt")"
+          source_tree="$(cat "${RUNNER_TEMP}/source-tree.txt")"
+          runtime=''; prefix=()
+          if command -v podman >/dev/null 2>&1 && podman inspect clay-direct-dev >/dev/null 2>&1; then runtime='podman'; prefix=(podman)
+          elif command -v docker >/dev/null 2>&1 && docker inspect clay-direct-dev >/dev/null 2>&1; then runtime='docker'; prefix=(docker)
+          elif command -v sudo >/dev/null 2>&1 && sudo -n podman inspect clay-direct-dev >/dev/null 2>&1; then runtime='sudo-podman'; prefix=(sudo -n podman)
+          elif command -v sudo >/dev/null 2>&1 && sudo -n docker inspect clay-direct-dev >/dev/null 2>&1; then runtime='sudo-docker'; prefix=(sudo -n docker)
+          fi
+          if [[ -z "$runtime" ]]; then
+            python3 - "$host_out/transport.json" "$source_head" "$source_tree" <<'PY'
+          import json,pathlib,sys
+          pathlib.Path(sys.argv[1]).write_text(json.dumps({'schema':'CLAY_TRIGGER1_STRUCTURAL_NATIVE_TRANSPORT/v1','status':'BLOCKED_CLAY_DIRECT_DEV_NOT_DISCOVERED','source_head':sys.argv[2],'source_tree':sys.argv[3],'scientific_negative':False},indent=2,sort_keys=True)+'\n')
+          PY
+            echo "host_out=$host_out" >> "$GITHUB_OUTPUT"; echo "status=BLOCKED_CLAY_DIRECT_DEV_NOT_DISCOVERED" >> "$GITHUB_OUTPUT"; exit 0
+          fi
+          remote="/tmp/clay-trigger1-structural-native-${GITHUB_RUN_ID}"
+          "${prefix[@]}" exec clay-direct-dev sh -lc "rm -rf '$remote' && mkdir -p '$remote/repo' '$remote/out'"
+          "${prefix[@]}" cp "${GITHUB_WORKSPACE}/." "clay-direct-dev:${remote}/repo"
+          set +e
+          "${prefix[@]}" exec -e CLAY_REMOTE="$remote" -e CLAY_SOURCE_HEAD="$source_head" clay-direct-dev bash -lc '
+            set -euo pipefail
+            cd "$CLAY_REMOTE/repo"
+            unset OPENAI_API_KEY OPENAI_API_KEYS ANTHROPIC_API_KEY ANTHROPIC_API_KEYS || true
+            unset GROQ_API_KEY GROQ_API_KEYS GROQ2_API_KEY GROQ3_API_KEY || true
+            unset MISTRAL_API_KEY MISTRAL_API_KEYS MISTRAL2_API_KEY MISTRAL3_API_KEY || true
+            unset NVIDIA_API_KEY NVIDIA_API_KEYS NVIDIA_NIM_API_KEY NVIDIA2_API_KEY NVIDIA3_API_KEY NGC_API_KEY || true
+            unset OPENROUTER_API_KEY OPENROUTER_API_KEYS OPENROUTER2_API_KEY OPENROUTER3_API_KEY || true
+            unset TOGETHER_API_KEY TOGETHER_API_KEYS HF_TOKEN HUGGING_FACE_HUB_TOKEN HUGGINGFACE_HUB_TOKEN || true
+            export HF_HUB_DISABLE_IMPLICIT_TOKEN=1
+            residual=""; while IFS= read -r name; do case "$name" in OPENAI*KEY*|ANTHROPIC*KEY*|GROQ*KEY*|MISTRAL*KEY*|NVIDIA*KEY*|NGC*KEY*|OPENROUTER*KEY*|TOGETHER*KEY*) residual="${residual}${name} ";; esac; done < <(compgen -v)
+            [[ -z "$residual" ]] || { echo "BLOCKED_PROVIDER_CREDENTIAL_ENV:$residual" >&2; exit 41; }
+            expected_llama=bb4caa7540188872173c44d161602d9271386413
+            expected_gguf=9465e63a22add5354d9bb4b99e90117043c7124007664907259bd16d043bb031
+            llama_root=""
+            for d in /workspace/llama.cpp /opt/llama.cpp /root/llama.cpp /tmp/llama.cpp /home/*/llama.cpp; do [[ -d "$d/.git" ]] || continue; [[ "$(git -C "$d" rev-parse HEAD 2>/dev/null || true)" == "$expected_llama" ]] && { llama_root="$d"; break; }; done
+            if [[ -z "$llama_root" ]]; then while IFS= read -r d; do [[ "$(git -C "$d" rev-parse HEAD 2>/dev/null || true)" == "$expected_llama" ]] && { llama_root="$d"; break; }; done < <(find /root /workspace /opt /home /tmp -maxdepth 5 -type d -name llama.cpp 2>/dev/null | head -50); fi
+            [[ -n "$llama_root" ]] || { echo BLOCKED_PINNED_LLAMA_CPP_NOT_FOUND >&2; exit 42; }
+            gguf=""; while IFS= read -r candidate; do [[ -f "$candidate" ]] || continue; [[ "$(sha256sum "$candidate" | awk "{print \\$1}")" == "$expected_gguf" ]] && { gguf="$candidate"; break; }; done < <(find /root /workspace /opt /home /tmp -maxdepth 7 -type f -name "*.gguf" -size +500M -size -800M 2>/dev/null | head -80)
+            [[ -n "$gguf" ]] || { echo BLOCKED_PINNED_Q8_GGUF_NOT_FOUND >&2; exit 43; }
+            cap="$CLAY_REMOTE/native-layer-capture"; log="$CLAY_REMOTE/native-cvec-logits"
+            c++ -std=c++17 -O2 -I"$llama_root/include" -I"$llama_root/ggml/include" tools/trigger1_native_llamacpp_layer_capture.cpp -L"$llama_root/build/bin" -Wl,-rpath,"$llama_root/build/bin" -lllama -lggml -lggml-base -lggml-cpu -pthread -o "$cap"
+            c++ -std=c++17 -O2 -I"$llama_root/include" -I"$llama_root/ggml/include" tools/trigger1_native_llamacpp_cvec_logits.cpp -L"$llama_root/build/bin" -Wl,-rpath,"$llama_root/build/bin" -lllama -lggml -lggml-base -lggml-cpu -pthread -o "$log"
+            python3 tools/trigger1_structural_native_abstract_execute.py --output-dir "$CLAY_REMOTE/out" --llama-root "$llama_root" --gguf "$gguf" --capture-harness "$cap" --logits-harness "$log" --source-head "$CLAY_SOURCE_HEAD" > "$CLAY_REMOTE/out/launcher.stdout.txt" 2> "$CLAY_REMOTE/out/launcher.stderr.txt"
+          '
+          rc=$?
+          set -e
+          "${prefix[@]}" cp "clay-direct-dev:${remote}/out/." "$host_out/" >/dev/null 2>&1 || true
+          python3 - "$host_out/transport.json" "$runtime" "$rc" "$source_head" "$source_tree" <<'PY'
+          import json,os,pathlib,sys
+          root=pathlib.Path(sys.argv[1]).parent; result=root/'trigger1_structural_native_abstract_result.json'; status='COMPLETE' if int(sys.argv[3])==0 and result.is_file() else f'BLOCKED_OR_FAILED_RC_{sys.argv[3]}'
+          pathlib.Path(sys.argv[1]).write_text(json.dumps({'schema':'CLAY_TRIGGER1_STRUCTURAL_NATIVE_TRANSPORT/v1','status':status,'container_runtime':sys.argv[2],'process_exit_code':int(sys.argv[3]),'source_head':sys.argv[4],'source_tree':sys.argv[5],'github_run_id':os.environ.get('GITHUB_RUN_ID'),'runner_name':os.environ.get('RUNNER_NAME'),'sandbox':'clay-direct-dev','external_provider_credentials_required':False,'zero_provider_billing':True,'scientific_negative':False if status!='COMPLETE' else None},indent=2,sort_keys=True)+'\n')
+          PY
+          echo "host_out=$host_out" >> "$GITHUB_OUTPUT"; echo "status=$(python3 -c 'import json,sys;print(json.load(open(sys.argv[1]))["status"])' "$host_out/transport.json")" >> "$GITHUB_OUTPUT"
+
+      - name: Persist exact runtime evidence
+        if: always() && steps.preflight.outputs.skip != 'true'
+        shell: bash
+        env:
+          HOST_OUT: ${{ steps.experiment.outputs.host_out }}
+          EXP_STATUS: ${{ steps.experiment.outputs.status }}
+        run: |
+          set -euo pipefail
+          [[ -n "${HOST_OUT:-}" && -d "$HOST_OUT" ]] || exit 0
+          target="research_entity/runtime/tool_results/trigger1-structural-native-run${GITHUB_RUN_ID}"
+          mkdir -p "$target"
+          for f in transport.json trigger1_structural_native_abstract_result.json structural_case_bundle.json residualized_layer21.json residualized_layer24.json launcher.stdout.txt launcher.stderr.txt gain_calibration.logits.stdout.jsonl holdout.logits.stdout.jsonl holdout.capture.stdout.jsonl; do [[ ! -s "$HOST_OUT/$f" ]] || cp "$HOST_OUT/$f" "$target/$f"; done
+          python3 - "$target/manifest.json" "$target" <<'PY'
+          import hashlib,json,os,pathlib,sys
+          out=pathlib.Path(sys.argv[1]); root=pathlib.Path(sys.argv[2]); files=[]
+          for p in sorted(root.iterdir()):
+            if p.is_file() and p!=out: files.append({'name':p.name,'bytes':p.stat().st_size,'sha256':hashlib.sha256(p.read_bytes()).hexdigest()})
+          out.write_text(json.dumps({'schema':'CLAY_TRIGGER1_STRUCTURAL_NATIVE_PERSISTED_MANIFEST/v1','status':os.environ.get('EXP_STATUS') or 'UNKNOWN','github_run_id':os.environ.get('GITHUB_RUN_ID'),'files':files,'canonical_credit_minted':False},indent=2,sort_keys=True)+'\n')
+          PY
+          git config user.name 'clay-trigger1-native-runner'; git config user.email 'clay-trigger1-native-runner@users.noreply.github.com'
+          git add "$target"; git commit -m "evidence(trigger1): structural native abstract run ${GITHUB_RUN_ID} [skip ci]" || exit 0
+          for attempt in 1 2 3 4 5 6; do git pull --rebase origin main && git push origin HEAD:main && exit 0; sleep $((attempt*3)); done
+          exit 1

@@ -7,8 +7,10 @@ one epoch/digest and so coordinator writes are compare-and-swap fenced. It delib
 reuses the exact validation/digest path from ``xeno_shared_state_boot_v1`` rather than
 creating another S1 canonicalizer.
 
-Ordinary nodes never write this store. Their ``NODE_RESULT/v1`` packets are ingested only
-by a coordinator holding a current lease. S0 truth/effect/security authority remains
+Ordinary nodes never write this store, including schema installation. Their
+``NODE_RESULT/v1`` packets are ingested only by a coordinator holding a current lease
+whose scope explicitly includes ``results``. Raw ingested results are likewise only
+read through a current coordinator lease. S0 truth/effect/security authority remains
 outside this module.
 """
 from __future__ import annotations
@@ -33,15 +35,20 @@ from xeno_shared_state_boot_v1 import (
 
 STORE_SCHEMA = "ENTITYOS_HCU_S1_SQLITE_CAS/v1"
 RESULT_STORE_SCHEMA = "ENTITYOS_HCU_NODE_RESULT_INGEST/v1"
+_REQUIRED_TABLES = frozenset({"hcu_s1_state", "hcu_s1_node_results"})
 
 
 class S1StoreError(SharedStateError):
     pass
 
 
-def _require_idle(db: sqlite3.Connection) -> None:
+def _require_connection(db: sqlite3.Connection) -> None:
     if not isinstance(db, sqlite3.Connection):
         raise S1StoreError("db:SQLITE_CONNECTION_REQUIRED")
+
+
+def _require_idle(db: sqlite3.Connection) -> None:
+    _require_connection(db)
     if db.in_transaction:
         raise S1StoreError("OUTER_TRANSACTION_FORBIDDEN")
 
@@ -71,6 +78,17 @@ def _install_schema(db: sqlite3.Connection) -> None:
           ingested_by TEXT NOT NULL
         )"""
     )
+
+
+def _require_schema_read_only(db: sqlite3.Connection) -> None:
+    """Verify schema by metadata read only; never let an ordinary read perform DDL."""
+    _require_connection(db)
+    rows = db.execute(
+        "SELECT name FROM sqlite_master WHERE type='table' AND name IN (?,?) ORDER BY name",
+        tuple(sorted(_REQUIRED_TABLES)),
+    ).fetchall()
+    if {str(row[0]) for row in rows} != set(_REQUIRED_TABLES):
+        raise S1StoreError("S1_STORE_UNINITIALIZED")
 
 
 def _state_json(state: Mapping[str, Any]) -> str:
@@ -135,10 +153,8 @@ def open_or_initialize(db: sqlite3.Connection, *, genesis_state: Mapping[str, An
 
 
 def read_snapshot(db: sqlite3.Connection) -> SharedStateSnapshot:
-    """Read and revalidate the persisted epoch/digest; never trust stored digest blindly."""
-    if not isinstance(db, sqlite3.Connection):
-        raise S1StoreError("db:SQLITE_CONNECTION_REQUIRED")
-    _install_schema(db)
+    """Strictly read-only S1 observation with persisted epoch/digest revalidation."""
+    _require_schema_read_only(db)
     return _load_snapshot_locked(db)
 
 
@@ -154,6 +170,11 @@ def _require_current_lease(current: SharedStateSnapshot, lease: CoordinatorLease
         raise S1StoreError("COORDINATOR_LEASE_NODE_MISMATCH")
     if lease.state_epoch != current.epoch or lease.state_digest != current.digest:
         raise S1StoreError("STALE_COORDINATOR_LEASE")
+
+
+def _require_lease_scope(lease: CoordinatorLease, root: str) -> None:
+    if root not in set(lease.scope):
+        raise S1StoreError(f"COORDINATOR_LEASE_SCOPE_REQUIRED:{root}")
 
 
 def publish_delta(
@@ -223,6 +244,7 @@ def ingest_node_result(
         _install_schema(db)
         current = _load_snapshot_locked(db)
         _require_current_lease(current, lease, coordinator_node_id)
+        _require_lease_scope(lease, "results")
         if not isinstance(result, NodeResult) or result.schema != NODE_RESULT_SCHEMA:
             raise S1StoreError("NODE_RESULT_SCHEMA_UNSUPPORTED")
         if result.state_epoch != current.epoch or result.state_digest != current.digest:
@@ -268,11 +290,17 @@ def ingest_node_result(
         raise
 
 
-def list_ingested_results(db: sqlite3.Connection) -> list[dict[str, Any]]:
-    """Read-only deterministic result listing for coordinator compression/integration."""
-    if not isinstance(db, sqlite3.Connection):
-        raise S1StoreError("db:SQLITE_CONNECTION_REQUIRED")
-    _install_schema(db)
+def list_ingested_results(
+    db: sqlite3.Connection,
+    lease: CoordinatorLease,
+    *,
+    coordinator_node_id: str,
+) -> list[dict[str, Any]]:
+    """Coordinator-only raw-result read for later compression/integration."""
+    _require_schema_read_only(db)
+    current = _load_snapshot_locked(db)
+    _require_current_lease(current, lease, coordinator_node_id)
+    _require_lease_scope(lease, "results")
     rows = db.execute(
         """SELECT result_id,result_schema,node_id,task_id,state_epoch,state_digest,
                   payload_ref,payload_sha256,ingested_by

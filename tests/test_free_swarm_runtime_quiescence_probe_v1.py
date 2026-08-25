@@ -1,3 +1,4 @@
+import hashlib
 import importlib.util
 import json
 from pathlib import Path
@@ -91,6 +92,13 @@ def make_budget_db(path: Path, *, requests=1, lease_expires_at=None):
         )
     con.commit()
     con.close()
+
+
+def test_file_sha256_returns_exact_hex_digest(tmp_path):
+    p = tmp_path / "hash-source.bin"
+    payload = b"trigger2-quiescence-hash-regression"
+    p.write_bytes(payload)
+    assert probe.file_sha256(p) == hashlib.sha256(payload).hexdigest()
 
 
 def test_admission_hard_off_passes(tmp_path):

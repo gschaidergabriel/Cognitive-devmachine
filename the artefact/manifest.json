@@ -8,7 +8,7 @@
   "canonical_repository": "gschaidergabriel/clay-global-research-entity",
   "canonical_branch": "main",
   "canonical_workspace": "the artefact/",
-  "authority_correction": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_72.json",
+  "authority_correction": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_78.json",
   "persistent_research_entity": "Clay",
   "temporary_worker_role": "ORGAN_NOT_ENTITY",
   "canonical_state_authority": "UnifiedDB_OR_CURRENT_COMPATIBILITY_MINIUNIFIEDDB_CANONICAL_STATE_EVIDENCE_SUBSTRATE",
@@ -45,7 +45,7 @@
   "execution_policy": {
     "free_only_default": true,
     "active_supervisor_free_only": true,
-    "active_supervisor_epoch": "8.72",
+    "active_supervisor_epoch": "8.78",
     "authorized_zero_cost_local_normal_user_execution": true,
     "authorized_clay_direct_dev_vps_sandbox_execution": true,
     "dual_machine_coordination_allowed_when_useful": true,
@@ -114,12 +114,14 @@
     "scope": "ENTRY_CANONICALIZATION_COMPONENT_ONLY"
   },
   "latest_go_runtime_gate": {
-    "authority_epoch": "8.72",
+    "authority_epoch": "8.78",
     "gate": "CLAY_FORGE_DISTILLERY_EXACT_CURRENT_RUNTIME_GATE/v2_PLUS_LIVE_PROMOTION",
     "source_workflow": ".github/workflows/go871-forge-distillery-runtime-gate.yml",
     "source_selection": "CANONICAL_MAIN_AT_RUNNER_CHECKOUT_TIME",
     "current_terminal_repository_bound_result_observed": false,
     "required_current_scope": [
+      "historical_backfill_saturation_receipt_pass",
+      "replay_v2_migration_concurrency_reopen_pass",
       "promotion_source_guards_pass",
       "disposable_exact_current_gate_pass",
       "live_distillery_promotion_status_pass",
@@ -134,7 +136,7 @@
       "workflow_job_id": 97480167751,
       "last_observed_status": "QUEUED",
       "current_scope_credit": 0,
-      "reason": "RUN_PREDATES_LIVE_PROMOTION_WORKFLOW_WIRING"
+      "reason": "RUN_PREDATES_CURRENT_HISTORICAL_BACKFILL_AND_REPLAY_V2_SCOPE"
     },
     "runtime_credit_added": 0,
     "jspace_model_runtime_credit_added": 0,
@@ -172,14 +174,14 @@
     "training_credit": 0
   },
   "live_funnel_observed": {
-    "snapshot_generated_at": "2026-08-24T16:45:00Z",
-    "free_swarm_total_tokens": 18035888,
+    "snapshot_generated_at": "2026-08-25T03:19:15.836786Z",
+    "free_swarm_total_tokens": 39932437,
     "forge_nominal_accepted_deltas": 1,
     "distillery_accepted_packets": 0,
     "distillery_accepted_dataset_tokens": 0
   },
   "coordination_authority": {
-    "supervisor": "8.72",
+    "supervisor": "8.78",
     "atomic_lease_required_before_unusual_intervention": true,
     "no_reproducible_trigger_identity": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
     "no_id_receipts": "LEGACY_MACROCYCLE_ID_UNRESOLVED_NO_POST_HOC_GROUPING",
@@ -200,12 +202,12 @@
     "policy": "prior ClayVerse-specific container/web/Clerk/Claude/MicroClay fields and acceptance gates remain available through Git provenance as donor evidence only; none are current EntityOS acceptance obligations unless explicitly re-admitted under current authority"
   },
   "current_frontier": [
-    "keep all current-facing authority mirrors aligned to SUPERVISOR_STEERING_8_72 FREE_ONLY and active owner zero-cost execution authority",
-    "execute and observe a terminal repository-bound result from the current Forge->Distillery workflow revision containing live promotion; the older queued run 32742535392 predates that scope and has zero current-scope credit",
-    "require disposable exact-current gate PASS plus live Distillery promotion PASS with exactly one nonzero-token new packet and immediate replay +0 before Forge operational runtime credit",
+    "keep all current-facing authority mirrors aligned to SUPERVISOR_STEERING_8_78 FREE_ONLY and active owner zero-cost execution authority",
+    "execute the fused backlog-first historical Forge path on exact-current source to saturation and emit FREE_SWARM_HISTORICAL_BACKFILL_RECEIPT/v1 with exact source/tree/dirty/artifact/scan/provenance/backlog identity",
+    "execute replay-v2 migration plus concurrency/reopen regressions on exact-current main before Distillery or training credit",
+    "require one evidence-qualified Forge ACCEPT to exactly one persistent Distillery packet with accepted_dataset_tokens > 0 and immediate semantic replay +0 packets/+0 tokens",
     "retain gschaidergabriel/clay-global-research-entity#1263 as the single HCU donor lane and avoid duplicate HCU/Typed Entry implementation while exact runtime closure is pending",
     "retain the provider-independent local Qwen3-0.6B nonterminal midlayer causal discriminator; require canonical atomic lease before unusual intervention and exact source-execution binding",
-    "require upstream label-independence proof, explicit holdout metric modality, counterbalanced token labels when applicable, wrong-layer, lesion/rescue and six matched controls before J-Space scientific promotion",
     "continue Typed Entry -> route -> verified engine/load -> GRID10 -> actual model execution -> InferenceReceipt -> model-specific Global J-Space/GWT -> TrainingTrace -> admitted causal dataset",
     "keep external provider lanes secondary and fail closed unless concrete FREE credential/model/route economic provenance is bound",
     "whole EntityOS/HCU, full HCU, provider runtime, J-Space model and training credit remain zero until exact executable evidence promotes only its measured scope"

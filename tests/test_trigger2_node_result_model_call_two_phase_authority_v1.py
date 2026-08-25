@@ -131,6 +131,7 @@ def test_positive_envelope_and_ten_member_cohort():
 
 def test_same_semantic_payload_different_model_call_not_interchangeable():
     a = build(1, "identical")
+    # Keep exact same raw semantic packet but bind a distinct exact model call/output.
     packet, _, launch, launch_id, _, _ = make_inputs(idx=1, packet_value="identical")
     call_b = call_receipt(n=99, candidate=launch["candidate_id"], rendered=launch["rendered_utf8_sha256"])
     launch_b = deepcopy(launch)
@@ -161,6 +162,7 @@ def test_model_call_reference_transplant_to_other_cell_rejected():
     packet1, call1, launch1, launch1_id, obs1, obs1_id = make_inputs(idx=1)
     _, _, launch2, launch2_id, _, _ = make_inputs(idx=2)
     transplanted_launch = deepcopy(launch2)
+    # Try to attach call1 to cell2 while keeping the frozen cell2 launch commitment.
     try:
         build_authority_envelope(
             packet=packet1,
@@ -204,6 +206,7 @@ def test_source_drift_requires_distinct_call_and_launch_commitments():
     packet, call, launch, launch_id, obs, obs_id = make_inputs(idx=1)
     changed = deepcopy(call)
     changed["source_identity"]["source_identity_sha256"] = h("new-source")
+    # The source-bound envelope remains old, so the receipt becomes internally inconsistent.
     try:
         build_authority_envelope(
             packet=packet,

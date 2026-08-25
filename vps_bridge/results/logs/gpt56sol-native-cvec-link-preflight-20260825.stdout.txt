@@ -1,0 +1,54 @@
+source_head=18ef954f1fda549088eab83d604671a8c2a4d210
+cpp_sha=7bdd6e2a19d06c5479c5f42dbff98b6475b5de2b3765903076902dcf4d87c366
+py_sha=eabb6dd6f4287340b1aa3948a6c849fca1faedccf9abba13c8cd87caf86feea0
+--- bin ---
+total 23M
+lrwxrwxrwx 1 root root   17 Aug 25 03:35 libggml-base.so -> libggml-base.so.0
+lrwxrwxrwx 1 root root   22 Aug 25 03:35 libggml-base.so.0 -> libggml-base.so.0.21.0
+-rwxr-xr-x 1 root root 902K Aug 25 03:35 libggml-base.so.0.21.0
+lrwxrwxrwx 1 root root   16 Aug 25 03:35 libggml-cpu.so -> libggml-cpu.so.0
+lrwxrwxrwx 1 root root   21 Aug 25 03:35 libggml-cpu.so.0 -> libggml-cpu.so.0.21.0
+-rwxr-xr-x 1 root root 1.1M Aug 25 03:35 libggml-cpu.so.0.21.0
+lrwxrwxrwx 1 root root   12 Aug 25 03:35 libggml.so -> libggml.so.0
+lrwxrwxrwx 1 root root   17 Aug 25 03:35 libggml.so.0 -> libggml.so.0.21.0
+-rwxr-xr-x 1 root root  56K Aug 25 03:35 libggml.so.0.21.0
+-rwxr-xr-x 1 root root 442K Aug 25 03:41 libllama-cli-impl.so
+lrwxrwxrwx 1 root root   20 Aug 25 03:39 libllama-common.so -> libllama-common.so.0
+lrwxrwxrwx 1 root root   24 Aug 25 03:39 libllama-common.so.0 -> libllama-common.so.0.2.0
+-rwxr-xr-x 1 root root 5.9M Aug 25 03:39 libllama-common.so.0.2.0
+-rwxr-xr-x 1 root root 7.2M Aug 25 03:41 libllama-server-impl.so
+lrwxrwxrwx 1 root root   13 Aug 25 03:37 libllama.so -> libllama.so.0
+lrwxrwxrwx 1 root root   17 Aug 25 03:37 libllama.so.0 -> libllama.so.0.2.0
+-rwxr-xr-x 1 root root 4.3M Aug 25 03:37 libllama.so.0.2.0
+lrwxrwxrwx 1 root root   12 Aug 25 03:39 libmtmd.so -> libmtmd.so.0
+lrwxrwxrwx 1 root root   16 Aug 25 03:39 libmtmd.so.0 -> libmtmd.so.0.2.0
+-rwxr-xr-x 1 root root 1.9M Aug 25 03:39 libmtmd.so.0.2.0
+-rwxr-xr-x 1 root root 1.2M Aug 25 03:41 llama-cli
+-rwxr-xr-x 1 root root  18K Aug 25 03:41 llama-server
+--- shared libs ---
+/cache/clay-qwen06-native/build/bin/libggml-base.so.0.21.0
+/cache/clay-qwen06-native/build/bin/libggml-cpu.so.0.21.0
+/cache/clay-qwen06-native/build/bin/libggml.so.0.21.0
+/cache/clay-qwen06-native/build/bin/libllama-cli-impl.so
+/cache/clay-qwen06-native/build/bin/libllama-common.so.0.2.0
+/cache/clay-qwen06-native/build/bin/libllama-server-impl.so
+/cache/clay-qwen06-native/build/bin/libllama.so.0.2.0
+/cache/clay-qwen06-native/build/bin/libmtmd.so.0.2.0
+--- llama ldd ---
+	linux-vdso.so.1 (0x00007ffd59768000)
+	libllama-cli-impl.so => /cache/clay-qwen06-native/build/bin/libllama-cli-impl.so (0x00007aafa70e0000)
+	libstdc++.so.6 => /lib/x86_64-linux-gnu/libstdc++.so.6 (0x00007aafa6e5e000)
+	libgcc_s.so.1 => /lib/x86_64-linux-gnu/libgcc_s.so.1 (0x00007aafa6e30000)
+	libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007aafa6c1e000)
+	/lib64/ld-linux-x86-64.so.2 (0x00007aafa7220000)
+	libllama-server-impl.so => /cache/clay-qwen06-native/build/bin/libllama-server-impl.so (0x00007aafa6400000)
+	libllama-common.so.0 => /cache/clay-qwen06-native/build/bin/libllama-common.so.0 (0x00007aafa5e00000)
+	libllama.so.0 => /cache/clay-qwen06-native/build/bin/libllama.so.0 (0x00007aafa5a00000)
+	libggml-base.so.0 => /cache/clay-qwen06-native/build/bin/libggml-base.so.0 (0x00007aafa6b4d000)
+	libm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x00007aafa6a64000)
+	libmtmd.so.0 => /cache/clay-qwen06-native/build/bin/libmtmd.so.0 (0x00007aafa5858000)
+	libggml.so.0 => /cache/clay-qwen06-native/build/bin/libggml.so.0 (0x00007aafa63f3000)
+	libgomp.so.1 => /lib/x86_64-linux-gnu/libgomp.so.1 (0x00007aafa639d000)
+	libggml-cpu.so.0 => /cache/clay-qwen06-native/build/bin/libggml-cpu.so.0 (0x00007aafa56cd000)
+--- compiler ---
+g++ (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0

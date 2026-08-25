@@ -1,6 +1,6 @@
 {
   "schema": "CLAY_FREE_SWARM_SYSTEM_ANALYSIS/v3",
-  "generated_at": "2026-08-25T00:33:03.648675+00:00",
+  "generated_at": "2026-08-25T00:48:09.603944+00:00",
   "runtime": {
     "supervisor": "STOPPED/QUARANTINED",
     "go_swarm": "RUNNING",
@@ -45,16 +45,16 @@
     "policy": "FREE_ONLY; CREDENTIAL_BLIND_CONTROL_PARENT; SWARM_CHILD_ONLY_SECRET_SCOPE; CURRENT_CANONICAL_PROVIDER_ADMISSION; NO_PAID_FALLBACK; TOGETHER_FORBIDDEN"
   },
   "conversion": {
-    "successful": 5110,
-    "delta": 529,
+    "successful": 5158,
+    "delta": 531,
     "ready": 148,
-    "questions": 941,
-    "macrocycles": 345,
-    "delta_rate": 0.1035225048923679,
-    "ready_rate": 0.028962818003913895,
-    "question_rate": 0.18414872798434442,
-    "avg_cycle_delta_rate": 0.08577753661619918,
-    "avg_cycle_ready_rate": 0.009800481518168702
+    "questions": 944,
+    "macrocycles": 351,
+    "delta_rate": 0.1029468786351299,
+    "ready_rate": 0.02869329197363319,
+    "question_rate": 0.18301667312911982,
+    "avg_cycle_delta_rate": 0.08495227958002483,
+    "avg_cycle_ready_rate": 0.009632951919567527
   },
   "go_feedback": {
     "receipts": 0,
@@ -65,7 +65,7 @@
   },
   "distillery": {
     "schema": "CLAY_RESEARCH_DISTILLERY_STATUS/v1",
-    "generated_at": "2026-08-25T00:33:02.492344+00:00",
+    "generated_at": "2026-08-25T00:48:06.587898+00:00",
     "collected_source_tokens": 11621,
     "accepted_dataset_tokens": 0,
     "dataset_yield": 0.0,
@@ -86,7 +86,7 @@
     "model_output_tokens": 1455,
     "shared_provider_budget": {
       "schema": "CLAY_SHARED_PROVIDER_BUDGET/v1",
-      "generated_at": "2026-08-25T00:33:02.493339+00:00",
+      "generated_at": "2026-08-25T00:48:06.588473+00:00",
       "providers": {
         "arxiv": {
           "max_inflight": 1,
@@ -140,7 +140,7 @@
           "max_inflight": 128,
           "active_leases": 0,
           "min_interval_s": 0.0,
-          "cooldown_seconds": 2285.092051267624,
+          "cooldown_seconds": 1380.99662399292,
           "total_requests": 150,
           "total_success": 99,
           "total_429": 51,
@@ -165,12 +165,12 @@
           "active_leases": 1,
           "min_interval_s": 0.0,
           "cooldown_seconds": 0.0,
-          "total_requests": 6142,
-          "total_success": 4689,
-          "total_429": 494,
-          "total_errors": 923,
+          "total_requests": 6209,
+          "total_success": 4737,
+          "total_429": 512,
+          "total_errors": 924,
           "last_status": "200",
-          "last_observed_at": "2026-08-25T00:32:47.622201+00:00"
+          "last_observed_at": "2026-08-25T00:47:56.574753+00:00"
         },
         "openalex": {
           "max_inflight": 2,
@@ -189,12 +189,12 @@
           "active_leases": 0,
           "min_interval_s": 0.5,
           "cooldown_seconds": 0.0,
-          "total_requests": 240,
+          "total_requests": 241,
           "total_success": 133,
-          "total_429": 106,
+          "total_429": 107,
           "total_errors": 0,
           "last_status": "429",
-          "last_observed_at": "2026-08-25T00:31:05.283697+00:00"
+          "last_observed_at": "2026-08-25T00:37:49.548994+00:00"
         },
         "semantic_scholar": {
           "max_inflight": 1,
@@ -224,26 +224,26 @@
     },
     "db_bytes": 860160,
     "top_questions": [
-      "How to properly enforce provider network quarantine mechanism?",
-      "What are the implications of external LLM-provider traffic continuing after FREE_ONLY quarantine was published?",
-      "Wie können die vorgeschlagenen Verbesserungen auf ihre potenziellen Auswirkungen auf die Systemleistung und -stabilität hin bewertet werden?",
-      "Wie wirkt sich die FREE ONLY-Anbieterzulassung auf die Systemleistung und -vertrauenswürdigkeit aus?",
-      "Welche Auswirkungen hat die kanonische Zustands-/Beweisevidenz auf die Systemleistung und -vertrauenswürdigkeit?",
-      "Wie können die Ergebnisse der A/B-Tests verwendet werden, um die Systemarchitektur zu optimieren?",
-      "Wie kann die aktuelle Implementierung verbessert werden, um die gewünschten Ergebnisse zu erzielen?",
-      "What is the exact NVIDIA API response pattern (status codes, headers, body) that distinguishes free-tier from paid-tier credentials for nemotron-3-super-120b-a12b?",
-      "Wie kann die Unsicherheit im System reduziert werden?",
-      "Wie kann die Wirksamkeit des Tests verbessert werden, um die Ergebnisse zu bestätigen?"
+      "Can the typed entry fabric be extended to automatically fallback to another provider (e.g., groq) when a GATE_TIMEOUT occurs while preserving deterministic causal identity?",
+      "Existieren in der aktuellen Codebasis unerwartete Provider-Endpunkte oder Credential-Pfade?",
+      "Wie skaliert die Admission-Prüfung mit N+1 Providern (z.B. 10 vs. 600)?",
+      "Wie kann die FREE_SWARM_ADMISSION_BOUNDARY_RECEIPT/v1 exakt geprüft werden, um sicherzustellen, dass secret_lookup_count und network_attempt_count tatsächlich null sind, ohne zusätzliche Netzwerk‑ oder Schlüssel‑Lookups?",
+      "Can J-Space causal DAGs constructed from economic provenance receipts alone distinguish model-internal reasoning causality from prompt-response correlation without model-internal observability?",
+      "Can J-Space causal trace distinguish model-specific inference causality from prompt-template causality when multiple typed-entries share the same model?",
+      "Welcher minimalisierte Test‑Szenario beweist, dass ein nicht‑admittierter Provider‑Call im HCU‑Workflow ohne Admission‑Receipt blockiert wird, und welche Effect‑Journal‑Einträge sind hierzu erforderlich?",
+      "How to validate engine_class authenticity without circular dependencies",
+      "What threshold to apply for route_result confidence scoring",
+      "Integration test for bound_provenance across multi-engine routing"
     ],
     "candidate_states": {}
   },
   "evidence_forge": {
     "schema": "CLAY_FREE_EVIDENCE_FORGE_STATUS/v1",
-    "generated_at": "2026-08-25T00:33:01.402925+00:00",
+    "generated_at": "2026-08-25T00:48:07.442770+00:00",
     "candidate_states": {
       "ACCEPTED": 1,
       "NEEDS_IMPLEMENTATION": 65,
-      "NEW": 381,
+      "NEW": 383,
       "PATCH_REJECTED": 81,
       "VALIDATED_NOT_BETTER": 1
     },
@@ -263,7 +263,7 @@
     "peak_parallel_tasks": 0,
     "shared_provider_budget": {
       "schema": "CLAY_SHARED_PROVIDER_BUDGET/v1",
-      "generated_at": "2026-08-25T00:33:01.403583+00:00",
+      "generated_at": "2026-08-25T00:48:07.443291+00:00",
       "providers": {
         "arxiv": {
           "max_inflight": 1,
@@ -317,7 +317,7 @@
           "max_inflight": 128,
           "active_leases": 0,
           "min_interval_s": 0.0,
-          "cooldown_seconds": 2286.1815667152405,
+          "cooldown_seconds": 1380.141834974289,
           "total_requests": 150,
           "total_success": 99,
           "total_429": 51,
@@ -342,12 +342,12 @@
           "active_leases": 1,
           "min_interval_s": 0.0,
           "cooldown_seconds": 0.0,
-          "total_requests": 6142,
-          "total_success": 4689,
-          "total_429": 494,
-          "total_errors": 923,
+          "total_requests": 6209,
+          "total_success": 4737,
+          "total_429": 512,
+          "total_errors": 924,
           "last_status": "200",
-          "last_observed_at": "2026-08-25T00:32:47.622201+00:00"
+          "last_observed_at": "2026-08-25T00:47:56.574753+00:00"
         },
         "openalex": {
           "max_inflight": 2,
@@ -366,12 +366,12 @@
           "active_leases": 0,
           "min_interval_s": 0.5,
           "cooldown_seconds": 0.0,
-          "total_requests": 240,
+          "total_requests": 241,
           "total_success": 133,
-          "total_429": 106,
+          "total_429": 107,
           "total_errors": 0,
           "last_status": "429",
-          "last_observed_at": "2026-08-25T00:31:05.283697+00:00"
+          "last_observed_at": "2026-08-25T00:37:49.548994+00:00"
         },
         "semantic_scholar": {
           "max_inflight": 1,
@@ -403,11 +403,11 @@
   },
   "costs": {
     "price_basis": "Claude Sonnet 5 introductory through 2026-08-31: $2/M input + $10/M output",
-    "free_swarm_sonnet5_equivalent_usd": 136.812136,
+    "free_swarm_sonnet5_equivalent_usd": 138.11612,
     "distillery_sonnet5_equivalent_usd": 0.015470000000000001,
-    "measured_total_sonnet5_equivalent_usd": 136.827606,
+    "measured_total_sonnet5_equivalent_usd": 138.13159,
     "verified_historical_savings_usd": null,
-    "nominal_avoided_if_zero_cost_usd": 136.827606,
-    "repo_output_only_proxy_usd": 121.60548
+    "nominal_avoided_if_zero_cost_usd": 138.13159,
+    "repo_output_only_proxy_usd": 121.60467
   }
 }

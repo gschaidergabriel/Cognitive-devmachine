@@ -1,6 +1,6 @@
 {
   "schema": "CLAY_FREE_SWARM_SYSTEM_ANALYSIS/v3",
-  "generated_at": "2026-08-25T13:24:09.312909+00:00",
+  "generated_at": "2026-08-25T13:39:20.992464+00:00",
   "runtime": {
     "supervisor": "STOPPED/QUARANTINED",
     "go_swarm": "RUNNING",
@@ -65,7 +65,7 @@
   },
   "distillery": {
     "schema": "CLAY_RESEARCH_DISTILLERY_STATUS/v1",
-    "generated_at": "2026-08-25T13:24:00.570839+00:00",
+    "generated_at": "2026-08-25T13:38:12.941353+00:00",
     "collected_source_tokens": 11621,
     "accepted_dataset_tokens": 0,
     "dataset_yield": 0.0,
@@ -111,7 +111,7 @@
     "model_output_tokens": 1455,
     "shared_provider_budget": {
       "schema": "CLAY_SHARED_PROVIDER_BUDGET/v1",
-      "generated_at": "2026-08-25T13:24:00.571479+00:00",
+      "generated_at": "2026-08-25T13:38:12.941967+00:00",
       "providers": {
         "arxiv": {
           "max_inflight": 1,
@@ -213,13 +213,13 @@
           "max_inflight": 16,
           "active_leases": 0,
           "min_interval_s": 0.5,
-          "cooldown_seconds": 9.989838600158691,
-          "total_requests": 930,
+          "cooldown_seconds": 9.990023136138916,
+          "total_requests": 1014,
           "total_success": 134,
-          "total_429": 795,
+          "total_429": 879,
           "total_errors": 0,
           "last_status": "429",
-          "last_observed_at": "2026-08-25T13:24:00.561390+00:00"
+          "last_observed_at": "2026-08-25T13:38:12.932028+00:00"
         },
         "semantic_scholar": {
           "max_inflight": 1,
@@ -247,24 +247,24 @@
         }
       }
     },
-    "db_bytes": 864256,
+    "db_bytes": 933888,
     "top_questions": [
-      "Does the concurrency threshold differ between model variants within the same provider (e.g., nemotron-3-super vs nemotron-mini)?",
-      "Is the threshold stable across time-of-day or provider-side load changes?",
-      "What cryptographic binding methods best preserve identity continuity while allowing parameter updates?",
-      "How does dynamic engine configuration affect cross-provider routing decisions in HCU's federated architecture?",
-      "Wie wirkt sich die Speicher‑Überlastung durch mmap‑basiertes Laden auf stabile Inferenz‑Leistung aus?",
-      "Does NVIDIA's NIM API expose any stable, per-call free-tier confirmation marker (header, response field, rate-limit signature) that distinguishes Developer Program free prototyping from paid usage without provider-side cooperation?",
-      "How does provider-side rate-limit signaling (429 headers, retry-after) causally interact with client-side timeout policy to shift the Pareto frontier?",
-      "Does NVIDIA's API surface a reliable, low-latency signal (HTTP status, header, error code) that distinguishes credential-level free vs paid model access at call time, or is billing purely post-hoc?",
-      "Kann das batch‑basierte Laden die Durchsatz‑Steigerung von groq‑Anfragen signifikant erhöhen, ohne die Latenz zu erhöhen?",
-      "Can the load balancing mechanism be applied to other providers with different architectures?"
+      "What minimum state serialization format is required for cross-provider identity preservation?",
+      "Can NVIDIA Developer Program credentials be cryptographically bound to specific free-prototyping routes at call time, or is provider-global admission the only available binding?",
+      "How does generation fencing interact with different model's context window management?",
+      "Can the current identity chaining mechanism scale to 6000 logical workers without performance degradation?",
+      "Wie kann die Lösung auf der AWS-Plattform konfiguriert werden, um die Skalierbarkeit zu maximieren?",
+      "Wie kann die Lösung auf der AWS-Plattform getestet und bewertet werden?",
+      "Wie kann loader_tx_id über Forks hinweg eindeutig und unveränderlich bleiben?",
+      "Which sparse MoE routing entropy metric (token-level vs sequence-level) causally predicts downstream task performance on HCU-style logical cells?",
+      "Does global broadcast intervention (ablation/patching) in GWT architectures produce measurable causal effects distinct from attention head ablation?",
+      "Can typed effect handlers provide deterministic replay guarantees for LLM tool chains under FREE_ONLY rate-limited inference?"
     ],
     "candidate_states": {}
   },
   "evidence_forge": {
     "schema": "CLAY_FREE_EVIDENCE_FORGE_STATUS/v1",
-    "generated_at": "2026-08-25T13:24:06.627761+00:00",
+    "generated_at": "2026-08-25T13:39:19.916811+00:00",
     "candidate_states": {
       "ACCEPTED": 1,
       "NEEDS_IMPLEMENTATION": 65,
@@ -288,7 +288,7 @@
     "peak_parallel_tasks": 0,
     "shared_provider_budget": {
       "schema": "CLAY_SHARED_PROVIDER_BUDGET/v1",
-      "generated_at": "2026-08-25T13:24:06.628543+00:00",
+      "generated_at": "2026-08-25T13:39:19.917451+00:00",
       "providers": {
         "arxiv": {
           "max_inflight": 1,
@@ -390,13 +390,13 @@
           "max_inflight": 16,
           "active_leases": 0,
           "min_interval_s": 0.5,
-          "cooldown_seconds": 3.9328205585479736,
-          "total_requests": 930,
+          "cooldown_seconds": 3.8712942600250244,
+          "total_requests": 1020,
           "total_success": 134,
-          "total_429": 795,
+          "total_429": 885,
           "total_errors": 0,
           "last_status": "429",
-          "last_observed_at": "2026-08-25T13:24:00.561390+00:00"
+          "last_observed_at": "2026-08-25T13:39:13.788744+00:00"
         },
         "semantic_scholar": {
           "max_inflight": 1,
@@ -433,6 +433,6 @@
     "measured_total_sonnet5_equivalent_usd": 148.830648,
     "verified_historical_savings_usd": null,
     "nominal_avoided_if_zero_cost_usd": 148.830648,
-    "repo_output_only_proxy_usd": 130.83632
+    "repo_output_only_proxy_usd": 131.8546
   }
 }

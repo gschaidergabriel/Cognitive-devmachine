@@ -1,0 +1,129 @@
+{
+  "schema": "CLAY_TRIGGER2_SWARM_BINDING_GENERATOR/v1",
+  "date": "2026-08-25",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "persistent_entity": "Clay",
+  "user_trigger": "triggerwort 2",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority_epoch": "8.78",
+  "canonical_main_at_start": "0edcc2ca0dba28fa0536bc5834fe6ede05a46e96",
+  "source_evidence": {
+    "claude_ingest": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_CLAUDE_XENO_VECTOR_EVIDENCE_INGEST_V1_GPT56SOL.json",
+    "target_model_snapshot": "Goekdeniz-Guelmez/Josiefied-Qwen3.5-0.8B-gabliterated-v1@591852bda6e1979f59e4b0f5ee2919697b12e936",
+    "observed_training_gap": "semantic readout and symbol-axis writeout are present while dynamic context-dependent codebook binding/routing is not established",
+    "observed_context_transfer_mean_L19": 0.5254629629629629,
+    "observed_codebook_symbol_baseline_hit": 0.3611111111111111,
+    "observed_codebook_symbol_chance": 0.3333333333333333,
+    "observed_baseline_one_sided_binomial_p_approx": 0.4224625249772148,
+    "protect": [
+      "semantic readout already measured strong on the measured task family",
+      "symbol-axis writeout already measured writable",
+      "carrier HRR/MAP binding algebra already measured sufficient through k<=16"
+    ]
+  },
+  "swarm_roles": [
+    "EVIDENCE_EXTRACTOR",
+    "DATASET_ARCHITECT",
+    "ADVERSARIAL_SHORTCUT_HUNTER",
+    "STATISTICAL_REVIEWER",
+    "ABI_PROVENANCE_REVIEWER",
+    "RETENTION_REVIEWER",
+    "HARNESS_COMPATIBILITY_REVIEWER",
+    "FINAL_INTEGRATOR"
+  ],
+  "review_findings_from_current_claude_generator": [
+    "CRITICAL: selected S3 permutation was metadata-only while the actual class-symbol mapping ignored it",
+    "CRITICAL: validator accepted partial S3 coverage",
+    "HIGH: counterbalance tolerance was too loose for complete class-symbol independence",
+    "HIGH: class-word leakage computation could not fail",
+    "HIGH: lexical split check omitted semantic-bearing prompt material",
+    "HIGH: training-template requirement was underchecked",
+    "MEDIUM: frozen nominal holdout template was visible in validation",
+    "MEDIUM: exact ABI row/manifest/model/tokenizer provenance still needs end-to-end binding"
+  ],
+  "implemented_delta": {
+    "generator": "tools/trigger2_dynamic_codebook_dataset_generator_v1.py",
+    "tests": "tests/test_trigger2_dynamic_codebook_dataset_generator_v1.py",
+    "purpose": "Generate a structural METHOD_ONLY seed that forces episode-local semantic-class -> symbol binding through the actually realized codebook mapping, not through permutation metadata.",
+    "properties": [
+      "all six S3 mappings are realized causally",
+      "target symbol is derived from the realized mapping",
+      "class-symbol pair counts are exactly balanced in the generated block",
+      "four structurally distinct training templates are emitted",
+      "class labels are permitted only inside the explicit CODEBOOK span",
+      "rejected measured atom 'or' is fail-closed",
+      "frozen T5 unseen-template family is never emitted",
+      "rows use ENTITYOS_HCU_TRAININGTRACE_CANDIDATE/v1 and cannot mint canonical truth/effect authority",
+      "placeholder atom runs are explicitly final_ft_eligible=false"
+    ]
+  },
+  "local_deterministic_validation": {
+    "pytest": "4 passed",
+    "generated_structural_rows": 72,
+    "realized_s3": 6,
+    "pair_count_min": 8,
+    "pair_count_max": 8,
+    "train_templates": ["T1_POLICY", "T2_QUESTION", "T3_STATEMENT", "T4_FIRST_PERSON"],
+    "frozen_templates_seen": [],
+    "candidate_gate_equivalent_rows_passed": 72,
+    "candidate_gate_equivalent_rows_failed": 0,
+    "generated_canonical_row_digest": "c5c490c0839114ba9448d179c60be939e42f5d741c40e2956247038d58af76fb",
+    "scope": "LOCAL_DETERMINISTIC_SOURCE_VALIDATION_ONLY; NOT REPOSITORY CI, MODEL RUNTIME, DATASET ADMISSION OR TRAINING CREDIT"
+  },
+  "swarm_rejections_and_repairs": [
+    {
+      "reviewer": "STATISTICAL_REVIEWER",
+      "rejected": "Treating one mapping family or loose relative-deviation tolerance as counterbalanced.",
+      "repair": "Realize all six S3 mappings and require exact equal counts for every class-symbol pair in the structural block."
+    },
+    {
+      "reviewer": "ADVERSARIAL_SHORTCUT_HUNTER",
+      "rejected": "Allowing class labels outside the codebook or deriving target from metadata instead of the realized mapping.",
+      "repair": "Span-aware class-label leak rejection plus target-from-mapping invariant."
+    },
+    {
+      "reviewer": "ABI_PROVENANCE_REVIEWER",
+      "rejected": "Calling placeholder ATOM_A/B/C rows final Full-FT training data.",
+      "repair": "Every generated row is final_ft_eligible=false; exact 46-atom ABI inventory, tokenizer identity, unseen-symbol split and manifest binding remain mandatory outer-pipeline gates."
+    },
+    {
+      "reviewer": "RETENTION_REVIEWER",
+      "rejected": "Relearning already measured semantic readout or symbol-axis writeout as the primary objective.",
+      "repair": "Concentrate this seed on context-dependent remapping while preserving read/write/carrier capabilities as retention targets."
+    },
+    {
+      "reviewer": "FINAL_INTEGRATOR",
+      "rejected": "Promoting generator greenness to training/model/J-Space credit.",
+      "repair": "Keep all promotion credits zero; this is a structural source/data-generation delta only."
+    }
+  ],
+  "remaining_blockers_before_final_full_ft_rows": [
+    "bind the exact measured 46 accepted ABI atoms and exact tokenizer/model snapshot; reject any inventory mismatch",
+    "freeze train/validation/holdout symbol families including a dedicated unseen-symbol holdout",
+    "implement split-isolated semantic-bearing lexical-family inventories and full SHA-256 provenance",
+    "reserve a fifth structurally unseen template family from both train and validation",
+    "bind exact ABI manifest member hashes and generator revision to every emitted row/family",
+    "run the repository-exact generator/tests and current candidate gate on an admitted execution surface",
+    "admit only evidence-qualified rows through the existing Forge/Distillery/TrainingTrace path",
+    "do not create positive Qwen3.5 J-Space semantic-control labels without same-model causal receipts"
+  ],
+  "training_hypothesis": {
+    "claim": "The most efficient first specialization pressure is episodic variable binding/routing: decode meaning already present, retrieve the episode-local mapping, and write the correct symbol through an already writable output direction.",
+    "status": "HYPOTHESIS_INFORMED_BY_CURRENT_MEASUREMENTS",
+    "counterhypothesis": "The apparent binding gap may require broader attention-mediated or distributed model changes rather than a narrow router.",
+    "falsifier": "After leak-free full-S3 multi-template training, held-out unseen-permutation/template/symbol performance fails to improve materially or retention damage exceeds the frozen bound."
+  },
+  "credits": {
+    "research_design_delta": 1,
+    "structural_training_example_generator_source": 1,
+    "accepted_dataset_tokens": 0,
+    "qwen35_jspace_runtime_credit": 0,
+    "qwen35_training_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "canonical_semantics_promotion": false
+  },
+  "next_exact_action": "Bind the exact 46-atom ABI inventory and tokenizer identity into a versioned outer generator that creates frozen symbol-family splits, then rerun the same S3/counterbalance/leak gates and emit an audited non-placeholder candidate JSONL before scaling corpus volume."
+}

@@ -5,9 +5,23 @@
   "probe_contract": "FREE_SWARM_BACKFILL_LINE_IDENTITY_RECEIPT/v1",
   "sandbox": "clay-direct-dev",
   "transport": "SELF_HOSTED_LINUX_X64",
-  "retry_generation": 0,
-  "current_dispatch_key": "free-swarm-backfill-line-identity-v1-g0000",
+  "retry_generation": 1,
+  "current_dispatch_key": "free-swarm-backfill-line-identity-v1-g0001",
   "generation_rule": "INCREMENT_ONLY_AFTER_TERMINAL_RESULT_REQUIRING_DELIBERATE_RETRY_OR_EXPLICIT_INFRASTRUCTURE_OR_PROBE_SEMANTIC_CHANGE; NEW_GO_ALONE_MUST_NOT_INCREMENT",
+  "generation_lineage": [
+    {
+      "generation": 0,
+      "dispatch_key": "free-swarm-backfill-line-identity-v1-g0000",
+      "state": "LEGACY_FANOUT_QUARANTINED_NO_NEW_TRIGGER",
+      "reason": "Pre-protocol issue fan-out created equivalent legacy carriers; generation 0 was quarantined and produced no canonical terminal result."
+    },
+    {
+      "generation": 1,
+      "dispatch_key": "free-swarm-backfill-line-identity-v1-g0001",
+      "state": "CURRENT",
+      "reason": "Explicit probe/infrastructure semantic change: workflow commit 27012e51b8c64e6aa91228c4c27782bbb11ec7f6 now enforces semantic dispatch key, create-only claim, stable concurrency group, canonical result path, and ALREADY_SATISFIED skip before sandbox execution. This is a protocol-authorized generation advance, not a new-go increment."
+    }
+  ],
   "identity_excludes": [
     "go_text",
     "macrocycle_id",

@@ -1,7 +1,8 @@
 {
   "schema": "CLAY_TRIGGER2_TRAINING_ARTIFACT_REGISTRY/v1",
-  "registry_version": "1.0.0",
+  "registry_version": "1.1.0",
   "created_at": "2026-08-25T19:00:00+07:00",
+  "last_reentry_at": "2026-08-25T19:04:00+07:00",
   "product": "EntityOS",
   "architecture": "HCU",
   "target_model_family": "Qwen3.5-0.8B",
@@ -11,8 +12,11 @@
   },
   "authority": {
     "canonical_main_at_registry_branch_base": "ba78c2fa87f8b2637b621fbe6301eee1158c9cc9",
+    "canonical_main_at_latest_reentry": "494e2214757e90c921afe462d9690ce1d0675ab8",
     "supervisor_epoch": "8.78",
     "owner_target_path": "research_entity/global/XENO_HCU_GO_TARGET_ARCHITECTURE_OWNER_DIRECTIVE_2026-08-25.md",
+    "semantic_hyperposition_contract_path": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_SEMANTIC_HYPERPOSITION_CROSSCUTTING_CONTRACT_V1_GPT56SOL.json",
+    "semantic_hyperposition_contract_blob_sha": "276ef668d14a998ae5739d686b2b1d594336b75c",
     "protocol_path": "research_entity/global/j-space/research/TRIGGER2_RESEARCH_AUDIT_VERSIONING_PROTOCOL_V1.md"
   },
   "inventory_completeness": "PARTIAL_BOOTSTRAP_REDISCOVERY_REQUIRED_EVERY_TRIGGER2",
@@ -58,6 +62,11 @@
       "rule_id": "RV006",
       "if": "holdout has been used for selection/retuning",
       "then": "freeze as historical contaminated evidence; never silently re-open it"
+    },
+    {
+      "rule_id": "RV007",
+      "if": "semantic Hyperposition cross-cutting contract changes",
+      "then": "review every corpus family for ontology/frame compatibility from the first trainable episode; do not assume late D-only coverage is sufficient"
     }
   ],
   "known_artifacts": [
@@ -78,6 +87,15 @@
       "review_action": "supersede only by newer admitted supervisor"
     },
     {
+      "artifact_id": "TRIGGER2_SEMANTIC_HYPERPOSITION_CROSSCUTTING_CONTRACT_V1",
+      "path": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_SEMANTIC_HYPERPOSITION_CROSSCUTTING_CONTRACT_V1_GPT56SOL.json",
+      "blob_sha": "276ef668d14a998ae5739d686b2b1d594336b75c",
+      "type": "CROSSCUTTING_TRAINING_ONTOLOGY",
+      "lifecycle_state": "CURRENT_CANDIDATE",
+      "role": "requires semantic Hyperposition carrier/schema from corpus start while allowing full D optimization to remain curriculum-late",
+      "revision_effect": "older C/A/B/process/binding artifacts lacking the required frame are REVIEW_REQUIRED for structural retrofit classification before integrated corpus admission"
+    },
+    {
       "artifact_id": "TRIGGER2_BINDING_ROUTER_FACTORIAL_V3",
       "path_hint": "Trigger-2 binding-router factorial generator v3 / its materialized corpus",
       "type": "BINDING_DATA_GENERATOR",
@@ -89,17 +107,18 @@
       "artifact_id": "TRIGGER2_COGNITIVE_PROCESS_FACTORIAL_SWARM_DELTA_V1",
       "path": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_COGNITIVE_PROCESS_FACTORIAL_SWARM_DELTA_V1_GPT56SOL.json",
       "type": "PROCESS_CURRICULUM_RESEARCH_DELTA",
-      "lifecycle_state": "CURRENT_CANDIDATE",
+      "lifecycle_state": "REVIEW_REQUIRED",
       "known_scope": "208 source-design rows across 13 process families with full 2x2x2 visible nuisance cross; no positive J-Space causal targets; not accepted dataset",
-      "review_action": "re-audit against Hyperposition/GRF labeler layer and final Xeno capability map before training freeze"
+      "revision_reason": "semantic Hyperposition cross-cutting contract landed after its original design; must verify/retrofit latent episode frame before integrated corpus use",
+      "review_action": "do not discard automatically; classify each family HYPERPOSITION_NATIVE / RETROFIT_REQUIRED / COMPONENT_ONLY / QUARANTINE"
     },
     {
       "artifact_id": "TRIGGER2_DYNAMIC_BINDING_SEEDS_PREMATERIALIZATION",
       "path_hint": "trigger2_xeno_dynamic_binding_seed_v2_prematerialization.jsonl and related full-cross successors",
       "type": "OPAQUE_BINDING_CURRICULUM",
-      "lifecycle_state": "BLOCKED",
-      "reason": "abstract ABI atoms / checkpoint-tokenizer binding and final materialization gates remain unresolved; exact status must be rediscovered from current main",
-      "review_action": "do not invent atom strings; rebind exact selected checkpoint/tokenizer/ABI manifest"
+      "lifecycle_state": "REVIEW_REQUIRED",
+      "reason": "in addition to ABI/checkpoint-tokenizer gates, current Hyperposition cross-cutting contract requires review of whether each episode is framed inside the latent branch-state ontology",
+      "review_action": "do not invent atom strings; rebind exact selected checkpoint/tokenizer/ABI manifest and classify Hyperposition frame compatibility"
     },
     {
       "artifact_id": "TRIGGER2_HYPERPOSITION_GRF_POSITIVE_ROWS",
@@ -107,7 +126,7 @@
       "type": "HYPERPOSITION_GRF_SUPERVISION",
       "lifecycle_state": "BLOCKED",
       "reason": "reference labelers U_state, D_resolve, U_test_order and f_salience_order are not yet canonically implemented/verified",
-      "review_action": "method/hard-negative rows may proceed where labels are mechanically valid; positive state-transition supervision waits for labeler contract"
+      "review_action": "method/hard-negative rows and mechanically labelable preserve/no-op frame examples may proceed; positive D/E state-transition supervision waits for labeler contract"
     }
   ],
   "required_labelers": [
@@ -153,6 +172,12 @@
     "AUTHORITY_EPISTEMIC_INTEGRITY",
     "GENERAL_CAPABILITY_RETENTION"
   ],
+  "crosscutting_hyperposition_policy": {
+    "carrier_schema_from_first_trainable_episode": true,
+    "full_D_optimization_may_be_curriculum_late": true,
+    "old_artifacts_without_frame": "REVIEW_REQUIRED_NOT_AUTOMATICALLY_REJECTED",
+    "allowed_pre_D_examples": "mechanically labelable identity/no-op/preserve-unresolved transitions inside the same latent ontology"
+  },
   "c1_policy": {
     "baseline_reported_in_training_scope": 0.222,
     "purpose": "cheap diagnostic of elementary semantic-class decodability",
@@ -181,6 +206,7 @@
   },
   "next_exact_actions": [
     "discover and hash the complete current Trigger-2 artifact inventory on each invocation",
+    "classify existing corpus families against the semantic-Hyperposition cross-cutting contract",
     "write explicit U_state/D_resolve/U_test_order/f_salience_order reference semantics before positive D/E generation",
     "add row/artifact dependency IDs to generators and candidate manifests",
     "add automatic stale/revision propagation based on dependency hash changes",

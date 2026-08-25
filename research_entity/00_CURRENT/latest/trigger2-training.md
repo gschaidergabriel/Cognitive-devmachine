@@ -2,66 +2,62 @@
 
 Status: `CURRENT_BLOCKED_ADMISSION`
 
-Trigger-2 **V66** is the current research-ledger successor under Supervisor **8.84**. This is a cache pointer only; newest explicit owner/supervisor authority and exact executable evidence outrank it.
+Trigger-2 **V68** is the current research-ledger successor under Supervisor **8.84**. This is a cache pointer only; newest explicit owner/supervisor authority and exact executable evidence outrank it.
 
-## P0 — runtime quiescence actively failed
+## P0 — runtime quiescence remains actively failed
 
-Owner FreeSwarm remains `HARD_OFF`. Latest committed telemetry carried forward from V65 reports `supervisor=STOPPED/QUARANTINED`, `go_swarm=RUNNING`, embedded provider admission still at **8.78**, and OpenRouter counters still advancing after stop. Supervisor 8.84 therefore preserves `ACTIVE_FAIL_POST_STOP_PROVIDER_ATTEMPT_COUNTERS_INCREASING`; provider/model/physical-GRID10/training promotion remains closed.
+Owner FreeSwarm remains `HARD_OFF`. Supervisor 8.84 preserves `ACTIVE_FAIL_POST_STOP_PROVIDER_ATTEMPT_COUNTERS_INCREASING`; provider/model/physical-GRID10/training promotion therefore remains closed.
 
-Required closure remains owning-host identification and termination/quarantine of every provider-capable survivor **without issuing a provider probe**, zero provider-capable survivors, a bounded no-restart interval, and zero provider-counter delta. Only after that may current FREE non-provider execution authority be re-entered.
+The current quiescence probe source has been strengthened to observe the shared provider-budget SQLite cumulative counters and unexpired leases directly in addition to derived `LIVE_METRICS` and `/proc` process samples. This is source progress only: no owning-host quiescence PASS is recorded here.
 
-## Retained V65 source chain
+Required closure remains: identify and terminate/quarantine every provider-capable survivor without issuing a provider probe, prove zero survivors and zero unexpired provider-budget leases, then observe bounded zero provider-counter delta before re-entering explicit FREE non-provider execution authority.
 
-Retained invocation/fusion authority remains:
+## Retained invocation/fusion source chain
 
 - `tools/trigger2_node_result_model_call_two_phase_authority_v1.py`
 - `tools/trigger2_fused_membership_two_phase_adapter_v1.py`
-- call-content identity may repeat across independent deterministic invocations;
-- invocation-event authority is distinct pre-call `launch_descriptor_sha256` plus post-call `executor_observation_sha256`;
+- call-content identity may repeat across deterministic independent invocations;
+- invocation-event authority is carried by distinct pre-call launch descriptors plus post-call executor observations;
 - membership ID/revision, node, PID, generation, state and immutable NODE_RESULT identity are cross-bound before fusion;
-- the adapter embeds authority into `authority_extensions`, reseals the existing proof envelope, and delegates only to the sole `FusedFabric.atomic_fused_cohort_commit` path.
+- current main freezes one deep-copied envelope cohort before validation and delegates that exact snapshot once, closing mutable-sequence validation/use drift at source level.
 
-Exact committed-byte adapter regression receipt remains **24 passed in 0.06s**, source-fixture scope only. No provider/model/physical-GRID10/VPS/training execution was performed and all promotion credits remain `0`.
+These are source/component results only. No provider/model/physical-GRID10/J-Space/training/HCU/EntityOS promotion credit is minted.
 
-## V66 — caller-forgeable physical proof boundary
+## V67 — caller-forgeable physical proof gap is durably pinned
 
-A stronger source blocker was found while re-entering the newly landed real-`FusedFabric` source-path integration test.
+The retained strict regression is:
 
-`FusedFabric.atomic_fused_cohort_commit` currently receives an ordinary caller-supplied `proof` dictionary and accepts the physical-cohort gate by checking boolean/value fields such as:
+- `tests/test_trigger2_physical_cohort_proof_origin_boundary_v1.py`
 
-- `all_alive_at_barrier`
-- `distinct_os_pids == 10`
-- `parent_child_pid_binding`
-- `same_snapshot_identity`
-- `all_transactions_open_at_barrier`
-- `all_hold_readonly_s1_fd_at_barrier`
-- `writer_free_identity_stable`
-- `process_intervals_overlap_release`
-- `ready_by_node` PID/read-receipt/snapshot markers
+It encodes the required fail-before-mutation behavior for an all-true synthetic proof dictionary. The physical coordinator still has no promotion credit until raw/synthetic proof origin is rejected at the real mutation boundary and a separately explicit source-fixture-only persistence path is preserved.
 
-The current source-path integration fixture `tests/test_trigger2_fused_membership_two_phase_real_fabric_source_v1.py` deliberately constructs `_synthetic_source_proof(...)`, sets those physical predicates to `True`, and uses deterministic packet PIDs `9001..9010`. This is acceptable only as a deterministic composition test of the real persistence code. It also demonstrates that the physical evidence boundary itself is not source-enforced: correctly shaped caller data is currently treated as equivalent to an observed physical witness.
+Blocker: `CALLER_FORGEABLE_PHYSICAL_COHORT_PROOF_DICTIONARY`.
 
-Blocker ID: `CALLER_FORGEABLE_PHYSICAL_COHORT_PROOF_DICTIONARY`.
+## V68 — pidfd physical-witness capability candidate committed
 
-Counterhypothesis: the dict is intended to be internal/trusted output of `spawn_held_cohort`. Current adjudication: that convention is insufficient for Clay's fail-closed evidence authority because the public source boundary does not verify trusted construction/provenance, and the source test itself traverses it with synthetic evidence.
+New source candidate:
 
-Therefore:
+- `tools/trigger2_physical_witness_capability_v1.py`
+- source commit `8691392d071e345c9388431e26e46ec49df8e339`
+- tests `tests/test_trigger2_physical_witness_capability_v1.py`
+- test commit `6e3ce8b701b9acdd73f9ec068f86e8adbe2d360f`
 
-- the real-`FusedFabric` source-path test may establish persistence/composition semantics only after exact execution;
-- it cannot establish physical GRID10 evidence;
-- physical GRID10 promotion credit remains `0`;
-- no model/J-Space/training/HCU/EntityOS runtime credit changes.
+The candidate adds a process-local nonserializable `PhysicalCohortWitness` carrying ten `pidfd` handles plus sealed physical evidence. It requires per-node read-only S1 descriptor metadata (`flags`, `mnt_id`, `ino`) bound to the exact S1 device/inode and explicitly rejects `synthetic_source_fixture_only` before witness minting. A separate `SOURCE_FIXTURE_ONLY` receipt shape hard-codes physical/model/training credit to `0`.
+
+Standalone precommit candidate validation: `py_compile` PASS and **5 passed in 0.03s**. This is not exact-current full-repository integration evidence and repository CI was not observed.
+
+Counterhypothesis remains active: a Python capability type is cosmetic until the retained barrier observer mints it while children are live and `FusedFabric.atomic_fused_cohort_commit` requires it before any mutation. Same-interpreter Python is not treated as a cryptographic trust boundary.
+
+Therefore physical-proof-boundary closure remains `0`.
 
 ## Next discriminator
 
-Split source-fixture composition from physical witness admission.
-
-1. Physical commit path must reject raw or explicitly synthetic proof data as physical evidence.
-2. Introduce an explicit typed/opaque physical witness provenance boundary minted by the retained physical observation path.
-3. Bind that witness to exact node/PID/read-receipt/snapshot/barrier observations.
-4. Preserve a separate source-fixture-only path for deterministic adapter persistence/replay testing whose receipts are structurally incapable of claiming physical runtime credit.
-5. Add a regression proving an all-true synthetic proof cannot mutate physical-cohort state.
-6. Only with an exact-current dependency tree execute the retained adapter through the actual physical witness path and require commit `state_delta=1`, identical replay `state_delta=0`, persisted resealed envelope-digest equality, fail-before-mutation on tamper, and transport-order invariance.
+1. In `spawn_held_cohort`, acquire pidfds and exact fdinfo/S1 identity while all ten children are still live at the barrier, before release/reap.
+2. Mint the retained `PhysicalCohortWitness` only from that observation path.
+3. Require the witness at the physical `FusedFabric` mutation boundary and reject raw/synthetic mappings before `fused_cohort_admissions`, `admitted_results`, or epoch mutation.
+4. Keep deterministic adapter persistence/replay on an explicitly `SOURCE_FIXTURE_ONLY` path incapable of physical promotion.
+5. Convert the retained strict proof-origin XFAIL into a real fail-before-mutation PASS in the same reviewed closure.
+6. Only after runtime quiescence PASS and explicit FREE non-provider authority re-entry consider an exact-source physical GRID10 rerun.
 
 ## Checkpoint/training governance remains frozen
 
@@ -73,12 +69,13 @@ The 512-case / 256-family four-quadrant logical checkpoint manifest remains froz
 - checkpoint winner: `null`
 - checkpoint/model-call runtime credit: `0`
 - physical GRID10 promotion credit: `0`
+- physical proof boundary closed: `0`
 - J-Space model credit: `0`
 - training credit: `0`
 - canonical semantics credit: `0`
 - whole HCU runtime credit: `0`
 - whole EntityOS runtime credit: `0`
 
-Current ledger: `research_entity/global/j-space/research/2026-08-26_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V66_GPT56SOL.json`
+Current ledger: `research_entity/global/j-space/research/2026-08-26_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V68_GPT56SOL.json`
 
 Supervisor: `research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_84_DELTA_2026-08-26T0545P0700_GPT56SOL.json`

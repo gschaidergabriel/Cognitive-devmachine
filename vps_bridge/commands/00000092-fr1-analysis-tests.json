@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v4",
+  "command_id": "fr1-analysis-tests-20260825",
+  "op": "exec",
+  "cwd": "/workspace/qwen06-fr1-v2repo",
+  "timeout_seconds": 900,
+  "command": "set -euo pipefail; git reset --hard origin/research/fr1-dual-qwen06-blind-cumulative-v2; test \"$(git rev-parse HEAD)\" = 61730d02dc547b152d96e15e07dd8378c9255f46; export PYTHONPATH=/workspace/qwen06-fr1-v2repo; /cache/clay-qwen06/venv/bin/python tests/test_forschungsrun1_dual_qwen06_jspace_blind_cumulative.py; /cache/clay-qwen06/venv/bin/python tests/test_forschungsrun1_dual_qwen06_jspace_blind_robust.py; /cache/clay-qwen06/venv/bin/python tests/test_forschungsrun1_dual_qwen06_robust_analyze.py"
+}

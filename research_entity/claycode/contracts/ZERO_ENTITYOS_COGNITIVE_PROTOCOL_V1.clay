@@ -18,6 +18,19 @@ record DBStateRef {
   mutability:String
 }
 
+record GridRuntime {
+  requested_N:Int
+  available_N:Int
+}
+
+record ResourceBudget {
+  budget_ref:String
+}
+
+record CompletionContract {
+  contract_ref:String
+}
+
 record GridExecutorBinding {
   grid_instance_id:String
   requested_N:Int
@@ -26,6 +39,8 @@ record GridExecutorBinding {
   lease_id:String
   process_id:String
   runtime_identity:String
+  started_at:String
+  ended_at:String
 }
 
 record DBWriteProposal {
@@ -100,11 +115,10 @@ record CognitiveWorkPacket {
   input_refs:List<String>
   epistemic_inputs:List<EpistemicItem>
   capability_scope_ref:String
-  resource_budget_ref:String
-  requested_N:Int
-  available_N:Int
+  resource_budget:ResourceBudget
+  grid_runtime:GridRuntime
   route_policy_ref:String
-  completion_contract_ref:String
+  completion_contract:CompletionContract
 }
 
 record CognitiveResultPacket {
@@ -124,7 +138,7 @@ record CognitiveResultPacket {
   db_write_proposals:List<DBWriteProposal>
   effect_request_candidates:List<EffectProposal>
   workspace_reentry:WorkspaceReentry?
-  runtime_receipt_ref:String?
+  runtime_receipt:String?
 }
 
 type CognitivePacket = CognitiveWorkPacket | CognitiveResultPacket | ClaudeCodeBridgePacket | WorkspaceReentry | JSpaceMeasurement

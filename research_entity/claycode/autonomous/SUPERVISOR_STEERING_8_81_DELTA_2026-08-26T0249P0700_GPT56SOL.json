@@ -1,0 +1,74 @@
+{
+  "schema": "CLAYCODE_SUPERVISOR_STEERING_DELTA/v1",
+  "date": "2026-08-26",
+  "supervisor_epoch": "8.81_DELTA",
+  "mode": "FREE_ONLY",
+  "repository": "gschaidergabriel/clay-global-research-entity",
+  "observed_main_head_before_write": "208fd6d74e9dc5dcfcc525a86bdb66806acf0b18",
+  "material_findings": [
+    {
+      "id": "PHYSICAL_GRID10_SOURCE_GAP_REPAIRED_AND_REPINNED",
+      "classification": "SOURCE_READY_RUNTIME_UNOBSERVED",
+      "evidence": {
+        "fused_source_commit": "0a76c14484c3230edb86f1075738a0a1011c5694",
+        "execution_request_commit": "208fd6d74e9dc5dcfcc525a86bdb66806acf0b18",
+        "entrypoint": "tools/xeno_physical_grid10_fused_acceptance_v1.py"
+      },
+      "finding": "The prior sequential-process/PID-count proof gap has been repaired in source by one fused harness using ten overlapping subprocess.Popen children, parent-observed distinct OS PIDs, a shared read-only S1 snapshot barrier, current membership/process-witness binding, exact cohort packet-set binding and one atomic coordinator fan-in. A repository-bound non-provider request is pinned to the exact repaired commit. No exact clean runtime receipt for that pin was observed during this review, so physical GRID10 runtime credit remains zero."
+    },
+    {
+      "id": "FREE_SWARM_EMERGENCY_STOP_NOT_RUNTIME_QUIESCED",
+      "classification": "MATERIAL_CONTROL_PLANE_RUNTIME_DRIFT",
+      "evidence": {
+        "provider_admission": "research_entity/claycode/autonomous/FREE_PROVIDER_ADMISSION.json",
+        "provider_admission_state": "OWNER_EMERGENCY_STOP_FREE_SWARM_HARD_OFF",
+        "emergency_stop_source_commit": "34cde26849a31b852b677a38f2c426c75d881bcf",
+        "live_telemetry_commit": "3cf7fc57c0a3871af8b8fa1cce54942d6af753a8",
+        "telemetry_observed_at": "2026-08-25T19:49:43.899176+00:00",
+        "observed_live_process_classes": [
+          "tools/run_6000_free_swarm_supervisor.sh",
+          "tools/run_free_evidence_forge.py",
+          "tools/run_research_distillery_local.py",
+          "free swarm/evaluate.py --watch"
+        ]
+      },
+      "finding": "Canonical provider admission is HARD_OFF and explicitly states that already-running unsynchronized host processes must be killed separately. Live clay-direct-dev telemetry still shows the pre-stop FreeSwarm supervisor and related long-lived processes after the source emergency-stop commit. Source hard-off therefore must not be represented as runtime quiescence."
+    },
+    {
+      "id": "AUTONOMOUS_EXECUTION_AUTHORITY_MUST_BE_REENTERED_BEFORE_GRID10",
+      "classification": "AUTHORITY_CONSISTENCY_GATE",
+      "finding": "The repository contains older/base ClayCode control language that forbids direct VPS/self-hosted candidate execution except where a newer explicit execution-boundary authority applies. The GRID10 request itself correctly says it awaits a separately authorized non-provider executor. Therefore do not infer execution authority from the existence of the pin. Re-enter current authority immediately before execution and bind the exact admitted surface in the receipt."
+    }
+  ],
+  "next_cycle_order": [
+    "P0_ENFORCE_AND_RECEIPT_RUNTIME_QUIESCENCE_FOR_OWNER_EMERGENCY_STOP_ON_CLAY_DIRECT_DEV_OR_ANY_OTHER_LIVE_FREE_SWARM_HOST_BEFORE_NEW_PROVIDER_OR_EXPERIMENT_EXECUTION",
+    "P0_REQUIRE_ZERO_LIVE_FREE_SWARM_PROVIDER_SUPERVISOR_OR_PROVIDER_CALLER_PROCESSES_AND_RECORD_HOST_TIMESTAMP_PROCESS_LIST_AND_NO_NEW_PROVIDER_USAGE_DELTA_ACROSS_A_SHORT_OBSERVATION_WINDOW",
+    "P1_REENTER_CURRENT_EXECUTION_AUTHORITY_AND_CONFIRM_THE_FUSED_GRID10_PIN_HAS_AN_ADMISSIBLE_FREE_NON_PROVIDER_ISOLATED_EXECUTION_SURFACE_WITHOUT_PAID_FALLBACK",
+    "P1_ONLY_THEN_EXECUTE_EXACT_PIN_0A76C144_ON_A_CLEAN_REPOSITORY_BOUND_RUNTIME_AND_PERSIST_HEAD_TREE_DIRTY_RUNTIME_SOURCE_HASH_STDOUT_STDERR_AND_FULL_RESULT_BINDINGS",
+    "P2_ONLY_IF_PASS_ADVANCE_TO_CONTROLLED_LOAD_COORDINATOR_FAILURE_REPLACEMENT_WORKER_RESTART_REJOIN_MATCHED_BUDGET_CHALLENGERS_AND_HYPERPOSITION_GWT_REENTRY",
+    "P3_KEEP_QWEN35_CHECKPOINT_INPUT_IDENTITY_ABI_EXECUTION_SEPARATE_FROM_GRID10_AND_DO_NOT_SELECT_A_CHECKPOINT_WINNER_UNTIL_ALL_THREE_FROZEN_CANDIDATES_HAVE_SELECTION_GRADE_CONSUMED_IDENTITY_RECEIPTS_AND_MATCHED_EVALUATION"
+  ],
+  "credit_state": {
+    "physical_grid10_source_component_progress": 1,
+    "physical_grid10_runtime_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0,
+    "checkpoint_selection_credit": 0,
+    "jspace_model_credit": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "canonical_semantics_credit": 0
+  },
+  "hard_invariants": [
+    "FREE_ONLY_NO_PAID_FALLBACK",
+    "TOGETHER_FORBIDDEN",
+    "OWNER_EMERGENCY_STOP_FREE_SWARM_REMAINS_HARD_OFF_UNTIL_LATER_EXPLICIT_OWNER_REENABLE",
+    "EXECUTABLE_EVIDENCE_OUTRANKS_MODEL_CONSENSUS",
+    "NO_BASE_WORK_PACKAGE_PASS_FROM_MODEL_CONSENSUS",
+    "NO_CANONICAL_SEMANTICS_PROMOTION_WITHOUT_EXECUTABLE_COUNTEREVIDENCE_AND_REVIEW",
+    "GOODMAN_COLLAPSE_SHARED_MODEL_FAMILY_PIPELINE_ORCHESTRATION_AND_REPACKAGED_HISTORY",
+    "MODEL_FAMILY_AND_CHECKPOINT_ANCESTRY_MUST_REMAIN_EXPLICIT",
+    "UBUNTU_ONLY_FRANK_V0_1_TARGET_REMAINS_UNCHANGED",
+    "DO_NOT_MODIFY_FRANK_HARNESS"
+  ]
+}

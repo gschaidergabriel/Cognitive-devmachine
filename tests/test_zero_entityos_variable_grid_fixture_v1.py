@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import json
 import sys
+import tempfile
 import unittest
 from pathlib import Path
 
@@ -98,6 +99,80 @@ class VariableGridFixtureTests(unittest.TestCase):
             self.assertEqual(0, self.census["credit_boundary"]["global_jspace_causal_runtime"])
         finally:
             rt.close()
+
+    def test_variable_node_two_process_same_snapshot(self):
+        rt = VariableGridFixture(
+            self.census,
+            self.abi,
+            RuntimeConfig(requested_n=1, available_n=1, grid_instance_id="same-node-runtime"),
+        )
+        try:
+            admission = rt.admit_task({"task": "two-process", "goal": "same runtime two functions"}, generation=4)
+            rt.seed_canonical_state("project/snapshot", {"goal": "stable"}, epoch=12)
+            snapshot = rt.canonical_state_ref("project/snapshot")
+            self.assertIsNotNone(snapshot)
+            rt.enqueue(admission, "ZECP03", {"phase": "reconstruct"}, state_snapshot_ref=snapshot)
+            rt.enqueue(admission, "ZECP06", {"phase": "plan"}, state_snapshot_ref=snapshot)
+            results = rt.execute_ready()
+            self.assertEqual({"ZECP03", "ZECP06"}, {r["semantic"]["process_id"] for r in results})
+            self.assertEqual({"fixture-executor-0000"}, {r["executor_id"] for r in results})
+            self.assertTrue(all(r["semantic"]["state_snapshot_ref"] == snapshot for r in results))
+            self.assertTrue(all(r["semantic"]["generation"] == 4 for r in results))
+            self.assertTrue(all(r["executor_binding"]["runtime_identity"] == "python-sqlite-reference-fixture-v1" for r in results))
+        finally:
+            rt.close()
+
+    def test_restart_rejoin_persistent_db_and_n_change(self):
+        with tempfile.TemporaryDirectory() as td:
+            db_path = Path(td) / "variable-grid.sqlite3"
+            before = VariableGridFixture(
+                self.census,
+                self.abi,
+                RuntimeConfig(requested_n=1, available_n=1, grid_instance_id="grid-before-restart"),
+                db_path=db_path,
+            )
+            admission = before.admit_task({"task": "restart-rejoin"}, generation=7)
+            before.seed_canonical_state("project/durable", {"value": "survives"}, epoch=21)
+            snapshot_before = before.canonical_state_ref("project/durable")
+            first_work = before.enqueue(
+                admission,
+                "ZECP03",
+                {"phase": "before"},
+                workspace_epoch=3,
+                state_snapshot_ref=snapshot_before,
+            )
+            first = before.execute_ready()[0]
+            before.close()
+
+            after = VariableGridFixture(
+                self.census,
+                self.abi,
+                RuntimeConfig(requested_n=20, available_n=20, grid_instance_id="grid-after-restart"),
+                db_path=db_path,
+            )
+            try:
+                self.assertEqual({"value": "survives"}, after.canonical_state("project/durable"))
+                snapshot_after = after.canonical_state_ref("project/durable")
+                self.assertEqual(snapshot_before, snapshot_after)
+                second_work = after.enqueue(
+                    admission,
+                    "ZECP06",
+                    {"phase": "after"},
+                    workspace_epoch=4,
+                    state_snapshot_ref=snapshot_after,
+                )
+                second = after.execute_ready()[0]
+                self.assertEqual(2, after.count("result_log"))
+                self.assertNotEqual(first_work["process_id"], second_work["process_id"])
+                self.assertNotEqual(first["executor_binding"]["grid_instance_id"], second["executor_binding"]["grid_instance_id"])
+                self.assertNotEqual(first["executor_binding"]["lease_id"], second["executor_binding"]["lease_id"])
+                self.assertEqual(1, first["executor_binding"]["requested_N"])
+                self.assertEqual(20, second["executor_binding"]["requested_N"])
+                self.assertEqual(snapshot_before, second["semantic"]["state_snapshot_ref"])
+                self.assertEqual(7, second["semantic"]["generation"])
+                self.assertEqual(0, after.count("effect_journal"))
+            finally:
+                after.close()
 
 
 if __name__ == "__main__":

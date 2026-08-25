@@ -1,12 +1,15 @@
-name: GO877 collective metrics freshness gate
+name: GO877 collective metrics freshness gate (manual retry only)
 
+# The historical source-repair carrier is retained for reproducibility, but it
+# must not be fanned out by repeated [CLAY-DISPATCH] issue creation. A future
+# runtime retry requires an explicit semantic dispatch generation/claim under
+# research_entity/continuity/ORDINARY_DISPATCH_IDEMPOTENCY_PROTOCOL.md before
+# this donor workflow is deliberately re-admitted.
 on:
-  issues:
-    types: [opened]
+  workflow_dispatch:
 
 permissions:
   contents: write
-  issues: read
 
 concurrency:
   group: go877-collective-metrics-freshness
@@ -14,7 +17,7 @@ concurrency:
 
 jobs:
   freshness:
-    if: github.repository == 'gschaidergabriel/clay-global-research-entity' && github.event.issue.title == '[CLAY-DISPATCH] GO877 collective metrics freshness' && github.event.issue.user.login == 'gschaidergabriel'
+    if: github.repository == 'gschaidergabriel/clay-global-research-entity'
     runs-on: [self-hosted, Linux, X64]
     timeout-minutes: 20
     steps:

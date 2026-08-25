@@ -21,7 +21,11 @@ from typing import Any, Iterable
 
 SCHEMA = "CLAY_TRIGGER2_CONTEXT_BINDING_SPLIT_GUARD/v1"
 SPLITS = ("TRAIN", "VALIDATION", "HOLDOUT")
-_CODEBOOK = re.compile(r"CODEBOOK\n.*?\nEND_CODEBOOK", re.DOTALL)
+_CODEBOOK_PATTERNS = (
+    re.compile(r"CODEBOOK_BEGIN.*?CODEBOOK_END", re.DOTALL | re.IGNORECASE),
+    re.compile(r"<CODEBOOK>.*?</CODEBOOK>", re.DOTALL | re.IGNORECASE),
+    re.compile(r"\bCODEBOOK\s*\n.*?\nEND_CODEBOOK\b", re.DOTALL | re.IGNORECASE),
+)
 _WS = re.compile(r"\s+")
 
 
@@ -37,33 +41,56 @@ def model_visible_semantic_surface(prompt: str) -> str:
     """
     if not isinstance(prompt, str):
         raise ValueError("prompt must be string")
-    if not _CODEBOOK.search(prompt):
-        raise ValueError("delimited CODEBOOK/END_CODEBOOK span required")
-    stripped = _CODEBOOK.sub("<CODEBOOK_REDACTED>", prompt)
+    stripped = prompt
+    matched = False
+    for pattern in _CODEBOOK_PATTERNS:
+        stripped, count = pattern.subn("<CODEBOOK_REDACTED>", stripped)
+        matched = matched or bool(count)
+    if not matched:
+        raise ValueError("recognized delimited codebook span required")
     return _WS.sub(" ", stripped).strip().casefold()
 
 
-def _set_from_meta(rows: Iterable[dict[str, Any]], key: str) -> set[str]:
+def _template_families(rows: Iterable[dict[str, Any]]) -> set[str]:
     out: set[str] = set()
     for row in rows:
+        candidates: list[Any] = []
         meta = row.get("curriculum")
         if isinstance(meta, dict):
-            value = meta.get(key)
+            candidates.append(meta.get("template_family"))
+        candidates.extend((row.get("template_family"), row.get("template_id")))
+        for value in candidates:
             if isinstance(value, str) and value:
                 out.add(value)
+                break
     return out
 
 
-def _atom_ids(rows: Iterable[dict[str, Any]]) -> set[int]:
+def _atom_ids_and_missing(rows: Iterable[dict[str, Any]]) -> tuple[set[int], int]:
     out: set[int] = set()
+    missing = 0
     for row in rows:
+        candidates: list[Any] = []
         meta = row.get("curriculum")
-        if not isinstance(meta, dict):
+        if isinstance(meta, dict):
+            candidates.append(meta.get("atom_token_ids"))
+        candidates.append(row.get("atom_token_ids"))
+        private = row.get("materializer_private")
+        if isinstance(private, dict):
+            candidates.append(private.get("atom_token_ids"))
+        ids = next((x for x in candidates if isinstance(x, list) and x), None)
+        valid = [x for x in ids if isinstance(x, int)] if isinstance(ids, list) else []
+        if not valid:
+            missing += 1
             continue
-        ids = meta.get("atom_token_ids")
-        if isinstance(ids, list):
-            out.update(x for x in ids if isinstance(x, int))
-    return out
+        out.update(valid)
+    return out, missing
+
+
+def _model_prompt(row: dict[str, Any]) -> Any:
+    if isinstance(row.get("prompt"), str):
+        return row.get("prompt")
+    return row.get("model_visible_prompt_template")
 
 
 def adjudicate(rows: Iterable[dict[str, Any]]) -> dict[str, Any]:
@@ -86,7 +113,7 @@ def adjudicate(rows: Iterable[dict[str, Any]]) -> dict[str, Any]:
     for split in SPLITS:
         for i, row in enumerate(by_split.get(split, [])):
             try:
-                surface = model_visible_semantic_surface(row.get("prompt"))
+                surface = model_visible_semantic_surface(_model_prompt(row))
             except Exception as exc:
                 failures.append(f"SEMANTIC_SURFACE_PARSE_FAIL:{split}:{i}:{type(exc).__name__}")
                 continue
@@ -97,8 +124,8 @@ def adjudicate(rows: Iterable[dict[str, Any]]) -> dict[str, Any]:
         overlap = sorted(semantic_hashes[a] & semantic_hashes[b])
         if overlap:
             failures.append(f"MODEL_VISIBLE_SEMANTIC_OVERLAP:{a}:{b}:{len(overlap)}")
-        templates_a = _set_from_meta(by_split.get(a, []), "template_family")
-        templates_b = _set_from_meta(by_split.get(b, []), "template_family")
+        templates_a = _template_families(by_split.get(a, []))
+        templates_b = _template_families(by_split.get(b, []))
         template_overlap = sorted(templates_a & templates_b)
         if template_overlap:
             failures.append(f"TEMPLATE_FAMILY_OVERLAP:{a}:{b}:{','.join(template_overlap)}")
@@ -120,9 +147,16 @@ def adjudicate(rows: Iterable[dict[str, Any]]) -> dict[str, Any]:
             "provenance_ancestry_id_overlap_count": len(prov_overlap),
         })
 
-    holdout_atoms = _atom_ids(by_split.get("HOLDOUT", []))
+    atoms_by_split: dict[str, set[int]] = {}
+    for split in SPLITS:
+        atoms, missing_atoms = _atom_ids_and_missing(by_split.get(split, []))
+        atoms_by_split[split] = atoms
+        if by_split.get(split) and missing_atoms:
+            failures.append(f"ATOM_IDENTITY_MISSING:{split}:{missing_atoms}")
+
+    holdout_atoms = atoms_by_split["HOLDOUT"]
     for prior in ("TRAIN", "VALIDATION"):
-        overlap = sorted(holdout_atoms & _atom_ids(by_split.get(prior, [])))
+        overlap = sorted(holdout_atoms & atoms_by_split[prior])
         if overlap:
             failures.append(f"HOLDOUT_ATOM_REUSE:{prior}:HOLDOUT:{len(overlap)}")
 

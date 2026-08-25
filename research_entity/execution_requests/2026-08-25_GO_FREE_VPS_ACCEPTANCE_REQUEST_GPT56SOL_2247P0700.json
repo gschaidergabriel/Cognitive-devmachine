@@ -1,0 +1,50 @@
+{
+  "schema": "GO_FREE_VPS_REPOSITORY_BOUND_ACCEPTANCE_REQUEST/v1",
+  "created_local": "2026-08-25T22:47:51+07:00",
+  "program": "ENTITYOS_HCU",
+  "target_architecture": "XENO_HCU_SELF_ORGANIZING_SHARED_STATE_COORDINATOR_ONLY_WRITES",
+  "priority": "P0",
+  "execution_surface": "clay-direct-dev",
+  "repository": "gschaidergabriel/clay-global-research-entity",
+  "exact_source": {
+    "head": "d4465f68d294893e630c2cddfd084fdc903a3aa3",
+    "tree": "1817e393e468826ea7134daf4e70e8cd39ea75d5",
+    "dirty_required": false
+  },
+  "instruction": [
+    "On the live free VPS, fetch the repository and checkout DETACHED at exact head d4465f68d294893e630c2cddfd084fdc903a3aa3; do not execute moving main.",
+    "Verify git rev-parse HEAD equals the requested head and git rev-parse HEAD^{tree} equals 1817e393e468826ea7134daf4e70e8cd39ea75d5.",
+    "Require git status --porcelain to be empty before execution.",
+    "Execute exactly: python3 tools/run_go_repository_bound_acceptance_bundle_v1.py",
+    "Capture stdout, stderr, exit code, Python/platform/runtime identity and SHA-256 of every source named by the runner.",
+    "Accept a PASS receipt only if dirty=false and head/tree/source hashes match the detached requested source exactly.",
+    "Do not redesign or patch the canonical S0 path during this request.",
+    "Do not use GitHub Actions as fallback; this request targets the observed live free VPS.",
+    "Do not use paid providers or Together.",
+    "If the bundle passes, record component-level runtime evidence only; do not mint whole EntityOS/HCU/J-Space/training credit beyond what the runner proves."
+  ],
+  "required_result": {
+    "receipt_schema": "GO_REPOSITORY_BOUND_ACCEPTANCE_RECEIPT/v1",
+    "must_bind": [
+      "requested_head",
+      "executed_head",
+      "requested_tree",
+      "executed_tree",
+      "dirty",
+      "runtime_identity",
+      "source_sha256",
+      "stdout_sha256",
+      "stderr_sha256",
+      "exit_code",
+      "per_component_verdicts"
+    ]
+  },
+  "success_frontier": "If and only if the current S0-CAS and integrated Xeno fabric components pass repository-bound execution, advance GO to physical GRID10 fan-in/compression, coordinator failure/replacement under load, and matched-budget challengers.",
+  "failure_frontier": "If execution fails, distinguish infrastructure failure from component scientific/runtime failure and preserve zero-credit boundaries.",
+  "credit_before_execution": {
+    "entityos_whole_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0
+  }
+}

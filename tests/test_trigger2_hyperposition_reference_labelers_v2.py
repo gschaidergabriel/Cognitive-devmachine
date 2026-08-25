@@ -1,5 +1,7 @@
 import copy
 
+import pytest
+
 from tools.trigger2_hyperposition_reference_labelers_v2 import (
     apply_resolution,
     d_resolve,
@@ -48,6 +50,31 @@ def test_exact_replay_idempotent():
     twice = u_state(once, observation("SUPPORTS", ["A"], event="e1", ancestry="a1"))
     assert len(twice["branches"][0]["E_plus"]) == 1
     assert not twice["branches"][0].get("correlated_observations")
+
+
+def test_exact_event_id_cannot_change_relation():
+    state = {"branches": [branch("A"), branch("B")]}
+    once = u_state(state, observation("SUPPORTS", ["A"], event="e1", ancestry="a1"))
+    with pytest.raises(ValueError, match="conflicting relation"):
+        u_state(once, observation("COUNTERS", ["A"], event="e1", ancestry="a1"))
+
+
+def test_exact_event_id_cannot_change_correlation_ancestry():
+    state = {"branches": [branch("A"), branch("B")]}
+    once = u_state(state, observation("SUPPORTS", ["A"], event="e1", ancestry="a1"))
+    with pytest.raises(ValueError, match="conflicting correlation ancestry"):
+        u_state(once, observation("SUPPORTS", ["A"], event="e1", ancestry="a2"))
+
+
+def test_unknown_target_branch_fails_closed():
+    state = {"branches": [branch("A"), branch("B")]}
+    with pytest.raises(ValueError, match="unknown target branch"):
+        u_state(state, observation("SUPPORTS", ["TYPO_BRANCH"]))
+
+
+def test_duplicate_branch_identity_fails_closed():
+    with pytest.raises(ValueError, match="duplicate branch_id"):
+        d_resolve({"branches": [branch("A"), branch("A")]})
 
 
 def test_distinct_event_same_ancestry_preserved_not_independent():
@@ -118,6 +145,12 @@ def test_unique_applicable_survivor_passes():
     assert {b["branch_id"]: b["sigma"] for b in out["branches"]}["A"] == "RESOLVED_PASS"
 
 
+def test_apply_resolution_rejects_unknown_selected_branch():
+    state = {"branches": [branch("A"), branch("B", sigma="FALSIFIED")]}
+    with pytest.raises(ValueError, match="select exactly one existing branch"):
+        apply_resolution(state, {"resolution": "PASS", "selected_branch_id": "TYPO_BRANCH"})
+
+
 def test_unknown_context_blocks_resolution():
     state = {"branches": [branch("A"), branch("B", K="UNKNOWN", sigma="WEAKENED_UNRESOLVED")]}
     assert d_resolve(state)["resolution"] == "UNRESOLVED"
@@ -149,6 +182,25 @@ def test_explicit_equivalence_merge_only():
         "certificate_id": "eq1",
     }
     assert len(u_state(state, obs)["branches"]) == 1
+
+
+def test_merge_target_cannot_collide_with_surviving_branch():
+    state = {
+        "branches": [
+            branch("A", v="same"),
+            branch("B", v="same"),
+            branch("C", v="different"),
+        ]
+    }
+    obs = observation("IRRELEVANT", [])
+    obs["equivalence_certificate"] = {
+        "equivalent": True,
+        "branch_ids": ["A", "B"],
+        "merge_to_branch_id": "C",
+        "certificate_id": "eq-collision",
+    }
+    with pytest.raises(ValueError, match="collides"):
+        u_state(state, obs)
 
 
 def test_test_order_prefers_separation():

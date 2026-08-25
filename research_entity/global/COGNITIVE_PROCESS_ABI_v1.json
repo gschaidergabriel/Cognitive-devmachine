@@ -3,24 +3,31 @@
   "status": "CURRENT_OWNER_ALIGNED_SOURCE_CONTRACT_NOT_RUNTIME_CREDIT",
   "authority": {
     "canonical_repository": "gschaidergabriel/clay-global-research-entity",
-    "base_main_sha": "08ac607b528257a2ffaac49387f3277479cb9e61",
+    "base_main_sha": "67cc81e369a63e2a7c392ab2420bbfa03c8a318d",
     "owner_target_path": "research_entity/global/OWNER_CORRECTION_ZERO_ENTITYOS_COGNITIVE_GRID_DB_CLAUDECODE_GLOBAL_JSPACE_2026-08-25.md",
-    "census_schema": "ZERO_ENTITYOS_COGNITIVE_PROCESS_CENSUS/v1"
+    "census_schema": "ZERO_ENTITYOS_COGNITIVE_PROCESS_CENSUS/v1",
+    "typed_entry_source": "the artefact/MicroEntity/hcu/xeno_entry_fabric_v1.py",
+    "typed_entry_event_identity_schema": "ENTITYOS_HCU_ENTRY_EVENT_IDENTITY/v3",
+    "typed_entry_admission_identity_schema": "ENTITYOS_HCU_ENTRY_ADMISSION_IDENTITY/v3",
+    "identity_binding_law": "ABI_PACKETS_REUSE_EXACT_TYPED_ENTRY_EVENT_AND_ADMISSION_DIGESTS_NO_PARALLEL_CAUSAL_IDENTITY"
   },
   "design_goals": [
     "semantic process identity independent of runtime grid size N and physical module identity",
     "durable exact state referenced from database rather than silently reconstructed",
     "all cognitive/model outputs remain candidate/proposal/measurement until deterministic admission",
+    "all downstream cognition reuses exact Typed Entry event/admission identity digests",
+    "DB-vs-simulation placement is an explicit typed decision separate from DB write admission",
     "Claude Code bridge bounded to actually exposed interfaces and exact request/result provenance",
     "workspace re-entry is explicit and causally attributable",
-    "real effects remain behind EffectGate/EffectJournal",
+    "real effects remain behind EffectGate/EffectJournal and only deterministic boundary may emit journal receipts",
     "UNKNOWN remains distinct from false/zero/negative evidence"
   ],
   "packet_types": {
     "COGNITIVE_WORK_PACKET/v1": {
-      "required": ["schema", "causal_event_id", "admission_id", "generation", "work_id", "process_id", "parent_work_ids", "workspace_epoch", "state_snapshot_ref", "input_refs", "epistemic_inputs", "capability_scope_ref", "resource_budget", "grid_runtime", "route_policy_ref", "completion_contract"],
+      "required": ["schema", "causal_event_id", "admission_id", "entry_event_sha256", "entry_admission_sha256", "generation", "work_id", "process_id", "parent_work_ids", "workspace_epoch", "state_snapshot_ref", "input_refs", "epistemic_inputs", "capability_scope_ref", "resource_budget", "grid_runtime", "route_policy_ref", "completion_contract"],
       "rules": {
-        "process_id": "must exist in current census",
+        "typed_entry_binding": "causal_event_id/admission_id are semantic references only; entry_event_sha256 and entry_admission_sha256 MUST equal the exact digests returned by admitted Typed Entry and may not be caller-minted aliases",
+        "process_id": "must exist in current ZECP census",
         "grid_runtime": "contains requested_N and observed_available_N as runtime facts; neither participates in semantic process identity",
         "state_snapshot_ref": "immutable database snapshot/checkpoint reference or explicit NONE/UNKNOWN",
         "input_refs": "typed references with digest+provenance; large durable payloads remain in DB/object substrate",
@@ -30,13 +37,14 @@
       }
     },
     "COGNITIVE_RESULT_PACKET/v1": {
-      "required": ["schema", "causal_event_id", "admission_id", "generation", "work_id", "process_id", "executor_binding", "result_id", "result_class", "result_payload_ref", "result_digest", "evidence_refs", "unknowns", "db_write_proposals", "effect_request_candidates", "workspace_reentry", "runtime_receipt"],
-      "allowed_result_class": ["CANDIDATE", "PROJECTION", "MEASUREMENT", "DETERMINISTIC_CONTROL_RESULT", "EFFECT_RECEIPT"],
+      "required": ["schema", "causal_event_id", "admission_id", "entry_event_sha256", "entry_admission_sha256", "generation", "work_id", "process_id", "executor_binding", "result_id", "result_class", "result_payload_ref", "result_digest", "evidence_refs", "unknowns", "db_write_proposals", "effect_request_candidates", "workspace_reentry", "runtime_receipt"],
+      "allowed_result_class": ["CANDIDATE", "PROJECTION", "MEASUREMENT", "DETERMINISTIC_CONTROL_RESULT"],
       "rules": {
+        "typed_entry_binding": "result MUST preserve the exact work packet entry_event_sha256 and entry_admission_sha256",
         "model_grid_claude_outputs": "must be CANDIDATE|PROJECTION|MEASUREMENT",
         "db_write_proposals": "never imply commit; deterministic DB authority validates/adopts/rejects",
-        "effect_request_candidates": "never imply execution; only ZECP17 deterministic EffectGate/Journal path may emit EFFECT_RECEIPT",
-        "workspace_reentry": "must bind source result_id, target workspace_epoch, causal_event_id and acceptance/rejection",
+        "effect_request_candidates": "never imply execution; only ZECP17 deterministic EffectGate/Journal path may emit EFFECT_JOURNAL_RECEIPT/v1",
+        "workspace_reentry": "must bind source result_id, target workspace_epoch, entry_event_sha256 and acceptance/rejection",
         "runtime_receipt": "bind exact executor/runtime/model/tool identity actually observed or emit UNKNOWN fields"
       }
     },
@@ -48,21 +56,43 @@
         "missing": "missing/unreadable state is UNKNOWN, never fabricated"
       }
     },
+    "STATE_PLACEMENT_DECISION/v1": {
+      "required": ["placement_id", "entry_event_sha256", "generation", "datum_ref", "datum_class", "durability_requirement", "exactness_requirement", "queryability_requirement", "restart_survival_requirement", "selected_plane", "policy_ref", "evidence_refs", "provenance"],
+      "allowed_selected_plane": ["DATABASE_S0", "WORKSPACE_S1", "LOCAL_EPHEMERAL_S2"],
+      "rules": {
+        "decision_not_write": "placement is classification only and cannot mutate S0",
+        "database": "durable exact queryable restart-surviving state belongs in DATABASE_S0 unless deterministic policy rejects admission",
+        "simulation": "transient interpretation/planning/alternatives/compression/coordination belong in S1/S2",
+        "self_promotion_forbidden": "model/workspace/Claude output cannot self-promote into DATABASE_S0 or canonical fact",
+        "unknown": "ambiguous epistemic status remains CANDIDATE/UNKNOWN even if durable storage is requested"
+      }
+    },
+    "DB_WRITE_PROPOSAL/v1": {
+      "required": ["proposal_id", "entry_event_sha256", "entry_admission_sha256", "generation", "placement_id", "expected_state_epoch", "target_ref", "candidate_value_ref", "evidence_refs", "provenance", "admission_policy_ref"],
+      "rules": {
+        "proposal_not_write": "proposal is not a write",
+        "placement_required": "placement_id must reference STATE_PLACEMENT_DECISION/v1 selecting DATABASE_S0",
+        "commit": "only deterministic canonical DB admission may commit; epoch conflict rejects or re-evaluates"
+      }
+    },
     "WORKSPACE_REENTRY/v1": {
-      "required": ["source_result_id", "source_process_id", "causal_event_id", "from_workspace_epoch", "to_workspace_epoch", "reentry_payload_ref", "reentry_digest", "observed_downstream_change"],
+      "required": ["source_result_id", "source_process_id", "entry_event_sha256", "entry_admission_sha256", "generation", "from_workspace_epoch", "to_workspace_epoch", "reentry_payload_ref", "reentry_digest", "observed_downstream_change"],
       "rules": {
         "observed_downstream_change": "TRUE|FALSE|UNKNOWN; Global J-Space causal credit requires evidence stronger than mere text presence",
-        "stale_epoch": "must fail closed"
+        "stale_epoch": "must fail closed",
+        "typed_entry_binding": "reentry preserves exact Typed Entry digests"
       }
     },
     "CLAUDE_CODE_BRIDGE_PACKET/v1": {
-      "required": ["bridge_id", "direction", "causal_event_id", "work_id", "workspace_epoch", "interface_class", "payload_ref", "payload_digest", "state_refs", "tool_scope_ref", "request_or_result_identity"],
+      "required": ["bridge_id", "direction", "entry_event_sha256", "entry_admission_sha256", "generation", "work_id", "workspace_epoch", "interface_class", "interface_evidence_ref", "payload_ref", "payload_digest", "state_refs", "tool_scope_ref", "request_or_result_identity"],
       "allowed_direction": ["GRID_TO_CLAUDE", "CLAUDE_TO_GRID"],
       "allowed_interface_class": ["TEXT", "STRUCTURED_TEXT", "TOOL_PROTOCOL", "SESSION_STATE_EXPOSED", "OTHER_EXPLICITLY_OBSERVED"],
       "rules": {
-        "activation_access": "never claimed unless an exact exposed activation/hook interface is directly observed",
+        "activation_access": "never claimed unless an exact exposed activation/hook interface is directly observed and interface_evidence_ref binds it",
         "result_reentry": "Claude assertions remain candidate claims until evidence/state/effect boundaries admit them",
-        "measurement": "bridge usefulness must be measurable against a comparator, not inferred from coherence"
+        "measurement": "bridge usefulness must be measurable against a comparator, not inferred from coherence",
+        "capability": "Claude output cannot broaden tool_scope_ref",
+        "semantic_binding": "bridge is part of ZECP13 handoff + ZECP14 reconciliation and workspace reentry, not acceptance-only telemetry"
       }
     },
     "GRID_EXECUTOR_BINDING/v1": {
@@ -72,7 +102,55 @@
         "executor_id": "physical identity does not redefine process semantics",
         "lease": "stale or mismatched lease fails closed"
       }
+    },
+    "JSPACE_MEASUREMENT/v1": {
+      "required": ["measurement_id", "entry_event_sha256", "entry_admission_sha256", "generation", "model_identity", "runtime_identity", "hook_or_interface_identity", "measurement_kind", "value_ref", "causal_test_ref", "credit_scope"],
+      "rules": {
+        "identity": "missing exact model/runtime/interface identity => UNKNOWN",
+        "text": "text handoff alone cannot be relabeled activation-level coupling",
+        "frozen_v1": "frozen structural native v1 behavioral failure remains negative executable evidence and cannot be erased or retuned on its holdout",
+        "successor": "successor requires separately preregistered fresh-holdout evidence",
+        "credit": "credit_scope remains component-bounded"
+      }
+    },
+    "EFFECT_PROPOSAL/v1": {
+      "required": ["effect_proposal_id", "entry_event_sha256", "entry_admission_sha256", "generation", "requested_effect_type", "payload_ref", "capability_scope_ref", "evidence_refs", "provenance"],
+      "rules": {
+        "proposal_only": "proposal never executes directly",
+        "authority": "EffectGate and EffectJournal remain sole real-effect authority"
+      }
+    },
+    "EFFECT_JOURNAL_RECEIPT/v1": {
+      "required": ["effect_id", "entry_event_sha256", "entry_admission_sha256", "generation", "effect_proposal_id", "effect_request_digest", "journal_precommit_ref", "outcome_status", "verification_refs", "provenance"],
+      "allowed_outcome_status": ["VERIFIED_SUCCESS", "VERIFIED_FAILURE", "UNKNOWN"],
+      "rules": {
+        "emitter": "emitted only by deterministic ZECP17 EffectGate/EffectJournal boundary",
+        "fabrication": "model/grid/workspace/Claude outputs cannot fabricate journal receipt",
+        "unknown": "UNKNOWN remains UNKNOWN until separately verified and never authorizes blind replay"
+      }
     }
+  },
+  "process_bindings": {
+    "ZECP01": ["COGNITIVE_WORK_PACKET/v1"],
+    "ZECP02": ["DB_STATE_REF/v1"],
+    "ZECP03": ["COGNITIVE_WORK_PACKET/v1", "COGNITIVE_RESULT_PACKET/v1"],
+    "ZECP04": ["COGNITIVE_WORK_PACKET/v1", "COGNITIVE_RESULT_PACKET/v1"],
+    "ZECP05": ["COGNITIVE_WORK_PACKET/v1", "COGNITIVE_RESULT_PACKET/v1", "STATE_PLACEMENT_DECISION/v1"],
+    "ZECP06": ["COGNITIVE_WORK_PACKET/v1", "COGNITIVE_RESULT_PACKET/v1"],
+    "ZECP07": ["COGNITIVE_WORK_PACKET/v1", "COGNITIVE_RESULT_PACKET/v1"],
+    "ZECP08": ["COGNITIVE_WORK_PACKET/v1", "COGNITIVE_RESULT_PACKET/v1"],
+    "ZECP09": ["COGNITIVE_WORK_PACKET/v1", "COGNITIVE_RESULT_PACKET/v1"],
+    "ZECP10": ["COGNITIVE_RESULT_PACKET/v1", "WORKSPACE_REENTRY/v1"],
+    "ZECP11": ["GRID_EXECUTOR_BINDING/v1"],
+    "ZECP12": ["COGNITIVE_RESULT_PACKET/v1", "WORKSPACE_REENTRY/v1"],
+    "ZECP13": ["COGNITIVE_WORK_PACKET/v1", "CLAUDE_CODE_BRIDGE_PACKET/v1"],
+    "ZECP14": ["CLAUDE_CODE_BRIDGE_PACKET/v1", "COGNITIVE_RESULT_PACKET/v1", "WORKSPACE_REENTRY/v1"],
+    "ZECP15": ["STATE_PLACEMENT_DECISION/v1", "DB_WRITE_PROPOSAL/v1", "COGNITIVE_RESULT_PACKET/v1"],
+    "ZECP16": ["EFFECT_PROPOSAL/v1", "COGNITIVE_RESULT_PACKET/v1"],
+    "ZECP17": ["EFFECT_PROPOSAL/v1", "EFFECT_JOURNAL_RECEIPT/v1"],
+    "ZECP18": ["EFFECT_JOURNAL_RECEIPT/v1", "STATE_PLACEMENT_DECISION/v1", "DB_WRITE_PROPOSAL/v1"],
+    "ZECP19": ["COGNITIVE_WORK_PACKET/v1", "COGNITIVE_RESULT_PACKET/v1"],
+    "ZECP20": ["JSPACE_MEASUREMENT/v1", "WORKSPACE_REENTRY/v1", "COGNITIVE_RESULT_PACKET/v1"]
   },
   "db_vs_simulation_boundary": {
     "store_in_db_when": [
@@ -91,28 +169,57 @@
       "real-effect execution authority",
       "effect outcome verification",
       "exact IDs/epochs/digests that already exist durably"
-    ]
+    ],
+    "typed_boundary": "STATE_PLACEMENT_DECISION/v1 must precede DB_WRITE_PROPOSAL/v1 for cognitive-origin durable write proposals"
   },
+  "cross_process_invariants": [
+    "semantic process identity is independent of module identity and runtime grid size N",
+    "all downstream cognitive packets bind exact Typed Entry entry_event_sha256 and entry_admission_sha256; generic semantic IDs never replace these digests",
+    "durable-data-vs-simulation placement is explicit; placement cannot itself write or mint facts",
+    "model/grid/workspace/Claude/J-Space outputs never mint canonical truth",
+    "capability scope is externally admitted and cannot be broadened by packet, lease or model output",
+    "Claude Code bridge participates in ZECP13 handoff, ZECP14 reconciliation and workspace reentry; it is not acceptance-only telemetry",
+    "text/session presence alone is not activation-level or Global J-Space causal evidence",
+    "only deterministic ZECP17 EffectGate/EffectJournal may emit EFFECT_JOURNAL_RECEIPT/v1",
+    "unknown external effect outcome is never blindly replayed",
+    "frozen structural native v1 J-Space behavioral failure remains negative evidence and is not posthoc retuned on its holdout"
+  ],
   "minimal_causal_chain": [
-    "typed task admission",
+    "Typed Entry admission -> exact event/admission digests",
     "DB state reference resolution",
+    "STATE_PLACEMENT_DECISION/v1 when durable-vs-simulated placement is material",
     "cognitive work packet",
     "variable-N route/executor lease",
     "small-model or Claude Code execution where selected",
     "cognitive result packet",
-    "workspace competition/broadcast",
-    "workspace re-entry receipt",
-    "DB write proposal and/or effect request candidate",
-    "deterministic admission/EffectGate if applicable",
+    "workspace competition/broadcast/reentry",
+    "DB write proposal and/or effect proposal",
+    "deterministic DB admission and/or ZECP17 EffectGate/EffectJournal",
     "outcome reconciliation"
   ],
   "acceptance_discriminators": [
+    {"id": "ABI-D0-ENTRY-IDENTITY", "claim": "all downstream packets reuse exact Typed Entry event/admission digests", "fail_if": "a packet mints or substitutes a parallel causal/admission identity"},
     {"id": "ABI-D1-N-INVARIANCE", "claim": "same semantic process can execute at N=1,10,20 without process identity changing", "fail_if": "process_id or meaning depends on physical node identity or fixed N"},
-    {"id": "ABI-D2-DB-FACT-FENCE", "claim": "generated state cannot silently become durable/canonical fact", "fail_if": "model/grid/Claude result writes canonical DB state without a deterministic admission record"},
-    {"id": "ABI-D3-EFFECT-FENCE", "claim": "cognitive path cannot execute real effect directly", "fail_if": "any process other than deterministic ZECP17 authority emits an executed-effect receipt"},
-    {"id": "ABI-D4-CLAUDE-REENTRY", "claim": "Claude Code result can be causally re-entered with exact request/result/state identity", "fail_if": "return path loses causal/workspace bindings or treats model assertion as canonical fact"},
+    {"id": "ABI-D2-DB-PLACEMENT-FACT-FENCE", "claim": "durable-vs-simulated placement is explicit and generated state cannot silently become canonical fact", "fail_if": "model/grid/Claude result writes canonical DB state without placement plus deterministic admission"},
+    {"id": "ABI-D3-EFFECT-FENCE", "claim": "cognitive path cannot execute or fabricate a real-effect receipt", "fail_if": "any source except deterministic ZECP17 emits EFFECT_JOURNAL_RECEIPT/v1"},
+    {"id": "ABI-D4-CLAUDE-REENTRY", "claim": "Claude Code result can be causally re-entered with exact request/result/state/Typed-Entry identity", "fail_if": "return path loses causal/workspace bindings or treats model assertion as canonical fact"},
     {"id": "ABI-D5-JSPACE-EVIDENCE", "claim": "Global J-Space re-entry credit is evidence-bounded", "fail_if": "text presence/coherence alone is labeled causal J-Space evidence"}
   ],
+  "first_executable_discriminator": {
+    "name": "VARIABLE_ROLE_DB_CLAUDE_REJOIN_ABI_SMOKE",
+    "ordinary_regression_only": true,
+    "steps": [
+      "admit one Typed Entry and preserve exact event_sha256/admission_sha256 through all downstream packets",
+      "execute two distinct ZECP cognitive process IDs sequentially on the same admitted runtime identity",
+      "classify one durable restart-surviving datum as DATABASE_S0 and one transient hypothesis as WORKSPACE_S1 or LOCAL_EPHEMERAL_S2",
+      "restart/rejoin executor and preserve generation/state epoch plus original Typed Entry digest binding",
+      "round-trip one ZECP13 GRID_TO_CLAUDE bridge and ZECP14 CLAUDE_TO_GRID reconciliation through actually exposed text/tool interface only",
+      "emit causally bound CognitiveResult and WorkspaceReentry",
+      "reject stale-generation, mismatched-entry-digest, self-granted-capability, direct-S0-write, fabricated-effect-receipt, and deeper-interface-without-evidence variants"
+    ],
+    "pass": "same runtime executes multiple process types across restart; DB-vs-simulation placement stays correct; Claude round-trip re-enters causally; all six fail-closed negatives reject",
+    "credit": "ABI_MULTI_PROCESS_DB_CLAUDE_REJOIN_COMPONENT_ONLY"
+  },
   "credit_boundary": {
     "abi_source_contract": 1,
     "abi_component_runtime": 0,
@@ -120,6 +227,7 @@
     "claude_code_bridge_runtime": 0,
     "global_jspace_causal_runtime": 0,
     "end_to_end_zero_equivalence": 0,
+    "whole_entityos_hcu_runtime": 0,
     "training": 0
   }
 }

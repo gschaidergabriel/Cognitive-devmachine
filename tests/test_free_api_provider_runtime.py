@@ -346,6 +346,7 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             "model": "mock",
             "messages": [{"role": "user", "content": ""}],
             "stream": False,
+            "n": 1,
             "max_tokens": MOD.MAX_PROVIDER_OUTPUT_TOKENS,
         }).encode())
         captured_sizes = []

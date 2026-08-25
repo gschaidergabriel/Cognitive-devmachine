@@ -1,0 +1,69 @@
+{
+  "schema": "CLAY_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER/v40",
+  "date": "2026-08-26",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "status": "CURRENT_RESEARCH_LEDGER_NONCANONICAL_SUCCESSOR_DYNAMIC",
+  "supersedes": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V39_GPT56SOL.json",
+  "inherits_all_nonconflicting_records_from": "T2-LEDGER-V39",
+  "observed_main_before_write": "b4160a6e889c3e58c59810c003d4cc4db2eed76c",
+  "authority": {
+    "supervisor_epoch": "8.81_DELTA",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "architecture": "HCU",
+    "training_execution_authorized": false,
+    "paid_provider_execution_authorized": false,
+    "freeswarm_provider_admission": "OWNER_EMERGENCY_STOP_HARD_OFF"
+  },
+  "revision_reason": "After V39, current main gained explicit owner emergency-stop authority in research_entity/claycode/autonomous/FREE_PROVIDER_ADMISSION.json. Trigger-2 must therefore fail closed on every autonomous Groq, Mistral, NVIDIA and OpenRouter FreeSwarm provider route until a later explicit owner instruction and deliberate control-plane change re-admits one. This delta changes execution availability only; it does not erase V39 research findings or mint negative scientific evidence from the stop itself.",
+  "authority_delta": {
+    "source": "research_entity/claycode/autonomous/FREE_PROVIDER_ADMISSION.json",
+    "source_commit": "b4160a6e889c3e58c59810c003d4cc4db2eed76c",
+    "default_policy": "OWNER_EMERGENCY_STOP_FREE_SWARM; ALL_AUTONOMOUS_PROVIDER_ADMISSION_DISABLED; NO_PAID_FALLBACK",
+    "providers_disabled": ["groq", "mistral", "nvidia", "openrouter"],
+    "execution_state": "OWNER_EMERGENCY_STOP_FREE_SWARM_HARD_OFF",
+    "re_enable_condition": "LATER_EXPLICIT_OWNER_INSTRUCTION_PLUS_DELIBERATE_CONTROL_PLANE_CHANGE"
+  },
+  "trigger2_effect": [
+    "Do not invoke, preflight, retry, spawn or fall back to any disabled FreeSwarm provider/model route.",
+    "Do not interpret provider unavailability caused by the emergency stop as a model, dataset, J-Space, HCU or scientific failure.",
+    "Static source analysis, deterministic repository work and other separately authorized local/isolation surfaces remain governed by their own current authority; this delta grants none.",
+    "Keep physical GRID10 runtime promotion blocked by V39 same-cohort and membership causal-identity gaps; the emergency stop is not a reason to bypass or weaken those gates.",
+    "Keep the executable cognitive-transition pilot candidate-only and accepted_dataset_tokens at zero until ordinary positive-admission gates close."
+  ],
+  "current_frontier": [
+    "P0 close GRID10 same-cohort process->packet->coordinator evidence identity and disjoint-cohort/unused-packet tamper negatives",
+    "P0 close deterministic NODE_RESULT membership/source authentication with ghost and unhealthy-source negatives",
+    "P0 preserve FreeSwarm HARD_OFF until later explicit owner authority",
+    "P1 validate issue-2022 executable cognitive-transition source pilot without admitting training rows",
+    "P1 finish checkpoint consumed-bundle plus exact model-visible input identity while checkpoint_winner remains null",
+    "P1 retain cross-encoding semantic-follow versus extraction-index-follow binding/J-Space evaluation as eval-only",
+    "P2 repair model-specific J-Space representation capture before representation-level promotion",
+    "P2 reopen one Forge->Distillery positive witness only after all upstream lineage/reference/nuisance/input gates are current"
+  ],
+  "training_generation_decision": {
+    "decision": "NO_NEW_ADMITTED_ROWS_WITH_REASON",
+    "new_positive_rows_generated": 0,
+    "positive_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "training_executed": false,
+    "training_credit": 0,
+    "checkpoint_winner": null,
+    "reason": "Positive admission was already blocked by V39 scientific/provenance gates, and current owner authority additionally hard-disables all autonomous FreeSwarm provider lanes."
+  },
+  "credits": {
+    "research_delta": 1,
+    "training_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "checkpoint_selection_credit": 0,
+    "jspace_representation_level_credit": 0,
+    "jspace_model_credit": 0,
+    "physical_grid10_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0,
+    "training_credit": 0
+  },
+  "next_exact_action": "Continue only non-provider Trigger-2 proof closure allowed by current authority: first close same-cohort GRID10 evidence identity and NODE_RESULT membership authentication on exact current source; do not create a provider execution lane while OWNER_EMERGENCY_STOP_FREE_SWARM_HARD_OFF remains current."
+}

@@ -1,0 +1,58 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "authority_epoch": "8.78",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "canonical_main_observed_before_write": "e78fdbd27a3dceaac961aebfbb4d638d65cdea82",
+  "branch": "go878-raw-generation-backpressure-gpt56sol-20260825",
+  "source_commit": "77f460f1ba665c7f18249b174c4b6f01d31c2951",
+  "observed": [
+    "SUPERVISOR_INBOX selects SUPERVISOR_STEERING_8_78",
+    "current main already wires tools/run_free_evidence_forge_backfill.py as the single active Forge entrypoint",
+    "current main still called start_6000 unconditionally after Forge reconciliation",
+    "an exact-source backpressure patcher existed on main but the active supervisor had not incorporated the gate",
+    "no open PR matching the exact raw-generation backpressure repair was observed before branch creation"
+  ],
+  "delta": {
+    "file": "tools/run_6000_free_swarm_supervisor.sh",
+    "policy": "PAUSE_RAW_GENERATION_WHILE_CONVERSION_PRESSURE_GTE_THRESHOLD",
+    "default_threshold": 64,
+    "pressure_terms": [
+      "ready backlog",
+      "NEEDS_IMPLEMENTATION backlog",
+      "PENDING_EXTRACTION historical chunks"
+    ],
+    "failure_policy": "FAIL_CLOSED_PAUSE_RAW_GENERATION",
+    "status_schema": "CLAY_SWARM_RAW_GENERATION_BACKPRESSURE/v1",
+    "external_provider_calls_added": 0,
+    "credentials_read_by_gate": false,
+    "second_forge_authority_added": false,
+    "second_truth_or_effect_authority_added": false
+  },
+  "go_tracks": {
+    "track_a": "ADVANCED: active EntityOS control plane no longer unconditionally scales raw generation while the conversion backlog is above threshold",
+    "track_b": "ADVANCED_AT_DETERMINISTIC_CONTROL_BOUNDARY: raw generation is now conditioned on canonical local Forge backlog state with fail-closed telemetry; no new HCU/Typed Entry truth authority is created",
+    "track_c": "ADVANCED_AT_DATASET_READINESS_BOUNDARY: zero-cost capacity is redirected from raw token generation toward historical extraction/Forge/Distillery conversion pressure before any training/J-Space credit"
+  },
+  "unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "no shared reproducible immutable macrocycle/request identity exposed to this organ",
+    "new_unusual_experiments": 0
+  },
+  "evidence": {
+    "source_diff_inspected": true,
+    "runtime_execution_observed": false,
+    "test_execution_observed": false,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "artefact_readme": "NO_CHANGE_WITH_REASON: current main is moving rapidly and the active authority/frontier is selected from SUPERVISOR_INBOX; this branch does not overwrite the large current README without an exact successor-current non-destructive merge. This receipt plus PR carries the bounded delta.",
+  "next_exact_gate": "execute syntax/regression checks on the exact branch head or successor-current merged source, then prove with a zero-cost repository-bound supervisor receipt that backlog pressure >= threshold stops the raw fabric and pressure < threshold permits it without changing provider admission or Forge authority"
+}

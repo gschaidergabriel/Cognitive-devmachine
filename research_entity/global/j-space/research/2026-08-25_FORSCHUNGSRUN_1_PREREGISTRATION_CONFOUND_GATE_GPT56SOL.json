@@ -1,0 +1,91 @@
+{
+  "schema": "CLAY_FORSCHUNGSRUN_1_PREREGISTRATION_CONFOUND_GATE/v1",
+  "date": "2026-08-25",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "user_trigger": "forschungsrun 1",
+  "persistent_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "stage": "ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP",
+  "authority_epoch_observed": "8.78",
+  "execution_mode": "FREE_ONLY",
+  "canonical_main_observed_before_receipt": "ab3347352d50bd16d484fb4c0e98f34fdac99aca",
+  "scope": "TRIGGER1_PRE_HOLDOUT_PREREGISTRATION_CONFOUND_CONTROL_ONLY",
+  "observed_parallel_current_work": {
+    "promotion_gate_v5_commit": "3766497cc2f6585dc04a3ab268f769f5456740e6",
+    "v5_role": "post-execution scientific-specificity adjudication; retained rather than duplicated",
+    "semantic_evidence_binding_research_commit": "dfbba165cf925151fae9564fbcaf78191f09ceb9",
+    "matched_triplet_blocking_research_commit": "38567e965ed556fea8c5bb129d9ba4de47eb5bd8",
+    "output_metric_context_boundary_research_commit": "27347222ec044d52a4a6a56670138053eba2a187"
+  },
+  "implemented_delta": {
+    "tool": "tools/trigger1_label_free_scope_norm_prereg_gate.py",
+    "tool_create_commit": "c0c658d646cfce7f8b47917856b014b4ffd30bf6",
+    "tool_current_blob_sha": "705b92d5636ce44188fc9dfb13e45f588efe70fb",
+    "tool_local_sha256": "f6002054fc94d97fe6480b6b750eaa16022839292f1c662884e5a63d0184f831",
+    "test": "tests/test_trigger1_label_free_scope_norm_prereg_gate.py",
+    "test_commit": "ab3347352d50bd16d484fb4c0e98f34fdac99aca",
+    "test_current_blob_sha": "6b41e50a3987f85e12413bfbad33ec6d2b062f02",
+    "test_local_sha256": "87068969bd9703e9e14ef99811d209bd997e64706d4396d30312dfa93cced027"
+  },
+  "preregistration_fail_closed_requirements": [
+    "exact checkpoint/tokenizer/GGUF/llama.cpp/native-harness identity",
+    "model-facing label-free basis with no evaluation output-code leakage and no holdout use",
+    "at least three distinct lexical basis families plus independently constructed lexical nuisance control",
+    "full balanced semantic-target x output-code 3x3 factorial in calibration and fresh holdout",
+    "disjoint calibration/holdout lexical families and seeds",
+    "matched scenario-family triplets containing AFFIRMATIVE/NEGATIVE/NEUTRAL variants of the same content skeleton",
+    "within-scenario centering, equal family weighting and blocked within-family permutation",
+    "disjoint basis/calibration/holdout scenario families",
+    "calibration-only residual-norm-relative operating-point selection",
+    "matched PyTorch last-token, PyTorch all-prompt-token and native llama.cpp all-prompt-token cvec scope conditions",
+    "seven matched controls including LABEL_ONLY_NUISANCE_VECTOR",
+    "cross-family cosine coherence with permutation null and calibration-only threshold",
+    "context-boundary tokenization attestation for exact prompt plus completion forms",
+    "at least two distinct counterbalanced codebook families",
+    "generated or constrained behavioral output agreement in addition to token-logit readout",
+    "preregistered treatment x semantic-target interaction, sign-flip reversal, fresh-family consistency and off-target drift bound",
+    "canonical atomic unusual-experiment lease required before execution",
+    "FREE_ONLY and preregistration itself mints zero runtime/product/model/training credit"
+  ],
+  "local_regression": {
+    "command": "python -m unittest tests/test_trigger1_label_free_scope_norm_prereg_gate.py -v",
+    "result": "14/14 PASS",
+    "scope": "LOCAL_STATIC_PREREG_GATE_UNIT_REGRESSION_ONLY",
+    "not_claimed": [
+      "exact-current repository workflow execution",
+      "Qwen model runtime execution",
+      "native llama.cpp cvec experiment execution",
+      "J-Space model runtime credit",
+      "whole HCU or EntityOS credit",
+      "training credit"
+    ]
+  },
+  "research_basis": [
+    "Wu, Zhao, Chen 2026 arXiv:2608.08159: raw activation scale/readout/operating-point confounds motivate residual-norm-relative and held-out operating-point control",
+    "Braun et al. 2025 arXiv:2505.22637: cross-sample variance and activation-difference coherence motivate cross-family coherence diagnostics",
+    "Tan et al. 2024 arXiv:2407.12404: steering brittleness/spurious bias motivates fresh lexical/domain families and off-target tasks",
+    "Wang et al. 2024 arXiv:2402.14499 and 2404.08382: first-token probability can disagree with emitted text, motivating behavioral agreement readout",
+    "Sanz-Guerrero et al. 2025 arXiv:2509.15020: answer-boundary tokenization can change MCQ evaluation, motivating exact prompt-boundary attestation",
+    "Zheng et al. 2023 arXiv:2309.03882: option-identifier token priors motivate multi-codebook replication",
+    "Panickssery et al. 2023/2024 arXiv:2312.06681 plus current matched-triplet research: paired/matched contrasts motivate scenario-family blocking"
+  ],
+  "hypothesis": "If Qwen3-0.6B contains a reusable semantic causal direction rather than label, scenario, output-realization or operating-point artifacts, a preregistered nonterminal intervention should retain target-specific sign and interaction under matched scenario blocking, lexical/codebook changes, norm-calibrated scope-matched execution and behavioral readout.",
+  "counterhypothesis": "The apparent steering effect is substantially explained by lexical pole reconstruction, scenario/domain geometry, output-code/token-form priors, broadcast-scope differences, raw-gain operating-point selection or generic instruction compliance.",
+  "discriminator": "Instantiate a plan that passes CLAY_TRIGGER1_LABEL_FREE_SCOPE_NORM_PREREG_GATE/v1 with exact current identities and sealed holdout; execute only after successful canonical create-only unusual-experiment lease; then feed evidence-bound results through the retained v5+ promotion path.",
+  "unusual_experiment": {
+    "executed_by_this_organ": false,
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "No successful canonical create-only unusual-experiment lease was established for this standalone trigger. Source review, preregistration validation code, local unit regression and research fusion are non-intervention work."
+  },
+  "credit_change": {
+    "provider_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "training_credit": 0,
+    "canonical_semantics_promotion": false
+  },
+  "next_exact_action": "Create an exact-current preregistration instance using pinned Qwen3-0.6B checkpoint/tokenizer/GGUF/llama.cpp/harness identities and frozen matched scenario/lexical/codebook families; require this gate PASS, then obtain the canonical create-only atomic unusual-experiment lease before any fresh native cvec holdout execution."
+}

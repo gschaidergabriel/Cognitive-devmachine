@@ -1,0 +1,89 @@
+{
+  "schema": "CLAY_TRIGGER2_NONCODEBOOK_SHORTCUT_RESEARCH/v1",
+  "date": "2026-08-25",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority": {
+    "canonical_main_at_branch_start": "de75176d958885df1f9d358154a9648a4705a59c",
+    "supervisor_epoch": "8.78",
+    "mode": "FREE_ONLY"
+  },
+  "review_target": {
+    "generator": "tools/trigger2_context_binding_generator_v1.py",
+    "generator_blob_sha": "4af4a384918064e80906089bd0eed98d1e2fc79f",
+    "generator_research_receipt": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_CONTEXT_BINDING_CURRICULUM_GENERATOR_V1_GPT56SOL.json",
+    "role": "retained sole current-main binder generator lane"
+  },
+  "source_observation": {
+    "classification": "SOURCE_DIRECT",
+    "finding": "The retained generator selects lexical_variant_index as (block_id + perm_index + template_index + polarity_index + base_class_index) modulo the number of variants.",
+    "risk": "Because block_id and perm_index also determine the episode-local symbol mapping, lexical surface selection is statistically coupled to target symbols outside the codebook.",
+    "why_existing_balance_is_insufficient": "Exact marginal class-symbol balance does not prove conditional independence from non-codebook text. A model can exploit a higher-order interaction among template, polarity, semantic state and lexical variant while every one-dimensional marginal remains balanced."
+  },
+  "deterministic_discriminator": {
+    "classification": "LOCAL_DETERMINISTIC_FORMULA_SIMULATION_NOT_EXACT_GENERATOR_RUNTIME",
+    "current_formula_one_atom_block": {
+      "rows": 144,
+      "outside_surface_target_mutual_information_bits": 0.6960736118322682,
+      "outside_surface_lookup_accuracy": 0.5555555555555556,
+      "marginal_target_chance": 0.3333333333333333,
+      "individual_predictor_mi_bits": {
+        "base_semantic_class": 0.0,
+        "target_semantic_class": 0.0,
+        "template_family": 0.0,
+        "query_polarity": 0.0,
+        "lexical_variant_index": 0.005764698152458326,
+        "codebook_order": 0.0
+      },
+      "interpretation": "The leak is interaction-level rather than visible in the major one-dimensional marginals."
+    },
+    "minimal_repair_formula_one_atom_block": {
+      "change": "Remove block_id and perm_index from lexical-variant selection so lexical surface is independent of symbol-set identity and S3 mapping.",
+      "example": "variant_index = (template_index + polarity_index + base_class_index) % len(variants)",
+      "outside_surface_target_mutual_information_bits": 0.0,
+      "outside_surface_lookup_accuracy": 0.3333333333333333,
+      "marginal_target_chance": 0.3333333333333333
+    },
+    "preferred_quality_repair": {
+      "design": "Factor lexical_variant_index independently rather than deriving it from mapping variables. Loop over all three lexical variants for every S3/template/polarity/base-class cell.",
+      "rows_per_atom_block": 432,
+      "factorization": "6 S3 mappings x 4 template families x 2 query polarities x 3 base semantic classes x 3 lexical variants",
+      "benefit": "Every exact non-codebook lexical surface is exposed under all six S3 mappings, preserving lexical diversity while making target-symbol prediction from outside-codebook text exactly uninformative within the deterministic design."
+    }
+  },
+  "swarm_review": {
+    "EVIDENCE_EXTRACTOR": "PASS: formula and current open lexical-predictor gate are source-grounded; no training/runtime promotion inferred.",
+    "ADVERSARIAL_SHORTCUT_HUNTER": "FAIL_CURRENT_GENERATOR: non-codebook interaction leaks target information despite exact marginal class-symbol balance.",
+    "STATISTICAL_REVIEWER": "FAIL_CURRENT_GENERATOR: I(outside_surface; target)=0.6960736118322682 bits in the deterministic formula simulation.",
+    "ABI_PROVENANCE_REVIEWER": "NO_CHANGE: real 46-atom manifest/tokenizer binding remains unresolved; no atom identity invented.",
+    "RETENTION_REVIEWER": "PASS_REPAIR_DIRECTION: repair changes curriculum counterbalancing rather than adding semantic re-training pressure.",
+    "HARNESS_COMPATIBILITY_REVIEWER": "PASS_DESIGN: linter operates on emitted candidate JSONL and can become a pre-pilot gate.",
+    "PARALLEL_WORK_DEDUP_REVIEWER": "PASS: no second binder generator was persisted; only a linter/test/research delta is added around the retained main generator.",
+    "FINAL_INTEGRATOR": "BLOCK_REAL_ATOM_SCALING_UNTIL_NONCODEBOOK_SHORTCUT_GATE_PASSES"
+  },
+  "new_files": {
+    "linter": "tools/trigger2_non_codebook_shortcut_linter_v1.py",
+    "tests": "tests/test_trigger2_non_codebook_shortcut_linter_v1.py",
+    "local_tests": "3/3 PASS",
+    "test_scope": "LOCAL_SOURCE_TEST_ONLY_NOT_ENTITYOS_RUNTIME"
+  },
+  "training_data_implication": {
+    "do_now": "Repair lexical-variant scheduling, then rerun the retained generator and linter before materializing real-atom training rows.",
+    "do_not_do": "Do not scale the current 144-row/block curriculum merely because class-symbol counts are equal; the interaction leak can reward a lexical shortcut.",
+    "next_curriculum_phase_after_repair": "Add balanced 2-4 hop dereference/distractor families as a separate family within the retained generator architecture, motivated by variable-binding research, after one-hop shortcut closure."
+  },
+  "credits": {
+    "research_delta": 1,
+    "linter_source_candidate": 1,
+    "accepted_dataset_tokens": 0,
+    "qwen35_training_credit": 0,
+    "qwen35_jspace_runtime_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  },
+  "next_exact_action": "Patch the retained context-binding generator so lexical realization is independent of block_id and s3_permutation, preferably by full lexical-variant factorization; then generate demo rows, run the existing generator validator plus the new non-codebook shortcut linter, and require both to pass before the real 46-atom tranche."
+}

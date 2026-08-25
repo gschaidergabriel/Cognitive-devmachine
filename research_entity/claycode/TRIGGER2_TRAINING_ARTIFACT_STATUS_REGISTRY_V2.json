@@ -1,0 +1,230 @@
+{
+  "schema": "CLAY_TRIGGER2_TRAINING_ARTIFACT_STATUS_REGISTRY/v2",
+  "date": "2026-08-25",
+  "trigger": "triggerwort 2",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "persistent_entity": "Clay",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "execution_mode": "FREE_ONLY",
+  "predecessor_registry": "research_entity/claycode/TRIGGER2_TRAINING_ARTIFACT_STATUS_REGISTRY_V1.json",
+  "predecessor_registry_status": "SUPERSEDED_BY_THIS_REGISTRY_SNAPSHOT",
+  "canonical_main_observed_before_cycle": "c05fd30f34b118efa14e625323f50971c5dcd7c4",
+  "supervisor_epoch_observed": "8.78",
+  "active_training_lane": {
+    "pr": 1956,
+    "branch": "research/trigger2-qwen35-08b-hcu-fullft-20260825",
+    "head_observed_before_cycle_writes": "2a2b30f964eb57893bf4232dcacba9ad4fe9da14",
+    "cycle_commits": [
+      "b3c5432abe4c586678902ff91f08f458a15e2c77",
+      "c610cb2a15bae113ae3a28677391b606c9817fac",
+      "2d364e2a6841e85cb84c6d8d69e8de72d3ac580c",
+      "3f42e73a54761147ea2455764163a5fff19cb045"
+    ]
+  },
+  "status_vocabulary": [
+    "CURRENT",
+    "CURRENT_SOURCE_GATE_UNEXECUTED",
+    "CURRENT_NONTRAINABLE_BLUEPRINT",
+    "CURRENT_BUT_SUCCESSOR_REQUIRED",
+    "DIAGNOSTIC_CANDIDATE_RETROFIT_REQUIRED",
+    "RETROFIT_REQUIRED",
+    "COMPONENT_ONLY",
+    "BLOCKED",
+    "SUPERSEDED",
+    "STALE_RECHECK_REQUIRED",
+    "QUARANTINE"
+  ],
+  "records": [
+    {
+      "artifact_id": "trigger2-training-artifact-status-registry-v1",
+      "path": "research_entity/claycode/TRIGGER2_TRAINING_ARTIFACT_STATUS_REGISTRY_V1.json",
+      "version": "v1",
+      "status": "SUPERSEDED",
+      "predecessor": null,
+      "successor": "research_entity/claycode/TRIGGER2_TRAINING_ARTIFACT_STATUS_REGISTRY_V2.json",
+      "provenance": ["Trigger-2 cycle 2026-08-25"],
+      "target_architecture_relation": "Artifact lifecycle/provenance control plane for Trigger-2 training",
+      "revision_reason": "Gate v2 and its regression source were created after registry v1; v2 is the first registry snapshot that reflects them as concrete successors rather than plans.",
+      "training_admission": "REGISTRY_ONLY"
+    },
+    {
+      "artifact_id": "trigger2-semantic-hyperposition-crosscutting-contract-v1",
+      "path": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_SEMANTIC_HYPERPOSITION_CROSSCUTTING_CONTRACT_V1_GPT56SOL.json",
+      "version": "v1",
+      "status": "CURRENT_BUT_SUCCESSOR_REQUIRED",
+      "predecessor": null,
+      "successor": "PLANNED: contract successor incorporating explicit joint-state compatibility",
+      "provenance": [
+        "owner semantic-Hyperposition correction",
+        "current-main Trigger-2 research fusion",
+        "research_entity/claycode/TRIGGER2_HYPERPOSITION_JOINT_STATE_RESEARCH_DELTA_V1.md"
+      ],
+      "target_architecture_relation": "Universal semantic coordinate system for variable-grid Zero/EntityOS cognitive training",
+      "revision_reason": "Branch-local v/K/E+/E-/F/T/A/sigma and anti-collapse remain current, but coupled alternatives now require explicit joint compatibility / no implicit Cartesian completion.",
+      "training_admission": "CONTRACT_ONLY_NO_TRAINING_CREDIT"
+    },
+    {
+      "artifact_id": "trigger2-semantic-hyperposition-universal-gate-v1",
+      "path": "tools/trigger2_semantic_hyperposition_universal_gate_v1.py",
+      "version": "v1",
+      "status": "SUPERSEDED",
+      "predecessor": "tools/trigger2_semantic_hyperposition_gate_v1.py",
+      "successor": "tools/trigger2_semantic_hyperposition_universal_gate_v2.py",
+      "provenance": [
+        "PR #1956 semantic-Hyperposition corpus re-audit",
+        "research_entity/claycode/TRIGGER2_HYPERPOSITION_JOINT_STATE_RESEARCH_DELTA_V1.md"
+      ],
+      "target_architecture_relation": "Universal Hyperposition row-level source/data-design gate",
+      "revision_reason": "v1 only list-types E+/E- and lacks explicit joint compatibility, evidence ancestry/independence, transition locality, output-vs-collapse and reopening enforcement.",
+      "training_admission": "SUPERSEDED_SOURCE_GATE"
+    },
+    {
+      "artifact_id": "trigger2-semantic-hyperposition-universal-gate-v2",
+      "path": "tools/trigger2_semantic_hyperposition_universal_gate_v2.py",
+      "version": "v2",
+      "status": "CURRENT_SOURCE_GATE_UNEXECUTED",
+      "predecessor": "tools/trigger2_semantic_hyperposition_universal_gate_v1.py",
+      "successor": null,
+      "provenance": [
+        "commit 2d364e2a6841e85cb84c6d8d69e8de72d3ac580c",
+        "research_entity/claycode/TRIGGER2_HYPERPOSITION_JOINT_STATE_RESEARCH_DELTA_V1.md"
+      ],
+      "target_architecture_relation": "Fail-closed universal Hyperposition v2 source/data-design gate",
+      "revision_reason": "Adds typed evidence identity/provenance-or-ancestry/independence-group fields, explicit joint-state representation with Cartesian completion forbidden, declared affected-branch locality, output-selection-vs-semantic-collapse checks, resolution reopening policy and counterhypothesis-birth declaration.",
+      "training_admission": "SOURCE_DATA_DESIGN_GATE_ONLY; EXACT_REPOSITORY_TEST_EXECUTION_NOT_YET_CLAIMED"
+    },
+    {
+      "artifact_id": "trigger2-semantic-hyperposition-universal-gate-v2-tests",
+      "path": "tests/test_trigger2_semantic_hyperposition_universal_gate_v2.py",
+      "version": "v2",
+      "status": "CURRENT_SOURCE_GATE_UNEXECUTED",
+      "predecessor": "tests/test_trigger2_semantic_hyperposition_gate_v1.py where applicable",
+      "successor": null,
+      "provenance": ["commit 3f42e73a54761147ea2455764163a5fff19cb045"],
+      "target_architecture_relation": "Mutation regressions for joint-state and evidence/projection/reopening invariants",
+      "revision_reason": "Locks typed-evidence rejection, Cartesian-completion rejection, invalid compatibility-set rejection, unaffected-branch mutation rejection, output-collapse rejection, reopening policy, synthetic-proof exception and counterhypothesis-birth declaration.",
+      "training_admission": "TEST_SOURCE_ONLY; EXECUTION_CREDIT_ZERO_UNTIL_OBSERVED"
+    },
+    {
+      "artifact_id": "trigger2-semantic-hyperposition-seed-v1",
+      "path": "research_entity/global/j-space/research/trigger2_semantic_hyperposition_seed_v1.jsonl",
+      "version": "v1",
+      "status": "DIAGNOSTIC_CANDIDATE_RETROFIT_REQUIRED",
+      "predecessor": null,
+      "successor": "PLANNED: v2 frame/joint-state/typed-evidence successor seed",
+      "provenance": [
+        "commit eb62cab1cc31aad0f515d698d5d89b8f9d93e2a5",
+        "semantic Hyperposition curriculum correction report",
+        "research_entity/claycode/TRIGGER2_HYPERPOSITION_JOINT_STATE_RESEARCH_DELTA_V1.md"
+      ],
+      "target_architecture_relation": "A-E diagnostic candidates inside semantic Hyperposition",
+      "revision_reason": "Useful branch/anti-collapse donor; not v2-trainable because evidence entries are often strings and coupled-alternative joint compatibility is not explicit.",
+      "training_admission": "NO_ACCEPTED_DATASET_OR_TRAINING_CREDIT"
+    },
+    {
+      "artifact_id": "trigger2-binding-router-factorial-generator-v3",
+      "path": "tools/trigger2_dynamic_codebook_generator_v3.py",
+      "version": "v3",
+      "status": "BLOCKED",
+      "predecessor": "earlier Trigger-2 dynamic binding generators",
+      "successor": "V2 full-cross nuisance schedule / tools/trigger2_dynamic_binding_blueprint_v2.py v2.1 or equivalent preregistered successor",
+      "provenance": [
+        "SUPERVISOR_STEERING_8_78.json",
+        "2026-08-25_TRIGGER2_V3_NUISANCE_CONDITIONAL_LEAK_AUDIT_GPT56SOL.json",
+        "2026-08-25_TRIGGER2_FACTORIAL_V3_NUISANCE_DECODER_AUDIT_GPT56SOL.json"
+      ],
+      "target_architecture_relation": "Episode-local semantic-to-codebook BIND/ROUTE",
+      "revision_reason": "Conditional nuisance leakage: 110/127 nuisance signatures admit only one target class; nuisance lookup accuracy 0.881944; conditional MI 1.348851 bits. Marginal balance/order MI cannot rescue it.",
+      "training_admission": "FORBIDDEN_DIRECT_TRAINING"
+    },
+    {
+      "artifact_id": "trigger2-dynamic-binding-blueprint-v2-1",
+      "path": "tools/trigger2_dynamic_binding_blueprint_v2.py",
+      "version": "v2.1",
+      "status": "CURRENT_NONTRAINABLE_BLUEPRINT",
+      "predecessor": "tools/trigger2_dynamic_binding_audit_seed_v1.py plus nonleaking donor concepts",
+      "successor": "materialized v2-Hyperposition pilot after accepted-atom ABI/tokenizer/split gates",
+      "provenance": [
+        "PR #1956 current model-function finding",
+        "9,072-row deterministic factorial blueprint",
+        "TRIGGER2_SEMANTIC_HYPERPOSITION_CORPUS_REAUDIT_V1.md"
+      ],
+      "target_architecture_relation": "READ vs BIND/ROUTE vs WRITE episode-local remapping under nuisance crossing",
+      "revision_reason": "Current factorial design donor/blueprint; remains explicitly nontrainable until exact ABI/tokenizer, immutable split, rendered-byte leakage and universal-frame gates pass.",
+      "training_admission": "NONTRAINABLE_BLUEPRINT_ONLY"
+    },
+    {
+      "artifact_id": "trigger2-cognitive-process-trajectory-generator-v1",
+      "path": "tools/trigger2_cognitive_process_trajectory_generator_v1.py",
+      "version": "v1",
+      "status": "RETROFIT_REQUIRED",
+      "predecessor": null,
+      "successor": "PLANNED: universal-Hyperposition-v2-native cognitive-process successor",
+      "provenance": ["TRIGGER2_SEMANTIC_HYPERPOSITION_CORPUS_REAUDIT_V1.md"],
+      "target_architecture_relation": "Zero/EntityOS cognitive-process census supervision for variable N grid",
+      "revision_reason": "Current 208-row source design has useful semantics/full 2x2x2 nuisance crossing but 0/208 rows meet explicit universal H_before/H_after contract as currently generated.",
+      "training_admission": "DONOR_ONLY_UNTIL_REGENERATED"
+    },
+    {
+      "artifact_id": "trigger2-integrated-cognitive-trajectory-seed-v4",
+      "path": "research_entity/global/j-space/research/trigger2_qwen35_08b_integrated_cognitive_trajectory_seed_v4.jsonl",
+      "version": "v4",
+      "status": "RETROFIT_REQUIRED",
+      "predecessor": "earlier integrated trajectory seeds",
+      "successor": "PLANNED: universal-Hyperposition-v2-native integrated trajectory successor",
+      "provenance": ["TRIGGER2_SEMANTIC_HYPERPOSITION_CORPUS_REAUDIT_V1.md"],
+      "target_architecture_relation": "Integrated planning/handoff/reentry/recovery/Hyperposition trajectories",
+      "revision_reason": "All 10 inspected rows are legacy pre-universal-frame candidates; preserve semantic donor value but regenerate structured transition/evidence/joint-state semantics before trainable use.",
+      "training_admission": "DONOR_ONLY_UNTIL_REGENERATED"
+    },
+    {
+      "artifact_id": "trigger2-dynamic-binding-audit-seed-v1",
+      "path": "tools/trigger2_dynamic_binding_audit_seed_v1.py",
+      "version": "v1",
+      "status": "SUPERSEDED",
+      "predecessor": null,
+      "successor": "tools/trigger2_dynamic_binding_blueprint_v2.py v2.1",
+      "provenance": ["PR #1956 branch Run-3 donor delta"],
+      "target_architecture_relation": "Early dynamic binding logical seed",
+      "revision_reason": "72-row logical seed retained only for donor/regression value; explicitly superseded for current binder design.",
+      "training_admission": "DONOR_REGRESSION_ONLY"
+    },
+    {
+      "artifact_id": "trigger2-owner-target-variable-grid-db-claude-global-jspace",
+      "path": "research_entity/global/OWNER_CORRECTION_ZERO_ENTITYOS_COGNITIVE_GRID_DB_CLAUDECODE_GLOBAL_JSPACE_2026-08-25.md",
+      "version": "2026-08-25",
+      "status": "CURRENT",
+      "predecessor": "conflicting fixed-GRID10/unbounded-grid target interpretations",
+      "successor": null,
+      "provenance": ["explicit owner correction"],
+      "target_architecture_relation": "Highest-precedence target: VARIABLE COGNITIVE GRID + PERSISTENT DATABASE + CLAUDE CODE with strongest-supported Global J-Space bridge",
+      "revision_reason": "N is runtime-variable; GRID10 benchmark only; training must reproduce Zero/EntityOS cognitive processes rather than generic chatbot quality or fixed roles.",
+      "training_admission": "TARGET_AUTHORITY_NOT_DATASET_ROW"
+    }
+  ],
+  "global_revision_rules": [
+    "Conflicting target-architecture artifacts become STALE_RECHECK_REQUIRED or SUPERSEDED; never silently reinterpret them.",
+    "Model-visible target leakage makes a generator BLOCKED even when class balance or marginal MI is good.",
+    "Pre-universal-frame cognitive rows remain donor/retrofit material until model-visible H_before/H_after semantics pass the current gate.",
+    "Evidence-bearing Hyperposition rows must preserve evidence identity, provenance/ancestry and independence group; repeated packaging is not independent evidence.",
+    "Coupled alternatives require explicit joint compatibility; implicit Cartesian completion is forbidden.",
+    "Training execution, accepted dataset tokens and model/runtime credit remain separate from source/data-design status."
+  ],
+  "next_registry_revision_trigger": [
+    "new owner/supervisor authority",
+    "new rendered pilot",
+    "new shortcut/leakage evidence",
+    "gate v2 execution result",
+    "new model runtime result",
+    "new accepted-dataset evidence",
+    "artifact supersession/quarantine"
+  ],
+  "credit_boundary": {
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "qwen35_jspace_causal_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  }
+}

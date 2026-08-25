@@ -1,0 +1,66 @@
+{
+  "schema": "CLAY_TRIGGER2_MODEL_CALL_OUTPUT_BINDING_NEGATIVE_FIXTURE_DELTA/v1",
+  "date": "2026-08-26",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "supervisor_epoch": "8.82",
+  "mode": "FREE_ONLY",
+  "parent_delta": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_CHECKPOINT_MODEL_STATE_CONSUMPTION_ABI_V2_SOURCE_DELTA_GPT56SOL.json",
+  "source": {
+    "path": "tools/trigger2_qwen35_checkpoint_model_state_consumption_probe_v2.py",
+    "git_blob_sha1": "14737671a579cad8c2c691a160d30833397bace2",
+    "sha256": "6b190553e405e6b06267e5e8eaa7c0560d1db403088b8f76457eef4695aa98c8",
+    "model_call_binding_fields": [
+      "candidate_id",
+      "checkpoint_manifest_sha256",
+      "checkpoint_state_digest",
+      "loaded_state_digest",
+      "rendered_utf8_sha256",
+      "input_ids identity",
+      "attention_mask identity",
+      "runtime identity",
+      "forward_output"
+    ],
+    "forward_output_in_runtime_path": "full logits shape + raw-byte identity of complete last-token logits vector + top1 token id"
+  },
+  "supervisor_8_82_alignment": {
+    "requirement": "Fuse consumed checkpoint closure with model output digest and model_call_identity; add SAME_TOP1_DIFFERENT_LOGITS and OUTPUT_TRANSPLANT negatives.",
+    "same_top1_different_logits": "CLOSED_BY_EXACT_TEST: equal top1 with different last-logits raw-byte digest changes model_call_binding_sha256.",
+    "output_transplant": "CLOSED_BY_EXACT_TEST: identical output/input envelope transplanted across candidate_id changes model_call_binding_sha256.",
+    "remaining_runtime_boundary": "Source/test closure does not prove an actual Qwen call receipt. Runtime quiescence and separately admitted exact FREE non-provider execution remain upstream."
+  },
+  "exact_source_test": {
+    "path": "tests/test_trigger2_qwen35_checkpoint_model_state_consumption_probe_v2.py",
+    "commit": "3bc647769c423d37dabc77368c52280a000bd137",
+    "git_blob_sha1": "f54ffd923e718899c1b9482c203253618482b910",
+    "sha256": "5fae03440a96506b4742ee7574ea4e834deb28c7ac09629029a2f081df76c365",
+    "source_blob_exact_match_verified": true,
+    "test_blob_exact_match_verified": true,
+    "py_compile": "PASS",
+    "pytest": "9/9 PASS",
+    "new_negatives": [
+      "same top1 token id but different last-logits digest must produce different call identity",
+      "same model output transplanted across candidate identity must produce different call identity"
+    ],
+    "scope": "DETERMINISTIC_EXACT_REPOSITORY_SOURCE_TEST_ONLY_NOT_MODEL_RUNTIME"
+  },
+  "execution": {
+    "runtime_quiescence": "NOT_PROVEN",
+    "provider_execution": "NOT_PERFORMED",
+    "model_runtime": "NOT_PERFORMED",
+    "training": "NOT_PERFORMED"
+  },
+  "credits": {
+    "research_delta": 1,
+    "exact_source_unit_test_credit": 1,
+    "model_call_runtime_credit": 0,
+    "checkpoint_model_state_runtime_credit": 0,
+    "checkpoint_selection_credit": 0,
+    "jspace_model_credit": 0,
+    "training_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  },
+  "next_exact_action": "Resolve and receipt runtime quiescence. Re-enter supervisor authority. Only if exact non-provider FREE model execution is explicitly admitted, run CHECKPOINT_MODEL_STATE_CONSUMPTION_ABI/v2 on frozen BASE and persist a call-level receipt binding consumed model state, model-visible tokens, runtime and last-logits digest. Preserve any fail-closed result."
+}

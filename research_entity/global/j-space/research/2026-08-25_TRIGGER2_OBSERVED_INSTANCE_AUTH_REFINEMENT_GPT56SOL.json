@@ -1,0 +1,110 @@
+{
+  "schema": "CLAY_TRIGGER2_OBSERVED_INSTANCE_AUTHENTICATION_REFINEMENT/v1",
+  "created_date": "2026-08-25",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "trigger": "triggerwort 2",
+  "repository": "gschaidergabriel/clay-global-research-entity",
+  "authority_epoch": "8.78",
+  "program": "ENTITYOS_HCU",
+  "mode": "FREE_ONLY",
+  "basis": {
+    "supervisor": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_78.json",
+    "producer_auth_counterexample_commit": "90b7b7735f078a6cc10438b5d3d8f92f98df8db7",
+    "current_trigger2_audit": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_1656Z_AUDIT_GPT56SOL.json",
+    "audited_source": "tools/trigger2_hyperposition_state_history_proof_gate_v1.py::_validate_observation_receipt"
+  },
+  "classification": "DESIGN_RESEARCH_DELTA_NOT_RUNTIME_EVIDENCE",
+  "primary_finding": "PRODUCER_AUTHORIZATION_IS_NOT_RUNTIME_INSTANCE_AUTHENTICATION",
+  "finding_detail": "A repository-bound allowlist can establish which producer identities, versions, source digests and policy digests are authorized. It does not by itself authenticate that a concrete observation receipt was actually emitted by that producer. The current validator accepts caller-supplied receipt objects and only checks schema, event digest, non-authority flags and nonempty source/provenance/time/id strings. Therefore a deterministic authority registry plus recomputable fields closes authorization and subject-binding only if the runtime path also prevents an untrusted caller from minting an indistinguishable authorized instance envelope.",
+  "external_research": {
+    "classification": "DESIGN_INPUT_NOT_PROJECT_RUNTIME_EVIDENCE",
+    "sources": [
+      "https://slsa.dev/spec/v1.2/source-requirements",
+      "https://github.com/in-toto/attestation/blob/main/spec/v1/statement.md",
+      "https://github.com/in-toto/attestation/blob/main/spec/v1/envelope.md",
+      "https://github.com/secure-systems-lab/dsse/blob/master/envelope.proto",
+      "https://arxiv.org/abs/2410.04962"
+    ],
+    "translation": [
+      "SLSA source requirements treat actor identification/authentication and attribution as an explicit control, separate from revision identity and provenance content.",
+      "in-toto Statement binds an attestation to immutable subjects by digest and predicate type, while the Envelope is the authentication layer.",
+      "DSSE signs the typed payload via pre-authentication encoding; keyid is explicitly an unauthenticated hint and cannot be treated as producer authority.",
+      "Activation Scaling frames causal intervention evaluation in terms of effectiveness, faithfulness and minimality; this supports retaining strong off-target and minimality controls for later J-Space work but does not provide current project runtime credit."
+    ]
+  },
+  "lifecycle_revision": [
+    {
+      "artifact": "2026-08-25_TRIGGER2_1656Z_AUDIT_GPT56SOL.json::required_observed_evidence_authority_design.cryptography",
+      "status": "NEEDS_QUALIFICATION",
+      "reason": "Its statement that cryptography is not required is correct only when an independently trusted runtime capability/process/channel makes receipt issuance unforgeable to the caller. Repository binding and deterministic recomputation alone do not authenticate a concrete runtime instance when the caller may supply the receipt object."
+    },
+    {
+      "artifact": "repository-bound OBSERVED producer allowlist/authority",
+      "status": "CURRENT_REQUIRED_COMPONENT_BUT_NOT_SUFFICIENT_ALONE",
+      "reason": "It is necessary for authorization, revocation, scope and policy resolution, but must be paired with an unforgeable issuance/authentication boundary."
+    },
+    {
+      "artifact": "OBSERVED positive training-row generation",
+      "status": "BLOCKED",
+      "reason": "Positive rows remain unsafe until both producer authorization and runtime instance authentication plus ordered-history authority close under executable adversarial tests."
+    }
+  ],
+  "two_axis_closure_model": {
+    "axis_A_producer_authorization": {
+      "question": "Is this producer identity/version allowed to issue this evidence class under this policy/generation?",
+      "minimum": [
+        "canonical repository-bound producer authority",
+        "producer id and version/epoch",
+        "source or consumed-artifact digest",
+        "policy digest",
+        "scope/namespace",
+        "revocation/currentness",
+        "generation"
+      ]
+    },
+    "axis_B_instance_authentication": {
+      "question": "Did this exact trusted producer actually issue this exact runtime evidence instance for this exact subject/admission context?",
+      "acceptable_mechanism_classes": [
+        "authenticated typed envelope whose payload is cryptographically verified against a trusted producer identity/policy",
+        "or an equivalently unforgeable local capability/process/IPC boundary in which the verifier obtains the receipt from the trusted issuer rather than accepting a caller-mintable envelope"
+      ],
+      "must_bind": [
+        "event semantic digest",
+        "subject/source-payload digest",
+        "causal_event_id",
+        "admission_id",
+        "generation",
+        "producer id/version",
+        "policy digest",
+        "invocation/context digest",
+        "replay identity/nonce or equivalent monotonic context",
+        "parent receipt digest when required"
+      ]
+    },
+    "promotion_rule": "OBSERVED candidate evidence is eligible for pre-admission only if BOTH axis_A and axis_B pass. Neither axis may mint canonical truth or direct effect authority."
+  },
+  "counterhypothesis": {
+    "claim": "Cryptographic signatures may be unnecessary in the all-local deterministic lane if the runtime call graph itself enforces an unforgeable producer capability and the caller can never directly submit or synthesize the accepted receipt object.",
+    "discriminator": "Expose the same public/admission surface available to an untrusted caller and attempt to produce a byte-equivalent accepted OBSERVED receipt without traversing the trusted producer capability. If this succeeds, the capability boundary is not authentication. If every such forgery fails while the legitimate producer path succeeds at exact identity, signatures are not logically required for this local gate."
+  },
+  "adversarial_acceptance_additions": [
+    "caller constructs all authority-valid deterministic fields and digests without traversing trusted producer issuer -> reject",
+    "caller copies a legitimate envelope and changes admission_id or generation -> reject",
+    "caller copies a legitimate envelope unchanged into a new admission context -> reject or resolve as the same replay identity without minting a new event",
+    "valid subject digest plus self-declared trusted producer id but no authenticated issuer path -> reject",
+    "authenticated issuer plus wrong subject/source-payload digest -> reject",
+    "authenticated issuer plus revoked/out-of-scope producer policy -> reject",
+    "keyid/producer-id hint without verified envelope/capability identity -> reject",
+    "legitimate trusted producer path with independently recomputed exact subject/context -> pass candidate pre-admission only"
+  ],
+  "training_decision": {
+    "new_positive_training_rows": 0,
+    "positive_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "checkpoint_selection_credit": 0,
+    "causal_jspace_credit": 0,
+    "reason": "Do not train epistemic behavior on evidence whose concrete producer instance can still be forged at the admission surface."
+  },
+  "next_exact_action": "Implement or identify the single trusted OBSERVED receipt issuer boundary, bind it to the repository-authorized producer registry, remove caller-mintable authority from the accepted admission path, add the new forgery test where every deterministic field is otherwise correct, and execute the exact clean repository-bound regression on the admitted zero-cost VPS. Only after this and nonempty ordered-history producer authority pass should positive diagnostic rows be generated."
+}

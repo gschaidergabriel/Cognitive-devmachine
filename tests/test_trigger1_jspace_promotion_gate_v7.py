@@ -11,13 +11,13 @@ TOOLS = ROOT / "tools"
 if str(TOOLS) not in sys.path:
     sys.path.insert(0, str(TOOLS))
 
-# The real modularity companion composes promotion-v6. This deterministic composition
-# harness supplies only its adjudication surface so v7 can be tested without importing
-# the full predecessor chain.
-if "trigger1_jspace_modularity_companion_v1" not in sys.modules:
-    stub = types.ModuleType("trigger1_jspace_modularity_companion_v1")
+# The real modularity-v2 companion composes v1 -> promotion-v6. This deterministic
+# composition harness supplies only its adjudication surface so v7 can be tested without
+# importing the full predecessor chain.
+if "trigger1_jspace_modularity_companion_v2" not in sys.modules:
+    stub = types.ModuleType("trigger1_jspace_modularity_companion_v2")
     stub.adjudicate = lambda _candidate: {}
-    sys.modules["trigger1_jspace_modularity_companion_v1"] = stub
+    sys.modules["trigger1_jspace_modularity_companion_v2"] = stub
 
 import trigger1_jspace_promotion_gate_v7 as v7
 
@@ -29,6 +29,7 @@ BASE_PASS = {
     "modular_hcu_jspace_control_candidate": True,
     "v5_specificity_failures": [],
     "modularity_failures": [],
+    "modularity_binding_failures": [],
 }
 BOUND_PASS = {
     "evidence_bound_semantic_factorial_candidate": True,
@@ -40,7 +41,7 @@ BOUND_PASS = {
 
 
 class Trigger1PromotionGateV7Tests(unittest.TestCase):
-    def test_upstream_pass_without_evidence_binding_is_rejected(self):
+    def test_upstream_pass_without_factorial_binding_is_rejected(self):
         with patch.object(v7.modularity, "adjudicate", return_value=dict(BASE_PASS)), patch.object(
             v7.factorial,
             "adjudicate",
@@ -52,7 +53,7 @@ class Trigger1PromotionGateV7Tests(unittest.TestCase):
         self.assertFalse(verdict["modular_hcu_jspace_control_candidate"])
         self.assertIn("LYING_SUMMARY", verdict["v7_failures"])
 
-    def test_evidence_binding_cannot_repair_upstream_scientific_failure(self):
+    def test_factorial_binding_cannot_repair_upstream_scientific_failure(self):
         upstream = {**BASE_PASS, "scientifically_independent_vector_candidate": False, "owner_trigger1_goal_credit_candidate": False}
         with patch.object(v7.modularity, "adjudicate", return_value=upstream), patch.object(
             v7.factorial, "adjudicate", return_value=dict(BOUND_PASS)
@@ -60,6 +61,15 @@ class Trigger1PromotionGateV7Tests(unittest.TestCase):
             verdict = v7.adjudicate({})
         self.assertFalse(verdict["scientifically_independent_vector_candidate"])
         self.assertFalse(verdict["owner_trigger1_goal_credit_candidate"])
+
+    def test_modularity_binding_failure_is_propagated(self):
+        upstream = {**BASE_PASS, "modular_hcu_jspace_control_candidate": False, "modularity_binding_failures": ["MATRIX_UNBOUND"]}
+        with patch.object(v7.modularity, "adjudicate", return_value=upstream), patch.object(
+            v7.factorial, "adjudicate", return_value=dict(BOUND_PASS)
+        ):
+            verdict = v7.adjudicate({})
+        self.assertFalse(verdict["modular_hcu_jspace_control_candidate"])
+        self.assertIn("MATRIX_UNBOUND", verdict["v7_failures"])
 
     def test_both_chains_must_pass_and_verdict_remains_non_minting(self):
         with patch.object(v7.modularity, "adjudicate", return_value=dict(BASE_PASS)), patch.object(

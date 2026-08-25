@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v4",
+  "command_id": "fr1-jspace06-native-current-main",
+  "op": "exec",
+  "cwd": "/workspace/clay-global-research-entity",
+  "timeout_seconds": 1800,
+  "command": "set -euo pipefail; OUT=/workspace/qwen06-fr1-current/native-replication; rm -rf $OUT; mkdir -p $OUT; echo classification=IDENTICAL_INTERVENTION_REPLICATION; echo source_head=$(git rev-parse HEAD); echo source_tree=$(git rev-parse HEAD^{tree}); echo executor_sha256=$(sha256sum tools/trigger1_local_qwen06_native_cvec_execute.py | cut -d ' ' -f1); echo harness_source_sha256=$(sha256sum tools/trigger1_native_llamacpp_cvec_logits.cpp | cut -d ' ' -f1); echo harness_binary_sha256=$(sha256sum /cache/clay-qwen06-native/native_cvec_logits | cut -d ' ' -f1); unset OPENAI_API_KEY OPENAI_API_KEYS ANTHROPIC_API_KEY ANTHROPIC_API_KEYS GROQ_API_KEY GROQ_API_KEYS MISTRAL_API_KEY MISTRAL_API_KEYS NVIDIA_API_KEY NVIDIA_API_KEYS NVIDIA_NIM_API_KEY NGC_API_KEY OPENROUTER_API_KEY OPENROUTER_API_KEYS TOGETHER_API_KEY TOGETHER_API_KEYS HF_TOKEN HUGGING_FACE_HUB_TOKEN HUGGINGFACE_HUB_TOKEN || true; export HF_HUB_DISABLE_IMPLICIT_TOKEN=1 HF_HUB_DISABLE_TELEMETRY=1 TOKENIZERS_PARALLELISM=false OMP_NUM_THREADS=2 MKL_NUM_THREADS=2 HF_HOME=/cache/clay-qwen06/hf; /cache/clay-qwen06/venv/bin/python tools/trigger1_local_qwen06_native_cvec_execute.py --output-dir $OUT --cache-dir /cache/clay-qwen06/hf --llama-root /cache/clay-qwen06-native/llama.cpp --gguf /cache/clay-qwen06-native/models/Qwen3-0.6B-Q8_0.gguf --harness /cache/clay-qwen06-native/native_cvec_logits; echo result_file_sha256=$(sha256sum $OUT/trigger1_local_qwen06_native_cvec_result.json | cut -d ' ' -f1)"
+}

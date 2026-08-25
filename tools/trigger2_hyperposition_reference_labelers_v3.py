@@ -265,7 +265,10 @@ def _validate_branch(branch: Any, world: dict[str, Any], *, allow_empty_evidence
         items = branch.get(field)
         if not isinstance(items, list):
             return "BRANCH_EVIDENCE_LIST_REQUIRED:" + field
-        if not allow_empty_evidence:
+        if allow_empty_evidence:
+            if items:
+                return "BRANCH_BIRTH_EVIDENCE_MUST_BE_EMPTY:" + field
+        else:
             for item in items:
                 err = _validate_record(item)
                 if err:

@@ -229,6 +229,34 @@ def test_branch_birth_is_derived_from_formal_world_rule():
     assert {b["branch_id"] for b in u["state_after"]["branches"]} == {"h_yes", "h_no", "h_new"}
 
 
+def test_branch_birth_rejects_nonempty_untyped_initial_evidence():
+    template = branch("h_new", "NEW_HYP", "YES")
+    for field in ("E_plus", "E_minus", "F"):
+        bad_template = copy.deepcopy(template)
+        bad_template[field] = [{"garbage": "not a typed evidence record"}]
+        births = [{
+            "rule_id": "birth-bad",
+            "test_id": "t_binary",
+            "observed_outcome": "YES",
+            "branch_template": bad_template,
+        }]
+        w = world(births=births)
+        err = lab._validate_world(w)
+        assert err == "WORLD_BRANCH_BIRTH_TEMPLATE_INVALID:BRANCH_BIRTH_EVIDENCE_MUST_BE_EMPTY:" + field, (field, err)
+
+
+def test_branch_birth_accepts_exactly_empty_initial_evidence():
+    template = branch("h_new", "NEW_HYP", "YES")
+    births = [{
+        "rule_id": "birth-ok",
+        "test_id": "t_binary",
+        "observed_outcome": "YES",
+        "branch_template": template,
+    }]
+    w = world(births=births)
+    assert lab._validate_world(w) is None
+
+
 def test_exact_semantic_merge_uses_declared_policy_not_similarity():
     b1 = branch("a", "SAME", "YES")
     b2 = branch("b", "SAME", "YES")

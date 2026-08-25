@@ -32,6 +32,7 @@ MAX_PROVIDER_OUTPUT_TOKENS = 4_096
 MAX_BEARER_TOKEN_CHARACTERS = 8_192
 MAX_ATTEMPT_NONCE_CHARACTERS = 128
 MAX_PROVIDER_RESPONSE_ID_CHARACTERS = 256
+MAX_PROVIDER_CREATED_UNIX_SECONDS = 9_999_999_999
 MAX_ZERO_COST_ATTESTATION_CHARACTERS = 1_024
 MAX_BUDGET_EPOCH_CHARACTERS = 256
 MAX_PROVIDER_BASE_URL_CHARACTERS = 2_048
@@ -903,6 +904,7 @@ def _execute_chat_locked(
     payment_latch_active = False
     payment_latch_publication_failed = False
     provider_response_id_sha256 = None
+    provider_created_unix_seconds = None
 
     try:
         try:
@@ -1012,6 +1014,13 @@ def _execute_chat_locked(
             provider_response_id_sha256 = hashlib.sha256(
                 payload["id"].encode("utf-8")
             ).hexdigest()
+            if (
+                "created" not in payload
+                or type(payload["created"]) is not int
+                or not 0 <= payload["created"] <= MAX_PROVIDER_CREATED_UNIX_SECONDS
+            ):
+                raise ValueError("response_created_must_be_bounded_unix_seconds")
+            provider_created_unix_seconds = payload["created"]
             if (
                 "model" not in payload
                 or type(payload["model"]) is not str
@@ -1173,6 +1182,7 @@ def _execute_chat_locked(
         "budget_epoch_id": _budget_epoch_id(env),
         "request_id": request_id,
         "provider_response_id_sha256": provider_response_id_sha256,
+        "provider_created_unix_seconds": provider_created_unix_seconds,
         "attempt_id": _safe_attempt_id(
             # The nonce supplies attempt uniqueness.  Keeping an unbounded
             # injected integer clock out of string formatting prevents a

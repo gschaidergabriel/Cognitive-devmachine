@@ -1,0 +1,81 @@
+{
+  "schema": "WORKSPACE_REENTRY_EVIDENCE_GATE/v1",
+  "status": "CURRENT_OWNER_ALIGNED_FAIL_CLOSED_SOURCE_CONTRACT_NOT_JSPACE_RUNTIME_CREDIT",
+  "authority": {
+    "base_main_sha": "e10f6ed0bf8600025c4b95182f91be5a54b1d283",
+    "owner_target_path": "research_entity/global/OWNER_CORRECTION_ZERO_ENTITYOS_COGNITIVE_GRID_DB_CLAUDECODE_GLOBAL_JSPACE_2026-08-25.md",
+    "abi_path": "research_entity/global/COGNITIVE_PROCESS_ABI_v1.json",
+    "owner_law": "GLOBAL_JSPACE_CLAIMS_BOUNDED_TO_STRONGEST_ACTUALLY_EXPOSED_CAUSAL_INTERFACE"
+  },
+  "problem_observed": {
+    "classification": "SOURCE_SEMANTIC_OVERCLAIM_NOT_RUNTIME_PROMOTION",
+    "instances": [
+      {
+        "path": "tools/zero_entityos_variable_grid_fixture_v1.py",
+        "condition": "stub_claude_roundtrip explicitly says NOT a Claude Code invocation but emits observed_downstream_change TRUE",
+        "required_interpretation": "PACKET_BINDING_ONLY; observed downstream causal change UNKNOWN"
+      },
+      {
+        "path": "tools/run_zero_entityos_variable_grid_fixture_v1.py",
+        "condition": "synthetic_fixture_return emits observed_downstream_change TRUE and downstream hash changes when payload changes",
+        "required_interpretation": "SYNTHETIC_PACKET_AND_DETERMINISTIC_TRANSFORM_ONLY; not measured cognitive causal use"
+      }
+    ],
+    "existing_credit_boundary": "Both fixtures already keep Claude runtime and Global J-Space causal runtime credit at zero; this gate prevents their local TRUE labels from being reused as stronger evidence."
+  },
+  "admission_law": {
+    "packet_presence": "May establish reentry packet identity/provenance only.",
+    "synthetic_or_stubbed": "Must normalize observed_downstream_change to UNKNOWN and causal_credit to 0.",
+    "unmeasured_real_interface": "Must normalize TRUE/FALSE self-claims to UNKNOWN and causal_credit to 0.",
+    "measured_observable_interface": "TRUE/FALSE may be retained only with an exact matched measurement binding source_result_id, causal_event_id, reentry_digest, intervention, matched control, metric, baseline/intervention values, off-target result and observation surface.",
+    "global_jspace": "Observable workspace reentry evidence cannot by itself grant model-internal or Global J-Space causal credit."
+  },
+  "measurement_schema": {
+    "schema": "WORKSPACE_REENTRY_CAUSAL_MEASUREMENT/v1",
+    "required": [
+      "measurement_id",
+      "source_result_id",
+      "causal_event_id",
+      "reentry_digest",
+      "intervention_id",
+      "matched_control_id",
+      "metric_id",
+      "baseline_value",
+      "intervention_value",
+      "observed_downstream_change",
+      "off_target_result",
+      "observation_surface"
+    ],
+    "observed_downstream_change": ["TRUE", "FALSE", "UNKNOWN"],
+    "off_target_result": ["PASS", "FAIL", "UNKNOWN"]
+  },
+  "credit_scopes": {
+    "PACKET_BINDING_ONLY": 0,
+    "REENTRY_PRESENT_UNMEASURED": 0,
+    "OBSERVABLE_WORKSPACE_REENTRY_UNRESOLVED": 0,
+    "OBSERVABLE_WORKSPACE_REENTRY_ONLY": "bounded interface-level causal evidence only; not Global J-Space/model-internal credit"
+  },
+  "falsifiers": [
+    "A stubbed or synthetic source retains observed_downstream_change TRUE after normalization.",
+    "An unmeasured reentry retains TRUE/FALSE causal credit.",
+    "Measurement causal_event_id/source_result_id/reentry_digest mismatch is accepted.",
+    "A measurement without matched_control_id is accepted.",
+    "Observable reentry evidence directly increments global_jspace_causal_credit."
+  ],
+  "go_tracks": {
+    "track_a": "Prevents the variable-grid executable fixture from emitting evidence stronger than its actual execution surface.",
+    "track_b": "Adds a reusable typed fail-closed interconnect evidence boundary for workspace reentry packets.",
+    "track_c": "Separates observable reentry packet/use evidence from model-specific Global J-Space causal promotion."
+  },
+  "next_exact_gate": "Run a real admitted zero-cost observable-interface matched-control reentry measurement with exact request/result/workspace identities and off-target regression; keep UNKNOWN if that surface is unavailable.",
+  "credit_boundary": {
+    "source_contract": 1,
+    "local_construction_unit": "7/7 PASS before repository write",
+    "repository_ci_runtime": 0,
+    "claude_code_runtime": 0,
+    "global_jspace_causal_runtime": 0,
+    "small_model_runtime": 0,
+    "training": 0,
+    "whole_entityos_hcu_runtime": 0
+  }
+}

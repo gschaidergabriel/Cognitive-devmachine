@@ -1,12 +1,14 @@
 {
   "schema": "CLAY_TRIGGER2_C1_MIXED_CHECKPOINT_EMERGENCE_PROTOCOL/v1",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "date": "2026-08-25",
   "trigger": "triggerwort 2",
   "status": "CURRENT_RESEARCH_PROTOCOL_NO_TRAINING_EXECUTION",
   "product": "EntityOS",
   "architecture": "HCU_VARIABLE_COGNITIVE_GRID",
   "target_model_family": "Qwen3.5-0.8B-class cognitive-process substrate",
+  "revision_from": "1.0.0@88eb0772ec7e3acb6992a960d6c3eb831563b07b",
+  "revision_reason": "Operationalize checkpoint-separated capability curves with a preregistered normalized cadence and add a learned nuisance-only challenger on disjoint families so exact-signature balance cannot hide a generalizing higher-order shortcut.",
   "finished_xeno_north_star": "After training, reusable 0.8B-class cognitive modules must operate inside semantic Hyperposition / Global-J-Space evidence boundaries, preserve variable-N process identity, distinguish persistent DB state from simulation, cooperate with Claude Code through typed handoff/return/re-entry, and keep model output candidate/projection/measurement rather than canonical truth or direct effect authority.",
   "execution_boundary": {
     "supervisor_epoch": "8.78",
@@ -54,31 +56,48 @@
       "cross fact/query order and surface templates",
       "family-split fantasy entities and predicates so lexical identity cannot define class",
       "counterbalance branch order and branch IDs outside model-visible semantics",
-      "measure nuisance-only prediction on final rendered bytes"
+      "measure nuisance-only prediction on final rendered bytes",
+      "train a simple preregistered nuisance-only challenger only on TRAIN semantic-ablated model-visible inputs and evaluate it on disjoint VALIDATION nuisance families; exact-signature chance alone does not prove absence of a generalizing higher-order shortcut"
     ],
+    "checkpoint_cadence": {
+      "status": "PREREGISTER_BEFORE_FIRST_UPDATE",
+      "coordinate": "normalized optimizer progress fraction",
+      "default_candidate_fractions": [0.0, 0.01, 0.03, 0.1, 0.25, 0.5, 0.75, 1.0],
+      "resource_constrained_subset_rule": "A smaller subset is allowed only if fixed before training and it retains baseline, at least two interior early/mid checkpoints, and final checkpoint.",
+      "event_triggered_extra": "Optional additional saves at preregistered validation thresholds; threshold values and metric names must be frozen before training and cannot use final holdout behavior.",
+      "forbidden": [
+        "select checkpoint times after opening final holdout behavior",
+        "report only the best checkpoint",
+        "discard a heuristic-dominant intermediate checkpoint from provenance",
+        "change cadence because an opened holdout failed"
+      ]
+    },
     "freeze_before_first_update": [
       "exact checkpoint/tokenizer/runtime identity",
       "C1 generator identity and content hash",
       "train/validation/frozen-holdout family manifest",
       "model-visible serializer bytes",
       "random seeds and optimizer recipe",
-      "checkpoint evaluation cadence",
+      "exact checkpoint evaluation cadence/fractions",
       "probe layers/token positions and probe method",
       "behavioral metrics, permutation/null procedure, nuisance controls",
+      "learned nuisance-only challenger architecture/features/training procedure/tolerance",
       "positive-control definition"
     ],
     "checkpoint_measurements": [
+      "optimizer progress fraction and checkpoint digest",
       "three-way behavioral accuracy with per-class confusion matrix",
       "family-OOD accuracy",
       "layerwise semantic-class decodability",
       "permutation/null distribution and uncertainty interval",
-      "nuisance-only decoder/lookup accuracy",
+      "nuisance-only exact decoder/lookup accuracy",
+      "learned nuisance-only challenger accuracy on disjoint semantic-ablated nuisance families",
       "surface/template transfer",
       "frozen general-capability/ClayCode retention control"
     ],
     "decision_matrix": {
-      "GO": "Preregistered behavioral and/or representational target signal rises beyond its frozen baseline/null on held-out families, nuisance-only controls remain at/near their preregistered null, and optimization/identity checks are valid.",
-      "INVESTIGATE": "Behavior moves without robust representation signal, representation moves without behavioral transfer, nuisance decoder rises, optimization is uncertain, or positive-control behavior is inconsistent. Diagnose before scaling.",
+      "GO": "Preregistered behavioral and/or representational target signal rises beyond its frozen baseline/null on held-out families, exact and learned nuisance-only controls remain at/near their preregistered null/tolerance, and optimization/identity checks are valid.",
+      "INVESTIGATE": "Behavior moves without robust representation signal, representation moves without behavioral transfer, exact or learned nuisance-only prediction rises, optimization is uncertain, or positive-control behavior is inconsistent. Diagnose before scaling.",
       "NO_GO_FOR_CURRENT_08B_RECIPE": "After verified optimization and clean identity/leakage checks, neither behavioral nor preregistered representation signal improves within the pilot budget and the evaluation pipeline has a functioning positive control.",
       "MODEL_SIZE_ATTRIBUTION": "Do not equate NO_GO_FOR_CURRENT_08B_RECIPE with model size proven wrong. Capacity is implicated only if the same frozen C1 pipeline/recipe yields a positive control on a larger matched model or another preregistered discriminator isolates capacity from data/objective/optimization/measurement causes."
     }
@@ -111,15 +130,28 @@
       "ClayCode/general reasoning/code/benign low-refusal retention"
     ],
     "per_checkpoint_record": [
-      "checkpoint/model/tokenizer/recipe identities",
+      "optimizer progress fraction",
+      "checkpoint/model/tokenizer/recipe identities and digests",
+      "dataset/split/generator/labeler/gate identities and digests",
       "loss by supervised capability/family",
       "five core holdout metrics",
       "finished-Xeno boundary holdout metrics",
       "layerwise decodability where preregistered",
-      "nuisance-only decodability",
+      "nuisance-only exact decodability/lookup",
+      "learned nuisance-only challenger metric on disjoint families",
       "cross-family interference/forgetting deltas from previous checkpoint and baseline",
-      "family/provenance leakage audit status"
+      "family/provenance leakage audit status",
+      "final_holdout_opened=false until the frozen terminal evaluation"
     ],
+    "binding_mechanism_diagnostic": {
+      "labels": [
+        "RANDOM_OR_UNDERFIT",
+        "HEURISTIC_DOMINANT",
+        "SYSTEMATIC_BINDER_CANDIDATE",
+        "CAUSAL_BINDER_SUPPORTED"
+      ],
+      "status_boundary": "These labels describe the observed training trajectory only. SYSTEMATIC_BINDER_CANDIDATE requires held-out task transfer plus nuisance controls at preregistered null/tolerance; CAUSAL_BINDER_SUPPORTED additionally requires the exact model/runtime causal-intervention gate."
+    },
     "failure_interpretation": "A final aggregate null or regression must be localized to non-learning, shortcut learning, interference, forgetting, identity drift, or evaluation failure before changing the whole architecture/model size."
   },
   "emergence_audit": {
@@ -136,7 +168,7 @@
       "no holdout selection/tuning after observing checkpoints",
       "source ancestry disjoint from train families",
       "lexical/template/codebook overlap scan",
-      "model-visible nuisance predictability at null/prior",
+      "model-visible nuisance predictability at null/prior under exact-signature and learned nuisance-only challengers",
       "report compositional transfer separately from stronger emergence claims"
     ],
     "status_rule": "Unexpected checkpoint improvement is EMERGENT_CANDIDATE only. Promote to a stronger claim only after explicit-training overlap, ancestry leakage, shortcut leakage and measurement artifact are excluded."
@@ -180,8 +212,8 @@
   },
   "next_exact_actions": [
     "Freeze/materialize a counterbalanced Hyperposition-native C1 pilot generator + family split manifest without executing paid training.",
-    "Bind C1 checkpoint metrics to exact rendered bytes/checkpoint/tokenizer/probe identities.",
-    "Finish derivation-bound D/E labeler/gate convergence and exact tests before positive D/E row admission.",
+    "Bind C1 checkpoint metrics to exact rendered bytes/checkpoint/tokenizer/probe identities and preregister both exact-signature and learned nuisance-only challengers.",
+    "Execute the exact-current semantic-Hyperposition gate-v3/reference-labeler-v3 mutation and property suite on an admitted zero-cost source-bound surface before positive D/E row admission.",
     "Only after those gates, freeze the mixed-run five-core plus finished-Xeno holdout manifest and independent emergence families."
   ]
 }

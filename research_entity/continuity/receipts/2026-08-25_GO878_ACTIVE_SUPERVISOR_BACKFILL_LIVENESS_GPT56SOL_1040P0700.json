@@ -1,0 +1,87 @@
+{
+  "schema": "CLAY_GO_RESEARCH_DELTA/v1",
+  "date": "2026-08-25",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol / ChatGPT project organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "authority": {
+    "inbox_selected_supervisor": "8.78",
+    "canonical_repository": "gschaidergabriel/clay-global-research-entity",
+    "canonical_branch": "main",
+    "canonical_main_observed_before_receipt": "f53d5ccc1c72597e1d48e159d88126ea71f147dd"
+  },
+  "finding": {
+    "classification": "ACTIVE_SUPERVISOR_PROCESS_BACKPRESSURE_COULD_DEADLOCK_HISTORICAL_EXTRACTION",
+    "statement": "The active 6000 supervisor stopped run_6000_free_swarm_fast.py whenever Forge conversion pressure was high, while the same process installs free_swarm_backfill_scheduler and is therefore the historical-extraction transport. Because pending_extraction contributed to the stop pressure, the controller could stop the only process able to drain the pending historical backlog.",
+    "exact_pre_fix_supervisor_blob": "71355fbb3e200c7e3001bc0bd9938beeb9dbfb58",
+    "exact_fabric_blob_observed": "b9d24b3bf063210626869222f14787b170a2d38a",
+    "scheduler_successor_commit_observed": "cbbff3b197fdcbf9be50f1738e45fdedd63e544a",
+    "leased_backlog_raw_prompt_leak_successor": "478a0c5f781956bcf824ca5bcdf806e3bec0f728"
+  },
+  "hypothesis": "Backpressure must preserve the shared extraction-carrying fabric and suppress raw research at scheduling/prompt allocation boundaries rather than killing the process that performs historical extraction.",
+  "counterhypothesis": "Process-level stop is safe because historical extraction has an independent transport.",
+  "counterhypothesis_disposition": "REJECTED_BY_EXACT_SOURCE: tools/run_6000_free_swarm_fast.py imports free_swarm_backfill_scheduler and calls historical_backfill.install(base), so the historical extraction scheduler is co-located in the process the supervisor was stopping.",
+  "delta": {
+    "active_supervisor_fix_commit": "cf7fc88cdb07c0cbb079562d91dca928e89b9645",
+    "active_supervisor_fixed_blob": "d0a7eb0b0d34772d988964bf84b951b6cdf1dd9f",
+    "regression_definition_commit": "50a30035856ba909083e6aaba2dba6eac00d0fb1",
+    "regression_definition": "tests/test_go878_active_supervisor_backfill_liveness.py",
+    "control_change": "raw_generation_allowed remains credential-blind pressure telemetry; the main loop no longer stop_6000 on pressure and always calls start_6000 after admission reconciliation",
+    "allocation_change_reused": "free_swarm_backfill_scheduler owns conversion-first slot allocation and prevents leased-backlog fallback from silently becoming raw research",
+    "new_truth_store": false,
+    "new_effect_authority": false,
+    "new_persistent_entity": false,
+    "provider_concurrency_increase": false,
+    "provider_token_budget_increase": false
+  },
+  "three_tracks": {
+    "track_a_entityos_executable_convergence": {
+      "status": "ADVANCED_SOURCE_CONTROL_PLANE",
+      "delta": "Closed an active control-loop liveness defect that could prevent the historical conversion path from ever reaching its terminal saturation gate."
+    },
+    "track_b_hcu_and_typed_entry_fabric": {
+      "status": "ADVANCED_REUSABLE_CONTROL_INVARIANT",
+      "delta": "Established a reusable shared-fabric invariant: backpressure may reduce/suppress candidate production but must not disable the transport required to drain the evidence queue. Exact causal/evidence authority remains unchanged."
+    },
+    "track_c_global_jspace_gwt_training_readiness": {
+      "status": "ADVANCED_BY_CANONICAL_PARALLEL_SUCCESSOR",
+      "parallel_receipt_commit": "f53d5ccc1c72597e1d48e159d88126ea71f147dd",
+      "delta": "Current canonical re-entry binds the model-specific Qwen3-0.6B nonterminal causal component to the next native llama.cpp cvec matched-control/provenance discriminator while keeping the intervention lease-gated and nonpromoting."
+    }
+  },
+  "coordination": {
+    "duplicate_dispatch_created": false,
+    "new_unusual_experiment": false,
+    "shared_immutable_macrocycle_or_request_id": null,
+    "unusual_experiment_state": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "paid_or_together_execution": false,
+    "provider_or_model_network_io_by_this_delta": false
+  },
+  "verification_boundary": {
+    "exact_source_inspection": true,
+    "source_write_committed": true,
+    "regression_definition_committed": true,
+    "regression_execution_observed_by_this_organ": false,
+    "authorized_runtime_acceptance_observed": false,
+    "historical_backfill_terminal_result_observed": false,
+    "forge_to_distillery_positive_token_witness_observed": false
+  },
+  "credits_after": {
+    "historical_backfill_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "native_cvec_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "artefact_readme": {
+    "status": "UPDATED_IN_PARALLEL_MACROCYCLE",
+    "observed_commit": "522141c57fa448621957c14731cdf89ce6f9c2e1",
+    "note": "The current-facing README was updated during this moving macrocycle with backpressure-liveness and Qwen component context; this append-only receipt preserves the exact active-supervisor closure without clobbering the parallel current-facing write."
+  },
+  "next_exact_action": "Execute the committed liveness regression plus the shared fail-closed exhaustiveness/backfill regressions on exact-current source in an admitted zero-cost runtime; obtain exactly one canonical terminal historical-backfill generation result; then prove one evidence-qualified Forge ACCEPT -> exactly one persistent Distillery packet -> accepted_dataset_tokens > 0 -> semantic replay +0. Native Qwen llama.cpp cvec execution remains lease-gated and uncredited until exact matched-control runtime evidence exists.",
+  "evidence_boundary": "Source/control-plane and regression-definition evidence only for this organ. No historical-saturation, provider, full-HCU, J-Space native-runtime, training, whole-EntityOS/HCU or whole-product runtime promotion."
+}

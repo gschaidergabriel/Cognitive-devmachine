@@ -1,0 +1,88 @@
+name: EntityOS canonical S0 epoch CAS
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'tools/zero_entityos_restart_resize_db_smoke_v1.py'
+      - '.github/workflows/entityos-canonical-s0-epoch-cas.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  canonical-s0-epoch-cas:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - name: Bind exact source identity
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/canonical-s0
+          git rev-parse HEAD | tee artifacts/canonical-s0/HEAD.txt
+          git rev-parse HEAD^{tree} | tee artifacts/canonical-s0/TREE.txt
+          sha256sum tools/zero_entityos_restart_resize_db_smoke_v1.py | tee artifacts/canonical-s0/SOURCE_SHA256.txt
+          python3 --version | tee artifacts/canonical-s0/PYTHON.txt
+      - name: Execute exact canonical S0 boundary test
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 tools/zero_entityos_restart_resize_db_smoke_v1.py | tee artifacts/canonical-s0/receipt.json
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('artifacts/canonical-s0/receipt.json')
+          r=json.loads(p.read_text())
+          required=[
+            'DB_PROPOSAL_BINDS_EXPECTED_S0_EPOCH',
+            'SAME_GENERATION_STALE_S0_EPOCH_WRITE_REJECTED',
+            'FRESH_S0_EPOCH_REBASE_SUCCEEDS',
+            'S0_ENGINE_LEVEL_READONLY_FROM_COGNITION',
+          ]
+          missing=[k for k in required if r.get('checks',{}).get(k) is not True]
+          if missing:
+              raise SystemExit('missing/failed checks: '+','.join(missing))
+          if r.get('credit_boundary',{}).get('whole_entityos_hcu_runtime') != 0:
+              raise SystemExit('component test must not mint whole EntityOS/HCU credit')
+          print('CANONICAL_S0_EPOCH_CAS_COMPONENT_PASS')
+          PY
+      - name: Build repository-bound execution receipt
+        if: always()
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import hashlib,json,os,pathlib,subprocess
+          d=pathlib.Path('artifacts/canonical-s0')
+          def read(name):
+              p=d/name
+              return p.read_text().strip() if p.exists() else None
+          rp=d/'receipt.json'
+          raw=rp.read_bytes() if rp.exists() else b''
+          out={
+            'schema':'ENTITYOS_CANONICAL_S0_EPOCH_CAS_REPOSITORY_EXECUTION/v1',
+            'repository':'gschaidergabriel/clay-global-research-entity',
+            'head':read('HEAD.txt'),
+            'tree':read('TREE.txt'),
+            'source_sha256_line':read('SOURCE_SHA256.txt'),
+            'python':read('PYTHON.txt'),
+            'canonical_receipt_sha256':hashlib.sha256(raw).hexdigest() if raw else None,
+            'github_run_id':os.environ.get('GITHUB_RUN_ID'),
+            'github_run_attempt':os.environ.get('GITHUB_RUN_ATTEMPT'),
+            'github_sha':os.environ.get('GITHUB_SHA'),
+            'component_scope_only':True,
+            'whole_entityos_hcu_credit':0,
+          }
+          (d/'repository_execution_receipt.json').write_text(json.dumps(out,sort_keys=True,indent=2)+'\n')
+          PY
+      - name: Upload exact execution evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: entityos-canonical-s0-epoch-cas-${{ github.sha }}
+          path: artifacts/canonical-s0
+          if-no-files-found: error
+          retention-days: 30

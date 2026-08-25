@@ -1,0 +1,374 @@
+{
+  "schema": "CLAY_TRIGGER2_TRAINING_ARTIFACT_REGISTRY/v1",
+  "date": "2026-08-25",
+  "audited_main_snapshot": "c05fd30f34b118efa14e625323f50971c5dcd7c4",
+  "branch": "research/trigger2-labelers-registry-c1-20260825",
+  "supervisor_epoch": "8.78",
+  "status": "CURRENT_REGISTRY_SEED_PARTIAL_CENSUS",
+  "promotion_allowed": false,
+  "promotion_blocker": "Full repository-wide Trigger-2 training artifact census and explicit disposition is not yet complete. Unregistered train-relevant artifacts must fail closed.",
+  "purpose": "Keep current/superseded/stale/blocked/revision-needed training artifacts distinguishable and make every Trigger-2 cycle re-audit predecessor/successor/provenance against finished-Xeno functionality.",
+  "target_architecture": {
+    "product": "EntityOS",
+    "architecture": "HCU",
+    "xeno_role": "transitional implementation codename for the trainable cognitive module inside EntityOS/HCU",
+    "finished_functionality_focus": [
+      "semantic Hyperposition as cross-cutting state ontology",
+      "Global J-Space/HCU coupling with causal/evidence boundaries",
+      "variable-N cognitive-grid operation",
+      "persistent DB as durable state/evidence authority",
+      "runtime codebook/symbol binding after semantic computation",
+      "A+B+C+D+E integrated behavior with separate capability attribution",
+      "Claude Code handoff/return and fail-closed authority behavior"
+    ]
+  },
+  "status_vocabulary": {
+    "lifecycle_status": [
+      "CURRENT",
+      "NEEDS_REVISION",
+      "SUPERSEDED",
+      "STALE"
+    ],
+    "training_status": [
+      "CANDIDATE_ONLY",
+      "BLOCKED",
+      "COMPONENT_ONLY",
+      "QUARANTINE",
+      "NOT_TRAINING_DATA"
+    ],
+    "evidence_status": [
+      "SOURCE_ONLY",
+      "STATIC_TEST_SOURCE",
+      "MEASURED_COMPONENT",
+      "RUNTIME_VERIFIED"
+    ]
+  },
+  "mandatory_fields_for_future_entries": [
+    "artifact_id",
+    "version",
+    "path",
+    "lifecycle_status",
+    "training_status",
+    "evidence_status",
+    "provenance",
+    "target_capabilities",
+    "semantic_hyperposition_disposition",
+    "predecessors",
+    "successors",
+    "revision_reason",
+    "last_audited_against",
+    "next_gate"
+  ],
+  "transition_law": [
+    "Never overwrite provenance to make an old artifact look current.",
+    "Every successor links its predecessor and every superseded predecessor links the successor when known.",
+    "A newer file name or commit does not automatically make an artifact CURRENT; current means re-audited against current authority/evidence/finished-Xeno target.",
+    "Any new evidence that invalidates a label, split, ontology, model identity, ABI, or target architecture moves the affected artifact to NEEDS_REVISION, SUPERSEDED, STALE, or training BLOCKED/QUARANTINE.",
+    "No D/E transition row is train-admissible unless its target is derivable from a versioned deterministic labeler or exact admitted evidence.",
+    "No flat pre-semantic-Hyperposition integrated family is promoted merely by adding prose/metadata; regenerate from Hyperposition-native latent state.",
+    "Every exact triggerwort 2 must re-audit registry entries and scan for unregistered train-relevant artifacts before generating volume."
+  ],
+  "entries": [
+    {
+      "artifact_id": "T2-CONTRACT-SEMHP-v1",
+      "version": "1",
+      "path": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_SEMANTIC_HYPERPOSITION_CROSSCUTTING_CONTRACT_V1_GPT56SOL.json",
+      "lifecycle_status": "CURRENT",
+      "training_status": "NOT_TRAINING_DATA",
+      "evidence_status": "SOURCE_ONLY",
+      "provenance": [
+        "owner correction",
+        "TRAININGSUMFANG_2026-08-25.pdf",
+        "main audit at ba78c2f"
+      ],
+      "target_capabilities": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "semantic Hyperposition"
+      ],
+      "semantic_hyperposition_disposition": "AUTHORITY_COMPATIBLE_CROSSCUTTING_RESEARCH_CONTRACT",
+      "predecessors": [],
+      "successors": [],
+      "revision_reason": null,
+      "last_audited_against": "supervisor 8.78 + finished Xeno/EntityOS-HCU target",
+      "next_gate": "Keep synchronized with registry/C1/labeler successor artifacts."
+    },
+    {
+      "artifact_id": "T2-DATA-SEMHP-SEED-v1",
+      "version": "1",
+      "path": "research_entity/global/j-space/research/trigger2_semantic_hyperposition_seed_v1.jsonl",
+      "lifecycle_status": "CURRENT",
+      "training_status": "CANDIDATE_ONLY",
+      "evidence_status": "SOURCE_ONLY",
+      "provenance": [
+        "commit eb62cab1cc31aad0f515d698d5d89b8f9d93e2a5"
+      ],
+      "target_capabilities": [
+        "A",
+        "B",
+        "C1-C3",
+        "D",
+        "E",
+        "joint A+B+C+D+E"
+      ],
+      "semantic_hyperposition_disposition": "HYPERPOSITION_NATIVE_DIAGNOSTIC_SEED",
+      "predecessors": [],
+      "successors": [],
+      "revision_reason": null,
+      "last_audited_against": "semantic Hyperposition contract v1",
+      "next_gate": "Bind D/E rows to versioned deterministic labelers and rerun structural/leakage gates."
+    },
+    {
+      "artifact_id": "T2-GATE-SEMHP-v1",
+      "version": "1",
+      "path": "tools/trigger2_semantic_hyperposition_gate_v1.py",
+      "lifecycle_status": "CURRENT",
+      "training_status": "NOT_TRAINING_DATA",
+      "evidence_status": "STATIC_TEST_SOURCE",
+      "provenance": [
+        "commit a95399c49e9462835182df7ca6e4576029b60883"
+      ],
+      "target_capabilities": [
+        "D",
+        "E",
+        "semantic Hyperposition"
+      ],
+      "semantic_hyperposition_disposition": "STRUCTURAL_ENFORCEMENT_ONLY",
+      "predecessors": [],
+      "successors": [],
+      "revision_reason": null,
+      "last_audited_against": "semantic Hyperposition contract v1",
+      "next_gate": "Upgrade candidate admission to require reference-labeler identity for D/E transitions."
+    },
+    {
+      "artifact_id": "T2-LABELERS-HP-v1",
+      "version": "1",
+      "path": "tools/trigger2_reference_labelers_v1.py",
+      "git_blob_sha": "dd809c0bc8e0b129516319a8d3707d707489a148",
+      "lifecycle_status": "CURRENT",
+      "training_status": "NOT_TRAINING_DATA",
+      "evidence_status": "STATIC_TEST_SOURCE",
+      "provenance": [
+        "user condition 1",
+        "semantic Hyperposition contract v1",
+        "branch research/trigger2-labelers-registry-c1-20260825"
+      ],
+      "target_capabilities": [
+        "D",
+        "E"
+      ],
+      "semantic_hyperposition_disposition": "DETERMINISTIC_REFERENCE_ORACLE_FOR_SYNTHETIC_TRANSITIONS",
+      "predecessors": [],
+      "successors": [],
+      "revision_reason": null,
+      "last_audited_against": "supervisor 8.78 + crosscutting contract v1",
+      "next_gate": "Execute unit tests on admitted zero-cost/source test surface and bind exact labeler version into regenerated D/E rows."
+    },
+    {
+      "artifact_id": "T2-PROTOCOL-C1-MIXED-v1",
+      "version": "1",
+      "path": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_C1_AND_MIXED_RUN_INSTRUMENTATION_PROTOCOL_V1_GPT56SOL.json",
+      "git_blob_sha": "0e35bb6b7ad03112274f91a9793dc0ded45cebf9",
+      "lifecycle_status": "CURRENT",
+      "training_status": "NOT_TRAINING_DATA",
+      "evidence_status": "SOURCE_ONLY",
+      "provenance": [
+        "user conditions 1-4",
+        "Claude Xeno vector measurement",
+        "current external literature review"
+      ],
+      "target_capabilities": [
+        "C1",
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "emergence attribution"
+      ],
+      "semantic_hyperposition_disposition": "HYPERPOSITION_CARRIER_PRESENT_FROM_C1",
+      "predecessors": [],
+      "successors": [],
+      "revision_reason": null,
+      "last_audited_against": "supervisor 8.78 + measured L23 structural baseline 0.2222",
+      "next_gate": "Freeze exact C1 pilot/split/metrics manifest before model update."
+    },
+    {
+      "artifact_id": "T2-BIND-BLUEPRINT-v2.1",
+      "version": "2.1",
+      "path": "tools/trigger2_dynamic_binding_blueprint_v2.py",
+      "git_blob_sha": "c131a0dd344bdb4c66f8c458c4f2c4e6b323fd21",
+      "lifecycle_status": "CURRENT",
+      "training_status": "BLOCKED",
+      "evidence_status": "STATIC_TEST_SOURCE",
+      "provenance": [
+        "PR #1956 donor lane",
+        "full nuisance factorial design"
+      ],
+      "target_capabilities": [
+        "A",
+        "B"
+      ],
+      "semantic_hyperposition_disposition": "RETROFIT_REQUIRED_BEFORE_INTEGRATED_USE",
+      "predecessors": [
+        "T2-BIND-AUDIT-SEED-v1",
+        "T2-BIND-GEN-v3"
+      ],
+      "successors": [],
+      "revision_reason": "Current generator is deliberately NON-TRAINABLE until exact accepted ABI atom surface/pinned tokenizer binding; flat A/B semantics also require Hyperposition-native latent regeneration for integrated corpus.",
+      "last_audited_against": "supervisor 8.78 + semantic Hyperposition contract v1",
+      "next_gate": "Bind exact ABI/tokenizer, then render a small Hyperposition-native pilot and re-run conditional-independence/leakage checks."
+    },
+    {
+      "artifact_id": "T2-BIND-GEN-v3",
+      "version": "3",
+      "path": "tools/trigger2_dynamic_binding_factorial_generator_v3.py",
+      "lifecycle_status": "SUPERSEDED",
+      "training_status": "QUARANTINE",
+      "evidence_status": "MEASURED_COMPONENT",
+      "provenance": [
+        "supervisor 8.78 shortcut diagnosis"
+      ],
+      "target_capabilities": [
+        "A",
+        "B"
+      ],
+      "semantic_hyperposition_disposition": "INVALID_FOR_DIRECT_TRAINING",
+      "predecessors": [],
+      "successors": [
+        "T2-BIND-BLUEPRINT-v2.1"
+      ],
+      "revision_reason": "Conditional nuisance leakage: display-order shuffle conditioned on target-generating factors; supervisor reports 110/127 nuisance signatures single-target-class and conditional MI 1.348851 bits.",
+      "last_audited_against": "supervisor 8.78",
+      "next_gate": "Preserve negative evidence only; do not admit rows."
+    },
+    {
+      "artifact_id": "T2-BIND-AUDIT-SEED-v1",
+      "version": "1",
+      "path": "tools/trigger2_dynamic_binding_audit_seed_v1.py",
+      "lifecycle_status": "SUPERSEDED",
+      "training_status": "COMPONENT_ONLY",
+      "evidence_status": "SOURCE_ONLY",
+      "provenance": [
+        "PR #1956 explicit disposition"
+      ],
+      "target_capabilities": [
+        "A",
+        "B"
+      ],
+      "semantic_hyperposition_disposition": "DONOR_REGRESSION_ONLY",
+      "predecessors": [],
+      "successors": [
+        "T2-BIND-BLUEPRINT-v2.1"
+      ],
+      "revision_reason": "72-row logical seed superseded for current binder design by v2.1 full factorial blueprint.",
+      "last_audited_against": "PR #1956 + current main",
+      "next_gate": "Retain only unique regression value."
+    },
+    {
+      "artifact_id": "T2-MULTIHOP-GEN-v1",
+      "version": "1",
+      "path": "tools/trigger2_multihop_binding_generator_v1.py",
+      "lifecycle_status": "NEEDS_REVISION",
+      "training_status": "BLOCKED",
+      "evidence_status": "STATIC_TEST_SOURCE",
+      "provenance": [
+        "current main Trigger-2 multihop family"
+      ],
+      "target_capabilities": [
+        "C",
+        "B"
+      ],
+      "semantic_hyperposition_disposition": "RETROFIT_REQUIRED",
+      "predecessors": [],
+      "successors": [],
+      "revision_reason": "Useful multihop semantic computation but final-state supervision lacks complete branch-local Hyperposition trajectory and unresolved alternatives.",
+      "last_audited_against": "semantic Hyperposition contract v1",
+      "next_gate": "Successor must emit branch-local before/after state, counterbranches/distractors and reference-labeler identity."
+    },
+    {
+      "artifact_id": "T2-EVIDENCE-BOUNDARY-SEED-v2",
+      "version": "2",
+      "path": "research_entity/global/j-space/research/trigger2_qwen35_08b_evidence_boundary_seed_v2.jsonl",
+      "lifecycle_status": "NEEDS_REVISION",
+      "training_status": "COMPONENT_ONLY",
+      "evidence_status": "SOURCE_ONLY",
+      "provenance": [
+        "Trigger-2 evidence-boundary swarm"
+      ],
+      "target_capabilities": [
+        "E"
+      ],
+      "semantic_hyperposition_disposition": "RETROFIT_REQUIRED_FOR_INTEGRATED_USE",
+      "predecessors": [],
+      "successors": [],
+      "revision_reason": "Strong GRF/epistemic boundary material remains mostly flat; integrated use requires branch-local E+/E-/F/status updates and competing alternatives or explicit UNKNOWN branch.",
+      "last_audited_against": "semantic Hyperposition contract v1",
+      "next_gate": "Regenerate from Hyperposition-native latent cases using reference labelers."
+    },
+    {
+      "artifact_id": "T2-COMPOUND-EVIDENCE-SEED-v1",
+      "version": "1",
+      "path": "research_entity/global/j-space/research/trigger2_compound_evidence_arbitration_seed_v1.jsonl",
+      "lifecycle_status": "NEEDS_REVISION",
+      "training_status": "BLOCKED",
+      "evidence_status": "SOURCE_ONLY",
+      "provenance": [
+        "Trigger-2 compound-evidence swarm"
+      ],
+      "target_capabilities": [
+        "D",
+        "E"
+      ],
+      "semantic_hyperposition_disposition": "RETROFIT_REQUIRED_NEAR_NATIVE",
+      "predecessors": [],
+      "successors": [],
+      "revision_reason": "Semantics are close to target but prose verdicts must become complete branch tuples plus deterministic transition labels.",
+      "last_audited_against": "semantic Hyperposition contract v1",
+      "next_gate": "Convert into explicit before/after branch state and derive targets only through versioned labelers."
+    },
+    {
+      "artifact_id": "T2-COG-PROCESS-GEN-v1",
+      "version": "1",
+      "path": "tools/trigger2_cognitive_process_trajectory_generator_v1.py",
+      "lifecycle_status": "NEEDS_REVISION",
+      "training_status": "BLOCKED",
+      "evidence_status": "STATIC_TEST_SOURCE",
+      "provenance": [
+        "current main census-wide process generator"
+      ],
+      "target_capabilities": [
+        "variable-N coordination",
+        "DB vs simulation",
+        "Claude handoff",
+        "A+B+C+D+E integration"
+      ],
+      "semantic_hyperposition_disposition": "RETROFIT_REQUIRED_NEAR_NATIVE",
+      "predecessors": [],
+      "successors": [],
+      "revision_reason": "Current full nuisance cross is valuable, but successor must emit/derive semantic-Hyperposition-native latent state without evaluator metadata leakage.",
+      "last_audited_against": "semantic Hyperposition 18:51 final report",
+      "next_gate": "Build Hyperposition-native successor preserving current 2x2x2 N/executor/presentation nuisance cross."
+    }
+  ],
+  "unregistered_artifact_policy": {
+    "status": "BLOCKED",
+    "rule": "Any train-relevant Trigger-2 artifact discovered by census but absent from this registry is UNREGISTERED_BLOCKED until classified and linked.",
+    "census_targets": [
+      "research_entity/global/j-space/research/**/*trigger2*.jsonl",
+      "research_entity/claycode/training/**/*TRIGGER2*.jsonl",
+      "tools/trigger2_*generator*.py",
+      "tools/trigger2_*blueprint*.py",
+      "tools/trigger2_*gate*.py",
+      "tools/trigger2_*labeler*.py"
+    ]
+  },
+  "next_registry_revision": {
+    "required": true,
+    "reason": "This seed intentionally does not claim a complete historical row-by-row census. Before any mixed-corpus promotion, expand to every current/inherited train-relevant family and validate predecessor/successor links.",
+    "target_version": "v1.1_or_successor"
+  }
+}

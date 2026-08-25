@@ -1,0 +1,83 @@
+{
+  "schema": "CLAY_GO_RESTART_RESIZE_DB_BOUNDARY_SMOKE_RECEIPT/v1",
+  "date": "2026-08-25",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "persistent_entity": "Clay",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority_epoch": "8.78",
+  "mode": "FREE_ONLY",
+  "canonical_base_main": "140d4b13967ff369d43d11ccf2d429142e73449f",
+  "owner_target": {
+    "path": "research_entity/global/OWNER_CORRECTION_ZERO_ENTITYOS_COGNITIVE_GRID_DB_CLAUDECODE_GLOBAL_JSPACE_2026-08-25.md",
+    "one_line": "VARIABLE_COGNITIVE_GRID_PLUS_PERSISTENT_DATABASE_PLUS_CLAUDE_CODE_WITH_EVIDENCE_BOUNDED_GLOBAL_JSPACE_BRIDGE",
+    "go_chain_position": "DB_VS_SIMULATION_BOUNDARY_TO_VARIABLE_GRID_RUNTIME"
+  },
+  "reentry_observation": {
+    "main_commit": "140d4b13967ff369d43d11ccf2d429142e73449f",
+    "main_delta": "DB_BACKED_VARIABLE_N_COGNITIVE_REFERENCE_FIXTURE",
+    "remaining_gap": "CURRENT_CANONICAL_DB_FIXTURE_USES_SQLITE_MEMORY_AND_CANNOT_ESTABLISH_S0_PERSISTENCE_ACROSS_PROCESS_RESTART",
+    "nonduplicate_reason": "This smoke tests file-backed persistence, runtime-generation fencing, S1 rebuild and S2 loss across reopen/N change rather than duplicating the in-process ABI-D2/variable-N fixture."
+  },
+  "overlap_resolution": {
+    "superseded_pr_closed": 1977,
+    "superseded_reason": "Current main admitted newer ZECP census/ABI/variable-grid semantics; stale AZP alternate ABI must not compete.",
+    "db_boundary_donor_pr": 1974,
+    "db_boundary_donor_role": "OPEN_SOURCE_CONTRACT_DONOR_NOT_CANONICAL_AUTHORITY",
+    "exact_smoke_overlap_found": false
+  },
+  "coordination": {
+    "shared_immutable_macrocycle_id": null,
+    "unusual_experiment_status": "COORDINATION_BLOCKED_ZERO_NEW_UNUSUAL_EXPERIMENTS",
+    "new_unusual_experiments_run": 0
+  },
+  "delta": {
+    "implementation": "tools/zero_entityos_restart_resize_db_boundary_v1.py",
+    "tests": "tests/test_zero_entityos_restart_resize_db_boundary_v1.py",
+    "state_classes": {
+      "S0": "FILE_BACKED_SQLITE_PERSISTENT_EXACT_STATE_FIXTURE",
+      "S1": "PROCESS_MEMORY_REBUILDABLE_NONCANONICAL_PROJECTION_FROM_S0",
+      "S2": "PROCESS_MEMORY_DISPOSABLE_SCRATCH"
+    },
+    "invariants": [
+      "S0 fingerprint excludes grid N and runtime generation and survives reopen/resize unchanged when no admitted durable write occurs",
+      "new runtime instance advances runtime generation while S1 and S2 start empty",
+      "S1 can be rebuilt from exact S0 digest/epoch references and never carries truth/effect authority",
+      "missing S0 reconstructs as UNKNOWN rather than false/zero",
+      "old-generation DB proposals are rejected after restart before S0 mutation",
+      "current-generation durable write is proposal-first then deterministic fixture admission with provenance and epoch increment",
+      "model/grid/Claude/J-Space direct S0 mutation is forbidden",
+      "S1 cache cannot become S0 recovery authority",
+      "effects remain proposal-only; direct effect execution is forbidden and fixture EffectJournal remains empty"
+    ]
+  },
+  "evidence": {
+    "local_construction_sanity": "8_OF_8_PASS",
+    "local_scope": "DETERMINISTIC_COMPONENT_MIRROR_ONLY",
+    "import_helper_mirror": "canonical_json_and_digest_behavior_mirrored_from_current_zero_entityos_variable_grid_fixture_v1",
+    "exact_repository_branch_execution": "NOT_OBSERVED",
+    "model_or_provider_execution": "NONE",
+    "claude_code_runtime": "NONE",
+    "jspace_intervention": "NONE",
+    "paid_or_together_execution": "NONE"
+  },
+  "go_tracks": {
+    "track_a_entityos_executable_convergence": "ADVANCED_BY_PROCESS_RESTART_AND_VARIABLE_N_PERSISTENT_STATE_REFERENCE_FIXTURE",
+    "track_b_hcu_typed_entry_state": "ADVANCED_BY_EXPLICIT_S0_S1_S2_RESTART_BOUNDARY_GENERATION_FENCE_AND_PROPOSAL_ONLY_DURABLE_WRITE_EFFECT_PATHS",
+    "track_c_global_jspace_gwt_training_readiness_free_only": "ADVANCED_SOURCE_READINESS_ONLY_BY_FAILURE_REJOIN_STALE_GENERATION_UNKNOWN_AND_JSPACE_TO_S0_HARD_NEGATIVE_CASES; ZERO_JSPACE_MODEL_OR_TRAINING_PROMOTION"
+  },
+  "credits": {
+    "source_component": 1,
+    "local_construction_sanity": 1,
+    "exact_repository_component_runtime": 0,
+    "variable_grid_model_runtime": 0,
+    "claude_code_bridge_runtime": 0,
+    "global_jspace_causal_runtime": 0,
+    "whole_entityos_hcu_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "counterhypothesis": "An in-memory DB fact fence can pass all same-process ABI tests while restart silently destroys or reconstructs durable state from noncanonical workspace/model memory; only process-reopen persistence plus stale-generation and cache-recovery negatives distinguishes the intended database boundary.",
+  "next_exact_action": "Execute the smoke on exact repository source, then compose the current ZECP variable-grid executor with this persistent S0 boundary so a real cognitive work sequence crosses restart and N change while preserving durable state and rejecting stale writes; after that advance the owner chain toward ClayCode cognitive protocol."
+}

@@ -1,0 +1,160 @@
+module EntityOS.CognitiveProtocol
+version "1.0"
+status CURRENT_OWNER_ALIGNED_SOURCE_CONTRACT_NOT_RUNTIME_CREDIT
+parent [@research_entity/global/COGNITIVE_PROCESS_ABI_v1.json,@research_entity/global/DB_VS_SIMULATION_BOUNDARY_v1.json,@research_entity/global/ZERO_ENTITYOS_COGNITIVE_PROCESS_CENSUS_v1.json]
+
+record GridRuntime {
+requested_N:Int
+observed_available_N:Int
+grid_instance_id:String
+}
+
+record EpistemicInput {
+status:EpistemicStatus
+ref:Ref
+}
+
+type EpistemicStatus = OBSERVED|INFERRED|HYPOTHESIS|UNKNOWN
+
+record DbStateRef {
+ref_id:String
+store:String
+snapshot_or_epoch:String
+object_key:String
+digest:String
+provenance:String
+mutability:String
+}
+
+record CognitiveWorkPacket {
+schema:String
+causal_event_id:String
+admission_id:String
+generation:Int
+work_id:String
+process_id:String
+parent_work_ids:List<String>
+workspace_epoch:Int
+state_snapshot_ref:DbStateRef
+input_refs:List<Ref>
+epistemic_inputs:List<EpistemicInput>
+capability_scope_ref:Ref
+resource_budget:ResourceBudget
+grid_runtime:GridRuntime
+route_policy_ref:Ref
+completion_contract:CompletionContract
+}
+
+record GridExecutorBinding {
+grid_instance_id:String
+requested_N:Int
+available_N:Int
+executor_id:String
+lease_id:String
+process_id:String
+runtime_identity:String
+started_at:Int
+ended_at:Int
+}
+
+record DbWriteProposal {
+causal_event_id:String
+admission_id:String
+generation:Int
+work_id:String
+source_result_id:String
+expected_state_ref:DbStateRef
+object_key:String
+value_ref:Ref
+value_digest:String
+provenance_ref:Ref
+}
+
+record EffectProposal {
+causal_event_id:String
+admission_id:String
+generation:Int
+work_id:String
+source_result_id:String
+capability_scope_ref:Ref
+request_ref:Ref
+request_digest:String
+}
+
+record WorkspaceReentry {
+source_result_id:String
+source_process_id:String
+causal_event_id:String
+from_workspace_epoch:Int
+to_workspace_epoch:Int
+reentry_payload_ref:Ref
+reentry_digest:String
+observed_downstream_change:TriState
+}
+
+type TriState = TRUE|FALSE|UNKNOWN
+
+record ClaudeCodeBridgePacket {
+bridge_id:String
+direction:BridgeDirection
+causal_event_id:String
+work_id:String
+workspace_epoch:Int
+interface_class:InterfaceClass
+payload_ref:Ref
+payload_digest:String
+state_refs:List<DbStateRef>
+tool_scope_ref:Ref
+request_or_result_identity:String
+}
+
+type BridgeDirection = GRID_TO_CLAUDE|CLAUDE_TO_GRID
+type InterfaceClass = TEXT|STRUCTURED_TEXT|TOOL_PROTOCOL|SESSION_STATE_EXPOSED|OTHER_EXPLICITLY_OBSERVED
+
+record JSpaceMeasurement {
+measurement_id:String
+causal_event_id:String
+generation:Int
+model_runtime_identity:Ref
+interface_identity:Ref
+intervention_identity:Ref
+pre_state_digest:String
+post_state_digest:String
+behavioral_result_ref:Ref
+credit_scope:String
+}
+
+record CognitiveResultPacket {
+schema:String
+causal_event_id:String
+admission_id:String
+generation:Int
+work_id:String
+process_id:String
+executor_binding:GridExecutorBinding
+result_id:String
+result_class:ResultClass
+result_payload_ref:Ref
+result_digest:String
+evidence_refs:List<Ref>
+unknowns:List<Ref>
+db_write_proposals:List<DbWriteProposal>
+effect_request_candidates:List<EffectProposal>
+workspace_reentry:WorkspaceReentry
+runtime_receipt:RuntimeReceipt
+}
+
+type ResultClass = CANDIDATE|PROJECTION|MEASUREMENT
+
+rule GridRuntime.requested_N never_implies CognitiveProcessIdentity
+rule GridRuntime.observed_available_N never_implies CognitiveProcessIdentity
+rule CognitiveResultPacket never_confers CanonicalFact
+rule DbWriteProposal never_confers CanonicalDBCommit
+rule EffectProposal cannot_authorize RealEffect
+rule RealEffect requires ZECP17
+rule ClaudeCodeBridgePacket never_confers CanonicalFact
+rule WorkspaceReentry.observed_downstream_change never_implies JSpaceCausalCredit
+rule JSpaceMeasurement never_confers CanonicalFact
+rule JSpaceMeasurement never_confers RealEffectAuthority
+rule UNKNOWN distinct_from false
+rule MethodPresent never_implies FactPresent

@@ -1,0 +1,68 @@
+{
+  "schema": "CLAY_GO878_FORGE_RUNTIME_IDENTITY_ENVELOPE_RECEIPT/v1",
+  "authority_epoch": "8.78",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "trigger": "go",
+  "organ": "GPT-5.6-Sol",
+  "base_main": "1309a539df4e9c5c33b5845cd9d1f3444616b960",
+  "issue": 1889,
+  "branch": "go878/forge-runtime-identity-envelope-gpt56sol-20260825",
+  "finding": {
+    "classification": "FORGE_LIVE_RUNTIME_IDENTITY_SOURCE_GAP",
+    "problem": "A stale or alternate Forge writer can publish generic LIVE without proving it is the currently fused backlog-first executable.",
+    "counterhypothesis": "The writer may be a different current publisher rather than a stale process; exact executable/source/process identity distinguishes the cases."
+  },
+  "delta": {
+    "helper": "tools/forge_runtime_identity.py",
+    "writer": "tools/run_free_evidence_forge_backfill.py",
+    "test": "tests/test_forge_runtime_identity.py",
+    "status_schema": "CLAY_FORGE_LIVE_STATUS/v2",
+    "identity_schema": "CLAY_FORGE_RUNTIME_IDENTITY/v1",
+    "bindings": [
+      "runtime_entrypoint_path",
+      "runtime_entrypoint_sha256",
+      "runtime_entrypoint_git_blob",
+      "source_commit",
+      "source_tree",
+      "process_pid_plus_linux_start_ticks",
+      "supervisor_pid_plus_linux_start_ticks",
+      "status_writer_schema_version"
+    ],
+    "fail_closed": "A writer whose entrypoint does not equal the committed Git blob, or whose process/supervisor generation cannot be bound, publishes state=RUNTIME_IDENTITY_UNVERIFIED instead of inheriting LIVE.",
+    "second_forge_authority_created": false
+  },
+  "tests": {
+    "scope": "LOCAL_DETERMINISTIC_UNIT_ONLY",
+    "command": "python3 -m pytest -q tests/test_forge_runtime_identity.py",
+    "passed": 5,
+    "failed": 0,
+    "cases": [
+      "PID reuse is bound with Linux /proc start ticks",
+      "exact committed entrypoint produces VERIFIED identity",
+      "mutated entrypoint fails closed",
+      "generic LIVE without runtime identity is rejected",
+      "exact live identity validates against current expected source"
+    ]
+  },
+  "coordination": {
+    "line_identity_singleton_dispatch_issue": 1874,
+    "source_count_donor_pr": 1851,
+    "new_duplicate_runtime_trigger_created": false,
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_experiments_executed": 0
+  },
+  "credits": {
+    "forge_runtime_identity_source": "SOURCE_PLUS_LOCAL_UNIT_ONLY",
+    "historical_backfill_runtime": 0,
+    "distillery_replay_v2_runtime": 0,
+    "whole_entityos_hcu_runtime": 0,
+    "hcu_full_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Fuse only after overlap review, then on the single authorized Forge supervisor path use the validator before accepting LIVE and require a fresh status whose exact source/process identity matches the expected backlog-first executable; runtime credit remains zero until that observed reconciliation executes.",
+  "evidence_boundary": "The 5/5 local deterministic pass verifies helper logic only. It does not prove the live supervisor has restarted, that FORGE_LIVE is emitted by this branch, historical saturation, model/J-Space causality, training, full HCU, or whole EntityOS acceptance."
+}

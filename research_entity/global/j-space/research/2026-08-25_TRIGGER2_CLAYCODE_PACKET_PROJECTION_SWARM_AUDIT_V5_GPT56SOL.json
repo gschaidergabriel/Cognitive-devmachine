@@ -55,13 +55,17 @@
       "finding": "Synthetic hard negatives emit the same structured packet JSON grammar as their positive pair; they do not introduce a competing REJECT/CORRECT prose output contract."
     },
     {
+      "role": "VALUE_CONSISTENCY_REVIEWER",
+      "finding": "A first local draft encoded grid_instance_id=grid:C7 in the two N-invariance targets while the prompts specified grid:C9 and referred to timestamps non-locally. The draft was rejected before final handoff; both rows now encode grid:C9 and contain explicit timestamps."
+    },
+    {
       "role": "FINAL_INTEGRATOR",
       "finding": "Use this as Lane-B/trajectory support and protocol-serialization supervision. It must not replace the dynamic-binding micro-curriculum or be treated as canonical ClayCode language syntax."
     }
   ],
   "local_candidate_seed": {
     "path_external_to_repo": "/mnt/data/trigger2_packet_seed.jsonl",
-    "sha256": "84f67557ba8ef6e277ee2a3e7247328a063c2932f9a993f6f2e9a8e10d00a7e3",
+    "sha256": "5dbeae286a80f239a81b1b8e2813cc5e2109f862f08a7dc9a486fd261235de19",
     "rows": 12,
     "families": 6,
     "evidence_counts": {
@@ -91,6 +95,8 @@
     "canonical_truth_allowed_all_false": true,
     "direct_effect_authority_all_false": true,
     "selected_using_holdout_all_false": true,
+    "n_invariance_prompt_target_grid_identity_consistent": true,
+    "rows_are_self_contained_on_timestamps": true,
     "exact_repo_gate_executed_against_file": false,
     "credit_boundary": "Local deterministic row construction/validation only; not an accepted Forge/Distillery dataset pass and not model runtime evidence."
   },

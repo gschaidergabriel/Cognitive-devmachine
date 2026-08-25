@@ -1,0 +1,73 @@
+{
+  "schema": "CLAY_GO_XENO_FABRIC_VPS_EXECUTION_REQUEST/v1",
+  "date": "2026-08-26",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "target_architecture": "AUTONOMOUS_SELF_ORGANIZING_XENO_HCU_SHARED_STATE_COORDINATOR_ONLY_WRITES",
+  "priority": "P0",
+  "execution_surface": "live free clay-direct-dev VPS",
+  "paid_provider_use": false,
+  "source_pin": {
+    "repository": "gschaidergabriel/clay-global-research-entity",
+    "commit": "d81327ea54d1401d46742a0231c47a056f90f943",
+    "reason": "latest reviewed source-bearing Trigger-2 campaign close commit before subsequent telemetry-only refresh commits; portable GO acceptance runner is present at this revision"
+  },
+  "command": "python3 tools/run_go_repository_bound_acceptance_bundle_v1.py",
+  "preconditions": [
+    "use a clean isolated checkout/worktree",
+    "checkout exactly d81327ea54d1401d46742a0231c47a056f90f943",
+    "verify git status --porcelain is empty",
+    "record exact HEAD and tree before execution",
+    "record Python/platform/runtime identity",
+    "hash exact runner and tested source files before execution"
+  ],
+  "required_component_claims": [
+    "canonical S0 same-generation stale-epoch rejection and explicit fresh rebase",
+    "autonomous Xeno boot/join and work selection from shared state",
+    "ordinary Xeno S1 read-only enforcement",
+    "ephemeral NODE_RESULT to coordinator path",
+    "dynamic coordinator lease enforcement",
+    "coordinator-only S1 write",
+    "CAS/rebase under competing coordinator writes",
+    "lease revocation removes write authority immediately",
+    "coordinator failure/replacement",
+    "recursive coordinator compression/integration path"
+  ],
+  "required_receipt": {
+    "dirty": false,
+    "must_bind": [
+      "head",
+      "tree",
+      "runtime_identity",
+      "runner_sha256",
+      "tested_source_sha256s",
+      "stdout_sha256",
+      "stderr_sha256",
+      "per-component exit status and assertion counts"
+    ],
+    "credit_rule": "component runtime credit only if exact bound execution passes; no physical GRID10/HCU whole-system credit from this bundle alone"
+  },
+  "fail_closed": [
+    "do not execute against moving main",
+    "do not patch the tested sources during this execution",
+    "do not use GitHub Actions as fallback while live free VPS is available",
+    "do not use paid providers",
+    "do not mint semantic J-Space or training credit from source presence or model consensus"
+  ],
+  "on_pass_next_frontier": [
+    "physical GRID10: ten identical Xeno processes on shared-state fabric",
+    "measure dynamic coordinator K and fan-in",
+    "measure compression ratio and state-update latency",
+    "coordinator failure/replacement under concurrent load",
+    "recursive coordinator scaling",
+    "matched-budget challengers: single Xeno, independent N, naive voting, fixed/random coordinator"
+  ],
+  "on_fail": "classify failure as infrastructure vs component/scientific; preserve exact evidence and repair only the minimal proven blocker",
+  "credit_before_execution": {
+    "xeno_fabric_component_runtime": 0,
+    "physical_grid10": 0,
+    "hcu_whole": 0,
+    "training": 0
+  }
+}

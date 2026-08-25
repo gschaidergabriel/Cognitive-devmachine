@@ -4,8 +4,9 @@
 When the Forge historical-extraction queue is non-empty, logical research calls
 are repurposed as bounded extraction passes over old worker outputs. This preserves
 the 6000 fabric as the extraction transport while preventing new raw-research scale
-from competing with the historical conversion backlog. Once no extraction packet is
-available, the ordinary prompt path resumes automatically.
+from competing with the historical conversion backlog. Ordinary raw research resumes
+only after the queue itself is empty, not merely when every visible chunk is already
+leased to an in-flight extraction worker.
 
 This changes allocation, not evidence authority: extracted deltas remain noncanonical
 and still traverse the same Forge validation path.
@@ -66,6 +67,23 @@ def _reserve(serial: int) -> dict[str, Any] | None:
     return None
 
 
+def _lease_saturation_hold_prompt() -> str:
+    """Suppress raw research while backlog exists but all visible chunks are leased.
+
+    The worker call may already have been allocated by the surrounding fabric. Returning
+    a bounded no-delta instruction is safer than falling through to the ordinary research
+    prompt, which would turn temporary lease saturation into fresh raw backlog.
+    """
+    return """HISTORICAL FREE-SWARM BACKFILL LEASE-SATURATION HOLD
+All currently visible historical chunks are already leased to in-flight extraction workers.
+Do NOT execute a new research task, do NOT invent a new architecture delta, and do NOT repeat
+an already-leased historical extraction. This is a bounded conversion-backpressure idle slot.
+Return exactly these two lines:
+NO_DELTA: HISTORICAL_BACKFILL_LEASE_SATURATED
+OPEN_RESEARCH_QUESTIONS_JSON=[]
+"""
+
+
 def install(base: Any) -> None:
     previous = base.worker_prompt
 
@@ -73,10 +91,12 @@ def install(base: Any) -> None:
         original = previous(protocol, role, task, state_context, serial)
         # Liveness rule: the same fabric carries historical extraction, therefore
         # keep it alive and devote every reservable slot to conversion while the
-        # historical queue is non-empty. Ordinary raw research resumes only when
-        # no extraction packet can be reserved.
+        # historical queue is non-empty. A failed reservation is not proof that
+        # the queue is empty: it can also mean every visible chunk is still leased.
         packet = _reserve(serial)
         if packet is None:
+            if _packets():
+                return _lease_saturation_hold_prompt()
             return original
         payload = json.dumps(packet, ensure_ascii=False, separators=(",", ":"))
         return original + f"""

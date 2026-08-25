@@ -1,0 +1,224 @@
+{
+  "schema": "CLAY_TRIGGER2_SWARM_TRAINING_RESEARCH_DELTA/v1",
+  "date": "2026-08-25",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "persistent_entity": "Clay",
+  "trigger": "triggerwort 2",
+  "authority": {
+    "canonical_main_at_seed": "0edcc2ca0dba28fa0536bc5834fe6ede05a46e96",
+    "supervisor_epoch": "8.78",
+    "mode": "FREE_ONLY",
+    "owner_target": "research_entity/global/XENO_HCU_GO_TARGET_ARCHITECTURE_OWNER_DIRECTIVE_2026-08-25.md",
+    "training_execution_authorized": false
+  },
+  "source_evidence": {
+    "claude_ingest": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_CLAUDE_XENO_VECTOR_EVIDENCE_INGEST_V1_GPT56SOL.json",
+    "target_model": "Goekdeniz-Guelmez/Josiefied-Qwen3.5-0.8B-gabliterated-v1",
+    "snapshot": "591852bda6e1979f59e4b0f5ee2919697b12e936",
+    "semantic_readability": "0.94-1.00 from approximately L6 onward on the measured family",
+    "baseline_dynamic_symbol_hit": 0.3611111111111111,
+    "chance": 0.3333333333333333,
+    "baseline_cross_template_transfer_L19": 0.5254629629629629,
+    "whitened_HRR_MAP_capacity_k_1_to_16": 1.0,
+    "primary_write_layer": 23,
+    "secondary_read_layers": [19, 21],
+    "training_interpretation": "Install content-dependent episode-local semantic -> codebook -> symbol routing while protecting already-measured semantic reading, symbol writeout and carrier-space binding."
+  },
+  "dynamic_binding_seed": {
+    "status": "AUDITED_ABSTRACT_EPISODE_SEED_NOT_YET_TRAINABLE",
+    "templates": [
+      "T1_PROSE_EVIDENCE",
+      "T2_STRUCTURED_FIELDS",
+      "T3_DIALOGUE",
+      "T4_RELATIONAL_LOGIC"
+    ],
+    "classes": ["ALLOW", "DENY", "ABSTAIN"],
+    "full_S3_permutations": [
+      [0, 1, 2], [0, 2, 1], [1, 0, 2], [1, 2, 0], [2, 0, 1], [2, 1, 0]
+    ],
+    "row_formula": "For each of 4 templates x each of 6 S3 mappings x each of 3 semantic classes, emit one abstract episode plan: 72 rows total.",
+    "counterbalance_audit": {
+      "row_count": 72,
+      "each_template_rows": 18,
+      "each_S3_permutation_rows": 12,
+      "each_class_to_symbol_slot_pair_rows": 8,
+      "all_nine_class_symbol_slot_pairs_equal": true
+    },
+    "preregistered_class_label_policy": "ALLOW/DENY/ABSTAIN are permitted only inside the episode-local codebook definition. Direct target-class leakage elsewhere in model-facing text is forbidden.",
+    "model_input_abstract_form": {
+      "codebook": "three semantic labels mapped by the selected S3 permutation onto ${ATOM_SLOT_0..2}",
+      "semantic_payload": "${SPLIT_ISOLATED_SEMANTIC_PAYLOAD}",
+      "instruction": "Emit exactly the episode-local symbol and nothing else."
+    },
+    "model_target_abstract_form": "${ATOM_SLOT_FOR_TARGET_CLASS}",
+    "materialization_gates": [
+      "Verify the exact ABI MANIFEST and all required member hashes.",
+      "Verify the exact 46 accepted atom literals/rows and exact tokenizer single-token property.",
+      "Do not invent atom literals when the canonical manifest/literal list is unavailable.",
+      "Materialize semantic payloads only from split-isolated lexical families.",
+      "Run a literal leakage scanner with only the preregistered codebook-span exception.",
+      "Control tokenizer/output length and semantic-bearing lexical overlap.",
+      "Construct the realized class<->atom mapping from the selected S3 permutation; do not trust metadata-only permutation IDs.",
+      "Verify that the target atom is derived from the realized mapping.",
+      "Freeze family-level train/calibration/holdout provenance before tuning.",
+      "Keep the fifth unseen-template family and unseen-symbol holdout unopened during this seed phase."
+    ]
+  },
+  "architecture_behavior_training_examples": [
+    {
+      "id": "ARCH-S1-001",
+      "evidence_class": "TARGET_DIRECTIVE",
+      "condition": "ordinary node requests a direct S1 mutation",
+      "target": "REJECT_DIRECT_S1_WRITE; emit NODE_RESULT/v1 only",
+      "hard_negative": "accept direct S1 write because model confidence is high"
+    },
+    {
+      "id": "ARCH-S1-002",
+      "evidence_class": "TARGET_DIRECTIVE",
+      "condition": "ordinary node reads an authorized S1 snapshot and computes a useful candidate",
+      "target": "emit NODE_RESULT/v1 bound to epoch/digest/scope; do not write S1",
+      "hard_negative": "append the candidate directly to shared state"
+    },
+    {
+      "id": "ARCH-S1-003",
+      "evidence_class": "TARGET_DIRECTIVE",
+      "condition": "no valid GRID_COORDINATOR_LEASE exists",
+      "target": "NO_MODEL_ORIGINATED_S1_WRITE",
+      "hard_negative": "self-elect coordinator from model confidence"
+    },
+    {
+      "id": "ARCH-LEASE-001",
+      "evidence_class": "TARGET_DIRECTIVE",
+      "condition": "coordinator lease scope, epoch, digest and policy match and the result is fresh",
+      "target": "ALLOW_COORDINATOR_CANDIDATE_S1_DELTA_WITH_CAS; never mint S0 truth",
+      "hard_negative": "treat coordinator write as canonical truth"
+    },
+    {
+      "id": "ARCH-LEASE-002",
+      "evidence_class": "TARGET_DIRECTIVE",
+      "condition": "coordinator lease epoch is stale",
+      "target": "REJECT_STALE_LEASE_AND_REBASE_OR_REACQUIRE",
+      "hard_negative": "write because generation is unchanged"
+    },
+    {
+      "id": "ARCH-LEASE-003",
+      "evidence_class": "TARGET_DIRECTIVE",
+      "condition": "coordinator policy authority digest mismatches current authority",
+      "target": "REJECT_FOREIGN_POLICY_AUTHORITY",
+      "hard_negative": "accept because node identity is known"
+    },
+    {
+      "id": "ARCH-EVID-001",
+      "evidence_class": "SUPERVISOR_8_78",
+      "condition": "source/test definition exists but exact target runtime did not execute",
+      "target": "SOURCE_COMPONENT_ONLY; RUNTIME_CREDIT=0",
+      "hard_negative": "promote to runtime PASS"
+    },
+    {
+      "id": "ARCH-EVID-002",
+      "evidence_class": "SUPERVISOR_8_78",
+      "condition": "GitHub workflow failed with zero steps and runner_id=0",
+      "target": "NEGATIVE_INFRASTRUCTURE_EVIDENCE_ONLY",
+      "hard_negative": "count as semantic or product FAIL"
+    },
+    {
+      "id": "ARCH-EVID-003",
+      "evidence_class": "SUPERVISOR_8_78",
+      "condition": "native cvec internal-state transport passed but the frozen structural behavioral discriminator failed",
+      "target": "retain bounded transport credit plus negative behavioral evidence; J-Space semantic promotion remains zero",
+      "hard_negative": "reinterpret transport as semantic causality"
+    },
+    {
+      "id": "ARCH-HYPER-001",
+      "evidence_class": "TARGET_DIRECTIVE",
+      "condition": "incompatible hypotheses remain supported and no evidence-bearing discriminator has closed them",
+      "target": "PRESERVE_HYPERPOSITION_BRANCHES",
+      "hard_negative": "collapse to majority vote"
+    },
+    {
+      "id": "ARCH-HYPER-002",
+      "evidence_class": "TARGET_DIRECTIVE",
+      "condition": "grid majority favors A but exact external evidence supports B",
+      "target": "weight evidence over grid majority and preserve provenance",
+      "hard_negative": "promote A because more models agree"
+    },
+    {
+      "id": "ARCH-RESULT-001",
+      "evidence_class": "TARGET_DIRECTIVE",
+      "condition": "NODE_RESULT is duplicate or bound to a stale S1 epoch/digest",
+      "target": "REJECT_STALE_OR_DUPLICATE_RESULT",
+      "hard_negative": "merge because the content is useful"
+    },
+    {
+      "id": "ARCH-BOOT-001",
+      "evidence_class": "TARGET_DIRECTIVE",
+      "condition": "fresh Xeno starts without a preassigned role",
+      "target": "read shared state, identify unclaimed useful work, default to ordinary worker",
+      "hard_negative": "wait for human role assignment"
+    },
+    {
+      "id": "ARCH-BOOT-002",
+      "evidence_class": "TARGET_DIRECTIVE",
+      "condition": "node estimates coordination would help but no deterministic lease is granted",
+      "target": "REMAIN_ORDINARY_WORKER",
+      "hard_negative": "self-elect coordinator"
+    },
+    {
+      "id": "ARCH-BOOT-003",
+      "evidence_class": "TARGET_DIRECTIVE",
+      "condition": "coordinator disappears and a replacement lease is granted",
+      "target": "rejoin from shared state without resetting canonical state",
+      "hard_negative": "reinitialize shared state from node-local memory"
+    }
+  ],
+  "cross_model_negative_boundary": {
+    "source_model_family": "Qwen3-0.6B research line",
+    "observed_pattern": "native cvec internal-state transport can pass while frozen structural behavioral control fails",
+    "training_use": "hard-negative evidence/causality semantics",
+    "forbidden_transfer": "do not transfer model-specific numeric or causal claims to the Qwen3.5-0.8B target"
+  },
+  "swarm_review": {
+    "roles": [
+      "EVIDENCE_EXTRACTOR",
+      "DATASET_ARCHITECT",
+      "ADVERSARIAL_SHORTCUT_HUNTER",
+      "STATISTICAL_REVIEWER",
+      "ABI_PROVENANCE_REVIEWER",
+      "RETENTION_REVIEWER",
+      "HARNESS_COMPATIBILITY_REVIEWER",
+      "FINAL_INTEGRATOR"
+    ],
+    "verdicts": {
+      "measured_problem_selection": "PASS",
+      "abstract_seed_structure": "PASS",
+      "full_S3_realization": "PASS_AT_SLOT_LEVEL",
+      "counterbalance": "PASS_AT_SLOT_LEVEL",
+      "literal_prompt_materialization": "BLOCKED_PENDING_EXACT_ABI_TOKENIZER_AND_SPLIT_LEXICAL_BINDING",
+      "trainable_corpus_status": "NO",
+      "training_credit": 0
+    },
+    "independence_note": "Role-separated review by one ChatGPT organ; not independent experimental replication or model-family evidence."
+  },
+  "local_full_seed_artifact": {
+    "filename": "2026-08-25_TRIGGER2_SWARM_TRAINING_SEED_V1_GPT56SOL.json",
+    "sha256": "0ec0fcc8fdf8130c44e19cd643bee8d0cceb6255f04b6f8140ee75defca5b27c",
+    "abstract_binding_rows": 72,
+    "architecture_behavior_examples": 15
+  },
+  "next_exact_actions": [
+    "Bind and materialize the exact 46-atom ABI/tokenizer inventory.",
+    "Repair the permutation-causal generator path and exact S3 validator before scaling.",
+    "Materialize a small literal audited seed using at least four train templates while keeping a fifth unseen template frozen.",
+    "Run leakage, counterbalance, tokenizer, ABI/provenance and retention reviewers again.",
+    "Only then scale the dynamic-binding family toward 20k-50k rows.",
+    "Expand autonomous-boot, S1-read-only, NODE_RESULT, coordinator, Hyperposition/GWT and evidence-class trajectory families under the same provenance/split law.",
+    "Do not execute paid training in current FREE_ONLY mode."
+  ],
+  "credits": {
+    "training_executed": false,
+    "training_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  }
+}

@@ -1,0 +1,142 @@
+{
+  "schema": "CLAY_TRIGGER2_LABELER_CONVERGENCE_AUDIT/v2",
+  "date": "2026-08-25",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "status": "CURRENT_RESEARCH_DELTA_NONPROMOTING",
+  "predecessor": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_LABELER_CONVERGENCE_AUDIT_V1_GPT56SOL.json",
+  "revision_reason": "Canonical main advanced during the same Trigger-2 cycle and landed a second/full-tuple labeler lane plus an event-ancestry v2 successor. This audit re-enters those exact-current sources and prevents the new v2 from being mistaken for a closed D/E labelability gate.",
+  "authority": {
+    "canonical_repository": "gschaidergabriel/clay-global-research-entity",
+    "canonical_branch": "main",
+    "observed_main_before_write": "ccfda671d85b768197f9d9bbd022657bf0de1efd",
+    "supervisor_epoch": "8.78",
+    "mode": "FREE_ONLY",
+    "owner_target": "research_entity/global/OWNER_CORRECTION_ZERO_ENTITYOS_COGNITIVE_GRID_DB_CLAUDECODE_GLOBAL_JSPACE_2026-08-25.md",
+    "training_executed": false,
+    "accepted_dataset_tokens_minted": 0
+  },
+  "exact_current_artifacts": [
+    {
+      "path": "tools/trigger2_semantic_hyperposition_reference_labelers_v1.py",
+      "blob_sha": "7b9191d5dff647af4793ca2797085d18fbef1da3",
+      "disposition": "HISTORICAL_OR_NARROW_DONOR_REVIEW_REQUIRED"
+    },
+    {
+      "path": "tools/trigger2_hyperposition_reference_labelers_v1.py",
+      "blob_sha": "5f1fba475e64421635016abc1b341dcfbb04b605",
+      "disposition": "FULL_TUPLE_CANDIDATE_DONOR_BLOCKED_FOR_NONCIRCULAR_D_E_LABEL_ADMISSION"
+    },
+    {
+      "path": "tools/trigger2_hyperposition_reference_labelers_v2.py",
+      "blob_sha": "6bb5b10de04ec3d268f25ebb59718831bab21d1b",
+      "disposition": "CURRENT_CANDIDATE_EVENT_ANCESTRY_SUCCESSOR_BLOCKED_FOR_D_E_LABEL_ADMISSION"
+    },
+    {
+      "path": "tests/test_trigger2_hyperposition_reference_labelers_v2.py",
+      "blob_sha": "6d29ce9dc32ea9998a97ee75070b5dc0cc030be4",
+      "disposition": "SOURCE_TEST_DONOR_ONLY_NO_EXECUTION_CREDIT_FROM_EXISTENCE"
+    },
+    {
+      "path": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_REFERENCE_LABELER_V1_ADVERSARIAL_AUDIT_GPT56SOL.json",
+      "blob_sha": "d12467502ca1ef3e0c0484293a2c74053a752549",
+      "disposition": "CURRENT_NEGATIVE_EVIDENCE_DONOR"
+    }
+  ],
+  "v2_positive_deltas": [
+    "Separates exact evidence-event identity from correlation ancestry and preserves distinct correlated observations for audit.",
+    "Exact event replay is idempotent at the branch update surface.",
+    "Correlated observations can be retained without granting independent-evidence credit.",
+    "Preserves branch-local E_plus/E_minus/F and context-filtering semantics rather than deleting alternatives.",
+    "Discriminator ordering includes pair separation and worst-case indistinguishable partition before ordinal risk/cost classes.",
+    "Salience ordering remains separate from truth/probability semantics.",
+    "Source tests add event-vs-ancestry, context filtering, branch permutation and correlated-majority anti-collapse cases."
+  ],
+  "promotion_blockers": [
+    {
+      "id": "V2_RELATION_REMAINS_CALLER_ASSERTED",
+      "severity": "CRITICAL",
+      "observed": "u_state still consumes observation.relation directly. No exact-current source in this lane derives SUPPORTS/COUNTERS/FALSIFIES from a synthetic world relation, branch prediction and observed discriminator result.",
+      "risk": "The missing target label can still be moved upstream into generator metadata; deterministic code does not make a self-asserted relation correct.",
+      "required_successor": "A separately versioned deterministic synthetic-world relation deriver or adjudicated evidence receipt whose inputs/outputs can be independently recomputed by the candidate gate."
+    },
+    {
+      "id": "V2_INDEPENDENCE_QUALIFICATION_REMAINS_CALLER_ASSERTED_AND_GROUP_NOT_ENFORCED",
+      "severity": "CRITICAL",
+      "observed": "independent_credit is granted when ancestry has not been seen and observation.independence_qualified is true. independence_group is recorded but is not itself used to reject/mark correlated a distinct event with a different ancestry identifier but the same dependence group.",
+      "risk": "A generator can mint independent-evidence credit by changing ancestry and asserting independence_qualified, even when the declared dependence group remains shared.",
+      "required_successor": "Derive/verify independence from immutable causal/provenance grouping rules. Same declared dependence group must not receive independent credit unless the group semantics explicitly define otherwise."
+    },
+    {
+      "id": "V2_EVENT_ID_REPLAY_MUTATION_IS_SILENTLY_IDEMPOTENT",
+      "severity": "HIGH",
+      "observed": "Exact replay detection keys primarily on evidence_event_id. If the same event id reappears with conflicting relation/ancestry/provenance metadata, the updater can silently skip it instead of failing closed on identity mutation.",
+      "risk": "Contradictory replay payloads can be hidden by idempotence rather than exposed as provenance corruption.",
+      "required_successor": "Bind event id to an immutable canonical event digest and reject same-id/different-digest replay."
+    },
+    {
+      "id": "V2_RESOLUTION_LOST_EXPLICIT_EXECUTED_DISCRIMINATOR_GATE",
+      "severity": "CRITICAL_REGRESSION_RELATIVE_TO_FULL_TUPLE_V1",
+      "observed": "v2 d_resolve(state) returns PASS whenever exactly one APPLIES branch remains non-falsified and no live UNKNOWN-context branch remains. Unlike the full-tuple v1 lane, v2 does not require an explicit executed+admissible discriminator/proof context.",
+      "risk": "Because FALSIFIES is still caller-supplied, arbitrary upstream relation metadata can eliminate competitors and create a unique survivor that resolves without proof that a real discriminator was executed or adequate.",
+      "required_successor": "Restore an explicit machine-checkable discriminator execution/admissibility/coverage receipt, or derive resolution directly from a deterministic world/test evaluator that proves the observed outcome uniquely separates all live applicable branches."
+    },
+    {
+      "id": "V2_FULL_TUPLE_IS_USED_BUT_NOT_FAIL_CLOSED_VALIDATED",
+      "severity": "HIGH",
+      "observed": "v2 tests construct v/K/E_plus/E_minus/F/T/A/sigma/projection_visibility, but the implementation does not validate the full mandatory tuple or allowed enum/schema constraints before updating/resolving.",
+      "risk": "Malformed or partial branches can enter the reference path and acquire labels despite violating the cross-cutting Hyperposition ontology.",
+      "required_successor": "Add exact schema validation for all mandatory branch-state fields and reject unknown/missing semantics before target generation."
+    },
+    {
+      "id": "V2_BRANCH_BIRTH_WARRANT_REMAINS_ASSERTED",
+      "severity": "HIGH",
+      "observed": "new_branch_payload is accepted when branch_creation_warranted is true, but the warrant itself is caller-provided and no deterministic counterhypothesis-birth rule is computed.",
+      "risk": "Synthetic positive targets can invent branches without a reproducible rule, defeating reference-label correctness.",
+      "required_successor": "Version and derive branch-birth conditions from the synthetic task/world relation, or keep branch birth out of admitted positive D/E rows until such a rule exists."
+    },
+    {
+      "id": "V2_DISCRIMINATOR_OUTCOMES_FOR_RANKING_ARE_ASSERTED",
+      "severity": "HIGH",
+      "observed": "u_test_order computes useful ordinal ranking from test.outcomes, but the per-branch outcomes themselves are caller/generator data and are not derived or verified in this source.",
+      "risk": "A generator can fabricate a high-utility test by fabricating outcome partitions.",
+      "required_successor": "Bind discriminator predicted outcomes to the same synthetic world/evaluator used to derive evidence relations, then rank the derived partitions."
+    }
+  ],
+  "lifecycle_decision": {
+    "missing_labeler_blocker": "SUPERSEDED_AS_EXISTENCE_ONLY_BLOCKER",
+    "current_labelability_blocker": "REFERENCE_CODE_EXISTS_BUT_NONCIRCULAR_GROUND_TRUTH_DERIVATION_AND_DISCRIMINATOR_COVERAGE_REMAIN_BLOCKING",
+    "v1_full_tuple": "RETAIN_AS_DONOR",
+    "v2_event_ancestry": "RETAIN_AS_SUCCESSOR_DONOR_NOT_ADMITTED_LABEL_AUTHORITY",
+    "positive_D_E_training_rows": "BLOCKED",
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0
+  },
+  "convergence_contract": [
+    "There must be one current D/E label semantics, not parallel semantic_hyperposition-v1, hyperposition-v1 and hyperposition-v2 authorities.",
+    "Fuse full-tuple fail-closed schema validation from the stricter lane with v2 exact-event/correlation-ancestry preservation.",
+    "Introduce a separately versioned deterministic relation/world evaluator so relation, independence and discriminator partitions are derived, not asserted.",
+    "Require same-event immutable payload digest equality; conflicting replay is a hard failure.",
+    "Restore explicit executed/admissible/adequate discriminator evidence before unique resolution, unless equivalent coverage is mechanically derived from the synthetic world evaluator.",
+    "Keep probability-free test/salience ordering and canonical-truth/effect nonauthority boundaries.",
+    "Only after the successor passes exact source tests plus model-visible leakage gates may positive synthetic D/E candidate rows be generated for Forge/Distillery admission."
+  ],
+  "external_research_reaffirmation": {
+    "variable_binding": "Wu, Geiger & Milliere, ICML 2025: developmental and causal study of learned variable dereferencing supports multi-hop/distractor/checkpoint/causal binder evaluation; it is method input, not Qwen-specific proof.",
+    "uncertainty": "Semantic-uncertainty/set-abstention literature may inform evaluation of unresolved alternatives, but must not substitute for deterministic branch semantics or truth authority."
+  },
+  "coordination": {
+    "pr_2009": "Reviewed/commented during this cycle; instructed to converge with exact-current main rather than introduce a second label authority and to bind synthetic relation derivation independently of generator assertions.",
+    "duplicate_implementation_created_by_this_audit": false
+  },
+  "credits": {
+    "research_delta": 1,
+    "source_test_execution_observed_by_this_organ": false,
+    "runtime_credit": 0,
+    "jspace_model_credit": 0,
+    "training_credit": 0,
+    "whole_entityos_hcu_credit": 0
+  },
+  "next_exact_action": "Implement or fuse one derivation-bound full-tuple Hyperposition labeler successor: exact synthetic world/test specification -> independently recomputed branch relations + independence qualification + discriminator partitions -> U update -> explicit adequate resolution; then add mutation tests for forged relation, forged independence, same-event/different-payload replay, missing tuple fields, nonexecuted discriminator, and fabricated test outcomes before generating positive D/E rows."
+}

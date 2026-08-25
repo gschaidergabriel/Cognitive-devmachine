@@ -1,0 +1,318 @@
+{
+  "schema": "CLAY_TRIGGER2_SINGLE_GATE_V4_PREREG_ACCEPTANCE_SPEC/v1",
+  "date": "2026-08-25",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "status": "PREREGISTERED_RESEARCH_ACCEPTANCE_SPEC_NONCANONICAL",
+  "purpose": "Freeze the acceptance semantics for one converged Trigger-2 semantic-Hyperposition positive-label gate before implementation or fresh positive-row generation. This is a convergence contract and test oracle, not a second semantic authority, dataset admission, or training execution.",
+  "authority_snapshot": {
+    "repository": "gschaidergabriel/clay-global-research-entity",
+    "branch": "main",
+    "observed_main_before_branch": "fd3b2bcf6f19f747cbc38f73b35e097fde8dad60",
+    "supervisor_epoch": "8.78",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "architecture": "HCU",
+    "owner_target": "VARIABLE COGNITIVE GRID + PERSISTENT DATABASE + CLAUDE CODE + strongest causally evidenced Global J-Space bridge",
+    "small_model_target": "Qwen3.5-0.8B-class cognitive-process substrate",
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0
+  },
+  "predecessor_inputs": [
+    "research_entity/global/j-space/research/2026-08-25_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V8_GPT56SOL.json",
+    "research_entity/global/j-space/research/2026-08-25_TRIGGER2_REENTRY_INTEGRATION_AUDIT_V8_GPT56SOL.json",
+    "research_entity/global/j-space/research/2026-08-25_TRIGGER2_GATE_CHAIN_REENTRY_AUDIT_V1_GPT56SOL.json",
+    "research_entity/global/j-space/research/2026-08-25_TRIGGER2_DERIVED_INDEPENDENCE_PROVENANCE_HARDNEGATIVE_BLUEPRINTS_V1_GPT56SOL.json",
+    "tools/trigger2_hyperposition_reference_labelers_v3.py",
+    "tools/trigger2_semantic_hyperposition_gate_v3.py",
+    "tools/trigger2_hyperposition_derivation_bound_gate_v2.py",
+    "tools/trigger2_semantic_hyperposition_native_seed_generator_v2.py"
+  ],
+  "observed_problem_statement": [
+    {
+      "id": "P0_GATE_PATH_SPLIT",
+      "status": "OPEN",
+      "observation": "The 11-row native seed v2 still self-checks through semantic_hyperposition_gate_v3, while the stronger registry-derived independence logic lives in a separate derivation_bound_gate_v2 path.",
+      "promotion_effect": "BLOCK_POSITIVE_D_E_EPISTEMIC_PROMOTION"
+    },
+    {
+      "id": "P0_EVENT_CONTENT_IDENTITY",
+      "status": "OPEN",
+      "observation": "The retained chain does not bind event_id to an immutable digest over all semantically relevant event content, so coherent same-id event/registry mutation is not rejected as an identity collision at the strongest boundary.",
+      "promotion_effect": "BLOCK_POSITIVE_D_E_PROMOTION"
+    },
+    {
+      "id": "P0_EVALUATOR_WORLD_PROVENANCE_ROOT",
+      "status": "OPEN",
+      "observation": "A legitimate generator-path/hash binding does not by itself authenticate evaluator-only formal world and dependence-registry objects supplied inside a row. A coherent alternate world can be internally self-consistent while not being generated from the bound source/manifest.",
+      "promotion_effect": "BLOCK_POSITIVE_REFERENCE_LABEL_PROMOTION"
+    },
+    {
+      "id": "P0_DISCRIMINATOR_RECEIPT_CLOSURE",
+      "status": "OPEN",
+      "observation": "Formal test definitions and pair-separation ordering exist, but resolution is not yet bound to typed discriminator admissibility, execution identity, outcome identity, decisiveness and live-alternative coverage receipts.",
+      "promotion_effect": "BLOCK_POSITIVE_RESOLUTION_PROMOTION"
+    },
+    {
+      "id": "P1_GRF_OBSERVATION_ROOT",
+      "status": "OPEN",
+      "observation": "epistemic_guard still accepts a naked evidence_qualified_observation boolean for promotion to OBSERVED rather than a typed source-bound evidence receipt.",
+      "promotion_effect": "BLOCK_POSITIVE_OBSERVED_PROMOTION"
+    },
+    {
+      "id": "P0_EXACT_EXECUTION",
+      "status": "OPEN",
+      "observation": "No exact-current repository-bound execution of the future converged gate/test chain is established by this preregistration.",
+      "promotion_effect": "NO_RUNTIME_OR_TRAINING_CREDIT"
+    }
+  ],
+  "single_authority_rule": {
+    "required": true,
+    "law": "There must be one retained positive-label candidate gate path. Structural/permutation checks, independence derivation, event/world provenance, discriminator proof closure and typed epistemic promotion may be implemented as internal helpers, but a candidate must not be able to choose a weaker parallel gate.",
+    "forbidden": [
+      "generator-selectable weaker gate",
+      "artifact-name-based claims that a stronger gate ran",
+      "parallel positive-label authorities with overlapping semantics"
+    ]
+  },
+  "event_identity_contract": {
+    "required_semantic_fields": [
+      "event_id",
+      "correlation_ancestry_id",
+      "independence_group",
+      "payload_key",
+      "provenance",
+      "epistemic_type",
+      "test_id",
+      "observed_outcome"
+    ],
+    "digest_requirement": "Compute a deterministic event_semantic_sha256 over a frozen canonical serialization of all required semantic fields. Non-authoritative convenience fields such as caller independence booleans must not alter the reference semantic digest or become label roots.",
+    "first_seen_binding": "The first admitted evaluator identity for an event_id binds that event_id to exactly one event_semantic_sha256 inside the source/manifest-bound registry.",
+    "exact_replay_rule": "same event_id + identical event_semantic_sha256 => idempotent replay; zero new independent evidence credit",
+    "collision_rule": "same event_id + different event_semantic_sha256 => fail closed with EVENT_ID_CONTENT_COLLISION; never reinterpret as fresh evidence or silent replay",
+    "history_rule": "Every E_plus/E_minus/F/correlated record used by the gate must be traceable to the same registry digest. A successor labeler may persist event_semantic_sha256 directly; otherwise the gate must reconstruct and verify it from complete stored semantic fields without ambiguity."
+  },
+  "evaluator_world_provenance_contract": {
+    "law": "Exact labeler/generator file hashes are necessary but do not authenticate arbitrary evaluator objects carried by the row.",
+    "accepted_closure_options": [
+      "reconstruct the formal world and event/dependence registry deterministically inside the gate from source-bound generator inputs",
+      "or require an immutable generation manifest that binds generator identity, generator inputs, formal_world_sha256, event_registry_sha256 and row/family identity, then recompute and compare all digests"
+    ],
+    "must_reject": [
+      "valid generator hash + coherently swapped formal world",
+      "valid generator hash + coherently swapped dependence registry",
+      "manifest digest mismatch",
+      "row/family identity not covered by the bound generation manifest"
+    ]
+  },
+  "independence_contract": {
+    "caller_independence_boolean_authoritative": false,
+    "required_inputs": [
+      "source/manifest-bound event registry",
+      "prior admitted event identities",
+      "correlation ancestry",
+      "dependence group",
+      "payload identity",
+      "explicit dependency edges"
+    ],
+    "rule": "Reference independent-evidence qualification is mechanically derived. Caller boolean mismatch is either rejected or overwritten before reference computation, but can never define the label.",
+    "goodman_boundary": "New packaging, new event ids, model-family repackaging or duplicated execution ancestry do not create independent evidence when causal/provenance ancestry remains shared."
+  },
+  "discriminator_receipt_contract": {
+    "receipt_required_for_decisive_resolution": true,
+    "minimum_typed_fields": [
+      "receipt_schema",
+      "event_id",
+      "event_semantic_sha256",
+      "test_id",
+      "formal_execution_id",
+      "admissible",
+      "executed",
+      "observed_outcome",
+      "coverage_branch_ids",
+      "decisiveness_class",
+      "source_or_generation_manifest_sha256"
+    ],
+    "resolution_law": "RESOLVED_WITHIN_SYNTHETIC_WORLD is permitted only when every eliminated applicable live alternative is covered by admissible, executed, source-bound discriminator evidence and the survivor satisfies the reference support condition. A registered test, a ranked test, or a declared mismatch_effect alone is not execution evidence.",
+    "must_remain_unresolved": [
+      "receipt missing",
+      "executed=false",
+      "admissible=false",
+      "event digest mismatch",
+      "test/outcome mismatch",
+      "coverage omits any applicable live alternative required for the claimed resolution",
+      "decisiveness not sufficient for FALSIFIES semantics",
+      "receipt not bound to the same generation/source identity"
+    ],
+    "scope_boundary": "Synthetic/formal execution receipts establish only deterministic curriculum semantics. They do not mint provider, physical-runtime, canonical-world or whole-EntityOS evidence."
+  },
+  "grf_epistemic_contract": {
+    "law": "UNKNOWN/HYPOTHESIS/COUNTERHYPOTHESIS/PREDICTION/CONTRADICTION/MEASUREMENT_ERROR -> OBSERVED cannot be authorized by a naked boolean.",
+    "typed_observation_receipt_minimum": [
+      "receipt_schema",
+      "source_class",
+      "event_id",
+      "event_semantic_sha256",
+      "source_identity_or_digest",
+      "admission_or_validation_status",
+      "epistemic_target=OBSERVED"
+    ],
+    "synthetic_boundary": "Synthetic proof/measurement labels remain explicitly typed as synthetic curriculum semantics and cannot be confused with canonical-world observation."
+  },
+  "labeler_and_carrier_invariants": [
+    "full semantic Hyperposition carrier h_i=(v,K,E+,E-,F,T,A,sigma) remains explicit",
+    "projection is nondestructive and cannot delete unresolved branches",
+    "branch birth requires deterministic formal warrant",
+    "merge requires exact declared semantic equivalence, never embedding similarity or majority",
+    "branch id/order/permutation are nuisance unless semantics explicitly say otherwise",
+    "U/D/test-order/salience functions remain deterministic and non-probability-minting",
+    "salience is attention ordering only, never truth/evidence strength",
+    "synthetic task-local resolution remains type-distinct from canonical RESOLVED_BY_EVIDENCE",
+    "canonical truth and direct-effect authority remain false on all training candidates"
+  ],
+  "preregistered_mutation_matrix": [
+    {
+      "id": "M01_CALLER_INDEPENDENCE_TRUE_FORGED",
+      "expected": "REJECT_OR_OVERWRITE_NONAUTHORITATIVE_FLAG; NO_POSITIVE_CREDIT"
+    },
+    {
+      "id": "M02_CALLER_INDEPENDENCE_FALSE_FORGED",
+      "expected": "REFERENCE_SEMANTICS_INVARIANT_EXCEPT_FAIL_CLOSED_MISMATCH"
+    },
+    {
+      "id": "M03_EXACT_EVENT_REPLAY",
+      "expected": "PASS_IDEMPOTENT_ZERO_NEW_CREDIT"
+    },
+    {
+      "id": "M04_SAME_EVENT_ID_MUTATE_EPISTEMIC_TYPE",
+      "expected": "FAIL_EVENT_ID_CONTENT_COLLISION"
+    },
+    {
+      "id": "M05_SAME_EVENT_ID_MUTATE_PROVENANCE",
+      "expected": "FAIL_EVENT_ID_CONTENT_COLLISION"
+    },
+    {
+      "id": "M06_SAME_EVENT_ID_MUTATE_TEST_OR_OUTCOME",
+      "expected": "FAIL_EVENT_ID_CONTENT_COLLISION"
+    },
+    {
+      "id": "M07_VALID_GENERATOR_HASH_COHERENT_WORLD_SWAP",
+      "expected": "FAIL_EVALUATOR_WORLD_OR_MANIFEST_BINDING"
+    },
+    {
+      "id": "M08_VALID_GENERATOR_HASH_COHERENT_REGISTRY_SWAP",
+      "expected": "FAIL_EVALUATOR_WORLD_OR_MANIFEST_BINDING"
+    },
+    {
+      "id": "M09_NEW_EVENT_REPACKAGED_PAYLOAD_OR_ANCESTRY",
+      "expected": "PASS_AS_AUDIT_OBSERVATION_BUT_ZERO_INDEPENDENT_CREDIT"
+    },
+    {
+      "id": "M10_DISCRIMINATOR_REGISTERED_NOT_EXECUTED",
+      "expected": "UNRESOLVED"
+    },
+    {
+      "id": "M11_DISCRIMINATOR_EXECUTED_NOT_ADMISSIBLE",
+      "expected": "UNRESOLVED"
+    },
+    {
+      "id": "M12_DISCRIMINATOR_PARTIAL_LIVE_COVERAGE",
+      "expected": "UNRESOLVED"
+    },
+    {
+      "id": "M13_DISCRIMINATOR_EVENT_DIGEST_MISMATCH",
+      "expected": "REJECT"
+    },
+    {
+      "id": "M14_GENERIC_MISMATCH_EFFECT_WITHOUT_DECISIVENESS_PROOF",
+      "expected": "NO_FALSIFICATION_BASED_RESOLUTION"
+    },
+    {
+      "id": "M15_OBSERVED_PROMOTION_NAKED_BOOLEAN",
+      "expected": "REJECT_OR_REMAIN_NONOBSERVED"
+    },
+    {
+      "id": "M16_OBSERVATION_RECEIPT_WRONG_EVENT_OR_SOURCE_DIGEST",
+      "expected": "REJECT"
+    },
+    {
+      "id": "M17_NATIVE_SEED_BINDS_WEAKER_GATE",
+      "expected": "FAIL_EXACT_GATE_IDENTITY_CHECK"
+    },
+    {
+      "id": "M18_BRANCH_PERMUTATION",
+      "expected": "SEMANTIC_STATE_AND_TARGET_INVARIANT"
+    },
+    {
+      "id": "M19_PROJECTION_HIDE_SHOW",
+      "expected": "NO_BRANCH_DELETION_OR_TRUTH_CHANGE"
+    },
+    {
+      "id": "M20_BINDING_NUISANCE_SEMANTIC_ABLATION",
+      "expected": "NO_TARGET_PREDICTION_ABOVE_PREREGISTERED_CHANCE_BOUND_FROM_NONSEMANTIC_VISIBLE_FIELDS"
+    }
+  ],
+  "acceptance_sequence": [
+    "A0 source implementation matches this preregistered contract without weakening tests after observing failures",
+    "A1 exact unit/mutation matrix passes at bound source identity",
+    "A2 native seed successor imports exactly the retained gate and fails a deliberately constructed weaker-gate divergence case",
+    "A3 regenerated owner-target seed and D/E donors remain candidate-only and pass family/provenance split plus model-visible nuisance/conditional-MI gates",
+    "A4 exact-current execution is observed on an admitted FREE_ONLY surface with source/hash/receipt binding",
+    "A5 Forge/Distillery proves at least one evidence-qualified candidate packet can become accepted_dataset_tokens > 0 without bypassing independent admission",
+    "A6 only then may a small family-disjoint positive D/E pilot be considered for training admission; training execution itself remains separately authorized"
+  ],
+  "counterhypotheses": [
+    {
+      "claim": "The separate semantic gate v3 and derivation-bound gate v2 are already equivalent enough for seed promotion.",
+      "falsifier": "A row with caller-independent metadata or world/registry provenance mutation passes the semantic path while the preregistered single gate rejects it."
+    },
+    {
+      "claim": "Registry field equality is sufficient; event digest adds no information.",
+      "falsifier": "Coherently mutate event plus registry under the same event_id while preserving currently compared fields or the registry's self-consistency. If no immutable external/root binding detects it, identity is underconstrained."
+    },
+    {
+      "claim": "A formal test description is equivalent to discriminator execution.",
+      "falsifier": "Hold formal test metadata fixed while executed/admissible/coverage status changes. Resolution must change or remain blocked accordingly."
+    }
+  ],
+  "artifact_lifecycle_effects": [
+    {
+      "artifact": "tools/trigger2_semantic_hyperposition_native_seed_generator_v2.py",
+      "status": "NEEDS_REVISION_P0_GATE_REBIND",
+      "successor_condition": "binds the single preregistered successor gate and passes M17 plus the full relevant mutation subset"
+    },
+    {
+      "artifact": "tools/trigger2_semantic_hyperposition_gate_v3.py",
+      "status": "DONOR_STRUCTURAL_GATE_NOT_POSITIVE_AUTHORITY",
+      "successor_condition": "unique structural/permutation semantics fused into the single gate"
+    },
+    {
+      "artifact": "tools/trigger2_hyperposition_derivation_bound_gate_v2.py",
+      "status": "DONOR_CURRENT_PARTIAL_P0_REPAIR",
+      "successor_condition": "registry-derived independence plus source binding fused with immutable event/world provenance and discriminator/GRF proof closure"
+    },
+    {
+      "artifact": "tools/trigger2_binding_router_factorial_generator_v3.py",
+      "status": "QUARANTINE_UNCHANGED",
+      "successor_condition": "full-cross or preregistered conditional-independence successor passes exact rendered nuisance gates"
+    }
+  ],
+  "generation_decision": {
+    "new_positive_training_rows": 0,
+    "new_hard_negative_rows": 0,
+    "reason": "V8 and the current provenance hard-negative blueprint already cover the observed failure families. Preregistering the exact successor acceptance boundary has higher information value and avoids duplicate training examples."
+  },
+  "credits": {
+    "research_preregistration_delta": 1,
+    "source_implementation_credit": 0,
+    "new_training_rows": 0,
+    "positive_D_E_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "positive_jspace_causal_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  },
+  "next_exact_action": "Implement one single gate successor against this frozen mutation matrix, first closing evaluator-world/registry provenance and event-content identity before adding any positive rows; then rebind the native seed and observe exact-source tests."
+}

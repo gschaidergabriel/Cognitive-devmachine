@@ -1,6 +1,6 @@
 {
   "schema": "CLAY_FREE_SWARM_SYSTEM_ANALYSIS/v3",
-  "generated_at": "2026-08-25T21:57:57.640107+00:00",
+  "generated_at": "2026-08-25T22:13:03.975116+00:00",
   "runtime": {
     "supervisor": "STOPPED/QUARANTINED",
     "go_swarm": "RUNNING",
@@ -65,7 +65,7 @@
   },
   "distillery": {
     "schema": "CLAY_RESEARCH_DISTILLERY_STATUS/v1",
-    "generated_at": "2026-08-25T21:57:33.835575+00:00",
+    "generated_at": "2026-08-25T22:12:48.752503+00:00",
     "collected_source_tokens": 11621,
     "accepted_dataset_tokens": 0,
     "dataset_yield": 0.0,
@@ -111,7 +111,7 @@
     "model_output_tokens": 1455,
     "shared_provider_budget": {
       "schema": "CLAY_SHARED_PROVIDER_BUDGET/v1",
-      "generated_at": "2026-08-25T21:57:33.836131+00:00",
+      "generated_at": "2026-08-25T22:12:48.752931+00:00",
       "providers": {
         "arxiv": {
           "max_inflight": 1,
@@ -213,13 +213,13 @@
           "max_inflight": 16,
           "active_leases": 0,
           "min_interval_s": 0.5,
-          "cooldown_seconds": 9.990885972976685,
-          "total_requests": 3960,
+          "cooldown_seconds": 9.993485689163208,
+          "total_requests": 4050,
           "total_success": 134,
-          "total_429": 3825,
+          "total_429": 3915,
           "total_errors": 0,
           "last_status": "429",
-          "last_observed_at": "2026-08-25T21:57:33.827108+00:00"
+          "last_observed_at": "2026-08-25T22:12:48.746424+00:00"
         },
         "semantic_scholar": {
           "max_inflight": 1,
@@ -249,16 +249,16 @@
     },
     "db_bytes": 983040,
     "top_questions": [
-      "What is the minimal provider fingerprint surface (syscalls, /proc, device nodes, RPC endpoints) that reliably distinguishes gVisor/Firecracker/Kata/runc at container startup without CAP_SYS_ADMIN?",
-      "How does the choice of token validation mechanism impact dataset yield?",
-      "What exact Distillery admission predicate rejects chunks that pass collection but fail packet promotion?",
-      "How can we ensure the memory provenance log does not interfere with the determinism of J-Space operations when used for causal research?",
-      "1. Wie beeinflusst die dynamische Anpassung von Max-Inflight die Stabilität des NVIDIA-Providers?",
-      "Which upstream free-tier credential binding implementations (e.g., OAuth2 device code, mTLS, signed JWT claims) can be reproduced without paid fallback and map 1:1 to NVIDIA/Groq/OpenRouter route admission?",
-      "2. Welche Minimalanforderungen an die Rate-Limit-Logik sind für 1000+ gleichzeitige Anfragen notwendig?",
-      "3. Wie können J-Space-Vektoren genutzt werden, um Rate-Limit-Erwartungen zu vorhersagen?",
-      "How to balance cryptographic overhead with real-time admission throughput?",
-      "Mitigating hash collision risks in large-scale data processing?"
+      "How can the effectiveness of the network isolation mechanism be measured and verified?",
+      "What are the potential alternatives to network isolation for ensuring provider network quarantine?",
+      "What is the relationship between binding granularity and security?",
+      "How do different binding granularity levels affect security outcomes?",
+      "Can the security impact of binding granularity be mitigated through other means?",
+      "What is the optimal chunk size for memory-mapped model loading?",
+      "Does parallel deserialization of model chunks improve throughput without increasing peak memory?",
+      "How does the proposed loader handle model version mismatches during incremental loading?",
+      "Does credential-level admission binding generalize to Groq/OpenRouter where model-level free limits already exist, or is NVIDIA's Developer Program structure uniquely coarse?",
+      "Wie kann die Engine‑Kosten‑Validierung in das HCU‑Routing integriert werden, ohne die Modellvielfalt zu reduzieren?"
     ],
     "candidate_states": {}
   },
@@ -433,6 +433,6 @@
     "measured_total_sonnet5_equivalent_usd": 148.830648,
     "verified_historical_savings_usd": null,
     "nominal_avoided_if_zero_cost_usd": 148.830648,
-    "repo_output_only_proxy_usd": 140.14367
+    "repo_output_only_proxy_usd": 140.20229
   }
 }

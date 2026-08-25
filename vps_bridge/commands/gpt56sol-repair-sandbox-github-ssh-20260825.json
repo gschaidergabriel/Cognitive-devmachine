@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v4",
+  "command_id": "gpt56sol-repair-sandbox-github-ssh-20260825",
+  "op": "exec",
+  "cwd": "/workspace/clay-global-research-entity",
+  "timeout_seconds": 180,
+  "command": "set -euo pipefail; mkdir -p /root/.ssh; chmod 700 /root/.ssh; touch /root/.ssh/known_hosts; chmod 600 /root/.ssh/known_hosts; ssh-keygen -F github.com -f /root/.ssh/known_hosts >/dev/null 2>&1 || ssh-keyscan -t ed25519,rsa github.com >> /root/.ssh/known_hosts 2>/dev/null; echo known_host_entries=$(ssh-keygen -F github.com -f /root/.ssh/known_hosts | grep '^github.com\|^|1|' | wc -l || true); echo remote=$(git remote get-url origin); GIT_SSH_COMMAND='ssh -o BatchMode=yes -o StrictHostKeyChecking=yes -o UserKnownHostsFile=/root/.ssh/known_hosts' git fetch origin main; echo FETCH_PASS; echo local_head=$(git rev-parse HEAD); echo origin_main=$(git rev-parse origin/main); git log -1 --oneline origin/main"
+}

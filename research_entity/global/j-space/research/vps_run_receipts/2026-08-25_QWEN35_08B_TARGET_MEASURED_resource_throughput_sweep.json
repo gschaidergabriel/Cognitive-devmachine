@@ -1,0 +1,47 @@
+{
+  "schema": "CLAY_TRIGGER2_QWEN35_08B_RESOURCE_THROUGHPUT_SWEEP/v1",
+  "candidate_id": "QWEN35_08B_JOSIEFIED_GABLITERATED_MEASURED",
+  "local_dir": "/root/qwen35-08b-hf-cache/models--Goekdeniz-Guelmez--Josiefied-Qwen3.5-0.8B-gabliterated-v1/snapshots/591852bda6e1979f59e4b0f5ee2919697b12e936",
+  "runtime": {
+    "torch": "2.13.0+cpu",
+    "transformers": "5.15.1",
+    "python": "3.12.3",
+    "omp_threads": "4"
+  },
+  "physical_note": "single process, batch=1, sequential contexts on one loaded model instance - this is single-instance throughput, NOT logical grid N / HCU concurrency (that is a separate Phase 11 measurement not yet run)",
+  "contexts": {
+    "context_64": {
+      "prompt_tokens": 64,
+      "first_token_latency_seconds": 17.3709,
+      "generated_tokens": 32,
+      "total_generation_seconds": 20.6101,
+      "tokens_per_second": 1.553,
+      "peak_rss_mb_so_far": 2109.4
+    },
+    "context_128": {
+      "prompt_tokens": 128,
+      "first_token_latency_seconds": 0.5938,
+      "generated_tokens": 26,
+      "total_generation_seconds": 80.1879,
+      "tokens_per_second": 0.324,
+      "peak_rss_mb_so_far": 2207.0
+    },
+    "context_256": {
+      "prompt_tokens": 256,
+      "first_token_latency_seconds": 9.4487,
+      "generated_tokens": 5,
+      "total_generation_seconds": 5.7886,
+      "tokens_per_second": 0.864,
+      "peak_rss_mb_so_far": 2241.5
+    },
+    "context_512": {
+      "prompt_tokens": 512,
+      "first_token_latency_seconds": 2.031,
+      "generated_tokens": 13,
+      "total_generation_seconds": 30.9051,
+      "tokens_per_second": 0.421,
+      "peak_rss_mb_so_far": 2336.5
+    }
+  },
+  "peak_rss_mb_final": 2336.5
+}

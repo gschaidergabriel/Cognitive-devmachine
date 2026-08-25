@@ -1,0 +1,43 @@
+{
+  "schema": "CLAY_TRIGGER2_QWEN35_08B_LOADER_CONSUMPTION_AND_RESOURCE_PROBE/v1",
+  "candidate_id": "QWEN35_08B_POSTTRAINED",
+  "local_dir": "/root/qwen35-08b-hf-cache/models--Qwen--Qwen3.5-0.8B/snapshots/2fc06364715b967f1860aea9cf38778875588b17",
+  "loader_consumption_observed": true,
+  "used_chat_template": true,
+  "architecture": {
+    "model_type": "qwen3_5",
+    "num_hidden_layers": null,
+    "hidden_size": null,
+    "num_attention_heads": null,
+    "num_key_value_heads": null,
+    "vocab_size": null,
+    "torch_dtype_config": "None",
+    "architectures": [
+      "Qwen3_5ForConditionalGeneration"
+    ],
+    "max_position_embeddings": null
+  },
+  "runtime": {
+    "python": "3.12.3",
+    "torch": "2.13.0+cpu",
+    "transformers": "5.15.1",
+    "platform": "Linux-6.8.0-138-generic-x86_64-with-glibc2.39",
+    "threads_env_OMP_NUM_THREADS": "4"
+  },
+  "resource_benchmark": {
+    "model_load_wall_seconds": 1.355,
+    "peak_rss_kb_after_load": 572640,
+    "peak_rss_kb_final": 2048352,
+    "peak_rss_mb_final": 2000.3
+  },
+  "throughput_probe": {
+    "short_32tok": {
+      "prompt_tokens": 23,
+      "generated_tokens": 30,
+      "generation_seconds": 4.315,
+      "tokens_per_second": 6.953,
+      "output_text": "A persistent database is a database that stores data across multiple systems and persists it over time, allowing for long-term data retention and recovery.\n"
+    }
+  },
+  "note": "single short deterministic generation only; not the full matched-baseline pilot (Phase 8) or causal J-Space suite (Phase 9)"
+}

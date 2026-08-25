@@ -4,13 +4,13 @@
 v11 correctly requires nuisance residualization and direct native ALL_PROMPT_TOKENS evidence,
 but several deconfound properties arrive as attestations/receipt digests. v12 adds an exact,
 deterministic source audit: the basis design and both producer case-plan objects must match a
-frozen label-free abstract relation protocol whose model-facing payload lexicons are pairwise
-disjoint across BASIS/CALIBRATION/HOLDOUT and whose calibration/holdout mapping is a full 3x3
-semantic-metadata x arbitrary A/B/C code factorial.
+frozen label-free abstract-state protocol whose BASIS/CALIBRATION/HOLDOUT are pairwise disjoint
+in both payload lexicon and logical surface structure, and whose calibration/holdout mapping is
+a full 3x3 semantic-metadata x arbitrary A/B/C code factorial.
 
 The old LAST_TOKEN_ONLY witness remains ineligible as a native-causal identity premise through
-v11. A separate scope-matched all-token witness may be used for backend replication, but v12
-does not require cross-backend numerical identity to support a direct-native candidate.
+v11. Direct native ALL_PROMPT_TOKENS evidence is the claim path. Cross-scope effect equivalence,
+when separately established, remains weaker than microscopic mechanistic identity.
 
 Execution-free and non-minting.
 """
@@ -55,7 +55,11 @@ def exact_source_audit(candidate: dict[str, Any]) -> dict[str, Any]:
         "basis_design_sha256",
         "case_plan_sha256",
         "payload_lexicon_sha256",
+        "structure_ids",
+        "structure_family_sha256",
         "payload_lexicon_pairwise_disjoint",
+        "phase_structures_pairwise_disjoint",
+        "basis_calibration_holdout_structurally_disjoint",
         "canonical_status_words_model_facing_absent",
         "semantic_x_output_code_counterbalanced",
         "generic_instruction_scaffold_common_mode",
@@ -63,6 +67,15 @@ def exact_source_audit(candidate: dict[str, Any]) -> dict[str, Any]:
     ):
         if declared.get(field) != expected.get(field):
             failures.append(f"ABSTRACT_STATE_EXACT_PROTOCOL_FIELD_MISMATCH:{field}")
+
+    if expected.get("payload_lexicon_pairwise_disjoint") is not True:
+        failures.append("EXACT_PROTOCOL_PAYLOAD_LEXICAL_DISJOINTNESS_REQUIRED")
+    if expected.get("basis_calibration_holdout_structurally_disjoint") is not True:
+        failures.append("EXACT_PROTOCOL_STRUCTURAL_DISJOINTNESS_REQUIRED")
+    if expected.get("semantic_x_output_code_counterbalanced") is not True:
+        failures.append("EXACT_PROTOCOL_COUNTERBALANCE_REQUIRED")
+    if expected.get("explicit_yes_no_approval_compliance_vocabulary_absent") is not True:
+        failures.append("EXACT_PROTOCOL_STATUS_COMPLIANCE_VOCABULARY_ABSENCE_REQUIRED")
 
     expected_plans = exact_protocol.expected_case_plans()
     prereg = candidate.get("preregistration_evidence")
@@ -81,6 +94,15 @@ def exact_source_audit(candidate: dict[str, Any]) -> dict[str, Any]:
         if got != want:
             failures.append(f"EXACT_AUDIT_{split}_PLAN_OBJECT_MISMATCH")
 
+    calibration_scenarios = set(expected_plans["CALIBRATION"].get("scenario_family_sha256") or [])
+    holdout_scenarios = set(expected_plans["HOLDOUT"].get("scenario_family_sha256") or [])
+    if calibration_scenarios & holdout_scenarios:
+        failures.append("EXACT_AUDIT_CALIBRATION_HOLDOUT_SCENARIO_FAMILIES_MUST_BE_DISJOINT")
+    calibration_lex = set(expected_plans["CALIBRATION"].get("lexical_family_sha256") or [])
+    holdout_lex = set(expected_plans["HOLDOUT"].get("lexical_family_sha256") or [])
+    if calibration_lex & holdout_lex:
+        failures.append("EXACT_AUDIT_CALIBRATION_HOLDOUT_LEXICAL_FAMILIES_MUST_BE_DISJOINT")
+
     basis_binding = candidate.get("abstract_state_basis_capture_binding")
     if not isinstance(basis_binding, dict):
         failures.append("ABSTRACT_STATE_BASIS_CAPTURE_BINDING_REQUIRED")
@@ -96,6 +118,8 @@ def exact_source_audit(candidate: dict[str, Any]) -> dict[str, Any]:
         failures.append("ABSTRACT_STATE_BASIS_CAPTURE_PROMPT_UNIVERSE_MISMATCH")
     if basis_binding.get("family_count") != 6:
         failures.append("ABSTRACT_STATE_BASIS_CAPTURE_EXACT_SIX_FAMILIES_REQUIRED")
+    if basis_binding.get("structure_id") != exact_protocol.STRUCTURE_IDS["BASIS"]:
+        failures.append("ABSTRACT_STATE_BASIS_CAPTURE_STRUCTURE_ID_MISMATCH")
     if basis_binding.get("capture_frozen_before_holdout") is not True:
         failures.append("ABSTRACT_STATE_BASIS_CAPTURE_MUST_PRECEDE_HOLDOUT")
     if not _sha256(basis_binding.get("basis_capture_receipt_sha256")):
@@ -111,6 +135,8 @@ def exact_source_audit(candidate: dict[str, Any]) -> dict[str, Any]:
         failures.append("ABSTRACT_STATE_PROJECTED_BASIS_RECEIPT_CROSS_BINDING_MISMATCH")
     if deconfound.get("basis_holdout_lexically_disjoint") is not True:
         failures.append("V11_BASIS_HOLDOUT_LEXICAL_DISJOINTNESS_ATTESTATION_MUST_REMAIN_TRUE")
+    if deconfound.get("basis_holdout_scenario_disjoint") is not True:
+        failures.append("V11_BASIS_HOLDOUT_SCENARIO_DISJOINTNESS_ATTESTATION_MUST_REMAIN_TRUE")
     if deconfound.get("semantic_synonym_lexicon_disjoint") is not True:
         failures.append("V11_SEMANTIC_SYNONYM_DISJOINTNESS_ATTESTATION_MUST_REMAIN_TRUE")
 
@@ -121,6 +147,10 @@ def exact_source_audit(candidate: dict[str, Any]) -> dict[str, Any]:
         "basis_design_sha256": expected.get("basis_design_sha256"),
         "case_plan_sha256": expected.get("case_plan_sha256"),
         "payload_lexicon_sha256": expected.get("payload_lexicon_sha256"),
+        "structure_ids": expected.get("structure_ids"),
+        "structure_family_sha256": expected.get("structure_family_sha256"),
+        "payload_lexicon_pairwise_disjoint": expected.get("payload_lexicon_pairwise_disjoint") is True,
+        "phase_structures_pairwise_disjoint": expected.get("phase_structures_pairwise_disjoint") is True,
         "basis_prompt_count": len(expected_basis_rows),
         "calibration_case_count": 9,
         "holdout_case_count": 9,
@@ -144,6 +174,7 @@ def adjudicate(candidate: dict[str, Any]) -> dict[str, Any]:
         "exact_abstract_protocol_sha256": exact.get("protocol_sha256"),
         "exact_abstract_basis_design_sha256": exact.get("basis_design_sha256"),
         "exact_abstract_case_plan_sha256": exact.get("case_plan_sha256"),
+        "exact_abstract_structure_ids": exact.get("structure_ids"),
         "abstract_native_semantic_jspace_candidate": promoted_candidate,
         "abstract_state_control_candidate": promoted_candidate,
         "strict_micro_mechanistic_identity_candidate": False,
@@ -156,12 +187,13 @@ def adjudicate(candidate: dict[str, Any]) -> dict[str, Any]:
         "training_credit": False,
         "evidence_boundary": (
             "v12 requires all v11 nuisance-residualized direct-native ALL_PROMPT_TOKENS evidence plus an "
-            "exact deterministic binding to the frozen label-free abstract-state basis and exact CALIBRATION/"
-            "HOLDOUT producer plans. Prompt payload lexicons are recomputed from source and pairwise disjoint; "
-            "the 3x3 semantic-metadata x arbitrary-code mapping is recomputed, not trusted as a boolean. The "
-            "basis capture prompt universe is hash-bound to the exact 18-row six-family design and cross-bound "
-            "to v11's projected-basis receipt. The historical last-token witness remains non-identifying. This "
-            "gate is adjudication only and mints no canonical semantics/runtime/J-Space/HCU/EntityOS/training credit."
+            "exact deterministic binding to a frozen label-free abstract-state basis and exact CALIBRATION/"
+            "HOLDOUT producer plans. BASIS/CALIBRATION/HOLDOUT payload lexicons and logical surface structures "
+            "are recomputed from source and pairwise disjoint; the 3x3 semantic-metadata x arbitrary-code mapping "
+            "is recomputed, not trusted as a boolean. The basis capture prompt universe is hash-bound to the exact "
+            "18-row six-family design and cross-bound to v11's projected-basis receipt. The historical last-token "
+            "witness remains non-identifying. This gate is adjudication only and mints no canonical semantics/"
+            "runtime/J-Space/HCU/EntityOS/training credit."
         ),
     }
 

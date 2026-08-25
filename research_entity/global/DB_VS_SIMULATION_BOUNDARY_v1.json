@@ -1,0 +1,168 @@
+{
+  "schema": "DB_VS_SIMULATION_BOUNDARY/v1",
+  "status": "CANDIDATE_SOURCE_CONTRACT_NOT_RUNTIME_CREDIT",
+  "authority": {
+    "product": "EntityOS",
+    "architecture": "HCU",
+    "owner_target_path": "research_entity/global/OWNER_CORRECTION_ZERO_ENTITYOS_COGNITIVE_GRID_DB_CLAUDECODE_GLOBAL_JSPACE_2026-08-25.md",
+    "abi_dependency": "COGNITIVE_PROCESS_ABI/v1@PR1972",
+    "owner_rule": "SIMULATE_COGNITION_STORE_DURABLE_DATA",
+    "grid_law": "VARIABLE_N_RUNTIME_PARAMETER"
+  },
+  "purpose": "Make the database-versus-cognitive-simulation boundary deterministic enough that variable-N modules can restart, rejoin, resize, and delegate to Claude Code without turning model/workspace state into a second truth store.",
+  "state_classes": {
+    "S0": {
+      "name": "CANONICAL_DURABLE_DATABASE_STATE",
+      "authority": "DETERMINISTIC_ONLY",
+      "survives_restart": true,
+      "may_mint_truth": "ONLY_THROUGH_EXISTING_DETERMINISTIC_ADMISSION",
+      "examples": [
+        "canonical_task_project_state",
+        "durable_memory",
+        "historical_events_results",
+        "evidence_provenance_refs",
+        "long_lived_goals_configuration",
+        "checkpoints_snapshots",
+        "exact_ids_counters_epochs_digests",
+        "capability_authority",
+        "effect_journal",
+        "admitted_engine_runtime_artifact_identity",
+        "persistent_retrieval_indexes_when_authoritative_or_rebuild_metadata"
+      ]
+    },
+    "S1": {
+      "name": "LIVE_SHARED_COGNITIVE_WORKSPACE",
+      "authority": "NONCANONICAL_CANDIDATE_PROJECTION",
+      "survives_restart": "OPTIONAL_CACHE_ONLY_IF_REBUILDABLE_AND_NONAUTHORITATIVE",
+      "may_mint_truth": false,
+      "examples": [
+        "workspace_selection",
+        "plan_candidates",
+        "route_candidates",
+        "salience",
+        "candidate_summaries",
+        "alternative_sets",
+        "uncertainty",
+        "compression_views",
+        "noncanonical_retrieval_projections",
+        "work_queue_views",
+        "broadcast_reentry_state"
+      ]
+    },
+    "S2": {
+      "name": "EPHEMERAL_LOCAL_COGNITION_SIMULATION",
+      "authority": "NONE",
+      "survives_restart": false,
+      "may_mint_truth": false,
+      "examples": [
+        "model_hidden_state",
+        "local_scratch_reasoning",
+        "temporary_rollout",
+        "unadmitted_hypothesis",
+        "local_attention_state",
+        "bounded_world_simulation",
+        "draft_claycode_transform",
+        "candidate_vector_control_state"
+      ]
+    }
+  },
+  "placement_rules": [
+    {"id":"P01","when":"value carries canonical fact/evidence identity, capability/security authority, effect outcome/journal identity, or exact causal/generation/epoch identity","place":"S0","reason":"authority_or_exactness_requires_deterministic_durable_storage"},
+    {"id":"P02","when":"value must survive module restart/grid resize and loss would change the accepted task/project/evidence state","place":"S0","reason":"semantic_continuity_requires_durable_storage"},
+    {"id":"P03","when":"value is an exact counter/id/digest/checkpoint/configuration or long-lived goal that should not be regenerated probabilistically","place":"S0","reason":"reconstruction_is_not_equivalent_to_persistence"},
+    {"id":"P04","when":"value is shared cognitive coordination state whose loss may reduce efficiency but can be deterministically reconstructed without changing canonical history","place":"S1","reason":"shared_workspace_not_truth"},
+    {"id":"P05","when":"value is a hypothesis, plan, route, summary, uncertainty estimate, salience score, or workspace winner before deterministic admission","place":"S1","reason":"candidate_projection_only"},
+    {"id":"P06","when":"value is local model state, hidden activation, scratchpad, simulation branch, or temporary alternative not required by another module","place":"S2","reason":"ephemeral_cognition"},
+    {"id":"P07","when":"classification is ambiguous between S0 and a noncanonical class and loss could alter truth/effect/security semantics","place":"S0_PENDING_TYPED_ADMISSION_OR_UNKNOWN","reason":"fail_closed_on_authority_ambiguity"},
+    {"id":"P08","when":"classification is ambiguous but the value is clearly nonauthoritative and safely reproducible","place":"S1_OR_S2_WITH_EXPLICIT_NONCANONICAL_TAG","reason":"preserve_uncertainty_without_minting_truth"}
+  ],
+  "transition_rules": {
+    "S0_to_S1": "READ_ONLY_PROJECTION_WITH_SOURCE_EPOCH_DIGEST_PROVENANCE",
+    "S1_to_S0": "DbWriteProposal_THEN_DETERMINISTIC_ADMISSION_ONLY",
+    "S2_to_S1": "CognitiveResult_OR_WorkspacePacket_WITH_CAUSAL_GENERATION_ROUTE_INPUT_BINDING",
+    "S2_to_S0": "FORBIDDEN_DIRECT",
+    "S1_to_effect": "EffectProposal_THEN_EffectGate_EffectJournal_ONLY",
+    "S2_to_effect": "FORBIDDEN_DIRECT",
+    "ClaudeCode_to_S1": "ClaudeCodeBridgePacket_RETURN_AS_CANDIDATE_OR_EVIDENCE_BOUND_RESULT",
+    "ClaudeCode_to_S0": "FORBIDDEN_DIRECT",
+    "JSpace_to_S0": "FORBIDDEN_DIRECT"
+  },
+  "required_packet_bindings": {
+    "durable_write": "DbWriteProposal",
+    "cognitive_output": "CognitiveResult",
+    "workspace_reentry": "WorkspacePacket",
+    "claude_code_bridge": "ClaudeCodeBridgePacket",
+    "effect_request": "EffectProposal",
+    "jspace_research": "JSpaceMeasurement"
+  },
+  "decision_questions": [
+    "Would losing this value across restart/grid resize change canonical accepted history or authority?",
+    "Must two modules agree byte-for-byte rather than approximately?",
+    "Is the value an identity, epoch, digest, checkpoint, provenance, capability, effect, durable memory, long-lived goal, or exact configuration?",
+    "Can the value be deterministically rebuilt from S0 without changing semantics?",
+    "Is the value speculative/model-generated/workspace-derived rather than admitted fact?",
+    "Is it model/runtime-specific internal state whose persistence would falsely imply cross-model meaning?",
+    "Could storing it as canonical cause majority/recurrence/model confidence to become truth?",
+    "Does the value need to be queryable/auditable long after the cognitive episode ends?"
+  ],
+  "hard_negatives": [
+    "MODEL_OUTPUT_DIRECT_DB_WRITE",
+    "CLAUDE_CODE_DIRECT_CANONICAL_WRITE",
+    "MAJORITY_OR_RECURRENCE_TO_TRUTH",
+    "HIDDEN_STATE_AS_CANONICAL_FACT",
+    "REGENERATE_DURABLE_ID_FROM_MODEL",
+    "CANONICAL_FACT_ONLY_IN_MODEL_MEMORY",
+    "S1_CACHE_USED_AS_RECOVERY_AUTHORITY",
+    "STALE_GENERATION_WRITE_PROPOSAL_ACCEPTED",
+    "EFFECT_EXECUTED_WITHOUT_EFFECTGATE_JOURNAL",
+    "UNKNOWN_NORMALIZED_TO_FALSE"
+  ],
+  "variable_grid_invariants": [
+    "S0 semantics do not depend on module count N",
+    "module identity is not cognitive-process identity",
+    "restart or replacement may discard S2 and rebuild S1 from S0 without changing canonical history",
+    "grid resize cannot grant new capabilities or effect authority",
+    "coordinator election or workspace majority cannot promote S1 into S0",
+    "the same admitted executor may perform different cognitive process types when route and capability bindings permit"
+  ],
+  "claude_code_boundary": {
+    "role": "STRONG_MODEL_TOOL_CODE_PARTNER",
+    "default_interface_claim": "OBSERVABLE_TEXT_TOOL_SESSION_SURFACE_UNLESS_STRONGER_EXPOSED_EVIDENCE_EXISTS",
+    "returns_to": "S1_CANDIDATE_OR_EVIDENCE_BOUND_RESULT",
+    "direct_S0_write": false,
+    "activation_level_global_jspace_claim_without_exposed_causal_evidence": false
+  },
+  "jspace_boundary": {
+    "default_class": "S2_MEASUREMENT_OR_S1_NONCANONICAL_MEASUREMENT",
+    "requires_exact_model_runtime_interface_identity": true,
+    "can_mint_truth": false,
+    "promotion_rule": "MODEL_SPECIFIC_CAUSAL_EVIDENCE_ONLY_AT_DECLARED_COMPONENT_SCOPE"
+  },
+  "first_executable_discriminator": {
+    "name": "RESTART_RESIZE_DB_BOUNDARY_SMOKE",
+    "steps": [
+      "seed S0 with one admitted task identity, generation, durable goal, evidence ref and exact epoch/digest",
+      "derive S1 work/workspace projections and create S2 local hypotheses on one module",
+      "emit one DbWriteProposal for a permitted durable memory update but do not mutate S0 directly",
+      "restart the module, discard S2, and rebuild required S1 from S0 plus admitted transition receipts",
+      "change grid size N and route a different cognitive process to the restarted executor without changing S0 semantic identity",
+      "attempt direct model-to-S0, stale-generation write, S1-cache-as-recovery-authority and direct-effect variants and require rejection",
+      "bridge one bounded request/result through ClaudeCodeBridgePacket and require candidate/evidence-bound reentry rather than direct S0 mutation"
+    ],
+    "pass": "canonical S0 identity remains stable across restart and N change; required S1 rebuilds; S2 loss is tolerated; admitted durable proposal path succeeds; all four authority violations reject",
+    "credit": "DB_SIMULATION_BOUNDARY_COMPONENT_ONLY"
+  },
+  "counterhypotheses": [
+    "Persisting more workspace state may appear more reliable but can create stale second-authority recovery semantics.",
+    "Keeping more state ephemeral may appear simpler but can make restart/grid resize silently change accepted history.",
+    "A single strong-model transcript may appear sufficient as memory but is not an exact durable state/evidence substrate.",
+    "Activation/vector persistence may be useful for research replay but does not make the stored vector a canonical fact."
+  ],
+  "credit": {
+    "whole_entityos_hcu": 0,
+    "full_hcu": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  }
+}

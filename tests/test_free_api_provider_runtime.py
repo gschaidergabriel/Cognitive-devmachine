@@ -280,6 +280,7 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
                     "id": "chatcmpl-test",
                     "created": 1,
                     "model": "mock-model",
+                    "usage": {"prompt_tokens": 1, "completion_tokens": 1, "total_tokens": 2},
                     "choices": [{
                         "index": 0,
                         "finish_reason": "stop",
@@ -345,7 +346,7 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             def __enter__(self): return self
             def __exit__(self, *args): pass
             def read(self, limit):
-                return b'{"object":"chat.completion","id":"chatcmpl-test","created":1,"model":"mock","choices":[{"index":0,"finish_reason":"stop","message":{"role":"assistant","content":"ok"}}]}'
+                return b'{"object":"chat.completion","id":"chatcmpl-test","created":1,"model":"mock","usage":{"prompt_tokens":1,"completion_tokens":1,"total_tokens":2},"choices":[{"index":0,"finish_reason":"stop","message":{"role":"assistant","content":"ok"}}]}'
 
         empty_body_size = len(json.dumps({
             "model": "mock",
@@ -608,6 +609,7 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
                     "id": "chatcmpl-test",
                     "created": 1,
                     "model": "mock",
+                    "usage": {"prompt_tokens": 1, "completion_tokens": 1, "total_tokens": 2},
                     "choices": [{
                         "index": 0,
                         "finish_reason": "stop",
@@ -660,6 +662,7 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
                     "id": "chatcmpl-test",
                     "created": 1,
                     "model": "mock",
+                    "usage": {"prompt_tokens": 1, "completion_tokens": 1, "total_tokens": 2},
                     "choices": [{
                         "index": 0,
                         "finish_reason": "stop",
@@ -701,6 +704,7 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
                     "id": "chatcmpl-test",
                     "created": 1,
                     "model": "mock",
+                    "usage": {"prompt_tokens": 1, "completion_tokens": 1, "total_tokens": 2},
                     "choices": [{
                         "index": 0,
                         "finish_reason": "stop",
@@ -737,6 +741,7 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
                     "id": "chatcmpl-test",
                     "created": 1,
                     "model": "mock",
+                    "usage": {"prompt_tokens": 1, "completion_tokens": 1, "total_tokens": 2},
                     "choices": [{
                         "index": 0,
                         "finish_reason": "stop",
@@ -902,6 +907,7 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
                     "id": "chatcmpl-test",
                     "created": 1,
                     "model": "mock",
+                    "usage": {"prompt_tokens": 1, "completion_tokens": 1, "total_tokens": 2},
                     "choices": [{
                         "index": 0,
                         "finish_reason": "stop",
@@ -938,7 +944,7 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             def __enter__(self): return self
             def __exit__(self, *args): pass
             def read(self, limit):
-                return b'{"object":"chat.completion","id":"chatcmpl-test","created":1,"model":"mock","choices":[{"index":0,"finish_reason":"stop","message":{"role":"assistant","content":"ok"}}]}'
+                return b'{"object":"chat.completion","id":"chatcmpl-test","created":1,"model":"mock","usage":{"prompt_tokens":1,"completion_tokens":1,"total_tokens":2},"choices":[{"index":0,"finish_reason":"stop","message":{"role":"assistant","content":"ok"}}]}'
 
         captured = {}
 
@@ -1385,6 +1391,7 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             def read(self, limit):
                 return (
                     b'{"object":"chat.completion","id":"chatcmpl-test","created":1,"model":"mock",'
+                    b'"usage":{"prompt_tokens":1,"completion_tokens":1,"total_tokens":2},'
                     b'"choices":[{"index":0,"finish_reason":"length",'
                     b'"message":{"role":"assistant","content":"partial"}}]}'
                 )
@@ -1611,6 +1618,7 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             def read(self, limit):
                 return (
                     b'{"object":"chat.completion","id":"chatcmpl-test","created":1,"model":"mock",'
+                    b'"usage":{"prompt_tokens":1,"completion_tokens":1,"total_tokens":2},'
                     b'"choices":[{"index":0,"message":{"role":"assistant",'
                     b'"content":"ok"},"logprobs":null,"finish_reason":"stop",'
                     b'"stop_reason":null}]}'
@@ -1640,6 +1648,10 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             "a6a0ecac2bda09c348e11837427a42cc",
         )
         self.assertEqual(receipt["provider_created_unix_seconds"], 1)
+        self.assertEqual(
+            receipt["provider_usage"],
+            {"prompt_tokens": 1, "completion_tokens": 1, "total_tokens": 2},
+        )
         self.assertEqual(result["content"], "ok")
 
     def test_multiple_response_choices_cannot_be_partially_verified(self):
@@ -1701,6 +1713,7 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             def read(self, limit):
                 return (
                     b'{"object":"chat.completion","id":"chatcmpl-test","created":1,"model":"mock",'
+                    b'"usage":{"prompt_tokens":1,"completion_tokens":1,"total_tokens":2},'
                     b'"choices":[{"finish_reason":"stop",'
                     b'"message":{"role":"assistant","content":"ok"}}]}'
                 )
@@ -1738,6 +1751,7 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             def read(self, limit):
                 return (
                     b'{"object":"chat.completion","created":1,"model":"mock",'
+                    b'"usage":{"prompt_tokens":1,"completion_tokens":1,"total_tokens":2},'
                     b'"choices":[{"index":0,"finish_reason":"stop",'
                     b'"message":{"role":"assistant","content":"ok"}}]}'
                 )
@@ -1775,7 +1789,7 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             def read(self, limit):
                 return (
                     b'{"object":"chat.completion","id":"chatcmpl-test",'
-                    b'"model":"mock","choices":[{"index":0,'
+                    b'"model":"mock","usage":{"prompt_tokens":1,"completion_tokens":1,"total_tokens":2},"choices":[{"index":0,'
                     b'"finish_reason":"stop","message":'
                     b'{"role":"assistant","content":"ok"}}]}'
                 )
@@ -1887,6 +1901,7 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             def read(self, limit):
                 return (
                     b'{"object":"chat.completion","id":"chatcmpl-test","created":1,"model":"other-model",'
+                    b'"usage":{"prompt_tokens":1,"completion_tokens":1,"total_tokens":2},'
                     b'"choices":[{"index":0,"finish_reason":"stop",'
                     b'"message":{"role":"assistant","content":"ok"}}]}'
                 )
@@ -1961,6 +1976,7 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             def read(self, limit):
                 return (
                     b'{"object":"text_completion","model":"mock",'
+                    b'"usage":{"prompt_tokens":1,"completion_tokens":1,"total_tokens":2},'
                     b'"choices":[{"index":0,"finish_reason":"stop",'
                     b'"message":{"role":"assistant","content":"ok"}}]}'
                 )
@@ -1998,6 +2014,7 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             def read(self, limit):
                 return (
                     b'{"model":"mock",'
+                    b'"usage":{"prompt_tokens":1,"completion_tokens":1,"total_tokens":2},'
                     b'"choices":[{"index":0,"finish_reason":"stop",'
                     b'"message":{"role":"assistant","content":"ok"}}]}'
                 )
@@ -2204,9 +2221,10 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
 
         finite_body = (
             b'{"object":"chat.completion","id":"chatcmpl-test","created":1,"model":"mock",'
+            b'"usage":{"prompt_tokens":1,"completion_tokens":1,"total_tokens":2},'
             b'"choices":[{"index":0,"finish_reason":"stop","message":{'
             b'"role":"assistant","content":"finite-ok"}}],'
-            b'"usage":{"ratio":1e300}}'
+            b'"telemetry":{"ratio":1e300}}'
         )
         finite_result = MOD.execute_chat(
             VALID_MESSAGES, model="mock", environ=env,
@@ -3169,6 +3187,7 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             def read(self, limit):
                 return (
                     b'{"object":"chat.completion","id":"chatcmpl-test","created":1,"model":"mock",'
+                    b'"usage":{"prompt_tokens":1,"completion_tokens":1,"total_tokens":2},'
                     b'"choices":[{"index":0,"finish_reason":"stop","message":'
                     b'{"role":"assistant","content":"ok"}}]}'
                 )
@@ -3307,6 +3326,7 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             def read(self, limit):
                 return (
                     b'{"object":"chat.completion","id":"chatcmpl-test","created":1,"model":"mock",'
+                    b'"usage":{"prompt_tokens":1,"completion_tokens":1,"total_tokens":2},'
                     b'"choices":[{"index":0,"finish_reason":"stop","message":'
                     b'{"role":"assistant","content":"ok"}}]}'
                 )

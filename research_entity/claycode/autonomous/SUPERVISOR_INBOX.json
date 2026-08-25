@@ -1,22 +1,28 @@
 {
-  "schema_version": "8.80",
-  "latest_cycle": "go-xeno-fabric-pass-to-physical-grid10",
+  "schema_version": "8.81",
+  "latest_cycle": "physical-grid10-proof-audit",
   "needs_review": true,
   "active_program": "ENTITYOS_HCU",
   "product": "EntityOS",
   "integrated_cognition_compute_architecture": "HCU",
-  "material_finding": "The previously highest-value pinned Xeno fabric repository-bound VPS bundle is no longer pending. It executed cleanly after fix 6463e4b12ae142e4479e0764a8923f0fe2e70386 and PASSed canonical_s0 plus xeno_self_organizing_fabric with dirty=false. Root cause was a caught failed DML on a read-only sqlite3 connection leaving an implicit transaction/snapshot open; explicit rollback fixed the stale-read race. This grants bounded component evidence only. GO now advances to the first physical GRID10 process acceptance target. A new harness at fbab5960980166f51047264775f102f2df22b292 starts exactly ten independent Xeno subprocesses against one isolated shared S1, keeps ordinary nodes read-only, uses ephemeral NODE_RESULT packets, dynamically leases scoped coordinators, measures compression, tests revocation/replacement and recursive compression. A pinned free-VPS execution request exists; receipt pending.",
+  "material_finding": "The prior Xeno fabric repository-bound VPS bundle remains a bounded component runtime PASS after the S0 rollback fix. However, the newly introduced physical GRID10 harness at fbab5960980166f51047264775f102f2df22b292 is not credit-worthy as written: it launches ten ordinary nodes sequentially with subprocess.run and labels pids=len(packets), so it does not prove ten simultaneously live independent OS processes. In addition, coordinator admission accepts packet.state_epoch <= current and does not compare packet.state_digest to the current snapshot; the harness then commits serially stale packets while S1 advances. The stale-evidence/rebase policy is therefore underspecified. Existing physical-GRID10 VPS execution pinned to fbab596 may be useful diagnostically but MUST NOT mint physical GRID10 credit even if pass=true. Repair and repin first.",
   "current_frontier": {
     "canonical_s0_epoch_cas": "BOUNDED_COMPONENT_RUNTIME_PASS",
     "xeno_self_organizing_fabric": "BOUNDED_COMPONENT_RUNTIME_PASS",
-    "physical_grid10_process_harness_source": "PRESENT_AT_FBAB5960980166F51047264775F102F2DF22B292",
-    "physical_grid10_repository_execution": "PINNED_REQUEST_PRESENT_RECEIPT_PENDING",
-    "physical_grid10_load_failure_rejoin": "BLOCKED_PENDING_BASE_PROCESS_PASS",
-    "physical_grid10_matched_budget_challengers": "BLOCKED_PENDING_BASE_PROCESS_PASS",
-    "physical_grid10_hyperposition_gwt_reentry": "BLOCKED_PENDING_BASE_PROCESS_PASS",
+    "physical_grid10_process_harness_source": "NEEDS_REVISION_CONCURRENCY_AND_STALE_EVIDENCE_PROOF_GAPS",
+    "physical_grid10_existing_repository_execution": "PINNED_TO_FBAB596_DIAGNOSTIC_ONLY_NO_CREDIT",
+    "physical_grid10_repaired_repository_execution": "BLOCKED_PENDING_REPAIRED_COMMIT_AND_NEW_PIN",
+    "physical_grid10_load_failure_rejoin": "BLOCKED_PENDING_TRUE_BASE_PROCESS_PASS",
+    "physical_grid10_matched_budget_challengers": "BLOCKED_PENDING_TRUE_BASE_PROCESS_PASS",
+    "physical_grid10_hyperposition_gwt_reentry": "BLOCKED_PENDING_TRUE_BASE_PROCESS_PASS",
+    "trigger2_binding_router_factorial_generator_v3": "BLOCKED_FROM_DIRECT_TRAINING_CONDITIONAL_NUISANCE_LEAKAGE",
+    "checkpoint_selection": "UNRESOLVED_MORE_MATCHED_DATA_REQUIRED",
+    "jspace_representation_metrology": "BLOCKED_KNOWN_INSTRUMENTATION_BUG",
+    "evidence_qualified_forge_to_distillery_positive_yield": "BLOCKED_ACCEPTED_DATASET_TOKENS_ZERO_UNLESS_NEW_EXECUTABLE_RECEIPT_SUPERSEDES",
     "entityos_whole_runtime_credit": 0,
     "hcu_full_runtime_credit": 0,
     "physical_grid10_runtime_credit": 0,
+    "canonical_semantics_credit": 0,
     "training_credit": 0
   },
   "free_only": {
@@ -27,20 +33,29 @@
   },
   "evidence_law": [
     "EXECUTABLE_EVIDENCE_OUTRANKS_MODEL_CONSENSUS",
+    "SOURCE_OR_MODEL_CONSENSUS_DOES_NOT_MINT_BASE_TRAINING_OR_CANONICAL_SEMANTICS_CREDIT",
+    "NO_BASE_WORK_PACKAGE_PASS_FROM_MODEL_CONSENSUS",
+    "NO_CANONICAL_SEMANTICS_PROMOTION_WITHOUT_EXECUTABLE_COUNTEREVIDENCE_AND_REVIEW",
     "COMPONENT_RUNTIME_PASS_IS_NOT_WHOLE_PRODUCT_PASS",
+    "GOODMAN_COLLAPSE_SHARED_MODEL_FAMILY_PIPELINE_ORCHESTRATION_AND_REPACKAGED_HISTORY",
+    "TRAIN_CALIBRATION_HOLDOUT_FAMILY_PROVENANCE_LEAKAGE_INVALIDATES_INDEPENDENCE_CREDIT",
+    "MODEL_FAMILY_AND_CHECKPOINT_ANCESTRY_MUST_REMAIN_EXPLICIT",
     "ORDINARY_XENO_MODULES_ARE_S1_READ_ONLY",
     "ONLY_VALID_DYNAMIC_COORDINATOR_LEASE_HOLDERS_MAY_WRITE_S1",
     "COORDINATOR_WRITE_NEVER_MINTS_S0_TRUTH_OR_EFFECT_AUTHORITY",
-    "PHYSICAL_GRID10_REQUIRES_10_INDEPENDENT_NODE_PROCESSES_NOT_LOGICAL_CELLS_OR_THREADS",
+    "PHYSICAL_GRID10_REQUIRES_10_SIMULTANEOUSLY_LIVE_INDEPENDENT_NODE_PROCESSES_NOT_SEQUENTIAL_INVOCATIONS_THREADS_OR_LOGICAL_CELLS",
+    "NODE_RESULT_OBSERVATION_IDENTITY_MUST_NOT_BE_SILENTLY_RELABELED_AS_CURRENT_AFTER_S1_ADVANCES",
     "REPOSITORY_BOUND_FREE_VPS_RECEIPTS_MUST_BIND_CLEAN_HEAD_TREE_RUNTIME_AND_EXACT_SOURCE_HASHES",
-    "NO_TRAINING_CREDIT_FROM_RUNTIME_COMPONENT_TESTS"
+    "NO_TRAINING_CREDIT_FROM_RUNTIME_COMPONENT_TESTS",
+    "UBUNTU_ONLY_FRANK_V0_1_TARGET_REMAINS_UNCHANGED",
+    "DO_NOT_MODIFY_FRANK_HARNESS"
   ],
   "next_focus": [
-    "EXECUTE_THE_PINNED_PHYSICAL_GRID10_HARNESS_ON_THE_LIVE_FREE_VPS_AT_EXACT_FBAB5960980166F51047264775F102F2DF22B292_AND_INGEST_ONLY_A_CLEAN_HASH_BOUND_RECEIPT",
-    "IF_PASS_MEASURE_DYNAMIC_COORDINATOR_K_FANIN_COMPRESSION_LATENCY_AND_CONTENTION_UNDER_CONTROLLED_LOAD",
-    "THEN_TEST_COORDINATOR_CRASH_REPLACEMENT_AND_ORDINARY_NODE_RESTART_REJOIN_DURING_ACTIVE_RESULT_FLOW",
-    "THEN_RUN_MATCHED_BUDGET_CHALLENGERS_SINGLE_XENO_10_INDEPENDENT_NO_STATE_NAIVE_VOTE_FIXED_RANDOM_COORDINATOR",
-    "THEN_ADD_HYPERPOSITION_GWT_REENTRY_ON_THE_PHYSICAL_PROCESS_FABRIC"
+    "REPAIR_XENO_PHYSICAL_GRID10_ACCEPTANCE_TO_USE_OVERLAPPING_POPEN_PROCESSES_WITH_TEN_DISTINCT_OS_PIDS_AND_A_BARRIER_OR_EQUIVALENT_CONCURRENT_LIVENESS_PROOF_ON_ONE_SHARED_READ_ONLY_S1",
+    "DEFINE_AND_TEST_STALE_NODE_RESULT_POLICY_REQUIRE_EXACT_SNAPSHOT_IDENTITY_OR_A_SEPARATELY_NAMED_PROVEN_REBASE_PROTOCOL_DO_NOT_ACCEPT_OLD_STATE_DIGEST_AS_CURRENT_EVIDENCE",
+    "ADD_NEGATIVE_STALE_DIGEST_AND_PID_OVERLAP_REGRESSIONS",
+    "COMMIT_REPAIRED_HARNESS_AND_CREATE_A_NEW_PINNED_FREE_VPS_EXECUTION_REQUEST_BOUND_TO_THAT_COMMIT",
+    "ONLY_IF_THE_REPAIRED_REPOSITORY_BOUND_RUN_PASSES_ADVANCE_TO_CONTROLLED_LOAD_COORDINATOR_FAILURE_REJOIN_MATCHED_BUDGET_CHALLENGERS_AND_HYPERPOSITION_GWT_REENTRY"
   ],
   "promotion_state": {
     "canonical_s0_component_runtime_pass": true,
@@ -48,7 +63,9 @@
     "physical_grid10_component_runtime_pass": false,
     "entityos_whole_runtime_pass": false,
     "hcu_full_runtime_pass": false,
+    "base_work_package_promotion": false,
+    "canonical_semantics_promotion": false,
     "training_credit": 0
   },
-  "steering": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_79_DELTA_2026-08-26T0105P0700_GPT56SOL.json"
+  "steering": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_81_DELTA_2026-08-26T0150P0700_GPT56SOL.json"
 }

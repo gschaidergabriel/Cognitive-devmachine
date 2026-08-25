@@ -1,0 +1,109 @@
+{
+  "schema": "CLAY_TRIGGER2_PR1956_REAL_ATOM_MATERIALIZER_ADVERSARIAL_AUDIT/v1",
+  "date": "2026-08-26",
+  "trigger": "triggerwort2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "status": "DONOR_SOURCE_AUDIT_ZERO_PROMOTION_CREDIT",
+  "observed_main_before_write": "562d76a7057af7ba31514668d788eeabe020bbd6",
+  "authority": {
+    "supervisor_epoch": "8.84",
+    "mode": "FREE_ONLY",
+    "runtime_quiescence": "ACTIVE_FAIL_POST_STOP_PROVIDER_ATTEMPT_COUNTERS_INCREASING",
+    "provider_execution_performed": false,
+    "model_execution_performed": false,
+    "training_execution_performed": false,
+    "physical_grid10_execution_performed": false
+  },
+  "donor": {
+    "pr": 1956,
+    "state_observed": "OPEN_DRAFT_NONMERGEABLE",
+    "head_sha_observed": "386110a483ccdf911c38a75e1a6ceb9198f4228f",
+    "source": "tools/trigger2_dynamic_binding_materializer_v1.py",
+    "source_role": "DONOR_ONLY_NOT_CURRENT_MAIN",
+    "holdout_partition_seed": "TRIGGER2_SYMBOL_HOLDOUT_V1_20260825",
+    "holdout_count": 10
+  },
+  "exact_source_reported_atom_set_used_for_analysis": [
+    "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z",
+    "0", "1", "2", "3", "4", "5", "6", "7", "8", "9",
+    "yes", "no", "true", "false", "maybe", "unknown", "if", "then", "not", "and"
+  ],
+  "deterministic_partition_reproduction": {
+    "method": "Exact donor source expression sorted(atoms, key=sha256(seed + NUL + atom)) with first 10 reserved.",
+    "reserved_holdout_atoms_if_exact_46_names_are_supplied": ["R", "5", "no", "false", "0", "N", "I", "P", "C", "3"],
+    "preholdout_visible_atoms": ["U", "G", "9", "8", "then", "E", "T", "unknown", "X", "Z", "and", "O", "A", "2", "6", "not", "J", "yes", "B", "W", "F", "K", "7", "true", "L", "D", "Y", "Q", "if", "H", "4", "S", "maybe", "V", "1", "M"],
+    "language_bearing_holdout_atoms": ["no", "false"],
+    "language_bearing_prehHoldout_atoms": ["then", "unknown", "and", "not", "yes", "true", "if", "maybe"],
+    "evidence_class": "DETERMINISTIC_SOURCE_DERIVATION_NOT_MODEL_RUNTIME"
+  },
+  "findings": [
+    {
+      "id": "T2_PR1956_F1_ATOM_INVENTORY_SHAPE_ONLY",
+      "severity": "BLOCKING_FOR_REAL_MATERIALIZATION",
+      "observed": "load_atoms accepts any JSON list/object field containing exactly 46 unique non-empty strings. It does not verify membership in the measured accepted atom set, reject 'or', consume atoms_index row/token-ID records, or prove a content relationship to the supplied ABI manifest.",
+      "implication": "Hashing an arbitrary atom-inventory file beside an ABI-manifest file is provenance recording, not proof that the inventory is the manifest's accepted atom table."
+    },
+    {
+      "id": "T2_PR1956_F2_TOKENIZER_IDENTITY_HASH_WITHOUT_CONTEXTUAL_TOKENIZATION",
+      "severity": "BLOCKING_FOR_REAL_MATERIALIZATION",
+      "observed": "materialize hashes tokenizer_path into tokenizer_identity_sha256 but never invokes the tokenizer against final prompt/target bytes and never checks atom token IDs, target token count, target position, codebook occurrence tokenization, or chat-template rendering.",
+      "implication": "Tokenizer identity presence is not tokenizer-consumption evidence. Real atom rows remain non-admissible until exact contextual tokenization is executed and bound."
+    },
+    {
+      "id": "T2_PR1956_F3_HOLDOUT_LEAK_SUBSTRING_FALSE_POSITIVE",
+      "severity": "BLOCKING_FOR_REAL_46_ATOM_INPUT",
+      "observed": "validate_prehHoldout builds one raw joined prompt/target string and rejects when any held-out atom string is a substring. With the exact hash partition, held-out single-character atoms include R, P and C. Those characters occur in the donor's fixed non-atom renderer text (for example 'Return', proposition 'P', and 'CASE'). A deterministic local reproduction of the donor's renderer phrases found held-out R in templates 1/4, P in 1/2/3/4, and C in 2/4.",
+      "counterhypothesis": "If all atom lexemes were multi-character sentinel strings, substring screening could approximate leak detection.",
+      "adjudication": "That counterhypothesis does not apply to the measured 46-name ABI, which contains 36 one-character alphanumeric atoms. The current source check is valid for its synthetic ¤NN self-test but not for the real accepted alphabet.",
+      "required_fix": "Detect holdout-symbol leakage at explicit rendered codebook/target atom spans and/or exact tokenizer token IDs, never via unconstrained raw substring search."
+    },
+    {
+      "id": "T2_PR1956_F4_HOLDOUT_SEMANTIC_PRIOR_NUISANCE",
+      "severity": "SCIENTIFIC_CONFOUND_TO_MEASURE_NOT_AUTOMATIC_REJECTION",
+      "observed": "The deterministic donor partition would reserve 'no' and 'false' among the ten unseen symbols, while 'yes', 'true', 'maybe', 'unknown', 'if', 'then', 'not' and 'and' remain pre-holdout-visible.",
+      "hypothesis": "Pretrained label/verbalizer priors can make unseen-symbol performance depend partly on lexical semantics rather than only episode-local binding generalization.",
+      "counterhypothesis": "Exact active-codebook counterbalancing makes this lexical prior negligible after binder training.",
+      "required_discriminator": "Report per-atom and neutral-alphanumeric-versus-language-bearing accuracy, including deliberately flipped mappings; do not collapse all ten unseen atoms into one metric."
+    },
+    {
+      "id": "T2_PR1956_F5_TEN_HOLDOUT_ATOMS_REQUIRE_EXPLICIT_BALANCED_SCHEDULE",
+      "severity": "DESIGN_GATE",
+      "observed": "The donor reserves 10 holdout atoms while its pre-holdout path forms disjoint groups of 3 from the 36 visible atoms. Ten is not divisible by three and the holdout body is intentionally absent.",
+      "implication": "A future holdout materializer must explicitly preregister how ten symbols participate in three-way episode codebooks while preserving per-atom/per-class balance. Reusing non-overlapping triplet chunking would leave a remainder and is not an admissible implicit choice."
+    }
+  ],
+  "scientific_context": {
+    "prior_delta": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_ABI_SYMBOL_PRIOR_CONTEXTUAL_TOKEN_AUDIT_V1_GPT56SOL.json",
+    "method_support": [
+      "Wei et al. 2023 symbol tuning: arbitrary labels can improve learning of in-context mappings and flipped labels.",
+      "Fei et al. 2023: label biases are an explicit in-context-learning failure class.",
+      "Kossen et al. 2024: in-context label relationships can be learned while pretrained prediction preferences may remain."
+    ],
+    "boundary": "These papers motivate the nuisance test; they do not establish the effect on the measured Xeno checkpoint."
+  },
+  "successor_requirements": [
+    "Consume exact atoms_index.json records, not a free string list.",
+    "Cross-bind atom row, lexeme, accepted status, token ID and ABI manifest/member hash.",
+    "Explicitly reject 'or' and any atom outside the exact accepted 46.",
+    "Run the exact target tokenizer over final rendered bytes and verify every atom occurrence and target span against ABI token IDs.",
+    "Replace raw substring holdout leakage with span/token-aware leakage checks.",
+    "Freeze the actual holdout atom identities before evaluation and audit semantic-prior strata without exposing those strata to the model.",
+    "Preregister a balanced 10-atom holdout codebook schedule before opening holdout outcomes.",
+    "Keep family/provenance isolation and exact rendered-byte hashes in the same immutable split manifest."
+  ],
+  "credit_boundary": {
+    "new_source_research_delta": 1,
+    "donor_bug_found": 1,
+    "donor_fixed": 0,
+    "real_abi_rows_materialized": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "checkpoint_selection_credit": 0,
+    "jspace_model_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  },
+  "next_exact_action": "Do not merge or promote the PR1956 materializer as a real-ABI path. Salvage its factorial/counterbalance geometry into the current lane only after replacing free-string inventory admission and substring leakage with manifest-bound atoms_index plus exact contextual tokenizer/span verification; then materialize a small blinded pilot and measure semantic-prior strata separately."
+}

@@ -1,0 +1,144 @@
+{
+  "schema": "CLAY_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER/v26",
+  "date": "2026-08-25",
+  "local_trigger_time": "22:22+07:00",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "status": "CURRENT_RESEARCH_LEDGER_NONCANONICAL_SUCCESSOR_DYNAMIC",
+  "supersedes": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V25_GPT56SOL.json",
+  "inherits_all_nonconflicting_records_from": "T2-LEDGER-V25",
+  "revision_reason": "Moving-main reentry after v25 preserves its P1 semantic repair but corrects two stale-on-write lifecycle facts: the parallel standalone membership-predicate test file was retired after overlap discovery, and the single retained VPS execution request currently pins the full-adversary c14e67fd/e1ea564a target rather than the older historical df22782a target described by v25. Exact runtime execution is still unobserved, so rows/tokens/J-Space/training credit remain zero.",
+  "authority": {
+    "repository": "gschaidergabriel/clay-global-research-entity",
+    "branch": "main",
+    "observed_main_before_v26_write": "2a4e1f00f1b01c5e4603f81b3967a4bdbcb3bd42",
+    "observed_tree_before_v26_write": "87a852fbdcd672329982e67fa4b1f05c9f5e6e2d",
+    "supervisor_epoch": "8.78",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "architecture": "HCU_VARIABLE_COGNITIVE_GRID",
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "positive_jspace_causal_credit": 0,
+    "trigger2_a02_runtime_credit": 0
+  },
+  "artifact_lifecycle_overrides": [
+    {
+      "artifact_id": "T2-LEDGER-V25",
+      "status": "SUPERSEDED",
+      "successor": "T2-LEDGER-V26",
+      "revision_reason": "P1 source conclusions survive, but v25 predates duplicate-test retirement and contains a stale current-facing execution-request identity."
+    },
+    {
+      "artifact": "tools/trigger2_hyperposition_reference_labelers_v3.py",
+      "status": "CURRENT_SOURCE_P1_MEMBERSHIP_OPERAND_GUARD_IMPLEMENTED_EXECUTION_UNOBSERVED",
+      "repair_commit": "4cadc7414146c3ec34cc1342e2d4100a05357fd3",
+      "revision_reason": "IN/NOT_IN require explicit JSON-array operands and malformed operands reject structurally before membership evaluation."
+    },
+    {
+      "artifact": "tests/test_trigger2_hyperposition_reference_labelers_v3.py",
+      "status": "CURRENT_INTEGRATED_P1_TEST_SOURCE_EXECUTION_UNOBSERVED",
+      "revision_commit": "406199eaa67304ab970fce498afc0e07f66516e6",
+      "revision_reason": "Retained integrated lane covers malformed and valid IN/NOT_IN operand semantics with fail-closed zero-credit assertions."
+    },
+    {
+      "artifact": "tests/test_trigger2_hyperposition_reference_labelers_v3_context_predicate_guard.py",
+      "status": "SUPERSEDED_DUPLICATE_DONOR_REMOVED",
+      "created_commit": "f0ee640de348210f236c7c97431aee9a39610049",
+      "removed_commit": "aa613123adab610f15fac060aba1cf10b0c32219",
+      "successor": "tests/test_trigger2_hyperposition_reference_labelers_v3.py @ 406199eaa67304ab970fce498afc0e07f66516e6",
+      "revision_reason": "Parallel integrated regression already covered the same boundary; the duplicate lane was retired instead of retained as a second current test authority."
+    },
+    {
+      "artifact": "tools/trigger2_a02_discriminator_producer_auth_gate_v1.py",
+      "status": "CURRENT_SOURCE_IMPLEMENTED_GIT_OBJECT_LINEAGE_BOUND_RUNTIME_EXECUTION_UNOBSERVED",
+      "repair_commit": "064055e34a871eeadc55540a3b9fd44004991034"
+    },
+    {
+      "artifact": "tools/run_trigger2_repository_bound_a02_acceptance_v1.py",
+      "status": "CURRENT_EXECUTION_RUNNER_SOURCE_READY_FULL_ADVERSARY_SET_RUNTIME_RECEIPT_UNOBSERVED",
+      "secret_fence_commit": "347e7ce13c2e492b181994bd6e7f082573b6ad82",
+      "full_adversary_selection_commit": "c14e67fd2ea36681957287bebb4c0330e3e44cf7"
+    },
+    {
+      "artifact": "research_entity/claycode/autonomous/GO_VPS_EXECUTION_REQUEST_2026-08-25T1447Z.json",
+      "status": "CURRENT_SINGLE_EXECUTION_REQUEST_PINNED_FULL_ADVERSARY_TARGET",
+      "requested_head": "c14e67fd2ea36681957287bebb4c0330e3e44cf7",
+      "requested_tree": "e1ea564a715569cb6185736080dff6347c4bc352",
+      "request_revision_commit": "965da75e78ee9c3149df4d8df05e634744ed1137",
+      "revision_reason": "Current file content proves the retained immutable request is the full-adversary c14e67fd target. Do not reinterpret an older request revision as current."
+    },
+    {
+      "artifact": "CLAY_TRIGGER2_REPOSITORY_BOUND_A02_ACCEPTANCE/v1 runtime receipt",
+      "status": "NOT_OBSERVED",
+      "revision_reason": "Repository search during this cycle returned no persisted receipt. Request/source/test existence is not execution evidence."
+    },
+    {
+      "artifact": "tools/trigger2_generation_provenance_gate_v1.py + TRIGGER2_TRUSTED_SYNTHETIC_GENERATOR_AUTHORITY_V1.json",
+      "status": "CURRENT_COMPONENT_NEEDS_A03_REPLAY_ROOT_PROOF_OR_SUCCESSOR_REVISION"
+    },
+    {
+      "artifact": "immutable genesis/nonempty ordered-history producer authority",
+      "status": "BLOCKED_NEEDS_AUTHENTICATED_NONCIRCULAR_HISTORY_ROOT"
+    },
+    {
+      "artifact": "OBSERVED evidence producer/result identity",
+      "status": "BLOCKED_NEEDS_AUTHENTICATED_PRODUCER_AND_RESULT_BINDING"
+    },
+    {
+      "artifact": "tools/trigger2_binding_router_factorial_generator_v3.py",
+      "status": "BLOCKED_QUARANTINED_FROM_DIRECT_TRAINING",
+      "revision_reason": "Model-visible nuisance leakage remains dispositive under supervisor 8.78."
+    },
+    {
+      "artifact": "000_CLAY_ENTITYOS_HCU_FAST_BOOTSTRAP_SOURCE_CURRENT_2026-08-24 supervisor 8.63",
+      "status": "STALE_AS_CURRENT_AUTHORITY_USEFUL_BOOTSTRAP_DONOR",
+      "successor": "BOOTSTRAP_MINIMAL 8.78 + SUPERVISOR_STEERING_8_78 + T2-LEDGER-V26"
+    }
+  ],
+  "measurement_snapshot": {
+    "source": "free swarm/SYSTEM_ANALYSIS_LIVE.json",
+    "generated_at": "2026-08-25T15:40:18.583044+00:00",
+    "go_swarm": "RUNNING",
+    "distillery": "RUNNING",
+    "evidence_forge": "RUNNING",
+    "local_model": "NOT_READY",
+    "collected_source_tokens": 11621,
+    "accepted_packets": 0,
+    "accepted_dataset_tokens": 0,
+    "forge_accepted_candidate_states": 1,
+    "interpretation": "Conversion/admission evidence remains the bottleneck; additional raw data generation is not the highest-information action."
+  },
+  "generation_decision": {
+    "new_positive_rows": 0,
+    "new_hard_negative_rows_admitted": 0,
+    "positive_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "decision": "NO_NEW_ROWS_WITH_REASON",
+    "reason": "Repository-bound A02 runtime is unobserved; A03 replay-root, immutable history and authenticated OBSERVED producer/result identity remain open; downstream rendered nuisance/split/tokenizer/actionability/cross-encoding/multi-seed gates remain unpromoted."
+  },
+  "fused_training_laws_delta": [
+    "P1 membership predicate grammar is source-repaired and regression-covered at source level, but execution credit remains zero until an admitted exact-source run exists.",
+    "Moving-main current-facing ledgers must follow current file identity, not stale request revisions or nearby timestamps.",
+    "Equivalent parallel tests must converge to one retained current lane; removed duplicates remain historical donor provenance only.",
+    "A02 execution acceptance can establish only bounded component evidence; it cannot admit rows or mint J-Space/HCU/EntityOS/training credit.",
+    "A03 replay-root, immutable ordered-history authority and authenticated OBSERVED evidence production remain mandatory before positive pilot admission."
+  ],
+  "credits": {
+    "research_delta": 1,
+    "versioning_reentry_delta": 1,
+    "p1_source_repair_observed": 1,
+    "p1_integrated_test_source_observed": 1,
+    "duplicate_lane_retired": 1,
+    "positive_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "positive_jspace_causal_credit": 0,
+    "trigger2_a02_runtime_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0
+  },
+  "next_exact_action": "Execute the one retained clay-direct-dev request at c14e67fd2ea36681957287bebb4c0330e3e44cf7 / e1ea564a715569cb6185736080dff6347c4bc352 and persist the exact CLAY_TRIGGER2_REPOSITORY_BOUND_A02_ACCEPTANCE/v1 outer receipt. Then close A03 replay-root plus immutable history/OBSERVED producer identity and only afterward run downstream rendered leakage/tokenizer/actionability/cross-encoding/multi-seed promotion gates before any positive training rows."
+}

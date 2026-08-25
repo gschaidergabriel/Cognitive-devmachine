@@ -15,7 +15,7 @@ The materializer reserves:
 This is source/candidate tooling only and cannot mint training/runtime/J-Space credit.
 """
 from __future__ import annotations
-import argparse, collections, hashlib, json, math, re
+import argparse, collections, hashlib, itertools, json, math, re
 from pathlib import Path
 
 SCHEMA="TRIGGER2_DYNAMIC_CODEBOOK_BINDING_CANDIDATE/v2"
@@ -103,24 +103,26 @@ def emit_split(split,families,atoms,hashes):
         for atom_order_i,ordered in enumerate(rotations3(base_triplet)):
          for pid in perms:
           p=S3[pid]; mapping={CLASSES[i]:ordered[p[i]] for i in range(3)}
-          for base_cls in CLASSES:
-           for polarity in ("DIRECT","NEGATED"):
-            target_cls=base_cls if polarity=="DIRECT" else flip(base_cls)
-            query="P" if polarity=="DIRECT" else "NOT P"
-            order=tuple(CLASSES[(i+gi+atom_order_i)%3] for i in range(3))
-            prompt=codebook(mapping,order)+"\n"+render(template,fam["cases"][base_cls],query)
-            row={
-             "schema":SCHEMA,"split":split,"eval_family":eval_family,
-             "canonical_truth_allowed":False,"direct_effect_authority":False,"selected_using_holdout":False,
-             "target_semantic_class":target_cls,"episode_atom_triplet":list(ordered),"permutation_id":pid,
-             "realized_codebook":mapping,"target":mapping[target_cls],"prompt":prompt,"template_id":template,
-             "family_id":fam["family_id"],"provenance_ancestry_id":fam["ancestry_id"],
-             "query_polarity":polarity,"base_semantic_class":base_cls,
-             "atom_group":gi,"atom_order_rotation":atom_order_i,
-             **hashes,
-            }
-            row["row_id"]="T2MAT-"+hashlib.sha256(canon({k:v for k,v in row.items() if k!="row_id"}).encode()).hexdigest()[:20]
-            rows.append(row)
+          # Fully cross all six display orders. Random-looking order is not enough: the realized
+          # class-conditional order distribution must be exactly identical.
+          for display_order_i,order in enumerate(itertools.permutations(CLASSES)):
+           for base_cls in CLASSES:
+            for polarity in ("DIRECT","NEGATED"):
+             target_cls=base_cls if polarity=="DIRECT" else flip(base_cls)
+             query="P" if polarity=="DIRECT" else "NOT P"
+             prompt=codebook(mapping,order)+"\n"+render(template,fam["cases"][base_cls],query)
+             row={
+              "schema":SCHEMA,"split":split,"eval_family":eval_family,
+              "canonical_truth_allowed":False,"direct_effect_authority":False,"selected_using_holdout":False,
+              "target_semantic_class":target_cls,"episode_atom_triplet":list(ordered),"permutation_id":pid,
+              "realized_codebook":mapping,"target":mapping[target_cls],"prompt":prompt,"template_id":template,
+              "family_id":fam["family_id"],"provenance_ancestry_id":fam["ancestry_id"],
+              "query_polarity":polarity,"base_semantic_class":base_cls,"codebook_order":list(order),
+              "atom_group":gi,"atom_order_rotation":atom_order_i,"display_order_id":display_order_i,
+              **hashes,
+             }
+             row["row_id"]="T2MAT-"+hashlib.sha256(canon({k:v for k,v in row.items() if k!="row_id"}).encode()).hexdigest()[:20]
+             rows.append(row)
     return rows
 
 def mi(rows):
@@ -150,10 +152,26 @@ def validate_prehHoldout(rows, atoms, forbidden):
       for lx in (*CODEBOOK_LABELS,*forbidden):
         if re.search(rf"\b{re.escape(lx)}\b",outside,re.I):
           fails.append("LEXEME_LEAK:"+r["row_id"]+":"+lx); break
+    # Nuisance-only challenger: after masking semantic evidence, all model-visible nonsemantic
+    # factors must leave the target semantic class at chance. This catches label-seeded PRNG/hash order.
+    nuisance=collections.defaultdict(collections.Counter)
+    for r in train:
+      sig=(r["template_id"],r["query_polarity"],r["permutation_id"],tuple(r["episode_atom_triplet"]),tuple(r["codebook_order"]))
+      nuisance[sig][r["target_semantic_class"]]+=1
+    nuisance_correct=sum(max(c.values()) for c in nuisance.values())
+    nuisance_total=sum(sum(c.values()) for c in nuisance.values())
+    nuisance_acc=(nuisance_correct/nuisance_total) if nuisance_total else float("inf")
+    if not math.isfinite(nuisance_acc) or abs(nuisance_acc-(1/3))>1e-12:
+      fails.append("NUISANCE_ONLY_DECODER_ABOVE_CHANCE")
+    order_by_class={c:collections.Counter() for c in CLASSES}
+    for r in train: order_by_class[r["target_semantic_class"]][tuple(r["codebook_order"])]+=1
+    if len({tuple(sorted(v.items())) for v in order_by_class.values()})!=1:
+      fails.append("DISPLAY_ORDER_CLASS_CONDITIONAL_MISMATCH")
     return {
       "status":"PASS" if not fails else "FAIL","failures":sorted(set(fails)),"rows":len(rows),"train_rows":len(train),
       "validation_rows":sum(r["split"]=="VALIDATION" for r in rows),"train_mi_bits":m,
-      "train_atoms":len({r["target"] for r in train}),"reserved_holdout_atom_count":len(held),"holdout_partition_seed":HOLDOUT_PARTITION_SEED,
+      "train_atoms":len({r["target"] for r in train}),"display_orders":6,"nuisance_only_decoder_accuracy":nuisance_acc,
+      "semantic_ablation_chance_target":1/3,"reserved_holdout_atom_count":len(held),"holdout_partition_seed":HOLDOUT_PARTITION_SEED,
       "train_perms":list(TRAIN_PERMS),"validation_perm":VALIDATION_PERM,"reserved_holdout_perm":HOLDOUT_PERM,
       "frozen_holdout_template":FROZEN_TEMPLATE_ID,
       "credit":{"accepted_dataset_tokens":0,"training_credit":0,"jspace_model_runtime_credit":0},

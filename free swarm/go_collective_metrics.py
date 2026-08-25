@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import argparse
 import datetime as dt
+import hashlib
 import importlib.util
 import json
 from pathlib import Path
@@ -23,6 +24,14 @@ def _load_module(name: str, path: Path):
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
     return module
+
+
+def _sha256_file(path: Path) -> str:
+    h = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            h.update(chunk)
+    return h.hexdigest()
 
 
 _HERE = Path(__file__).resolve().parent
@@ -105,8 +114,8 @@ def main() -> int:
         "product": "EntityOS",
         "architecture": "HCU",
         "config_sha256": core.sha256_json(config),
-        "collector_sha256": core.sha256_file(Path(__file__)),
-        "collector_core_sha256": core.sha256_file(_CORE_PATH),
+        "collector_sha256": _sha256_file(Path(__file__)),
+        "collector_core_sha256": _sha256_file(_CORE_PATH),
         "bounded_live_snapshot": first_snapshot,
         "freshness": {
             "schema": freshness.FRESHNESS_SCHEMA,

@@ -1,0 +1,142 @@
+{
+  "schema": "CLAY_FORSCHUNGSRUN_1_SEMANTIC_EVIDENCE_BINDING_GAP/v1",
+  "date": "2026-08-25",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "user_trigger": "forschungsrun 1",
+  "persistent_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "stage": "ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP",
+  "authority_epoch_observed": "8.78",
+  "execution_mode": "FREE_ONLY",
+  "canonical_main_observed_before_write": "a5c86495ab57a3a593f8a3c16b4cba0ddf998886",
+  "scope": "TRIGGER1_PROMOTION_GATE_SEMANTIC_COUNTERBALANCE_EVIDENCE_AUTHENTICITY",
+  "observed_current_source": {
+    "promotion_gate": {
+      "path": "tools/trigger1_jspace_promotion_gate.py",
+      "blob_sha": "013bfdcd2961723dd731ec0e1982f7fabd59d51c",
+      "schema": "CLAY_TRIGGER1_JSPACE_PROMOTION_GATE/v4",
+      "semantic_guard_behavior": [
+        "accepts semantic_target_counterbalanced when the candidate field is literally true",
+        "accepts semantic target coverage when the declared semantic_targets set equals AFFIRMATIVE/NEGATIVE/NEUTRAL",
+        "accepts semantic_target_interaction_test when the candidate field is literally true"
+      ],
+      "case_level_recomputation_present": false,
+      "semantic_target_x_output_code_cross_table_recomputation_present": false,
+      "interaction_analysis_receipt_binding_present": false
+    },
+    "positive_guard_regression": {
+      "path": "tests/test_trigger1_semantic_target_counterbalance.py",
+      "blob_sha": "624f9a802136c5bdb7bd4b117f167dd48cdfd078",
+      "observation": "The positive fixture satisfies the semantic guard by inserting declaration fields into an in-memory candidate dictionary; it does not bind those declarations to case rows or runtime receipts."
+    },
+    "current_native_semantic_executor": {
+      "path": "tools/trigger1_local_qwen06_native_semantic_counterbalanced_execute.py",
+      "blob_sha": "07287f9ffd7d775a5f5c924cc191d6e4ee9e8738",
+      "observation": "The currently observed calibration and fresh-holdout cases all request AFFIRMATIVE while only A/B/C output-code identities are rotated. Its emitted promotion candidate does not contain the new semantic-target factorial declarations, so v4 currently fails closed rather than accidentally promoting this predecessor design."
+    }
+  },
+  "material_finding": {
+    "id": "DECLARATIVE_SEMANTIC_FACTORIAL_SELF_ATTESTATION_GAP",
+    "reality_level": "R1_INFERRED_FROM_EXACT_CURRENT_SOURCE",
+    "statement": "The v4 promotion boundary improved the semantic-target confound but still treats semantic factoriality and the interaction test as candidate-declared metadata. A syntactically valid candidate can therefore claim semantic balance and an interaction test without the gate itself recomputing either property from evidence-bearing case identities and runtime receipts.",
+    "importance": "At a scientific promotion boundary, self-declared experimental design metadata is weaker than evidence-bound reconstruction. The current guard prevents the known predecessor runner from promotion, but it does not yet prove that a future candidate's declarations correspond to what was actually executed.",
+    "credit_effect": "SOURCE_LEVEL_RESEARCH_FINDING_ONLY_NO_RUNTIME_OR_SEMANTIC_PROMOTION"
+  },
+  "counterhypothesis": {
+    "id": "H0_TRUSTED_PRODUCER_MAKES_GATE_RECOMPUTATION_REDUNDANT",
+    "statement": "If every candidate can only be produced by one trusted executor whose runtime receipt already commits to all case rows, then declarative semantic fields may be sufficient at the promotion gate.",
+    "why_not_closed": "The gate is explicitly an evidence adjudication boundary and consumes a candidate object. Exact current v4 does not verify a producer identity that cryptographically binds semantic declarations to the referenced runtime rows, nor does it independently derive the factorial design from those rows. Therefore producer trust is not established by the gate itself."
+  },
+  "source_level_adversarial_witness": {
+    "classification": "NOT_EXECUTED_ANALYTIC_WITNESS",
+    "construction": [
+      "Keep otherwise valid mechanism, identity, six-control, calibration/holdout split and receipt-shaped evidence.",
+      "Let the actual executed cases remain single-target AFFIRMATIVE-only or otherwise non-factorial.",
+      "Declare semantic_target_counterbalanced=true in calibration and holdout.",
+      "Declare semantic_targets=[AFFIRMATIVE,NEGATIVE,NEUTRAL] in both splits.",
+      "Declare holdout.semantic_target_interaction_test=true."
+    ],
+    "prediction_from_current_source": "The semantic-target-specific v4 helper has no case-level data from which to discover the mismatch and therefore accepts this semantic guard if the declarations are present. End-to-end owner promotion still depends on all other gates; this witness is scoped only to semantic-design authenticity.",
+    "falsifier": "Show an exact-current promotion path outside the inspected helper that recomputes semantic targets and interaction evidence from digest-bound runtime rows before scientific_independence becomes true."
+  },
+  "relationship_to_parallel_forschungsrun_1_work": {
+    "semantic_target_counterbalance_v4": "SUCCESSOR_HARDENING_NOT_REJECTION",
+    "lexical_deconfound": "COMPLEMENTARY",
+    "token_scope_boundary": "COMPLEMENTARY",
+    "residual_norm_operating_point": "COMPLEMENTARY",
+    "semantic_simplex_rank_pr_1926": "ORTHOGONAL_COMPLEMENTARY",
+    "output_metric_context_boundary": "ORTHOGONAL_COMPLEMENTARY",
+    "downstream_causal_transport": "ORTHOGONAL_COMPLEMENTARY"
+  },
+  "proposed_successor_gate": {
+    "name": "TRIGGER1_SEMANTIC_FACTORIAL_EVIDENCE_BINDING/v1",
+    "principle": "Promotion-relevant semantic factoriality is derived from exact evidence rows, never granted from summary booleans alone.",
+    "required_split_evidence": [
+      "calibration.semantic_factorial_receipt_sha256",
+      "holdout.semantic_factorial_receipt_sha256",
+      "holdout.semantic_interaction_analysis_receipt_sha256"
+    ],
+    "required_case_row_fields": [
+      "case_id",
+      "seed",
+      "prompt_sha256",
+      "semantic_target",
+      "output_code_identity",
+      "split_family_id",
+      "control_runtime_receipt_sha256 map for every required control"
+    ],
+    "recomputation_rules": [
+      "Normalize and recompute semantic target counts from case rows; require AFFIRMATIVE, NEGATIVE and NEUTRAL in calibration and fresh holdout.",
+      "Recompute the semantic_target x output_code_identity table rather than trusting label_mapping_counterbalanced or semantic_target_counterbalanced booleans.",
+      "Require every preregistered target x code cell to be populated and, for the strict three-by-three design, require exact or declared bounded count balance.",
+      "Bind the split-level factorial receipt digest to the canonical ordered case-row identities and their six-control runtime receipt digests.",
+      "Require the interaction-analysis receipt to bind the exact same holdout case universe, metric-definition digest, treatment/control identities and preregistered analysis implementation digest.",
+      "Reject any summary declaration that disagrees with the recomputed evidence rows."
+    ],
+    "minimum_strict_design": {
+      "semantic_targets": ["AFFIRMATIVE", "NEGATIVE", "NEUTRAL"],
+      "output_codes": ["A", "B", "C"],
+      "factorial_cells": 9,
+      "minimum_cases_per_split_before_control_expansion": 9,
+      "controls": [
+        "BASELINE",
+        "+VECTOR",
+        "SIGN_FLIP",
+        "NULL_VECTOR",
+        "ORTHOGONAL_SAME_NORM",
+        "PERMUTED_SAME_NORM"
+      ],
+      "minimum_runtime_observations_per_split_if_one_observation_per_cell_control": 54
+    },
+    "interaction_decision": {
+      "positive_semantic_specificity": "The preregistered treatment-by-semantic-target interaction is target-specific on fresh holdout; SIGN_FLIP reverses the class-selective effect and null/nuisance controls do not reproduce it.",
+      "generic_compliance_rejection": "A broad similar uplift across all requested semantic targets is classified as generic compliance/code-emission change, not semantic specificity.",
+      "evidence_binding": "The interaction verdict is accepted only if its analysis receipt references the exact holdout factorial receipt and metric definition digest."
+    }
+  },
+  "implementation_sequence": [
+    "First harden the promotion gate and add a deterministic regression containing a lying semantic-summary candidate whose case rows are single-target; require rejection.",
+    "Add a positive synthetic factorial fixture where row-derived 3x3 balance and receipt bindings are internally consistent.",
+    "Only then update the native semantic executor to emit the real label-free semantic-target x code factorial case rows and interaction receipt.",
+    "Preserve lexical-deconfound, semantic-simplex dimensionality, token-scope matching, residual-norm calibration, output-context validity and downstream-transport gates as independent requirements rather than collapsing them into one score.",
+    "Execute the hardened source regressions on an admitted exact-current zero-cost surface before claiming test-runtime credit; a new native intervention remains separately coordinated."
+  ],
+  "unusual_experiment": {
+    "executed_by_this_organ": false,
+    "status": "NO_NEW_UNUSUAL_EXPERIMENT",
+    "reason": "This delta is deterministic exact-source review and protocol hardening research. No model/provider intervention or paid surface was invoked."
+  },
+  "credit_change": {
+    "new_runtime_credit": 0,
+    "existing_native_llamacpp_cvec_component_credit_revoked": false,
+    "canonical_semantics_promotion": false,
+    "jspace_model_runtime_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "training_credit": 0
+  },
+  "research_delta": "Forschungsrun 1 finds a remaining evidence-authenticity gap in Trigger-1 v4: semantic-target counterbalance and interaction are now required, but the promotion helper trusts summary declarations instead of deriving them from digest-bound executed cases. The successor gate should reconstruct the semantic-target x output-code factorial and bind the interaction analysis to the exact six-control runtime case universe before scientific semantic promotion can be considered.",
+  "next_exact_action": "Implement the case-row-bound semantic-factorial gate plus lying-summary and valid-factorial deterministic regressions; then run those exact-source regressions on an admitted zero-cost execution surface before any further native semantic promotion attempt."
+}

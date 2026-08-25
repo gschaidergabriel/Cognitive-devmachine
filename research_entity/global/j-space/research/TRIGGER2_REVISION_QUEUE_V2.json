@@ -1,8 +1,10 @@
 {
   "schema": "CLAY_TRIGGER2_REVISION_QUEUE/v2",
-  "queue_version": "2.0.0",
+  "queue_version": "2.0.1",
   "date": "2026-08-25",
   "supersedes": "research_entity/global/j-space/research/TRIGGER2_REVISION_QUEUE_V1.json",
+  "candidate_revision_of": "2.0.0",
+  "candidate_revision_reason": "RQ2-003 updated after adversarial audit hardened Hyperposition labeler candidate to 1.0.1; exact committed execution remains pending, so training admission stays blocked.",
   "status": "LIVE_REVIEW_QUEUE_REDISCOVER_EVERY_TRIGGER2",
   "authority_snapshot": {
     "main_observed": "c05fd30f34b118efa14e625323f50971c5dcd7c4",
@@ -38,8 +40,8 @@
       "priority": "P0",
       "artifact": "positive Hyperposition/GRF transition-resolution-test-order-salience supervision",
       "current_state": "BLOCKED_UNTIL_EXACT_LABELER_AND_GATE_VALIDATION",
-      "reason": "Candidate reference labelers and TrainingTrace gate-v2 exist on PR #2009 but exact committed execution is not yet observed.",
-      "required_action": "Execute exact committed tests; do not convert source/local-smoke evidence into training admission."
+      "reason": "PR #2009 now contains Hyperposition reference-labeler contract 1.0.1-candidate with fail-closed guards for unknown target IDs, duplicate branch IDs, merge collisions, invalid PASS targets and conflicting relation reuse for one evidence/causal ancestry. TrainingTrace gate-v2 also exists, but exact committed execution of the current bytes is not yet observed.",
+      "required_action": "Execute exact committed tests for labeler 1.0.1-candidate and TrainingTrace gate-v2. Do not convert source, code-review, local-smoke or prior-candidate evidence into training admission."
     },
     {
       "queue_id": "RQ2-004",
@@ -99,5 +101,5 @@
       "required_action": "Counterbalance lexical/template/branch-order variants, add validation/frozen holdout families and pass current candidate/leakage/version gates before any training admission."
     }
   ],
-  "next_queue_head": "RQ2-003 + RQ2-004: exact-test labeler/gate candidate, then retrofit highest-value cognitive-process trajectories into current owner-target Hyperposition-native form."
+  "next_queue_head": "RQ2-003 + RQ2-004: exact-test labeler/gate current bytes, then retrofit highest-value cognitive-process trajectories into current owner-target Hyperposition-native form."
 }

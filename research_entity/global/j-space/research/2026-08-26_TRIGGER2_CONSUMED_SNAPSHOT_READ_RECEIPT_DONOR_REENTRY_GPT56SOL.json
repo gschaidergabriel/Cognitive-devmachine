@@ -1,0 +1,41 @@
+{
+  "schema": "CLAY_TRIGGER2_CONSUMED_SNAPSHOT_READ_RECEIPT_DONOR_REENTRY/v1",
+  "date": "2026-08-26",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "status": "DONOR_ONLY_NONCANONICAL_RESEARCH_DELTA",
+  "authority_epoch": "8.81_DELTA",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "reentry": {
+    "current_canonical_physical_grid10_source": "tools/xeno_physical_grid10_acceptance_v2.py",
+    "canonical_source_commit_observed": "0011673f34bc55b838f52420376df6d68e40d9be",
+    "canonical_execution_request": "research_entity/execution_requests/2026-08-26_TRIGGER2_PHYSICAL_GRID10_V2_REPOSITORY_BOUND_EXECUTION_PIN_GPT56SOL_0205P0700.json",
+    "duplicate_source_commit_created_then_removed": "3ae859b235223286bf2331652327a5ca43e0a048",
+    "duplicate_removal_commit": "7721be123cbab89910e6e5e307ba4e3539d44af6",
+    "reason": "A parallel Trigger-2 organ had already committed and pinned the canonical physical GRID10 v2 harness. The duplicate proof lane was removed from current main to preserve one implementation/execution authority."
+  },
+  "unique_donor_delta_preserved": {
+    "problem": "Declared NODE_RESULT epoch/digest equality is weaker than proof that the payload was actually produced from those consumed S1 bytes.",
+    "candidate_mechanism": "Bind a source-hash-qualified producer/read receipt to producer PID, source node id, consumed generation/epoch/digest, consumed selected-task digest and payload digest; require declared snapshot identity to equal consumed identity before deterministic coordinator admission.",
+    "adversarial_case": "Produce payload from an older S1 observation, then rewrite only declared state_epoch/state_digest/generation and recompute packet_digest. A consumed-snapshot gate must still reject.",
+    "boundary": "A self-authored receipt hash alone is not authoritative attestation. Credit requires exact source-bound producer execution or a stronger trusted read-to-result measurement."
+  },
+  "hypothesis": "Exact source-bound producer execution plus an explicit read-to-result receipt can distinguish genuine current observations from metadata-rewritten stale payloads more strongly than packet epoch/digest equality alone.",
+  "counterhypothesis": "The current canonical v2 harness's exact source binding, explicit read transaction, writer-free barrier, per-process PID binding and stale epoch/digest rejection may already make an additional in-packet receipt redundant for bounded physical GRID10 component credit.",
+  "cheapest_high_information_discriminator": "After the pinned canonical v2 repository-bound run returns, construct one deterministic declared-current/consumed-stale adversarial producer fixture against the exact executed source. If current acceptance can be fooled without changing trusted source identity, promote an explicit read-to-result attestation gate; otherwise retain the receipt design as a donor and avoid redundant protocol surface.",
+  "training_effect": {
+    "positive_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "training_executed": false,
+    "training_credit": 0
+  },
+  "runtime_credit": {
+    "physical_grid10": 0,
+    "whole_hcu": 0,
+    "whole_entityos": 0,
+    "jspace_model": 0
+  }
+}

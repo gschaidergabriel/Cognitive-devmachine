@@ -28,7 +28,36 @@ REQUIRED_HASHES = (
 
 
 def _sha(x: Any) -> bool:
-    return isinstance(x, str) and bool(_SHA256.fullmatch(x.lower()))
+    return isinstance(x, str) and bool(_SHA256.fullmatch(x.lower())) and x.lower() != ("0" * 64)
+
+
+def _file_sha256(path: Path) -> str:
+    h = hashlib.sha256()
+    with path.open("rb") as f:
+        for chunk in iter(lambda: f.read(1024 * 1024), b""):
+            h.update(chunk)
+    return h.hexdigest()
+
+
+def verify_evidence_bytes(row: dict[str, Any], evidence_files: dict[str, Path]) -> list[str]:
+    """Bind claimed materialization digests to the exact files supplied for export.
+
+    This proves byte identity only. It does not prove that the contents semantically
+    establish tokenizer quality, partition correctness, counterbalance, or admission.
+    """
+    failures: list[str] = []
+    mat = row.get("abi_materialization") if isinstance(row, dict) else None
+    if not isinstance(mat, dict):
+        return ["ABI_MATERIALIZATION_REQUIRED"]
+    for key in REQUIRED_HASHES:
+        path = evidence_files.get(key)
+        if not isinstance(path, Path) or not path.is_file():
+            failures.append("EVIDENCE_FILE_REQUIRED:" + key)
+            continue
+        actual = _file_sha256(path)
+        if mat.get(key) != actual:
+            failures.append("EVIDENCE_BYTE_HASH_MISMATCH:" + key)
+    return failures
 
 
 def _canonical_json(obj: Any) -> bytes:
@@ -136,12 +165,33 @@ def main() -> int:
     ap.add_argument("input", type=Path)
     ap.add_argument("--model-jsonl", required=True, type=Path)
     ap.add_argument("--audit-jsonl", required=True, type=Path)
+    ap.add_argument("--abi-manifest", required=True, type=Path)
+    ap.add_argument("--symbol-partition-manifest", required=True, type=Path)
+    ap.add_argument("--tokenizer-identity", required=True, type=Path)
+    ap.add_argument("--materialization-receipt", required=True, type=Path)
     args=ap.parse_args()
+    evidence_files = {
+        "abi_manifest_sha256": args.abi_manifest,
+        "symbol_partition_manifest_sha256": args.symbol_partition_manifest,
+        "tokenizer_identity_sha256": args.tokenizer_identity,
+        "materialization_receipt_sha256": args.materialization_receipt,
+    }
     rows=_load(args.input)
-    results=[adjudicate(r) for r in rows]
+    results=[]
+    for row in rows:
+        result=adjudicate(row)
+        byte_failures=verify_evidence_bytes(row, evidence_files) if result["projection_pass"] else []
+        if byte_failures:
+            result["failures"]=sorted(set(result["failures"] + byte_failures))
+            result["projection_pass"]=False
+            result["model_record"]=None
+            result["audit_record"]=None
+        results.append(result)
     bad=[{"index":i,"failures":r["failures"]} for i,r in enumerate(results) if not r["projection_pass"]]
     summary={"schema":SCHEMA,"rows_total":len(rows),"rows_pass":len(rows)-len(bad),"rows_fail":len(bad),"failures":bad,
-             "outputs_written":False,"canonical_dataset_admission":False,"accepted_dataset_tokens_minted":0}
+             "outputs_written":False,"canonical_dataset_admission":False,"accepted_dataset_tokens_minted":0,
+             "evidence_byte_identity_checked":True,
+             "evidence_semantics_authenticated":False}
     if bad:
         print(json.dumps(summary, sort_keys=True))
         return 1

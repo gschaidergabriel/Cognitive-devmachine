@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """Deterministic ClayCode envelope adapter for COGNITIVE_PROCESS_ABI/v1.
 
-This is an executable transport/validation bridge, not a claim that the full cognitive
-payload is natively lowered into ClayCode TypedIR yet. The typed ABI payload remains a
-canonical deterministic JSON value inside a ClayCode BASE-D V18 candidate envelope; the
-actual checked-in ClayCode frontend parses/canonicalizes the envelope and binds its
-source/grammar/semantic hashes.
+This is an executable transport/validation bridge over the single canonical ClayCode
+cognitive protocol contract. It is not a claim that the full cognitive payload is natively
+lowered into ClayCode TypedIR yet. The typed ABI payload remains a canonical deterministic
+JSON value inside a ClayCode BASE-D V18 candidate envelope; the actual checked-in ClayCode
+frontend parses/canonicalizes the envelope and binds its source/grammar/semantic hashes.
 
 Authority boundary: this adapter cannot grant canonical truth, capability, coordinator,
 security, real-effect or Global J-Space causal authority. Model/Claude/provider execution
@@ -28,7 +28,7 @@ if str(TOOLS) not in sys.path:
 from claycode_base_frontend import DEFAULT_GRAMMAR, compile_frontend
 
 ABI_PATH = ROOT / "research_entity/global/COGNITIVE_PROCESS_ABI_v1.json"
-PROTOCOL_PATH = ROOT / "research_entity/claycode/cognitive/COGNITIVE_PROCESS_PROTOCOL_v1.clay"
+PROTOCOL_PATH = ROOT / "research_entity/claycode/contracts/ZERO_ENTITYOS_COGNITIVE_PROTOCOL_V1.clay"
 ENVELOPE_SCHEMA = "CLAYCODE_COGNITIVE_ENVELOPE/v1"
 PAYLOAD_ENCODING = "DETERMINISTIC_JSON_V1"
 SURFACE = "BASE_D_V18_REWARD_RELATIONS_CANDIDATE"

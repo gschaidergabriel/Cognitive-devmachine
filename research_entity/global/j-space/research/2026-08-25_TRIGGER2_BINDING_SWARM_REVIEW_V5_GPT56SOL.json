@@ -1,0 +1,271 @@
+{
+  "schema": "CLAY_TRIGGER2_BINDING_SWARM_REVIEW/v5",
+  "date": "2026-08-25",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "status": "RESEARCH_DELTA_COMMITTED_CANDIDATE_NOT_ADMITTED",
+  "authority_observed": {
+    "canonical_main": "0ac33c0ce6f2be3bb9c15b61db72b1bc07802b4a",
+    "supervisor_epoch": "8.78",
+    "execution_mode": "FREE_ONLY",
+    "active_trigger2_pr": 1956,
+    "active_trigger2_branch_head_before_this_write": "3fb72546c483fa1e84e036ba295df434e553411f",
+    "paid_training_executed": false,
+    "provider_preflight_executed": false
+  },
+  "inherits": [
+    "research_entity/global/j-space/research/2026-08-25_TRIGGER2_CLAUDE_XENO_VECTOR_EVIDENCE_INGEST_V1_GPT56SOL.json",
+    "research_entity/global/j-space/research/2026-08-25_TRIGGER2_BINDING_SWARM_REVIEW_V4_GPT56SOL.json",
+    "research_entity/claycode/TRIGGER2_XENO_FUNCTIONALITY_TO_DATA_MATRIX_V2.md",
+    "research_entity/triggers/TRIGGER2_QWEN35_08B_TRAINING_RESEARCH_PROTOCOL_V2.md",
+    "research_entity/global/XENO_HCU_GO_TARGET_ARCHITECTURE_OWNER_DIRECTIVE_2026-08-25.md"
+  ],
+  "new_gate_delta": {
+    "path": "tools/trigger2_dynamic_codebook_binding_gate_v3.py",
+    "commit": "221033d8d3876ecad307ad2b172bcaa49f434610",
+    "adds": [
+      "parse and bind actual codebook entry order rather than treating order as irrelevant formatting",
+      "require all six codebook entry orders in TRAIN",
+      "require near-zero mutual information for semantic-class versus target-position",
+      "require near-zero mutual information for emitted-symbol versus target-position",
+      "bind an exact atom-tokenization audit to the exact tokenizer-identity bytes",
+      "reject any episode atom not measured as exactly one token at the bound tokenizer",
+      "retain v2 exact-byte provenance and pre-holdout permutation/symbol/template isolation",
+      "require explicit multi-role candidate review fields"
+    ],
+    "boundary": "source/candidate validation only; no canonical admission or runtime/training credit"
+  },
+  "external_research_delta": [
+    {
+      "source": "Qwen/Qwen3.5-0.8B and Qwen/Qwen3.5-0.8B-Base official Hugging Face repositories",
+      "observed": "Qwen3.5-0.8B uses a hybrid sequence model with full_attention_interval=4; exact tokenizer artifacts are versioned model inputs.",
+      "dataset_or_eval_change": [
+        "bind every atom/token-length claim to exact tokenizer bytes rather than model-family name",
+        "J-Space intervention rows must bind module/site type, not only numeric layer index",
+        "post-FT and Q4 evaluation must rerun tokenization and site-identity checks at exact selected artifact"
+      ]
+    },
+    {
+      "source": "Wu, Geiger, Milliere 2025, How Do Transformers Learn Variable Binding in Symbolic Programs, arXiv:2505.20896",
+      "observed": "The studied Transformer had to dereference assignment chains up to four steps with distractor chains, and passed through a shallow early-assignment heuristic before systematic binding emerged.",
+      "dataset_or_eval_change": [
+        "add depth-2/3/4 binding-chain curriculum and frozen depth-4 OOD slice",
+        "randomize assignment order and target location",
+        "add hard negatives where the earliest or nearest assignment is wrong but a later chained binding is correct",
+        "track depth-conditioned accuracy so a shallow heuristic cannot hide under aggregate score"
+      ]
+    },
+    {
+      "source": "Bertalanic and Fortuna 2026, The Cost of Consensus, arXiv:2605.00914",
+      "observed": "In the reported homogeneous N=10 debate setting, conformity and consensus collapse can make debate more costly than isolated self-correction.",
+      "dataset_or_eval_change": [
+        "add isolated-self-correction as a matched-budget GRID10 challenger",
+        "train/evaluate disagreement preservation rather than unconditional peer adoption",
+        "add correct-minority versus wrong-majority trajectories with ancestry-aware retention"
+      ]
+    },
+    {
+      "source": "Yan et al. 2026, When Truth Is Distributed, arXiv:2608.03421",
+      "observed": "A single false testimony can propagate through homogeneous multi-agent communication and persist after the original source exits.",
+      "dataset_or_eval_change": [
+        "add root-evidence-lineage tracking to consensus hard negatives",
+        "count copied testimony as one ancestry branch rather than independent corroboration",
+        "require an evidence-bearing discriminator before Hyperposition collapse when many nodes inherit one root claim"
+      ]
+    }
+  ],
+  "swarm_review_roles": [
+    {
+      "role": "ARCHITECTURE_REVIEWER",
+      "verdict": "PASS_WITH_BOUNDARY",
+      "finding": "Binding curriculum remains a model-facing primitive inside Xeno/HCU; it must not replace boot/join/state/lease/Hyperposition/GWT/EffectGate training families."
+    },
+    {
+      "role": "EVIDENCE_BOUNDARY_REVIEWER",
+      "verdict": "PASS",
+      "finding": "No Qwen3.5 positive J-Space control label is created. Qwen3-0.6B causal/vector evidence remains cross-model methodology only."
+    },
+    {
+      "role": "LEAKAGE_RED_TEAM",
+      "verdict": "NEW_CRITICAL_DELTA",
+      "finding": "A correct class-to-atom permutation can still leak through fixed codebook line order. Position must be independently counterbalanced and audited."
+    },
+    {
+      "role": "CAUSAL_REVIEWER",
+      "verdict": "PASS_WITH_NEW_OOD",
+      "finding": "Binding evaluation must distinguish shallow assignment heuristics from true chained dereference by depth, distractors, and assignment-order interventions."
+    },
+    {
+      "role": "GRID10_CORRELATION_REVIEWER",
+      "verdict": "PASS_WITH_NEW_HARD_NEGATIVES",
+      "finding": "Ten identical checkpoints are not ten independent evidence sources. Root ancestry and matched isolated-self-correction baselines are mandatory."
+    },
+    {
+      "role": "TOKENIZER_REVIEWER",
+      "verdict": "NEW_CRITICAL_DELTA",
+      "finding": "Single-token atom claims must be regenerated for exact tokenizer bytes; tokenizer-family similarity cannot establish the property."
+    },
+    {
+      "role": "MINIMALITY_REVIEWER",
+      "verdict": "PASS",
+      "finding": "Do not broaden primary training toward semantics, HRR/MAP algebra, or generic world knowledge while measured binding/routing remains the dominant gap."
+    }
+  ],
+  "candidate_example_blueprints": [
+    {
+      "id": "BIND_DEPTH4_DISTRACTOR_POS",
+      "family": "DYNAMIC_CODEBOOK_BINDING_OOD",
+      "model_visible_shape": "[CODEBOOK] ... [/CODEBOOK] plus four assignment links, two irrelevant chains, then a query for the terminal variable",
+      "target_rule": "follow all four episode-local links, resolve the semantic state, then emit only the atom selected by the current codebook",
+      "hard_negative": "emit the atom attached to an earlier assignment or nearest textual assignment",
+      "admission": "CANDIDATE_NOT_ADMITTED"
+    },
+    {
+      "id": "BIND_EARLY_ASSIGNMENT_HEURISTIC_TRAP",
+      "family": "DYNAMIC_CODEBOOK_BINDING_HARD_NEGATIVE",
+      "model_visible_shape": "the first assignment points toward a distractor; a later reassignment plus chain determines the queried value",
+      "target_rule": "use the causally active assignment chain, not first-mention position",
+      "hard_negative": "choose first assignment",
+      "admission": "CANDIDATE_NOT_ADMITTED"
+    },
+    {
+      "id": "BIND_CODEBOOK_LINE_POSITION_TRAP",
+      "family": "DYNAMIC_CODEBOOK_BINDING_HARD_NEGATIVE",
+      "model_visible_shape": "identical semantic case and atom triplet, but codebook entry order is permuted independently of class-to-atom mapping",
+      "target_rule": "emit mapping-derived atom independent of first/second/third codebook line",
+      "hard_negative": "choose atom by target class line position",
+      "required_metric": "I(class;position)<=1e-6 and I(symbol;position)<=1e-6 in audited TRAIN seed",
+      "admission": "CANDIDATE_NOT_ADMITTED"
+    },
+    {
+      "id": "BIND_TOKENIZER_REBIND_NEG",
+      "family": "ENGINE_TOKENIZER_IDENTITY_HARD_NEGATIVE",
+      "model_visible_shape": "same human-readable atom inventory referenced under a different tokenizer identity",
+      "target_rule": "reject single-token guarantee until exact tokenizer audit is recomputed and hash-bound",
+      "hard_negative": "inherit token count from another Qwen3.5 tokenizer or revision",
+      "admission": "CANDIDATE_NOT_ADMITTED"
+    },
+    {
+      "id": "JSPACE_SITE_TYPE_IDENTITY_NEG",
+      "family": "JSPACE_EVIDENCE_BOUNDARY",
+      "model_visible_shape": "an intervention receipt names layer N but omits whether the site is linear-attention or full-attention and omits exact model/tokenizer identity",
+      "target_rule": "do not promote to positive J-Space control evidence",
+      "hard_negative": "treat equal layer number as equal causal site",
+      "admission": "CANDIDATE_NOT_ADMITTED"
+    },
+    {
+      "id": "GRID10_FALSE_ROOT_PROPAGATION",
+      "family": "CORRELATED_CONSENSUS_HARD_NEGATIVE",
+      "model_visible_shape": "one node introduces unsupported claim H1; seven later nodes repeat H1 through explicit ancestry links; two nodes retain independent H2 evidence",
+      "target_rule": "treat repeated H1 as one root evidence lineage, preserve H2, request discriminator, do not collapse by count",
+      "hard_negative": "8-to-2 majority collapse to H1",
+      "admission": "CANDIDATE_NOT_ADMITTED"
+    },
+    {
+      "id": "GRID10_SOURCE_EXIT_PERSISTENCE",
+      "family": "CORRELATED_CONSENSUS_HARD_NEGATIVE",
+      "model_visible_shape": "original H1 source node leaves, but copied H1 remains in descendant NODE_RESULT packets",
+      "target_rule": "retain original root provenance and uncertainty; source exit does not convert copied testimony into independent evidence",
+      "hard_negative": "re-root each surviving copy as fresh corroboration",
+      "admission": "CANDIDATE_NOT_ADMITTED"
+    },
+    {
+      "id": "GRID10_ISOLATED_SELF_CORRECTION_CHALLENGER",
+      "family": "MATCHED_BUDGET_EVAL",
+      "model_visible_shape": "same base checkpoint and same total token/sample budget assigned either to isolated self-correction or unguided ten-node peer exchange",
+      "target_rule": "credit GRID10 only for measured advantage beyond the matched challenger, not for extra tokens or agreement",
+      "hard_negative": "declare collective cognition because ten outputs were produced",
+      "admission": "EVAL_BLUEPRINT_NOT_TRAINING_FACT"
+    },
+    {
+      "id": "GRID10_LEASE_CONSENSUS_TRAP",
+      "family": "STATE_AUTHORITY_HARD_NEGATIVE",
+      "model_visible_shape": "nine ordinary nodes agree that S1 should be changed; none holds a valid scoped coordinator lease",
+      "target_rule": "emit NODE_RESULT proposals only; no S1 write",
+      "hard_negative": "majority grants write authority",
+      "admission": "CANDIDATE_NOT_ADMITTED"
+    },
+    {
+      "id": "HYPERPOSITION_ANCESTRY_WEIGHTED_KEEP_OPEN",
+      "family": "SEMANTIC_HYPERPOSITION",
+      "model_visible_shape": "candidate H1 has many descendants but one root; H2 has one direct independent evidence record with incompatible outcome",
+      "target_rule": "keep both branches open until a discriminator resolves the conflict",
+      "hard_negative": "collapse to the branch with more packets",
+      "admission": "CANDIDATE_NOT_ADMITTED"
+    },
+    {
+      "id": "GWT_BROADCAST_NOT_TRUTH",
+      "family": "GWT_HARD_NEGATIVE",
+      "model_visible_shape": "workspace candidate wins competition and is broadcast/acknowledged by all ten nodes, but no external evidence closes its factual uncertainty",
+      "target_rule": "grant broadcast/uptake credit only; preserve factual uncertainty",
+      "hard_negative": "broadcast recurrence mints canonical truth",
+      "admission": "CANDIDATE_NOT_ADMITTED"
+    },
+    {
+      "id": "JSPACE_DECODED_NOT_ACTIONABLE",
+      "family": "JSPACE_HARD_NEGATIVE",
+      "model_visible_shape": "a semantic variable is linearly decodable at a site, but intervention/rescue evidence is absent or negative",
+      "target_rule": "classify as observation/readout only, not writable control",
+      "hard_negative": "probe accuracy implies causal steering interface",
+      "admission": "CANDIDATE_NOT_ADMITTED"
+    }
+  ],
+  "dataset_compiler_delta": {
+    "binding_primary": [
+      "exact S3 mapping realization",
+      "independent codebook entry-order randomization",
+      "class-symbol and class-position counterbalance",
+      "depth-conditioned multi-hop binding with distractor chains",
+      "frozen unseen template, permutation, symbol and lexical families",
+      "exact tokenizer-bound atom tokenization audit"
+    ],
+    "grid10_adversarial": [
+      "root-lineage correlated consensus",
+      "false-testimony propagation after source exit",
+      "majority-without-lease authority trap",
+      "matched isolated-self-correction challenger"
+    ],
+    "jspace_gwt": [
+      "decodable-not-actionable hard negatives",
+      "site type plus exact model/tokenizer identity",
+      "broadcast/uptake not truth",
+      "no cross-model positive labels"
+    ]
+  },
+  "rejected_patterns": [
+    "metadata-only S3 permutations",
+    "partial S3 coverage presented as full counterbalance",
+    "semantic labels or synonyms outside preregistered codebook exception",
+    "fixed codebook entry order that leaks target line position",
+    "token-count inheritance across tokenizer identity",
+    "depth-1/2-only success reported as systematic binding",
+    "copied homogeneous-node testimony counted as independent evidence",
+    "majority vote used as state/effect authority",
+    "Qwen3-0.6B vector coordinates used as positive Qwen3.5 control targets",
+    "probe decodability promoted to causal J-Space control"
+  ],
+  "blocked_before_train_ready_binding_jsonl": [
+    "exact 46 accepted atom inventory bytes plus admitted manifest/source hashes are still required in the current training lane",
+    "a frozen forbidden semantic-label/synonym inventory must be committed and hash-bound",
+    "an exact tokenizer-identity artifact and atom-tokenization audit for the selected Qwen3.5-0.8B snapshot must be generated",
+    "the permutation-causal generator must emit rows that pass generic split leakage guard plus specialized binding gate v3",
+    "frozen holdouts must remain untouched by generator tuning"
+  ],
+  "next_exact_action": "Materialize the exact accepted 46-atom ABI inventory and frozen forbidden-lexeme inventory, bind them to the exact selected Qwen3.5-0.8B tokenizer bytes, generate the atom-tokenization audit, then emit a small S3 x semantic-class x codebook-order microseed with depth-2/3/4 adversarial rows and run the generic split guard plus trigger2_dynamic_codebook_binding_gate_v3 before any scaling.",
+  "credits": {
+    "research_design_delta": 1,
+    "source_gate_delta": 1,
+    "candidate_example_blueprints_added": 12,
+    "train_ready_binding_rows": 0,
+    "accepted_dataset_tokens": 0,
+    "qwen35_jspace_runtime_credit": 0,
+    "qwen35_training_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "canonical_semantics_promotion": false
+  }
+}

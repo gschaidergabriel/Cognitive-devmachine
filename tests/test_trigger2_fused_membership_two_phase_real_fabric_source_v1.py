@@ -12,12 +12,12 @@ from tools.trigger2_fused_membership_two_phase_adapter_v1 import (
     validate_two_phase_cohort,
 )
 from tools.trigger2_grid10_fused_physical_membership_cohort_acceptance_v1 import (
-    FusedFabric,
     N,
     SCOPE,
     dg,
     snapshot_identity,
 )
+from tools.trigger2_grid10_physical_cohort_witness_v2 import SourceFixtureFusedFabric
 from tools.trigger2_node_result_model_call_two_phase_authority_v1 import (
     SCHEMA as PHASE_SCHEMA,
     canonical_sha256,
@@ -100,7 +100,7 @@ def _phase_authority(packet: dict, membership: dict, idx: int) -> dict:
 
 def _synthetic_source_proof(start, envelopes: list[dict]) -> dict:
     # This is deliberately a deterministic source-path fixture, NOT physical GRID10 evidence.
-    # The real FusedFabric commit code is exercised, but no OS-process/procfs claim is minted.
+    # SourceFixtureFusedFabric keeps that fact structural at the commit boundary.
     return {
         "all_alive_at_barrier": True,
         "distinct_os_pids": N,
@@ -138,7 +138,7 @@ def _structural_members(envelopes: list[dict]) -> list[dict]:
 
 
 def _fixture(tmp_path, label: str):
-    fabric = FusedFabric(tmp_path / f"{label}.sqlite")
+    fabric = SourceFixtureFusedFabric(tmp_path / f"{label}.sqlite")
     node_ids = [f"x{i:02d}" for i in range(1, N + 1)]
     memberships = {
         node_id: fabric.runtime_register_node(node_id, "reason")
@@ -229,7 +229,7 @@ def _reseal_proof(envelope: dict) -> dict:
 
 def test_resealed_two_phase_authority_is_persisted_by_real_fusedfabric_and_replay_is_zero(tmp_path):
     fx = _fixture(tmp_path, "positive")
-    fabric: FusedFabric = fx["fabric"]
+    fabric: SourceFixtureFusedFabric = fx["fabric"]
     try:
         forward_validation = validate_two_phase_cohort(fx["extended_envelopes"])
         reverse_validation = validate_two_phase_cohort(list(reversed(fx["extended_envelopes"])))
@@ -248,6 +248,8 @@ def test_resealed_two_phase_authority_is_persisted_by_real_fusedfabric_and_repla
         assert fused["replay"] is False
         assert fused["state_delta"] == 1
         assert fused["cohort_id"] == fx["cohort_id"]
+        assert fused["source_fixture_only"] is True
+        assert fused["credit_boundary"]["physical_grid10_runtime_credit_added"] == 0
 
         row = fabric.con.execute(
             "SELECT envelope_digests_json FROM fused_cohort_admissions WHERE cohort_id=?",
@@ -271,6 +273,7 @@ def test_resealed_two_phase_authority_is_persisted_by_real_fusedfabric_and_repla
         replay = _commit(fx, fx["extended_envelopes"])["fused_coordinator_receipt"]
         assert replay["replay"] is True
         assert replay["state_delta"] == 0
+        assert replay["source_fixture_only"] is True
         assert fabric.snapshot().epoch == fx["start"].epoch + 1
     finally:
         fabric.close()
@@ -278,7 +281,7 @@ def test_resealed_two_phase_authority_is_persisted_by_real_fusedfabric_and_repla
 
 def test_transplanted_membership_authority_fails_before_real_fusedfabric_mutation(tmp_path):
     fx = _fixture(tmp_path, "negative")
-    fabric: FusedFabric = fx["fabric"]
+    fabric: SourceFixtureFusedFabric = fx["fabric"]
     try:
         before_epoch = fabric.snapshot().epoch
         bad = deepcopy(fx["extended_envelopes"])

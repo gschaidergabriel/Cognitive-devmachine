@@ -81,6 +81,10 @@
       "training_credit_minted": false
     }
   },
+  "artefact_readme": {
+    "status": "NO_CHANGE_WITH_REASON",
+    "reason": "the artefact/README.md was being advanced concurrently across multiple go organs and canonical main moved repeatedly during this cycle; replacing the current-facing README from a stale read would risk clobbering newer parallel state. The append-only receipt preserves this organ's exact delta without overwriting current-facing work."
+  },
   "credits_after_cycle": {
     "whole_entityos_hcu_runtime_credit": 0,
     "hcu_full_runtime_credit": 0,

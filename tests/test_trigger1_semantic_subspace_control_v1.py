@@ -112,6 +112,7 @@ def request(rank_result: dict, *, h1: float = 2.0, h2: float = 0.0) -> dict:
             "gguf_sha256": h("gguf"),
             "tokenizer_sha256": h("native-tokenizer"),
             "mapping_receipt_sha256": h("mapping"),
+            "conversion_receipt_sha256": h("conversion"),
             "llama_cpp_source_commit": "2" * 40,
             "n_embd": 4,
             "n_layer": 28,
@@ -136,6 +137,7 @@ class SemanticSubspaceControlTests(unittest.TestCase):
         self.assertFalse(candidate["native_cvec"]["native_runtime_observed"])
         self.assertFalse(candidate["semantic_causality_established"])
         self.assertEqual(0, candidate["jspace_model_runtime_credit"])
+        self.assertEqual(h("conversion"), candidate["native_cvec"]["conversion_receipt_sha256"])
 
     def test_native_layout_populates_only_attested_layer_range(self):
         packet = activation_packet(True)
@@ -179,6 +181,14 @@ class SemanticSubspaceControlTests(unittest.TestCase):
         req = request(rank_result, h1=2.0, h2=1.0)
         req["native_target"]["n_embd"] = 1024
         with self.assertRaisesRegex(ValueError, "NATIVE_TARGET_EMBEDDING_DIM_MISMATCH"):
+            controller.build_candidate(packet, rank_result, req)
+
+    def test_conversion_receipt_is_required(self):
+        packet = activation_packet(True)
+        rank_result = ranker.analyze(packet)
+        req = request(rank_result, h1=2.0, h2=1.0)
+        del req["native_target"]["conversion_receipt_sha256"]
+        with self.assertRaisesRegex(ValueError, "NATIVE_TARGET_CONVERSION_RECEIPT_SHA256_REQUIRED"):
             controller.build_candidate(packet, rank_result, req)
 
     def test_native_runtime_cannot_be_preclaimed(self):

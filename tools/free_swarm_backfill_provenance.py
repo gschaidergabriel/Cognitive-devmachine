@@ -32,17 +32,37 @@ def replay_stable_source_event_identity_available(con: sqlite3.Connection) -> bo
     return "line_no" in columns
 
 
-def reconcile_candidate_source_counts(con: sqlite3.Connection) -> int:
-    """Reconcile source counts only when source-event identity is replay-stable.
+def _clamp_unstable_source_counts(con: sqlite3.Connection) -> int:
+    """Conservatively remove unprovable multi-source scheduling weight.
 
-    Returns the number of candidate rows whose stored count changed. If the absolute
-    line checkpoint has not been admitted yet, this is a deliberate no-op: preserving
-    an existing scheduling hint is safer than recomputing it from partition-sensitive
-    provenance identities. Candidates with no `candidate_sources` rows are also left
-    untouched so legacy Forge rows are not silently reinterpreted as zero provenance.
+    Until replay-partition-invariant event identity exists, any count above one may be
+    an artefact of segmented replay. Candidates with at least one provenance link are
+    clamped to the known-safe lower bound of one. Unlinked legacy candidates are left
+    untouched because their provenance cannot be reconstructed here.
+    """
+    before = con.total_changes
+    con.execute(
+        "UPDATE candidates SET source_count=1 "
+        "WHERE COALESCE(source_count,1)<>1 AND EXISTS ("
+        "SELECT 1 FROM candidate_sources cs WHERE cs.candidate_hash=candidates.candidate_hash)"
+    )
+    changed = con.total_changes - before
+    if changed:
+        con.commit()
+    return int(changed)
+
+
+def reconcile_candidate_source_counts(con: sqlite3.Connection) -> int:
+    """Reconcile source counts under the strongest currently provable identity.
+
+    Returns the number of candidate rows whose stored count changed. Before the
+    absolute-line checkpoint is admitted, linked candidates are clamped to one so
+    partition-sensitive replay identities cannot bias Forge scheduling. Once the
+    checkpoint exists, source_count becomes COUNT(DISTINCT source_event_id). Candidates
+    with no `candidate_sources` rows are intentionally left untouched.
     """
     if not replay_stable_source_event_identity_available(con):
-        return 0
+        return _clamp_unstable_source_counts(con)
 
     expected = {
         str(candidate_hash): int(source_events)

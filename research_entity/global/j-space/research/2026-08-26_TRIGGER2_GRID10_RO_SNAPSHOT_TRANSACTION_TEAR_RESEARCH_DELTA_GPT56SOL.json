@@ -1,0 +1,139 @@
+{
+  "schema": "CLAY_TRIGGER2_GRID10_RO_SNAPSHOT_TRANSACTION_TEAR_RESEARCH_DELTA/v1",
+  "date": "2026-08-26",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "status": "CURRENT_RESEARCH_DELTA_NONCANONICAL_EVAL_AND_REPAIR_DESIGN_ONLY",
+  "observed_main_before_write": "dd2ebf19e19bbce36c9f6bdbf659109fe075e248",
+  "authority": {
+    "supervisor_epoch": "8.81_DELTA",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "architecture": "HCU",
+    "training_execution_authorized": false,
+    "paid_provider_execution_authorized": false,
+    "physical_grid10_runtime_credit": 0,
+    "training_credit": 0
+  },
+  "source_observation": {
+    "path": "tools/xeno_physical_grid10_acceptance_v1.py",
+    "blob_sha": "a560ebf6d16346bd8b7abcd169f607f62522e08b",
+    "function": "ro_snapshot",
+    "finding": "ro_snapshot opens one read-only sqlite3 connection and performs separate SELECT statements for epoch, generation, tasks, scopes and leases without an explicit BEGIN or an explicit PEP-249 autocommit=False transaction boundary. The returned state_digest therefore lacks source-level proof that all fields were read from one SQLite read transaction snapshot.",
+    "classification": "SOURCE_DIRECT_PROOF_GAP_NOT_RUNTIME_FAILURE"
+  },
+  "external_method_evidence": [
+    {
+      "source": "Python 3.14 sqlite3 transaction control documentation",
+      "url": "https://docs.python.org/3/library/sqlite3.html",
+      "classification": "OFFICIAL_DOC_METHOD_EVIDENCE",
+      "finding": "With the current default LEGACY_TRANSACTION_CONTROL, implicit transaction opening is tied to DML statements; other statements such as SELECT do not receive Python-level implicit transaction handling. PEP-249 autocommit=False is the recommended always-open transaction mode."
+    },
+    {
+      "source": "SQLite Isolation documentation",
+      "url": "https://www.sqlite.org/isolation.html",
+      "classification": "OFFICIAL_DOC_METHOD_EVIDENCE",
+      "finding": "SQLite snapshot isolation is a property of a read transaction: once a read transaction starts it keeps an unchanging database snapshot, while a later new read transaction can observe newer committed state."
+    },
+    {
+      "source": "SQLite WAL documentation",
+      "url": "https://www.sqlite.org/wal.html",
+      "classification": "OFFICIAL_DOC_METHOD_EVIDENCE",
+      "finding": "Different readers may have different WAL end marks; a particular reader's end mark is stable for the duration of its transaction. Same database file therefore does not by itself imply same snapshot identity across processes."
+    }
+  ],
+  "material_inference": {
+    "claim": "A future Popen/barrier repair can still be proof-insufficient if it only demonstrates simultaneous liveness and a shared database path. Each child must also establish a transaction-bounded observation, and the harness must prove that the ten observation identities are the same or otherwise explicitly define a valid evidence-rebase protocol.",
+    "classification": "MODEL_INFERENCE_FROM_CURRENT_SOURCE_PLUS_OFFICIAL_TRANSACTION_SEMANTICS",
+    "not_claimed": [
+      "No runtime interleaving failure has been observed in the current harness from this analysis alone.",
+      "No physical GRID10 component credit is minted.",
+      "No J-Space, HCU, EntityOS or training credit is minted."
+    ]
+  },
+  "hypotheses_and_counterhypotheses": [
+    {
+      "id": "H37_1_TRANSACTION_TEAR",
+      "hypothesis": "Without an explicit read-transaction boundary, a concurrent writer can commit between ro_snapshot SELECT statements so the returned digest can combine fields from different committed states and fail to identify a real atomic observation snapshot.",
+      "counterhypothesis": "Current harness scheduling happens to prevent all writes during every ro_snapshot call, making the missing transaction boundary harmless in observed runs.",
+      "cheapest_discriminator": "Add a deterministic adversarial writer that advances a covered table/meta field between selected ro_snapshot reads. The old implementation must either produce a mixed-state witness or demonstrate a stronger invariant that excludes the interleaving. Then repeat with one explicit read transaction and require stable snapshot fields."
+    },
+    {
+      "id": "H37_2_CONCURRENCY_NOT_SAME_SNAPSHOT",
+      "hypothesis": "Ten simultaneously live Popen children can still observe different legitimate SQLite snapshots when their read transactions begin at different times around an S1 commit.",
+      "counterhypothesis": "A write-free barrier interval around all child snapshot acquisition is sufficient to make all ten observation identities equal without lower-level sqlite3_snapshot APIs.",
+      "cheapest_discriminator": "Preregister a barrier protocol: parent freezes S1 writers, children enter BEGIN/read transaction, emit PID plus epoch/digest plus ready marker, parent verifies all ten are alive and all identities equal before releasing the barrier; inject one controlled writer between two child BEGIN points as the negative control."
+    },
+    {
+      "id": "H37_3_MODE_RO_IS_NOT_SNAPSHOT_PROOF",
+      "hypothesis": "SQLite URI mode=ro proves read-only opening intent but does not prove transaction-scoped atomic snapshot identity across multiple SELECTs or multiple processes.",
+      "counterhypothesis": "The surrounding Fabric protocol already freezes S1 strongly enough that mode=ro plus digest equality is operationally equivalent to the required proof.",
+      "cheapest_discriminator": "Trace whether any S1 mutation is possible between child snapshot acquisition points under the exact harness protocol; if yes, require explicit transaction/barrier evidence."
+    }
+  ],
+  "quarantined_eval_cases": [
+    {
+      "id": "T37-SNAP-001",
+      "input": {"explicit_read_transaction": false, "multi_select_snapshot": true, "writer_commit_between_selects": true},
+      "expected": "ATOMIC_SNAPSHOT_IDENTITY_UNPROVEN_FAIL_CLOSED",
+      "hard_negative": "SAME_CONNECTION_MEANS_SAME_SNAPSHOT",
+      "training_eligible": false
+    },
+    {
+      "id": "T37-SNAP-002",
+      "input": {"explicit_read_transaction": true, "single_connection": true, "writer_commits_after_begin": true},
+      "expected": "ONE_READER_SNAPSHOT_STABLE_FOR_TRANSACTION_COMPONENT_PRECONDITION_ONLY",
+      "hard_negative": "ONE_READER_STABILITY_PROVES_ALL_TEN_SHARE_SNAPSHOT",
+      "training_eligible": false
+    },
+    {
+      "id": "T37-SNAP-003",
+      "input": {"ten_distinct_pids": true, "all_live_barrier": true, "shared_db_path": true, "explicit_read_transactions": true, "writer_commit_between_child_begins": true, "all_snapshot_identities_equal": false},
+      "expected": "PHYSICAL_CONCURRENCY_PRESENT_SAME_SNAPSHOT_PROOF_FAILED",
+      "hard_negative": "CONCURRENT_READERS_ON_ONE_DB_AUTOMATICALLY_SHARE_SNAPSHOT",
+      "training_eligible": false
+    },
+    {
+      "id": "T37-SNAP-004",
+      "input": {"ten_distinct_pids": true, "all_live_barrier": true, "writer_freeze_active": true, "explicit_read_transactions": true, "all_epoch_digest_generation_equal": true, "repository_bound_receipt": false},
+      "expected": "SNAPSHOT_AND_CONCURRENCY_PRECONDITIONS_SATISFIED_RUNTIME_CREDIT_STILL_UNPROVEN",
+      "hard_negative": "SOURCE_LEVEL_PRECONDITIONS_MINT_RUNTIME_CREDIT",
+      "training_eligible": false
+    },
+    {
+      "id": "T37-SNAP-005",
+      "input": {"ten_distinct_pids": true, "all_live_barrier": true, "writer_freeze_active": true, "explicit_read_transactions": true, "all_epoch_digest_generation_equal": true, "repository_bound_receipt": true, "clean_head_tree_bound": true, "exact_source_hashes_bound": true},
+      "expected": "ELIGIBLE_FOR_BOUNDED_PHYSICAL_GRID10_COMPONENT_REVIEW_ONLY",
+      "hard_negative": "BOUND_COMPONENT_RECEIPT_MINTS_WHOLE_HCU_ENTITYOS_OR_TRAINING_CREDIT",
+      "training_eligible": false
+    },
+    {
+      "id": "T37-SNAP-006",
+      "input": {"mode_ro": true, "explicit_read_transaction": false, "all_returned_digests_equal": true, "adversarial_interleaving_test_present": false},
+      "expected": "EQUALITY_OBSERVED_BUT_TRANSACTION_CAUSAL_PROOF_INCOMPLETE",
+      "hard_negative": "REPEATED_EQUALITY_REPLACES_TRANSACTION_PROOF",
+      "training_eligible": false
+    }
+  ],
+  "repair_contract_candidate": {
+    "status": "DESIGN_ONLY_NOT_IMPLEMENTED",
+    "minimum_requirements": [
+      "Make each child observation transaction-scoped before the first covered SELECT and retain that read transaction until all snapshot fields are captured.",
+      "Prove ten distinct OS PIDs and overlapping liveness with a barrier or equivalent handshake.",
+      "Prevent or explicitly control S1 writes during the shared-snapshot acquisition window, or use an exact snapshot-identity mechanism with equivalent proof strength.",
+      "Receipt per-child PID, process start/ready/stop evidence, observation epoch/digest/generation and the barrier/freeze identity.",
+      "Add adversarial negative controls for writer commits between child transaction starts and between covered reads.",
+      "Bind the final runtime receipt to clean head/tree and exact source hashes; component PASS remains component-scoped."
+    ]
+  },
+  "credit_boundary": {
+    "source_research_delta": true,
+    "runtime_execution_performed_by_this_delta": false,
+    "physical_grid10_runtime_credit_delta": 0,
+    "jspace_model_runtime_credit_delta": 0,
+    "training_credit_delta": 0,
+    "dataset_admission": "NONE"
+  },
+  "next_exact_action": "Before any new physical GRID10 execution pin, repair and regression-test both dimensions together: ten-process overlapping liveness and transaction-bounded same-snapshot acquisition. Do not treat Popen conversion alone as sufficient."
+}

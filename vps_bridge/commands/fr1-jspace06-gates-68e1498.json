@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v4",
+  "command_id": "fr1-jspace06-gates-68e1498",
+  "op": "exec",
+  "cwd": "/workspace",
+  "timeout_seconds": 600,
+  "command": "set -euo pipefail; SRC=/workspace/clay-global-research-entity; WT=/workspace/fr1-jspace06-gates-68e1498; git -C $SRC fetch origin 68e149835a77de8ef1f9c9a0b15b9f589a009153; if [ -e $WT ]; then git -C $SRC worktree remove --force $WT || rm -rf $WT; fi; git -C $SRC worktree add --detach $WT 68e149835a77de8ef1f9c9a0b15b9f589a009153; cd $WT; echo source_head=$(git rev-parse HEAD); /cache/clay-qwen06/venv/bin/python -m pytest -q tests/test_trigger1_full_vector_control_bridge_873.py tests/test_trigger1_semantic_target_counterbalance.py; echo full_control_bridge_sha256=$(sha256sum tools/trigger1_full_vector_control_bridge.py | cut -d ' ' -f1); echo vector_abi_sha256=$(sha256sum tools/jspace_vector_control_abi_v1.py | cut -d ' ' -f1); echo promotion_gate_sha256=$(sha256sum tools/trigger1_jspace_promotion_gate.py | cut -d ' ' -f1)"
+}

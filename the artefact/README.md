@@ -4,7 +4,7 @@
 
 ## Current authority — 2026-08-25 re-entry
 
-Newest inbox-selected supervisor observed in this update: **8.78**. Mode: **FREE_ONLY**. Canonical `main` observed immediately before this write: `884892a82d1d25bf3f0325dc90fe5bd7a2065739`.
+Newest inbox-selected supervisor observed in this update: **8.78**. Mode: **FREE_ONLY**. Canonical `main` observed immediately before this write: `9127b76d4458aff94c71f558f4367af357d77a29`.
 
 Persistent research entity = **Clay**. Temporary workers/models/sessions are organs, not persistent entities. Product = **EntityOS**. Integrated cognition/compute architecture = **HCU**. Xeno/XCU remain compatibility/research aliases only.
 
@@ -30,7 +30,7 @@ Canonical `main` contains the fused backlog-first Forge supervisor wiring. The a
 
 This cycle also closed the raw-generation control-plane defect identified after the low conversion yield from the historical Free-Swarm corpus. Commit `9eeccc273c4c2d98191a19a047fd7e78f298bc25` adds `CLAY_SWARM_RAW_GENERATION_BACKPRESSURE/v1` to the active 6000 supervisor: the control loop reads only local canonical Forge SQLite counts, pauses/stops the raw 6000 generator when `ready NEW + NEEDS_IMPLEMENTATION + PENDING_EXTRACTION >= threshold`, and fails closed when the Forge DB/schema/read is unavailable. Raw generation is allowed only below the configured threshold. No provider credential is read by this gate and the patch does not increase provider concurrency or token budget.
 
-The previous issue-trigger dispatch fan-out was also retired on current main at `606062164802bbfcea84ca1083f24059f3bb93b8`; this cycle therefore did not create another issue-trigger probe.
+The previous issue-trigger dispatch fan-out was also retired on current main at `606062164802bbfcea84ca1083f24059f3bb93b8`; this cycle therefore did not create another issue-trigger probe. The current GO revalidated that the completed GO878 wiring workflow no longer listens to `issues.opened`, closed carrier issue #1834 as completed and #1836/#1841/#1852 as duplicates, and persisted `research_entity/continuity/receipts/2026-08-25_GO878_COMPLETED_ONESHOT_DISPATCH_RETIREMENT_GPT56SOL.json`. Existing legacy queued Actions are intentionally not relabelled as independent evidence.
 
 These are **source/control-plane deltas only**. No terminal exact-current historical-backfill saturation receipt, no exact-current replay-v2 migration runtime receipt, and no runtime backpressure acceptance receipt were observed in this re-entry. Therefore the historical ~39M-token corpus is not yet credited as re-evaluated, and Distillery/model/training credit remains zero.
 

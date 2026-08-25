@@ -1,0 +1,40 @@
+{
+  "schema": "CLAY_TRIGGER2_TRACK_A_PHASE3_CLOSURE_RECEIPT/v1",
+  "utc_note": "2026-08-25/26 VPS Track A continuation, Phase 3",
+  "repository": "gschaidergabriel/clay-global-research-entity",
+  "status": "CLOSED",
+  "commits_pushed": ["64ec0cedc", "ab59e4ed5"],
+  "mechanism": "Extended tools/trigger2_generation_provenance_gate_v1.py to bind genesis_state and the full ordered event_history to the same trusted-generator authority already used for the single current event. Added a second authorized case T2_GP_PILOT_HIST_CHAIN_V1 to the SAME generator/authority file (no second authority created). state_before for the history case is computed by actually replaying through the same retained v3 labeler, not hand-authored.",
+  "empirical_closure_evidence": {
+    "test_file": "tests/test_trigger2_genesis_history_producer_authority_v1.py",
+    "tests_added": 5,
+    "tests_passing": 5,
+    "positive_control": "authorized HIST_CHAIN row passes generation provenance AND the existing replay-bound state-history proof gate end-to-end",
+    "negative_controls": [
+      "nonempty history with no generation_case_id at all -> GENERATION_CASE_NOT_AUTHORIZED",
+      "forged history event content -> subject-digest mismatch",
+      "DB_MATCH (empty-history) case cannot be reused to smuggle a nonempty history"
+    ]
+  },
+  "regression_check": {
+    "method": "clean baseline worktree at pre-change commit 609d3d499, same targeted pytest sweep, compared to post-change sweep",
+    "baseline": "97 failed, 1276 passed, 1 xfailed",
+    "after_change": "97 failed, 1281 passed, 1 xfailed",
+    "conclusion": "zero regressions; +5 new passing tests; the 97 failures are pre-existing and unrelated (confirmed identical failure set before/after), largely from a separate unrelated broken import (trigger2_semantic_hyperposition_reference_labelers_v1.py, removed by an unrelated autonomous commit e207ee115) and other pre-existing repo churn"
+  },
+  "v4_composition_update": "tools/trigger2_hyperposition_state_history_generation_bound_gate_v4.py remaining_p0 item 'immutable genesis/ordered-history producer authority is required before nonempty-history positives' moved to a new closed_p0 list, since v4's generation stage (its first, non-short-circuitable composition stage) now structurally enforces this on every adjudication call, not just claims it as a future requirement.",
+  "hypothesis_and_implications": {
+    "hypothesis": "The gap existed because trigger2_generation_provenance_gate_v1 was originally scoped to a single evaluator-subject case (one event), and nothing ever extended that authority to cover multi-event history CONTENT even though the replay-integrity gate (trigger2_hyperposition_state_history_proof_gate_v1) already enforced STRUCTURAL replay correctness. The two concerns (content provenance vs structural replay) were conflated in the remaining_p0 wording but actually needed separate closure -- structural was already closed, content was not.",
+    "implication_for_future_history_cases": "Any future nonempty-history positive candidate now needs its own authorized case in TRIGGER2_TRUSTED_SYNTHETIC_GENERATOR_AUTHORITY_V1.json (or a generalized case-family mechanism if history shapes proliferate) -- this does not scale past a handful of hand-registered histories without a follow-up generalization (e.g. a parametric case template), which was intentionally NOT built here to avoid over-engineering ahead of actual pilot demand.",
+    "implication_for_phase6_nuisance_audit": "The now-mandatory genesis_state/event_history byte-identity check in generation provenance is itself a new authoritative-vs-nuisance surface: any future rendering/serialization normalization work (Phase 6.2 nuisance audit) must treat these two fields as authoritative content, not nuisance, or it will silently break this closure.",
+    "known_seam_documented_not_fixed": "row['source_binding'] is read by two different gates for two different purposes on the same row (trigger2_generation_provenance_gate_v1 wants it to resolve to the trusted generator; trigger2_hyperposition_derivation_bound_gate_v2 wants it to resolve to whatever path it's given, which happens to also need to match). They compose correctly today because trigger2_hyperposition_derivation_bound_gate_v2.current_source_binding() is path-generic and returns a superset of keys generation-provenance reads, but a future change to either gate's expectations could silently break this composition. Worth a dedicated regression test file at the v4-integration level (not just per-gate) if this project continues -- explicitly deferred here as out of Phase 3's scope."
+  },
+  "evidence_scope": "immutable genesis/ordered-history producer authority component only",
+  "credit_boundary": {
+    "positive_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "jspace_credit": 0,
+    "hcu_credit": 0
+  }
+}

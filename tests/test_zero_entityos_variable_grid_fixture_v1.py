@@ -84,16 +84,21 @@ class VariableGridFixtureTests(unittest.TestCase):
             self.assertEqual(admission["causal_event_id"], roundtrip["reentry"]["causal_event_id"])
             self.assertEqual(7, roundtrip["reentry"]["from_workspace_epoch"])
             self.assertEqual(8, roundtrip["reentry"]["to_workspace_epoch"])
-            self.assertEqual("TRUE", roundtrip["reentry"]["observed_downstream_change"])
+            self.assertEqual("UNKNOWN", roundtrip["reentry"]["observed_downstream_change"])
+            self.assertEqual(0, roundtrip["reentry"]["causal_credit"])
             self.assertEqual(1, rt.count("workspace_reentry"))
         finally:
             rt.close()
 
-    def test_d5_jspace_credit_not_minted_by_reentry(self):
+    def test_d5_stub_reentry_cannot_mint_jspace_causal_observation(self):
         rt, admission, *_ = self.run_semantics(10)
         try:
-            rt.enqueue(admission, "ZECP20", {"probe": "fixture"})
+            work = rt.enqueue(admission, "ZECP13", {"handoff": "fixture"})
             rt.execute_ready()
+            roundtrip = rt.stub_claude_roundtrip(admission, work["work_id"], 4, ["project/fact"])
+            self.assertEqual("UNKNOWN", roundtrip["reentry"]["observed_downstream_change"])
+            self.assertEqual(0, roundtrip["reentry"]["causal_credit"])
+            self.assertIn("NO_MATCHED_DOWNSTREAM_INTERVENTION_CONTROL", roundtrip["reentry"]["measurement_reason"])
             self.assertEqual(0, self.abi["credit_boundary"]["global_jspace_causal_runtime"])
             self.assertEqual(0, self.census["credit_boundary"]["global_jspace_causal_runtime"])
         finally:

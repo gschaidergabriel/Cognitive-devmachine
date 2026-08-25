@@ -1,0 +1,100 @@
+{
+  "schema": "CLAY_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER/v58",
+  "date": "2026-08-26",
+  "trigger": "triggerwort2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "status": "CURRENT_RESEARCH_LEDGER_NONCANONICAL_SUCCESSOR_DYNAMIC",
+  "supersedes": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V57_GPT56SOL.json",
+  "inherits_all_nonconflicting_records_from": "T2-LEDGER-V57",
+  "observed_main_before_write": "48c572e57d70f9c6747bfceac9af84ff4bca8338",
+  "authority": {
+    "supervisor_epoch": "8.83_DELTA",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "architecture": "HCU",
+    "free_swarm_provider_admission": "OWNER_EMERGENCY_STOP_HARD_OFF",
+    "runtime_quiescence": "ACTIVE_FAIL_POST_STOP_PROVIDER_ATTEMPT_COUNTERS_INCREASING",
+    "latest_openrouter_total_requests": 4050,
+    "latest_openrouter_total_429": 3915,
+    "delta_vs_supervisor_8_83_requests": 267,
+    "delta_vs_supervisor_8_83_429": 267,
+    "provider_routes_admitted": false,
+    "training_execution_authorized": false,
+    "checkpoint_winner": null,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "jspace_model_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  },
+  "revision_reason": "V58 preserves the stronger exact-current post-stop provider-drift falsification and advances the parallel source-only model-call lineage frontier. The existing source-bound model-call identity is now deterministically bindable to immutable NODE_RESULT, node, process and GRID-cell launch identity without adding authority fields to learned cognition or creating a second call-ID authority.",
+  "selection_governance": {
+    "logical_four_quadrant_freeze": "UNCHANGED_512_CASES_256_FAMILIES_OUTPUTS_UNBLINDED",
+    "risk_coverage_gate": "FROZEN_BLOCK_AWARE_V2",
+    "renderer_interaction_policy": "FROZEN_PREUNBLINDING_SOURCE_ONLY",
+    "checkpoint_winner": null,
+    "checkpoint_selection_credit": 0
+  },
+  "runtime_quiescence_delta": {
+    "artifact": "research_entity/trigger_runs/2/2-20260826-0523-gpt56sol-quiescence-drift-reentry/FINAL_REPORT.md",
+    "status": "ACTIVE_FAIL_STRENGTHENED",
+    "finding": "Exact-current SYSTEM_ANALYSIS telemetry reaches OpenRouter 4050 total requests and 3915 total 429, +267/+267 beyond the already-failing Supervisor 8.83 snapshot. This is positive non-quiescence evidence, not merely missing proof.",
+    "next_gate": "Owning-host process-tree identification/termination, zero provider-capable survivors, bounded zero request/429 delta, then FREE non-provider authority re-entry. No provider probe is admissible for diagnosis."
+  },
+  "model_call_to_node_lineage_delta": {
+    "source": "tools/trigger2_node_result_model_call_authority_envelope_v1.py",
+    "tests": "tests/test_trigger2_node_result_model_call_authority_envelope_v1.py",
+    "research_receipt": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_NODE_RESULT_MODEL_CALL_AUTHORITY_ENVELOPE_SOURCE_DELTA_V1_GPT56SOL.json",
+    "pull_request": 2036,
+    "local_deterministic_validation": "py_compile PASS; pytest 8/8 PASS; local source-only fixture, not repository CI and not model runtime",
+    "closed_source_properties": [
+      "reuse exact source_bound_model_call_identity_sha256 rather than create a second call-ID authority",
+      "recompute immutable NODE_RESULT packet digest",
+      "forbid model-generated call/source/cell/authority fields",
+      "freeze exact node, producer PID, GRID cell, NODE_RESULT digest, expected call identity and expected output identity in controller-owned launch binding",
+      "reject call/node/process/result/output/cell transplant against the frozen binding",
+      "source identity drift creates a distinct source-bound call and fails against an old frozen launch binding",
+      "authority-envelope digest changes when call lineage changes even if raw NODE_RESULT remains unchanged"
+    ],
+    "remaining_source_gap": "Wire the lineage envelope into FusedFabric cohort member derivation, cohort_id and persistence; reject a whole batch when one member's call authority envelope is invalid; then propagate the exact call/output reference into evaluation and J-Space receipts.",
+    "runtime_credit": 0
+  },
+  "hypothesis": {
+    "H58_1": "A controller-owned launch binding plus deterministic authority envelope closes the missing call-to-node/cell lineage without teaching the model to mint authority IDs.",
+    "counterhypothesis": "Packet+membership+PID integrity alone is enough for downstream attribution.",
+    "discriminator_result": "SOURCE_ONLY_SUPPORTS_H58_1: 8/8 deterministic fixture tests pass, including identical-semantic-payload/different-call non-interchangeability and call/node/cell/source/output transplant rejection. Integration/runtime claim remains open."
+  },
+  "runtime_and_training_decision": {
+    "providers": "DO_NOT_INVOKE",
+    "together": "FORBIDDEN",
+    "model_runtime_executed_this_cycle": false,
+    "training_executed_this_cycle": false,
+    "positive_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "reason": "Supervisor 8.83 P0 runtime quiescence is actively failed and exact-current telemetry strengthens that failure. Source-only lineage progress cannot mint execution, selection or training authority."
+  },
+  "credits": {
+    "research_delta": 1,
+    "model_call_to_node_lineage_source_credit": 1,
+    "local_source_fixture_credit": 1,
+    "checkpoint_model_state_runtime_credit": 0,
+    "model_call_runtime_credit": 0,
+    "checkpoint_selection_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "jspace_model_credit": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  },
+  "next_priority_order": [
+    "P0 owning live host: execute only the already-pinned FreeSwarm quiescence enforcer and prove zero provider-capable survivors plus bounded zero provider-counter delta without provider probing",
+    "P0 after quiescence PASS: re-enter newest explicit FREE non-provider execution authority",
+    "P1 source-only while P0 is external: integrate exact call/output lineage envelope into current fused GRID10 membership cohort member/cohort_id/persistence and add whole-batch invalid-call rejection",
+    "P1 preserve frozen 512-case/256-family four-quadrant evaluation and keep outputs unopened until eligible runtime identity exists",
+    "P3 keep Forge-to-Distillery positive admission closed until exact accepted witness yields accepted_dataset_tokens > 0 and exact replay +0"
+  ],
+  "next_exact_action": "P0 remains owning-live-host quiescence. In parallel source-only, wire the new exact call/output authority-envelope digest into FusedFabric cohort membership and cohort persistence, add invalid-call whole-batch rejection, and preserve zero promotion credit until repository/runtime evidence exists."
+}

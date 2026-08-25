@@ -1,13 +1,15 @@
 #!/usr/bin/env python3
-"""Collective recursive-improvement metrics for Clay `go`.
+"""Collective recursive-improvement metrics for Clay ``go``.
 
-Offline/local collector. It reads append-only worker evidence plus existing Free Swarm
-worker artifacts and architecture-delta adjudications, derives a multi-objective table,
-and writes deterministic JSON/Markdown. It performs no provider call, reads no provider
-credential, and grants no canonical runtime/model/training credit.
+This is the single existing GO collective-metrics publisher.  It remains an
+offline/local measurement surface: no provider call, no credential lookup and no
+runtime/model/training credit.
 
-Scores are descriptive proxies behind hard evidence gates. Raw fields stay visible.
-UNKNOWN is preferred over invented precision.
+Supervisor 8.76/8.77 added a hard metrology requirement that the publisher must
+not let a stale aggregate supersede newer live Swarm/Forge/Distillery inputs.
+Publication therefore starts from one bounded, digest-bound snapshot of those
+three live surfaces plus the current supervisor inbox, then fails closed against
+an already-published newer writer.
 """
 from __future__ import annotations
 
@@ -23,8 +25,16 @@ from typing import Any, Iterable
 
 SCHEMA = "CLAY_GO_COLLECTIVE_METRICS/v1"
 WORKER_SCHEMA = "CLAY_GO_WORKER_METRICS/v1"
+FRESHNESS_SCHEMA = "CLAY_GO_COLLECTIVE_METRICS_FRESHNESS/v1"
+FRESHNESS_RECEIPT_SCHEMA = "COLLECTIVE_METRICS_FRESHNESS_RECEIPT/v1"
 AUTO_BEGIN = "<!-- GO_COLLECTIVE_RECURSIVE_METRICS:BEGIN -->"
 AUTO_END = "<!-- GO_COLLECTIVE_RECURSIVE_METRICS:END -->"
+LIVE_INPUT_PATHS = {
+    "swarm": Path("free swarm/LIVE_METRICS.json"),
+    "forge": Path("free swarm/FORGE_LIVE.json"),
+    "distillery": Path("free swarm/DISTILLERY_LIVE.json"),
+    "authority": Path("research_entity/claycode/autonomous/SUPERVISOR_INBOX.json"),
+}
 
 
 def read_json(path: Path) -> dict[str, Any]:
@@ -33,6 +43,13 @@ def read_json(path: Path) -> dict[str, Any]:
     except Exception:
         return {}
     return value if isinstance(value, dict) else {}
+
+
+def read_bytes(path: Path) -> bytes | None:
+    try:
+        return path.read_bytes()
+    except OSError:
+        return None
 
 
 def iter_jsonl(paths: Iterable[Path]):
@@ -59,10 +76,19 @@ def parse_ts(value: Any) -> dt.datetime | None:
     if not isinstance(value, str) or not value.strip():
         return None
     try:
-        x = dt.datetime.fromisoformat(value.replace("Z", "+00:00"))
-        return x if x.tzinfo else x.replace(tzinfo=dt.timezone.utc)
+        parsed = dt.datetime.fromisoformat(value.replace("Z", "+00:00"))
+        return parsed if parsed.tzinfo else parsed.replace(tzinfo=dt.timezone.utc)
     except Exception:
         return None
+
+
+def epoch_key(value: Any) -> tuple[int, ...] | None:
+    if value is None:
+        return None
+    parts = str(value).strip().split(".")
+    if not parts or any(not p.isdigit() for p in parts):
+        return None
+    return tuple(int(p) for p in parts)
 
 
 def fnum(value: Any) -> float | None:
@@ -74,25 +100,29 @@ def fnum(value: Any) -> float | None:
 
 
 def inum(value: Any) -> int | None:
-    x = fnum(value)
-    return int(x) if x is not None else None
+    value = fnum(value)
+    return int(value) if value is not None else None
 
 
 def usage(row: dict[str, Any]) -> tuple[int | None, int | None, int | None]:
-    u = row.get("usage")
-    if not isinstance(u, dict):
-        u = {}
-    i = inum(u.get("input_tokens", u.get("prompt_tokens", row.get("input_tokens"))))
-    o = inum(u.get("output_tokens", u.get("completion_tokens", row.get("output_tokens"))))
-    t = inum(u.get("total_tokens", row.get("total_tokens")))
-    if t is None and i is not None and o is not None:
-        t = i + o
-    return i, o, t
+    raw = row.get("usage")
+    if not isinstance(raw, dict):
+        raw = {}
+    inp = inum(raw.get("input_tokens", raw.get("prompt_tokens", row.get("input_tokens"))))
+    out = inum(raw.get("output_tokens", raw.get("completion_tokens", row.get("output_tokens"))))
+    total = inum(raw.get("total_tokens", row.get("total_tokens")))
+    if total is None and inp is not None and out is not None:
+        total = inp + out
+    return inp, out, total
+
+
+def sha256_bytes(data: bytes) -> str:
+    return hashlib.sha256(data).hexdigest()
 
 
 def sha256_json(value: Any) -> str:
-    data = json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode()
-    return hashlib.sha256(data).hexdigest()
+    raw = json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode("utf-8")
+    return sha256_bytes(raw)
 
 
 def load_config(repo: Path) -> dict[str, Any]:
@@ -105,7 +135,7 @@ def accepted_delta(row: dict[str, Any]) -> bool:
         return False
     imp = fnum(row.get("relative_improvement_pct"))
     runs = inum(row.get("reproducible_runs")) or 0
-    hard_failed = sum((inum(row.get(k)) or 0) for k in (
+    hard_failed = sum((inum(row.get(key)) or 0) for key in (
         "tests_failed", "negative_tests_failed", "static_checks_failed"
     ))
     return bool(
@@ -120,8 +150,7 @@ def test_ratio(row: dict[str, Any], passed: str, failed: str) -> float | None:
     f = inum(row.get(failed))
     if p is None and f is None:
         return None
-    p = p or 0
-    f = f or 0
+    p, f = p or 0, f or 0
     return p / (p + f) if p + f else None
 
 
@@ -135,7 +164,7 @@ def code_quality(row: dict[str, Any], config: dict[str, Any]) -> tuple[float | N
             0.0 if row.get("benchmark_non_regression") is False else None
         ),
         "reproducibility": min((inum(row.get("reproducible_runs")) or 0) / 3.0, 1.0)
-            if row.get("reproducible_runs") is not None else None,
+        if row.get("reproducible_runs") is not None else None,
         "maintainability_complexity": fnum(row.get("maintainability_score")),
         "provenance_causal_identity": fnum(row.get("provenance_score")),
         "cross_mode_reuse": fnum(row.get("cross_mode_reuse_score")),
@@ -143,36 +172,34 @@ def code_quality(row: dict[str, Any], config: dict[str, Any]) -> tuple[float | N
     for key, value in list(components.items()):
         if value is not None and value > 1.0:
             components[key] = max(0.0, min(value / 100.0, 1.0))
-    coverage = sum(float(weights.get(k, 0.0)) for k, v in components.items() if v is not None)
+    coverage = sum(float(weights.get(k, 0.0)) for k, value in components.items() if value is not None)
     min_cov = float((config.get("code_quality") or {}).get("min_evidence_coverage", 0.60))
     if coverage < min_cov:
         return None, coverage
-    score = 100.0 * sum(float(weights.get(k, 0.0)) * (v or 0.0) for k, v in components.items())
+    score = 100.0 * sum(float(weights.get(k, 0.0)) * (value or 0.0) for k, value in components.items())
     return score, coverage
 
 
 def innovation_score(row: dict[str, Any], config: dict[str, Any]) -> float | None:
     inv = row.get("innovation")
-    if not isinstance(inv, dict):
-        return None
-    if inv.get("verified") is not True:
+    if not isinstance(inv, dict) or inv.get("verified") is not True:
         return None
     weights = (config.get("innovation") or {}).get("weights") or {}
-    keys = {
+    mapping = {
         "nonduplicate_mechanism_novelty": "novelty",
         "measured_useful_effect": "measured_effect",
         "transferability_reuse": "transferability",
         "falsifiability_causal_discriminability": "falsifiability",
     }
-    vals: dict[str, float] = {}
-    for target, source in keys.items():
-        x = fnum(inv.get(source))
-        if x is None:
+    values: dict[str, float] = {}
+    for target, source in mapping.items():
+        value = fnum(inv.get(source))
+        if value is None:
             return None
-        if x > 1:
-            x /= 100.0
-        vals[target] = max(0.0, min(x, 1.0))
-    return 100.0 * sum(float(weights.get(k, 0.0)) * v for k, v in vals.items())
+        if value > 1:
+            value /= 100.0
+        values[target] = max(0.0, min(value, 1.0))
+    return 100.0 * sum(float(weights.get(key, 0.0)) * value for key, value in values.items())
 
 
 def information_latency(row: dict[str, Any]) -> float | None:
@@ -190,12 +217,10 @@ def performance_index(row: dict[str, Any]) -> float | None:
     bench = row.get("benchmark")
     if not isinstance(bench, dict):
         return None
-    baseline = fnum(bench.get("baseline"))
-    new = fnum(bench.get("new"))
-    higher = bench.get("higher_is_better", True)
+    baseline, new = fnum(bench.get("baseline")), fnum(bench.get("new"))
     if baseline is None or new is None or baseline <= 0 or new <= 0:
         return None
-    return (new / baseline) if higher else (baseline / new)
+    return new / baseline if bench.get("higher_is_better", True) else baseline / new
 
 
 def explicit_worker_rows(repo: Path) -> list[dict[str, Any]]:
@@ -205,10 +230,9 @@ def explicit_worker_rows(repo: Path) -> list[dict[str, Any]]:
         return rows
     for path in sorted(root.rglob("*.json")):
         row = read_json(path)
-        if not row:
-            continue
-        row["_record_path"] = path.relative_to(repo).as_posix()
-        rows.append(row)
+        if row:
+            row["_record_path"] = path.relative_to(repo).as_posix()
+            rows.append(row)
     return rows
 
 
@@ -217,26 +241,23 @@ def free_swarm_rows(artifacts: Path | None) -> list[dict[str, Any]]:
         return []
     rows: list[dict[str, Any]] = []
     for raw in iter_jsonl(sorted(artifacts.rglob("workers.jsonl"))):
-        i, o, t = usage(raw)
-        ts = raw.get("ts")
-        serial = raw.get("worker_serial")
+        inp, out, total = usage(raw)
         provider = str(raw.get("provider") or "unknown")
         model = str(raw.get("model") or "unknown")
-        lineage = f"free_swarm:{provider}:{model}"
         rows.append({
             "schema": WORKER_SCHEMA,
             "macrocycle_id": raw.get("macrocycle_id") or raw.get("go_macrocycle_id") or "MACROCYCLE_ID_UNRESOLVED",
-            "worker_id": f"free-swarm-{serial or raw.get('_line')}",
+            "worker_id": f"free-swarm-{raw.get('worker_serial') or raw.get('_line')}",
             "organ": f"{provider}/{model}",
             "source_class": "free_swarm",
             "provider": provider,
             "model": model,
-            "evidence_lineage": lineage,
+            "evidence_lineage": f"free_swarm:{provider}:{model}",
             "started_at": None,
-            "finished_at": ts,
-            "input_tokens": i,
-            "output_tokens": o,
-            "total_tokens": t,
+            "finished_at": raw.get("ts"),
+            "input_tokens": inp,
+            "output_tokens": out,
+            "total_tokens": total,
             "runtime_status": raw.get("http_status"),
             "_source": raw.get("_source"),
             "_line": raw.get("_line"),
@@ -260,10 +281,8 @@ def worker_lineage(row: dict[str, Any]) -> str:
     if value:
         return str(value)
     return ":".join([
-        str(row.get("provider") or "unknown"),
-        str(row.get("model") or row.get("organ") or "unknown"),
-        str(row.get("prompt_lineage") or "unknown"),
-        str(row.get("orchestration_lineage") or "unknown"),
+        str(row.get("provider") or "unknown"), str(row.get("model") or row.get("organ") or "unknown"),
+        str(row.get("prompt_lineage") or "unknown"), str(row.get("orchestration_lineage") or "unknown"),
     ])
 
 
@@ -272,56 +291,41 @@ def attach_delta_metrics(workers: list[dict[str, Any]], deltas: list[dict[str, A
     for delta in deltas:
         if not accepted_delta(delta):
             continue
-        candidates = {
-            str(delta.get("worker_id") or ""),
-            str(delta.get("organ") or ""),
-            str(delta.get("model") or ""),
-        }
-        for c in candidates:
-            if c:
-                by_actor[c].append(delta)
+        for candidate in {str(delta.get("worker_id") or ""), str(delta.get("organ") or ""), str(delta.get("model") or "")}:
+            if candidate:
+                by_actor[candidate].append(delta)
     for row in workers:
-        matches: list[dict[str, Any]] = []
-        for c in {worker_key(row), str(row.get("organ") or ""), str(row.get("model") or "")}:
-            matches.extend(by_actor.get(c, []))
-        uniq = {}
-        for d in matches:
-            key = str(d.get("delta_id") or d.get("_source")) + ":" + str(d.get("_line"))
-            uniq[key] = d
-        matches = list(uniq.values())
-        total_tokens = inum(row.get("total_tokens"))
+        matches: dict[str, dict[str, Any]] = {}
+        for candidate in {worker_key(row), str(row.get("organ") or ""), str(row.get("model") or "")}:
+            for delta in by_actor.get(candidate, []):
+                key = str(delta.get("delta_id") or delta.get("_source")) + ":" + str(delta.get("_line"))
+                matches[key] = delta
         utility = 0.0
         cqs: list[float] = []
         viss: list[float] = []
-        for d in matches:
-            cq, _ = code_quality(d, config)
+        for delta in matches.values():
+            cq, _ = code_quality(delta, config)
             if cq is not None:
                 cqs.append(cq)
-            vis = innovation_score(d, config)
+            vis = innovation_score(delta, config)
             if vis is not None:
                 viss.append(vis)
-            imp = fnum(d.get("relative_improvement_pct")) or 0.0
-            runs = inum(d.get("reproducible_runs")) or 0
-            indep = fnum(d.get("independence_factor"))
-            if indep is None:
-                indep = 1.0
-            cqf = (cq / 100.0) if cq is not None else 0.0
-            utility += max(0.0, imp / 100.0) * cqf * min(runs / 3.0, 1.0) * max(0.0, min(indep, 1.0))
+            imp = fnum(delta.get("relative_improvement_pct")) or 0.0
+            runs = inum(delta.get("reproducible_runs")) or 0
+            independence = fnum(delta.get("independence_factor"))
+            independence = 1.0 if independence is None else independence
+            utility += max(0.0, imp / 100.0) * ((cq or 0.0) / 100.0) * min(runs / 3.0, 1.0) * max(0.0, min(independence, 1.0))
+        total = inum(row.get("total_tokens"))
         row["accepted_delta_count"] = len(matches)
         row["verified_utility_units"] = utility
-        row["token_quality_efficiency"] = (
-            1000.0 * utility / total_tokens if total_tokens is not None and total_tokens > 0 else None
-        )
+        row["token_quality_efficiency"] = 1000.0 * utility / total if total and total > 0 else None
         row["code_quality_score"] = statistics.fmean(cqs) if cqs else None
         row["verified_innovation_score"] = statistics.fmean(viss) if viss else None
-        pidx = performance_index(row)
-        lat = information_latency(row)
+        pidx, latency = performance_index(row), information_latency(row)
         floor = float((config.get("capability_information_latency") or {}).get("measurement_floor_seconds", 0.001))
         row["performance_index"] = pidx
-        row["information_latency_seconds"] = lat
-        row["capability_information_latency_ratio"] = (
-            pidx / max(lat, floor) if pidx is not None and lat is not None else None
-        )
+        row["information_latency_seconds"] = latency
+        row["capability_information_latency_ratio"] = pidx / max(latency, floor) if pidx is not None and latency is not None else None
         row["evidence_lineage_resolved"] = worker_lineage(row)
 
 
@@ -330,108 +334,222 @@ def robust_median(values: list[float]) -> float | None:
 
 
 def hcu_forecast(workers: list[dict[str, Any]], config: dict[str, Any]) -> dict[str, Any]:
-    hc = config.get("hcu_confidence") or {}
-    milestones = list(hc.get("milestones") or [])
+    hcu = config.get("hcu_confidence") or {}
+    milestones = list(hcu.get("milestones") or [])
     per_lineage: dict[str, dict[str, list[float]]] = collections.defaultdict(lambda: collections.defaultdict(list))
     for row in workers:
         forecast = row.get("hcu_forecast")
-        if not isinstance(forecast, dict):
-            continue
-        lineage = worker_lineage(row)
-        probs = forecast.get("milestone_probabilities")
+        probs = forecast.get("milestone_probabilities") if isinstance(forecast, dict) else None
         if not isinstance(probs, dict):
             continue
-        for m in milestones:
-            p = fnum(probs.get(m))
-            if p is not None and 0 <= p <= 1:
-                per_lineage[lineage][m].append(p)
-
+        lineage = worker_lineage(row)
+        for milestone in milestones:
+            probability = fnum(probs.get(milestone))
+            if probability is not None and 0 <= probability <= 1:
+                per_lineage[lineage][milestone].append(probability)
     milestone_probs: dict[str, float] = {}
-    for m in milestones:
-        lineage_vals = []
-        for _, values in per_lineage.items():
-            x = robust_median(values.get(m, []))
-            if x is not None:
-                lineage_vals.append(x)
-        x = robust_median(lineage_vals)
-        if x is not None:
-            milestone_probs[m] = x
-
-    baseline = hc.get("initial_research_baseline") or {}
-    seed = baseline.get("milestone_probabilities") or {}
-    used_seed = False
-    for m in milestones:
-        if m not in milestone_probs:
-            p = fnum(seed.get(m))
-            if p is not None:
-                milestone_probs[m] = p
-                used_seed = True
-
-    values = [max(0.01, min(float(milestone_probs[m]), 0.99)) for m in milestones if m in milestone_probs]
-    probability = math.exp(sum(math.log(x) for x in values) / len(values)) if values else None
-    coverage = len(values) / len(milestones) if milestones else 0.0
-    lineages = len(per_lineage)
-    calibration_state = "UNCALIBRATED" if used_seed or lineages < 3 else "COLLECTING_OUTCOME_CALIBRATION"
+    for milestone in milestones:
+        lineage_values = [robust_median(values.get(milestone, [])) for values in per_lineage.values()]
+        resolved = robust_median([value for value in lineage_values if value is not None])
+        if resolved is not None:
+            milestone_probs[milestone] = resolved
+    seed = (hcu.get("initial_research_baseline") or {}).get("milestone_probabilities") or {}
+    seed_used = False
+    for milestone in milestones:
+        if milestone not in milestone_probs:
+            probability = fnum(seed.get(milestone))
+            if probability is not None:
+                milestone_probs[milestone] = probability
+                seed_used = True
+    bounded = [max(0.01, min(float(milestone_probs[m]), 0.99)) for m in milestones if m in milestone_probs]
+    probability = math.exp(sum(math.log(x) for x in bounded) / len(bounded)) if bounded else None
     return {
-        "event": hc.get("event"),
-        "event_definition": hc.get("event_definition"),
+        "event": hcu.get("event"),
+        "event_definition": hcu.get("event_definition"),
         "forecast_probability": probability,
         "milestone_probabilities": milestone_probs,
-        "milestone_coverage": coverage,
-        "independent_forecast_lineages": lineages,
-        "seed_used": used_seed,
-        "calibration_state": calibration_state,
+        "milestone_coverage": len(bounded) / len(milestones) if milestones else 0.0,
+        "independent_forecast_lineages": len(per_lineage),
+        "seed_used": seed_used,
+        "calibration_state": "UNCALIBRATED" if seed_used or len(per_lineage) < 3 else "COLLECTING_OUTCOME_CALIBRATION",
         "brier_score": None,
         "log_loss": None,
-        "note": "Forecast only; not completion percentage or canonical truth. Resolve future milestones and calibrate.",
+        "note": "Forecast only; not completion percentage or canonical truth.",
     }
 
 
 def aggregate(workers: list[dict[str, Any]], config: dict[str, Any]) -> dict[str, Any]:
-    known_tokens = [inum(r.get("total_tokens")) for r in workers]
-    total_tokens = sum(x for x in known_tokens if x is not None)
-    exact_token_rows = sum(1 for x in known_tokens if x is not None)
-    utility = sum(float(r.get("verified_utility_units") or 0.0) for r in workers)
-    tqe = 1000.0 * utility / total_tokens if total_tokens > 0 else None
-    cqs = [fnum(r.get("code_quality_score")) for r in workers]
-    cqs = [x for x in cqs if x is not None]
-    viss = [fnum(r.get("verified_innovation_score")) for r in workers]
-    viss = [x for x in viss if x is not None]
-    lats = [fnum(r.get("information_latency_seconds")) for r in workers]
-    lats = sorted(x for x in lats if x is not None)
-    pidx = [fnum(r.get("performance_index")) for r in workers]
-    pidx = [x for x in pidx if x is not None]
-
-    def percentile95(xs: list[float]) -> float | None:
-        if not xs:
-            return None
-        if len(xs) == 1:
-            return xs[0]
-        k = 0.95 * (len(xs) - 1)
-        lo = math.floor(k)
-        hi = math.ceil(k)
-        if lo == hi:
-            return xs[lo]
-        return xs[lo] * (hi - k) + xs[hi] * (k - lo)
-
-    p95 = percentile95(lats)
-    perf = statistics.median(pidx) if pidx else None
+    known_tokens = [inum(row.get("total_tokens")) for row in workers]
+    total_tokens = sum(value for value in known_tokens if value is not None)
+    exact_rows = sum(value is not None for value in known_tokens)
+    utility = sum(float(row.get("verified_utility_units") or 0.0) for row in workers)
+    cqs = [value for value in (fnum(row.get("code_quality_score")) for row in workers) if value is not None]
+    viss = [value for value in (fnum(row.get("verified_innovation_score")) for row in workers) if value is not None]
+    latencies = sorted(value for value in (fnum(row.get("information_latency_seconds")) for row in workers) if value is not None)
+    pidxs = [value for value in (fnum(row.get("performance_index")) for row in workers) if value is not None]
+    p95 = None
+    if latencies:
+        if len(latencies) == 1:
+            p95 = latencies[0]
+        else:
+            k = 0.95 * (len(latencies) - 1); lo, hi = math.floor(k), math.ceil(k)
+            p95 = latencies[lo] if lo == hi else latencies[lo] * (hi - k) + latencies[hi] * (k - lo)
+    perf = statistics.median(pidxs) if pidxs else None
     floor = float((config.get("capability_information_latency") or {}).get("measurement_floor_seconds", 0.001))
-    cilr = perf / max(p95, floor) if perf is not None and p95 is not None else None
     return {
         "worker_records": len(workers),
-        "exact_token_rows": exact_token_rows,
-        "total_tokens": total_tokens if exact_token_rows else None,
+        "exact_token_rows": exact_rows,
+        "total_tokens": total_tokens if exact_rows else None,
         "verified_utility_units": utility,
-        "token_quality_efficiency": tqe,
+        "token_quality_efficiency": 1000.0 * utility / total_tokens if total_tokens > 0 else None,
         "code_quality_score": statistics.fmean(cqs) if cqs else None,
         "verified_innovation_score": statistics.fmean(viss) if viss else None,
         "performance_index_median": perf,
         "p95_information_latency_seconds": p95,
-        "capability_information_latency_ratio": cilr,
-        "missing_token_fraction": 1.0 - (exact_token_rows / len(workers)) if workers else None,
+        "capability_information_latency_ratio": perf / max(p95, floor) if perf is not None and p95 is not None else None,
+        "missing_token_fraction": 1.0 - exact_rows / len(workers) if workers else None,
         "hcu_confidence": hcu_forecast(workers, config),
     }
+
+
+def _decode_snapshot(raw: dict[str, bytes]) -> tuple[dict[str, dict[str, Any]], str | None]:
+    decoded: dict[str, dict[str, Any]] = {}
+    for name, payload in raw.items():
+        try:
+            value = json.loads(payload.decode("utf-8"))
+        except Exception:
+            return {}, f"INVALID_JSON:{name}"
+        if not isinstance(value, dict):
+            return {}, f"INVALID_OBJECT:{name}"
+        decoded[name] = value
+    return decoded, None
+
+
+def capture_input_snapshot(repo: Path, attempts: int = 4) -> dict[str, Any]:
+    """Read all live input bytes twice; return only an internally stable snapshot."""
+    absolute = {name: repo / rel for name, rel in LIVE_INPUT_PATHS.items()}
+    last_reason = "SNAPSHOT_UNSTABLE"
+    for _ in range(max(1, attempts)):
+        first = {name: read_bytes(path) for name, path in absolute.items()}
+        if any(payload is None for payload in first.values()):
+            missing = sorted(name for name, payload in first.items() if payload is None)
+            return {"ok": False, "status": "MISSING_INPUT", "missing": missing}
+        second = {name: read_bytes(path) for name, path in absolute.items()}
+        if first != second:
+            last_reason = "INPUT_CHANGED_DURING_SNAPSHOT"
+            continue
+        stable = {name: payload for name, payload in first.items() if payload is not None}
+        decoded, error = _decode_snapshot(stable)
+        if error:
+            return {"ok": False, "status": error}
+        authority_epoch = decoded["authority"].get("schema_version")
+        if epoch_key(authority_epoch) is None:
+            return {"ok": False, "status": "AUTHORITY_EPOCH_UNRESOLVED"}
+        source_times: dict[str, str] = {}
+        parsed_times: list[dt.datetime] = []
+        for name in ("swarm", "forge", "distillery"):
+            raw_ts = decoded[name].get("generated_at")
+            parsed = parse_ts(raw_ts)
+            if parsed is None:
+                return {"ok": False, "status": f"INPUT_TIMESTAMP_UNRESOLVED:{name}"}
+            parsed = parsed.astimezone(dt.timezone.utc)
+            parsed_times.append(parsed)
+            source_times[name] = parsed.isoformat()
+        digests = {name: sha256_bytes(payload) for name, payload in stable.items()}
+        identity_material = {
+            "authority_epoch": str(authority_epoch),
+            "sources": {name: {"sha256": digests[name], "generated_at": source_times.get(name)} for name in sorted(digests)},
+        }
+        snapshot_id = sha256_json(identity_material)
+        return {
+            "ok": True,
+            "status": "FRESH_BOUNDED_SNAPSHOT",
+            "schema": FRESHNESS_SCHEMA,
+            "authority_epoch": str(authority_epoch),
+            "snapshot_id": snapshot_id,
+            "source_sha256": digests,
+            "source_generated_at": source_times,
+            "input_watermark": max(parsed_times).isoformat(),
+            "oldest_input_at": min(parsed_times).isoformat(),
+            "max_input_skew_seconds": (max(parsed_times) - min(parsed_times)).total_seconds(),
+            "decoded": decoded,
+        }
+    return {"ok": False, "status": last_reason}
+
+
+def source_metrics_from_snapshot(snapshot: dict[str, Any]) -> dict[str, Any]:
+    decoded = snapshot["decoded"]
+    swarm_workers = decoded["swarm"].get("workers") if isinstance(decoded["swarm"].get("workers"), dict) else {}
+    deltas = decoded["swarm"].get("deltas") if isinstance(decoded["swarm"].get("deltas"), dict) else {}
+    forge, dist = decoded["forge"], decoded["distillery"]
+    return {
+        "snapshot_id": snapshot["snapshot_id"],
+        "free_swarm_live_metrics_generated_at": snapshot["source_generated_at"]["swarm"],
+        "worker_records": inum(swarm_workers.get("worker_records")),
+        "exact_usage_rows": inum(swarm_workers.get("exact_usage_rows")),
+        "input_tokens": inum(swarm_workers.get("input_tokens")),
+        "output_tokens": inum(swarm_workers.get("output_tokens")),
+        "total_tokens": inum(swarm_workers.get("total_tokens")),
+        "swarm_evident_accepted_deltas": inum(deltas.get("accepted")),
+        "forge_generated_at": snapshot["source_generated_at"]["forge"],
+        "forge_evaluations": inum(forge.get("evaluations")),
+        "forge_accepted_deltas": inum(forge.get("accepted_deltas")),
+        "distillery_generated_at": snapshot["source_generated_at"]["distillery"],
+        "distillery_collected_source_tokens": inum(dist.get("collected_source_tokens")),
+        "distillery_accepted_packets": inum(dist.get("accepted_packets")),
+        "distillery_accepted_dataset_tokens": inum(dist.get("accepted_dataset_tokens")),
+    }
+
+
+def stable_measurement_digest(result: dict[str, Any]) -> str:
+    """Digest only evidence-bearing deterministic fields, excluding wall-clock publication time."""
+    material = {
+        "schema": result.get("schema"),
+        "authority_epoch": result.get("authority_epoch"),
+        "config_sha256": result.get("config_sha256"),
+        "snapshot_id": ((result.get("freshness") or {}).get("snapshot_id")),
+        "source_metrics": result.get("source_metrics"),
+        "aggregate": result.get("aggregate"),
+        "anti_goodhart": result.get("anti_goodhart"),
+        "selection_policy": result.get("selection_policy"),
+        "runtime_credit_added": result.get("runtime_credit_added"),
+    }
+    return sha256_json(material)
+
+
+def publication_decision(existing: dict[str, Any], candidate: dict[str, Any]) -> dict[str, Any]:
+    if not existing:
+        return {"allow": True, "status": "NO_EXISTING_PUBLICATION"}
+    current_epoch = epoch_key(candidate.get("authority_epoch"))
+    existing_epoch = epoch_key(existing.get("authority_epoch"))
+    if current_epoch is None:
+        return {"allow": False, "status": "CANDIDATE_AUTHORITY_UNRESOLVED"}
+    if existing_epoch is not None and existing_epoch > current_epoch:
+        return {"allow": False, "status": "HISTORICAL_AUTHORITY_EPOCH"}
+    if existing_epoch is not None and existing_epoch < current_epoch:
+        return {"allow": True, "status": "SUPERSEDE_HISTORICAL_AUTHORITY_EPOCH"}
+    existing_fresh = existing.get("freshness") if isinstance(existing.get("freshness"), dict) else {}
+    candidate_fresh = candidate.get("freshness") if isinstance(candidate.get("freshness"), dict) else {}
+    old_watermark = parse_ts(existing_fresh.get("input_watermark") or existing.get("generated_at"))
+    new_watermark = parse_ts(candidate_fresh.get("input_watermark"))
+    if new_watermark is None:
+        return {"allow": False, "status": "CANDIDATE_WATERMARK_UNRESOLVED"}
+    if old_watermark is not None and old_watermark > new_watermark:
+        return {"allow": False, "status": "OUT_OF_ORDER_OLDER_WRITER"}
+    if old_watermark == new_watermark:
+        old_snapshot, new_snapshot = existing_fresh.get("snapshot_id"), candidate_fresh.get("snapshot_id")
+        if old_snapshot and new_snapshot and old_snapshot != new_snapshot:
+            return {"allow": False, "status": "WATERMARK_COLLISION_DIFFERENT_SNAPSHOT"}
+        if existing.get("measurement_digest_sha256") == candidate.get("measurement_digest_sha256"):
+            return {"allow": False, "status": "IDEMPOTENT_ALREADY_PUBLISHED", "idempotent": True}
+    return {"allow": True, "status": "NEWER_OR_CHANGED_MEASUREMENT"}
+
+
+def atomic_write_text(path: Path, text: str) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    tmp = path.with_name(path.name + ".tmp")
+    tmp.write_text(text, encoding="utf-8")
+    tmp.replace(path)
 
 
 def fmt(value: Any, digits: int = 3) -> str:
@@ -443,76 +561,45 @@ def fmt(value: Any, digits: int = 3) -> str:
 
 
 def worker_table_rows(workers: list[dict[str, Any]], limit: int = 100) -> list[str]:
-    lines = [
-        "| worker | tokens | TQE | CQS | VIS | perf idx | info latency s | CILR | lineage | status |",
-        "|---|---:|---:|---:|---:|---:|---:|---:|---|---|",
-    ]
-    ranked = sorted(
-        workers,
-        key=lambda r: (
-            -(fnum(r.get("token_quality_efficiency")) or -1),
-            str(r.get("worker_id") or r.get("organ") or ""),
-        ),
-    )
-    for r in ranked[:limit]:
-        status = str(r.get("status") or r.get("runtime_status") or "OBSERVED")
+    lines = ["| worker | tokens | TQE | CQS | VIS | perf idx | info latency s | CILR | lineage | status |",
+             "|---|---:|---:|---:|---:|---:|---:|---:|---|---|"]
+    ranked = sorted(workers, key=lambda row: (-(fnum(row.get("token_quality_efficiency")) or -1), worker_key(row)))
+    for row in ranked[:limit]:
+        status = str(row.get("status") or row.get("runtime_status") or "OBSERVED")
         lines.append(
-            f"| {worker_key(r)} | {fmt(r.get('total_tokens'),0)} | "
-            f"{fmt(r.get('token_quality_efficiency'),6)} | {fmt(r.get('code_quality_score'),2)} | "
-            f"{fmt(r.get('verified_innovation_score'),2)} | {fmt(r.get('performance_index'),3)} | "
-            f"{fmt(r.get('information_latency_seconds'),3)} | "
-            f"{fmt(r.get('capability_information_latency_ratio'),3)} | "
-            f"`{str(r.get('evidence_lineage_resolved') or 'UNKNOWN')[:80]}` | {status} |"
+            f"| {worker_key(row)} | {fmt(row.get('total_tokens'),0)} | {fmt(row.get('token_quality_efficiency'),6)} | "
+            f"{fmt(row.get('code_quality_score'),2)} | {fmt(row.get('verified_innovation_score'),2)} | "
+            f"{fmt(row.get('performance_index'),3)} | {fmt(row.get('information_latency_seconds'),3)} | "
+            f"{fmt(row.get('capability_information_latency_ratio'),3)} | `{str(row.get('evidence_lineage_resolved') or 'UNKNOWN')[:80]}` | {status} |"
         )
-    if len(workers) > limit:
-        lines.append(f"| … | … | … | … | … | … | … | … | … | {len(workers)-limit} additional rows in JSON |")
     return lines
 
 
 def markdown(result: dict[str, Any]) -> str:
-    a = result["aggregate"]
-    h = a["hcu_confidence"]
-    p = h.get("forecast_probability")
+    aggregate_value = result["aggregate"]
+    hcu = aggregate_value["hcu_confidence"]
+    probability = hcu.get("forecast_probability")
+    freshness = result["freshness"]
     lines = [
-        AUTO_BEGIN,
-        "## GO Collective Recursive-Improvement Metrics",
-        f"Generated: `{result['generated_at']}`  ",
-        f"Schema: `{SCHEMA}`  ",
-        "",
-        "### Aggregate",
-        "| Metric | Current | Evidence note |",
-        "|---|---:|---|",
-        f"| Worker records observed | {a['worker_records']} | all explicit records + available Free Swarm rows |",
-        f"| Exact-token rows | {a['exact_token_rows']} | missing tokens remain UNKNOWN |",
-        f"| Total exact tokens | {fmt(a['total_tokens'],0)} | no historical estimate added |",
-        f"| Token Quality Efficiency / 1k tokens | {fmt(a['token_quality_efficiency'],6)} | accepted verified utility only |",
-        f"| Code Quality Score / 100 | {fmt(a['code_quality_score'],2)} | UNKNOWN when evidence coverage is insufficient |",
-        f"| Verified Innovation Score / 100 | {fmt(a['verified_innovation_score'],2)} | self-reported novelty ignored |",
-        f"| Median performance index | {fmt(a['performance_index_median'],3)} | same benchmark family only |",
-        f"| p95 information latency (s) | {fmt(a['p95_information_latency_seconds'],3)} | producer evidence -> first downstream consumption |",
-        f"| Capability / latency ratio | {fmt(a['capability_information_latency_ratio'],3)} | unbounded; raw perf+latency remain visible |",
-        f"| HCU_TARGET_100_GO forecast | {fmt(100*p,1) if p is not None else 'UNKNOWN'}% | {h.get('calibration_state')} forecast, not completion % |",
-        "",
-        "### HCU milestone forecast vector",
-        "| milestone | p |",
-        "|---|---:|",
+        AUTO_BEGIN, "## GO Collective Recursive-Improvement Metrics",
+        f"Generated: `{result['generated_at']}`  ", f"Authority: `{result['authority_epoch']}`  ",
+        f"Snapshot: `{freshness['snapshot_id']}`  ", f"Input watermark: `{freshness['input_watermark']}`  ", "",
+        "### Aggregate", "| Metric | Current | Evidence note |", "|---|---:|---|",
+        f"| Worker records observed | {aggregate_value['worker_records']} | explicit records + available Free Swarm artifact rows |",
+        f"| Total exact tokens | {fmt(aggregate_value['total_tokens'],0)} | historical estimates not invented |",
+        f"| Token Quality Efficiency / 1k tokens | {fmt(aggregate_value['token_quality_efficiency'],6)} | verified utility only |",
+        f"| Code Quality Score / 100 | {fmt(aggregate_value['code_quality_score'],2)} | UNKNOWN under insufficient evidence |",
+        f"| Verified Innovation Score / 100 | {fmt(aggregate_value['verified_innovation_score'],2)} | self-report ignored |",
+        f"| HCU_TARGET_100_GO forecast | {fmt(100*probability,1) if probability is not None else 'UNKNOWN'}% | {hcu.get('calibration_state')} forecast, not completion |",
+        "", "### Bounded live snapshot", "| surface | generated_at | sha256 |", "|---|---|---|",
     ]
-    for key, value in h.get("milestone_probabilities", {}).items():
-        lines.append(f"| `{key}` | {100*float(value):.1f}% |")
-    lines += [
-        "",
-        "### Per-worker view",
-        *worker_table_rows(result["workers"]),
-        "",
-        "### Anti-Goodhart health",
-        "- No single scalar selects winners; use Pareto comparison plus hard correctness/provenance/security/effect gates.",
-        "- Scores may decrease after stronger measurement or counterevidence.",
-        "- Shared model/source/prompt/orchestration ancestry is correlated evidence and must be collapsed.",
-        "- Metric-definition changes are versioned, shadow-run, and do not rewrite raw history.",
-        "- Confidence forecasts are calibrated on resolved outcomes using Brier/log loss when enough observations exist.",
-        AUTO_END,
-        "",
-    ]
+    for name in ("swarm", "forge", "distillery"):
+        lines.append(f"| {name} | `{freshness['source_generated_at'][name]}` | `{freshness['source_sha256'][name]}` |")
+    lines += ["", "### Per-worker view", *worker_table_rows(result["workers"]), "",
+              "### Anti-Goodhart health",
+              "- Stale aggregate output cannot supersede a newer bounded live snapshot.",
+              "- Authority-epoch regressions fail closed; historical snapshots remain evidence but not current state.",
+              "- Shared model/source/prompt/orchestration ancestry is correlated evidence and must be collapsed.", AUTO_END, ""]
     return "\n".join(lines)
 
 
@@ -524,33 +611,57 @@ def replace_block(text: str, block: str) -> str:
     return text.rstrip() + "\n\n" + block
 
 
+def make_receipt(candidate: dict[str, Any], decision: dict[str, Any], *, published: bool) -> dict[str, Any]:
+    return {
+        "schema": FRESHNESS_RECEIPT_SCHEMA,
+        "generated_at": dt.datetime.now(dt.timezone.utc).isoformat(),
+        "authority_epoch": candidate.get("authority_epoch"),
+        "snapshot_id": ((candidate.get("freshness") or {}).get("snapshot_id")),
+        "input_watermark": ((candidate.get("freshness") or {}).get("input_watermark")),
+        "measurement_digest_sha256": candidate.get("measurement_digest_sha256"),
+        "publication_decision": decision,
+        "published": published,
+        "tests_or_runtime_credit_added": 0,
+        "scope": "COLLECTIVE_METRICS_FRESHNESS_AND_ORDERING_ONLY",
+        "whole_entityos_hcu_credit": 0,
+    }
+
+
 def main() -> int:
-    ap = argparse.ArgumentParser()
-    ap.add_argument("--repo", type=Path, default=Path(__file__).resolve().parents[1])
-    ap.add_argument("--artifacts", type=Path, default=Path("/artifacts/clay-entityos-swarm"))
-    ap.add_argument("--output-json", type=Path, default=None)
-    ap.add_argument("--output-md", type=Path, default=None)
-    ap.add_argument("--update-readme", action="store_true")
-    args = ap.parse_args()
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--repo", type=Path, default=Path(__file__).resolve().parents[1])
+    parser.add_argument("--artifacts", type=Path, default=Path("/artifacts/clay-entityos-swarm"))
+    parser.add_argument("--output-json", type=Path, default=None)
+    parser.add_argument("--output-md", type=Path, default=None)
+    parser.add_argument("--receipt-json", type=Path, default=None)
+    parser.add_argument("--update-readme", action="store_true")
+    args = parser.parse_args()
 
     repo = args.repo.resolve()
+    snapshot = capture_input_snapshot(repo)
+    if not snapshot.get("ok"):
+        print(json.dumps({"schema": FRESHNESS_RECEIPT_SCHEMA, "published": False, "status": snapshot.get("status")}, sort_keys=True))
+        return 2
+
     config = load_config(repo)
     if config.get("schema") != "CLAY_GO_COLLECTIVE_METRICS_CONFIG/v1":
         raise SystemExit("GO_METRICS_CONFIG_REQUIRED")
-
     workers = explicit_worker_rows(repo)
     workers.extend(free_swarm_rows(args.artifacts))
-    deltas = delta_rows(repo)
-    attach_delta_metrics(workers, deltas, config)
+    attach_delta_metrics(workers, delta_rows(repo), config)
 
+    freshness = {key: value for key, value in snapshot.items() if key not in {"ok", "decoded"}}
     result = {
         "schema": SCHEMA,
         "generated_at": dt.datetime.now(dt.timezone.utc).isoformat(),
+        "authority_epoch": snapshot["authority_epoch"],
         "program": "ENTITYOS_HCU",
         "product": "EntityOS",
         "architecture": "HCU",
         "config_sha256": sha256_json(config),
         "worker_record_count": len(workers),
+        "source_metrics": source_metrics_from_snapshot(snapshot),
+        "freshness": freshness,
         "aggregate": aggregate(workers, config),
         "workers": workers,
         "anti_goodhart": config.get("anti_goodhart"),
@@ -558,31 +669,28 @@ def main() -> int:
         "runtime_credit_added": 0,
         "note": "Derived measurement only. It cannot mint canonical truth or runtime/model/training credit.",
     }
-    md = markdown(result)
-
+    result["measurement_digest_sha256"] = stable_measurement_digest(result)
     out_json = args.output_json or (repo / "free swarm/GO_COLLECTIVE_METRICS.json")
     out_md = args.output_md or (repo / "free swarm/GO_COLLECTIVE_METRICS.md")
-    out_json.write_text(json.dumps(result, indent=2, sort_keys=True, ensure_ascii=False) + "\n", encoding="utf-8")
-    out_md.write_text(md, encoding="utf-8")
-
-    if args.update_readme:
-        readme = repo / "free swarm/README.md"
-        current = readme.read_text(encoding="utf-8") if readme.exists() else "# Free Swarm\n"
-        readme.write_text(replace_block(current, md), encoding="utf-8")
-
-    print(out_json)
-    print(out_md)
-    h = result["aggregate"]["hcu_confidence"]
-    print(json.dumps({
-        "workers": len(workers),
-        "tqe": result["aggregate"]["token_quality_efficiency"],
-        "cqs": result["aggregate"]["code_quality_score"],
-        "vis": result["aggregate"]["verified_innovation_score"],
-        "cilr": result["aggregate"]["capability_information_latency_ratio"],
-        "hcu_forecast_probability": h.get("forecast_probability"),
-        "calibration_state": h.get("calibration_state"),
-    }, sort_keys=True))
-    return 0
+    existing = read_json(out_json)
+    decision = publication_decision(existing, result)
+    published = False
+    if decision.get("allow"):
+        atomic_write_text(out_json, json.dumps(result, indent=2, sort_keys=True, ensure_ascii=False) + "\n")
+        atomic_write_text(out_md, markdown(result))
+        if args.update_readme:
+            readme = repo / "free swarm/README.md"
+            current = readme.read_text(encoding="utf-8") if readme.exists() else "# Free Swarm\n"
+            atomic_write_text(readme, replace_block(current, markdown(result)))
+        published = True
+    receipt = make_receipt(result, decision, published=published)
+    if args.receipt_json:
+        target = args.receipt_json if args.receipt_json.is_absolute() else repo / args.receipt_json
+        atomic_write_text(target, json.dumps(receipt, indent=2, sort_keys=True, ensure_ascii=False) + "\n")
+    print(json.dumps(receipt, sort_keys=True, ensure_ascii=False))
+    if decision.get("idempotent"):
+        return 0
+    return 0 if published else 3
 
 
 if __name__ == "__main__":

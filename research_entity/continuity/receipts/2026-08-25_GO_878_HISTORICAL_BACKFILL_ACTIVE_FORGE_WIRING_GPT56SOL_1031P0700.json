@@ -1,0 +1,66 @@
+{
+  "schema": "CLAY_GO_RESEARCH_DELTA_RECEIPT/v1",
+  "authority_epoch": "8.78",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "canonical_base_main": "9239370999c192328f33eb47fa3bbb7e88ab39a7",
+  "branch": "go878-wire-historical-backfill-forge-20260825-1031",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "observation": {
+    "supervisor_inbox_selected": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_78.json",
+    "priority_1": "WIRE_THE_EXISTING_BACKLOG_FIRST_FORGE_ENTRYPOINT_INTO_THE_SINGLE_ACTIVE_FORGE_SUPERVISOR_PATH_INSTEAD_OF_CREATING_A_SECOND_FORGE_AUTHORITY",
+    "backlog_first_entrypoint_present": "tools/run_free_evidence_forge_backfill.py",
+    "active_supervisor_observed": "tools/run_24h_entityos_swarm_supervisor.sh",
+    "defect": "start_forge still selected tools/run_free_evidence_forge_safe.py and forge_running still observed that predecessor, so the historical backfill entrypoint was source-present but not activated by the canonical 24h supervisor path"
+  },
+  "hypothesis": "Switching the existing start_forge selection and status probe to run_free_evidence_forge_backfill.py, while retiring predecessor Forge processes first, closes the activation gap without creating a second Forge authority.",
+  "counterhypothesis": "A different hidden activation path may already start the backlog-first Forge; source search did not establish such a current supervisor reference, so runtime saturation remains uncredited until exact-source execution evidence exists.",
+  "delta": {
+    "supervisor_commit": "302a866552622c1952fb2b12acd9d8dc3cb9ec6a",
+    "test_commit": "bcc4e096e4fc26102281bc434542411584dd344f",
+    "files": [
+      "tools/run_24h_entityos_swarm_supervisor.sh",
+      "tests/test_forge_distillery_supervisor_wiring_871.py"
+    ],
+    "changes": [
+      "single active Forge entrypoint now selects run_free_evidence_forge_backfill.py",
+      "existing backlog-first process is detected before spawn",
+      "predecessor safe Forge entrypoints are retired before activation to prevent dual evaluator authority",
+      "SUPERVISOR.json forge_running now tracks the backlog-first entrypoint",
+      "regression tests pin activation and status semantics"
+    ]
+  },
+  "coordination": {
+    "overlap_reviewed": [
+      "PR#1879 historical backfill saturation semantics",
+      "PR#1877 replay-idempotent source support",
+      "PR#1851 provenance/source-count reconciliation",
+      "PR#1856 collective metrics freshness",
+      "PR#1263 retained HCU donor lane"
+    ],
+    "duplicate_activation_wiring_pr_observed": false,
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "No shared reproducible immutable macrocycle/request identity was exposed to this organ; this cycle used ordinary source review and deterministic wiring only."
+  },
+  "tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED_SOURCE_CONTROL_PLANE_SCOPE",
+    "B_HCU_TYPED_ENTRY": "ADVANCED_EVIDENCE_ADMISSION_AND_SINGLE_AUTHORITY_CONTROL_SCOPE",
+    "C_GLOBAL_JSPACE_GWT_TRAINING_READINESS": "TRAINING_READINESS_NO_CHANGE_WITH_REASON: upstream historical conversion and exact runtime receipts remain the highest-information gates; no model intervention was justified or coordinated"
+  },
+  "evidence_scope": {
+    "source_delta": true,
+    "regression_test_source": true,
+    "tests_executed_on_exact_branch": false,
+    "historical_backfill_runtime_credit": 0,
+    "provider_runtime_credit": 0,
+    "entityos_hcu_whole_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Execute the focused supervisor wiring regression plus historical-backfill tests on the exact branch, then fuse if green; after fusion execute the active historical backfill incrementally to saturation and emit FREE_SWARM_HISTORICAL_BACKFILL_RECEIPT/v1 before increasing raw generation."
+}

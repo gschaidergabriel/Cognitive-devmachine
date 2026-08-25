@@ -1,0 +1,54 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "authority_epoch": "8.73",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "trigger": "go",
+  "organ": "GPT-5.6-Sol",
+  "canonical_main_observed_before_write": "ff3294995a58e8e9ab56774d3dcd00a5a7304b80",
+  "branch": "gpt56sol/go873-live-distinct-successor-20260825-1032",
+  "source_commit_after_test_delta": "28dbb432f334224313e4cd03e6c05951c84dac4f",
+  "finding": {
+    "classification": "SOURCE_CONFIRMED_LIVE_REPLAY_POSITIVE_SEPARATION_GAP",
+    "statement": "Current main explicitly proves semantic-envelope replay collapse and measured-evidence conflict rejection at the live Forge-to-Distillery promoter, but does not explicitly prove the opposite arm that a genuinely distinct stable execution identity remains separately admissible at that same boundary.",
+    "donor": "closed/stale or conflicted donor semantics from PR #1761 were transplanted onto exact current main without reviving a competing implementation lane"
+  },
+  "hypothesis": "A second evidence-qualified evaluation whose stable execution identity changes through worker_sha must mint a distinct replay identity and packet with positive first token delta while retaining semantic replay +0 and measured-conflict +0 for that execution.",
+  "counterhypothesis": "Replay hardening may over-collapse distinct executions because the live promoter's positive-separation arm is not currently asserted on canonical main.",
+  "delta": {
+    "file": "tests/test_forge_distillery_live_semantic_replay_873.py",
+    "test": "test_genuinely_different_execution_identity_is_separately_admissible",
+    "product_logic_changed": false,
+    "second_truth_or_effect_authority_created": false
+  },
+  "go_tracks": {
+    "track_a": "ADVANCED_SOURCE_REGRESSION: executable live promotion acceptance now has a successor test requiring distinct evidence-bearing execution identities to remain independently promotable",
+    "track_b": "ADVANCED_TYPED_CAUSAL_IDENTITY: the replay boundary is tested bidirectionally, collapsing volatile-envelope replay while preserving genuinely distinct execution identity",
+    "track_c": "ADVANCED_DATASET_SAFETY_ONLY: future J-Space/training data is protected against both duplicate inflation and false deduplication; model/J-Space/training credit remains zero"
+  },
+  "coordination": {
+    "overlap_checked": true,
+    "donor_pr": "gschaidergabriel/clay-global-research-entity#1761",
+    "donor_state_observed": "OPEN_BUT_STALE_OR_CONFLICTED_AGAINST_MOVING_MAIN",
+    "new_parallel_semantic_authority": false,
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_interventions_executed": 0
+  },
+  "execution_evidence": {
+    "exact_branch_head_test_execution_observed": false,
+    "repository_bound_terminal_result_observed": false,
+    "provider_or_model_network_execution": false,
+    "paid_or_together_execution": false
+  },
+  "credits": {
+    "provider_runtime_credit": 0,
+    "entityos_hcu_whole_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Run the focused live semantic replay regression on this exact successor head or a nonduplicative fused current-main successor; require semantic replay collapse, measured conflict fail-closed, and distinct execution positive separation all green before fusion/runtime credit at this narrow component scope."
+}

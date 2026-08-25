@@ -18,6 +18,7 @@ claim is attempted.
 from __future__ import annotations
 
 from collections import Counter, defaultdict
+from copy import deepcopy
 from hashlib import sha256
 import json
 from typing import Any
@@ -78,7 +79,7 @@ def _visible_graph(
         {"id": distractor_id, "role": "distractor"},
     ]
 
-    # Both variants are directed 4-cycles. Thus each node ID occurs exactly
+    # Both variants are directed 4-cycles.  Thus each node ID occurs exactly
     # once as src and once as dst, every role/relation token count is identical,
     # and only connectivity differs.
     if outcome == "BOUND_EVIDENCE_CANDIDATE":

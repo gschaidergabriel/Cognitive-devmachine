@@ -16,18 +16,31 @@ import re
 from collections import Counter, defaultdict
 from typing import Any, Iterable
 
-from tools import trigger2_dynamic_codebook_generator_v2 as base
-
-ROW_SCHEMA = base.ROW_SCHEMA
+ROW_SCHEMA = "ENTITYOS_HCU_TRAININGTRACE_CANDIDATE/v1"
 AUDIT_SCHEMA = "TRIGGER2_MULTIHOP_BINDING_GENERATOR_AUDIT/v1"
 GENERATOR_SCHEMA = "CLAY_TRIGGER2_MULTIHOP_BINDING_GENERATOR/v1"
-CLASSES = base.CLASSES
-OUTPUT_SLOTS = base.ABSTRACT_SLOTS
+CLASSES = ("ALLOW", "DENY", "ABSTAIN")
+OUTPUT_SLOTS = ("ATOM_A", "ATOM_B", "ATOM_C")
 ROOT_ROLES = ("r0", "r1", "r2")
 ROOT_S3 = tuple(itertools.permutations(ROOT_ROLES))
-SYMBOL_S3 = base.S3
+SYMBOL_S3 = tuple(itertools.permutations(OUTPUT_SLOTS))
 DEPTHS = (1, 2, 3, 4)
-TEMPLATES = tuple(base.TRAIN_LEXICON)
+TEMPLATES = (
+    "T1_CODEBOOK_THEN_CASE",
+    "T2_CASE_THEN_CODEBOOK",
+    "T3_TABLE_STYLE_CODEBOOK",
+    "T4_DIALOGUE_STYLE_EPISODE",
+)
+SCENARIOS = {
+    "ALLOW": "Facts: p=true; q=true. Rule condition: p AND q.",
+    "DENY": "Facts: p=true; q=false. Rule condition: p AND q.",
+    "ABSTAIN": "Facts: p=true; q=UNKNOWN. Rule condition: p AND q.",
+}
+CLASS_WORD_POLICY = "CODEBOOK_ONLY_ALLOWED_CANDIDATE"
+ABI_MANIFEST_SHA256 = "0f664e6a4626351fbf97cd74a4825cedaf115b80f56b71b16c39315dba02fa11"
+SOURCE_PACKAGE_SHA256 = "a2babae93dfe39e4e452a06bd8b848337f29766e38c422f05fb395126229b05c"
+MEASUREMENT_DONOR_MODEL = "Goekdeniz-Guelmez/Josiefied-Qwen3.5-0.8B-gabliterated-v1"
+MEASUREMENT_DONOR_SNAPSHOT = "591852bda6e1979f59e4b0f5ee2919697b12e936"
 
 
 def _codebook(mapping: dict[str, str], order: tuple[str, ...]) -> str:
@@ -39,13 +52,13 @@ def _bindings(edges: list[tuple[str, str]]) -> str:
 
 
 def _prompt(template: str, cb: str, graph: str, scenario: str) -> str:
-    if template == "T1":
+    if template == "T1_CODEBOOK_THEN_CASE":
         return f"{cb}\n{graph}\n<SITUATION>{scenario}</SITUATION>\n<QUERY>Resolve the episode-local bindings and emit only the final symbol.</QUERY>"
-    if template == "T2":
+    if template == "T2_CASE_THEN_CODEBOOK":
         return f"<EPISODE><OBSERVATION>{scenario}</OBSERVATION>{cb}{graph}<INSTRUCTION>Use only this episode's mapping graph. Emit one final symbol.</INSTRUCTION></EPISODE>"
-    if template == "T3":
+    if template == "T3_TABLE_STYLE_CODEBOOK":
         return f"{cb}{graph}<STATE>{scenario}</STATE><RESOLVE>?</RESOLVE>"
-    if template == "T4":
+    if template == "T4_DIALOGUE_STYLE_EPISODE":
         return f"<CASE>{scenario}</CASE><MAPPING>{cb}{graph}</MAPPING><OUTPUT_CONTRACT>Follow the relevant chain, ignore unrelated chains, emit one final symbol.</OUTPUT_CONTRACT>"
     raise ValueError(template)
 
@@ -143,7 +156,7 @@ def build_rows(*, split: str = "TRAIN", distractor_chains: int = 2) -> list[dict
                         d_edges, d_roots = _distractors(tag, depth, distractor_chains)
                         edges = _shuffle(edges + d_edges, tag)
                         order = orders[(row_i + depth + rp_i + sp_i) % len(orders)]
-                        prompt = _prompt(template, _codebook(c2r, order), _bindings(edges), base.TRAIN_LEXICON[template][cls])
+                        prompt = _prompt(template, _codebook(c2r, order), _bindings(edges), SCENARIOS[cls])
                         target, path = resolve(c2r[cls], edges)
                         rows.append({
                             "schema": ROW_SCHEMA,
@@ -174,13 +187,13 @@ def build_rows(*, split: str = "TRAIN", distractor_chains: int = 2) -> list[dict
                                 "distractor_roots": d_roots,
                                 "distractor_chain_count": distractor_chains,
                             },
-                            "class_word_policy": base.CLASS_WORD_POLICY,
+                            "class_word_policy": CLASS_WORD_POLICY,
                             "requires_abi_atom_resolution": True,
                             "candidate_train_ready": False,
-                            "abi_manifest_sha256": base.ABI_MANIFEST_SHA256,
-                            "measurement_source_package_sha256": base.SOURCE_PACKAGE_SHA256,
-                            "measurement_donor_model_id": base.MEASUREMENT_DONOR_MODEL,
-                            "measurement_donor_snapshot": base.MEASUREMENT_DONOR_SNAPSHOT,
+                            "abi_manifest_sha256": ABI_MANIFEST_SHA256,
+                            "measurement_source_package_sha256": SOURCE_PACKAGE_SHA256,
+                            "measurement_donor_model_id": MEASUREMENT_DONOR_MODEL,
+                            "measurement_donor_snapshot": MEASUREMENT_DONOR_SNAPSHOT,
                             "jspace_label_transfer_allowed": False,
                         })
                         row_i += 1

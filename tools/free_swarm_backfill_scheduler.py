@@ -16,7 +16,12 @@ import threading
 import time
 from typing import Any
 
-from free_swarm_historical_backfill import load_backfill_packets
+import free_swarm_historical_backfill as historical_backfill_core
+from free_swarm_backfill_exhaustiveness_878 import install as install_exhaustiveness
+
+# Producer and consumer must share one conservative completion policy.
+install_exhaustiveness(historical_backfill_core)
+load_backfill_packets = historical_backfill_core.load_backfill_packets
 
 ARTIFACT_ROOT = Path(os.getenv("CLAY_SWARM_ARTIFACT_ROOT", "/artifacts/clay-entityos-swarm"))
 FORGE_DB = ARTIFACT_ROOT / "forge/forge.sqlite3"
@@ -89,11 +94,16 @@ BACKFILL LAW
   the implementation queue instead of being discarded.
 - Dedupe against known_concept_ids conceptually; do not emit paraphrase-only duplicates.
 - Preserve counterhypotheses as separate candidates only when they imply a different executable discriminator.
-- Return at most 8 deltas in this pass. If more remain, exhaustive=false; the chunk will be scheduled again.
+- Return at most 8 deltas in this pass. If ANY materially distinct supported delta may remain after this batch,
+  set exhaustive=false so the chunk is scheduled again. Set exhaustive=true ONLY after a complete re-read
+  supports the claim that no further materially distinct delta remains.
+- A zero-delta pass is not enough to close a chunk. The consumer requires two consecutive zero-novel passes
+  that both explicitly assert exhaustive=true before SATURATED is allowed.
 - This extraction pass grants ZERO acceptance credit. Every emitted delta still goes through the one canonical Forge.
 
-For this call, replace the ordinary single ARCHITECTURE_DELTA_JSON line with exactly:
-ARCHITECTURE_DELTA_BATCH_JSON={{"historical_source_event_id":"{packet.get('historical_source_event_id')}","historical_chunk_id":"{packet.get('historical_chunk_id')}","extraction_pass":{int(packet.get('extraction_pass') or 1)},"exhaustive":true,"deltas":[<0..8 normal architecture-delta objects>]}}
+For this call, replace the ordinary single ARCHITECTURE_DELTA_JSON line with exactly one line of this shape,
+replacing <EXHAUSTIVE_BOOLEAN> with the JSON boolean true or false according to the law above:
+ARCHITECTURE_DELTA_BATCH_JSON={{"historical_source_event_id":"{packet.get('historical_source_event_id')}","historical_chunk_id":"{packet.get('historical_chunk_id')}","extraction_pass":{int(packet.get('extraction_pass') or 1)},"exhaustive":<EXHAUSTIVE_BOOLEAN>,"deltas":[<0..8 normal architecture-delta objects>]}}
 Then emit the normal OPEN_RESEARCH_QUESTIONS_JSON line.
 Each delta object must use the normal schema and include the same historical_source_event_id,
 historical_chunk_id and extraction_pass fields. Use ready_for_forge=true only with a real unified diff,

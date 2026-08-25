@@ -999,8 +999,10 @@ def _execute_chat_locked(
                 or payload["object"] != "chat.completion"
             ):
                 raise ValueError("response_object_must_be_chat_completion")
-            if "model" in payload and (
-                type(payload["model"]) is not str or payload["model"] != model
+            if (
+                "model" not in payload
+                or type(payload["model"]) is not str
+                or payload["model"] != model
             ):
                 raise ValueError("response_model_must_match_request")
             choices = payload["choices"]

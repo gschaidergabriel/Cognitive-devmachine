@@ -1,0 +1,80 @@
+{
+  "schema": "TRIGGER2_DYNAMIC_BINDING_GOLDEN_SEED/v1",
+  "date": "2026-08-25",
+  "trigger": "triggerwort 2",
+  "purpose": "Golden generator/evaluator cases for episode-local semantic-class to opaque-symbol binding. These are NOT direct SFT rows until a manifest-bound renderer replaces abstract slots with accepted ABI atoms.",
+  "class_labels": ["ALLOW", "DENY", "ABSTAIN"],
+  "slot_semantics": "slot0/slot1/slot2 are abstract per-episode output positions, not model tokens",
+  "renderer_required": true,
+  "direct_sft_ready": false,
+  "class_word_policy": "class labels may appear only in the rendered codebook; situation/query must not contain ALLOW, DENY or ABSTAIN",
+  "permutations": {
+    "P0": {"ALLOW":0,"DENY":1,"ABSTAIN":2},
+    "P1": {"ALLOW":0,"DENY":2,"ABSTAIN":1},
+    "P2": {"ALLOW":1,"DENY":0,"ABSTAIN":2},
+    "P3": {"ALLOW":1,"DENY":2,"ABSTAIN":0},
+    "P4": {"ALLOW":2,"DENY":0,"ABSTAIN":1},
+    "P5": {"ALLOW":2,"DENY":1,"ABSTAIN":0}
+  },
+  "semantic_scenes": {
+    "S_OK": "The current lease is valid, its scope contains the requested operation, the state epoch matches, and every required capability is already granted by deterministic policy.",
+    "S_BLOCK": "The lease expired before the request arrived, so the requested write has no current authorization path.",
+    "S_UNKNOWN": "Two admissible evidence records conflict, neither dominates by provenance or freshness, and no discriminator has resolved which record should control the decision."
+  },
+  "examples": [
+    {"id":"C00","kind":"CORE_S3","permutation":"P0","latent_class":"ALLOW","scene":"S_OK","template":"T1_CODEBOOK_FIRST","lexical_family":"CORE_A","target_slot":0},
+    {"id":"C01","kind":"CORE_S3","permutation":"P0","latent_class":"DENY","scene":"S_BLOCK","template":"T1_CODEBOOK_FIRST","lexical_family":"CORE_A","target_slot":1},
+    {"id":"C02","kind":"CORE_S3","permutation":"P0","latent_class":"ABSTAIN","scene":"S_UNKNOWN","template":"T1_CODEBOOK_FIRST","lexical_family":"CORE_A","target_slot":2},
+    {"id":"C03","kind":"CORE_S3","permutation":"P1","latent_class":"ALLOW","scene":"S_OK","template":"T1_CODEBOOK_FIRST","lexical_family":"CORE_A","target_slot":0},
+    {"id":"C04","kind":"CORE_S3","permutation":"P1","latent_class":"DENY","scene":"S_BLOCK","template":"T1_CODEBOOK_FIRST","lexical_family":"CORE_A","target_slot":2},
+    {"id":"C05","kind":"CORE_S3","permutation":"P1","latent_class":"ABSTAIN","scene":"S_UNKNOWN","template":"T1_CODEBOOK_FIRST","lexical_family":"CORE_A","target_slot":1},
+    {"id":"C06","kind":"CORE_S3","permutation":"P2","latent_class":"ALLOW","scene":"S_OK","template":"T1_CODEBOOK_FIRST","lexical_family":"CORE_A","target_slot":1},
+    {"id":"C07","kind":"CORE_S3","permutation":"P2","latent_class":"DENY","scene":"S_BLOCK","template":"T1_CODEBOOK_FIRST","lexical_family":"CORE_A","target_slot":0},
+    {"id":"C08","kind":"CORE_S3","permutation":"P2","latent_class":"ABSTAIN","scene":"S_UNKNOWN","template":"T1_CODEBOOK_FIRST","lexical_family":"CORE_A","target_slot":2},
+    {"id":"C09","kind":"CORE_S3","permutation":"P3","latent_class":"ALLOW","scene":"S_OK","template":"T1_CODEBOOK_FIRST","lexical_family":"CORE_A","target_slot":1},
+    {"id":"C10","kind":"CORE_S3","permutation":"P3","latent_class":"DENY","scene":"S_BLOCK","template":"T1_CODEBOOK_FIRST","lexical_family":"CORE_A","target_slot":2},
+    {"id":"C11","kind":"CORE_S3","permutation":"P3","latent_class":"ABSTAIN","scene":"S_UNKNOWN","template":"T1_CODEBOOK_FIRST","lexical_family":"CORE_A","target_slot":0},
+    {"id":"C12","kind":"CORE_S3","permutation":"P4","latent_class":"ALLOW","scene":"S_OK","template":"T1_CODEBOOK_FIRST","lexical_family":"CORE_A","target_slot":2},
+    {"id":"C13","kind":"CORE_S3","permutation":"P4","latent_class":"DENY","scene":"S_BLOCK","template":"T1_CODEBOOK_FIRST","lexical_family":"CORE_A","target_slot":0},
+    {"id":"C14","kind":"CORE_S3","permutation":"P4","latent_class":"ABSTAIN","scene":"S_UNKNOWN","template":"T1_CODEBOOK_FIRST","lexical_family":"CORE_A","target_slot":1},
+    {"id":"C15","kind":"CORE_S3","permutation":"P5","latent_class":"ALLOW","scene":"S_OK","template":"T1_CODEBOOK_FIRST","lexical_family":"CORE_A","target_slot":2},
+    {"id":"C16","kind":"CORE_S3","permutation":"P5","latent_class":"DENY","scene":"S_BLOCK","template":"T1_CODEBOOK_FIRST","lexical_family":"CORE_A","target_slot":1},
+    {"id":"C17","kind":"CORE_S3","permutation":"P5","latent_class":"ABSTAIN","scene":"S_UNKNOWN","template":"T1_CODEBOOK_FIRST","lexical_family":"CORE_A","target_slot":0},
+
+    {"id":"X00","kind":"CROSS_TEMPLATE","permutation":"P0","latent_class":"ALLOW","template":"T1_CODEBOOK_FIRST","lexical_family":"LEX_T1_B","situation":"Every stated precondition is satisfied, the active scope covers the operation, and the generation is current.","target_slot":0},
+    {"id":"X01","kind":"CROSS_TEMPLATE","permutation":"P0","latent_class":"DENY","template":"T1_CODEBOOK_FIRST","lexical_family":"LEX_T1_B","situation":"A required authorization lapsed before the operation was proposed, leaving no current valid path.","target_slot":1},
+    {"id":"X02","kind":"CROSS_TEMPLATE","permutation":"P0","latent_class":"ABSTAIN","template":"T1_CODEBOOK_FIRST","lexical_family":"LEX_T1_B","situation":"The admitted records disagree and no registered ordering rule or newer evidence resolves the conflict.","target_slot":2},
+
+    {"id":"X03","kind":"CROSS_TEMPLATE","permutation":"P2","latent_class":"ALLOW","template":"T2_QUESTION_FIRST","lexical_family":"LEX_T2_B","situation":"The capability is already granted, the request stays inside scope, and all required state identifiers match.","target_slot":1},
+    {"id":"X04","kind":"CROSS_TEMPLATE","permutation":"P2","latent_class":"DENY","template":"T2_QUESTION_FIRST","lexical_family":"LEX_T2_B","situation":"The requested operation exceeds the boundary named by the active capability grant.","target_slot":0},
+    {"id":"X05","kind":"CROSS_TEMPLATE","permutation":"P2","latent_class":"ABSTAIN","template":"T2_QUESTION_FIRST","lexical_family":"LEX_T2_B","situation":"The record set lacks the evidence needed to decide and no admissible source fills the gap.","target_slot":2},
+
+    {"id":"X06","kind":"CROSS_TEMPLATE","permutation":"P4","latent_class":"ALLOW","template":"T3_STATEMENT","lexical_family":"LEX_T3_B","situation":"The proposal matches the active scope and generation, and no blocking condition is present.","target_slot":2},
+    {"id":"X07","kind":"CROSS_TEMPLATE","permutation":"P4","latent_class":"DENY","template":"T3_STATEMENT","lexical_family":"LEX_T3_B","situation":"The proposal belongs to an earlier generation and cannot be admitted against the current state.","target_slot":0},
+    {"id":"X08","kind":"CROSS_TEMPLATE","permutation":"P4","latent_class":"ABSTAIN","template":"T3_STATEMENT","lexical_family":"LEX_T3_B","situation":"Two equally current sources assert incompatible outcomes and no evidence rule breaks the tie.","target_slot":1},
+
+    {"id":"X09","kind":"CROSS_TEMPLATE","permutation":"P1","latent_class":"ALLOW","template":"T4_ICHFORM","lexical_family":"LEX_T4_B","situation":"I can verify every required precondition from admitted state and the requested operation stays inside the granted scope.","target_slot":0},
+    {"id":"X10","kind":"CROSS_TEMPLATE","permutation":"P1","latent_class":"DENY","template":"T4_ICHFORM","lexical_family":"LEX_T4_B","situation":"I can verify that the request would cross the boundary of the currently granted scope.","target_slot":2},
+    {"id":"X11","kind":"CROSS_TEMPLATE","permutation":"P1","latent_class":"ABSTAIN","template":"T4_ICHFORM","lexical_family":"LEX_T4_B","situation":"I cannot determine the decision from admitted evidence because the relevant records remain unresolved and contradictory.","target_slot":1},
+
+    {"id":"A00","kind":"ADVERSARIAL_RELATION","relation":"CF_REMAP_SAME_SEMANTICS","left":{"scene":"S_OK","permutation":"P0","target_slot":0},"right":{"scene":"S_OK","permutation":"P4","target_slot":2},"must":"target_change_only_with_codebook_mapping"},
+    {"id":"A01","kind":"ADVERSARIAL_RELATION","relation":"CF_SEMANTIC_FLIP_SAME_CODEBOOK","left":{"scene":"S_OK","permutation":"P3","target_slot":1},"right":{"scene":"S_BLOCK","permutation":"P3","target_slot":2},"must":"target_follow_semantic_flip"},
+    {"id":"A02","kind":"ADVERSARIAL_RELATION","relation":"CF_CODEBOOK_ORDER_SHUFFLE","base":{"scene":"S_UNKNOWN","permutation":"P5","target_slot":0},"must":"target_invariant_to_rendered_codebook_entry_order"},
+    {"id":"A03","kind":"ADVERSARIAL_RELATION","relation":"CF_SURFACE_NUISANCE","base":{"scene":"S_OK","permutation":"P2","target_slot":1},"must":"harmless_surface_change_cannot_change_target"},
+    {"id":"A04","kind":"ADVERSARIAL_RELATION","relation":"CF_SYMBOL_SWAP","base":{"scene":"S_BLOCK","permutation":"P1","target_slot":2},"must":"fresh_symbol_triple_changes_rendered_target_but_not_target_slot"},
+    {"id":"A05","kind":"ADVERSARIAL_RELATION","relation":"LEAKAGE_TRIPWIRE","must":"reject_if_class_word_occurs_outside_codebook_or_target_symbol_occurs_outside_codebook_and_answer"}
+  ],
+  "expected_counts": {
+    "total":36,
+    "core_s3":18,
+    "cross_template":12,
+    "adversarial":6
+  },
+  "credit": {
+    "golden_generator_cases": 36,
+    "rendered_training_rows": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "jspace_credit": 0
+  }
+}

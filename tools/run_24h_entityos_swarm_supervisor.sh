@@ -14,9 +14,6 @@ FORGE_DISTILLERY_STATUS="$STATE_DIR/forge-distillery-ingest.json"
 
 provider_admitted(){ python3 "$ADMISSION_TOOL" --provider "$1" >/dev/null 2>&1; }
 
-# Bind a running external-provider swarm to the exact currently validated admission
-# snapshot. The admission tool reads canonical control-plane data only; no provider
-# secret or provider network surface is touched while deriving this digest.
 current_provider_admission_binding(){
   local snapshot
   snapshot="$(python3 "$ADMISSION_TOOL" --json 2>/dev/null)" || return 1
@@ -24,11 +21,6 @@ current_provider_admission_binding(){
   printf '%s' "$snapshot" | sha256sum | awk '{print $1}'
 }
 
-# Child processes inherit the supervisor environment. Remove credentials belonging
-# to any external LLM provider that is not canonically typed FREE-admitted before
-# spawning local-model/distillery/forge/dashboard/swarm children. `unset` and
-# `compgen -v` operate on variable names only; blocked credential values are never
-# expanded merely to decide whether they should be removed.
 clear_unadmitted_provider_secret_env(){
   local name
   if ! provider_admitted groq; then
@@ -123,10 +115,13 @@ start_distillery(){
 }
 
 start_forge(){
-  local x="$ROOT/tools/run_free_evidence_forge_safe.py"; [[ -f "$x" ]] || return 0
-  pgrep -f '[r]un_free_evidence_forge_safe.py' >/dev/null 2>&1 && return 0
-  # The legacy Forge evaluates model-authored command strings through bash -lc.
-  # Retire it before the isolated successor starts; a zero-match is normal.
+  # Supervisor 8.78: make the already-existing historical backlog-first entrypoint
+  # the single active Forge authority instead of running a second evaluator.
+  local x="$ROOT/tools/run_free_evidence_forge_backfill.py"; [[ -f "$x" ]] || return 0
+  pgrep -f '[r]un_free_evidence_forge_backfill.py' >/dev/null 2>&1 && return 0
+  while IFS= read -r pid; do
+    [[ -n "$pid" ]] && kill "$pid" 2>/dev/null || true
+  done < <(pgrep -f '[r]un_free_evidence_forge_safe(_871)?\.py' || true)
   while IFS= read -r pid; do
     [[ -n "$pid" ]] && kill "$pid" 2>/dev/null || true
   done < <(pgrep -f '[r]un_free_evidence_forge.py' || true)
@@ -139,8 +134,6 @@ run_forge_distillery_bridge(){
   local db="$STATE_DIR/distillery/distillery.sqlite3"
   local tmp="${FORGE_DISTILLERY_STATUS}.tmp"
   [[ -f "$x" && -f "$evaluations" && -f "$db" ]] || return 0
-  # Bridge failure is evidence, not a reason to kill independent Forge/Distillery
-  # processes. The tool itself fails closed on non-exact/non-accepted evaluations.
   if python3 "$x" --forge-evaluations "$evaluations" --distillery-db "$db" >"$tmp" 2>"$STATE_DIR/forge-distillery-ingest.err"; then
     mv "$tmp" "$FORGE_DISTILLERY_STATUS"
   else
@@ -154,8 +147,6 @@ start_go_swarm_if_admitted(){
   pgrep -f '[r]un_24h_entityos_swarm.py' >/dev/null 2>&1 && return 0
   local now rem hours out admission_binding child_pid swarm_entry
   swarm_entry="$ROOT/tools/run_24h_entityos_swarm_backpressured.py"
-  # Supervisor 8.72 conversion-before-scale invariant: if the bounded wrapper is
-  # absent, fail closed instead of silently spawning the raw-throughput path.
   [[ -f "$swarm_entry" ]] || return 0
   admission_binding="$(current_provider_admission_binding)" || return 0
   now=$(date +%s); rem=$((DEADLINE-now)); (( rem>0 )) || return 0
@@ -172,10 +163,6 @@ PY
 }
 
 stop_unadmitted_go_swarm(){
-  # A child inherits provider credentials at spawn and cannot be sanitized later by
-  # unsetting the supervisor's environment. Therefore any validated admission drift
-  # invalidates the child capability set, even when a different FREE provider remains
-  # admitted. Missing/invalid binding also fails closed and forces a clean restart.
   local current_binding="" spawned_binding="" must_stop=0
   if has_admitted_provider_key; then
     current_binding="$(current_provider_admission_binding)" || must_stop=1
@@ -190,10 +177,6 @@ stop_unadmitted_go_swarm(){
   else
     must_stop=1
   fi
-
-  # With `set -e -o pipefail`, a bare `pgrep | while` aborts the whole supervisor
-  # when there is correctly nothing to stop. Process substitution plus `|| true`
-  # makes the zero-match case a normal steady state instead of a supervisor crash.
   if (( must_stop )); then
     while IFS= read -r pid; do
       [[ -n "$pid" ]] && kill "$pid" 2>/dev/null || true
@@ -229,7 +212,7 @@ def load_json(path):
  try:
   with open(path,'r',encoding='utf-8') as f:return json.load(f)
  except Exception:return None
-print(json.dumps({'schema':'CLAY_ENTITYOS_SWARM_SUPERVISOR/v8','observed_at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'repo_root':os.getcwd(),'remaining_seconds':$REMAINING,'provider_admission':snap,'go_swarm_running':running('run_24h_entityos_swarm.py'),'local_research_model_ready':local_health(),'distillery_running':running('run_research_distillery_(local|entry).py'),'forge_running':running('run_free_evidence_forge_safe.py'),'forge_distillery_bridge':load_json('$FORGE_DISTILLERY_STATUS'),'conversion_backpressure':load_json('$STATE_DIR/control/conversion_backpressure.json'),'dashboard_running':running('free swarm/evaluate.py.*--watch'),'policy':'EXTERNAL_LLM_SWARM_ONLY_WHEN_TYPED_FREE_ADMITTED; BLOCKED_PROVIDER_CREDENTIALS_CLEARED_BY_NAME_BEFORE_CHILD_START; RUNNING_SWARM_BOUND_TO_EXACT_VALIDATED_ADMISSION_AND_RESTARTED_ON_DRIFT; CONVERSION_BEFORE_SCALE_BACKPRESSURE_REQUIRED; SAFE_FORGE_REQUIRES_NO_SHELL_SECRET_FREE_ISOLATED_EXECUTOR; LOOPBACK_4B+PUBLIC_FORGE_CONTINUE_DURING_QUARANTINE'},indent=2))
+print(json.dumps({'schema':'CLAY_ENTITYOS_SWARM_SUPERVISOR/v8','observed_at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'repo_root':os.getcwd(),'remaining_seconds':$REMAINING,'provider_admission':snap,'go_swarm_running':running('run_24h_entityos_swarm.py'),'local_research_model_ready':local_health(),'distillery_running':running('run_research_distillery_(local|entry).py'),'forge_running':running('run_free_evidence_forge_backfill.py'),'forge_distillery_bridge':load_json('$FORGE_DISTILLERY_STATUS'),'conversion_backpressure':load_json('$STATE_DIR/control/conversion_backpressure.json'),'dashboard_running':running('free swarm/evaluate.py.*--watch'),'policy':'EXTERNAL_LLM_SWARM_ONLY_WHEN_TYPED_FREE_ADMITTED; BLOCKED_PROVIDER_CREDENTIALS_CLEARED_BY_NAME_BEFORE_CHILD_START; RUNNING_SWARM_BOUND_TO_EXACT_VALIDATED_ADMISSION_AND_RESTARTED_ON_DRIFT; CONVERSION_BEFORE_SCALE_BACKPRESSURE_REQUIRED; BACKLOG_FIRST_HISTORICAL_FORGE_IS_SINGLE_ACTIVE_FORGE; SAFE_FORGE_REQUIRES_NO_SHELL_SECRET_FREE_ISOLATED_EXECUTOR; LOOPBACK_4B+PUBLIC_FORGE_CONTINUE_DURING_QUARANTINE'},indent=2))
 PY
   mv "$STATE_DIR/SUPERVISOR.json.tmp" "$STATE_DIR/SUPERVISOR.json"
   sleep 30

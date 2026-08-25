@@ -994,6 +994,10 @@ def _execute_chat_locked(
                 payload.get("object") == "error" or "error" in payload
             ):
                 raise ProviderReportedError
+            if "model" in payload and (
+                type(payload["model"]) is not str or payload["model"] != model
+            ):
+                raise ValueError("response_model_must_match_request")
             choices = payload["choices"]
             if not isinstance(choices, list) or len(choices) != 1:
                 raise ValueError("response_choices_must_contain_exactly_one_choice")

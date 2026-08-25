@@ -20,6 +20,7 @@ def base_v7(passes: bool = True) -> dict:
         "owner_trigger1_goal_credit_candidate": passes,
         "owner_trigger1_direct_free_api_model_credit_candidate": passes,
         "modular_hcu_jspace_control_candidate": passes,
+        "full_native_jspace_vector_control_candidate": passes,
         "v7_failures": [] if passes else ["V7_FAIL"],
         "canonical_credit_minted": False,
         "jspace_model_runtime_credit": False,
@@ -46,6 +47,7 @@ class Trigger1PromotionGateV8Tests(unittest.TestCase):
         self.assertTrue(verdict["scientifically_independent_vector_candidate"])
         self.assertTrue(verdict["owner_trigger1_goal_credit_candidate"])
         self.assertTrue(verdict["modular_hcu_jspace_control_candidate"])
+        self.assertTrue(verdict["full_native_jspace_vector_control_candidate"])
         self.assertTrue(verdict["preregistration_runtime_binding_pass"])
         self.assertFalse(verdict["canonical_credit_minted"])
 
@@ -57,6 +59,7 @@ class Trigger1PromotionGateV8Tests(unittest.TestCase):
         self.assertFalse(verdict["scientifically_independent_vector_candidate"])
         self.assertFalse(verdict["owner_trigger1_goal_credit_candidate"])
         self.assertFalse(verdict["modular_hcu_jspace_control_candidate"])
+        self.assertFalse(verdict["full_native_jspace_vector_control_candidate"])
         self.assertIn("PLAN_RUNTIME_DRIFT", verdict["v8_failures"])
 
     def test_binding_cannot_rescue_v7_failure(self):
@@ -67,6 +70,7 @@ class Trigger1PromotionGateV8Tests(unittest.TestCase):
         self.assertFalse(verdict["scientifically_independent_vector_candidate"])
         self.assertFalse(verdict["owner_trigger1_goal_credit_candidate"])
         self.assertFalse(verdict["modular_hcu_jspace_control_candidate"])
+        self.assertFalse(verdict["full_native_jspace_vector_control_candidate"])
         self.assertIn("V7_FAIL", verdict["v8_failures"])
 
     def test_credit_fields_remain_non_minting(self):

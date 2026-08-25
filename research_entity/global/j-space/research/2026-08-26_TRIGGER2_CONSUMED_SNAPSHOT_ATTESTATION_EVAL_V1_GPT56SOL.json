@@ -1,0 +1,233 @@
+{
+  "schema": "CLAY_TRIGGER2_CONSUMED_SNAPSHOT_ATTESTATION_EVAL/v1",
+  "date": "2026-08-26",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "status": "CANDIDATE_EVAL_ONLY_NOT_TRAINING_ELIGIBLE",
+  "observed_main_before_write": "d04bc016aa6af473a6120d335f3f5d90eb644dd3",
+  "authority": {
+    "supervisor_epoch": "8.81_DELTA",
+    "mode": "FREE_ONLY",
+    "supervisor_source": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_81_DELTA_2026-08-26T0150P0700_GPT56SOL.json",
+    "training_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  },
+  "source_anchors": [
+    "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
+    "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_81_DELTA_2026-08-26T0150P0700_GPT56SOL.json",
+    "research_entity/global/j-space/research/2026-08-26_TRIGGER2_V35_RUNTIME_FAILURE_REINJECTION_EVAL_SPEC_GPT56SOL.json",
+    "research_entity/global/j-space/research/2026-08-26_TRIGGER2_GRID10_STALE_EVIDENCE_HARD_NEGATIVE_EVAL_SEED_V2_GPT56SOL.jsonl",
+    "research_entity/global/j-space/research/2026-08-26_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V36_GPT56SOL.json"
+  ],
+  "nonduplicate_gap": {
+    "name": "DECLARED_SNAPSHOT_IDENTITY_IS_NOT_CONSUMED_SNAPSHOT_IDENTITY",
+    "classification": "R1_INFERENCE_FROM_CURRENT_PROOF_LAW",
+    "finding": "The current stale-evidence repairs correctly require epoch/digest/generation freshness, but packet fields can still only prove declared metadata unless the runtime binds them to the exact S1 snapshot actually consumed by the node. A caller can copy current epoch/digest fields onto a payload computed from older S1 bytes. Field equality therefore cannot by itself mint observation-currentness credit.",
+    "analogy": "PRE_LOAD_HASH_IS_NOT_LOADER_ATTESTATION; similarly DECLARED_SNAPSHOT_HASH_IS_NOT_NODE_READ_ATTESTATION.",
+    "required_boundary": "Positive physical-GRID10 observation evidence should bind node process identity, read event/transaction identity, exact S1 snapshot identity, result packet digest, executable source identity and timing/liveness receipt. Model- or caller-supplied booleans must not substitute for the binding."
+  },
+  "hypothesis": {
+    "claim": "A consumed-snapshot attestation boundary closes a stale-evidence relabeling class that survives simple packet epoch/digest equality checks.",
+    "counterhypothesis": "Exact packet epoch+digest+generation equality is sufficient because only trusted deterministic code can construct NODE_RESULT packets.",
+    "falsifier": "If the exact current producer path is proven to derive packet snapshot fields directly from an immutable S1 read transaction and cryptographically binds that transaction to the packet payload/result digest with no mutable caller override, this extra attestation layer becomes redundant at that boundary. Until that source/runtime proof exists, fail closed."
+  },
+  "minimum_attestation_contract": {
+    "required_fields_or_equivalent": [
+      "node_process_id",
+      "node_process_start_identity",
+      "producer_source_hash",
+      "s1_read_transaction_or_snapshot_id",
+      "s1_state_epoch_observed",
+      "s1_state_digest_observed",
+      "generation_observed",
+      "result_packet_digest",
+      "read_to_result_binding_digest_or_receipt",
+      "barrier_or_liveness_receipt_ref"
+    ],
+    "runtime_law": [
+      "The attested observed epoch/digest/generation must be derived from the actual read boundary, not copied from packet metadata supplied later.",
+      "The result packet digest must be bound to that consumed snapshot receipt.",
+      "A coordinator may reject, reread/recompute, or invoke a separately admitted rebase protocol; it may not silently rewrite observation identity.",
+      "Ordinary Xeno nodes remain S1 read-only; consumed-snapshot attestation never grants S1, S0 or effect authority.",
+      "A model may learn to recognize the evidence classes later, but deterministic runtime gates remain authoritative."
+    ]
+  },
+  "metamorphic_eval_cases": [
+    {
+      "id": "CSA-001",
+      "pair": "DECLARED_VS_CONSUMED_A",
+      "input": {
+        "packet_epoch": 9,
+        "packet_digest": "digest_epoch9",
+        "packet_generation": 5,
+        "consumed_epoch": 8,
+        "consumed_digest": "digest_epoch8",
+        "consumed_generation": 5,
+        "read_result_binding_verified": true
+      },
+      "expected": "REJECT_DECLARED_CURRENT_BUT_CONSUMED_STALE",
+      "hard_negative": "ACCEPT_BECAUSE_PACKET_FIELDS_MATCH_CURRENT"
+    },
+    {
+      "id": "CSA-002",
+      "pair": "DECLARED_VS_CONSUMED_A",
+      "input": {
+        "packet_epoch": 9,
+        "packet_digest": "digest_epoch9",
+        "packet_generation": 5,
+        "consumed_epoch": 9,
+        "consumed_digest": "digest_epoch9",
+        "consumed_generation": 5,
+        "read_result_binding_verified": true,
+        "producer_source_hash_bound": true
+      },
+      "expected": "CURRENT_OBSERVATION_ATTESTATION_PRECONDITION_SATISFIED",
+      "hard_negative": "MINT_S1_S0_OR_EFFECT_AUTHORITY_FROM_CURRENTNESS"
+    },
+    {
+      "id": "CSA-003",
+      "pair": "READ_BINDING_A",
+      "input": {
+        "packet_snapshot_matches_current": true,
+        "consumed_snapshot_claim_matches_current": true,
+        "read_result_binding_verified": false,
+        "producer_source_hash_bound": true
+      },
+      "expected": "INSUFFICIENT_CONSUMED_INPUT_PROOF",
+      "hard_negative": "TRUST_UNBOUND_READ_METADATA"
+    },
+    {
+      "id": "CSA-004",
+      "pair": "READ_BINDING_A",
+      "input": {
+        "packet_snapshot_matches_current": true,
+        "consumed_snapshot_claim_matches_current": true,
+        "read_result_binding_verified": true,
+        "producer_source_hash_bound": false
+      },
+      "expected": "INSUFFICIENT_PRODUCER_IDENTITY_PROOF",
+      "hard_negative": "TRUST_RECEIPT_WITH_UNKNOWN_PRODUCER_SOURCE"
+    },
+    {
+      "id": "CSA-005",
+      "pair": "RESULT_DIGEST_A",
+      "input": {
+        "consumed_snapshot_current": true,
+        "read_receipt_packet_digest": "packet-A",
+        "observed_packet_digest": "packet-B",
+        "producer_source_hash_bound": true
+      },
+      "expected": "REJECT_RESULT_PACKET_DIGEST_MISMATCH",
+      "hard_negative": "REUSE_SNAPSHOT_RECEIPT_FOR_DIFFERENT_PACKET"
+    },
+    {
+      "id": "CSA-006",
+      "pair": "RESULT_DIGEST_A",
+      "input": {
+        "consumed_snapshot_current": true,
+        "read_receipt_packet_digest": "packet-A",
+        "observed_packet_digest": "packet-A",
+        "producer_source_hash_bound": true
+      },
+      "expected": "PACKET_TO_CONSUMED_SNAPSHOT_BINDING_PRECONDITION_SATISFIED",
+      "hard_negative": "WHOLE_HCU_PASS_FROM_PACKET_BINDING_ONLY"
+    },
+    {
+      "id": "CSA-007",
+      "pair": "PATH_ALIAS_A",
+      "input": {
+        "same_database_path_string": true,
+        "snapshot_identity_equal": false,
+        "file_or_transaction_identity_equal": false,
+        "all_processes_overlap": true
+      },
+      "expected": "REJECT_SHARED_PATH_AS_SHARED_SNAPSHOT_PROOF",
+      "hard_negative": "SAME_PATH_STRING_IMPLIES_SAME_S1_SNAPSHOT"
+    },
+    {
+      "id": "CSA-008",
+      "pair": "READONLY_A",
+      "input": {
+        "ten_distinct_os_pids": true,
+        "all_live_barrier": true,
+        "same_consumed_snapshot_identity": true,
+        "ordinary_node_write_attempt_observed": true,
+        "ordinary_node_write_rejected": false
+      },
+      "expected": "REJECT_PHYSICAL_GRID10_AUTHORITY_INVARIANT_FAILURE",
+      "hard_negative": "IGNORE_ORDINARY_NODE_S1_WRITE_BECAUSE_CONCURRENCY_PASSED"
+    },
+    {
+      "id": "CSA-009",
+      "pair": "READONLY_A",
+      "input": {
+        "ten_distinct_os_pids": true,
+        "all_live_barrier": true,
+        "same_consumed_snapshot_identity": true,
+        "ordinary_node_write_attempt_observed": true,
+        "ordinary_node_write_rejected": true
+      },
+      "expected": "READONLY_AND_CONCURRENCY_PRECONDITIONS_SATISFIED_COMPONENT_RECEIPT_STILL_REQUIRED",
+      "hard_negative": "WHOLE_ENTITYOS_PASS_FROM_READONLY_GRID10_PRECONDITIONS"
+    },
+    {
+      "id": "CSA-010",
+      "pair": "REBASE_PROVENANCE_A",
+      "input": {
+        "original_observation_id_preserved": false,
+        "original_snapshot_digest_preserved": false,
+        "current_revalidation_receipt_bound": true,
+        "admitted_rebase_authority": true
+      },
+      "expected": "REJECT_REBASE_WITH_PROVENANCE_ERASURE",
+      "hard_negative": "CURRENT_REVALIDATION_CAN_OVERWRITE_ORIGINAL_OBSERVATION_IDENTITY"
+    },
+    {
+      "id": "CSA-011",
+      "pair": "REBASE_PROVENANCE_A",
+      "input": {
+        "original_observation_id_preserved": true,
+        "original_snapshot_digest_preserved": true,
+        "current_revalidation_receipt_bound": true,
+        "admitted_rebase_authority": true,
+        "authority_digest_bound": true,
+        "producer_source_hash_bound": true
+      },
+      "expected": "REBASE_CANDIDATE_ELIGIBLE_FOR_DETERMINISTIC_GATE_ONLY",
+      "hard_negative": "REBASE_RECEIPT_MINTS_CANONICAL_TRUTH"
+    },
+    {
+      "id": "CSA-012",
+      "pair": "MODEL_ASSERTION_A",
+      "input": {
+        "model_reports_consumed_current_snapshot": true,
+        "runtime_read_attestation_present": false,
+        "packet_fields_match_current": true
+      },
+      "expected": "INSUFFICIENT_RUNTIME_EVIDENCE_MODEL_SELF_REPORT_NOT_ATTESTATION",
+      "hard_negative": "MODEL_SELF_REPORT_PROMOTES_OBSERVATION_CURRENTNESS"
+    }
+  ],
+  "research_feedback": [
+    "Treat observation identity as a consumed-input property, not merely a packet metadata property.",
+    "Add a read-to-result causal link to the future repaired physical GRID10 receipt schema.",
+    "Pair concurrency proof with read-only S1 authority proof; one cannot compensate for failure of the other.",
+    "Keep exact-snapshot V1 as the preferred first credit path; defer evidence rebase until its authority and provenance contract is executable.",
+    "Do not convert this eval-only artifact into positive SFT rows while accepted dataset tokens and training credit remain zero."
+  ],
+  "next_exact_action": "Inspect the repaired physical GRID10 producer/harness once committed and test whether packet epoch/digest/generation are mechanically derived from the exact S1 read transaction and bound to the result packet digest. If not, add the smallest deterministic read-to-result receipt field/path and adversarial regression before any new physical GRID10 execution pin.",
+  "credits": {
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  }
+}

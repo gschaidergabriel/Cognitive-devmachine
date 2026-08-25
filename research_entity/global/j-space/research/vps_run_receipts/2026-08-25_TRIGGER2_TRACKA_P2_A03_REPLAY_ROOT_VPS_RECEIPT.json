@@ -1,0 +1,34 @@
+{
+  "schema": "CLAY_TRIGGER2_A03_GENERATION_AUTHORITY_REPLAY_ROOT/v1",
+  "utc_note": "2026-08-25 VPS Track A Phase 2",
+  "repository": "gschaidergabriel/clay-global-research-entity",
+  "executed_head": "17aae5f404417e657ffd16521a4f0b118361ceec",
+  "dirty_before": false,
+  "dirty_after": false,
+  "decision": "OUTER_REPLAY_ROOT_SUFFICIENT",
+  "reasoning": "expected_generation_receipt is fully recomputed from current authority content (generator identity+commit, case parameters JCS hash, materials JCS hash, subject hashes, semantic_scope) and compared byte-for-byte to the row's stored receipt. Any authority-content mutation that changes what a given case authorizes therefore changes the recomputed receipt and rejects the stale row via GENERATION_RECEIPT_NOT_EXACTLY_RECOMPUTED, even with zero outer git-pinning. The mandatory immutable outer HEAD/tree receipt (Phase 1 A02/retained-v4 acceptance) additionally binds the authority file's exact historical bytes for audit identity, but is not the only thing preventing stale-row admission under swapped authority.",
+  "mutation_test": {
+    "1_baseline_valid_row_real_authority": {
+      "pass": true,
+      "failures": []
+    },
+    "2_stale_row_against_mutated_authority_no_outer_binding": {
+      "pass": false,
+      "failures": [
+        "GENERATION_PARAMETERS_DIGEST_MISMATCH",
+        "GENERATION_PARAMETERS_NOT_AUTHORIZED"
+      ],
+      "hypothesis_would_be_confirmed_if_pass_true": false
+    },
+    "3_outer_binding_present_path": {
+      "note": "structurally guaranteed by run_trigger2_repository_bound_a02_acceptance_v1.py; any authority mutation changes its worktree SHA-256 vs pinned HEAD blob, which fails the outer acceptance receipt before this gate result can be credited.",
+      "verified_in_phase1_receipt": true
+    }
+  },
+  "evidence_scope": "A03 generation-authority historical replay-root component only",
+  "credit_boundary": {
+    "positive_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0
+  }
+}

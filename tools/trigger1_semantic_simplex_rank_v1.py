@@ -1,11 +1,16 @@
 #!/usr/bin/env python3
-"""Deterministic source-only rank discriminator for Trigger-1 semantic activations.
+"""Blocked matched-triplet rank discriminator for Trigger-1 semantic activations.
 
-This tool never runs a model and never opens holdout data. It consumes calibration-only,
-model-facing-label-free activation vectors grouped into lexically disjoint families and
-asks whether the three semantic classes are better described by one stable contrast or a
-2-D centered simplex. The verdict is research metrology only; it grants no J-Space,
-HCU, training, canonical-semantics, or whole-product credit.
+No model is run and no holdout is opened. The analyzer consumes calibration-only
+activations from matched scenario triplets (AFFIRMATIVE/NEGATIVE/NEUTRAL variants of
+the same content skeleton), builds orthonormal Helmert semantic contrasts within each
+scenario family, and tests cross-family aligned one-vs-two-dimensional geometry against
+a semantic-label permutation null blocked within scenario family.
+
+The decision must agree for raw equal-family aggregation and a family-energy-balanced
+aggregation, preventing one high-norm family from silently determining the result.
+This is research metrology only: no J-Space/HCU/training/canonical-semantics/product
+runtime credit is minted.
 """
 from __future__ import annotations
 
@@ -19,12 +24,14 @@ from pathlib import Path
 from typing import Any, Iterable
 
 INPUT_SCHEMA = "CLAY_TRIGGER1_LABEL_FREE_SEMANTIC_ACTIVATIONS/v1"
-OUTPUT_SCHEMA = "CLAY_TRIGGER1_SEMANTIC_SIMPLEX_RANK_DISCRIMINATOR/v1"
+OUTPUT_SCHEMA = "CLAY_TRIGGER1_SEMANTIC_SIMPLEX_RANK_DISCRIMINATOR/v2"
 CLASSES = ("AFFIRMATIVE", "NEGATIVE", "NEUTRAL")
 PERMS = tuple(itertools.permutations(CLASSES))
+SQRT6 = math.sqrt(6.0)
+SQRT2 = math.sqrt(2.0)
 
 
-def _sha256_text(value: str) -> bool:
+def _sha256_text(value: Any) -> bool:
     if not isinstance(value, str) or len(value) != 64:
         return False
     try:
@@ -102,35 +109,71 @@ def quantile(values: list[float], q: float) -> float:
         raise ValueError("QUANTILE_REQUIRES_VALUES")
     ordered = sorted(values)
     idx = int(math.ceil(q * len(ordered))) - 1
-    idx = max(0, min(len(ordered) - 1, idx))
-    return ordered[idx]
+    return ordered[max(0, min(len(ordered) - 1, idx))]
 
 
-def spectral_stats(class_means: dict[str, list[float]]) -> dict[str, Any]:
-    c = mean(class_means[name] for name in CLASSES)
-    centered = [sub(class_means[name], c) for name in CLASSES]
-    gram = [[dot(a, b) for b in centered] for a in centered]
-    trace = sum(gram[i][i] for i in range(3))
-    trace_sq = sum(value * value for row in gram for value in row)
-    disc = max(0.0, 2.0 * trace_sq - trace * trace)
-    lam1 = max(0.0, 0.5 * (trace + math.sqrt(disc)))
-    lam2 = max(0.0, 0.5 * (trace - math.sqrt(disc)))
-    sigma1 = math.sqrt(lam1)
-    sigma2 = math.sqrt(lam2)
-    ratio = sigma2 / sigma1 if sigma1 > 1e-15 else 0.0
+def _two_row_spectrum(a: list[float], b: list[float]) -> tuple[float, float, float]:
+    g11, g22, g12 = dot(a, a), dot(b, b), dot(a, b)
+    trace = g11 + g22
+    disc = math.sqrt(max(0.0, (g11 - g22) ** 2 + 4.0 * g12 * g12))
+    lam1 = max(0.0, 0.5 * (trace + disc))
+    lam2 = max(0.0, 0.5 * (trace - disc))
+    s1, s2 = math.sqrt(lam1), math.sqrt(lam2)
+    return s1, s2, (s2 / s1 if s1 > 1e-15 else 0.0)
 
-    h1_raw = sub(class_means["AFFIRMATIVE"], scale(add(class_means["NEGATIVE"], class_means["NEUTRAL"]), 0.5))
-    h1 = normalize(h1_raw)
-    h2_raw = sub(class_means["NEGATIVE"], class_means["NEUTRAL"])
+
+def _family_contrasts(rows: dict[str, list[float]]) -> tuple[list[float], list[float]]:
+    a, n, u = rows["AFFIRMATIVE"], rows["NEGATIVE"], rows["NEUTRAL"]
+    c1 = scale(sub(scale(a, 2.0), add(n, u)), 1.0 / SQRT6)
+    c2 = scale(sub(n, u), 1.0 / SQRT2)
+    return c1, c2
+
+
+def aligned_helmert_stats(grouped: dict[str, dict[str, list[float]]], *, family_energy_balance: bool) -> dict[str, Any]:
+    family: dict[str, tuple[list[float], list[float]]] = {}
+    energies: dict[str, float] = {}
+    for family_id, rows in grouped.items():
+        c1, c2 = _family_contrasts(rows)
+        energy = math.sqrt(dot(c1, c1) + dot(c2, c2))
+        if not math.isfinite(energy) or energy <= 1e-15:
+            raise ValueError(f"DEGENERATE_MATCHED_TRIPLET:{family_id}")
+        energies[family_id] = energy
+        if family_energy_balance:
+            c1, c2 = scale(c1, 1.0 / energy), scale(c2, 1.0 / energy)
+        family[family_id] = (c1, c2)
+
+    c1_bar = mean(pair[0] for pair in family.values())
+    c2_bar = mean(pair[1] for pair in family.values())
+    sigma1, sigma2, ratio = _two_row_spectrum(c1_bar, c2_bar)
+    h1 = normalize(c1_bar)
+    h2_raw = c2_bar
     if h1 is not None:
         h2_raw = sub(h2_raw, scale(h1, dot(h2_raw, h1)))
     h2 = normalize(h2_raw)
+
+    h1_cosines: list[float] = []
+    h2_cosines: list[float] = []
+    for c1, c2 in family.values():
+        local_h1 = normalize(c1)
+        if local_h1 is not None and h1 is not None:
+            h1_cosines.append(dot(h1, local_h1))
+        local_h2_raw = c2
+        if h1 is not None:
+            local_h2_raw = sub(local_h2_raw, scale(h1, dot(local_h2_raw, h1)))
+        local_h2 = normalize(local_h2_raw)
+        if local_h2 is not None and h2 is not None:
+            h2_cosines.append(dot(h2, local_h2))
+
     return {
         "sigma1": sigma1,
         "sigma2": sigma2,
         "sigma2_over_sigma1": ratio,
         "h1": h1,
         "h2": h2,
+        "family_h1_cosine_mean": sum(h1_cosines) / len(h1_cosines) if h1_cosines else None,
+        "family_h2_cosine_mean": sum(h2_cosines) / len(h2_cosines) if h2_cosines else None,
+        "family_pair_energy_min": min(energies.values()),
+        "family_pair_energy_max": max(energies.values()),
     }
 
 
@@ -141,6 +184,8 @@ def _validate_and_group(payload: dict[str, Any]) -> tuple[dict[str, dict[str, li
         raise ValueError("MODEL_FACING_LABEL_FREE_REQUIRED")
     if payload.get("lexically_disjoint_families") is not True:
         raise ValueError("LEXICALLY_DISJOINT_FAMILIES_REQUIRED")
+    if payload.get("scenario_family_matched_triplets") is not True:
+        raise ValueError("SCENARIO_FAMILY_MATCHED_TRIPLETS_REQUIRED")
     if payload.get("holdout_opened") is not False:
         raise ValueError("HOLDOUT_MUST_REMAIN_UNOPENED")
     if not _repo_sha(payload.get("repo_head")):
@@ -187,11 +232,7 @@ def _validate_and_group(payload: dict[str, Any]) -> tuple[dict[str, dict[str, li
         if semantic in slot:
             raise ValueError(f"DUPLICATE_CLASS_WITHIN_FAMILY:{family}:{semantic}")
         slot[semantic] = parsed
-        bound_rows.append({
-            "family_id": family,
-            "semantic_class": semantic,
-            "activation_sha256_f64le": vector_sha(parsed),
-        })
+        bound_rows.append({"family_id": family, "semantic_class": semantic, "activation_sha256_f64le": vector_sha(parsed)})
 
     assert dimension is not None
     if len(grouped) < 3:
@@ -202,30 +243,21 @@ def _validate_and_group(payload: dict[str, Any]) -> tuple[dict[str, dict[str, li
     return grouped, dimension, sorted(bound_rows, key=lambda x: (x["family_id"], x["semantic_class"]))
 
 
-def _class_means(grouped: dict[str, dict[str, list[float]]]) -> dict[str, list[float]]:
-    return {semantic: mean(rows[semantic] for rows in grouped.values()) for semantic in CLASSES}
-
-
 def _perm_configs(family_ids: list[str], max_null: int, seed_material: str) -> list[tuple[tuple[str, ...], ...]]:
     total = 6 ** len(family_ids)
     identity = tuple(CLASSES)
     if total <= max_null:
         return list(itertools.product(PERMS, repeat=len(family_ids)))
-
     configs: list[tuple[tuple[str, ...], ...]] = [tuple(identity for _ in family_ids)]
     seen = {configs[0]}
     counter = 0
     while len(configs) < max_null:
-        digest = hashlib.sha256(f"{seed_material}:{counter}".encode("utf-8")).digest()
+        digest = hashlib.sha256(f"{seed_material}:{counter}".encode()).digest()
         counter += 1
-        config = []
-        for i in range(len(family_ids)):
-            idx = digest[i % len(digest)] % len(PERMS)
-            config.append(PERMS[idx])
-        tup = tuple(config)
-        if tup not in seen:
-            seen.add(tup)
-            configs.append(tup)
+        config = tuple(PERMS[digest[i % len(digest)] % len(PERMS)] for i in range(len(family_ids)))
+        if config not in seen:
+            seen.add(config)
+            configs.append(config)
     return configs
 
 
@@ -235,12 +267,6 @@ def _permuted_grouped(grouped: dict[str, dict[str, list[float]]], family_ids: li
         original = grouped[family]
         out[family] = {target: original[source] for source, target in zip(CLASSES, perm)}
     return out
-
-
-def _cosine(a: list[float] | None, b: list[float] | None) -> float | None:
-    if a is None or b is None:
-        return None
-    return dot(a, b)
 
 
 def analyze(payload: dict[str, Any], *, rank2_ratio_threshold: float = 0.15, null_q: float = 0.95, max_null: int = 4096) -> dict[str, Any]:
@@ -253,7 +279,8 @@ def analyze(payload: dict[str, Any], *, rank2_ratio_threshold: float = 0.15, nul
 
     grouped, dimension, bound_rows = _validate_and_group(payload)
     family_ids = sorted(grouped)
-    observed = spectral_stats(_class_means(grouped))
+    raw = aligned_helmert_stats(grouped, family_energy_balance=False)
+    balanced = aligned_helmert_stats(grouped, family_energy_balance=True)
 
     seed_material = canonical_json_sha({
         "repo_head": payload["repo_head"],
@@ -263,51 +290,58 @@ def analyze(payload: dict[str, Any], *, rank2_ratio_threshold: float = 0.15, nul
         "rows": bound_rows,
     })
     configs = _perm_configs(family_ids, max_null, seed_material)
-    null_s1: list[float] = []
-    null_s2: list[float] = []
     identity_config = tuple(tuple(CLASSES) for _ in family_ids)
+    null_raw_s1: list[float] = []
+    null_raw_s2: list[float] = []
+    null_bal_s1: list[float] = []
+    null_bal_s2: list[float] = []
     for config in configs:
         if config == identity_config:
             continue
-        stats = spectral_stats(_class_means(_permuted_grouped(grouped, family_ids, config)))
-        null_s1.append(float(stats["sigma1"]))
-        null_s2.append(float(stats["sigma2"]))
-    if not null_s1:
+        permuted = _permuted_grouped(grouped, family_ids, config)
+        nr = aligned_helmert_stats(permuted, family_energy_balance=False)
+        nb = aligned_helmert_stats(permuted, family_energy_balance=True)
+        null_raw_s1.append(float(nr["sigma1"]))
+        null_raw_s2.append(float(nr["sigma2"]))
+        null_bal_s1.append(float(nb["sigma1"]))
+        null_bal_s2.append(float(nb["sigma2"]))
+    if not null_raw_s1:
         raise ValueError("NULL_PERMUTATION_SET_EMPTY")
 
-    loo_ratios: list[float] = []
+    loo_raw: list[float] = []
+    loo_bal: list[float] = []
     for held_out in family_ids:
-        subset = {family: rows for family, rows in grouped.items() if family != held_out}
-        stats = spectral_stats(_class_means(subset))
-        loo_ratios.append(float(stats["sigma2_over_sigma1"]))
+        subset = {f: rows for f, rows in grouped.items() if f != held_out}
+        loo_raw.append(float(aligned_helmert_stats(subset, family_energy_balance=False)["sigma2_over_sigma1"]))
+        loo_bal.append(float(aligned_helmert_stats(subset, family_energy_balance=True)["sigma2_over_sigma1"]))
 
-    h1_cosines: list[float] = []
-    h2_cosines: list[float] = []
-    for family in family_ids:
-        local = spectral_stats(grouped[family])
-        c1 = _cosine(observed["h1"], local["h1"])
-        c2 = _cosine(observed["h2"], local["h2"])
-        if c1 is not None:
-            h1_cosines.append(c1)
-        if c2 is not None:
-            h2_cosines.append(c2)
+    q = {
+        "raw_sigma1": quantile(null_raw_s1, null_q),
+        "raw_sigma2": quantile(null_raw_s2, null_q),
+        "balanced_sigma1": quantile(null_bal_s1, null_q),
+        "balanced_sigma2": quantile(null_bal_s2, null_q),
+    }
+    rank1_signal = float(raw["sigma1"]) > q["raw_sigma1"] and float(balanced["sigma1"]) > q["balanced_sigma1"]
+    rank2_signal = (
+        float(raw["sigma2"]) > q["raw_sigma2"]
+        and float(balanced["sigma2"]) > q["balanced_sigma2"]
+        and float(raw["sigma2_over_sigma1"]) >= rank2_ratio_threshold
+        and float(balanced["sigma2_over_sigma1"]) >= rank2_ratio_threshold
+    )
+    rank1_no_second = (
+        float(raw["sigma2"]) <= q["raw_sigma2"]
+        and float(balanced["sigma2"]) <= q["balanced_sigma2"]
+        and float(raw["sigma2_over_sigma1"]) < rank2_ratio_threshold
+        and float(balanced["sigma2_over_sigma1"]) < rank2_ratio_threshold
+    )
+    loo_rank2 = min(loo_raw) >= rank2_ratio_threshold * 0.5 and min(loo_bal) >= rank2_ratio_threshold * 0.5
+    loo_rank1 = max(loo_raw) < rank2_ratio_threshold and max(loo_bal) < rank2_ratio_threshold
+    h1_coherent = raw["family_h1_cosine_mean"] is not None and float(raw["family_h1_cosine_mean"]) > 0.0
+    h2_coherent = raw["family_h2_cosine_mean"] is not None and float(raw["family_h2_cosine_mean"]) > 0.0
 
-    q_s1 = quantile(null_s1, null_q)
-    q_s2 = quantile(null_s2, null_q)
-    ratio = float(observed["sigma2_over_sigma1"])
-    h1_mean = sum(h1_cosines) / len(h1_cosines) if h1_cosines else None
-    h2_mean = sum(h2_cosines) / len(h2_cosines) if h2_cosines else None
-
-    rank1_signal = float(observed["sigma1"]) > q_s1
-    stable_h1 = h1_mean is not None and h1_mean > 0.0
-    stable_h2 = h2_mean is not None and h2_mean > 0.0
-    rank2_signal = float(observed["sigma2"]) > q_s2 and ratio >= rank2_ratio_threshold
-    loo_rank2 = min(loo_ratios) >= rank2_ratio_threshold * 0.5
-    loo_rank1 = max(loo_ratios) < rank2_ratio_threshold
-
-    if rank1_signal and rank2_signal and loo_rank2 and stable_h1 and stable_h2:
+    if rank1_signal and rank2_signal and loo_rank2 and h1_coherent and h2_coherent:
         verdict = "TWO_DIMENSIONAL_REQUIRED"
-    elif rank1_signal and float(observed["sigma2"]) <= q_s2 and ratio < rank2_ratio_threshold and loo_rank1 and stable_h1:
+    elif rank1_signal and rank1_no_second and loo_rank1 and h1_coherent:
         verdict = "ONE_DIMENSIONAL_SUPPORTED"
     else:
         verdict = "UNRESOLVED"
@@ -328,34 +362,33 @@ def analyze(payload: dict[str, Any], *, rank2_ratio_threshold: float = 0.15, nul
             "calibration_only": True,
             "holdout_opened": False,
             "model_facing_label_free": True,
-            "lexically_disjoint_families": True,
+            "scenario_family_matched_triplets": True,
+            "blocked_permutation_within_scenario_family": True,
             "bound_rows_sha256": canonical_json_sha(bound_rows),
         },
         "observed_geometry": {
-            "sigma1": observed["sigma1"],
-            "sigma2": observed["sigma2"],
-            "sigma2_over_sigma1": ratio,
-            "family_h1_cosine_mean": h1_mean,
-            "family_h2_cosine_mean": h2_mean,
-            "leave_one_family_out_sigma2_over_sigma1": loo_ratios,
+            "raw_equal_family": {k: v for k, v in raw.items() if k not in {"h1", "h2"}},
+            "family_energy_balanced": {k: v for k, v in balanced.items() if k not in {"h1", "h2"}},
+            "leave_one_family_out_raw_sigma2_over_sigma1": loo_raw,
+            "leave_one_family_out_balanced_sigma2_over_sigma1": loo_bal,
         },
-        "permutation_null": {
+        "blocked_permutation_null": {
             "quantile": null_q,
-            "configurations_evaluated": len(null_s1),
-            "sigma1_q": q_s1,
-            "sigma2_q": q_s2,
+            "configurations_evaluated": len(null_raw_s1),
+            **q,
             "deterministic_seed_material_sha256": seed_material,
         },
         "decision_rule": {
             "rank2_ratio_threshold": rank2_ratio_threshold,
-            "rank1_signal_above_null": rank1_signal,
-            "rank2_signal_above_null_and_ratio": rank2_signal,
-            "loo_rank2_stable": loo_rank2,
-            "loo_rank1_stable": loo_rank1,
-            "h1_direction_coherent": stable_h1,
-            "h2_direction_coherent": stable_h2,
+            "raw_and_balanced_rank1_signal_above_null": rank1_signal,
+            "raw_and_balanced_rank2_signal_above_null": rank2_signal,
+            "raw_and_balanced_rank1_no_second_dimension": rank1_no_second,
+            "leave_one_family_out_rank2_stable": loo_rank2,
+            "leave_one_family_out_rank1_stable": loo_rank1,
+            "h1_direction_coherent": h1_coherent,
+            "h2_direction_coherent": h2_coherent,
         },
-        "promotion_boundary": "A rank verdict alone does not establish causal steerability. Native class-selective intervention-by-target evidence with fresh holdout and nuisance/off-target controls remains mandatory.",
+        "promotion_boundary": "A blocked matched-triplet rank verdict is representation metrology only. Fresh-holdout native class-selective causal transport, sign, nuisance, output-realization, token-scope and off-target controls remain mandatory.",
     }
     output["analysis_sha256"] = canonical_json_sha(output)
     return output

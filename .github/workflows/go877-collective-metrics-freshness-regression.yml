@@ -1,0 +1,58 @@
+name: GO877 collective metrics freshness regression
+
+on:
+  push:
+    branches:
+      - gpt56sol/go877-metrics-freshness-publisher-20260825-0948
+    paths:
+      - "free swarm/go_collective_metrics_fresh_publish.py"
+      - "free swarm/go_collective_metrics.py"
+      - "tests/test_go_collective_metrics_freshness_877.py"
+      - "tests/test_go_collective_metrics_v1.py"
+      - ".github/workflows/go877-collective-metrics-freshness-regression.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  freshness-regression:
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          clean: true
+          persist-credentials: false
+
+      - name: Bind exact checkout
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "${GITHUB_SHA}"
+          test -z "$(git status --porcelain=v1)"
+
+      - name: Compile publisher
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m py_compile \
+            "free swarm/go_collective_metrics.py" \
+            "free swarm/go_collective_metrics_fresh_publish.py" \
+            tests/test_go_collective_metrics_freshness_877.py
+
+      - name: Execute freshness and preserved v1 regressions
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m unittest -v \
+            tests.test_go_collective_metrics_freshness_877 \
+            tests.test_go_collective_metrics_v1
+
+      - name: Verify clean source after tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -z "$(git status --porcelain=v1)"

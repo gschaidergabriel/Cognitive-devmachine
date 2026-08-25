@@ -2,8 +2,9 @@
 """Build a deterministic live-authority worker envelope for Xeno.
 
 Current worker authority is cross-bound from Supervisor Inbox -> exact steering ->
-FREE_PROVIDER_ADMISSION. Older all-worker prose remains compatibility/provenance and
-cannot override a newer machine-readable supervisor epoch.
+FREE_PROVIDER_ADMISSION. The resolver is successor-schema aware but fail-closed: a newer
+supervisor may express program/free-only law structurally differently, yet equivalent hard
+invariants must still be explicit before Xeno GO admission can pass.
 """
 from __future__ import annotations
 
@@ -18,7 +19,7 @@ ADMISSION_REL = Path("research_entity/claycode/autonomous/FREE_PROVIDER_ADMISSIO
 PROTOCOL_BEGIN = "[MINI ENTITY :: GRF + CLAYCODE MANDATORY WORKER PROTOCOL]"
 PROTOCOL_END = "[/MINI ENTITY :: GRF + CLAYCODE MANDATORY WORKER PROTOCOL]"
 LIVE_MARKER = "[ENTITYOS/HCU LIVE AUTHORITY ENVELOPE]"
-SCHEMA = "ENTITYOS_HCU_LIVE_WORKER_AUTHORITY/v1"
+SCHEMA = "ENTITYOS_HCU_LIVE_WORKER_AUTHORITY/v2"
 
 
 class AuthorityProtocolError(RuntimeError):
@@ -49,6 +50,45 @@ def _digest(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
+def _require(ok: bool, code: str) -> None:
+    if not ok:
+        raise AuthorityProtocolError(code)
+
+
+def _program(obj: dict[str, Any]) -> str:
+    # 8.78 steering uses `program`; older/current inbox surfaces use `active_program`.
+    values = [obj.get("active_program"), obj.get("program")]
+    present = [str(v) for v in values if v not in (None, "")]
+    _require(bool(present), "PROGRAM_MISSING")
+    _require(len(set(present)) == 1, "PROGRAM_FIELDS_CONFLICT")
+    return present[0]
+
+
+def _require_identity(obj: dict[str, Any], prefix: str) -> None:
+    _require(_program(obj) == "ENTITYOS_HCU", f"{prefix}_PROGRAM_MISMATCH")
+    _require(obj.get("product") == "EntityOS", f"{prefix}_PRODUCT_MISMATCH")
+    _require(obj.get("integrated_cognition_compute_architecture") == "HCU", f"{prefix}_HCU_MISMATCH")
+
+
+def _require_free_only(steering: dict[str, Any]) -> str:
+    """Accept explicit legacy map or successor hard-invariant form, never inference."""
+    free_only = steering.get("free_only")
+    if isinstance(free_only, dict):
+        _require(free_only.get("enabled") is True, "STEERING_FREE_ONLY_DISABLED")
+        _require(free_only.get("no_paid_fallback") is True, "STEERING_PAID_FALLBACK_NOT_FORBIDDEN")
+        _require(free_only.get("together_forbidden") is True, "STEERING_TOGETHER_NOT_FORBIDDEN")
+        _require(free_only.get("unknown_or_unlisted_route") == "FAIL_CLOSED", "STEERING_UNKNOWN_ROUTE_NOT_FAIL_CLOSED")
+        return "EXPLICIT_FREE_ONLY_MAP"
+
+    _require(steering.get("mode") == "FREE_ONLY", "STEERING_FREE_ONLY_MODE_MISSING")
+    invariants = steering.get("hard_invariants")
+    _require(isinstance(invariants, list), "STEERING_HARD_INVARIANTS_MISSING")
+    inv = {str(v) for v in invariants}
+    _require("FREE_ONLY_NO_PAID_FALLBACK_TOGETHER_FORBIDDEN" in inv, "STEERING_FREE_ONLY_HARD_INVARIANT_MISSING")
+    _require("PAID_SUBSCRIPTION_UNKNOWN_FAIL_CLOSED" in inv, "STEERING_UNKNOWN_COST_HARD_INVARIANT_MISSING")
+    return "SUCCESSOR_HARD_INVARIANTS"
+
+
 def resolve_current_authority(root: Path = ROOT) -> dict[str, Any]:
     root = root.resolve()
     inbox_path = _safe(root, str(INBOX_REL), "INBOX")
@@ -62,52 +102,27 @@ def resolve_current_authority(root: Path = ROOT) -> dict[str, Any]:
     admission = _load(admission_path)
 
     epoch = str(inbox.get("schema_version"))
-    if epoch in {"", "None"}:
-        raise AuthorityProtocolError("INBOX_EPOCH_MISSING")
-    if str(steering.get("schema_version")) != epoch:
-        raise AuthorityProtocolError("STEERING_EPOCH_MISMATCH")
-    if str(admission.get("authority_epoch")) != epoch:
-        raise AuthorityProtocolError("PROVIDER_ADMISSION_EPOCH_MISMATCH")
+    _require(epoch not in {"", "None"}, "INBOX_EPOCH_MISSING")
+    _require(str(steering.get("schema_version")) == epoch, "STEERING_EPOCH_MISMATCH")
+    _require(str(admission.get("authority_epoch")) == epoch, "PROVIDER_ADMISSION_EPOCH_MISMATCH")
 
-    for obj, prefix in ((inbox, "INBOX"), (steering, "STEERING")):
-        if obj.get("active_program") != "ENTITYOS_HCU":
-            raise AuthorityProtocolError(f"{prefix}_PROGRAM_MISMATCH")
-        if obj.get("product") != "EntityOS":
-            raise AuthorityProtocolError(f"{prefix}_PRODUCT_MISMATCH")
-        if obj.get("integrated_cognition_compute_architecture") != "HCU":
-            raise AuthorityProtocolError(f"{prefix}_HCU_MISMATCH")
+    _require_identity(inbox, "INBOX")
+    _require_identity(steering, "STEERING")
+    free_only_form = _require_free_only(steering)
 
-    free_only = steering.get("free_only") or {}
-    if free_only.get("enabled") is not True:
-        raise AuthorityProtocolError("STEERING_FREE_ONLY_DISABLED")
-    if free_only.get("no_paid_fallback") is not True:
-        raise AuthorityProtocolError("STEERING_PAID_FALLBACK_NOT_FORBIDDEN")
-    if free_only.get("together_forbidden") is not True:
-        raise AuthorityProtocolError("STEERING_TOGETHER_NOT_FORBIDDEN")
-    if free_only.get("unknown_or_unlisted_route") != "FAIL_CLOSED":
-        raise AuthorityProtocolError("STEERING_UNKNOWN_ROUTE_NOT_FAIL_CLOSED")
-
-    if admission.get("schema") != "ENTITYOS_HCU_FREE_PROVIDER_ADMISSION/v1":
-        raise AuthorityProtocolError("PROVIDER_ADMISSION_SCHEMA_MISMATCH")
-    if admission.get("mode") != "FREE_ONLY":
-        raise AuthorityProtocolError("PROVIDER_ADMISSION_NOT_FREE_ONLY")
-    if admission.get("product") != "EntityOS" or admission.get("compute_architecture") != "HCU":
-        raise AuthorityProtocolError("PROVIDER_ADMISSION_IDENTITY_MISMATCH")
+    _require(admission.get("schema") == "ENTITYOS_HCU_FREE_PROVIDER_ADMISSION/v1", "PROVIDER_ADMISSION_SCHEMA_MISMATCH")
+    _require(admission.get("mode") == "FREE_ONLY", "PROVIDER_ADMISSION_NOT_FREE_ONLY")
+    _require(admission.get("product") == "EntityOS" and admission.get("compute_architecture") == "HCU", "PROVIDER_ADMISSION_IDENTITY_MISMATCH")
 
     route = admission.get("route_level_gate") or {}
-    if route.get("receipt_schema") != "FREE_LANE_EXECUTION_RECEIPT/v1":
-        raise AuthorityProtocolError("FREE_LANE_RECEIPT_GATE_MISSING")
-    if route.get("unknown_or_unbound_route") != "FAIL_CLOSED":
-        raise AuthorityProtocolError("FREE_LANE_UNKNOWN_ROUTE_NOT_FAIL_CLOSED")
-    if route.get("paid_fallback_attempt_count") != 0:
-        raise AuthorityProtocolError("FREE_LANE_PAID_FALLBACK_NONZERO")
+    _require(route.get("receipt_schema") == "FREE_LANE_EXECUTION_RECEIPT/v1", "FREE_LANE_RECEIPT_GATE_MISSING")
+    _require(route.get("unknown_or_unbound_route") == "FAIL_CLOSED", "FREE_LANE_UNKNOWN_ROUTE_NOT_FAIL_CLOSED")
+    _require(route.get("paid_fallback_attempt_count") == 0, "FREE_LANE_PAID_FALLBACK_NONZERO")
     implementation = str(route.get("implementation") or "")
-    if "tools/free_lane_provenance.py" not in implementation:
-        raise AuthorityProtocolError("FREE_LANE_PROVENANCE_IMPLEMENTATION_MISSING")
+    _require("tools/free_lane_provenance.py" in implementation, "FREE_LANE_PROVENANCE_IMPLEMENTATION_MISSING")
 
     providers = admission.get("providers")
-    if not isinstance(providers, dict) or not providers:
-        raise AuthorityProtocolError("PROVIDER_SET_MISSING")
+    _require(isinstance(providers, dict) and bool(providers), "PROVIDER_SET_MISSING")
 
     return {
         "schema": SCHEMA,
@@ -121,6 +136,7 @@ def resolve_current_authority(root: Path = ROOT) -> dict[str, Any]:
         "providers": sorted(str(k) for k in providers),
         "receipt_schema": route.get("receipt_schema"),
         "route_implementation": implementation,
+        "free_only_form": free_only_form,
     }
 
 
@@ -133,6 +149,7 @@ current_supervisor_epoch={a['epoch']}
 inbox={a['inbox_path']} sha256={a['inbox_sha256']}
 steering={a['steering_path']} sha256={a['steering_sha256']}
 provider_admission={a['provider_admission_path']} sha256={a['provider_admission_sha256']}
+free_only_form={a['free_only_form']}
 product=EntityOS
 compute_architecture=HCU
 persistent_research_entity=Clay
@@ -145,9 +162,10 @@ CURRENT AUTHORITY LAW
 - This envelope is derived from current machine-readable authority. Older worker-directive prose is compatibility/provenance only where it conflicts.
 - Provider-level FREE admission cannot authorize arbitrary traffic. Every autonomous external request must pass the current credential+route economic binding immediately before network I/O and emit FREE_LANE_EXECUTION_RECEIPT/v1.
 - Unknown/unbound/paid/subscription routes fail closed. Together and paid fallback are forbidden. Key presence, HTTP success, labels, model consensus and historical traffic cannot self-admit economic safety.
-- Canonical state/evidence remains deterministic. HCU/model/J-Space/workspace outputs are candidate/projection/measurement only; real effects remain behind EffectGate/EffectJournal.
+- Canonical S0 state/evidence remains deterministic. HCU/model/J-Space/S1 workspace outputs are candidate/projection/measurement only; real effects remain behind EffectGate/EffectJournal.
+- Current owner GO target is autonomous shared-state Xeno/HCU with ordinary S1 read-only nodes, typed NODE_RESULT transport, dynamically leased coordinator-only S1 writes, and physical GRID10 acceptance.
 - Global J-Space/GWT is model-specific causal research. Self-report/coherence/consensus cannot mint causal credit.
-- GRID10 logical cells are not resident model count or physical decode concurrency.
+- Physical GRID10 acceptance must not be inferred from historical logical-cell GRID10 simulation.
 - FACT_UNKNOWN + METHOD_PRESENT != FACT_PRESENT.
 
 GO TRACKS

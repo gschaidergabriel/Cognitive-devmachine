@@ -1,6 +1,6 @@
 {
   "schema": "CLAY_FREE_SWARM_SYSTEM_ANALYSIS/v3",
-  "generated_at": "2026-08-25T21:27:45.662274+00:00",
+  "generated_at": "2026-08-25T21:42:51.442401+00:00",
   "runtime": {
     "supervisor": "STOPPED/QUARANTINED",
     "go_swarm": "RUNNING",
@@ -65,7 +65,7 @@
   },
   "distillery": {
     "schema": "CLAY_RESEARCH_DISTILLERY_STATUS/v1",
-    "generated_at": "2026-08-25T21:27:29.166210+00:00",
+    "generated_at": "2026-08-25T21:42:44.854978+00:00",
     "collected_source_tokens": 11621,
     "accepted_dataset_tokens": 0,
     "dataset_yield": 0.0,
@@ -111,7 +111,7 @@
     "model_output_tokens": 1455,
     "shared_provider_budget": {
       "schema": "CLAY_SHARED_PROVIDER_BUDGET/v1",
-      "generated_at": "2026-08-25T21:27:29.166744+00:00",
+      "generated_at": "2026-08-25T21:42:44.855548+00:00",
       "providers": {
         "arxiv": {
           "max_inflight": 1,
@@ -213,13 +213,13 @@
           "max_inflight": 16,
           "active_leases": 0,
           "min_interval_s": 0.5,
-          "cooldown_seconds": 9.992135763168335,
-          "total_requests": 3783,
+          "cooldown_seconds": 9.993444681167603,
+          "total_requests": 3873,
           "total_success": 134,
-          "total_429": 3648,
+          "total_429": 3738,
           "total_errors": 0,
           "last_status": "429",
-          "last_observed_at": "2026-08-25T21:27:29.158902+00:00"
+          "last_observed_at": "2026-08-25T21:42:44.849051+00:00"
         },
         "semantic_scholar": {
           "max_inflight": 1,
@@ -249,16 +249,16 @@
     },
     "db_bytes": 983040,
     "top_questions": [
-      "How does the caching layer affect the overall system latency?",
-      "What are the optimal parameters for the periodic quota status updates?",
-      "Does the current typed entry validator emit a cryptographic commitment (hash) that survives to the JIT emission point, or is validation state ephemeral?",
-      "Does the Groq credential+model rate-header binding have an equivalent coarse-validation gap for model-specific free-tier eligibility?",
-      "What is the minimal set of typed-entry invariants that, if violated, must deterministically reject at loader boundary vs. degrade gracefully at model execution?",
-      "Does the NVIDIA credential binding implement per-credential API entitlement verification or only static policy matching?",
-      "Does adaptive routing weight recalculation with recovery bonus improve overall swarm latency without increasing provider-level 429 rates?",
-      "Can the quota status cache be effectively shared across multiple sandbox environments?",
-      "What are the optimal parameters for the HYBRID model?",
-      "How does the HYBRID model perform under different workload scenarios?"
+      "Welche minimalen Telemetriedaten (z. B. Latenz, Rückgabecodes) ermöglichen das zuverlässige Falschen von Admissions‑Gate‑Ordering‑Violationen?",
+      "How can we autonomously verify concrete NVIDIA credential proof without relying on provider-provided statements?",
+      "Ist ein deterministisches Kausalhändchen‑Tracking von Provider‑Aufrufen ohne SDK‑Instrumentierung realisierbar?",
+      "How does causal-event-identity binding interact with existing Hyperposition semantics?",
+      "Does recursive self-model injection generalize across model architectures (nemotron vs gpt-oss vs qwen) or is the effect model-specific, and what architectural properties mediate the effect?",
+      "Can the identity-cache be made lock-free without compromising consistency?",
+      "What's the minimum engine-identity set required to avoid cache thrashing?",
+      "Does predictive pre-admission generalize across provider rate-limit topologies (token-bucket vs leaky-bucket vs fixed-window) without provider-specific tuning?",
+      "What are the optimal convergence metrics to use for dynamic entropy tuning?",
+      "Does the current NVIDIA credential binding distinguish between Developer Program membership and NIM free-tier entitlement per concrete credential?"
     ],
     "candidate_states": {}
   },
@@ -433,6 +433,6 @@
     "measured_total_sonnet5_equivalent_usd": 148.830648,
     "verified_historical_savings_usd": null,
     "nominal_avoided_if_zero_cost_usd": 148.830648,
-    "repo_output_only_proxy_usd": 139.97057
+    "repo_output_only_proxy_usd": 139.9784
   }
 }

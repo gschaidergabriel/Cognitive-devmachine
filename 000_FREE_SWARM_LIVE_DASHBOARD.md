@@ -60,7 +60,7 @@ Zweck: **Aktivität → ausführbarer Patch/Test → reproduzierbare Architektur
 
 <!-- RESEARCH_DISTILLERY_AUTO:BEGIN -->
 ## AUTO — Research Distillery / kumuliertes Wissens-Dataset
-Aktualisiert: `2026-08-25T21:27:44.996141+00:00`
+Aktualisiert: `2026-08-25T21:42:50.880141+00:00`
 
 **1. wichtigste Quote — Entity-Dataset-Yield:** `0 / 11,621 = 0.000%`  
 Kompressionsfaktor Quelltokens : akzeptierte Dataset-Tokens: **UNKNOWN**.
@@ -112,7 +112,7 @@ GO-Worker emittieren `OPEN_RESEARCH_QUESTIONS_JSON`; die Distillery zerlegt Frag
 
 <!-- SYSTEM_ANALYSIS_AUTO:BEGIN -->
 ## AUTO — Gesamtsystem, GO-Fluss, Script-Auswertung und Sonnet-Vergleich
-Aktualisiert: `2026-08-25T21:27:45.662274+00:00`
+Aktualisiert: `2026-08-25T21:42:51.442401+00:00`
 
 ### 1. Wichtigster Effizienzindikator — was geht im Durchschnitt wieder an `go`?
 **Source → GO Pass-through: 0.000%.** Definition: `accepted dataset-token yield × average distinct accepted-packet coverage delivered to GO macrocycles`.
@@ -151,16 +151,16 @@ Bei 0 akzeptierten Dataset-Tokens ist Source→GO exakt 0%; fehlende Reinjection
 - truth/effect/capability boundaries and falsification
 
 **Top offene Forschungsfragen aus der laufenden Queue:**
-- How does the caching layer affect the overall system latency?
-- What are the optimal parameters for the periodic quota status updates?
-- Does the current typed entry validator emit a cryptographic commitment (hash) that survives to the JIT emission point, or is validation state ephemeral?
-- Does the Groq credential+model rate-header binding have an equivalent coarse-validation gap for model-specific free-tier eligibility?
-- What is the minimal set of typed-entry invariants that, if violated, must deterministically reject at loader boundary vs. degrade gracefully at model execution?
-- Does the NVIDIA credential binding implement per-credential API entitlement verification or only static policy matching?
-- Does adaptive routing weight recalculation with recovery bonus improve overall swarm latency without increasing provider-level 429 rates?
-- Can the quota status cache be effectively shared across multiple sandbox environments?
-- What are the optimal parameters for the HYBRID model?
-- How does the HYBRID model perform under different workload scenarios?
+- Welche minimalen Telemetriedaten (z. B. Latenz, Rückgabecodes) ermöglichen das zuverlässige Falschen von Admissions‑Gate‑Ordering‑Violationen?
+- How can we autonomously verify concrete NVIDIA credential proof without relying on provider-provided statements?
+- Ist ein deterministisches Kausalhändchen‑Tracking von Provider‑Aufrufen ohne SDK‑Instrumentierung realisierbar?
+- How does causal-event-identity binding interact with existing Hyperposition semantics?
+- Does recursive self-model injection generalize across model architectures (nemotron vs gpt-oss vs qwen) or is the effect model-specific, and what architectural properties mediate the effect?
+- Can the identity-cache be made lock-free without compromising consistency?
+- What's the minimum engine-identity set required to avoid cache thrashing?
+- Does predictive pre-admission generalize across provider rate-limit topologies (token-bucket vs leaky-bucket vs fixed-window) without provider-specific tuning?
+- What are the optimal convergence metrics to use for dynamic entropy tuning?
+- Does the current NVIDIA credential binding distinguish between Developer Program membership and NIM free-tier entitlement per concrete credential?
 
 ### 5. Fortschritts-Funnel
 | Stufe | Wert |
@@ -192,7 +192,7 @@ Preisannahme: **Claude Sonnet 5 introductory through 2026-08-31: $2/M input + $1
 | Free-Swarm Usage | 31,313,649 input + 8,618,788 output | **$148.82** |
 | Distillery Modellarbeit | 460 input + 1,455 output | **$0.0155** |
 | zusammen, gemessener LLM-Tokenmix | — | **$148.83** |
-| persistenter Repo-Korpus, Output-only Proxy | 13,997,057 Proxy-Tokens | **$139.97** |
+| persistenter Repo-Korpus, Output-only Proxy | 13,997,840 Proxy-Tokens | **$139.98** |
 
 **Nominal vermiedene Sonnet-Kosten, falls diese Calls tatsächlich $0 kosteten: $148.83. Verifiziert gespart: UNKNOWN.** Die aktuelle typed Authority verbietet die nachträgliche FREE-Klassifikation historischer Provider-Traffic; der Korpuswert ist ebenfalls nur ein Neu-Erzeugungsproxy.
 
@@ -205,7 +205,7 @@ Dieser komplette Block ist Pflichtbestandteil des Publishers. Kompakte Tabellen 
 
 <!-- FREE_SWARM_AUTO:BEGIN -->
 ## AUTO — Live-Auswertung
-Aktualisiert: `2026-08-25T21:27:43.607103+00:00`
+Aktualisiert: `2026-08-25T21:42:49.630003+00:00`
 
 | Kennzahl | Wert |
 |---|---:|
@@ -219,8 +219,8 @@ Aktualisiert: `2026-08-25T21:27:43.607103+00:00`
 | Evident akzeptierte Architektur-Deltas | 0 |
 | Nominal/historisch akzeptierte Architektur-Deltas | 1 |
 | Legacy/unqualifizierte nominale Accepts | 1 |
-| Repo-Korpus-Proxy Tokens (4 Zeichen/Token) | 13997057 |
-| Sonnet-5 Output-only Äquivalent des Repo-Proxys | $139.97 |
+| Repo-Korpus-Proxy Tokens (4 Zeichen/Token) | 13997840 |
+| Sonnet-5 Output-only Äquivalent des Repo-Proxys | $139.98 |
 
 ### Modelle
 | Provider | Modell | Requests | Success | 429 | Input | Output | Total |
@@ -286,8 +286,8 @@ Innovativstes Modell: **NO EVIDENCE YET**
 | GPT/ChatGPT | 0 | UNKNOWN | UNKNOWN% |
 
 ### Research-Entity-Output / Sonnet-Kostenproxy
-API-exakte historische Gesamttokens aller früheren Organe bleiben **UNKNOWN**, solange keine vollständige historische Usage-Buchhaltung existiert. Der messbare persistente Repo-Korpus umfasst aktuell 10780 Textdateien / 55988228 Zeichen ≈ **13997057 Tokens** bei der ausdrücklich nur als Proxy verwendeten 4-Zeichen-Näherung.
-Hypothetische reine Output-Neuerzeugung dieses Proxy-Korpus mit Claude Sonnet 5: **$139.97** zum derzeit geltenden Output-Tarif von $10/M Tokens. Input-/Caching-/Toolkosten sind darin nicht enthalten.
+API-exakte historische Gesamttokens aller früheren Organe bleiben **UNKNOWN**, solange keine vollständige historische Usage-Buchhaltung existiert. Der messbare persistente Repo-Korpus umfasst aktuell 10781 Textdateien / 55991361 Zeichen ≈ **13997840 Tokens** bei der ausdrücklich nur als Proxy verwendeten 4-Zeichen-Näherung.
+Hypothetische reine Output-Neuerzeugung dieses Proxy-Korpus mit Claude Sonnet 5: **$139.98** zum derzeit geltenden Output-Tarif von $10/M Tokens. Input-/Caching-/Toolkosten sind darin nicht enthalten.
 <!-- FREE_SWARM_AUTO:END -->
 
 

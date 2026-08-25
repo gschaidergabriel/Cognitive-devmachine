@@ -151,12 +151,13 @@ def _claimed(world, state, event):
     }
 
 
-def _row(*, event=None, state=None, world=None):
+def _row(*, event=None, state=None, world=None, recompute_claimed=True):
     event = deepcopy(event or _event())
     state = deepcopy(state or _base_state())
     world = deepcopy(world or _world(event, observation_qualified=event["epistemic_type"] == "OBSERVED"))
     binding = gate.current_source_binding(GENERATOR)
     assert binding["pass"], binding
+    claimed = _claimed(world, state, event) if recompute_claimed else {"prevalidation_failure_fixture": True}
     return {
         "schema": gate.base.ROW_SCHEMA,
         "evidence_class": "SYNTHETIC_DETERMINISTIC_LABEL",
@@ -174,7 +175,7 @@ def _row(*, event=None, state=None, world=None):
         "formal_task_world_evaluator_only": world,
         "synthetic_test_event_evaluator_only": event,
         "hyperposition_state_before_evaluator_only": state,
-        "v3_reference_target_evaluator_only": _claimed(world, state, event),
+        "v3_reference_target_evaluator_only": claimed,
     }
 
 
@@ -216,7 +217,7 @@ def test_same_event_id_cannot_be_rebound_to_different_content():
     state = first["identity_bound_state_after"]
     changed = _event(outcome="NO")
     world = _world(changed)
-    row = _row(event=changed, state=state, world=world)
+    row = _row(event=changed, state=state, world=world, recompute_claimed=False)
     result = gate.adjudicate(row)
     assert not result["pass"]
     assert any("EVENT_ID_REBOUND_TO_DIFFERENT_CONTENT" in x for x in result["failures"])
@@ -231,7 +232,7 @@ def test_same_id_legacy_record_without_digest_is_not_treated_as_exact_replay():
             for record in branch.get(field, []):
                 if record.get("event_id") == "e1":
                     record.pop("event_content_sha256", None)
-    row = _row(state=state)
+    row = _row(state=state, recompute_claimed=False)
     result = gate.adjudicate(row)
     assert not result["pass"]
     assert any("PRIOR_EVENT_DIGEST_MISSING_FOR_SAME_ID" in x for x in result["failures"])
@@ -275,7 +276,7 @@ def test_observed_event_requires_typed_observation_qualification():
 def test_caller_independence_boolean_remains_non_authoritative():
     event = _event(independent=False)
     world = _world(event)
-    row = _row(event=event, world=world)
+    row = _row(event=event, world=world, recompute_claimed=False)
     result = gate.adjudicate(row)
     assert not result["pass"]
     assert any("CALLER_INDEPENDENCE_FLAG_MISMATCH_DERIVED_VALUE" in x for x in result["failures"])

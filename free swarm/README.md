@@ -2,7 +2,7 @@
 
 <!-- EVIDENCE_FORGE_AUTO:BEGIN -->
 ## AUTO — Evidence Forge / dritter autonomer Swarm
-Aktualisiert: `2026-08-25T07:36:05.527071+00:00`
+Aktualisiert: `2026-08-25T07:51:11.861348+00:00`
 
 Zweck: **Aktivität → ausführbarer Patch/Test → reproduzierbare Architektur-Evidenz**. Der Forge nutzt primär andere Kapazitäten als die LLM-Swarms: OpenAlex, Crossref, Semantic Scholar, Hugging Face Hub, GitHub, lokale Disposable-Clones und — innerhalb eines harten Free-Credit-Budgets — parallele E2B-Sandboxes.
 
@@ -60,7 +60,7 @@ Zweck: **Aktivität → ausführbarer Patch/Test → reproduzierbare Architektur
 
 <!-- RESEARCH_DISTILLERY_AUTO:BEGIN -->
 ## AUTO — Research Distillery / kumuliertes Wissens-Dataset
-Aktualisiert: `2026-08-25T07:36:05.754748+00:00`
+Aktualisiert: `2026-08-25T07:51:12.039209+00:00`
 
 **1. wichtigste Quote — Entity-Dataset-Yield:** `0 / 11,621 = 0.000%`  
 Kompressionsfaktor Quelltokens : akzeptierte Dataset-Tokens: **UNKNOWN**.
@@ -112,7 +112,7 @@ GO-Worker emittieren `OPEN_RESEARCH_QUESTIONS_JSON`; die Distillery zerlegt Frag
 
 <!-- SYSTEM_ANALYSIS_AUTO:BEGIN -->
 ## AUTO — Gesamtsystem, GO-Fluss, Script-Auswertung und Sonnet-Vergleich
-Aktualisiert: `2026-08-25T07:36:06.373659+00:00`
+Aktualisiert: `2026-08-25T07:51:12.677156+00:00`
 
 ### 1. Wichtigster Effizienzindikator — was geht im Durchschnitt wieder an `go`?
 **Source → GO Pass-through: 0.000%.** Definition: `accepted dataset-token yield × average distinct accepted-packet coverage delivered to GO macrocycles`.
@@ -151,16 +151,16 @@ Bei 0 akzeptierten Dataset-Tokens ist Source→GO exakt 0%; fehlende Reinjection
 - truth/effect/capability boundaries and falsification
 
 **Top offene Forschungsfragen aus der laufenden Queue:**
-- What is the root cause of the high error rate in the NVIDIA provider?
-- Can the load balancing mechanism be applied to other providers?
-- What are the long-term effects of the load balancing mechanism on system performance?
-- What is the impact of the free swarm provider admission runtime credit on the development of the local research model?
-- How can we optimize the supervisor inbox to prioritize the convergence of the executable EntityOS/HCU?
-- How to balance identity binding latency with model throughput in free provider networks?
-- Can hybrid identity verification (local + swarm consensus) prevent credential leakage without breaking FREE_ONLY constraints?
-- What minimal formal model captures the tension between causal traceability and execution speed?
-- Does credential-bound admission enable cross-region free-tier validation?
-- Does recursive self-modeling generalize across model families (Nemotron vs GPT-OSS) or is it model-specific?
+- Does Gemma-2-2B INT4 quantization on CPU (llama.cpp) establish FREE_ONLY 0.8B readiness baseline with InferenceReceipt provenance?
+- Wie standardisiert man provider_key_id across heterogeneous free providers?
+- Welches minimale Signatur‑Algorithmus‑Set liefert niedrige Latenz und ausreichende Integrität?
+- How can we statically determine the longest dependency chain in the Hyperposition resolution process in the presence of dynamic control flow and indirect jumps?
+- Kann die Modell‑Hash‑Komponente weggelassen werden, wenn request_id und provider‑Kontext ausreichend sind?
+- Can provider-native security features be composed into a defense-in-depth architecture without code duplication?
+- What is the minimum viable signature set for local pre-validation that doesn't introduce latency?
+- Can model-specific J-Space causal vectors be normalized for cross-model causal comparison without minting spurious training credit?
+- Which single causal mechanism from GWT/MoE/credential-binding literature most parsimoniously explains HCU typed-entry convergence when isolated in a minimal reproduction?
+- How to dynamically adjust rate limits across providers while maintaining zero-cost operation?
 
 ### 5. Fortschritts-Funnel
 | Stufe | Wert |
@@ -192,7 +192,7 @@ Preisannahme: **Claude Sonnet 5 introductory through 2026-08-31: $2/M input + $1
 | Free-Swarm Usage | 31,313,649 input + 8,618,788 output | **$148.82** |
 | Distillery Modellarbeit | 460 input + 1,455 output | **$0.0155** |
 | zusammen, gemessener LLM-Tokenmix | — | **$148.83** |
-| persistenter Repo-Korpus, Output-only Proxy | 12,628,838 Proxy-Tokens | **$126.29** |
+| persistenter Repo-Korpus, Output-only Proxy | 12,630,636 Proxy-Tokens | **$126.31** |
 
 **Nominal vermiedene Sonnet-Kosten, falls diese Calls tatsächlich $0 kosteten: $148.83. Verifiziert gespart: UNKNOWN.** Die aktuelle typed Authority verbietet die nachträgliche FREE-Klassifikation historischer Provider-Traffic; der Korpuswert ist ebenfalls nur ein Neu-Erzeugungsproxy.
 
@@ -205,7 +205,7 @@ Dieser komplette Block ist Pflichtbestandteil des Publishers. Kompakte Tabellen 
 
 <!-- FREE_SWARM_AUTO:BEGIN -->
 ## AUTO — Live-Auswertung
-Aktualisiert: `2026-08-25T07:36:04.421132+00:00`
+Aktualisiert: `2026-08-25T07:51:10.517594+00:00`
 
 | Kennzahl | Wert |
 |---|---:|
@@ -219,8 +219,8 @@ Aktualisiert: `2026-08-25T07:36:04.421132+00:00`
 | Evident akzeptierte Architektur-Deltas | 0 |
 | Nominal/historisch akzeptierte Architektur-Deltas | 1 |
 | Legacy/unqualifizierte nominale Accepts | 1 |
-| Repo-Korpus-Proxy Tokens (4 Zeichen/Token) | 12628838 |
-| Sonnet-5 Output-only Äquivalent des Repo-Proxys | $126.29 |
+| Repo-Korpus-Proxy Tokens (4 Zeichen/Token) | 12630636 |
+| Sonnet-5 Output-only Äquivalent des Repo-Proxys | $126.31 |
 
 ### Modelle
 | Provider | Modell | Requests | Success | 429 | Input | Output | Total |
@@ -286,8 +286,8 @@ Innovativstes Modell: **NO EVIDENCE YET**
 | GPT/ChatGPT | 0 | UNKNOWN | UNKNOWN% |
 
 ### Research-Entity-Output / Sonnet-Kostenproxy
-API-exakte historische Gesamttokens aller früheren Organe bleiben **UNKNOWN**, solange keine vollständige historische Usage-Buchhaltung existiert. Der messbare persistente Repo-Korpus umfasst aktuell 10203 Textdateien / 50515352 Zeichen ≈ **12628838 Tokens** bei der ausdrücklich nur als Proxy verwendeten 4-Zeichen-Näherung.
-Hypothetische reine Output-Neuerzeugung dieses Proxy-Korpus mit Claude Sonnet 5: **$126.29** zum derzeit geltenden Output-Tarif von $10/M Tokens. Input-/Caching-/Toolkosten sind darin nicht enthalten.
+API-exakte historische Gesamttokens aller früheren Organe bleiben **UNKNOWN**, solange keine vollständige historische Usage-Buchhaltung existiert. Der messbare persistente Repo-Korpus umfasst aktuell 10204 Textdateien / 50522545 Zeichen ≈ **12630636 Tokens** bei der ausdrücklich nur als Proxy verwendeten 4-Zeichen-Näherung.
+Hypothetische reine Output-Neuerzeugung dieses Proxy-Korpus mit Claude Sonnet 5: **$126.31** zum derzeit geltenden Output-Tarif von $10/M Tokens. Input-/Caching-/Toolkosten sind darin nicht enthalten.
 <!-- FREE_SWARM_AUTO:END -->
 
 

@@ -1,0 +1,44 @@
+{
+  "schema": "TRIGGER2_SWARM_REENTRY/v2",
+  "date": "2026-08-25",
+  "canonical_main_after_parallel_advance": "2edb6a9a6bd88faf89ff65785684ed5868b006b7",
+  "supervisor": "8.78",
+  "execution_mode": "FREE_ONLY",
+  "prior_branch_delta_commits": [
+    "30e6089771d0bc2192cba2373f9841d6fe1710ef",
+    "5cc2c0a82c10148872401d880e23dbedf9134b18"
+  ],
+  "reconciliation": {
+    "now_implemented_on_main_not_open_blockers": [
+      "realized S3 permutation changes actual mapping",
+      "target is derived from the prompt mapping",
+      "class-word leakage outside the allowed codebook is rejected",
+      "exact slot-level class-symbol counterbalance is regression-tested",
+      "generation rejects unverified/multitoken/unknown demo atoms"
+    ],
+    "status_of_delta_rows": "DATA_AUDIT_001..004 remain useful hard-negative/regression training examples, but must not be described as still-unimplemented main blockers.",
+    "newer_main_materialization_findings": [
+      "slot balance is not sufficient: real-atom identity balance/MI must also be validated",
+      "CODEBOOK_FLIP counterfactuals must hold the real atom triplet fixed",
+      "unseen-symbol atoms must be absent from every model-visible training position",
+      "counterfactual variants must remain in one ancestry-level split",
+      "three-class materialized codebooks must be injective and exclude the measured rejected atom 'or'"
+    ]
+  },
+  "remaining_high_value_gates": [
+    "Expose/freeze the exact 46 accepted ABI atom identities under the bound source-package/manifest/tokenizer hashes.",
+    "Freeze deterministic train/validation/holdout symbol partitions before tuning.",
+    "Audit class↔real-atom, atom↔position and atom↔target frequency/MI after materialization.",
+    "Keep counterfactual families causally isolated and family-split together.",
+    "Preserve frozen structural native v1 as negative evidence; no posthoc retuning on that holdout.",
+    "Convert evidence-qualified Forge output into nonzero Distillery dataset tokens with exactly-once replay before treating pipeline volume as useful training yield.",
+    "No paid Together training/preflight is authorized by triggerwort 2."
+  ],
+  "credit": {
+    "research_design_delta": 1,
+    "new_branch_candidate_rows": 20,
+    "admitted_dataset_tokens_from_this_branch_delta": 0,
+    "training_credit": 0,
+    "whole_entityos_hcu_credit": 0
+  }
+}

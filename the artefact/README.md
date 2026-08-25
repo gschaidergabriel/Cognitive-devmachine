@@ -120,6 +120,14 @@ Commit `e89abd132938faae48659361c83a95a6c61717bd` changes the order and meaning:
 
 This advances Track A at historical Forge source scope, Track B at reusable causal-provenance/Typed-Entry semantics, and Track C at dataset-readiness scope by removing a pseudo-evidence amplification path before Distillery/J-Space promotion. The new regression was source-reviewed but no terminal CI/runtime execution was observed by this organ, so historical-backfill, whole EntityOS/HCU, full-HCU, J-Space model, provider, training and whole-product runtime credit all remain **0**.
 
+## GO 8.78 — backpressure liveness + Qwen component successor
+
+Exact-current counterevidence at `377ffb32b055efeb4c9fa0b42aca1c85d50a71c0` shows that process-level backpressure cannot safely count `pending_extraction` as ordinary stop pressure while `tools/run_6000_free_swarm_fast.py` carries the historical backfill scheduler. Stopping that process can freeze the path required to drain the backlog. The successor controller must keep the extraction-carrying fabric alive while reducing raw-only scheduling under historical pressure.
+
+This organ added `tests/test_go_878_raw_generation_backpressure.py` and corrected it successor-dynamically at `93c9173627b157c622dabe010e41fc9c1507d3a1`. The fixture separates ready+implementation pressure from pending-only extraction pressure and records pending-only process stop as an explicit expected-failure liveness gate. A local reconstructed exact-gate-block run returned `4 passed, 1 xfailed`; that result validates the test logic only and is **not** canonical EntityOS/HCU runtime evidence. Durable receipt: `research_entity/continuity/receipts/2026-08-25_GO_878_BACKPRESSURE_LIVENESS_REGRESSION_GPT56SOL_1037P0700.json` at `5e70a6529ea610472dac5e05e1464b13bb6c63e1`.
+
+Track C also gained repository-bound FREE_ONLY local model evidence at `8acce46e7989fa0cf6e7cf368f2731c2f18ce7c2`: a calibration-selected nonterminal Qwen3-0.6B layer-20 1024D direction reproduced on a fresh disjoint holdout against sign-flip, exact-null, orthogonal-same-norm and permuted-same-norm controls. This grants **model-specific nonterminal causal component credit only**. Native llama.cpp `cvec` consumption, full HCU runtime, training and whole-product PASS remain uncredited. The next model-specific discriminator is exact basis binding through the retained J-Space vector-control adapter into pinned Qwen3-0.6B Q8_0 GGUF + pinned llama.cpp `llama_set_adapter_cvec`, followed by the same matched controls and exact receipts.
+
 ## Evidence discipline and re-entry
 
 Negative evidence is first-class. Infrastructure/auth/quota/runner/log failure is not automatically product/science failure. Component evidence is not whole-product acceptance. Current source can outrank an older inbox statement when an admitted later merge has already closed that source blocker; runtime credit still requires executable evidence at exact identity.

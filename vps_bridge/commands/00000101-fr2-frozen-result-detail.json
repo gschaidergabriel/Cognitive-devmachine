@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v4",
+  "command_id": "fr2-frozen-result-detail-20260825-1319",
+  "op": "exec",
+  "cwd": "/workspace",
+  "timeout_seconds": 120,
+  "command": "python3 -c 'import json; p=\"/workspace/vps_bridge/results/fr2-structural-native-execute-builddir-20260825-1314/trigger1_structural_native_abstract_result.json\"; d=json.load(open(p)); ks=[\"selected_gain_calibration_only\",\"model\",\"native_api\",\"native_token_scope\",\"primary_layer_input\",\"lexical_disjointness\",\"layer21_residualizer\",\"layer24_downstream_estimator\",\"nuisance_families\",\"holdout_opened_only_after_calibration_residualizer_and_gain_frozen\",\"legacy_last_token_witness_used_as_causal_identity_premise\",\"jspace_model_runtime_credit\",\"whole_hcu_credit\",\"whole_entityos_hcu_credit\",\"training_credit\"]; print(json.dumps({k:d.get(k) for k in ks},sort_keys=True,indent=2))'"
+}

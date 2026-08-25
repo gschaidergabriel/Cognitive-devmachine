@@ -1,0 +1,66 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "date": "2026-08-25",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "persistent_entity": "Clay",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority_epoch": "8.78",
+  "mode": "FREE_ONLY",
+  "canonical_main_observed_before_write": "ed77e41627c0a416dc8bcfb99605403c3bf81b0d",
+  "canonical_target": {
+    "path": "tools/zero_entityos_restart_resize_db_smoke_v1.py",
+    "blob_sha": "179fff954dc640815aa5c7f8385eb0f021d28f18",
+    "scope": "RESTART_RESIZE_DB_BOUNDARY_SMOKE_COMPONENT"
+  },
+  "observed_gap": {
+    "id": "SAME_GENERATION_STALE_S0_EPOCH_RACE",
+    "classification": "SOURCE_LEVEL_FAIL_CLOSED_GAP",
+    "description": "The canonical DB_WRITE_PROPOSAL binds generation and value digest but not the S0 epoch observed when the proposal was created. Two proposals from the same generation for the same object can therefore both remain admissible after one has already changed S0; the later admission decision is not forced to reject a stale read/version.",
+    "counterexample": "Create proposal A and proposal B at the same generation against S0 epoch e; admit B so S0 advances; then A still passes generation+digest checks because A contains no expected_s0_epoch binding.",
+    "risk": "Lost-update/stale-proposal overwrite at the deterministic S0 admission boundary; generation fencing alone does not close same-generation races.",
+    "runtime_failure_observed_on_canonical_source": false,
+    "reason_runtime_credit_not_granted": "The finding is established by exact-current source inspection plus a behaviorally mirrored deterministic donor regression, not exact-current canonical repository execution."
+  },
+  "donor_hardening": {
+    "closed_donor_pr": 1983,
+    "branch": "gpt56sol/go-restart-resize-db-boundary-smoke-20260825-1422",
+    "implementation_commit": "29db146799791efa2ff3c1f876aa958a10458452",
+    "regression_commit": "4e6896c060873a6b28d06dc05c15b0b48885e0b6",
+    "mechanism": [
+      "bind every durable DB proposal to expected_s0_epoch",
+      "include expected_s0_epoch in proposal identity",
+      "perform compare-and-admit under BEGIN IMMEDIATE",
+      "reject and mark proposal REJECTED_STALE_S0_EPOCH when current S0 epoch differs",
+      "preserve the existing stale-generation fence"
+    ],
+    "local_component_mirror": "9_OF_9_PASS",
+    "new_regression": "same-generation proposals A/B against one S0 epoch; admit B; A must fail DB_PROPOSAL_EXPECTED_S0_EPOCH_STALE and must not overwrite B",
+    "merge_status": "DONOR_ONLY_NOT_TO_BE_MERGED_AS_SECOND_RUNTIME_IMPLEMENTATION"
+  },
+  "coordination": {
+    "shared_immutable_macrocycle_id": null,
+    "unusual_experiment": "COORDINATION_BLOCKED_ZERO_NEW_UNUSUAL_EXPERIMENTS",
+    "new_unusual_experiments_run": 0,
+    "duplicate_runtime_lane_created": false
+  },
+  "go_tracks": {
+    "track_a_entityos_executable_convergence": "ADVANCED_BY_IDENTIFYING_AND_DURABLY_RECORDING_A_CANONICAL_S0_ADMISSION_RACE_PLUS_EXACT_DONOR_FIX",
+    "track_b_hcu_and_typed_entry_fabric": "ADVANCED_BY_TIGHTENING_DURABLE_STATE_VERSION_CAUSALITY_AT_THE_S0_BOUNDARY_WITH_EXPECTED_EPOCH_SEMANTICS",
+    "track_c_global_jspace_gwt_training_readiness_free_only": "ADVANCED_HARD_NEGATIVE_READINESS_ONLY; STALE_STATE_ADMISSION_IS_AN_EXPLICIT_NEGATIVE; ZERO_JSPACE_MODEL_OR_TRAINING_PROMOTION"
+  },
+  "credits": {
+    "source_gap_observation": 1,
+    "donor_source_hardening": 1,
+    "donor_local_component_mirror": 1,
+    "canonical_exact_runtime_for_epoch_fix": 0,
+    "variable_grid_model_runtime": 0,
+    "claude_code_bridge_runtime": 0,
+    "global_jspace_causal_runtime": 0,
+    "whole_entityos_hcu_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_action": "Patch the canonical tools/zero_entityos_restart_resize_db_smoke_v1.py so DB_WRITE_PROPOSAL/v1 carries expected_s0_epoch captured from the read-only S0 view; make CanonicalStateAuthority compare current epoch and commit atomically; add the same-generation A/B stale-epoch regression to the canonical smoke tests; execute at exact current source identity before granting component runtime credit."
+}

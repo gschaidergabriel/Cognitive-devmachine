@@ -669,6 +669,16 @@
     "counterhypothesis": "Verifying choices[0] is sufficient because additional choices can be ignored; falsified for FRANK's receipt claim because a second distinct completion crossed the execution boundary without validation or provenance.",
     "uncertainty": "Multi-choice generation remains intentionally unsupported; a future adapter must type, verify and receipt every returned choice before requesting n greater than one."
   },
+  "http_200_provider_error_envelope": {
+    "checked_at": "2026-08-25",
+    "claim": "A syntactically valid HTTP 200 JSON body whose object discriminator is error, or which carries an explicit top-level error member, is classified as provider_error. It remains EXECUTED but cannot reach VERIFIED or DONE and does not create HTTP-status evidence that was not received.",
+    "source": "https://docs.nvidia.com/nim/large-language-models/1.14.0/release-notes.html",
+    "external_evidence": "NVIDIA documents a Kanana NIM case where logprobs=0 can return HTTP 200 with a BadRequest error, so status 200 alone is not sufficient evidence of a fulfilled completion.",
+    "internal_measurement": "A documented-shape object=error body at status 200 previously fell through to a missing-choices KeyError and was mislabeled invalid_provider_response instead of provider_error.",
+    "executable_evidence": "test_http_200_provider_error_envelope_is_classified_as_error",
+    "counterhypothesis": "Every HTTP 200 body that lacks a verifiable choice is merely malformed transport data; falsified because NVIDIA explicitly documents application-level BadRequest errors carried with status 200.",
+    "uncertainty": "The adapter recognizes only explicit error discriminators and never promotes a body-level numeric code to received HTTP status or payment-latch evidence."
+  },
   "pending_http_results": {
     "checked_at": "2026-08-13",
     "claim": "For NVIDIA Chat Completions, HTTP 200 is fulfilled while HTTP 202 is pending and requires requestId polling; a 202 response cannot reach VERIFIED/DONE or trigger a blind replay of the original request.",

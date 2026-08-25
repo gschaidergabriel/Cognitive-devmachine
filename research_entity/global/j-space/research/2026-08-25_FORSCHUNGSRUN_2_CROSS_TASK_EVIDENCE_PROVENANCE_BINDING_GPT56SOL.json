@@ -1,0 +1,108 @@
+{
+  "schema": "CLAY_FORSCHUNGSRUN_2_CROSS_TASK_EVIDENCE_PROVENANCE_BINDING/v1",
+  "date": "2026-08-25",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "user_trigger": "2 / forschungsrun 2",
+  "persistent_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority_epoch_observed": "8.78",
+  "execution_mode": "FREE_ONLY",
+  "canonical_main_observed_before_write": "7be6dd97472b983461d0e8a15314e13a1f765f1e",
+  "scope": "STATIC_NONINTERVENTIONAL_AUDIT_OF_CROSS_TASK_ABSTRACT_CONTROL_ATTESTATION_PROVENANCE_BINDING",
+  "execution": {
+    "new_model_intervention_executed": false,
+    "duplicate_dispatch_created": false,
+    "paid_or_external_provider_used": false,
+    "runtime_credit_minted": false
+  },
+  "observed_source": {
+    "case_generator": {
+      "path": "tools/trigger1_cross_task_factorial_cases_v3.py",
+      "schema": "CLAY_TRIGGER1_CROSS_TASK_FACTORIAL_CASESET/v3",
+      "role": "Produces preregistered cross-task target x code x polarity cases with case_id, prompt_sha256, task-family and bundle_sha256 identities."
+    },
+    "gate": {
+      "path": "tools/trigger1_cross_task_abstract_control_gate_v2.py",
+      "blob_sha": "b6716e9323e241ec064a4f0f9745a9e089f8a542",
+      "attestation_schema": "CLAY_TRIGGER1_CROSS_TASK_ABSTRACT_CONTROL_EVIDENCE/v2",
+      "role": "Adjudicates model settings, geometry, rank, causal rows, position/length structure and off-target controls."
+    },
+    "gate_test": {
+      "path": "tests/test_trigger1_cross_task_abstract_control_gate_v2.py",
+      "blob_sha": "76b69c7ae644ed6c04083eef053a3e8aa6b817ea",
+      "constructive_observation": "The valid() fixture synthesizes basis directions, causal margins, topology labels, length metadata, permutation-null thresholds and rank declarations directly in memory; test_valid asserts that this fully synthetic attestation passes the gate without a v3 bundle identity, case_id, prompt_sha256, runtime receipt hash or source/execution receipt binding."
+    }
+  },
+  "new_material_finding": {
+    "id": "R2_B11_CROSS_TASK_GATE_ACCEPTS_UNBOUND_SELF_ATTESTED_EVIDENCE",
+    "classification": "PROMOTION_CRITICAL_EVIDENCE_PROVENANCE_GAP",
+    "statement": "The v2 cross-task gate validates internal consistency of an attestation but does not prove that the attested rows are derived from the preregistered v3 case bundle or from any exact runtime execution. Its own passing unit fixture is constructive evidence that arbitrary synthetic rows can satisfy the gate.",
+    "exact_missing_bindings": [
+      "No required CLAY_TRIGGER1_CROSS_TASK_FACTORIAL_CASESET/v3 bundle_sha256 or generator/source identity is checked by adjudicate().",
+      "holdout_causal_rows do not require case_id or prompt_sha256 and therefore are not row-wise bound to the preregistered prompts.",
+      "basis_family_directions are not bound to exact calibration case identities, activation-capture receipts or projected-vector hashes.",
+      "S0/S1/S2 vector_state_id has no required preregistered immutable mapping to evaluator-side target identities from the case bundle, leaving state-label permutation provenance unbound.",
+      "geometry_permutation_null accepts caller-supplied q95 thresholds plus a boolean provenance assertion; the gate does not require or verify an exact permutation-null receipt/hash or recompute thresholds from bound samples.",
+      "primary_settings pins model/build/layer/gain values but does not bind the causal rows to a concrete native execution receipt, harness identity, source tree or result manifest."
+    ],
+    "constructive_falsifier_of_current_sufficiency": "A hand-constructed in-memory candidate with invented family names, invented directions, constant target/control margins, invented topology labels, invented token counts and caller-chosen permutation-null thresholds is accepted by test_valid. Therefore PASS currently establishes schema-consistency only, not exact-source empirical provenance.",
+    "scientific_consequence": "Even after target/code/polarity counterbalance, task-family separation, rank consistency, proof-topology controls and position/length checks, a green gate cannot promote an empirical abstract-control claim unless every admitted datum is causally and cryptographically bound to the frozen case design and exact runtime receipts.",
+    "important_limit": "This is a static evidence-admission finding, not evidence that any real runtime result was fabricated or incorrect. It identifies what the successor gate must bind before a future real PASS can carry empirical credit."
+  },
+  "counterhypotheses": [
+    {
+      "id": "H0_TRUSTED_CALLER_MAKES_BINDING_UNNECESSARY",
+      "statement": "A trusted executor could guarantee out-of-band that the attestation came from the correct v3 cases.",
+      "falsifier": "Exact EntityOS/HCU evidence law requires reproducible identity in the artifact itself; a trusted caller assertion cannot establish row-level prompt/runtime provenance after transport, replay or parallel-worker fusion."
+    },
+    {
+      "id": "H0_SCHEMA_INTERNAL_CONSISTENCY_IS_ENOUGH_FOR_COMPONENT_CREDIT",
+      "statement": "Because the gate is only a component adjudicator, internal consistency may be sufficient.",
+      "falsifier": "The gate's claim scope names a Qwen3-0.6B native-control component. Model-specific empirical credit requires exact model/runtime/case execution evidence, which synthetic passing fixtures demonstrably do not provide."
+    }
+  ],
+  "successor_fix": {
+    "name": "EXACT_CASE_AND_RUNTIME_PROVENANCE_BINDING",
+    "required_gate_inputs": [
+      "generator_schema plus exact generator blob/source-tree identity",
+      "case_bundle_sha256 and immutable calibration/holdout family identities",
+      "preregistered S0/S1/S2 to evaluator-target mapping hash frozen before evaluation",
+      "calibration activation/direction receipt hashes and projected-vector hashes",
+      "permutation-null receipt hash plus raw/permutation-summary identity sufficient to verify q95 thresholds",
+      "exact native runtime receipt/manifest, source head/tree, harness hashes, GGUF hash and llama.cpp commit"
+    ],
+    "required_row_bindings": [
+      "Each causal row must carry case_id and prompt_sha256 and match exactly one bound v3 holdout case.",
+      "Requested code, polarity, replicate, task family and evaluator state must be recomputed or verified from the bound case record rather than trusted from the attestation row.",
+      "Each control row must bind the exact cvec/vector artifact hash and intervention identity used for that case.",
+      "Token counts, last-token index and proof-topology metadata must either be deterministically recomputed from the bound prompt/runtime tokenizer or carry receipt hashes that make them independently verifiable."
+    ],
+    "required_fail_closed_rules": [
+      "Reject any causal or geometry row absent from the bound case/execution manifests.",
+      "Reject post-hoc or caller-only state-label mappings.",
+      "Reject caller-supplied permutation-null thresholds without a bound null receipt.",
+      "Reject mismatched or missing source tree, case bundle, runtime manifest, prompt hash, vector hash or calibration receipt identities.",
+      "Preserve all existing v2 factorial, proof-topology, rank, position/length, sign-reversal and off-target requirements in addition to provenance binding."
+    ]
+  },
+  "relationship_to_other_run2_findings": [
+    "The v3 generator materially improves the earlier polarity and cross-task design confounds.",
+    "The v2 gate materially incorporates rank, proof-topology and position/length controls.",
+    "The separately recorded rank-complete nuisance-subspace causal coverage gap remains open when nuisance rank exceeds the number of causally tested nuisance axes.",
+    "This receipt adds the orthogonal evidence-admission requirement: a strong design and a strict statistic still need exact identity binding to become empirical evidence."
+  ],
+  "credit_change": {
+    "new_runtime_credit": 0,
+    "native_llamacpp_cvec_component_runtime_credit": 1,
+    "structural_label_free_native_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0,
+    "training_credit": 0,
+    "canonical_semantics_promotion": false
+  },
+  "research_delta": "Forschungsrun 2 demonstrates from the v2 gate's own passing synthetic fixture that current cross-task adjudication is not yet exact-case/exact-runtime evidence: it accepts internally consistent self-attestation without binding bundle, prompts, state mapping, permutation null or runtime receipts. The next successor must preserve all current structural controls and add exact cryptographic provenance closure.",
+  "next_exact_action": "Fuse exact v3 case-bundle, row-level prompt/case, frozen state-mapping, calibration/vector, permutation-null and native-runtime receipt identities into a successor gate; separately complete nuisance-rank causal coverage; do not dispatch another model run while the existing self-hosted structural job remains queued."
+}

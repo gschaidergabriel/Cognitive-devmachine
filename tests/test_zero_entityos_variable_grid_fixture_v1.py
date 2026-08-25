@@ -84,7 +84,11 @@ class VariableGridFixtureTests(unittest.TestCase):
             self.assertEqual(admission["causal_event_id"], roundtrip["reentry"]["causal_event_id"])
             self.assertEqual(7, roundtrip["reentry"]["from_workspace_epoch"])
             self.assertEqual(8, roundtrip["reentry"]["to_workspace_epoch"])
-            self.assertEqual("TRUE", roundtrip["reentry"]["observed_downstream_change"])
+            self.assertEqual("UNKNOWN", roundtrip["reentry"]["observed_downstream_change"])
+            stored = rt.con.execute(
+                "SELECT observed_downstream_change FROM workspace_reentry"
+            ).fetchone()[0]
+            self.assertEqual("UNKNOWN", stored)
             self.assertEqual(1, rt.count("workspace_reentry"))
         finally:
             rt.close()

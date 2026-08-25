@@ -1,0 +1,52 @@
+{
+  "schema": "FREE_SWARM_BACKFILL_SOURCECOUNT_IDEMPOTENCE_RECEIPT/v1",
+  "authority_epoch": "8.78",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "trigger": "go",
+  "organ": "GPT-5.6-Sol",
+  "base_main": "6e63c9c03a6c78bb25d7f293b19994c9ad782f00",
+  "branch": "go878/backfill-sourcecount-idempotence-gpt56sol-20260825",
+  "finding": {
+    "classification": "REPLAY_NONIDEMPOTENT_SCHEDULING_METADATA",
+    "observed_source": "tools/free_swarm_historical_backfill.py::_insert_candidate",
+    "mechanism": "Existing candidates increment source_count before candidate_sources INSERT OR IGNORE establishes whether provenance is new. Replaying the same source execution or surfacing it through multiple chunks/extractors can therefore increase scheduling weight without new evidence.",
+    "risk": "Backlog ordering uses source_count as a secondary priority; inflated counts can bias the historical 39M-token re-evaluation toward repeated provenance and undermine Goodman-style evidence collapse."
+  },
+  "delta": {
+    "helper": "tools/free_swarm_backfill_provenance.py",
+    "active_path_wiring": "tools/run_free_evidence_forge_backfill.py",
+    "rule": "For candidates with candidate_sources links, source_count is reconciled to COUNT(DISTINCT source_event_id) after each historical ingestion pass. Legacy candidates with no source links are left unchanged.",
+    "second_authority_created": false
+  },
+  "tests": {
+    "scope": "LOCAL_DETERMINISTIC_UNIT_ONLY",
+    "status": "PASS",
+    "passed": 3,
+    "failed": 0,
+    "cases": [
+      "same source execution across multiple chunks/extractors counts once",
+      "reconciliation is idempotent across reruns",
+      "legacy candidate without source links is not silently reinterpreted"
+    ],
+    "helper_sha256": "46db72b5dc63476666b0c5160f975a35fa575c12e655f9fde5eb830119b24160",
+    "test_sha256": "c885b33e06ba84872d8a8fafcd7b216fc9cd14ef5062da6b780558e91e1c0427"
+  },
+  "coordination": {
+    "shared_immutable_macrocycle_identity": null,
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_experiments_executed": 0
+  },
+  "credits": {
+    "historical_backfill_runtime": 0,
+    "distillery_replay_v2_runtime": 0,
+    "whole_entityos_hcu_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0
+  },
+  "next_exact_gate": "Execute the branch tests plus existing historical-backfill suite on exact branch source in clay-direct-dev, verify full historical replay does not increase source_count on a second saturation pass, then fuse only if current main has no successor implementation.",
+  "evidence_boundary": "The local unit pass verifies the isolated deterministic reconciliation logic only. It is not a terminal exact-current VPS receipt, full historical-backfill execution, EntityOS/HCU runtime acceptance, J-Space model evidence, or training evidence."
+}

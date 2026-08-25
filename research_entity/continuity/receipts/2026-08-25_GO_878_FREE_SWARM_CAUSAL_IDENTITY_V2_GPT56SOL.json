@@ -1,0 +1,67 @@
+{
+  "schema": "FREE_SWARM_CAUSAL_EVENT_IDENTITY_V2_SOURCE_RECEIPT/v1",
+  "authority_epoch": "8.78",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "organ": "GPT-5.6 Sol ChatGPT organ",
+  "trigger": "go",
+  "observed_exact_current_main_before_receipt": "edcc502f6a872f7f924a63b8f0a746ce21a5bf58",
+  "finding": "The historical Free-Swarm legacy source_event_id preimage binds the concrete source_path. A cumulative line checkpoint removes resume-dependent line-number drift but cannot make that event identity stable across relocation of the same artifact tree to a different absolute artifact root.",
+  "counterhypothesis": "Artifact-root-relative logical paths remove absolute-root relocation drift but do not establish fully path-independent occurrence identity when the same worker row is re-homed under a different logical run directory. A stronger future successor may require an immutable producer run identity if such identity is present or historically recoverable.",
+  "decision": "Add a successor causal_event_id under CLAY_FREE_SWARM_CAUSAL_EVENT_IDENTITY/v2 while preserving legacy source_event_id as compatibility/admission identity. Do not silently reinterpret existing hashes, rows, chunks, candidate provenance, or receipts.",
+  "writes": [
+    {
+      "path": "tools/free_swarm_causal_identity_v2.py",
+      "commit": "3d579694f2ac3148d71eb406f4c30e20ceaf0dc8",
+      "git_blob_sha": "142513997b641d545117148c66f0a69db57232b5"
+    },
+    {
+      "path": "tests/test_free_swarm_causal_identity_v2.py",
+      "commit": "0f01fa580615b88f1194b564711109bbecb61bd5",
+      "git_blob_sha": "98abe6dedd5b213e9f36739c450bc70d62806c40"
+    },
+    {
+      "path": "research_entity/continuity/FREE_SWARM_CAUSAL_EVENT_IDENTITY_V2.md",
+      "commit": "d449e956e86c46c11b16687f07debdcb8ab966c4",
+      "git_blob_sha": "3893c4d6f6e5523190bd2a4406e2d67d0f0fb31b"
+    }
+  ],
+  "deterministic_local_source_test": {
+    "command_class": "python unittest on pre-commit content-equivalent helper/test files",
+    "tests": 5,
+    "passed": 5,
+    "failed": 0,
+    "helper_sha256": "1d3685fc878a3c19fa5081577278c6c4ddfb6c92d184b9642fdcb13bbfd33c45",
+    "test_sha256": "653ef6a3f42556123d631e30126fd8b98b54a437b269b7c2c07f0e7c5edb10d1",
+    "scope": "SOURCE_LEVEL_DETERMINISTIC_UNIT_EVIDENCE_ONLY"
+  },
+  "acceptance_discriminators": [
+    "same artifact tree relocated under a different absolute artifact root yields the same v2 causal_event_id",
+    "one-shot and resumed scans yield identical absolute-line plus v2 causal identity",
+    "legacy admission identity may differ while relocated v2 causal identity remains equal",
+    "different logical run paths remain distinct",
+    "replay of one v2 causal event adds zero source-support weight after first admission",
+    "mixed legacy/v2 migration fails closed for v2-derived support credit",
+    "second saturation pass creates zero new causal IDs, support, packets, and accepted dataset tokens"
+  ],
+  "external_donor_check": {
+    "source": "CloudEvents specification",
+    "principle": "event identity is producer/source scoped and replayed duplicates may retain the same id; transport destination is not event identity",
+    "use": "design corroboration only; not canonical Clay authority"
+  },
+  "integration_state": "SOURCE_PRIMITIVE_ONLY_NOT_ACTIVE_BACKFILL_AUTHORITY",
+  "unusual_experiment": false,
+  "paid_provider_execution": false,
+  "together_execution": false,
+  "external_model_execution_by_this_delta": false,
+  "credit": {
+    "historical_backfill_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "hcu_full": 0,
+    "jspace_model": 0,
+    "training": 0,
+    "provider_runtime": 0
+  }
+}

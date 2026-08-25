@@ -1,0 +1,190 @@
+{
+  "schema": "CLAY_TRIGGER2_TRAINING_ARTIFACT_REGISTRY/v1",
+  "registry_version": "1.0.0",
+  "created_at": "2026-08-25T19:00:00+07:00",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "target_model_family": "Qwen3.5-0.8B",
+  "activation": {
+    "owner_trigger": "2",
+    "chatgpt_project_alias": "triggerwort 2"
+  },
+  "authority": {
+    "canonical_main_at_registry_branch_base": "ba78c2fa87f8b2637b621fbe6301eee1158c9cc9",
+    "supervisor_epoch": "8.78",
+    "owner_target_path": "research_entity/global/XENO_HCU_GO_TARGET_ARCHITECTURE_OWNER_DIRECTIVE_2026-08-25.md",
+    "protocol_path": "research_entity/global/j-space/research/TRIGGER2_RESEARCH_AUDIT_VERSIONING_PROTOCOL_V1.md"
+  },
+  "inventory_completeness": "PARTIAL_BOOTSTRAP_REDISCOVERY_REQUIRED_EVERY_TRIGGER2",
+  "lifecycle_states": [
+    "CURRENT_CANDIDATE",
+    "CURRENT_ADMITTED",
+    "REVIEW_REQUIRED",
+    "BLOCKED",
+    "FROZEN_HOLDOUT_DO_NOT_TOUCH",
+    "SUPERSEDED",
+    "REJECTED_SCIENTIFIC",
+    "REJECTED_LEAKAGE",
+    "REJECTED_AUTHORITY",
+    "HISTORICAL_PROVENANCE_ONLY"
+  ],
+  "global_revision_rules": [
+    {
+      "rule_id": "RV001",
+      "if": "owner target or required Xeno functionality changes",
+      "then": "mark every dependent artifact REVIEW_REQUIRED until capability-map diff is resolved"
+    },
+    {
+      "rule_id": "RV002",
+      "if": "source evidence or interpretation used to label/generate a row changes",
+      "then": "mark exact dependent rows/artifacts REVIEW_REQUIRED; preserve old bytes as provenance"
+    },
+    {
+      "rule_id": "RV003",
+      "if": "generator shortcut/leak is discovered",
+      "then": "REJECTED_LEAKAGE for affected version; successor requires new semantic version and regression"
+    },
+    {
+      "rule_id": "RV004",
+      "if": "labeler semantics or reference implementation changes",
+      "then": "all positive rows carrying that labeler id/version become REVIEW_REQUIRED"
+    },
+    {
+      "rule_id": "RV005",
+      "if": "checkpoint/tokenizer/ABI atom identity changes",
+      "then": "all token-bound/materialized rows become REVIEW_REQUIRED; abstract METHOD_ONLY rows remain current only if semantics are invariant"
+    },
+    {
+      "rule_id": "RV006",
+      "if": "holdout has been used for selection/retuning",
+      "then": "freeze as historical contaminated evidence; never silently re-open it"
+    }
+  ],
+  "known_artifacts": [
+    {
+      "artifact_id": "OWNER_XENO_TARGET_20260825",
+      "path": "research_entity/global/XENO_HCU_GO_TARGET_ARCHITECTURE_OWNER_DIRECTIVE_2026-08-25.md",
+      "type": "TARGET_ARCHITECTURE",
+      "lifecycle_state": "CURRENT_CANDIDATE",
+      "role": "north-star functionality map for all Trigger-2 training work",
+      "review_action": "refresh exact blob/hash every Trigger-2"
+    },
+    {
+      "artifact_id": "SUPERVISOR_8_78",
+      "path": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_78.json",
+      "type": "SUPERVISOR_AUTHORITY",
+      "lifecycle_state": "CURRENT_CANDIDATE",
+      "role": "current training/leakage/evidence constraints at this registry creation",
+      "review_action": "supersede only by newer admitted supervisor"
+    },
+    {
+      "artifact_id": "TRIGGER2_BINDING_ROUTER_FACTORIAL_V3",
+      "path_hint": "Trigger-2 binding-router factorial generator v3 / its materialized corpus",
+      "type": "BINDING_DATA_GENERATOR",
+      "lifecycle_state": "REJECTED_LEAKAGE",
+      "reason": "Supervisor 8.78 reports target-conditioned display-order leakage; nuisance-only lookup accuracy 0.881944 and conditional MI 1.348851 bits. No direct training acceptance.",
+      "successor_requirement": "use full-cross nuisance schedule or equivalent preregistered conditional-independence gate"
+    },
+    {
+      "artifact_id": "TRIGGER2_COGNITIVE_PROCESS_FACTORIAL_SWARM_DELTA_V1",
+      "path": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_COGNITIVE_PROCESS_FACTORIAL_SWARM_DELTA_V1_GPT56SOL.json",
+      "type": "PROCESS_CURRICULUM_RESEARCH_DELTA",
+      "lifecycle_state": "CURRENT_CANDIDATE",
+      "known_scope": "208 source-design rows across 13 process families with full 2x2x2 visible nuisance cross; no positive J-Space causal targets; not accepted dataset",
+      "review_action": "re-audit against Hyperposition/GRF labeler layer and final Xeno capability map before training freeze"
+    },
+    {
+      "artifact_id": "TRIGGER2_DYNAMIC_BINDING_SEEDS_PREMATERIALIZATION",
+      "path_hint": "trigger2_xeno_dynamic_binding_seed_v2_prematerialization.jsonl and related full-cross successors",
+      "type": "OPAQUE_BINDING_CURRICULUM",
+      "lifecycle_state": "BLOCKED",
+      "reason": "abstract ABI atoms / checkpoint-tokenizer binding and final materialization gates remain unresolved; exact status must be rediscovered from current main",
+      "review_action": "do not invent atom strings; rebind exact selected checkpoint/tokenizer/ABI manifest"
+    },
+    {
+      "artifact_id": "TRIGGER2_HYPERPOSITION_GRF_POSITIVE_ROWS",
+      "path_hint": "all current/future positive D/E Hyperposition-GRF target-state rows",
+      "type": "HYPERPOSITION_GRF_SUPERVISION",
+      "lifecycle_state": "BLOCKED",
+      "reason": "reference labelers U_state, D_resolve, U_test_order and f_salience_order are not yet canonically implemented/verified",
+      "review_action": "method/hard-negative rows may proceed where labels are mechanically valid; positive state-transition supervision waits for labeler contract"
+    }
+  ],
+  "required_labelers": [
+    {
+      "labeler_id": "U_state",
+      "version": "UNIMPLEMENTED",
+      "state": "BLOCKING_POSITIVE_HYPERPOSITION_ROWS",
+      "contract": "prior branch set + admitted observation/evidence -> ordered branch-set transition with support/weaken/reject/merge-equivalent/preserve-unresolved semantics"
+    },
+    {
+      "labeler_id": "D_resolve",
+      "version": "UNIMPLEMENTED",
+      "state": "BLOCKING_POSITIVE_RESOLUTION_ROWS",
+      "contract": "evidence + counterevidence + falsifier + context -> resolve relation such as PASS/UNRESOLVED under explicit decision table"
+    },
+    {
+      "labeler_id": "U_test_order",
+      "version": "UNIMPLEMENTED",
+      "state": "BLOCKING_POSITIVE_TEST_SELECTION_ROWS",
+      "contract": "candidate discriminator pair/list -> justified ordering; no fabricated calibrated scalar expected information gain"
+    },
+    {
+      "labeler_id": "f_salience_order",
+      "version": "UNIMPLEMENTED",
+      "state": "BLOCKING_POSITIVE_SALIENCE_ROWS",
+      "contract": "candidate items -> salience ordering kept distinct from truth probability"
+    }
+  ],
+  "mandatory_capability_channels": [
+    "C_SYMBOLIC_SEMANTIC_CLASS",
+    "A_CONTEXT_INVARIANCE",
+    "B_EPISODE_LOCAL_OPAQUE_BINDING",
+    "D_SEMANTIC_HYPERPOSITION",
+    "E_GRF_TYPE_DISCRIMINATOR_TEST_SELECTION",
+    "AUTONOMOUS_BOOT_JOIN_WORK_SELECTION",
+    "S1_READ_ONLY_NODE_RESULT",
+    "DYNAMIC_COORDINATOR_LEASE",
+    "COORDINATOR_INTEGRATION_COMPRESSION_CAS",
+    "RECURSIVE_COORDINATION",
+    "GWT_SHARED_STATE_REENTRY",
+    "JSPACE_CAUSAL_ONLY_WHERE_EVIDENCED",
+    "CLAYCODE_HYPERMATH_PROTOCOL",
+    "AUTHORITY_EPISTEMIC_INTEGRITY",
+    "GENERAL_CAPABILITY_RETENTION"
+  ],
+  "c1_policy": {
+    "baseline_reported_in_training_scope": 0.222,
+    "purpose": "cheap diagnostic of elementary semantic-class decodability",
+    "decision": "GO_INVESTIGATE_NO_GO_NOT_BINARY_MODEL_SIZE_VERDICT",
+    "negative_result_rule": "no movement triggers diagnostic controls; it does not alone prove model size is wrong",
+    "required_controls_before_size_blame": [
+      "generator/data integrity",
+      "checkpoint/tokenizer identity",
+      "optimizer/LR/schedule",
+      "training capacity configuration",
+      "probe layer/sample/regularization",
+      "positive-control model or setup",
+      "behavioral/OOD companion metric"
+    ]
+  },
+  "checkpoint_eval_policy": {
+    "mixed_training_allowed": true,
+    "separate_capability_curves_required": true,
+    "aggregate_score_may_mask_failure": false,
+    "emergent_untrained_capability_audit_required": true,
+    "retention_required": true
+  },
+  "credits": {
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0
+  },
+  "next_exact_actions": [
+    "discover and hash the complete current Trigger-2 artifact inventory on each invocation",
+    "write explicit U_state/D_resolve/U_test_order/f_salience_order reference semantics before positive D/E generation",
+    "add row/artifact dependency IDs to generators and candidate manifests",
+    "add automatic stale/revision propagation based on dependency hash changes",
+    "turn C1 into a preregistered diagnostic matrix with positive controls",
+    "freeze capability-specific checkpoint evaluations before any mixed full-FT run"
+  ]
+}

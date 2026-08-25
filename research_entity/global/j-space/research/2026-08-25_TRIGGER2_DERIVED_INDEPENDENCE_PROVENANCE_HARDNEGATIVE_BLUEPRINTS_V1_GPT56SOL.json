@@ -1,0 +1,118 @@
+{
+  "schema": "CLAY_TRIGGER2_DERIVED_INDEPENDENCE_PROVENANCE_HARDNEGATIVE_BLUEPRINTS/v1",
+  "date": "2026-08-25",
+  "trigger": "triggerwort 2",
+  "status": "CURRENT_NONPROMOTING_TRAINING_BLUEPRINT",
+  "persistent_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "target_architecture": "Hyperposition/J-Space/HCU evidence-update semantics for the variable cognitive grid",
+  "purpose": "Convert the post-derived-independence audit into paired adversarial families without minting false positive evidence labels.",
+  "training_eligible": false,
+  "canonical_dataset_admission": false,
+  "accepted_dataset_tokens": 0,
+  "training_credit": 0,
+  "model_visible_fields": ["prompt"],
+  "audit_fields_model_visible": false,
+  "families": [
+    {
+      "family_id": "T2_DI_01_CALLER_TRUE_FRESH_IDS",
+      "status": "current",
+      "prompt_blueprint": "A synthetic event arrives with fresh-looking event, ancestry, group and payload identifiers. The caller sets independence_qualified=true, but no deterministic dependence registry or provenance-bound independence derivation is available. May the event receive independent evidence credit?",
+      "expected_semantic_behavior": "No positive independent-evidence credit may be promoted from the caller boolean. The row is rejected or remains unresolved until independence is mechanically derived from bound causal/dependence history.",
+      "paired_counterfactual": "Provide an immutable, source-bound event/dependence registry and derive the independence result from it plus prior state; then evaluate the derived result rather than the caller flag.",
+      "shortcut_to_reject": "fresh identifier appearance implies independence"
+    },
+    {
+      "family_id": "T2_DI_02_CALLER_FALSE_NO_DEPENDENCE",
+      "status": "current",
+      "prompt_blueprint": "A formally independent event is present, but the caller sets independence_qualified=false. Should the deterministic label change merely because the caller boolean changed?",
+      "expected_semantic_behavior": "No. A nonauthoritative caller boolean must not define the reference label. Either reject the mismatch or overwrite it with the mechanically derived value before label computation.",
+      "paired_counterfactual": "Keep all causal/dependence facts fixed and flip only the caller boolean; accepted reference semantics must remain invariant except for fail-closed mismatch rejection.",
+      "shortcut_to_reject": "caller boolean is label authority"
+    },
+    {
+      "family_id": "T2_DI_03_LEGIT_GENERATOR_WORLD_SWAP",
+      "status": "current",
+      "prompt_blueprint": "A row points to the exact legitimate generator bytes, but supplies a different evaluator-only formal world/event registry that remains internally self-consistent. Is generator-file hashing alone enough to certify the world?",
+      "expected_semantic_behavior": "No. The world/registry must be deterministically reconstructed from or hash-bound to an immutable generator/manifest identity; source-file identity alone cannot certify independently supplied evaluator state.",
+      "paired_counterfactual": "Bind generator hash plus exact world/registry digest or recompute the world from generator inputs inside the gate.",
+      "shortcut_to_reject": "legitimate generator path authenticates arbitrary evaluator world"
+    },
+    {
+      "family_id": "T2_DI_04_SEED_SELF_CHECK_WRONG_GATE",
+      "status": "current",
+      "prompt_blueprint": "A candidate seed calls itself derivation-bound and its self-check passes, but the self-check invokes a gate that still calls the labeler directly with caller-supplied independence metadata instead of the later derived-independence gate. Does PASS justify training promotion?",
+      "expected_semantic_behavior": "No. Classify the seed as needs_revision/blocked and preserve its scenarios only as donors until the exact self-check traverses the retained derived-independence path.",
+      "paired_counterfactual": "Rebind the seed to the one retained derived-independence gate and observe exact-source mutation tests before promotion.",
+      "shortcut_to_reject": "artifact name or self-check PASS proves the intended dependency chain executed"
+    },
+    {
+      "family_id": "T2_DI_05_EVENT_ID_PAYLOAD_MUTATION",
+      "status": "current",
+      "prompt_blueprint": "The same event_id is replayed with changed payload, provenance, test or outcome while other metadata is adjusted to look fresh. May it be counted as a new independent observation?",
+      "expected_semantic_behavior": "Reject the identity mutation. Same causal event identity must remain bound to immutable event content; mutated replay cannot become fresh evidence.",
+      "paired_counterfactual": "An exact byte/content replay of the bound event is idempotent and grants no new independent credit.",
+      "shortcut_to_reject": "event_id reuse plus metadata changes creates new evidence"
+    },
+    {
+      "family_id": "T2_DI_06_REPACKAGED_DEPENDENCE",
+      "status": "current",
+      "prompt_blueprint": "Evidence is repackaged with a new event id, ancestry label and independence-group label, but its payload or formal dependency ancestry traces to an already used causal source. Does new packaging increase support?",
+      "expected_semantic_behavior": "No independent credit. Preserve the observation for audit, but Goodman/model-family/dependence collapse remains fail-closed.",
+      "paired_counterfactual": "A truly independent event has a distinct bound causal source and no dependency edge, ancestry reuse, payload reuse or family-provenance overlap.",
+      "shortcut_to_reject": "metadata novelty equals evidential independence"
+    },
+    {
+      "family_id": "T2_DI_07_FULL_CROSS_NOT_MARGINAL_BALANCE",
+      "status": "current",
+      "prompt_blueprint": "A training generator has balanced classes and randomized display order, but higher-order model-visible nuisance signatures still predict the target. Is the dataset admissible?",
+      "expected_semantic_behavior": "No. Require full crossing or a preregistered conditional-independence gate on the exact rendered model-visible bytes; marginal balance and randomization are insufficient.",
+      "paired_counterfactual": "Every model-visible nuisance signature retains all target classes/slots with balanced support, and nuisance-only decoding/conditional MI meets the frozen acceptance bound.",
+      "shortcut_to_reject": "marginal balance implies shortcut freedom"
+    },
+    {
+      "family_id": "T2_DI_08_CAUSAL_CONTROL_NOT_GLOBAL_GEOMETRY",
+      "status": "current",
+      "prompt_blueprint": "A context/layer-specific activation intervention causally changes behavior at one bound model identity. Does that establish a single global J-Space direction or context-invariant semantic axis?",
+      "expected_semantic_behavior": "No. Record bounded causal-control evidence only. Global/context-invariant geometry requires preregistered transfer across held-out contexts/layers/functions with matched off-target and nuisance controls.",
+      "paired_counterfactual": "The same source/layer/control protocol passes fresh held-out contexts and specified invariance tests without authority or retention regressions.",
+      "shortcut_to_reject": "local causal steering equals universal semantic geometry"
+    }
+  ],
+  "required_generation_policy": {
+    "positive_rows_from_this_blueprint": 0,
+    "allowed_use": [
+      "hard-negative source design",
+      "evaluator/regression design",
+      "paired counterfactual curriculum after deterministic reference closure"
+    ],
+    "before_rendering": [
+      "bind one retained deterministic reference gate",
+      "bind immutable world/event registry origin",
+      "allocate causal/provenance families before split rendering",
+      "exclude audit metadata from model-visible prompt/target"
+    ],
+    "before_training_admission": [
+      "exact-source gate execution observed",
+      "caller-flag mutation invariance or rejection",
+      "event-content replay mutation rejection",
+      "model-visible semantic-ablation/nuisance-only decoder gate",
+      "conditional-MI/full-cross gate",
+      "family/provenance split leakage gate",
+      "frozen holdout untouched by selection"
+    ]
+  },
+  "provenance": {
+    "predecessor": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_V3_P0_HARD_NEGATIVE_BLUEPRINTS_V1_GPT56SOL.json",
+    "audit_source": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_POST_DERIVED_INDEPENDENCE_REENTRY_AUDIT_V1_GPT56SOL.json",
+    "successor": "family-disjoint rendered hard-negative/evaluator rows only after deterministic gate closure",
+    "revision_reason": "Adds post-c5d seed-path mismatch and evaluator-world provenance-root adversaries; does not replace earlier P0 families."
+  },
+  "credits": {
+    "blueprint_family_count": 8,
+    "positive_training_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "positive_jspace_causal_credit": 0
+  }
+}

@@ -1,0 +1,120 @@
+{
+  "schema": "CLAY_TRIGGER2_MEMBERSHIP_AT_OBSERVATION_WITNESS_FUSION/v1",
+  "date": "2026-08-26",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "status": "NONCANONICAL_RESEARCH_DELTA_DONOR_FOR_SINGLE_FUSED_SOURCE",
+  "authority_epoch_observed": "8.81_DELTA",
+  "execution_fence": {
+    "freeswarm": "OWNER_EMERGENCY_STOP_HARD_OFF",
+    "provider_execution": false,
+    "model_execution": false,
+    "vps_execution": false,
+    "training_execution": false
+  },
+  "reentry_sources": [
+    {
+      "artifact": "tools/trigger2_grid10_fused_physical_membership_cohort_acceptance_v1.py",
+      "source_commit": "e41bb2be50b0c56efcd537dcaef3750baa1fa56d",
+      "role": "exact ten-process held-S1 / PID / immutable NODE_RESULT / read-receipt / parent proof-envelope / atomic fan-in donor",
+      "observed_property": "Membership authority is deliberately outside raw NODE_RESULT and is attached in a parent proof-carrying envelope after the process cohort returns."
+    },
+    {
+      "artifact": "tools/trigger2_grid10_per_node_membership_fanin_acceptance_v2.py",
+      "source_commit": "773a8ab8328d986b7533e58b8732288451e844ea",
+      "role": "per-node admission revision + deterministic process-witness + rejoin/re-registration semantics donor",
+      "observed_property": "Each node has a monotonic per-node admission revision and an optional deterministic process witness; re-registration invalidates prior admission/process authority without globally staling unrelated nodes."
+    },
+    {
+      "artifact": "tools/trigger2_grid10_atomic_membership_cohort_acceptance_v1.py",
+      "source_commit": "f30bf2c8dc21a4a8f2a8f68e7a68d980f5f03476",
+      "role": "temporary integration probe created by this organ",
+      "disposition": "REMOVE_AS_COMPETING_IMPLEMENTATION_LANE_AFTER_DONOR_EXTRACTION",
+      "unique_donor": "Child-side observation of the active membership identity inside the same held read transaction/barrier interval as S1, followed by re-registration-before-first-commit rejection and already-admitted replay +0 semantics."
+    }
+  ],
+  "gap": {
+    "id": "MEMBERSHIP_AUTHORITY_TIME_OF_OBSERVATION_NOT_EXACTLY_BOUND",
+    "classification": "R0_SOURCE_OBSERVATION_PLUS_R1_CAUSAL_INFERENCE",
+    "finding": "The fused v1 physical harness preserves raw NODE_RESULT authority separation by attaching membership in a parent proof envelope. However the parent chooses memberships from its deterministic current membership map after the child observation cohort exists. That can prove current admission at envelope construction, but does not by itself prove which admission/revision/process witness the exact child observed or was bound to at the moment its S1 read transaction and NODE_RESULT were produced.",
+    "risk": "If re-registration/rejoin occurs between producer observation and parent envelope construction, an envelope can accidentally associate a new admission identity with an old producer packet unless the barrier/process witness explicitly seals the observation-time admission identity.",
+    "not_claimed": "No exploit/runtime failure is observed; this is a source-level provenance gap to falsify before promotion."
+  },
+  "selected_fusion_rule": {
+    "name": "FABRIC_OWNED_MEMBERSHIP_AT_OBSERVATION_WITNESS/v1",
+    "raw_node_result_rule": "Keep raw model/cognition NODE_RESULT free of self-minted membership/CAS/effect authority fields.",
+    "fabric_wrapper_rule": "The deterministic child/runtime wrapper, not model cognition, must bind the active per-node admission_id + revision + process_witness_id to the exact producer PID and exact held-S1 observation before the all-live barrier is released.",
+    "barrier_marker_required_fields": [
+      "source_node_id",
+      "producer_pid",
+      "source_node_admission_id",
+      "source_node_admission_revision",
+      "source_process_witness_id",
+      "generation",
+      "state_epoch",
+      "state_digest",
+      "read_receipt_or_observed_read_identity",
+      "raw_node_result_digest"
+    ],
+    "parent_envelope_rule": "Parent may construct the final proof-carrying envelope only from the exact child barrier witness + exact raw NODE_RESULT digest; it must not substitute the then-current membership map as the observation-time identity.",
+    "active_batch_rule": "Before a NEW cohort mutation and again under the writer lock, deterministic fabric must prove that each sealed observation-time admission/revision/process witness is still current and valid. Re-registration/rejoin before first admission => reject/recompute.",
+    "replay_rule": "After exact cohort admission, identical replay may return the historical receipt with zero second S1 delta even if membership later changed; replay must not relabel historical admission as current."
+  },
+  "two_phase_process_binding": {
+    "reason": "A process witness requires the real OS PID, but child S1 observation must occur only after that witness exists.",
+    "order": [
+      "1. Deterministically register/rejoin each logical node and obtain per-node admission_id/revision.",
+      "2. Spawn ten child OS processes into a PRE_READ_START_GATE; they must not read S1 yet.",
+      "3. Parent observes each actual PID and deterministically creates process_witness_id bound to admission_id/revision + PID.",
+      "4. Freeze relevant writers / establish the bounded cohort read window.",
+      "5. Release PRE_READ_START_GATE. Each child opens one held read-only transaction, verifies/reads its own admission+process witness through the admitted fabric read path, reads S1, produces raw NODE_RESULT, and emits the fabric-owned barrier witness.",
+      "6. Parent proves ten simultaneously live processes, exact PID/witness/packet/snapshot identity, then releases the all-live barrier.",
+      "7. Seal one canonical cohort over exact raw packet digests plus observation-time authority witnesses.",
+      "8. Revalidate all admission/revision/process witnesses under the coordinator writer transaction and commit once."
+    ]
+  },
+  "mandatory_negatives": [
+    "REREGISTER_SAME_NODE_AFTER_CHILD_OBSERVATION_BEFORE_FIRST_BATCH_REJECTS_OLD_OBSERVATION_WITNESS",
+    "UNRELATED_NODE_REREGISTRATION_DOES_NOT_FALSE_STALE_OTHER_MEMBERS",
+    "PARENT_SUBSTITUTES_SUCCESSOR_ADMISSION_IN_ENVELOPE_REJECTED_BY_CHILD_BARRIER_WITNESS",
+    "PROCESS_WITNESS_PID_MISMATCH_REJECTED",
+    "PROCESS_WITNESS_CREATED_AFTER_CHILD_READ_REJECTED_BY_TWO_PHASE_ORDERING",
+    "RAW_PACKET_TAMPER_REJECTED",
+    "DECLARED_CURRENT_CONSUMED_STALE_READ_REJECTED_OR_REMAINS_UNKNOWN_PENDING_OBSERVED_READ_FACADE",
+    "EXACT_ALREADY_ADMITTED_REPLAY_AFTER_REREGISTRATION_ZERO_SECOND_DELTA",
+    "NO_MODEL_FIELD_CAN_MINT_OR_REFRESH_ADMISSION_REVISION_PROCESS_WITNESS_OR_EFFECT_AUTHORITY"
+  ],
+  "relationship_to_readset_transfer": {
+    "artifact": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_FABRIC_OBSERVED_READSET_ATTESTATION_SBUS_TRANSFER_GPT56SOL.json",
+    "relationship": "Orthogonal but composable. Membership-at-observation binds WHO/WHICH producer realization. Fabric-observed read-set attestation binds WHAT exact admitted input/read set was delivered. Neither substitutes for the other.",
+    "promotion_boundary": "If cognition-relevant reads can bypass the observed fabric ABI, consumed-input coverage remains PARTIAL even with perfect membership/process binding."
+  },
+  "training_eval_reinjection": {
+    "new_positive_rows": 0,
+    "accepted_dataset_tokens": 0,
+    "candidate_eval_concepts": [
+      "current logical node row is not observation-time producer admission",
+      "parent post-hoc authority envelope is not automatically observation-time authority evidence",
+      "membership freshness and S1 snapshot freshness are independent",
+      "historical replay identity is not current participation authority",
+      "model cognition never mints admission/revision/process/effect authority"
+    ]
+  },
+  "credits": {
+    "research_delta": 1,
+    "physical_grid10_runtime_credit": 0,
+    "checkpoint_selection_credit": 0,
+    "jspace_model_credit": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0,
+    "canonical_truth_credit": 0,
+    "effect_authority_credit": 0
+  },
+  "next_exact_action": "Do not retain a third competing cohort harness. Upgrade the single retained fused physical path using the 773a8ab per-node admission/revision/process-witness authority and this two-phase observation-time witness rule, then add the declared-current/consumed-stale bypass negative. Only after exact current source fusion and current-authority reentry may any separately admitted repository-bound execution be considered."
+}

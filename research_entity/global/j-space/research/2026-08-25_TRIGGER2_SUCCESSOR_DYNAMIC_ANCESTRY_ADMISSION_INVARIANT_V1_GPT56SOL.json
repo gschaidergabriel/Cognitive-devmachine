@@ -1,0 +1,117 @@
+{
+  "schema": "CLAY_TRIGGER2_SUCCESSOR_DYNAMIC_ANCESTRY_ADMISSION_INVARIANT/v1",
+  "date": "2026-08-25",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU_VARIABLE_COGNITIVE_GRID",
+  "status": "CURRENT_RESEARCH_INVARIANT_NONPROMOTING_SNAPSHOT_INDEPENDENT",
+  "purpose": "Eliminate moving-main stale-on-arrival currentness as a training-admission failure class without requiring a research artifact to guess which numbered ledger will still be current when its commit lands.",
+  "supersedes_currentness_fields_from": [
+    "research_entity/global/j-space/research/2026-08-25_TRIGGER2_2227_SUCCESSOR_DYNAMIC_LEDGER_DRIFT_AUDIT_V1_GPT56SOL.json",
+    "research_entity/global/j-space/research/2026-08-25_TRIGGER2_2229_SUCCESSOR_DYNAMIC_LEDGER_DRIFT_AUDIT_V2_GPT56SOL.json"
+  ],
+  "preserves_from_predecessors": [
+    "scientifically useful donor content may coexist with stale lifecycle metadata",
+    "commit timestamp and filename recency do not establish training authority",
+    "stale-on-arrival currentness forces donor-only status until explicit successor reentry",
+    "no positive-row generation while provenance/execution gates remain open"
+  ],
+  "snapshot_independent_resolution": {
+    "current_ledger": "RESOLVE_NEWEST_ADMITTED_T2_LEDGER_FROM_EXACT_COMMIT_ANCESTRY_AT_ADMISSION_TIME",
+    "current_owner_supervisor": "RESOLVE_FROM_NEWEST_ADMITTED_AUTHORITY_AT_ADMISSION_TIME",
+    "artifact_self_declared_currentness": "NONAUTHORITATIVE_METADATA_ONLY",
+    "commit_timestamp": "NONAUTHORITATIVE_FOR_SUCCESSOR_ORDER",
+    "filename_version": "NONAUTHORITATIVE_UNLESS_ANCESTRY_AND_SUPERSESSION_RELATION_AGREE",
+    "parallel_branch_or_pr": "DONOR_ONLY_UNTIL_REBASED_OR_EXPLICITLY_FUSED_INTO_THE_ADMITTED_SUCCESSOR_CHAIN"
+  },
+  "admission_algorithm": [
+    "Given candidate artifact commit C, walk admitted first-parent/full ancestry according to the repository's declared authority rule and enumerate Trigger-2 training ledgers reachable from C's parent.",
+    "Resolve the newest reachable admitted ledger L by explicit supersedes edges plus ancestry, not timestamp alone.",
+    "Resolve newest owner/supervisor authority A independently; fail closed if authority ordering is ambiguous.",
+    "Compare candidate-declared predecessor/current ledger and authority metadata with L and A.",
+    "If candidate declares an older ledger/authority than was already reachable from its parent and does not explicitly classify itself as donor/reentry-on-older-snapshot, mark STALE_ON_ARRIVAL_CURRENTNESS and force DONOR_ONLY_NEEDS_REENTRY.",
+    "If candidate is scientifically nonconflicting but metadata-stale, preserve content/provenance and revision reason; never silently discard or silently promote it.",
+    "If candidate conflicts with newer authority, classify SUPERSEDED_OR_REJECTED according to the exact conflict; do not average versions.",
+    "Before dataset admission, require that every transitive training source has a resolved lifecycle state and no unresolved stale-on-arrival authority/currentness edge.",
+    "After a concurrent write, re-run ancestry resolution; a successful write does not freeze the frontier."
+  ],
+  "required_lifecycle_outputs": [
+    "CURRENT",
+    "NEEDS_REVISION",
+    "DONOR_ONLY_NEEDS_REENTRY",
+    "BLOCKED",
+    "SUPERSEDED",
+    "REJECTED",
+    "FROZEN"
+  ],
+  "minimum_provenance_fields": [
+    "artifact_identity",
+    "artifact_commit",
+    "commit_parent",
+    "declared_predecessor",
+    "resolved_predecessor_at_admission",
+    "resolved_authority_epoch",
+    "status",
+    "revision_reason",
+    "predecessor",
+    "successor_or_successor_requirement",
+    "training_credit",
+    "accepted_dataset_tokens"
+  ],
+  "direct_project_falsifier_examples": [
+    {
+      "case": "artifact declares V18 current while its commit parent already contains admitted V21",
+      "required_status": "DONOR_ONLY_NEEDS_REENTRY",
+      "must_not": "CURRENT_OR_TRAINING_ADMITTED"
+    },
+    {
+      "case": "artifact declares V21 current but commit parent already contains admitted V22",
+      "required_status": "DONOR_ONLY_NEEDS_REENTRY",
+      "must_not": "CURRENT_OR_TRAINING_ADMITTED"
+    },
+    {
+      "case": "artifact is based on older ledger by design and explicitly declares donor-only historical comparison",
+      "required_status": "DONOR_ONLY_OR_HISTORICAL_VALID_SCOPE",
+      "must_not": "BE_REJECTED_SOLELY_FOR_AGE_IF_SCOPE_IS_EXPLICIT_AND_NONPROMOTING"
+    },
+    {
+      "case": "candidate predecessor equals newest ancestor ledger and authority matches newest admitted owner/supervisor; all other gates pass",
+      "required_status": "ELIGIBLE_FOR_NEXT_GATE_NOT_AUTOMATICALLY_TRAINING_ADMITTED",
+      "must_not": "MINT_RUNTIME_OR_TRAINING_CREDIT_FROM_LINEAGE_ALONE"
+    }
+  ],
+  "current_training_frontier_is_not_hardcoded_here": {
+    "reason": "The frontier is deliberately resolved dynamically from the newest admitted ledger and authority. This invariant must survive future v23/v24/... without becoming stale merely because numbering advances.",
+    "known_persistent_classes_at_creation": [
+      "A02 promotion-grade Git-object producer-lineage proof plus exact repository-bound execution",
+      "A03 durable generation-authority replay-root proof",
+      "ordered-history and OBSERVED-producer provenance/authentication",
+      "rendered nuisance/family/provenance/tokenizer ABI gates",
+      "model-specific multi-seed READ/BIND_ROUTE/WRITE actionability and J-Space causal metrology"
+    ]
+  },
+  "generation_decision": {
+    "decision": "NO_NEW_ROWS_WITH_REASON",
+    "new_positive_rows": 0,
+    "new_hard_negative_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "reason": "This cycle's highest-information delta is admission-lineage correctness. Additional corpus volume cannot close provenance/runtime/model-causal gates."
+  },
+  "credits": {
+    "research_delta": 1,
+    "versioning_invariant_delta": 1,
+    "runtime_credit": 0,
+    "positive_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "positive_jspace_causal_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0
+  },
+  "execution_note": "No unusual experiment, provider execution or training execution was performed. The invariant is a nonpromoting research/admission rule until implemented and tested in the canonical admission path.",
+  "next_exact_action": "Implement this ancestry-dynamic rule as a deterministic admission linter/test before candidate rows can become training-admitted; separately continue the newest dynamically resolved provenance/runtime frontier."
+}

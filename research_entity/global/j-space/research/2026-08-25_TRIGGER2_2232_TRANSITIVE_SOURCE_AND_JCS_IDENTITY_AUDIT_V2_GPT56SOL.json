@@ -1,0 +1,127 @@
+{
+  "schema": "CLAY_TRIGGER2_TRANSITIVE_SOURCE_AND_JCS_IDENTITY_AUDIT/v2",
+  "artifact_version": "2.0.0",
+  "date": "2026-08-25",
+  "local_trigger_time": "22:32+07:00",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "status": "CURRENT_RESEARCH_AUDIT_NONPROMOTING_SUCCESSOR_DYNAMIC",
+  "supersedes_for_currentness": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_2227_TRANSITIVE_SOURCE_AND_JCS_IDENTITY_AUDIT_V1_GPT56SOL.json",
+  "inherits_technical_finding_from": "CLAY_TRIGGER2_TRANSITIVE_SOURCE_AND_JCS_IDENTITY_AUDIT/v1",
+  "revision_reason": "V1 was stale-on-arrival for moving-main currentness: it observed v20/main 7d160047 before write, while the GitHub create committed on parent bdb7a2e5 after v23, repository-bound A02 runner hardening and dynamic-ledger ancestry work had already landed. This v2 re-enters that newer state. The transitive executable-dependency and reference-digest findings remain unclosed after re-search of current source.",
+  "authority": {
+    "repository": "gschaidergabriel/clay-global-research-entity",
+    "branch": "main",
+    "observed_main_before_v2_write": "a4786c5ab6284f660c63f2e2347d701f906a3dd1",
+    "observed_tree_before_v2_write": "bcb5a763fb59b874aec765dfc378c043f7b3e899",
+    "v1_actual_commit_parent": "bdb7a2e582eb391088b8c414b5ac5c069eed0f01",
+    "latest_training_ledger_observed": "CLAY_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER/v23",
+    "latest_training_ledger_commit": "a11b58dc2c4bfdc3d5cc6214edd66d32e29b7b50",
+    "supervisor_epoch": "8.78",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "architecture": "HCU_VARIABLE_COGNITIVE_GRID",
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "positive_jspace_causal_credit": 0
+  },
+  "v1_lifecycle": {
+    "status": "STALE_ON_ARRIVAL_FOR_CURRENTNESS_TECHNICAL_FINDING_RETAINED",
+    "predecessor": null,
+    "successor": "this v2",
+    "stale_fields": [
+      "current_ledger_at_observation=v20 treated as current at write",
+      "observed_main_before_write=7d160047 treated as if it were the commit parent"
+    ],
+    "retained_fields": [
+      "A02 top-level producer pin does not explicitly bind dynamically loaded labeler bytes",
+      "A02 top-level producer pin does not explicitly bind dynamically loaded canonicalizer bytes",
+      "gate reconstructs through current dependencies, creating self-consistent dependency-drift risk",
+      "v3 Hyperposition internal _digest is Python compact JSON rather than repository RFC8785/JCS",
+      "zero-row/zero-credit decision"
+    ]
+  },
+  "current_reentry_findings": [
+    {
+      "artifact": "CLAY_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER/v23",
+      "status": "CURRENT_LEDGER_AT_REENTRY_SUCCESSOR_DYNAMIC",
+      "finding": "V23 correctly records A02 Git-object producer lineage as source-repaired/runtime-unobserved and keeps A03 replay-root plus downstream training gates open. It does not claim or define a complete transitive executable dependency manifest for the producer."
+    },
+    {
+      "artifact": "tools/trigger2_a02_discriminator_producer_auth_gate_v1.py",
+      "status": "CURRENT_SOURCE_GIT_OBJECT_TOP_LEVEL_PRODUCER_LINEAGE_BOUND_TRANSITIVE_DEPENDENCY_IDENTITY_NOT_OBSERVED",
+      "finding": "The repaired gate proves producer commit/path bytes, ancestry, repository origin and executed HEAD/tree. That closes the specific fake-commit/top-level-producer lineage gap. It does not by itself pin the labeler/canonicalizer byte identities that the producer imports dynamically."
+    },
+    {
+      "artifact": "tools/trigger2_a02_discriminator_producer_v1.py",
+      "status": "CURRENT_SOURCE_TOP_LEVEL_PRODUCER_PINNED_DYNAMIC_DEPENDENCIES_UNPINNED_IN_RECEIPT_PREIMAGE",
+      "finding": "The receipt preimage binds producer_source_sha256, policy/formal-spec JCS, generation case, world/prestate/event and producer-result JCS. No labeler-source or canonicalizer-source digest is present in the observed receipt preimage."
+    },
+    {
+      "artifact": "tools/trigger2_hyperposition_reference_labelers_v3.py",
+      "status": "CURRENT_DETERMINISTIC_SEMANTIC_REFERENCE_NEEDS_IDENTITY_SUCCESSOR_BEFORE_PORTABLE_CANONICAL_HASH_USE",
+      "finding": "u_state/D/U/f semantics remain useful and nonpromoting. Internal derivation/state digests still use Python json.dumps sorting/number rendering rather than the repository JCS canonicalizer."
+    },
+    {
+      "artifact": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_2227_TRANSITIVE_SOURCE_AND_JCS_IDENTITY_AUDIT_V1_GPT56SOL.json",
+      "status": "SUPERSEDED_FOR_CURRENTNESS_RETAINED_AS_PROVENANCE",
+      "successor": "this v2"
+    }
+  ],
+  "convergence_with_v23": {
+    "not_a_regression_of": "064055e Git-object producer-lineage repair",
+    "distinction": "V23 closes authenticity of the declared top-level producer bytes. This audit asks whether the executable closure of that producer is complete when behavior depends on dynamically imported repository files. Both can be true simultaneously.",
+    "current_a02_credit": 0,
+    "recommended_claim_ceiling_until_review": "A02 top-level-producer/source-lineage closure is implemented; full transitive executable-source closure is not yet demonstrated."
+  },
+  "jcs_identity_finding": {
+    "status": "OPEN_RESEARCH_SOURCE_IDENTITY_GAP",
+    "primary_spec": "RFC 8785 JCS",
+    "primary_spec_url": "https://www.rfc-editor.org/rfc/rfc8785.html",
+    "repository_authority_to_reuse": "the artefact/MicroEntity/hcu/entry_canonicalization_v1.py",
+    "rule": "Do not create a second canonicalizer. Either migrate v3 identity hashes in a versioned semantic-labeler successor or namespace the existing Python-compact hashes as local compatibility hashes that cannot satisfy cross-runtime causal identity."
+  },
+  "recommended_successor": {
+    "id": "T2_A02_TRANSITIVE_EXECUTION_CLOSURE_GATE_V1",
+    "status": "CURRENT_RESEARCH_CANDIDATE_NOT_IMPLEMENTED_NOT_TRAINING_ADMITTED",
+    "minimum_manifest": [
+      "A02 producer exact path+bytes",
+      "A02 auth gate exact path+bytes",
+      "Hyperposition v3 labeler exact path+bytes",
+      "EntityOS RFC8785/JCS canonicalizer exact path+bytes",
+      "A02 producer authority exact JCS digest",
+      "trusted synthetic generator authority exact JCS digest",
+      "executed HEAD+tree"
+    ],
+    "required_negative_controls": [
+      "labeler-only mutation with unchanged producer source must reject",
+      "canonicalizer-only mutation with unchanged producer source must reject",
+      "generation-authority content mutation under same path/schema must reject",
+      "dependency-manifest mutation must reject"
+    ],
+    "gate_order": "Review this closure before interpreting an exact-current A02 PASS as more than the explicitly measured source/execution scope. Do not move current semantic sources merely to make this audit green before coordination."
+  },
+  "generation_decision": {
+    "new_positive_rows": 0,
+    "new_hard_negative_rows_admitted": 0,
+    "positive_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "decision": "NO_NEW_ROWS_WITH_REASON",
+    "reason": "V23 still has A02 runtime unobserved and A03 replay-root unresolved; this audit adds a transitive source-identity review requirement. Raw or synthetic row generation would optimize the wrong bottleneck."
+  },
+  "credits": {
+    "research_delta": 1,
+    "versioning_reentry_delta": 1,
+    "source_provenance_gap_found": 1,
+    "positive_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "trigger2_a02_runtime_credit": 0,
+    "positive_jspace_causal_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0
+  },
+  "next_exact_action": "On the current clean admitted zero-cost repository execution lane, either extend the A02 receipt/runner to bind and verify the transitive dependency manifest before execution, or explicitly cap the current run's claim to top-level-producer-bound evidence and schedule the transitive-closure gate as the immediate successor. In either case, keep A03 replay-root and all positive-row gates closed."
+}

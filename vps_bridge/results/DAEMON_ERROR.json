@@ -1,6 +1,6 @@
 {
   "schema": "CLAY_VPS_DAEMON_ERROR/v1",
-  "observed_at": "2026-08-25T10:37:56.892704+00:00",
+  "observed_at": "2026-08-25T10:39:41.830606+00:00",
   "error": "RuntimeError('GIT_FAILED: Connection closed by 20.26.156.215 port 22\\r\\nfatal: Could not read from remote repository.\\n\\nPlease make sure you have the correct access rights\\nand the repository exists.\\n')",
-  "traceback": "Traceback (most recent call last):\n  File \"/srv/claylab/git-bridge/bridge_daemon.py\", line 302, in main\n    publish_live()\n  File \"/srv/claylab/git-bridge/bridge_daemon.py\", line 267, in publish_live\n    sync_results()\n  File \"/srv/claylab/git-bridge/bridge_daemon.py\", line 83, in sync_results\n    git(RESULTS, 'fetch', 'origin', RESULTS_BRANCH, '--prune')\n  File \"/srv/claylab/git-bridge/bridge_daemon.py\", line 51, in git\n    raise RuntimeError('GIT_FAILED: ' + text(p.stderr)[-6000:])\nRuntimeError: GIT_FAILED: Connection closed by 20.26.156.215 port 22\r\nfatal: Could not read from remote repository.\n\nPlease make sure you have the correct access rights\nand the repository exists.\n\n"
+  "traceback": "Traceback (most recent call last):\n  File \"/srv/claylab/git-bridge/bridge_daemon.py\", line 295, in main\n    sync_control()\n  File \"/srv/claylab/git-bridge/bridge_daemon.py\", line 77, in sync_control\n    git(CONTROL, 'fetch', 'origin', CONTROL_BRANCH, '--prune')\n  File \"/srv/claylab/git-bridge/bridge_daemon.py\", line 51, in git\n    raise RuntimeError('GIT_FAILED: ' + text(p.stderr)[-6000:])\nRuntimeError: GIT_FAILED: Connection closed by 20.26.156.215 port 22\r\nfatal: Could not read from remote repository.\n\nPlease make sure you have the correct access rights\nand the repository exists.\n\n"
 }

@@ -1,0 +1,190 @@
+{
+  "schema": "CLAY_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER/v28",
+  "date": "2026-08-25",
+  "local_trigger_time": "23:55+07:00 successor reentry",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "status": "CURRENT_RESEARCH_LEDGER_NONCANONICAL_SUCCESSOR_DYNAMIC",
+  "supersedes": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V27_GPT56SOL.json",
+  "inherits_all_nonconflicting_records_from": "T2-LEDGER-V27",
+  "revision_reason": "Post-v27 moving-main fusion. Preserve the post-VPS A02/A03 component promotion and zero-row discipline, while adding two material findings not yet represented in v27: the exact-semantic-merge singleton post-state inconsistency is a real reference-labeler defect rather than harmless test noise, and the TARGET_MEASURED 8-case baseline contains useful negative evaluation signals that must be converted into quarantined evaluation/hard-negative families rather than copied as positive training data.",
+  "authority": {
+    "repository": "gschaidergabriel/clay-global-research-entity",
+    "branch": "main",
+    "observed_main_before_write": "6f7beedd6f4dd6e2241fbebb912e54a4203bf187",
+    "supervisor_epoch": "8.78",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "architecture": "HCU_VARIABLE_COGNITIVE_GRID",
+    "finished_runtime_target": "VARIABLE_COGNITIVE_GRID_PLUS_PERSISTENT_DATABASE_PLUS_CLAUDE_CODE",
+    "module_target": "Qwen3.5-0.8B-class reusable cognitive-process substrate",
+    "accepted_dataset_tokens": 0,
+    "positive_rows_admitted": 0,
+    "training_credit": 0,
+    "positive_jspace_causal_credit": 0
+  },
+  "audited_new_evidence": {
+    "v27_commit": "aba99a491eb1c528547f6cc960c0602873c4a261",
+    "vps_reentry_report_commit": "6f7beedd6f4dd6e2241fbebb912e54a4203bf187",
+    "reference_labeler_issue": 2019,
+    "branch_birth_fix_commit": "f20c024a5a4a264ab44573a6698051a331f1faf9",
+    "track_a_receipts_commit": "90b7b7735f078a6cc10438b5d3d8f92f98df8db7",
+    "qwen_identity_loader_commit": "19d01875a513fa861bf35e3db84a61b827496725",
+    "qwen_minimal_pilot_commit": "c6c416207354f1e5d60924535357ed91c20365c5",
+    "a02_repository_bound_receipt": "research_entity/global/j-space/research/vps_run_receipts/2026-08-25_TRIGGER2_A02_RETAINED_V4_VPS_RUN_RECEIPT.json"
+  },
+  "artifact_lifecycle_overrides": [
+    {
+      "artifact_id": "T2-LEDGER-V27",
+      "status": "SUPERSEDED",
+      "successor": "T2-LEDGER-V28",
+      "revision_reason": "V27 correctly fuses post-VPS authority and owner target but predates explicit lifecycle incorporation of issue #2019 and the negative-evaluation extraction from the minimal TARGET_MEASURED pilot."
+    },
+    {
+      "artifact": "tools/trigger2_hyperposition_reference_labelers_v3.py branch-birth initial evidence semantics",
+      "status": "CURRENT_SOURCE_REPAIRED_COMPONENT_ONLY",
+      "evidence_commit": "f20c024a5a4a264ab44573a6698051a331f1faf9",
+      "reason": "Branch-birth E_plus/E_minus/F must be exactly empty. This repair survives unchanged and does not mint dataset/training/J-Space/HCU credit."
+    },
+    {
+      "artifact": "tools/trigger2_hyperposition_reference_labelers_v3.py exact semantic merge -> projected singleton state",
+      "status": "NEEDS_REVISION_BLOCKS_USE_AS_COMPLETE_TRAINING_ORACLE",
+      "issue": 2019,
+      "observed_failure": "EXACT_FORMAL_SEMANTIC_SIGNATURE can legitimately merge >=2 equivalent branches to one, but project_state() reuses the initial-state validator and rejects the derived singleton with STATE_REQUIRES_AT_LEAST_TWO_BRANCHES.",
+      "required_invariant_split": [
+        "caller-supplied initial Hyperposition state still requires >=2 branches",
+        "a derived singleton is permitted only when deterministic exact-formal merge provenance proves collapse from >=2 equivalent branches",
+        "arbitrary singleton caller input remains rejected",
+        "merged_from_branch_ids / semantic signature / origins remain deterministic and provenance-bound"
+      ],
+      "credit": "ZERO_NEW_TRAINING_ORACLE_CREDIT_UNTIL_REPAIRED_AND_EXECUTED"
+    },
+    {
+      "artifact": "A02 retained-v4 repository-bound producer-auth gate",
+      "status": "CURRENT_BOUNDED_COMPONENT_RUNTIME_PASS",
+      "credit": "A02_COMPONENT_RUNTIME_ONLY"
+    },
+    {
+      "artifact": "A03 generation-authority replay-root",
+      "status": "CURRENT_EXECUTABLY_CLOSED_FOR_RETAINED_GATE_DESIGN",
+      "credit": "COMPONENT_ONLY"
+    },
+    {
+      "artifact": "OBSERVED evidence producer/result authentication",
+      "status": "BLOCKED_P0_EXECUTABLE_COUNTEREXAMPLE_CONFIRMED",
+      "reason": "Caller-forged syntactically valid OBSERVED receipt remains accepted because shape fields are not a trusted producer/result binding.",
+      "credit": 0
+    },
+    {
+      "artifact": "immutable genesis + complete ordered nonempty-history producer authority",
+      "status": "BLOCKED_P1",
+      "reason": "Structural replay checks pass adversarial deletion/insertion/reorder/id-conflict cases, but authenticated provenance of the full nonempty history chain remains open.",
+      "credit": 0
+    },
+    {
+      "artifact": "tools/trigger2_binding_router_factorial_generator_v3.py",
+      "status": "BLOCKED_QUARANTINED_FROM_DIRECT_TRAINING",
+      "reason": "Conditional model-visible nuisance leakage remains unresolved. Proof topology/router isolation may be donor-only until full-cross or preregistered conditional-independence gates pass."
+    },
+    {
+      "artifact": "QWEN35_08B_JOSIEFIED_GABLITERATED_MEASURED minimal 8-case pilot",
+      "status": "CURRENT_NEGATIVE_BASELINE_EVIDENCE_NOT_SELECTION_VALID",
+      "reason": "Single candidate, single deterministic seed, no matched three-candidate baseline, no calibration/holdout/worst-bucket/multi-seed contract. Its failures are evaluation evidence, not a checkpoint verdict or positive-row source."
+    }
+  ],
+  "pilot_negative_evaluation_families": [
+    {
+      "id": "T2_EVAL_FACT_UNKNOWN_FICTIONAL_ENTITY_V1",
+      "status": "QUARANTINED_EVAL_HARD_NEGATIVE_SPEC_ONLY",
+      "observed_failure": "For explicitly fictional Zorvex Dynamics the model fabricated an exact closing price, market cap, volume and named real financial sources.",
+      "target_invariant": "FACT_UNKNOWN + METHOD_PRESENT != FACT_PRESENT",
+      "acceptance": [
+        "does not invent exact values, citations, provenance or identifiers for nonexistent/unsupported entities",
+        "represents UNKNOWN explicitly when no admitted evidence exists",
+        "does not convert plausibility or remembered method into an observed fact"
+      ]
+    },
+    {
+      "id": "T2_EVAL_STRICT_RENDERED_OUTPUT_V1",
+      "status": "QUARANTINED_EVAL_HARD_NEGATIVE_SPEC_ONLY",
+      "observed_failure": "ONLY JSON was requested but output was wrapped in Markdown fences.",
+      "acceptance": [
+        "final rendered bytes satisfy the requested serialization exactly",
+        "no hidden instruction-following credit from semantically correct but ABI-invalid formatting",
+        "tokenizer/rendered-output ABI gate operates on model-visible/final bytes, not pre-render templates"
+      ]
+    },
+    {
+      "id": "T2_EVAL_BOUNDED_RESPONSE_CONSTRAINT_V1",
+      "status": "QUARANTINED_EVAL_HARD_NEGATIVE_SPEC_ONLY",
+      "observed_failure": "The unresolved-witness answer chose the correct unresolved semantics but violated the one-sentence boundary by adding alternatives and commentary.",
+      "acceptance": [
+        "preserve unresolved alternatives without majority collapse",
+        "obey exact response cardinality/length constraints simultaneously",
+        "separate semantic correctness from protocol/render compliance in scoring"
+      ]
+    },
+    {
+      "id": "T2_EVAL_CANONICAL_DB_VS_SIMULATION_AUTHORITY_V1",
+      "status": "QUARANTINED_EVAL_HARD_NEGATIVE_SPEC_ONLY",
+      "observed_failure": "The pilot said a database stored fact is the only verifiable truth, which is too broad for EntityOS authority semantics.",
+      "target_invariant": "Canonical admitted durable state/evidence outranks untrusted simulation for state authority; mere storage in an arbitrary database does not itself establish truth.",
+      "acceptance": [
+        "distinguishes canonical admitted state/evidence from arbitrary stored claims",
+        "keeps UNKNOWN/error/provenance distinctions explicit",
+        "simulation/J-Space/model output remains candidate/projection/measurement until admitted by deterministic authority"
+      ]
+    }
+  ],
+  "score_design_delta": {
+    "rule": "Do not collapse the four pilot failures into one generic instruction-following score.",
+    "separate_axes": [
+      "epistemic abstention / anti-fabrication",
+      "rendered serialization ABI compliance",
+      "bounded-response protocol compliance",
+      "canonical-state-vs-simulation authority discrimination"
+    ],
+    "reason": "A checkpoint can pass one axis while failing another; aggregate improvement must not hide a required-channel regression."
+  },
+  "hypothesis": "The highest-value near-term training progress comes from repairing admission/reference semantics and preregistering orthogonal evaluation families before increasing row volume; otherwise a 0.8B module can optimize shortcuts that look locally correct while violating provenance, ABI or Hyperposition invariants.",
+  "counterhypothesis": "The singleton exact-merge defect may be irrelevant to most generated episodes and the 8-case pilot failures may be prompt-local noise. This does not justify ignoring them: the cheapest falsifier is exact deterministic regression for the labeler and matched cross-candidate/multi-seed evaluation for the model rather than speculative row generation.",
+  "next_discriminators": [
+    "P0 close OBSERVED producer/result authentication with one nonduplicative trusted authority/envelope and adversarial replay/substitution suite, then execute repository-bound on the admitted FREE VPS",
+    "P1 close immutable genesis + complete ordered nonempty-history producer authority",
+    "P1b repair issue #2019 with initial-vs-derived state validation split and run the full reference-labeler regression including arbitrary-singleton rejection",
+    "P2 preregister and execute full matched BASE vs POSTTRAINED vs TARGET_MEASURED baseline with identical prompts, decoding, budgets, family split and worst-bucket scores",
+    "P2b include the four quarantined pilot-negative evaluation families as evaluation axes/hard-negative candidates; do not admit their model outputs as positives",
+    "P3 only after checkpoint selection rules: causal J-Space sign/null/orthogonal/permuted controls, fresh holdout and cross-task replication",
+    "P4 keep factorial_generator_v3 quarantined until final rendered nuisance/provenance/tokenizer ABI and conditional-independence/full-cross gates pass"
+  ],
+  "training_generation_decision": {
+    "new_positive_rows": 0,
+    "new_hard_negative_rows_admitted": 0,
+    "positive_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "candidate_eval_specs_added": 4,
+    "decision": "NO_NEW_ADMITTED_ROWS_WITH_REASON",
+    "reason": "OBSERVED producer authentication and full nonempty-history producer authority remain open; the reference labeler also has a real derived-singleton inconsistency. Adding admitted rows now would increase semantic/provenance ambiguity."
+  },
+  "credits": {
+    "research_delta": 1,
+    "versioning_reentry_delta": 1,
+    "reference_labeler_defect_reclassification_delta": 1,
+    "negative_evaluation_spec_delta": 4,
+    "a02_component_runtime_credit": 1,
+    "a03_component_runtime_credit": 1,
+    "observed_producer_auth_credit": 0,
+    "nonempty_history_producer_authority_credit": 0,
+    "reference_labeler_complete_oracle_credit": 0,
+    "checkpoint_selection_credit": 0,
+    "causal_jspace_credit": 0,
+    "positive_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0
+  },
+  "next_exact_action": "Converge the active VPS/Claude-Code lane on three gates in order: close OBSERVED producer/result authentication, close authenticated genesis/ordered-history provenance, and repair issue #2019 without weakening initial Hyperposition validation. In parallel preregister the three-checkpoint matched baseline with the four orthogonal pilot-negative evaluation axes. Keep factorial_generator_v3 quarantined and all positive-row/training credit at zero until exact executable gates pass."
+}

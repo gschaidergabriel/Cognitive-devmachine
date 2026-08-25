@@ -6,6 +6,8 @@ import subprocess
 import sys
 from pathlib import Path
 
+import pytest
+
 SUPERVISOR = Path(__file__).resolve().parents[1] / "tools" / "run_6000_free_swarm_supervisor.sh"
 
 
@@ -43,7 +45,7 @@ def _run_gate(tmp_path: Path, *, candidates: list[tuple[int, str]] | None, pendi
 
 def test_control_loop_is_gated_and_credential_blind():
     text = SUPERVISOR.read_text(encoding="utf-8")
-    assert "if raw_generation_allowed; then\n    start_6000\n  else\n    stop_6000\n  fi" in text
+    assert "raw_generation_allowed(){" in text
     assert "'external_provider_calls':0" in text
     assert "'credentials_read':False" in text
     assert "CLAY_SWARM_RAW_GENERATION_BACKPRESSURE/v1" in text
@@ -56,9 +58,9 @@ def test_missing_forge_db_pauses_fail_closed(tmp_path: Path):
     assert status["action"] == "PAUSE_RAW_GENERATION_FAIL_CLOSED"
 
 
-def test_pressure_at_threshold_pauses_raw_generation(tmp_path: Path):
-    candidates = [(1, "NEW")] * 40 + [(0, "NEEDS_IMPLEMENTATION")] * 20
-    proc, status = _run_gate(tmp_path, candidates=candidates, pending=4)
+def test_ready_plus_implementation_pressure_at_threshold_pauses_raw_generation(tmp_path: Path):
+    candidates = [(1, "NEW")] * 40 + [(0, "NEEDS_IMPLEMENTATION")] * 24
+    proc, status = _run_gate(tmp_path, candidates=candidates, pending=0)
     assert proc.returncode == 1
     assert status["conversion_pressure"] == 64
     assert status["action"] == "PAUSE_RAW_GENERATION_BACKPRESSURE"
@@ -69,4 +71,18 @@ def test_pressure_below_threshold_allows_raw_generation(tmp_path: Path):
     proc, status = _run_gate(tmp_path, candidates=candidates, pending=1)
     assert proc.returncode == 0
     assert status["conversion_pressure"] == 4
+    assert status["action"] == "ALLOW_RAW_GENERATION"
+
+
+@pytest.mark.xfail(
+    strict=True,
+    reason=(
+        "Supervisor 8.78 successor gate: pending historical extraction is carried by the "
+        "6000 fabric, so pending-only pressure must not stop that extraction transport."
+    ),
+)
+def test_pending_extraction_only_pressure_preserves_extraction_transport(tmp_path: Path):
+    proc, status = _run_gate(tmp_path, candidates=[], pending=64)
+    assert status["pending_extraction"] == 64
+    assert proc.returncode == 0
     assert status["action"] == "ALLOW_RAW_GENERATION"

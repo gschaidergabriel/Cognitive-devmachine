@@ -1,0 +1,17 @@
+{
+  "schema": "CLAY_VPS_RECEIPT/v4",
+  "command_id": "fr1-jspace06-native-capture-compile",
+  "command_sha256": "759a3953108ca1c0a3b0962665714a6af6ed40641f9424a71cd3b4b53b2b8722",
+  "started_at": "2026-08-25T04:20:37.526445+00:00",
+  "finished_at": "2026-08-25T04:20:38.710987+00:00",
+  "status": "FAIL",
+  "exit_code": 1,
+  "op": "exec",
+  "stdout_sha256": "77afba370409d8d8c37772a4ac9b993a4fb5f2dd58f8be0362d47c4c0b13b77b",
+  "stderr_sha256": "a5f9e8146ddb914cf7ae4ab316ed31a7078fc04d5aff3be8d240256eaac04247",
+  "stdout_tail": "source_head=fbf5140fe0db284bc01f707c06ca47af86ac30f1\nllama_head=bb4caa7540188872173c44d161602d9271386413\ncapture_source=tools/trigger1_native_llamacpp_layer_capture.cpp\ncapture_source_sha256=0af3078912e0d0f086b7d5337f2d49b178efab8cd1eb534f80843f8b2a757874\n",
+  "stderr_tail": "/usr/bin/ld: cannot find -lllama: No such file or directory\n/usr/bin/ld: cannot find -lggml: No such file or directory\n/usr/bin/ld: cannot find -lggml-base: No such file or directory\n/usr/bin/ld: cannot find -lggml-cpu: No such file or directory\ncollect2: error: ld returned 1 exit status\n",
+  "meta": {},
+  "execution_boundary": "ROOT_INSIDE_ROOTLESS_PODMAN_OR_EXPLICIT_REPO_CONTROL_OP",
+  "canonical_credit_minted": 0
+}

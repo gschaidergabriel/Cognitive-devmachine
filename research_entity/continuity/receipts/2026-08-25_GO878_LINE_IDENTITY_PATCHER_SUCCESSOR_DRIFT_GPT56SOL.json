@@ -1,0 +1,80 @@
+{
+  "schema": "CLAY_GO_RESEARCH_DELTA/v1",
+  "date": "2026-08-25",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol / ChatGPT project organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority": {
+    "newest_observed_supervisor": "8.78",
+    "mode": "FREE_ONLY",
+    "canonical_repository": "gschaidergabriel/clay-global-research-entity",
+    "canonical_branch": "main",
+    "main_observed_before_write": "1309a539df4e9c5c33b5845cd9d1f3444616b960"
+  },
+  "observed_successor_drift": {
+    "backfill_path": "tools/free_swarm_historical_backfill.py",
+    "current_backfill_blob": "5cb0045f5c355170372efd4f08c033b33c91fbed",
+    "line_identity_bug_still_present": true,
+    "bug_observation": "incremental resume still loads byte_offset, resets local_line=0, increments local_line and feeds it to _ingest_worker_row/source_event_identity",
+    "patcher_path": "tools/apply_go878_backfill_line_checkpoint.py",
+    "patcher_blob": "6b845f7a3a9e0feac1d1b30777ed69e4692d2567",
+    "patcher_expected_source_blob": "f095ec12ab28aa5df87b1762b2cc19afca592365",
+    "patcher_matches_current_source": false,
+    "consequence": "the prepared exact-blob repair now fails closed before applying, so the retained line-identity gate is not executable against current main without a deliberate successor rebind/review"
+  },
+  "movement_since_previous_exact_blob": {
+    "base_main": "87dfbc548b42517827b8a1853bdab121b6752102",
+    "head_main": "1309a539df4e9c5c33b5845cd9d1f3444616b960",
+    "commits_ahead": 22,
+    "backfill_file_changes": {
+      "additions": 8,
+      "deletions": 4,
+      "total_changes": 12
+    },
+    "repair_markers_rechecked": [
+      "backfill_files remains offset-only without cumulative line_no",
+      "ingest_artifact_history still resets local_line on each resume",
+      "source_event identity still receives resume-local line coordinate"
+    ]
+  },
+  "coordination": {
+    "retained_issue": 1874,
+    "issue_comment_id": 5404757036,
+    "dispatch_key": "free-swarm-backfill-line-identity-v1-g0000",
+    "dispatch_claim_state": "LEGACY_FANOUT_QUARANTINED_NO_NEW_TRIGGER",
+    "new_issue_authorized": false,
+    "new_dispatch_created_by_this_organ": false,
+    "new_unusual_experiment": false
+  },
+  "hypothesis": "Successor-dynamic source movement, not only dispatch fan-out, is now preventing the already-designed cumulative-line repair from becoming executable evidence.",
+  "counterhypothesis": "The 12-line source movement is semantically orthogonal to the repair and only requires a safe exact-blob rebind; no redesign is necessary.",
+  "cheapest_high_information_discriminator": "Review the 12-line backfill diff against every patch marker, then deliberately rebind the existing patcher to the current backfill/test blobs under the singleton dispatch protocol; execute the existing one-shot-vs-resumed and legacy-offset regressions exactly once in the admitted FREE sandbox and persist the bounded receipt.",
+  "tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": {
+      "status": "ADVANCED",
+      "delta": "reduced the open historical replay gate from generic line-identity repair to a concrete successor-drift blocker between current source and its exact-blob patcher"
+    },
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": {
+      "status": "HCU_NO_CHANGE_WITH_REASON",
+      "reason": "the highest-information blocker remains replay-stable causal event provenance upstream of HCU/Typed Entry; creating a second ingress/authority would be harmful",
+      "next_discriminator": "after stable historical causal identity, bind recovered evidence through the existing Typed Entry/HCU causal chain"
+    },
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": {
+      "status": "TRAINING_READINESS_NO_CHANGE_WITH_REASON",
+      "reason": "dataset/evidence provenance is still chunking-dependent and the retained line-identity repair is not executable at current source identity",
+      "next_discriminator": "after admitted line-identity repair plus nonzero accepted dataset tokens, resume only the retained zero-cost model-specific J-Space causal lane"
+    }
+  },
+  "credits_after_cycle": {
+    "whole_entityos_hcu_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "provider_runtime_credit": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_action": "Successor-review and rebind the existing exact-blob line-identity patcher to the latest current backfill/test blobs without creating a new semantic repair lane or another generation-0 issue; then execute the singleton regression/receipt path when protocol admission permits.",
+  "evidence_boundary": "exact-current source/coordination finding only; no runtime/model/J-Space/training/whole-product promotion"
+}

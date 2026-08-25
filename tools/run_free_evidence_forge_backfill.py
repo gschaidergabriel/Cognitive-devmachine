@@ -14,7 +14,16 @@ import time
 
 import run_free_evidence_forge_safe_871 as safe
 from free_swarm_backfill_provenance import reconcile_candidate_source_counts
-from free_swarm_historical_backfill import backfill_metrics, ensure_schema, ingest_artifact_history
+import free_swarm_historical_backfill as historical_backfill_core
+from free_swarm_backfill_exhaustiveness_878 import install as install_exhaustiveness
+
+# Keep provenance reconciliation from current main and install the stronger
+# completion semantics on the same historical-backfill module. The canonical
+# _batch_binding gate remains the only progress-admission authority.
+install_exhaustiveness(historical_backfill_core)
+backfill_metrics = historical_backfill_core.backfill_metrics
+ensure_schema = historical_backfill_core.ensure_schema
+ingest_artifact_history = historical_backfill_core.ingest_artifact_history
 
 base = safe.base
 _ORIGINAL_CONNECT = base.connect

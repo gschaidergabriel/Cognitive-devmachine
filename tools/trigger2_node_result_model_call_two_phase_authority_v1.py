@@ -351,6 +351,7 @@ def derive_authority_cohort_id(
     launches = [item["launch_descriptor_sha256"] for item in checked]
     observations = [item["executor_observation_sha256"] for item in checked]
     raw_packets = [item["raw_node_result_packet_digest"] for item in checked]
+    node_admissions = [item["source_node_admission_id"] for item in checked]
     for values, code in (
         (cells, "AUTHORITY_COHORT_CELL_DUPLICATE"),
         (nodes, "AUTHORITY_COHORT_NODE_DUPLICATE"),
@@ -358,6 +359,7 @@ def derive_authority_cohort_id(
         (launches, "AUTHORITY_COHORT_LAUNCH_DUPLICATE"),
         (observations, "AUTHORITY_COHORT_EXECUTOR_OBSERVATION_DUPLICATE"),
         (raw_packets, "AUTHORITY_COHORT_RAW_PACKET_DUPLICATE"),
+        (node_admissions, "AUTHORITY_COHORT_NODE_ADMISSION_DUPLICATE"),
     ):
         _require(len(set(values)) == expected_member_count, code)
 

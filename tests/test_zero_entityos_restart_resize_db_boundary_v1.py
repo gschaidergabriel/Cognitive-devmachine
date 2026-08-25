@@ -86,6 +86,29 @@ class RestartResizeDBBoundaryTests(unittest.TestCase):
             self.assertTrue(admitted["provenance"].startswith("ADMITTED_PROPOSAL:"))
             r.close()
 
+    def test_same_generation_stale_epoch_proposal_is_rejected(self):
+        with tempfile.TemporaryDirectory() as td:
+            db = Path(td) / "entityos.db"
+            r = RestartResizeDBBoundary(db, grid_n=10)
+            r.seed_s0_fixture("project/fact", {"value": 1})
+            old = r.propose_db_write(
+                work_id="work-old", object_key="project/fact", value={"value": 2}
+            )
+            new = r.propose_db_write(
+                work_id="work-new", object_key="project/fact", value={"value": 3}
+            )
+            admitted = r.admit_db_write(
+                new, expected_generation=r.runtime_generation
+            )
+            self.assertEqual({"value": 3}, admitted["value"])
+            self.assertEqual(2, admitted["epoch"])
+            with self.assertRaisesRegex(BoundaryError, "EXPECTED_S0_EPOCH_STALE"):
+                r.admit_db_write(old, expected_generation=r.runtime_generation)
+            current = r.read_s0("project/fact")
+            self.assertEqual({"value": 3}, current["value"])
+            self.assertEqual(2, current["epoch"])
+            r.close()
+
     def test_direct_model_grid_claude_jspace_s0_write_is_forbidden(self):
         with tempfile.TemporaryDirectory() as td:
             r = RestartResizeDBBoundary(Path(td) / "entityos.db", grid_n=10)

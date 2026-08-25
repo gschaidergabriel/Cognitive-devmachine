@@ -15,6 +15,7 @@ from __future__ import annotations
 import json
 import os
 from pathlib import Path
+import sys
 import threading
 import time
 from typing import Any
@@ -125,3 +126,13 @@ historical_chunk_id and extraction_pass fields. Use ready_for_forge=true only wi
 declared target_files and bounded test_commands.
 """
     base.worker_prompt = backlog_prompt
+
+    # Current v5 captures base.worker_prompt during import, before this scheduler
+    # is installed by run_6000_free_swarm_fast.py. Rebind only that exact captured
+    # predecessor so the final v5 proposal path actually traverses the canonical
+    # backlog wrapper. If v5 has evolved away from the frozen reference, leave it
+    # untouched rather than creating a second prompt authority.
+    v5 = sys.modules.get("run_6000_free_swarm_v5")
+    if v5 is not None and getattr(v5, "base", None) is base:
+        if getattr(v5, "_ORIGINAL_WORKER_PROMPT", None) is previous:
+            v5._ORIGINAL_WORKER_PROMPT = backlog_prompt

@@ -1,0 +1,196 @@
+{
+  "schema": "CLAY_TRIGGER2_CAUSAL_REPRESENTATION_AND_EVIDENCE_IDENTITY_AUDIT/v1",
+  "version": "1.0.0",
+  "date": "2026-08-25",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "trigger": "triggerwort 2",
+  "status": "CURRENT_CANDIDATE_RESEARCH_DELTA",
+  "persistent_entity": "Clay",
+  "product": "EntityOS",
+  "architecture": "HCU variable cognitive grid",
+  "target_model_family": "Qwen3.5-0.8B-class cognitive module",
+  "authority_snapshot": {
+    "canonical_main_observed": "c05fd30f34b118efa14e625323f50971c5dcd7c4",
+    "supervisor_epoch": "8.78",
+    "mode": "FREE_ONLY",
+    "owner_target": "research_entity/global/OWNER_CORRECTION_ZERO_ENTITYOS_COGNITIVE_GRID_DB_CLAUDECODE_GLOBAL_JSPACE_2026-08-25.md",
+    "owner_target_git_blob": "2315e204d2db876baff0d846b4c590a8df045729",
+    "convergence_pr": 2009,
+    "convergence_pr_head_observed_before_write": "26e5cb791ed4b750ecdcc53e99bd45f785feb9e0"
+  },
+  "source_inputs": [
+    {
+      "kind": "PROJECT_MEASUREMENT_PACKAGE",
+      "title": "XENO — Trainingsumfang, Sprachspezifikation, Messwerte",
+      "date": "2026-08-25",
+      "scope": "Qwen3.5-0.8B measurement/training handoff; noncanonical where current GitHub authority differs",
+      "material_points": [
+        "semantic readout is reported strong while dynamic codebook binding, context transfer and symbolic inference are weak",
+        "concepts are reported as rank-2-to-4 subspaces rather than one direction",
+        "Hyperposition is defined as a branch set with branch-local context, evidence, counterevidence, falsifier, validity, provenance and epistemic status",
+        "carrier binding capacity is reported as non-blocking at the measured scope"
+      ]
+    },
+    {
+      "kind": "PRIMARY_RESEARCH",
+      "citation": "Wu, Geiger, Milliere (ICML 2025), How Do Transformers Learn Variable Binding in Symbolic Programs?",
+      "id": "PMLR-v267-wu25j / arXiv:2505.20896",
+      "method_input": "Training can pass through a shallow heuristic phase before systematic variable binding; causal interventions identified learned routing/addressable-memory mechanisms."
+    },
+    {
+      "kind": "PREPRINT_METHOD_INPUT",
+      "citation": "Sharma, Dawes, Raval (2026), Dissociating Decodability and Causal Use in Bracket-Sequence Transformers",
+      "id": "arXiv:2604.22128",
+      "method_input": "Multiple internal variables can be linearly decodable while their causal contribution to behavior differs sharply."
+    },
+    {
+      "kind": "PREPRINT_METHOD_INPUT",
+      "citation": "Yuan, Su (2026), Beyond Language: Format-Agnostic Reasoning Subspaces in Large Language Models",
+      "id": "arXiv:2605.09496",
+      "method_input": "Cross-form reasoning can concentrate in a low-dimensional subspace and should be tested with cross-form generalization plus intervention, not surface-form accuracy alone."
+    },
+    {
+      "kind": "PRIMARY_METHOD_CAUTION",
+      "citation": "Makelov, Lange, Geiger, Nanda (ICLR 2024), Is This the Subspace You Are Looking for? An Interpretability Illusion for Subspace Activation Patching",
+      "method_input": "A successful subspace intervention can still exploit a dormant parallel path and therefore does not by itself identify the faithful mechanism."
+    },
+    {
+      "kind": "WORKSHOP_METHOD_INPUT",
+      "citation": "Kim (ICML 2026 Mechanistic Interpretability Workshop), Non-linear Interventions on Large Language Models",
+      "method_input": "Failure of linear intervention need not imply absence of a feature if the relevant representation lies on a nonlinear manifold."
+    }
+  ],
+  "audited_current_artifacts": [
+    {
+      "path": "research_entity/global/j-space/research/TRIGGER2_RESEARCH_AUDIT_VERSIONING_PROTOCOL_V2.md",
+      "state": "CURRENT_CANDIDATE",
+      "verdict": "KEEP",
+      "delta": "Its probe-is-diagnostic rule is correct; strengthen C/Hyperposition acceptance from probe-plus-behavior to an explicit representation-plus-causal-use evidence ladder."
+    },
+    {
+      "path": "research_entity/global/j-space/research/TRIGGER2_HYPERPOSITION_REFERENCE_LABELER_CONTRACT_V1.json",
+      "state": "CURRENT_CANDIDATE_REVIEW_REQUIRED",
+      "verdict": "TARGETED_REVIEW",
+      "delta": "The contract currently treats same causal_ancestry_id as duplicate evidence. Correlation ancestry and exact event identity should be distinct so correlated-but-distinct observations remain provenance-visible without receiving independent-evidence credit."
+    },
+    {
+      "path": "tools/trigger2_hyperposition_reference_labelers_v1.py",
+      "state": "CURRENT_CANDIDATE_REVIEW_REQUIRED",
+      "verdict": "TARGETED_REVIEW",
+      "delta": "_already_seen returns true on either evidence_id equality or causal_ancestry_id equality. Preserve exact-event idempotence, but explicitly test whether distinct events sharing ancestry must remain recorded as correlated observations rather than silently disappear."
+    },
+    {
+      "path": "research_entity/global/j-space/research/trigger2_hyperposition_native_microseed_v1.jsonl",
+      "state": "CURRENT_CANDIDATE_NOT_TRAINING_ADMITTED",
+      "verdict": "KEEP_AS_MICROSEED_AND_EXPAND",
+      "delta": "Add correlated-distinct-vs-exact-duplicate evidence families, branch-ID permutation families, and cross-surface semantic-equivalence families before scaling."
+    },
+    {
+      "artifact": "Trigger-2 binding-router factorial generator v3/direct derivatives",
+      "state": "REJECTED_LEAKAGE",
+      "verdict": "NO_CHANGE",
+      "delta": "Supervisor 8.78 rejection remains binding; do not rescue v3 with marginal metrics."
+    }
+  ],
+  "material_findings": [
+    {
+      "id": "T2_CR01_DECODABLE_IS_NOT_CAUSALLY_USED",
+      "severity": "P0_METHOD_CORRECTION",
+      "finding": "For capability C and the Hyperposition carrier, linear decodability is a representation gate, not final functional acceptance.",
+      "training_consequence": "Keep frozen probe curves, but require matched behavioral/OOD use and a causal discriminator at the strongest exposed model interface before claiming that the trained internal state is functionally used.",
+      "acceptance_ladder": [
+        "R1_REPRESENTATION: split-clean probe/subspace readout above preregistered threshold",
+        "R2_BEHAVIOR: unseen lexical/template/structure families solve the intended operation",
+        "R3_CAUSAL_USE: lesion/shuffle/rescue or equally strong matched intervention changes the intended behavior selectively",
+        "R4_MECHANISM_SCOPE: claim only the component/path actually identified; do not infer whole J-Space or faithful localization automatically"
+      ]
+    },
+    {
+      "id": "T2_CR02_BINDING_DEVELOPMENT_NEEDS_CHECKPOINT_MECHANISM_AUDIT",
+      "severity": "P1",
+      "finding": "Systematic variable binding may emerge after an earlier shortcut/heuristic phase.",
+      "training_consequence": "At checkpoints, score not only final binder accuracy but nuisance-only accuracy, hop/depth generalization, unseen symbol/permutation transfer, and if available routing-head/residual-stream causal signatures. A transient aggregate gain cannot be assumed to be the intended binder."
+    },
+    {
+      "id": "T2_CR03_HYPERPOSITION_SHOULD_NOT_BE_FORCED_TO_ONE_DIRECTION",
+      "severity": "P1",
+      "finding": "Project measurements already describe semantic concepts as rank-2-to-4 subspaces, and current external work provides additional evidence that reasoning features can occupy low-dimensional subspaces rather than a single vector.",
+      "training_consequence": "Represent/evaluate the semantic Hyperposition carrier as structured branch-state/set information with rank-aware readout and branch-permutation equivariance. A single steering direction may remain a probe/control primitive but is not the ontology."
+    },
+    {
+      "id": "T2_CR04_SUBSPACE_CAUSALITY_NEEDS_ANTI_ILLUSION_CONTROLS",
+      "severity": "P1",
+      "finding": "Even successful activation/subspace patching can create a behavioral effect through a dormant or off-path mechanism.",
+      "training_consequence": "Any future J-Space/Hyperposition causal promotion should include off-target controls, alternate-site controls, lesion/shuffle/rescue consistency and downstream re-entry receipts. Successful patching alone is insufficient for faithful-mechanism claims."
+    },
+    {
+      "id": "T2_CR05_LINEAR_NEGATIVE_IS_NOT_REPRESENTATION_ABSENCE",
+      "severity": "P1_METHOD_BOUNDARY",
+      "finding": "A failed linear probe/intervention does not logically prove absence of the target representation because nonlinear encodings are possible.",
+      "training_consequence": "Negative linear results narrow the linear-control hypothesis only. Use preregistered nonlinear/readout alternatives on fresh data if the decision is material; never retune a frozen holdout post hoc."
+    },
+    {
+      "id": "T2_CR06_EVENT_IDENTITY_MUST_BE_DISTINCT_FROM_CORRELATION_ANCESTRY",
+      "severity": "P0_LABEL_SEMANTICS_REVIEW",
+      "finding": "Exact duplicate suppression and correlated-evidence non-independence are different operations. The current labeler conflates them when causal_ancestry_id equality alone suppresses attachment.",
+      "risk": "A distinct observation that shares a source/model/pipeline ancestry can disappear from branch provenance, making later contradiction, replay and reliability analysis impossible; conversely, preserving it must not mint independent-evidence weight.",
+      "proposed_successor_invariant": [
+        "same exact evidence_event_id or exact replay identity => idempotent duplicate, do not reattach",
+        "distinct evidence_event_id + same correlation/ancestry family => preserve as a correlated observation, independent_credit=false",
+        "distinct evidence_event_id + independently qualified ancestry => preserve and allow independent_credit=true only when the independence gate says so",
+        "D_resolve remains insensitive to recurrence/count unless an admitted discriminator relation changes branch status"
+      ],
+      "required_test_families": [
+        "EXACT_REPLAY_IDEMPOTENT",
+        "DISTINCT_EVENT_SAME_ANCESTRY_PRESERVED_NOT_INDEPENDENT",
+        "DISTINCT_EVENT_INDEPENDENT_ANCESTRY_PRESERVED",
+        "CORRELATED_MAJORITY_NEVER_RESOLVES",
+        "CONTRADICTORY_CORRELATED_EVENT_REMAINS_AUDITABLE"
+      ]
+    },
+    {
+      "id": "T2_CR07_BRANCH_ID_AND_ORDER_EQUIVARIANCE_IS_A_CORE_HP_GATE",
+      "severity": "P1",
+      "finding": "Hyperposition semantics belong to branch content/relations, not arbitrary branch IDs or presentation order.",
+      "training_consequence": "For each HP family, construct branch-ID renamings and order permutations that preserve the semantic state up to the same permutation; require state-transition equivariance and keep IDs evaluator-only unless intentionally task-visible."
+    }
+  ],
+  "versioning_delta": {
+    "artifacts_to_mark_review_required": [
+      {
+        "artifact": "TRIGGER2_HYPERPOSITION_REFERENCE_LABELER_CONTRACT_V1",
+        "reason": "EVIDENCE_IDENTITY_VS_CORRELATION_ANCESTRY_SEMANTICS_REVIEW"
+      },
+      {
+        "artifact": "trigger2_hyperposition_reference_labelers_v1.py",
+        "reason": "EVIDENCE_IDENTITY_VS_CORRELATION_ANCESTRY_SEMANTICS_REVIEW"
+      }
+    ],
+    "artifacts_not_invalidated": [
+      "existing exact-duplicate idempotence tests as method donors",
+      "v3 binding-router leakage rejection",
+      "frozen model/runtime negative evidence",
+      "historical source measurements"
+    ],
+    "proposed_revision_reason_enum": "EVIDENCE_IDENTITY_SEMANTICS_REFINED"
+  },
+  "hypothesis_counterhypothesis": {
+    "hypothesis": "A Hyperposition-native curriculum with rank-aware/set-equivariant representation, exact event identity, correlated-evidence preservation and causal-use evaluation will transfer better to variable-grid reconciliation than a flat-label or single-direction curriculum.",
+    "counterhypothesis": "The added latent structure may increase supervision complexity without improving end-task behavior; the model may learn the visible schema while ignoring it internally.",
+    "falsifier": "At matched training tokens and frozen OOD families, compare a flat/legacy donor schedule against the Hyperposition-native successor. Reject the added structure if it does not improve branch-preservation/update, correlated-evidence arbitration, variable-N transfer and causal-use metrics while meeting retention floors."
+  },
+  "next_exact_actions": [
+    "Do not create a competing Trigger-2 lane; converge through PR #2009.",
+    "Add an evidence-event-vs-ancestry identity field contract and the five required labeler tests before positive D/E admission.",
+    "Promote C acceptance language from decodability-only to representation + behavior/OOD + causal-use scope.",
+    "Add branch-ID/order equivariance tests to the Hyperposition native generator before corpus scale-up.",
+    "Keep v3 binder rejected; use current full-cross/prompt-derived semantic-ablation successor gates before token materialization."
+  ],
+  "credits": {
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "positive_jspace_causal_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  }
+}

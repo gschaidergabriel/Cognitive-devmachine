@@ -1,0 +1,115 @@
+{
+  "schema": "CLAY_TRIGGER2_SEMANTIC_ANCHOR_OVERRIDE_GATE_RESEARCH_DELTA/v1",
+  "date": "2026-08-26",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "status": "APPEND_ONLY_RESEARCH_DELTA_NONPROMOTING",
+  "observed_main_before_write": "6dac47c80fae41e95a9adddcfd3f52ebf5771248",
+  "authority": {
+    "supervisor_epoch": "8.81_DELTA",
+    "mode": "FREE_ONLY",
+    "free_swarm_provider_routes": "OWNER_EMERGENCY_STOP_HARD_OFF",
+    "runtime_quiescence": "NOT_PROVEN",
+    "training_execution_authorized": false,
+    "checkpoint_selection_credit": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0
+  },
+  "deduplication": {
+    "current_ledger": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V52_GPT56SOL.json",
+    "existing_binding_generator": "tools/trigger2_binding_router_factorial_generator_v3.py",
+    "existing_binding_generator_status": "BLOCKED_QUARANTINED_FROM_DIRECT_TRAINING",
+    "open_donor_pr": "gschaidergabriel/clay-global-research-entity#1956",
+    "new_source_generator_created": false,
+    "new_rows_generated": 0,
+    "reason": "This delta adds a distinct evaluation/falsification contract for semantic anchoring versus episode-local binding; it does not duplicate existing generators, atom gates or checkpoint identity sources."
+  },
+  "external_primary_research": [
+    {
+      "source": "Kumar (2025), Semantic Anchors in In-Context Learning: Why Small LLMs Cannot Flip Their Labels, arXiv:2511.21038",
+      "finding": "Across reported 1-12B open models, inverted demonstration semantics did not produce coherent anti-semantic classifiers; prompt alignment rose only with accuracy loss and the reported semantic override rate remained zero in the studied few-shot setting.",
+      "trigger2_relevance": "Qwen3.5-0.8B should not be assumed to learn arbitrary episode-local semantic remapping from prompt/codebook presence alone. Dynamic binding must be trained and separately measured against pretraining or fine-tuning semantic anchors."
+    },
+    {
+      "source": "Wu, Geiger, Milliere (2025), How Do Transformers Learn Variable Binding in Symbolic Programs?, arXiv:2505.20896",
+      "finding": "A transformer can move from random behavior through a shallow heuristic phase to systematic dereferencing, with causal interventions identifying routing mechanisms.",
+      "trigger2_relevance": "Final aggregate accuracy is insufficient. Measure binding at multiple checkpoints and require orbit-level systematicity plus causal/nuisance controls."
+    },
+    {
+      "source": "Peng et al. (2025), Enhancing Input-Label Mapping in In-Context Learning with Contrastive Decoding, arXiv:2502.13738",
+      "finding": "Input-label mapping is a distinct failure surface in ICL and can be improved independently of general semantic task competence.",
+      "trigger2_relevance": "Keep READ semantics, BIND_ROUTE mapping and WRITE atom emission as separate evaluation channels."
+    }
+  ],
+  "hypotheses": [
+    {
+      "id": "H_SA_1_EPISODE_LOCAL_BINDING_MUST_OVERRIDE_GLOBAL_ATOM_PRIORS",
+      "hypothesis": "A successful Xeno binder will follow the current episode codebook even when it conflicts with any global atom-to-semantic association learned during pretraining or fine-tuning.",
+      "counterhypothesis": "Fine-tuning will create stable atom semantic anchors; apparent binding gains will mostly reflect those global associations and fail under permutation reversal.",
+      "discriminator": "For the same semantic item and same three valid one-token atoms, evaluate all six S3 codebook permutations under identical renderer structure. Require target changes to follow only the episode mapping and measure complete-orbit correctness rather than marginal accuracy."
+    },
+    {
+      "id": "H_SA_2_BINDING_GENERALIZATION_IS_SEPARATE_FROM_SEMANTIC_READ_AND_WRITE",
+      "hypothesis": "READ and WRITE can remain strong while BIND_ROUTE fails, especially for counter-prior or unseen permutations.",
+      "counterhypothesis": "Any observed binding failure is actually semantic misclassification or inability to emit the chosen atom.",
+      "discriminator": "Use matched positive controls that separately verify semantic class readout and one-token atom emission, then score the composed BIND_ROUTE task on the same items and atoms."
+    }
+  ],
+  "evaluation_contract_candidate": {
+    "id": "TRIGGER2_SEMANTIC_ANCHOR_OVERRIDE_STRESS_GATE/v1",
+    "status": "RESEARCH_DESIGN_ONLY_NOT_TRAINING_ADMISSION",
+    "activation_prerequisites": [
+      "runtime quiescence proven and current execution authority re-entered",
+      "candidate passes CHECKPOINT_INPUT_IDENTITY_ABI/v1",
+      "exact accepted 46-atom inventory and exact candidate tokenizer identity are bound",
+      "production renderer/input identity is frozen",
+      "family/provenance holdout and nuisance-independence gates are frozen before outputs are opened"
+    ],
+    "paired_units": [
+      "same semantic evidence item",
+      "same atom triplet",
+      "all six S3 semantic-to-atom mappings",
+      "counterbalanced codebook display orders",
+      "direct and inverted query forms where semantics are unambiguous",
+      "family-disjoint unseen template and symbol partitions"
+    ],
+    "required_channels": [
+      "READ_SEMANTIC_CLASS",
+      "WRITE_REQUESTED_ATOM",
+      "BIND_ROUTE_CODEBOOK_CONDITIONED"
+    ],
+    "primary_metrics": {
+      "s3_orbit_complete_accuracy": "fraction of semantic items for which all six mapping permutations are correct",
+      "counter_prior_override_accuracy": "accuracy restricted to mappings that oppose the candidate's empirically measured context-free or dominant atom-class prior",
+      "mapping_equivariance_violation_rate": "fraction of mapping permutations where target fails to transform according to the codebook permutation",
+      "read_bind_write_decomposition": "separate READ, BIND_ROUTE and WRITE error rates on matched units",
+      "atom_prior_predictability": "ability of atom identity alone, without semantic payload/codebook, to predict semantic class; promotion requires preregistered chance-compatible behavior after balancing"
+    },
+    "positive_falsifiers": [
+      "inject a fixed global class-to-atom mapping into a synthetic control model or scoring rule and require the gate to reject it",
+      "remove or corrupt the episode codebook and require BIND_ROUTE performance to collapse while READ control may remain intact",
+      "permute codebook labels while holding semantic evidence fixed and require output to transform with the permutation"
+    ],
+    "fail_closed_rules": [
+      "Marginal accuracy cannot substitute for complete S3 orbit consistency.",
+      "A high READ score plus a high WRITE score does not mint BIND_ROUTE credit.",
+      "Natural/default mapping success cannot substitute for counter-prior override success.",
+      "No threshold may be chosen after confirmatory outputs are exposed; freeze practical margins and tie/Pareto policy prospectively.",
+      "Do not convert this evaluation design into positive training rows or checkpoint-selection credit before independent current admission gates pass."
+    ]
+  },
+  "training_reinjection": {
+    "new_positive_rows": 0,
+    "new_admitted_hard_negative_rows": 0,
+    "accepted_dataset_tokens": 0,
+    "checkpoint_winner": null,
+    "training_executed": false,
+    "training_credit": 0,
+    "curriculum_delta": "Add semantic-anchor override/counter-prior mapping as a mandatory post-training binding evaluation family once exact identity, atom, renderer, family and execution gates are open."
+  },
+  "next_exact_action": "Keep current V52 quiescence-first priority. After runtime quiescence and three-candidate identity eligibility, freeze this semantic-anchor override gate before opening a fresh family-disjoint block; then use complete S3 orbit and counter-prior override metrics to distinguish genuine episode-local binding from learned global atom semantics."
+}

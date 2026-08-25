@@ -1,0 +1,120 @@
+{
+  "schema": "CLAY_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER/v38",
+  "date": "2026-08-26",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "status": "CURRENT_RESEARCH_LEDGER_NONCANONICAL_SUCCESSOR_DYNAMIC",
+  "supersedes": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V37_GPT56SOL.json",
+  "inherits_all_nonconflicting_records_from": "T2-LEDGER-V37",
+  "observed_main_before_write": "0011673f34bc55b838f52420376df6d68e40d9be",
+  "authority": {
+    "supervisor_epoch": "8.81_DELTA",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "architecture": "HCU",
+    "implementation_compatibility_codename": "Xeno",
+    "training_execution_authorized": false,
+    "paid_provider_execution_authorized": false,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "physical_grid10_credit": 0,
+    "jspace_model_credit": 0,
+    "training_credit": 0
+  },
+  "revision_reason": "Live Trigger-2 reentry found that current main now contains tools/xeno_physical_grid10_acceptance_v2.py, which materially repairs the prior sequential-subprocess proof gap by using ten Popen children, a release barrier, distinct PID binding and exact epoch/digest rejection. Static source audit also found one new nonduplicate evidence-quality defect: proof.writer_free_interval is assigned the constant true and P1_WRITER_FREE_BARRIER_INTERVAL therefore cannot falsify a concurrent S1 write. V38 records the split disposition instead of inflating the whole harness to PASS or discarding its genuine concurrency improvement.",
+  "observed_source_delta": {
+    "artifact": "tools/xeno_physical_grid10_acceptance_v2.py",
+    "artifact_commit": "0011673f34bc55b838f52420376df6d68e40d9be",
+    "observed_improvements": [
+      "ten child processes are launched with subprocess.Popen before barrier release",
+      "the parent checks that all ten are alive at the barrier",
+      "ready-row PID identities are compared with parent-observed child PIDs",
+      "all ready rows must report one shared generation/epoch/state_digest identity",
+      "ordinary-node packets remain s1_write_intent=false",
+      "ExactSnapshotFabric rejects stale generation, stale epoch and stale digest",
+      "the old sequential subprocess.run-only physical-liveness proof gap is repaired at source level"
+    ],
+    "new_proof_gap": {
+      "id": "GRID10_V2_WRITER_FREE_CONSTANT_ASSERTION",
+      "severity": "BOUNDARY_PROOF_GAP",
+      "observation": "concurrent_probe constructs proof.writer_free_interval as the literal boolean true; the corresponding acceptance test only casts that constant to bool",
+      "affected_test": "P1_WRITER_FREE_BARRIER_INTERVAL",
+      "epistemic_effect": "the specific writer-free interval subclaim is SOURCE_ASSERTED_NOT_OBSERVED and is non-falsifiable in the current harness",
+      "does_not_negate": [
+        "distinct PID evidence",
+        "simultaneous process-liveness evidence",
+        "barrier overlap evidence",
+        "same declared snapshot-identity evidence",
+        "stale epoch/digest rejection source semantics"
+      ]
+    }
+  },
+  "artifact_lifecycle_delta": [
+    {
+      "artifact": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V37_GPT56SOL.json",
+      "status": "SUPERSEDED",
+      "successor": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V38_GPT56SOL.json",
+      "reason": "current main gained the physical GRID10 v2 successor after V37"
+    },
+    {
+      "artifact": "tools/xeno_physical_grid10_acceptance_v1.py",
+      "status": "SUPERSEDED_FOR_CURRENT_PHYSICAL_GRID10_SOURCE",
+      "successor": "tools/xeno_physical_grid10_acceptance_v2.py",
+      "reason": "v2 replaces sequential ordinary-node invocation with simultaneous child-process barrier proof and exact stale epoch/digest rejection"
+    },
+    {
+      "artifact": "tools/xeno_physical_grid10_acceptance_v2.py",
+      "status": "CURRENT_SOURCE_NEEDS_REVISION_FOR_WRITER_FREE_SUBCLAIM_AND_RUNTIME_BINDING",
+      "scope": "SOURCE_LEVEL_COMPONENT_ACCEPTANCE_DESIGN_ONLY",
+      "reason": "v2 closes the old sequential-liveness source gap but P1_WRITER_FREE_BARRIER_INTERVAL is fed by a constant true and no admitted exact repository-bound runtime receipt has yet promoted physical GRID10 credit"
+    },
+    {
+      "artifact": "physical GRID10 runtime credit",
+      "status": "BLOCKED_ZERO_CREDIT",
+      "reason": "source improvement is not admitted repository-bound execution evidence, and one proof subclaim remains non-falsifiable"
+    },
+    {
+      "artifact": "positive Trigger-2 training rows",
+      "status": "BLOCKED_ZERO_NEW_ROWS",
+      "reason": "this cycle is a runtime/evidence-boundary reinjection; upstream nuisance-independent binding, exact-input, checkpoint, J-Space representation and Forge->Distillery gates remain unresolved"
+    }
+  ],
+  "runtime_failure_reinjection": {
+    "finding": "A green acceptance field can still be non-evidentiary when its proof value is a constant rather than a measurement.",
+    "hypothesis": "Replacing writer_free_interval=true with an observed state-stability discriminator will preserve the useful simultaneous-process proof while preventing false positive writer-free credit.",
+    "counterhypothesis": "The writer-free interval property is redundant because the temporary isolated DB plus identical generation/epoch/digest ready rows already provide sufficient acceptance for the intended shell-only physical GRID10 claim; keeping a separate writer-free test may add ceremony without information.",
+    "cheapest_high_information_discriminator": "Capture authoritative parent snapshot identity immediately before launching the ten children and again after all ready rows exist but before release; require pre_identity == every ready identity == barrier_identity. Add a deterministic negative-control writer that advances S1 during the read phase and require the stability test to fail. Keep the negative control separate from the positive acceptance run.",
+    "training_eval_reinjection": "Do not teach the model to prove writer-freedom, PIDs, hashes or process liveness. Model-side mirrored cases should consume typed deterministic outcomes such as CURRENT, STALE_REJECTED, GENERATION_CHANGED or REBASE_PROVEN and respond with re-read/recompute/new NODE_RESULT behavior."
+  },
+  "course_alignment": {
+    "architecture_to_training_diff": "No new model semantic authority is introduced. Physical process proof remains deterministic shell evidence; model curriculum remains variable-N and identity-independent.",
+    "ledger_audit": "V37 superseded; physical GRID10 v1 superseded; v2 current source with bounded revision requirement; no positive corpus promotion.",
+    "capability_traceability": "The source delta maps to physical GRID10 shell acceptance and stale-result recovery boundaries, not generic chatbot quality.",
+    "production_eval_policy": "unchanged: exact checkpoint/tokenizer/renderer/input identity plus greedy/constrained decoding for primary model evaluation; sampling remains diagnostic",
+    "freeze_policy": "unchanged: no checkpoint/corpus/recipe freeze until ancestry, exact input identity, nuisance independence, accepted lineage and critical-axis evidence are current"
+  },
+  "next_exact_gates": [
+    "repair P1_WRITER_FREE_BARRIER_INTERVAL so it is derived from observed parent/child state identity rather than a literal true",
+    "add a writer-interference negative control that must make the state-stability discriminator fail",
+    "pin the repaired exact source only after the source-level proof semantics are self-falsifying",
+    "execute the repaired source on the currently admitted isolated FREE repository-bound surface before granting physical GRID10 runtime credit",
+    "preserve the existing consumed-snapshot attestation gap as a separate stronger model/inference-boundary question; do not conflate declared packet freshness with proof of exact consumed cognitive input",
+    "continue >=64 fresh held-out matched greedy cases per decisive checkpoint axis for unknowable-fact epistemics and DB-vs-simulation authority when an admitted model-eval surface is available",
+    "keep the quarantined factorial binding generator blocked until rendered-byte and higher-order nuisance independence are demonstrated"
+  ],
+  "credit_boundary_after_v38": {
+    "new_admitted_positive_rows": 0,
+    "accepted_dataset_tokens": 0,
+    "checkpoint_selection_credit": 0,
+    "jspace_representation_level_credit": 0,
+    "physical_grid10_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0,
+    "training_credit": 0
+  },
+  "coordination": {
+    "duplicate_lane_created": false,
+    "open_trigger2_donor_prs_observed": [2009, 1956],
+    "note": "No new PR or dispatch issue was created. This append-only successor ledger records a nonduplicate exact-main proof audit and leaves implementation convergence on current main."
+  }
+}

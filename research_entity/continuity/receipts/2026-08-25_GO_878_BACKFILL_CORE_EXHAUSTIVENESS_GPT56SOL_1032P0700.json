@@ -1,0 +1,73 @@
+{
+  "schema": "CLAY_GO_878_BACKFILL_CORE_EXHAUSTIVENESS_RECEIPT/v1",
+  "timestamp_local": "2026-08-25T10:32:00+07:00",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority": {
+    "inbox_selected_supervisor": "8.78",
+    "mode": "FREE_ONLY",
+    "active_owner_authority": "governance/CLAY_DUAL_MACHINE_EXECUTION_AUTHORITY_2026-08-24.md",
+    "canonical_main_at_successor_branch_base": "1b444d30674a5b710c370f257ae1a016c5dbfd8f",
+    "source_branch": "go878/backfill-core-exhaustiveness-gpt56sol-20260825-1032"
+  },
+  "coordination": {
+    "upstream_shared_immutable_macrocycle_id": null,
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_interventions": 0,
+    "reason": "No shared reproducible immutable macrocycle/request identity is exposed to this organ; this delta is ordinary deterministic source/regression work."
+  },
+  "observation": {
+    "current_core_max_passes_before_delta": 3,
+    "current_core_saturation_before_delta": "passes>=2 plus one zero-novel pass plus exhaustive=true could mark SATURATED",
+    "scheduler_hardcoded_exhaustive_true_on_branch_base": false,
+    "runtime_capsule_imports_core_directly": true,
+    "stale_pr_1879_mergeable_at_review": false
+  },
+  "hypothesis": "Historical Free-Swarm conversion can be falsely classified as semantically saturated because the canonical core permits one explicit exhaustive zero-novel confirmation after pass 2 and a three-pass ceiling is too small for bounded <=8-delta extraction from a 14k-character chunk.",
+  "counterhypothesis": "Installing an exhaustiveness monkey-patch only in the backlog scheduler and long-lived Forge consumer is sufficient.",
+  "counterhypothesis_result": "REJECTED_AT_SOURCE_TOPOLOGY_SCOPE: run_free_swarm_historical_backfill_capsule_878.py imports free_swarm_historical_backfill directly, so consumer-local monkey-patching would leave an exact-source runtime path with old core semantics.",
+  "delta": {
+    "core_file": "tools/free_swarm_historical_backfill.py",
+    "core_commit": "42f2e91b97df3e8c13403d3eb4a7455025de5f0f",
+    "core_changes": [
+      "MIN_EXHAUSTIVE_ZERO_CONFIRMATIONS=2",
+      "MAX_PASSES=64",
+      "only explicit exhaustive=true plus novel_count=0 increments confirmation streak",
+      "non-exhaustive, missing-exhaustive or novel passes reset confirmation streak",
+      "SATURATED requires two consecutive explicit exhaustive zero-novel confirmations",
+      "MAX_PASSES_REACHED remains a bounded stall state, never semantic saturation"
+    ],
+    "regression_file": "tests/test_free_swarm_backfill_core_exhaustiveness_878.py",
+    "regression_commit": "77beae68cbd11e196ef2ac9112aebc1f30900be3",
+    "scope": "SINGLE_CANONICAL_HISTORICAL_BACKFILL_CORE"
+  },
+  "go_tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED_SOURCE_SCOPE: exact historical conversion cannot silently close after one zero-novel confirmation or the old three-pass ceiling.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED_CAUSAL_ADMISSION_SCOPE: the existing exact source-event/chunk/next-pass binding remains authoritative while completion semantics are fail-closed in the shared core used by all consumers.",
+    "C_GLOBAL_JSPACE_GWT_AND_LOCAL_08B_READINESS": "ADVANCED_DATASET_READINESS_SCOPE: false historical saturation is blocked before Forge/Distillery/J-Space training data can be treated as fully re-evaluated; no model intervention or training occurred."
+  },
+  "evidence": {
+    "source_diff": "21 changed lines in the core commit relative to successor base",
+    "tests_defined": true,
+    "tests_executed_by_this_organ": false,
+    "runtime_historical_backfill_executed_by_this_organ": false,
+    "runtime_credit_added": 0
+  },
+  "credits": {
+    "whole_entityos_hcu": 0,
+    "hcu_full": 0,
+    "jspace_model": 0,
+    "training": 0,
+    "provider_runtime": 0,
+    "whole_product_pass": false
+  },
+  "overlap": {
+    "stale_lane": "gschaidergabriel/clay-global-research-entity#1879",
+    "parallel_source_support_lane": "gschaidergabriel/clay-global-research-entity#1877",
+    "policy": "Do not modify the replay-idempotent source-support semantics in #1877; supersede #1879 only at the exhaustiveness completion-semantics scope."
+  },
+  "next_exact_gate": "Execute the focused core exhaustiveness regression plus the existing historical-backfill and batch-identity suites on an authorized exact-source zero-cost surface; then run full historical replay to a repository-bound FREE_SWARM_HISTORICAL_BACKFILL_RECEIPT/v1 and require remaining pending extraction=0 without premature SATURATED classification before any conversion/training promotion."
+}

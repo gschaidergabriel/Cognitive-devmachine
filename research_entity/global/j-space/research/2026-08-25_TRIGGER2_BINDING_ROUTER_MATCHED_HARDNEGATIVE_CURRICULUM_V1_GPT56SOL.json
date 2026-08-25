@@ -1,0 +1,111 @@
+{
+  "schema": "CLAY_TRIGGER2_BINDING_ROUTER_MATCHED_HARDNEGATIVE_CURRICULUM/v1",
+  "date": "2026-08-25",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority_at_write": {
+    "canonical_main_observed": "be0e88b1f59b1459f3d6596a9a3d7cfc0945a1fc",
+    "supervisor_epoch": "8.78",
+    "mode": "FREE_ONLY"
+  },
+  "evidence_basis": {
+    "measured_missing_operations": {
+      "A_CONTEXT_INVARIANT_BINDING": {"baseline": 0.5254629629629629, "accept": 0.90},
+      "B_DYNAMIC_CODEBOOK_BINDING": {"baseline": 0.3611111111111111, "chance": 0.3333333333333333, "accept": 0.90}
+    },
+    "protect_existing_measured_functions": [
+      "semantic reading",
+      "symbol-axis writeout",
+      "carrier-space HRR/MAP binding through k<=16 at measured scope"
+    ],
+    "retained_positive_generator": "tools/trigger2_context_binding_generator_v1.py",
+    "required_cross_split_gate": "tools/trigger2_context_binding_split_audit_v1.py",
+    "production_blocker": "exact accepted 46-atom ABI inventory plus exact tokenizer/model binding is still unavailable in current canonical text evidence; no guessed atoms may be rendered"
+  },
+  "design_rule": "Add only matched negatives that force dependence on the current episode-local codebook. Every negative must have a matched positive/counterfactual with the same semantic content and nuisance surface where possible; only the causal binding variable changes.",
+  "families": [
+    {
+      "id": "HN_STALE_PREVIOUS_EPISODE_CODEBOOK",
+      "intervention": "show a previous episode codebook as explicitly stale context before the current episode codebook",
+      "required_target": "symbol derived only from the current episode mapping",
+      "matched_control": "same semantic scene and current mapping without the stale codebook",
+      "falsifier": "model follows previous-episode symbol when current mapping differs",
+      "reason": "directly tests episode-local routing rather than static class-to-symbol association"
+    },
+    {
+      "id": "HN_WRONG_SYMBOL_PROPOSAL",
+      "intervention": "present one wrong symbol proposal selected from the same current three-atom codebook",
+      "required_target": "emit only the correct current mapped symbol; do not train REJECT/CORRECT prose wrappers",
+      "matched_control": "same scene/codebook without proposal",
+      "falsifier": "proposal attracts output despite unchanged semantic class and mapping",
+      "reason": "tests distractor resistance while preserving one-symbol output contract"
+    },
+    {
+      "id": "HN_CODEBOOK_ORDER_SHUFFLE",
+      "intervention": "reorder the three codebook entries without changing the class-to-symbol mapping",
+      "required_target": "identical target symbol across all six entry-order permutations",
+      "matched_control": "canonical display order",
+      "falsifier": "output changes as a function of display position",
+      "reason": "separates mapping content from presentation order"
+    },
+    {
+      "id": "HN_MAPPING_SWAP_COUNTERFACTUAL",
+      "intervention": "hold semantic scene and template fixed while swapping the current S3 mapping",
+      "required_target": "change exactly to the symbol implied by the new realized mapping",
+      "matched_control": "same scene under original S3 mapping",
+      "falsifier": "output stays on the old symbol or follows semantic-class lexical identity directly",
+      "reason": "highest-information causal check that codebook binding, not memorized symbol semantics, controls output"
+    },
+    {
+      "id": "HN_ABSTAIN_UNKNOWN_DISCIPLINE",
+      "intervention": "use structurally incomplete evidence where the required fact is genuinely unresolved",
+      "required_target": "current codebook symbol for ABSTAIN, with class word visible only inside the codebook",
+      "matched_control": "minimal evidence completion producing ALLOW or DENY under the same template and mapping",
+      "falsifier": "model defaults unresolved cases to a fixed non-ABSTAIN symbol",
+      "reason": "preserves FACT_UNKNOWN != FACT_PRESENT while training the router"
+    }
+  ],
+  "swarm_review": {
+    "generator_reviewer": "ACCEPT as additive families only; do not create a second positive generator.",
+    "permutation_reviewer": "REQUIRE every row to reconstruct mapping from the declared S3 permutation and exact atom triplet before target derivation.",
+    "leak_reviewer": "REQUIRE semantic class metadata to remain excluded from model input outside the delimited codebook; proposal/correction prose may not reveal the target class.",
+    "counterbalance_reviewer": "REQUIRE each hard-negative family to be crossed with all three semantic classes and all six S3 mappings, with nuisance features balanced and reported.",
+    "split_reviewer": "REQUIRE hard-negative causal families and provenance ancestry to stay inside one split; frozen holdout template and unseen-atom pool remain absent from tuning.",
+    "abi_reviewer": "BLOCK TRAINING_ELIGIBLE until exact 46 accepted atoms, per-atom token_id/token_count=1, ABI manifest, target checkpoint and tokenizer are hash-bound.",
+    "final_integrator": "ACCEPT curriculum delta at METHOD_ONLY blueprint scope. Materialize only through the retained generator/split-manifest path after ABI atom recovery."
+  },
+  "example_blueprints_non_train_ready": [
+    {
+      "family": "HN_MAPPING_SWAP_COUNTERFACTUAL",
+      "codebook": {"ALLOW": "<A0>", "DENY": "<A2>", "ABSTAIN": "<A1>"},
+      "scene": "Every required condition is observed satisfied and no exclusion condition is active.",
+      "target": "<A0>"
+    },
+    {
+      "family": "HN_WRONG_SYMBOL_PROPOSAL",
+      "codebook": {"ALLOW": "<A2>", "DENY": "<A0>", "ABSTAIN": "<A1>"},
+      "scene": "A required condition is explicitly contradicted by the observation.",
+      "wrong_proposal": "<A1>",
+      "target": "<A0>"
+    },
+    {
+      "family": "HN_ABSTAIN_UNKNOWN_DISCIPLINE",
+      "codebook": {"ALLOW": "<A1>", "DENY": "<A2>", "ABSTAIN": "<A0>"},
+      "scene": "A required datum has not been observed, and neither satisfaction nor violation is established.",
+      "target": "<A0>"
+    }
+  ],
+  "blueprint_status": "NON_TRAIN_READY_PLACEHOLDERS_ONLY",
+  "promotion_boundary": {
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "qwen35_jspace_runtime_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0
+  },
+  "next_exact_action": "Recover the exact accepted 46-atom ABI inventory from the measured source package or a hash-equivalent canonical export. Then render a small real-atom tranche through the retained context-binding generator, add these five matched hard-negative families without opening the frozen holdout, and run exact S3/mapping, class-symbol MI, codebook-order, family/provenance split, atom-token and leakage gates before any dataset admission."
+}

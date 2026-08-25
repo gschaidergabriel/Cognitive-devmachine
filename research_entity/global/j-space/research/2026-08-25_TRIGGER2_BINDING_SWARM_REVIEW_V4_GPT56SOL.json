@@ -1,0 +1,255 @@
+{
+  "schema": "CLAY_TRIGGER2_BINDING_SWARM_REVIEW/v4",
+  "date": "2026-08-25",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "research_mode": "MULTI_ROLE_ADVERSARIAL_REVIEW_NOT_INDEPENDENT_MODEL_REPLICATION",
+  "authority": {
+    "canonical_main_observed": "0edcc2ca0dba28fa0536bc5834fe6ede05a46e96",
+    "supervisor_epoch": "8.78",
+    "execution_mode": "FREE_ONLY",
+    "active_trigger2_pr": 1956,
+    "active_trigger2_branch": "research/trigger2-qwen35-08b-hcu-fullft-20260825",
+    "paid_training_executed": false,
+    "provider_preflight_executed": false
+  },
+  "evidence_inputs": {
+    "claude_vector_ingest": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_CLAUDE_XENO_VECTOR_EVIDENCE_INGEST_V1_GPT56SOL.json",
+    "claude_ingest_schema": "CLAY_TRIGGER2_CLAUDE_XENO_VECTOR_EVIDENCE_INGEST/v1.1",
+    "measured_model": "Goekdeniz-Guelmez/Josiefied-Qwen3.5-0.8B-gabliterated-v1",
+    "measured_snapshot": "591852bda6e1979f59e4b0f5ee2919697b12e936",
+    "existing_seed": "research_entity/global/j-space/research/trigger2_qwen35_08b_xeno_hcu_synthetic_seed_v1.jsonl",
+    "existing_seed_rows": 16,
+    "existing_seed_candidate_gate_pass": 16,
+    "existing_seed_candidate_gate_fail": 0,
+    "existing_generic_gate": "tools/entityos_hcu_trainingtrace_candidate_gate_v1.py",
+    "new_binding_gate": "tools/trigger2_dynamic_codebook_binding_gate_v1.py"
+  },
+  "measured_training_gap": {
+    "preserve": [
+      "semantic reading is already strong on the measured lexically separated family",
+      "the symbol emission axis is already writable",
+      "carrier-space HRR/MAP binding is measured sufficient through k=16 at supplied scope"
+    ],
+    "teach_only_primary": [
+      {
+        "id": "A_CONTEXT_INVARIANT_BINDING",
+        "baseline": 0.5254629629629629,
+        "acceptance_target": 0.90
+      },
+      {
+        "id": "B_DYNAMIC_CODEBOOK_BINDING",
+        "baseline": 0.3611111111111111,
+        "chance": 0.3333333333333333,
+        "acceptance_target": 0.90
+      }
+    ],
+    "working_interpretation": "Install an episodic content-dependent router/binder that maps already decoded semantics through an episode-local class-to-symbol codebook to the correct symbol, instead of primarily relearning semantics or carrier algebra."
+  },
+  "swarm_roles": [
+    {
+      "role": "EVIDENCE_BOUNDARY_REVIEWER",
+      "finding": "Preserve the Qwen3-0.6B dissociation: native internal state transport did not demonstrate abstract behavioral control. Never create positive Qwen3.5 J-Space labels from the 0.6B vector/layer evidence."
+    },
+    {
+      "role": "CAUSAL_BINDING_REVIEWER",
+      "finding": "Permutation metadata must cause the actual codebook mapping and target symbol. A logged permutation that does not construct the prompt mapping is a false holdout."
+    },
+    {
+      "role": "LEAKAGE_RED_TEAM",
+      "finding": "The existing generic candidate gate correctly protects evidence/authority classes but does not test S3 realization, class-word/synonym leakage, template isolation, atom isolation, or class-symbol statistical independence."
+    },
+    {
+      "role": "STATISTICAL_REVIEWER",
+      "finding": "Complete counterbalancing must be tested on realized class-symbol identity, not codebook order. Train mutual information between semantic class and emitted atom should be approximately zero; large relative-deviation thresholds are too weak."
+    },
+    {
+      "role": "HOLDOUT_REVIEWER",
+      "finding": "Template, permutation, symbol and causal/provenance ancestry holdouts are separate axes and must not be silently conflated. T5 must remain frozen and absent from train/validation."
+    },
+    {
+      "role": "ARCHITECTURE_REVIEWER",
+      "finding": "Binding training is necessary but not sufficient for Xeno/HCU. Existing architecture-protocol seed families remain useful and should stay separate from the measured binder curriculum so protocol-format performance cannot mask a failed binder."
+    },
+    {
+      "role": "RETENTION_REVIEWER",
+      "finding": "A narrow binder curriculum should be evaluated for less forgetting than broad semantic retraining, but this is a hypothesis. Retention/general language-code capability damage remains an explicit rejection condition."
+    }
+  ],
+  "critical_corrections": [
+    {
+      "id": "PERMUTATION_METADATA_NOT_CAUSAL",
+      "severity": "CRITICAL",
+      "required_training_fix": "Construct realized_codebook[class] = episode_atom_triplet[S3_permutation[class_index]] and derive target from that realized mapping; validator recomputes it independently."
+    },
+    {
+      "id": "S3_VALIDATOR_TOO_WEAK",
+      "severity": "CRITICAL",
+      "required_training_fix": "Require exact P012/P021/P102/P120/P201/P210 corpus coverage and an actually isolated held-out permutation family rather than merely counting metadata IDs."
+    },
+    {
+      "id": "COUNTERBALANCE_VALIDATOR_TOO_LOOSE",
+      "severity": "HIGH",
+      "required_training_fix": "Require per-symbol class counts to differ by at most one and train class-symbol MI <= 1e-6 bits for the audited seed/generator output."
+    },
+    {
+      "id": "CLASS_WORD_CHECK_IS_NON_CHECK",
+      "severity": "HIGH",
+      "required_training_fix": "Preregister the codebook exception: ALLOW/DENY/ABSTAIN may appear only inside an explicit [CODEBOOK] span; target labels and a frozen synonym inventory must fail outside it."
+    },
+    {
+      "id": "LEXICAL_DISJOINTNESS_CHECK_INCOMPLETE",
+      "severity": "HIGH",
+      "required_training_fix": "Bind each row to a semantic lexical-family inventory/hash and reject cross-split overlap of semantic-bearing vocabulary/template material; protocol tokens are separately enumerated exemptions."
+    },
+    {
+      "id": "TEMPLATE_HOLDOUT_UNDERCHECKED",
+      "severity": "HIGH",
+      "required_training_fix": "Use at least T1-T4 as structurally distinct training templates and T5_FROZEN_UNSEEN only in HOLDOUT_TEMPLATE."
+    }
+  ],
+  "microseed_blueprints": [
+    {
+      "id": "BIND_POS_T1_ALLOW",
+      "template": "T1_KEYVALUE",
+      "semantic_case": "evidence_complete=1, required_condition=1, blocker=0",
+      "prompt_skeleton": "[CODEBOOK] ALLOW=>{map.ALLOW}; DENY=>{map.DENY}; ABSTAIN=>{map.ABSTAIN} [/CODEBOOK]\\nEvidence complete: 1. Required condition: 1. Blocking condition: 0. Apply the learned three-way decision semantics. Emit one codebook atom only.",
+      "target_derivation": "realized_codebook[ALLOW]"
+    },
+    {
+      "id": "BIND_POS_T1_DENY",
+      "template": "T1_KEYVALUE",
+      "semantic_case": "evidence_complete=1, required_condition=0, blocker=1",
+      "target_derivation": "realized_codebook[DENY]"
+    },
+    {
+      "id": "BIND_POS_T1_ABSTAIN",
+      "template": "T1_KEYVALUE",
+      "semantic_case": "evidence_complete=0, required_condition=unknown, blocker=unknown",
+      "target_derivation": "realized_codebook[ABSTAIN]"
+    },
+    {
+      "id": "BIND_POS_T2_TABLE",
+      "template": "T2_TABLE",
+      "prompt_skeleton": "[CODEBOOK] ... [/CODEBOOK]\\n| complete | requirement | blocker |\\n| 1 | 1 | 0 |\\nReturn exactly the atom selected by the current episode-local mapping.",
+      "purpose": "Same semantic decision under a structurally different surface."
+    },
+    {
+      "id": "BIND_POS_T3_NARRATIVE",
+      "template": "T3_NARRATIVE",
+      "prompt_skeleton": "[CODEBOOK] ... [/CODEBOOK]\\nAll required evidence is present; the required condition is satisfied; no blocking condition is present. Emit exactly one current codebook atom.",
+      "purpose": "Cross-template semantic-to-symbol binding without reusing T1 surface structure."
+    },
+    {
+      "id": "BIND_POS_T4_SYMBOLIC",
+      "template": "T4_SYMBOLIC",
+      "prompt_skeleton": "[CODEBOOK] ... [/CODEBOOK]\\nstate=(K=1,R=1,B=0). Apply the learned decision semantics; output one atom.",
+      "purpose": "Compact symbolic transfer pressure."
+    },
+    {
+      "id": "BIND_HOLDOUT_T5_UNSEEN",
+      "template": "T5_FROZEN_UNSEEN",
+      "split": "HOLDOUT",
+      "eval_family": "HOLDOUT_TEMPLATE",
+      "prompt_skeleton": "[CODEBOOK] ... [/CODEBOOK]\\nCase packet: knowledge=complete / condition=satisfied / exclusion=absent. Produce only the episode code.",
+      "purpose": "Frozen unseen structural family; never shown during train/validation or prompt tuning."
+    },
+    {
+      "id": "NEG_METADATA_ONLY_PERMUTATION",
+      "type": "GENERATOR_REJECTION",
+      "mutation": "Change permutation_id but leave realized prompt codebook unchanged.",
+      "expected_gate_failure": "PERMUTATION_NOT_CAUSALLY_REALIZED"
+    },
+    {
+      "id": "NEG_WRONG_TARGET_DERIVATION",
+      "type": "GENERATOR_REJECTION",
+      "mutation": "Correct realized codebook but target is atom for a different semantic class.",
+      "expected_gate_failure": "TARGET_NOT_DERIVED_FROM_MAPPING"
+    },
+    {
+      "id": "NEG_CLASS_LABEL_LEAK",
+      "type": "LEAKAGE_REJECTION",
+      "mutation": "Append the target class label or frozen synonym outside [CODEBOOK].",
+      "expected_gate_failure": "SEMANTIC_LABEL_LEAK"
+    },
+    {
+      "id": "NEG_TEMPLATE_HOLDOUT_LEAK",
+      "type": "HOLDOUT_REJECTION",
+      "mutation": "Put T5_FROZEN_UNSEEN into TRAIN or VALIDATION.",
+      "expected_gate_failure": "FROZEN_TEMPLATE_LEAK"
+    },
+    {
+      "id": "NEG_SYMBOL_HOLDOUT_OVERLAP",
+      "type": "HOLDOUT_REJECTION",
+      "mutation": "Reuse a TRAIN atom in HOLDOUT_SYMBOL.",
+      "expected_gate_failure": "UNSEEN_SYMBOL_HOLDOUT_NOT_ISOLATED"
+    },
+    {
+      "id": "NEG_PERM_HOLDOUT_OVERLAP",
+      "type": "HOLDOUT_REJECTION",
+      "mutation": "Reuse a TRAIN S3 permutation in HOLDOUT_PERM.",
+      "expected_gate_failure": "UNSEEN_PERM_HOLDOUT_NOT_ISOLATED"
+    },
+    {
+      "id": "NEG_PARTIAL_S3",
+      "type": "COVERAGE_REJECTION",
+      "mutation": "Generate only cyclic rotations and omit transpositions.",
+      "expected_gate_failure": "FULL_S3_CORPUS_COVERAGE_REQUIRED"
+    },
+    {
+      "id": "NEG_CLASS_SYMBOL_SHORTCUT",
+      "type": "STATISTICAL_REJECTION",
+      "mutation": "Make one atom disproportionately associated with one semantic class while keeping prompt codebook order random.",
+      "expected_gate_failure": "TRAIN_CLASS_SYMBOL_COUNTERBALANCE or TRAIN_CLASS_SYMBOL_MI_NONZERO"
+    },
+    {
+      "id": "NEG_CROSS_MODEL_JSPACE_TEACHER",
+      "type": "EVIDENCE_REJECTION",
+      "mutation": "Use Qwen3-0.6B vector/layer coordinates as a positive Qwen3.5-0.8B semantic-control target.",
+      "expected_policy": "FORBIDDEN; only same-model causal receipts can create positive Qwen3.5 J-Space targets."
+    }
+  ],
+  "specialized_gate_contract": {
+    "path": "tools/trigger2_dynamic_codebook_binding_gate_v1.py",
+    "row_schema": "TRIGGER2_DYNAMIC_CODEBOOK_BINDING_CANDIDATE/v1",
+    "required_provenance_hashes": [
+      "abi_manifest_sha256",
+      "atom_inventory_sha256",
+      "generator_sha256",
+      "forbidden_lexeme_inventory_sha256"
+    ],
+    "required_dataset_checks": [
+      "permutation is causally realized",
+      "target derived from realized mapping",
+      "class/forbidden lexemes absent outside explicit codebook",
+      "family and provenance ancestry do not cross split",
+      "T5 frozen unseen isolation",
+      "full S3 corpus coverage",
+      "unseen permutation holdout isolation",
+      "unseen symbol holdout isolation",
+      "per-symbol class count difference <=1",
+      "train class-symbol MI <=1e-6 bits"
+    ]
+  },
+  "blocked_inputs_before_emitting_final_training_jsonl": [
+    "Exact 46 accepted atom inventory is not contained in the canonical ingest record; the source archive binds it but this organ did not have the atom inventory bytes available as a current canonical file.",
+    "Frozen forbidden semantic-label/synonym inventory is not yet a canonical input artifact.",
+    "Therefore this run deliberately does not invent atom strings, tokenizer identities, or synonym lists and does not claim a train-ready binder JSONL."
+  ],
+  "next_exact_action": "Extract or commit the exact 46-atom ABI inventory plus its manifest/source hashes and a preregistered forbidden-lexeme inventory; then implement the permutation-causal generator, emit a small audited S3/T1-T5 binder microseed, run both the generic candidate gate and the specialized binding gate, and only then scale toward the 20k-50k hypothesis range without touching frozen holdouts.",
+  "credits": {
+    "research_design_delta": 1,
+    "specialized_binding_gate_source_delta": 1,
+    "train_ready_binding_rows": 0,
+    "accepted_dataset_tokens": 0,
+    "qwen35_jspace_runtime_credit": 0,
+    "qwen35_training_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "canonical_semantics_promotion": false
+  }
+}

@@ -1,0 +1,152 @@
+{
+  "schema": "CLAY_TRIGGER2_MECHANISM_TRANSITION_EVALUATION_CONTRACT/v1",
+  "date": "2026-08-25",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority": {
+    "supervisor_epoch": "8.78",
+    "mode": "FREE_ONLY",
+    "owner_target": "research_entity/global/OWNER_CORRECTION_ZERO_ENTITYOS_COGNITIVE_GRID_DB_CLAUDECODE_GLOBAL_JSPACE_2026-08-25.md",
+    "training_executed": false,
+    "training_credit": 0
+  },
+  "purpose": "Prevent Trigger-2 from accepting a Qwen3.5-0.8B binding/cognition checkpoint merely because final task accuracy is high when shortcut heuristics, nuisance decoding, or correlational J-Space readout could still explain the result.",
+  "research_basis": [
+    {
+      "source": "Wu, Geiger & Milliere, How Do Transformers Learn Variable Binding in Symbolic Programs?, ICML 2025 / arXiv:2505.20896",
+      "direct_finding": "Their trained Transformer progressed through random prediction, a shallow early-assignment heuristic, and then a systematic dereferencing mechanism; causal interventions supported the later routing/addressable-memory interpretation.",
+      "scope_boundary": "This is not Qwen3.5-0.8B or EntityOS evidence. It motivates a training-dynamics discriminator for our binding curriculum."
+    },
+    {
+      "source": "Braun et al., Understanding (Un)Reliability of Steering Vectors in Language Models, arXiv:2505.22637",
+      "direct_finding": "Steering effects varied strongly across samples/prompts; activation-difference directional coherence and positive/negative separability predicted better steering.",
+      "scope_boundary": "This does not establish any current Xeno/Qwen3.5 J-Space vector. It motivates prompt-family-specific geometry and control checks."
+    },
+    {
+      "source": "Sankaranarayanan et al., Surgical Activation Steering via Generative Causal Mediation, arXiv:2602.16080",
+      "direct_finding": "Generative Causal Mediation selected sparse components that outperformed correlational probe baselines for steering in the reported refusal/sycophancy/style tasks.",
+      "scope_boundary": "This does not prove GCM transfers to Qwen3.5-0.8B or our HCU task. It raises the promotion bar from probe correlation toward intervention evidence where internals are accessible."
+    },
+    {
+      "source": "Chen et al., On-Policy Replay for Continual Supervised Fine-Tuning, arXiv:2605.29495",
+      "direct_finding": "On-policy replay reduced forgetting on the paper's tested 7-8B continual-SFT backbones.",
+      "scope_boundary": "This is a later retention ablation candidate only; no transfer to a 0.8B base is assumed."
+    }
+  ],
+  "binding_training_dynamics": {
+    "mandatory_before_any_pilot": true,
+    "checkpoint_freeze_rule": "Before training starts, preregister a checkpoint schedule using normalized optimizer progress and event-triggered saves. Do not choose checkpoints after seeing holdout behavior.",
+    "default_normalized_progress_candidates": [0.0, 0.01, 0.03, 0.1, 0.25, 0.5, 0.75, 1.0],
+    "event_triggered_candidate": "Optional extra checkpoint when validation binding accuracy first crosses each preregistered threshold; threshold values must be fixed before training and cannot use final holdout.",
+    "phase_labels_are_descriptive_not_truth": [
+      "RANDOM_OR_UNDERFIT",
+      "HEURISTIC_DOMINANT",
+      "SYSTEMATIC_BINDER_CANDIDATE",
+      "CAUSAL_BINDER_SUPPORTED"
+    ]
+  },
+  "heuristic_baselines_required_at_each_binding_checkpoint": [
+    {
+      "id": "H_POSITION",
+      "input": "record position/focus route/early-vs-late assignment features without semantic evidence",
+      "failure": "Above preregistered chance tolerance on unseen families."
+    },
+    {
+      "id": "H_TEMPLATE_LEXICAL",
+      "input": "template/lexical/style identifiers or model-visible nonsemantic surface after semantic ablation",
+      "failure": "Target prediction above preregistered chance tolerance."
+    },
+    {
+      "id": "H_CODEBOOK_ORDER_FREQUENCY",
+      "input": "codebook display order, target slot frequency, symbol frequency and ordering nuisance without semantic evidence",
+      "failure": "Target prediction above preregistered chance tolerance."
+    },
+    {
+      "id": "H_VISIBLE_NUISANCE_EXACT_SIGNATURE",
+      "input": "exact rendered prompt after masking only semantic payload while preserving all model-visible nuisance surface",
+      "failure": "Any nuisance group lacks complete/equal target support or exact lookup exceeds episode-local chance."
+    },
+    {
+      "id": "H_VISIBLE_NUISANCE_LEARNED",
+      "input": "same semantic-ablated model-visible nuisance projection",
+      "method": "Simple preregistered classifier or small nuisance learner trained only on TRAIN nuisance projections and evaluated on disjoint VALIDATION nuisance families.",
+      "failure": "Generalized nuisance prediction exceeds preregistered tolerance; exact-signature chance alone is not sufficient against higher-order/generalizing nuisance functions."
+    }
+  ],
+  "intended_binding_metrics_at_each_checkpoint": [
+    "semantic-class correctness before runtime symbol mapping",
+    "episode-local codebook symbol correctness",
+    "unseen codebook permutation accuracy",
+    "unseen template/lexical family accuracy",
+    "proof-depth/topology accuracy",
+    "minimal codebook-flip sensitivity",
+    "minimal semantic-state-flip sensitivity",
+    "neutral nuisance invariance"
+  ],
+  "hyperposition_training_dynamics": {
+    "carrier_from_first_episode": true,
+    "full_D_loss_staged_late": true,
+    "checkpoint_metrics": [
+      "branch-set membership/retrieval on disjoint families",
+      "branch permutation invariance",
+      "branch-local E_plus/E_minus/F/T/A/sigma attachment",
+      "non-discriminating update preserves live alternatives",
+      "discriminating update changes only causally matching branches",
+      "projection does not delete hidden branches",
+      "same-ancestry evidence does not gain independent weight through repetition",
+      "unresolved cases request an actually discriminating test"
+    ],
+    "shortcut_baselines": [
+      "branch order/branch id",
+      "surface salience",
+      "evidence count without ancestry",
+      "recurrence/majority",
+      "template family",
+      "resolution-token frequency"
+    ]
+  },
+  "jspace_promotion_ladder": [
+    {
+      "level": "J0_OBSERVED_ACTIVATION",
+      "claim": "Exact activations/hidden states were captured at exact model/runtime identity."
+    },
+    {
+      "level": "J1_DECODABLE",
+      "claim": "A preregistered probe reads the target state on disjoint families above null/permutation controls.",
+      "promotion_limit": "Measurement only; no causal control claim."
+    },
+    {
+      "level": "J2_GEOMETRICALLY_COHERENT",
+      "claim": "Activation-difference directions are coherent/separable across prompt families with matched null controls.",
+      "promotion_limit": "Still not causal control."
+    },
+    {
+      "level": "J3_INTERVENTION_EFFECT",
+      "claim": "Preregistered intervention changes intended behavior/state more than random/orthogonal/permuted same-norm controls at exact identity.",
+      "promotion_limit": "Bounded component causal evidence only."
+    },
+    {
+      "level": "J4_DOUBLE_DISSOCIATION_RESCUE",
+      "claim": "Semantic lesion vs binding lesion separate predicted functions and a preregistered rescue restores the damaged function while off-target floors remain intact.",
+      "promotion_limit": "Model-specific causal mechanism evidence; never canonical truth/effect authority."
+    }
+  ],
+  "retention_research_candidate": {
+    "method": "ON_POLICY_REPLAY",
+    "status": "OPTIONAL_FUTURE_ZERO_COST_ABLATION_NOT_DEFAULT",
+    "reason": "Recent 7-8B continual-SFT evidence is promising, but model scale/base/task mismatch prevents direct promotion into the Qwen3.5-0.8B recipe.",
+    "minimum_comparison": "No replay vs ordinary frozen retention replay vs on-policy replay under matched token/compute budget, using validation only; freeze winner before holdout."
+  },
+  "promotion_rule": "No final checkpoint is Trigger-2 binding/J-Space ready merely because end-task accuracy is high. Promotion requires the intended performance to rise while nuisance/heuristic predictors remain at preregistered chance/tolerance, family/provenance holdouts stay sealed, and any J-Space causal claim passes the corresponding intervention level at exact model/runtime identity.",
+  "nonclaims": [
+    "No Qwen3.5-0.8B training was executed by this contract.",
+    "No mechanism transition has yet been observed in Qwen3.5-0.8B.",
+    "No J-Space vector or hidden-state direction is promoted by this contract.",
+    "No retention method is selected by this contract.",
+    "No accepted dataset tokens or training credit are created."
+  ],
+  "next_exact_action": "Wire these evaluation outputs into the future Trigger-2 training recipe and artifact registry, then implement the current binder's model-visible nuisance gate on exact serialized rows before any pilot dataset admission."
+}

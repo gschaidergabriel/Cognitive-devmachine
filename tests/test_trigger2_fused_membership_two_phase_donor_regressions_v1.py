@@ -142,17 +142,12 @@ def reseal_proof(envelope: dict) -> dict:
     return out
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason=(
-        "Retained adapter does not yet independently bind NODE_RESULT.producer_pid "
-        "to payload.process_pid; downstream real FusedFabric rejects this, but the "
-        "adapter compositional proof should fail closed itself."
-    ),
-)
 def test_packet_producer_pid_must_match_payload_process_pid_at_adapter_boundary():
     proof = proof_envelope(1, packet_pid=7001, payload_pid=8001, envelope_pid=8001)
-    with pytest.raises(AdapterError):
+    with pytest.raises(
+        AdapterError,
+        match="^NODE_RESULT_PRODUCER_PID_PAYLOAD_MISMATCH$",
+    ):
         attach_two_phase_authority(proof, phase_authority(1, proof))
 
 

@@ -1,0 +1,60 @@
+{
+  "schema": "CLAY_GO_TRANSPORT_DISCRIMINATOR_RECEIPT/v1",
+  "generated_at": "2026-08-25T03:07:26Z",
+  "authority_epoch": "8.78",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol / ChatGPT project organ",
+  "canonical_main_observed_before_write": "ab19066920417c346b9e8dc98252ed9768f69f6a",
+  "authority_source": "governance/CLAY_VPS_SANDBOX_FULL_EXECUTION_AUTHORITY_2026-08-25.md",
+  "bridge_map_source": "governance/CLAY_VPS_SANDBOX_BRIDGE_CURRENT.md",
+  "purpose": "Discriminate Clay-repository workflow/label failure from a broader execution-transport availability problem without creating another runtime dispatch.",
+  "observations": {
+    "chat_runtime_ssh_config_present": false,
+    "chat_runtime_ssh_directory_present": false,
+    "chat_runtime_relevant_bridge_environment_names_observed": [],
+    "documented_vps_public_ssh_tcp_22": "CONNECTION_REFUSED",
+    "documented_jump_ssh_tcp_22": "CONNECTION_REFUSED",
+    "controller_repository_probe_run": {
+      "repository": "gschaidergabriel/Dr.-Unterweger",
+      "workflow": ".github/workflows/frank-self-hosted-probe.yml",
+      "run_id": 32803694800,
+      "head_sha": "6ad6af25038f8b7be07e660b2c47ea14a9de7c5f",
+      "status_observed": "queued",
+      "conclusion_observed": null
+    }
+  },
+  "interpretation": {
+    "observed": "The current ChatGPT execution container cannot enter the documented SSH bridge directly, and an independent controller-repository self-hosted probe was still queued at observation time.",
+    "inferred": "Evidence weakens the narrow hypothesis that Clay-repository labels/workflow syntax alone cause the queue and is more compatible with a repo-spanning self-hosted scheduling/transport availability problem.",
+    "not_claimed": [
+      "VPS_IS_DOWN",
+      "SELF_HOSTED_RUNNER_IS_DEFINITIVELY_OFFLINE",
+      "CLAY_DIRECT_DEV_IS_BROKEN",
+      "SSH_BRIDGE_DOES_NOT_EXIST"
+    ]
+  },
+  "counterhypotheses": [
+    "The ChatGPT network namespace may reject these SSH routes even while the owner bridge works from another machine.",
+    "The self-hosted runner may be online but unable to accept jobs because of GitHub-side registration, runner-group, concurrency, service-account, or scheduling state.",
+    "The VPS/container may be healthy while only the ingress/runner transport is unavailable."
+  ],
+  "next_high_information_gate": "Restore or expose one already-authorized transport into clay-direct-dev and obtain one terminal CLAY_DIRECT_DEV_ROUNDTRIP/v1 result; do not create another generation-0 dispatch merely because another go was received.",
+  "execution_effects": {
+    "new_runtime_dispatch_created": false,
+    "provider_calls": 0,
+    "paid_calls": 0,
+    "unusual_experiment_executed": false,
+    "secrets_read_or_persisted": false
+  },
+  "credit": {
+    "transport_runtime_pass": false,
+    "historical_backfill_runtime_pass": false,
+    "distillery_replay_v2_runtime_pass": false,
+    "whole_entityos_hcu_runtime_credit_added": 0,
+    "hcu_full_runtime_credit_added": 0,
+    "jspace_model_runtime_credit_added": 0,
+    "training_credit_added": 0
+  }
+}

@@ -18,7 +18,7 @@ The generator emits 144 rows:
 
 - `TRAIN`: 72 = 4 structurally distinct templates × 6 S3 permutations × 3 semantic classes.
 - `VALIDATION`: 18 = 6 S3 permutations × 3 classes with a calibration paraphrase family.
-- `HOLDOUT_FROZEN`: 54 = three orthogonal 18-row families:
+- `HOLDOUT`: 54 (all rows carry `frozen_holdout=true`) = three orthogonal 18-row families:
   - unseen semantic-bearing vocabulary;
   - unseen structural template (`T5_STRUCTURED_EVIDENCE_BUNDLE`);
   - unseen symbol-set instances.
@@ -66,7 +66,7 @@ The present holdout tests unseen *mapping instances* through new symbol identiti
 
 ## Falsifiers retained
 
-1. If targets still score well after codebook mappings are shuffled independently, a loader/dataset leak exists.
+1. If targets still score well after codebook mappings are shuffled independently of targets, a loader/dataset leak exists.
 2. If only unseen-vocabulary performance collapses, the model learned lexical semantics rather than context-invariant binding.
 3. If only unseen-symbol performance collapses, it learned atom identities rather than episodic variable binding.
 4. If narrow specialization damages measured semantic readout/symbol writeout or declared retention bounds, the “small router is sufficient” hypothesis weakens.
@@ -75,3 +75,14 @@ The present holdout tests unseen *mapping instances* through new symbol identiti
 ## Credit boundary
 
 This is dataset-method/source work only. Training was not executed. No J-Space model runtime, HCU runtime, EntityOS/HCU whole-runtime, canonical-semantics or training credit is minted by this delta.
+
+## Re-entry after main advanced
+
+After the first V2 write, canonical `main` advanced to `09965e898b27e21f86d0f9e5d08339fe8439fed4` with `CLAY_TRIGGER2_POSTTRAINING_CAUSAL_ADJUDICATION_SWARM/v1`. That delta establishes two constraints this V2 now adopts:
+
+1. behavioral episodic binding and scientific self-adjudication are separate curricula and must receive separate acceptance credit;
+2. candidate row schema/enums fail closed rather than being weakened to accommodate new prose.
+
+V2 was therefore converted to the exact current candidate row schema `ENTITYOS_HCU_TRAININGTRACE_CANDIDATE/v1` and rechecked against `tools/entityos_hcu_trainingtrace_candidate_gate_v1.py` at blob `a51c7b8afc6a9ae5562e5ec647528960e812eba3`.
+
+Result: **144/144 candidate rows pass the current gate**. This is only candidate-gate validity. All 144 remain `training_ready=false` because the exact manifest-bound ABI atom materialization is still blocked, and no canonical dataset admission or training credit follows from the gate pass.

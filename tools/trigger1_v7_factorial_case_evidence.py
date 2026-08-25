@@ -1,15 +1,21 @@
 #!/usr/bin/env python3
-"""Deterministic Trigger-1 v7 semantic-factorial case/evidence producer.
+"""Deterministic Trigger-1 semantic-factorial case/evidence producer.
 
-This module is deliberately execution-free. It freezes an exact 3x3 requested-semantic
-state x output-code design for CALIBRATION and HOLDOUT, expands each planned case into the
-six required native-cvec controls, and can later bind observed per-control runtime receipt
-digests into the exact evidence envelope consumed by
+This module is deliberately execution-free. It never invents model-facing semantic
+prompts. Instead it accepts an externally frozen set of label-free matched scenario
+cases, verifies an exact 3x3 requested-semantic-state x output-code factorial, expands
+those exact cases across the six evidence controls, and later binds observed per-control
+runtime receipt digests into the evidence envelope consumed by
 trigger1_semantic_factorial_evidence_gate_v1.
 
-It must never synthesize runtime receipts and it refuses legacy AFFIRMATIVE-only 1x3 data.
-Runtime rows must also echo the exact deterministic case identity; case_id alone is not a
+The separation is intentional: semantic_target is evaluator metadata, not model-facing
+text. A producer that writes "Requested semantic state: AFFIRMATIVE" into the prompt
+would reintroduce the target-label shortcut that the current preregistration forbids.
+Runtime rows must echo the exact deterministic case identity; case_id alone is not a
 sufficient binding between an observed receipt and its planned semantic-factorial cell.
+
+This tool does not run a model, open holdout, synthesize runtime receipts, or mint any
+runtime/J-Space/HCU/EntityOS/training/canonical-semantics credit.
 """
 from __future__ import annotations
 
@@ -26,12 +32,14 @@ if str(ROOT) not in sys.path:
 
 from tools import trigger1_semantic_factorial_evidence_gate_v1 as evidence_gate
 
-PLAN_SCHEMA = "CLAY_TRIGGER1_V7_SEMANTIC_FACTORIAL_CASE_PLAN/v1"
-BOUND_SPLIT_SCHEMA = "CLAY_TRIGGER1_V7_BOUND_SEMANTIC_FACTORIAL_SPLIT/v1"
+PLAN_SCHEMA = "CLAY_TRIGGER1_V7_SEMANTIC_FACTORIAL_CASE_PLAN/v2"
+BOUND_SPLIT_SCHEMA = "CLAY_TRIGGER1_V7_BOUND_SEMANTIC_FACTORIAL_SPLIT/v2"
+CASE_SPEC_SCHEMA = "CLAY_TRIGGER1_LABEL_FREE_FACTORIAL_CASE_SPEC/v1"
 TARGETS = evidence_gate.TARGETS
 CODES = evidence_gate.CODES
 CONTROLS = evidence_gate.REQUIRED_CONTROLS
 SPLITS = ("CALIBRATION", "HOLDOUT")
+FORBIDDEN_MODEL_FACING_LABELS = tuple(x.lower() for x in TARGETS)
 CASE_IDENTITY_FIELDS = (
     "case_id",
     "seed",
@@ -39,6 +47,9 @@ CASE_IDENTITY_FIELDS = (
     "semantic_target",
     "output_code_identity",
     "split_family_id",
+    "scenario_family_sha256",
+    "lexical_family_sha256",
+    "codebook_family_sha256",
 )
 
 
@@ -54,75 +65,179 @@ def _prompt_sha(text: str) -> str:
     return hashlib.sha256(text.encode("utf-8")).hexdigest()
 
 
+def _sha256(value: Any) -> bool:
+    if not isinstance(value, str) or len(value) != 64:
+        return False
+    try:
+        int(value, 16)
+    except ValueError:
+        return False
+    return value == value.lower()
+
+
 def _case_identity(row: dict[str, Any]) -> str:
     return canonical_sha({key: row.get(key) for key in CASE_IDENTITY_FIELDS})
 
 
-def _mapping_for(target: str, target_code: str, variant: int) -> dict[str, str]:
-    """Return code->semantic bijection with target fixed to target_code."""
-    remaining_targets = [x for x in TARGETS if x != target]
-    remaining_codes = [x for x in CODES if x != target_code]
-    if variant % 2:
-        remaining_targets.reverse()
-    mapping = {target_code: target}
-    mapping[remaining_codes[0]] = remaining_targets[0]
-    mapping[remaining_codes[1]] = remaining_targets[1]
-    return {code: mapping[code] for code in CODES}
+def _normalize_case_spec(raw: Any, *, split: str, index: int) -> dict[str, Any]:
+    if not isinstance(raw, dict):
+        raise EvidenceBuildError(f"CASE_SPEC_{index}_OBJECT_REQUIRED")
+    if raw.get("schema") not in (None, CASE_SPEC_SCHEMA):
+        raise EvidenceBuildError(f"CASE_SPEC_{index}_SCHEMA_INVALID")
+
+    case_id = raw.get("case_id")
+    semantic_target = str(raw.get("semantic_target") or "").strip().upper()
+    output_code = str(raw.get("output_code_identity") or "").strip().upper()
+    seed = raw.get("seed")
+    prompt = raw.get("prompt")
+    scenario_sha = raw.get("scenario_family_sha256")
+    lexical_sha = raw.get("lexical_family_sha256")
+    codebook_sha = raw.get("codebook_family_sha256")
+
+    if not isinstance(case_id, str) or not case_id.strip():
+        raise EvidenceBuildError(f"CASE_SPEC_{index}_CASE_ID_REQUIRED")
+    if semantic_target not in TARGETS:
+        raise EvidenceBuildError(f"CASE_SPEC_{index}_SEMANTIC_TARGET_INVALID")
+    if output_code not in CODES:
+        raise EvidenceBuildError(f"CASE_SPEC_{index}_OUTPUT_CODE_INVALID")
+    if not isinstance(seed, int) or isinstance(seed, bool):
+        raise EvidenceBuildError(f"CASE_SPEC_{index}_INTEGER_SEED_REQUIRED")
+    if not isinstance(prompt, str) or not prompt.strip():
+        raise EvidenceBuildError(f"CASE_SPEC_{index}_PROMPT_REQUIRED")
+    if raw.get("model_facing_target_identity_exposed") is not False:
+        raise EvidenceBuildError(f"CASE_SPEC_{index}_MODEL_FACING_TARGET_IDENTITY_MUST_BE_FALSE")
+    if raw.get("model_facing_explicit_semantic_labels") is not False:
+        raise EvidenceBuildError(f"CASE_SPEC_{index}_MODEL_FACING_EXPLICIT_SEMANTIC_LABELS_MUST_BE_FALSE")
+
+    lowered = prompt.lower()
+    exposed = [label for label in FORBIDDEN_MODEL_FACING_LABELS if label in lowered]
+    if exposed:
+        raise EvidenceBuildError(
+            f"CASE_SPEC_{index}_CANONICAL_SEMANTIC_LABEL_PRESENT_IN_PROMPT:{','.join(exposed)}"
+        )
+
+    for name, value in (
+        ("scenario_family_sha256", scenario_sha),
+        ("lexical_family_sha256", lexical_sha),
+        ("codebook_family_sha256", codebook_sha),
+    ):
+        if not _sha256(value):
+            raise EvidenceBuildError(f"CASE_SPEC_{index}_{name.upper()}_REQUIRED")
+
+    declared_prompt_sha = raw.get("prompt_sha256")
+    actual_prompt_sha = _prompt_sha(prompt)
+    if declared_prompt_sha is not None and declared_prompt_sha != actual_prompt_sha:
+        raise EvidenceBuildError(f"CASE_SPEC_{index}_PROMPT_SHA256_MISMATCH")
+
+    return {
+        "case_id": case_id.strip(),
+        "seed": seed,
+        "semantic_target": semantic_target,
+        "output_code_identity": output_code,
+        "prompt": prompt,
+        "prompt_sha256": actual_prompt_sha,
+        "scenario_family_sha256": scenario_sha,
+        "lexical_family_sha256": lexical_sha,
+        "codebook_family_sha256": codebook_sha,
+        "model_facing_target_identity_exposed": False,
+        "model_facing_explicit_semantic_labels": False,
+        "split": split,
+    }
 
 
-def _prompt(split: str, ordinal: int, target: str, target_code: str, mapping: dict[str, str]) -> str:
-    mapping_text = "; ".join(f"{code}={mapping[code]}" for code in CODES)
-    if split == "CALIBRATION":
-        stem = "Calibration decision card"
-        verb = "Return only the code assigned to the requested state"
-    else:
-        stem = "Unseen evaluation decision card"
-        verb = "Emit exactly the code corresponding to the requested state"
-    return (
-        f"/no_think\n{stem} {ordinal}. Temporary codebook: {mapping_text}. "
-        f"Requested semantic state: {target}. {verb}."
-    )
-
-
-def build_plan(split: str) -> dict[str, Any]:
+def build_plan(split: str, case_specs: list[dict[str, Any]] | None = None) -> dict[str, Any]:
+    """Freeze externally authored label-free cases; no internal prompt synthesis is allowed."""
     split = str(split).strip().upper()
     if split not in SPLITS:
         raise EvidenceBuildError(f"SPLIT_INVALID:{split}")
-    seed_base = 7100 if split == "CALIBRATION" else 8100
-    family_id = canonical_sha({
-        "schema": PLAN_SCHEMA,
-        "split": split,
-        "family_version": 1,
-        "purpose": "semantic_target_x_output_code_factorial",
-    })
+    if not isinstance(case_specs, list):
+        raise EvidenceBuildError("EXTERNAL_LABEL_FREE_CASE_SPECS_REQUIRED")
+    if len(case_specs) != 9:
+        raise EvidenceBuildError("EXACTLY_NINE_EXTERNAL_CASE_SPECS_REQUIRED")
+
+    normalized = [_normalize_case_spec(row, split=split, index=i) for i, row in enumerate(case_specs)]
+    case_ids = [row["case_id"] for row in normalized]
+    if len(set(case_ids)) != len(case_ids):
+        raise EvidenceBuildError("EXTERNAL_CASE_IDS_MUST_BE_UNIQUE")
+    prompt_hashes = [row["prompt_sha256"] for row in normalized]
+    if len(set(prompt_hashes)) != len(prompt_hashes):
+        raise EvidenceBuildError("EXTERNAL_PROMPTS_MUST_BE_UNIQUE")
+
+    expected_factorial = {(target, code) for target in TARGETS for code in CODES}
+    observed_factorial = {
+        (row["semantic_target"], row["output_code_identity"]) for row in normalized
+    }
+    if observed_factorial != expected_factorial:
+        raise EvidenceBuildError("EXTERNAL_FULL_THREE_BY_THREE_FACTORIAL_REQUIRED")
+
+    scenario_ids = sorted({row["scenario_family_sha256"] for row in normalized})
+    lexical_ids = sorted({row["lexical_family_sha256"] for row in normalized})
+    codebook_ids = sorted({row["codebook_family_sha256"] for row in normalized})
+    if len(scenario_ids) < 3:
+        raise EvidenceBuildError("AT_LEAST_THREE_SCENARIO_FAMILIES_REQUIRED")
+    if len(lexical_ids) < 3:
+        raise EvidenceBuildError("AT_LEAST_THREE_LEXICAL_FAMILIES_REQUIRED")
+    if len(codebook_ids) < 2:
+        raise EvidenceBuildError("AT_LEAST_TWO_CODEBOOK_FAMILIES_REQUIRED")
+
+    # Stronger than the global 3x3 requirement: every scenario family must contain all
+    # semantic targets and all output codes, preventing domain/scenario identity from
+    # becoming a proxy for the semantic class or code identity.
+    by_scenario: dict[str, list[dict[str, Any]]] = {}
+    for row in normalized:
+        by_scenario.setdefault(row["scenario_family_sha256"], []).append(row)
+    for scenario_sha, rows in by_scenario.items():
+        if {row["semantic_target"] for row in rows} != set(TARGETS):
+            raise EvidenceBuildError(f"SCENARIO_MISSING_SEMANTIC_TARGETS:{scenario_sha}")
+        if {row["output_code_identity"] for row in rows} != set(CODES):
+            raise EvidenceBuildError(f"SCENARIO_MISSING_OUTPUT_CODE_ROTATION:{scenario_sha}")
+        if len({row["lexical_family_sha256"] for row in rows}) != 1:
+            raise EvidenceBuildError(f"SCENARIO_MUST_USE_ONE_MATCHED_LEXICAL_FAMILY:{scenario_sha}")
+
+    split_family_id = canonical_sha(
+        {
+            "schema": PLAN_SCHEMA,
+            "split": split,
+            "case_specs": [
+                {key: row[key] for key in (
+                    "case_id",
+                    "seed",
+                    "prompt_sha256",
+                    "semantic_target",
+                    "output_code_identity",
+                    "scenario_family_sha256",
+                    "lexical_family_sha256",
+                    "codebook_family_sha256",
+                )}
+                for row in sorted(normalized, key=lambda x: x["case_id"])
+            ],
+        }
+    )
+
     cases: list[dict[str, Any]] = []
-    ordinal = 0
-    for target_index, target in enumerate(TARGETS):
-        for code_index, target_code in enumerate(CODES):
-            ordinal += 1
-            mapping = _mapping_for(target, target_code, target_index + code_index + (0 if split == "CALIBRATION" else 1))
-            prompt = _prompt(split, ordinal, target, target_code, mapping)
-            case = {
-                "case_id": f"{split.lower()}-{target.lower()}-{target_code.lower()}-v1",
-                "seed": seed_base + ordinal,
-                "semantic_target": target,
-                "output_code_identity": target_code,
-                "codebook": mapping,
-                "prompt": prompt,
-                "prompt_sha256": _prompt_sha(prompt),
-                "split_family_id": family_id,
-            }
-            case["case_identity_sha256"] = _case_identity(case)
-            cases.append(case)
+    for row in normalized:
+        case = {
+            **row,
+            "split_family_id": split_family_id,
+        }
+        case["case_identity_sha256"] = _case_identity(case)
+        cases.append(case)
+
     plan_core = {
         "schema": PLAN_SCHEMA,
         "split": split,
-        "split_family_id": family_id,
+        "split_family_id": split_family_id,
         "semantic_targets": list(TARGETS),
         "output_codes": list(CODES),
         "required_controls": list(CONTROLS),
         "case_identity_fields": list(CASE_IDENTITY_FIELDS),
         "case_count": len(cases),
+        "scenario_family_sha256": scenario_ids,
+        "lexical_family_sha256": lexical_ids,
+        "codebook_family_sha256": codebook_ids,
+        "external_case_specs_sha256": canonical_sha(case_specs),
+        "model_facing_target_identity_exposed": False,
+        "model_facing_explicit_semantic_labels": False,
         "cases": cases,
         "model_executed": False,
         "runtime_receipts_present": False,
@@ -148,6 +263,9 @@ def expand_runtime_cases(plan: dict[str, Any], candidate_key: str) -> list[dict[
                 "prompt_sha256": case["prompt_sha256"],
                 "prompt_family": case["case_id"],
                 "split_family_id": case["split_family_id"],
+                "scenario_family_sha256": case["scenario_family_sha256"],
+                "lexical_family_sha256": case["lexical_family_sha256"],
+                "codebook_family_sha256": case["codebook_family_sha256"],
                 "control": control,
                 "candidate_key": candidate_key,
             })
@@ -167,8 +285,13 @@ def _validate_plan(plan: Any) -> None:
         raise EvidenceBuildError("PLAN_MUST_NOT_PRETEND_RUNTIME_RECEIPTS")
     if plan.get("model_executed") is not False:
         raise EvidenceBuildError("PLAN_MUST_BE_EXECUTION_FREE")
+    if plan.get("model_facing_target_identity_exposed") is not False:
+        raise EvidenceBuildError("PLAN_MODEL_FACING_TARGET_IDENTITY_MUST_BE_FALSE")
+    if plan.get("model_facing_explicit_semantic_labels") is not False:
+        raise EvidenceBuildError("PLAN_MODEL_FACING_EXPLICIT_SEMANTIC_LABELS_MUST_BE_FALSE")
     if plan.get("case_identity_fields") != list(CASE_IDENTITY_FIELDS):
         raise EvidenceBuildError("PLAN_CASE_IDENTITY_FIELDS_MISMATCH")
+
     observed = {(row.get("semantic_target"), row.get("output_code_identity")) for row in cases}
     expected = {(target, code) for target in TARGETS for code in CODES}
     if observed != expected:
@@ -180,16 +303,37 @@ def _validate_plan(plan: Any) -> None:
     if any(not isinstance(x, str) or not x for x in case_ids) or len(set(case_ids)) != len(case_ids):
         raise EvidenceBuildError("PLAN_UNIQUE_CASE_IDS_REQUIRED")
     prompt_hashes = [row.get("prompt_sha256") for row in cases]
-    if any(not isinstance(x, str) or len(x) != 64 for x in prompt_hashes) or len(set(prompt_hashes)) != len(prompt_hashes):
+    if any(not _sha256(x) for x in prompt_hashes) or len(set(prompt_hashes)) != len(prompt_hashes):
         raise EvidenceBuildError("PLAN_UNIQUE_PROMPT_SHA256_REQUIRED")
+
+    by_scenario: dict[str, list[dict[str, Any]]] = {}
     for row in cases:
-        mapping = row.get("codebook")
-        if not isinstance(mapping, dict) or set(mapping) != set(CODES) or set(mapping.values()) != set(TARGETS):
-            raise EvidenceBuildError(f"PLAN_CODEBOOK_INVALID:{row.get('case_id')}")
-        if mapping[row["output_code_identity"]] != row["semantic_target"]:
-            raise EvidenceBuildError(f"PLAN_TARGET_CODEBOOK_MISMATCH:{row.get('case_id')}")
+        prompt = row.get("prompt")
+        if not isinstance(prompt, str) or _prompt_sha(prompt) != row.get("prompt_sha256"):
+            raise EvidenceBuildError(f"PLAN_PROMPT_SHA256_MISMATCH:{row.get('case_id')}")
+        lowered = prompt.lower()
+        if any(label in lowered for label in FORBIDDEN_MODEL_FACING_LABELS):
+            raise EvidenceBuildError(f"PLAN_CANONICAL_SEMANTIC_LABEL_PRESENT:{row.get('case_id')}")
+        if row.get("model_facing_target_identity_exposed") is not False:
+            raise EvidenceBuildError(f"PLAN_TARGET_IDENTITY_EXPOSURE_ATTESTATION_FAIL:{row.get('case_id')}")
+        if row.get("model_facing_explicit_semantic_labels") is not False:
+            raise EvidenceBuildError(f"PLAN_EXPLICIT_SEMANTIC_LABEL_ATTESTATION_FAIL:{row.get('case_id')}")
+        for field in ("scenario_family_sha256", "lexical_family_sha256", "codebook_family_sha256"):
+            if not _sha256(row.get(field)):
+                raise EvidenceBuildError(f"PLAN_{field.upper()}_INVALID:{row.get('case_id')}")
         if row.get("case_identity_sha256") != _case_identity(row):
             raise EvidenceBuildError(f"PLAN_CASE_IDENTITY_MISMATCH:{row.get('case_id')}")
+        by_scenario.setdefault(row["scenario_family_sha256"], []).append(row)
+
+    if len(by_scenario) < 3:
+        raise EvidenceBuildError("PLAN_AT_LEAST_THREE_SCENARIO_FAMILIES_REQUIRED")
+    for scenario_sha, rows in by_scenario.items():
+        if {row["semantic_target"] for row in rows} != set(TARGETS):
+            raise EvidenceBuildError(f"PLAN_SCENARIO_MISSING_SEMANTIC_TARGETS:{scenario_sha}")
+        if {row["output_code_identity"] for row in rows} != set(CODES):
+            raise EvidenceBuildError(f"PLAN_SCENARIO_MISSING_OUTPUT_CODE_ROTATION:{scenario_sha}")
+        if len({row["lexical_family_sha256"] for row in rows}) != 1:
+            raise EvidenceBuildError(f"PLAN_SCENARIO_LEXICAL_FAMILY_MISMATCH:{scenario_sha}")
 
 
 def bind_runtime_receipts(plan: dict[str, Any], runtime_rows: list[dict[str, Any]]) -> dict[str, Any]:
@@ -213,26 +357,27 @@ def bind_runtime_receipts(plan: dict[str, Any], runtime_rows: list[dict[str, Any
         for field in CASE_IDENTITY_FIELDS:
             if row.get(field) != expected_case.get(field):
                 raise EvidenceBuildError(f"RUNTIME_ROW_CASE_FIELD_MISMATCH:{case_id}:{field}")
+        if row.get("prompt") != expected_case.get("prompt"):
+            raise EvidenceBuildError(f"RUNTIME_ROW_PROMPT_MISMATCH:{case_id}")
+        if _prompt_sha(str(row.get("prompt"))) != expected_case["prompt_sha256"]:
+            raise EvidenceBuildError(f"RUNTIME_ROW_PROMPT_HASH_MISMATCH:{case_id}")
         if control not in CONTROLS:
             raise EvidenceBuildError(f"RUNTIME_ROW_UNKNOWN_CONTROL:{control}")
-        if not isinstance(receipt, str) or len(receipt) != 64:
+        if not _sha256(receipt):
             raise EvidenceBuildError(f"RUNTIME_ROW_RECEIPT_INVALID:{case_id}:{control}")
-        try:
-            int(receipt, 16)
-        except ValueError as exc:
-            raise EvidenceBuildError(f"RUNTIME_ROW_RECEIPT_INVALID:{case_id}:{control}") from exc
         if control in grouped[case_id]:
             raise EvidenceBuildError(f"RUNTIME_ROW_DUPLICATE_CONTROL:{case_id}:{control}")
-        grouped[case_id][control] = receipt.lower()
+        grouped[case_id][control] = receipt
 
-    case_rows: list[dict[str, Any]] = []
+    evidence_case_rows: list[dict[str, Any]] = []
+    preregistration_case_rows: list[dict[str, Any]] = []
     for case_id in sorted(expected_by_case):
         case = expected_by_case[case_id]
         receipts = grouped[case_id]
         missing = [control for control in CONTROLS if control not in receipts]
         if missing:
             raise EvidenceBuildError(f"RUNTIME_CONTROLS_MISSING:{case_id}:{','.join(missing)}")
-        case_rows.append({
+        evidence_row = {
             "case_id": case_id,
             "seed": case["seed"],
             "prompt_sha256": case["prompt_sha256"],
@@ -240,10 +385,25 @@ def bind_runtime_receipts(plan: dict[str, Any], runtime_rows: list[dict[str, Any
             "output_code_identity": case["output_code_identity"],
             "split_family_id": case["split_family_id"],
             "control_runtime_receipts": {control: receipts[control] for control in CONTROLS},
+        }
+        evidence_case_rows.append(evidence_row)
+        preregistration_case_rows.append({
+            "split": plan["split"],
+            "case_id": case_id,
+            "scenario_family_sha256": case["scenario_family_sha256"],
+            "lexical_family_sha256": case["lexical_family_sha256"],
+            "codebook_family_sha256": case["codebook_family_sha256"],
+            "seed": case["seed"],
+            "prompt_sha256": case["prompt_sha256"],
+            "semantic_target": case["semantic_target"],
+            "output_code_identity": case["output_code_identity"],
+            "split_family_id": case["split_family_id"],
+            "case_identity_sha256": case["case_identity_sha256"],
+            "control_runtime_receipts": {control: receipts[control] for control in CONTROLS},
         })
 
     counts = {target: {code: 0 for code in CODES} for target in TARGETS}
-    for row in case_rows:
+    for row in evidence_case_rows:
         counts[row["semantic_target"]][row["output_code_identity"]] += 1
     split_name = str(plan["split"])
     material = {
@@ -255,7 +415,7 @@ def bind_runtime_receipts(plan: dict[str, Any], runtime_rows: list[dict[str, Any
         "required_controls": list(CONTROLS),
         "factorial_counts": counts,
         "case_rows": sorted(
-            case_rows,
+            evidence_case_rows,
             key=lambda row: (
                 row["semantic_target"], row["output_code_identity"], row["case_id"], row["seed"]
             ),
@@ -270,10 +430,13 @@ def bind_runtime_receipts(plan: dict[str, Any], runtime_rows: list[dict[str, Any
         "label_mapping_counterbalanced": True,
         "semantic_target_x_output_code_factorial": True,
         "semantic_target_x_output_code_counts": counts,
-        "case_rows": case_rows,
+        "case_rows": evidence_case_rows,
+        "preregistration_case_rows": preregistration_case_rows,
         "semantic_factorial_receipt_sha256": receipt,
         "source_plan_sha256": plan["plan_sha256"],
         "runtime_case_identity_binding": True,
+        "model_facing_target_identity_exposed": False,
+        "model_facing_explicit_semantic_labels": False,
     }
     derived, failures = evidence_gate.derive_split_receipt(split, split_name)
     if failures or derived is None or derived["receipt_sha256"] != receipt:
@@ -311,17 +474,14 @@ def build_interaction_binding(
 
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
-    ap.add_argument("--split", choices=SPLITS)
+    ap.add_argument("--split", required=True, choices=SPLITS)
+    ap.add_argument("--cases-json", required=True)
     ap.add_argument("--output")
     args = ap.parse_args()
-    plans = [build_plan(args.split)] if args.split else [build_plan(split) for split in SPLITS]
-    payload: Any = plans[0] if args.split else {
-        "schema": "CLAY_TRIGGER1_V7_SEMANTIC_FACTORIAL_PLAN_SET/v1",
-        "plans": plans,
-        "model_executed": False,
-        "runtime_credit": 0,
-    }
-    text = json.dumps(payload, indent=2, sort_keys=True, ensure_ascii=False) + "\n"
+    raw = json.loads(Path(args.cases_json).read_text(encoding="utf-8"))
+    case_specs = raw.get("cases") if isinstance(raw, dict) else raw
+    plan = build_plan(args.split, case_specs)
+    text = json.dumps(plan, indent=2, sort_keys=True, ensure_ascii=False) + "\n"
     if args.output:
         Path(args.output).write_text(text, encoding="utf-8")
     else:

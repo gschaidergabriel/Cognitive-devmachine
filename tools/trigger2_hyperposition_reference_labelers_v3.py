@@ -27,11 +27,8 @@ TEST_SCHEMA = "XENO_SEMANTIC_HYPERPOSITION_DISCRIMINATOR/v3"
 
 ALLOWED_K = {"APPLIES", "DOES_NOT_APPLY", "UNKNOWN"}
 ALLOWED_SIGMA = {
-    "LIVE_UNRESOLVED",
-    "SUPPORTED_UNRESOLVED",
-    "WEAKENED_UNRESOLVED",
-    "FALSIFIED",
-    "RESOLVED_PASS",
+    "LIVE_UNRESOLVED", "SUPPORTED_UNRESOLVED", "WEAKENED_UNRESOLVED",
+    "FALSIFIED", "RESOLVED_PASS",
 }
 ALLOWED_VISIBILITY = {"VISIBLE", "FILTERED_CONTEXT"}
 NONUPDATING_RELATIONS = {"IRRELEVANT", "UNKNOWN_RELATION"}
@@ -133,6 +130,23 @@ def validate_state(state: Any) -> None:
         seen.add(bid)
 
 
+def validate_test(test: Any, state: Dict[str, Any]) -> None:
+    if not isinstance(test, dict) or test.get("schema") != TEST_SCHEMA:
+        raise LabelerError("TEST_SCHEMA_MISMATCH")
+    if not _nonempty(test.get("test_id")):
+        raise LabelerError("TEST_ID_REQUIRED")
+    outcomes = test.get("outcomes")
+    if not isinstance(outcomes, dict):
+        raise LabelerError("TEST_OUTCOMES_REQUIRED")
+    branch_ids = {b["branch_id"] for b in state["branches"]}
+    unknown = set(outcomes) - branch_ids
+    if unknown:
+        raise LabelerError("TEST_OUTCOME_UNKNOWN_BRANCH:" + ",".join(sorted(unknown)))
+    for field in ("risk_class", "execution_cost_class", "coordination_cost_class"):
+        if not isinstance(test.get(field, 0), int) or int(test.get(field, 0)) < 0:
+            raise LabelerError("TEST_ORDINAL_COST_INVALID:" + field)
+
+
 def validate_event(event: Any, state: Dict[str, Any]) -> None:
     if not isinstance(event, dict) or event.get("schema") != EVENT_SCHEMA:
         raise LabelerError("EVENT_SCHEMA_MISMATCH")
@@ -151,23 +165,6 @@ def validate_event(event: Any, state: Dict[str, Any]) -> None:
     validate_test(test, state)
     if test.get("test_id") != event.get("discriminator_id", test.get("test_id")):
         raise LabelerError("EVENT_DISCRIMINATOR_ID_MISMATCH")
-
-
-def validate_test(test: Any, state: Dict[str, Any]) -> None:
-    if not isinstance(test, dict) or test.get("schema") != TEST_SCHEMA:
-        raise LabelerError("TEST_SCHEMA_MISMATCH")
-    if not _nonempty(test.get("test_id")):
-        raise LabelerError("TEST_ID_REQUIRED")
-    outcomes = test.get("outcomes")
-    if not isinstance(outcomes, dict):
-        raise LabelerError("TEST_OUTCOMES_REQUIRED")
-    branch_ids = {b["branch_id"] for b in state["branches"]}
-    unknown = set(outcomes) - branch_ids
-    if unknown:
-        raise LabelerError("TEST_OUTCOME_UNKNOWN_BRANCH:" + ",".join(sorted(unknown)))
-    for field in ("risk_class", "execution_cost_class", "coordination_cost_class"):
-        if not isinstance(test.get(field, 0), int) or int(test.get(field, 0)) < 0:
-            raise LabelerError("TEST_ORDINAL_COST_INVALID:" + field)
 
 
 def derive_relations(state: Dict[str, Any], event: Dict[str, Any]) -> Dict[str, str]:
@@ -234,7 +231,8 @@ def _merge_explicit_equivalents(branches: List[Dict[str, Any]], cert: Dict[str, 
             for e in b.get(field, []) or []:
                 eid = _event_id(e)
                 if eid and eid not in seen:
-                    seen.add(eid); values.append(deepcopy(e))
+                    seen.add(eid)
+                    values.append(deepcopy(e))
         pivot[field] = values
     sigmas = {b["sigma"] for b in group}
     if "FALSIFIED" in sigmas:
@@ -300,10 +298,16 @@ def u_state(state: Dict[str, Any], event: Dict[str, Any]) -> Dict[str, Any]:
             "training_credit_minted": False,
         }
 
-    out = deepcopy(state)
     independent = identity_status == "NOVEL_INDEPENDENT_EVENT"
+    structural_requested = event.get("new_branch_payload") is not None or event.get("equivalence_certificate") is not None
+    if structural_requested and not independent:
+        raise LabelerError("NONINDEPENDENT_EVENT_CANNOT_MUTATE_BRANCH_TOPOLOGY")
+
+    out = deepcopy(state)
     if not independent:
-        out.setdefault("correlated_observations", []).append(_record(event, "CORRELATED_OR_NONINDEPENDENT", independent_credit=False))
+        out.setdefault("correlated_observations", []).append(
+            _record(event, "CORRELATED_OR_NONINDEPENDENT", independent_credit=False)
+        )
     else:
         by_id = {b["branch_id"]: b for b in out["branches"]}
         for bid, relation in relations.items():
@@ -411,12 +415,8 @@ def u_test_order(state: Dict[str, Any], tests: Iterable[Dict[str, Any]]) -> List
             "coordination_cost_class": int(test.get("coordination_cost_class", 0)),
         })
     rows.sort(key=lambda r: (
-        -r["separated_pair_count"],
-        r["worst_partition_size"],
-        r["risk_class"],
-        r["execution_cost_class"],
-        r["coordination_cost_class"],
-        r["test_id"],
+        -r["separated_pair_count"], r["worst_partition_size"], r["risk_class"],
+        r["execution_cost_class"], r["coordination_cost_class"], r["test_id"],
     ))
     for i, row in enumerate(rows, 1):
         row["ordinal_rank"] = i

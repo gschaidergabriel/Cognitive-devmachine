@@ -1,0 +1,128 @@
+{
+  "schema": "CLAY_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER/v59",
+  "date": "2026-08-26",
+  "trigger": "triggerwort2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "status": "CURRENT_RESEARCH_LEDGER_NONCANONICAL_SUCCESSOR_DYNAMIC",
+  "supersedes": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V58_GPT56SOL.json",
+  "inherits_all_nonconflicting_records_from": "T2-LEDGER-V58",
+  "observed_main_before_write": "e287fcc5e73277dd8bc5119c11f2b97b5dde9616",
+  "authority": {
+    "supervisor_epoch": "8.83_DELTA",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "architecture": "HCU",
+    "free_swarm_provider_admission": "OWNER_EMERGENCY_STOP_HARD_OFF",
+    "runtime_quiescence": "ACTIVE_FAIL_POST_STOP_PROVIDER_ATTEMPT_COUNTERS_INCREASING",
+    "provider_routes_admitted": false,
+    "training_execution_authorized": false,
+    "latest_openrouter_total_requests": 4140,
+    "latest_openrouter_total_429": 4005,
+    "delta_vs_supervisor_8_83_requests": 357,
+    "delta_vs_supervisor_8_83_429": 357,
+    "checkpoint_winner": null,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "jspace_model_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  },
+  "revision_reason": "V58 adjudicated two overlapping one-phase NODE_RESULT/model-call lineage gates, but successor source work exposed a temporal-causality defect in that pattern: a controller commitment containing exact model-call/output identities cannot literally be frozen before the call whose output it names. V59 therefore retains the newer two-phase authority pattern: a pre-call launch descriptor freezes only pre-call facts, and a post-call executor observation binds that exact launch descriptor to the already-existing source-bound model-call/output/ABI receipt identities. Earlier one-phase gates remain provenance/donor material only. No provider/model/training execution is performed and no promotion credit is minted.",
+  "source_progress": {
+    "existing_call_identity_source": "tools/trigger2_model_call_repository_bound_gate_v1.py",
+    "retained_two_phase_authority": {
+      "source": "tools/trigger2_node_result_model_call_two_phase_authority_v1.py",
+      "source_commit": "56e8cc09f0c1b8e1fd99ab091154c3f3a6382b17",
+      "tests": "tests/test_trigger2_node_result_model_call_two_phase_authority_v1.py",
+      "tests_commit": "e287fcc5e73277dd8bc5119c11f2b97b5dde9616",
+      "status": "RETAINED_SOURCE_DIRECTION",
+      "mechanism": [
+        "pre-call launch descriptor freezes cohort plan, GRID cell, node, node-admission identity/revision, runtime generation, controller-observed PID, candidate, rendered input identity, and source identity before the model call",
+        "post-call executor observation binds the exact launch descriptor to the existing source-bound model-call identity, model-output identity, ABI-v2 receipt identity, and executor-observed PID",
+        "the raw NODE_RESULT cognitive packet remains authority-field-free and immutable",
+        "the resulting deterministic authority envelope binds raw packet, exact call/output, launch and post-call observation without creating a second model-call identity",
+        "cohort derivation rejects invalid/tampered members and duplicate executor observations across cells",
+        "canonical_truth and effect_authority remain false and all promotion credits remain zero"
+      ],
+      "exact_committed_test_execution_observed": false,
+      "source_test_coverage_observed": [
+        "positive envelope plus ten-member cohort",
+        "same semantic payload from distinct exact calls remains non-interchangeable",
+        "call/cell transplant rejection",
+        "model-output mismatch rejection",
+        "source drift requires distinct commitments",
+        "authority-reference change changes envelope digest while raw packet may remain unchanged",
+        "model/child self-minted authority fields rejected",
+        "one invalid member rejects whole cohort",
+        "same executor observation cannot be reused across two cells"
+      ],
+      "runtime_credit": 0
+    },
+    "superseded_one_phase_sources": [
+      {
+        "source": "tools/trigger2_node_result_model_call_lineage_gate_v1.py",
+        "status": "REMOVED_FROM_CURRENT_MAIN_AFTER_TEMPORAL_CAUSALITY_REVIEW",
+        "reason": "Its controller lineage included post-call call/output identities in a commitment that could otherwise be misread as a pre-call freeze."
+      },
+      {
+        "source": "tools/trigger2_node_result_model_call_authority_envelope_v1.py",
+        "status": "DONOR_ONLY_NOT_PEER_AUTHORITY",
+        "reason": "It remains useful donor provenance but represents an overlapping one-phase envelope path and must not be advanced as a competing authority lane."
+      }
+    ],
+    "coordination": {
+      "superseded_pr": 2036,
+      "superseded_pr_state": "CLOSED_UNMERGED",
+      "reason": "Parallel current-main work had already closed the same blocker more comprehensively; merging a second gate would create duplicate provenance authority."
+    }
+  },
+  "current_p0_observation": {
+    "telemetry_generated_at": "2026-08-25T22:28:09.891741+00:00",
+    "supervisor": "STOPPED/QUARANTINED",
+    "go_swarm": "RUNNING",
+    "embedded_provider_admission_epoch": "8.78",
+    "openrouter_total_requests": 4140,
+    "openrouter_total_429": 4005,
+    "openrouter_total_success": 134,
+    "interpretation": "Positive continuing non-quiescence evidence under HARD_OFF; strongest hypothesis remains at least one stale provider-capable runtime/process tree, but exact process ownership is not yet observed.",
+    "required_falsifier_or_closure": "On the owning live host identify and terminate/quarantine every provider-capable survivor without issuing a provider probe; prove zero survivors plus a bounded no-restart interval with zero provider-counter delta; only then re-enter current FREE non-provider execution authority."
+  },
+  "hypothesis": {
+    "H59_1": "Two-phase controller authority is causally cleaner than one-phase precommitment because only facts available before the call are frozen before execution, while exact call/output identities enter through a separately frozen post-call executor observation.",
+    "counterhypothesis": "A one-phase lineage digest is sufficient if explicitly classified only as a post-call integrity commitment and never as a pre-call launch commitment.",
+    "assessment": "The counterhypothesis may be valid for narrow post-call integrity, but the two-phase form preserves temporal semantics explicitly and is safer for future runtime admission, replay and training-trace provenance."
+  },
+  "runtime_and_training_decision": {
+    "providers": "DO_NOT_INVOKE",
+    "together": "FORBIDDEN",
+    "model_runtime_executed_this_cycle": false,
+    "training_executed_this_cycle": false,
+    "positive_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "reason": "Supervisor 8.83 P0 runtime quiescence remains actively failed and current committed telemetry strengthens that failure. Source-only causal-lineage progress cannot mint execution, selection or training authority."
+  },
+  "credits": {
+    "research_delta": 1,
+    "two_phase_model_call_lineage_source_credit": 1,
+    "coordination_duplicate_closure_credit": 1,
+    "model_call_runtime_credit": 0,
+    "checkpoint_selection_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "jspace_model_credit": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  },
+  "next_priority_order": [
+    "P0 owning live host: execute only the already-pinned quiescence enforcer and produce source/time/process-bound zero-survivor plus bounded zero-counter-delta evidence without provider probing",
+    "P0 after quiescence PASS: re-enter newest explicit FREE non-provider execution authority",
+    "P1 source-only: integrate the retained two-phase launch->executor-observation->authority-envelope pattern with the current fused GRID10 membership/cohort source path without changing raw model cognition",
+    "P1 source-only: collapse/archive the remaining donor-only one-phase executable path after confirming no unique negative coverage is lost",
+    "P1 only after separately admitted execution: run the frozen checkpoint-state/model-call ABI on the unopened checkpoint candidates and preserve blinded selection governance",
+    "P3 keep Forge-to-Distillery positive admission closed until an exact accepted witness yields accepted_dataset_tokens > 0 and exact replay +0"
+  ],
+  "next_exact_action": "P0 remains owning-live-host FreeSwarm quiescence and cannot be fabricated through GitHub. In parallel source-only work, integrate the retained two-phase authority pattern into the existing fused GRID10 membership/cohort path and retire the remaining donor-only one-phase envelope after coverage equivalence is proved."
+}

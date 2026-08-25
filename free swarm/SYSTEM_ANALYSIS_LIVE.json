@@ -1,6 +1,6 @@
 {
   "schema": "CLAY_FREE_SWARM_SYSTEM_ANALYSIS/v3",
-  "generated_at": "2026-08-25T11:07:55.963546+00:00",
+  "generated_at": "2026-08-25T11:23:02.330544+00:00",
   "runtime": {
     "supervisor": "STOPPED/QUARANTINED",
     "go_swarm": "RUNNING",
@@ -65,7 +65,7 @@
   },
   "distillery": {
     "schema": "CLAY_RESEARCH_DISTILLERY_STATUS/v1",
-    "generated_at": "2026-08-25T11:07:53.451420+00:00",
+    "generated_at": "2026-08-25T11:22:58.796291+00:00",
     "collected_source_tokens": 11621,
     "accepted_dataset_tokens": 0,
     "dataset_yield": 0.0,
@@ -86,7 +86,7 @@
     "model_output_tokens": 1455,
     "shared_provider_budget": {
       "schema": "CLAY_SHARED_PROVIDER_BUDGET/v1",
-      "generated_at": "2026-08-25T11:07:53.452133+00:00",
+      "generated_at": "2026-08-25T11:22:58.797040+00:00",
       "providers": {
         "arxiv": {
           "max_inflight": 1,
@@ -224,22 +224,22 @@
     },
     "db_bytes": 864256,
     "top_questions": [
-      "How can the EffectGate be extended to enforce provider call quarantine without breaking existing free provider admission logic?",
-      "Does NVIDIA NIM/Developer Program API expose per-credential free-tier entitlement and model-specific quota in a machine-verifiable way at call time?",
-      "What minimal causal identity bindings guarantee that provider traffic respects the FREE_ONLY boundary?",
-      "Wie kann der Cache-Fingerprint ohne Leistungseinbußen und ohne Preisgabe von Cache-Inhalten in die Entscheidungsidentität integriert werden, ohne die Hyperposition-Stabilität zu gefährden?",
-      "Gibt es offene Quellen- oder Forschungsprojekte, die ähnliche Optimierungsansätze für VM-Memory-Management verfolgen?",
-      "Welche Auswirkungen können die vorgeschlagenen Änderungen auf die Sicherheit von EntityOS/HCU haben?",
-      "How can the system prove zero secret lookups and zero network attempts for missing/malformed/unknown/paid/subscription/authority mismatch and unlisted providers?",
-      "What are the implications of the control breach on the system's security and reliability?",
-      "Does causal boundary injection generalize from synthetic DAG workloads to open-ended HCU computation traces?",
-      "Does NVIDIA NGC API expose per-credential quota_scope (not just org-level) for NIM free-tier models?"
+      "What is the minimal per-credential free-tier verification API call for NVIDIA NIM that can be executed at pre-call binding without consuming free quota?",
+      "Wie wird die kryptografische Bindung mit bestehenden Hyperposition-Protokollen integriert?",
+      "Does GRID10 logical cell specialization emerge spontaneously under causal routing pressure, or must it be seeded?",
+      "What are the dependencies and configuration requirements for the local research model?",
+      "How can we automate the process of checking and modifying dependencies and configuration?",
+      "Does explicit causal graph construction in J-Space produce measurable causal trace coherence improvements that correlate with ground-truth causal accuracy, or only self-reported confidence?",
+      "Kann ein typed‑Free‑Admission‑Schema für alle freien Provider ohne Änderungen an der HCU‑Routenlogik durchgesetzt werden?",
+      "What is the actual NVIDIA API endpoint and response schema for per-credential model access enumeration, and does it distinguish free-tier vs paid-tier access per model?",
+      "Beeinflusst das Sandbox‑Rate‑Limiting die Durchführbarkeit einer free‑only Admission für OpenRouter?",
+      "Gibt es eine verlässliche Methode, zu beweisen, dass die OpenRouter‑Free‑Tier‑Kosten unter den aktuellen Provider‑Richtlinien nie entstehen?"
     ],
     "candidate_states": {}
   },
   "evidence_forge": {
     "schema": "CLAY_FREE_EVIDENCE_FORGE_STATUS/v1",
-    "generated_at": "2026-08-25T11:07:54.191709+00:00",
+    "generated_at": "2026-08-25T11:23:00.303700+00:00",
     "candidate_states": {
       "ACCEPTED": 1,
       "NEEDS_IMPLEMENTATION": 65,
@@ -263,7 +263,7 @@
     "peak_parallel_tasks": 0,
     "shared_provider_budget": {
       "schema": "CLAY_SHARED_PROVIDER_BUDGET/v1",
-      "generated_at": "2026-08-25T11:07:54.192655+00:00",
+      "generated_at": "2026-08-25T11:23:00.304530+00:00",
       "providers": {
         "arxiv": {
           "max_inflight": 1,
@@ -408,6 +408,6 @@
     "measured_total_sonnet5_equivalent_usd": 148.830648,
     "verified_historical_savings_usd": null,
     "nominal_avoided_if_zero_cost_usd": 148.830648,
-    "repo_output_only_proxy_usd": 126.39428
+    "repo_output_only_proxy_usd": 126.39506
   }
 }

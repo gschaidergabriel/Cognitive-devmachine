@@ -1,16 +1,17 @@
 #!/usr/bin/env python3
-"""Process-persistent S1 CAS/lease adapter for the EntityOS/HCU Xeno primitive.
+"""Process-persistent S1 CAS/lease adapter for the current EntityOS/HCU Xeno primitive.
 
-L1/L2 development scope only: this is not a physical-grid datastore and does not earn
-physical GRID10 or whole-HCU runtime credit. The adapter persists noncanonical S1 cognitive
-workspace state, a deterministic admitted coordinator lease record, and coordinator-ingested
-``NODE_RESULT/v1`` metadata in SQLite so multiple local processes can share one epoch/digest.
+L1/L2 development scope only: this is not a physical-grid datastore and earns no
+physical GRID10, whole-HCU, J-Space-model, or training credit. The adapter persists
+noncanonical S1 cognitive workspace state, deterministically admitted coordinator lease
+records, and coordinator-ingested ``NODE_RESULT/v1`` metadata in SQLite so multiple local
+processes can share one epoch/digest.
 
-The exact S1 validation/digest functions from ``xeno_shared_state_boot_v1`` are reused;
-there is no second S1 canonicalizer. Ordinary reads perform no DDL and ordinary nodes have
-no write API. Coordinator writes require an exact lease record already admitted in this
-store from the shared state's admitted node roster. S0 truth/effect/security authority is
-outside this module.
+It reuses the exact RFC8785/JCS-backed S1 validation/digest path and current coordinator
+capability-authority binding from ``xeno_shared_state_boot_v1``. Ordinary reads perform no
+DDL and ordinary nodes have no write API. Coordinator writes require an exact persisted
+lease admitted from the current shared-state node roster plus the externally admitted
+capability-policy binding. S0 truth/effect/security authority remains outside this module.
 """
 from __future__ import annotations
 
@@ -21,6 +22,7 @@ from typing import Any, Mapping, Sequence
 
 from xeno_shared_state_boot_v1 import (
     COORDINATOR_LEASE_SCHEMA,
+    COORDINATOR_POLICY_VERSION,
     NODE_RESULT_SCHEMA,
     CoordinatorLease,
     NodeDescriptor,
@@ -29,10 +31,14 @@ from xeno_shared_state_boot_v1 import (
     S1StateFabric,
     SharedStateError,
     SharedStateSnapshot,
-    FORBIDDEN_S1_ROOTS,
     _canonical_bytes,
     _capabilities,
+    _find_forbidden_authority_field,
+    _hex_digest,
+    _normalize_authority_key,
     _sha256,
+    FORBIDDEN_S1_KEYS,
+    capability_authority_binding,
 )
 
 STORE_SCHEMA = "ENTITYOS_HCU_S1_SQLITE_CAS/v1"
@@ -79,7 +85,9 @@ def _install_schema(db: sqlite3.Connection) -> None:
           node_id TEXT NOT NULL,
           scope_json TEXT NOT NULL,
           state_epoch INTEGER NOT NULL,
-          state_digest TEXT NOT NULL
+          state_digest TEXT NOT NULL,
+          policy_version TEXT NOT NULL,
+          authority_binding_sha256 TEXT NOT NULL
         )"""
     )
     db.execute(
@@ -99,7 +107,7 @@ def _install_schema(db: sqlite3.Connection) -> None:
 
 
 def _require_schema_read_only(db: sqlite3.Connection) -> None:
-    """Verify schema by metadata read only; never let an ordinary read perform DDL."""
+    """Verify schema by metadata read only; an ordinary read must never perform DDL."""
     _require_connection(db)
     placeholders = ",".join("?" for _ in _REQUIRED_TABLES)
     rows = db.execute(
@@ -139,8 +147,7 @@ def _load_snapshot_locked(db: sqlite3.Connection) -> SharedStateSnapshot:
         raise S1StoreError("S1_STATE_SCHEMA_MISMATCH")
     if isinstance(epoch, bool) or not isinstance(epoch, int) or epoch < 0:
         raise S1StoreError("S1_EPOCH_INVALID")
-    if not isinstance(digest, str) or not digest:
-        raise S1StoreError("S1_DIGEST_INVALID")
+    digest = _hex_digest(digest, "s1_digest")
     state = _decode_state(raw_state)
     expected = S1StateFabric._state_digest(epoch, state)
     if expected != digest:
@@ -148,7 +155,11 @@ def _load_snapshot_locked(db: sqlite3.Connection) -> SharedStateSnapshot:
     return SharedStateSnapshot(S1_SCHEMA, epoch, digest, state)
 
 
-def open_or_initialize(db: sqlite3.Connection, *, genesis_state: Mapping[str, Any] | None = None) -> SharedStateSnapshot:
+def open_or_initialize(
+    db: sqlite3.Connection,
+    *,
+    genesis_state: Mapping[str, Any] | None = None,
+) -> SharedStateSnapshot:
     """Open an existing S1 store or atomically create epoch 0 from explicit genesis."""
     _require_idle(db)
     try:
@@ -206,6 +217,22 @@ def _lease_identity(lease: CoordinatorLease) -> str:
         "scope": list(lease.scope),
         "state_epoch": lease.state_epoch,
         "state_digest": lease.state_digest,
+        "policy_version": lease.policy_version,
+        "authority_binding_sha256": lease.authority_binding_sha256,
+    })
+
+
+def _result_identity(result: NodeResult) -> str:
+    return _sha256({
+        "schema": NODE_RESULT_SCHEMA,
+        "node_id": result.node_id,
+        "task_id": result.task_id,
+        "state_epoch": result.state_epoch,
+        "state_digest": result.state_digest,
+        "payload_ref": result.payload_ref,
+        "payload_sha256": result.payload_sha256,
+        "canonical_truth": False,
+        "effect_authority": False,
     })
 
 
@@ -214,15 +241,34 @@ def issue_coordinator_lease(
     *,
     node_id: str,
     scope: Sequence[str],
+    admitted_capabilities_by_node: Mapping[str, Sequence[str]],
+    authority_binding_sha256: str,
+    policy_version: str = COORDINATOR_POLICY_VERSION,
 ) -> CoordinatorLease:
-    """Persist one deterministic lease admitted from the current shared-state node roster."""
+    """Persist a deterministic lease admitted from S1 roster + external capability authority."""
     _require_idle(db)
     try:
         db.execute("BEGIN IMMEDIATE")
         _install_schema(db)
         current = _load_snapshot_locked(db)
+        policy_version = str(policy_version).strip()
+        if not policy_version:
+            raise S1StoreError("policy_version:NONEMPTY_STRING_REQUIRED")
+        expected_binding = capability_authority_binding(
+            admitted_capabilities_by_node,
+            policy_version=policy_version,
+        )
+        observed_binding = _hex_digest(
+            authority_binding_sha256,
+            "authority_binding_sha256",
+        )
+        if observed_binding != expected_binding:
+            raise S1StoreError("COORDINATOR_AUTHORITY_BINDING_MISMATCH")
         nodes = _node_roster(current)
-        winner = S1StateFabric.select_coordinator(nodes)
+        winner = S1StateFabric.select_coordinator(
+            nodes,
+            admitted_capabilities_by_node=admitted_capabilities_by_node,
+        )
         if not isinstance(node_id, str) or not node_id.strip():
             raise S1StoreError("node_id:NONEMPTY_STRING_REQUIRED")
         node_id = node_id.strip()
@@ -231,23 +277,27 @@ def issue_coordinator_lease(
         normalized_scope = _capabilities(scope)
         if not normalized_scope:
             raise S1StoreError("scope:NONEMPTY_REQUIRED")
-        if any(root in FORBIDDEN_S1_ROOTS for root in normalized_scope):
+        if any(_normalize_authority_key(root) in FORBIDDEN_S1_KEYS for root in normalized_scope):
             raise S1StoreError("LEASE_SCOPE_CANNOT_GRANT_S0_AUTHORITY")
-        lease = CoordinatorLease(
+        provisional = CoordinatorLease(
             COORDINATOR_LEASE_SCHEMA,
             "",
             node_id,
             normalized_scope,
             current.epoch,
             current.digest,
+            policy_version,
+            observed_binding,
         )
         lease = CoordinatorLease(
-            lease.schema,
-            _lease_identity(lease),
-            lease.node_id,
-            lease.scope,
-            lease.state_epoch,
-            lease.state_digest,
+            provisional.schema,
+            _lease_identity(provisional),
+            provisional.node_id,
+            provisional.scope,
+            provisional.state_epoch,
+            provisional.state_digest,
+            provisional.policy_version,
+            provisional.authority_binding_sha256,
         )
         scope_json = _canonical_bytes(list(lease.scope)).decode("utf-8")
         record = (
@@ -257,9 +307,12 @@ def issue_coordinator_lease(
             scope_json,
             lease.state_epoch,
             lease.state_digest,
+            lease.policy_version,
+            lease.authority_binding_sha256,
         )
         prior = db.execute(
-            """SELECT store_schema,lease_schema,node_id,scope_json,state_epoch,state_digest
+            """SELECT store_schema,lease_schema,node_id,scope_json,state_epoch,state_digest,
+                      policy_version,authority_binding_sha256
                  FROM hcu_s1_coordinator_leases WHERE lease_id=?""",
             (lease.lease_id,),
         ).fetchone()
@@ -268,7 +321,7 @@ def issue_coordinator_lease(
                 raise S1StoreError("COORDINATOR_LEASE_ID_COLLISION")
         else:
             db.execute(
-                "INSERT INTO hcu_s1_coordinator_leases VALUES(?,?,?,?,?,?,?)",
+                "INSERT INTO hcu_s1_coordinator_leases VALUES(?,?,?,?,?,?,?,?,?)",
                 (lease.lease_id, *record),
             )
         db.commit()
@@ -283,6 +336,8 @@ def _require_current_lease(
     current: SharedStateSnapshot,
     lease: CoordinatorLease,
     node_id: str,
+    *,
+    expected_authority_binding_sha256: str,
 ) -> None:
     if not isinstance(lease, CoordinatorLease):
         raise S1StoreError("COORDINATOR_LEASE_REQUIRED")
@@ -291,15 +346,22 @@ def _require_current_lease(
     if not isinstance(node_id, str) or not node_id.strip():
         raise S1StoreError("node_id:NONEMPTY_STRING_REQUIRED")
     node_id = node_id.strip()
+    expected_binding = _hex_digest(
+        expected_authority_binding_sha256,
+        "expected_authority_binding_sha256",
+    )
     if lease.node_id != node_id:
         raise S1StoreError("COORDINATOR_LEASE_NODE_MISMATCH")
+    if lease.authority_binding_sha256 != expected_binding:
+        raise S1StoreError("COORDINATOR_LEASE_AUTHORITY_BINDING_MISMATCH")
     if lease.lease_id != _lease_identity(lease):
         raise S1StoreError("COORDINATOR_LEASE_IDENTITY_MISMATCH")
     if lease.state_epoch != current.epoch or lease.state_digest != current.digest:
         raise S1StoreError("STALE_COORDINATOR_LEASE")
     scope_json = _canonical_bytes(list(lease.scope)).decode("utf-8")
     row = db.execute(
-        """SELECT store_schema,lease_schema,node_id,scope_json,state_epoch,state_digest
+        """SELECT store_schema,lease_schema,node_id,scope_json,state_epoch,state_digest,
+                  policy_version,authority_binding_sha256
              FROM hcu_s1_coordinator_leases WHERE lease_id=?""",
         (lease.lease_id,),
     ).fetchone()
@@ -310,6 +372,8 @@ def _require_current_lease(
         scope_json,
         lease.state_epoch,
         lease.state_digest,
+        lease.policy_version,
+        lease.authority_binding_sha256,
     )
     if row is None or tuple(row) != expected:
         raise S1StoreError("COORDINATOR_LEASE_NOT_ADMITTED")
@@ -326,6 +390,7 @@ def publish_delta(
     *,
     node_id: str,
     delta: Mapping[str, Any],
+    expected_authority_binding_sha256: str,
 ) -> SharedStateSnapshot:
     """Atomically publish one admitted-coordinator S1 delta using epoch+digest CAS."""
     _require_idle(db)
@@ -333,12 +398,19 @@ def publish_delta(
         db.execute("BEGIN IMMEDIATE")
         _install_schema(db)
         current = _load_snapshot_locked(db)
-        _require_current_lease(db, current, lease, node_id)
+        _require_current_lease(
+            db,
+            current,
+            lease,
+            node_id,
+            expected_authority_binding_sha256=expected_authority_binding_sha256,
+        )
         if not isinstance(delta, Mapping) or not delta:
             raise S1StoreError("delta:NONEMPTY_MAPPING_REQUIRED")
+        forbidden = _find_forbidden_authority_field(delta)
+        if forbidden:
+            raise S1StoreError(f"S1_DELTA_ATTEMPTS_S0_AUTHORITY:{forbidden}")
         roots = set(delta)
-        if roots & FORBIDDEN_S1_ROOTS:
-            raise S1StoreError("S1_DELTA_ATTEMPTS_S0_AUTHORITY")
         unauthorized = roots - set(lease.scope)
         if unauthorized:
             raise S1StoreError(f"S1_DELTA_OUT_OF_SCOPE:{','.join(sorted(unauthorized))}")
@@ -379,6 +451,7 @@ def ingest_node_result(
     *,
     coordinator_node_id: str,
     result: NodeResult,
+    expected_authority_binding_sha256: str,
 ) -> dict[str, Any]:
     """Coordinator-only durable ingestion of an ephemeral ordinary-node result packet."""
     _require_idle(db)
@@ -386,19 +459,31 @@ def ingest_node_result(
         db.execute("BEGIN IMMEDIATE")
         _install_schema(db)
         current = _load_snapshot_locked(db)
-        _require_current_lease(db, current, lease, coordinator_node_id)
+        _require_current_lease(
+            db,
+            current,
+            lease,
+            coordinator_node_id,
+            expected_authority_binding_sha256=expected_authority_binding_sha256,
+        )
         _require_lease_scope(lease, "results")
         if not isinstance(result, NodeResult) or result.schema != NODE_RESULT_SCHEMA:
             raise S1StoreError("NODE_RESULT_SCHEMA_UNSUPPORTED")
+        if result.result_id != _result_identity(result):
+            raise S1StoreError("NODE_RESULT_IDENTITY_MISMATCH")
+        _hex_digest(result.payload_sha256, "payload_sha256")
         if result.state_epoch != current.epoch or result.state_digest != current.digest:
             raise S1StoreError("STALE_NODE_RESULT")
-        task_ids = {
-            str(task.get("task_id"))
+        matching = [
+            task
             for task in current.state.get("tasks", [])
-            if isinstance(task, Mapping)
-        }
-        if result.task_id not in task_ids:
+            if isinstance(task, Mapping) and task.get("task_id") == result.task_id
+        ]
+        if len(matching) != 1:
             raise S1StoreError("NODE_RESULT_TASK_UNKNOWN")
+        task = matching[0]
+        if task.get("status") != "IN_FLIGHT" or task.get("claimed_by") != result.node_id:
+            raise S1StoreError("NODE_RESULT_REQUIRES_COORDINATOR_ADMITTED_CLAIM")
 
         record = (
             RESULT_STORE_SCHEMA,
@@ -438,11 +523,18 @@ def list_ingested_results(
     lease: CoordinatorLease,
     *,
     coordinator_node_id: str,
+    expected_authority_binding_sha256: str,
 ) -> list[dict[str, Any]]:
     """Coordinator-only raw-result read for later compression/integration."""
     _require_schema_read_only(db)
     current = _load_snapshot_locked(db)
-    _require_current_lease(db, current, lease, coordinator_node_id)
+    _require_current_lease(
+        db,
+        current,
+        lease,
+        coordinator_node_id,
+        expected_authority_binding_sha256=expected_authority_binding_sha256,
+    )
     _require_lease_scope(lease, "results")
     rows = db.execute(
         """SELECT result_id,result_schema,node_id,task_id,state_epoch,state_digest,

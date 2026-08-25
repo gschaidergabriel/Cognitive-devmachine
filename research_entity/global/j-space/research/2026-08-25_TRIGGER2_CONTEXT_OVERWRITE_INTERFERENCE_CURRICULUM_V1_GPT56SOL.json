@@ -1,0 +1,69 @@
+{
+  "schema": "CLAY_TRIGGER2_CONTEXT_OVERWRITE_INTERFERENCE_CURRICULUM/v1",
+  "date": "2026-08-25",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority": {
+    "supervisor_epoch": "8.78",
+    "mode": "FREE_ONLY",
+    "canonical_main_observed_before_local_generation": "4e9b58bdd1a017e4f25e61554016463a797c586d",
+    "training_executed": false,
+    "paid_provider_used": false,
+    "unusual_experiment": "NOT_USED_SOURCE_CURRICULUM_ONLY"
+  },
+  "measured_basis": {
+    "model_id": "Goekdeniz-Guelmez/Josiefied-Qwen3.5-0.8B-gabliterated-v1",
+    "model_revision": "591852bda6e1979f59e4b0f5ee2919697b12e936",
+    "claude_source_package_sha256": "a2babae93dfe39e4e452a06bd8b848337f29766e38c422f05fb395126229b05c",
+    "context_transfer_baseline_L19": 0.5254629629629629,
+    "dynamic_symbol_hit_baseline": 0.3611111111111111,
+    "chance_three_way": 0.3333333333333333,
+    "protected_observed_functions": [
+      "semantic readout already strong at measured scope",
+      "symbol writeout already writable at measured scope",
+      "centered/whitened carrier binding already sufficient through k<=16 at measured scope"
+    ]
+  },
+  "research_delta": {
+    "problem": "Existing Trigger-2 rows force episode-local mapping, but a model can still overfit to recency, display position, or one-map parsing rather than learn overwrite-sensitive binding when a conflicting prior mapping exists.",
+    "hypothesis": "Adding a conflicting stale/distractor codebook whose target is guaranteed to disagree with the active codebook on every row will increase pressure toward current-episode binding/routing instead of static class-to-symbol or stale-map reuse.",
+    "strongest_counterhypothesis": "The model may solve the new tranche through lexical cues such as ACTIVE/CURRENT/NOW or simple recency rather than a reusable binding mechanism.",
+    "next_falsifier": "Generate cue-neutralized variants where the authoritative map is selected by a nonce episode pointer rather than words such as active/current, counterbalance pointer position, and require transfer to unseen pointer syntax before treating behavioral gains as evidence for reusable binding."
+  },
+  "candidate_bundle": {
+    "local_dataset_path": "/mnt/data/triggerwort2_context_overwrite_interference_v1_2026-08-25.jsonl",
+    "local_audit_path": "/mnt/data/triggerwort2_context_overwrite_interference_v1_audit_2026-08-25.json",
+    "dataset_sha256": "334e4a884985a2a04a98320b430f36ca454e7c90a18e73a9c767907dd6f013c2",
+    "rows": 54,
+    "split_counts": {"TRAIN": 18, "VALIDATION": 18, "HOLDOUT": 18},
+    "all_splits_full_s3": true,
+    "class_symbol_exact_balance": true,
+    "stale_target_conflicts_with_current_target_all_rows": true,
+    "split_symbol_placeholder_pools_pairwise_disjoint": true,
+    "status": "NONCANONICAL_SOURCE_CANDIDATE_NOT_TRAIN_READY"
+  },
+  "swarm_review": {
+    "generator": "PASS: generated 54 deterministic stale-vs-active mapping conflict rows.",
+    "permutation_reviewer": "PASS: all six S3 mappings independently represented in TRAIN, VALIDATION and HOLDOUT.",
+    "counterbalance_reviewer": "PASS: every semantic class maps to every split-local placeholder symbol exactly twice.",
+    "shortcut_adversary": "PASS_SOURCE_DESIGN: blindly reusing the stale mapping is wrong on every row.",
+    "position_bias_reviewer": "CONDITIONAL_PASS: prompt families vary order/placement, but lexical authority cues remain and require nonce-pointer falsification.",
+    "leak_reviewer": "CONDITIONAL_PASS: semantic class metadata is not placed in scenario/query text; class labels remain inside explicit mapping spans only.",
+    "abi_reviewer": "BLOCKED_FOR_ADMISSION: exact verified 46-atom text/token-id list is not exposed in current accessible canonical/file evidence, so placeholders are retained rather than invented.",
+    "causal_reviewer": "BOUNDARY_PASS: this is behavioral source curriculum only and cannot mint model-internal J-Space causality."
+  },
+  "promotion_boundary": {
+    "final_abi_atoms_injected": false,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "qwen35_jspace_runtime_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "canonical_semantics_promotion": false
+  },
+  "next_exact_action": "Resolve the exact 46 accepted one-token ABI atoms with token ids under the measured tokenizer; materialize split-disjoint atom pools into the retained binder lane; then add nonce-pointer stale-vs-active variants and run S3/counterbalance/leak/split/token-length validators before any Forge/Distillery admission."
+}

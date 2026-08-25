@@ -21,7 +21,7 @@ class Response:
         self,
         status=200,
         body=(
-            b'{"object":"chat.completion","model":"x",'
+            b'{"object":"chat.completion","id":"chatcmpl-test","model":"x",'
             b'"choices":[{"index":0,"finish_reason":"stop",'
             b'"message":{"role":"assistant","content":"ok"}}]}'
         ),

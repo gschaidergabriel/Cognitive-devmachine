@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v4",
+  "command_id": "fr1-v2-model-smoke36-20260825",
+  "op": "exec",
+  "cwd": "/workspace/qwen06-fr1-v2repo",
+  "timeout_seconds": 1800,
+  "command": "set -euo pipefail; test \"$(git rev-parse HEAD)\" = 3a146cfc7a97f429e2b343d711c11bc372355e12; unset OPENAI_API_KEY OPENAI_API_KEYS ANTHROPIC_API_KEY ANTHROPIC_API_KEYS GROQ_API_KEY GROQ_API_KEYS MISTRAL_API_KEY MISTRAL_API_KEYS NVIDIA_API_KEY NVIDIA_API_KEYS NVIDIA_NIM_API_KEY NGC_API_KEY OPENROUTER_API_KEY OPENROUTER_API_KEYS TOGETHER_API_KEY TOGETHER_API_KEYS HF_TOKEN HUGGING_FACE_HUB_TOKEN HUGGINGFACE_HUB_TOKEN || true; export HF_HUB_OFFLINE=1 HF_HUB_DISABLE_IMPLICIT_TOKEN=1 HF_HUB_DISABLE_TELEMETRY=1 TOKENIZERS_PARALLELISM=false OMP_NUM_THREADS=2 MKL_NUM_THREADS=2 PYTHONPATH=/workspace/qwen06-fr1-v2repo; OUT=/workspace/qwen06-fr1-current/blind-v2-smoke36; rm -rf \"$OUT\"; /cache/clay-qwen06/venv/bin/python tools/forschungsrun1_dual_qwen06_jspace_blind_cumulative.py --output-dir \"$OUT\" --cache-dir /cache/clay-qwen06/hf --epochs 2 --turns-per-case 2 --skip-native"
+}

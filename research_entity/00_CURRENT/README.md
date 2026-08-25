@@ -48,13 +48,21 @@ All workers editing one global list causes races and accidental state loss. Appe
 
 ## Automatic refresh
 
-`.github/workflows/clay-current-index.yml` refreshes the generated layer after normal pushes to `main` and commits only the generated cache delta. It ignores its own generated-cache commits to avoid recursion.
+**Primary path:** `tools/clay_current_emit_v1.py` writes the immutable result receipt **and immediately runs** `tools/clay_current_refresh_v1.py` in the worker checkout. The generated cache delta must be committed with the material result. Because every substantive worker is required by `AGENTS.md` and the all-workers directive to use this path, current-state maintenance is distributed across the researchers instead of depending on one central editor.
 
-Local workers can refresh immediately with:
+**Redundant backup:** `.github/workflows/clay-current-index.yml` is configured to rebuild the generated layer after normal pushes to `main` and commits only the cache delta. Its first observed GitHub-hosted run (`32894361197`) failed before useful job-step evidence was available, while other repository workflows were also failing in that period. Therefore the workflow is **not yet credited as a proven refresh executor** and must not be the sole maintenance mechanism. Once a green exact run is observed, it provides an additional repair/reconciliation path.
+
+Workers can also refresh explicitly with:
 
 ```bash
 python3 tools/clay_current_refresh_v1.py
 ```
+
+## Branch / work awareness
+
+The refresh tool scans local and remote Git refs sorted by recent commit time and folds recent branches into `ACTIVE.tsv`. A material worker should additionally bind its own active `branch`, `pr`, `issue` or execution `request` in its FAST_RESULT receipt, which is more precise than branch-name discovery alone.
+
+Branch presence is **awareness only**: it does not mean the branch result is admitted current state. A branch result becomes the selected global direction result only after its receipt reaches `main` (or another newer explicit authority admits it).
 
 ## Layer model
 

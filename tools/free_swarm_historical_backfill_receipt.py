@@ -1,17 +1,17 @@
 #!/usr/bin/env python3
-"""Exact-source receipt for the FREE Swarm historical Forge backfill.
+"""Fail-closed exact-source receipt for the FREE Swarm historical Forge backfill.
 
-The backfill itself lives in ``free_swarm_historical_backfill.py`` and remains the
-single historical replay/admission implementation.  This tool does not create a
-second Forge authority.  It runs that existing incremental scanner to a bounded
-quiescent point, then records whether the *currently visible* historical artifact
-set is fully scanned and whether every extracted chunk is SATURATED.
+The historical replay implementation remains ``free_swarm_historical_backfill.py``.
+This tool creates no second Forge authority.  It runs that existing incremental
+scanner to a bounded quiescent point and then measures whether every workers.jsonl
+visible at the beginning of the run has been scanned through its exact byte cutoff
+and whether the shared Forge DB has no unresolved historical extraction chunks.
 
-A PASS is deliberately strict.  Source must be clean, the artifact set must stay
-stable while the receipt is measured, every visible workers.jsonl must be caught
-up to its current byte size, at least one successful historical output must exist,
-and no PENDING_EXTRACTION or MAX_PASSES_REACHED chunks may remain.  Anything else
-is a bounded BLOCKED result, not runtime/model/training credit.
+The receipt is deliberately scoped.  A PASS proves only historical backfill
+scan/extraction saturation for the bound source/authority/artifact-cutoff/Forge-DB
+state.  It grants zero whole-EntityOS, HCU, J-Space model, provider or training
+credit.  Appends/new files after the cutoff are reported but do not rewrite the
+identity of the bounded historical set.
 """
 from __future__ import annotations
 
@@ -28,6 +28,7 @@ from typing import Any
 import free_swarm_historical_backfill as backfill
 
 SCHEMA = "FREE_SWARM_HISTORICAL_BACKFILL_RECEIPT/v1"
+CUTOFF_SCHEMA = "FREE_SWARM_HISTORICAL_SCAN_CUTOFF/v1"
 SCOPE = "FREE_SWARM_HISTORICAL_BACKFILL_SATURATION_ONLY"
 
 
@@ -51,6 +52,14 @@ def sha256_file(path: Path) -> str:
     return h.hexdigest()
 
 
+def read_json_bytes(path: Path) -> tuple[dict[str, Any], bytes]:
+    raw = path.read_bytes()
+    value = json.loads(raw.decode("utf-8"))
+    if not isinstance(value, dict):
+        raise RuntimeError(f"JSON_OBJECT_REQUIRED:{path}")
+    return value, raw
+
+
 def git_text(repo: Path, *args: str) -> str:
     proc = subprocess.run(
         ["git", "-C", str(repo), *args],
@@ -63,18 +72,48 @@ def git_text(repo: Path, *args: str) -> str:
     return proc.stdout.strip()
 
 
+def authority_identity(repo: Path) -> dict[str, Any]:
+    inbox_path = repo / "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json"
+    inbox, inbox_raw = read_json_bytes(inbox_path)
+    epoch = str(inbox.get("schema_version") or "").strip()
+    steering_rel = inbox.get("steering")
+    if not epoch or not isinstance(steering_rel, str) or not steering_rel.strip():
+        raise RuntimeError("SUPERVISOR_INBOX_AUTHORITY_REQUIRED")
+    steering_path = repo / steering_rel
+    steering, steering_raw = read_json_bytes(steering_path)
+    if str(steering.get("schema_version") or "").strip() != epoch:
+        raise RuntimeError("SUPERVISOR_EPOCH_MISMATCH")
+    if steering.get("program") != "ENTITYOS_HCU":
+        raise RuntimeError("SUPERVISOR_PROGRAM_MISMATCH")
+    if steering.get("product") != "EntityOS":
+        raise RuntimeError("SUPERVISOR_PRODUCT_MISMATCH")
+    if steering.get("integrated_cognition_compute_architecture") != "HCU":
+        raise RuntimeError("SUPERVISOR_ARCHITECTURE_MISMATCH")
+    mode = str(steering.get("mode") or "")
+    if mode and mode != "FREE_ONLY":
+        raise RuntimeError(f"SUPERVISOR_MODE_NOT_FREE_ONLY:{mode}")
+    return {
+        "epoch": epoch,
+        "inbox_path": inbox_path.relative_to(repo).as_posix(),
+        "inbox_sha256": sha256_bytes(inbox_raw),
+        "steering_path": steering_rel,
+        "steering_sha256": sha256_bytes(steering_raw),
+        "mode": mode or "FREE_ONLY",
+    }
+
+
 def source_identity(repo: Path) -> dict[str, Any]:
     head = git_text(repo, "rev-parse", "HEAD")
     tree = git_text(repo, "rev-parse", "HEAD^{tree}")
     status = git_text(repo, "status", "--porcelain", "--untracked-files=no")
-    source_files = [
+    files = [
         repo / "tools/free_swarm_historical_backfill.py",
         Path(__file__).resolve(),
         repo / "tools/run_free_evidence_forge_backfill.py",
         repo / "tools/run_free_evidence_forge_safe.py",
     ]
     hashes: dict[str, str | None] = {}
-    for path in source_files:
+    for path in files:
         try:
             rel = path.resolve().relative_to(repo.resolve()).as_posix()
         except ValueError:
@@ -86,6 +125,7 @@ def source_identity(repo: Path) -> dict[str, Any]:
         "dirty": bool(status),
         "tracked_status": status or None,
         "source_file_sha256": hashes,
+        "authority": authority_identity(repo),
     }
 
 
@@ -132,10 +172,12 @@ def db_snapshot(con: sqlite3.Connection) -> dict[str, Any]:
             "GROUP BY extraction_mode ORDER BY extraction_mode"
         )
     }
+    chunks = scalar(con, "SELECT COUNT(*) FROM historical_chunks")
+    saturated = int(chunk_states.get("SATURATED", 0))
     return {
         "schema_ready": True,
         "historical_outputs": scalar(con, "SELECT COUNT(*) FROM historical_outputs"),
-        "historical_chunks": scalar(con, "SELECT COUNT(*) FROM historical_chunks"),
+        "historical_chunks": chunks,
         "chunk_states": chunk_states,
         "candidate_source_links": scalar(con, "SELECT COUNT(*) FROM candidate_sources"),
         "distinct_concepts": scalar(
@@ -155,11 +197,40 @@ def db_snapshot(con: sqlite3.Connection) -> dict[str, Any]:
         ),
         "remaining_pending_extraction": int(chunk_states.get("PENDING_EXTRACTION", 0)),
         "max_passes_reached": int(chunk_states.get("MAX_PASSES_REACHED", 0)),
-        "saturated_chunks": int(chunk_states.get("SATURATED", 0)),
+        "saturated_chunks": saturated,
+        "non_saturated_chunks": max(0, chunks - saturated),
         "explicit_deltas_recovered": int(extraction_modes.get("EXPLICIT_WORKER_DELTA", 0)),
         "batch_deltas_recovered": int(extraction_modes.get("HISTORICAL_BATCH", 0)),
         "extraction_mode_unique_variants": extraction_modes,
         "extraction_mode_observations": extraction_observations,
+    }
+
+
+def artifact_cutoff(artifact_root: Path) -> dict[str, Any]:
+    rows: list[dict[str, Any]] = []
+    paths = sorted(p for p in artifact_root.rglob("workers.jsonl") if p.is_file()) if artifact_root.exists() else []
+    for path in paths:
+        st = path.stat()
+        try:
+            rel = path.relative_to(artifact_root).as_posix()
+        except ValueError:
+            rel = str(path)
+        rows.append(
+            {
+                "path": rel,
+                "size_cutoff": int(st.st_size),
+                "mtime_ns_at_cutoff": int(st.st_mtime_ns),
+                "inode_at_cutoff": int(st.st_ino),
+            }
+        )
+    identity = {
+        "schema": CUTOFF_SCHEMA,
+        "files": rows,
+    }
+    return {
+        **identity,
+        "file_count": len(rows),
+        "cutoff_identity_sha256": sha256_bytes(canonical_json(identity)),
     }
 
 
@@ -178,51 +249,71 @@ def _tracked_offsets(con: sqlite3.Connection) -> dict[str, dict[str, int | None]
     return out
 
 
-def artifact_scan_state(con: sqlite3.Connection, artifact_root: Path) -> dict[str, Any]:
+def cutoff_progress(
+    con: sqlite3.Connection,
+    artifact_root: Path,
+    cutoff: dict[str, Any],
+) -> dict[str, Any]:
     tracked = _tracked_offsets(con)
     rows: list[dict[str, Any]] = []
-    visible = sorted(p for p in artifact_root.rglob("workers.jsonl") if p.is_file()) if artifact_root.exists() else []
-    for path in visible:
-        st = path.stat()
+    cutoff_paths = {str(row["path"]) for row in cutoff.get("files", [])}
+    current_paths = {
+        p.relative_to(artifact_root).as_posix(): p
+        for p in artifact_root.rglob("workers.jsonl")
+        if p.is_file()
+    } if artifact_root.exists() else {}
+
+    for row in cutoff.get("files", []):
+        rel = str(row["path"])
+        path = artifact_root / rel
         key = str(path)
         prior = tracked.get(key) or {}
         offset = int(prior.get("byte_offset") or 0)
-        inode = prior.get("inode")
-        inode_matches = inode is not None and int(inode) == int(st.st_ino)
-        caught_up = bool(inode_matches and offset >= int(st.st_size))
-        try:
-            rel = path.relative_to(artifact_root).as_posix()
-        except ValueError:
-            rel = key
+        tracked_inode = prior.get("inode")
+        exists = path.exists() and path.is_file()
+        current_size = None
+        current_inode = None
+        replaced_or_truncated = True
+        if exists:
+            st = path.stat()
+            current_size = int(st.st_size)
+            current_inode = int(st.st_ino)
+            replaced_or_truncated = (
+                current_inode != int(row["inode_at_cutoff"])
+                or current_size < int(row["size_cutoff"])
+            )
+        tracked_matches_cutoff_inode = (
+            tracked_inode is not None and int(tracked_inode) == int(row["inode_at_cutoff"])
+        )
+        caught_up = bool(
+            exists
+            and not replaced_or_truncated
+            and tracked_matches_cutoff_inode
+            and offset >= int(row["size_cutoff"])
+        )
         rows.append(
             {
-                "path": rel,
-                "size": int(st.st_size),
-                "mtime_ns": int(st.st_mtime_ns),
-                "inode": int(st.st_ino),
-                "tracked_inode": int(inode) if inode is not None else None,
+                **row,
+                "exists_after": exists,
+                "current_size": current_size,
+                "current_inode": current_inode,
+                "tracked_inode": int(tracked_inode) if tracked_inode is not None else None,
                 "tracked_byte_offset": offset,
-                "caught_up": caught_up,
+                "replaced_or_truncated": replaced_or_truncated,
+                "caught_up_to_cutoff": caught_up,
             }
         )
-    identity_rows = [
-        {
-            "path": row["path"],
-            "size": row["size"],
-            "mtime_ns": row["mtime_ns"],
-            "inode": row["inode"],
-            "tracked_inode": row["tracked_inode"],
-            "tracked_byte_offset": row["tracked_byte_offset"],
-        }
-        for row in rows
-    ]
+
+    post_cutoff = sorted(path for path in current_paths if path not in cutoff_paths)
     return {
-        "artifact_root": str(artifact_root),
-        "visible_workers_jsonl": len(rows),
-        "caught_up_files": sum(int(bool(row["caught_up"])) for row in rows),
-        "uncaught_up_files": sum(int(not bool(row["caught_up"])) for row in rows),
-        "scan_set": rows,
-        "scan_set_identity_sha256": sha256_bytes(canonical_json(identity_rows)),
+        "cutoff_identity_sha256": cutoff.get("cutoff_identity_sha256"),
+        "cutoff_file_count": len(rows),
+        "caught_up_files": sum(int(bool(row["caught_up_to_cutoff"])) for row in rows),
+        "uncaught_up_files": sum(int(not bool(row["caught_up_to_cutoff"])) for row in rows),
+        "replaced_or_truncated_files": sum(int(bool(row["replaced_or_truncated"])) for row in rows),
+        "files": rows,
+        "post_cutoff_new_files": post_cutoff,
+        "post_cutoff_new_file_count": len(post_cutoff),
     }
 
 
@@ -257,8 +348,8 @@ def delta(after: dict[str, Any], before: dict[str, Any], key: str) -> int | None
 def classify(
     *,
     source: dict[str, Any],
-    scan_before: dict[str, Any],
-    scan_after: dict[str, Any],
+    cutoff: dict[str, Any],
+    progress: dict[str, Any],
     db_after: dict[str, Any],
     rounds: list[dict[str, int]],
 ) -> tuple[str, list[str]]:
@@ -267,12 +358,12 @@ def classify(
         blockers.append("DIRTY_SOURCE")
     if not db_after.get("schema_ready"):
         blockers.append("FORGE_BACKFILL_SCHEMA_NOT_READY")
-    if scan_after.get("visible_workers_jsonl", 0) <= 0:
-        blockers.append("NO_VISIBLE_WORKERS_JSONL")
-    if scan_before.get("scan_set_identity_sha256") != scan_after.get("scan_set_identity_sha256"):
-        blockers.append("ARTIFACT_SET_CHANGED_DURING_RECEIPT")
-    if int(scan_after.get("uncaught_up_files", 0) or 0) > 0:
-        blockers.append("HISTORICAL_SCAN_NOT_CAUGHT_UP")
+    if int(cutoff.get("file_count", 0) or 0) <= 0:
+        blockers.append("NO_VISIBLE_WORKERS_JSONL_AT_CUTOFF")
+    if int(progress.get("replaced_or_truncated_files", 0) or 0) > 0:
+        blockers.append("CUTOFF_FILE_REPLACED_OR_TRUNCATED")
+    if int(progress.get("uncaught_up_files", 0) or 0) > 0:
+        blockers.append("HISTORICAL_SCAN_NOT_CAUGHT_UP_TO_CUTOFF")
     if rounds and int(rounds[-1].get("lines_seen", 0)) != 0:
         blockers.append("NO_QUIESCENT_SCAN_ROUND_OBSERVED")
     if int(db_after.get("historical_outputs", 0) or 0) <= 0:
@@ -281,6 +372,8 @@ def classify(
         blockers.append("PENDING_EXTRACTION_REMAINS")
     if int(db_after.get("max_passes_reached", 0) or 0) > 0:
         blockers.append("MAX_PASSES_REACHED_UNRESOLVED")
+    if int(db_after.get("non_saturated_chunks", 0) or 0) > 0:
+        blockers.append("NON_SATURATED_CHUNKS_REMAIN")
     return ("PASS", []) if not blockers else ("BLOCKED", blockers)
 
 
@@ -295,6 +388,33 @@ def atomic_json(path: Path, value: dict[str, Any]) -> None:
     os.replace(tmp, path)
 
 
+def blocked_receipt(
+    *,
+    repo: Path,
+    artifact_root: Path,
+    forge_db: Path,
+    blocker: str,
+    source: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+    return {
+        "schema": SCHEMA,
+        "generated_at": utc_now(),
+        "status": "BLOCKED",
+        "blockers": [blocker],
+        "program": "ENTITYOS_HCU",
+        "product": "EntityOS",
+        "architecture": "HCU",
+        "source": source,
+        "repo": str(repo),
+        "artifact_root": str(artifact_root),
+        "forge_db": str(forge_db),
+        "scope": SCOPE,
+        "runtime_credit_added": 0,
+        "model_credit_added": 0,
+        "training_credit_added": 0,
+    }
+
+
 def build_receipt(
     repo: Path,
     artifact_root: Path,
@@ -303,44 +423,30 @@ def build_receipt(
     max_rounds: int,
     max_new_lines_per_round: int,
 ) -> dict[str, Any]:
-    if not forge_db.exists():
-        return {
-            "schema": SCHEMA,
-            "generated_at": utc_now(),
-            "status": "BLOCKED",
-            "blockers": ["FORGE_DB_MISSING"],
-            "repo": str(repo),
-            "artifact_root": str(artifact_root),
-            "forge_db": str(forge_db),
-            "scope": SCOPE,
-            "runtime_credit_added": 0,
-            "model_credit_added": 0,
-            "training_credit_added": 0,
-        }
-
     source_before = source_identity(repo)
+    if not forge_db.exists():
+        return blocked_receipt(
+            repo=repo,
+            artifact_root=artifact_root,
+            forge_db=forge_db,
+            blocker="FORGE_DB_MISSING",
+            source=source_before,
+        )
+
+    cutoff = artifact_cutoff(artifact_root)
     con = sqlite3.connect(str(forge_db), timeout=30)
     con.row_factory = sqlite3.Row
     try:
         if not table_exists(con, "candidates"):
-            return {
-                "schema": SCHEMA,
-                "generated_at": utc_now(),
-                "status": "BLOCKED",
-                "blockers": ["FORGE_CANDIDATES_TABLE_MISSING"],
-                "source": source_before,
-                "repo": str(repo),
-                "artifact_root": str(artifact_root),
-                "forge_db": str(forge_db),
-                "scope": SCOPE,
-                "runtime_credit_added": 0,
-                "model_credit_added": 0,
-                "training_credit_added": 0,
-            }
-
+            return blocked_receipt(
+                repo=repo,
+                artifact_root=artifact_root,
+                forge_db=forge_db,
+                blocker="FORGE_CANDIDATES_TABLE_MISSING",
+                source=source_before,
+            )
         backfill.ensure_schema(con)
         before = db_snapshot(con)
-        scan_before = artifact_scan_state(con, artifact_root)
         rounds = run_incremental_scan(
             con,
             artifact_root,
@@ -348,7 +454,7 @@ def build_receipt(
             max_new_lines_per_round=max_new_lines_per_round,
         )
         after = db_snapshot(con)
-        scan_after = artifact_scan_state(con, artifact_root)
+        progress = cutoff_progress(con, artifact_root, cutoff)
     finally:
         con.close()
 
@@ -360,58 +466,51 @@ def build_receipt(
 
     status, blockers = classify(
         source=source_after,
-        scan_before=scan_before,
-        scan_after=scan_after,
+        cutoff=cutoff,
+        progress=progress,
         db_after=after,
         rounds=rounds,
     )
     if not source_stable:
         status = "BLOCKED"
-        blockers = [*blockers, "SOURCE_CHANGED_DURING_RECEIPT"]
+        blockers = [*blockers, "SOURCE_OR_AUTHORITY_CHANGED_DURING_RECEIPT"]
 
     lines_scanned = sum(int(row.get("lines_seen", 0)) for row in rounds)
     successful_outputs_observed = sum(int(row.get("successful_outputs", 0)) for row in rounds)
-    explicit_new = delta(after, before, "explicit_deltas_recovered")
-    batch_new = delta(after, before, "batch_deltas_recovered")
-    concepts_new = delta(after, before, "distinct_concepts")
-    variants_new = delta(after, before, "distinct_execution_variants")
-    duplicates_new = delta(after, before, "duplicates_superseded")
-
     receipt = {
         "schema": SCHEMA,
         "generated_at": utc_now(),
         "status": status,
         "blockers": blockers,
-        "authority_epoch_expected": "8.78",
         "program": "ENTITYOS_HCU",
         "product": "EntityOS",
         "architecture": "HCU",
         "source": source_after,
         "artifact_root": str(artifact_root),
         "forge_db": str(forge_db),
-        "artifact_root_scan_set": scan_after,
-        "scan_set_stable_during_receipt": (
-            scan_before.get("scan_set_identity_sha256") == scan_after.get("scan_set_identity_sha256")
-        ),
+        "artifact_root_scan_set": cutoff,
+        "artifact_root_scan_progress": progress,
+        "post_cutoff_history_excluded_from_cutoff_identity": True,
         "incremental_scan_rounds": rounds,
         "lines_scanned": lines_scanned,
         "successful_outputs": successful_outputs_observed,
         "successful_outputs_total": after.get("historical_outputs"),
-        "explicit_deltas_recovered": explicit_new,
+        "explicit_deltas_recovered": delta(after, before, "explicit_deltas_recovered"),
         "explicit_deltas_recovered_total": after.get("explicit_deltas_recovered"),
-        "batch_deltas_recovered": batch_new,
+        "batch_deltas_recovered": delta(after, before, "batch_deltas_recovered"),
         "batch_deltas_recovered_total": after.get("batch_deltas_recovered"),
-        "new_concepts": concepts_new,
+        "new_concepts": delta(after, before, "distinct_concepts"),
         "distinct_concepts_total": after.get("distinct_concepts"),
-        "new_execution_variants": variants_new,
+        "new_execution_variants": delta(after, before, "distinct_execution_variants"),
         "distinct_execution_variants_total": after.get("distinct_execution_variants"),
-        "duplicates_superseded": duplicates_new,
+        "duplicates_superseded": delta(after, before, "duplicates_superseded"),
         "duplicates_superseded_total": after.get("duplicates_superseded"),
         "ready_backlog": after.get("ready_backlog"),
         "implementation_backlog": after.get("implementation_backlog"),
         "remaining_pending_extraction": after.get("remaining_pending_extraction"),
         "max_passes_reached_unresolved": after.get("max_passes_reached"),
         "saturated_chunks": after.get("saturated_chunks"),
+        "non_saturated_chunks": after.get("non_saturated_chunks"),
         "before": before,
         "after": after,
         "scope": SCOPE,
@@ -419,7 +518,7 @@ def build_receipt(
         "model_credit_added": 0,
         "training_credit_added": 0,
         "evidence_note": (
-            "PASS establishes only exact-source historical backfill scan/extraction saturation at this bounded artifact/DB identity. "
+            "PASS establishes only exact-source historical backfill scan/extraction saturation at the bound cutoff and Forge DB. "
             "It does not establish whole EntityOS/HCU, J-Space model, provider, or training acceptance."
         ),
     }
@@ -443,13 +542,21 @@ def main() -> int:
     output = args.output or (
         repo / "research_entity/continuity/receipts/FREE_SWARM_HISTORICAL_BACKFILL_RECEIPT_V1.json"
     )
-    receipt = build_receipt(
-        repo,
-        artifact_root,
-        forge_db,
-        max_rounds=max(1, args.max_rounds),
-        max_new_lines_per_round=max(1, args.max_new_lines_per_round),
-    )
+    try:
+        receipt = build_receipt(
+            repo,
+            artifact_root,
+            forge_db,
+            max_rounds=max(1, args.max_rounds),
+            max_new_lines_per_round=max(1, args.max_new_lines_per_round),
+        )
+    except Exception as exc:
+        receipt = blocked_receipt(
+            repo=repo,
+            artifact_root=artifact_root,
+            forge_db=forge_db,
+            blocker=f"RECEIPT_EXCEPTION:{type(exc).__name__}:{str(exc)[:500]}",
+        )
     atomic_json(output, receipt)
     print(json.dumps(receipt, sort_keys=True))
     return 0 if receipt.get("status") == "PASS" else 3

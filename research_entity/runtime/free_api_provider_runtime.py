@@ -59,6 +59,13 @@ TEXT_RESPONSE_USAGE_REQUIRED_FIELDS = frozenset(
 TEXT_RESPONSE_USAGE_FIELDS = TEXT_RESPONSE_USAGE_REQUIRED_FIELDS | frozenset(
     {"prompt_tokens_details", "completion_tokens_details"}
 )
+TEXT_RESPONSE_USAGE_DETAIL_FIELDS = {
+    "prompt_tokens_details": ("cached_tokens", "prompt_tokens"),
+    "completion_tokens_details": (
+        "reasoning_tokens",
+        "completion_tokens",
+    ),
+}
 TEXT_RESPONSE_CHOICE_FIELDS = frozenset(
     {
         "finish_reason",
@@ -1044,12 +1051,6 @@ def _execute_chat_locked(
                 or not usage_fields.issubset(TEXT_RESPONSE_USAGE_FIELDS)
             ):
                 raise ValueError("response_usage_fields_not_supported")
-            for detail_field in (
-                "prompt_tokens_details",
-                "completion_tokens_details",
-            ):
-                if usage.get(detail_field) is not None:
-                    raise ValueError("response_usage_details_not_supported")
             for token_field in TEXT_RESPONSE_USAGE_REQUIRED_FIELDS:
                 token_count = usage[token_field]
                 if (
@@ -1069,6 +1070,29 @@ def _execute_chat_locked(
                     "total_tokens",
                 )
             }
+            for detail_field, (
+                detail_count_field,
+                parent_count_field,
+            ) in TEXT_RESPONSE_USAGE_DETAIL_FIELDS.items():
+                details = usage.get(detail_field)
+                if details is None:
+                    continue
+                if (
+                    type(details) is not dict
+                    or set(details) != {detail_count_field}
+                ):
+                    raise ValueError("response_usage_details_not_supported")
+                detail_count = details[detail_count_field]
+                if (
+                    type(detail_count) is not int
+                    or not 0 <= detail_count <= usage[parent_count_field]
+                ):
+                    raise ValueError(
+                        "response_usage_detail_must_fit_parent_count"
+                    )
+                provider_usage[detail_field] = {
+                    detail_count_field: detail_count
+                }
             choices = payload["choices"]
             if not isinstance(choices, list) or len(choices) != 1:
                 raise ValueError("response_choices_must_contain_exactly_one_choice")

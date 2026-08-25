@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v4",
+  "command_id": "gpt56sol-qwen06-status-5-20260825",
+  "op": "exec",
+  "cwd": "/workspace",
+  "timeout_seconds": 120,
+  "command": "echo status_probe=5; pgrep -af 'trigger1_local_qwen06_midlayer_causal_execute|pip install|qwen06-gpt56sol' || true; echo '--- log ---'; tail -240 /workspace/qwen06-gpt56sol-direct/execution.log 2>/dev/null || true; echo '--- outputs ---'; find /workspace/qwen06-gpt56sol-direct/out -maxdepth 1 -type f -printf '%f %s bytes\\n' 2>/dev/null | sort || true; echo '--- cache ---'; du -sh /cache/clay-qwen06 /cache/clay-qwen06/hf 2>/dev/null || true; echo '--- versions ---'; /cache/clay-qwen06/venv/bin/python -c 'import torch,transformers,huggingface_hub; print(torch.__version__, transformers.__version__, huggingface_hub.__version__)' 2>/dev/null || true; echo '--- exit ---'; cat /workspace/qwen06-gpt56sol-direct/out/exit_code.txt 2>/dev/null || true; echo '--- resources ---'; df -h /cache; free -h"
+}

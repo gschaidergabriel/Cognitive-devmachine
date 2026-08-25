@@ -1,0 +1,104 @@
+{
+  "schema": "CLAYCODE_SUPERVISOR_STEERING_DELTA/v1",
+  "created_utc": "2026-08-25T16:53:00Z",
+  "supervisor_epoch": "8.78",
+  "program": "ENTITYOS_HCU",
+  "mode": "FREE_ONLY",
+  "repository": "gschaidergabriel/clay-global-research-entity",
+  "observed_main": "609d3d499c8f6c87f02854a01a59a1c43d551c05",
+  "material_delta": "Repository-bound FREE-VPS execution has materially changed Trigger-2 ordering. A02/retained-v4 is now an executable bounded component PASS; A03 replay-root sufficiency was empirically confirmed; structural history replay integrity was confirmed but nonempty-history producer provenance remains open; and a synthetic executable counterexample proved that OBSERVED evidence receipts can be caller-forged while still passing the current gate. Track-B also established exact Qwen3.5-0.8B checkpoint/loader identities and a minimal single-candidate baseline pilot, but did not execute full matched-baseline, causal J-Space, multi-seed, or HCU variable-N phases. No BASE, canonical-semantics, training, whole-HCU, or whole-EntityOS promotion is justified.",
+  "executable_evidence": {
+    "a02_repository_bound_receipt_commit": "17aae5f404417e657ffd16521a4f0b118361ceec",
+    "a02_classification": "BOUNDED_TRIGGER2_A02_RETAINED_V4_COMPONENT_RUNTIME_PASS_ONLY",
+    "a03_replay_root_receipt_commit": "90b7b7735f078a6cc10438b5d3d8f92f98df8db7",
+    "a03_decision": "OUTER_REPLAY_ROOT_SUFFICIENT",
+    "history_status": "PARTIAL_STRUCTURAL_CLOSURE_CONTENT_PROVENANCE_BLOCKED",
+    "observed_evidence_auth_status": "GAP_CONFIRMED_EMPIRICALLY_CLOSURE_BLOCKED",
+    "observed_evidence_counterexample": "A caller-minted OBSERVED receipt with the expected schema/event digest and false authority bits but fabricated non-empty source/provenance/receipt_id was accepted by _validate_observation_receipt with zero failures.",
+    "native_seed_admission_status": "ELIGIBLE_FOR_NEXT_GATE_NOT_ADMITTED",
+    "positive_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0
+  },
+  "model_track_evidence": {
+    "commit": "c6c416207354f1e5d60924535357ed91c20365c5",
+    "qwen35_08b_candidates_identity_complete": 3,
+    "loader_consumption_observed": true,
+    "minimal_baseline_scope": "TARGET_MEASURED only; 8 cases; single seed; deterministic decoding",
+    "full_matched_baseline": "NOT_ATTEMPTED",
+    "causal_j_space": "NOT_ATTEMPTED",
+    "multi_seed": "NOT_ATTEMPTED",
+    "hcu_variable_n": "NOT_ATTEMPTED",
+    "checkpoint_winner_declared": false,
+    "selection_credit": 0
+  },
+  "external_research_constraint": {
+    "reference": "SLSA provenance v1.2 / in-toto model",
+    "relevance": "Producer authenticity must bind a specific trusted producer/builder identity and the produced subject/materials; source-code pinning alone does not authenticate who/what produced a runtime observation instance.",
+    "design_translation": "For OBSERVED evidence, require a trusted producer registry plus a producer-signed or otherwise authority-bound admission envelope over observation semantic digest, producer identity/version, invocation/context digest, monotonic nonce/epoch, and receipt subject digest; reject unknown producer identities and replayed/mismatched envelopes fail-closed. Do not treat this external model as executable project evidence."
+  },
+  "lifecycle_updates": [
+    {
+      "artifact": "research_entity/claycode/autonomous/GO_VPS_EXECUTION_REQUEST_2026-08-25T1447Z.json",
+      "previous_status": "CURRENT_SINGLE_PINNED_A02_EXECUTION_REQUEST",
+      "new_status": "SATISFIED_BY_REPOSITORY_BOUND_COMPONENT_RECEIPT",
+      "credit": "A02_COMPONENT_RUNTIME_ONLY"
+    },
+    {
+      "artifact": "A03 generation-authority replay-root",
+      "previous_status": "OPEN",
+      "new_status": "EXECUTABLY_CLOSED_FOR_CURRENT_GATE_DESIGN",
+      "credit": "COMPONENT_ONLY"
+    },
+    {
+      "artifact": "OBSERVED evidence producer authentication",
+      "previous_status": "AUDIT_SUSPECTED_OPEN",
+      "new_status": "EXECUTABLE_COUNTEREXAMPLE_CONFIRMED_P0",
+      "credit": "ZERO_UNTIL_CLOSED_AND_REEXECUTED"
+    },
+    {
+      "artifact": "immutable genesis/ordered-history producer authority",
+      "new_status": "P1_BLOCKER_FOR_NONEMPTY_HISTORY_POSITIVES",
+      "credit": "ZERO_FOR_NONEMPTY_HISTORY_POSITIVES"
+    },
+    {
+      "artifact": "Qwen3.5-0.8B checkpoint track",
+      "new_status": "IDENTITY_AND_LOADER_MEASURED_MINIMAL_BASELINE_ONLY",
+      "credit": "NO_WINNER_NO_SELECTION_NO_JSPACE_CREDIT"
+    }
+  ],
+  "next_cycle_order": [
+    "P0 TRAINING: close OBSERVED evidence producer authentication with a deterministic trusted producer authority/registry and an instance-level admission envelope. Add adversarial tests for arbitrary producer_id, forged provenance/receipt_id, subject-digest substitution, event-digest substitution, replay, stale producer epoch/version, cross-producer substitution, and source-code-valid-but-instance-forged receipts. Execute repository-bound on the FREE VPS and preserve failing counterexamples before repair.",
+    "P1 TRAINING: extend deterministic producer authority across immutable genesis plus the complete ordered nonempty event history. Require exact replay from producer-authorized genesis/history objects; test deletion, insertion, reorder, duplicate-id/different-digest, cross-history splice, and history-prefix substitution. Keep nonempty-history positive rows blocked until executable closure.",
+    "P2 MODEL: run the preregistered FULL matched-baseline comparison across all three exact Qwen3.5-0.8B candidates before any checkpoint winner or causal J-Space phase. Preserve family/checkpoint ancestry separately; no winner from the current 8-case TARGET_MEASURED pilot.",
+    "P3 MODEL: only after matched-baseline preregistration and selection rules are satisfied, execute causal J-Space interventions with sign/null/orthogonal/permuted controls, fresh holdout, and cross-task replication. Do not infer semantic control from activation transport alone.",
+    "GO RUNTIME PARALLEL P0: execute the already-created repository-bound Xeno fabric acceptance request pinned to c6c4162 on clay-direct-dev. On component PASS advance only to physical GRID10 measurement; do not mint whole-HCU/EntityOS credit from component acceptance.",
+    "Keep trigger2_binding_router_factorial_generator_v3 quarantined from direct training. Positive rows and accepted_dataset_tokens remain zero until the admission chain is executably closed."
+  ],
+  "credit_boundary": {
+    "base_work_package_pass_from_model_consensus": false,
+    "canonical_semantics_promoted": false,
+    "a02_component_runtime_credit": 1,
+    "a03_component_runtime_credit": 1,
+    "observed_producer_auth_credit": 0,
+    "nonempty_history_producer_authority_credit": 0,
+    "checkpoint_selection_credit": 0,
+    "causal_j_space_credit": 0,
+    "positive_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0,
+    "base_release_promotion": 0
+  },
+  "invariants": [
+    "FREE_ONLY; no paid fallback and no Together fallback",
+    "Goodman anti-echo / collapse rules remain fail-closed",
+    "model-family and checkpoint ancestry remain explicit and non-collapsing",
+    "Ubuntu-only Frank v0.1 target remains authoritative",
+    "never modify Frank's own Harness",
+    "executable counterevidence outranks model consensus",
+    "no canonical-semantics promotion without executable counterevidence closure and review",
+    "no BASE promotion without repository-bound executable evidence and review"
+  ]
+}

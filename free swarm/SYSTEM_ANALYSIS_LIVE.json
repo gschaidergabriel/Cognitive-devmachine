@@ -1,6 +1,6 @@
 {
   "schema": "CLAY_FREE_SWARM_SYSTEM_ANALYSIS/v3",
-  "generated_at": "2026-08-25T20:57:32.985546+00:00",
+  "generated_at": "2026-08-25T21:12:39.247306+00:00",
   "runtime": {
     "supervisor": "STOPPED/QUARANTINED",
     "go_swarm": "RUNNING",
@@ -65,7 +65,7 @@
   },
   "distillery": {
     "schema": "CLAY_RESEARCH_DISTILLERY_STATUS/v1",
-    "generated_at": "2026-08-25T20:57:30.040486+00:00",
+    "generated_at": "2026-08-25T21:12:14.341320+00:00",
     "collected_source_tokens": 11621,
     "accepted_dataset_tokens": 0,
     "dataset_yield": 0.0,
@@ -111,7 +111,7 @@
     "model_output_tokens": 1455,
     "shared_provider_budget": {
       "schema": "CLAY_SHARED_PROVIDER_BUDGET/v1",
-      "generated_at": "2026-08-25T20:57:30.040985+00:00",
+      "generated_at": "2026-08-25T21:12:14.341891+00:00",
       "providers": {
         "arxiv": {
           "max_inflight": 1,
@@ -213,13 +213,13 @@
           "max_inflight": 16,
           "active_leases": 0,
           "min_interval_s": 0.5,
-          "cooldown_seconds": 9.993295669555664,
-          "total_requests": 3606,
+          "cooldown_seconds": 9.992500305175781,
+          "total_requests": 3693,
           "total_success": 134,
-          "total_429": 3471,
+          "total_429": 3558,
           "total_errors": 0,
           "last_status": "429",
-          "last_observed_at": "2026-08-25T20:57:30.034313+00:00"
+          "last_observed_at": "2026-08-25T21:12:14.334393+00:00"
         },
         "semantic_scholar": {
           "max_inflight": 1,
@@ -249,16 +249,16 @@
     },
     "db_bytes": 983040,
     "top_questions": [
-      "Does NVIDIA NIM API provide a lightweight credential+model verification endpoint (HEAD /v1/models or similar) that can distinguish per-credential model access without incurring inference cost?",
-      "What causes Groq provider cooldown_seconds to remain at 1972.67 despite FREE admission?",
-      "How to measure actual token volume vs target_utilization=0.991 discrepancy?",
-      "Does NVIDIA provide a programmatic API to query credential entitlement (free vs paid) without executing a model call, and if so, can it replace the probe call for zero-latency admission?",
-      "Does the NVIDIA API expose a per-credential free-tier quota endpoint or rate-limit header that can be probed pre-call without consuming quota?",
-      "Can we validate J-Space/GWT prototype readiness without paid fallback mechanisms?",
-      "Wie kann die Anmelde-Rezeption in die aktuellen Sandbox-Tools integriert werden, ohne die bestehende Architektur zu verändern?",
-      "Wie kann die Effektivität der Integration der Anmelde-Rezeption in die aktuellen Sandbox-Tools gemessen werden?",
-      "How can we formally verify the correctness of the ClayCode type checker extensions for array index invariants?",
-      "Can token caching alone guarantee reduced admission latency across all provider types without additional rate‑limit handling?"
+      "Can we reuse existing provider‑level tracing infrastructure to avoid custom instrumentation?",
+      "Does NVIDIA NIM/Developer Program API expose a credential-scoped free-tier entitlement check endpoint that correlates 1:1 with inference free-tier access without consuming inference quota?",
+      "Can engine identity anchors be securely maintained across multiple configuration reloads without performance degradation?",
+      "How can we economically bind provider admission at the exact pre-call state without introducing latency that affects REAL-TIME constraints in HCU?",
+      "Does the concurrency threshold differ between model variants within the same provider (e.g., nemotron-3-super vs nemotron-mini)?",
+      "Is the threshold stable across time-of-day or provider-side load changes?",
+      "What cryptographic binding methods best preserve identity continuity while allowing parameter updates?",
+      "How does dynamic engine configuration affect cross-provider routing decisions in HCU's federated architecture?",
+      "Wie wirkt sich die Speicher‑Überlastung durch mmap‑basiertes Laden auf stabile Inferenz‑Leistung aus?",
+      "Does NVIDIA's NIM API expose any stable, per-call free-tier confirmation marker (header, response field, rate-limit signature) that distinguishes Developer Program free prototyping from paid usage without provider-side cooperation?"
     ],
     "candidate_states": {}
   },
@@ -433,6 +433,6 @@
     "measured_total_sonnet5_equivalent_usd": 148.830648,
     "verified_historical_savings_usd": null,
     "nominal_avoided_if_zero_cost_usd": 148.830648,
-    "repo_output_only_proxy_usd": 139.5289
+    "repo_output_only_proxy_usd": 139.65868
   }
 }

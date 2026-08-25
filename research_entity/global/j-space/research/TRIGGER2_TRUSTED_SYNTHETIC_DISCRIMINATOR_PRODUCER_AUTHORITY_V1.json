@@ -4,8 +4,11 @@
   "purpose": "Pin one deterministic synthetic discriminator producer/policy for the bounded T2_GP_PILOT_DB_MATCH_V1 proof lane so admissible/executed/receipt identity are recomputed rather than trusted from candidate rows.",
   "producer": {
     "repo_path": "tools/trigger2_trusted_synthetic_discriminator_producer_v1.py",
-    "source_sha256": "c3d5cfdfc259f1832f8e3bbfcbcf2be5cd4a1aa1f52664a4272a7d8416fdf7c4",
-    "producer_schema_or_version": "CLAY_TRIGGER2_TRUSTED_SYNTHETIC_DISCRIMINATOR_PRODUCER/v1"
+    "source_sha256": "9a591298912c0d0d57a26c3424a32d963e1726583a1495dcd0809118f403f87d",
+    "producer_schema_or_version": "CLAY_TRIGGER2_TRUSTED_SYNTHETIC_DISCRIMINATOR_PRODUCER/v1",
+    "source_commit_sha": "ec1ee0ac2175342205e1e27ef1f169642ffcd846",
+    "branch_base_main_sha": "efd226f8cd4e5a696c28652c64b44aa986f32f29",
+    "source_lineage": "A02 contract -> initial producer 97cf46d2c7b027e6d646e6e11742b4d77a6470af -> strengthened receipt identity ec1ee0ac2175342205e1e27ef1f169642ffcd846"
   },
   "policy": {
     "schema": "CLAY_TRIGGER2_SYNTHETIC_DISCRIMINATOR_POLICY/v1",
@@ -16,16 +19,19 @@
     "require_complete_live_pair_coverage": true,
     "require_noncanonical_fences": true
   },
+  "policy_sha256": "c153daf077b173537492f9df66d5d4f326f29c616d5b488d2dc20ae9b2e1d6aa",
   "allowed_cases": {
     "T2_GP_PILOT_DB_MATCH_V1": {
       "world_id": "t2gp:world:db-match:v1",
       "event_id": "t2gp:event:db-match:v1",
       "test_id": "db_probe",
       "epistemic_type": "SYNTHETIC_PROOF",
+      "observed_outcome": "MATCH",
       "world_sha256": "244a152921ea08fd66adc8430a1ff04dbd0318e994a45d9a11761858284282d9",
       "state_before_sha256": "7b2248741a1d3f0c999cf4a1c9ce00ea92b4ce93d8585a611b8e65038576c83c",
       "event_semantic_sha256": "918d0ba4911a42444e064eb5e40168aaa18da1cf84bf685324d5d5f34c3dd8c9",
       "full_event_sha256": "372d48f2862401ecaaf1d9edcf4fc3eed99977f45ecc0bb7afd4414113360ad4",
+      "world_scoped_event_sha256": "e3cdbec999162b66a1e58501101d88bc44b102b06c1af02aa14d5b7fd5f3e90f",
       "discriminator_spec_sha256": "e8beaca57d5190cf22c51dd545c823752bf7c3996b3dc5e7f1cd1b59dcebde93"
     }
   },

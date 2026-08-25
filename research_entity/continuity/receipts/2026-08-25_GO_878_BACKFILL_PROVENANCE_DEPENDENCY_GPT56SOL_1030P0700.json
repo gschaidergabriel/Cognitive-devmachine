@@ -1,0 +1,69 @@
+{
+  "schema": "CLAY_GO_RESEARCH_DELTA/v1",
+  "date": "2026-08-25",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol / ChatGPT project organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority": {
+    "supervisor_epoch_observed": "8.78",
+    "mode": "FREE_ONLY",
+    "canonical_repository": "gschaidergabriel/clay-global-research-entity",
+    "canonical_branch": "main",
+    "main_observed_before_write": "cbbff3b197fdcbf9be50f1738e45fdedd63e544a"
+  },
+  "observed": {
+    "backlog_first_forge_wiring": "FUSED_ON_MAIN_SOURCE_LEVEL",
+    "historical_backfill_terminal_result": "NOT_OBSERVED",
+    "ordinary_dispatch_key": "free-swarm-historical-backfill-saturation-g0001",
+    "ordinary_dispatch_result_path": "research_entity/continuity/ordinary_dispatch_results/free-swarm-historical-backfill-saturation-g0001.json",
+    "ordinary_dispatch_result_observed": false,
+    "pr_1881": "OPEN_DRAFT_SOURCECOUNT_RECONCILIATION_DONOR",
+    "pr_1881_review_id": 5014724149
+  },
+  "finding": {
+    "classification": "PROVENANCE_IDENTITY_PRECONDITION_FOR_SOURCECOUNT_IDEMPOTENCE",
+    "severity": "BLOCKS_TRUSTED_REPLAY_IDEMPOTENCE_CREDIT",
+    "source_observation": "Current main still stores backfill_files byte_offset without a cumulative absolute line checkpoint and resets local_line inside each incremental ingest_artifact_history invocation, while source_event_identity hashes line_no.",
+    "consequence": "The same physical workers.jsonl execution can receive different source_event_id values under one-shot versus resumed scanning. Therefore COUNT(DISTINCT source_event_id) is not yet a safe idempotence target for source_count until replay-stable source-event identity is fused and verified.",
+    "counterhypothesis": "PR1881 source_count reconciliation alone is sufficient because duplicate provenance links are distinct only when the underlying execution is genuinely distinct.",
+    "falsifier": "Scan one identical fixture once in one pass and once via multiple incremental resumes, then reconcile candidate provenance. Candidate source_event_id sets and source_count must be identical; an immediate second pass must change zero candidate/evidence counts.",
+    "existing_nonduplicate_repair_lane": {
+      "issue": 1874,
+      "workflow": ".github/workflows/go878-backfill-line-identity-reentry.yml",
+      "status": "SOURCE_READY_TERMINAL_RESULT_NOT_OBSERVED"
+    }
+  },
+  "coordination": {
+    "new_equivalent_dispatch_created": false,
+    "new_unusual_experiment_executed": false,
+    "unusual_experiment_status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "action": "REVIEWED_EXISTING_PR1881_INSTEAD_OF_CREATING_DUPLICATE_IMPLEMENTATION_LANE"
+  },
+  "three_tracks": {
+    "track_a": {
+      "status": "ADVANCED_ACCEPTANCE_INTEGRITY",
+      "delta": "Bound PR1881 replay-idempotence semantics to the pre-existing replay-stable source-event identity gate before full-history saturation can receive credit."
+    },
+    "track_b": {
+      "status": "HCU_NO_CHANGE_WITH_REASON",
+      "reason": "Supervisor 8.78 and the retained HCU donor lane already define the next HCU/J-Space gates; the highest-information current blocker is the historical evidence funnel identity/transport chain, so creating another HCU primitive would duplicate active work.",
+      "next_discriminator": "After historical conversion evidence is trustworthy, continue the existing Typed Entry -> verified engine/load -> GRID10 -> ModelExecution/InferenceReceipt -> J-Space trace chain."
+    },
+    "track_c": {
+      "status": "ADVANCED_TRAINING_DATA_PROVENANCE_READINESS",
+      "delta": "Prevent replay-resume artifacts from inflating historical evidence/source weight before any recovered corpus is used for J-Space dataset/training-readiness decisions."
+    }
+  },
+  "credit_boundary": {
+    "historical_39m_re_evaluated": false,
+    "historical_backfill_runtime_credit": 0,
+    "distillery_replay_v2_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0
+  },
+  "next_exact_gate": "Obtain one repository-bound terminal PASS from the existing GO878 line-identity reentry lane on exact successor source, then validate PR1881 with the combined one-shot-vs-resume + source_count reconciliation + second-no-change integration discriminator before historical saturation credit."
+}

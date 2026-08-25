@@ -1,0 +1,96 @@
+name: GO878 historical backfill line identity reentry
+
+on:
+  issues:
+    types: [opened]
+
+permissions:
+  contents: write
+  issues: read
+
+concurrency:
+  group: go878-backfill-line-identity
+  cancel-in-progress: false
+
+jobs:
+  repair-and-test:
+    if: github.repository == 'gschaidergabriel/clay-global-research-entity' && github.event.issue.title == '[CLAY-DISPATCH] GO878 repair backfill line identity reentry' && github.event.issue.user.login == 'gschaidergabriel'
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: main
+          fetch-depth: 0
+          clean: true
+          persist-credentials: true
+
+      - name: Patch current admitted successor and regress in clay-direct-dev
+        shell: bash
+        run: |
+          set -euo pipefail
+          scratch="/tmp/clay-go878-lineid-reentry-${GITHUB_RUN_ID}"
+          host_tmp="/tmp/clay-go878-lineid-reentry-host-${GITHUB_RUN_ID}"
+          rm -rf "$host_tmp"; mkdir -p "$host_tmp"
+          runtime=''; prefix=()
+          if command -v docker >/dev/null 2>&1 && docker inspect clay-direct-dev >/dev/null 2>&1; then runtime='docker'; prefix=(docker)
+          elif command -v sudo >/dev/null 2>&1 && sudo -n docker inspect clay-direct-dev >/dev/null 2>&1; then runtime='sudo-docker'; prefix=(sudo -n docker)
+          elif command -v podman >/dev/null 2>&1 && podman inspect clay-direct-dev >/dev/null 2>&1; then runtime='podman'; prefix=(podman)
+          elif command -v sudo >/dev/null 2>&1 && sudo -n podman inspect clay-direct-dev >/dev/null 2>&1; then runtime='sudo-podman'; prefix=(sudo -n podman)
+          else echo 'CLAY_GO878_LINE_IDENTITY=BLOCKED_SANDBOX_NOT_DISCOVERED' >&2; exit 72; fi
+
+          "${prefix[@]}" exec clay-direct-dev sh -lc "rm -rf '$scratch'; mkdir -p '$scratch'"
+          "${prefix[@]}" cp "$GITHUB_WORKSPACE/." "clay-direct-dev:$scratch"
+          set +e
+          "${prefix[@]}" exec clay-direct-dev sh -lc "set -eu; cd '$scratch'; python3 tools/run_go878_backfill_line_checkpoint_reentry.py --repo '$scratch'; python3 -m pytest -q tests/test_free_swarm_historical_backfill.py" >"$host_tmp/tests.txt" 2>&1
+          rc=$?
+          set -e
+          cat "$host_tmp/tests.txt"
+          [[ "$rc" -eq 0 ]] || exit "$rc"
+          "${prefix[@]}" cp "clay-direct-dev:$scratch/tools/free_swarm_historical_backfill.py" "$GITHUB_WORKSPACE/tools/free_swarm_historical_backfill.py"
+          "${prefix[@]}" cp "clay-direct-dev:$scratch/tests/test_free_swarm_historical_backfill.py" "$GITHUB_WORKSPACE/tests/test_free_swarm_historical_backfill.py"
+
+          RUNTIME="$runtime" HOST_TMP="$host_tmp" python3 - <<'PY'
+          import datetime, hashlib, json, os, pathlib, subprocess
+          ws=pathlib.Path(os.environ['GITHUB_WORKSPACE'])
+          def blob(rel): return subprocess.check_output(['git','hash-object',rel],cwd=ws,text=True).strip()
+          log=(pathlib.Path(os.environ['HOST_TMP'])/'tests.txt').read_bytes()
+          receipt={
+            'schema':'FREE_SWARM_BACKFILL_LINE_IDENTITY_RECEIPT/v1',
+            'generated_at':datetime.datetime.now(datetime.timezone.utc).isoformat(),
+            'github_run_id':os.environ.get('GITHUB_RUN_ID'),
+            'github_sha_trigger':os.environ.get('GITHUB_SHA'),
+            'sandbox':'clay-direct-dev','container_runtime':os.environ.get('RUNTIME'),
+            'source_blob_after':blob('tools/free_swarm_historical_backfill.py'),
+            'test_blob_after':blob('tests/test_free_swarm_historical_backfill.py'),
+            'test_log_sha256':hashlib.sha256(log).hexdigest(),
+            'test_command':'python3 -m pytest -q tests/test_free_swarm_historical_backfill.py',
+            'status':'PASS',
+            'source_predecessor_blob':'f095ec12ab28aa5df87b1762b2cc19afca592365',
+            'preserved_parallel_delta':'HISTORICAL_BATCH_CAUSAL_BINDING',
+            'invariants':['resumed scans preserve absolute line/source_event_id identity','legacy offset-only checkpoints recover absolute line count'],
+            'external_provider_calls':0,'external_model_calls':0,'secrets_recorded':False,
+            'runtime_credit_added':0,'whole_entityos_hcu_credit_added':0,'jspace_model_credit_added':0,'training_credit_added':0,
+            'scope':'HISTORICAL_BACKFILL_PROVENANCE_IDENTITY_COMPONENT_ONLY'
+          }
+          target=ws/'research_entity/runtime/tool_results'/f"go878-backfill-line-identity-{os.environ['GITHUB_RUN_ID']}.json"
+          target.parent.mkdir(parents=True,exist_ok=True); target.write_text(json.dumps(receipt,indent=2,sort_keys=True)+'\n')
+          PY
+          "${prefix[@]}" exec clay-direct-dev sh -lc "rm -rf '$scratch'" || true
+          rm -rf "$host_tmp"
+
+      - name: Persist tested successor source and receipt
+        shell: bash
+        run: |
+          set -euo pipefail
+          git diff --check
+          git config user.name 'clay-go878-line-identity-runner'
+          git config user.email 'clay-go878-line-identity-runner@users.noreply.github.com'
+          git add tools/free_swarm_historical_backfill.py tests/test_free_swarm_historical_backfill.py research_entity/runtime/tool_results/
+          if git diff --cached --quiet; then echo 'No delta: parallel work already converged.'; exit 0; fi
+          git commit -m "backfill: stabilize resumed source-event identity ${GITHUB_RUN_ID} [skip ci]"
+          for attempt in 1 2 3 4 5 6; do
+            if git pull --rebase origin main && git push origin HEAD:main; then exit 0; fi
+            git rebase --abort 2>/dev/null || true; sleep $((attempt * 3))
+          done
+          exit 1

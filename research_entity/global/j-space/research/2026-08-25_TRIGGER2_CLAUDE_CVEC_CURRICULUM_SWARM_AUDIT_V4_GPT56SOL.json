@@ -1,0 +1,105 @@
+{
+  "schema": "CLAY_TRIGGER2_CLAUDE_CVEC_CURRICULUM_SWARM_AUDIT/v4",
+  "date": "2026-08-25",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "trigger": "triggerwort 2",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "supervisor_epoch": "8.78",
+  "mode": "FREE_ONLY",
+  "source": {
+    "ingest_path": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_CLAUDE_XENO_VECTOR_EVIDENCE_INGEST_V1_GPT56SOL.json",
+    "ingest_blob_sha": "82021cfd76928f2b72bff7ecea77e0325f3fa92e",
+    "source_package_sha256": "a2babae93dfe39e4e452a06bd8b848337f29766e38c422f05fb395126229b05c",
+    "measured_model_id": "Goekdeniz-Guelmez/Josiefied-Qwen3.5-0.8B-gabliterated-v1",
+    "measured_model_revision": "591852bda6e1979f59e4b0f5ee2919697b12e936"
+  },
+  "companion_pr": 1992,
+  "candidate_delta": {
+    "dataset_sha256": "0999d861f71129aa5444d96b33055589bcc0a305ea8217298b4f08afc4ae7ab3",
+    "materialization": "LOCAL_CANDIDATE_ARTIFACT_NOT_CANONICAL_DATASET",
+    "rows_total": 44,
+    "families_total": 11,
+    "split_counts": {"TRAIN": 44, "VALIDATION": 0, "HOLDOUT": 0},
+    "source_observed_rows": 11,
+    "method_only_rows": 22,
+    "synthetic_hard_negative_rows": 11,
+    "positive_jspace_causal_targets": 0,
+    "candidate_gate_failures": 0,
+    "family_split_leaks": 0,
+    "provenance_ancestry_split_leaks": 0
+  },
+  "measurement_grounded_families": [
+    "CVEC_CONTEXT_BINDING_F01",
+    "CVEC_DYNAMIC_CODEBOOK_F02",
+    "CVEC_CENTERING_F03",
+    "CVEC_SEMANTIC_SUBSPACE_F04",
+    "CVEC_CARRIER_BINDING_F05",
+    "CVEC_READ_WRITE_F06",
+    "CVEC_STRUCTURE_NEGATIVE_F07",
+    "CVEC_ALPHABET_F08",
+    "CVEC_GENERATOR_LEAK_F09",
+    "CVEC_CORRECTION_LINEAGE_F10",
+    "CVEC_MODEL_OBJECTIVE_F11"
+  ],
+  "swarm_review": [
+    {
+      "role": "EVIDENCE_AUDITOR",
+      "verdict": "PASS_WITH_GUARD",
+      "finding": "Measured values are confined to SOURCE_OBSERVED/R0 rows; method and hard-negative rows do not mint measured facts."
+    },
+    {
+      "role": "SHORTCUT_HUNTER",
+      "verdict": "PASS_AFTER_REWRITE",
+      "finding": "Reject within-template=>invariant, static-mapping-with-shuffled-lines, raw-cosine=>semantics and writable-axis=>dynamic-routing shortcuts."
+    },
+    {
+      "role": "LEAKAGE_REVIEWER",
+      "verdict": "PASS_WITH_LIMITATION",
+      "finding": "Candidate delta is TRAIN-only so the shared Claude/model ancestry is not split across TRAIN/VALIDATION/HOLDOUT."
+    },
+    {
+      "role": "JSPACE_SKEPTIC",
+      "verdict": "PASS",
+      "finding": "No positive J-Space causal target is created; cross-model Qwen3-0.6B -> Qwen3.5-0.8B labels remain forbidden."
+    },
+    {
+      "role": "RETENTION_REVIEWER",
+      "verdict": "PASS",
+      "finding": "Semantic reading, symbol-axis writeout and whitened HRR/MAP k<=16 are protection objectives, not primary retraining objectives."
+    },
+    {
+      "role": "DATASET_ADJUDICATOR",
+      "verdict": "PASS_CANDIDATE_NOT_FINAL_SFT",
+      "finding": "Literal atom-emission rows remain blocked until the exact 46-atom ABI inventory plus exact tokenizer binding is available."
+    }
+  ],
+  "key_training_delta": {
+    "teach_primary": [
+      "context-invariant semantic binding/routing",
+      "episode-local dynamic codebook binding"
+    ],
+    "protect": [
+      "semantic readability already measured present",
+      "symbol-axis writeout already measured writable",
+      "carrier binding already measured sufficient through k<=16"
+    ],
+    "hard_negative_lineage": [
+      "initial MAP k=2 collapse was an implementation/algebra error, not a capacity fact",
+      "raw HRR decline was anisotropy-sensitive and disappeared under centering/whitening",
+      "nondecodable structural target cannot support context-dependent-atom claims",
+      "metadata-only S3 permutation IDs do not establish realized mapping generalization"
+    ]
+  },
+  "final_atom_emission_status": "BLOCKED_UNTIL_EXACT_46_ATOM_INVENTORY_AND_TOKENIZER_BINDING",
+  "credits": {
+    "accepted_dataset_tokens": 0,
+    "qwen35_jspace_runtime_credit": 0,
+    "qwen35_training_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "canonical_semantics_promotion": false
+  },
+  "next_exact_action": "Bind the exact 46-atom ABI inventory and tokenizer identity; then materialize the PR1992 abstract full-S3 plans into literal rows, verify realized mappings, leakage/counterbalance, and freeze disjoint lexical/template/symbol holdouts before any matched pilot."
+}

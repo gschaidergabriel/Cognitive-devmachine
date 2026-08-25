@@ -1,0 +1,109 @@
+{
+  "schema": "CLAY_FORSCHUNGSRUN_1_V8_FULL_NATIVE_EVIDENCE_CONJUNCTION/v1",
+  "date": "2026-08-25",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "user_trigger": "forschungsrun 1",
+  "persistent_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority_epoch_observed": "8.78",
+  "execution_mode": "FREE_ONLY",
+  "canonical_main_observed_at_final_reentry": "7097499cd44688a7b6cc342fe6f36f9c9a69cfc4",
+  "current_promotion_epoch_observed": "v8",
+  "research_question": "Can the strongest inherited full-native J-Space vector-control candidate bypass successor evidence gates even when scientific/owner/modular fields fail closed correctly?",
+  "observed_bug": {
+    "v7": {
+      "source": "tools/trigger1_jspace_promotion_gate_v7.py",
+      "prepatch_behavior": "The verdict spreads **base, recomputes scientific/owner/modular using case-bound factorial evidence, but does not overwrite full_native_jspace_vector_control_candidate.",
+      "fail_open_case": "An inherited v6 full-native TRUE can survive a modularity-v2 or semantic-factorial evidence failure."
+    },
+    "v8": {
+      "source": "tools/trigger1_jspace_promotion_gate_v8.py",
+      "prepatch_blob_sha256": "bb0a784411b9a477fb60adf84dd1f3dc920e4389",
+      "prepatch_behavior": "The verdict spreads **base, recomputes scientific/owner/modular using preregistration-runtime binding, but does not overwrite full_native_jspace_vector_control_candidate.",
+      "fail_open_case": "A v7 full-native TRUE can survive exact frozen-plan-to-runtime binding failure."
+    }
+  },
+  "counterhypothesis": {
+    "claim": "Full-native is intentionally orthogonal to successor evidence gates and may remain TRUE when modularity, factorial or preregistration-runtime binding fails.",
+    "status": "REJECTED_FOR_CURRENT_PROMOTION_SEMANTICS",
+    "reason": "Current v7/v8 descriptions define positive successor status as requiring the added evidence boundaries; allowing the strongest inherited candidate alone to bypass them contradicts fail-closed successor semantics and the current Forschungsrun-1 full-control boundary."
+  },
+  "implemented_invariant": {
+    "v7_full_native": "upstream_v6_full_native AND evidence_bound_modularity_v2 AND case_bound_semantic_factorial",
+    "v8_full_native": "v7_full_native AND preregistration_runtime_binding",
+    "canonical_credit_minted": false
+  },
+  "current_write": {
+    "branch": "fix/forschungsrun1-v8-full-native-evidence-conjunction",
+    "pull_request": 1936,
+    "source_commits": [
+      "6a454f15e9b354b325badd73b0ebba3aa986a594",
+      "b7c04da9be94c825bbf5945bea7cc5880e7ad9cf",
+      "b9bf06476cdb788fda480ec01f2a9db08d81885a",
+      "1261d63c6b30121544898e54f2d45bcd8355f37f"
+    ],
+    "files": [
+      "tools/trigger1_jspace_promotion_gate_v7.py",
+      "tests/test_trigger1_jspace_promotion_gate_v7.py",
+      "tools/trigger1_jspace_promotion_gate_v8.py",
+      "tests/test_trigger1_jspace_promotion_gate_v8.py"
+    ]
+  },
+  "regression_contract": {
+    "v7": [
+      "factorial failure forces full-native FALSE",
+      "modularity-v2 binding failure forces modular and full-native FALSE without erasing a narrower scientific/owner candidate",
+      "upstream failure cannot be rescued",
+      "fully evidence-bound v7 may preserve full-native TRUE while all canonical/runtime/training credits remain false"
+    ],
+    "v8": [
+      "v7 plus preregistration-runtime binding are both required for full-native TRUE",
+      "plan/runtime drift forces full-native FALSE together with other v8-positive candidate statuses",
+      "binding PASS cannot rescue v7 failure",
+      "all canonical/runtime/training credit fields remain non-minting"
+    ]
+  },
+  "validation_and_negative_evidence": {
+    "prior_isolated_v7_composition_regressions": "4/4 PASS",
+    "exact_local_git_clone": "BLOCKED_DNS_COULD_NOT_RESOLVE_GITHUB_COM",
+    "pr1936_identity_guard_run": {
+      "run_id": 32808769858,
+      "conclusion": "failure",
+      "observed_job_steps": 0,
+      "runner_id": 0
+    },
+    "pr1936_verify_run": {
+      "run_id": 32808769794,
+      "conclusion": "failure",
+      "observed_job_steps": 0,
+      "runner_id": 0
+    },
+    "ci_failure_classification": "RUNNER_OR_CHECK_START_FAILURE_NOT_SOURCE_TEST_RESULT",
+    "exact_repository_test_pass_claimed": false
+  },
+  "coordination": {
+    "pr1930": "CLOSED_DUPLICATE_AFTER_CANONICAL_FACTORIAL_GATE_CONVERGED",
+    "pr1931": "CLOSED_SUPERSEDED_BY_MODULARITY_V2",
+    "pr1933": "CLOSED_SUPERSEDED_BY_PROMOTION_V8",
+    "single_current_fix_lane": 1936,
+    "new_unusual_experiment_executed": false
+  },
+  "runtime_boundary": {
+    "native_llamacpp_cvec_component_runtime_credit_preexisting": true,
+    "new_model_decode_this_run": false,
+    "new_provider_runtime_this_run": false,
+    "fresh_holdout_opened_this_run": false,
+    "current_trigger1_vps_queue_quarantine_respected": true,
+    "atomic_unusual_experiment_lease_claimed": false
+  },
+  "credit_change": {
+    "canonical_semantics_promotion": false,
+    "jspace_model_runtime_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "training_credit": 0
+  },
+  "next_exact_action": "Keep PR1936 as the single source repair unless current main independently closes both conjunctions. Obtain an actually-started exact-source repository regression/guard execution; zero-step runner failures are not acceptance evidence. Then advance the current v8 producer contract so exact native Qwen3-0.6B Q8_0 case rows bind preregistration receipt, checkpoint/tokenizer/GGUF/llama.cpp/harness identity, family identities, modularity rows, semantic factorials and downstream readouts before any fresh holdout is opened under a valid atomic unusual-experiment lease."
+}

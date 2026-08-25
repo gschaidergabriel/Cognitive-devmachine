@@ -22,6 +22,7 @@ class Response:
         status=200,
         body=(
             b'{"object":"chat.completion","id":"chatcmpl-test","created":1,"model":"x",'
+            b'"usage":{"prompt_tokens":1,"completion_tokens":1,"total_tokens":2},'
             b'"choices":[{"index":0,"finish_reason":"stop",'
             b'"message":{"role":"assistant","content":"ok"}}]}'
         ),

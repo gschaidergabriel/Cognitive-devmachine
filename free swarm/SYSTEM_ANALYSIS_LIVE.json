@@ -1,6 +1,6 @@
 {
   "schema": "CLAY_FREE_SWARM_SYSTEM_ANALYSIS/v3",
-  "generated_at": "2026-08-25T06:20:35.929644+00:00",
+  "generated_at": "2026-08-25T06:35:41.834481+00:00",
   "runtime": {
     "supervisor": "STOPPED/QUARANTINED",
     "go_swarm": "RUNNING",
@@ -65,7 +65,7 @@
   },
   "distillery": {
     "schema": "CLAY_RESEARCH_DISTILLERY_STATUS/v1",
-    "generated_at": "2026-08-25T06:20:32.386761+00:00",
+    "generated_at": "2026-08-25T06:35:37.937816+00:00",
     "collected_source_tokens": 11621,
     "accepted_dataset_tokens": 0,
     "dataset_yield": 0.0,
@@ -86,7 +86,7 @@
     "model_output_tokens": 1455,
     "shared_provider_budget": {
       "schema": "CLAY_SHARED_PROVIDER_BUDGET/v1",
-      "generated_at": "2026-08-25T06:20:32.387630+00:00",
+      "generated_at": "2026-08-25T06:35:37.938616+00:00",
       "providers": {
         "arxiv": {
           "max_inflight": 1,
@@ -224,22 +224,22 @@
     },
     "db_bytes": 864256,
     "top_questions": [
-      "Wie kann die Lösung auf der AWS-Plattform getestet und bewertet werden?",
-      "Wie kann loader_tx_id über Forks hinweg eindeutig und unveränderlich bleiben?",
-      "Which sparse MoE routing entropy metric (token-level vs sequence-level) causally predicts downstream task performance on HCU-style logical cells?",
-      "Does global broadcast intervention (ablation/patching) in GWT architectures produce measurable causal effects distinct from attention head ablation?",
-      "Can typed effect handlers provide deterministic replay guarantees for LLM tool chains under FREE_ONLY rate-limited inference?",
-      "Welche minimalen Signaturattribute (z. B. Loader‑Tx‑ID, Model‑Hash, Zeitstempel) sind nötig für eine robuste Zuordnung?",
-      "Does the optimal mmap chunk size for transformer weight loading correlate with the model's layer size distribution and access pattern (sequential vs. Mixture-of-Experts routing)?",
-      "Können mehrere Model‑Versionen mit derselben Loader‑Transaktion verwendet werden, und wie lässt sich das unterscheiden?",
-      "Does NVIDIA NIM/Developer Program expose a credential-scoped free-tier metadata endpoint that distinguishes free vs paid access per API key without incurring inference cost?",
-      "How does the caching layer affect the overall system latency?"
+      "How to cryptographically bind secret_lookup_count and network_attempt_count to the actual execution context at admission time?",
+      "What is the optimal provider-specific rate limiting and quota management strategy for FREE_ONLY providers in EntityOS/HCU scaling?",
+      "How can dynamic executor rebinding be optimized for maximum performance and availability in FREE_ONLY provider environments?",
+      "How can we quantitatively balance acceptance stringency with model innovation in free swarm environments?",
+      "Can we implement a sandbox‑level eBPF filter to block all outbound connections to provider domains while allowing internal J‑Space traffic?",
+      "What are the optimal resource allocation strategies for minimizing physical decode concurrency?",
+      "How can we effectively monitor and adapt the performance of the system to ensure efficient management of boundaries?",
+      "Can EffectGate composition be made atomic without introducing a new single-point-of-failure in the HCU critical path?",
+      "How does memory bandwidth saturation affect latency for different Nvidia model architectures at varying batch sizes?",
+      "Does NVIDIA's NIM API expose a deterministic per-credential endpoint that returns pricing/tier metadata for the authenticated credential without consuming paid quota?"
     ],
     "candidate_states": {}
   },
   "evidence_forge": {
     "schema": "CLAY_FREE_EVIDENCE_FORGE_STATUS/v1",
-    "generated_at": "2026-08-25T06:20:34.548015+00:00",
+    "generated_at": "2026-08-25T06:35:39.119625+00:00",
     "candidate_states": {
       "ACCEPTED": 1,
       "NEEDS_IMPLEMENTATION": 65,
@@ -263,7 +263,7 @@
     "peak_parallel_tasks": 0,
     "shared_provider_budget": {
       "schema": "CLAY_SHARED_PROVIDER_BUDGET/v1",
-      "generated_at": "2026-08-25T06:20:34.548896+00:00",
+      "generated_at": "2026-08-25T06:35:39.120443+00:00",
       "providers": {
         "arxiv": {
           "max_inflight": 1,
@@ -408,6 +408,6 @@
     "measured_total_sonnet5_equivalent_usd": 148.830648,
     "verified_historical_savings_usd": null,
     "nominal_avoided_if_zero_cost_usd": 148.830648,
-    "repo_output_only_proxy_usd": 125.68646
+    "repo_output_only_proxy_usd": 125.79613
   }
 }

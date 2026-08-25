@@ -234,6 +234,60 @@ reconcile_6000_admission(){
   fi
 }
 
+raw_generation_allowed(){
+  # Supervisor 8.78 conversion-pressure gate. This process is credential blind:
+  # it reads only the local canonical Forge DB and writes one local status record.
+  python3 - <<'PY'
+import datetime,json,os,sqlite3
+from pathlib import Path
+
+threshold=max(1,int(os.getenv('CLAY_SWARM_RAW_GENERATION_BACKPRESSURE_THRESHOLD','64')))
+state_root=Path('/artifacts/clay-entityos-swarm')
+db=state_root/'forge/forge.sqlite3'
+status_path=state_root/'RAW_GENERATION_BACKPRESSURE.json'
+status={
+ 'schema':'CLAY_SWARM_RAW_GENERATION_BACKPRESSURE/v1',
+ 'observed_at':datetime.datetime.now(datetime.timezone.utc).isoformat(),
+ 'threshold':threshold,
+ 'source':'FORGE_SQLITE_CANONICAL_LOCAL_STATE',
+ 'external_provider_calls':0,
+ 'credentials_read':False,
+}
+allowed=False
+try:
+ if not db.exists():
+  status.update({'state':'UNKNOWN_FORGE_DB','action':'PAUSE_RAW_GENERATION_FAIL_CLOSED'})
+ else:
+  con=sqlite3.connect(f'file:{db}?mode=ro',uri=True,timeout=2.0)
+  tables={str(r[0]) for r in con.execute("SELECT name FROM sqlite_master WHERE type='table'")}
+  if 'candidates' not in tables:
+   status.update({'state':'UNKNOWN_CANDIDATE_TABLE','action':'PAUSE_RAW_GENERATION_FAIL_CLOSED'})
+  else:
+   ready=int(con.execute("SELECT COUNT(*) FROM candidates WHERE ready=1 AND state='NEW'").fetchone()[0])
+   implementation=int(con.execute("SELECT COUNT(*) FROM candidates WHERE state='NEEDS_IMPLEMENTATION'").fetchone()[0])
+   pending=0
+   if 'historical_chunks' in tables:
+    pending=int(con.execute("SELECT COUNT(*) FROM historical_chunks WHERE state='PENDING_EXTRACTION'").fetchone()[0])
+   pressure=ready+implementation+pending
+   allowed=pressure < threshold
+   status.update({
+    'state':'OBSERVED',
+    'ready_backlog':ready,
+    'implementation_backlog':implementation,
+    'pending_extraction':pending,
+    'conversion_pressure':pressure,
+    'action':'ALLOW_RAW_GENERATION' if allowed else 'PAUSE_RAW_GENERATION_BACKPRESSURE',
+   })
+  con.close()
+except Exception as exc:
+ status.update({'state':'READ_FAILED','action':'PAUSE_RAW_GENERATION_FAIL_CLOSED','error_class':type(exc).__name__})
+tmp=status_path.with_suffix('.json.tmp')
+tmp.write_text(json.dumps(status,indent=2,sort_keys=True)+'\n',encoding='utf-8')
+tmp.replace(status_path)
+raise SystemExit(0 if allowed else 1)
+PY
+}
+
 start_6000(){
   pgrep -f '[r]un_6000_free_swarm_fast.py' >/dev/null 2>&1 && return 0
   local before after post now rem hours out pid tmp vault_exec
@@ -283,7 +337,11 @@ while (( $(date +%s) < DEADLINE )); do
   start_forge
   stop_legacy_go_swarm
   reconcile_6000_admission
-  start_6000
+  if raw_generation_allowed; then
+    start_6000
+  else
+    stop_6000
+  fi
   refresh_root_results
 
   NOW=$(date +%s); REMAINING=$((DEADLINE-NOW))

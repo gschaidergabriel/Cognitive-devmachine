@@ -25,11 +25,13 @@
   "hypotheses": [
     {
       "id": "H-CBMI-01",
-      "claim": "The current CLAY_TRIGGER2_MODEL_CALL_BINDING/v2 digest is a content identity, not a sufficient causal occurrence identity, because it omits causal_event/admission/route/plan/cell/attempt identity."
+      "claim": "The current CLAY_TRIGGER2_MODEL_CALL_BINDING/v2 digest is a content identity, not a sufficient causal occurrence identity, because it omits causal_event/admission/route/plan/cell/attempt identity.",
+      "status": "SUPPORTED_WORKING_HYPOTHESIS_SOURCE_PLUS_SYNTHETIC"
     },
     {
       "id": "H-CBMI-02",
-      "claim": "A two-level identity split—model_call_content_digest plus model_call_event_id—can preserve deterministic replay while separating distinct executions that happen to have identical bound content and output."
+      "claim": "A two-level identity split—model_call_content_digest plus model_call_event_id—can preserve deterministic replay while separating distinct executions that happen to have identical bound content and output.",
+      "status": "SUPPORTED_WORKING_HYPOTHESIS_EXACT_SYNTHETIC_MECHANISM"
     }
   ],
   "counterhypotheses": [
@@ -48,6 +50,12 @@
     "PR-1891 distinct-execution versus semantic-replay identity law"
   ],
   "falsifier": "If current downstream NODE_RESULT/J-Space/evaluation lineage is proven to bind a separate immutable call-occurrence receipt containing causal_event_id/admission_id/route/grid-cell/attempt identity and rejects same-occurrence/different-content conflicts, then the call-level occurrence gap is already closed outside the digest and this field reduces to a naming/documentation clarification.",
+  "artifacts": {
+    "probe": "research_entity/emergent_fields/fields/field-666-20260826T0400p0700-causal-bisimulation-model-call-identity-09c2ea75/causal_bisimulation_probe.py",
+    "result": "research_entity/emergent_fields/fields/field-666-20260826T0400p0700-causal-bisimulation-model-call-identity-09c2ea75/EXPERIMENT_RESULT.json",
+    "report": "research_entity/trigger_runs/666/666-20260826T0400p0700-e50-gpt56sol-causal-bisimulation/FINAL_REPORT.md",
+    "mesh_event": "research_entity/rooms/rooms/center/events/delta-666-20260826T0400p0700-causal-bisimulation-model-call-identity.json"
+  },
   "execution": {
     "kind": "DETERMINISTIC_SYNTHETIC_IDENTITY_EXPERIMENT",
     "provider_calls": 0,
@@ -56,7 +64,8 @@
     "vps_calls": 0,
     "unusual_experiment": false
   },
-  "lifecycle_state": "TESTED",
+  "lifecycle_state": "INTEGRATED",
+  "result": "SUPPORTED_WORKING_HYPOTHESIS_WITH_EXACT_SYNTHETIC_OCCURRENCE_IDENTITY_COUNTEREXAMPLE_ROUTED_TO_MESH_NOT_PROMOTED",
   "evidence_class": "R0_SOURCE_OBSERVED_PLUS_EXACT_SYNTHETIC_MECHANISM_TEST_PLUS_R1_ARCHITECTURE_INFERENCE",
   "promotion_credit": {
     "model_call_runtime": 0,

@@ -1,6 +1,6 @@
 {
   "state": "LIVE",
-  "generated_at": "2026-08-25T11:23:01.449815+00:00",
+  "generated_at": "2026-08-25T11:53:19.223108+00:00",
   "collected_source_tokens": 11621,
   "accepted_dataset_tokens": 0,
   "dataset_yield": 0.0,
@@ -26,10 +26,19 @@
     "collected_source_tokens": 11621,
     "collected_chunks": 48
   },
-  "small_models": [],
+  "small_models": [
+    "google/gemma-4-26b-a4b-it:free",
+    "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
+    "liquid/lfm-2.5-2.6b:free",
+    "nvidia/nemotron-3-super-120b-a12b:free",
+    "google/gemma-4-31b-it:free",
+    "nvidia/nemotron-3-ultra-550b-a55b:free",
+    "cohere/north-mini-code:free",
+    "dots-studio/dots-3-note-preview:free"
+  ],
   "provider_budget": {
     "schema": "CLAY_SHARED_PROVIDER_BUDGET/v1",
-    "generated_at": "2026-08-25T11:22:58.797040+00:00",
+    "generated_at": "2026-08-25T11:52:25.138759+00:00",
     "providers": {
       "arxiv": {
         "max_inflight": 1,
@@ -131,13 +140,13 @@
         "max_inflight": 16,
         "active_leases": 0,
         "min_interval_s": 0.5,
-        "cooldown_seconds": 0.0,
-        "total_requests": 250,
-        "total_success": 133,
-        "total_429": 116,
+        "cooldown_seconds": 9.991740942001343,
+        "total_requests": 391,
+        "total_success": 134,
+        "total_429": 256,
         "total_errors": 0,
         "last_status": "429",
-        "last_observed_at": "2026-08-25T02:49:22.245963+00:00"
+        "last_observed_at": "2026-08-25T11:52:25.130563+00:00"
       },
       "semantic_scholar": {
         "max_inflight": 1,

@@ -4,5 +4,5 @@
   "op": "exec",
   "cwd": "/cache/clay-qwen06-native/llama.cpp",
   "timeout_seconds": 180,
-  "command": "set -euo pipefail; echo llama_head=$(git rev-parse HEAD); echo '=== llama context params ==='; sed -n '350,390p' include/llama.h; echo '=== callback typedef ==='; grep -RIn 'typedef.*ggml_backend_sched_eval_callback\|using ggml_backend_sched_eval_callback\|ggml_backend_sched_eval_callback' ggml include src | head -n 40; echo '=== qwen3 layer graph ==='; sed -n '95,155p' src/models/qwen3.cpp; echo '=== graph tensor names around cvec ==='; grep -RIn 'ggml_set_name.*cur\|set_name.*cur\|cb_eval' src/models/qwen3.cpp src/llama-context.cpp ggml/src | head -n 100"
+  "command": "set -euo pipefail; echo llama_head=$(git rev-parse HEAD); echo '=== llama context params ==='; sed -n '350,390p' include/llama.h; echo '=== callback typedef hits ==='; grep -RIn 'ggml_backend_sched_eval_callback' ggml include src | head -n 40; echo '=== qwen3 layer graph ==='; sed -n '95,155p' src/models/qwen3.cpp; echo '=== cb_eval hits ==='; grep -RIn 'cb_eval' src/models/qwen3.cpp src/llama-context.cpp ggml/src | head -n 100"
 }

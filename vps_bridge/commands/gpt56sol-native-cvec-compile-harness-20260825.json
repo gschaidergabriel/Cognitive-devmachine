@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v4",
+  "command_id": "gpt56sol-native-cvec-compile-harness-20260825",
+  "op": "exec",
+  "cwd": "/workspace/clay-global-research-entity",
+  "timeout_seconds": 180,
+  "command": "set -euo pipefail; ROOT=/cache/clay-qwen06-native; BIN=$ROOT/native_cvec_logits; g++ -O2 -std=c++17 -I$ROOT/llama.cpp/include -I$ROOT/llama.cpp/ggml/include tools/trigger1_native_llamacpp_cvec_logits.cpp -L$ROOT/build/bin -Wl,-rpath,$ROOT/build/bin -lllama -lggml -o $BIN; echo COMPILE_NATIVE_HARNESS=PASS; echo binary_sha256=$(sha256sum $BIN | cut -d ' ' -f1); ldd $BIN"
+}

@@ -1,0 +1,329 @@
+{
+  "schema": "CLAY_TRIGGER2_OOD_FACTOR_ORTHOGONALITY_SWARM_REVIEW/v1",
+  "date": "2026-08-25",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority": {
+    "canonical_main_observed_before_branch": "e2aa3b4b246ac02f1df1df714c673654ea712fd7",
+    "supervisor_epoch": "8.78",
+    "mode": "FREE_ONLY",
+    "training_executed": false,
+    "provider_preflight_executed": false,
+    "unusual_experiment": "NOT_USED_STATIC_SOURCE_REVIEW_ONLY"
+  },
+  "review_target": {
+    "path": "tools/trigger2_dynamic_binding_blueprint_v2.py",
+    "observed_blob_sha": "c131a0dd344bdb4c66f8c458c4f2c4e6b323fd21",
+    "schema": "CLAY_TRIGGER2_DYNAMIC_BINDING_EPISODE_BLUEPRINT/v2.1",
+    "observed_split_geometry": {
+      "TRAIN": {
+        "templates": [
+          "T1_NUMERIC_COMPARISON",
+          "T2_SET_MEMBERSHIP",
+          "T3_ORDER_RELATION",
+          "T4_ATTRIBUTE_BINDING"
+        ],
+        "symbol_pool": "TRAIN_TRIPLETS_00_11"
+      },
+      "VALIDATION": {
+        "templates": [
+          "T5_BOOLEAN_XOR_VALIDATION"
+        ],
+        "symbol_pool": "SAME_AS_TRAIN"
+      },
+      "HOLDOUT_FROZEN": {
+        "templates": [
+          "T6_PARITY_HOLDOUT"
+        ],
+        "symbol_pool": "HOLDOUT_TRIPLET_12_14"
+      }
+    },
+    "source_selftest_fact": "train_syms == val_syms AND train_syms isdisjoint hold_syms"
+  },
+  "swarm_review": {
+    "roles": [
+      "EVIDENCE_EXTRACTOR",
+      "FACTORIAL_DESIGN_REVIEWER",
+      "ADVERSARIAL_ATTRIBUTION_REVIEWER",
+      "GOODMAN_PROVENANCE_REVIEWER",
+      "SHORTCUT_HUNTER",
+      "HARNESS_REVIEWER",
+      "FINAL_INTEGRATOR"
+    ],
+    "round_1_candidate": "Accept the current three observed cells as sufficient because validation isolates unseen-template transfer and frozen holdout adds unseen symbols.",
+    "round_1_rejection": "The frozen holdout changes both template family and symbol pool. After a validation pass, a holdout failure still cannot distinguish symbol-OOD failure from a template-by-symbol interaction or from the second unseen template family being harder.",
+    "round_2_verdict": "ADD_A_FROZEN_SYMBOL_ONLY_CELL_AND_SCORE_MAIN_EFFECTS_PLUS_INTERACTION; retain current generator as the sole binder lane and treat this as a diagnostic amendment, not a competing training authority."
+  },
+  "finding": {
+    "severity": "HIGH",
+    "id": "MISSING_KNOWN_TEMPLATE_UNSEEN_SYMBOL_CELL",
+    "observed_cells": [
+      "KNOWN_TEMPLATE + KNOWN_SYMBOLS (training/reference)",
+      "UNSEEN_TEMPLATE + KNOWN_SYMBOLS (validation)",
+      "UNSEEN_TEMPLATE + UNSEEN_SYMBOLS (frozen holdout)"
+    ],
+    "missing_cell": "KNOWN_TEMPLATE + UNSEEN_SYMBOLS",
+    "why_it_matters": "Without the missing cell, symbol generalization is not separately identifiable from a joint template+symbol distribution shift at final evaluation.",
+    "counterhypothesis": "A compound OOD holdout is sufficient because only aggregate robustness matters.",
+    "adjudication": "That counterhypothesis is acceptable only for a compound-robustness claim. It is insufficient for the stronger Trigger-2 claim that episode-local binding generalizes to unseen symbols as a distinct capability."
+  },
+  "required_repair": {
+    "minimal": "Add a frozen post-training SYMBOL_ONLY diagnostic using a known structural template family with an untouched symbol pool. It must not be used for tuning or checkpoint selection.",
+    "stronger": "Preregister a final 2x2 diagnostic over template_status {KNOWN,UNSEEN} x symbol_status {KNOWN,UNSEEN}; fully counterbalance S3 mappings, codebook display orders, query polarity, layout and semantic class within every cell.",
+    "atom_pool_rule": "If unseen-symbol cells share atom identities, open them only together after model freeze. If one cell is used for selection, use disjoint unseen atom pools and report that symbol-pool identity is an additional factor.",
+    "family_rule": "Keep causal/counterfactual siblings atomic by provenance_ancestry_id and counterfactual_family_id.",
+    "model_visible_rule": "Evaluator-only class IDs, split labels, mapping IDs, provenance labels and target metadata remain outside model-visible serialization.",
+    "credit_rule": "Behavioral success on this diagnostic cannot mint J-Space causal credit; same-model causal interventions remain separately required."
+  },
+  "candidate_example_shapes": [
+    {
+      "status": "METHOD_ONLY_EXAMPLE_SHAPE_NOT_TRAIN_READY",
+      "cell": "K_TEMPLATE_K_SYMBOL",
+      "template_status": "KNOWN",
+      "symbol_status": "KNOWN",
+      "template_family": "T1_NUMERIC_COMPARISON",
+      "semantic_class_evaluator_only": "ALLOW",
+      "evidence": "Register r has value 7.",
+      "query": "Register r is greater than 5.",
+      "logical_codebook": {
+        "ALLOW": "ABI_ACCEPTED_ORDINAL:00",
+        "DENY": "ABI_ACCEPTED_ORDINAL:01",
+        "ABSTAIN": "ABI_ACCEPTED_ORDINAL:02"
+      },
+      "logical_target": "ABI_ACCEPTED_ORDINAL:00",
+      "materialization_note": "Logical aliases only. Production expansion must use exact checkpoint-local admitted atoms, full S3 mapping/display-order counterbalance, split/family provenance, and model-visible metadata redaction."
+    },
+    {
+      "status": "METHOD_ONLY_EXAMPLE_SHAPE_NOT_TRAIN_READY",
+      "cell": "K_TEMPLATE_K_SYMBOL",
+      "template_status": "KNOWN",
+      "symbol_status": "KNOWN",
+      "template_family": "T1_NUMERIC_COMPARISON",
+      "semantic_class_evaluator_only": "DENY",
+      "evidence": "Register r has value 3.",
+      "query": "Register r is greater than 5.",
+      "logical_codebook": {
+        "ALLOW": "ABI_ACCEPTED_ORDINAL:00",
+        "DENY": "ABI_ACCEPTED_ORDINAL:01",
+        "ABSTAIN": "ABI_ACCEPTED_ORDINAL:02"
+      },
+      "logical_target": "ABI_ACCEPTED_ORDINAL:01",
+      "materialization_note": "Logical aliases only. Production expansion must use exact checkpoint-local admitted atoms, full S3 mapping/display-order counterbalance, split/family provenance, and model-visible metadata redaction."
+    },
+    {
+      "status": "METHOD_ONLY_EXAMPLE_SHAPE_NOT_TRAIN_READY",
+      "cell": "K_TEMPLATE_K_SYMBOL",
+      "template_status": "KNOWN",
+      "symbol_status": "KNOWN",
+      "template_family": "T1_NUMERIC_COMPARISON",
+      "semantic_class_evaluator_only": "ABSTAIN",
+      "evidence": "Register s has value 7; no value for register r is given.",
+      "query": "Register r is greater than 5.",
+      "logical_codebook": {
+        "ALLOW": "ABI_ACCEPTED_ORDINAL:00",
+        "DENY": "ABI_ACCEPTED_ORDINAL:01",
+        "ABSTAIN": "ABI_ACCEPTED_ORDINAL:02"
+      },
+      "logical_target": "ABI_ACCEPTED_ORDINAL:02",
+      "materialization_note": "Logical aliases only. Production expansion must use exact checkpoint-local admitted atoms, full S3 mapping/display-order counterbalance, split/family provenance, and model-visible metadata redaction."
+    },
+    {
+      "status": "METHOD_ONLY_EXAMPLE_SHAPE_NOT_TRAIN_READY",
+      "cell": "K_TEMPLATE_U_SYMBOL",
+      "template_status": "KNOWN",
+      "symbol_status": "UNSEEN",
+      "template_family": "T1_NUMERIC_COMPARISON",
+      "semantic_class_evaluator_only": "ALLOW",
+      "evidence": "Register r has value 7.",
+      "query": "Register r is greater than 5.",
+      "logical_codebook": {
+        "ALLOW": "UNTOUCHED_ATOM_POOL:A",
+        "DENY": "UNTOUCHED_ATOM_POOL:B",
+        "ABSTAIN": "UNTOUCHED_ATOM_POOL:C"
+      },
+      "logical_target": "UNTOUCHED_ATOM_POOL:A",
+      "materialization_note": "Logical aliases only. Production expansion must use exact checkpoint-local admitted atoms, full S3 mapping/display-order counterbalance, split/family provenance, and model-visible metadata redaction."
+    },
+    {
+      "status": "METHOD_ONLY_EXAMPLE_SHAPE_NOT_TRAIN_READY",
+      "cell": "K_TEMPLATE_U_SYMBOL",
+      "template_status": "KNOWN",
+      "symbol_status": "UNSEEN",
+      "template_family": "T1_NUMERIC_COMPARISON",
+      "semantic_class_evaluator_only": "DENY",
+      "evidence": "Register r has value 3.",
+      "query": "Register r is greater than 5.",
+      "logical_codebook": {
+        "ALLOW": "UNTOUCHED_ATOM_POOL:A",
+        "DENY": "UNTOUCHED_ATOM_POOL:B",
+        "ABSTAIN": "UNTOUCHED_ATOM_POOL:C"
+      },
+      "logical_target": "UNTOUCHED_ATOM_POOL:B",
+      "materialization_note": "Logical aliases only. Production expansion must use exact checkpoint-local admitted atoms, full S3 mapping/display-order counterbalance, split/family provenance, and model-visible metadata redaction."
+    },
+    {
+      "status": "METHOD_ONLY_EXAMPLE_SHAPE_NOT_TRAIN_READY",
+      "cell": "K_TEMPLATE_U_SYMBOL",
+      "template_status": "KNOWN",
+      "symbol_status": "UNSEEN",
+      "template_family": "T1_NUMERIC_COMPARISON",
+      "semantic_class_evaluator_only": "ABSTAIN",
+      "evidence": "Register s has value 7; no value for register r is given.",
+      "query": "Register r is greater than 5.",
+      "logical_codebook": {
+        "ALLOW": "UNTOUCHED_ATOM_POOL:A",
+        "DENY": "UNTOUCHED_ATOM_POOL:B",
+        "ABSTAIN": "UNTOUCHED_ATOM_POOL:C"
+      },
+      "logical_target": "UNTOUCHED_ATOM_POOL:C",
+      "materialization_note": "Logical aliases only. Production expansion must use exact checkpoint-local admitted atoms, full S3 mapping/display-order counterbalance, split/family provenance, and model-visible metadata redaction."
+    },
+    {
+      "status": "METHOD_ONLY_EXAMPLE_SHAPE_NOT_TRAIN_READY",
+      "cell": "U_TEMPLATE_K_SYMBOL",
+      "template_status": "UNSEEN",
+      "symbol_status": "KNOWN",
+      "template_family": "T7_GRAPH_REACHABILITY_FROZEN",
+      "semantic_class_evaluator_only": "ALLOW",
+      "evidence": "Edges are a->b and b->c.",
+      "query": "Is c reachable from a?",
+      "logical_codebook": {
+        "ALLOW": "ABI_ACCEPTED_ORDINAL:00",
+        "DENY": "ABI_ACCEPTED_ORDINAL:01",
+        "ABSTAIN": "ABI_ACCEPTED_ORDINAL:02"
+      },
+      "logical_target": "ABI_ACCEPTED_ORDINAL:00",
+      "materialization_note": "Logical aliases only. Production expansion must use exact checkpoint-local admitted atoms, full S3 mapping/display-order counterbalance, split/family provenance, and model-visible metadata redaction."
+    },
+    {
+      "status": "METHOD_ONLY_EXAMPLE_SHAPE_NOT_TRAIN_READY",
+      "cell": "U_TEMPLATE_K_SYMBOL",
+      "template_status": "UNSEEN",
+      "symbol_status": "KNOWN",
+      "template_family": "T7_GRAPH_REACHABILITY_FROZEN",
+      "semantic_class_evaluator_only": "DENY",
+      "evidence": "The only edges are a->b and c->b; there is no outgoing edge from b.",
+      "query": "Is c reachable from a?",
+      "logical_codebook": {
+        "ALLOW": "ABI_ACCEPTED_ORDINAL:00",
+        "DENY": "ABI_ACCEPTED_ORDINAL:01",
+        "ABSTAIN": "ABI_ACCEPTED_ORDINAL:02"
+      },
+      "logical_target": "ABI_ACCEPTED_ORDINAL:01",
+      "materialization_note": "Logical aliases only. Production expansion must use exact checkpoint-local admitted atoms, full S3 mapping/display-order counterbalance, split/family provenance, and model-visible metadata redaction."
+    },
+    {
+      "status": "METHOD_ONLY_EXAMPLE_SHAPE_NOT_TRAIN_READY",
+      "cell": "U_TEMPLATE_K_SYMBOL",
+      "template_status": "UNSEEN",
+      "symbol_status": "KNOWN",
+      "template_family": "T7_GRAPH_REACHABILITY_FROZEN",
+      "semantic_class_evaluator_only": "ABSTAIN",
+      "evidence": "Edge a->b is observed; the outgoing edges of b were not observed.",
+      "query": "Is c reachable from a?",
+      "logical_codebook": {
+        "ALLOW": "ABI_ACCEPTED_ORDINAL:00",
+        "DENY": "ABI_ACCEPTED_ORDINAL:01",
+        "ABSTAIN": "ABI_ACCEPTED_ORDINAL:02"
+      },
+      "logical_target": "ABI_ACCEPTED_ORDINAL:02",
+      "materialization_note": "Logical aliases only. Production expansion must use exact checkpoint-local admitted atoms, full S3 mapping/display-order counterbalance, split/family provenance, and model-visible metadata redaction."
+    },
+    {
+      "status": "METHOD_ONLY_EXAMPLE_SHAPE_NOT_TRAIN_READY",
+      "cell": "U_TEMPLATE_U_SYMBOL",
+      "template_status": "UNSEEN",
+      "symbol_status": "UNSEEN",
+      "template_family": "T7_GRAPH_REACHABILITY_FROZEN",
+      "semantic_class_evaluator_only": "ALLOW",
+      "evidence": "Edges are a->b and b->c.",
+      "query": "Is c reachable from a?",
+      "logical_codebook": {
+        "ALLOW": "UNTOUCHED_ATOM_POOL:A",
+        "DENY": "UNTOUCHED_ATOM_POOL:B",
+        "ABSTAIN": "UNTOUCHED_ATOM_POOL:C"
+      },
+      "logical_target": "UNTOUCHED_ATOM_POOL:A",
+      "materialization_note": "Logical aliases only. Production expansion must use exact checkpoint-local admitted atoms, full S3 mapping/display-order counterbalance, split/family provenance, and model-visible metadata redaction."
+    },
+    {
+      "status": "METHOD_ONLY_EXAMPLE_SHAPE_NOT_TRAIN_READY",
+      "cell": "U_TEMPLATE_U_SYMBOL",
+      "template_status": "UNSEEN",
+      "symbol_status": "UNSEEN",
+      "template_family": "T7_GRAPH_REACHABILITY_FROZEN",
+      "semantic_class_evaluator_only": "DENY",
+      "evidence": "The only edges are a->b and c->b; there is no outgoing edge from b.",
+      "query": "Is c reachable from a?",
+      "logical_codebook": {
+        "ALLOW": "UNTOUCHED_ATOM_POOL:A",
+        "DENY": "UNTOUCHED_ATOM_POOL:B",
+        "ABSTAIN": "UNTOUCHED_ATOM_POOL:C"
+      },
+      "logical_target": "UNTOUCHED_ATOM_POOL:B",
+      "materialization_note": "Logical aliases only. Production expansion must use exact checkpoint-local admitted atoms, full S3 mapping/display-order counterbalance, split/family provenance, and model-visible metadata redaction."
+    },
+    {
+      "status": "METHOD_ONLY_EXAMPLE_SHAPE_NOT_TRAIN_READY",
+      "cell": "U_TEMPLATE_U_SYMBOL",
+      "template_status": "UNSEEN",
+      "symbol_status": "UNSEEN",
+      "template_family": "T7_GRAPH_REACHABILITY_FROZEN",
+      "semantic_class_evaluator_only": "ABSTAIN",
+      "evidence": "Edge a->b is observed; the outgoing edges of b were not observed.",
+      "query": "Is c reachable from a?",
+      "logical_codebook": {
+        "ALLOW": "UNTOUCHED_ATOM_POOL:A",
+        "DENY": "UNTOUCHED_ATOM_POOL:B",
+        "ABSTAIN": "UNTOUCHED_ATOM_POOL:C"
+      },
+      "logical_target": "UNTOUCHED_ATOM_POOL:C",
+      "materialization_note": "Logical aliases only. Production expansion must use exact checkpoint-local admitted atoms, full S3 mapping/display-order counterbalance, split/family provenance, and model-visible metadata redaction."
+    }
+  ],
+  "production_expansion_contract": {
+    "examples_above": "ILLUSTRATIVE_METHOD_ONLY_NOT_DIRECT_SFT",
+    "minimum_factorial_axes": [
+      "template_status",
+      "symbol_status",
+      "all_6_S3_mappings",
+      "all_6_codebook_display_orders",
+      "query_polarity",
+      "layout",
+      "semantic_class"
+    ],
+    "required_metrics": [
+      "per_cell_accuracy",
+      "worst_S3_accuracy",
+      "orbit_exact_rate",
+      "symbol_OOD_main_effect",
+      "template_OOD_main_effect",
+      "template_x_symbol_interaction",
+      "codebook_flip_sensitivity",
+      "neutral_order_invariance"
+    ],
+    "acceptance_claim_boundary": "Only make a distinct unseen-symbol generalization claim if the symbol-only cell passes its preregistered threshold without holdout reuse."
+  },
+  "research_return": {
+    "training_rule": "Generalization factors that are named as separate capabilities need separate single-factor discriminators; a joint-OOD pass/fail alone cannot identify which capability changed.",
+    "harness_requirement": "The future Xeno/HCU harness should report template main effect, symbol main effect and their interaction rather than one aggregate holdout score.",
+    "architecture_implication": "If semantic-template transfer passes while symbol-only transfer fails, the bottleneck is closer to symbol binding/materialization than semantic reasoning; if the reverse occurs, target the semantic composition layer instead of increasing binder pressure.",
+    "distillery_implication": "Do not mint accepted training utility from a corpus whose claimed generalization factor is only observable through a confounded final holdout."
+  },
+  "credits": {
+    "research_design_delta": 1,
+    "candidate_example_shapes": 12,
+    "materialized_training_rows": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "qwen35_jspace_runtime_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "canonical_semantics_promotion": false
+  },
+  "next_exact_action": "Amend the retained Trigger-2 evaluator/generator contract with a frozen known-template+unseen-symbol diagnostic cell before any pilot claim of distinct unseen-symbol generalization; keep exact ABI/tokenizer materialization and Forge/Distillery admission gates closed until checkpoint-local atoms and provenance are bound."
+}

@@ -31,8 +31,11 @@ CODEC_SCHEMA = "JSPACE_Q8_SYMMETRIC_RATIONAL/v1"
 WIRE_FORMAT = "RFC8785_JCS_JSON_UTF8"
 CONTROL_CONDITIONS = frozenset({
     "BASELINE",
+    "POSITIVE_VECTOR",
     "NULL_VECTOR",
     "SIGN_FLIP",
+    "ORTHOGONAL_SAME_NORM",
+    "PERMUTED_SAME_NORM",
     "PERMUTED",
     "ROLE_SWAP",
     "LESION",
@@ -377,38 +380,3 @@ def packet_text(packet: VectorControlPacket) -> str:
     """Return the sole admitted text form: exact RFC8785/JCS UTF-8 packet bytes."""
     return packet_bytes(packet).decode("utf-8", "strict")
 
-
-def parse_packet_text(text: str) -> VectorControlPacket:
-    """Parse only the exact canonical JCS text form; aliases/extra fields fail closed."""
-    if not isinstance(text, str) or not text:
-        raise JSpaceVectorControlError("VECTOR_CONTROL_TEXT_REQUIRED")
-    try:
-        value = json.loads(text)
-    except (json.JSONDecodeError, ValueError) as exc:
-        raise JSpaceVectorControlError("VECTOR_CONTROL_TEXT_JSON_INVALID") from exc
-    if not isinstance(value, dict) or set(value) != _PACKET_FIELDS:
-        raise JSpaceVectorControlError("VECTOR_CONTROL_TEXT_SCHEMA_MISMATCH")
-    if not isinstance(value.get("q8_values"), list):
-        raise JSpaceVectorControlError("VECTOR_CONTROL_TEXT_Q8_ARRAY_REQUIRED")
-    packet = VectorControlPacket(
-        schema=value.get("schema"),
-        abi_schema=value.get("abi_schema"),
-        canonicalization_schema=value.get("canonicalization_schema"),
-        codec_schema=value.get("codec_schema"),
-        wire_format=value.get("wire_format"),
-        basis_id=value.get("basis_id"),
-        basis_sha256=value.get("basis_sha256"),
-        generation=value.get("generation"),
-        role=value.get("role"),
-        dimension=value.get("dimension"),
-        control_condition=value.get("control_condition"),
-        source_vector_sha256=value.get("source_vector_sha256"),
-        scale_numerator=value.get("scale_numerator"),
-        scale_denominator=value.get("scale_denominator"),
-        q8_values=tuple(value.get("q8_values")),
-        packet_sha256=value.get("packet_sha256"),
-    )
-    validate_packet(packet)
-    if packet_text(packet) != text:
-        raise JSpaceVectorControlError("VECTOR_CONTROL_TEXT_NONCANONICAL")
-    return packet

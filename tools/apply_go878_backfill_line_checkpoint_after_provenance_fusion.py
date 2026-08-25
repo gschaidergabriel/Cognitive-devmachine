@@ -8,7 +8,8 @@ reset. This adapter rebinds the unchanged cumulative-line transformation to that
 post-provenance source only.
 
 Fail-closed law:
-- the delegated base patcher must still name its audited predecessor/test blobs;
+- the delegated base patcher must still name the currently audited post-provenance source
+  and exact test blob;
 - the current backfill source must hash to POST_PROVENANCE_FUSION_SOURCE_BLOB when the
   delegated patcher executes;
 - any further source movement requires another explicit audit/successor, never widening
@@ -22,7 +23,7 @@ from __future__ import annotations
 
 import apply_go878_backfill_line_checkpoint as base
 
-EXPECTED_BASE_PATCHER_SOURCE = "6c441c92024df8b0ff14c4246478523ae3d54266"
+EXPECTED_BASE_PATCHER_SOURCE = "5cb0045f5c355170372efd4f08c033b33c91fbed"
 EXPECTED_TEST_BLOB = "702c2e42fe6e4881ef7a08b67f6b8b0b567ac8b4"
 POST_PROVENANCE_FUSION_SOURCE_BLOB = "5cb0045f5c355170372efd4f08c033b33c91fbed"
 

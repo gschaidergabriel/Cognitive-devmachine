@@ -131,7 +131,7 @@ class SharedStateFabric:
         lid="gcl:"+digest(core); mac=self._mac({**core,"lease_id":lid})
         self.db.execute("INSERT INTO leases VALUES(?,?,?,?,?,?,?,?,?) ON CONFLICT(scope) DO UPDATE SET lease_id=excluded.lease_id,holder=excluded.holder,generation=excluded.generation,issued_epoch=excluded.issued_epoch,issued_digest=excluded.issued_digest,expires=excluded.expires,policy_digest=excluded.policy_digest,mac=excluded.mac",
                         (scope,lid,node_id,gen,s.epoch,s.state_digest,exp,self.policy_digest,mac))
-        return CoordinatorLease(LEASE,lid,self.fabric_id,scope,node_id,gen,s.issued_epoch if hasattr(s,'issued_epoch') else s.epoch,s.state_digest,exp,self.policy_digest,mac)
+        return CoordinatorLease(LEASE,lid,self.fabric_id,scope,node_id,gen,s.epoch,s.state_digest,exp,self.policy_digest,mac)
     def assert_lease(self,l:CoordinatorLease):
         r=self.db.execute("SELECT * FROM leases WHERE scope=?",(l.scope,)).fetchone()
         if not r:raise LeaseRejected("LEASE_NOT_FOUND")

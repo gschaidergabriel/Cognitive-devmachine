@@ -176,6 +176,44 @@ def test_context_predicate_derives_targets_and_projection_without_deletion():
     assert p["projected_out_branch_ids"] == ["hb"]
 
 
+def test_context_in_not_in_require_json_array_operands_and_fail_closed():
+    malformed_values = ["A", {"A": True}, None, 7, True]
+    for op in ("IN", "NOT_IN"):
+        for value in malformed_values:
+            bad = branch(
+                "ha",
+                "BAD_CONTEXT",
+                "YES",
+                k={"all": [{"key": "mode", "op": op, "value": value}]},
+            )
+            good = branch("hb", "CONTROL", "NO")
+            r = lab.derive_relations(world(), state([bad, good]), event())
+            assert r["pass"] is False
+            assert r["failure"] == "BRANCH_K_INVALID"
+            assert r["canonical_truth_minted"] is False
+            assert r["training_credit_minted"] is False
+
+
+def test_context_in_not_in_accept_explicit_json_array_operands():
+    in_branch = branch(
+        "hin",
+        "IN_SCOPE",
+        "YES",
+        k={"all": [{"key": "mode", "op": "IN", "value": ["A", "B"]}]},
+    )
+    not_in_branch = branch(
+        "hnot",
+        "NOT_IN_SCOPE",
+        "NO",
+        k={"all": [{"key": "mode", "op": "NOT_IN", "value": ["B", "C"]}]},
+    )
+    s = state([in_branch, not_in_branch])
+    r = lab.derive_relations(world(), s, event())
+    assert r["pass"] is True
+    assert r["target_branch_ids"] == ["hin", "hnot"]
+    assert r["context_applicability"] == {"hin": True, "hnot": True}
+
+
 def test_branch_birth_is_derived_from_formal_world_rule():
     template = branch("h_new", "NEW_HYP", "YES")
     births = [{

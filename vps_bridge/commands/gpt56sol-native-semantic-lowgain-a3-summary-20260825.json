@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v4",
+  "command_id": "gpt56sol-native-semantic-lowgain-a3-summary-20260825",
+  "op": "exec",
+  "cwd": "/workspace",
+  "timeout_seconds": 120,
+  "command": "set -euo pipefail; R=/workspace/qwen06-gpt56sol-direct/out-native-semantic-counterbalanced-lowgain/trigger1_native_semantic_counterbalanced_result.json; test -s $R; jq '{schema,status,result_sha256,source,selected_calibration_candidate,fresh_holdout:{seeds:.fresh_holdout.seeds,target_labels:.fresh_holdout.target_labels,metrics:.fresh_holdout.metrics,api_request_sha256:.fresh_holdout.api_request_sha256,api_response_sha256:.fresh_holdout.api_response_sha256},promotion_candidate_written,promotion_gate_verdict,metric_definition_sha256,derivation_family_id,external_provider_credentials_read,zero_provider_billing}' $R; echo OVERRIDE_MANIFEST; cat /workspace/qwen06-gpt56sol-direct/out-native-semantic-counterbalanced-lowgain/calibration_override_manifest.json"
+}

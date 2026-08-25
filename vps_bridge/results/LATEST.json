@@ -1,20 +1,17 @@
 {
   "schema": "CLAY_VPS_RECEIPT/v4",
-  "command_id": "fr1-jspace06-sync-1c12778",
-  "command_sha256": "ead6730e34448fc661708feb9889cd72dec685ff772bd13bbd74394e629ebaf5",
-  "started_at": "2026-08-25T04:27:41.454667+00:00",
-  "finished_at": "2026-08-25T04:27:43.511317+00:00",
-  "status": "PASS",
-  "exit_code": 0,
-  "op": "canonical_sync",
-  "stdout_sha256": "e4535682c519adfe606fa4112f0ba1cebd4f0447ea45608b2f517872cb56d56d",
+  "command_id": "fr1-jspace06-native-q8-basis-1c12778",
+  "command_sha256": "3e49f8ade947bc74b0525bbf66b34ea6eb12e9405983d68540b191fa8f2a96ec",
+  "started_at": "2026-08-25T04:27:54.711316+00:00",
+  "finished_at": "2026-08-25T04:28:00.624843+00:00",
+  "status": "FAIL",
+  "exit_code": 3,
+  "op": "exec",
+  "stdout_sha256": "436f3ecc466dee7e11cc2801bb2770f5c7f8dd7342e2b1a74893333a570b20a5",
   "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-  "stdout_tail": "1c12778fb46bdc58a898add000104aaa96ea22f3\n",
+  "stdout_tail": "{\"reason\": \"RuntimeError:NATIVE_Q8_SIMPLEX_RANK_UNRESOLVED\", \"schema\": \"CLAY_TRIGGER1_QWEN06_Q8_NATIVE_JSPACE_BASIS/v1\", \"status\": \"BLOCKED_NATIVE_Q8_BASIS_BUILD\"}\n",
   "stderr_tail": "",
-  "meta": {
-    "head": "1c12778fb46bdc58a898add000104aaa96ea22f3",
-    "ref": "1c12778fb46bdc58a898add000104aaa96ea22f3"
-  },
+  "meta": {},
   "execution_boundary": "ROOT_INSIDE_ROOTLESS_PODMAN_OR_EXPLICIT_REPO_CONTROL_OP",
   "canonical_credit_minted": 0
 }

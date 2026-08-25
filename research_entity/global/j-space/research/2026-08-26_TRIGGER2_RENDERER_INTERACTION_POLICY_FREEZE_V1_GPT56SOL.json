@@ -1,0 +1,109 @@
+{
+  "schema": "CLAY_TRIGGER2_RENDERER_INTERACTION_POLICY_FREEZE/v1",
+  "date": "2026-08-26",
+  "trigger": "triggerwort2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "status": "FROZEN_PREUNBLINDING_SOURCE_ONLY",
+  "observed_main_before_write": "ba32249897d8a58339541973fa3d5d42c1915638",
+  "authority": {
+    "supervisor_epoch": "8.83",
+    "runtime_quiescence": "ACTIVE_FAIL_POST_STOP_PROVIDER_ATTEMPT_COUNTERS_INCREASING",
+    "provider_routes_admitted": false,
+    "together_forbidden": true,
+    "model_runtime_authorized_by_this_delta": false,
+    "training_authorized_by_this_delta": false
+  },
+  "binds": {
+    "frozen_logical_manifest_sha256": "9e9a2a421cdaa9207783060b6b127fa4ca26bf25d9415b22730812f31229d57d",
+    "frozen_logical_generator": "tools/trigger2_four_quadrant_checkpoint_eval_v1.py",
+    "risk_threshold_contract": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_FOUR_QUADRANT_PRACTICAL_THRESHOLD_FREEZE_V1_GPT56SOL.json",
+    "block_aware_risk_postprocessor": "tools/trigger2_four_quadrant_selection_eval_v2.py",
+    "renderer_transportability_basis": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_XENO_RENDERER_TRANSPORTABILITY_CHECKPOINT_SELECTION_DELTA_V1_GPT56SOL.json",
+    "renderer_order_donor": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_FOUR_QUADRANT_PREOUTPUT_FREEZE_DELTA_V1_GPT56SOL.json"
+  },
+  "source_observation": {
+    "epistemic_axis": "Q1/Q2 contain one evidence item, so evidence-list order is not a nuisance factor there.",
+    "authority_axis": "Q3/Q4 each contain S0_DB and S2_SIMULATION; the frozen logical generator places S0_DB before S2_SIMULATION in both quadrants.",
+    "gap": "Global case shuffling does not remove token-level evidence-order sensitivity inside a rendered Q3/Q4 case.",
+    "boundary": "This is a renderer nuisance-control problem. It does not alter S0 authority, gold labels, logical worlds, family membership, blocks, or the frozen logical manifest."
+  },
+  "hypothesis": {
+    "H1": "If the exact Xeno/ClayCode renderer serializes typed evidence into an ordered token sequence, fixed DB-first presentation can become a shortcut or nuisance feature that contaminates authority-resolution measurement.",
+    "counterhypothesis": "The final admitted renderer may be effectively order-invariant, or may intentionally impose a canonical semantic order whose variation would be invalid.",
+    "pre_runtime_discriminator": "Freeze a deterministic presentation-arm policy now; later require exact renderer-arm, rendered-UTF8 and input-tensor identity. No candidate output is needed to freeze the policy."
+  },
+  "renderer_interaction_policy": {
+    "logical_manifest_immutability": "MUST_NOT_MUTATE_FROZEN_MODEL_INPUT_OR_GOLD",
+    "presentation_transform_scope": "RENDERER_VIEW_ONLY_AFTER_FROZEN_LOGICAL_CASE_VALIDATION",
+    "axis_policy": {
+      "EPISTEMIC_ANSWERABILITY": {
+        "arm": "SINGLE_EVIDENCE_NO_ORDER_FACTOR",
+        "rule": "Preserve the sole evidence item exactly."
+      },
+      "DB_VS_SIMULATION_AUTHORITY": {
+        "arms": ["DB_FIRST", "SIM_FIRST"],
+        "assignment": "For family index i parsed from T2FQ-B-i: if i is even, Q3=DB_FIRST and Q4=SIM_FIRST; if i is odd, Q3=SIM_FIRST and Q4=DB_FIRST.",
+        "balance": "Across all 128 B-axis families, Q3 has 64 DB_FIRST and 64 SIM_FIRST; Q4 has 64 DB_FIRST and 64 SIM_FIRST. Within every family Q3/Q4 use opposite arms.",
+        "semantic_rule": "Only presentation order of the two already-frozen evidence records may differ. Evidence record bytes/fields/values, task, query, output schema, allowed decisions/actions, world identity, gold and audit-only data remain unchanged and audit-only data never enters the renderer."
+      }
+    },
+    "arm_identity": "Future execution receipt must bind case_id + family_id + renderer_policy_version + renderer_arm + exact renderer source/digest + rendered_utf8_sha256 + tokenizer/config/chat-template identity + input tensor identity.",
+    "anti_leakage": [
+      "Arm assignment depends only on frozen family index parity, never gold labels or model outputs.",
+      "No candidate output may be observed before this policy identity is frozen.",
+      "No arm-specific prompt wording, labels, hints, field-name changes or control tokens may encode the expected decision.",
+      "Q2 audit-only hidden truth remains excluded from all rendered inputs.",
+      "Renderer-arm identity is evidence metadata, not model-visible answer metadata unless the production renderer requires an opaque transport tag that is proven nonpredictive of gold."
+    ]
+  },
+  "interaction_decision_policy": {
+    "primary_selection_metric": "Use the already-frozen four-quadrant grader plus block-aware risk/coverage postprocessor; do not average away Q2/Q3/Q4 hard-risk failures.",
+    "arm_stratification": "For every opened block, report Q3 and Q4 raw counts/rates separately for DB_FIRST and SIM_FIRST in addition to the primary aggregate.",
+    "diagnostic_margin": 0.10,
+    "diagnostic_rule": "If the absolute within-quadrant error-rate difference between DB_FIRST and SIM_FIRST exceeds 0.10 for Q3 or Q4 at an opened block, mark RENDERER_INTERACTION_SIGNAL and forbid treating renderer transportability as established by the primary lane.",
+    "promotion_effect": "RENDERER_INTERACTION_SIGNAL does not rewrite the frozen primary result and does not by itself choose/reject a checkpoint; it forces the existing exact Xeno/ClayCode renderer transportability gate to remain unresolved until paired semantic-isomorphic renderer evidence on untouched families closes the interaction.",
+    "no_signal_effect": "Absence of a >0.10 signal is only a nuisance-screen result, not proof of renderer invariance and not model/training/J-Space/HCU/EntityOS runtime credit.",
+    "threshold_status": "The 0.10 interaction margin is a preregistered project research margin aligned with the already-frozen 0.10 catastrophic risk ceilings; it is not a universal literature-derived safety threshold."
+  },
+  "external_method_context": [
+    {
+      "source": "Pezeshkpour & Hruschka, Large Language Models Sensitivity to The Order of Options in Multiple-Choice Questions, 2023",
+      "classification": "METHOD_ONLY_NOT_PROJECT_RUNTIME_EVIDENCE",
+      "use": "Supports treating presentation order as a potentially material nuisance factor."
+    },
+    {
+      "source": "Guan et al., The Order Effect: Investigating Prompt Sensitivity in Closed-Source LLMs, 2025",
+      "classification": "METHOD_ONLY_NOT_PROJECT_RUNTIME_EVIDENCE",
+      "use": "Supports measuring robustness under semantically preserving input-order changes rather than assuming invariance."
+    },
+    {
+      "source": "Ok & Lee, Lost in the Prompt Order: Revealing the Limitations of Causal Attention in Language Models, 2026",
+      "classification": "METHOD_ONLY_NOT_PROJECT_RUNTIME_EVIDENCE",
+      "use": "Provides recent mechanism-level motivation that causal token order can alter information access and measured performance."
+    }
+  ],
+  "execution": {
+    "provider_called": false,
+    "model_runtime_executed": false,
+    "training_executed": false,
+    "outputs_unblinded": false,
+    "unusual_experiment_executed": false
+  },
+  "credits": {
+    "research_delta": 1,
+    "renderer_interaction_policy_frozen": 1,
+    "checkpoint_selection_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "jspace_model_credit": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  },
+  "next_exact_action": "P0 remains live-host FreeSwarm quiescence: execute the already-pinned fail-closed enforcer on the actual owning host, prove zero matching survivors plus >=60s zero provider-counter delta, then re-enter current FREE non-provider authority. In source-only Trigger-2 work, materialize a deterministic renderer-view validator for this frozen arm policy without touching the logical manifest; do not unblind B1 until exact admitted renderer and checkpoint/input identity gates are satisfied."
+}

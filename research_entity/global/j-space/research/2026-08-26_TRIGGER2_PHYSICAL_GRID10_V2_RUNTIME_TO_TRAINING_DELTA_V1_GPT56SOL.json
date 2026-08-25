@@ -1,0 +1,108 @@
+{
+  "schema": "CLAY_TRIGGER2_PHYSICAL_GRID10_V2_RUNTIME_TO_TRAINING_DELTA/v1",
+  "date": "2026-08-26",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority_epoch": "8.81_DELTA",
+  "mode": "FREE_ONLY",
+  "observed_main_before_write": "24c352cad6e94c9a90ccb2fb67aefab47d04ae60",
+  "runtime_change": {
+    "repaired_harness_commit": "0011673f34bc55b838f52420376df6d68e40d9be",
+    "source": "tools/xeno_physical_grid10_acceptance_v2.py",
+    "schema": "XENO_PHYSICAL_GRID10_ACCEPTANCE/v2",
+    "execution_request": "research_entity/execution_requests/2026-08-26_TRIGGER2_PHYSICAL_GRID10_V2_VPS_EXECUTION_PIN_0011673_GPT56SOL_0205P0700.json",
+    "execution_request_commit": "2fca4005a3e9aa3732189897e38947dda27c9b45",
+    "runtime_status": "PINNED_EXACT_SOURCE_EXECUTION_REQUEST_PRESENT_RUNTIME_RESULT_NOT_OBSERVED_BY_THIS_ORGAN"
+  },
+  "source_observations": [
+    "v2 replaces the old sequential ordinary-node proof with ten Popen children held concurrently at a release barrier",
+    "parent Popen PID identity is cross-checked against child self-reported PID identity",
+    "all barrier readers must report one shared generation+epoch+state_digest identity",
+    "the child read path wraps the multi-SELECT state read in an explicit SQLite read transaction",
+    "ExactSnapshotFabric rejects packet generation, epoch or digest that differs from the exact current snapshot before coordinator commit",
+    "barrier packets are not silently admitted after coordinator lease creation advances S1; fresh process observations are taken before each later CAS admission",
+    "ordinary NODE_RESULT remains nonwriting and coordinator publication remains noncanonical"
+  ],
+  "external_method_evidence": [
+    {
+      "source": "Python subprocess documentation",
+      "url": "https://docs.python.org/3/library/subprocess.html",
+      "classification": "OFFICIAL_METHOD_REFERENCE",
+      "finding": "Popen exposes a live child process and pid; poll() returns None while that child has not terminated.",
+      "implication": "A simultaneous physical-node claim should be tied to overlapping live Popen children rather than a count of completed subprocess.run invocations."
+    },
+    {
+      "source": "SQLite Isolation",
+      "url": "https://www.sqlite.org/isolation.html",
+      "classification": "OFFICIAL_STORAGE_SEMANTICS_REFERENCE",
+      "finding": "In WAL mode an active read transaction sees an unchanging snapshot; writes committed after that read transaction begins are invisible until a new read transaction starts.",
+      "implication": "The explicit child BEGIN plus bounded read set is the correct mechanism-level basis for one stable per-child S1 observation; equality across children still has to be measured, not assumed."
+    }
+  ],
+  "research_finding": "The repaired source changes the Trigger-2 learning target from vague multi-node participation to two separable proof obligations: physical concurrency identity and epistemic snapshot identity. A Xeno must not equate node count with simultaneous process liveness, and it must not equate a syntactically valid NODE_RESULT with evidence that is current after shared-state advancement.",
+  "hypothesis": "Training/evaluation examples that force explicit separation of process-liveness evidence, snapshot identity, and later coordinator admission will reduce authority/epistemic errors in variable-N Xeno coordination without teaching deterministic lease/CAS policy as model authority.",
+  "counterhypothesis": "These distinctions may be fully enforceable by deterministic runtime code and add little value as learned cognition; overtraining them could cause unnecessary abstention or verbose protocol narration.",
+  "discriminator": "Evaluate the same checkpoint on matched pairs where surface wording is held constant but only one proof axis changes: (a) ten completed vs ten overlapping live processes, (b) matching generation only vs exact generation+epoch+digest, (c) previously valid packet before vs after S1 advancement, (d) declared packet fields vs exact-source producer-bound observation. Measure answer correctness separately from answerability/abstention.",
+  "training_eval_delta": {
+    "status": "CANDIDATE_EVAL_AND_CURRICULUM_DELTA_NOT_POSITIVE_TRAINING_ADMISSION",
+    "families_to_add_or_strengthen": [
+      "PHYSICAL_CONCURRENCY_PROOF_AXIS",
+      "SNAPSHOT_IDENTITY_FRESHNESS_AXIS",
+      "STALE_AFTER_SHARED_STATE_ADVANCE_AXIS",
+      "DECLARED_METADATA_VS_PRODUCER_BOUND_EVIDENCE_AXIS",
+      "COMPONENT_PASS_VS_WHOLE_PRODUCT_CREDIT_AXIS"
+    ],
+    "positive_semantics": [
+      "ten distinct child PIDs plus a shared instant at which all ten are alive is evidence for the physical-process overlap property at the measured harness scope",
+      "generation+epoch+digest equality measured from one explicit read transaction is stronger evidence than generation match alone",
+      "when S1 advances, the safe default is re-read/recompute or an explicitly proven rebase path; stale evidence is not silently relabeled current",
+      "runtime source identity and producer execution evidence must remain separate from caller-declared packet fields",
+      "component runtime evidence never automatically promotes HCU, EntityOS, J-Space or training credit"
+    ],
+    "hard_negatives": [
+      "10 sequential subprocess completions => physical GRID10",
+      "10 logical cells => 10 simultaneously live OS processes",
+      "same generation => same current observation",
+      "old epoch but plausible payload => silently accept as current",
+      "forged current-looking state_digest => accept",
+      "NODE_RESULT fields alone => consumed-snapshot attestation theorem",
+      "physical GRID10 component PASS => whole HCU or EntityOS PASS"
+    ],
+    "do_not_train_as_model_authority": [
+      "lease issuance",
+      "CAS authorization",
+      "canonical state mutation rights",
+      "EffectGate authorization"
+    ]
+  },
+  "artifact_lifecycle_effect": [
+    {
+      "artifact": "tools/xeno_physical_grid10_acceptance_v1.py",
+      "status": "SUPERSEDED_FOR_PHYSICAL_GRID10_PROOF_BY_V2"
+    },
+    {
+      "artifact": "tools/xeno_physical_grid10_acceptance_v2.py",
+      "status": "CURRENT_SOURCE_CANDIDATE_AWAITING_EXACT_PINNED_RUNTIME_RESULT"
+    },
+    {
+      "artifact": "physical GRID10 request pinned to fbab5960980166f51047264775f102f2df22b292",
+      "status": "STALE_DIAGNOSTIC_ONLY_ZERO_CREDIT"
+    },
+    {
+      "artifact": "physical GRID10 request pinned to 0011673f34bc55b838f52420376df6d68e40d9be",
+      "status": "CURRENT_EXECUTION_REQUEST_RUNTIME_RESULT_UNOBSERVED_BY_THIS_ORGAN"
+    }
+  ],
+  "credit_boundary": {
+    "physical_grid10_runtime_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "jspace_model_credit": 0,
+    "training_credit": 0,
+    "accepted_training_tokens_delta": 0
+  },
+  "next_exact_gate": "Observe and verify the exact clean repository-bound FREE execution result for the request pinned to 0011673f34bc55b838f52420376df6d68e40d9be. If and only if every v2 property passes, admit physical-GRID10 component evidence at exact scope, then separately adjudicate consumed-snapshot attestation before advancing load/failure/rejoin/challenger/Hyperposition-GWT gates."
+}

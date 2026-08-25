@@ -1,0 +1,166 @@
+{
+  "schema": "CLAY_TRIGGER2_CURRENT_HYPERPOSITION_LABELER_REENTRY_AUDIT/v1",
+  "date": "2026-08-25",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "status": "CURRENT_RESEARCH_DELTA_NONPROMOTING",
+  "authority": {
+    "canonical_repository": "gschaidergabriel/clay-global-research-entity",
+    "canonical_branch": "main",
+    "observed_main_before_write": "5fd4bd93e46d01a236f1f29c6a06def2307f44ef",
+    "supervisor_epoch": "8.78",
+    "mode": "FREE_ONLY",
+    "training_executed": false,
+    "provider_execution": false,
+    "unusual_experiment": "NOT_USED_SOURCE_SEMANTIC_AUDIT_ONLY"
+  },
+  "reason_for_reentry": "Parallel Trigger-2 workers replaced the first just-landed semantic-Hyperposition labeler with a converged current-main implementation while earlier audits still referenced the removed source. This audit therefore evaluates the exact current implementation rather than propagating a stale blocker list.",
+  "audited_current_artifacts": [
+    {
+      "path": "tools/trigger2_hyperposition_reference_labelers_v1.py",
+      "blob_sha": "5f1fba475e64421635016abc1b341dcfbb04b605",
+      "role": "current deterministic Hyperposition reference-labeler source"
+    },
+    {
+      "path": "tests/test_trigger2_hyperposition_reference_labelers_v1.py",
+      "source_commit": "c8a03f457473d58f0027826cd707f5b455484898",
+      "role": "current invariant tests"
+    },
+    {
+      "path": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_SEMANTIC_HYPERPOSITION_CROSSCUTTING_CONTRACT_V1_GPT56SOL.json",
+      "role": "cross-cutting training ontology"
+    },
+    {
+      "path": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V1_GPT56SOL.json",
+      "role": "version/disposition ledger that predates the converged current labeler"
+    },
+    {
+      "path": "PR gschaidergabriel/clay-global-research-entity#2009",
+      "role": "parallel versioning/labeler/gate donor; convergence target, not a second authority"
+    }
+  ],
+  "positive_delta_vs_removed_labeler": [
+    "The current branch schema now carries the full v/K/E+/E-/F/T/A/sigma-style semantic-Hyperposition tuple plus projection_visibility.",
+    "D_resolve now requires an executed admissible discriminator context before resolving.",
+    "Salience rejects explicit confidence/probability/majority/recurrence proxy fields and cannot change truth status.",
+    "Merge is limited to an explicit EXACT_SYNTHETIC_EQUIVALENCE certificate and preserves source branches as out-of-scope provenance rather than silently deleting them.",
+    "The tests explicitly cover no-discriminator nonresolution, majority noncollapse, inadmissible discriminator ranking, salience/truth separation, merge rejection for embedding similarity and exact branch-relation coverage."
+  ],
+  "material_blockers": [
+    {
+      "id": "CURRENT_V1_EPISTEMIC_TYPE_COVERAGE_INCOMPLETE",
+      "severity": "PROMOTION_BLOCKING_FOR_E_GRFTYPE_COVERAGE",
+      "observed": "The current EPISTEMIC set accepts OBSERVED, HYPOTHESIS, COUNTERHYPOTHESIS, UNKNOWN and PREDICTION, but the current training contract also requires MEASUREMENT_ERROR and CONTRADICTION as first-class epistemic states.",
+      "risk": "Positive D/E transition rows cannot cover the declared GRF type system without either failing validation or collapsing required distinctions into another label.",
+      "required_successor": "Extend the versioned branch-state schema and tests to the complete admitted epistemic vocabulary before E/GRF row promotion; do not silently map MEASUREMENT_ERROR to UNKNOWN or CONTRADICTION to COUNTERHYPOTHESIS."
+    },
+    {
+      "id": "CURRENT_V1_NONDECISIVE_FALSIFY_ORACLE",
+      "severity": "CRITICAL",
+      "observed": "U_update sets branch.validity=FALSIFIED whenever latent branch_relations marks FALSIFY. It does not require evidence.decision_role=DECISIVE_CONTRADICTION, does not match F_falsifier, and does not derive the relation from executable task-world semantics.",
+      "risk": "A generator can create a ground-truth transition by asserting FALSIFY even when the evidence item is NONDECISIVE. This is label circularity rather than a reference derivation.",
+      "required_successor": "Require a derivation receipt or deterministic task-world evaluator that proves the branch-local falsifier relation; at minimum fail closed when FALSIFY is paired with a nondecisive decision role or a mismatched falsifier/context predicate."
+    },
+    {
+      "id": "CURRENT_V1_CONTEXT_PREDICATE_NOT_EXECUTED",
+      "severity": "HIGH",
+      "observed": "K_context_predicate is structurally required but neither U_update nor D_resolve evaluates it against the supplied context. D_resolve reasons only over validity and evidence fields.",
+      "risk": "The schema can carry context-dependent alternatives without the reference labeler proving whether the branch applies. Generator-supplied validity can therefore substitute for the missing K evaluation.",
+      "required_successor": "Define a deterministic context-predicate evaluator or an exact derivation receipt and bind applicability/projection decisions to it. UNKNOWN applicability must remain unresolved."
+    },
+    {
+      "id": "CURRENT_V1_ALL_OTHERS_FALSIFIED_CALLER_ASSERTION",
+      "severity": "CRITICAL",
+      "observed": "When one eligible branch remains, D_resolve may accept context.all_other_branches_explicitly_falsified=true as a resolution condition without deriving that statement from the branch set. Branches can also be OUT_OF_SCOPE rather than FALSIFIED.",
+      "risk": "A caller can turn context filtering or prior out-of-scope status into effective deletion/collapse, violating projection-is-not-deletion and the proof/discriminator-only resolution law.",
+      "required_successor": "Remove the caller-trusted boolean or recompute it from machine-checkable branch-local decisive contradictions/falsifiers under the same context; OUT_OF_SCOPE must never count as explicit falsification."
+    },
+    {
+      "id": "CURRENT_V1_DEPENDENCE_GROUP_NOT_CANONICALIZED",
+      "severity": "HIGH",
+      "observed": "Evidence uniqueness is the exact tuple (evidence_id, provenance_ancestry_id, independence_group). Different evidence IDs/ancestries in the same independence_group remain separately attached, and no explicit independent_for_update field is derived.",
+      "risk": "Although current D_resolve does not majority-count ordinary support, model-facing state can still encode duplicated correlated evidence as multiple records and teach recurrence/packaging as evidence strength unless later projection normalizes it.",
+      "required_successor": "Bind each evidence item to a stable dependence/causal-family identity and either canonicalize dependent duplicates or expose an explicit nonindependent marker that downstream label/projection code must respect."
+    },
+    {
+      "id": "CURRENT_V1_DISCRIMINATOR_SEPARATION_SELF_ASSERTED",
+      "severity": "HIGH",
+      "observed": "U_d_test_order trusts each candidate's separates_branch_pairs and novel_independence_groups metadata; it does not derive pair separation from branch predictions plus possible/observed test outcomes.",
+      "risk": "The missing discriminator-quality label can be moved into generator metadata and then ranked deterministically, creating a circular U(d) target.",
+      "required_successor": "Represent branch-conditioned predicted outcomes and compute outcome partitions/pair coverage deterministically; derive novelty from evidence/provenance identities rather than a caller-supplied count."
+    },
+    {
+      "id": "CURRENT_V1_TEST_GAPS",
+      "severity": "HIGH",
+      "observed": "Current tests do not cover NONDECISIVE+FALSIFY rejection, MEASUREMENT_ERROR/CONTRADICTION states, context-predicate UNKNOWN/nonapplicability, OUT_OF_SCOPE plus forged all_other_branches_explicitly_falsified, same-independence-group/different-ancestry evidence, or derived discriminator partitions.",
+      "required_successor": "Add adversarial mutation/property tests for these exact cases before changing D/E status from blocked to training-eligible."
+    }
+  ],
+  "external_research_delta": [
+    {
+      "source": "Gurnee et al., Verbalizable Representations Form a Global Workspace in Language Models, Transformer Circuits, 2026",
+      "class": "EXTERNAL_METHOD_INPUT",
+      "source_claim": "The studied Claude models contain a selective intermediate-depth J-space with workspace-like report, modulation, reasoning and generalization properties, while most representational content remains outside that workspace.",
+      "training_implication": "Keep semantic Hyperposition as the carrier-independent branch/state ontology and treat J-space visibility/control as a measured model-specific interface onto selected content, not as the entire latent state or an automatic truth signal.",
+      "nonclaim": "This does not establish the same J-space coordinates, layer band, or causal behavior in Qwen3.5-0.8B."
+    },
+    {
+      "source": "Venkatesh & Kurapath, On the Identifiability of Steering Vectors in Large Language Models, arXiv:2602.06801, 2026",
+      "class": "EXTERNAL_METHOD_INPUT",
+      "source_claim": "Behaviorally similar activation interventions can be non-identifiable without additional structural assumptions such as multi-environment validation, sparsity or cross-layer consistency.",
+      "training_implication": "Do not supervise one raw Qwen/Claude vector as semantic truth. Version semantic state separately from any model/checkpoint/layer/site-specific carrier and require held-out causal equivalence tests."
+    },
+    {
+      "source": "Wu, Geiger & Milliere, How Do Transformers Learn Variable Binding in Symbolic Programs?, 2025",
+      "class": "EXTERNAL_METHOD_INPUT",
+      "source_claim": "In the studied Transformer, training moved through chance and shallow heuristics before systematic dereferencing, and causal interventions were needed to characterize the learned routing mechanism.",
+      "training_implication": "Track C/B checkpoint trajectories with OOD/factorial mechanism-sensitive tests; final mapped-symbol accuracy alone is insufficient to show the desired episode-local binder."
+    }
+  ],
+  "training_revision": {
+    "D_E_status": "BLOCKED_FOR_POSITIVE_TRANSITION_ADMISSION_DESPITE_EXISTING_REFERENCE_SOURCE",
+    "why": "The existence blocker has been replaced by a derivation/noncircularity and coverage blocker.",
+    "safe_current_use": [
+      "source-design donor",
+      "negative/adversarial test generation",
+      "candidate-state schema rehearsal",
+      "nonpromoting local deterministic tests"
+    ],
+    "unsafe_current_use": [
+      "minting positive D/E transition labels for final mixed training",
+      "treating caller-supplied FALSIFY/separation metadata as reference truth",
+      "claiming E/GRF coverage without MEASUREMENT_ERROR and CONTRADICTION",
+      "using OUT_OF_SCOPE/projection as evidence that alternatives are falsified"
+    ]
+  },
+  "versioning_delta": {
+    "current_labeler": {
+      "artifact": "tools/trigger2_hyperposition_reference_labelers_v1.py",
+      "version": "v1",
+      "status": "CURRENT_COMPONENT_ONLY_REVIEW_REQUIRED",
+      "predecessor": "removed tools/trigger2_semantic_hyperposition_reference_labelers_v1.py",
+      "successor": "v2 derivation-bound full-E-coverage labeler or equivalent converged successor",
+      "revision_reason": "Current v1 closes structural/full-tuple and admissible-discriminator gaps but still trusts decisive generator metadata and incompletely represents GRF epistemic types."
+    },
+    "ledger": {
+      "artifact": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V1_GPT56SOL.json",
+      "status": "RECHECK_REQUIRED",
+      "successor": "V2 ledger after current labeler/PR2009 convergence",
+      "revision_reason": "V1 ledger predates the converged current labeler and therefore does not contain the exact current predecessor/successor disposition."
+    }
+  },
+  "credits": {
+    "research_audit_delta": 1,
+    "training_examples_promoted": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "qwen35_jspace_runtime_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0
+  },
+  "next_exact_action": "Converge a v2 derivation-bound Hyperposition reference labeler that computes falsifier/context applicability and discriminator partitions rather than trusting generator assertions; complete E/GRF epistemic coverage; add the listed adversarial tests; update the artifact ledger; only then regenerate a small Hyperposition-native D/E candidate family and run model-visible leakage/ancestry gates before any training promotion."
+}

@@ -1,0 +1,106 @@
+{
+  "schema": "CLAY_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER/v11",
+  "date": "2026-08-25",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "status": "CURRENT_RESEARCH_LEDGER_NONCANONICAL",
+  "supersedes": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V10_GPT56SOL.json",
+  "inherits_all_nonconflicting_records_from": "T2-LEDGER-V10",
+  "revision_reason": "V10 correctly adds the epistemic-update P0. This successor adds one orthogonal model-selection correction discovered by exact source audit: tools/trigger2_qwen35_checkpoint_candidates_gate_v1.py admits only official Base/post-trained candidates even though the Trigger-2 target constraint requires an abliterated approximately-0.8B model. Eight nonpromoting counterexamples are registered; no positive training data or credit is minted.",
+  "authority": {
+    "supervisor_epoch": "8.78",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "architecture": "HCU",
+    "current_protocol": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_CURRENT_PROTOCOL_V4_GPT56SOL.json",
+    "trigger2_target_model_constraint": "ABLITERATED_APPROX_0_8B_TARGET_MODEL_REQUIRED",
+    "training_executed": false,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0
+  },
+  "artifact_overrides_and_additions": [
+    {
+      "artifact_id": "T2-LEDGER-V10",
+      "path": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V10_GPT56SOL.json",
+      "version": "v10",
+      "status": "SUPERSEDED",
+      "predecessor": "T2-LEDGER-V9",
+      "successor": "T2-LEDGER-V11",
+      "revision_reason": "Its deterministic proof/epistemic findings remain current but it does not classify checkpoint selection against the abliterated-target requirement."
+    },
+    {
+      "artifact_id": "T2-QWEN35-CHECKPOINT-CANDIDATES-GATE-V1",
+      "path": "tools/trigger2_qwen35_checkpoint_candidates_gate_v1.py",
+      "version": "v1",
+      "status": "NEEDS_REVISION_ABLITERATED_TARGET_MISSING",
+      "predecessor": null,
+      "successor": "abliterated-target-aware checkpoint selection gate",
+      "revision_reason": "The only hardcoded candidates are Qwen/Qwen3.5-0.8B-Base and Qwen/Qwen3.5-0.8B. They remain valid controls but cannot satisfy the required abliterated TARGET role. Exact hashes for the wrong role do not satisfy the target constraint."
+    },
+    {
+      "artifact_id": "T2-ABLITERATED-CHECKPOINT-SELECTION-AUDIT-V1",
+      "path": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_ABLITERATED_CHECKPOINT_SELECTION_AUDIT_V1_GPT56SOL.json",
+      "version": "v1",
+      "status": "CURRENT_MODEL_SELECTION_CORRECTION_NONPROMOTING",
+      "predecessor": "T2-QWEN35-CHECKPOINT-CANDIDATES-GATE-V1 source-selection assumptions",
+      "successor": "exact abliterated TARGET manifests plus matched-pilot gate",
+      "provenance": ["commit 96ea5981145fc07d364fe32b17b250a55039f447"],
+      "revision_reason": "External current repositories show multiple Qwen3.5-0.8B abliterated candidates exist, but names/tags/model-card claims are not exact loaded-byte evidence and cannot select a winner."
+    },
+    {
+      "artifact_id": "T2-ABLITERATED-CHECKPOINT-SELECTION-HARDNEG-SEED-V1",
+      "path": "research_entity/global/j-space/research/trigger2_abliterated_checkpoint_selection_hardneg_seed_v1.jsonl",
+      "version": "v1",
+      "status": "CURRENT_NONPROMOTING_TRAINING_EVAL_BLUEPRINT",
+      "predecessor": "T2-ABLITERATED-CHECKPOINT-SELECTION-AUDIT-V1",
+      "successor": "family-disjoint matched-pilot eval data after exact target identities freeze",
+      "provenance": ["commit 1b996dd72fbbe11acb4a4967347f082b5c85a280"],
+      "observed_rows": 8,
+      "training_eligible": false,
+      "revision_reason": "Covers TARGET/control role confusion, abliterated label without byte identity, tokenizer/template drift, absent loader attestation, refusal-only Goodhart, cognition-retention loss, holdout selection leakage and preregistered multi-objective selection."
+    }
+  ],
+  "external_method_inputs": {
+    "canonical_authority": false,
+    "candidate_repositories_observed": [
+      "lew96123/Qwen3.5-0.8B-abliterated",
+      "wangzhang/Qwen3.5-0.8B-abliterated",
+      "huihui-ai/Huihui-Qwen3.5-0.8B-abliterated"
+    ],
+    "status": "AVAILABILITY_ONLY",
+    "credit": 0,
+    "rule": "Repository/model-card abliterated metadata and self-reported refusal/benchmark values are not immutable checkpoint identity, loader-consumption evidence or Clay pilot results."
+  },
+  "successor_model_gate_requirements": [
+    "separate ABLITERATED_TARGET from OFFICIAL_BASE_CONTROL and OFFICIAL_POSTTRAINED_CONTROL roles",
+    "freeze immutable repo revision plus weights/tokenizer/chat-template/config/file-manifest digests for every TARGET",
+    "bind loader-consumed bytes and exact runtime build before runtime credit",
+    "use a preregistered matched pilot; do not select with the final holdout",
+    "measure low-refusal separately from cognition, DB/state, Hyperposition, variable-N, Claude-Code, ClayCode/protocol, J-Space causal and off-target retention",
+    "do not choose a winner from model-card metrics alone"
+  ],
+  "generation_decision": {
+    "positive_rows_generated_for_promotion": 0,
+    "positive_rows_admitted": 0,
+    "nonpromoting_rows_added": 8,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0
+  },
+  "current_frontier": {
+    "deterministic_label_frontier": "Preserve V10's generation-provenance + typed epistemic-evidence + replay/event/discriminator proof requirements; execute exact-current mutation tests and rebind native seed to one retained gate before positive generation.",
+    "model_frontier": "Replace the current control-only checkpoint gate with an abliterated TARGET-aware successor, freeze at least two target candidates to exact byte manifests, then run a matched FREE_ONLY local pilot without final-holdout leakage.",
+    "next_exact_action": "Advance both independent prerequisites without mixing their authority: exact deterministic positive-label proof execution, and immutable abliterated target checkpoint selection. Generate only a small positive family-disjoint pilot after both gates pass; no corpus scaling or training promotion yet."
+  },
+  "credits": {
+    "research_delta": 1,
+    "versioning_delta": 1,
+    "nonpromoting_training_eval_rows_added": 8,
+    "positive_D_E_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  }
+}

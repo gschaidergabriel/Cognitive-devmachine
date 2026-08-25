@@ -1,0 +1,48 @@
+{
+  "schema": "TRIGGER2_SWARM_INDEPENDENT_REVIEW/v2",
+  "date": "2026-08-25",
+  "independent_reviewer": "separate parser/recomputation; ignores stored target-review verdicts for correctness checks",
+  "status": "PASS",
+  "errors": [],
+  "row_count": 24,
+  "s3_unique": 6,
+  "class_symbol_cells": {
+    "ALLOW->ABI_ATOM_03": 2,
+    "ALLOW->ABI_ATOM_17": 2,
+    "ALLOW->ABI_ATOM_29": 2,
+    "DENY->ABI_ATOM_03": 2,
+    "DENY->ABI_ATOM_17": 2,
+    "DENY->ABI_ATOM_29": 2,
+    "ABSTAIN->ABI_ATOM_03": 2,
+    "ABSTAIN->ABI_ATOM_17": 2,
+    "ABSTAIN->ABI_ATOM_29": 2
+  },
+  "target_positions": {"0": 6, "1": 6, "2": 6},
+  "canonical_main_observed": "0edcc2ca0dba28fa0536bc5834fe6ede05a46e96",
+  "supervisor_epoch": "8.78",
+  "model_identity": {
+    "model_id": "Goekdeniz-Guelmez/Josiefied-Qwen3.5-0.8B-gabliterated-v1",
+    "snapshot": "591852bda6e1979f59e4b0f5ee2919697b12e936"
+  },
+  "claude_archive_sha256": "a2babae93dfe39e4e452a06bd8b848337f29766e38c422f05fb395126229b05c",
+  "dataset_sha256": "9344c2c001b1263424033be6183d57729e3093a459e070e7e43960131f302ded",
+  "checks": [
+    "all 24 row IDs unique",
+    "full six-element S3 mapping set recomputed from actual mapping_realized fields",
+    "each class-symbol cell occurs exactly twice in the 18-row direct-binding seed",
+    "target codebook position is balanced 6/6/6 across positions 0/1/2",
+    "every direct target recomputed from semantic_class_internal plus actual codebook",
+    "episode-reset targets recomputed from episode_2 and differ from episode_1 bindings",
+    "multihop targets recomputed through slot/role chains",
+    "T5 not materialized and no row is selected_using_holdout",
+    "exact ALLOW/DENY/ABSTAIN labels appear in model-visible input only as codebook class fields",
+    "current main/model/source provenance is uniform",
+    "rejected atom 'or' is never used as a target"
+  ],
+  "remaining_blockers": [
+    "abstract ABI_ATOM_nn handles not resolved to verified accepted token rows",
+    "frozen lexical/symbol/template holdout families not generated or exposed",
+    "no model training/runtime execution performed"
+  ],
+  "credit": {"training":0,"jspace_model_runtime":0,"whole_hcu":0,"whole_entityos_hcu":0}
+}

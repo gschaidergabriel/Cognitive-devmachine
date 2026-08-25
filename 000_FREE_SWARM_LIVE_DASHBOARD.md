@@ -60,7 +60,7 @@ Zweck: **Aktivität → ausführbarer Patch/Test → reproduzierbare Architektur
 
 <!-- RESEARCH_DISTILLERY_AUTO:BEGIN -->
 ## AUTO — Research Distillery / kumuliertes Wissens-Dataset
-Aktualisiert: `2026-08-25T18:11:23.587260+00:00`
+Aktualisiert: `2026-08-25T18:26:29.874114+00:00`
 
 **1. wichtigste Quote — Entity-Dataset-Yield:** `0 / 11,621 = 0.000%`  
 Kompressionsfaktor Quelltokens : akzeptierte Dataset-Tokens: **UNKNOWN**.
@@ -112,7 +112,7 @@ GO-Worker emittieren `OPEN_RESEARCH_QUESTIONS_JSON`; die Distillery zerlegt Frag
 
 <!-- SYSTEM_ANALYSIS_AUTO:BEGIN -->
 ## AUTO — Gesamtsystem, GO-Fluss, Script-Auswertung und Sonnet-Vergleich
-Aktualisiert: `2026-08-25T18:11:24.224058+00:00`
+Aktualisiert: `2026-08-25T18:26:30.486425+00:00`
 
 ### 1. Wichtigster Effizienzindikator — was geht im Durchschnitt wieder an `go`?
 **Source → GO Pass-through: 0.000%.** Definition: `accepted dataset-token yield × average distinct accepted-packet coverage delivered to GO macrocycles`.
@@ -151,16 +151,16 @@ Bei 0 akzeptierten Dataset-Tokens ist Source→GO exakt 0%; fehlende Reinjection
 - truth/effect/capability boundaries and falsification
 
 **Top offene Forschungsfragen aus der laufenden Queue:**
-- Welche Rolle spielt die canonical typed provider admission bei der Verhinderung von unbefugtem Netzwerkzugriff?
-- Wie können die Grenzen zwischen logischen Modulen, residenten Modellzahlen und physischer Dekodierkonkurrenz effektiv verwaltet werden?
-- How can we ensure that the Free Swarm is not vulnerable to unadmitted external provider traffic?
-- What are the implications of the canonical typed provider admission gap on the security of the Free Swarm?
-- How can we optimize the execution of the FREE_SWARM_ADMISSION_BOUNDARY_RECEIPT/v1 on the current exact source with secret and socket tripwires?
-- Wie kann die genaue Prüfung von `secret_lookup_count` und `network_attempt_count` im Admission‑Receipt automatisiert und in das go‑Contract‑Gate integriert werden?
-- How to implement cryptographic verification for Vercel sandbox API responses?
-- What is the minimal provider admission evidence required for mixed free/paid workflows?
-- What is the minimal jspace_vector dimensionality that preserves causal attribution across model switches without conflating architecture effects with provenance gaps?
-- Should FREE_PROVIDER_ADMISSION track disabled_models separately for audit trail, or is removal sufficient?
+- What are the potential risks and trade-offs associated with optimizing provider budget?
+- What are the potential limitations and risks associated with relying on FREE_ONLY provider admission?
+- Can the system's development and effectiveness be improved through the use of alternative provider admission models or strategies?
+- Wie lässt sich die Typed Entry Fabric‑Logik so skalieren, dass mehr als 10 logische Module ohne Signifikanzverlust laufen?
+- Welche Optimierungen im J‑Space‑Bereich reduzieren die Latenz unter 30 ms bei 5 M Tokens?
+- Wie kann die Admission‑Logik für neue Free‑Provider dynamisch aktualisiert werden, ohne die Free‑Only‑Kriterien zu verletzen?
+- Does model-specific J-Space causal attribution require access to model-internal activations (unavailable via API), or can causal evidence be constructed solely from observable inference metadata + economic provenance?
+- Why is the current accepted_packets count zero despite collected_chunks=48?
+- Is the distillery validation logic misconfigured?
+- What component is responsible for chunk rejection if distillery is functioning correctly?
 
 ### 5. Fortschritts-Funnel
 | Stufe | Wert |
@@ -192,7 +192,7 @@ Preisannahme: **Claude Sonnet 5 introductory through 2026-08-31: $2/M input + $1
 | Free-Swarm Usage | 31,313,649 input + 8,618,788 output | **$148.82** |
 | Distillery Modellarbeit | 460 input + 1,455 output | **$0.0155** |
 | zusammen, gemessener LLM-Tokenmix | — | **$148.83** |
-| persistenter Repo-Korpus, Output-only Proxy | 13,525,080 Proxy-Tokens | **$135.25** |
+| persistenter Repo-Korpus, Output-only Proxy | 13,530,151 Proxy-Tokens | **$135.30** |
 
 **Nominal vermiedene Sonnet-Kosten, falls diese Calls tatsächlich $0 kosteten: $148.83. Verifiziert gespart: UNKNOWN.** Die aktuelle typed Authority verbietet die nachträgliche FREE-Klassifikation historischer Provider-Traffic; der Korpuswert ist ebenfalls nur ein Neu-Erzeugungsproxy.
 
@@ -205,7 +205,7 @@ Dieser komplette Block ist Pflichtbestandteil des Publishers. Kompakte Tabellen 
 
 <!-- FREE_SWARM_AUTO:BEGIN -->
 ## AUTO — Live-Auswertung
-Aktualisiert: `2026-08-25T18:11:22.304492+00:00`
+Aktualisiert: `2026-08-25T18:26:28.490181+00:00`
 
 | Kennzahl | Wert |
 |---|---:|
@@ -219,8 +219,8 @@ Aktualisiert: `2026-08-25T18:11:22.304492+00:00`
 | Evident akzeptierte Architektur-Deltas | 0 |
 | Nominal/historisch akzeptierte Architektur-Deltas | 1 |
 | Legacy/unqualifizierte nominale Accepts | 1 |
-| Repo-Korpus-Proxy Tokens (4 Zeichen/Token) | 13525080 |
-| Sonnet-5 Output-only Äquivalent des Repo-Proxys | $135.25 |
+| Repo-Korpus-Proxy Tokens (4 Zeichen/Token) | 13530151 |
+| Sonnet-5 Output-only Äquivalent des Repo-Proxys | $135.30 |
 
 ### Modelle
 | Provider | Modell | Requests | Success | 429 | Input | Output | Total |
@@ -286,8 +286,8 @@ Innovativstes Modell: **NO EVIDENCE YET**
 | GPT/ChatGPT | 0 | UNKNOWN | UNKNOWN% |
 
 ### Research-Entity-Output / Sonnet-Kostenproxy
-API-exakte historische Gesamttokens aller früheren Organe bleiben **UNKNOWN**, solange keine vollständige historische Usage-Buchhaltung existiert. Der messbare persistente Repo-Korpus umfasst aktuell 10569 Textdateien / 54100322 Zeichen ≈ **13525080 Tokens** bei der ausdrücklich nur als Proxy verwendeten 4-Zeichen-Näherung.
-Hypothetische reine Output-Neuerzeugung dieses Proxy-Korpus mit Claude Sonnet 5: **$135.25** zum derzeit geltenden Output-Tarif von $10/M Tokens. Input-/Caching-/Toolkosten sind darin nicht enthalten.
+API-exakte historische Gesamttokens aller früheren Organe bleiben **UNKNOWN**, solange keine vollständige historische Usage-Buchhaltung existiert. Der messbare persistente Repo-Korpus umfasst aktuell 10572 Textdateien / 54120604 Zeichen ≈ **13530151 Tokens** bei der ausdrücklich nur als Proxy verwendeten 4-Zeichen-Näherung.
+Hypothetische reine Output-Neuerzeugung dieses Proxy-Korpus mit Claude Sonnet 5: **$135.30** zum derzeit geltenden Output-Tarif von $10/M Tokens. Input-/Caching-/Toolkosten sind darin nicht enthalten.
 <!-- FREE_SWARM_AUTO:END -->
 
 

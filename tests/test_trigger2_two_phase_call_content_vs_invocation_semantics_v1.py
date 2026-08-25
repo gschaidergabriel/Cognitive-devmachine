@@ -106,15 +106,6 @@ def test_equal_output_content_does_not_collapse_distinct_invocations():
     assert len(cohort_id) == 64
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason=(
-        "Remaining membership-provenance discriminator: one admitted membership identity should "
-        "not be projected onto two distinct nodes unless an explicit fanout/consumer contract says "
-        "so. Remove xfail when the retained two-phase path cross-validates membership-to-node or "
-        "raises AUTHORITY_COHORT_NODE_ADMISSION_DUPLICATE."
-    ),
-)
 def test_one_node_admission_identity_cannot_be_projected_onto_two_nodes():
     shared_admission = "member-shared"
     with pytest.raises(GateError, match="^AUTHORITY_COHORT_NODE_ADMISSION_DUPLICATE$"):

@@ -1,0 +1,121 @@
+{
+  "schema": "CLAY_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER/v62",
+  "date": "2026-08-26",
+  "trigger": "triggerwort2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "status": "CURRENT_RESEARCH_LEDGER_NONCANONICAL_SUCCESSOR_DYNAMIC",
+  "supersedes": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V61_GPT56SOL.json",
+  "inherits_all_nonconflicting_records_from": "T2-LEDGER-V61",
+  "observed_main_before_write": "9b97e703397044bc9b7dcf9033ac9df8b76494f4",
+  "authority": {
+    "supervisor_epoch": "8.83_DELTA",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "architecture": "HCU",
+    "free_swarm_provider_admission": "OWNER_EMERGENCY_STOP_HARD_OFF",
+    "runtime_quiescence": "ACTIVE_FAIL_POST_STOP_PROVIDER_ATTEMPT_COUNTERS_INCREASING",
+    "provider_routes_admitted": false,
+    "training_execution_authorized": false,
+    "checkpoint_winner": null,
+    "accepted_dataset_tokens": 0,
+    "checkpoint_selection_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "jspace_model_credit": 0,
+    "training_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  },
+  "revision_reason": "V61 separated call-content/evidence identity from invocation-event authority and blocked blind call-digest injectivity. Parallel source tests then encoded that semantic split explicitly and the earlier exact-call-injectivity regression was retired as falsified. V62 records that convergence, incorporates the exact committed-source validation receipt, and narrows the next source frontier to node-admission/membership-incarnation provenance plus integration of the two-phase authority chain into the fused GRID10 cohort path.",
+  "validated_two_phase_source": {
+    "source": "tools/trigger2_node_result_model_call_two_phase_authority_v1.py",
+    "source_commit": "56e8cc09f0c1b8e1fd99ab091154c3f3a6382b17",
+    "source_validation_receipt": "research_entity/continuity/receipts/2026-08-26_TRIGGER2_TWO_PHASE_SOURCE_VALIDATION_GPT56SOL.json",
+    "receipt_commit": "e9292ea7857877ec1da972d43ee21e745a00fc66",
+    "claim_scope": "EXACT_COMMITTED_BYTES_LOCAL_DETERMINISTIC_SOURCE_FIXTURE_ONLY",
+    "py_compile": "PASS",
+    "pytest_result": "9 passed in 0.03s",
+    "repository_ci_observed": false,
+    "admitted_entityos_runtime_observed": false,
+    "actual_pre_call_freeze_timing_attested": false,
+    "actual_post_call_executor_observation_attested": false,
+    "runtime_credit": 0
+  },
+  "identity_semantics_resolution": {
+    "audit": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_MODEL_CALL_CONTENT_VS_INVOCATION_IDENTITY_AUDIT_V1_GPT56SOL.json",
+    "audit_commit": "71b7b10dafc715930948cc12cbc5f39277fdc322",
+    "semantic_test": "tests/test_trigger2_two_phase_call_content_vs_invocation_semantics_v1.py",
+    "semantic_test_commit": "4b705e086d65fe5b9cf4a7d1119b517deabf8cb3",
+    "retired_falsified_test_commit": "9b97e703397044bc9b7dcf9033ac9df8b76494f4",
+    "resolved_rules": [
+      "Two independently attributed invocations may share source_bound_model_call_identity_sha256 and model_output_identity_sha256 when their deterministic call-content evidence is equal.",
+      "Reusing one executor_observation_sha256 across two cells fails closed.",
+      "Reusing one launch_descriptor_sha256 across two cells fails closed.",
+      "Equal model output does not collapse distinct invocation authority.",
+      "Call-content equality is not invocation-event equality."
+    ],
+    "falsified_hypothesis": "SOURCE_BOUND_MODEL_CALL_IDENTITY_MUST_BE_INJECTIVE_OVER_INDEPENDENT_INVOCATIONS",
+    "replacement_model": "INVOCATION_MULTIPLICITY_IS_CARRIED_BY_PHASE_SEPARATED_LAUNCH_AND_EXECUTOR_OBSERVATION_AUTHORITY; CALL_DIGEST_IS_CONTENT_EVIDENCE_IDENTITY"
+  },
+  "remaining_source_gap": {
+    "id": "NODE_ADMISSION_MEMBERSHIP_INCARCATION_PROVENANCE",
+    "current_test": "test_one_node_admission_identity_cannot_be_projected_onto_two_nodes",
+    "status": "STRICT_XFAIL_EXPECTED_SOURCE_GAP",
+    "required_rule": "Within a cohort claiming independently attributed nodes, one source_node_admission_id/membership incarnation cannot be silently projected onto two distinct controller_observed_node_id values unless an explicit multiplexing/fanout contract exists.",
+    "cheapest_discriminator": "Add source_node_admission_id to cohort-level uniqueness or bind admission identity to node identity through an independently validated membership receipt; preserve explicit fanout as a separate schema if ever required."
+  },
+  "hcu_integration_frontier": {
+    "next_source_target": "FUSED_GRID10_MEMBERSHIP_COHORT_TO_TWO_PHASE_MODEL_CALL_AUTHORITY",
+    "required_chain": [
+      "existing membership/admission incarnation",
+      "pre-call launch descriptor",
+      "model-call content/evidence receipt",
+      "post-call executor observation",
+      "immutable authority-free NODE_RESULT",
+      "two-phase authority envelope",
+      "cohort reducer",
+      "atomic fused GRID10 coordinator"
+    ],
+    "anti_authority_duplication": "Do not reintroduce one-phase model-call/NODE_RESULT gates as peer authorities."
+  },
+  "training_jspace_feedback": {
+    "event_attribution": "USE_INVOCATION_AUTHORITY",
+    "content_equivalence_and_dedup": "USE_SOURCE_BOUND_MODEL_CALL_CONTENT_IDENTITY",
+    "new_positive_rows": 0,
+    "accepted_dataset_tokens_added": 0,
+    "training_credit_added": 0
+  },
+  "execution": {
+    "provider_called_this_cycle": false,
+    "model_runtime_executed_this_cycle": false,
+    "training_executed_this_cycle": false,
+    "vps_execution_performed": false,
+    "paid_execution": false,
+    "unusual_experiment_executed": false,
+    "work_class": "SOURCE_ONLY_VALIDATION_AND_SEMANTIC_FUSION"
+  },
+  "credits": {
+    "research_delta": 1,
+    "exact_source_fixture_validation_credit": 1,
+    "identity_semantics_resolution_credit": 1,
+    "repository_ci_credit": 0,
+    "model_call_runtime_credit": 0,
+    "checkpoint_selection_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "jspace_model_credit": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  },
+  "next_priority_order": [
+    "P0 owning live host: prove FreeSwarm provider quiescence with zero provider-capable survivors and bounded zero provider-counter delta without provider probing",
+    "P1 source-only: close node-admission/membership-incarnation provenance in the retained two-phase cohort reducer without breaking explicit future fanout semantics",
+    "P1 source-only: integrate phase-separated authority with PROOF_CARRYING_NODE_RESULT/v1 and fused GRID10 membership/cohort source",
+    "P1 source-only: add tests distinguishing membership replay from explicit consumer fanout if fanout becomes required",
+    "P1 after quiescence PASS: re-enter newest explicit FREE non-provider execution authority before any model or physical GRID10 promotion",
+    "P2 keep blinded checkpoint evaluation and training materialization closed until separately admitted executable evidence",
+    "P3 keep Forge-to-Distillery positive admission closed until accepted_dataset_tokens > 0 from an exact accepted witness and exact replay adds +0"
+  ],
+  "next_exact_action": "Close the remaining membership-provenance xfail: prevent one source_node_admission_id from being projected as two independent node memberships in one cohort, then bind the validated two-phase invocation authority into the fused GRID10 membership/cohort source path. P0 runtime quiescence remains externally blocking for all model/provider/training promotion."
+}

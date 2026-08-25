@@ -1,14 +1,12 @@
 #!/usr/bin/env python3
-"""Authority-bindable deterministic discriminator producer for Trigger-2 A02.
+"""Authority-driven deterministic discriminator producer for one Trigger-2 synthetic pilot.
 
-This module is deliberately a pure synthetic producer.  It receives generation-bound
-world/state/event subjects plus an authority-selected policy object, recomputes the retained
-``u_test_order`` discriminator result, and emits one deterministic execution receipt.  It
-does not read row-carried ``admissible``/``executed`` flags and cannot mint canonical truth,
-effects, runtime, J-Space, HCU, EntityOS, dataset, or training credit.
+The producer does not accept row assertions as evidence authority. It delegates discriminator
+ordering semantics to the retained Trigger-2 v3 reference labeler, while deriving a deterministic
+synthetic execution receipt from authority-pinned policy plus exact world/state/event identities.
 
-The companion producer-auth gate verifies this file's exact repository identity and policy
-manifest before invoking ``produce``.
+SOURCE/CANDIDATE PRE-ADMISSION ONLY. It mints zero canonical truth/effect/runtime/J-Space/HCU/
+EntityOS/dataset-token/training credit.
 """
 from __future__ import annotations
 
@@ -21,6 +19,8 @@ from typing import Any
 
 PRODUCER_SCHEMA = "CLAY_TRIGGER2_PINNED_SYNTHETIC_DISCRIMINATOR_PRODUCER/v1"
 RECEIPT_SCHEMA = "XENO_SYNTHETIC_DISCRIMINATOR_EXECUTION_RECEIPT/v1"
+POLICY_SCHEMA = "CLAY_TRIGGER2_SYNTHETIC_DISCRIMINATOR_POLICY/v1"
+REFERENCE_LABELER_FILENAME = "trigger2_hyperposition_reference_labelers_v3.py"
 
 
 def _load_sibling(filename: str, module_name: str):
@@ -33,198 +33,171 @@ def _load_sibling(filename: str, module_name: str):
     return module
 
 
-history = _load_sibling(
-    "trigger2_hyperposition_state_history_proof_gate_v1.py",
-    "trigger2_history_for_a02_discriminator_producer_v1",
-)
-generation = _load_sibling(
-    "trigger2_generation_provenance_gate_v1.py",
-    "trigger2_generation_for_a02_discriminator_producer_v1",
+labeler = _load_sibling(
+    REFERENCE_LABELER_FILENAME,
+    "trigger2_reference_labeler_for_discriminator_producer_v1",
 )
 
 
-def _jcs_sha256(value: Any) -> str:
-    return generation._jcs_sha256(value)
+def _digest(value: Any) -> str:
+    return sha256(
+        json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode("utf-8")
+    ).hexdigest()
 
 
-def _nonempty(value: Any) -> bool:
-    return isinstance(value, str) and bool(value)
+def _event_semantic_payload(event: Any) -> dict[str, Any]:
+    if not isinstance(event, dict):
+        raise ValueError("EVENT_OBJECT_REQUIRED")
+    keys = (
+        "schema",
+        "event_id",
+        "correlation_ancestry_id",
+        "independence_group",
+        "payload_key",
+        "provenance",
+        "epistemic_type",
+        "test_id",
+        "observed_outcome",
+        "canonical_truth_allowed",
+        "direct_effect_authority",
+    )
+    if any(key not in event for key in keys):
+        raise ValueError("EVENT_SEMANTIC_FIELDS_REQUIRED")
+    return {key: deepcopy(event[key]) for key in keys}
 
 
-def _policy_without_digest(policy: dict[str, Any]) -> dict[str, Any]:
-    return {k: deepcopy(v) for k, v in policy.items() if k != "formal_spec_jcs_sha256"}
-
-
-def validate_policy(policy: Any, case_id: str, world: Any, event: Any) -> list[str]:
-    failures: list[str] = []
-    if not isinstance(policy, dict):
-        return ["POLICY_OBJECT_REQUIRED"]
-    required = {
-        "policy_id",
-        "policy_version",
-        "allowed_case_id",
-        "required_epistemic_type",
-        "allowed_test_ids",
-        "require_full_live_pair_coverage",
-        "ordering_function",
-        "formal_spec",
-        "formal_spec_jcs_sha256",
-    }
-    if not required.issubset(policy):
-        return ["POLICY_FIELDS_MISSING"]
-    if not _nonempty(policy.get("policy_id")) or not _nonempty(policy.get("policy_version")):
-        failures.append("POLICY_ID_OR_VERSION_INVALID")
-    if policy.get("allowed_case_id") != case_id:
-        failures.append("POLICY_CASE_NOT_AUTHORIZED")
-    if policy.get("ordering_function") != "u_test_order":
-        failures.append("POLICY_ORDERING_FUNCTION_MISMATCH")
-    if policy.get("require_full_live_pair_coverage") is not True:
-        failures.append("POLICY_MUST_REQUIRE_FULL_LIVE_PAIR_COVERAGE")
-    if not isinstance(world, dict) or not isinstance(event, dict):
-        failures.append("WORLD_EVENT_OBJECT_REQUIRED")
-        return sorted(set(failures))
-    if event.get("epistemic_type") != policy.get("required_epistemic_type"):
-        failures.append("POLICY_EPISTEMIC_TYPE_MISMATCH")
-    allowed_test_ids = policy.get("allowed_test_ids")
-    if not isinstance(allowed_test_ids, list) or event.get("test_id") not in allowed_test_ids:
-        failures.append("POLICY_TEST_NOT_AUTHORIZED")
-    formal_spec = policy.get("formal_spec")
-    if not isinstance(formal_spec, dict):
-        failures.append("POLICY_FORMAL_SPEC_OBJECT_REQUIRED")
-    else:
-        test_id = event.get("test_id")
-        expected = {
-            "test_id": test_id,
-            **deepcopy(world.get("tests", {}).get(test_id, {})),
-        }
-        if formal_spec != expected:
-            failures.append("POLICY_FORMAL_SPEC_NOT_EXACT_WORLD_TEST")
-        try:
-            digest = _jcs_sha256(formal_spec)
-        except Exception as exc:
-            failures.append("POLICY_FORMAL_SPEC_JCS_FAILED:" + type(exc).__name__)
-        else:
-            if digest != policy.get("formal_spec_jcs_sha256"):
-                failures.append("POLICY_FORMAL_SPEC_DIGEST_MISMATCH")
-    return sorted(set(failures))
+def _subject_match(policy: dict[str, Any], key: str, value: Any) -> None:
+    expected = policy.get("expected_" + key)
+    if expected != value:
+        raise ValueError("POLICY_SUBJECT_MISMATCH:" + key)
 
 
 def produce(
+    world: Any,
+    state_before: Any,
+    event: Any,
     *,
     case_id: str,
-    world: dict[str, Any],
-    state_before: dict[str, Any],
-    event: dict[str, Any],
-    producer_binding: dict[str, Any],
-    policy: dict[str, Any],
+    policy: Any,
+    producer_binding: Any,
+    labeler_binding: Any,
 ) -> dict[str, Any]:
-    """Derive one synthetic execution receipt from bound subjects and policy.
-
-    The caller is expected to be the companion auth gate after generation provenance passes.
-    Row-carried receipt fields never participate in this derivation.
-    """
-    failures = validate_policy(policy, case_id, world, event)
-    if failures:
-        raise ValueError("POLICY_REJECTED:" + ",".join(failures))
+    """Return the exact deterministic synthetic discriminator receipt for the pinned case."""
+    if not isinstance(world, dict) or not isinstance(state_before, dict) or not isinstance(event, dict):
+        raise ValueError("WORLD_STATE_EVENT_OBJECTS_REQUIRED")
+    if not isinstance(policy, dict) or policy.get("schema") != POLICY_SCHEMA:
+        raise ValueError("DISCRIMINATOR_POLICY_SCHEMA_MISMATCH")
     if not isinstance(producer_binding, dict):
         raise ValueError("PRODUCER_BINDING_REQUIRED")
-    required_binding = {
-        "repo_path",
-        "source_sha256",
-        "git_commit_sha",
-        "producer_schema_or_version",
-    }
-    if not required_binding.issubset(producer_binding):
-        raise ValueError("PRODUCER_BINDING_FIELDS_MISSING")
-    if producer_binding.get("producer_schema_or_version") != PRODUCER_SCHEMA:
-        raise ValueError("PRODUCER_SCHEMA_BINDING_MISMATCH")
+    if not isinstance(labeler_binding, dict):
+        raise ValueError("LABELER_BINDING_REQUIRED")
+
+    _subject_match(policy, "generation_case_id", case_id)
+    _subject_match(policy, "world_id", world.get("world_id"))
+    _subject_match(policy, "query_id", state_before.get("query_id"))
+    _subject_match(policy, "event_id", event.get("event_id"))
+    _subject_match(policy, "test_id", event.get("test_id"))
+    _subject_match(policy, "observed_outcome", event.get("observed_outcome"))
+    _subject_match(policy, "epistemic_type", event.get("epistemic_type"))
+
+    if world.get("canonical_truth_allowed") is not False or world.get("direct_effect_authority") is not False:
+        raise ValueError("WORLD_AUTHORITY_FENCE_INVALID")
+    if state_before.get("canonical_truth_allowed") is not False or state_before.get("direct_effect_authority") is not False:
+        raise ValueError("STATE_AUTHORITY_FENCE_INVALID")
+    if event.get("canonical_truth_allowed") is not False or event.get("direct_effect_authority") is not False:
+        raise ValueError("EVENT_AUTHORITY_FENCE_INVALID")
 
     test_id = event.get("test_id")
-    observed_outcome = event.get("observed_outcome")
-    formal_spec = policy["formal_spec"]
-    if observed_outcome not in formal_spec.get("allowed_outcomes", []):
-        raise ValueError("OBSERVED_OUTCOME_NOT_IN_BOUND_FORMAL_SPEC")
+    tests = world.get("tests")
+    if not isinstance(tests, dict) or test_id not in tests or not isinstance(tests[test_id], dict):
+        raise ValueError("FORMAL_DISCRIMINATOR_SPEC_REQUIRED")
+    formal_spec = tests[test_id]
+    formal_spec_sha256 = _digest(formal_spec)
+    if formal_spec_sha256 != policy.get("formal_discriminator_spec_sha256"):
+        raise ValueError("FORMAL_DISCRIMINATOR_SPEC_DIGEST_MISMATCH")
 
-    ordering = history.lab.u_test_order(world, state_before, [test_id])
-    if not isinstance(ordering, dict) or not ordering.get("pass"):
+    state_before_sha256 = _digest(state_before)
+    if state_before_sha256 != policy.get("state_before_sha256"):
+        raise ValueError("STATE_BEFORE_DIGEST_MISMATCH")
+
+    ordering = labeler.u_test_order(world, state_before, [test_id])
+    if not isinstance(ordering, dict) or ordering.get("pass") is not True:
         raise ValueError("DISCRIMINATOR_ORDER_RECOMPUTE_REJECTED")
     rows = ordering.get("ordering")
     if not isinstance(rows, list) or len(rows) != 1 or not isinstance(rows[0], dict):
         raise ValueError("DISCRIMINATOR_ORDER_RESULT_INVALID")
     item = rows[0]
+
     separated = item.get("separated_live_pairs")
     full_coverage = item.get("separates_all_live_pairs")
-    if not isinstance(separated, int) or separated <= 0:
-        raise ValueError("DISCRIMINATOR_DOES_NOT_SEPARATE_LIVE_PAIR")
-    if policy.get("require_full_live_pair_coverage") is True and full_coverage is not True:
+    if policy.get("require_at_least_one_live_pair") is True:
+        if not isinstance(separated, int) or separated <= 0:
+            raise ValueError("DISCRIMINATOR_MUST_SEPARATE_AT_LEAST_ONE_LIVE_PAIR")
+    if policy.get("require_full_live_pair_separation") is True and full_coverage is not True:
         raise ValueError("DISCRIMINATOR_INCOMPLETE_LIVE_PAIR_COVERAGE")
 
-    event_semantic_sha256 = history.event_semantic_sha256(event)
-    if not _nonempty(event_semantic_sha256):
-        raise ValueError("EVENT_SEMANTIC_DIGEST_REQUIRED")
-    world_sha256 = history._world_sha256(world)
-    if not _nonempty(world_sha256):
-        raise ValueError("WORLD_DIGEST_REQUIRED")
-    pre_state_jcs_sha256 = _jcs_sha256(state_before)
-    world_scoped_event_jcs_sha256 = _jcs_sha256({
-        "world_id": world.get("world_id"),
-        "event_semantic_sha256": event_semantic_sha256,
-        "test_id": test_id,
-        "observed_outcome": observed_outcome,
-    })
-    policy_jcs_sha256 = _jcs_sha256(_policy_without_digest(policy))
-    ordering_result_jcs_sha256 = _jcs_sha256(ordering)
+    event_semantic_sha256 = _digest(_event_semantic_payload(event))
+    world_sha256 = _digest(world)
+    world_scoped_event_sha256 = _digest(
+        {
+            "world_id": world.get("world_id"),
+            "world_sha256": world_sha256,
+            "event_semantic_sha256": event_semantic_sha256,
+            "test_id": test_id,
+            "observed_outcome": event.get("observed_outcome"),
+        }
+    )
+    policy_sha256 = _digest(policy)
 
-    producer_result = {
-        "producer_schema": PRODUCER_SCHEMA,
-        "case_id": case_id,
-        "policy_jcs_sha256": policy_jcs_sha256,
-        "formal_discriminator_spec_jcs_sha256": policy["formal_spec_jcs_sha256"],
+    execution_preimage = {
+        "producer": deepcopy(producer_binding),
+        "labeler": deepcopy(labeler_binding),
+        "policy_sha256": policy_sha256,
+        "generation_case_id": case_id,
         "world_sha256": world_sha256,
-        "pre_state_jcs_sha256": pre_state_jcs_sha256,
-        "world_scoped_event_jcs_sha256": world_scoped_event_jcs_sha256,
-        "event_semantic_sha256": event_semantic_sha256,
-        "test_id": test_id,
-        "observed_outcome": deepcopy(observed_outcome),
-        "ordering_result_jcs_sha256": ordering_result_jcs_sha256,
+        "state_before_sha256": state_before_sha256,
+        "world_scoped_event_sha256": world_scoped_event_sha256,
+        "formal_discriminator_spec_sha256": formal_spec_sha256,
+        "ordering_result_sha256": _digest(ordering),
         "separated_live_pairs": separated,
-        "separates_all_live_pairs": bool(full_coverage),
-        "admissible": True,
-        "executed": True,
+        "separates_all_live_pairs": full_coverage,
     }
-    producer_result_jcs_sha256 = _jcs_sha256(producer_result)
-    receipt_preimage = {
-        "producer_binding": deepcopy(producer_binding),
-        "producer_result_jcs_sha256": producer_result_jcs_sha256,
-    }
-    execution_receipt_id = "t2disc:" + _jcs_sha256(receipt_preimage)
+    execution_receipt_id = "t2dp:" + _digest(execution_preimage)
 
     return {
         "schema": RECEIPT_SCHEMA,
         "execution_receipt_id": execution_receipt_id,
         "event_id": event.get("event_id"),
         "test_id": test_id,
-        "observed_outcome": deepcopy(observed_outcome),
+        "observed_outcome": deepcopy(event.get("observed_outcome")),
         "event_semantic_sha256": event_semantic_sha256,
         "world_sha256": world_sha256,
+        "world_scoped_event_sha256": world_scoped_event_sha256,
+        "formal_discriminator_spec_sha256": formal_spec_sha256,
+        "state_before_sha256": state_before_sha256,
+        "policy_sha256": policy_sha256,
+        "producer": deepcopy(producer_binding),
+        "ordering_semantics": deepcopy(labeler_binding),
         "admissible": True,
         "executed": True,
         "separated_live_pairs": separated,
-        "separates_all_live_pairs": bool(full_coverage),
-        "producer": deepcopy(producer_binding),
-        "policy": {
-            "policy_id": policy["policy_id"],
-            "policy_version": policy["policy_version"],
-            "policy_jcs_sha256": policy_jcs_sha256,
-            "formal_discriminator_spec_jcs_sha256": policy["formal_spec_jcs_sha256"],
-        },
-        "pre_state_jcs_sha256": pre_state_jcs_sha256,
-        "world_scoped_event_jcs_sha256": world_scoped_event_jcs_sha256,
-        "ordering_result_jcs_sha256": ordering_result_jcs_sha256,
-        "producer_result_jcs_sha256": producer_result_jcs_sha256,
+        "separates_all_live_pairs": full_coverage,
+        "synthetic_noncanonical": True,
         "canonical_truth_allowed": False,
         "direct_effect_authority": False,
-        "training_eligible": False,
-        "accepted_dataset_tokens_minted": 0,
-        "training_credit_minted": 0,
+        "runtime_credit_minted": False,
+        "jspace_runtime_credit_minted": False,
+        "hcu_runtime_credit_minted": False,
+        "entityos_runtime_credit_minted": False,
+        "training_credit_minted": False,
     }
+
+
+if __name__ == "__main__":
+    print(
+        {
+            "schema": PRODUCER_SCHEMA,
+            "status": "SOURCE_ONLY_DETERMINISTIC_SYNTHETIC_PRODUCER",
+            "training_credit_minted": False,
+        }
+    )

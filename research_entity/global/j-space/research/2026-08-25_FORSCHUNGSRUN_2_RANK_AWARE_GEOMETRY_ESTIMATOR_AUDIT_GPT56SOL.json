@@ -1,0 +1,128 @@
+{
+  "schema": "CLAY_FORSCHUNGSRUN_2_RANK_AWARE_GEOMETRY_ESTIMATOR_AUDIT/v1",
+  "date": "2026-08-25",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "user_trigger": "forschungsrun 2",
+  "persistent_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority_epoch_observed": "8.78",
+  "execution_mode": "FREE_ONLY",
+  "canonical_main_observed_before_write": "03d6a60e524aebffbcfb2d21902e0d8205216d34",
+  "scope": "NON_DUPLICATE_STATIC_AND_METHOD_AUDIT_OF_RANK_GEOMETRY_AND_DOWNSTREAM_ESTIMATOR_IN_THE_ALREADY_QUEUED_STRUCTURAL_NATIVE_DISCRIMINATOR",
+  "execution": {
+    "new_model_intervention_executed": false,
+    "new_holdout_opened": false,
+    "new_provider_call": false,
+    "reason": "The retained structural run 32810213066 and transport-recovery/controller probes are already queued. This audit does not spawn a duplicate intervention or modify frozen scientific source."
+  },
+  "observed_prior_rank_aware_design": {
+    "source": "tools/trigger1_native_q8_jspace_basis_build.py",
+    "rank_analyzer": "tools/trigger1_semantic_simplex_rank_analyze.py",
+    "rank_outcomes": [
+      "ONE_DIMENSIONAL_SUPPORTED",
+      "TWO_DIMENSIONAL_REQUIRED",
+      "UNRESOLVED"
+    ],
+    "geometry_rule": "Project three class centroids into the admitted orthonormal 1D/2D basis, divide by one shared geometry scale, then restore the zero-sum simplex invariant.",
+    "why_it_matters": "The design explicitly allows the three-state relation to be rank 2 and preserves relative class geometry instead of forcing three independently unit-normalized radial directions."
+  },
+  "observed_queued_executor": {
+    "source": "tools/trigger1_structural_native_abstract_execute.py",
+    "semantic_estimator": "group class means at layer-input 21 and 24, nuisance-residualize each layer, then independently convert each projected class vector to unit norm",
+    "rank_analyzer_called": false,
+    "one_or_two_dimensional_rank_verdict_required": false,
+    "shared_geometry_scale_preserved": false,
+    "downstream_metric": "For each holdout case, compute d = intervened_layer24 - baseline_layer24, then use Euclidean dot(d, v24[target]) as target-coordinate score and absolute dot products against the other two independently unit-normalized class vectors as off-axis scores.",
+    "signflip_semantics": "SIGN_FLIP injects -v21[target]."
+  },
+  "new_promotion_blockers": [
+    {
+      "id": "R2_B8_RANK_AWARE_BASIS_REGRESSION",
+      "severity": "CRITICAL_FOR_JSPACE_COORDINATE_CLAIM",
+      "observation": "The queued executor bypasses the existing calibration-only semantic-simplex rank analyzer and does not require agreement on whether the native three-state geometry is 1D or 2D before intervention and downstream interpretation.",
+      "implication": "A runtime PASS can establish a task-bounded class-selective native intervention effect, but cannot establish that the intervention is acting in the previously specified native J-Space coordinate system. Representation rank, intervention rank and downstream transport rank are not forced to agree."
+    },
+    {
+      "id": "R2_B9_INDEPENDENT_UNIT_NORMALIZATION_DESTROYS_RELATIVE_SIMPLEX_SCALE",
+      "severity": "MATERIAL_FOR_GEOMETRY",
+      "observation": "After nuisance projection, each of the three centered semantic vectors is normalized independently. The earlier rank-aware builder instead divides projected class centroids by one shared scale and preserves their zero-sum simplex geometry.",
+      "implication": "Independent unit normalization preserves radial direction but not relative centroid radius or pairwise class distances. Therefore the queued cvecs are a reparameterized three-direction controller, not a faithful transport of the previously defined native class geometry."
+    },
+    {
+      "id": "R2_B10_DOT_PRODUCTS_ARE_ALIGNMENT_SCORES_NOT_COORDINATES",
+      "severity": "CRITICAL_FOR_DOWNSTREAM_STATE_WORDING",
+      "observation": "The three layer-24 class vectors are centered class directions and are not established as an orthonormal basis or dual basis. In a centered three-class simplex they are linearly dependent in at most two dimensions. Raw Euclidean dot products against all three therefore do not constitute independent semantic coordinates.",
+      "implication": "matched_target_coordinate_mean should be interpreted as a target-alignment score under the frozen estimator, not as measured transport of a well-defined J-Space coordinate. Promotion requires coordinates in an admitted orthonormal 1D/2D basis (or an explicitly justified dual/causal metric)."
+    },
+    {
+      "id": "R2_B11_THREE_STATE_SIGN_FLIP_IS_NOT_AUTOMATIC_SEMANTIC_OPPOSITE",
+      "severity": "CLAIM_SCOPE",
+      "observation": "For a three-state geometry, -v[target] is only guaranteed to point away from the target radial direction. Unless rank-1 geometry is established and a semantic antipode is preregistered, the negative vector is not guaranteed to correspond to either of the other semantic states.",
+      "implication": "A negative sign-flip effect is useful anti-target causal evidence. It is not by itself proof of a single bidirectional semantic axis. If rank 2 is required, causal tests should be expressed in the admitted 2D simplex/subspace coordinates and use target-to-target displacement predictions rather than semantic-opposite language."
+    }
+  ],
+  "counterhypotheses_retained": [
+    {
+      "id": "H0_THREE_RADIAL_CLASS_ACTUATORS",
+      "statement": "The current intervention works as three task-specific class actuator directions even though no stable rank-aware semantic coordinate system exists."
+    },
+    {
+      "id": "H0_TWO_DIMENSIONAL_SIMPLEX",
+      "statement": "The native three-state relation is genuinely rank 2; forcing interpretation through independently normalized target vectors and sign flips obscures rather than proves its geometry."
+    },
+    {
+      "id": "H0_EUCLIDEAN_ESTIMATOR_ARTIFACT",
+      "statement": "The reported downstream target dominance depends on the chosen Euclidean dot-product estimator and may not survive an admitted orthonormal/dual basis or cross-family geometry test."
+    }
+  ],
+  "external_research_inputs": [
+    {
+      "source": "The Geometry of Categorical and Hierarchical Concepts in Large Language Models",
+      "arxiv": "2406.01506",
+      "use": "Primary literature explicitly generalizes linear-representation analysis from binary directions to categorical concepts represented geometrically as polytopes; supports not forcing a three-state concept into an unverified single signed axis. Context only, not Clay runtime evidence."
+    },
+    {
+      "source": "Beyond Single Concept Vector: Modeling Concept Subspace in LLMs with Gaussian Distribution",
+      "arxiv": "2410.00153",
+      "use": "Reports instability of single concept vectors across data/training and motivates subspace/distributional robustness rather than treating one direction as canonical. Context only."
+    },
+    {
+      "source": "The Linear Representation Hypothesis and the Geometry of Large Language Models",
+      "arxiv": "2311.03658",
+      "use": "Shows that geometric interpretation depends on the metric/inner product and connects causal counterfactual formulations to steering; supports treating raw Euclidean hidden-state dot products as an operational estimator unless separately justified. Context only."
+    },
+    {
+      "source": "Cross-Architecture Steering Transfer in Language Models: A Systematic Empirical Study",
+      "arxiv": "2608.05164",
+      "use": "Provides recent empirical evidence that functional steering generalization degrades at very small model scales, reinforcing exact-model and cross-family revalidation for Qwen3-0.6B. Context only."
+    }
+  ],
+  "successor_gate_delta": {
+    "name": "RANK_CONSISTENT_CROSS_FAMILY_NATIVE_STATE_TRANSPORT_GATE",
+    "phase_0": "Keep the currently queued frozen run unchanged; its result remains useful bounded evidence under its own estimator.",
+    "phase_1_calibration_rank": "On successor calibration families, run the existing deterministic simplex-rank analyzer after the chosen nuisance treatment. Require raw/family-balanced agreement: 1D, 2D, or fail closed.",
+    "phase_2_geometry": "Construct intervention vectors from the admitted rank-aware basis with one shared geometry scale and preserved zero-sum class centroid geometry. Freeze basis, gain rule and metric before successor holdout.",
+    "phase_3_downstream": "At layer-input 24, independently reconstruct/admit the downstream rank-aware basis. Measure intervened-minus-baseline displacement in orthonormal basis coordinates. Require representation rank, intervention rank and downstream transport rank to agree or explicitly explain a preregistered rank transition.",
+    "phase_4_causality_rank1": "If rank 1 is supported, preregister semantic ordering/poles and require +/− interventions to reverse the scalar coordinate and target behavior; require NEUTRAL placement to satisfy the frozen rank-1 geometry rule.",
+    "phase_4_causality_rank2": "If rank 2 is required, drop semantic-opposite wording for simple sign flip. Require target-specific displacement toward the frozen 2D target centroid, away-from-target behavior for negative radial controls, and pairwise target-to-target interventions whose observed coordinate displacement matches the preregistered simplex displacement direction.",
+    "phase_5_generalization": "Combine this rank-consistency gate with Run-2's already recorded cross-task-family, per-target positivity, strict controls, off-target regression, replication and v12 immutable binding requirements.",
+    "promotion_scope_on_pass": "QWEN3_0_6B_RANK_CONSISTENT_CROSS_TASK_NATIVE_CONTROL_COMPONENT_ONLY; Global J-Space/GWT still requires evidence of broader workspace/state coordination."
+  },
+  "current_queued_run_reclassification_delta": {
+    "if_pass": "STRONG_STRUCTURAL_LABEL_FREE_NATIVE_CLASS_SELECTIVE_ACTUATOR_AND_TARGET_ALIGNMENT_EVIDENCE_UNDER_ITS_FROZEN_ESTIMATOR; NO_RANK_AWARE_JSPACE_COORDINATE_PROMOTION",
+    "if_fail": "PRESERVE_AS_COUNTEREVIDENCE_AT_EXACT_FROZEN_IDENTITY; DO_NOT_REDESIGN_ON_HOLDOUT_AND_SILENTLY_RERUN",
+    "if_queued": "TRANSPORT_BLOCKER_ONLY; NO_SCIENTIFIC_POSITIVE_OR_NEGATIVE CREDIT"
+  },
+  "credit_change": {
+    "new_runtime_credit": 0,
+    "structural_label_free_native_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0,
+    "training_credit": 0,
+    "canonical_semantics_promotion": false
+  },
+  "next_exact_action": "Repair/attest the retained self-hosted runner transport and let existing frozen run 32810213066 execute unchanged. In parallel source-only successor design, fuse the existing semantic-simplex rank analyzer and shared-scale native geometry into the cross-task-family gate; do not modify the already queued frozen scientific files before execution."
+}

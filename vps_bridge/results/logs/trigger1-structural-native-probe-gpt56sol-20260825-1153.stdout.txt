@@ -1,0 +1,6 @@
+CURRENT_HEAD=91eb282627c873655bae74a257f950066b135f53
+PROCESSES_BEGIN
+568510 bash -lc set -euo pipefail; echo CURRENT_HEAD=$(git rev-parse HEAD 2>/dev/null || true); echo PROCESSES_BEGIN; pgrep -af 'trigger1_structural_native_abstract_execute.py|native-layer-capture|native-cvec-logits|clay-trigger1-structural-native' || true; echo PROCESSES_END; echo RESULTS_BEGIN; find /workspace -maxdepth 6 -type f -name trigger1_structural_native_abstract_result.json -print 2>/dev/null | head -20 || true; echo RESULTS_END
+PROCESSES_END
+RESULTS_BEGIN
+RESULTS_END

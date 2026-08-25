@@ -1,0 +1,146 @@
+{
+  "schema": "TRIGGER2_FOUR_QUADRANT_SELECTIVE_ANSWERABILITY_AUTHORITY_EVAL/v1",
+  "status": "FROZEN_PREOUTPUT_SOURCE_ONLY_NO_MODEL_EXECUTION",
+  "date": "2026-08-26",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "supervisor_epoch": "8.82",
+  "mode": "FREE_ONLY",
+  "candidate_set": [
+    "QWEN35_08B_BASE",
+    "QWEN35_08B_POSTTRAINED",
+    "QWEN35_08B_TARGET_MEASURED"
+  ],
+  "selection_credit_before_execution": 0,
+  "evaluator_source_sha256": "9a57f6eae7e62324c9321422677b98b614749f08bd1e1944e5d9d1ba4df834a3",
+  "materialization_contract": {
+    "version": "v1",
+    "case_count": 32,
+    "family_count": 8,
+    "quadrants_per_family": 4,
+    "q3_q4_evidence_order": "CROSSED_WITHIN_FAMILY",
+    "actual_xeno_renderer_transport": "SEPARATE_GATE_NOT_CLAIMED_BY_THIS_MANIFEST"
+  },
+  "family_disjointness_claim": {
+    "against_n64_families": "NEW_SYNTHETIC_WORLD_IDS_AND_PROMPTS_NOT_PRESENT_IN_PRIOR_N64_MANIFEST",
+    "against_training_or_other_unindexed_sources": "UNKNOWN_FAIL_CLOSED_REQUIRES_PREEXECUTION_AUDIT"
+  },
+  "response_contract": {
+    "allowed_decisions": [
+      "ANSWER",
+      "ABSTAIN_UNKNOWN",
+      "TRUST_DB",
+      "REREAD_RECONCILE"
+    ],
+    "lines": [
+      "DECISION=<token>",
+      "VALUE=<exact value or NONE>"
+    ],
+    "extra_text": "INVALID"
+  },
+  "mandatory_shortcut_challengers": [
+    "CONSTANT_LABEL_EACH_DECISION",
+    "ALWAYS_TRUST_DB",
+    "ALWAYS_ABSTAIN_UNKNOWN",
+    "EVIDENCE_ORDER_AUDIT_WITHIN_FAMILY_Q3_Q4",
+    "FAMILY_ID_TEMPLATE_MEMORIZATION_AUDIT"
+  ],
+  "preregistered_metrics": [
+    "per_quadrant_exact_accuracy",
+    "macro_quadrant_accuracy",
+    "hard_quadrant_floor",
+    "invalid_format_rate",
+    "best_constant_label_accuracy",
+    "margin_over_best_constant_label",
+    "paired_item_candidate_differences",
+    "family_clustered_summary"
+  ],
+  "prospective_stopping_rules": {
+    "primary_block": "exactly_32_cases_8_families_x_4_quadrants",
+    "no_posthoc_trim": true,
+    "incomplete_runtime": "INCOMPLETE_NO_SELECTION_CREDIT",
+    "expansion": "requires_new_still_sealed_manifest_identity_before_any_new_candidate_outputs"
+  },
+  "reproducibility_requirements": [
+    "persist_full_raw_output_utf8",
+    "persist_raw_output_sha256",
+    "bind_checkpoint_tokenizer_renderer_rendered_utf8_input_tensor_runtime_identity",
+    "exact_grader_source_digest",
+    "report_nominal_N_unique_prompt_N_semantic_family_N",
+    "no_heuristic_keyword_grading"
+  ],
+  "promotion_rules": [
+    "N64 remains exploratory only",
+    "No checkpoint winner from aggregate mean alone",
+    "Any holdout/training-family overlap invalidates selection credit",
+    "Runtime authority and CHECKPOINT_MODEL_STATE_CONSUMPTION_ABI remain upstream",
+    "This manifest and evaluator mint zero model/J-Space/training/HCU/EntityOS runtime credit"
+  ],
+  "worlds": [
+    {
+      "family_id": "W01_TELEMETRY",
+      "source": "Aster-9 sensor packet",
+      "field": "temperature_c",
+      "current_value": "23.4",
+      "sim_value": "41.9",
+      "invalid_kind": "STALE_GENERATION"
+    },
+    {
+      "family_id": "W02_INVENTORY",
+      "source": "Merope warehouse ledger",
+      "field": "units_on_hand",
+      "current_value": "317",
+      "sim_value": "902",
+      "invalid_kind": "PROVENANCE_INVALID"
+    },
+    {
+      "family_id": "W03_FINANCE",
+      "source": "Talus internal budget record",
+      "field": "approved_budget_usd",
+      "current_value": "125000",
+      "sim_value": "210000",
+      "invalid_kind": "UNBOUND_ADMISSION"
+    },
+    {
+      "family_id": "W04_SCHEDULING",
+      "source": "Orchid maintenance calendar",
+      "field": "maintenance_day",
+      "current_value": "Thursday",
+      "sim_value": "Monday",
+      "invalid_kind": "CONFLICT_UNRECONCILED"
+    },
+    {
+      "family_id": "W05_ROBOTICS",
+      "source": "Kite-4 actuator registry",
+      "field": "torque_limit_nm",
+      "current_value": "58",
+      "sim_value": "91",
+      "invalid_kind": "STALE_GENERATION"
+    },
+    {
+      "family_id": "W06_WEATHER",
+      "source": "Nacre station archive",
+      "field": "rainfall_mm",
+      "current_value": "12.8",
+      "sim_value": "46.2",
+      "invalid_kind": "PROVENANCE_INVALID"
+    },
+    {
+      "family_id": "W07_LAB",
+      "source": "Pavo assay notebook",
+      "field": "sample_ph",
+      "current_value": "7.31",
+      "sim_value": "5.88",
+      "invalid_kind": "UNBOUND_ADMISSION"
+    },
+    {
+      "family_id": "W08_NETWORK",
+      "source": "Helix routing table",
+      "field": "primary_gateway",
+      "current_value": "gw-17",
+      "sim_value": "gw-42",
+      "invalid_kind": "CONFLICT_UNRECONCILED"
+    }
+  ],
+  "preoutput_manifest_sha256": "31a2b5d3a3c1bc28ff7cbd6c0f71c57c3fb9dfc2952c8ebe0135b2c15d598909"
+}

@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v4",
+  "command_id": "fr1-jspace06-native-capture-compile",
+  "op": "exec",
+  "cwd": "/workspace/clay-global-research-entity",
+  "timeout_seconds": 600,
+  "command": "set -euo pipefail; echo source_head=$(git rev-parse HEAD); LL=/cache/clay-qwen06-native/llama.cpp; echo llama_head=$(git -C $LL rev-parse HEAD); SRC=$(find tools -maxdepth 1 -name '*layer*capture*.cpp' | head -n 1); test -n \"$SRC\"; echo capture_source=$SRC; echo capture_source_sha256=$(sha256sum $SRC | cut -d ' ' -f1); OUT=/cache/clay-qwen06-native/native_layer_capture; c++ -std=c++17 -O2 -I$LL/include -I$LL/src -I$LL/ggml/include $SRC -L$LL/build/bin -Wl,-rpath,$LL/build/bin -lllama -lggml -lggml-base -lggml-cpu -pthread -ldl -o $OUT; echo binary_sha256=$(sha256sum $OUT | cut -d ' ' -f1); ldd $OUT"
+}

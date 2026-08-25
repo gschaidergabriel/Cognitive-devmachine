@@ -8,21 +8,34 @@ credential, and grants no canonical runtime/model/training credit.
 
 Scores are descriptive proxies behind hard evidence gates. Raw fields stay visible.
 UNKNOWN is preferred over invented precision.
+
+Supervisor 8.76/8.77 freshness law is enforced in this existing publisher path: the
+canonical Swarm, Forge and Distillery live mirrors are bound into one bounded snapshot,
+selected supervisor authority is bound explicitly, result identity is deterministic,
+and an advisory file lock plus compare-before-replace gate prevents an older writer
+from regressing a newer publication.
 """
 from __future__ import annotations
 
 import argparse
 import collections
 import datetime as dt
+import fcntl
 import hashlib
 import json
 import math
+import os
 from pathlib import Path
 import statistics
+import tempfile
 from typing import Any, Iterable
 
 SCHEMA = "CLAY_GO_COLLECTIVE_METRICS/v1"
 WORKER_SCHEMA = "CLAY_GO_WORKER_METRICS/v1"
+SOURCE_SNAPSHOT_SCHEMA = "CLAY_GO_COLLECTIVE_METRICS_SOURCE_SNAPSHOT/v1"
+FRESHNESS_SCHEMA = "CLAY_GO_COLLECTIVE_METRICS_FRESHNESS/v1"
+FRESHNESS_RECEIPT_SCHEMA = "COLLECTIVE_METRICS_FRESHNESS_RECEIPT/v1"
+MAX_SOURCE_SKEW_SECONDS = 120.0
 AUTO_BEGIN = "<!-- GO_COLLECTIVE_RECURSIVE_METRICS:BEGIN -->"
 AUTO_END = "<!-- GO_COLLECTIVE_RECURSIVE_METRICS:END -->"
 
@@ -99,6 +112,263 @@ def load_config(repo: Path) -> dict[str, Any]:
     return read_json(repo / "research_entity/continuity/go_metrics/GO_METRICS_CONFIG_V1.json")
 
 
+def epoch_key(value: Any) -> tuple[int, ...] | None:
+    if not isinstance(value, (str, int, float)):
+        return None
+    parts = str(value).strip().split(".")
+    try:
+        return tuple(int(part) for part in parts)
+    except ValueError:
+        return None
+
+
+def current_authority_binding(repo: Path) -> dict[str, Any]:
+    """Bind the inbox-selected steering; never self-seed authority from this publisher."""
+    inbox_path = repo / "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json"
+    inbox = read_json(inbox_path)
+    epoch = str(inbox.get("schema_version") or "").strip()
+    steering_rel = inbox.get("steering")
+    errors: list[str] = []
+    if not epoch:
+        errors.append("SUPERVISOR_INBOX_EPOCH_MISSING")
+    if not isinstance(steering_rel, str) or not steering_rel.strip():
+        errors.append("SUPERVISOR_STEERING_POINTER_MISSING")
+        steering = {}
+    else:
+        steering = read_json(repo / steering_rel)
+        if not steering:
+            errors.append("SUPERVISOR_STEERING_UNREADABLE")
+        elif str(steering.get("schema_version") or "").strip() != epoch:
+            errors.append("SUPERVISOR_STEERING_EPOCH_MISMATCH")
+    binding_payload = {
+        "inbox": inbox,
+        "selected_steering": steering,
+        "selected_steering_path": steering_rel,
+    }
+    return {
+        "authority_epoch": epoch or None,
+        "selected_steering_path": steering_rel if isinstance(steering_rel, str) else None,
+        "binding_sha256": sha256_json(binding_payload),
+        "status": "BOUND" if not errors else "UNMEASURED_FAIL_CLOSED",
+        "errors": errors,
+    }
+
+
+def _source_metrics(name: str, doc: dict[str, Any]) -> dict[str, Any]:
+    if name == "swarm":
+        workers = doc.get("workers") if isinstance(doc.get("workers"), dict) else {}
+        return {key: workers.get(key) for key in (
+            "worker_records", "exact_usage_rows", "input_tokens", "output_tokens", "total_tokens"
+        )}
+    if name == "forge":
+        return {key: doc.get(key) for key in (
+            "discovery_queries", "discovery_hits", "evaluations", "accepted_deltas"
+        )}
+    return {key: doc.get(key) for key in (
+        "collected_source_tokens", "collected_chunks", "accepted_packets", "accepted_dataset_tokens"
+    )}
+
+
+def source_snapshot_from_docs(
+    swarm: dict[str, Any],
+    forge: dict[str, Any],
+    distillery: dict[str, Any],
+    authority: dict[str, Any],
+    measurement_bindings: dict[str, Any] | None = None,
+    max_source_skew_seconds: float = MAX_SOURCE_SKEW_SECONDS,
+) -> dict[str, Any]:
+    """Create one deterministic identity for Swarm+Forge+Distillery+authority inputs."""
+    docs = {"swarm": swarm, "forge": forge, "distillery": distillery}
+    errors = list(authority.get("errors") or [])
+    sources: dict[str, Any] = {}
+    times: list[dt.datetime] = []
+    for name, doc in docs.items():
+        if not isinstance(doc, dict) or not doc:
+            errors.append(f"{name.upper()}_SOURCE_MISSING")
+            continue
+        generated_at = doc.get("generated_at")
+        parsed = parse_ts(generated_at)
+        if parsed is None:
+            errors.append(f"{name.upper()}_GENERATED_AT_INVALID")
+        else:
+            times.append(parsed)
+        sources[name] = {
+            "generated_at": generated_at,
+            "sha256": sha256_json(doc),
+            "metrics": _source_metrics(name, doc),
+        }
+
+    earliest = min(times).isoformat() if len(times) == 3 else None
+    latest = max(times).isoformat() if len(times) == 3 else None
+    skew = (max(times) - min(times)).total_seconds() if len(times) == 3 else None
+    if skew is not None and skew > float(max_source_skew_seconds):
+        errors.append("SOURCE_SNAPSHOT_SKEW_EXCEEDED")
+    if authority.get("status") != "BOUND" or not authority.get("authority_epoch"):
+        if "AUTHORITY_NOT_BOUND" not in errors:
+            errors.append("AUTHORITY_NOT_BOUND")
+
+    identity_payload = {
+        "schema": SOURCE_SNAPSHOT_SCHEMA,
+        "authority_epoch": authority.get("authority_epoch"),
+        "authority_binding_sha256": authority.get("binding_sha256"),
+        "selected_steering_path": authority.get("selected_steering_path"),
+        "max_source_skew_seconds": float(max_source_skew_seconds),
+        "sources": sources,
+        "measurement_bindings": measurement_bindings or {},
+    }
+    return {
+        **identity_payload,
+        "snapshot_id": sha256_json(identity_payload),
+        "earliest_input_at": earliest,
+        "latest_input_at": latest,
+        "source_skew_seconds": skew,
+        "status": "FRESH" if not errors else "UNMEASURED_FAIL_CLOSED",
+        "errors": errors,
+    }
+
+
+def load_source_snapshot(
+    repo: Path,
+    authority: dict[str, Any],
+    measurement_bindings: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+    return source_snapshot_from_docs(
+        read_json(repo / "free swarm/LIVE_METRICS.json"),
+        read_json(repo / "free swarm/FORGE_LIVE.json"),
+        read_json(repo / "free swarm/DISTILLERY_LIVE.json"),
+        authority,
+        measurement_bindings=measurement_bindings,
+    )
+
+
+def canonical_measurement_rows(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Remove executor-local absolute source paths from the deterministic measurement digest."""
+    out: list[dict[str, Any]] = []
+    for row in rows:
+        item = dict(row)
+        item.pop("_source", None)
+        out.append(item)
+    return out
+
+
+def source_metrics_from_snapshot(snapshot: dict[str, Any]) -> dict[str, Any]:
+    sources = snapshot.get("sources") if isinstance(snapshot.get("sources"), dict) else {}
+    return {
+        name: dict((sources.get(name) or {}).get("metrics") or {})
+        for name in ("swarm", "forge", "distillery")
+    }
+
+
+def classify_existing_publication(
+    existing: dict[str, Any],
+    snapshot: dict[str, Any],
+    current_epoch: str,
+) -> str:
+    if not existing:
+        return "MISSING"
+    existing_epoch = str(existing.get("authority_epoch") or "").strip()
+    if existing_epoch != current_epoch:
+        old_key = epoch_key(existing_epoch)
+        new_key = epoch_key(current_epoch)
+        if old_key is not None and new_key is not None and old_key > new_key:
+            return "EXISTING_NEWER_AUTHORITY_FAIL_CLOSED"
+        return "HISTORICAL_AUTHORITY_EPOCH"
+
+    current_latest = parse_ts(snapshot.get("latest_input_at"))
+    existing_snapshot = existing.get("source_snapshot")
+    if not isinstance(existing_snapshot, dict):
+        existing_generated = parse_ts(existing.get("generated_at"))
+        if existing_generated is not None and current_latest is not None and existing_generated < current_latest:
+            return "STALE_UNBOUND_AGGREGATE"
+        return "UNMEASURED_UNBOUND_AGGREGATE"
+
+    old_latest = parse_ts(existing_snapshot.get("latest_input_at"))
+    if old_latest is None or current_latest is None:
+        return "UNMEASURED_SNAPSHOT_TIME"
+    old_id = existing_snapshot.get("snapshot_id")
+    new_id = snapshot.get("snapshot_id")
+    if old_latest > current_latest:
+        return "CURRENT_NEWER_SNAPSHOT_EXISTS"
+    if old_latest < current_latest:
+        return "STALE_SUPERSEDED_INPUT"
+    if old_id == new_id:
+        return "CURRENT_SAME_SNAPSHOT"
+    return "AMBIGUOUS_SAME_TIME_DIFFERENT_SNAPSHOT"
+
+
+def publication_decision(existing: dict[str, Any], result: dict[str, Any]) -> dict[str, Any]:
+    snapshot = result.get("source_snapshot") if isinstance(result.get("source_snapshot"), dict) else {}
+    epoch = str(result.get("authority_epoch") or "")
+    if snapshot.get("status") != "FRESH":
+        return {"publish": False, "reason": "NEW_SNAPSHOT_NOT_FRESH", "classification": "UNMEASURED_FAIL_CLOSED"}
+    classification = classify_existing_publication(existing, snapshot, epoch)
+    blocked = {
+        "EXISTING_NEWER_AUTHORITY_FAIL_CLOSED",
+        "CURRENT_NEWER_SNAPSHOT_EXISTS",
+        "AMBIGUOUS_SAME_TIME_DIFFERENT_SNAPSHOT",
+        "UNMEASURED_SNAPSHOT_TIME",
+        "UNMEASURED_UNBOUND_AGGREGATE",
+    }
+    if classification in blocked:
+        return {"publish": False, "reason": classification, "classification": classification}
+    if classification == "CURRENT_SAME_SNAPSHOT":
+        if existing.get("result_digest") == result.get("result_digest"):
+            return {"publish": False, "reason": "IDEMPOTENT_NO_CHANGE", "classification": classification}
+        return {"publish": False, "reason": "SAME_SNAPSHOT_RESULT_DIGEST_MISMATCH", "classification": classification}
+    return {"publish": True, "reason": "PUBLISH", "classification": classification}
+
+
+def stable_result_digest(result: dict[str, Any]) -> str:
+    """Digest only bounded deterministic fields, never wall-clock writer timing or local paths."""
+    keys = (
+        "schema", "generated_at", "authority_epoch", "program", "product", "architecture",
+        "config_sha256", "source_snapshot", "source_metrics", "worker_record_count", "aggregate",
+        "anti_goodhart", "selection_policy", "runtime_credit_added", "note",
+    )
+    return sha256_json({key: result.get(key) for key in keys})
+
+
+def _atomic_write(path: Path, text: str) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with tempfile.NamedTemporaryFile(
+        mode="w", encoding="utf-8", dir=path.parent, prefix=f".{path.name}.", delete=False
+    ) as tmp:
+        tmp.write(text)
+        tmp.flush()
+        os.fsync(tmp.fileno())
+        temp_path = Path(tmp.name)
+    os.replace(temp_path, path)
+
+
+def publish_guarded(
+    result: dict[str, Any],
+    md: str,
+    out_json: Path,
+    out_md: Path,
+    readme: Path | None = None,
+) -> dict[str, Any]:
+    """Serialize writers and re-check the current publication while holding the lock."""
+    out_json.parent.mkdir(parents=True, exist_ok=True)
+    lock_path = out_json.with_name(f".{out_json.name}.lock")
+    with lock_path.open("a+", encoding="utf-8") as lock:
+        fcntl.flock(lock.fileno(), fcntl.LOCK_EX)
+        existing = read_json(out_json)
+        decision = publication_decision(existing, result)
+        if decision["reason"] == "IDEMPOTENT_NO_CHANGE":
+            return decision
+        if not decision["publish"]:
+            raise SystemExit(f"COLLECTIVE_METRICS_PUBLICATION_BLOCKED:{decision['reason']}")
+
+        json_text = json.dumps(result, indent=2, sort_keys=True, ensure_ascii=False) + "\n"
+        # Markdown is staged first; canonical JSON is the commit point for consumers.
+        _atomic_write(out_md, md)
+        if readme is not None:
+            current = readme.read_text(encoding="utf-8") if readme.exists() else "# Free Swarm\n"
+            _atomic_write(readme, replace_block(current, md))
+        _atomic_write(out_json, json_text)
+        return decision
+
+
 def accepted_delta(row: dict[str, Any]) -> bool:
     status = str(row.get("status") or "").lower()
     if status not in {"accepted", "pass", "integrated", "verified"}:
@@ -153,9 +423,7 @@ def code_quality(row: dict[str, Any], config: dict[str, Any]) -> tuple[float | N
 
 def innovation_score(row: dict[str, Any], config: dict[str, Any]) -> float | None:
     inv = row.get("innovation")
-    if not isinstance(inv, dict):
-        return None
-    if inv.get("verified") is not True:
+    if not isinstance(inv, dict) or inv.get("verified") is not True:
         return None
     weights = (config.get("innovation") or {}).get("weights") or {}
     keys = {
@@ -277,32 +545,32 @@ def attach_delta_metrics(workers: list[dict[str, Any]], deltas: list[dict[str, A
             str(delta.get("organ") or ""),
             str(delta.get("model") or ""),
         }
-        for c in candidates:
-            if c:
-                by_actor[c].append(delta)
+        for candidate in candidates:
+            if candidate:
+                by_actor[candidate].append(delta)
     for row in workers:
         matches: list[dict[str, Any]] = []
-        for c in {worker_key(row), str(row.get("organ") or ""), str(row.get("model") or "")}:
-            matches.extend(by_actor.get(c, []))
+        for candidate in {worker_key(row), str(row.get("organ") or ""), str(row.get("model") or "")}:
+            matches.extend(by_actor.get(candidate, []))
         uniq = {}
-        for d in matches:
-            key = str(d.get("delta_id") or d.get("_source")) + ":" + str(d.get("_line"))
-            uniq[key] = d
+        for delta in matches:
+            key = str(delta.get("delta_id") or delta.get("_source")) + ":" + str(delta.get("_line"))
+            uniq[key] = delta
         matches = list(uniq.values())
         total_tokens = inum(row.get("total_tokens"))
         utility = 0.0
         cqs: list[float] = []
         viss: list[float] = []
-        for d in matches:
-            cq, _ = code_quality(d, config)
+        for delta in matches:
+            cq, _ = code_quality(delta, config)
             if cq is not None:
                 cqs.append(cq)
-            vis = innovation_score(d, config)
+            vis = innovation_score(delta, config)
             if vis is not None:
                 viss.append(vis)
-            imp = fnum(d.get("relative_improvement_pct")) or 0.0
-            runs = inum(d.get("reproducible_runs")) or 0
-            indep = fnum(d.get("independence_factor"))
+            imp = fnum(delta.get("relative_improvement_pct")) or 0.0
+            runs = inum(delta.get("reproducible_runs")) or 0
+            indep = fnum(delta.get("independence_factor"))
             if indep is None:
                 indep = 1.0
             cqf = (cq / 100.0) if cq is not None else 0.0
@@ -341,30 +609,30 @@ def hcu_forecast(workers: list[dict[str, Any]], config: dict[str, Any]) -> dict[
         probs = forecast.get("milestone_probabilities")
         if not isinstance(probs, dict):
             continue
-        for m in milestones:
-            p = fnum(probs.get(m))
-            if p is not None and 0 <= p <= 1:
-                per_lineage[lineage][m].append(p)
+        for milestone in milestones:
+            probability = fnum(probs.get(milestone))
+            if probability is not None and 0 <= probability <= 1:
+                per_lineage[lineage][milestone].append(probability)
 
     milestone_probs: dict[str, float] = {}
-    for m in milestones:
+    for milestone in milestones:
         lineage_vals = []
         for _, values in per_lineage.items():
-            x = robust_median(values.get(m, []))
-            if x is not None:
-                lineage_vals.append(x)
-        x = robust_median(lineage_vals)
-        if x is not None:
-            milestone_probs[m] = x
+            value = robust_median(values.get(milestone, []))
+            if value is not None:
+                lineage_vals.append(value)
+        value = robust_median(lineage_vals)
+        if value is not None:
+            milestone_probs[milestone] = value
 
     baseline = hc.get("initial_research_baseline") or {}
     seed = baseline.get("milestone_probabilities") or {}
     used_seed = False
-    for m in milestones:
-        if m not in milestone_probs:
-            p = fnum(seed.get(m))
-            if p is not None:
-                milestone_probs[m] = p
+    for milestone in milestones:
+        if milestone not in milestone_probs:
+            probability = fnum(seed.get(milestone))
+            if probability is not None:
+                milestone_probs[milestone] = probability
                 used_seed = True
 
     values = [max(0.01, min(float(milestone_probs[m]), 0.99)) for m in milestones if m in milestone_probs]
@@ -388,18 +656,18 @@ def hcu_forecast(workers: list[dict[str, Any]], config: dict[str, Any]) -> dict[
 
 
 def aggregate(workers: list[dict[str, Any]], config: dict[str, Any]) -> dict[str, Any]:
-    known_tokens = [inum(r.get("total_tokens")) for r in workers]
+    known_tokens = [inum(row.get("total_tokens")) for row in workers]
     total_tokens = sum(x for x in known_tokens if x is not None)
     exact_token_rows = sum(1 for x in known_tokens if x is not None)
-    utility = sum(float(r.get("verified_utility_units") or 0.0) for r in workers)
+    utility = sum(float(row.get("verified_utility_units") or 0.0) for row in workers)
     tqe = 1000.0 * utility / total_tokens if total_tokens > 0 else None
-    cqs = [fnum(r.get("code_quality_score")) for r in workers]
+    cqs = [fnum(row.get("code_quality_score")) for row in workers]
     cqs = [x for x in cqs if x is not None]
-    viss = [fnum(r.get("verified_innovation_score")) for r in workers]
+    viss = [fnum(row.get("verified_innovation_score")) for row in workers]
     viss = [x for x in viss if x is not None]
-    lats = [fnum(r.get("information_latency_seconds")) for r in workers]
+    lats = [fnum(row.get("information_latency_seconds")) for row in workers]
     lats = sorted(x for x in lats if x is not None)
-    pidx = [fnum(r.get("performance_index")) for r in workers]
+    pidx = [fnum(row.get("performance_index")) for row in workers]
     pidx = [x for x in pidx if x is not None]
 
     def percentile95(xs: list[float]) -> float | None:
@@ -449,20 +717,20 @@ def worker_table_rows(workers: list[dict[str, Any]], limit: int = 100) -> list[s
     ]
     ranked = sorted(
         workers,
-        key=lambda r: (
-            -(fnum(r.get("token_quality_efficiency")) or -1),
-            str(r.get("worker_id") or r.get("organ") or ""),
+        key=lambda row: (
+            -(fnum(row.get("token_quality_efficiency")) or -1),
+            str(row.get("worker_id") or row.get("organ") or ""),
         ),
     )
-    for r in ranked[:limit]:
-        status = str(r.get("status") or r.get("runtime_status") or "OBSERVED")
+    for row in ranked[:limit]:
+        status = str(row.get("status") or row.get("runtime_status") or "OBSERVED")
         lines.append(
-            f"| {worker_key(r)} | {fmt(r.get('total_tokens'),0)} | "
-            f"{fmt(r.get('token_quality_efficiency'),6)} | {fmt(r.get('code_quality_score'),2)} | "
-            f"{fmt(r.get('verified_innovation_score'),2)} | {fmt(r.get('performance_index'),3)} | "
-            f"{fmt(r.get('information_latency_seconds'),3)} | "
-            f"{fmt(r.get('capability_information_latency_ratio'),3)} | "
-            f"`{str(r.get('evidence_lineage_resolved') or 'UNKNOWN')[:80]}` | {status} |"
+            f"| {worker_key(row)} | {fmt(row.get('total_tokens'),0)} | "
+            f"{fmt(row.get('token_quality_efficiency'),6)} | {fmt(row.get('code_quality_score'),2)} | "
+            f"{fmt(row.get('verified_innovation_score'),2)} | {fmt(row.get('performance_index'),3)} | "
+            f"{fmt(row.get('information_latency_seconds'),3)} | "
+            f"{fmt(row.get('capability_information_latency_ratio'),3)} | "
+            f"`{str(row.get('evidence_lineage_resolved') or 'UNKNOWN')[:80]}` | {status} |"
         )
     if len(workers) > limit:
         lines.append(f"| … | … | … | … | … | … | … | … | … | {len(workers)-limit} additional rows in JSON |")
@@ -470,34 +738,46 @@ def worker_table_rows(workers: list[dict[str, Any]], limit: int = 100) -> list[s
 
 
 def markdown(result: dict[str, Any]) -> str:
-    a = result["aggregate"]
-    h = a["hcu_confidence"]
-    p = h.get("forecast_probability")
+    aggregate_result = result["aggregate"]
+    hcu = aggregate_result["hcu_confidence"]
+    probability = hcu.get("forecast_probability")
+    snapshot = result.get("source_snapshot") or {}
+    source_metrics = result.get("source_metrics") or {}
     lines = [
         AUTO_BEGIN,
         "## GO Collective Recursive-Improvement Metrics",
-        f"Generated: `{result['generated_at']}`  ",
+        f"Generated from bounded inputs: `{result['generated_at']}`  ",
         f"Schema: `{SCHEMA}`  ",
+        f"Authority epoch: `{result.get('authority_epoch')}`  ",
+        f"Freshness: **{snapshot.get('status','UNMEASURED')}** · snapshot `{snapshot.get('snapshot_id','UNKNOWN')}`  ",
+        f"Input skew: `{fmt(snapshot.get('source_skew_seconds'),3)} s` · result digest `{result.get('result_digest','UNKNOWN')}`  ",
+        "",
+        "### Bound source snapshot",
+        "| source | generated_at | key measurements |",
+        "|---|---|---|",
+        f"| Swarm | {((snapshot.get('sources') or {}).get('swarm') or {}).get('generated_at','UNKNOWN')} | total_tokens={((source_metrics.get('swarm') or {}).get('total_tokens'))} |",
+        f"| Forge | {((snapshot.get('sources') or {}).get('forge') or {}).get('generated_at','UNKNOWN')} | evaluations={((source_metrics.get('forge') or {}).get('evaluations'))}; accepted={((source_metrics.get('forge') or {}).get('accepted_deltas'))} |",
+        f"| Distillery | {((snapshot.get('sources') or {}).get('distillery') or {}).get('generated_at','UNKNOWN')} | packets={((source_metrics.get('distillery') or {}).get('accepted_packets'))}; dataset_tokens={((source_metrics.get('distillery') or {}).get('accepted_dataset_tokens'))} |",
         "",
         "### Aggregate",
         "| Metric | Current | Evidence note |",
         "|---|---:|---|",
-        f"| Worker records observed | {a['worker_records']} | all explicit records + available Free Swarm rows |",
-        f"| Exact-token rows | {a['exact_token_rows']} | missing tokens remain UNKNOWN |",
-        f"| Total exact tokens | {fmt(a['total_tokens'],0)} | no historical estimate added |",
-        f"| Token Quality Efficiency / 1k tokens | {fmt(a['token_quality_efficiency'],6)} | accepted verified utility only |",
-        f"| Code Quality Score / 100 | {fmt(a['code_quality_score'],2)} | UNKNOWN when evidence coverage is insufficient |",
-        f"| Verified Innovation Score / 100 | {fmt(a['verified_innovation_score'],2)} | self-reported novelty ignored |",
-        f"| Median performance index | {fmt(a['performance_index_median'],3)} | same benchmark family only |",
-        f"| p95 information latency (s) | {fmt(a['p95_information_latency_seconds'],3)} | producer evidence -> first downstream consumption |",
-        f"| Capability / latency ratio | {fmt(a['capability_information_latency_ratio'],3)} | unbounded; raw perf+latency remain visible |",
-        f"| HCU_TARGET_100_GO forecast | {fmt(100*p,1) if p is not None else 'UNKNOWN'}% | {h.get('calibration_state')} forecast, not completion % |",
+        f"| Worker records observed | {aggregate_result['worker_records']} | all explicit records + available Free Swarm rows |",
+        f"| Exact-token rows | {aggregate_result['exact_token_rows']} | missing tokens remain UNKNOWN |",
+        f"| Total exact tokens | {fmt(aggregate_result['total_tokens'],0)} | per-worker measurement; live source total remains separately bound above |",
+        f"| Token Quality Efficiency / 1k tokens | {fmt(aggregate_result['token_quality_efficiency'],6)} | accepted verified utility only |",
+        f"| Code Quality Score / 100 | {fmt(aggregate_result['code_quality_score'],2)} | UNKNOWN when evidence coverage is insufficient |",
+        f"| Verified Innovation Score / 100 | {fmt(aggregate_result['verified_innovation_score'],2)} | self-reported novelty ignored |",
+        f"| Median performance index | {fmt(aggregate_result['performance_index_median'],3)} | same benchmark family only |",
+        f"| p95 information latency (s) | {fmt(aggregate_result['p95_information_latency_seconds'],3)} | producer evidence -> first downstream consumption |",
+        f"| Capability / latency ratio | {fmt(aggregate_result['capability_information_latency_ratio'],3)} | unbounded; raw perf+latency remain visible |",
+        f"| HCU_TARGET_100_GO forecast | {fmt(100*probability,1) if probability is not None else 'UNKNOWN'}% | {hcu.get('calibration_state')} forecast, not completion % |",
         "",
         "### HCU milestone forecast vector",
         "| milestone | p |",
         "|---|---:|",
     ]
-    for key, value in h.get("milestone_probabilities", {}).items():
+    for key, value in hcu.get("milestone_probabilities", {}).items():
         lines.append(f"| `{key}` | {100*float(value):.1f}% |")
     lines += [
         "",
@@ -510,6 +790,7 @@ def markdown(result: dict[str, Any]) -> str:
         "- Shared model/source/prompt/orchestration ancestry is correlated evidence and must be collapsed.",
         "- Metric-definition changes are versioned, shadow-run, and do not rewrite raw history.",
         "- Confidence forecasts are calibrated on resolved outcomes using Brier/log loss when enough observations exist.",
+        "- Stale/unbound/out-of-order aggregate writers fail closed before canonical JSON replacement.",
         AUTO_END,
         "",
     ]
@@ -538,18 +819,34 @@ def main() -> int:
     if config.get("schema") != "CLAY_GO_COLLECTIVE_METRICS_CONFIG/v1":
         raise SystemExit("GO_METRICS_CONFIG_REQUIRED")
 
+    authority = current_authority_binding(repo)
+    if authority.get("status") != "BOUND":
+        raise SystemExit("COLLECTIVE_METRICS_AUTHORITY_UNBOUND:" + ",".join(authority.get("errors") or []))
+
     workers = explicit_worker_rows(repo)
     workers.extend(free_swarm_rows(args.artifacts))
     deltas = delta_rows(repo)
     attach_delta_metrics(workers, deltas, config)
+    measurement_bindings = {
+        "config_sha256": sha256_json(config),
+        "workers_sha256": sha256_json(canonical_measurement_rows(workers)),
+        "deltas_sha256": sha256_json(canonical_measurement_rows(deltas)),
+    }
+    snapshot = load_source_snapshot(repo, authority, measurement_bindings=measurement_bindings)
+    if snapshot.get("status") != "FRESH":
+        raise SystemExit("COLLECTIVE_METRICS_SOURCE_SNAPSHOT_UNMEASURED:" + ",".join(snapshot.get("errors") or []))
 
     result = {
         "schema": SCHEMA,
-        "generated_at": dt.datetime.now(dt.timezone.utc).isoformat(),
+        # Deterministic: publication identity comes from the latest bounded input, never writer wall-clock time.
+        "generated_at": snapshot.get("latest_input_at"),
+        "authority_epoch": authority.get("authority_epoch"),
         "program": "ENTITYOS_HCU",
         "product": "EntityOS",
         "architecture": "HCU",
         "config_sha256": sha256_json(config),
+        "source_snapshot": snapshot,
+        "source_metrics": source_metrics_from_snapshot(snapshot),
         "worker_record_count": len(workers),
         "aggregate": aggregate(workers, config),
         "workers": workers,
@@ -558,29 +855,30 @@ def main() -> int:
         "runtime_credit_added": 0,
         "note": "Derived measurement only. It cannot mint canonical truth or runtime/model/training credit.",
     }
+    result["result_digest"] = stable_result_digest(result)
     md = markdown(result)
 
     out_json = args.output_json or (repo / "free swarm/GO_COLLECTIVE_METRICS.json")
     out_md = args.output_md or (repo / "free swarm/GO_COLLECTIVE_METRICS.md")
-    out_json.write_text(json.dumps(result, indent=2, sort_keys=True, ensure_ascii=False) + "\n", encoding="utf-8")
-    out_md.write_text(md, encoding="utf-8")
-
-    if args.update_readme:
-        readme = repo / "free swarm/README.md"
-        current = readme.read_text(encoding="utf-8") if readme.exists() else "# Free Swarm\n"
-        readme.write_text(replace_block(current, md), encoding="utf-8")
+    readme = (repo / "free swarm/README.md") if args.update_readme else None
+    decision = publish_guarded(result, md, out_json, out_md, readme=readme)
 
     print(out_json)
     print(out_md)
-    h = result["aggregate"]["hcu_confidence"]
+    hcu = result["aggregate"]["hcu_confidence"]
     print(json.dumps({
         "workers": len(workers),
         "tqe": result["aggregate"]["token_quality_efficiency"],
         "cqs": result["aggregate"]["code_quality_score"],
         "vis": result["aggregate"]["verified_innovation_score"],
         "cilr": result["aggregate"]["capability_information_latency_ratio"],
-        "hcu_forecast_probability": h.get("forecast_probability"),
-        "calibration_state": h.get("calibration_state"),
+        "hcu_forecast_probability": hcu.get("forecast_probability"),
+        "calibration_state": hcu.get("calibration_state"),
+        "authority_epoch": result["authority_epoch"],
+        "freshness_status": snapshot.get("status"),
+        "source_snapshot_id": snapshot.get("snapshot_id"),
+        "result_digest": result.get("result_digest"),
+        "publication": decision,
     }, sort_keys=True))
     return 0
 

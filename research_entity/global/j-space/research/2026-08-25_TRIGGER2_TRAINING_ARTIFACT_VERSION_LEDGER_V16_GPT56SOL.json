@@ -1,0 +1,164 @@
+{
+  "schema": "CLAY_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER/v16",
+  "date": "2026-08-25",
+  "local_trigger_time": "22:20+07:00",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "status": "CURRENT_RESEARCH_LEDGER_NONPROMOTING",
+  "supersedes": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V15_GPT56SOL.json",
+  "inherits_all_nonconflicting_records_from": "T2-LEDGER-V15",
+  "authority": {
+    "repository": "gschaidergabriel/clay-global-research-entity",
+    "branch": "main",
+    "observed_main_before_v16_write": "c6a9982f3e352ab326e5ff8f01ce2ecdc79aa916",
+    "supervisor_epoch": "8.78",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "architecture": "HCU_VARIABLE_COGNITIVE_GRID",
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0
+  },
+  "audit_delta": [
+    {
+      "artifact": "000_CLAY_ENTITYOS_HCU_FAST_BOOTSTRAP_SOURCE 2026-08-24 supervisor 8.63",
+      "status": "STALE_AS_CURRENT_AUTHORITY_USEFUL_BOOTSTRAP_DONOR",
+      "successor": "current main + SUPERVISOR_STEERING_8_78",
+      "revision_reason": "Current main and admitted supervisor authority have advanced beyond the bootstrap cache."
+    },
+    {
+      "artifact": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V15_GPT56SOL.json",
+      "status": "SUPERSEDED",
+      "successor": "T2-LEDGER-V16",
+      "revision_reason": "V15 correctly kept runtime/training credit at zero but its source-hardening frontier was overtaken by subsequent main changes."
+    },
+    {
+      "artifact": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_2128_A02_POST_IMPLEMENTATION_REENTRY_AUDIT_V1_GPT56SOL.json",
+      "status": "PARTIALLY_SUPERSEDED_CURRENT_AS_HISTORICAL_REENTRY_EVIDENCE",
+      "successor": "current A02 producer authority + producer source on main",
+      "revision_reason": "Its missing-policy-digest and missing-source-lineage findings are closed on current main; its exact-current-execution-unobserved finding remains current."
+    },
+    {
+      "artifact": "research_entity/global/j-space/research/TRIGGER2_A02_DISCRIMINATOR_PRODUCER_AUTHORITY_V1.json",
+      "status": "CURRENT_SOURCE_AUTHORITY_NONPROMOTING",
+      "predecessor": "same authority before policy/source-lineage hardening",
+      "successor": "exact-current repository-bound execution receipt",
+      "revision_reason": "Current authority binds producer path/source SHA/schema, explicit source_lineage, complete policy and policy_jcs_sha256."
+    },
+    {
+      "artifact": "tools/trigger2_a02_discriminator_producer_v1.py",
+      "status": "CURRENT_SOURCE_IMPLEMENTATION_NONPROMOTING_EXECUTION_UNOBSERVED",
+      "predecessor": "A02 design-only contract",
+      "successor": "same retained implementation after exact-current mutation execution",
+      "revision_reason": "Receipt preimage now includes policy_jcs_sha256 plus producer/source/world/prestate/world-scoped-event/result digests."
+    },
+    {
+      "artifact": "tools/trigger2_a02_discriminator_producer_auth_gate_v1.py",
+      "status": "CURRENT_SOURCE_IMPLEMENTATION_NONPROMOTING_EXECUTION_UNOBSERVED",
+      "successor": "same retained gate after repository-bound mutation PASS",
+      "revision_reason": "Exact producer bytes, generation authority subjects and reconstructed receipt equality are source-checked; execution credit remains zero."
+    },
+    {
+      "artifact": "tools/trigger2_hyperposition_state_history_generation_bound_gate_v4.py",
+      "status": "CURRENT_RETAINED_SUCCESSOR_SOURCE_ONLY_NONPROMOTING",
+      "predecessor": "tools/trigger2_hyperposition_state_history_generation_bound_gate_v3.py",
+      "successor": "same v4 proof path after exact-current execution and remaining proof-root closure",
+      "revision_reason": "Single retained order is generation provenance -> A02 producer auth -> epistemic preupdate -> replay/state-history semantics; positive_D_E_promotion_ready remains false."
+    },
+    {
+      "artifact": "tools/trigger2_hyperposition_state_history_generation_bound_gate_v3.py",
+      "status": "SUPERSEDED_AS_CURRENT_POSITIVE_COMPOSITION_HISTORICAL_DONOR",
+      "successor": "tools/trigger2_hyperposition_state_history_generation_bound_gate_v4.py",
+      "revision_reason": "v4 inserts authority-pinned A02 producer authentication before semantic update."
+    },
+    {
+      "artifact": "tools/trigger2_binding_router_factorial_generator_v3.py",
+      "status": "BLOCKED_QUARANTINED_FROM_DIRECT_TRAINING",
+      "successor": "full-cross or preregistered conditional-independence successor schedule",
+      "revision_reason": "Supervisor 8.78 conditional nuisance leakage remains dispositive; randomized presentation is not nuisance independence."
+    },
+    {
+      "artifact": "nonempty-history positive training path",
+      "status": "NEEDS_REVISION_P0_OPEN",
+      "successor": "immutable genesis + ordered-history producer authority/root binding",
+      "revision_reason": "Replay consistency alone does not authenticate the exact historical lineage when distinct histories can converge to the same final state."
+    },
+    {
+      "artifact": "OBSERVED positive evidence path",
+      "status": "NEEDS_REVISION_P0_OPEN",
+      "successor": "authenticated evidence producer with immutable source/observation digest and qualification rule digest",
+      "revision_reason": "Typed receipt shape does not independently establish evidence origin or qualification."
+    },
+    {
+      "artifact": "Qwen/Qwen3.5-0.8B-Base",
+      "status": "CURRENT_EXTERNAL_BASE_CHECKPOINT_CANDIDATE_NOT_YET_PROJECT_IDENTITY_BOUND",
+      "successor": "exact checkpoint/tokenizer/runtime/build identity admission before model-specific J-Space/training credit",
+      "revision_reason": "Official current model repository describes a pre-trained-only 0.8B checkpoint intended for fine-tuning/research; project credit still requires exact locally/admitted-bound identity and executable evidence."
+    }
+  ],
+  "research_fusion": {
+    "hypothesis_1": "A02 source authenticity is now sufficiently closed that the highest-information next discriminator is exact-current repository-bound mutation execution, not another producer-auth redesign.",
+    "counterhypothesis_1": "Nominal source_lineage metadata is insufficient because the auth gate validates source bytes but does not independently prove the recorded git lineage at runtime.",
+    "decision_1": "Do not reopen the already-closed A02 source P0. Preserve the lineage concern as a bounded execution-receipt provenance check: the repository-bound receipt must bind clean head/tree and exact source hashes.",
+    "hypothesis_2": "Future Global J-Space vector-control acceptance should require causal behavioral effect plus an intervention-distribution guard/rescue measurement, because successful activation steering can still create divergent internal states.",
+    "counterhypothesis_2": "Some representation divergence is behaviorally harmless and a strict in-distribution gate could reject legitimate causal mechanisms.",
+    "decision_2": "Record as a preregistered successor research discriminator, not as a new current training gate: measure effect, matched random control, representation divergence, and rescue/null-space behavior separately.",
+    "hypothesis_3": "Nuisance robustness must be evaluated with full crossing or preregistered conditional-independence/conditional-MI structure rather than display randomization alone.",
+    "counterhypothesis_3": "Six randomized display orders are sufficient to destroy shortcut signal.",
+    "decision_3": "Reject the counterhypothesis for training admission; retain Supervisor 8.78 quarantine on binding_router_factorial_generator_v3."
+  },
+  "web_research_inputs_noncanonical": [
+    {
+      "source": "Qwen/Qwen3.5-0.8B-Base official Hugging Face repository",
+      "classification": "SOURCE_DIRECT_EXTERNAL",
+      "finding": "Pre-trained-only 0.8B checkpoint intended for fine-tuning, in-context experiments and research; 24 layers, hidden dimension 1024, native 262144-token context."
+    },
+    {
+      "source": "Srivastav 2026, Steering the Language Axis: From Linear Decodability to Causal Control",
+      "classification": "SOURCE_DIRECT_EXTERNAL_RESEARCH",
+      "finding": "Activation directions can causally control language choice in Qwen 3.5-2B and other models with strong layer/direction dependence."
+    },
+    {
+      "source": "Grant et al., ICLR 2026, Addressing divergent representations from causal interventions on neural networks",
+      "classification": "SOURCE_DIRECT_EXTERNAL_RESEARCH",
+      "finding": "Causal interventions can move representations away from the natural distribution; harmless and pernicious divergence must be distinguished."
+    },
+    {
+      "source": "Dunion et al. 2023, Conditional Mutual Information for Disentangled Representations",
+      "classification": "SOURCE_DIRECT_EXTERNAL_RESEARCH_ANALOGICAL",
+      "finding": "Conditional mutual information can address spurious correlations when factors are correlated; transfer to language-model nuisance gating remains a project hypothesis requiring its own validation."
+    }
+  ],
+  "generation_decision": {
+    "new_positive_rows": 0,
+    "new_hard_negative_rows": 0,
+    "positive_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "decision": "NO_NEW_ROWS_WITH_REASON",
+    "reason": "Current source closure removed stale A02 design blockers, but exact-current repository-bound mutation execution is still absent and Supervisor 8.78 explicitly keeps nonempty-history, OBSERVED, native-seed and nuisance/provenance/tokenizer gates closed."
+  },
+  "current_frontier": {
+    "p0": "EXACT_CURRENT_REPOSITORY_BOUND_A02_AND_V4_MUTATION_EXECUTION_WITH_CLEAN_HEAD_TREE_RUNTIME_SOURCE_HASH_RECEIPT",
+    "p0_after_execution": [
+      "immutable genesis and ordered-history producer authority for nonempty-history positives",
+      "OBSERVED evidence producer authentication",
+      "native seed rebind to the single retained v4 successor",
+      "rendered nuisance full-cross or preregistered conditional-MI family/provenance/tokenizer ABI gates"
+    ],
+    "jspace_successor_research": "preregister model-specific vector-control intervention with matched random control plus representation-divergence/rescue measurement before causal J-Space promotion"
+  },
+  "credits": {
+    "research_delta": 1,
+    "artifact_reclassification_delta": 1,
+    "web_research_fusion_delta": 1,
+    "positive_D_E_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "trigger2_discriminator_producer_auth_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0
+  },
+  "next_exact_action": "On the admitted FREE_ONLY repository-bound execution surface, clean-checkout exact current reviewed main, run the focused A02 producer-auth mutation suite plus retained v4 ordering/zero-credit tests, and admit only a receipt binding dirty=false, head, tree, runtime and exact source hashes. If PASS, move to immutable genesis/ordered-history and OBSERVED-producer authority before any new positive rows."
+}

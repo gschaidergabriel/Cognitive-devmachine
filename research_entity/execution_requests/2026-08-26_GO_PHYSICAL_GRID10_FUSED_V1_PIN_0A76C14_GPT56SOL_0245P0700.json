@@ -1,0 +1,67 @@
+{
+  "schema": "CLAY_GO_REPOSITORY_BOUND_EXECUTION_REQUEST/v1",
+  "date": "2026-08-26",
+  "trigger": "go",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "mode": "FREE_ONLY_NON_PROVIDER",
+  "status": "PINNED_SOURCE_READY_AWAITING_SEPARATELY_AUTHORIZED_NON_PROVIDER_EXECUTOR",
+  "freeswarm": "HARD_OFF_DO_NOT_ROUTE",
+  "provider_calls": "FORBIDDEN",
+  "repository": "gschaidergabriel/clay-global-research-entity",
+  "pinned_source_commit": "0a76c14484c3230edb86f1075738a0a1011c5694",
+  "pinned_tree": "c30f626a319b98373aa91db7f36d15fcd6bd85bc",
+  "entrypoint": "tools/xeno_physical_grid10_fused_acceptance_v1.py",
+  "entrypoint_blob_sha": "f30726d3cb250373e120b3af0065fe08b9d1fd6f",
+  "bound_dependencies": [
+    {
+      "path": "tools/trigger2_grid10_per_node_membership_fanin_acceptance_v2.py",
+      "blob_sha_observed": "9fffaa910eeb29f1bb7b46d48d9a9ba327e2c8ac"
+    },
+    {
+      "path": "tools/xeno_self_organizing_fabric_acceptance_v1.py",
+      "blob_sha_observed": "a15c2dbc85abaa496ad9b1abb4f3bc368f051c22"
+    }
+  ],
+  "command": "python3 tools/xeno_physical_grid10_fused_acceptance_v1.py",
+  "preconditions": [
+    "checkout exact pinned_source_commit detached",
+    "verify exact tree equals pinned_tree",
+    "git status --porcelain must be empty",
+    "verify entrypoint and dependency blob identities from the pinned commit",
+    "Ubuntu/Linux proc/runtime capable of ten simultaneous child processes and SQLite WAL",
+    "no provider API keys or provider calls required"
+  ],
+  "acceptance_requirements": [
+    "result schema XENO_PHYSICAL_GRID10_FUSED_ACCEPTANCE/v1",
+    "pass=true",
+    "ten simultaneously-live distinct parent-observed OS child PIDs",
+    "all ten children bind one shared S1 snapshot while holding explicit read transactions",
+    "each exact child PID is bound to current deterministic membership admission/revision and process witness",
+    "ordinary NODE_RESULT packets are S1 read-only",
+    "coordinator-consumed packet digest set equals the exact barrier cohort packet digest set",
+    "one valid coordinator lease performs one atomic cohort fan-in and one S1 epoch advance",
+    "omitted member, packet tamper, disjoint process substitution and replay fail closed",
+    "coordinator write remains noncanonical and has no effect authority"
+  ],
+  "required_receipt_bindings": [
+    "executed HEAD",
+    "executed tree",
+    "dirty state",
+    "Python/platform/runtime identity",
+    "entrypoint/dependency SHA identities",
+    "stdout SHA256",
+    "stderr SHA256",
+    "full structured result JSON"
+  ],
+  "credit_boundary": {
+    "source_component_progress": 1,
+    "repository_bound_physical_grid10_runtime_credit_before_execution": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0,
+    "jspace_model_credit": 0,
+    "training_credit": 0
+  },
+  "after_pass": "Advance GO to controlled load: coordinator fan-in/compression/latency/contention, coordinator crash/replacement, worker restart/rejoin, matched-budget challengers, then Hyperposition/GWT re-entry on the real process fabric."
+}

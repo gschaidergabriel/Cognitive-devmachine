@@ -38,6 +38,19 @@ class ForgeDistillerySupervisorWiringTests(unittest.TestCase):
         for forbidden in ('curl ', 'wget ', 'http://', 'https://', 'sudo ', 'docker ', 'podman '):
             self.assertNotIn(forbidden, fn)
 
+    def test_single_active_forge_is_backlog_first(self):
+        fn_start = self.text.index('start_forge(){')
+        fn_end = self.text.index('\n}\n\nrun_forge_distillery_bridge', fn_start)
+        fn = self.text[fn_start:fn_end]
+        self.assertIn('local x="$ROOT/tools/run_free_evidence_forge_backfill.py"', fn)
+        self.assertIn("pgrep -f '[r]un_free_evidence_forge_backfill.py'", fn)
+        self.assertIn("pgrep -f '[r]un_free_evidence_forge_safe(_871)?\\.py'", fn)
+        self.assertNotIn('local x="$ROOT/tools/run_free_evidence_forge_safe.py"', fn)
+
+    def test_status_tracks_backlog_first_forge(self):
+        self.assertIn("'forge_running':running('run_free_evidence_forge_backfill.py')", self.text)
+        self.assertNotIn("'forge_running':running('run_free_evidence_forge_safe.py')", self.text)
+
 
 if __name__ == "__main__":
     unittest.main()

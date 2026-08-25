@@ -24,6 +24,8 @@ AUTHORITY_PATH = (
     "TRIGGER2_A02_DISCRIMINATOR_PRODUCER_AUTHORITY_V1.json"
 )
 CANONICALIZER_PATH = "the artefact/MicroEntity/hcu/entry_canonicalization_v1.py"
+EXPECTED_REPOSITORY = "gschaidergabriel/clay-global-research-entity"
+EXPECTED_BRANCH = "main"
 
 
 def _repo_root() -> Path:
@@ -59,6 +61,14 @@ def _jcs_module():
 
 def _jcs_sha256(value: Any) -> str:
     return sha256(_jcs_module().canonicalize(value)).hexdigest()
+
+
+def _is_lower_hex_sha(value: Any, width: int) -> bool:
+    return (
+        isinstance(value, str)
+        and len(value) == width
+        and all(ch in "0123456789abcdef" for ch in value)
+    )
 
 
 def _result(failures: list[str], **extra: Any) -> dict[str, Any]:
@@ -120,6 +130,16 @@ def adjudicate(row: Any) -> dict[str, Any]:
     if not isinstance(generation_auth_ref, dict):
         return _result(failures + ["A02_GENERATION_AUTHORITY_REFERENCE_REQUIRED"])
 
+    try:
+        actual_policy_digest = _jcs_sha256(policy)
+    except Exception as exc:
+        return _result(failures + ["A02_POLICY_JCS_FAILED:" + type(exc).__name__])
+    authority_policy_digest = authority.get("policy_jcs_sha256")
+    if not _is_lower_hex_sha(authority_policy_digest, 64):
+        failures.append("A02_POLICY_JCS_SHA256_REQUIRED")
+    elif actual_policy_digest != authority_policy_digest:
+        failures.append("A02_POLICY_JCS_SHA256_MISMATCH")
+
     producer_repo_path = producer_auth.get("repo_path")
     if not isinstance(producer_repo_path, str) or not producer_repo_path:
         return _result(failures + ["A02_PRODUCER_PATH_REQUIRED"])
@@ -130,6 +150,19 @@ def adjudicate(row: Any) -> dict[str, Any]:
         return _result(failures + ["A02_PRODUCER_PATH_ESCAPES_REPO"])
     if not producer_path.is_file():
         return _result(failures + ["A02_PRODUCER_FILE_MISSING"])
+
+    source_lineage = producer_auth.get("source_lineage")
+    if not isinstance(source_lineage, dict):
+        failures.append("A02_PRODUCER_SOURCE_LINEAGE_REQUIRED")
+    else:
+        if source_lineage.get("repository") != EXPECTED_REPOSITORY:
+            failures.append("A02_PRODUCER_SOURCE_LINEAGE_REPOSITORY_MISMATCH")
+        if source_lineage.get("branch") != EXPECTED_BRANCH:
+            failures.append("A02_PRODUCER_SOURCE_LINEAGE_BRANCH_MISMATCH")
+        if source_lineage.get("source_path") != producer_repo_path:
+            failures.append("A02_PRODUCER_SOURCE_LINEAGE_PATH_MISMATCH")
+        if not _is_lower_hex_sha(source_lineage.get("source_commit_sha"), 40):
+            failures.append("A02_PRODUCER_SOURCE_LINEAGE_COMMIT_INVALID")
 
     actual_producer_sha = _source_sha256(producer_path)
     if actual_producer_sha != producer_auth.get("source_sha256"):
@@ -197,8 +230,10 @@ def adjudicate(row: Any) -> dict[str, Any]:
         "repo_path": producer_repo_path,
         "source_sha256": actual_producer_sha,
         "producer_schema_or_version": producer_auth.get("producer_schema_or_version"),
+        "source_lineage": source_lineage,
         "policy_id": policy.get("policy_id"),
         "policy_version": policy.get("policy_version"),
+        "policy_jcs_sha256": actual_policy_digest,
         "formal_discriminator_spec_jcs_sha256": policy.get(
             "formal_discriminator_spec_jcs_sha256"
         ),
@@ -244,6 +279,10 @@ def adjudicate(row: Any) -> dict[str, Any]:
         supplied_subject_hashes=supplied_subject_hashes,
         bounded_generation_case_id=case_id,
         producer_source_verified=actual_producer_sha == producer_auth.get("source_sha256"),
+        producer_source_lineage_verified=not any(
+            failure.startswith("A02_PRODUCER_SOURCE_LINEAGE_") for failure in failures
+        ),
+        policy_digest_verified=actual_policy_digest == authority_policy_digest,
         producer_invocation_completed=expected_receipt is not None,
         semantic_authority="RETAINED_V3_U_TEST_ORDER_VIA_AUTHORITY_PINNED_PRODUCER",
         producer_execution_scope="SYNTHETIC_PROOF_ONLY_NONCANONICAL",

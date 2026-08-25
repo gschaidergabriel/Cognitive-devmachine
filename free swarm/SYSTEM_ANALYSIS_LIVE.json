@@ -1,6 +1,6 @@
 {
   "schema": "CLAY_FREE_SWARM_SYSTEM_ANALYSIS/v3",
-  "generated_at": "2026-08-25T09:37:04.467669+00:00",
+  "generated_at": "2026-08-25T09:52:10.324203+00:00",
   "runtime": {
     "supervisor": "STOPPED/QUARANTINED",
     "go_swarm": "RUNNING",
@@ -65,7 +65,7 @@
   },
   "distillery": {
     "schema": "CLAY_RESEARCH_DISTILLERY_STATUS/v1",
-    "generated_at": "2026-08-25T09:37:02.689732+00:00",
+    "generated_at": "2026-08-25T09:52:07.826047+00:00",
     "collected_source_tokens": 11621,
     "accepted_dataset_tokens": 0,
     "dataset_yield": 0.0,
@@ -86,7 +86,7 @@
     "model_output_tokens": 1455,
     "shared_provider_budget": {
       "schema": "CLAY_SHARED_PROVIDER_BUDGET/v1",
-      "generated_at": "2026-08-25T09:37:02.690647+00:00",
+      "generated_at": "2026-08-25T09:52:07.826924+00:00",
       "providers": {
         "arxiv": {
           "max_inflight": 1,
@@ -224,22 +224,22 @@
     },
     "db_bytes": 864256,
     "top_questions": [
-      "Whether J-Space causal graph structure is isomorphic enough across Nemotron model variants to allow checkpoint recovery without semantic drift, or if model-specific causal topology requires per-model checkpoint schemas",
-      "What exact state variables in the GWT prototype's admission engine define 'cost-free' per credential vs per provider, and where is the route-price revalidation gate before network I/O?",
-      "Can the sandbox maintain consistent low‑latency access to free providers under sustained load, or does provider‑specific rate‑limiting inevitably introduce latency and errors?",
-      "Does NVIDIA's Developer Program free tier enforce per-credential or per-account concurrency limits that differ from the published max_concurrency=256?",
-      "Can policy code hash be pinned to a git commit hash without introducing deployment coupling that defeats dynamic policy updates?",
-      "Can FREE providers scale with EntityOS/HCU under high workload?",
-      "What are the optimal parameters for the HCU architecture?",
-      "Does HCU attention mechanism exhibit a causal surprisal-bandwidth optimum for global workspace integration, or is apparent effect mediated by measurement artifacts in J-Space estimation?",
-      "Does per-model TEW specialization (e.g., nemotron-3-ultra vs nemotron-mini) yield additional gains beyond per-provider adaptation?",
-      "How does the Global J-Space/GWT prototype impact system convergence?"
+      "What are the potential risks and challenges associated with the execution of the local research model?",
+      "What are the potential risks associated with relying on free providers?",
+      "How can the security of the system be ensured while utilizing free providers?",
+      "What are the most effective methods for implementing additional security measures?",
+      "Can a lightweight tracing wrapper be integrated into the HCU inference pipeline without exceeding free provider runtime credit limits?",
+      "Does the added tracing affect the deterministic behavior of J‑Space/GWT inference, potentially invalidating causal trace analysis?",
+      "What is the minimal set of event identities that must be captured to satisfy the FREE_ONLY constraints while still providing useful instrumentation?",
+      "What is the optimal token bucket parameters for cooldown backpressure?",
+      "Which causal principle—counterfactual world-model rollout, typed-grammar constrained decoding, or MoE causal routing—yields the largest measurable improvement in HCU Typed Entry → GRID10 → J-Space/GWT fidelity per free-tier compute unit?",
+      "How do mixed provider workloads affect HCU's global j-space coherence?"
     ],
     "candidate_states": {}
   },
   "evidence_forge": {
     "schema": "CLAY_FREE_EVIDENCE_FORGE_STATUS/v1",
-    "generated_at": "2026-08-25T09:37:01.680331+00:00",
+    "generated_at": "2026-08-25T09:52:08.355963+00:00",
     "candidate_states": {
       "ACCEPTED": 1,
       "NEEDS_IMPLEMENTATION": 65,
@@ -263,7 +263,7 @@
     "peak_parallel_tasks": 0,
     "shared_provider_budget": {
       "schema": "CLAY_SHARED_PROVIDER_BUDGET/v1",
-      "generated_at": "2026-08-25T09:37:01.681196+00:00",
+      "generated_at": "2026-08-25T09:52:08.356564+00:00",
       "providers": {
         "arxiv": {
           "max_inflight": 1,
@@ -408,6 +408,6 @@
     "measured_total_sonnet5_equivalent_usd": 148.830648,
     "verified_historical_savings_usd": null,
     "nominal_avoided_if_zero_cost_usd": 148.830648,
-    "repo_output_only_proxy_usd": 126.33976
+    "repo_output_only_proxy_usd": 126.37887
   }
 }

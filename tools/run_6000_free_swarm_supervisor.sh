@@ -12,6 +12,10 @@ ADMISSION_TOOL="$ROOT/tools/free_provider_admission.py"
 LOGICAL_WORKERS="${CLAY_LOGICAL_WORKERS:-6000}"
 HTTP_THREADS="${CLAY_SWARM_HTTP_THREADS:-512}"
 ADMISSION_BINDING_FILE="$STATE_DIR/swarm6000.admission.binding"
+FORGE_RUNTIME_VERIFIER="$ROOT/tools/verify_forge_runtime_identity_878.py"
+FORGE_RUNTIME_EXPECTATION="$STATE_DIR/forge-runtime-expectation.json"
+FORGE_RUNTIME_ADMISSION="$STATE_DIR/FORGE_RUNTIME_IDENTITY_ADMISSION.json"
+FORGE_RUNTIME_STATUS="$STATE_DIR/forge/STATUS.json"
 
 # Initial probes are deliberately above the old local 12-slot bottleneck for
 # empirically healthy NVIDIA, while 429-heavy lanes start lower and ramp by AIMD.
@@ -186,8 +190,57 @@ start_distillery(){
   pgrep -f '[r]un_research_distillery_local.py' >/dev/null 2>&1 || nohup python3 "$x" --hours 24 --sleep-seconds 1 >"$STATE_DIR/distillery.log" 2>&1 </dev/null &
 }
 
+stop_backlog_forge(){
+  local pid
+  while IFS= read -r pid; do
+    [[ -n "$pid" ]] && kill "$pid" 2>/dev/null || true
+  done < <(pgrep -f '[r]un_free_evidence_forge_backfill.py' || true)
+  rm -f "$STATE_DIR/forge.pid" "$FORGE_RUNTIME_EXPECTATION"
+}
+
+write_forge_runtime_expectation(){
+  local nonce="$1" pid="$2" spawned_at="$3"
+  python3 - "$FORGE_RUNTIME_EXPECTATION" "$nonce" "$pid" "$spawned_at" <<'PY'
+import json,sys
+from pathlib import Path
+path=Path(sys.argv[1]); path.parent.mkdir(parents=True,exist_ok=True)
+obj={
+ "schema":"CLAY_FORGE_RUNTIME_EXPECTATION/v1",
+ "nonce":sys.argv[2],
+ "pid":int(sys.argv[3]),
+ "spawned_at_unix":float(sys.argv[4]),
+}
+tmp=path.with_suffix(path.suffix+'.tmp')
+tmp.write_text(json.dumps(obj,sort_keys=True)+'\n',encoding='utf-8')
+tmp.replace(path)
+PY
+}
+
+verify_running_forge(){
+  local pid="$1" tmp rc=0
+  tmp="$FORGE_RUNTIME_ADMISSION.tmp"
+  if python3 "$FORGE_RUNTIME_VERIFIER" \
+      --status "$FORGE_RUNTIME_STATUS" \
+      --expectation "$FORGE_RUNTIME_EXPECTATION" \
+      --expected-entrypoint "$ROOT/tools/run_free_evidence_forge_backfill.py" \
+      --repo-root "$ROOT" \
+      --actual-pid "$pid" \
+      --max-age-seconds 90 \
+      --grace-seconds 60 >"$tmp" 2>/dev/null; then
+    rc=0
+  else
+    rc=$?
+  fi
+  mv "$tmp" "$FORGE_RUNTIME_ADMISSION" 2>/dev/null || true
+  return "$rc"
+}
+
 start_forge(){
-  local x="$ROOT/tools/run_free_evidence_forge_backfill.py"; [[ -f "$x" ]] || return 0
+  local x="$ROOT/tools/run_free_evidence_forge_backfill.py"
+  local pid nonce spawned_at rc=0
+  local -a pids=()
+  [[ -f "$x" ]] || return 0
+
   # Supervisor 8.78 requires one backlog-first Forge authority. Retire both the
   # shell-capable legacy Forge and the pre-backfill safe daemon before starting
   # the backlog-first entrypoint, which delegates evaluation to the existing
@@ -198,9 +251,41 @@ start_forge(){
   while IFS= read -r pid; do
     [[ -n "$pid" ]] && kill "$pid" 2>/dev/null || true
   done < <(pgrep -f '[r]un_free_evidence_forge_safe.py' || true)
-  pgrep -f '[r]un_free_evidence_forge_backfill.py' >/dev/null 2>&1 && return 0
-  nohup python3 "$x" --hours 24 --sleep-seconds 20 --questions-per-cycle 12 --backpressure-questions-per-cycle 0 --backpressure-threshold 64 --discovery-parallel 8 --local-parallel 4 --e2b-parallel 20 >"$STATE_DIR/forge.log" 2>&1 </dev/null &
-  echo $! >"$STATE_DIR/forge.pid"
+
+  mapfile -t pids < <(pgrep -f '[r]un_free_evidence_forge_backfill.py' || true)
+  if [[ ! -f "$FORGE_RUNTIME_VERIFIER" ]]; then
+    # Never preserve a process merely by command-name match when the verifier is
+    # unavailable. Fail closed by removing any unadmitted Forge authority.
+    ((${#pids[@]})) && stop_backlog_forge
+    return 0
+  fi
+
+  if ((${#pids[@]} > 1)); then
+    stop_backlog_forge
+    pids=()
+  elif ((${#pids[@]} == 1)); then
+    pid="${pids[0]}"
+    if verify_running_forge "$pid"; then
+      return 0
+    else
+      rc=$?
+    fi
+    if (( rc == 2 )); then
+      # The newly spawned process has a bounded grace window to replace any
+      # pre-spawn status with a fresh, nonce-bound identity envelope.
+      return 0
+    fi
+    stop_backlog_forge
+    pids=()
+  fi
+
+  nonce="$(python3 -c 'import secrets; print(secrets.token_hex(16))')"
+  [[ -n "$nonce" ]] || return 0
+  spawned_at="$(python3 -c 'import time; print(time.time())')"
+  CLAY_SUPERVISOR_GENERATION_NONCE="$nonce" nohup python3 "$x" --hours 24 --sleep-seconds 20 --questions-per-cycle 12 --backpressure-questions-per-cycle 0 --backpressure-threshold 64 --discovery-parallel 8 --local-parallel 4 --e2b-parallel 20 >"$STATE_DIR/forge.log" 2>&1 </dev/null &
+  pid=$!
+  echo "$pid" >"$STATE_DIR/forge.pid"
+  write_forge_runtime_expectation "$nonce" "$pid" "$spawned_at"
 }
 
 refresh_root_results(){
@@ -383,6 +468,8 @@ try: admission_binding=Path('$ADMISSION_BINDING_FILE').read_text().strip()
 except OSError: admission_binding=None
 try: raw_backpressure=json.loads(Path('$STATE_DIR/RAW_GENERATION_BACKPRESSURE.json').read_text())
 except Exception: raw_backpressure={'state':'UNOBSERVED','action':'PAUSE_RAW_GENERATION_FAIL_CLOSED'}
+try: forge_runtime_identity_admission=json.loads(Path('$FORGE_RUNTIME_ADMISSION').read_text())
+except Exception: forge_runtime_identity_admission={'state':'UNOBSERVED','reason':'NO_SUPERVISOR_FORGE_IDENTITY_ADMISSION_YET'}
 print(json.dumps({
  'schema':'CLAY_6000_SWARM_SUPERVISOR/v4',
  'observed_at':datetime.datetime.now(datetime.timezone.utc).isoformat(),
@@ -396,16 +483,17 @@ print(json.dumps({
  'raw_generation_backpressure':raw_backpressure,
  'distillery_running':running('run_research_distillery_local.py'),
  'forge_running':running('run_free_evidence_forge_backfill.py'),
+ 'forge_runtime_identity_admission':forge_runtime_identity_admission,
  'legacy_safe_forge_running':running('run_free_evidence_forge_safe.py'),
  'legacy_forge_running':running('run_free_evidence_forge.py'),
  'forge_entrypoint':'tools/run_free_evidence_forge_backfill.py',
  'forge_backpressure_policy':'BACKLOG_FIRST; PENDING_EXTRACTION_PRESERVES_EXTRACTION_TRANSPORT; READY_PLUS_NEEDS_IMPLEMENTATION_CAN_PAUSE_AFTER_PENDING_ZERO',
- 'forge_execution_policy':'CLAY_FORGE_EXECUTION_ADMISSION/v1',
+ 'forge_execution_policy':'CLAY_FORGE_EXECUTION_ADMISSION/v1; RESTART_FORGE_ON_RUNTIME_IDENTITY_MISMATCH; REQUIRE_SOURCE_MATERIAL_PID_NONCE_FRESH_STATUS',
  'dashboard_running':running('free swarm/evaluate.py.*--watch'),
  'local_model_ready':health(),
  'fabric':fabric,
  'shared_quota':snapshot(),
- 'revocation_policy':'CREDENTIAL_BLIND_CONTROL_PARENT; SWARM_CHILD_ONLY_SECRET_SCOPE; RESTART_CHILD_ON_ADMISSION_OR_ECONOMIC_PROVENANCE_BINDING_CHANGE; REQUEST_PATH_REVALIDATES_CURRENT_ROUTE_CREDENTIAL_AUTHORITY_BEFORE_NETWORK; LEGACY_FORGE_TERMINATED; BACKLOG_FIRST_SAFE_FORGE_ONLY; PENDING_EXTRACTION_NEVER_SELF_STOPS_EXTRACTION_TRANSPORT'
+ 'revocation_policy':'CREDENTIAL_BLIND_CONTROL_PARENT; SWARM_CHILD_ONLY_SECRET_SCOPE; RESTART_CHILD_ON_ADMISSION_OR_ECONOMIC_PROVENANCE_BINDING_CHANGE; REQUEST_PATH_REVALIDATES_CURRENT_ROUTE_CREDENTIAL_AUTHORITY_BEFORE_NETWORK; LEGACY_FORGE_TERMINATED; BACKLOG_FIRST_SAFE_FORGE_ONLY; RESTART_FORGE_ON_RUNTIME_IDENTITY_MISMATCH; PENDING_EXTRACTION_NEVER_SELF_STOPS_EXTRACTION_TRANSPORT'
 },indent=2))
 PY
   mv "$STATE_DIR/SUPERVISOR_6000.json.tmp" "$STATE_DIR/SUPERVISOR_6000.json"

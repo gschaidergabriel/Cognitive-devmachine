@@ -11,15 +11,15 @@ def h(text: str) -> str:
     return hashlib.sha256(text.encode("utf-8")).hexdigest()
 
 
-def triad(prefix: str, family: str, words: tuple[str, str, str], *, field: str, target: str) -> list[dict]:
-    rows = []
-    for semantic, word in zip(gate.TARGETS, words):
-        rows.append({
+def triad(family: str, words: tuple[str, str, str], *, field: str, target: str) -> list[dict]:
+    return [
+        {
             field: family,
             target: semantic,
             "prompt": f"/no_think Internally represent {word}. Do not answer with a code or class label.",
-        })
-    return rows
+        }
+        for semantic, word in zip(gate.TARGETS, words)
+    ]
 
 
 def clean_candidate() -> dict:
@@ -33,7 +33,7 @@ def clean_candidate() -> dict:
     )
     basis = []
     for i, words in enumerate(basis_words):
-        basis += triad("basis", f"basis-{i}", words, field="family_group_id", target="semantic_class")
+        basis += triad(f"basis-{i}", words, field="family_group_id", target="semantic_class")
 
     cal_words = (
         ("sanctioned", "prohibited", "pending"),
@@ -54,7 +54,10 @@ def clean_candidate() -> dict:
                 cases.append({
                     "scenario_family_sha256": fam,
                     "semantic_target": semantic,
-                    "prompt": f"/no_think The observed relation is {word}. Return only the temporary action code.",
+                    "prompt": (
+                        f"/no_think The observed relation is {word}. Temporary action codes: A B C. "
+                        "Return only the temporary action code."
+                    ),
                 })
         return {"cases": cases}
 
@@ -84,11 +87,18 @@ def clean_candidate() -> dict:
 
 
 class Trigger1LexicalIndependenceGateTests(unittest.TestCase):
-    def test_strict_cross_family_and_cross_partition_design_passes(self):
+    def test_strict_design_passes_with_counterbalanced_eval_code_identities_present(self):
         verdict = gate.validate(clean_candidate())
         self.assertTrue(verdict["pass"], verdict["failures"])
         self.assertTrue(verdict["generic_compliance_counterhypothesis_rejected_by_design_candidate"])
         self.assertFalse(verdict["native_last_token_causal_identity_required"])
+
+    def test_basis_output_code_identity_leak_fails(self):
+        candidate = clean_candidate()
+        candidate["lexical_independence_evidence"]["basis_rows"][0]["prompt"] += " A"
+        verdict = gate.validate(candidate)
+        self.assertFalse(verdict["pass"])
+        self.assertTrue(any("FORBIDDEN_OUTPUT_CODE" in f for f in verdict["failures"]))
 
     def test_reused_discriminative_word_fails_even_with_distinct_family_ids(self):
         candidate = clean_candidate()

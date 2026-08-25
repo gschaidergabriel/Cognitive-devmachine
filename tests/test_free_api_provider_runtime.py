@@ -1627,11 +1627,17 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             "FRANK_PROVIDER_BASE_URL": "http://localhost:8765/v1",
             "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
         }
+        captured_request = {}
+
+        def opener(request, timeout):
+            captured_request.update(json.loads(request.data))
+            return Response()
+
         result = MOD.execute_chat(
             VALID_MESSAGES,
             model="mock",
             environ=env,
-            opener=lambda *args, **kwargs: Response(),
+            opener=opener,
             now=iter((50.3, 50.31)).__next__,
         )
         receipt = result["receipt"]
@@ -1641,6 +1647,7 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
         self.assertNotIn("VERIFIED", receipt["lifecycle"])
         self.assertNotIn("DONE", receipt["lifecycle"])
         self.assertIsNone(result["content"])
+        self.assertEqual(captured_request["n"], 1)
 
     def test_non_bytes_response_body_cannot_reach_verified_state(self):
         class Response:

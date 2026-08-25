@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v4",
+  "command_id": "fr1-jspace06-native-capture-libpaths",
+  "op": "exec",
+  "cwd": "/cache/clay-qwen06-native",
+  "timeout_seconds": 180,
+  "command": "set -euo pipefail; find /cache/clay-qwen06-native -maxdepth 5 -type f -name 'libllama.so*' -o -name 'libggml.so*' -o -name 'libggml-base.so*' -o -name 'libggml-cpu.so*'; echo ===existing_harness===; ldd /cache/clay-qwen06-native/native_cvec_logits"
+}

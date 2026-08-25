@@ -14,13 +14,43 @@ Workers must read and obey, in order:
 1. `CLAY_EXECUTION_AUTHORITY.md` and the newest explicit owner authority it names;
 2. `research_entity/claycode/autonomous/SUPERVISOR_INBOX.json`;
 3. the exact steering file selected by that inbox;
-4. `research_entity/continuity/BOOTSTRAP_MINIMAL.json`;
-5. `research_entity/rooms/PROGRAM_STATE.json`;
-6. the versioned all-workers directive named by those current surfaces;
-7. exact current source/runtime evidence;
-8. historical directives only at their retained provenance scope.
+4. `research_entity/00_CURRENT/NOW.md`, then only the needed `INDEX.tsv` / `ACTIVE.tsv` / `latest/<direction>.md` cache entries;
+5. `research_entity/continuity/BOOTSTRAP_MINIMAL.json`;
+6. `research_entity/rooms/PROGRAM_STATE.json`;
+7. the versioned all-workers directive named by those current surfaces;
+8. exact current source/runtime evidence;
+9. historical directives only at their retained provenance scope.
+
+The `research_entity/00_CURRENT` layer is a token-efficient navigation/cache layer only. It never outranks owner authority, the current supervisor, or exact executable evidence.
 
 Newest explicit owner authority immediately overrides stale cached `VPS_FORBIDDEN`, `SELF_HOSTED_FORBIDDEN`, `NO_ROOT_IN_SANDBOX`, zero-cost-command-only, or equivalent restrictions where the owner authority explicitly changes them.
+
+## Mandatory current-result receipt after substantive work
+
+Every worker that produces a **material research/architecture/runtime/training result** must emit at least one tiny append-only `CLAY_FAST_RESULT/v1` receipt for the affected research direction before considering the lane complete.
+
+Preferred command:
+
+```bash
+python3 tools/clay_current_emit_v1.py \
+  --direction <direction> \
+  --status <status> \
+  --headline '<one-line delta>' \
+  --next '<next discriminator>' \
+  --evidence <exact-result-path> \
+  --branch <branch-if-any>
+```
+
+Rules:
+
+- do not rewrite old FAST_RESULT receipts;
+- do not copy long reports/logs into the receipt;
+- cite the exact original evidence path(s);
+- emit one small receipt per materially affected research direction;
+- include active branch/PR/issue/request refs when they matter;
+- never hand-edit generated `NOW.md`, `INDEX.tsv`, `ACTIVE.tsv`, `RECENT.tsv`, `MANIFEST.json` or `latest/*`;
+- if a material result is not represented in `00_CURRENT`, the research lane is informationally incomplete even if its deep artifact exists;
+- the receipt is navigation/synthesis metadata, never promotion authority.
 
 ## Current VPS sandbox owner override — 2026-08-25
 

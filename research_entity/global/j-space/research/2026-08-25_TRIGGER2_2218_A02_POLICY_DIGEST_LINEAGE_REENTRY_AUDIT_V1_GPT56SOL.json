@@ -1,0 +1,164 @@
+{
+  "schema": "CLAY_TRIGGER2_A02_POLICY_DIGEST_LINEAGE_REENTRY_AUDIT/v1",
+  "date": "2026-08-25",
+  "local_trigger_time": "22:18+07:00",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU_VARIABLE_COGNITIVE_GRID",
+  "status": "CURRENT_RESEARCH_DELTA_NONPROMOTING_SUCCESSOR_DYNAMIC",
+  "authority_snapshot": {
+    "repository": "gschaidergabriel/clay-global-research-entity",
+    "branch": "main",
+    "observed_main_before_write": "c6a9982f3e352ab326e5ff8f01ce2ecdc79aa916",
+    "bootstrap_schema": "8.78",
+    "supervisor_epoch": "8.78",
+    "mode": "FREE_ONLY",
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0
+  },
+  "audit_basis": [
+    "research_entity/continuity/BOOTSTRAP_MINIMAL.json@c6a9982f3e352ab326e5ff8f01ce2ecdc79aa916",
+    "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_78.json@c6a9982f3e352ab326e5ff8f01ce2ecdc79aa916",
+    "research_entity/global/j-space/research/2026-08-25_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V15_GPT56SOL.json@c6a9982f3e352ab326e5ff8f01ce2ecdc79aa916",
+    "research_entity/global/j-space/research/2026-08-25_TRIGGER2_2128_A02_POST_IMPLEMENTATION_REENTRY_AUDIT_V1_GPT56SOL.json@c6a9982f3e352ab326e5ff8f01ce2ecdc79aa916",
+    "research_entity/global/j-space/research/2026-08-25_TRIGGER2_A02_DISCRIMINATOR_PRODUCER_AUTH_CONTRACT_V1_GPT56SOL.json@c6a9982f3e352ab326e5ff8f01ce2ecdc79aa916",
+    "research_entity/global/j-space/research/TRIGGER2_A02_DISCRIMINATOR_PRODUCER_AUTHORITY_V1.json@c6a9982f3e352ab326e5ff8f01ce2ecdc79aa916",
+    "tools/trigger2_a02_discriminator_producer_v1.py@c6a9982f3e352ab326e5ff8f01ce2ecdc79aa916",
+    "tools/trigger2_a02_discriminator_producer_auth_gate_v1.py@c6a9982f3e352ab326e5ff8f01ce2ecdc79aa916",
+    "tests/test_trigger2_a02_discriminator_producer_auth_gate_v1.py@c6a9982f3e352ab326e5ff8f01ce2ecdc79aa916"
+  ],
+  "verified_findings": [
+    {
+      "id": "T2_A02_FULL_POLICY_DIGEST_MISSING",
+      "reality_level": "R0_OBSERVED_SOURCE",
+      "finding": "The A02 successor contract requires execution_receipt_id to bind producer identity plus policy digest. Current producer receipt_preimage binds policy_id, policy_version and formal_discriminator_spec_jcs_sha256 but not a digest of the complete authority-resolved policy object.",
+      "impact": "A semantically relevant policy-field mutation outside the formal discriminator spec is not cryptographically represented by a full-policy digest in the receipt identity. Exact row equality still rejects many mutations, but the contract is not implemented literally at this boundary.",
+      "classification": "NEEDS_REVISION_P0_SOURCE_CONTRACT_COMPLETENESS"
+    },
+    {
+      "id": "T2_A02_PRODUCER_GIT_SOURCE_LINEAGE_MISSING",
+      "reality_level": "R0_OBSERVED_SOURCE",
+      "finding": "The A02 successor contract requires authority to bind producer repo_path, exact source_sha256, producer schema/version and git/source lineage. Current authority manifest binds path, SHA and schema/version but exposes no producer commit/source-lineage field.",
+      "impact": "Exact bytes are pinned, so semantic execution can remain byte-bound, but provenance lineage is incomplete relative to the declared contract and cannot be promoted as contract-complete source authority.",
+      "classification": "NEEDS_REVISION_P0_PROVENANCE_COMPLETENESS"
+    },
+    {
+      "id": "T2_A02_RUNTIME_STILL_UNOBSERVED",
+      "reality_level": "R0_AUTHORITY_AND_LEDGER",
+      "finding": "No exact-current repository-bound execution receipt for the A02 mutation suite is admitted in the inspected current state.",
+      "impact": "Even after source hardening, A02 runtime/training/canonical-semantics credit remains zero until admitted exact-current execution evidence exists.",
+      "classification": "BLOCKED_RUNTIME_EVIDENCE"
+    },
+    {
+      "id": "T2_V3_FACTORIAL_ROUTER_DIRECT_TRAINING_BLOCK_RETAINED",
+      "reality_level": "R0_SUPERVISOR",
+      "finding": "trigger2_binding_router_factorial_generator_v3 remains quarantined from direct training because randomized presentation does not establish nuisance independence and conditional nuisance leakage remains unresolved.",
+      "classification": "BLOCKED_DIRECT_TRAINING"
+    }
+  ],
+  "artifact_lifecycle_delta": [
+    {
+      "artifact": "research_entity/global/j-space/research/2026-08-25_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V15_GPT56SOL.json",
+      "status": "NEEDS_REVISION_SUPERSEDED_BY_NEXT_LEDGER",
+      "reason": "V15 records A02 source closure too strongly. The later post-implementation audit and exact-current byte inspection establish two unresolved contract-completeness gaps: full policy digest and git/source lineage."
+    },
+    {
+      "artifact": "research_entity/global/j-space/research/TRIGGER2_A02_DISCRIMINATOR_PRODUCER_AUTHORITY_V1.json",
+      "status": "CURRENT_SOURCE_AUTHORITY_CANDIDATE_NONPROMOTING_NEEDS_REVISION",
+      "predecessor": "A02 design-only authority gap",
+      "successor": "same single retained authority lane with explicit complete-policy JCS digest and noncircular producer source lineage binding",
+      "reason": "Path/SHA/schema are pinned, but the declared successor contract also requires git/source lineage and receipt-level policy digest binding."
+    },
+    {
+      "artifact": "tools/trigger2_a02_discriminator_producer_v1.py",
+      "status": "CURRENT_SOURCE_IMPLEMENTATION_NONPROMOTING_NEEDS_REVISION",
+      "successor": "same producer semantics with complete authority-resolved policy digest in receipt preimage and returned receipt",
+      "reason": "Receipt identity currently substitutes policy_id/version plus formal-spec digest for the required complete policy digest."
+    },
+    {
+      "artifact": "tools/trigger2_a02_discriminator_producer_auth_gate_v1.py",
+      "status": "CURRENT_SOURCE_IMPLEMENTATION_NONPROMOTING_NEEDS_REVISION_TRANSITIVELY",
+      "reason": "Gate reconstructs the current producer correctly, but expected binding does not require a complete-policy digest or source-lineage field because the authority manifest does not expose them yet."
+    },
+    {
+      "artifact": "tools/trigger2_hyperposition_state_history_generation_bound_gate_v4.py",
+      "status": "CURRENT_RETAINED_SUCCESSOR_SOURCE_ONLY_NONPROMOTING_BLOCKED_TRANSITIVELY_ON_A02_HARDENING_AND_RUNTIME",
+      "reason": "Composition ordering remains valuable; do not fork it. Harden A02 in-place, then execute exact-current mutation/order tests."
+    },
+    {
+      "artifact": "tools/trigger2_binding_router_factorial_generator_v3.py",
+      "status": "BLOCKED_QUARANTINED_FROM_DIRECT_TRAINING",
+      "reason": "Supervisor 8.78 conditional nuisance leakage remains dispositive."
+    },
+    {
+      "artifact": "000_CLAY_ENTITYOS_HCU_FAST_BOOTSTRAP_SOURCE_CURRENT_2026-08-24 supervisor 8.63",
+      "status": "STALE_AS_CURRENT_AUTHORITY_USEFUL_BOOTSTRAP_DONOR",
+      "successor": "BOOTSTRAP_MINIMAL 8.78 + SUPERVISOR_STEERING_8_78 + exact-current Trigger-2 ledger"
+    }
+  ],
+  "hypotheses": [
+    {
+      "id": "H_POLICY_DIGEST_HARDENING",
+      "hypothesis": "Binding a JCS digest of the entire authority-resolved policy object into both the row producer binding and deterministic execution receipt closes the residual coherent-policy-rewrite class without creating a second semantic authority.",
+      "counterhypothesis": "policy_id/version plus formal-spec digest are already sufficient because other policy fields are independently scope-checked.",
+      "discriminator": "Add a policy field that is authority-relevant but outside formal_discriminator_spec, coherently rewrite candidate binding/receipt, and require rejection unless the exact full-policy digest matches authority."
+    },
+    {
+      "id": "H_SOURCE_LINEAGE_NONCIRCULAR",
+      "hypothesis": "Producer git/source lineage can be bound noncircularly by committing producer bytes first, then updating the authority manifest in a successor commit to reference that already-known producer commit SHA while retaining source_sha256 as executable identity.",
+      "counterhypothesis": "Embedding a source commit is redundant because source_sha256 fully identifies bytes.",
+      "discriminator": "Treat source_sha256 as execution identity and source_commit_sha as provenance lineage; verify that authority can be reproduced from a clean checkout at the referenced lineage without self-referential commit construction."
+    },
+    {
+      "id": "H_JSPACE_CAUSALITY_REQUIRES_INTERVENTION",
+      "hypothesis": "For Xeno/EntityOS Global J-Space, decodability or stable latent geometry should not count as causal evidence unless targeted intervention changes the bound function while matched random/off-target controls do not.",
+      "counterhypothesis": "High held-out linear decodability is sufficient evidence that the latent axis is functionally causal.",
+      "discriminator": "Preregister layer/context/function-indexed steering or ablation with held-out functional targets, matched random-direction controls and off-target retention."
+    }
+  ],
+  "external_research_delta": [
+    {
+      "source": "Hsu et al., Contextual Linear Activation Steering of Language Models, arXiv:2604.24693 (2026)",
+      "classification": "SOURCE_DIRECT_EXTERNAL_NONCANONICAL",
+      "use": "Supports treating steering strength as context-dependent and evaluating steering across multiple benchmarks/model families; strengthens the requirement that a single static vector is not assumed globally valid."
+    },
+    {
+      "source": "Srivastav, Steering the Language Axis: From Linear Decodability to Causal Control, arXiv:2608.12334 (2026)",
+      "classification": "SOURCE_DIRECT_EXTERNAL_NONCANONICAL",
+      "use": "Provides a recent example separating linear decodability from causal intervention and reporting layer-/direction-specific control; supports the Trigger-2 law that J-Space readability alone does not imply causal global geometry."
+    },
+    {
+      "source": "QwenLM/Qwen3 official repository plus ggml-org/llama.cpp Qwen3-0.6B schema",
+      "classification": "SOURCE_DIRECT_EXTERNAL_NONCANONICAL",
+      "use": "Confirms a zero-cost local Qwen3-0.6B/llama.cpp-compatible implementation path exists in principle; this does not mint project runtime, J-Space or training credit."
+    }
+  ],
+  "training_generation_decision": {
+    "new_positive_rows": 0,
+    "new_hard_negative_rows": 0,
+    "positive_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "decision": "NO_NEW_ROWS_WITH_REASON",
+    "reason": "Current evidence shows a residual A02 contract-completeness gap plus unobserved exact-current mutation execution. Generating additional rows would outrun the authority/evidence chain and increase stale-data debt."
+  },
+  "next_exact_gate": {
+    "p0_source": "Harden the single retained A02 lane with complete-policy JCS digest binding and noncircular producer source lineage; add explicit policy-digest and lineage mutation tests without redesigning the retained v4 semantic composition.",
+    "p0_runtime": "On an admitted FREE_ONLY exact-current clean checkout, execute the focused A02 producer-auth mutation suite plus retained v4 ordering/zero-credit tests and bind the receipt to HEAD/tree/runtime/source hashes.",
+    "after_pass": "Only then rebind the native seed to the retained v4 successor, close nonempty-history genesis/history producer authority and OBSERVED-evidence producer authentication, then run rendered nuisance/family-split/tokenizer-ABI gates before a small family-disjoint D/E/Epistemic pilot."
+  },
+  "credits": {
+    "research_delta": 1,
+    "artifact_reclassification_delta": 1,
+    "source_runtime_credit": 0,
+    "positive_D_E_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "positive_jspace_causal_credit": 0,
+    "full_hcu_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0
+  }
+}

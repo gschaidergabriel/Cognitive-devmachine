@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v4",
+  "command_id": "gpt56sol-native-semantic-z10-calibration-rank-20260825",
+  "op": "exec",
+  "cwd": "/workspace",
+  "timeout_seconds": 120,
+  "command": "jq '[.calibration_candidates[]|{key,layer_index,orientation,gain,basis_vector_sha256,metrics}]|sort_by(.metrics.objective_min_specific_direction_margin)|reverse' /workspace/qwen06-gpt56sol-direct/out-native-semantic-counterbalanced/trigger1_native_semantic_counterbalanced_result.json"
+}

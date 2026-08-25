@@ -2,7 +2,7 @@
 
 Status: `CURRENT_BLOCKED_ADMISSION`
 
-Trigger-2 **V70** is the current research-ledger successor under Supervisor **8.84**. This is a cache pointer only; newest explicit owner/supervisor authority and exact executable evidence outrank it.
+Trigger-2 **V71** is the current research-ledger successor under Supervisor **8.84**. This is a cache pointer only; newest explicit owner/supervisor authority and exact executable evidence outrank it.
 
 ## P0 — runtime quiescence actively failed with direct counter movement
 
@@ -14,7 +14,9 @@ Owner FreeSwarm remains `HARD_OFF`, but committed shared provider-budget telemet
 
 Classification remains `ACTIVE_FAIL_POST_STOP_PROVIDER_ATTEMPT_COUNTERS_INCREASING`. This is evidence of continued provider-attempt activity, not a scientific negative about model/EntityOS behavior and not authorization to issue a provider probe.
 
-Provider/model/physical-GRID10/training promotion remains closed. Required closure: zero provider-capable survivors, zero unexpired provider-budget leases and a bounded zero provider-counter delta without probing a provider; only then re-enter explicit FREE non-provider execution authority.
+The quiescence gate now reads direct shared-budget counters and unexpired leases filtered to the canonical `FREE_PROVIDER_ADMISSION` provider set, while retaining process-tree and `LIVE_METRICS` checks. This avoids falsely treating unrelated GitHub/arXiv/Crossref source-tool traffic as provider-lane failure.
+
+Provider/model/physical-GRID10/training promotion remains closed. Required closure: zero provider-capable survivors, zero unexpired canonical-provider budget leases and a bounded zero canonical-provider counter delta without probing a provider; only then re-enter explicit FREE non-provider execution authority.
 
 ## Retained invocation/fusion source chain
 
@@ -64,6 +66,31 @@ During the live barrier, acquire one pidfd per child and use `pidfd_getfd` on th
 
 This remains source/research direction only. Physical-proof-boundary closure remains `0`.
 
+## V71 — topology-only provenance OOD discriminator
+
+The earlier evidence-provenance probe was vulnerable to a serious shortcut counterhypothesis: a future model could memorize lexical provenance markers instead of learning the relation between an observation, its receipt and the claim it can promote.
+
+V71 adds and exact-byte validates:
+
+- `tools/trigger2_evidence_provenance_topology_ood_probe_v1.py`
+- `tests/test_trigger2_evidence_provenance_topology_ood_probe_v1.py`
+- `research_entity/continuity/receipts/2026-08-26_TRIGGER2_EVIDENCE_PROVENANCE_TOPOLOGY_OOD_SOURCE_VALIDATION_GPT56SOL.json`
+
+Current METHOD_ONLY validation:
+
+- `7 passed in 0.09s` on the byte-identical committed tool/test pair;
+- 64 rows / 32 opposite-label counterfactual pairs;
+- every pair has the **same complete visible lexical token multiset**;
+- pairwise bag-of-visible-token information bound: `0.5`;
+- DEVELOPMENT and OOD_HOLDOUT opaque carrier vocabularies are disjoint;
+- nuisance-only majority accuracy: `0.5`;
+- deterministic structural topology reference: `1.0`;
+- target/split stay outside model-visible input;
+- training-eligible rows: `0`;
+- accepted dataset token delta: `0`.
+
+This complements the parallel opaque-symbol/codebook gate: the codebook gate tests episode-local arbitrary remapping, while V71 makes lexical bag shortcuts exactly pairwise non-informative and leaves graph connectivity as the discriminator. Neither result is model evidence.
+
 ## Training — Qwen3.5-0.8B binding/remap discriminator
 
 Current training hypothesis: the highest-value trainable deficit is episode-local **BIND / ROUTE / REMAP**, not semantic readout alone.
@@ -88,7 +115,7 @@ P0: close owning-host runtime quiescence without a provider probe.
 
 P1 source: restructure the retained held-cohort lifecycle so pidfds, actual S1 descriptor binding and a complete packet commitment are sealed **before release/reap**; then require that observation-bound capability at the sole physical FusedFabric mutation entry and keep `SOURCE_FIXTURE_ONLY` structurally disjoint from `PHYSICAL_OBSERVED`.
 
-P2 training: retain B1+B2 as the first small family-disjoint pilot only after runtime authority and exact ABI/tokenizer/rendered-byte gates permit deterministic materialization.
+P2 training: freeze both the opaque-symbol/codebook gate and the V71 topology OOD set. Resolve exact ABI `atoms_index.json`, tokenizer, renderer and contextual-token identity before any B1+B2 materialization. Do not tune frozen holdout structures from future model results.
 
 ## Credits
 
@@ -104,6 +131,6 @@ P2 training: retain B1+B2 as the first small family-disjoint pilot only after ru
 - whole HCU runtime credit: `0`
 - whole EntityOS runtime credit: `0`
 
-Current ledger: `research_entity/global/j-space/research/2026-08-26_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V70_GPT56SOL.json`
+Current ledger: `research_entity/global/j-space/research/2026-08-26_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V71_GPT56SOL.json`
 
 Supervisor: `research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_84_DELTA_2026-08-26T0545P0700_GPT56SOL.json`

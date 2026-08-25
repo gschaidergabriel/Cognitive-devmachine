@@ -1,0 +1,95 @@
+{
+  "schema": "CLAY_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER/v44",
+  "date": "2026-08-26",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "status": "CURRENT_RESEARCH_LEDGER_NONCANONICAL_SUCCESSOR_DYNAMIC",
+  "supersedes": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V43_GPT56SOL.json",
+  "inherits_all_nonconflicting_records_from": "T2-LEDGER-V43",
+  "observed_main_before_write": "fa04dd60fc13f482da5302c0bc454a44ea4783cc",
+  "authority": {
+    "supervisor_epoch": "8.81_DELTA",
+    "mode": "FREE_ONLY",
+    "product": "EntityOS",
+    "architecture": "HCU",
+    "freeswarm_provider_admission": "OWNER_EMERGENCY_STOP_HARD_OFF",
+    "training_execution_authorized": false,
+    "paid_provider_execution_authorized": false
+  },
+  "revision_reason": "Deduplication correction after V43 reentry. Commit cbcdd5803b29373027e51d6b41800d5d69d17d7c predates V43 and already established the conceptual per-node membership identity gap for tools/trigger2_grid10_atomic_cohort_fanin_pilot_v1.py. V43 must therefore not receive independent discovery credit for that concept. Its unique useful delta is narrower: exact-current inspection shows the separately hardened tools/trigger2_grid10_atomic_cohort_batch_acceptance_v1.py@a425f44 also lacks the selected monotonic per-node membership admission identity even though it now checks current nodes-table capability/health and exact PID/packet/snapshot bindings.",
+  "artifact_lifecycle_delta": [
+    {
+      "artifact": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V43_GPT56SOL.json",
+      "status": "SUPERSEDED_NEEDS_PROVENANCE_CORRECTION",
+      "successor": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V44_GPT56SOL.json",
+      "reason": "V43 did not cite the earlier cbcdd580 per-node membership gap and could be misread as an independent conceptual discovery"
+    },
+    {
+      "artifact": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_ATOMIC_FANIN_PER_NODE_MEMBERSHIP_IDENTITY_GAP_V1_GPT56SOL.json@cbcdd5803b29373027e51d6b41800d5d69d17d7c",
+      "status": "CURRENT_PRIOR_CONCEPTUAL_GAP_DONOR",
+      "finding": "Already proves the reusable-fan-in conflict between global/visible membership state and the selected per-node admission revision model, including same-state re-registration and unrelated-node-change paired negatives."
+    },
+    {
+      "artifact": "tools/trigger2_grid10_atomic_cohort_batch_acceptance_v1.py@a425f44d828baea8901024d1a8e4699f9db340ee",
+      "status": "CURRENT_ADDITIONAL_PATH_COVERAGE_NEEDS_MEMBERSHIP_FUSION",
+      "finding": "This distinct atomic batch implementation now has idempotent replay and stronger PID/snapshot/current-node checks, but still carries no monotonic source_node_admission_id/source_membership_id in NODE_RESULT cohort members or cohort_id. V43's valid unique contribution is extending the already-known concept to this exact current path."
+    }
+  ],
+  "deduplication_accounting": {
+    "independent_concept_discovery_credit_for_v43": 0,
+    "additional_exact_source_path_coverage_from_v43": 1,
+    "prior_artifact_preserved": true,
+    "evidence_not_double_counted": true,
+    "reason": "Same conceptual failure family with two distinct executable candidate paths is useful coverage, not independent evidence of the underlying hypothesis."
+  },
+  "fused_current_gap": {
+    "id": "PER_NODE_ADMISSION_IDENTITY_NOT_YET_UNIFIED_ACROSS_ATOMIC_FANIN_IMPLEMENTATIONS",
+    "severity": "P0_BEFORE_REUSABLE_FANIN_OR_PHYSICAL_GRID_PROMOTION",
+    "affected_paths": [
+      "tools/trigger2_grid10_atomic_cohort_fanin_pilot_v1.py",
+      "tools/trigger2_grid10_atomic_cohort_batch_acceptance_v1.py"
+    ],
+    "selected_identity_direction": "SEPARATE_RUNTIME_MEMBERSHIP_AUTHORITY_WITH_PER_NODE_ADMISSION_REVISION",
+    "required_property": "Each exact consumed packet is sealed to the currently policy-valid per-node admission identity/revision and, for physical credit, its exact process witness; unrelated node membership changes must not falsely stale the cohort, while same-node re-registration/restart must invalidate old active admission identity under the strict active-cohort policy."
+  },
+  "cheapest_high_information_discriminator": {
+    "name": "SAME_STATE_REREGISTRATION_PLUS_UNRELATED_NODE_CHANGE_PAIR_ON_BOTH_ATOMIC_PATHS",
+    "negative_a": "Re-register one participating node with identical visible capability/health after packet production but before unseen cohort commit. Old admission must reject under strict active-cohort policy without requiring cognitive S1 to change.",
+    "negative_b": "Re-register/change unrelated x11. Valid x01..x10 per-node admissions must not become stale solely because unrelated membership changed.",
+    "negative_c": "Transplant semantic payload, admission id or process witness across nodes. Reject before any admitted_results/summary mutation.",
+    "positive_control": "Unchanged exact per-node admission identities + exact process/packet/snapshot set may proceed to all later gates.",
+    "scope": "DETERMINISTIC_SOURCE/REGRESSION_GATE_ONLY_UNTIL_AUTHORIZED_RUNTIME_RECEIPT"
+  },
+  "training_course_reinjection": {
+    "positive_training_admission": "BLOCKED",
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "candidate_eval_families": [
+      "SAME_NODE_SAME_VISIBLE_STATE_REREGISTRATION_OLD_ADMISSION_REJECT",
+      "UNRELATED_NODE_MEMBERSHIP_CHANGE_NO_FALSE_STALENESS",
+      "LOGICAL_NODE_ADMISSION_TRANSPLANT_REJECT",
+      "PROCESS_WITNESS_ADMISSION_MISMATCH_REJECT"
+    ],
+    "model_authority_rule": "The model does not mint, refresh or guess node admission identity, membership revision, PID/process witness, freshness, CAS or provider authority."
+  },
+  "execution_decision": {
+    "freeswarm": "HARD_OFF",
+    "provider_or_training_execution": "NOT_AUTHORIZED",
+    "physical_grid_runtime_promotion": "BLOCKED",
+    "new_runtime_pin": "BLOCKED_PENDING_COMPOSITE_PER_NODE_MEMBERSHIP_PLUS_PACKET_PROCESS_SNAPSHOT_PLUS_CONSUMED_INPUT_CONTRACT"
+  },
+  "credits": {
+    "deduplication_correction": 1,
+    "new_independent_concept_discovery": 0,
+    "additional_source_path_coverage": 1,
+    "physical_grid10_runtime_credit": 0,
+    "checkpoint_selection_credit": 0,
+    "jspace_model_credit": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  },
+  "next_exact_action": "Fuse the already-selected per-node admission revision contract into both current atomic fan-in paths or converge to one retained implementation, then run the same-state re-registration plus unrelated-node-change paired regressions and source/process transplants. Preserve the exact packet/process/snapshot and consumed-input gates. FreeSwarm remains HARD OFF; no positive training rows or physical GRID promotion before composite executable evidence."
+}

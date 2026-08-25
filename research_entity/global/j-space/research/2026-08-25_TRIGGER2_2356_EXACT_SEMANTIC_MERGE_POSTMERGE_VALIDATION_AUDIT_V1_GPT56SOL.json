@@ -1,0 +1,44 @@
+{
+  "schema": "CLAY_TRIGGER2_EXACT_SEMANTIC_MERGE_POSTMERGE_VALIDATION_AUDIT/v1",
+  "date": "2026-08-25",
+  "local_trigger_time": "23:56+07:00",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "authority_epoch": "8.78",
+  "repository": "gschaidergabriel/clay-global-research-entity",
+  "observed_main_before_audit": "2b1a80c03ead467e7ad360924c88fe117f6ae1f9",
+  "audited_source": "tools/trigger2_hyperposition_reference_labelers_v3.py",
+  "audited_source_blob_sha": "7f43653574461a2cd704dc270671880174df4047",
+  "audited_test": "tests/test_trigger2_hyperposition_reference_labelers_v3.py::test_exact_semantic_merge_uses_declared_policy_not_similarity",
+  "status": "NEEDS_REVISION_P1_INTERNAL_CONTRACT_INCONSISTENCY",
+  "prior_status": "PRE_EXISTING_UNRELATED_FAILURE",
+  "finding": "The red exact-semantic-merge regression is causally explained by an internal validator contract mismatch, not by embedding similarity or nondeterministic behavior. _merge_exact_equivalents can validly collapse two formally equivalent branches to one under merge_policy=EXACT_FORMAL_SEMANTIC_SIGNATURE. u_state then calls project_state(world, out). project_state immediately invokes _validate_state(state, world), whose generic external-state invariant rejects any state with fewer than two branches. Therefore a semantically valid exact merge creates an internal one-branch post-merge state that the next stage rejects before projection.",
+  "evidence_chain": [
+    "test constructs two branches with identical v, K, T and predictions and declares EXACT_FORMAL_SEMANTIC_SIGNATURE merge",
+    "_semantic_signature hashes exactly v, K, T and predictions, so the two branches share one declared formal semantic signature",
+    "_merge_exact_equivalents deterministically groups by that signature and emits one pivot with merged_from_branch_ids",
+    "u_state calls _merge_exact_equivalents and then project_state",
+    "project_state invokes _validate_state before projection",
+    "_validate_state requires len(branches) >= 2 and returns STATE_REQUIRES_AT_LEAST_TWO_BRANCHES for the post-merge state"
+  ],
+  "semantic_interpretation": "Exact formal semantic equivalents are duplicate representations of one hypothesis, not unresolved competing hypotheses. Merging them does not violate Hyperposition's requirement to preserve unresolved alternatives. The bug is specifically that the external-input minimum-branch invariant is reused after an internal equivalence collapse where it no longer matches the declared merge semantics.",
+  "counterhypothesis": "The system may intend every Hyperposition carrier to contain at least two branches even after exact equivalence collapse, in which case the merge operation itself should be forbidden or represented without reducing branch cardinality. That interpretation contradicts the current test contract and the implemented _merge_exact_equivalents behavior, so the source/test pair is internally inconsistent until one invariant is explicitly chosen.",
+  "recommended_repair_constraint": [
+    "do not globally weaken external Hyperposition input validation",
+    "retain rejection of caller-supplied single-branch input states",
+    "permit a one-branch state only on a narrowly scoped internal/post-merge validation path reached after exact formal semantic equivalence merge, or adopt an equivalently strict proof-carrying post-merge state contract",
+    "add a negative regression proving externally supplied single-branch input still fails closed",
+    "retain the positive exact-semantic-merge regression proving declared exact policy merges and embedding/surface similarity alone does not",
+    "execute the full reference-labeler suite repository-bound before assigning any component promotion credit"
+  ],
+  "falsifier": "If the current exact source at blob 7f43653574461a2cd704dc270671880174df4047 can execute the cited regression successfully without bypassing or changing the _validate_state branch-count contract, this diagnosis is false.",
+  "training_impact": {
+    "positive_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "reason": "A deterministic reference-labeler contract inconsistency must not be converted into training labels. Existing upstream OBSERVED producer-authentication and nonempty-history producer-authority blockers remain higher priority."
+  },
+  "relationship_to_v27": "Noncanonical research delta discovered during the same Trigger-2 cycle after T2-LEDGER-V27 had already been created by a parallel organ. This file does not create a second ledger authority; it is intended for successor fusion into V28 or later after source repair/review.",
+  "next_exact_action": "Apply one bounded source repair that distinguishes external pre-update Hyperposition validation from internal post-exact-merge validation without allowing caller-supplied one-branch states, add both positive and fail-closed regressions, then run the exact full reference-labeler suite repository-bound."
+}

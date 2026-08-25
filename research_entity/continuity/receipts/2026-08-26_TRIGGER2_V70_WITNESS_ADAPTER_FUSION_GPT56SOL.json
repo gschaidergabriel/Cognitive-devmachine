@@ -56,10 +56,10 @@
     "proof_origin_regression": "V67 strict XFAIL is converted in the candidate branch to an ordinary adapter-scope rejection regression requiring zero state mutation from an all-true synthetic raw proof."
   },
   "validation": {
-    "prepared_python_syntax_compile": "PASS",
+    "local_python_compile": "UNRESOLVED_TOOL_EXECUTION_DID_NOT_COMPLETE_RELIABLY",
     "repository_pytest": "NOT_EXECUTED_LOCAL_CONTAINER_NETWORK_DNS_UNAVAILABLE_FOR_PRIVATE_REPO_CLONE",
     "prior_pr_head_workflows": {
-      "head": "cdeb9612213b2990ed3f9fea6f91e4ae56fada6f",
+      "head": "ee8712946241a7f0373aada1b78e0954bad57c81",
       "research_entity_identity_guard": "FAILURE_WITH_ZERO_STEPS_AND_RUNNER_ID_0",
       "research_entity_verify": "FAILURE_WITH_ZERO_STEPS_AND_RUNNER_ID_0",
       "classification": "WORKFLOW_RUNNER_OR_PRESTEP_INFRASTRUCTURE_FAILURE_UNTIL_PROVEN_OTHERWISE_NOT_PRODUCT_TEST_FAILURE"
@@ -72,6 +72,7 @@
     "No current FusedFabric.atomic_fused_cohort_witness_commit implementation has been observed.",
     "The retained V70 witness donor still accepts caller-supplied marker/FD/S1/predicate mappings when minting and therefore is not complete physical provenance authority.",
     "spawn_held_cohort returns after release/communicate/reap, so post-return pidfd minting is temporally too late for barrier-time provenance.",
+    "Local Python compile/test execution was not reliably completed in this organ and therefore grants no validation credit.",
     "P0 runtime quiescence remains active fail; no provider/model/physical GRID10/training execution is authorized by this delta."
   ],
   "external_method_basis": [
@@ -81,9 +82,9 @@
       "use": "A Python class/name-mangling convention is not a hostile-code unforgeability boundary."
     },
     {
-      "source": "Linux pidfd_open(2)",
-      "url": "https://man7.org/linux/man-pages/man2/pidfd_open.2.html",
-      "use": "pidfd is a kernel task reference primitive; additional descriptor/snapshot/packet evidence is still required."
+      "source": "Linux pidfd_open(2) and pidfd_getfd(2)",
+      "url": "https://man7.org/linux/man-pages/man2/pidfd_getfd.2.html",
+      "use": "pidfd is a kernel task reference primitive and pidfd_getfd can bind an actual target descriptor/open-file description, but permission/kernel failures must fail closed and additional snapshot/packet evidence remains required."
     }
   ],
   "execution_this_cycle": {

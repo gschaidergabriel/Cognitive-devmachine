@@ -1,108 +1,29 @@
 {
-  "abi_gate": {
-    "reason": "Exact 46 accepted atom row/name mapping is not available in current connected source context; placeholders deliberately prevent fabricated atom identities. Training admission requires manifest-bound materialization and pinned-tokenizer single-token verification.",
-    "status": "BLOCKED"
+  "abi_gate": {"reason":"Exact 46 accepted atom row/name mapping is not available in current connected source context; placeholders deliberately prevent fabricated atom identities. Training admission requires manifest-bound materialization and pinned-tokenizer single-token verification.","status":"BLOCKED"},
+  "candidate_gate_recheck": {"gate_blob_sha":"a51c7b8afc6a9ae5562e5ec647528960e812eba3","gate_path":"tools/entityos_hcu_trainingtrace_candidate_gate_v1.py","row_schema":"ENTITYOS_HCU_TRAININGTRACE_CANDIDATE/v1","rows_checked":144,"rows_failed":0,"rows_passed":144,"scope":"CURRENT_CANDIDATE_GATE_ONLY_NOT_CANONICAL_DATASET_ADMISSION","training_ready_still_false_due_to_abi_materialization":true},
+  "candidate_gate_required_schema":"ENTITYOS_HCU_TRAININGTRACE_CANDIDATE/v1",
+  "canonical_reentry":{"consequence":"Behavioral episodic binding and scientific self-adjudication remain separate curricula; this V2 is Stage-A binding data and cannot substitute for post-training causal adjudication or retention evidence.","main_sha_after_initial_write":"09965e898b27e21f86d0f9e5d08339fe8439fed4","new_main_delta":"CLAY_TRIGGER2_POSTTRAINING_CAUSAL_ADJUDICATION_SWARM/v1"},
+  "class_label_leakage_outside_codebook":{"count":0,"pass":true},
+  "counterfactual_target_span":{
+    "T1_RULE:ABSTAIN":{"all_symbols_seen":true,"target_refs":["ABI_ROW_PLACEHOLDER_03","ABI_ROW_PLACEHOLDER_17","ABI_ROW_PLACEHOLDER_29"]},"T1_RULE:ALLOW":{"all_symbols_seen":true,"target_refs":["ABI_ROW_PLACEHOLDER_03","ABI_ROW_PLACEHOLDER_17","ABI_ROW_PLACEHOLDER_29"]},"T1_RULE:DENY":{"all_symbols_seen":true,"target_refs":["ABI_ROW_PLACEHOLDER_03","ABI_ROW_PLACEHOLDER_17","ABI_ROW_PLACEHOLDER_29"]},
+    "T2_VERIFY:ABSTAIN":{"all_symbols_seen":true,"target_refs":["ABI_ROW_PLACEHOLDER_08","ABI_ROW_PLACEHOLDER_22","ABI_ROW_PLACEHOLDER_31"]},"T2_VERIFY:ALLOW":{"all_symbols_seen":true,"target_refs":["ABI_ROW_PLACEHOLDER_08","ABI_ROW_PLACEHOLDER_22","ABI_ROW_PLACEHOLDER_31"]},"T2_VERIFY:DENY":{"all_symbols_seen":true,"target_refs":["ABI_ROW_PLACEHOLDER_08","ABI_ROW_PLACEHOLDER_22","ABI_ROW_PLACEHOLDER_31"]},
+    "T3_DIALOGUE:ABSTAIN":{"all_symbols_seen":true,"target_refs":["ABI_ROW_PLACEHOLDER_12","ABI_ROW_PLACEHOLDER_25","ABI_ROW_PLACEHOLDER_41"]},"T3_DIALOGUE:ALLOW":{"all_symbols_seen":true,"target_refs":["ABI_ROW_PLACEHOLDER_12","ABI_ROW_PLACEHOLDER_25","ABI_ROW_PLACEHOLDER_41"]},"T3_DIALOGUE:DENY":{"all_symbols_seen":true,"target_refs":["ABI_ROW_PLACEHOLDER_12","ABI_ROW_PLACEHOLDER_25","ABI_ROW_PLACEHOLDER_41"]},
+    "T4_FIRSTPERSON:ABSTAIN":{"all_symbols_seen":true,"target_refs":["ABI_ROW_PLACEHOLDER_09","ABI_ROW_PLACEHOLDER_18","ABI_ROW_PLACEHOLDER_36"]},"T4_FIRSTPERSON:ALLOW":{"all_symbols_seen":true,"target_refs":["ABI_ROW_PLACEHOLDER_09","ABI_ROW_PLACEHOLDER_18","ABI_ROW_PLACEHOLDER_36"]},"T4_FIRSTPERSON:DENY":{"all_symbols_seen":true,"target_refs":["ABI_ROW_PLACEHOLDER_09","ABI_ROW_PLACEHOLDER_18","ABI_ROW_PLACEHOLDER_36"]}
   },
-  "class_label_leakage_outside_codebook": {
-    "count": 0,
-    "pass": true
+  "credits":{"jspace_model_runtime_credit":0,"training_credit":0,"training_executed":false,"whole_entityos_hcu_runtime_credit":0,"whole_hcu_runtime_credit":0},
+  "falsifiers":["A model performing well while codebook mappings are shuffled independently of targets would expose a dataset/loader leak.","Accuracy collapsing only on unseen vocabulary with intact codebook mechanics would indicate semantic lexical overfit rather than context-invariant binding.","Accuracy collapsing only on unseen symbol identities would indicate atom memorization rather than episodic variable binding.","Post-training semantic readability or symbol-write capability degrading beyond declared retention bounds falsifies the narrow-router specialization hypothesis.","Lesion of the learned binding route failing to selectively impair codebook choice, or rescue failing to restore it, weakens causal binder claims."],
+  "frozen_holdouts":["UNSEEN_SEMANTIC_VOCABULARY","UNSEEN_TEMPLATE","UNSEEN_SYMBOL_SET"],
+  "full_s3_balance":{
+    "T1_RULE":{"class_symbol_counts":{"ABSTAIN->ABI_ROW_PLACEHOLDER_03":2,"ABSTAIN->ABI_ROW_PLACEHOLDER_17":2,"ABSTAIN->ABI_ROW_PLACEHOLDER_29":2,"ALLOW->ABI_ROW_PLACEHOLDER_03":2,"ALLOW->ABI_ROW_PLACEHOLDER_17":2,"ALLOW->ABI_ROW_PLACEHOLDER_29":2,"DENY->ABI_ROW_PLACEHOLDER_03":2,"DENY->ABI_ROW_PLACEHOLDER_17":2,"DENY->ABI_ROW_PLACEHOLDER_29":2},"exact_pair_balance":true,"full_s3":true,"permutations":[0,1,2,3,4,5],"rows":18},
+    "T2_VERIFY":{"class_symbol_counts":{"ABSTAIN->ABI_ROW_PLACEHOLDER_08":2,"ABSTAIN->ABI_ROW_PLACEHOLDER_22":2,"ABSTAIN->ABI_ROW_PLACEHOLDER_31":2,"ALLOW->ABI_ROW_PLACEHOLDER_08":2,"ALLOW->ABI_ROW_PLACEHOLDER_22":2,"ALLOW->ABI_ROW_PLACEHOLDER_31":2,"DENY->ABI_ROW_PLACEHOLDER_08":2,"DENY->ABI_ROW_PLACEHOLDER_22":2,"DENY->ABI_ROW_PLACEHOLDER_31":2},"exact_pair_balance":true,"full_s3":true,"permutations":[0,1,2,3,4,5],"rows":18},
+    "T3_DIALOGUE":{"class_symbol_counts":{"ABSTAIN->ABI_ROW_PLACEHOLDER_12":2,"ABSTAIN->ABI_ROW_PLACEHOLDER_25":2,"ABSTAIN->ABI_ROW_PLACEHOLDER_41":2,"ALLOW->ABI_ROW_PLACEHOLDER_12":2,"ALLOW->ABI_ROW_PLACEHOLDER_25":2,"ALLOW->ABI_ROW_PLACEHOLDER_41":2,"DENY->ABI_ROW_PLACEHOLDER_12":2,"DENY->ABI_ROW_PLACEHOLDER_25":2,"DENY->ABI_ROW_PLACEHOLDER_41":2},"exact_pair_balance":true,"full_s3":true,"permutations":[0,1,2,3,4,5],"rows":18},
+    "T4_FIRSTPERSON":{"class_symbol_counts":{"ABSTAIN->ABI_ROW_PLACEHOLDER_09":2,"ABSTAIN->ABI_ROW_PLACEHOLDER_18":2,"ABSTAIN->ABI_ROW_PLACEHOLDER_36":2,"ALLOW->ABI_ROW_PLACEHOLDER_09":2,"ALLOW->ABI_ROW_PLACEHOLDER_18":2,"ALLOW->ABI_ROW_PLACEHOLDER_36":2,"DENY->ABI_ROW_PLACEHOLDER_09":2,"DENY->ABI_ROW_PLACEHOLDER_18":2,"DENY->ABI_ROW_PLACEHOLDER_36":2},"exact_pair_balance":true,"full_s3":true,"permutations":[0,1,2,3,4,5],"rows":18}
   },
-  "counterfactual_target_span": {
-    "T1_RULE:ABSTAIN": {"all_symbols_seen": true, "target_refs": ["ABI_ROW_PLACEHOLDER_03", "ABI_ROW_PLACEHOLDER_17", "ABI_ROW_PLACEHOLDER_29"]},
-    "T1_RULE:ALLOW": {"all_symbols_seen": true, "target_refs": ["ABI_ROW_PLACEHOLDER_03", "ABI_ROW_PLACEHOLDER_17", "ABI_ROW_PLACEHOLDER_29"]},
-    "T1_RULE:DENY": {"all_symbols_seen": true, "target_refs": ["ABI_ROW_PLACEHOLDER_03", "ABI_ROW_PLACEHOLDER_17", "ABI_ROW_PLACEHOLDER_29"]},
-    "T2_VERIFY:ABSTAIN": {"all_symbols_seen": true, "target_refs": ["ABI_ROW_PLACEHOLDER_08", "ABI_ROW_PLACEHOLDER_22", "ABI_ROW_PLACEHOLDER_31"]},
-    "T2_VERIFY:ALLOW": {"all_symbols_seen": true, "target_refs": ["ABI_ROW_PLACEHOLDER_08", "ABI_ROW_PLACEHOLDER_22", "ABI_ROW_PLACEHOLDER_31"]},
-    "T2_VERIFY:DENY": {"all_symbols_seen": true, "target_refs": ["ABI_ROW_PLACEHOLDER_08", "ABI_ROW_PLACEHOLDER_22", "ABI_ROW_PLACEHOLDER_31"]},
-    "T3_DIALOGUE:ABSTAIN": {"all_symbols_seen": true, "target_refs": ["ABI_ROW_PLACEHOLDER_12", "ABI_ROW_PLACEHOLDER_25", "ABI_ROW_PLACEHOLDER_41"]},
-    "T3_DIALOGUE:ALLOW": {"all_symbols_seen": true, "target_refs": ["ABI_ROW_PLACEHOLDER_12", "ABI_ROW_PLACEHOLDER_25", "ABI_ROW_PLACEHOLDER_41"]},
-    "T3_DIALOGUE:DENY": {"all_symbols_seen": true, "target_refs": ["ABI_ROW_PLACEHOLDER_12", "ABI_ROW_PLACEHOLDER_25", "ABI_ROW_PLACEHOLDER_41"]},
-    "T4_FIRSTPERSON:ABSTAIN": {"all_symbols_seen": true, "target_refs": ["ABI_ROW_PLACEHOLDER_09", "ABI_ROW_PLACEHOLDER_18", "ABI_ROW_PLACEHOLDER_36"]},
-    "T4_FIRSTPERSON:ALLOW": {"all_symbols_seen": true, "target_refs": ["ABI_ROW_PLACEHOLDER_09", "ABI_ROW_PLACEHOLDER_18", "ABI_ROW_PLACEHOLDER_36"]},
-    "T4_FIRSTPERSON:DENY": {"all_symbols_seen": true, "target_refs": ["ABI_ROW_PLACEHOLDER_09", "ABI_ROW_PLACEHOLDER_18", "ABI_ROW_PLACEHOLDER_36"]}
-  },
-  "credits": {
-    "jspace_model_runtime_credit": 0,
-    "training_credit": 0,
-    "training_executed": false,
-    "whole_entityos_hcu_runtime_credit": 0,
-    "whole_hcu_runtime_credit": 0
-  },
-  "falsifiers": [
-    "A model performing well while codebook mappings are shuffled independently of targets would expose a dataset/loader leak.",
-    "Accuracy collapsing only on unseen vocabulary with intact codebook mechanics would indicate semantic lexical overfit rather than context-invariant binding.",
-    "Accuracy collapsing only on unseen symbol identities would indicate atom memorization rather than episodic variable binding.",
-    "Post-training semantic readability or symbol-write capability degrading beyond declared retention bounds falsifies the narrow-router specialization hypothesis.",
-    "Lesion of the learned binding route failing to selectively impair codebook choice, or rescue failing to restore it, weakens causal binder claims."
-  ],
-  "frozen_holdouts": ["UNSEEN_SEMANTIC_VOCABULARY", "UNSEEN_TEMPLATE", "UNSEEN_SYMBOL_SET"],
-  "full_s3_balance": {
-    "T1_RULE": {
-      "class_symbol_counts": {
-        "ABSTAIN->ABI_ROW_PLACEHOLDER_03": 2, "ABSTAIN->ABI_ROW_PLACEHOLDER_17": 2, "ABSTAIN->ABI_ROW_PLACEHOLDER_29": 2,
-        "ALLOW->ABI_ROW_PLACEHOLDER_03": 2, "ALLOW->ABI_ROW_PLACEHOLDER_17": 2, "ALLOW->ABI_ROW_PLACEHOLDER_29": 2,
-        "DENY->ABI_ROW_PLACEHOLDER_03": 2, "DENY->ABI_ROW_PLACEHOLDER_17": 2, "DENY->ABI_ROW_PLACEHOLDER_29": 2
-      },
-      "exact_pair_balance": true, "full_s3": true, "permutations": [0,1,2,3,4,5], "rows": 18
-    },
-    "T2_VERIFY": {
-      "class_symbol_counts": {
-        "ABSTAIN->ABI_ROW_PLACEHOLDER_08": 2, "ABSTAIN->ABI_ROW_PLACEHOLDER_22": 2, "ABSTAIN->ABI_ROW_PLACEHOLDER_31": 2,
-        "ALLOW->ABI_ROW_PLACEHOLDER_08": 2, "ALLOW->ABI_ROW_PLACEHOLDER_22": 2, "ALLOW->ABI_ROW_PLACEHOLDER_31": 2,
-        "DENY->ABI_ROW_PLACEHOLDER_08": 2, "DENY->ABI_ROW_PLACEHOLDER_22": 2, "DENY->ABI_ROW_PLACEHOLDER_31": 2
-      },
-      "exact_pair_balance": true, "full_s3": true, "permutations": [0,1,2,3,4,5], "rows": 18
-    },
-    "T3_DIALOGUE": {
-      "class_symbol_counts": {
-        "ABSTAIN->ABI_ROW_PLACEHOLDER_12": 2, "ABSTAIN->ABI_ROW_PLACEHOLDER_25": 2, "ABSTAIN->ABI_ROW_PLACEHOLDER_41": 2,
-        "ALLOW->ABI_ROW_PLACEHOLDER_12": 2, "ALLOW->ABI_ROW_PLACEHOLDER_25": 2, "ALLOW->ABI_ROW_PLACEHOLDER_41": 2,
-        "DENY->ABI_ROW_PLACEHOLDER_12": 2, "DENY->ABI_ROW_PLACEHOLDER_25": 2, "DENY->ABI_ROW_PLACEHOLDER_41": 2
-      },
-      "exact_pair_balance": true, "full_s3": true, "permutations": [0,1,2,3,4,5], "rows": 18
-    },
-    "T4_FIRSTPERSON": {
-      "class_symbol_counts": {
-        "ABSTAIN->ABI_ROW_PLACEHOLDER_09": 2, "ABSTAIN->ABI_ROW_PLACEHOLDER_18": 2, "ABSTAIN->ABI_ROW_PLACEHOLDER_36": 2,
-        "ALLOW->ABI_ROW_PLACEHOLDER_09": 2, "ALLOW->ABI_ROW_PLACEHOLDER_18": 2, "ALLOW->ABI_ROW_PLACEHOLDER_36": 2,
-        "DENY->ABI_ROW_PLACEHOLDER_09": 2, "DENY->ABI_ROW_PLACEHOLDER_18": 2, "DENY->ABI_ROW_PLACEHOLDER_36": 2
-      },
-      "exact_pair_balance": true, "full_s3": true, "permutations": [0,1,2,3,4,5], "rows": 18
-    }
-  },
-  "generated_rows": 144,
-  "holdout_symbol_set_absent_train_validation": true,
-  "holdout_template_absent_train_validation": true,
-  "issues": [],
-  "mutual_information_bits_class_target_per_train_template": {"T1_RULE":0.0,"T2_VERIFY":0.0,"T3_DIALOGUE":0.0,"T4_FIRSTPERSON":0.0},
-  "pass_candidate_invariants": true,
-  "review_swarm": {
-    "ABI_PROVENANCE_REVIEWER": "BLOCK: placeholder symbols must be replaced only from exact ABI manifest / pinned tokenizer verification.",
-    "ADVERSARIAL_SHORTCUT_HUNTER": "PASS_CANDIDATE: static class-symbol, line-position, prior-episode and safe-default shortcuts countered by codebook permutation/order and counterfactual twins.",
-    "DATASET_ARCHITECT": "PASS: 72-row core covers 4 structures × full S3 × 3 semantic classes; 54 frozen holdout rows cover three orthogonal generalization axes.",
-    "EVIDENCE_EXTRACTOR": "PASS: objective matches measured missing binding/router capability; protected functions remain non-primary targets.",
-    "FINAL_INTEGRATOR": "CANDIDATE_ONLY: no row is training-admitted; no model/J-Space/HCU/training credit.",
-    "HARNESS_COMPATIBILITY_REVIEWER": "PASS_SYMBOL_REF_LEVEL_ONLY: row structure supports episode-local codebook lookup traces; exact ABI hook compatibility awaits materialization.",
-    "RETENTION_REVIEWER": "OPEN_SEPARATE: seed does not evaluate post-training semantic-read/symbol-write/general-language/code retention.",
-    "STATISTICAL_REVIEWER": "PASS_CANDIDATE: exact class×symbol balance within each train template; MI(class,target)=0 bits at designed scope."
-  },
-  "schema": "TRIGGER2_SWARM_BINDING_DATASET_AUDIT/v2",
-  "semantic_lexeme_isolation": {
-    "holdout_lexemes": ["carve-out","cleared","decisive","disallows","indeterminate","observation","precludes","sanctions"],
-    "overlap": [],
-    "pass": true,
-    "policy": "semantic-bearing lexeme inventory only; protocol/function words explicitly exempt",
-    "train_lexemes": ["authorizes","blocking","forbids","grant","incomplete","missing","overriding","permit","permits","prohibit","prohibition","prohibits","unavailable","underdetermined"]
-  },
-  "spec_tension": {
-    "candidate_resolution": "Treat unseen mapping-instance generalization (new symbol identities / codebook instances) separately from relative-S3 generalization, or reserve a defined structural permutation factor in a separately versioned protocol. Do not claim relative unseen-permutation acceptance from this seed.",
-    "id": "FULL_S3_TRAIN_VS_UNSEEN_RELATIVE_PERMUTATION_HOLDOUT",
-    "observation": "The source simultaneously requires full S3 coverage and an unseen-permutation holdout. If all six relative 3-class permutations occur in training, a relative-S3 permutation cannot also be unseen.",
-    "relative_s3_unseen_holdout_present": false,
-    "status": "OPEN_PREREGISTRATION_REQUIRED",
-    "unseen_mapping_instance_holdout_present": true
-  },
-  "split_counts": {"HOLDOUT_FROZEN":54,"TRAIN":72,"VALIDATION":18},
-  "status": "PASS_CANDIDATE_GATES_WITH_ABI_MATERIALIZATION_BLOCK",
-  "train_templates": ["T1_RULE","T2_VERIFY","T3_DIALOGUE","T4_FIRSTPERSON"]
+  "generated_rows":144,"holdout_symbol_set_absent_train_validation":true,"holdout_template_absent_train_validation":true,"issues":[],
+  "mutual_information_bits_class_target_per_train_template":{"T1_RULE":0.0,"T2_VERIFY":0.0,"T3_DIALOGUE":0.0,"T4_FIRSTPERSON":0.0},"pass_candidate_invariants":true,
+  "review_swarm":{"ABI_PROVENANCE_REVIEWER":"BLOCK: placeholder symbols must be replaced only from exact ABI manifest / pinned tokenizer verification.","ADVERSARIAL_SHORTCUT_HUNTER":"PASS_CANDIDATE: static class-symbol, line-position, prior-episode and safe-default shortcuts countered by codebook permutation/order and counterfactual twins.","DATASET_ARCHITECT":"PASS: 72-row core covers 4 structures × full S3 × 3 semantic classes; 54 frozen holdout rows cover three orthogonal generalization axes.","EVIDENCE_EXTRACTOR":"PASS: objective matches measured missing binding/router capability; protected functions remain non-primary targets.","FINAL_INTEGRATOR":"CANDIDATE_ONLY: no row is training-admitted; no model/J-Space/HCU/training credit.","HARNESS_COMPATIBILITY_REVIEWER":"PASS_SYMBOL_REF_LEVEL_ONLY: row structure supports episode-local codebook lookup traces; exact ABI hook compatibility awaits materialization.","RETENTION_REVIEWER":"OPEN_SEPARATE: seed does not evaluate post-training semantic-read/symbol-write/general-language/code retention.","STATISTICAL_REVIEWER":"PASS_CANDIDATE: exact class×symbol balance within each train template; MI(class,target)=0 bits at designed scope."},
+  "schema":"TRIGGER2_SWARM_BINDING_DATASET_AUDIT/v2",
+  "semantic_lexeme_isolation":{"holdout_lexemes":["carve-out","cleared","decisive","disallows","indeterminate","observation","precludes","sanctions"],"overlap":[],"pass":true,"policy":"semantic-bearing lexeme inventory only; protocol/function words explicitly exempt","train_lexemes":["authorizes","blocking","forbids","grant","incomplete","missing","overriding","permit","permits","prohibit","prohibition","prohibits","unavailable","underdetermined"]},
+  "spec_tension":{"candidate_resolution":"Treat unseen mapping-instance generalization (new symbol identities / codebook instances) separately from relative-S3 generalization, or reserve a defined structural permutation factor in a separately versioned protocol. Do not claim relative unseen-permutation acceptance from this seed.","id":"FULL_S3_TRAIN_VS_UNSEEN_RELATIVE_PERMUTATION_HOLDOUT","observation":"The source simultaneously requires full S3 coverage and an unseen-permutation holdout. If all six relative 3-class permutations occur in training, a relative-S3 permutation cannot also be unseen.","relative_s3_unseen_holdout_present":false,"status":"OPEN_PREREGISTRATION_REQUIRED","unseen_mapping_instance_holdout_present":true},
+  "split_counts":{"HOLDOUT":54,"TRAIN":72,"VALIDATION":18},"status":"PASS_CURRENT_CANDIDATE_GATE_WITH_ABI_MATERIALIZATION_BLOCK","train_templates":["T1_RULE","T2_VERIFY","T3_DIALOGUE","T4_FIRSTPERSON"]
 }

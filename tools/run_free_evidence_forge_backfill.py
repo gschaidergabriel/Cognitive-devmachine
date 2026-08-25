@@ -13,7 +13,16 @@ import shutil
 import time
 
 import run_free_evidence_forge_safe_871 as safe
-from free_swarm_historical_backfill import backfill_metrics, ensure_schema, ingest_artifact_history
+import free_swarm_historical_backfill as historical_backfill_core
+from free_swarm_backfill_exhaustiveness_878 import install as install_exhaustiveness
+
+# Consumer-side completion semantics are installed on the same historical
+# backfill module used by the producer. Canonical source/pass binding remains
+# inside historical_backfill_core._batch_binding and is not bypassed.
+install_exhaustiveness(historical_backfill_core)
+backfill_metrics = historical_backfill_core.backfill_metrics
+ensure_schema = historical_backfill_core.ensure_schema
+ingest_artifact_history = historical_backfill_core.ingest_artifact_history
 
 base = safe.base
 _ORIGINAL_CONNECT = base.connect

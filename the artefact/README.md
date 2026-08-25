@@ -1,16 +1,16 @@
 # the artefact — EntityOS + HCU cognitive computer
 
-`the artefact/` is the current-facing product/research workspace for **EntityOS** and its integrated **HCU** cognition/compute architecture. It is not independent authority or a historical ledger. Re-enter verified `main`, newest owner/supervisor authority, and exact executable evidence before material work.
+`the artefact/` is the current-facing product/research workspace for **EntityOS** and its integrated **HCU** cognition/compute architecture. It is not an independent authority or a historical ledger. Re-enter verified `main`, the newest owner/supervisor authority, and exact executable evidence before material work.
 
 ## Current authority — 2026-08-25 re-entry
 
-Newest inbox-selected supervisor: **8.73**. Mode: **FREE_ONLY**. Canonical `main` observed during this macrocycle advanced from `19576d876cf0843890116f8d525e8e283906abeb` to `12cc97ba7ccb6ca4f436dc89472929a64c64edba`; this file update is bound to the latter current blob.
+Newest inbox-selected supervisor observed in this update: **8.78**. Mode: **FREE_ONLY**. Canonical `main` observed immediately before this write: `e12dfc8b194af20d98253d9d64f445a8e9a8166b`.
 
 Persistent research entity = **Clay**. Temporary workers/models/sessions are organs, not persistent entities. Product = **EntityOS**. Integrated cognition/compute architecture = **HCU**. Xeno/XCU remain compatibility/research aliases only.
 
 Canonical durable state/evidence stays deterministic and outside model-generated cognition/simulation. HCU/J-Space/world-model/workspace outputs are candidate/projection/measurement only. `EffectGate + EffectJournal` remain the only real-effect authority. `FACT_UNKNOWN + METHOD_PRESENT != FACT_PRESENT`.
 
-Current owner/supervisor authority permits zero-cost normal-user local Linux and authorized `clay-direct-dev` VPS-sandbox development with stated guards. Paid/subscription/unknown-cost execution, upgrades/credit purchases, Together, and paid fallback remain forbidden. External free-provider execution requires concrete credential/model/route economic provenance.
+Current owner/supervisor authority permits zero-cost local Linux and authorized `clay-direct-dev` VPS-sandbox development under the current execution guards. Paid/subscription/unknown-cost execution, upgrades/credit purchases, Together, and paid fallback remain forbidden. Source/workflow presence and queued jobs do not mint runtime credit.
 
 ## Target causal path
 
@@ -18,68 +18,55 @@ Current owner/supervisor authority permits zero-cost normal-user local Linux and
 
 Pre-load hashing is not loader-consumption attestation. Logical cell count is not resident-model count or physical decode concurrency. Global J-Space/GWT remains a model-specific causal hypothesis.
 
-## GO 8.73 — exact runtime evidence frontier
+## GO 8.78 — historical conversion / executable evidence frontier
 
 ### Track A — EntityOS executable convergence
 
-Canonical `main` already contains the replay-stable Forge -> Distillery identity repair plus the merged concurrency closure from PR #1765. Replay classification, measured-evidence conflict detection, packet insertion, and dataset-token mutation are serialized inside one SQLite admission transaction.
+**ADVANCED AT SOURCE/CONTROL-PLANE SCOPE.**
 
-The retained runtime lane is repository-qualified PR `gschaidergabriel/clay-global-research-entity#1619`. Direct re-observation in this macrocycle found its Forge -> Distillery workflow runs still nonterminal:
+The replay-v2 migration was fused onto canonical `main` at merge commit `92435b90e450a99b09e016592228a0f84be53739` while preserving serialized replay admission. Supervisor 8.78 subsequently shifted the dominant frontier from source migration to historical conversion and exact-current execution.
 
-- `32742535392` — queued;
-- `32752823987` — queued;
-- `32753831629` — queued.
+Canonical `main@e12dfc8b194af20d98253d9d64f445a8e9a8166b` now also contains the fused backlog-first Forge supervisor wiring. The active path is intended to preserve one Forge authority while replaying the historical Free-Swarm evidence backlog rather than creating a second evaluator.
 
-Current GitHub self-hosted-runner documentation narrows this state: when no online idle runner matches a job's required labels/groups, GitHub leaves the job queued until a matching runner becomes available. Therefore these runs are classified as `QUEUED_SELFHOSTED_RUNNER_AVAILABILITY_OR_ROUTING_UNRESOLVED`, not as EntityOS/HCU semantic failure. The append-only research receipt is `research_entity/research/receipts/GO_2026-08-25_SELFHOSTED_QUEUE_EVIDENCE_BOUNDARY_V1.md`.
+This is **source fusion only**. No terminal exact-current historical-backfill saturation receipt and no exact-current replay-v2 migration runtime receipt were observed in this re-entry. Therefore the historical ~39M-token corpus is not yet credited as re-evaluated, and Distillery/model/training credit remains zero.
 
-No `CLAY_GO873_DISTILLERY_SELFHOSTED_REGRESSION_RECEIPT/v1` was found in canonical repository search. Therefore exact-current runner execution, deterministic regression completion, and the persistent live Forge -> Distillery witness remain unobserved. No new run was launched: current FREE_ONLY authority does not permit assuming GitHub Actions monetary provenance.
-
-Research Entity Identity Guard run `32753831612` remains completed/failure. Its job `97516690619` reports **zero materialized steps**, while canonical workflow source explicitly defines checkout, Python setup, and the identity validation command. Combined with the unavailable job log, this narrows the observed boundary to **pre-step / workflow-runner infrastructure uncertainty**: there is still no evidence that `tools/research_identity_guard_check.py` executed, so the red run must not be interpreted as a semantic identity-guard failure.
-
-#### Newly re-entered replay-schema migration blocker
-
-Current `main@12cc97ba7ccb6ca4f436dc89472929a64c64edba` still has no `CLAY_FORGE_EXECUTION_REPLAY_IDENTITY/v2` symbol. The current delta-id-independent replay preimage is therefore still published under `CLAY_FORGE_EXECUTION_REPLAY_IDENTITY/v1`, while historical admitted v1 rows were created under an older preimage that included `delta_id`. The same issue applies to the aligned measured-evidence v1 identity. This is a schema/version migration ambiguity: a persisted digest must not silently change meaning across upgrades.
-
-Open PR `gschaidergabriel/clay-global-research-entity#1767` is the retained migration donor. It introduces explicit replay/measured identity **v2**, preserves historical v1 preimages, adds v2 digest columns/indexing, and fails closed as `LEGACY_REPLAY_IDENTITY_UNRESOLVED` when a pre-v2 row cannot be reconstructed exactly. Its deterministic reproducer reports the unsafe in-place-v1 transition can re-admit an envelope-renamed replay with a second packet/token increment, while the versioned-v2 candidate rejects the ambiguous overlap with zero token delta.
-
-PR #1767 is currently conflict-bearing against moving `main` because the canonical path separately absorbed the stronger `BEGIN IMMEDIATE` concurrency serialization after the donor was cut. Therefore the required nonduplicate fusion is precise: **version replay/measured identity as v2 without dropping the current serialized admission transaction**. Do not merge a stale donor wholesale and do not leave the changed replay preimage mislabeled as historical v1.
-
-Until exact-current v2 migration + concurrency semantics are fused and executable-green, Distillery promotion remains blocked at schema-migration scope even though same-process replay/concurrency component evidence is stronger.
-
-**Track A delta:** refreshed exact repository/runtime evidence, persisted the self-hosted queue boundary from the concurrent lane, and added the newly re-entered migration-safe replay identity blocker to the current-facing product surface. Runtime credit remains unchanged.
+The owner-provisioned `clay-direct-dev` bridge is a real configured execution path, but generation-0 roundtrip dispatches accumulated duplicate queued triggers. Canonical coordination now defines a singleton ordinary-dispatch identity `clay-direct-dev-roundtrip-v1-g0000` and quarantines the legacy fan-out. A new `go` alone must not create another generation-0 trigger. No terminal singleton roundtrip result was observed during this update.
 
 ### Track B — HCU + Typed Entry Fabric co-development
 
-**ADVANCED.** The v1->v2 issue strengthens a reusable Typed Entry/HCU causal-identity invariant: whenever an identity preimage changes semantically, persisted digests require a new schema/version rather than reinterpretation in place. This composes with the already-fused concurrency rule that replay lookup, conflict classification, packet insertion, and token mutation occur inside one serialized admission transaction.
+**ADVANCED AT CAUSAL-IDENTITY / EVIDENCE-ADMISSION SCOPE.**
 
-Current invariant set:
+The current reusable invariants now include:
 
-- volatile evaluation/transport envelope fields do not define measured execution identity;
-- semantic replay mints +0 packet/+0 accepted dataset tokens;
-- changed measured evidence under one stable replay identity fails closed;
-- distinct execution identities remain independently admissible;
-- identity-preimage changes require explicit schema/version succession;
-- ambiguous pre-version overlap remains UNKNOWN/fail-closed rather than guessed;
-- concurrent replay admission remains serialized before classification.
+- replay/measured identity preimage changes require explicit schema succession rather than silent reinterpretation;
+- replay lookup, conflict classification, packet insertion, and accepted-token mutation remain serialized;
+- historical replay must preserve original execution identity and Goodman-style evidence-family collapse;
+- model-generated historical batch references are input, never authority; a current exact-source patcher exists to bind batch proposals/progress to canonical `(chunk_id, source_event_id, next extraction_pass)` and to reject foreign/stale/future bindings before promotion;
+- repeated historical processing must not be allowed to manufacture evidence weight merely by replaying one execution.
 
-No second truth store, admission authority, effect path, or persistent entity was introduced.
+A newly isolated draft donor, PR **#1851**, addresses the last point for Forge scheduling metadata by reconciling `source_count` to unique historical `source_event_id` provenance. It is deliberately **not canonical yet**: focused deterministic unit tests pass locally, but exact-current `clay-direct-dev` execution plus historical saturation/replay evidence is still required before fusion.
 
-### Track C — Global J-Space/GWT + zero-cost ~0.8B readiness
+No second truth store, effect path, Forge authority, or persistent entity was introduced.
 
-**TRAINING_READINESS_NO_CHANGE_WITH_REASON:** source contracts are already present and the strongest model-specific gate remains the local Qwen3-0.6B nonterminal six-control causal discriminator. This invocation exposes no reproducible shared immutable macrocycle/request identity sufficient for the canonical create-only unusual-experiment claim.
+### Track C — Global J-Space/GWT + zero-cost local model readiness
+
+**TRAINING_READINESS_NO_CHANGE_WITH_REASON.**
+
+The strongest gates are upstream and executable: historical replay must reach a terminal saturation receipt, replay-v2 must execute on exact-current source, and one evidence-qualified Forge ACCEPT must become exactly one persistent Distillery packet with `accepted_dataset_tokens > 0`, followed by semantic replay with exactly `+0` packets / `+0` accepted tokens.
+
+The local Qwen3-0.6B/J-Space causal lane remains zero-cost and nonpromoting. This invocation exposes no reproducible shared immutable macrocycle/request identity sufficient for the canonical create-only unusual-experiment lease, therefore:
 
 `COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT`
 
-No J-Space/model intervention, provider call, paid execution, or training run was performed. A new source-only J-Space lane would duplicate retained donor lane #1263. The replay-v2 migration blocker is nevertheless training-readiness relevant because schema migration must not inflate future accepted dataset tokens.
+No new unusual J-Space/model intervention, paid/provider execution, Together call, or training run was performed.
 
 ## Current evidence credit
 
-- Forge/Distillery replay + concurrency: source/regression/component evidence only;
-- replay-v2 migration safety: donor/component evidence only; exact-current fused execution pending;
-- exact-current Distillery terminal regression receipt: **unobserved**;
-- persistent live Forge -> Distillery positive-token witness: **unobserved**;
-- queued self-hosted runs: **runner availability/routing unresolved; no semantic product failure inferred**;
-- Research Entity Identity Guard semantic failure: **unobserved; current red run is pre-step/infrastructure-uncertain**;
+- replay-v2 migration: **canonical source fusion present; exact-current runtime credit 0**;
+- backlog-first Forge supervisor wiring: **canonical source fusion present; historical-backfill runtime credit 0**;
+- full historical Free-Swarm re-evaluation/saturation: **not yet terminally observed**;
+- persistent Forge -> Distillery positive-token conversion witness: **not yet observed**;
+- `clay-direct-dev` singleton roundtrip: **terminal result not yet observed**;
 - provider runtime credit: **0**;
 - whole EntityOS/HCU runtime credit: **0**;
 - full HCU runtime credit: **0**;
@@ -87,19 +74,18 @@ No J-Space/model intervention, provider call, paid execution, or training run wa
 - training credit: **0**;
 - whole-product PASS: **false**.
 
-A source file, workflow, queued run, deployment, token count, model consensus, or component PASS cannot mint broader credit.
+A source file, workflow, queued run, token count, model consensus, or component PASS cannot mint broader credit.
 
 ## Highest-information next gates
 
-1. Fuse PR #1767's explicit v2 migration semantics onto exact-current `main` **without losing current `BEGIN IMMEDIATE` replay-admission serialization**.
-2. Execute the exact-source migration + concurrency regressions: pre-v2 ambiguous overlap -> fail closed +0; timestamp/narration/`delta_id` replay under v2 -> duplicate +0; changed measured evidence -> `REPLAY_IDENTITY_CONFLICT`; genuinely distinct execution -> separately admissible; concurrent equivalent replay -> one admission + one clean duplicate.
-3. Observe/repair the authorized VPS bridge/self-hosted runner health and routing labels; capture a real roundtrip receipt before interpreting queued runtime requests.
-4. Observe a repository-bound terminal exact-current Distillery regression receipt and require replay/concurrency/rebuild/migration/live-semantic scoped steps to succeed.
-5. Observe the persistent live Forge -> Distillery witness: one evidence-qualified ACCEPT -> exactly one persistent packet -> `accepted_dataset_tokens > 0` -> semantic replay -> exactly +0 packets/+0 tokens.
-6. For the Research Entity Identity Guard, first obtain a run where steps actually materialize; only then classify the validator result. Do not weaken the invariant to make CI green.
-7. Continue one canonical Typed Entry -> verified loader consumption -> actual model execution -> InferenceReceipt -> model-specific J-Space causal trace through retained HCU donor lane #1263.
-8. Run the local Qwen3-0.6B six-control discriminator only after reproducible macrocycle identity and successful canonical atomic lease.
+1. Obtain one terminal singleton `CLAY_DIRECT_DEV_ROUNDTRIP/v1` result without creating another generation-0 dispatch.
+2. Execute the historical-backfill path on exact-current source across all existing `workers.jsonl` incrementally to saturation and emit `FREE_SWARM_HISTORICAL_BACKFILL_RECEIPT/v1` binding exact source commit/tree/dirty state, artifact root, scan set, lines scanned, successful outputs, explicit/batch deltas, new concepts, execution variants, duplicates superseded, ready backlog, implementation backlog, and remaining pending extraction.
+3. Execute replay-v2 migration/concurrency regressions on exact-current `main` using the frozen pre-v2 database fixture and reopen/concurrent replay cases.
+4. Prove one evidence-qualified Forge ACCEPT -> exactly one persistent Distillery packet -> `accepted_dataset_tokens > 0` -> semantic replay -> exactly `+0` packets / `+0` accepted tokens.
+5. Validate draft PR #1851 against exact-current historical replay; a second saturation pass must not inflate source-count scheduling weight from repeated provenance.
+6. Only after these gates should external Free-Swarm scale-up be reconsidered.
+7. Keep local Qwen3-0.6B/J-Space causal work separate, zero-cost, and nonpromoting until its own exact-source terminal evidence and experiment coordination requirements are satisfied.
 
-## Evidence discipline and reentry
+## Evidence discipline and re-entry
 
-Negative evidence is first-class. Infrastructure/auth/quota/runner/log failure is not automatically product/science failure. Component evidence is not whole-product acceptance. Refresh `main` after every durable write before making the next current-state claim.
+Negative evidence is first-class. Infrastructure/auth/quota/runner/log failure is not automatically product/science failure. Component evidence is not whole-product acceptance. Current source can outrank an older inbox statement when an admitted later merge has already closed that source blocker; runtime credit still requires executable evidence at exact identity.

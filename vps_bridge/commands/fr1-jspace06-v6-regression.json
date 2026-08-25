@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v4",
+  "command_id": "fr1-jspace06-v6-regression",
+  "op": "exec",
+  "cwd": "/workspace/clay-global-research-entity",
+  "timeout_seconds": 900,
+  "command": "set -euo pipefail; echo source_head=$(git rev-parse HEAD); /cache/clay-qwen06/venv/bin/python -m py_compile tools/trigger1_jspace_promotion_gate_v6.py tools/trigger1_semantic_simplex_rank_admission.py tools/trigger1_semantic_factorial_evidence_gate_v1.py; /cache/clay-qwen06/venv/bin/python -m pytest -q tests -k 'trigger1 and (jspace or simplex or semantic)'"
+}

@@ -327,17 +327,43 @@ def _insert_candidate(con: sqlite3.Connection, *, obj: dict[str, Any], row: dict
     return added, candidate_hash
 
 
+def _batch_binding(con: sqlite3.Connection, value: dict[str, Any]) -> tuple[str, str, int] | None:
+    """Resolve only the exact canonical chunk/source/next-pass binding."""
+    chunk_id = str(value.get("historical_chunk_id") or "").strip()
+    source_event_id = str(value.get("historical_source_event_id") or "").strip()
+    try:
+        extraction_pass = int(value.get("extraction_pass"))
+    except (TypeError, ValueError):
+        return None
+    if not chunk_id or not source_event_id or extraction_pass <= 0:
+        return None
+    row = con.execute(
+        "SELECT source_event_id,extraction_passes FROM historical_chunks WHERE chunk_id=?",
+        (chunk_id,),
+    ).fetchone()
+    if not row or str(row[0]) != source_event_id:
+        return None
+    expected_pass = int(row[1] or 0) + 1
+    if extraction_pass != expected_pass:
+        return None
+    return chunk_id, source_event_id, expected_pass
+
+
 def _record_batch_progress(con: sqlite3.Connection, envelope: dict[str, Any], novel_count: int) -> None:
-    chunk_id = str(envelope.get("historical_chunk_id") or "").strip()
-    if not chunk_id:
+    binding = _batch_binding(con, envelope)
+    values = envelope.get("deltas")
+    if binding is None or not isinstance(values, list) or len(values) > MAX_BATCH_DELTAS:
         return
-    row = con.execute("SELECT extraction_passes,consecutive_zero_novel FROM historical_chunks WHERE chunk_id=?", (chunk_id,)).fetchone()
+    chunk_id, _, passes = binding
+    row = con.execute(
+        "SELECT consecutive_zero_novel FROM historical_chunks WHERE chunk_id=?",
+        (chunk_id,),
+    ).fetchone()
     if not row:
         return
-    passes = max(int(row[0] or 0) + 1, int(envelope.get("extraction_pass") or 0))
-    zero = int(row[1] or 0) + 1 if novel_count == 0 else 0
+    zero = int(row[0] or 0) + 1 if novel_count == 0 else 0
     state = "PENDING_EXTRACTION"
-    if passes >= 2 and zero >= 1:
+    if passes >= 2 and zero >= 1 and envelope.get("exhaustive") is True:
         state = "SATURATED"
     elif passes >= MAX_PASSES:
         state = "MAX_PASSES_REACHED"
@@ -372,6 +398,10 @@ def _ingest_worker_row(con: sqlite3.Connection, row: dict[str, Any], source_path
     batch_novel: dict[str, int] = {}
     for obj in proposals:
         chunk_id = str(obj.get("historical_chunk_id") or "")
+        if chunk_id and _batch_binding(con, obj) is None:
+            # Model-generated causal references are input, never authority. A
+            # foreign/stale/future pass cannot attach provenance or mint a candidate.
+            continue
         mode = "HISTORICAL_BATCH" if chunk_id else "EXPLICIT_WORKER_DELTA"
         was_added, _ = _insert_candidate(con, obj=obj, row=row, source_event_id=event_id, chunk_id=chunk_id, extraction_mode=mode)
         added += int(was_added)

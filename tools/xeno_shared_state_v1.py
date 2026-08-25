@@ -38,11 +38,33 @@ class CoordinatorLease:
     schema:str; lease_id:str; fabric_id:str; scope:str; holder_node_id:str; generation:int
     issued_epoch:int; issued_state_digest:str; expires_at:float; policy_digest:str; token_mac:str
 
+def _snapshot_from_conn(db:sqlite3.Connection,fabric_id:str)->Snapshot:
+    r=db.execute("SELECT epoch,payload,digest FROM s1 WHERE singleton=1").fetchone()
+    if not r:raise RuntimeError("S1_NOT_INITIALIZED")
+    p=json.loads(r["payload"]); d=digest({"schema":S1,"fabric_id":fabric_id,"epoch":int(r["epoch"]),"payload":p})
+    if not hmac.compare_digest(d,r["digest"]):raise RuntimeError("S1_DIGEST_CORRUPTION")
+    return Snapshot(fabric_id,int(r["epoch"]),r["digest"],p)
+
+class ReadOnlyS1:
+    """SQLite read-only S1 view: ordinary-node code receives no controller handle or authority secret."""
+    def __init__(self,path:str|Path,*,fabric_id:str):
+        self.fabric_id=fabric_id
+        uri=Path(path).resolve().as_uri()+"?mode=ro"
+        self.db=sqlite3.connect(uri,uri=True,isolation_level=None,timeout=30,check_same_thread=False)
+        self.db.row_factory=sqlite3.Row
+        self.db.execute("PRAGMA query_only=ON")
+        row=self.db.execute("SELECT v FROM meta WHERE k='fabric_id'").fetchone()
+        req(row is not None and row[0]==fabric_id,"FABRIC_ID_DB_MISMATCH")
+    def snapshot(self)->Snapshot:return _snapshot_from_conn(self.db,self.fabric_id)
+    def close(self):self.db.close()
+
 class NodeSession:
-    """Ordinary-node interface: read S1 and emit result packets; no S1 mutation API."""
-    def __init__(self,fabric:"SharedStateFabric",node_id:str,caps:Sequence[str]):
-        self._f=fabric; self.node_id=node_id; self.capabilities=tuple(sorted(set(caps)))
-    def snapshot(self)->Snapshot:return self._f.snapshot()
+    """Ordinary-node interface backed only by an OS/SQLite read-only S1 connection."""
+    def __init__(self,path:str|Path,*,fabric_id:str,node_id:str,caps:Sequence[str]):
+        self._reader=ReadOnlyS1(path,fabric_id=fabric_id)
+        self.fabric_id=fabric_id; self.node_id=node_id; self.capabilities=tuple(sorted(set(caps)))
+    def close(self):self._reader.close()
+    def snapshot(self)->Snapshot:return self._reader.snapshot()
     def autonomous_boot(self)->dict[str,Any]:
         a=self.snapshot(); work=select_work(a.payload.get("work",[]),self.capabilities); b=self.snapshot()
         if (a.epoch,a.state_digest)!=(b.epoch,b.state_digest):raise StaleState("S1_CHANGED_DURING_BOOT")
@@ -50,7 +72,7 @@ class NodeSession:
                 "observed_epoch":a.epoch,"observed_state_digest":a.state_digest,"capabilities":list(self.capabilities),
                 "selected_work":work,"s1_access":"READ_ONLY","coordinator_write_authority":False}
     def make_result(self,*,work_id:str,snapshot:Snapshot,payload:Mapping[str,Any])->dict[str,Any]:
-        req(work_id!="","WORK_ID_REQUIRED"); req(snapshot.fabric_id==self._f.fabric_id,"FABRIC_MISMATCH")
+        req(work_id!="","WORK_ID_REQUIRED"); req(snapshot.fabric_id==self.fabric_id,"FABRIC_MISMATCH")
         p=dict(payload); pd=digest(p); ident={"fabric_id":snapshot.fabric_id,"node_id":self.node_id,"work_id":work_id,
             "observed_epoch":snapshot.epoch,"observed_state_digest":snapshot.state_digest,"payload_digest":pd}
         return {"schema":RESULT,"result_id":"nr:"+digest(ident),**ident,"payload":p,
@@ -68,12 +90,13 @@ def select_work(items:Any,caps:Sequence[str])->dict[str,Any]|None:
     return None if not out else sorted(out,key=lambda x:(-float(x["priority"]),str(x["work_id"])))[0]
 
 class SharedStateFabric:
+    """Trusted deterministic shell/controller authority for S1 admission, leases and writes."""
     def __init__(self,path:str|Path,*,fabric_id:str,authority_secret:bytes,coordinator_policy:Mapping[str,Any]|None=None):
         req(bool(fabric_id),"FABRIC_ID_REQUIRED"); req(isinstance(authority_secret,(bytes,bytearray)) and len(authority_secret)>=32,"AUTHORITY_SECRET_MIN_32")
-        self.fabric_id=fabric_id; self._secret=bytes(authority_secret)
+        self.path=Path(path); self.fabric_id=fabric_id; self._secret=bytes(authority_secret)
         self.policy=dict(coordinator_policy or {"schema":POLICY,"allowed_scopes":["global"],"required_capabilities":["COORDINATE"],"max_ttl_seconds":300})
         req(self.policy.get("schema")==POLICY,"POLICY_SCHEMA"); self.policy_digest=digest(self.policy)
-        self.db=sqlite3.connect(Path(path),isolation_level=None,timeout=30,check_same_thread=False); self.db.row_factory=sqlite3.Row
+        self.db=sqlite3.connect(self.path,isolation_level=None,timeout=30,check_same_thread=False); self.db.row_factory=sqlite3.Row
         self.db.executescript(SQL); self.db.execute("INSERT OR IGNORE INTO meta VALUES('fabric_id',?)",(fabric_id,))
         req(self.db.execute("SELECT v FROM meta WHERE k='fabric_id'").fetchone()[0]==fabric_id,"FABRIC_ID_DB_MISMATCH")
     def close(self):self.db.close()
@@ -82,12 +105,7 @@ class SharedStateFabric:
         req(self.db.execute("SELECT 1 FROM s1").fetchone() is None,"S1_ALREADY_INITIALIZED")
         p=dict(payload); d=digest({"schema":S1,"fabric_id":self.fabric_id,"epoch":1,"payload":p})
         self.db.execute("INSERT INTO s1 VALUES(1,1,?,?,NULL)",(json.dumps(p,sort_keys=True,separators=(",",":")),d)); return self.snapshot()
-    def snapshot(self)->Snapshot:
-        r=self.db.execute("SELECT epoch,payload,digest FROM s1 WHERE singleton=1").fetchone()
-        if not r:raise RuntimeError("S1_NOT_INITIALIZED")
-        p=json.loads(r["payload"]); d=digest({"schema":S1,"fabric_id":self.fabric_id,"epoch":int(r["epoch"]),"payload":p})
-        if not hmac.compare_digest(d,r["digest"]):raise RuntimeError("S1_DIGEST_CORRUPTION")
-        return Snapshot(self.fabric_id,int(r["epoch"]),r["digest"],p)
+    def snapshot(self)->Snapshot:return _snapshot_from_conn(self.db,self.fabric_id)
     def mint_admission(self,*,node_id:str,admission_id:str,capabilities:Sequence[str],controller_authority_digest:str)->dict[str,Any]:
         req(bool(node_id) and bool(admission_id),"NODE_ID_OR_ADMISSION_ID_REQUIRED"); req(hex64(controller_authority_digest),"AUTHORITY_DIGEST_INVALID")
         core={"schema":ADMISSION,"fabric_id":self.fabric_id,"node_id":node_id,"admission_id":admission_id,
@@ -102,7 +120,7 @@ class SharedStateFabric:
         if r:
             req((r["admission_id"],r["caps"],r["authority_digest"])==(core["admission_id"],caps,core["controller_authority_digest"]),"NODE_ADMISSION_DRIFT")
         else:self.db.execute("INSERT INTO nodes VALUES(?,?,?,?)",(core["node_id"],core["admission_id"],caps,core["controller_authority_digest"]))
-        return NodeSession(self,core["node_id"],core["capabilities"])
+        return NodeSession(self.path,fabric_id=self.fabric_id,node_id=core["node_id"],caps=core["capabilities"])
     def issue_coordinator_lease(self,*,node_id:str,scope:str,ttl_seconds:float)->CoordinatorLease:
         req(scope in set(self.policy.get("allowed_scopes",[])),"LEASE_SCOPE_NOT_ALLOWED"); req(0<float(ttl_seconds)<=float(self.policy.get("max_ttl_seconds",0)),"LEASE_TTL_OUT_OF_RANGE")
         n=self.db.execute("SELECT caps FROM nodes WHERE node_id=?",(node_id,)).fetchone(); req(n is not None,"NODE_NOT_ADMITTED")
@@ -113,7 +131,7 @@ class SharedStateFabric:
         lid="gcl:"+digest(core); mac=self._mac({**core,"lease_id":lid})
         self.db.execute("INSERT INTO leases VALUES(?,?,?,?,?,?,?,?,?) ON CONFLICT(scope) DO UPDATE SET lease_id=excluded.lease_id,holder=excluded.holder,generation=excluded.generation,issued_epoch=excluded.issued_epoch,issued_digest=excluded.issued_digest,expires=excluded.expires,policy_digest=excluded.policy_digest,mac=excluded.mac",
                         (scope,lid,node_id,gen,s.epoch,s.state_digest,exp,self.policy_digest,mac))
-        return CoordinatorLease(LEASE,lid,self.fabric_id,scope,node_id,gen,s.epoch,s.state_digest,exp,self.policy_digest,mac)
+        return CoordinatorLease(LEASE,lid,self.fabric_id,scope,node_id,gen,s.issued_epoch if hasattr(s,'issued_epoch') else s.epoch,s.state_digest,exp,self.policy_digest,mac)
     def assert_lease(self,l:CoordinatorLease):
         r=self.db.execute("SELECT * FROM leases WHERE scope=?",(l.scope,)).fetchone()
         if not r:raise LeaseRejected("LEASE_NOT_FOUND")

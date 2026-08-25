@@ -1,0 +1,236 @@
+{
+  "schema": "CLAY_FORSCHUNGSRUN_1_DOWNSTREAM_CAUSAL_TRANSPORT/v1",
+  "date": "2026-08-25",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "user_trigger": "forschungsrun 1",
+  "persistent_entity": "Clay",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "stage": "ENTITYOS_HCU_COMPUTATIONAL_BOOTSTRAP",
+  "authority_epoch_observed": "8.78",
+  "execution_mode": "FREE_ONLY",
+  "canonical_main_observed_before_write": "68e149835a77de8ef1f9c9a0b15b9f589a009153",
+  "scope": "QWEN3_0_6B_JSPACE_DOWNSTREAM_SEMANTIC_STATE_TRANSPORT_AND_CAUSAL_ABSTRACTION_DISCRIMINATOR",
+  "observed_parent_state": {
+    "supervisor_inbox": "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
+    "native_llamacpp_cvec_component_runtime_credit": true,
+    "canonical_semantics_promotion": false,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "parent_promotion_fusion_commit": "68e149835a77de8ef1f9c9a0b15b9f589a009153",
+    "parent_semantic_simplex_commit": "e69593213dbb7d4677651d68528491609f33cd07",
+    "parent_semantic_target_guard_commit": "ba543040700a06efb9a537380c453eee0c30f3b8",
+    "current_gate": "tools/trigger1_jspace_promotion_gate.py",
+    "current_gate_schema": "CLAY_TRIGGER1_JSPACE_PROMOTION_GATE/v4"
+  },
+  "new_material_finding": {
+    "id": "OUTPUT_EFFECT_IS_NOT_SUFFICIENT_FOR_JSPACE_STATE_CAUSALITY",
+    "statement": "Even after output-code counterbalancing, semantic-target counterbalancing, lexical deconfounding and matched native cvec controls, a target-specific output-logit effect does not by itself establish that an independently measurable semantic state was created at the intervention site and causally transported through downstream model computation. The intervention may instead exploit a narrow control/readout-sensitive path whose output signature is semantically correlated without supporting the claimed reusable J-Space state abstraction.",
+    "consequence": "Promotion toward model-specific J-Space semantics should require an internal downstream transport endpoint learned independently of the intervention vector and independently of output-token identities, in addition to the already-required counterbalanced behavioral endpoint.",
+    "credit_effect": "RESEARCH_PROTOCOL_DELTA_ONLY_NO_NEW_RUNTIME_OR_PROMOTION_CREDIT"
+  },
+  "primary_hypothesis": {
+    "id": "H1_CAUSAL_SEMANTIC_STATE_TRANSPORT",
+    "statement": "At the retained nonterminal Qwen3-0.6B site, a valid semantic J-Space intervention creates a class-selective internal state that remains detectable as a causally shifted, lexically generalizing semantic subspace at one or more downstream nonterminal layers before the output head.",
+    "prediction": "A preregistered class-direction intervention produces a target-specific displacement in an independently estimated downstream semantic subspace, with sign-sensitive propagation across fresh lexical families, while null, orthogonal, permuted and lexical-nuisance controls do not reproduce the displacement. The internal displacement and the independently counterbalanced behavioral endpoint agree in direction without sharing output-label-derived features."
+  },
+  "counterhypotheses": [
+    {
+      "id": "H0_READOUT_OR_CONTROL_PATH_SHORTCUT",
+      "statement": "The intervention changes output logits through a narrow control/readout-sensitive pathway without creating a stable downstream semantic state.",
+      "prediction": "Behavioral output effects are present but independently measured downstream semantic displacement is absent, unstable, or not class-selective."
+    },
+    {
+      "id": "H0_GENERIC_INSTRUCTION_COMPLIANCE",
+      "statement": "The intervention boosts instruction following, confidence or code emission rather than semantic class state.",
+      "prediction": "Internal and behavioral changes are similar across requested semantic targets or survive only as a generic common-mode shift after class means are removed."
+    },
+    {
+      "id": "H0_LEXICAL_OR_DATASET_AXIS",
+      "statement": "The apparent semantic direction is driven by lexical-family regularities or dataset construction artifacts.",
+      "prediction": "Principal-angle/subspace stability and downstream transport collapse on lexically disjoint leave-one-family-out holdouts or are reproduced by a lexical nuisance vector."
+    },
+    {
+      "id": "H0_ESTIMATOR_NONUNIQUENESS",
+      "statement": "A selected semantic subspace is one of several incompatible estimators that fit the same labels, so geometry alone is not a unique representation claim.",
+      "prediction": "Different calibration-only estimators disagree strongly in principal angles or downstream causal transport despite similar probe separability."
+    }
+  ],
+  "external_primary_research": [
+    {
+      "source": "Wu, Zhao, Chen (2026), When Is a Steerable Concept Representation Real? Measurement Confounds in a Cross-Family Audit of Neuroscience Parallels in LLMs",
+      "arxiv": "2608.08159",
+      "observed": "Steering conclusions depend materially on raw activation units, readout metric and operating point; residual-norm-comparable interventions and held-out operating-point selection change interpretation.",
+      "protocol_use": "Freeze operating point on calibration, report residual-norm-relative dose, and prohibit holdout-sensitive gain selection."
+    },
+    {
+      "source": "Naowarat, Tang, Goldwater (2026), A framework for analyzing concept representations in neural models",
+      "arxiv": "2605.01381",
+      "observed": "Concept subspaces need not be uniquely determined; estimator choice affects containment/disentanglement and even strong erasure estimators can generalize imperfectly.",
+      "protocol_use": "Do not treat one centroid/SVD basis as unique truth; compare calibration-only estimators and require causal transport/generalization rather than probe geometry alone."
+    },
+    {
+      "source": "Geiger et al. (2023), Finding Alignments Between Interpretable Causal Variables and Distributed Neural Representations",
+      "arxiv": "2303.02536",
+      "observed": "Distributed Alignment Search tests causal abstractions in learned distributed subspaces using interventions rather than requiring neuron-aligned variables.",
+      "protocol_use": "Frame J-Space semantic claims as graded causal-abstraction hypotheses and test intervention-equivalent internal state changes, not only output correlation."
+    },
+    {
+      "source": "Geiger et al. (2023), Causal Abstraction: A Theoretical Foundation for Mechanistic Interpretability",
+      "arxiv": "2301.04709",
+      "observed": "Activation steering, interchange intervention and related methods can be expressed under a causal-abstraction framework where faithfulness is intervention-defined.",
+      "protocol_use": "Require explicit high-level semantic intervention predictions and compare them with low-level model interventions at internal and behavioral endpoints."
+    },
+    {
+      "source": "Braun et al. (2025), Understanding (Un)Reliability of Steering Vectors in Language Models",
+      "arxiv": "2505.22637",
+      "observed": "Steering effectiveness has high sample variance; directional coherence among activation differences predicts reliability.",
+      "protocol_use": "Measure leave-one-family-out direction coherence and retain per-family signs/variance rather than pooled means only."
+    },
+    {
+      "source": "Tan et al. (2024), Analyzing the Generalization and Reliability of Steering Vectors",
+      "arxiv": "2407.12404",
+      "observed": "Steering can be brittle to prompt changes and can exploit spurious biases.",
+      "protocol_use": "Use fresh lexical/domain families, off-target tasks and nuisance controls."
+    },
+    {
+      "source": "Belrose et al. (2023), LEACE: Perfect linear concept erasure in closed form",
+      "arxiv": "2306.03819",
+      "observed": "Linear concept information can be explicitly erased with a minimum-distortion closed-form intervention, enabling concept-scrubbing tests.",
+      "protocol_use": "Add a downstream concept-erasure rescue/lesion arm after a positive transport result: erasing the independently estimated semantic subspace should reduce the class-selective downstream/behavioral effect if that subspace is causally relevant."
+    }
+  ],
+  "proposed_discriminator": {
+    "name": "CROSSFIT_DOWNSTREAM_SEMANTIC_TRANSPORT_AND_ERASURE_RESCUE_NATIVE_CVEC/v1",
+    "goal": "Distinguish genuine reusable semantic-state causality from readout steering, generic compliance, lexical axes and estimator-specific geometry.",
+    "phase_0_freeze": [
+      "Bind exact Qwen3-0.6B checkpoint/tokenizer/GGUF, llama.cpp commit/build, native harness, layer-20 intervention site, token-scope condition and exact applied-vector bytes.",
+      "Freeze all prompt families into DERIVATION, CALIBRATION, DOWNSTREAM_ESTIMATOR and FINAL_HOLDOUT partitions before opening FINAL_HOLDOUT.",
+      "Freeze residual-norm-relative dose grid and choose one operating point on CALIBRATION only.",
+      "Freeze semantic-target x A/B/C output-code counterbalance and all nuisance/off-target controls before FINAL_HOLDOUT."
+    ],
+    "phase_1_independent_downstream_subspace": {
+      "rule": "Estimate the downstream semantic subspace from unsteered DOWNSTREAM_ESTIMATOR activations at preregistered later nonterminal layers using prompts disjoint from vector derivation and final holdout.",
+      "estimators": [
+        "class-centroid Helmert/SVD subspace",
+        "whitened between-class LDA-like subspace using calibration-only covariance regularization",
+        "LEACE-derived removable concept subspace"
+      ],
+      "nonuniqueness_test": "Compute pairwise principal angles and leave-one-family-out stability. No unique-representation claim is allowed if estimators disagree materially; a causal transport claim may still proceed only if the preregistered primary estimator and declared robustness estimators agree on intervention direction/sign within tolerance.",
+      "output_head_independence": "No lm_head/output-token weights, A/B/C token embedding rows or final-holdout labels may enter downstream-subspace estimation."
+    },
+    "phase_2_internal_transport_endpoint": {
+      "primary_metric": "For requested class j and intervention direction i, measure the change in downstream semantic coordinates relative to matched baseline after removing common-mode shift; define T[i,j,l] over downstream layer l.",
+      "positive_signature": "At preregistered downstream layers, intervention i creates a class-selective diagonal displacement for requested class i; SIGN_FLIP reverses the class-selective component; NULL/ORTHOGONAL/PERMUTED/LABEL_ONLY_NUISANCE do not reproduce it.",
+      "transport_requirement": "At least one downstream nonterminal layer must satisfy the preregistered class-selective transport criterion on every fresh lexical family and under leave-one-family-out aggregation.",
+      "failure_classification": "Behavioral effect without internal transport is READOUT_OR_CONTROL_PATH_COMPONENT_EFFECT, not JSPACE_SEMANTIC_STATE_CAUSALITY."
+    },
+    "phase_3_behavioral_endpoint": {
+      "metric": "Use the existing independently rotated semantic-target x A/B/C codebook mapped-target logit margin with semantic-target interaction testing.",
+      "independence": "Behavioral metric remains secondary and must not share derivation features with the internal transport metric.",
+      "agreement_rule": "Internal transport and behavioral selectivity must agree in sign/class ordering on FINAL_HOLDOUT; disagreement is preserved as negative evidence rather than averaged away."
+    },
+    "phase_4_dose_response": {
+      "rule": "Use calibration-frozen residual-norm-relative doses only.",
+      "requirement": "A credible mechanism should show a bounded monotonic or otherwise preregistered dose-response region before fluency/off-target degradation; isolated single-gain positives receive weaker evidence classification.",
+      "anti_goodhart": "Do not select a gain from FINAL_HOLDOUT and do not report only the best layer/gain pair."
+    },
+    "phase_5_lesion_rescue": {
+      "lesion": "After establishing transport, apply an independently estimated semantic-subspace erasure/scrub at a downstream site while keeping nuisance dimensions as intact as possible.",
+      "prediction": "If transported semantic coordinates are causally relevant, erasure should selectively reduce the class-specific internal and behavioral steering effect.",
+      "sham": "Apply equal-rank/equal-norm random or nuisance-subspace erasure as a matched sham.",
+      "classification": "A positive steering result that survives semantic-subspace erasure unchanged is counterevidence against the claimed transported semantic mechanism."
+    },
+    "phase_6_cross_runtime_scope": {
+      "conditions": [
+        "PyTorch LAST_TOKEN_ONLY",
+        "PyTorch ALL_PROMPT_TOKENS",
+        "native llama.cpp ALL_PROMPT_TOKENS_CVEC"
+      ],
+      "rule": "Do not call native cvec a strict replication of the PyTorch result unless token-scope and layer semantics match. If scope differs, classify agreement as cross-runtime mechanism convergence at differing intervention scope."
+    },
+    "phase_7_acceptance_matrix": {
+      "strongest_candidate": "Internal transport PASS + behavioral counterbalanced PASS + sign-flip PASS + nuisance/off-target controls PASS + cross-family stability PASS + estimator-robustness PASS + lesion selectively attenuates effect.",
+      "mechanism_only": "Behavioral PASS but internal transport FAIL/UNKNOWN, or internal transport PASS but behavioral semantic interaction FAIL.",
+      "reject_semantic_specificity": "Generic uplift/common-mode shift, lexical nuisance reproduction, holdout-sensitive gain selection, unstable estimator geometry, or nonselective lesion result.",
+      "credit": "Even the strongest candidate is promotion-candidate evidence only; canonical semantics, training, full HCU and whole EntityOS remain separately gated."
+    }
+  },
+  "measurement_contract": {
+    "representation_geometry": [
+      "singular spectrum versus class-permutation null",
+      "principal angles across estimators/families",
+      "leave-one-family-out direction coherence",
+      "residual-norm-relative intervention magnitude"
+    ],
+    "causal_internal": [
+      "class-selective downstream coordinate displacement",
+      "sign-flip reversal",
+      "downstream layer transport profile",
+      "semantic-subspace lesion attenuation versus sham"
+    ],
+    "behavioral": [
+      "semantic-target x output-code counterbalanced mapped-target margin",
+      "treatment-by-semantic-target interaction",
+      "off-target drift and fluency bounds"
+    ],
+    "provenance": [
+      "exact source head/tree",
+      "exact runtime build",
+      "checkpoint/tokenizer/GGUF digests",
+      "exact vector and adapter bytes",
+      "layer/token-scope identity",
+      "split-family identities and hashes",
+      "all control runtime receipts",
+      "analysis code/metric definition digest"
+    ]
+  },
+  "why_this_is_higher_information_than_another_output_only_run": [
+    "It directly tests whether the intervention creates a persistent internal semantic state rather than only a convenient output effect.",
+    "It operationalizes J-Space as a causal internal coordination-state hypothesis rather than a synonym for steerable logits.",
+    "It turns concept-subspace nonuniqueness into a falsifiable robustness condition instead of hiding estimator choice.",
+    "It adds lesion evidence, which can distinguish a merely correlated downstream trace from a causally relevant transported subspace.",
+    "It preserves the already-fused lexical, semantic-target, output-code, gain-calibration and token-scope safeguards rather than replacing them."
+  ],
+  "recommended_source_delta_after_protocol_review": {
+    "promotion_gate_successor": "CLAY_TRIGGER1_JSPACE_PROMOTION_GATE/v5",
+    "new_candidate_fields": [
+      "downstream_transport.metric_definition_sha256",
+      "downstream_transport.estimator_family_id",
+      "downstream_transport.estimator_receipt_sha256",
+      "downstream_transport.output_head_independent == true",
+      "downstream_transport.vector_derivation_independent == true",
+      "downstream_transport.final_holdout_independent == true",
+      "downstream_transport.class_selective_effect == true",
+      "downstream_transport.sign_flip_reversal == true",
+      "downstream_transport.cross_family_stable == true",
+      "downstream_transport.analysis_receipt_sha256",
+      "subspace_robustness.principal_angle_analysis_receipt_sha256",
+      "lesion_rescue.semantic_erasure_observed == true",
+      "lesion_rescue.sham_control_observed == true",
+      "lesion_rescue.selective_attenuation == true"
+    ],
+    "implementation_rule": "Do not weaken current v4 requirements. Additive successor only; preserve mechanism-only credit when the stronger J-Space semantic transport fields are absent or fail."
+  },
+  "execution_and_coordination": {
+    "new_unusual_experiment_executed": false,
+    "reason": "This research run performs source/research synthesis and proposes a higher-information discriminator. No new model intervention is required to persist the protocol delta, and unusual experiments remain subject to the canonical atomic lease law.",
+    "provider_calls": 0,
+    "paid_calls": 0,
+    "together_calls": 0,
+    "vps_testing": false,
+    "runtime_credit_added": 0
+  },
+  "credit_boundary": {
+    "native_llamacpp_cvec_component_runtime_credit": "UNCHANGED_BOUNDED_COMPONENT_ONLY",
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0,
+    "canonical_semantics_promotion": false,
+    "whole_product_pass": false
+  },
+  "next_exact_action": "Review/fuse this protocol as an additive Trigger-1 promotion successor, then on a future macrocycle with valid atomic lease implement the independent downstream-subspace collector and execute one calibration-frozen native cvec transport + lesion/sham experiment on exact admitted zero-cost source/runtime identity."
+}

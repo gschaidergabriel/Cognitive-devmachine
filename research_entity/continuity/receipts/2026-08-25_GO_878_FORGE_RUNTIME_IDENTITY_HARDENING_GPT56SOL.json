@@ -1,0 +1,58 @@
+{
+  "schema": "CLAY_GO878_FORGE_RUNTIME_IDENTITY_HARDENING_RECEIPT/v1",
+  "authority_epoch": "8.78",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "trigger": "go",
+  "organ": "GPT-5.6-Sol",
+  "base_main": "277d39f6d1f7b130b44fc9fdc1c93231d95bbd64",
+  "issue": 1889,
+  "branch": "go878/forge-runtime-identity-hardening-gpt56sol-20260825",
+  "predecessor": "dc6ba9faf5c1afb01cfd7b9c5451f68b2dc36e92",
+  "finding": {
+    "classification": "RUNTIME_IDENTITY_ENVELOPE_PRESENT_BUT_NOT_FAIL_CLOSED",
+    "predecessor_gaps": [
+      "runtime SHA was not proven equal to the Git blob at source_commit",
+      "process_generation_identity used module time_ns rather than Linux process start identity",
+      "supervisor_generation_or_start_nonce could be null",
+      "missing or mismatched identity did not force state away from LIVE",
+      "no reusable validator existed for supervisor-side acceptance"
+    ]
+  },
+  "delta": {
+    "helper": "tools/forge_runtime_identity.py",
+    "writer": "tools/run_free_evidence_forge_backfill.py",
+    "test": "tests/test_forge_runtime_identity.py",
+    "preserves_current_exhaustiveness_adapter": true,
+    "identity_schema": "CLAY_FORGE_RUNTIME_IDENTITY/v1",
+    "status_writer_schema": "BACKLOG_FIRST_FORGE_STATUS/v3",
+    "fail_closed": "Writer status becomes RUNTIME_IDENTITY_UNVERIFIED whenever exact committed executable/source/process/supervisor generation binding cannot be established.",
+    "validator": "validate_status_identity rejects generic LIVE without identity, source mismatch, uncommitted entrypoint bytes and dead/reused process generations.",
+    "second_forge_authority_created": false
+  },
+  "tests": {
+    "scope": "LOCAL_DETERMINISTIC_UNIT_ONLY",
+    "command": "python3 -m pytest -q tests/test_forge_runtime_identity.py",
+    "passed": 5,
+    "failed": 0
+  },
+  "coordination": {
+    "duplicate_predecessor_detected_and_rebased_as_successor_hardening": true,
+    "new_runtime_trigger_created": false,
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_experiments_executed": 0
+  },
+  "credits": {
+    "forge_runtime_identity": "SOURCE_PLUS_LOCAL_UNIT_ONLY",
+    "historical_backfill_runtime": 0,
+    "distillery_replay_v2_runtime": 0,
+    "whole_entityos_hcu_runtime": 0,
+    "hcu_full_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "After fusion, make the single supervisor reconciliation call validate_status_identity against the fresh FORGE_LIVE file and exact backlog-first entrypoint; only a matching live process/source identity may count as current Forge LIVE evidence.",
+  "evidence_boundary": "5/5 local deterministic tests validate the identity helper only. No live Forge restart/reconciliation, historical saturation, provider/model execution, whole HCU, training or whole EntityOS acceptance is claimed."
+}

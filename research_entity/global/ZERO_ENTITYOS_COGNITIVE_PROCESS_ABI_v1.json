@@ -1,0 +1,188 @@
+{
+  "schema": "ZERO_ENTITYOS_COGNITIVE_PROCESS_ABI/v1",
+  "status": "SOURCE_CONTRACT_CANDIDATE",
+  "authority": {
+    "product": "EntityOS",
+    "architecture": "HCU",
+    "owner_target": "VARIABLE_COGNITIVE_GRID_PLUS_PERSISTENT_DATABASE_PLUS_CLAUDE_CODE",
+    "grid_size_law": "N_IS_RUNTIME_PARAMETER",
+    "durable_state_authority": "PERSISTENT_DATABASE_DETERMINISTIC",
+    "real_effect_authority": "EFFECTGATE_EFFECTJOURNAL_ONLY",
+    "strong_model_partner": "CLAUDE_CODE",
+    "model_outputs_are": "CANDIDATE_PROJECTION_MEASUREMENT_ONLY",
+    "supervisor_epoch": "8.78",
+    "execution_mode": "FREE_ONLY"
+  },
+  "census_binding": {
+    "preferred_donor": "PR1971_AGENT_ZERO_DISTRIBUTED_COGNITIVE_PROCESS_CENSUS_V1",
+    "duplicate_donor": "PR1970_AGENT_ZERO_COGNITIVE_PROCESS_CENSUS_V1",
+    "process_id_pattern": "AZP01..AZP20",
+    "binding_status": "DONOR_IDS_UNMERGED_NO_RUNTIME_CREDIT"
+  },
+  "wire_types": {
+    "COGNITIVE_WORK/v1": {
+      "required": [
+        "causal_event_id",
+        "admission_id",
+        "generation",
+        "work_id",
+        "process_id",
+        "parent_work_ids",
+        "db_snapshot_digest",
+        "workspace_digest",
+        "input_digest",
+        "capability_scope_digest",
+        "budget_digest",
+        "provenance_digest"
+      ],
+      "authority": "READ_OR_PROPOSE_ONLY",
+      "notes": "A work packet cannot self-grant capability, coordinator, canonical-write, semantic, or effect authority."
+    },
+    "COGNITIVE_RESULT/v1": {
+      "required": [
+        "causal_event_id",
+        "admission_id",
+        "generation",
+        "work_id",
+        "process_id",
+        "executor_instance_id",
+        "model_artifact_digest",
+        "input_digest",
+        "output_digest",
+        "result_kind",
+        "uncertainty",
+        "provenance_digest"
+      ],
+      "allowed_result_kinds": ["CANDIDATE", "PROJECTION", "MEASUREMENT", "ABSTAINED", "BLOCKED"],
+      "authority": "NONCANONICAL_OUTPUT_ONLY"
+    },
+    "DB_WRITE_PROPOSAL/v1": {
+      "required": [
+        "causal_event_id",
+        "generation",
+        "expected_db_snapshot_digest",
+        "proposal_digest",
+        "provenance_digest"
+      ],
+      "authority": "PROPOSAL_ONLY",
+      "commit_rule": "DETERMINISTIC_DB_GATE_AND_CAS_REQUIRED"
+    },
+    "EFFECT_PROPOSAL/v1": {
+      "required": [
+        "causal_event_id",
+        "generation",
+        "effect_request_digest",
+        "capability_scope_digest",
+        "provenance_digest"
+      ],
+      "authority": "PROPOSAL_ONLY",
+      "execution_rule": "EFFECTGATE_EFFECTJOURNAL_REQUIRED"
+    },
+    "CLAUDE_BRIDGE_REQUEST/v1": {
+      "required": [
+        "causal_event_id",
+        "generation",
+        "workspace_digest",
+        "state_slice_digest",
+        "request_digest",
+        "capability_scope_digest",
+        "provenance_digest"
+      ],
+      "authority": "CONTEXT_AND_TOOL_REQUEST_ONLY"
+    },
+    "CLAUDE_BRIDGE_RESULT/v1": {
+      "required": [
+        "causal_event_id",
+        "generation",
+        "request_digest",
+        "result_digest",
+        "tool_receipt_digests",
+        "uncertainty",
+        "provenance_digest"
+      ],
+      "authority": "CANDIDATE_RESULT_ONLY"
+    },
+    "WORKSPACE_REENTRY/v1": {
+      "required": [
+        "causal_event_id",
+        "generation",
+        "source_result_digest",
+        "pre_workspace_digest",
+        "post_workspace_digest",
+        "reentry_policy_digest",
+        "provenance_digest"
+      ],
+      "authority": "NONCANONICAL_WORKSPACE_TRANSITION_ONLY",
+      "causal_claim_rule": "PRESENCE_IS_NOT_CAUSAL_USE"
+    },
+    "EPHEMERAL_GRID_LEASE/v1": {
+      "required": [
+        "generation",
+        "lease_id",
+        "executor_instance_id",
+        "eligible_process_ids",
+        "budget_digest",
+        "expires_at",
+        "lease_digest"
+      ],
+      "authority": "SCHEDULING_ONLY",
+      "forbidden": ["CANONICAL_TRUTH_AUTHORITY", "REAL_EFFECT_AUTHORITY", "CAPABILITY_BROADENING"]
+    },
+    "JSPACE_SUCCESSOR_CANDIDATE/v1": {
+      "required": [
+        "successor_id",
+        "preregistration_digest",
+        "model_family_provenance_digest",
+        "calibration_family_digest",
+        "fresh_holdout_family_digest",
+        "tokenizer_position_contract_digest",
+        "geometry_contract_digest",
+        "fixed_gain_contract_digest",
+        "nuisance_control_digest",
+        "full_state_causal_matrix_contract_digest",
+        "cross_task_replication_contract_digest",
+        "off_target_regression_contract_digest",
+        "immutable_runtime_binding_digest"
+      ],
+      "authority": "EXPERIMENTAL_MEASUREMENT_ONLY",
+      "frozen_v1_status": "BEHAVIORALLY_FALSIFIED_AT_BOUND_IDENTITY_DO_NOT_RETUNE_OR_RERUN_ON_HOLDOUT",
+      "promotion_rule": "SEPARATELY_VERSIONED_PREREGISTERED_FRESH_HOLDOUT_EXECUTABLE_REVIEW_REQUIRED"
+    }
+  },
+  "invariants": [
+    "VARIABLE_GRID_SIZE_MUST_NOT_CHANGE_PROCESS_SEMANTICS",
+    "SIMULATE_COGNITION_STORE_DURABLE_DATA",
+    "DATABASE_FACTS_MUST_NOT_BE_MINTED_FROM_MODEL_OUTPUT",
+    "CLAUDE_CODE_REMAINS_STRONG_MODEL_TOOL_PARTNER",
+    "MODEL_AND_WORKSPACE_OUTPUTS_ARE_NONCANONICAL",
+    "NO_PACKET_SELF_GRANTS_CAPABILITY_OR_EFFECT_AUTHORITY",
+    "DB_WRITES_REQUIRE_DETERMINISTIC_GATE_AND_CAS",
+    "REAL_EFFECTS_REQUIRE_EFFECTGATE_AND_EFFECTJOURNAL",
+    "REENTRY_PRESENCE_DOES_NOT_PROVE_CAUSAL_USE",
+    "JSPACE_CLAIMS_MUST_NOT_EXCEED_EXPOSED_MODEL_INTERFACE_EVIDENCE",
+    "FROZEN_JSPACE_V1_NEGATIVE_EVIDENCE_MUST_BE_PRESERVED",
+    "SUCCESSOR_JSPACE_REQUIRES_SEPARATE_PREREGISTRATION_AND_FRESH_HOLDOUT",
+    "TRAIN_CALIBRATION_HOLDOUT_MODEL_FAMILY_PROVENANCE_LEAKAGE_FAILS_CLOSED",
+    "COMPONENT_SOURCE_OR_TEST_PASS_DOES_NOT_MINT_WHOLE_ENTITYOS_HCU_JSPACE_OR_TRAINING_CREDIT"
+  ],
+  "first_runtime_discriminator": {
+    "name": "VARIABLE_NODE_TWO_PROCESS_REJOIN",
+    "ordinary_regression_only": true,
+    "requirements": [
+      "ONE_IDENTICAL_NODE_RUNTIME_EXECUTES_TWO_DISTINCT_PROCESS_IDS_WITHOUT_FIXED_PERSONALITY",
+      "BOTH_WORK_ITEMS_READ_THE_SAME_GENERATION_BOUND_DB_SNAPSHOT",
+      "RESULTS_ARE_TYPED_AND_CAUSALLY_BOUND_TO_INPUT_AND_EXECUTOR_IDENTITY",
+      "NODE_RESTARTS_AND_REJOINS_WITH_A_NEW_EPHEMERAL_LEASE_WITHOUT_STATE_LOSS",
+      "NODE_CANNOT_SELF_GRANT_DB_COMMIT_OR_EFFECT_AUTHORITY",
+      "CHANGING_GRID_N_DOES_NOT_CHANGE_WIRE_SEMANTICS"
+    ]
+  },
+  "credit": {
+    "source_contract": 1,
+    "distributed_runtime": 0,
+    "whole_entityos": 0,
+    "whole_hcu": 0,
+    "jspace_model": 0,
+    "training": 0
+  }
+}

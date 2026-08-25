@@ -1,8 +1,10 @@
 {
   "schema": "CLAY_TRIGGER2_TRAINING_ARTIFACT_REGISTRY/v3",
-  "registry_version": "3.0.0",
+  "registry_version": "3.0.1",
   "date": "2026-08-25",
   "supersedes": "research_entity/global/j-space/research/TRIGGER2_TRAINING_ARTIFACT_REGISTRY_V2.json",
+  "candidate_revision_of": "3.0.0",
+  "candidate_revision_reason": "Adversarial labeler audit added fail-closed identity/ancestry guards without changing model-visible training meaning; HP labeler contract advanced to 1.0.1-candidate.",
   "product": "EntityOS",
   "architecture": "HCU_VARIABLE_COGNITIVE_GRID",
   "target_model_family": "Qwen3.5-0.8B",
@@ -18,7 +20,8 @@
   "lifecycle_notes": [
     "Registry v2 remains historical provenance but is superseded for current owner-target resolution because it pointed to the older XENO_HCU_GO_TARGET authority.",
     "GRID10-specific semantics are review-required whenever they affect model-visible meaning; GRID10 remains usable as a benchmark fixture only.",
-    "No artifact becomes training-admitted merely by appearing in this registry."
+    "No artifact becomes training-admitted merely by appearing in this registry.",
+    "Candidate registry patch 3.0.1 records exact fail-closed labeler revision while preserving 3.0.0 in Git history; training admission remains blocked until exact committed tests execute."
   ],
   "current_artifacts": [
     {
@@ -39,8 +42,14 @@
     {
       "artifact_id": "HP_LABELER_CONTRACT_V1",
       "path": "research_entity/global/j-space/research/TRIGGER2_HYPERPOSITION_REFERENCE_LABELER_CONTRACT_V1.json",
-      "version": "1.0.0-candidate",
+      "version": "1.0.1-candidate",
+      "git_blob": "304c3c3b56d18ce6cf30ba99b4661ddc0b2a578c",
+      "implementation": "tools/trigger2_hyperposition_reference_labelers_v1.py",
+      "implementation_git_blob": "02cb57b0de910e13793be3bee87caa270538fc4b",
+      "tests": "tests/test_trigger2_hyperposition_reference_labelers_v1.py",
+      "tests_git_blob": "b55a81eff28d686a7e29fbfd5984a97e2f2c3e83",
       "state": "CURRENT_CANDIDATE_EXACT_COMMITTED_TEST_NOT_OBSERVED",
+      "revision_reason": "FAIL_CLOSED_UNKNOWN_TARGET_DUPLICATE_BRANCH_MERGE_COLLISION_INVALID_PASS_TARGET_AND_CONFLICTING_ANCESTRY_RELATION",
       "capabilities": ["SEMANTIC_HYPERPOSITION_UPDATE","GRF_RESOLUTION_TEST_ORDER_SALIENCE_ORDER"]
     },
     {
@@ -103,14 +112,14 @@
     {
       "artifact": "positive D/E supervision without exact verified labeler/gate binding",
       "state": "BLOCKED",
-      "reason": "target state must come from deterministic/adjudicated source, not invented labels"
+      "reason": "target state must come from deterministic/adjudicated source, not invented labels; 1.0.1-candidate source is not yet exact-test verified"
     }
   ],
   "capability_status": {
     "C_SYMBOLIC_SEMANTIC_CLASS": "EXISTING_DESIGN_REVIEW_REQUIRED_UNDER_HP_FRAME",
     "A_CONTEXT_INVARIANCE": "EXISTING_DESIGN_REVIEW_REQUIRED_UNDER_HP_FRAME",
     "B_EPISODE_LOCAL_OPAQUE_BINDING": "ACTIVE_RESEARCH_FULL_CROSS_SUCCESSOR_REQUIRED",
-    "D_SEMANTIC_HYPERPOSITION": "LABELER_AND_SMALL_NATIVE_SEEDS_CANDIDATE_NOT_ADMITTED",
+    "D_SEMANTIC_HYPERPOSITION": "LABELER_1_0_1_AND_SMALL_NATIVE_SEEDS_CANDIDATE_NOT_ADMITTED",
     "E_GRF_TYPE_DISCRIMINATOR_TEST_SELECTION": "CANDIDATE_LABELERS_NEED_EXACT_TEST_AND_SCALE",
     "VARIABLE_N_COORDINATION": "OWNER_CURRENT_SMALL_SEED_ADDED_NEEDS_FACTORIAL_SUCCESSOR",
     "DB_VS_SIMULATION": "OWNER_CURRENT_SMALL_SEED_ADDED_NEEDS_FACTORIAL_SUCCESSOR",
@@ -147,5 +156,5 @@
     "whole_hcu_runtime_credit": 0,
     "whole_entityos_runtime_credit": 0
   },
-  "next_exact_action": "Execute exact committed Hyperposition labeler + TrainingTrace gate-v2 tests; then build a counterbalanced Hyperposition-native successor of the current cognitive-process trajectory families covering variable-N, DB-vs-simulation and Claude handoff/re-entry while preserving nuisance and family-split guards."
+  "next_exact_action": "Execute exact committed Hyperposition labeler 1.0.1-candidate + TrainingTrace gate-v2 tests; then build a counterbalanced Hyperposition-native successor of the current cognitive-process trajectory families covering variable-N, DB-vs-simulation and Claude handoff/re-entry while preserving nuisance and family-split guards."
 }

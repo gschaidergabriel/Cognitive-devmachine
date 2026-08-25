@@ -125,7 +125,7 @@ def basis_rows() -> list[dict[str, Any]]:
                 "semantic_target": target,
                 "prompt": prompt,
                 "prompt_sha256": _sha(prompt),
-                "lexical_content_sha256": abstraction.lexical_digest(prompt),
+                "lexical_content_sha256": abstraction.lexical_family_sha(abstraction.lexical_tokens(prompt)),
             })
     return rows
 
@@ -138,13 +138,14 @@ def _eval_rows(split: str, scenarios: tuple[dict[str, Any], ...], seed_base: int
         descriptions = scenario["descriptions"]
         codebook = {mapping[target]: descriptions[target] for target in TARGETS}
         codebook_text = "; ".join(f"{code} means {codebook[code]}" for code in CODES)
+        family_rows: list[dict[str, Any]] = []
         for target in TARGETS:
             n += 1
             prompt = (
                 f"Mapping: {codebook_text}. Hold the following outcome: {descriptions[target]}. "
                 "Emit only the matching symbol."
             )
-            rows.append({
+            family_rows.append({
                 "split": split,
                 "case_id": f"{split.lower()}-{scenario['family_id']}-{n}",
                 "seed": seed_base + n,
@@ -153,9 +154,53 @@ def _eval_rows(split: str, scenarios: tuple[dict[str, Any], ...], seed_base: int
                 "output_code_identity": mapping[target],
                 "prompt": prompt,
                 "prompt_sha256": _sha(prompt),
-                "lexical_content_sha256": abstraction.lexical_digest(prompt),
             })
+        family_tokens = set().union(*(abstraction.lexical_tokens(row["prompt"]) for row in family_rows))
+        lexical_sha = abstraction.lexical_family_sha(family_tokens)
+        scenario_sha = abstraction.canonical_sha({
+            "schema": "CLAY_TRIGGER1_ABSTRACT_SCENARIO_FAMILY/v1",
+            "split": split,
+            "family_id": scenario["family_id"],
+            "prompt_sha256": sorted(row["prompt_sha256"] for row in family_rows),
+        })
+        codebook_sha = abstraction.canonical_sha({
+            "schema": "CLAY_TRIGGER1_ABSTRACT_CODEBOOK_FAMILY/v1",
+            "split": split,
+            "family_id": scenario["family_id"],
+            "mapping": mapping,
+            "codebook": codebook,
+        })
+        for row in family_rows:
+            row["lexical_content_sha256"] = abstraction.lexical_family_sha(abstraction.lexical_tokens(row["prompt"]))
+            row["scenario_family_sha256"] = scenario_sha
+            row["lexical_family_sha256"] = lexical_sha
+            row["codebook_family_sha256"] = codebook_sha
+            rows.append(row)
     return rows
+
+
+def producer_case_specs(split: str) -> list[dict[str, Any]]:
+    split = split.strip().upper()
+    rows = calibration_rows() if split == "CALIBRATION" else holdout_rows() if split == "HOLDOUT" else None
+    if rows is None:
+        raise ValueError(f"SPLIT_INVALID:{split}")
+    return [
+        {
+            "schema": "CLAY_TRIGGER1_LABEL_FREE_FACTORIAL_CASE_SPEC/v1",
+            "case_id": row["case_id"],
+            "seed": row["seed"],
+            "semantic_target": row["semantic_target"],
+            "output_code_identity": row["output_code_identity"],
+            "prompt": row["prompt"],
+            "prompt_sha256": row["prompt_sha256"],
+            "scenario_family_sha256": row["scenario_family_sha256"],
+            "lexical_family_sha256": row["lexical_family_sha256"],
+            "codebook_family_sha256": row["codebook_family_sha256"],
+            "model_facing_target_identity_exposed": False,
+            "model_facing_explicit_semantic_labels": False,
+        }
+        for row in rows
+    ]
 
 
 def calibration_rows() -> list[dict[str, Any]]:

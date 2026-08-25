@@ -1,0 +1,52 @@
+{
+  "allowed_cases": {
+    "T2_GP_PILOT_DB_MATCH_V1": {
+      "case_id": "T2_GP_PILOT_DB_MATCH_V1",
+      "event_id": "t2gp:event:db-match:v1",
+      "formal_discriminator_spec": {
+        "allowed_outcomes": [
+          "MATCH",
+          "MISSING"
+        ],
+        "coordination_rank": 0,
+        "cost_rank": 0,
+        "mismatch_effect": "FALSIFIES",
+        "risk_rank": 0
+      },
+      "formal_discriminator_spec_sha256": "44ac402376a4d7ae906a7e3f277cf5974bfe29f3c2032845924fdb5054f816a9",
+      "policy": {
+        "allowed_outcomes": [
+          "MATCH",
+          "MISSING"
+        ],
+        "execution_scope": "DETERMINISTIC_EVALUATOR_ONLY",
+        "history_mode": "EMPTY_ONLY",
+        "min_separated_live_pairs": 1,
+        "require_complete_live_pair_coverage": true,
+        "required_epistemic_type": "SYNTHETIC_PROOF"
+      },
+      "test_id": "db_probe",
+      "world_id": "t2gp:world:db-match:v1"
+    }
+  },
+  "authority_fences": {
+    "accepted_dataset_tokens_minted": 0,
+    "canonical_truth_allowed": false,
+    "direct_effect_authority": false,
+    "training_credit_minted": 0,
+    "training_eligible": false
+  },
+  "producer": {
+    "producer_schema_or_version": "CLAY_TRIGGER2_DETERMINISTIC_DISCRIMINATOR_PRODUCER_AUTH/v1",
+    "repo_path": "tools/trigger2_discriminator_producer_auth_v1.py",
+    "source_sha256": "d746f146841ffcf2cae321dbb34a051cc6cc872a4f14768ffe3b4f29e37ca8d7"
+  },
+  "purpose": "Pin one deterministic discriminator producer and admissibility policy for Trigger-2 A02 so row-carried admissible/executed/receipt assertions cannot create producer authority.",
+  "schema": "CLAY_TRIGGER2_DETERMINISTIC_DISCRIMINATOR_PRODUCER_AUTHORITY/v1",
+  "status": "CURRENT_SOURCE_AUTHORITY_CANDIDATE_NONPROMOTING",
+  "upstream_requirement": {
+    "must_pass": true,
+    "reason": "Generator/world/event/state subjects must already be reconstructed from repository authority before discriminator production.",
+    "schema": "CLAY_TRIGGER2_GENERATION_PROVENANCE_GATE/v1"
+  }
+}

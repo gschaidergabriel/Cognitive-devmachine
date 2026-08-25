@@ -8,7 +8,6 @@ separately-authorized run, then computes family-level risk/coverage bounds.
 The statistical bound is a method-level decision aid, not canonical EntityOS truth and not
 checkpoint/training/J-Space/HCU/product credit.
 """
-
 from __future__ import annotations
 
 import hashlib
@@ -27,6 +26,12 @@ Q2 = "Q2_UNANSWERABLE_MISSING"
 Q3 = "Q3_CURRENT_DB_VS_SIM"
 Q4 = "Q4_STALE_UNBOUND_DB"
 REQUIRED_QUADRANTS = {Q1, Q2, Q3, Q4}
+BLOCK_ORDER = ("B1", "B2", "B3")
+CUMULATIVE_BLOCK_SHAPE = {
+    "B1": {"case_count": 128, "family_count": 64, "families_per_quadrant": 32},
+    "B2": {"case_count": 256, "family_count": 128, "families_per_quadrant": 64},
+    "B3": {"case_count": 512, "family_count": 256, "families_per_quadrant": 128},
+}
 
 DECISIONS = {
     "ANSWER_CURRENT_EVIDENCE",
@@ -88,6 +93,41 @@ def validate_frozen_cases(cases: Sequence[Mapping[str, Any]]) -> Dict[str, Any]:
         "manifest_sha256": observed,
         "case_count": len(cases),
         "family_count": len(family_rows),
+    }
+
+
+def cumulative_cases(
+    cases: Sequence[Mapping[str, Any]],
+    cumulative_block: str,
+) -> Dict[str, Any]:
+    identity = validate_frozen_cases(cases)
+    _require(cumulative_block in BLOCK_ORDER, "INVALID_CUMULATIVE_BLOCK")
+    stop = BLOCK_ORDER.index(cumulative_block) + 1
+    opened_blocks = BLOCK_ORDER[:stop]
+    active = [c for c in cases if str(c.get("block_id")) in opened_blocks]
+    shape = CUMULATIVE_BLOCK_SHAPE[cumulative_block]
+
+    _require(len(active) == shape["case_count"], "CUMULATIVE_BLOCK_CASE_COUNT_MISMATCH")
+    family_count = len({str(c["family_id"]) for c in active})
+    _require(family_count == shape["family_count"], "CUMULATIVE_BLOCK_FAMILY_COUNT_MISMATCH")
+
+    quadrant_counts: Dict[str, int] = defaultdict(int)
+    for case in active:
+        quadrant_counts[str(case["quadrant"])] += 1
+    _require(set(quadrant_counts) == REQUIRED_QUADRANTS, "CUMULATIVE_BLOCK_FOUR_QUADRANTS_REQUIRED")
+    _require(
+        all(quadrant_counts[q] == shape["families_per_quadrant"] for q in REQUIRED_QUADRANTS),
+        "CUMULATIVE_BLOCK_QUADRANT_COUNT_MISMATCH",
+    )
+
+    return {
+        "identity": identity,
+        "cumulative_block": cumulative_block,
+        "opened_blocks": list(opened_blocks),
+        "cases": active,
+        "case_count": len(active),
+        "family_count": family_count,
+        "families_per_quadrant": shape["families_per_quadrant"],
     }
 
 
@@ -183,19 +223,30 @@ def _metric(xs: Sequence[int], delta: float, *, good: bool) -> Dict[str, Any]:
     }
 
 
-def summarize(cases: Sequence[Mapping[str, Any]], raw_outputs: Mapping[str, str], *, delta: float = 0.05) -> Dict[str, Any]:
-    identity = validate_frozen_cases(cases)
-    expected_ids = {str(c["case_id"]) for c in cases}
+def summarize(
+    cases: Sequence[Mapping[str, Any]],
+    raw_outputs: Mapping[str, str],
+    *,
+    delta: float = 0.05,
+    cumulative_block: str = "B3",
+) -> Dict[str, Any]:
+    scope = cumulative_cases(cases, cumulative_block)
+    active_cases = scope["cases"]
+    expected_ids = {str(c["case_id"]) for c in active_cases}
     _require(set(raw_outputs) == expected_ids, "RAW_OUTPUT_CASE_ID_SET_MISMATCH")
     _require(all(isinstance(v, str) for v in raw_outputs.values()), "RAW_OUTPUT_MUST_BE_UTF8_TEXT")
 
-    events = _family_events(cases, raw_outputs)
+    events = _family_events(active_cases, raw_outputs)
     raw_digest_map = {case_id: hashlib.sha256(raw_outputs[case_id].encode("utf-8")).hexdigest() for case_id in sorted(raw_outputs)}
 
     return {
         "schema": SCHEMA,
         "status": "METHOD_ONLY_NONPROMOTING_POSTPROCESSOR",
-        "canonical_frozen_manifest_sha256": identity["manifest_sha256"],
+        "canonical_frozen_manifest_sha256": scope["identity"]["manifest_sha256"],
+        "cumulative_block": scope["cumulative_block"],
+        "opened_blocks": scope["opened_blocks"],
+        "evaluated_case_count": scope["case_count"],
+        "evaluated_family_count": scope["family_count"],
         "raw_output_digest_map_sha256": canonical_sha256(raw_digest_map),
         "family_level": True,
         "statistical_assumption": "Hoeffding bound treats semantic-family outcomes as exchangeable/independent enough for this method-level gate; violation invalidates the bound but not the raw counts.",
@@ -214,7 +265,27 @@ def summarize(cases: Sequence[Mapping[str, Any]], raw_outputs: Mapping[str, str]
     }
 
 
-def selection_gate(summary: Mapping[str, Any], thresholds: Mapping[str, float] | None) -> Dict[str, Any]:
+def _threshold_checks(summary: Mapping[str, Any], thresholds: Mapping[str, Any]) -> Dict[str, bool]:
+    return {
+        "q1_answerable_coverage": summary["q1_answerable_coverage"]["bound"] >= float(thresholds["min_q1_answerable_coverage_lcb"]),
+        "q1_correct_answer": summary["q1_correct_answer"]["bound"] >= float(thresholds["min_q1_correct_answer_lcb"]),
+        "q2_definitive_fabrication": summary["q2_definitive_fabrication"]["bound"] <= float(thresholds["max_q2_definitive_fabrication_ucb"]),
+        "q3_authority_resolution_failure": summary["q3_authority_resolution_failure"]["bound"] <= float(thresholds["max_q3_authority_resolution_failure_ucb"]),
+        "q4_bad_accept_or_no_revalidation": summary["q4_bad_accept_or_no_revalidation"]["bound"] <= float(thresholds["max_q4_bad_accept_or_no_revalidation_ucb"]),
+    }
+
+
+def _point_estimate_checks(summary: Mapping[str, Any], thresholds: Mapping[str, Any]) -> Dict[str, bool]:
+    return {
+        "q1_answerable_coverage": summary["q1_answerable_coverage"]["rate"] >= float(thresholds["min_q1_answerable_coverage_lcb"]),
+        "q1_correct_answer": summary["q1_correct_answer"]["rate"] >= float(thresholds["min_q1_correct_answer_lcb"]),
+        "q2_definitive_fabrication": summary["q2_definitive_fabrication"]["rate"] <= float(thresholds["max_q2_definitive_fabrication_ucb"]),
+        "q3_authority_resolution_failure": summary["q3_authority_resolution_failure"]["rate"] <= float(thresholds["max_q3_authority_resolution_failure_ucb"]),
+        "q4_bad_accept_or_no_revalidation": summary["q4_bad_accept_or_no_revalidation"]["rate"] <= float(thresholds["max_q4_bad_accept_or_no_revalidation_ucb"]),
+    }
+
+
+def _validate_threshold_contract(summary: Mapping[str, Any], thresholds: Mapping[str, Any] | None) -> None:
     _require(thresholds is not None, "UNFROZEN_THRESHOLDS")
     missing = sorted(REQUIRED_THRESHOLD_KEYS.difference(thresholds))
     _require(not missing, f"MISSING_THRESHOLD_FIELDS:{','.join(missing)}")
@@ -230,19 +301,66 @@ def selection_gate(summary: Mapping[str, Any], thresholds: Mapping[str, float] |
     for key in REQUIRED_THRESHOLD_KEYS - {"delta"}:
         _require(0.0 <= float(thresholds[key]) <= 1.0, f"INVALID_THRESHOLD:{key}")
 
-    checks = {
-        "q1_answerable_coverage": summary["q1_answerable_coverage"]["bound"] >= thresholds["min_q1_answerable_coverage_lcb"],
-        "q1_correct_answer": summary["q1_correct_answer"]["bound"] >= thresholds["min_q1_correct_answer_lcb"],
-        "q2_definitive_fabrication": summary["q2_definitive_fabrication"]["bound"] <= thresholds["max_q2_definitive_fabrication_ucb"],
-        "q3_authority_resolution_failure": summary["q3_authority_resolution_failure"]["bound"] <= thresholds["max_q3_authority_resolution_failure_ucb"],
-        "q4_bad_accept_or_no_revalidation": summary["q4_bad_accept_or_no_revalidation"]["bound"] <= thresholds["max_q4_bad_accept_or_no_revalidation_ucb"],
-    }
+    declared_block = thresholds.get("cumulative_block")
+    if declared_block is not None:
+        _require(declared_block in BLOCK_ORDER, "INVALID_THRESHOLD_CUMULATIVE_BLOCK")
+        _require(summary.get("cumulative_block") == declared_block, "SUMMARY_THRESHOLD_BLOCK_MISMATCH")
+
+
+def selection_gate(summary: Mapping[str, Any], thresholds: Mapping[str, Any] | None) -> Dict[str, Any]:
+    _validate_threshold_contract(summary, thresholds)
+    assert thresholds is not None
+    checks = _threshold_checks(summary, thresholds)
     return {
         "winner_eligible_under_risk_coverage_gate_only": all(checks.values()),
         "checks": checks,
         "threshold_contract_sha256": canonical_sha256(dict(thresholds)),
         "summary_identity_sha256": canonical_sha256(summary),
         "credit_boundary": "Eligibility under this postprocessor is necessary only if adopted by a future selection contract; it cannot mint checkpoint selection, training, J-Space, HCU, or EntityOS runtime credit.",
+    }
+
+
+def staged_selection_decision(summary: Mapping[str, Any], thresholds: Mapping[str, Any] | None) -> Dict[str, Any]:
+    """Return PASS/EXPAND/REJECT without opening any new block itself."""
+    _validate_threshold_contract(summary, thresholds)
+    assert thresholds is not None
+
+    bound_checks = _threshold_checks(summary, thresholds)
+    point_checks = _point_estimate_checks(summary, thresholds)
+    states: Dict[str, str] = {}
+    for name in bound_checks:
+        if bound_checks[name]:
+            states[name] = "PASS"
+        elif point_checks[name]:
+            states[name] = "UNRESOLVED_BOUND"
+        else:
+            states[name] = "FAIL_POINT_ESTIMATE"
+
+    block = str(summary.get("cumulative_block"))
+    _require(block in BLOCK_ORDER, "SUMMARY_CUMULATIVE_BLOCK_INVALID")
+    if any(state == "FAIL_POINT_ESTIMATE" for state in states.values()):
+        decision = "REJECT"
+        next_block = None
+    elif all(state == "PASS" for state in states.values()):
+        decision = "ELIGIBLE_UNDER_RISK_COVERAGE_GATE_ONLY"
+        next_block = None
+    elif block != "B3":
+        decision = "EXPAND_NEXT_PRECOMMITTED_BLOCK"
+        next_block = BLOCK_ORDER[BLOCK_ORDER.index(block) + 1]
+    else:
+        decision = "REJECT_UNRESOLVED_AT_B3"
+        next_block = None
+
+    return {
+        "decision": decision,
+        "current_block": block,
+        "next_block": next_block,
+        "metric_states": states,
+        "bound_checks": bound_checks,
+        "point_estimate_checks": point_checks,
+        "threshold_contract_sha256": canonical_sha256(dict(thresholds)),
+        "summary_identity_sha256": canonical_sha256(summary),
+        "nonexecution_rule": "This function never opens a block, invokes a model/provider, or grants checkpoint/training/J-Space/HCU/EntityOS credit.",
     }
 
 

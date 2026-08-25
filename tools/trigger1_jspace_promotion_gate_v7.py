@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
 """Evidence-bound successor promotion gate for Trigger-1 J-Space claims.
 
-v7 composes the current promotion-v6 chain through the modularity companion with the
-semantic-factorial evidence gate. It closes the remaining self-attestation gap:
-upstream summary declarations cannot produce a positive scientific/owner candidate unless
-calibration and holdout semantic factorials are reconstructed from digest-bound case rows
-and the holdout interaction analysis is bound to that exact case universe.
+v7 composes the current promotion-v6 chain through the evidence-bound modularity-v2
+companion with the semantic-factorial evidence gate. Upstream summary declarations cannot
+produce a positive scientific/owner candidate unless modularity rows and calibration/
+holdout semantic factorial evidence satisfy their respective reconstruction boundaries.
 
 This adjudicator is fail-closed and non-minting. It never runs a model and cannot mint
 canonical semantics, J-Space model runtime, HCU, EntityOS, training, BASE, or real-effect
@@ -19,7 +18,7 @@ import json
 from pathlib import Path
 from typing import Any
 
-import trigger1_jspace_modularity_companion_v1 as modularity
+import trigger1_jspace_modularity_companion_v2 as modularity
 import trigger1_semantic_factorial_evidence_gate_v1 as factorial
 
 VERDICT_SCHEMA = "CLAY_TRIGGER1_JSPACE_PROMOTION_GATE/v7"
@@ -42,6 +41,7 @@ def adjudicate(candidate: dict[str, Any]) -> dict[str, Any]:
     failures = sorted(set(
         list(base.get("v5_specificity_failures", []))
         + list(base.get("modularity_failures", []))
+        + list(base.get("modularity_binding_failures", []))
         + list(bound.get("failures", []))
     ))
 
@@ -65,12 +65,11 @@ def adjudicate(candidate: dict[str, Any]) -> dict[str, Any]:
         "jspace_model_runtime_credit": False,
         "training_credit": False,
         "evidence_boundary": (
-            "v7 composes the current promotion-v6 scientific chain through the modularity companion with independent "
-            "case-row evidence binding. A positive candidate must survive all upstream scientific/modularity controls "
-            "and must reconstruct a complete exactly balanced semantic-target x output-code factorial from per-case "
-            "six-control receipt digests, with the holdout interaction analysis bound to the exact reconstructed holdout "
-            "receipt. This is adjudication only and mints no canonical semantics, runtime, HCU, EntityOS, training, BASE, "
-            "or real-effect credit."
+            "v7 composes promotion-v6 through modularity-v2 and independent semantic-factorial case-row binding. "
+            "A positive candidate must survive upstream scientific controls, reconstruct/digest-bind modularity family "
+            "rows, and reconstruct the balanced semantic-target x output-code factorial from per-case six-control "
+            "receipt digests with holdout interaction binding. External runtime receipt authenticity is still a separate "
+            "boundary. This adjudicator mints no canonical semantics, runtime, HCU, EntityOS, training, BASE, or effect credit."
         ),
     }
 

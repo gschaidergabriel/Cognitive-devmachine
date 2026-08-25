@@ -60,7 +60,7 @@ Zweck: **Aktivität → ausführbarer Patch/Test → reproduzierbare Architektur
 
 <!-- RESEARCH_DISTILLERY_AUTO:BEGIN -->
 ## AUTO — Research Distillery / kumuliertes Wissens-Dataset
-Aktualisiert: `2026-08-25T19:26:54.611410+00:00`
+Aktualisiert: `2026-08-25T19:42:00.564767+00:00`
 
 **1. wichtigste Quote — Entity-Dataset-Yield:** `0 / 11,621 = 0.000%`  
 Kompressionsfaktor Quelltokens : akzeptierte Dataset-Tokens: **UNKNOWN**.
@@ -112,7 +112,7 @@ GO-Worker emittieren `OPEN_RESEARCH_QUESTIONS_JSON`; die Distillery zerlegt Frag
 
 <!-- SYSTEM_ANALYSIS_AUTO:BEGIN -->
 ## AUTO — Gesamtsystem, GO-Fluss, Script-Auswertung und Sonnet-Vergleich
-Aktualisiert: `2026-08-25T19:26:55.225399+00:00`
+Aktualisiert: `2026-08-25T19:42:02.481011+00:00`
 
 ### 1. Wichtigster Effizienzindikator — was geht im Durchschnitt wieder an `go`?
 **Source → GO Pass-through: 0.000%.** Definition: `accepted dataset-token yield × average distinct accepted-packet coverage delivered to GO macrocycles`.
@@ -151,16 +151,16 @@ Bei 0 akzeptierten Dataset-Tokens ist Source→GO exakt 0%; fehlende Reinjection
 - truth/effect/capability boundaries and falsification
 
 **Top offene Forschungsfragen aus der laufenden Queue:**
-- Should provider config be derived from runtime health state automatically rather than static lists?
-- exact-source isolation: what level of OS‑level isolation (PID, network, mount) is required for PASS?
-- exact-source isolation: can a hybrid approach combine read‑only source with dynamic code generation while preserving exact‑source semantics?
-- Wie kann die Genauigkeit der Überprüfung der Admission-Boundary verbessert werden?
-- Wie kann die Skalierbarkeit der Lösung verbessert werden?
-- Kann Engine Identity dynamisch aktualisiert werden ohne Identitätswechsel?
-- Which causal tracing method (activation patching, causal mediation analysis, or counterfactual intervention) yields the most reproducible J-Space/GWT signal for sub-1B models under FREE_ONLY compute constraints?
-- Wie wird die Generationen-Fencing-Überwachung bei Netzwerk-Partitionen umgesetzt?
-- What is the minimal per-credential free-tier verification API call for NVIDIA NIM that can be executed at pre-call binding without consuming free quota?
-- Wie wird die kryptografische Bindung mit bestehenden Hyperposition-Protokollen integriert?
+- Can the concurrency limit be made adaptive based on real-time system metrics?
+- How to maintain zero-cost operation while implementing additional security filters?
+- What is the minimum set of system calls that must be allowed for legitimate child process execution?
+- Can we achieve equivalent security through container-level restrictions instead of process-level hooks?
+- Wie kann die Whitelist von zugelassenen Anbietern automatisch aktualisiert werden?
+- Wie kann die Wirksamkeit der Lösung in einer realen Umgebung überprüft werden?
+- How does the proposed mechanism scale with an increasing number of providers?
+- How to bound anchor storage growth without losing causal chain integrity during long-running HCU epochs?
+- What causal mechanism links provider credential binding to economic safety in the HCU?
+- What are the potential vulnerabilities in the key generation and validation process?
 
 ### 5. Fortschritts-Funnel
 | Stufe | Wert |
@@ -192,7 +192,7 @@ Preisannahme: **Claude Sonnet 5 introductory through 2026-08-31: $2/M input + $1
 | Free-Swarm Usage | 31,313,649 input + 8,618,788 output | **$148.82** |
 | Distillery Modellarbeit | 460 input + 1,455 output | **$0.0155** |
 | zusammen, gemessener LLM-Tokenmix | — | **$148.83** |
-| persistenter Repo-Korpus, Output-only Proxy | 13,744,802 Proxy-Tokens | **$137.45** |
+| persistenter Repo-Korpus, Output-only Proxy | 13,747,358 Proxy-Tokens | **$137.47** |
 
 **Nominal vermiedene Sonnet-Kosten, falls diese Calls tatsächlich $0 kosteten: $148.83. Verifiziert gespart: UNKNOWN.** Die aktuelle typed Authority verbietet die nachträgliche FREE-Klassifikation historischer Provider-Traffic; der Korpuswert ist ebenfalls nur ein Neu-Erzeugungsproxy.
 
@@ -205,7 +205,7 @@ Dieser komplette Block ist Pflichtbestandteil des Publishers. Kompakte Tabellen 
 
 <!-- FREE_SWARM_AUTO:BEGIN -->
 ## AUTO — Live-Auswertung
-Aktualisiert: `2026-08-25T19:26:53.220555+00:00`
+Aktualisiert: `2026-08-25T19:41:59.170265+00:00`
 
 | Kennzahl | Wert |
 |---|---:|
@@ -219,8 +219,8 @@ Aktualisiert: `2026-08-25T19:26:53.220555+00:00`
 | Evident akzeptierte Architektur-Deltas | 0 |
 | Nominal/historisch akzeptierte Architektur-Deltas | 1 |
 | Legacy/unqualifizierte nominale Accepts | 1 |
-| Repo-Korpus-Proxy Tokens (4 Zeichen/Token) | 13744802 |
-| Sonnet-5 Output-only Äquivalent des Repo-Proxys | $137.45 |
+| Repo-Korpus-Proxy Tokens (4 Zeichen/Token) | 13747358 |
+| Sonnet-5 Output-only Äquivalent des Repo-Proxys | $137.47 |
 
 ### Modelle
 | Provider | Modell | Requests | Success | 429 | Input | Output | Total |
@@ -286,8 +286,8 @@ Innovativstes Modell: **NO EVIDENCE YET**
 | GPT/ChatGPT | 0 | UNKNOWN | UNKNOWN% |
 
 ### Research-Entity-Output / Sonnet-Kostenproxy
-API-exakte historische Gesamttokens aller früheren Organe bleiben **UNKNOWN**, solange keine vollständige historische Usage-Buchhaltung existiert. Der messbare persistente Repo-Korpus umfasst aktuell 10648 Textdateien / 54979207 Zeichen ≈ **13744802 Tokens** bei der ausdrücklich nur als Proxy verwendeten 4-Zeichen-Näherung.
-Hypothetische reine Output-Neuerzeugung dieses Proxy-Korpus mit Claude Sonnet 5: **$137.45** zum derzeit geltenden Output-Tarif von $10/M Tokens. Input-/Caching-/Toolkosten sind darin nicht enthalten.
+API-exakte historische Gesamttokens aller früheren Organe bleiben **UNKNOWN**, solange keine vollständige historische Usage-Buchhaltung existiert. Der messbare persistente Repo-Korpus umfasst aktuell 10649 Textdateien / 54989432 Zeichen ≈ **13747358 Tokens** bei der ausdrücklich nur als Proxy verwendeten 4-Zeichen-Näherung.
+Hypothetische reine Output-Neuerzeugung dieses Proxy-Korpus mit Claude Sonnet 5: **$137.47** zum derzeit geltenden Output-Tarif von $10/M Tokens. Input-/Caching-/Toolkosten sind darin nicht enthalten.
 <!-- FREE_SWARM_AUTO:END -->
 
 

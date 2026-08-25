@@ -1,0 +1,86 @@
+{
+  "schema": "CLAY_TRIGGER2_TWO_PHASE_COHORT_EXACT_CALL_UNIQUENESS_AUDIT/v1",
+  "date": "2026-08-26",
+  "trigger": "triggerwort2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority_epoch": "8.83_DELTA",
+  "mode": "FREE_ONLY",
+  "status": "SOURCE_ONLY_AUDIT_NONPROMOTING",
+  "observed_main_before_write": "98dfdc5d9ba29470bab394d36c66098cee696d1a",
+  "authority_state": {
+    "free_swarm_provider_admission": "OWNER_EMERGENCY_STOP_HARD_OFF",
+    "runtime_quiescence": "ACTIVE_FAIL_POST_STOP_PROVIDER_ATTEMPT_COUNTERS_INCREASED",
+    "provider_model_runtime_admitted": false,
+    "training_execution_admitted": false,
+    "physical_grid10_runtime_credit": 0,
+    "checkpoint_selection_credit": 0,
+    "jspace_model_credit": 0,
+    "training_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  },
+  "basis": {
+    "two_phase_source": "tools/trigger2_node_result_model_call_two_phase_authority_v1.py",
+    "two_phase_source_blob_sha1": "26756e6912c89be625a498534c44befecb1f21b2",
+    "two_phase_tests": "tests/test_trigger2_node_result_model_call_two_phase_authority_v1.py",
+    "two_phase_tests_blob_sha1": "02b8c91576b7436cbc864392062a490b83431691",
+    "two_phase_delta": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_TWO_PHASE_MODEL_CALL_AUTHORITY_DELTA_V1_GPT56SOL.json"
+  },
+  "observed_source_fact": {
+    "id": "T2_TWO_PHASE_COHORT_EXACT_CALL_UNIQUENESS_NOT_EXPLICITLY_GATED",
+    "reality_level": "R0_SOURCE_OBSERVED_PLUS_R1_CAUSAL_PROTOCOL_INFERENCE",
+    "detail": "derive_authority_cohort_id validates one cohort plan and uniqueness of grid_cell_id, controller_observed_node_id, controller_observed_pid, launch_descriptor_sha256, executor_observation_sha256 and raw_node_result_packet_digest. It does not explicitly require source_bound_model_call_identity_sha256 to be unique across cohort members.",
+    "test_coverage_observation": "The existing negative test named test_reusing_same_call_observation_across_two_cells_is_rejected duplicates executor_observation_sha256. It does not construct two distinct launch descriptors and two distinct executor observations that both reference the same exact source_bound_model_call_identity_sha256."
+  },
+  "hypothesis": {
+    "H1": "For a physical/logical GRID10 cohort in which each member represents one independently attributed model invocation, the exact source_bound_model_call_identity_sha256 must be injective over cohort members. Otherwise one exact call can be projected into multiple distinct cell/node authority envelopes.",
+    "counterhypothesis": "Unique launch descriptors and executor observations are sufficient because every cell has a distinct provenance record even when they refer to the same exact model call.",
+    "counterassessment": "Distinct records prove distinct bookkeeping events, not distinct model invocations. The existing source-bound call identity is the identity of the exact call; allowing two members to reference one call weakens claims about per-cell invocation multiplicity and causal attribution.",
+    "boundary_condition": "If a future HCU mode intentionally permits one exact model call to fan out into multiple logical consumers, that must be represented as one call with explicit fan-out/consumer identities, not silently counted as multiple independently executed calls."
+  },
+  "cheapest_discriminator": {
+    "type": "SOURCE_ONLY_NEGATIVE_FIXTURE",
+    "construction": [
+      "Build member A with launch A, executor observation A and exact call C.",
+      "Build member B with distinct node, cell, PID, node admission, launch B and executor observation B, but reuse exact call C and its exact output/ABI/source identities.",
+      "Keep all currently enforced uniqueness fields distinct and valid.",
+      "Ask derive_authority_cohort_id to admit the two-member fixture."
+    ],
+    "required_fail_closed_result": "AUTHORITY_COHORT_MODEL_CALL_DUPLICATE",
+    "current_source_prediction": "LIKELY_ACCEPTS_UNLESS_A_PARALLEL_SUCCESSOR_ADDS_EXACT_CALL_UNIQUENESS_BEFORE_EXECUTION_OF_THE_FIXTURE"
+  },
+  "recommended_minimal_delta": {
+    "source_change": "In derive_authority_cohort_id add source_bound_model_call_identity_sha256 to the cohort-level injective identity checks.",
+    "negative_test": "TWO_DISTINCT_LAUNCH_AND_EXECUTOR_OBSERVATIONS_REUSING_ONE_EXACT_MODEL_CALL_MUST_REJECT",
+    "positive_control": "Two distinct exact model calls may share the same semantic output identity if all call identities and required invocation identities are distinct.",
+    "do_not_do": [
+      "Do not create a second model-call identity schema.",
+      "Do not move call identity into the model-generated NODE_RESULT payload.",
+      "Do not infer runtime or GRID10 promotion from this source-only audit."
+    ]
+  },
+  "execution": {
+    "provider_called": false,
+    "model_runtime_executed": false,
+    "vps_execution_performed": false,
+    "training_executed": false,
+    "unusual_experiment_executed": false,
+    "source_only_audit": true
+  },
+  "credits": {
+    "research_delta": 1,
+    "source_audit_credit": 1,
+    "runtime_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "checkpoint_selection_credit": 0,
+    "jspace_model_credit": 0,
+    "training_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0
+  },
+  "next_exact_action": "Re-enter current main. If no parallel successor has already closed it, add an exact-call injectivity check to the retained two-phase cohort validator and a negative fixture with distinct launch/observation identities sharing one exact call. P0 FreeSwarm quiescence remains external and blocks provider/model/training/runtime promotion."
+}

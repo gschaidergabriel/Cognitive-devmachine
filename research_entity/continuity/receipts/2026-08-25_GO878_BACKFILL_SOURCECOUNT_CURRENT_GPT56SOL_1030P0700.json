@@ -1,0 +1,55 @@
+{
+  "schema": "FREE_SWARM_BACKFILL_SOURCECOUNT_IDEMPOTENCE_RECEIPT/v1",
+  "authority_epoch": "8.78",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "trigger": "go",
+  "organ": "GPT-5.6-Sol",
+  "base_main": "e78fdbd27a3dceaac961aebfbb4d638d65cdea82",
+  "branch": "go878/backfill-sourcecount-current-gpt56sol-20260825t1030",
+  "finding": {
+    "classification": "REPLAY_NONIDEMPOTENT_SCHEDULING_METADATA",
+    "mechanism": "Historical candidate scheduling uses source_count as a secondary priority, while repeated replay/chunk variants can represent the same source_event_id. Counting repeated provenance as fresh source weight can bias the 39M-token backlog without adding independent evidence.",
+    "counterhypothesis": "The inflation is harmless because source_count is only a scheduling hint, not evidence authority.",
+    "discriminator": "Reconcile linked candidates to COUNT(DISTINCT source_event_id) and require a second identical reconciliation pass to produce zero changes while leaving unlinked legacy rows untouched."
+  },
+  "delta": {
+    "helper": "tools/free_swarm_backfill_provenance.py",
+    "active_path": "tools/run_free_evidence_forge_backfill.py",
+    "test": "tests/test_free_swarm_backfill_provenance_878.py",
+    "rule": "For candidates with candidate_sources links, source_count is reconciled to COUNT(DISTINCT source_event_id) after historical ingestion. Candidates with no provenance links are not silently reinterpreted.",
+    "second_truth_or_forge_authority_created": false
+  },
+  "local_deterministic_test": {
+    "status": "PASS",
+    "passed": 3,
+    "failed": 0,
+    "scope": "ISOLATED_SQLITE_HELPER_ONLY",
+    "helper_sha256": "05fbd4e2c77e9a4c6d200046f9be4dfdd0eb50311774158893ab3b8246366d25",
+    "test_sha256": "738c61daa4525d6d69d3fd0d4e1ec0e7ae056fc77539fdfcb26041974656c09e",
+    "cases": [
+      "same source_event_id across multiple chunks/extractors counts once",
+      "second reconciliation pass is idempotent",
+      "legacy candidate without candidate_sources links remains unchanged"
+    ]
+  },
+  "coordination": {
+    "shared_immutable_macrocycle_identity": null,
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_experiments_executed": 0,
+    "stale_donor": "PR1851",
+    "stale_donor_mergeable": false
+  },
+  "credits": {
+    "historical_backfill_runtime": 0,
+    "distillery_replay_v2_runtime": 0,
+    "whole_entityos_hcu_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0
+  },
+  "next_exact_gate": "Run the current branch plus historical-backfill suite on the authorized clay-direct-dev path and prove that a full second saturation pass does not increase source_count or accepted evidence weight for unchanged source_event_id provenance.",
+  "evidence_boundary": "Local deterministic unit evidence verifies only the reconciliation invariant. It does not prove full historical saturation, exact-current clay-direct-dev runtime, EntityOS/HCU acceptance, J-Space model causality, or training readiness."
+}

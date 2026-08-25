@@ -17,7 +17,7 @@ import subprocess
 
 SOURCE_REL = "tools/free_swarm_historical_backfill.py"
 TEST_REL = "tests/test_free_swarm_historical_backfill.py"
-EXPECTED_SOURCE_BLOB = "f095ec12ab28aa5df87b1762b2cc19afca592365"
+EXPECTED_SOURCE_BLOB = "5cb0045f5c355170372efd4f08c033b33c91fbed"
 EXPECTED_TEST_BLOB = "702c2e42fe6e4881ef7a08b67f6b8b0b567ac8b4"
 
 

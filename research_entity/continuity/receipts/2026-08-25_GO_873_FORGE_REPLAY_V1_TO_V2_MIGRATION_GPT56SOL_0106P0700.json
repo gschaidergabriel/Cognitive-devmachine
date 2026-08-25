@@ -1,0 +1,55 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "authority_epoch": "8.73",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "trigger": "go",
+  "organ": "GPT-5.6-Sol",
+  "canonical_main_observed_before_write": "9f1ffad6a6f687285b1f34970fbd4a47b68c04e1",
+  "finding": {
+    "classification": "SOURCE_AND_DETERMINISTIC_MIGRATION_REPRODUCER_CONFIRMED",
+    "statement": "Current main correctly excludes delta_id, evaluated_at and candidate narration from replay-stable packet/evidence preimages, but reused CLAY_FORGE_EXECUTION_REPLAY_IDENTITY/v1 and CLAY_FORGE_MEASURED_EVIDENCE_IDENTITY/v1 after changing those preimages. Persisted pre-change v1 rows retain non-null old digests computed with delta_id; new v1 digests miss them and the NULL-only legacy fence also misses them, so an envelope-renamed semantic replay after upgrade can mint another Distillery packet/token increment.",
+    "impact": "REPLAY_IDENTITY_VERSION_DRIFT_CAN_REENABLE_DUPLICATE_DATASET_MINT_AFTER_UPGRADE"
+  },
+  "hypothesis": "Version the delta_id-independent replay/measured identity as v2, preserve historical v1 preimages append-only, add v2 digest columns, and fail closed on possible pre-v2 overlap whose v2 identity cannot be reconstructed exactly.",
+  "counterhypothesis": "The existing legacy NULL replay-identity fence is sufficient for all historical rows.",
+  "counterhypothesis_disposition": "FALSIFIED_BY_DETERMINISTIC_MIGRATION_REPRODUCER: pre-change v1 rows have non-null old digests and bypass the NULL-only fence.",
+  "delta": {
+    "source": "tools/ingest_forge_accepts_into_distillery.py",
+    "test": "tests/test_forge_distillery_replay_identity_v2_migration_873.py",
+    "replay_identity_schema": "CLAY_FORGE_EXECUTION_REPLAY_IDENTITY/v2",
+    "measured_evidence_identity_schema": "CLAY_FORGE_MEASURED_EVIDENCE_IDENTITY/v2",
+    "historical_v1_preimages_preserved": true,
+    "current_rebuild_stable_packet_preimage_preserved": true,
+    "database_migration": "ADDITIVE_V2_COLUMNS_PLUS_PARTIAL_UNIQUE_V2_REPLAY_INDEX",
+    "pre_v2_unknown_policy": "FAIL_CLOSED_LEGACY_REPLAY_IDENTITY_UNRESOLVED",
+    "public_acceptance_semantics_preserved": "EVIDENCE_QUALIFIED_ONLY"
+  },
+  "deterministic_reproducer": {
+    "scope": "LOCAL_DETERMINISTIC_SQLITE_SOURCE_COMPONENT_ONLY",
+    "in_place_v1_upgrade_failure": {"replay_admitted": 1, "replay_duplicates": 0, "accepted_dataset_tokens_delta": 263, "forge_execution_packets_total": 2},
+    "versioned_v2_candidate": {"replay_admitted": 0, "replay_duplicates": 0, "rejected": {"LEGACY_REPLAY_IDENTITY_UNRESOLVED": 1}, "accepted_dataset_tokens_delta": 0, "forge_execution_packets_total": 1},
+    "focused_v2_regressions": "3/3 PASS_ON_DETERMINISTIC_CANDIDATE",
+    "credit_boundary": "NOT_EXACT_CURRENT_REPOSITORY_BOUND_RUNTIME_EVIDENCE"
+  },
+  "go_tracks": {
+    "track_a": "ADVANCED: migration-safe Forge-to-Distillery replay identity prevents duplicate packet/token mint across identity-schema upgrades",
+    "track_b": "ADVANCED: versioned reusable causal/evidence identity with append-only provenance compatibility and fail-closed migration boundary",
+    "track_c": "ADVANCED_AT_DATASET_SAFETY_SCOPE: future J-Space/training data cannot gain duplicate credit from envelope renaming across an identity-schema upgrade; model/J-Space/training runtime credit remains zero"
+  },
+  "coordination": {
+    "overlap_search": "No open Forge/Distillery replay-identity v2 migration PR or issue was found before implementation; retained HCU donor remains repository-qualified PR #1263.",
+    "parallel_main_reentry": "Concurrent main work removed delta_id/timestamp from packet/replay preimages and added rebuild/restart/terminal-evidence convergence. The PR branch was rebased onto that current source and preserves those improvements; its sole implementation delta is the nonduplicate v1-to-v2 migration boundary.",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_interventions_executed": 0
+  },
+  "execution_boundary": {"provider_or_model_network_io": false, "paid_or_together_execution": false, "canonical_effect": false, "runtime_credit_granted": 0},
+  "artefact_readme": {
+    "status": "NO_CHANGE_WITH_REASON",
+    "reason": "the artefact/README.md was concurrently updated by another current go lane; this PR preserves that new base content and records its own exact replay-migration delta in this receipt rather than clobbering the current-facing surface."
+  },
+  "credits": {"provider_runtime_credit": 0, "entityos_hcu_whole_runtime_credit": 0, "hcu_full_runtime_credit": 0, "jspace_model_runtime_credit": 0, "training_credit": 0, "whole_product_pass": false},
+  "next_exact_gate": "Execute the v2 migration regression on exact PR/current source, then repository-bound Forge-to-Distillery live promotion: one evidence-qualified ACCEPT -> exactly one persistent packet -> accepted_dataset_tokens > 0 -> semantic replay with changed timestamp/narration/delta_id adds zero packets and zero tokens."
+}

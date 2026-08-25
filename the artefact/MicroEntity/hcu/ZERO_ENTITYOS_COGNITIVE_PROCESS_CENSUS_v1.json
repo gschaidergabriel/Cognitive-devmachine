@@ -1,0 +1,62 @@
+{
+  "schema_version": "ZERO_ENTITYOS_COGNITIVE_PROCESS_CENSUS/v1",
+  "authority_epoch": "OWNER_2026-08-25_PLUS_SUPERVISOR_8.78",
+  "status": "SOURCE_SPECIFICATION_ONLY",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "target": "VARIABLE_08B_COGNITIVE_GRID_PLUS_PERSISTENT_DB_PLUS_CLAUDE_CODE",
+  "identity_law": {
+    "process_semantic_identity_independent_of_grid_size": true,
+    "logical_cell_not_persistent_entity": true,
+    "grid_size_is_runtime_assignment_metadata": true,
+    "majority_does_not_mint_truth": true
+  },
+  "authority_boundaries": {
+    "durable_state": "UnifiedDB_OR_CURRENT_COMPATIBILITY_CANONICAL_DB",
+    "model_grid_workspace_outputs": "CANDIDATE_PROJECTION_MEASUREMENT_ONLY",
+    "effects": "EffectGate+EffectJournal",
+    "claude_code_interface": "OBSERVABLE_TEXT_TOOL_SESSION_ONLY_UNLESS_STRONGER_INTERFACE_IS_EXECUTABLY_PROVEN",
+    "second_truth_store": "FORBIDDEN"
+  },
+  "processes": [
+    {"id": "CONTEXT_INTERPRET", "function": "task/context interpretation", "default_output": "WORKSPACE_CANDIDATE", "training_family": "process_state_interpretation"},
+    {"id": "RELEVANCE_SELECT", "function": "attention/relevance selection", "default_output": "WORKSPACE_CANDIDATE", "training_family": "attention_relevance"},
+    {"id": "WORKING_STATE_RECONSTRUCT", "function": "working-state reconstruction from admitted refs", "default_output": "WORKSPACE_CANDIDATE", "training_family": "state_reconstruction"},
+    {"id": "MEMORY_SELECT", "function": "memory selection from canonical database references", "default_output": "REFERENCE_SELECTION", "training_family": "db_retrieval"},
+    {"id": "MEMORY_UPDATE_PROPOSE", "function": "memory update proposal; never direct durable write", "default_output": "DB_WRITE_PROPOSAL", "training_family": "db_write_proposal"},
+    {"id": "GOAL_MAINTAIN", "function": "goal/state maintenance", "default_output": "WORKSPACE_CANDIDATE", "training_family": "goal_state"},
+    {"id": "PLAN", "function": "planning", "default_output": "ACTION_CANDIDATES", "training_family": "planning"},
+    {"id": "REPLAN", "function": "replanning after evidence/outcome", "default_output": "ACTION_CANDIDATES", "training_family": "replanning"},
+    {"id": "DECOMPOSE", "function": "decomposition of work", "default_output": "PROCESS_CANDIDATES", "training_family": "decomposition"},
+    {"id": "ALTERNATIVES_GENERATE", "function": "generation of alternatives/hypotheses", "default_output": "HYPERPOSITION_SET", "training_family": "alternatives"},
+    {"id": "CONTINUATION_SIMULATE", "function": "bounded simulation of possible continuations", "default_output": "NONCANONICAL_SIMULATION", "training_family": "simulation"},
+    {"id": "UNCERTAINTY_ESTIMATE", "function": "confidence/uncertainty handling", "default_output": "UNCERTAINTY_MEASUREMENT", "training_family": "uncertainty"},
+    {"id": "CONTRADICTION_RECONCILE", "function": "contradiction and evidence handling", "default_output": "EVIDENCE_CANDIDATES", "training_family": "evidence_reconciliation"},
+    {"id": "SELF_EVALUATE", "function": "self-evaluation/critique", "default_output": "CRITIQUE_CANDIDATE", "training_family": "self_evaluation"},
+    {"id": "NEXT_COGNITIVE_ACTION_SELECT", "function": "selection of next cognitive action", "default_output": "PROCESS_CANDIDATES", "training_family": "next_action"},
+    {"id": "TOOL_ACTION_PROPOSE", "function": "tool/action proposal; never direct effect", "default_output": "EFFECT_PROPOSAL", "training_family": "tool_action_proposal"},
+    {"id": "OUTCOME_RECONCILE", "function": "outcome reconciliation", "default_output": "WORKSPACE_CANDIDATE", "training_family": "outcome_reconciliation"},
+    {"id": "RETRY_RECOVERY_DECIDE", "function": "retry/recovery decisions with unknown-outcome preservation", "default_output": "ACTION_CANDIDATES", "training_family": "retry_recovery"},
+    {"id": "LONG_LOOP_CONTINUE", "function": "long-loop continuation decision", "default_output": "PROCESS_CANDIDATES", "training_family": "long_loop"},
+    {"id": "WORKSPACE_COMPETE", "function": "global-workspace competition", "default_output": "WORKSPACE_CANDIDATE", "training_family": "workspace_competition"},
+    {"id": "WORKSPACE_BROADCAST", "function": "workspace broadcast", "default_output": "WORKSPACE_BROADCAST_CANDIDATE", "training_family": "workspace_broadcast"},
+    {"id": "WORKSPACE_UPTAKE", "function": "workspace uptake/re-entry", "default_output": "WORKSPACE_CANDIDATE", "training_family": "workspace_reentry"},
+    {"id": "CLAYCODE_TRANSFORM", "function": "ClayCode-native compact cognitive transform", "default_output": "WORKSPACE_CANDIDATE", "training_family": "claycode_transform"},
+    {"id": "HYPERPOSITION_TRANSFORM", "function": "semantic Hyperposition transform preserving unresolved alternatives", "default_output": "HYPERPOSITION_SET", "training_family": "hyperposition"},
+    {"id": "CLAUDE_CODE_HANDOFF", "function": "prepare compact observable-interface handoff to Claude Code", "default_output": "CLAUDE_CODE_HANDOFF", "training_family": "claude_code_handoff"},
+    {"id": "CLAUDE_CODE_REENTRY", "function": "ingest Claude Code result into workspace candidate state with causal-use probe", "default_output": "WORKSPACE_CANDIDATE", "training_family": "claude_code_return"},
+    {"id": "JSPACE_OBSERVE", "function": "model-specific J-Space observation only when causally supported", "default_output": "MEASUREMENT_ONLY", "training_family": "jspace_observation"},
+    {"id": "JSPACE_CONTROL_PROPOSE", "function": "model-specific J-Space control proposal; no semantic promotion by presence", "default_output": "CONTROL_CANDIDATE", "training_family": "jspace_control"}
+  ],
+  "db_vs_simulation_boundary": {
+    "DURABLE_EXACT": ["canonical facts", "durable memory", "task/project state", "historical events/results", "evidence/provenance references", "long-lived goals/configuration", "indexes/retrieval structures", "checkpoints/snapshots", "exact counters/ids/epochs/digests"],
+    "SIMULATED_EPHEMERAL": ["attention state", "hypotheses", "plans before admission", "working interpretations", "uncertainty estimates", "critiques", "workspace competition state", "bounded continuation simulations"],
+    "MIXED_PROPOSAL_BOUNDARY": ["memory updates", "goal updates", "tool actions", "effect requests", "workspace-to-database compression"]
+  },
+  "training_readiness": {
+    "families_derive_from_census": true,
+    "must_include": ["db_vs_simulation_discrimination", "variable_n_invariance", "majority_not_truth", "stale_generation_rejection", "false_memory_rejection", "fake_authority_rejection", "unknown_effect_outcome_preservation", "claude_code_handoff_and_reentry", "workspace_competition_broadcast_uptake", "hard_negative_evidence_contradiction"],
+    "paid_training_authorized": false,
+    "training_credit": 0
+  }
+}

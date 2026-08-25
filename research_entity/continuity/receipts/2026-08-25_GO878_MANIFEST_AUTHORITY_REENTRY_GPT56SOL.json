@@ -1,0 +1,60 @@
+{
+  "schema": "CLAY_GO_RESEARCH_RECEIPT/v1",
+  "authority_epoch": "8.78",
+  "persistent_research_entity": "Clay",
+  "temporary_worker_role": "ORGAN_NOT_ENTITY",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "trigger": "go",
+  "base_main": "25ce07e151749b7814e20f778f3034a7ca1e7370",
+  "branch": "go878/manifest-authority-sync-gpt56sol-20260825-1036",
+  "observed": {
+    "supervisor_inbox_epoch": "8.78",
+    "program_state_epoch": "8.78",
+    "free_provider_admission_epoch": "8.78",
+    "artefact_manifest_epoch_before": "8.72",
+    "artefact_manifest_blob_before": "b233ce18a33a4934708b7b6a624ccd12fe340552",
+    "artefact_manifest_blob_after": "77c48b4548754cfa0aebc5d93db9294335be7b04",
+    "manifest_update_commit": "9bd7bc85fb9e7990afc80818a4a90ddd1da7941b",
+    "clay_direct_dev_roundtrip_run_32802727269": "QUEUED_NONTERMINAL",
+    "retained_controller_probe_run_32803694800": "QUEUED_NONTERMINAL",
+    "retained_hcu_donor": "gschaidergabriel/clay-global-research-entity#1263",
+    "retained_vcr_executor": "gschaidergabriel/Dr.-Unterweger#810",
+    "historical_source_count_donor": "gschaidergabriel/clay-global-research-entity#1851",
+    "historical_exhaustiveness_successor": "gschaidergabriel/clay-global-research-entity#1879"
+  },
+  "finding": {
+    "classification": "CURRENT_FACING_AUTHORITY_STALE_ISLAND",
+    "detail": "Canonical main had already synchronized BOOTSTRAP_MINIMAL, PROGRAM_STATE and FREE_PROVIDER_ADMISSION to inbox-selected supervisor 8.78 while the artefact manifest still selected 8.72 in authority_correction, execution_policy.active_supervisor_epoch, latest_go_runtime_gate.authority_epoch and coordination_authority.supervisor.",
+    "falsifier": "A current-main manifest selecting 8.78 at all successor-dynamic authority fields would falsify the stale-island finding.",
+    "existing_regression": "tests/test_current_facing_authority_alignment_v1.py",
+    "test_execution": "NOT_EXECUTED_IN_THIS_ORGAN; SOURCE_LEVEL_EXPECTATION_ONLY"
+  },
+  "backfill_reentry": {
+    "prompt_only_fix_on_main": "014deaa4ea2728650cdd95a6bfbbf09182ab8ad4",
+    "remaining_counterhypothesis": "Producer prompt correctness alone is insufficient if consumer progress semantics can still mark SATURATED without explicit conservative exhaustiveness evidence.",
+    "nonduplicate_lane": "PR1879",
+    "action": "DO_NOT_DUPLICATE_OR_MERGE_UNVERIFIED; RETAIN AS SUCCESSOR DONOR UNTIL REBASED/EXECUTED"
+  },
+  "go_tracks": {
+    "track_a": "ADVANCED_CURRENT_FACING_AUTHORITY_CONVERGENCE",
+    "track_b": "HCU_NO_CHANGE_WITH_REASON: retained donor lanes already own HCU/Typed-Entry implementation; this cycle repaired a cross-cutting authority/evidence boundary instead of creating a duplicate HCU lane",
+    "track_c": "TRAINING_READINESS_NO_CHANGE_WITH_REASON: upstream historical conversion and exact runtime gates remain unresolved; no exact-source terminal J-Space model receipt exists"
+  },
+  "coordination": {
+    "shared_reproducible_macrocycle_id": "UNAVAILABLE_TO_THIS_ORGAN",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT"
+  },
+  "runtime_credit": {
+    "entityos_hcu_whole": 0,
+    "hcu_full": 0,
+    "provider_runtime": 0,
+    "jspace_model": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "paid_or_provider_execution": "NONE",
+  "together_execution": "NONE",
+  "claim_scope": "SOURCE_CONTROL_PLANE_AND_AUTHORITY_MIRROR_ONLY"
+}

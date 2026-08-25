@@ -23,7 +23,7 @@ def request():
         "admission_id": "adm-1",
         "generation": 7,
         "process_instance_id": "proc-identity-bound-upstream",
-        "process_id": "PLAN",
+        "process_id": "ZECP06",
         "step_index": 3,
         "parent_process_instance_id": "parent-2",
         "input_refs": ["db:task/1"],
@@ -37,7 +37,7 @@ def result(candidates):
     return {
         "schema_version": RESULT_VERSION,
         "process_instance_id": "proc-identity-bound-upstream",
-        "process_id": "PLAN",
+        "process_id": "ZECP06",
         "candidates": candidates,
         "evidence_refs": ["ev:1"],
         "uncertainty": 0.25,
@@ -51,7 +51,8 @@ def test_semantic_identity_excludes_topology():
     assert "grid_size" not in material
     assert "cell_id" not in material
     assert "replica_index" not in material
-    assert material["process_id"] == "PLAN"
+    assert material["process_id"] == "ZECP06"
+    assert material["census_schema"] == "ZERO_ENTITYOS_COGNITIVE_PROCESS_CENSUS/v1"
 
 
 def test_semantic_request_rejects_topology_fields():

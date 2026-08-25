@@ -16,7 +16,14 @@ import threading
 import time
 from typing import Any
 
-from free_swarm_historical_backfill import load_backfill_packets
+import free_swarm_historical_backfill as historical_backfill_core
+from free_swarm_backfill_exhaustiveness_878 import install as install_exhaustiveness
+
+# Producer-side packet scheduling and the backlog-first Forge consumer must share
+# one completion law; otherwise the producer can stop emitting packets at pass 3
+# while the consumer still considers the chunk scientifically unresolved.
+install_exhaustiveness(historical_backfill_core)
+load_backfill_packets = historical_backfill_core.load_backfill_packets
 
 ARTIFACT_ROOT = Path(os.getenv("CLAY_SWARM_ARTIFACT_ROOT", "/artifacts/clay-entityos-swarm"))
 FORGE_DB = ARTIFACT_ROOT / "forge/forge.sqlite3"

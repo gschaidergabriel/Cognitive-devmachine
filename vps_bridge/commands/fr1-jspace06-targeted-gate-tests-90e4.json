@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v4",
+  "command_id": "fr1-jspace06-targeted-gate-tests-90e4",
+  "op": "exec",
+  "cwd": "/workspace/clay-global-research-entity",
+  "timeout_seconds": 900,
+  "command": "set -euo pipefail; echo source_head=$(git rev-parse HEAD); V=/cache/clay-jspace-test-venv; $V/bin/python -m pip install -q numpy; for t in tests/test_trigger1_jspace_promotion_gate_v5.py tests/test_trigger1_jspace_promotion_gate_v6.py tests/test_trigger1_jspace_promotion_gate_v7.py tests/test_trigger1_semantic_simplex_rank_admission.py tests/test_trigger1_semantic_simplex_rank_analyze.py tests/test_trigger1_semantic_simplex_blocked_rank_v1.py; do echo ===$t===; $V/bin/python $t; done"
+}

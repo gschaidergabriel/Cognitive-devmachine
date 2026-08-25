@@ -23,7 +23,7 @@ Build the highest-quality, evidence-grounded training corpus and training/evalua
 - GWT competition, broadcast, uptake and re-entry;
 - semantic Hyperposition: unresolved alternatives, evidence/counterevidence, higher-order relations, topology and discriminators without premature collapse;
 - Typed Entry -> route/cell candidate behavior;
-- physical GRID10 role flexibility and shared-state coordination;
+- physical GRID10 role flexibility and coordinator-only shared-state writes;
 - compact ClayCode/GRF projection;
 - provenance/generation/capability/resource fail-closed behavior;
 - script-only/no-model abstention decisions;
@@ -48,7 +48,8 @@ Every `2` run reads and may update:
 
 - `research_entity/claycode/TRIGGER2_QWEN35_08B_FULLFT_MASTER_PLAN_V1.md`
 - `research_entity/claycode/TRIGGER2_XENO_FUNCTIONALITY_TO_DATA_MATRIX_V1.md`
-- `research_entity/claycode/TRIGGER2_GRID10_SHARED_STATE_COORDINATION_ARCHITECTURE_V1.md`
+- `research_entity/claycode/TRIGGER2_GRID10_SHARED_STATE_COORDINATION_ARCHITECTURE_V2.md`
+- `research_entity/claycode/TRIGGER2_OWNER_CORRECTION_COORDINATOR_ONLY_S1_WRITES_2026-08-25.md`
 - `research_entity/claycode/TRIGGER2_TARGET_LOCK_V1.json`
 - `research_entity/claycode/TRIGGER2_TRAINING_WEB_RESEARCH_LEDGER_V1.md`
 - newest `research_entity/trigger_runs/2/*/FINAL_REPORT.md`
@@ -78,7 +79,7 @@ Every run performs fresh, targeted research. Search at least these lanes when ma
 6. Small-model specialization — evidence specific to sub-1B/1B-class models when available; do not transfer large-model findings without stating the extrapolation.
 7. J-Space / representation control — causal representation/steering, activation intervention, matched controls, hidden-state measurement and failures of output-proxy claims.
 8. Hyperposition/GWT analogues — uncertainty representation, multiple-hypothesis preservation, ambiguity handling, structured latent/task-state supervision, workspace routing and evidence-gated collapse.
-9. Shared-state multi-agent coordination — explicit shared memory/state, blackboard architectures, dynamic coordinator/leader roles, replicated state machines, MVCC/CAS, correlated-error/consensus traps, failure/rejoin, and communication-overhead minimization.
+9. Shared-state multi-agent coordination — explicit shared memory/state, blackboard architectures, dynamic coordinator/leader roles, single/few-writer shared-state designs, MVCC/CAS, correlated-error/consensus traps, failure/rejoin, and communication-overhead minimization.
 10. Quantization — llama.cpp/GGUF current quantization behavior, Q4_K_M, importance-matrix methods, Q5_K_M/Q8 challengers and architecture-specific regressions.
 11. Evaluation — pre/post FT causal tests, fail-closed tests, calibration, adversarial OOD, seed variance, quantization regression, latency/RAM/throughput and matched-compute GRID10 challengers.
 
@@ -95,7 +96,8 @@ Each run must improve or explicitly NO_CHANGE one of:
 - Hyperposition examples/controls;
 - J-Space vector-control packet examples;
 - GWT/workspace examples;
-- physical GRID10 shared-state/coordinator trajectories;
+- physical GRID10 coordinator-only shared-state trajectories;
+- ordinary-node `NODE_RESULT/v1` return trajectories;
 - correlated-consensus trap families;
 - retention anchors;
 - curriculum/mixture schedule;
@@ -123,7 +125,7 @@ Re-evaluate, from current data statistics and web evidence:
 - eval cadence/checkpoints;
 - mixture weights/curriculum;
 - stopping/overfit criteria;
-- curriculum order for single-node skills -> coordinator role -> multi-node trajectories;
+- curriculum order for single-node skills -> ordinary GRID read/return discipline -> coordinator role -> multi-node trajectories;
 - functional forgetting/domain-exclusivity pressure while retaining required operational floors.
 
 No hyperparameter becomes final merely because it is a common default.
@@ -152,7 +154,7 @@ Every run reopens the functionality matrix and asks:
 6. Which training rows accidentally teach the model to usurp deterministic authority?
 7. Which functions interact and therefore need multi-step integrated trajectories rather than isolated rows?
 8. Which capabilities became obsolete or changed after new Xeno/HCU implementation evidence?
-9. Which behaviors must be correct both as ordinary GRID10 node and dynamically leased coordinator?
+9. Which behaviors must be correct as an ordinary read-only GRID10 node versus a dynamically leased coordinator?
 
 The run then changes the dataset schema, generators, mixture or evaluation plan if necessary.
 
@@ -188,34 +190,39 @@ The trigger must progressively turn the best supported Hyperposition design into
 
 ### Track H — physical GRID10 shared-state coordination
 
-Every `2` researches and improves the architecture in `TRIGGER2_GRID10_SHARED_STATE_COORDINATION_ARCHITECTURE_V1.md`.
+Every `2` researches and improves the architecture in `TRIGGER2_GRID10_SHARED_STATE_COORDINATION_ARCHITECTURE_V2.md`.
 
 Hard target:
 
-- all ten nodes attach to the same versioned shared cognitive state;
-- one or more nodes become coordinators dynamically under deterministic leases;
-- coordinators see the shared cognitive state and steer role/work allocation with compact deltas;
-- all nodes may emit proposals;
+- all ten nodes attach to the same versioned shared cognitive state S1;
+- ordinary modules are strictly READ-ONLY with respect to S1;
+- ordinary modules communicate by returning typed ephemeral `NODE_RESULT/v1` packets to an active coordinator, not by writing/appending proposals to S1;
+- one or more nodes become coordinators dynamically under deterministic scoped leases;
+- only valid coordinator lease holders may write S1;
+- no valid coordinator lease means no S1 write;
+- coordinators receive/filter/merge/reject ordinary-node results and commit compact S1 deltas;
+- overlapping coordinator writes use scoped leases + CAS/rebase, never silent last-writer-wins;
 - coordinator/shared-workspace writes never directly mint canonical facts/effects;
 - large payloads are referenced rather than repeatedly copied;
-- ordinary colocated operation minimizes overhead using hot shared state + append-only deltas + durable checkpoints rather than full DB roundtrips per token;
-- every model output binds to an exact shared-state epoch;
+- ordinary colocated operation minimizes overhead using hot shared-state reads + ephemeral node->coordinator result queues + coordinator-only deltas + durable checkpoints;
+- every model result binds to an exact shared-state epoch/digest;
 - coordinator failure/replacement and node partition/rejoin preserve generation/causal fences;
 - majority agreement never substitutes for evidence.
 
 Every run must improve or explicitly NO_CHANGE at least one of:
 
 - S1 shared-state schema;
-- hot-state/delta transport;
+- technical enforcement of ordinary-node read-only access;
+- ephemeral node->coordinator result transport;
 - coordinator selection/lease policy;
 - number-of-coordinators K policy;
-- conflict/CAS/rebase semantics;
+- coordinator-only conflict/CAS/rebase semantics;
 - GWT shared broadcast;
 - Hyperposition branch synchronization;
 - same-checkpoint J-Space peer-transfer test;
 - failure/rejoin;
 - matched-compute critical-mass evaluation;
-- training trajectories teaching both ordinary-node and coordinator roles.
+- training trajectories teaching ordinary read-only node versus coordinator write role.
 
 ## Data evidence classes
 
@@ -236,6 +243,9 @@ Dataset compiler must preserve evidence class and ancestry in offline sidecars.
 - Majority vote, recurrence or model self-report does not mint truth.
 - Shared cognitive state is not canonical truth.
 - Dynamic coordinator is a temporary role, not a persistent authority or personality.
+- Ordinary GRID10 modules MUST NOT write S1.
+- Ordinary-node communication reaches the grid only after coordinator admission/commit into S1.
+- No valid coordinator lease means no S1 write.
 - Split by causal episode/trace family, never only random rows.
 - Hard negatives are mandatory and overrepresented in validation/holdout.
 - One completed training job is not PASS.
@@ -293,7 +303,7 @@ Do not create the one paid Together job until all are true:
 5. Trigger-1/J-Space evidence is classified and does not contaminate labels with unproven semantics;
 6. semantic Hyperposition has explicit typed representation, adversarial/label-free/OOD evaluation and evidence-gated collapse semantics;
 7. every in-scope model-facing Xeno capability has training/evaluation coverage or an explicit justified exclusion;
-8. physical GRID10 shared-state/coordinator behavior has explicit training trajectories and a frozen post-FT acceptance suite;
+8. physical GRID10 coordinator-only shared-state behavior has explicit training trajectories, technical ordinary-node read-only enforcement and a frozen post-FT acceptance suite;
 9. must-gain/must-retain baseline is frozen on the exact base checkpoint;
 10. price/config is shown before job creation;
 11. current execution/spend authority explicitly permits the one job.

@@ -111,14 +111,20 @@ def _world_history_binding(world: Any, history_events: Any, event: Any) -> dict[
         )
     ordered_history_digest = _digest(ordered_history)
     preimage = {
+        "world_id": world.get("world_id"),
         "world_sha256": world_digest,
         "ordered_history_sha256": ordered_history_digest,
         "event_semantic_sha256": event_digest,
+        "test_id": event.get("test_id"),
+        "observed_outcome": deepcopy(event.get("observed_outcome")),
     }
     return {
         "schema": EVENT_BINDING_SCHEMA,
+        "world_id": world.get("world_id"),
         "event_id": event.get("event_id"),
         "event_semantic_sha256": event_digest,
+        "test_id": event.get("test_id"),
+        "observed_outcome": deepcopy(event.get("observed_outcome")),
         "world_sha256": world_digest,
         "ordered_history_sha256": ordered_history_digest,
         "scoped_event_id": "t2scope:" + _digest(preimage),
@@ -170,11 +176,37 @@ def _derive_receipt(
     state_before: dict[str, Any],
     event: dict[str, Any],
     event_binding: dict[str, Any],
+    upstream_generation_result: dict[str, Any],
 ) -> tuple[dict[str, Any] | None, list[str], dict[str, Any] | None]:
     failures: list[str] = []
     policy = case.get("policy")
     if not isinstance(policy, dict):
         return None, ["DISCRIMINATOR_POLICY_REQUIRED"], None
+    if _digest(policy) != case.get("policy_sha256"):
+        failures.append("DISCRIMINATOR_POLICY_AUTHORITY_DIGEST_MISMATCH")
+
+    # Bind the exact reconstructed generation subjects, not just their semantic shape.
+    if _digest(world) != case.get("formal_world_sha256"):
+        failures.append("DISCRIMINATOR_FORMAL_WORLD_AUTHORITY_DIGEST_MISMATCH")
+    if _digest(state_before) != case.get("state_before_sha256"):
+        failures.append("DISCRIMINATOR_PRESTATE_AUTHORITY_DIGEST_MISMATCH")
+    if _digest(event) != case.get("event_sha256"):
+        failures.append("DISCRIMINATOR_EVENT_AUTHORITY_DIGEST_MISMATCH")
+
+    reconstructed_hashes = upstream_generation_result.get("reconstructed_subject_hashes")
+    if not isinstance(reconstructed_hashes, dict):
+        failures.append("UPSTREAM_GENERATION_RECONSTRUCTED_HASHES_REQUIRED")
+    else:
+        if reconstructed_hashes.get("formal_world_jcs_sha256") != case.get("formal_world_sha256"):
+            failures.append("UPSTREAM_GENERATION_WORLD_DIGEST_AUTHORITY_MISMATCH")
+        if reconstructed_hashes.get("state_before_jcs_sha256") != case.get("state_before_sha256"):
+            failures.append("UPSTREAM_GENERATION_PRESTATE_DIGEST_AUTHORITY_MISMATCH")
+        if reconstructed_hashes.get("event_jcs_sha256") != case.get("event_sha256"):
+            failures.append("UPSTREAM_GENERATION_EVENT_DIGEST_AUTHORITY_MISMATCH")
+
+    expected_generation_receipt = upstream_generation_result.get("expected_generation_receipt")
+    if not isinstance(expected_generation_receipt, dict):
+        failures.append("UPSTREAM_EXPECTED_GENERATION_RECEIPT_REQUIRED")
 
     if world.get("world_id") != case.get("world_id"):
         failures.append("DISCRIMINATOR_WORLD_ID_AUTHORITY_MISMATCH")
@@ -238,8 +270,13 @@ def _derive_receipt(
         "authority_sha256": _digest(authority),
         "producer_repo_path": EXPECTED_REPO_PATH,
         "producer_source_sha256": _source_sha256(),
+        "producer_source_commit_sha": authority.get("producer", {}).get("source_commit_sha"),
+        "source_lineage_base_main": authority.get("producer", {}).get("source_lineage_base_main"),
         "generation_case_id": case.get("case_id"),
+        "generation_receipt_sha256": _digest(expected_generation_receipt),
+        "policy_sha256": case.get("policy_sha256"),
         "world_scoped_event_id": event_binding.get("scoped_event_id"),
+        "world_id": event_binding.get("world_id"),
         "world_sha256": event_binding.get("world_sha256"),
         "ordered_history_sha256": event_binding.get("ordered_history_sha256"),
         "event_semantic_sha256": event_binding.get("event_semantic_sha256"),
@@ -323,7 +360,13 @@ def authenticate_and_sanitize(
             failures.append("WORLD_HISTORY_EVENT_BINDING_FAILED:" + type(exc).__name__ + ":" + str(exc))
         else:
             derived_receipt, derivation_failures, ordering = _derive_receipt(
-                authority, case, world, state_before, event, event_binding
+                authority,
+                case,
+                world,
+                state_before,
+                event,
+                event_binding,
+                upstream_generation_result,
             )
             failures.extend(derivation_failures)
 

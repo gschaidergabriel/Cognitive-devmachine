@@ -1,0 +1,110 @@
+name: GO878 source-count idempotence exact gate
+
+on:
+  issues:
+    types: [opened]
+
+permissions:
+  contents: write
+  issues: read
+
+jobs:
+  exact-regression:
+    if: github.repository == 'gschaidergabriel/clay-global-research-entity' && github.event.issue.title == '[CLAY-DISPATCH] sourcecount idempotence 8.78' && github.event.issue.user.login == 'gschaidergabriel'
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 15
+    env:
+      EXACT_HEAD: d8afe1c17b24934b61f783d1b66015083cd00498
+      BRANCH: go878/backfill-sourcecount-idempotence-gpt56sol-20260825
+      ARTIFACT_ROOT: /artifacts/clay-entityos-swarm
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: go878/backfill-sourcecount-idempotence-gpt56sol-20260825
+          fetch-depth: 0
+          clean: true
+          persist-credentials: true
+
+      - name: Bind exact branch source
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$EXACT_HEAD"
+          test -z "$(git status --porcelain=v1)"
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          inbox=json.loads(Path('research_entity/claycode/autonomous/SUPERVISOR_INBOX.json').read_text())
+          assert inbox.get('schema_version') == '8.78', inbox
+          assert inbox.get('active_program') == 'ENTITYOS_HCU', inbox
+          PY
+
+      - name: Run exact deterministic regressions
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m py_compile tools/free_swarm_backfill_provenance.py tools/run_free_evidence_forge_backfill.py tests/test_free_swarm_backfill_provenance_878.py
+          python3 -m unittest -v tests.test_free_swarm_backfill_provenance_878 |& tee /tmp/sourcecount-unit.log
+          python3 -m pytest -q tests/test_free_swarm_historical_backfill.py |& tee /tmp/sourcecount-historical.log
+
+      - name: Prove real-DB reconciliation converges on an isolated SQLite snapshot
+        shell: bash
+        run: |
+          set -euo pipefail
+          export PYTHONPATH="$PWD/tools${PYTHONPATH:+:$PYTHONPATH}"
+          python3 - <<'PY' | tee /tmp/sourcecount-realdb.json
+          import json, sqlite3
+          from pathlib import Path
+          from free_swarm_backfill_provenance import reconcile_candidate_source_counts
+          from free_swarm_historical_backfill import ensure_schema
+
+          src_path=Path('/artifacts/clay-entityos-swarm/forge/forge.sqlite3')
+          if not src_path.exists():
+              raise SystemExit('FORGE_DB_REQUIRED')
+          dst_path=Path('/tmp/go878-sourcecount-forge-snapshot.sqlite3')
+          dst_path.unlink(missing_ok=True)
+          src=sqlite3.connect(f'file:{src_path}?mode=ro', uri=True, timeout=10)
+          dst=sqlite3.connect(dst_path, timeout=10)
+          src.backup(dst)
+          src.close()
+          ensure_schema(dst)
+          before=int(dst.execute('SELECT COALESCE(SUM(source_count),0) FROM candidates').fetchone()[0] or 0)
+          changed1=reconcile_candidate_source_counts(dst)
+          after1=int(dst.execute('SELECT COALESCE(SUM(source_count),0) FROM candidates').fetchone()[0] or 0)
+          changed2=reconcile_candidate_source_counts(dst)
+          after2=int(dst.execute('SELECT COALESCE(SUM(source_count),0) FROM candidates').fetchone()[0] or 0)
+          linked=int(dst.execute('SELECT COUNT(DISTINCT candidate_hash) FROM candidate_sources').fetchone()[0] or 0)
+          distinct_events=int(dst.execute('SELECT COUNT(DISTINCT candidate_hash || char(0) || source_event_id) FROM candidate_sources').fetchone()[0] or 0)
+          dst.close()
+          assert changed2 == 0, (changed1, changed2)
+          assert after2 == after1, (after1, after2)
+          print(json.dumps({'schema':'FREE_SWARM_BACKFILL_SOURCECOUNT_EXACT_REGRESSION/v1','exact_head':'d8afe1c17b24934b61f783d1b66015083cd00498','db_mode':'READONLY_SOURCE_TO_SQLITE_BACKUP','source_db_mutated':False,'candidate_source_linked_candidates':linked,'distinct_candidate_source_events':distinct_events,'source_count_sum_before':before,'source_count_sum_after_first_reconcile':after1,'first_reconcile_changed_candidates':changed1,'second_reconcile_changed_candidates':changed2,'source_count_sum_after_second_reconcile':after2,'second_pass_idempotent':True,'runtime_credit_scope':'DETERMINISTIC_PROVENANCE_RECONCILIATION_ONLY','whole_product_credit':0,'jspace_model_credit':0,'training_credit':0},sort_keys=True))
+          PY
+
+      - name: Emit exact bounded receipt on branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          def sha(p): return hashlib.sha256(Path(p).read_bytes()).hexdigest()
+          real=json.loads(Path('/tmp/sourcecount-realdb.json').read_text())
+          receipt={
+            'schema':'FREE_SWARM_BACKFILL_SOURCECOUNT_EXACT_EXECUTION_RECEIPT/v1',
+            'authority_epoch':'8.78','program':'ENTITYOS_HCU','product':'EntityOS','architecture':'HCU','mode':'FREE_ONLY',
+            'exact_source_commit':'d8afe1c17b24934b61f783d1b66015083cd00498','executor':'SELF_HOSTED_LINUX_X64_OWNER_VPS_RUNNER',
+            'tests':{'sourcecount_unit':'PASS','historical_backfill_suite':'PASS','unit_log_sha256':sha('/tmp/sourcecount-unit.log'),'historical_log_sha256':sha('/tmp/sourcecount-historical.log')},
+            'real_db_snapshot_regression':real,
+            'source_db_mutated':False,'provider_calls':0,'model_calls':0,'together_used':False,'paid_fallback':False,'unusual_experiment':False,
+            'credits':{'historical_backfill_saturation':0,'entityos_whole':0,'hcu_full':0,'jspace_model':0,'training':0},
+            'promotion':'SOURCECOUNT_IDEMPOTENCE_COMPONENT_EXECUTION_PASS'
+          }
+          p=Path('research_entity/continuity/receipts/2026-08-25_GO878_BACKFILL_SOURCECOUNT_EXACT_EXECUTION_GPT56SOL.json')
+          p.write_text(json.dumps(receipt,indent=2,sort_keys=True)+'\n')
+          PY
+          git config user.name 'clay-go878-runner'
+          git config user.email 'clay-go878-runner@users.noreply.github.com'
+          git add research_entity/continuity/receipts/2026-08-25_GO878_BACKFILL_SOURCECOUNT_EXACT_EXECUTION_GPT56SOL.json
+          git commit -m 'evidence: execute backfill source-count idempotence gate'
+          git push origin "HEAD:$BRANCH"

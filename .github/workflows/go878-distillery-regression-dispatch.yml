@@ -1,0 +1,35 @@
+name: GO878 dispatch existing Distillery exact-main regression
+
+on:
+  issues:
+    types: [opened]
+
+permissions:
+  actions: write
+  contents: read
+  issues: read
+
+jobs:
+  dispatch-existing-authority:
+    if: github.repository == 'gschaidergabriel/clay-global-research-entity' && github.event.issue.title == '[CLAY-DISPATCH] GO878 exact-current Distillery replay-v2 regression' && github.event.issue.user.login == 'gschaidergabriel'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Dispatch existing canonical self-hosted regression carrier
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TARGET_WORKFLOW: go873-distillery-selfhosted-main-regression.yml
+        run: |
+          set -euo pipefail
+          code="$(curl -sS --retry 2 --retry-delay 1 \
+            -o /tmp/dispatch.json \
+            -w '%{http_code}' \
+            -X POST \
+            -H 'Accept: application/vnd.github+json' \
+            -H 'X-GitHub-Api-Version: 2022-11-28' \
+            -H "Authorization: Bearer ${GH_TOKEN}" \
+            "https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/workflows/${TARGET_WORKFLOW}/dispatches" \
+            -d '{"ref":"main"}')"
+          test "$code" = 204
+          echo "Existing Distillery carrier dispatch accepted at HTTP 204. Runtime credit still requires its repository-bound terminal receipt."

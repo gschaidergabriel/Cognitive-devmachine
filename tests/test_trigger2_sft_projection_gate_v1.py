@@ -80,3 +80,25 @@ def test_target_must_be_real_atom():
     row["target"] = "nope"
     result = projection.adjudicate(row)
     assert not result["projection_pass"]
+
+
+def test_zero_hash_claim_rejected():
+    row = _base()
+    row["abi_materialization"]["abi_manifest_sha256"] = "0" * 64
+    result = projection.adjudicate(row)
+    assert not result["projection_pass"]
+
+
+def test_evidence_byte_hash_binding(tmp_path):
+    row = _base()
+    paths = {}
+    for key in projection.REQUIRED_HASHES:
+        path = tmp_path / (key + ".json")
+        path.write_text(key, encoding="utf-8")
+        digest = projection._file_sha256(path)
+        row["abi_materialization"][key] = digest
+        paths[key] = path
+    assert projection.verify_evidence_bytes(row, paths) == []
+    paths["tokenizer_identity_sha256"].write_text("changed", encoding="utf-8")
+    failures = projection.verify_evidence_bytes(row, paths)
+    assert "EVIDENCE_BYTE_HASH_MISMATCH:tokenizer_identity_sha256" in failures

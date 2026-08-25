@@ -1,0 +1,70 @@
+{
+  "schema": "CLAY_TRIGGER2_OUTER_TYPED_ENTRY_BINDING_AUDIT/v1",
+  "date": "2026-08-25",
+  "trigger": "triggerwort 2",
+  "persistent_entity": "Clay",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "program": "ENTITYOS_HCU",
+  "supervisor_epoch": "8.78",
+  "mode": "FREE_ONLY",
+  "repository": "gschaidergabriel/clay-global-research-entity",
+  "observed_main_before_write": "46bce53d26cb7c13611f3807be77b6e99689f4eb",
+  "purpose": "Execute issue #2020's cheapest discriminator before introducing any new OBSERVED producer registry: inspect whether the retained Typed Entry boundary already provides a mandatory immutable replay-verifiable producer/instance authority that is mechanically required by the Trigger-2 state-history observation gate.",
+  "classification": "SOURCE_AUDIT_NONPROMOTING",
+  "audited_sources": [
+    "the artefact/MicroEntity/hcu/xeno_entry_fabric_v1.py",
+    "tools/trigger2_hyperposition_state_history_proof_gate_v1.py",
+    "issues/2020"
+  ],
+  "observations": {
+    "typed_entry_strengths": [
+      "EntryPacket deterministically separates replay-stable causal event identity (event_sha256) from concrete admission identity (admission_sha256).",
+      "Event identity binds causal_id, source_kind, source_id, modality, observed_time, provenance_ref, provenance_sha256, parent_id, stream_id and payload_sha256.",
+      "Admission identity additionally binds event_sha256, entity_generation, ingress_id, received_time, admitted capability binding, budget and payload_ref.",
+      "Generation and capability/budget authority are fail-closed against externally supplied current/admitted views."
+    ],
+    "typed_entry_limit": "At exact audited source, source_id, provenance_ref and provenance_sha256 are validated for shape/digest form and included in identity, but the Typed Entry code itself does not authenticate that a trusted producer actually controls/issued those source/provenance claims. Identity binding is not producer authentication.",
+    "observation_gate_current_checks": [
+      "For OBSERVED events _validate_observation_receipt requires exactly one receipt matching event_id.",
+      "It checks receipt schema, event_semantic_sha256, canonical_truth_allowed=false, direct_effect_authority=false, and nonempty source/provenance/observed_time/receipt_id strings."
+    ],
+    "missing_mechanical_binding": [
+      "The OBSERVED receipt validator does not require EntryPacket/event_sha256/admission_sha256.",
+      "It does not require causal_id/causal_event_id, ingress/admission identity, entity_generation, payload_sha256, provenance_sha256, capability-binding identity or a producer-authority digest.",
+      "Repository search for typed_observation_evidence_receipts_evaluator_only together with EntryPacket/admission_sha256/event_sha256 returned no retained mechanical bridge."
+    ]
+  },
+  "decision": "PATH_A_EXISTING_OUTER_BOUNDARY_NOT_SUFFICIENT_AS_CURRENTLY_WIRED",
+  "decision_scope": "This does not reject the Typed Entry Fabric. It rejects only the claim that current Typed Entry identity automatically authenticates concrete OBSERVED evidence instances or is currently mandatory/mechanically consumed by the Trigger-2 observation gate.",
+  "hypothesis": "The smallest nonduplicative successor can reuse Typed Entry event/admission identities as the instance substrate while adding exactly one trusted producer/source authority resolution and requiring the observation gate to verify the resulting admission/subject identity rather than caller narrative strings.",
+  "counterhypothesis": "A different mandatory outer runtime boundary, outside xeno_entry_fabric_v1.py and the retained Trigger-2 gate, may already authenticate producer identity and make a new registry unnecessary.",
+  "counterhypothesis_status": "NOT_PROVEN_BY_CURRENT_RETAINED_SOURCE_SEARCH; keep open if a concrete mandatory pre-gate path with exact executable binding is produced.",
+  "successor_design_constraints": [
+    "Reuse event_sha256/admission_sha256 semantics where possible; do not invent a competing causal/admission identity namespace without necessity.",
+    "Resolve producer/source authority independently of untrusted Entry/observation strings.",
+    "Bind producer identity/version or epoch, exact subject/source-payload digest, event semantic identity, causal event identity, concrete admission identity, generation and policy/authority digest.",
+    "Preserve canonical_truth_allowed=false and direct_effect_authority=false; producer authentication proves provenance, not factual truth.",
+    "Reject unknown/revoked producer, stale epoch/version, payload/subject substitution, event/admission/generation substitution, replay under changed admission, cross-producer substitution and source-code-valid-but-instance-forged receipts.",
+    "Keep one retained authority/envelope lane and converge with issue #2020 rather than creating parallel registries."
+  ],
+  "training_effect": {
+    "new_positive_rows": 0,
+    "new_hard_negative_rows_admitted": 0,
+    "positive_rows_admitted": 0,
+    "accepted_dataset_tokens": 0,
+    "training_credit": 0,
+    "decision": "NO_NEW_ADMITTED_ROWS_WITH_REASON",
+    "reason": "OBSERVED producer/result authentication remains executably open and full nonempty-history producer authority remains separately open; exact-semantic-merge issue #2019 also blocks treating reference-labeler v3 as a complete training oracle."
+  },
+  "credits": {
+    "research_source_audit_delta": 1,
+    "typed_entry_reuse_constraint_delta": 1,
+    "runtime_credit": 0,
+    "positive_jspace_causal_credit": 0,
+    "checkpoint_selection_credit": 0,
+    "training_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_hcu_runtime_credit": 0
+  },
+  "next_exact_action": "Converge issue #2020 on one successor implementation that reuses current Typed Entry event/admission identities but adds independently resolved trusted producer authority and an instance envelope/receipt binding; preserve the forged current receipt as a must-fail regression and execute the repaired suite repository-bound on the admitted zero-cost clay-direct-dev VPS. In parallel close full ordered-history producer authority and issue #2019 before positive row admission."
+}

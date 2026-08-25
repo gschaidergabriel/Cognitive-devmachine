@@ -1,6 +1,6 @@
 {
   "schema": "CLAY_FREE_SWARM_SYSTEM_ANALYSIS/v3",
-  "generated_at": "2026-08-25T13:54:27.093417+00:00",
+  "generated_at": "2026-08-25T14:09:33.439054+00:00",
   "runtime": {
     "supervisor": "STOPPED/QUARANTINED",
     "go_swarm": "RUNNING",
@@ -65,7 +65,7 @@
   },
   "distillery": {
     "schema": "CLAY_RESEARCH_DISTILLERY_STATUS/v1",
-    "generated_at": "2026-08-25T13:53:36.847678+00:00",
+    "generated_at": "2026-08-25T14:09:07.970180+00:00",
     "collected_source_tokens": 11621,
     "accepted_dataset_tokens": 0,
     "dataset_yield": 0.0,
@@ -111,7 +111,7 @@
     "model_output_tokens": 1455,
     "shared_provider_budget": {
       "schema": "CLAY_SHARED_PROVIDER_BUDGET/v1",
-      "generated_at": "2026-08-25T13:53:36.848164+00:00",
+      "generated_at": "2026-08-25T14:09:07.970955+00:00",
       "providers": {
         "arxiv": {
           "max_inflight": 1,
@@ -213,13 +213,13 @@
           "max_inflight": 16,
           "active_leases": 0,
           "min_interval_s": 0.5,
-          "cooldown_seconds": 9.99271559715271,
-          "total_requests": 1105,
+          "cooldown_seconds": 9.99169921875,
+          "total_requests": 1196,
           "total_success": 134,
-          "total_429": 970,
+          "total_429": 1061,
           "total_errors": 0,
           "last_status": "429",
-          "last_observed_at": "2026-08-25T13:53:36.840906+00:00"
+          "last_observed_at": "2026-08-25T14:09:07.962459+00:00"
         },
         "semantic_scholar": {
           "max_inflight": 1,
@@ -249,22 +249,22 @@
     },
     "db_bytes": 933888,
     "top_questions": [
-      "Does NVIDIA NIM/Developer Program expose a credential-scoped free-tier metadata endpoint that distinguishes free vs paid access per API key without incurring inference cost?",
-      "How does the caching layer affect the overall system latency?",
-      "What are the optimal parameters for the periodic quota status updates?",
-      "Does the current typed entry validator emit a cryptographic commitment (hash) that survives to the JIT emission point, or is validation state ephemeral?",
-      "Does the Groq credential+model rate-header binding have an equivalent coarse-validation gap for model-specific free-tier eligibility?",
-      "What is the minimal set of typed-entry invariants that, if violated, must deterministically reject at loader boundary vs. degrade gracefully at model execution?",
-      "Does the NVIDIA credential binding implement per-credential API entitlement verification or only static policy matching?",
-      "Does adaptive routing weight recalculation with recovery bonus improve overall swarm latency without increasing provider-level 429 rates?",
-      "Can the quota status cache be effectively shared across multiple sandbox environments?",
-      "What are the optimal parameters for the HYBRID model?"
+      "Does Nemotron-3-ULTRA 550B sparse MoE expert routing (128 experts, top-4) causally map to GRID10 logical cells without model consensus?",
+      "Does the current J-Space admission gate (credit=0) have any executable surface to accept a causal envelope, or is the entire J-Space path a stub?",
+      "Can Qwen3-30B-A3B sliding window attention (4096 window, 131k context) isolate Typed Entry Fabric streaming causality at 0.8B scale?",
+      "Does Gemma-2-2B INT4 quantization on CPU (llama.cpp) establish FREE_ONLY 0.8B readiness baseline with InferenceReceipt provenance?",
+      "Wie standardisiert man provider_key_id across heterogeneous free providers?",
+      "Welches minimale Signatur‑Algorithmus‑Set liefert niedrige Latenz und ausreichende Integrität?",
+      "How can we statically determine the longest dependency chain in the Hyperposition resolution process in the presence of dynamic control flow and indirect jumps?",
+      "Kann die Modell‑Hash‑Komponente weggelassen werden, wenn request_id und provider‑Kontext ausreichend sind?",
+      "Can provider-native security features be composed into a defense-in-depth architecture without code duplication?",
+      "What is the minimum viable signature set for local pre-validation that doesn't introduce latency?"
     ],
     "candidate_states": {}
   },
   "evidence_forge": {
     "schema": "CLAY_FREE_EVIDENCE_FORGE_STATUS/v1",
-    "generated_at": "2026-08-25T13:54:26.095615+00:00",
+    "generated_at": "2026-08-25T14:09:31.681738+00:00",
     "candidate_states": {
       "ACCEPTED": 1,
       "NEEDS_IMPLEMENTATION": 65,
@@ -288,7 +288,7 @@
     "peak_parallel_tasks": 0,
     "shared_provider_budget": {
       "schema": "CLAY_SHARED_PROVIDER_BUDGET/v1",
-      "generated_at": "2026-08-25T13:54:26.096228+00:00",
+      "generated_at": "2026-08-25T14:09:31.682315+00:00",
       "providers": {
         "arxiv": {
           "max_inflight": 1,
@@ -390,13 +390,13 @@
           "max_inflight": 16,
           "active_leases": 0,
           "min_interval_s": 0.5,
-          "cooldown_seconds": 1.2936718463897705,
-          "total_requests": 1109,
+          "cooldown_seconds": 6.546799421310425,
+          "total_requests": 1198,
           "total_success": 134,
-          "total_429": 974,
+          "total_429": 1063,
           "total_errors": 0,
           "last_status": "429",
-          "last_observed_at": "2026-08-25T13:54:17.390002+00:00"
+          "last_observed_at": "2026-08-25T14:09:28.229167+00:00"
         },
         "semantic_scholar": {
           "max_inflight": 1,
@@ -433,6 +433,6 @@
     "measured_total_sonnet5_equivalent_usd": 148.830648,
     "verified_historical_savings_usd": null,
     "nominal_avoided_if_zero_cost_usd": 148.830648,
-    "repo_output_only_proxy_usd": 132.01345
+    "repo_output_only_proxy_usd": 132.01354
   }
 }

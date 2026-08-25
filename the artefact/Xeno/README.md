@@ -52,9 +52,11 @@ The current first concrete GRID acceptance target is **10 physical Xeno nodes** 
 
 Historical "10 logical cells over shared workers" remains a useful component simulator/baseline, but it is **not** the current physical GRID10 acceptance target.
 
-## Current implementation delta
+## Current implementation primitive
 
-The active GO runtime lane is PR **#1967**, which introduces the first source primitive for:
+`tools/xeno_shared_state_v1.py` is the current source primitive for the first owner-priority path. Its regression is `tests/test_xeno_shared_state_v1.py`.
+
+The primitive currently covers:
 
 - autonomous boot against exact S1 epoch/digest;
 - SQLite-enforced ordinary-node read-only S1 access;

@@ -751,20 +751,21 @@
   },
   "provider_response_top_level_schema_closure": {
     "checked_at": "2026-08-26",
-    "claim": "A successful v0.1 text response has a closed top-level schema. In addition to the required object, id, created, model, usage and choices fields, prompt_routed_experts, service_tier, prompt_logprobs, prompt_token_ids, prompt_text and kv_transfer_params are accepted only as null. An optional nonempty Unicode-scalar system_fingerprint is locally bounded to 256 characters and retained only as a SHA-256 digest. Every other top-level extension remains unverified.",
+    "claim": "A successful v0.1 text response has a closed top-level schema. In addition to the required object, id, created, model, usage and choices fields, prompt_routed_experts, prompt_logprobs, prompt_token_ids, prompt_text and kv_transfer_params are accepted only as null. Optional service_tier is null or one exact built-in value from auto, default, flex, scale and priority and is retained in the receipt. An optional nonempty Unicode-scalar system_fingerprint is locally bounded to 256 characters and retained only as a SHA-256 digest. Every other top-level extension remains unverified.",
     "sources": [
       "https://docs.nvidia.com/nim/large-language-models/latest/get-started/quickstart.html",
       "https://docs.vllm.ai/en/v0.16.0/api/vllm/entrypoints/openai/chat_completion/protocol/"
     ],
-    "external_evidence": "NVIDIA's current expected Chat Completions envelope, updated 2026-08-21, includes the six null metadata fields and a vLLM system fingerprint. Official vLLM documents these names as ChatCompletionResponse fields rather than arbitrary extension storage.",
-    "internal_measurement": "An otherwise canonical status-200 response containing an unknown active top-level object previously returned success and reached VERIFIED and DONE while the extension was silently discarded from both content and receipt.",
+    "external_evidence": "NVIDIA's current expected Chat Completions envelope, updated 2026-08-21, includes passive top-level metadata and a vLLM system fingerprint. Official vLLM 0.16 defines ChatCompletionResponse.service_tier as null or the closed literal set auto, default, flex, scale and priority.",
+    "internal_measurement": "An otherwise canonical status-200 response containing an unknown active top-level object previously returned success and reached VERIFIED and DONE while the extension was silently discarded from both content and receipt. After closing the envelope, an otherwise canonical response with officially typed service_tier default was rejected as invalid_provider_response.",
     "executable_evidence": [
       "test_unknown_top_level_response_extension_cannot_be_verified",
       "test_documented_nvidia_passive_message_metadata_remains_compatible",
+      "test_documented_vllm_service_tier_remains_compatible",
       "test_overflowing_json_exponents_cannot_reach_verified_state"
     ],
-    "counterhypothesis": "Validating the known required members is sufficient because unknown top-level fields cannot change visible text; falsified because VERIFIED then asserted complete interpretation while active provider metadata was neither typed nor preserved.",
-    "uncertainty": "Current backend versions can define non-null service-tier, routing, logprob, token-id or transfer metadata. FRANK v0.1 does not interpret those values, so they require a separately typed adapter before verification. The fingerprint digest identifies provider-reported software metadata but does not authenticate it. No Ubuntu NVIDIA live receipt is available on this host."
+    "counterhypothesis": "Requiring every optional top-level field to be null is the safest compatible closure; falsified because it rejects vLLM's officially enumerated service-tier response while a closed enum can preserve both compatibility and provenance. Arbitrary tier strings remain rejected by executable counterevidence.",
+    "uncertainty": "Current backend versions can define non-null routing, logprob, token-id or transfer metadata. FRANK v0.1 does not interpret those values, so they require a separately typed adapter before verification. A provider-reported service tier does not prove price, billing state or zero cost. The fingerprint digest identifies provider-reported software metadata but does not authenticate it. No Ubuntu NVIDIA live receipt is available on this host."
   },
   "http_200_provider_error_envelope": {
     "checked_at": "2026-08-25",

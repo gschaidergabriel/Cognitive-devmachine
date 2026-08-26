@@ -1,0 +1,202 @@
+{
+  "checks": {
+    "bag_of_words_shortcut_probe": {
+      "accuracy": 0.24305555555555555,
+      "accuracy_minus_chance": -0.09027777777777776,
+      "chance_accuracy": 0.3333333333333333,
+      "folds": 5,
+      "n": 2304,
+      "note": "PASS means the bag-of-words shortcut probe could not beat chance by more than 5pp (one-sided; below-chance is classifier noise, not a leak signal). It does not by itself prove zero information -- check_text_conditional_target_uniformity is the exact proof for that; this probe is a secondary, weaker corroboration.",
+      "pass": true,
+      "per_fold_accuracy": [
+        0.2386117136659436,
+        0.23427331887201736,
+        0.24511930585683298,
+        0.25379609544468545,
+        0.24347826086956523
+      ]
+    },
+    "cross_split_disjointness": {
+      "pairwise_overlaps": {},
+      "pass": true,
+      "splits": {
+        "HOLDOUT_FROZEN": 12,
+        "TRAIN": 48,
+        "VALIDATION": 12
+      }
+    },
+    "higher_order_joint_mi": {
+      "excess_failures": [],
+      "excess_mi_over_template_baseline_bits": {
+        "c__templatexlay": 7.395570986446986e-32,
+        "c__templatexord": 1.5500450824910932e-16,
+        "c__templatexp": 7.395570986446986e-32,
+        "c__templatexperm": -1.0333633883273981e-17,
+        "target__templatexlay": 5.551115123125783e-17,
+        "target__templatexord": 1.1102230246251565e-16,
+        "target__templatexp": 5.551115123125783e-17,
+        "target__templatexperm": -1.1102230246251565e-16
+      },
+      "failures": [],
+      "informational_combined_corpus_joint_mi_bits": {
+        "c__layxp": 0.0,
+        "c__layxt": 1.653381421323829e-16,
+        "c__ordxlay": 0.0,
+        "c__ordxp": 0.0,
+        "c__ordxt": 3.2034265038149216e-16,
+        "c__permxlay": 0.0,
+        "c__permxord": 1.3433724048256097e-16,
+        "c__permxp": 0.0,
+        "c__permxt": 1.5500450824910885e-16,
+        "c__pxt": 1.653381421323829e-16,
+        "target__layxp": 0.0,
+        "target__layxt": 0.45868581620054033,
+        "target__ordxlay": 0.002401417712090389,
+        "target__ordxp": 0.002401417712090389,
+        "target__ordxt": 0.4586858162005404,
+        "target__permxlay": 3.1000901649821796e-17,
+        "target__permxord": 0.002401417712090359,
+        "target__permxp": 3.1000901649821796e-17,
+        "target__permxt": 0.45868581620054016,
+        "target__pxt": 0.45868581620054033
+      },
+      "informational_note": "combined-corpus numbers above are EXPECTED_HOLDOUT_SUPPORT_SHIFT (HOLDOUT_FROZEN's intentional disjoint symbol pool under template T6), not a leak; see module CORRECTION docstring. They are informational/regression-tracking only and do not gate pass.",
+      "pass": true,
+      "template_baseline_mi_bits": {
+        "c": 1.6533814213238284e-16,
+        "target": 0.4586858162005403
+      },
+      "within_split_failures": [],
+      "within_split_joint_mi_bits": {
+        "HOLDOUT_FROZEN": {
+          "c__layxp": 0.0,
+          "c__layxt": 0.0,
+          "c__ordxlay": 0.0,
+          "c__ordxp": 0.0,
+          "c__ordxt": 0.0,
+          "c__permxlay": 0.0,
+          "c__permxord": 0.0,
+          "c__permxp": 0.0,
+          "c__permxt": 0.0,
+          "c__pxt": 0.0,
+          "target__layxp": 0.0,
+          "target__layxt": 0.0,
+          "target__ordxlay": 0.0,
+          "target__ordxp": 0.0,
+          "target__ordxt": 0.0,
+          "target__permxlay": 0.0,
+          "target__permxord": 0.0,
+          "target__permxp": 0.0,
+          "target__permxt": 0.0,
+          "target__pxt": 0.0
+        },
+        "TRAIN": {
+          "c__layxp": 0.0,
+          "c__layxt": 0.0,
+          "c__ordxlay": 0.0,
+          "c__ordxp": 0.0,
+          "c__ordxt": 0.0,
+          "c__permxlay": 0.0,
+          "c__permxord": 0.0,
+          "c__permxp": 0.0,
+          "c__permxt": 0.0,
+          "c__pxt": 0.0,
+          "target__layxp": 0.0,
+          "target__layxt": 0.0,
+          "target__ordxlay": 0.0,
+          "target__ordxp": 0.0,
+          "target__ordxt": 0.0,
+          "target__permxlay": 0.0,
+          "target__permxord": 0.0,
+          "target__permxp": 0.0,
+          "target__permxt": 0.0,
+          "target__pxt": 0.0
+        },
+        "VALIDATION": {
+          "c__layxp": 0.0,
+          "c__layxt": 0.0,
+          "c__ordxlay": 0.0,
+          "c__ordxp": 0.0,
+          "c__ordxt": 0.0,
+          "c__permxlay": 0.0,
+          "c__permxord": 0.0,
+          "c__permxp": 0.0,
+          "c__permxt": 0.0,
+          "c__pxt": 0.0,
+          "target__layxp": 0.0,
+          "target__layxt": 0.0,
+          "target__ordxlay": 0.0,
+          "target__ordxp": 0.0,
+          "target__ordxt": 0.0,
+          "target__permxlay": 0.0,
+          "target__permxord": 0.0,
+          "target__permxp": 0.0,
+          "target__permxt": 0.0,
+          "target__pxt": 0.0
+        }
+      }
+    },
+    "intended_split_support_shift": {
+      "holdout_disjoint_from_train": true,
+      "holdout_symbols": [
+        "ABI_ACCEPTED_ORDINAL:12",
+        "ABI_ACCEPTED_ORDINAL:13",
+        "ABI_ACCEPTED_ORDINAL:14"
+      ],
+      "note": "This IS the intended unseen-symbol holdout design (not a leak). It is exactly what makes template alone informative about target in the combined corpus -- see check_higher_order_joint_mi's informational_combined_corpus_joint_mi_bits.",
+      "pass": true,
+      "train_equals_validation_symbols": true,
+      "train_symbols": [
+        "ABI_ACCEPTED_ORDINAL:00",
+        "ABI_ACCEPTED_ORDINAL:01",
+        "ABI_ACCEPTED_ORDINAL:02",
+        "ABI_ACCEPTED_ORDINAL:03",
+        "ABI_ACCEPTED_ORDINAL:04",
+        "ABI_ACCEPTED_ORDINAL:05",
+        "ABI_ACCEPTED_ORDINAL:06",
+        "ABI_ACCEPTED_ORDINAL:07",
+        "ABI_ACCEPTED_ORDINAL:08",
+        "ABI_ACCEPTED_ORDINAL:09",
+        "ABI_ACCEPTED_ORDINAL:10",
+        "ABI_ACCEPTED_ORDINAL:11"
+      ],
+      "validation_symbols": [
+        "ABI_ACCEPTED_ORDINAL:00",
+        "ABI_ACCEPTED_ORDINAL:01",
+        "ABI_ACCEPTED_ORDINAL:02",
+        "ABI_ACCEPTED_ORDINAL:03",
+        "ABI_ACCEPTED_ORDINAL:04",
+        "ABI_ACCEPTED_ORDINAL:05",
+        "ABI_ACCEPTED_ORDINAL:06",
+        "ABI_ACCEPTED_ORDINAL:07",
+        "ABI_ACCEPTED_ORDINAL:08",
+        "ABI_ACCEPTED_ORDINAL:09",
+        "ABI_ACCEPTED_ORDINAL:10",
+        "ABI_ACCEPTED_ORDINAL:11"
+      ]
+    },
+    "order_mapping_decoupling": {
+      "all_six_mappings_present_at_every_surviving_order": true,
+      "distinct_orders_present_in_train": 6,
+      "order_target_mi_bits": 0.0,
+      "pass": true
+    },
+    "text_conditional_target_uniformity": {
+      "cell_sizes_seen": [
+        36,
+        48,
+        144
+      ],
+      "failures": [],
+      "groups_checked": 72,
+      "pass": true
+    },
+    "uniqueness": {
+      "duplicate_prompt_count": 0,
+      "pass": true,
+      "total_rendered": 4464,
+      "unique_full_prompts": 4464
+    }
+  },
+  "overall_pass": true
+}

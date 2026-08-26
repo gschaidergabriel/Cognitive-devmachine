@@ -1,0 +1,23 @@
+{
+  "schema": "CLAY_FAST_RESULT/v1",
+  "receipt_id": "20260826T122007Z-trigger2-b1-balanced-2order-selection-claude-code-lead",
+  "direction": "trigger2-training",
+  "created_at": "2026-08-26T12:20:07Z",
+  "observed_head": "e61fc28e0e5be2ba9cf6a26eb4b04ee1857f2adf",
+  "status": "B1_BALANCED_TRAIN_TIER_SELECTED_AFTER_TWO_REJECTED_KEYING_SCHEMES_CANDIDATE_ADMISSION_CLOSED",
+  "headline": "Derived the 2304-row B1 balanced TRAIN mix-tier chatgpt-secondary recommended (avoid B1's full 6912 rows dominating the 10k mix); two of three keying schemes for which orders to keep were rejected by this tool's own fail-closed re-audit before any output was written, only the third passed all 7 checks.",
+  "state": "chatgpt-secondary (conversation c/6a8ed518) reviewed the full 9072-row B1 pool and recommended: keep it as an audited source pool, but for the actual 10k full-FT train mix use a reduced ~2304-row TRAIN tier (all 6 S3 mappings kept, codebook order reduced from 6 to 2 per structural cell) so B1 does not outweigh the sibling families (B2/B3, B4/B5, B6) purely by repetition; VALIDATION (1728) and HOLDOUT_FROZEN (432) stay fully untouched since they carry no gradient. Implemented tools/trigger2_b1_train_balanced_2order_selector_v1.py + tests (5/5 pass), fail-closed gated on a rerun of every leakage-audit-v1.1 check PLUS a new order_mapping_decoupling check (order must carry exactly 0 MI with target within TRAIN, and all 6 mappings must remain present at every surviving order). Two keying schemes for 'which 2 of 6 orders per structural cell' were tried and REJECTED by this gate before writing any file (documented in the tool's own CORRECTION docstring, not silently dropped): (1) keying by (template, triplet) -- chatgpt-secondary's literal suggestion -- leaked, because every symbol is unique to exactly one triplet, so the target symbol reveals the triplet, which then predicted the surviving order-pair (I(target;order)=0.079 bits, I(target;order x template)=1.5 bits, both nonzero); (2) keying by (class, polarity, layout) instead -- fixing the first leak -- introduced a new one, because order-pair became a near-bijective proxy for class, and class directly co-determines target (I(class;order x layout)=0.585 bits). (3) keying by TEMPLATE ALONE (4 templates, template-index-mod-4 opposite-pair rule) finally passed cleanly: template is provably marginally independent of target within TRAIN (every template crosses every triplet/mapping/class/polarity/layout), so a deterministic function of template alone cannot leak target information (verified numerically, not just argued from the data-processing inequality). Final result: exactly 2304 TRAIN + 1728 VALIDATION + 432 HOLDOUT_FROZEN = 4464 rows, all 7 audit checks pass (uniqueness, cross-split disjointness, text-conditional target uniformity, within-split+excess higher-order joint MI, intended split-support shift, bag-of-words shortcut probe, order-mapping decoupling). Order coverage across the 4 template groups is uneven but complete (every one of the 6 order values appears at least once: counts 2/1/1/2/1/1). Committed to research_entity/claycode/training/TRIGGER2_B1_TRAIN_BALANCED_2ORDER_V1.jsonl plus audit/report JSON. accepted_dataset_tokens remains 0; training_credit remains 0 -- this is a candidate mix-tier selection, not an admission event.",
+  "next": "The full 9072-row pool (prior commit 86cee4b) remains the donor/audit/expansion tier per chatgpt-secondary's explicit instruction -- do not delete or deprecate it. If later evals show codebook-order generalization specifically is a weak axis, a documented, re-audited step-up to a 3-order (3456-row) tier is the recommended next move rather than reverting to the full 6912. Coordinate with the sibling B2/B3, B4/B5 and B6 agents' final row counts before any actual 10k-mix assembly, since the balanced-tier sizing here (2304, ~20-25% of 10k) assumes those families deliver comparable volume.",
+  "evidence": [
+    "tools/trigger2_b1_train_balanced_2order_selector_v1.py",
+    "tests/test_trigger2_b1_train_balanced_2order_selector_v1.py",
+    "research_entity/claycode/training/TRIGGER2_B1_TRAIN_BALANCED_2ORDER_V1.jsonl",
+    "research_entity/claycode/training/TRIGGER2_B1_BALANCED_2ORDER_AUDIT_V1.json",
+    "research_entity/claycode/training/TRIGGER2_B1_BALANCED_2ORDER_REPORT_V1.json",
+    "research_entity/claycode/training/TRIGGER2_B1_BINDING_MATERIALIZED_CANDIDATE_V1.jsonl"
+  ],
+  "organ": "Anthropic / Claude Code (claude-code-lead), tier recommendation from chatgpt-secondary / GPT-5.6 Sol",
+  "origin_actor": "claude-code-lead",
+  "actor_role": "LEAD_RESEARCHER_PRIMARY_ADJUDICATOR",
+  "provider": "Anthropic"
+}

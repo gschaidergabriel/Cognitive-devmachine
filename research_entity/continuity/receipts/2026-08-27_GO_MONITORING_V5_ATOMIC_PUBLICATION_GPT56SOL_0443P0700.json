@@ -1,0 +1,37 @@
+{
+  "schema": "GO_MONITORING_V5_ATOMIC_PUBLICATION_RECEIPT/v1",
+  "timestamp_local": "2026-08-27T04:43:33+07:00",
+  "program": "ENTITYOS_HCU",
+  "trigger": "go",
+  "target_architecture": "autonomous self-organizing Xeno/HCU fabric",
+  "source_head_after_change": "f5b50a8bb7890f683f5dc08fe70575057e0f7ee7",
+  "source_tree_after_change": "6f8c239dbaa29ee2f56c26b4bb38c3a39bd08435",
+  "frontier_before": {
+    "runtime_quiescence": "P0_OPEN",
+    "restart_authority_attribution_v3": "SOURCE_CANDIDATE_RUNTIME_UNVERIFIED",
+    "monitoring_truth": "V4_SOURCE_CANDIDATE_DUAL_AUTHORITY_HARDENED_BUT_RETAINED_PUBLISHER_SWITCH_UNPROVEN"
+  },
+  "finding": "Monitoring v4 still invoked the legacy v3 publisher directly against canonical repo paths before overwriting its authority/runtime fields. A concurrent reader could therefore observe a transient legacy OR-combined runtime/provider snapshot even though the final v4 file was hardened.",
+  "changes": [
+    {
+      "path": "free swarm/update_system_analysis_v5.py",
+      "commit": "c6d1444c450586b1f141352c650789dcda12c536",
+      "effect": "legacy metrics computation runs only inside an isolated staging repo; authority/runtime provenance is overlaid before canonical publication; canonical JSON/provenance/README writes use same-directory atomic replace"
+    },
+    {
+      "path": "tests/test_update_system_analysis_v5.py",
+      "commit": "f5b50a8bb7890f683f5dc08fe70575057e0f7ee7",
+      "effect": "adds regressions for canonical-path non-mutation during legacy staging, hardened runtime/authority replacement, atomic replacement, provenance-block uniqueness, and fail-closed staged legacy failure"
+    }
+  ],
+  "evidence_boundary": {
+    "source_progress": true,
+    "repository_bound_tests_executed": false,
+    "runtime_credit": 0,
+    "runtime_quiescence_pass": false,
+    "physical_grid10_runtime_credit": 0,
+    "hcu_runtime_credit": 0,
+    "training_credit": 0
+  },
+  "next_exact_action": "On a clean current non-provider checkout, execute tests/test_free_swarm_restart_authority_attribution_v3.py, tests/test_update_system_analysis_v4.py, and tests/test_update_system_analysis_v5.py with bound HEAD/tree/source hashes and dirty=false. Only after PASS may v3 run read-only on the live Clay host and the retained autonomous publisher be switched to v5. No process kill is authorized by this receipt."
+}

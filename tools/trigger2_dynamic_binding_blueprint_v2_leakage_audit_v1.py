@@ -45,6 +45,28 @@ splits of a real atom string). A tokenizer-identity-bound rerun remains a separa
 gate once the exact ABI atom manifest + pinned tokenizer are admitted (see Q35/Qwen3.5
 identity-metrology chain) -- this is recorded explicitly in the output, not silently assumed
 away.
+
+CORRECTION (2026-08-26, same session, chatgpt-secondary review of commit ece5a0d, reproduced
+independently by claude-code-lead before accepting): v1's check_higher_order_joint_mi()
+computed joint MI over ALL 9072 rows combined (TRAIN+VALIDATION+HOLDOUT_FROZEN together).
+The observed ~0.276-bit "leak" between target and (perm|ord|layout|polarity) x template is
+NOT a within-split nuisance leak. It is exactly and entirely I(target;template) alone --
+because HOLDOUT_FROZEN intentionally uses a disjoint, unseen symbol pool (12-14) exclusively
+under template T6, template identity alone already predicts which 3-symbol pool the target
+comes from. That is the INTENDED unseen-symbol-holdout design, not a defect. Reproduced
+directly: I(target;perm x template) split-scoped inside TRAIN/VALIDATION/HOLDOUT_FROZEN
+separately is exactly 0.0 in all three; and over the combined corpus,
+I(target;template x nuisance) - I(target;template) = ~1.1e-16 (numerically zero) for every
+nuisance field. The nuisance field adds ZERO information beyond what the (by-design)
+cross-split symbol-support shift already explains. H5 ("pairwise zero-MI alone is
+insufficient") remains a correct general warning, but this specific experiment does not
+confirm it -- the original classification was TOOLING PASS / INTERPRETATION FAIL /
+GENERATOR NOT CONVICTED. check_higher_order_joint_mi() is now split-scoped (the actual leak
+test) plus an explicit excess-MI check against the template baseline (the correct
+generalization for cross-split MI); the old combined-corpus number is retained as a
+documented, correctly-labeled EXPECTED_HOLDOUT_SUPPORT_SHIFT informational field, not a
+failure condition. See the corrected receipt superseding
+research_entity/00_CURRENT/updates/trigger2-training/20260826T105610Z-trigger2-blueprint-v2-leakage-audit-claude-code-lead.json.
 """
 from __future__ import annotations
 
@@ -163,6 +185,24 @@ def check_text_conditional_target_uniformity(rendered: list[dict]) -> dict:
 
 
 def check_higher_order_joint_mi(rows: list[dict]) -> dict:
+    """Corrected v1.1 (see module docstring CORRECTION note). Two separate, properly
+    scoped questions, not one combined-corpus number:
+
+    (a) WITHIN-SPLIT leakage: for each of TRAIN/VALIDATION/HOLDOUT_FROZEN separately,
+        joint MI between target/class and every 2-way nuisance-field combination must
+        be exactly 0. This is the actual "does the generator leak inside the split a
+        model would actually train/eval on" test.
+    (b) CROSS-CORPUS excess MI: combined over all rows, does adding a nuisance field to
+        `template` explain any MORE about the target than `template` alone already does
+        (I(target;template x nuisance) - I(target;template))? template alone is expected
+        to carry real information (HOLDOUT_FROZEN's disjoint symbol pool is intentional,
+        documented separately in check_intended_split_support_shift below) -- the excess
+        over that baseline is the actual leak signal, and must be exactly 0.
+
+    The old (v1) combined-corpus raw joint-MI number is retained under
+    `informational_combined_corpus_joint_mi_bits` for provenance/regression tracking,
+    explicitly labeled as EXPECTED_HOLDOUT_SUPPORT_SHIFT, and does NOT gate `pass`.
+    """
     fields = {
         "perm": lambda r: tuple(r["perm"]),
         "ord": lambda r: tuple(r["ord"]),
@@ -170,19 +210,66 @@ def check_higher_order_joint_mi(rows: list[dict]) -> dict:
         "p": lambda r: r["p"],
         "t": lambda r: r["t"],
     }
+    nuisance_fields = {k: v for k, v in fields.items() if k != "t"}
     targets = {
         "c": lambda r: r["c"],
         "target": lambda r: r["target"],
     }
-    results = {}
+
+    def joint_of(fa, fb):
+        return lambda r: (fa(r), fb(r))
+
+    # (a) within-split
+    within_split: dict[str, dict[str, float]] = {}
+    within_split_failures = []
+    for split in ("TRAIN", "VALIDATION", "HOLDOUT_FROZEN"):
+        subset = [r for r in rows if r["split"] == split]
+        split_results = {}
+        for (fa_name, fb_name) in itertools.combinations(fields, 2):
+            fa, fb = fields[fa_name], fields[fb_name]
+            for tgt_name, tgt_fn in targets.items():
+                key = f"{tgt_name}__{fa_name}x{fb_name}"
+                v = mi(subset, tgt_fn, joint_of(fa, fb))
+                split_results[key] = v
+                if abs(v) > 1e-9:
+                    within_split_failures.append(f"{split}:{key}={v}")
+        within_split[split] = split_results
+
+    # (b) cross-corpus excess over the template baseline
+    template_baseline = {
+        tgt_name: mi(rows, tgt_fn, fields["t"]) for tgt_name, tgt_fn in targets.items()
+    }
+    excess_mi: dict[str, float] = {}
+    excess_failures = []
+    for nf_name, nf_fn in nuisance_fields.items():
+        for tgt_name, tgt_fn in targets.items():
+            key = f"{tgt_name}__templatex{nf_name}"
+            joint_val = mi(rows, tgt_fn, joint_of(fields["t"], nf_fn))
+            excess = joint_val - template_baseline[tgt_name]
+            excess_mi[key] = excess
+            if abs(excess) > 1e-9:
+                excess_failures.append(f"{key}={excess}")
+
+    # retained for provenance/regression only, NOT a pass/fail gate (see CORRECTION note)
+    informational_combined = {}
     for (fa_name, fb_name) in itertools.combinations(fields, 2):
         fa, fb = fields[fa_name], fields[fb_name]
-        joint = lambda r, fa=fa, fb=fb: (fa(r), fb(r))  # noqa: E731
         for tgt_name, tgt_fn in targets.items():
             key = f"{tgt_name}__{fa_name}x{fb_name}"
-            results[key] = mi(rows, tgt_fn, joint)
-    failures = [k for k, v in results.items() if abs(v) > 1e-9]
-    return {"joint_mi_bits": results, "failures": failures, "pass": not failures}
+            informational_combined[key] = mi(rows, tgt_fn, joint_of(fa, fb))
+
+    failures = within_split_failures + excess_failures
+    return {
+        "within_split_joint_mi_bits": within_split,
+        "within_split_failures": within_split_failures,
+        "template_baseline_mi_bits": template_baseline,
+        "excess_mi_over_template_baseline_bits": excess_mi,
+        "excess_failures": excess_failures,
+        "informational_combined_corpus_joint_mi_bits": informational_combined,
+        "informational_note": "combined-corpus numbers above are EXPECTED_HOLDOUT_SUPPORT_SHIFT (HOLDOUT_FROZEN's intentional disjoint symbol pool under template T6), not a leak; see module CORRECTION docstring. They are informational/regression-tracking only and do not gate pass.",
+        "failures": failures,
+        "pass": not failures,
+    }
 
 
 def tokenize(text: str) -> list[str]:
@@ -250,8 +337,35 @@ def bow_shortcut_probe(rendered: list[dict], folds: int = 5, seed: int = 2026082
         "per_fold_accuracy": per_fold_acc,
         "chance_accuracy": CHANCE_ACCURACY,
         "accuracy_minus_chance": accuracy - CHANCE_ACCURACY,
-        "pass": abs(accuracy - CHANCE_ACCURACY) < 0.05,
-        "note": "PASS means the bag-of-words shortcut probe could not beat chance by more than 5pp; it does not by itself prove zero information, only bounds this specific shallow-classifier attack.",
+        # One-sided: a SHORTCUT means beating chance, so only above-chance deviation
+        # fails this check. Below-chance is classifier noise/weakness (Laplace-smoothed
+        # NB on short texts, 5-fold CV), not evidence of a leak -- and is independently
+        # ruled out anyway by check_text_conditional_target_uniformity's exact
+        # enumeration proof that text alone carries exactly zero information here.
+        "pass": (accuracy - CHANCE_ACCURACY) < 0.05,
+        "note": "PASS means the bag-of-words shortcut probe could not beat chance by more than 5pp (one-sided; below-chance is classifier noise, not a leak signal). It does not by itself prove zero information -- check_text_conditional_target_uniformity is the exact proof for that; this probe is a secondary, weaker corroboration.",
+    }
+
+
+def check_intended_split_support_shift(rows: list[dict]) -> dict:
+    """Documents, explicitly and separately from the leakage checks, that
+    TRAIN/VALIDATION intentionally share their symbol pool and HOLDOUT_FROZEN
+    intentionally uses a disjoint unseen pool. This is the designed unseen-symbol
+    evaluation, not a leak -- stating it as its own checked fact (rather than letting
+    it hide inside an unscoped MI number, which is exactly what v1 got wrong) prevents
+    the next reader from re-deriving the same misattribution."""
+    train_syms = {r["target"] for r in rows if r["split"] == "TRAIN"}
+    val_syms = {r["target"] for r in rows if r["split"] == "VALIDATION"}
+    hold_syms = {r["target"] for r in rows if r["split"] == "HOLDOUT_FROZEN"}
+    ok = train_syms == val_syms and train_syms.isdisjoint(hold_syms) and bool(hold_syms)
+    return {
+        "train_symbols": sorted(train_syms),
+        "validation_symbols": sorted(val_syms),
+        "holdout_symbols": sorted(hold_syms),
+        "train_equals_validation_symbols": train_syms == val_syms,
+        "holdout_disjoint_from_train": train_syms.isdisjoint(hold_syms),
+        "pass": ok,
+        "note": "This IS the intended unseen-symbol holdout design (not a leak). It is exactly what makes template alone informative about target in the combined corpus -- see check_higher_order_joint_mi's informational_combined_corpus_joint_mi_bits.",
     }
 
 
@@ -267,6 +381,7 @@ def run() -> dict:
         "cross_split_disjointness": check_cross_split_disjointness(rendered),
         "text_conditional_target_uniformity": check_text_conditional_target_uniformity(rendered),
         "higher_order_joint_mi": check_higher_order_joint_mi(rows),
+        "intended_split_support_shift": check_intended_split_support_shift(rows),
         "bag_of_words_shortcut_probe": bow_shortcut_probe(rendered),
     }
     overall_pass = all(c.get("pass") for c in checks.values())

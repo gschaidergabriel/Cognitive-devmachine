@@ -1,0 +1,54 @@
+{
+  "schema": "CLAYCODE_SUPERVISOR_STEERING_DELTA/v1",
+  "supervisor_version": "9.01",
+  "date": "2026-08-26",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "integrated_cognition_compute_architecture": "HCU",
+  "reason": "A cross-family consolidation result landed after 9.00. It found and fixed two real B6 source defects: inconsistent sub-family keying and non-deterministic use of Python hash() that changed emitted bytes across PYTHONHASHSEED values. The repaired B6 generator is byte-stable across varied hash seeds, its 12 tests still pass, and a sweep over all 14 candidate JSONL files found zero parse errors, zero canonical/training eligibility violations, and zero contradictory cross-family duplicate prompts. The same sweep exposed an unresolved tokenizer-ABI design mismatch: B0-B3 use 15 placeholder ordinals, B4 uses a disjoint 60-ordinal block, and B5 roughly 93 ordinals, for 168 distinct placeholder ordinals versus the course's declared 46 real accepted atoms. This is not yet proven fatal before real-tokenizer binding, but it is a concrete fail-closed admission blocker until the canonical ABI-binding layer demonstrates a deterministic, collision-safe, leakage-safe mapping or reduces the candidate symbol space. No training/admission/runtime/BASE/semantics credit is added.",
+  "material_findings": {
+    "b6_family_key_consistency": "SOURCE_FIXED",
+    "b6_cross_process_byte_determinism": "SOURCE_TEST_PASS",
+    "cross_family_candidate_jsonl_sweep": "PASS_WITH_KNOWN_EXPECTED_B1_SUBSET_OVERLAPS",
+    "placeholder_atom_namespace": "168_DISTINCT_PLACEHOLDER_ORDINALS_VS_46_DECLARED_REAL_ACCEPTED_ATOMS_UNRESOLVED",
+    "canonical_tokenizer_abi_binding": "P1_BLOCKER",
+    "canonical_dataset_rows_admitted": 0,
+    "training_credit": 0,
+    "runtime_quiescence": "P0_OPEN_RESTART_AUTHORITY_ATTRIBUTION_EXECUTION_REQUIRED"
+  },
+  "next_cycle_order": [
+    "P0_RUNTIME unchanged: execute the pinned read-only restart-authority attribution probe on the live Clay host; do not kill on UNKNOWN; after unambiguous Clay restart-authority disablement require >=90s zero survivors/descendants/restarts.",
+    "P1_TRAINING_ABI: freeze the current B0-B6 candidate corpus revision and build one canonical tokenizer-ABI binding plan against the actual retained Qwen3.5-0.8B tokenizer artifacts. Prove whether 168 placeholder ordinals can map to the declared 46 real accepted atoms without collisions that change targets, class leakage, split leakage, or cross-family semantics. Fail closed if not.",
+    "P1_TRAINING_ABI_NEGATIVES: add mutation/transplant tests for atom-map swaps, duplicate real-token assignment, family-specific remapping, tokenizer artifact drift, special-token/config drift, and prompt-render drift. Require exact artifact/source hashes and deterministic rerun bytes.",
+    "P1_TRAINING_CURATION: only after ABI closure, construct the separately versioned balanced causal-family corpus authority from B0-B6 candidate pools; do not use raw row count as mixture weight and do not create a competing generic generator.",
+    "P1_TRAINING_GATES: rerun cross-family nuisance/conditional leakage, near-duplicate, Goodman family provenance, explicit model/checkpoint ancestry, tokenizer ABI currentness, and train/calibration/holdout disjointness immediately before admission.",
+    "P2_ADMISSION: only after those gates pass, execute an 8-16 row production micropilot through canonical admission with accepted-row receipts and identical replay +0.",
+    "P3_GO_RUNTIME: only after quiescence/provider-path runtime closure return to Physical GRID10/recursive-scaling evidence."
+  ],
+  "hard_invariants": [
+    "FREE_ONLY_NO_PAID_FALLBACK",
+    "TOGETHER_FORBIDDEN",
+    "OWNER_EMERGENCY_STOP_PROVIDER_HARD_OFF_UNTIL_EXPLICIT_CURRENT_AUTHORITY_CHANGE",
+    "EXECUTABLE_EVIDENCE_OUTRANKS_MODEL_CONSENSUS",
+    "NO_BASE_WORK_PACKAGE_PASS_FROM_MODEL_CONSENSUS",
+    "NO_CANONICAL_SEMANTICS_PROMOTION_WITHOUT_EXECUTABLE_COUNTEREVIDENCE_AND_REVIEW",
+    "GOODMAN_COLLAPSE_SHARED_MODEL_FAMILY_PIPELINE_ORCHESTRATION_AND_REPACKAGED_HISTORY",
+    "TRAIN_CALIBRATION_HOLDOUT_FAMILY_PROVENANCE_LEAKAGE_INVALIDATES_INDEPENDENCE_CREDIT",
+    "MODEL_FAMILY_AND_CHECKPOINT_ANCESTRY_MUST_REMAIN_EXPLICIT",
+    "UBUNTU_ONLY_FRANK_V0_1_TARGET_REMAINS_UNCHANGED",
+    "DO_NOT_MODIFY_FRANK_HARNESS"
+  ],
+  "credit_change": {
+    "b6_source_determinism_progress": true,
+    "cross_family_source_audit_progress": true,
+    "canonical_tokenizer_abi_credit": 0,
+    "canonical_generator_authority_credit": 0,
+    "canonical_dataset_admission_credit": 0,
+    "training_credit": 0,
+    "runtime_quiescence_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "base_credit": 0,
+    "canonical_semantics_credit": 0
+  }
+}

@@ -710,17 +710,17 @@
   },
   "provider_response_usage_provenance": {
     "checked_at": "2026-08-26",
-    "claim": "Every successful non-streaming Chat Completions response must contain a usage object with exact built-in, nonnegative, locally bounded prompt_tokens, completion_tokens and total_tokens integers, total_tokens must equal the sum of its two components, and the required nonempty visible text requires completion_tokens to be positive. FRANK retains those three provider-asserted counts in the execution receipt.",
+    "claim": "Every successful non-streaming Chat Completions response must contain a usage object with exact built-in, locally bounded prompt_tokens, completion_tokens and total_tokens integers. The closed adapter's required nonempty text request and visible response require both component counts to be positive, and total_tokens must equal their sum. FRANK retains those three provider-asserted counts in the execution receipt.",
     "sources": [
       "https://docs.nvidia.com/nim/large-language-models/latest/deployment/csp-deployment/aws.html",
       "https://docs.nvidia.com/nim/large-language-models/latest/reference/api-reference.html",
       "https://docs.vllm.ai/en/v0.16.0/api/vllm/entrypoints/openai/chat_completion/serving/"
     ],
-    "external_evidence": "NVIDIA's official expected non-streaming responses pair generated assistant text with positive completion_tokens. NVIDIA identifies vLLM as the inference backend; official vLLM serving code derives num_completion_tokens from generated token IDs and constructs UsageInfo with the two component counts and their arithmetic sum.",
-    "internal_measurement": "A status-200 response containing the required envelope and nonempty visible content but asserting completion_tokens zero previously returned success and reached VERIFIED and DONE. The existing omission falsifier separately proves that the entire usage object cannot be absent.",
-    "executable_evidence": "test_missing_response_usage_cannot_reach_verified_state; test_visible_content_requires_positive_completion_tokens",
-    "counterhypothesis": "A structurally valid nonempty content string can be verified even when the provider reports zero generated completion tokens; falsified because vLLM derives the count from generated token IDs and the closed adapter requires the visible output to have provider-side token provenance.",
-    "uncertainty": "Provider token counts remain unauthenticated assertions and do not establish billing, monetary cost or an exact character-to-token mapping. The 9999999999 ceiling and positive-output invariant are local FRANK v0.1 verification policy, not NVIDIA numeric limits. No Ubuntu NVIDIA live receipt is available on this host."
+    "external_evidence": "NVIDIA's official expected non-streaming responses pair nonempty chat messages and generated assistant text with positive prompt_tokens and completion_tokens. NVIDIA identifies vLLM as the inference backend; official vLLM serving code derives prompt_tokens from prompt token-ID lengths, completion_tokens from generated token-ID lengths, and constructs UsageInfo with their arithmetic sum.",
+    "internal_measurement": "Two canonical status-200 responses previously returned success and reached VERIFIED and DONE despite asserting respectively zero completion tokens for nonempty visible content and zero prompt tokens for the adapter's required nonempty text request. The existing omission falsifier separately proves that the entire usage object cannot be absent.",
+    "executable_evidence": "test_missing_response_usage_cannot_reach_verified_state; test_visible_content_requires_positive_completion_tokens; test_nonempty_text_request_requires_positive_prompt_tokens",
+    "counterhypothesis": "Structurally valid nonempty request and response text can be verified when either provider component count is zero; falsified because vLLM derives both counts from the respective token-ID sequences and this adapter admits neither empty messages nor prompt embeddings.",
+    "uncertainty": "Provider token counts remain unauthenticated assertions and do not establish billing, monetary cost or exact character-to-token mappings. Prompt embeddings can legitimately report zero prompt tokens in a different NVIDIA endpoint mode, but this closed text-chat adapter neither requests nor accepts that mode. The 9999999999 ceiling and positive-component invariants are local FRANK v0.1 verification policy, not NVIDIA numeric limits. No Ubuntu NVIDIA live receipt is available on this host."
   },
   "provider_response_usage_detail_compatibility": {
     "checked_at": "2026-08-26",

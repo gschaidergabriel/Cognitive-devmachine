@@ -1,0 +1,43 @@
+{
+  "schema": "CLAY_HOST_BOUND_PROVIDER_ATTRIBUTION_RECEIPT/v1",
+  "host": "agentforge (72.61.19.188)",
+  "container_identity": "clay-direct-dev (rootless podman, conmon-managed, user claylab)",
+  "observed_utc": "2026-08-26T00:53:26Z",
+  "observation_window_seconds": 65,
+  "method": "process-tree + repo-path + script-name attribution, no provider probe issued",
+  "clay_attributed_processes_found_before": [
+    {"pid": 1773169, "ppid": 1773156, "cmd": "python3 /workspace/clay-global-research-entity/tools/run_research_distillery_local.py --hours 24 --sleep-seconds 1", "elapsed_seconds": 48278, "note": "checkout at /workspace/clay-global-research-entity no longer exists on disk -- orphaned/legacy process holding deleted files open"},
+    {"pid": 1773156, "cmd": "bash tools/run_6000_free_swarm_supervisor.sh", "note": "supervisor wrapper for the above"},
+    {"pid": 1772948, "ppid": 1772935, "cmd": "python3 .../free swarm/evaluate.py --repo ... --watch --hours 24 --interval-seconds 30", "elapsed_seconds": 48295},
+    {"pid": 1772935, "cmd": "bash tools/run_6000_free_swarm_supervisor.sh", "note": "supervisor wrapper for the above"},
+    {"pid": 480240, "cmd": "python3 free swarm/update_fabric_live.py --repo ... --watch --interval-seconds 20", "elapsed_seconds": 125195}
+  ],
+  "termination_events": [
+    {"pid": 1773169, "signal": "SIGTERM", "result": "terminated"},
+    {"pid": 1773156, "signal": "SIGTERM", "result": "terminated (defunct, unreaped by parent 21196)"},
+    {"pid": 1772948, "signal": "SIGTERM", "result": "terminated"},
+    {"pid": 1772935, "signal": "SIGTERM", "result": "terminated (defunct)"},
+    {"pid": 480240, "signal": "SIGTERM", "result": "terminated (defunct)"}
+  ],
+  "not_terminated_explicitly_excluded": [
+    {"cmd": "bash /srv/claylab/bin/clay-free-swarm-publisher", "reason": "reviewed source: only runs git fetch/merge/render/commit/push of dashboard metrics files; does not itself call any model/provider API; respawns automatically (flock-guarded, likely cron/loop-managed elsewhere, not yet located) -- correctly out of scope for a provider-capability kill, would need separate justification to stop"},
+    {"cmd": "conmon (pid 21194), sleep infinity (pid 21196), git-bridge bridge_daemon.py (pid 21259), dbus/gpg-agent/systemd --user", "reason": "container/session infrastructure, not Clay-provider-specific, explicitly out of scope per fail-closed selection rule (unrelated_processes_terminated must be 0)"}
+  ],
+  "post_termination_observation": {
+    "window_seconds": 65,
+    "result_at_65s": "zero matching clay-attributed provider-capable processes (distillery/evaluate/fabric-updater); publisher only, confirmed non-provider-capable"
+  },
+  "hypothesis_and_implications": {
+    "root_cause": "AgentForge VPS ran an independent, orphaned FreeSwarm/Distillery process family (repo checkout since deleted) that continued issuing free-tier provider requests (OpenRouter :free models per the observed DISTILLERY_LIVE.json small_models list) at a 1-second poll interval, unaffected by the owner emergency-stop recorded in FREE_PROVIDER_ADMISSION.json on the canonical VPS (frank-api) -- the two hosts were not actually cross-enforcing the same HARD_OFF authority state.",
+    "implication_shared_pool": "Gabriel (owner) independently flagged mid-session that the free-tier token/provider pool is shared across MULTIPLE legitimate instances/hosts, not exclusive to Clay -- this matches the supervisor's own 8.87 correction (fleet_provider_counter_attribution: ACTIVE_FAIL -> UNRESOLVED_UNTIL_ATTRIBUTION). Aggregate OpenRouter counters alone cannot distinguish Clay-attributed usage from other legitimate projects on the same shared budget.",
+    "implication_next_step": "Host-bound, process-tree-level attribution (as done here) is the correct verification unit going forward, not global counter deltas. A reusable attribution-probe tool should be built so this check can be repeated across every host/sandbox that can reach the shared provider budget, per supervisor 8.87 p0_frontier.required_next_evidence.",
+    "known_gap": "The publisher's respawn mechanism (cron/systemd/loop) was not located in this pass -- it is confirmed non-provider-capable so left running, but its supervising mechanism should be documented for completeness in a future pass."
+  },
+  "evidence_scope": "clay-direct-dev host on AgentForge (72.61.19.188) only, provider-capability-termination component",
+  "credit_boundary": {
+    "positive_rows_admitted": 0,
+    "training_credit": 0,
+    "fleet_quiescence_credit": 0,
+    "note": "this receipt supports host-local quiescence for THIS host only; fleet-wide PASS still requires the same check on every other host/sandbox per supervisor 8.87"
+  }
+}

@@ -1,0 +1,116 @@
+{
+  "schema": "CLAY_TRIGGER2_ABI_TOKENIZER_REAL_EXECUTION_RESULT/v1",
+  "date": "2026-08-26",
+  "trigger": "triggerwort2",
+  "persistent_entity": "Clay",
+  "organ": "Claude Code (Sonnet 5) sandbox worker",
+  "status": "REAL_EXECUTION_EVIDENCE_PARTIAL_GATE_PROGRESS_ZERO_TRAINING_CREDIT",
+  "scope": "Real tokenizer/config execution against the pinned checkpoint inside clay-direct-dev. This closes part of TRIGGER2_ABI_CONTEXTUAL_RENDER_GATE/v1 (real tokenizer identity, standalone + contextual single-token check for all 46 accepted atoms + rejected 'or', architecture claim verification). It does NOT close the gate fully: no atoms_index.json (row/token-ID table) was located/ingested here, so exact per-row/per-occurrence identity against a manifest-bound index remains open. Zero dataset tokens, zero training/model-run credit claimed.",
+  "predecessor_delta": "research_entity/global/j-space/research/2026-08-26_TRIGGER2_ABI_SYMBOL_PRIOR_CONTEXTUAL_TOKEN_AUDIT_V1_GPT56SOL.json",
+  "execution_authority": {
+    "governance_docs_read": [
+      "governance/CLAY_VPS_SANDBOX_FULL_EXECUTION_AUTHORITY_2026-08-25.md",
+      "governance/CLAY_VPS_SANDBOX_BRIDGE_CURRENT.md"
+    ],
+    "provider_execution_performed": false,
+    "model_forward_pass_performed": false,
+    "training_execution_performed": false,
+    "note": "Only tokenizer/config-level CPU work (huggingface_hub + transformers tokenizers backend). No PyTorch installed, no model weights downloaded, no forward pass run."
+  },
+  "bridge_used": {
+    "path": "A (SSH bridge)",
+    "route": "local -> ssh -J root@100.71.48.1 -> root@72.61.19.188 -> su - claylab -> podman exec clay-direct-dev",
+    "verified_roundtrip": true,
+    "container": "clay-direct-dev (localhost/clay-direct-dev:ubuntu24)",
+    "container_uptime_at_test": "2 days",
+    "container_resources_observed": {
+      "disk_free": "141G of 193G overlay",
+      "ram_total": "15Gi",
+      "ram_free_at_test": "5.2Gi",
+      "cpus": 4
+    },
+    "packages_installed_this_session": ["huggingface_hub", "transformers"],
+    "outbound_network_verified": "https://huggingface.co reachable, HTTP 200"
+  },
+  "target_checkpoint": {
+    "repo_id": "Goekdeniz-Guelmez/Josiefied-Qwen3.5-0.8B-gabliterated-v1",
+    "revision_pinned": "591852bda6e1979f59e4b0f5ee2919697b12e936",
+    "revision_fetched_matches_pinned": true,
+    "fetched_files_sha256": {
+      "tokenizer.json": "87a7830d63fcf43bf241c3c5242e96e62dd3fdc29224ca26fed8ea333db72de4",
+      "tokenizer_config.json": "65506bca9e7dc188410f45b4f9f98752f3b37e5c51a7906cc95fd2d1fb70cd7e",
+      "config.json": "014cf897820e714e413a7b7a5f1c7dd35c421469a013b3e3db91292d240e8933",
+      "chat_template.jinja": "273d8e0e683b885071fb17e08d71e5f2a5ddfb5309756181681de4f5a1822d80"
+    },
+    "tokenizer_load_class": "TokenizersBackend (transformers AutoTokenizer)",
+    "tokenizer_load_warning_observed": "The tokenizer you are loading from ... with an incorrect regex pattern (mistral-style discussion #84). Recommends fix_mistral_regex=True. This run did NOT apply that flag, so results are the as-shipped-default tokenization, not the vendor-recommended-fixed one; a fixed-regex rerun is a listed open item."
+  },
+  "architecture_claim_check_vs_course_section_4": {
+    "note": "Top-level config.json keys do NOT carry these fields directly; they are nested under config.json.text_config. First automated pass mistakenly checked top-level and reported false MISMATCH; corrected by direct inspection of raw config.json content.",
+    "num_hidden_layers": {"claimed": 24, "actual_text_config": 24, "status": "MATCH"},
+    "hidden_size": {"claimed": 1024, "actual_text_config": 1024, "status": "MATCH"},
+    "vocab_size_config": {"claimed": 248320, "actual_text_config": 248320, "status": "MATCH"},
+    "full_attention_layers_0_indexed": {
+      "claimed": [3, 7, 11, 15, 19, 23],
+      "actual_layer_types_full_attention_indices": [3, 7, 11, 15, 19, 23],
+      "status": "MATCH",
+      "derivation": "text_config.layer_types is a 24-entry list alternating linear_attention x3 then full_attention, repeating; full_attention lands exactly at indices 3,7,11,15,19,23. Also text_config.full_attention_interval = 4, consistent."
+    },
+    "architecture_family_note": "architectures=['Qwen3_5ForConditionalGeneration'], model_type='qwen3_5', a hybrid linear-attention/full-attention (gated linear attention style) architecture with an attached vision_config (multimodal-capable checkpoint, image/video token IDs present even though course targets text-only Xeno usage)."
+  },
+  "tokenizer_object_vocab_size_note": {
+    "len_tokenizer": 248077,
+    "tokenizer_vocab_size_attr": 248044,
+    "config_text_config_vocab_size": 248320,
+    "interpretation_not_yet_confirmed": "config vocab_size (248320) is almost certainly the embedding-table size including reserved/padding slots (pad_token_id=248044, eos=248046, vision_start=248053, vision_end=248054, image_token=248056, video_token=248057 all sit inside that range); tokenizer object's own reported length is smaller than the embedding table. This gap is a real, previously-undocumented nuance for exact ABI binding and should be treated as OPEN, not silently reconciled by inference, per the same 'do not reconcile by inference' rule the predecessor delta already states for the dtype tension."
+  },
+  "atom_set_tested": {
+    "neutral_26_letters": "A-Z",
+    "neutral_10_digits": "0-9",
+    "language_bearing_10_words": ["yes", "no", "true", "false", "maybe", "unknown", "if", "then", "not", "and"],
+    "rejected_atom": "or",
+    "total_accepted": 46
+  },
+  "results": {
+    "standalone_no_leading_space": {
+      "single_token_count": "46/46",
+      "detail": "Every accepted atom (all 26 letters, all 10 digits, all 10 words) renders as exactly one token with zero leading context. Rejected atom 'or' also renders as exactly one token (id 269) -- confirms its 2026-08-25 rejection was for semantic/diagonal-response reasons (-0.150), not a tokenization-identity failure. Digit token IDs 15-24 for '0'-'9', not defended against namespace clashes elsewhere -- only noted here."
+    },
+    "standalone_with_leading_space": {
+      "single_token_count": "36/46",
+      "letters_status": "26/26 single token, distinct token IDs from no-space form (e.g. 'A'=32 vs ' A'=357, using Ġ-prefixed SentencePiece-style tokens)",
+      "words_status": "10/10 single token, distinct Ġ-prefixed IDs",
+      "digits_status": "0/10 single token -- EVERY digit '0'-'9' splits into 2 tokens when preceded by a space: token 220 ('Ġ', a bare space token) followed by the bare digit token (15-24). This is a real, measured ABI break for the 10 digit atoms under any whitespace-preceded rendering.",
+      "rejected_or_status": "single token with leading space too (id 466)"
+    },
+    "contextual_render_test": {
+      "templates_used": [
+        "SYMBOL: {atom} -> CLASS: unknown  (codebook-slot position, atom follows ': ')",
+        "The answer is {atom}.  (target-slot position, atom follows 'is ')"
+      ],
+      "finding": "In both realistic mid-sentence positions (both preceded by a space in the rendered text), letters and words tokenize as a single contiguous span identical to their standalone-with-space token ID. Digits again always split into the same 2-token ('Ġ', digit) pattern as the standalone-with-space case -- confirmed contextually, not just in isolation. No case observed where a letter/word atom's contextual span differed from its standalone-with-space identity (no extra merge/split beyond the already-known digit split), across the two templates tested.",
+      "limitation": "Only 2 template shapes tested here, not the full space of real B0-B6 rendered rows/templates. This is a targeted probe, not exhaustive coverage of TRIGGER2_ABI_CONTEXTUAL_RENDER_GATE/v1's full required input set (no exact atoms_index.json, no immutable split manifest cross-check performed)."
+    }
+  },
+  "headline_finding": "H_T2_ABI_02 (contextual token ID drift) is REAL and MEASURED for exactly the 10 digit atoms: any whitespace-preceded occurrence of a digit atom (the overwhelmingly common case in natural rendered text) yields 2 tokens, not 1, breaking the 'exactly one token per admitted atom occurrence' requirement in TRIGGER2_ABI_CONTEXTUAL_RENDER_GATE/v1's must_reject list ('zero-token or multi-token target span'). The 26 letters, 10 words, and the rejected atom 'or' all remain single-token in every tested position (standalone-no-space, standalone-with-space, both contextual templates).",
+  "recommended_next_steps": [
+    "Decide a binding-time rule for digit atoms: either (a) always render digit atoms with NO leading space (verified single-token), which constrains template design, or (b) treat the 2-token ('Ġ',digit) span as the accepted target span for digit atoms specifically and update the render-gate's reject rule to allow exactly-2-tokens for the neutral-digit stratum only, with the first token always being the fixed space token 220.",
+    "Rerun with fix_mistral_regex=True (the tokenizer's own load-time warning) and diff results -- this run used the as-shipped default regex.",
+    "Locate/ingest the actual atoms_index.json (row/token-ID table) referenced by the handoff to close the full gate -- not done in this pass.",
+    "Reconcile the tokenizer-object-vs-config vocab_size gap (248077/248044 vs 248320) with the actual embedding weight tensor shape once model weights (not just tokenizer) are pulled -- not done in this pass (no torch installed, no weights downloaded)."
+  ],
+  "adjudication": {
+    "resolved": [
+      "Real tokenizer for the exact pinned checkpoint/revision loaded and hashed inside the authorized sandbox.",
+      "Architecture claims in course doc section 4 (24 layers, hidden 1024, vocab 248320, full_attention at [3,7,11,15,19,23]) verified EXACT MATCH against real config.json (nested under text_config).",
+      "All 46 accepted atoms confirmed single-token standalone with no leading space; rejected atom 'or' also single-token (rejection is semantic, not tokenization).",
+      "Digit-atom whitespace-context multi-token split (H_T2_ABI_02) measured directly with real tokenizer output, both in isolation and in 2 contextual templates."
+    ],
+    "still_open": [
+      "TRIGGER2_ABI_CONTEXTUAL_RENDER_GATE/v1 not fully closed: no atoms_index.json ingested, no immutable split-manifest cross-check performed, only 2 template shapes tested.",
+      "fix_mistral_regex=True variant not tested.",
+      "No model weights pulled; no forward-pass/embedding-tensor verification performed.",
+      "Tokenizer vocab_size internal accounting gap (248077/248044 vs config 248320) unresolved."
+    ]
+  }
+}

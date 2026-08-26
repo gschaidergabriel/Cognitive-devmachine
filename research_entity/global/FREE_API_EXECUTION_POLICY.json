@@ -359,6 +359,25 @@
     "counterhypothesis": "Any nonblank Unicode-scalar model string can be delegated to provider-side validation; falsified locally because an embedded control character crossed the authenticated request boundary and entered verified provenance.",
     "uncertainty": "Rejecting all C0/C1 controls is local FRANK safety and canonicalization policy, not an NVIDIA or vLLM identifier guarantee. Printable Unicode identifiers remain permitted because NIM_SERVED_MODEL_NAME is configurable."
   },
+  "semantic_text_presence_boundary": {
+    "checked_at": "2026-08-27",
+    "claim": "Plain-text request content, verified response content and exposed reasoning each require at least one Unicode-scalar character that is neither Unicode whitespace nor a C0/C1 transport control. Controls and whitespace remain permitted around or within real text, but cannot alone satisfy the adapter's semantic-content requirement.",
+    "sources": [
+      "https://docs.python.org/3/library/stdtypes.html#str.strip",
+      "https://www.rfc-editor.org/rfc/rfc8259.html#section-7",
+      "https://docs.nvidia.com/nim/large-language-models/3.0.0/get-started/quickstart.html"
+    ],
+    "external_evidence": "Python defines str.strip without an explicit character set as removal of str.isspace characters, so NUL and other non-whitespace controls survive. RFC 8259 permits U+0000 through U+001F inside JSON strings when escaped, which proves transport validity but not semantic text. NVIDIA's current Chat Completions examples use natural-language message content; they do not specify that a control-only scalar is a meaningful prompt or final answer.",
+    "internal_measurement": "A user message containing only U+0000 passed the former strip predicate and reached the authenticated opener. Canonical status-200 responses whose visible content or parsed reasoning contained only escaped U+0000 each reached success, VERIFIED and DONE; the reasoning case also produced digest and character-count provenance. The repaired shared predicate rejects all three paths, while ordinary text with line breaks remains allowed.",
+    "executable_evidence": [
+      "test_control_only_text_cannot_cross_semantic_text_boundaries",
+      "test_blank_text_message_is_blocked_before_network",
+      "test_documented_nvidia_reasoning_message_remains_compatible",
+      "test_del_escape_overflow_is_rejected_before_json_materialization"
+    ],
+    "counterhypothesis": "Successful JSON decoding plus value.strip() is sufficient proof of nonblank text; falsified because escaped NUL is valid JSON, is not whitespace to Python, and crossed all three semantic boundaries without carrying visible or reasoned content.",
+    "uncertainty": "This is an explicit local FRANK text-adapter policy, not a claim that every control character is invalid model output. Tool, binary, multimodal and protocol-specific payloads require separate typed adapters. Format controls outside C0/C1 are not classified by this boundary."
+  },
   "bearer_credential_syntax": {
     "checked_at": "2026-08-24",
     "claim": "A configured provider credential is routable only when it is at most 8192 characters and matches the RFC 6750 b64token grammar before normalization, scanning or Authorization-header construction; oversized values, whitespace, CR/LF, non-ASCII and other separators fail closed before network access.",

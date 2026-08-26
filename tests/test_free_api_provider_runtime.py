@@ -991,6 +991,53 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
                     )
         self.assertFalse(called)
 
+    def test_model_name_with_internal_control_character_is_blocked_before_network(self):
+        called = False
+
+        class Response:
+            status = 200
+            headers = {}
+            def __enter__(self): return self
+            def __exit__(self, *args): pass
+            def read(self, limit):
+                return json.dumps({
+                    "object": "chat.completion",
+                    "id": "chatcmpl-test",
+                    "created": 1,
+                    "model": "mock\nforged",
+                    "usage": {
+                        "prompt_tokens": 1,
+                        "completion_tokens": 1,
+                        "total_tokens": 2,
+                    },
+                    "choices": [{
+                        "index": 0,
+                        "finish_reason": "stop",
+                        "message": {"role": "assistant", "content": "ok"},
+                    }],
+                }).encode("utf-8")
+
+        def opener(*args, **kwargs):
+            nonlocal called
+            called = True
+            return Response()
+
+        env = {
+            "NVIDIA_API_KEY": "secret",
+            "FRANK_PROVIDER_BASE_URL": "http://localhost:8765/v1",
+            "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
+        }
+        with self.assertRaisesRegex(
+            ValueError, "model_must_not_contain_control_characters"
+        ):
+            MOD.execute_chat(
+                VALID_MESSAGES,
+                model="mock\nforged",
+                environ=env,
+                opener=opener,
+            )
+        self.assertFalse(called)
+
     def test_empty_message_list_is_blocked_before_network(self):
         called = False
 

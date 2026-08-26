@@ -77,13 +77,15 @@ TEXT_RESPONSE_NULL_FIELDS = frozenset(
         "prompt_routed_experts",
         "prompt_text",
         "prompt_token_ids",
-        "service_tier",
     }
+)
+TEXT_RESPONSE_SERVICE_TIERS = frozenset(
+    {"auto", "default", "flex", "scale", "priority"}
 )
 TEXT_RESPONSE_FIELDS = (
     TEXT_RESPONSE_REQUIRED_FIELDS
     | TEXT_RESPONSE_NULL_FIELDS
-    | frozenset({"system_fingerprint"})
+    | frozenset({"service_tier", "system_fingerprint"})
 )
 TEXT_RESPONSE_CHOICE_FIELDS = frozenset(
     {
@@ -950,6 +952,7 @@ def _execute_chat_locked(
     payment_latch_active = False
     payment_latch_publication_failed = False
     provider_response_id_sha256 = None
+    provider_service_tier = None
     provider_system_fingerprint_sha256 = None
     provider_created_unix_seconds = None
     provider_usage = None
@@ -1072,6 +1075,14 @@ def _execute_chat_locked(
                 provider_system_fingerprint_sha256 = hashlib.sha256(
                     system_fingerprint.encode("utf-8")
                 ).hexdigest()
+            service_tier = payload.get("service_tier")
+            if service_tier is not None:
+                if (
+                    type(service_tier) is not str
+                    or service_tier not in TEXT_RESPONSE_SERVICE_TIERS
+                ):
+                    raise ValueError("response_service_tier_not_supported")
+                provider_service_tier = service_tier
             if (
                 "object" not in payload
                 or type(payload["object"]) is not str
@@ -1322,6 +1333,7 @@ def _execute_chat_locked(
         "budget_epoch_id": _budget_epoch_id(env),
         "request_id": request_id,
         "provider_response_id_sha256": provider_response_id_sha256,
+        "provider_service_tier": provider_service_tier,
         "provider_system_fingerprint_sha256": (
             provider_system_fingerprint_sha256
         ),

@@ -479,6 +479,17 @@ def _contains_unicode_control_character(value: str) -> bool:
     )
 
 
+def _has_semantic_text(value: str) -> bool:
+    """Require content beyond whitespace and transport control characters."""
+    return any(
+        not character.isspace()
+        and not (
+            ord(character) <= 0x1F or 0x7F <= ord(character) <= 0x9F
+        )
+        for character in value
+    )
+
+
 def _ascii_json_string_payload_size(value: str, stop_after: int) -> int:
     """Count default json.dumps string payload bytes without materializing."""
     total = 0
@@ -639,7 +650,7 @@ def _validate_text_chat_request(messages, model) -> None:
             raise ValueError("message_content_must_be_string")
         if not _is_unicode_scalar_text(message["content"]):
             raise ValueError("message_content_must_be_unicode_scalar_string")
-        if not message["content"].strip():
+        if not _has_semantic_text(message["content"]):
             raise ValueError("message_content_must_be_nonempty_string")
 
     if messages[-1]["role"] != "user":
@@ -1268,7 +1279,7 @@ def _execute_chat_locked(
             if reasoning is not None:
                 if (
                     not _is_unicode_scalar_text(reasoning)
-                    or not reasoning.strip()
+                    or not _has_semantic_text(reasoning)
                     or len(reasoning) > MAX_PROVIDER_RESPONSE_BYTES
                 ):
                     raise ValueError(
@@ -1305,7 +1316,7 @@ def _execute_chat_locked(
             content = message["content"]
             if not _is_unicode_scalar_text(content):
                 raise ValueError("response_content_must_be_unicode_scalar_string")
-            if not content.strip():
+            if not _has_semantic_text(content):
                 raise ValueError("response_content_must_be_nonempty_string")
             if provider_usage["completion_tokens"] == 0:
                 raise ValueError(

@@ -1,0 +1,37 @@
+#!/usr/bin/env python3
+"""
+clay-room-leave — cleanly remove THIS session's entry from the room
+registry. If this session was chief, triggers deterministic re-election
+among the remaining active sessions.
+
+Usage:
+  clay-room-leave
+"""
+import sys
+import os
+
+sys.path.insert(0, os.path.expanduser("~/.claude/room"))
+import roomlib  # noqa: E402
+
+
+def main():
+    session_id = roomlib.resolve_session_id()
+
+    with roomlib.Guard():
+        state = roomlib.load_state()
+        was_chief = state.get("chief_session_id") == session_id
+        state["sessions"].pop(session_id, None)
+        roomlib.prune_dead_sessions(state)
+
+        if was_chief:
+            new_chief = roomlib.elect_chief(state)
+        else:
+            new_chief = roomlib.ensure_chief(state)
+
+        roomlib.save_state(state)
+
+    print(f"left room: {session_id} (was_chief={was_chief}, new_chief={new_chief})")
+
+
+if __name__ == "__main__":
+    main()

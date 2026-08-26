@@ -1,0 +1,74 @@
+#!/usr/bin/env python3
+"""
+clay-room-heartbeat — cheap, silent refresh of THIS session's presence in
+the room registry. Designed to be called on EVERY tool call (PostToolUse
+hook), same pattern as ~/.claude/watchdog/bin/heartbeat.sh but with no
+visible output/alerts — pure background coordination.
+
+Auto-joins if this session isn't registered yet. Also re-checks chief
+freshness every call: if the current chief's heartbeat is stale (>5min) or
+its pid is dead on this host, a new chief is elected deterministically
+(oldest joined_at among active sessions).
+
+Usage:
+  clay-room-heartbeat [--lane "<what this session is doing now>"]
+
+Exit 0 always (must never break a hook chain). No stdout by default (quiet);
+use --verbose for a one-line status if needed interactively.
+"""
+import sys
+import os
+import argparse
+
+sys.path.insert(0, os.path.expanduser("~/.claude/room"))
+import roomlib  # noqa: E402
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--lane", default=None)
+    ap.add_argument("--verbose", action="store_true")
+    args = ap.parse_args()
+
+    session_id = roomlib.resolve_session_id()
+    pid = int(os.environ.get("CLAY_ROOM_SESSION_PID", os.getppid()))
+    hostname = os.uname().nodename
+
+    try:
+        with roomlib.Guard():
+            state = roomlib.load_state()
+            roomlib.prune_dead_sessions(state)
+
+            now = roomlib.now_iso()
+            entry = state["sessions"].get(session_id)
+            if entry is None:
+                entry = {
+                    "pid": pid,
+                    "joined_at": now,
+                    "last_heartbeat": now,
+                    "lane": args.lane or "unspecified",
+                    "role": "WORKER",
+                    "hostname": hostname,
+                }
+                state["sessions"][session_id] = entry
+            else:
+                entry["last_heartbeat"] = now
+                entry["pid"] = pid
+                if args.lane is not None:
+                    entry["lane"] = args.lane
+
+            chief = roomlib.ensure_chief(state)
+            roomlib.save_state(state)
+
+        if args.verbose:
+            role = "CHIEF" if chief == session_id else "WORKER"
+            print(f"{role} {session_id}")
+    except Exception as e:
+        # Never let room bookkeeping break the caller's tool chain.
+        if args.verbose:
+            print(f"clay-room-heartbeat: non-fatal error: {e}", file=sys.stderr)
+        sys.exit(0)
+
+
+if __name__ == "__main__":
+    main()

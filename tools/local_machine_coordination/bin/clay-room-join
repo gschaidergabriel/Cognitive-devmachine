@@ -1,0 +1,66 @@
+#!/usr/bin/env python3
+"""
+clay-room-join — register THIS Claude Code session in the local "room"
+coordination registry. Idempotent: safe to call repeatedly (e.g. from a
+PostToolUse hook), just refreshes the heartbeat if already joined.
+
+Usage:
+  clay-room-join [--lane "<what this session is doing>"]
+
+If no CHIEF is currently active (fresh heartbeat + live pid), this session
+may become chief itself via deterministic election (oldest joined_at among
+active sessions wins — never random).
+
+Session identity: $CLAUDE_CODE_SESSION_ID (harness), override for testing
+via $CLAY_ROOM_SESSION_ID.
+
+Registry: ~/.claude/room/state.json
+Exit 0 on success; prints "<role> <session_id>" on stdout (e.g. "CHIEF abc123").
+"""
+import sys
+import os
+import argparse
+
+sys.path.insert(0, os.path.expanduser("~/.claude/room"))
+import roomlib  # noqa: E402
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--lane", default=None, help="freetext: what this session is doing")
+    args = ap.parse_args()
+
+    session_id = roomlib.resolve_session_id()
+    pid = int(os.environ.get("CLAY_ROOM_SESSION_PID", os.getppid()))
+    hostname = os.uname().nodename
+
+    with roomlib.Guard():
+        state = roomlib.load_state()
+        roomlib.prune_dead_sessions(state)
+
+        now = roomlib.now_iso()
+        existing = state["sessions"].get(session_id)
+        if existing:
+            existing["last_heartbeat"] = now
+            existing["pid"] = pid
+            if args.lane is not None:
+                existing["lane"] = args.lane
+        else:
+            state["sessions"][session_id] = {
+                "pid": pid,
+                "joined_at": now,
+                "last_heartbeat": now,
+                "lane": args.lane or "unspecified",
+                "role": "WORKER",
+                "hostname": hostname,
+            }
+
+        chief = roomlib.ensure_chief(state)
+        roomlib.save_state(state)
+
+    role = "CHIEF" if chief == session_id else "WORKER"
+    print(f"{role} {session_id}")
+
+
+if __name__ == "__main__":
+    main()

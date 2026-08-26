@@ -1,0 +1,88 @@
+#!/usr/bin/env python3
+"""
+clay-browser-tab-acquire — get (or reuse) THIS session's own tab in the
+shared gstack `browse` daemon (headed Chrome on :99).
+
+WHY: multiple independent Claude Code instances share one browse daemon.
+Instead of fighting over one tab (exclusive lock -> everyone waits), each
+session gets its OWN tab and stays confined to it. Sessions then run in
+PARALLEL without stepping on each other.
+
+RULE FOR ANY CLAUDE CODE INSTANCE ON THIS MACHINE:
+  1. tab_id=$(clay-browser-tab-acquire "<purpose text>")
+     - idempotent: if this session already owns a live tab, returns the
+       SAME tab_id instead of opening a new one.
+     - first call for a session opens a fresh tab (about:blank) and
+       registers it.
+  2. BEFORE every browse action, switch onto your own tab first:
+       $B tab "$tab_id"
+     then run your action ($B goto/click/fill/...). Never act on a tab id
+     that isn't yours.
+  3. When your task/session is done:
+       clay-browser-tab-release
+     (closes your tab and frees the registry entry — unless yours is the
+     LAST tab open, in which case it's left open to avoid the 0-tab crash
+     bug; see clay-browser-tab-release).
+
+Usage:
+  clay-browser-tab-acquire "<purpose text>"
+
+Session identity: $CLAUDE_CODE_SESSION_ID (harness-provided, stable for the
+session), override for testing via $CLAY_BROWSER_SESSION_ID.
+
+Registry: ~/.claude/browser_lock/session_tabs.json
+Exit 0 always on success; prints tab_id on stdout.
+"""
+import sys
+import os
+
+sys.path.insert(0, os.path.expanduser("~/.claude/browser_lock"))
+import tablib  # noqa: E402
+
+
+def main():
+    purpose = sys.argv[1] if len(sys.argv) > 1 else "unspecified"
+    session_id = tablib.resolve_session_id()
+
+    with tablib.Guard():
+        live_ids = tablib.list_tab_ids()
+        reg = tablib.load_registry()
+        reg, removed = tablib.prune_orphans(reg, live_ids)
+        for sid, entry in removed.items():
+            print(
+                f"[cleanup] removed orphaned registry entry: session '{sid}' "
+                f"-> tab {entry.get('tab_id')} (no longer open)",
+                file=sys.stderr,
+            )
+
+        existing = reg.get(session_id)
+        if existing and existing.get("tab_id") in live_ids:
+            print(existing["tab_id"])
+            tablib.save_registry(reg)
+            sys.exit(0)
+
+        rc, out, err = tablib.run_browse("newtab")
+        if rc != 0:
+            print(f"failed to open new tab: {err or out}", file=sys.stderr)
+            sys.exit(1)
+
+        new_id = None
+        for tok in out.split():
+            if tok.isdigit():
+                new_id = int(tok)
+        if new_id is None:
+            print(f"could not parse new tab id from: {out!r}", file=sys.stderr)
+            sys.exit(1)
+
+        reg[session_id] = {
+            "tab_id": new_id,
+            "assigned_at": tablib.now_iso(),
+            "purpose": purpose,
+        }
+        tablib.save_registry(reg)
+        print(new_id)
+        sys.exit(0)
+
+
+if __name__ == "__main__":
+    main()

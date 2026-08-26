@@ -1,0 +1,84 @@
+#!/usr/bin/env python3
+"""
+clay-browser-tab-release — close THIS session's own tab and drop its
+registry entry. Call at end of a session/task that acquired a tab via
+clay-browser-tab-acquire.
+
+Usage:
+  clay-browser-tab-release [session_id]
+
+  With no argument: resolves session_id the same way clay-browser-tab-acquire
+  does ($CLAUDE_CODE_SESSION_ID, or $CLAY_BROWSER_SESSION_ID override, or
+  hostname-PPID fallback) and releases that session's tab.
+
+  With an explicit argument: releases that specific session_id's tab
+  (e.g. cleanup from a coordinator, or in tests simulating multiple
+  sessions from one shell).
+
+Safety: refuses to closetab if it's the LAST tab open (avoids the known
+0-tab daemon crash bug). In that case the registry entry is still removed
+(session releases ownership) but the tab itself is left open.
+
+Exit 0: released (tab closed, or already gone, or left open as last-tab).
+Exit 1: no registered tab for that session.
+"""
+import sys
+import os
+
+sys.path.insert(0, os.path.expanduser("~/.claude/browser_lock"))
+import tablib  # noqa: E402
+
+
+def main():
+    session_id = sys.argv[1] if len(sys.argv) > 1 else tablib.resolve_session_id()
+
+    with tablib.Guard():
+        live_ids = tablib.list_tab_ids()
+        reg = tablib.load_registry()
+        reg, removed = tablib.prune_orphans(reg, live_ids)
+        for sid, entry in removed.items():
+            print(
+                f"[cleanup] removed orphaned registry entry: session '{sid}' "
+                f"-> tab {entry.get('tab_id')} (no longer open)",
+                file=sys.stderr,
+            )
+
+        entry = reg.get(session_id)
+        if not entry:
+            print(f"no registered tab for session '{session_id}'", file=sys.stderr)
+            tablib.save_registry(reg)
+            sys.exit(1)
+
+        tab_id = entry["tab_id"]
+
+        if tab_id not in live_ids:
+            # already gone (crashed/closed externally) -- just drop entry
+            del reg[session_id]
+            tablib.save_registry(reg)
+            print(f"tab {tab_id} already closed; registry entry removed")
+            sys.exit(0)
+
+        if len(live_ids) <= 1:
+            # refuse to close the last tab -- avoid 0-tab daemon crash
+            del reg[session_id]
+            tablib.save_registry(reg)
+            print(
+                f"tab {tab_id} is the LAST open tab -- left open (0-tab crash "
+                f"guard). Registry entry removed; tab now unowned.",
+                file=sys.stderr,
+            )
+            sys.exit(0)
+
+        rc, out, err = tablib.run_browse("closetab", str(tab_id))
+        if rc != 0:
+            print(f"closetab {tab_id} failed: {err or out}", file=sys.stderr)
+            sys.exit(1)
+
+        del reg[session_id]
+        tablib.save_registry(reg)
+        print(f"tab {tab_id} closed; registry entry removed")
+        sys.exit(0)
+
+
+if __name__ == "__main__":
+    main()

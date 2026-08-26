@@ -1,0 +1,36 @@
+{
+  "schema_version": "8.91",
+  "active_program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "integrated_cognition_compute_architecture": "HCU",
+  "cycle": "runtime-authority-staleness-fail-closed",
+  "material_finding": "Fresh live telemetry at 2026-08-26T04:40:38Z reports supervisor STOPPED/QUARANTINED but go_swarm/distillery/forge RUNNING and labels provider admission epoch 8.78 with groq/mistral/nvidia/openrouter admitted=true as CURRENT_CANONICAL_PROVIDER_ADMISSION. Current main SUPERVISOR_INBOX is 8.90 and FREE_PROVIDER_ADMISSION has all providers admitted=false under OWNER_EMERGENCY_STOP; tools/free_provider_admission.py correctly requires provider-admission authority_epoch == current supervisor epoch and otherwise fails closed. Therefore the live publisher/runtime is operating from stale control-plane bytes or stale runtime state and must not be treated as current execution authority. Provider counters have not shown fresh provider activity since the last observed timestamps, so this is an authority-integrity blocker, not evidence of a new provider call.",
+  "evidence_boundary": {
+    "provider_runtime_credit": 0,
+    "training_credit": 0,
+    "base_work_package_promotion": false,
+    "canonical_semantics_promotion": false,
+    "physical_grid10_runtime_credit": 0
+  },
+  "control_actions": [
+    "KEEP_FREE_ONLY_NO_PAID_FALLBACK_AND_TOGETHER_FORBIDDEN",
+    "KEEP_ALL_PROVIDER_ROUTES_ADMITTED_FALSE_UNDER_OWNER_EMERGENCY_STOP",
+    "TREAT_ANY_RUNTIME_PROVIDER_ADMISSION_EPOCH_OLDER_THAN_CURRENT_SUPERVISOR_EPOCH_AS_STALE_NO_EXECUTION_AUTHORITY",
+    "DO_NOT_USE_LIVE_DASHBOARD_CURRENT_CANONICAL_PROVIDER_ADMISSION_LABEL_AS_AUTHORITY_UNLESS ITS EPOCH MATCHES CURRENT_SUPERVISOR_INBOX_AND CANONICAL FREE_PROVIDER_ADMISSION",
+    "BEFORE_ANY_PROVIDER_CAPABLE_RUNTIME_RESTART_REQUIRE CLEAN_CHECKOUT_AT_CURRENT_MAIN PLUS CURRENT SUPERVISOR_EPOCH PLUS CURRENT FREE_PROVIDER_ADMISSION EPOCH MATCH AND ALL PROVIDERS FALSE",
+    "DO_NOT_CREATE_PROVIDER_PROBE_CALLS",
+    "ALLOW_PROVIDER_INDEPENDENT_LOCAL_OR_SANDBOX_SOURCE_TESTING_ONLY",
+    "CONTINUE_DIVERSE_GENERATOR_AUTHORITY_SOURCE_WORK_WITH GOODMAN_FAMILY_DISJOINTNESS_MODEL_CHECKPOINT_ANCESTRY_TOKENIZER_ABI_NUISANCE_AND_CURRENTNESS GATES",
+    "DO_NOT_SCALE_TRAINING_OR_ADMIT_CANONICAL_ROWS_UNTIL THE 8_TO_16 ROW DIVERSE MICROPILOT PASSES THE REAL FINAL ADMISSION BOUNDARY WITH RECEIPTS AND IDENTICAL_REPLAY_PLUS_ZERO",
+    "UBUNTU_ONLY_FRANK_V0_1_TARGET_REMAINS_UNCHANGED",
+    "DO_NOT_MODIFY_FRANK_HARNESS"
+  ],
+  "promotion_law": [
+    "EXECUTABLE_EVIDENCE_OUTRANKS_MODEL_CONSENSUS",
+    "NO_BASE_WORK_PACKAGE_PASS_FROM_MODEL_CONSENSUS",
+    "NO_CANONICAL_SEMANTICS_PROMOTION_WITHOUT_EXECUTABLE_COUNTEREVIDENCE_AND_REVIEW",
+    "GOODMAN_COLLAPSE_SHARED_MODEL_FAMILY_PIPELINE_ORCHESTRATION_AND_REPACKAGED_HISTORY",
+    "MODEL_FAMILY_AND_CHECKPOINT_ANCESTRY_MUST_REMAIN_EXPLICIT",
+    "STALE_CONTROL_PLANE_BYTES_CANNOT_MINT_EXECUTION_AUTHORITY"
+  ]
+}

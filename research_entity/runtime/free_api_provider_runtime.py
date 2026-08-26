@@ -471,6 +471,14 @@ def _is_unicode_scalar_text(value) -> bool:
     )
 
 
+def _contains_unicode_control_character(value: str) -> bool:
+    """Identify C0/C1 controls that cannot occur in a model identifier."""
+    return any(
+        ord(character) <= 0x1F or 0x7F <= ord(character) <= 0x9F
+        for character in value
+    )
+
+
 def _ascii_json_string_payload_size(value: str, stop_after: int) -> int:
     """Count default json.dumps string payload bytes without materializing."""
     total = 0
@@ -608,6 +616,8 @@ def _validate_text_chat_request(messages, model) -> None:
         raise ValueError("model_must_be_unicode_scalar_string")
     if model != model.strip():
         raise ValueError("model_must_match_served_identifier_exactly")
+    if _contains_unicode_control_character(model):
+        raise ValueError("model_must_not_contain_control_characters")
     if type(messages) is not list:
         raise ValueError("messages_must_be_list")
     if not messages:

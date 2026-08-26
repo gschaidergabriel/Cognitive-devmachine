@@ -76,7 +76,19 @@ TEXT_RESPONSE_CHOICE_FIELDS = frozenset(
         "token_ids",
     }
 )
-TEXT_RESPONSE_MESSAGE_FIELDS = frozenset({"role", "content"})
+TEXT_RESPONSE_MESSAGE_NULL_FIELDS = frozenset(
+    {
+        "annotations",
+        "audio",
+        "function_call",
+        "reasoning",
+        "refusal",
+    }
+)
+TEXT_RESPONSE_MESSAGE_FIELDS = (
+    frozenset({"role", "content", "tool_calls"})
+    | TEXT_RESPONSE_MESSAGE_NULL_FIELDS
+)
 BEARER_TOKEN_CHARACTERS = frozenset(
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~+/"
 )
@@ -1128,6 +1140,16 @@ def _execute_chat_locked(
                 raise ValueError("response_message_must_be_object")
             if not set(message).issubset(TEXT_RESPONSE_MESSAGE_FIELDS):
                 raise ValueError("response_fields_not_supported_by_text_adapter")
+            for metadata_field in TEXT_RESPONSE_MESSAGE_NULL_FIELDS:
+                if message.get(metadata_field) is not None:
+                    raise ValueError(
+                        "response_message_metadata_not_supported_by_text_adapter"
+                    )
+            if "tool_calls" in message and (
+                type(message["tool_calls"]) is not list
+                or message["tool_calls"]
+            ):
+                raise ValueError("response_tool_calls_require_typed_adapter")
             if message.get("role") != "assistant":
                 raise ValueError("response_role_must_be_assistant")
             content = message["content"]

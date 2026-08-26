@@ -35,6 +35,7 @@ MAX_PROVIDER_RESPONSE_ID_CHARACTERS = 256
 MAX_PROVIDER_SYSTEM_FINGERPRINT_CHARACTERS = 256
 MAX_PROVIDER_CREATED_UNIX_SECONDS = 9_999_999_999
 MAX_PROVIDER_CREATED_FUTURE_SKEW_SECONDS = 300
+MAX_PROVIDER_CREATED_PAST_SKEW_SECONDS = 300
 MAX_PROVIDER_USAGE_TOKENS = 9_999_999_999
 PROVIDER_RESPONSE_ID_SUFFIX_CHARACTERS = frozenset(
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._"
@@ -1134,9 +1135,12 @@ def _execute_chat_locked(
                 or provider_created_unix_seconds
                 > response_received_unix_seconds
                 + MAX_PROVIDER_CREATED_FUTURE_SKEW_SECONDS
+                or provider_created_unix_seconds
+                < response_received_unix_seconds
+                - MAX_PROVIDER_CREATED_PAST_SKEW_SECONDS
             ):
                 raise ValueError(
-                    "response_created_exceeds_local_receipt_time"
+                    "response_created_outside_local_receipt_window"
                 )
             if (
                 "model" not in payload
@@ -1418,6 +1422,9 @@ def _execute_chat_locked(
         "response_received_unix_seconds": response_received_unix_seconds,
         "provider_created_max_future_skew_seconds": (
             MAX_PROVIDER_CREATED_FUTURE_SKEW_SECONDS
+        ),
+        "provider_created_max_past_skew_seconds": (
+            MAX_PROVIDER_CREATED_PAST_SKEW_SECONDS
         ),
         "provider_usage": provider_usage,
         "attempt_id": _safe_attempt_id(

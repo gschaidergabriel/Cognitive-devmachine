@@ -32,6 +32,7 @@ MAX_PROVIDER_OUTPUT_TOKENS = 4_096
 MAX_BEARER_TOKEN_CHARACTERS = 8_192
 MAX_ATTEMPT_NONCE_CHARACTERS = 128
 MAX_PROVIDER_RESPONSE_ID_CHARACTERS = 256
+MAX_PROVIDER_SYSTEM_FINGERPRINT_CHARACTERS = 256
 MAX_PROVIDER_CREATED_UNIX_SECONDS = 9_999_999_999
 MAX_PROVIDER_USAGE_TOKENS = 9_999_999_999
 MAX_ZERO_COST_ATTESTATION_CHARACTERS = 1_024
@@ -66,6 +67,24 @@ TEXT_RESPONSE_USAGE_DETAIL_FIELDS = {
         "completion_tokens",
     ),
 }
+TEXT_RESPONSE_REQUIRED_FIELDS = frozenset(
+    {"object", "id", "created", "model", "choices", "usage"}
+)
+TEXT_RESPONSE_NULL_FIELDS = frozenset(
+    {
+        "kv_transfer_params",
+        "prompt_logprobs",
+        "prompt_routed_experts",
+        "prompt_text",
+        "prompt_token_ids",
+        "service_tier",
+    }
+)
+TEXT_RESPONSE_FIELDS = (
+    TEXT_RESPONSE_REQUIRED_FIELDS
+    | TEXT_RESPONSE_NULL_FIELDS
+    | frozenset({"system_fingerprint"})
+)
 TEXT_RESPONSE_CHOICE_FIELDS = frozenset(
     {
         "finish_reason",
@@ -931,6 +950,7 @@ def _execute_chat_locked(
     payment_latch_active = False
     payment_latch_publication_failed = False
     provider_response_id_sha256 = None
+    provider_system_fingerprint_sha256 = None
     provider_created_unix_seconds = None
     provider_usage = None
 
@@ -1026,6 +1046,32 @@ def _execute_chat_locked(
                 payload.get("object") == "error" or "error" in payload
             ):
                 raise ProviderReportedError
+            if type(payload) is not dict:
+                raise ValueError("response_must_be_object")
+            payload_fields = set(payload)
+            if (
+                not TEXT_RESPONSE_REQUIRED_FIELDS.issubset(payload_fields)
+                or not payload_fields.issubset(TEXT_RESPONSE_FIELDS)
+            ):
+                raise ValueError("response_top_level_fields_not_supported")
+            if any(payload[field] is not None for field in (
+                TEXT_RESPONSE_NULL_FIELDS & payload_fields
+            )):
+                raise ValueError("response_top_level_metadata_not_passive")
+            system_fingerprint = payload.get("system_fingerprint")
+            if system_fingerprint is not None:
+                if (
+                    not _is_unicode_scalar_text(system_fingerprint)
+                    or not system_fingerprint
+                    or len(system_fingerprint)
+                    > MAX_PROVIDER_SYSTEM_FINGERPRINT_CHARACTERS
+                ):
+                    raise ValueError(
+                        "response_system_fingerprint_must_be_bounded_unicode_string"
+                    )
+                provider_system_fingerprint_sha256 = hashlib.sha256(
+                    system_fingerprint.encode("utf-8")
+                ).hexdigest()
             if (
                 "object" not in payload
                 or type(payload["object"]) is not str
@@ -1276,6 +1322,9 @@ def _execute_chat_locked(
         "budget_epoch_id": _budget_epoch_id(env),
         "request_id": request_id,
         "provider_response_id_sha256": provider_response_id_sha256,
+        "provider_system_fingerprint_sha256": (
+            provider_system_fingerprint_sha256
+        ),
         "provider_created_unix_seconds": provider_created_unix_seconds,
         "provider_usage": provider_usage,
         "attempt_id": _safe_attempt_id(

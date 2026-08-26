@@ -1,0 +1,45 @@
+{
+  "schema": "GO_QUIESCENCE_RESTART_ATTRIBUTION_TOOL/v1",
+  "date": "2026-08-26",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "trigger": "go",
+  "priority": "P0_RUNTIME_QUIESCENCE",
+  "source_commit": "453d061f432adf4a44444e678b027bc42e75dd07",
+  "entrypoint": "tools/free_swarm_restart_authority_attribution_v1.py",
+  "reason": "Supervisor 8.99 requires restart-authority attribution before any kill. Fresh repository liveness continues after 8.99, including metrics commit b0de467af47046d5ec2f696e2a52e41867e0f55b at 2026-08-26T12:44:14Z. Repo liveness is not by itself provider-call proof or host attribution.",
+  "authority": {
+    "free_only": true,
+    "provider_routes_admitted": false,
+    "free_swarm_owner_emergency_stop": true,
+    "together_forbidden": true,
+    "non_provider_local_validation_allowed": true
+  },
+  "exact_action": [
+    "On clay-direct-dev, use a clean checkout containing source_commit 453d061f432adf4a44444e678b027bc42e75dd07 or later current main with identical entrypoint bytes.",
+    "Run: python3 tools/free_swarm_restart_authority_attribution_v1.py --output /tmp/free_swarm_restart_authority_attribution_v1.json",
+    "Do not kill any process in this step.",
+    "For every matched legacy root retain PID/PPID/argv/exe/cwd/uid/cgroup/PID namespace/parent chain and provider environment variable NAMES only.",
+    "Require a restart-authority classification. UNKNOWN must fail closed and trigger manual/secondary attribution, not blind pkill.",
+    "If systemd scope/service evidence exists, preserve systemctl-show output hash and unit identity. If container/tmux/screen/nohup/cron/timer ancestry is found, preserve the classified evidence.",
+    "Only after an unambiguous ownership/restart-authority receipt may the existing quiescence enforcer disable that authority and terminate the exact matched Clay tree descendants-first.",
+    "Then require >=90 seconds zero survivors, zero descendants and zero restart events before provider-gate runtime validation or GRID10 work resumes."
+  ],
+  "forbidden": [
+    "NO_PROVIDER_OR_HOSTED_MODEL_CALLS",
+    "NO_TOGETHER",
+    "NO_SECRET_VALUE_EXPORT",
+    "NO_KILL_DURING_ATTRIBUTION_PROBE",
+    "NO_GLOBAL_PROVIDER_COUNTER_ONLY_ATTRIBUTION",
+    "NO_GRID10_BEFORE_QUIESCENCE_PASS"
+  ],
+  "credit_change": {
+    "source_tooling_progress": true,
+    "runtime_quiescence_credit": 0,
+    "provider_path_runtime_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "training_credit": 0
+  }
+}

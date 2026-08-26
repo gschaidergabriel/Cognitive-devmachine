@@ -1,0 +1,54 @@
+{
+  "schema_version": "8.92",
+  "active_program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "integrated_cognition_compute_architecture": "HCU",
+  "cycle": "autonomous-provider-authority-split-brain-fail-closed",
+  "material_findings": [
+    "Current main still has SUPERVISOR_INBOX 8.91 with OWNER_EMERGENCY_STOP and all provider routes admitted=false, while CLAYCODE_AUTONOMOUS_RESEARCH_CONTROL remains status ACTIVE and SUPERVISOR_STATE remains an older independent 9.9 work-selection state.",
+    "tools/claycode_autonomous_cycle.py loads CONTROL and SUPERVISOR_STATE but does not load or validate SUPERVISOR_INBOX before credential discovery, NVIDIA probing, reranking/embedding, or Mistral/NVIDIA model calls. With credentials present, those code paths can perform provider network calls despite current 8.91 HARD_OFF.",
+    "The latest GO recursive Physical GRID10 -> recursive-scaling bridge v2 has source, fail-closed tests and an exact non-provider execution request, but its own receipt states that no clean repository-bound execution receipt was obtained; all physical GRID10/recursive-scale/whole-HCU runtime credit remains zero.",
+    "Fresh metrics at 2026-08-26T06:41:33Z still report supervisor STOPPED/QUARANTINED while go_swarm remains RUNNING and Distillery yield remains 0 / 88774 accepted dataset tokens. This does not itself prove a new provider call, but it confirms runtime/control-plane state is still not cleanly converged."
+  ],
+  "control_actions": [
+    "KEEP_FREE_ONLY_NO_PAID_FALLBACK_AND_TOGETHER_FORBIDDEN",
+    "KEEP_OWNER_EMERGENCY_STOP_AND_ALL_PROVIDER_ROUTES_ADMITTED_FALSE",
+    "TREAT_SUPERVISOR_INBOX_AS_THE_CURRENT_FAIL_CLOSED_RUNTIME_PROVIDER_AUTHORITY_FOR_AUTONOMOUS_CLAYCODE_CYCLES",
+    "DO_NOT_EXECUTE_TOOLS_CLAYCODE_AUTONOMOUS_CYCLE_PY_WHILE_ITS_PROVIDER_PATH_LACKS_A_CURRENT_INBOX_HARD_OFF_GATE",
+    "DO_NOT_PERFORM_PROVIDER_DISCOVERY_PROBES_RERANK_EMBED_OR_CHAT_FROM_THE_AUTONOMOUS_CYCLE_WHILE_PROVIDER_ROUTES_ADMITTED_IS_FALSE",
+    "ALLOW_PROVIDER_INDEPENDENT_LOCAL_OR_SANDBOX_SOURCE_VALIDATION_ONLY",
+    "DO_NOT_PROMOTE_THE_RECURSIVE_PHYSICAL_BRIDGE_UNTIL_THE_PINNED_EXACT_SOURCE_EXECUTION_RECEIPT_EXISTS_AND_CURRENT_EXECUTION_AUTHORITY_IS_REENTERED",
+    "KEEP_TRIGGER2_DIVERSE_GENERATOR_AUTHORITY_AS_TRAINING_P0; CANONICAL_DATASET_ROWS_AND_TRAINING_CREDIT_REMAIN_ZERO",
+    "UBUNTU_ONLY_FRANK_V0_1_TARGET_REMAINS_UNCHANGED",
+    "DO_NOT_MODIFY_FRANK_HARNESS"
+  ],
+  "required_source_repair": {
+    "target": "tools/claycode_autonomous_cycle.py",
+    "law": "Before any secret_source/provider catalog/probe/rerank/embed/chat operation, load SUPERVISOR_INBOX and fail closed unless free_only.enabled=true, provider_routes_admitted=true, emergency_stop=false, and any required provider-admission epoch/currentness checks match. A stale/missing/malformed inbox must disable provider access, not fall back to CONTROL/SUPERVISOR_STATE.",
+    "minimum_regressions": [
+      "provider routes false -> no secret lookup and no provider function called",
+      "emergency stop true -> no provider function called",
+      "missing or malformed inbox -> no provider function called",
+      "stale provider/supervisor authority -> no provider function called",
+      "provider-independent source path remains available without network access"
+    ]
+  },
+  "promotion_law": [
+    "EXECUTABLE_EVIDENCE_OUTRANKS_MODEL_CONSENSUS",
+    "NO_BASE_WORK_PACKAGE_PASS_FROM_MODEL_CONSENSUS",
+    "NO_CANONICAL_SEMANTICS_PROMOTION_WITHOUT_EXECUTABLE_COUNTEREVIDENCE_AND_REVIEW",
+    "GOODMAN_COLLAPSE_SHARED_MODEL_FAMILY_PIPELINE_ORCHESTRATION_AND_REPACKAGED_HISTORY",
+    "MODEL_FAMILY_AND_CHECKPOINT_ANCESTRY_MUST_REMAIN_EXPLICIT",
+    "STALE_OR_SPLIT_CONTROL_PLANE_BYTES_CANNOT_MINT_EXECUTION_AUTHORITY",
+    "SOURCE_OR_REQUEST_RECEIPT_IS_NOT_RUNTIME_PASS"
+  ],
+  "credit_change": {
+    "provider_runtime_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "recursive_scale_runtime_credit": 0,
+    "whole_hcu_credit": 0,
+    "training_credit": 0,
+    "base_work_package_promotion": false,
+    "canonical_semantics_promotion": false
+  }
+}

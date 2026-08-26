@@ -1,16 +1,17 @@
 {
-  "schema_version": "8.92",
-  "latest_cycle": "autonomous-provider-authority-split-brain-fail-closed",
+  "schema_version": "8.93",
+  "latest_cycle": "autonomous-provider-gate-canonical-source-closed-direct-cli-quarantined",
   "needs_review": true,
   "active_program": "ENTITYOS_HCU",
   "product": "EntityOS",
   "integrated_cognition_compute_architecture": "HCU",
-  "material_finding": "Current main contains conflicting autonomous control state: this inbox is the current OWNER_EMERGENCY_STOP/HARD_OFF authority with all provider routes false, while CLAYCODE_AUTONOMOUS_RESEARCH_CONTROL remains ACTIVE and SUPERVISOR_STATE remains an older independent 9.9 work-selection state. tools/claycode_autonomous_cycle.py does not load this inbox before credential discovery, provider probing, reranking/embedding, or Mistral/NVIDIA calls, so it is not currently safe to execute as a provider-capable cycle under HARD_OFF. Latest recursive Physical GRID10 -> recursive scaling bridge v2 remains source/request evidence only with runtime credit zero. Fresh metrics at 2026-08-26T06:41:33Z still show supervisor STOPPED/QUARANTINED, go_swarm RUNNING, and Distillery 0 / 88774 accepted dataset tokens; this is control/runtime convergence evidence, not proof of a fresh provider call.",
+  "material_finding": "Canonical autonomous workflow routing is now fail-closed at source level: provider gate + guarded entrypoint + workflow routing exist on main. However tools/claycode_autonomous_cycle.py remains direct-CLI quarantined by the repository's own policy gate, so whole-entrypoint safety is not closed. Current Ubuntu Actions evidence at head 74dbfb1b... is zero-step failure (steps=[], runner_id=0), hence no runtime PASS/FAIL. Fresh clay-direct-dev telemetry shows old FreeSwarm/evaluator/distillery/fabric workers as defunct zombies, but that checkout is stale/dirty/behind main and cannot mint current execution authority. Distillery remains 0 / 88774 accepted dataset tokens.",
   "current_frontier": {
-    "runtime_provider_authority": "HARD_OFF_8_92_AUTONOMOUS_PROVIDER_PATH_QUARANTINED_UNTIL_INBOX_GATE_EXISTS",
-    "autonomous_cycle_provider_safety": "SOURCE_GAP_CONFIRMED_RUNNER_DOES_NOT_CONSULT_CURRENT_INBOX_BEFORE_PROVIDER_OPERATIONS",
+    "runtime_provider_authority": "HARD_OFF_8_93_CANONICAL_WORKFLOW_SOURCE_GUARDED_LEGACY_DIRECT_CLI_QUARANTINED",
+    "autonomous_cycle_provider_safety": "CANONICAL_WORKFLOW_SOURCE_ROUTING_CLOSED_RUNTIME_UNVERIFIED_DIRECT_CLI_UNSAFE",
     "current_free_provider_admission": "KEEP_ALL_PROVIDERS_FALSE_UNDER_OWNER_EMERGENCY_STOP",
-    "recursive_physical_scaling_bridge_v2": "SOURCE_TEST_AND_EXECUTION_REQUEST_ONLY_RUNTIME_RECEIPT_NOT_OBSERVED",
+    "github_actions_execution": "ZERO_STEP_RUNNER_ID_0_INFRASTRUCTURE_UNRESOLVED_NOT_SEMANTIC_FAIL",
+    "clay_direct_dev_runtime": "OLD_WORKERS_DEFUNCT_BUT_CHECKOUT_STALE_DIRTY_BEHIND_MAIN_NO_CURRENT_AUTHORITY",
     "trigger2_diverse_content_generator_authority": "MISSING_TRAINING_P0",
     "latest_observed_distillery_source_tokens": 88774,
     "canonical_dataset_rows_admitted": 0,
@@ -33,11 +34,11 @@
     "EXECUTABLE_EVIDENCE_OUTRANKS_MODEL_CONSENSUS",
     "NO_BASE_WORK_PACKAGE_PASS_FROM_MODEL_CONSENSUS",
     "NO_CANONICAL_SEMANTICS_PROMOTION_WITHOUT_EXECUTABLE_COUNTEREVIDENCE_AND_REVIEW",
-    "COMPONENT_RUNTIME_PASS_IS_NOT_WHOLE_PRODUCT_PASS",
+    "COMPONENT_SOURCE_PASS_IS_NOT_RUNTIME_PASS",
     "GOODMAN_COLLAPSE_SHARED_MODEL_FAMILY_PIPELINE_ORCHESTRATION_AND_REPACKAGED_HISTORY",
     "TRAIN_CALIBRATION_HOLDOUT_FAMILY_PROVENANCE_LEAKAGE_INVALIDATES_INDEPENDENCE_CREDIT",
     "MODEL_FAMILY_AND_CHECKPOINT_ANCESTRY_MUST_REMAIN_EXPLICIT",
-    "STALE_OR_SPLIT_CONTROL_PLANE_BYTES_CANNOT_MINT_EXECUTION_AUTHORITY",
+    "STALE_DIRTY_OR_SPLIT_CONTROL_PLANE_BYTES_CANNOT_MINT_EXECUTION_AUTHORITY",
     "SOURCE_OR_EXECUTION_REQUEST_RECEIPT_IS_NOT_RUNTIME_PASS",
     "OWNER_EMERGENCY_STOP_REMAINS_PROVIDER_HARD_OFF_UNTIL_EXPLICIT_CURRENT_AUTHORITY_CHANGES_IT",
     "FREE_ONLY_NO_PAID_FALLBACK_TOGETHER_FORBIDDEN",
@@ -45,16 +46,17 @@
     "DO_NOT_MODIFY_FRANK_HARNESS"
   ],
   "next_focus": [
-    "PATCH_THE_AUTONOMOUS_CYCLE_PROVIDER_BOUNDARY_SO_CURRENT_SUPERVISOR_INBOX_IS_LOADED_AND_FAIL_CLOSED_BEFORE_ANY_SECRET_LOOKUP_OR_PROVIDER_OPERATION",
-    "ADD_NEGATIVE_REGRESSIONS_FOR_PROVIDER_ROUTES_FALSE_EMERGENCY_STOP_MISSING_OR_MALFORMED_INBOX_AND_STALE_AUTHORITY_WITH_ZERO_PROVIDER_CALLS",
-    "KEEP_PROVIDER_DISCOVERY_PROBES_RERANK_EMBED_AND_CHAT_DISABLED_UNTIL_THOSE_GATES_PASS_AND_CURRENT_AUTHORITY_EXPLICITLY_ADMITS_THE_ROUTE",
-    "CONTINUE_PROVIDER_INDEPENDENT_SOURCE_VALIDATION_AND_DIVERSE_GENERATOR_AUTHORITY_WORK",
-    "DO_NOT_PROMOTE_RECURSIVE_GRID_SCALING_UNTIL_EXACT_PINNED_EXECUTION_RECEIPT_EXISTS",
+    "CLOSE_DIRECT_LEGACY_CLI_BYPASS_BY_GATING_TOOLS_CLAYCODE_AUTONOMOUS_CYCLE_PY_ITSELF_BEFORE_ANY_SECRET_OR_PROVIDER_CAPABLE_IMPORT_OR_REMOVING_IT_AS_AN_EXECUTABLE_ENTRYPOINT",
+    "ADD_DIRECT_CLI_BYPASS_NEGATIVE_REGRESSION_ALONGSIDE_MISSING_MALFORMED_STALE_EMERGENCY_STOP_AND_PROVIDER_ROUTES_FALSE_CASES",
+    "RUN_PROVIDER_GATE_ENTRYPOINT_POLICY_GATE_AND_GUARDED_HARD_OFF_PATH_ON_CLEAN_CURRENT_FREE_NON_PROVIDER_CHECKOUT_WITH_HEAD_TREE_SOURCE_HASH_DIRTY_FALSE_STDOUT_STDERR_AND_ZERO_PROVIDER_CALL_BOUNDARY",
+    "DO_NOT_TREAT_ZERO_STEP_GITHUB_ACTIONS_AS_GATE_TEST_FAILURE",
+    "CONTINUE_PROVIDER_INDEPENDENT_DIVERSE_GENERATOR_AUTHORITY_WORK_WITH_GOODMAN_ANCESTRY_TOKENIZER_ABI_AND_NUISANCE_GATES",
     "DO_NOT_SCALE_TRAINING_BEFORE_REAL_CANONICAL_ACCEPTANCE_RECEIPTS_AND_IDENTICAL_REPLAY_PLUS_ZERO"
   ],
   "promotion_state": {
+    "canonical_workflow_provider_guard_source_credit": true,
     "autonomous_provider_path_admitted": false,
-    "recursive_physical_scaling_runtime_pass": false,
+    "legacy_direct_cli_provider_safety": false,
     "trigger2_diverse_generator_authorized": false,
     "canonical_dataset_rows_admitted": 0,
     "physical_grid10_component_runtime_pass": false,
@@ -66,5 +68,5 @@
     "jspace_model_credit": 0,
     "training_credit": 0
   },
-  "steering": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_92_DELTA_2026-08-26T1345P0700_GPT56SOL.json"
+  "steering": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_93_DELTA_2026-08-26T1455P0700_GPT56SOL.json"
 }

@@ -2140,6 +2140,55 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
         )
         self.assertEqual(result["content"], "ok")
 
+    def test_noncanonical_system_fingerprint_cannot_enter_verified_receipt(self):
+        class Response:
+            status = 200
+
+            def __init__(self, fingerprint):
+                self.fingerprint = fingerprint
+
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *args):
+                return False
+
+            def read(self, limit):
+                return (
+                    b'{"object":"chat.completion","id":"chatcmpl-test",'
+                    b'"created":1,"model":"mock","system_fingerprint":'
+                    + self.fingerprint
+                    + b',"usage":{"prompt_tokens":1,"completion_tokens":1,'
+                    b'"total_tokens":2},"choices":[{"index":0,'
+                    b'"finish_reason":"stop","message":{'
+                    b'"role":"assistant","content":"ok"}}]}'
+                )
+
+        env = {
+            "NVIDIA_API_KEY": "secret",
+            "FRANK_PROVIDER_BASE_URL": "http://localhost:8765/v1",
+            "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
+        }
+        for fingerprint in (b'"   "', b'"vllm\\u000aforged"'):
+            with self.subTest(fingerprint=fingerprint):
+                result = MOD.execute_chat(
+                    VALID_MESSAGES,
+                    model="mock",
+                    environ=env,
+                    opener=lambda *args, **kwargs: Response(fingerprint),
+                    now=iter((50.251, 50.252)).__next__,
+                )
+                self.assertEqual(
+                    result["receipt"]["outcome"],
+                    "invalid_provider_response",
+                )
+                self.assertNotIn("VERIFIED", result["receipt"]["lifecycle"])
+                self.assertNotIn("DONE", result["receipt"]["lifecycle"])
+                self.assertIsNone(
+                    result["receipt"]["provider_system_fingerprint_sha256"]
+                )
+                self.assertIsNone(result["content"])
+
     def test_documented_vllm_service_tier_remains_compatible(self):
         class Response:
             status = 200

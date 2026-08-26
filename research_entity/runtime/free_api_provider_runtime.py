@@ -103,12 +103,11 @@ TEXT_RESPONSE_MESSAGE_NULL_FIELDS = frozenset(
         "annotations",
         "audio",
         "function_call",
-        "reasoning",
         "refusal",
     }
 )
 TEXT_RESPONSE_MESSAGE_FIELDS = (
-    frozenset({"role", "content", "tool_calls"})
+    frozenset({"role", "content", "reasoning", "tool_calls"})
     | TEXT_RESPONSE_MESSAGE_NULL_FIELDS
 )
 BEARER_TOKEN_CHARACTERS = frozenset(
@@ -952,6 +951,8 @@ def _execute_chat_locked(
     payment_latch_active = False
     payment_latch_publication_failed = False
     provider_response_id_sha256 = None
+    provider_reasoning_characters = None
+    provider_reasoning_sha256 = None
     provider_service_tier = None
     provider_system_fingerprint_sha256 = None
     provider_created_unix_seconds = None
@@ -1208,6 +1209,20 @@ def _execute_chat_locked(
                     raise ValueError(
                         "response_message_metadata_not_supported_by_text_adapter"
                     )
+            reasoning = message.get("reasoning")
+            if reasoning is not None:
+                if (
+                    not _is_unicode_scalar_text(reasoning)
+                    or not reasoning
+                    or len(reasoning) > MAX_PROVIDER_RESPONSE_BYTES
+                ):
+                    raise ValueError(
+                        "response_reasoning_must_be_bounded_unicode_string"
+                    )
+                provider_reasoning_characters = len(reasoning)
+                provider_reasoning_sha256 = hashlib.sha256(
+                    reasoning.encode("utf-8")
+                ).hexdigest()
             if "tool_calls" in message and (
                 type(message["tool_calls"]) is not list
                 or message["tool_calls"]
@@ -1333,6 +1348,8 @@ def _execute_chat_locked(
         "budget_epoch_id": _budget_epoch_id(env),
         "request_id": request_id,
         "provider_response_id_sha256": provider_response_id_sha256,
+        "provider_reasoning_characters": provider_reasoning_characters,
+        "provider_reasoning_sha256": provider_reasoning_sha256,
         "provider_service_tier": provider_service_tier,
         "provider_system_fingerprint_sha256": (
             provider_system_fingerprint_sha256

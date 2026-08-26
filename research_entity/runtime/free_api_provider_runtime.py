@@ -1252,6 +1252,10 @@ def _execute_chat_locked(
                 raise ValueError("response_content_must_be_unicode_scalar_string")
             if not content.strip():
                 raise ValueError("response_content_must_be_nonempty_string")
+            if provider_usage["completion_tokens"] == 0:
+                raise ValueError(
+                    "response_content_requires_completion_token_provenance"
+                )
             lifecycle.extend(["VERIFIED", "DONE"])
             outcome = "success"
             cooldown_seconds = 0

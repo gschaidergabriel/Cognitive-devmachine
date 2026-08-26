@@ -1,0 +1,78 @@
+{
+  "schema_version": "8.87",
+  "date_local": "2026-08-26T07:52:31+07:00",
+  "organ": "GPT-5.6 Sol / autonomous ClayCode research supervisor",
+  "active_program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "observed_main_before_write": "89ff29a971abe66b4f280fcf325c588efa6181b8",
+  "material_corrections": {
+    "fleet_provider_counter_attribution": {
+      "old": "ACTIVE_FAIL_CANONICAL_PROVIDER_COUNTERS_INCREASING",
+      "new": "UNRESOLVED_UNTIL_CLAY_SPECIFIC_OR_PROCESS_SPECIFIC_ATTRIBUTION",
+      "reason": "Aggregate/shared free-provider usage is not uniquely attributable to Clay. Counter movement alone may include other projects using the same free-token/provider resources. Therefore counter deltas cannot by themselves prove that Clay processes remain provider-active or prove Clay quiescence failure.",
+      "retained_evidence": "clay-direct-dev host-local quiescence remains PASS_COMPONENT_ONLY with zero matching survivors; current shared-budget telemetry still shows OpenRouter movement, but this is attribution evidence to investigate, not a Clay-runtime verdict by itself."
+    },
+    "physical_grid10_witness_boundary": {
+      "status": "SOURCE_BLOCKER_CONFIRMED_NO_RUNTIME_CREDIT",
+      "evidence": "Current Trigger-2 V70 research and draft PR 2044 isolate that raw caller-owned physical proof mappings must not reach promotion-bearing fused GRID10 commit. A donor adapter requires a PhysicalCohortWitness capability, but the current canonical FusedFabric still exposes legacy atomic_fused_cohort_commit(proof=dict), the witness-aware atomic_fused_cohort_witness_commit is not yet canonical-current, and complete observer-owned pre-release pidfd_getfd/S1-descriptor/packet-commitment provenance is not executed.",
+      "linux_method_constraint": "pidfd_getfd can duplicate a target process file descriptor and refers to the same open file description, but it is guarded by PTRACE_MODE_ATTACH_REALCREDS; EPERM or unsupported-kernel paths must fail closed rather than fall back to caller-supplied proof mappings.",
+      "promotion_effect": "physical_grid10_runtime_credit remains 0"
+    }
+  },
+  "p0_frontier": {
+    "host_local_clay_direct_dev": "PASS_COMPONENT_ONLY_ZERO_MATCHING_SURVIVORS",
+    "fleet_clay_runtime_quiescence": "UNRESOLVED_ATTRIBUTION_REQUIRED",
+    "provider_capability_attribution": "SOURCE_AND_LOCAL_TEST_READY_FLEET_RUNTIME_UNOBSERVED",
+    "required_next_evidence": [
+      "Collect non-network host-bound attribution receipts from every Clay host/sandbox/self-hosted runner that can access the shared provider budget or Clay provider credentials.",
+      "Bind process tree, executable, cgroup/container identity, Clay repo/runtime identity, credential-variable names only, and local budget-state writer/reader provenance where observable; do not emit provider calls merely to test attribution.",
+      "Only classify Clay quiescence FAIL if a Clay-attributed provider-capable process/lease/request path is observed after HARD_OFF, or if Clay-specific logs/receipts bind new provider attempts to Clay.",
+      "Only classify Clay fleet quiescence PASS after zero Clay-attributed provider-capable survivors, zero unexpired Clay leases, and a bounded observation window with zero Clay-attributed provider-attempt delta. Shared/global counters alone are insufficient for either verdict."
+    ]
+  },
+  "p1_after_valid_quiescence": {
+    "physical_witness_provenance": [
+      "Do not merge or promote an unvalidated donor adapter merely because it blocks raw proof mappings.",
+      "Implement one canonical witness-aware physical mutation entry rather than a second coordinator authority.",
+      "Acquire pidfds while children are still alive and held at the common barrier; independently duplicate/validate the actual S1 descriptor with pidfd_getfd where supported and permitted.",
+      "Bind descriptor device/inode/read-only state, ready marker, shared snapshot identity, process PID/incarnation, and a pre-release packet commitment before barrier release.",
+      "After release, require exact packet/read-receipt equality and reject stale/transplanted/forged witness material before atomic coordinator persistence.",
+      "Fail closed on kernel/permission inability to establish observer-owned provenance; never fall back to caller assertions for physical credit."
+    ]
+  },
+  "source_closures_preserved": {
+    "node_admission_membership_incarnation_provenance": "SOURCE_CLOSED_REGRESSION_PRESENT_RUNTIME_CREDIT_UNCHANGED",
+    "fused_grid10_two_phase_authority_integration": "SOURCE_CLOSED_LOCAL_DETERMINISTIC_24_TEST_PASS_RUNTIME_CREDIT_UNCHANGED",
+    "do_not_reopen": true
+  },
+  "training_state": {
+    "accepted_dataset_tokens": 0,
+    "latest_observed_distillery_source_tokens": 88774,
+    "source_to_go": 0.0,
+    "training_credit": 0,
+    "near_term_gold_pilot_target": "256 admitted rows / >=64 independent families only after executable admission gates begin yielding nonzero accepted rows; this target is planning, not credit"
+  },
+  "credit": {
+    "base_work_package_promotion": false,
+    "canonical_semantics_credit": 0,
+    "checkpoint_selection_credit": 0,
+    "jspace_model_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "entityos_whole_runtime_credit": 0,
+    "training_credit": 0
+  },
+  "hard_invariants": [
+    "FREE_ONLY_NO_PAID_FALLBACK",
+    "TOGETHER_FORBIDDEN_UNDER_CURRENT_DIRECTIVE",
+    "EXECUTABLE_EVIDENCE_OUTRANKS_MODEL_CONSENSUS",
+    "NO_BASE_WORK_PACKAGE_PASS_FROM_MODEL_CONSENSUS",
+    "NO_CANONICAL_SEMANTICS_PROMOTION_WITHOUT_EXECUTABLE_COUNTEREVIDENCE_AND_REVIEW",
+    "GOODMAN_COLLAPSE_SHARED_MODEL_FAMILY_PIPELINE_ORCHESTRATION_AND_REPACKAGED_HISTORY",
+    "MODEL_FAMILY_AND_CHECKPOINT_ANCESTRY_MUST_REMAIN_EXPLICIT",
+    "TRAIN_CALIBRATION_HOLDOUT_FAMILY_PROVENANCE_LEAKAGE_INVALIDATES_INDEPENDENCE_CREDIT",
+    "UBUNTU_ONLY_FRANK_V0_1_TARGET_REMAINS_UNCHANGED",
+    "DO_NOT_MODIFY_FRANK_HARNESS"
+  ],
+  "go_result": "MATERIAL_STEERING_CORRECTION: SHARED_PROVIDER_COUNTERS_DEMOTED_FROM_CLAY_RUNTIME_VERDICT TO ATTRIBUTION_SIGNAL; PHYSICAL_WITNESS_PROVENANCE PINNED AS POST_QUIESCENCE GRID10 PREREQUISITE; NO CREDIT MINTED"
+}

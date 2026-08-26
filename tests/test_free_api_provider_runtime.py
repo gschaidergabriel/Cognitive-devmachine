@@ -14,6 +14,9 @@ SPEC = importlib.util.spec_from_file_location("free_api_provider_runtime", PATH)
 MOD = importlib.util.module_from_spec(SPEC)
 sys.modules[SPEC.name] = MOD
 SPEC.loader.exec_module(MOD)
+# Synthetic success fixtures use created=1. Pin their default receipt wall
+# clock so temporal-provenance tests remain deterministic across real dates.
+MOD.execute_chat.__kwdefaults__["wall_time"] = lambda: 1.0
 
 VALID_MESSAGES = [{"role": "user", "content": "test"}]
 
@@ -2548,6 +2551,45 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
         self.assertNotIn("VERIFIED", receipt["lifecycle"])
         self.assertNotIn("DONE", receipt["lifecycle"])
         self.assertIsNone(result["content"])
+
+    def test_response_created_at_past_skew_boundary_remains_compatible(self):
+        class Response:
+            status = 200
+
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *args):
+                return False
+
+            def read(self, limit):
+                return (
+                    b'{"object":"chat.completion","id":"chatcmpl-test",'
+                    b'"created":700,"model":"mock","usage":{'
+                    b'"prompt_tokens":1,"completion_tokens":1,'
+                    b'"total_tokens":2},"choices":[{"index":0,'
+                    b'"finish_reason":"stop","message":'
+                    b'{"role":"assistant","content":"ok"}}]}'
+                )
+
+        env = {
+            "NVIDIA_API_KEY": "secret",
+            "FRANK_PROVIDER_BASE_URL": "http://localhost:8765/v1",
+            "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
+        }
+        result = MOD.execute_chat(
+            VALID_MESSAGES,
+            model="mock",
+            environ=env,
+            opener=lambda *args, **kwargs: Response(),
+            now=iter((50.409, 50.410)).__next__,
+            wall_time=lambda: 1000.0,
+        )
+        receipt = result["receipt"]
+        self.assertEqual(receipt["outcome"], "success")
+        self.assertEqual(receipt["lifecycle"][-2:], ["VERIFIED", "DONE"])
+        self.assertEqual(receipt["provider_created_max_past_skew_seconds"], 300)
+        self.assertEqual(result["content"], "ok")
 
     def test_missing_response_usage_cannot_reach_verified_state(self):
         class Response:

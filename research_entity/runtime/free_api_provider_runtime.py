@@ -1103,7 +1103,7 @@ def _execute_chat_locked(
             if (
                 "created" not in payload
                 or type(payload["created"]) is not int
-                or not 0 <= payload["created"] <= MAX_PROVIDER_CREATED_UNIX_SECONDS
+                or not 0 < payload["created"] <= MAX_PROVIDER_CREATED_UNIX_SECONDS
             ):
                 raise ValueError("response_created_must_be_bounded_unix_seconds")
             provider_created_unix_seconds = payload["created"]

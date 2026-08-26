@@ -2345,6 +2345,47 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
         self.assertNotIn("DONE", receipt["lifecycle"])
         self.assertIsNone(result["content"])
 
+    def test_future_response_created_cannot_reach_verified_state(self):
+        class Response:
+            status = 200
+
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *args):
+                return False
+
+            def read(self, limit):
+                return (
+                    b'{"object":"chat.completion","id":"chatcmpl-test",'
+                    b'"created":1301,"model":"mock","usage":{'
+                    b'"prompt_tokens":1,"completion_tokens":1,'
+                    b'"total_tokens":2},"choices":[{"index":0,'
+                    b'"finish_reason":"stop","message":'
+                    b'{"role":"assistant","content":"ok"}}]}'
+                )
+
+        env = {
+            "NVIDIA_API_KEY": "secret",
+            "FRANK_PROVIDER_BASE_URL": "http://localhost:8765/v1",
+            "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
+        }
+        result = MOD.execute_chat(
+            VALID_MESSAGES,
+            model="mock",
+            environ=env,
+            opener=lambda *args, **kwargs: Response(),
+            now=iter((50.403, 50.404)).__next__,
+            wall_time=lambda: 1000.0,
+        )
+        receipt = result["receipt"]
+        self.assertEqual(receipt["status"], 200)
+        self.assertEqual(receipt["outcome"], "invalid_provider_response")
+        self.assertIn("EXECUTED", receipt["lifecycle"])
+        self.assertNotIn("VERIFIED", receipt["lifecycle"])
+        self.assertNotIn("DONE", receipt["lifecycle"])
+        self.assertIsNone(result["content"])
+
     def test_missing_response_usage_cannot_reach_verified_state(self):
         class Response:
             status = 200

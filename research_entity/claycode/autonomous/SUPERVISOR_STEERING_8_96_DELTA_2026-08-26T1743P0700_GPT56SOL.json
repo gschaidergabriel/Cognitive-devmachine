@@ -1,0 +1,68 @@
+{
+  "schema": "CLAYCODE_SUPERVISOR_STEERING_DELTA/v1",
+  "date": "2026-08-26",
+  "supervisor_epoch": "8.96_DELTA",
+  "mode": "FREE_ONLY",
+  "repository": "gschaidergabriel/clay-global-research-entity",
+  "observed_main_head_before_write": "f0e1d63cadd99310fa7392a1c1fe610c641bc54a",
+  "material_findings": [
+    {
+      "id": "LIVE_VPS_TELEMETRY_REOPENS_RUNTIME_QUIESCENCE_P0",
+      "classification": "EXECUTABLE_HOST_SURVIVOR_EVIDENCE",
+      "evidence": {
+        "telemetry_branch": "chatgpt-vps-results",
+        "telemetry_commit": "f270bcd7b146857b18024c8920733c6d3ee1eeae",
+        "telemetry_observed_at": "2026-08-26T10:45:34.060291+00:00",
+        "sandbox": "clay-direct-dev",
+        "observed_live_legacy_process_classes": [
+          "tools/run_free_evidence_forge.py",
+          "tools/run_research_distillery_local.py",
+          "free swarm/evaluate.py --watch",
+          "free swarm/update_fabric_live.py --watch",
+          "tools/run_6000_free_swarm_supervisor.sh"
+        ]
+      },
+      "finding": "Fresh host telemetry shows long-lived FreeSwarm/forge/distillery processes still alive in clay-direct-dev while owner emergency-stop HARD_OFF remains current. This directly invalidates any current clay-direct-dev runtime-quiescence PASS. Aggregate provider counters are not used for attribution here; the surviving Clay-specific process argv is sufficient to reopen quiescence."
+    },
+    {
+      "id": "MAIN_METRICS_REFRESH_IS_CORROBORATING_NOT_ATTRIBUTION_AUTHORITY",
+      "classification": "CORROBORATING_ACTIVITY_SIGNAL_ONLY",
+      "evidence": {
+        "main_head": "f0e1d63cadd99310fa7392a1c1fe610c641bc54a",
+        "commit_message": "metrics: autonomous Free Swarm + distillery + forge + root dashboard refresh"
+      },
+      "finding": "A fresh autonomous Free Swarm/distillery/forge metrics refresh landed on main at 2026-08-26T10:43:21Z. Because aggregate/free-provider usage can include other projects, this commit is not by itself provider-attribution evidence. It is only corroborating evidence that legacy runtime machinery remains active."
+    },
+    {
+      "id": "PROVIDER_ENTRYPOINT_SOURCE_GUARDS_REMAIN_VALID_BUT_NOT_SUFFICIENT",
+      "classification": "SOURCE_CREDIT_RETAINED_RUNTIME_P0_PRECEDES_RUNTIME_GATE_TEST",
+      "finding": "The 8.95 direct/guarded provider-entrypoint source guards remain valid source progress. However, the highest-information predecessor is now to stop the observed legacy runtime tree and prove quiescence. Provider-gate runtime testing on a dirty/non-quiescent host cannot close fleet safety."
+    }
+  ],
+  "next_cycle_order": [
+    "P0_ON_CLAY_DIRECT_DEV_RUN_EXISTING_FREE_SWARM_RUNTIME_QUIESCENCE_ENFORCER_FAIL_CLOSED_AGAINST_THE_FRESHLY_OBSERVED_LEGACY_PROCESS_TREE",
+    "P0_REQUIRE_ZERO_MATCHING_LIVE_PROCESS_ROOTS_ZERO_RESTARTS_AND_ZERO_CLAY_SPECIFIC_PROVIDER_CAPABILITY_ACTIVITY_OVER_AT_LEAST_60_SECONDS_WITH_HOST_TIMESTAMP_AND_PROCESS_EVIDENCE",
+    "P0_DO_NOT_USE_GLOBAL_PROVIDER_COUNTERS_ALONE_TO_ATTRIBUTE_ACTIVITY_TO_CLAY",
+    "P1_AFTER_QUIESCENCE_PASS_EXECUTE_PROVIDER_GATE_DIRECT_ENTRYPOINT_REGRESSION_DIRECT_CLI_AND_GUARDED_HARD_OFF_PATH_ON_CLEAN_CURRENT_NON_PROVIDER_CHECKOUT_WITH_ZERO_PROVIDER_SECRET_BOUNDARY_CROSSINGS",
+    "P2_AFTER_PROVIDER_RUNTIME_PATH_CLOSURE_RETURN_GO_TO_PHYSICAL_GRID10_RECURSIVE_SCALING_BRIDGE_FANIN_COMPRESSION_LATENCY_CONTENTION_AND_COORDINATOR_FAILURE_REPLACEMENT",
+    "P3_KEEP_TRIGGER2_DATASET_GENERATOR_WORK_EXCLUSIVE_TO_EXACT_TRIGGER_2"
+  ],
+  "credit_state": {
+    "provider_guard_source_credit": 1,
+    "runtime_quiescence_credit": 0,
+    "provider_path_runtime_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0,
+    "training_credit": 0
+  },
+  "hard_invariants": [
+    "FREE_ONLY_NO_PAID_FALLBACK",
+    "TOGETHER_FORBIDDEN",
+    "OWNER_EMERGENCY_STOP_FREE_SWARM_REMAINS_HARD_OFF_UNTIL_LATER_EXPLICIT_OWNER_REENABLE",
+    "ORDINARY_XENO_S1_READ_ONLY_COORDINATOR_ONLY_WRITES",
+    "EXECUTABLE_EVIDENCE_OUTRANKS_MODEL_CONSENSUS",
+    "GLOBAL_PROVIDER_COUNTERS_ALONE_DO_NOT_PROVE_CLAY_ACTIVITY",
+    "SOURCE_OR_EXECUTION_REQUEST_RECEIPT_IS_NOT_RUNTIME_PASS"
+  ]
+}

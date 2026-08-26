@@ -1,0 +1,74 @@
+{
+  "schema": "GO_QUIESCENCE_RESTART_AUTHORITY_ATTRIBUTION/v1",
+  "date": "2026-08-26",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "trigger": "go",
+  "owner_target": "XENO_HCU_GO_TARGET_ARCHITECTURE_OWNER_DIRECTIVE_2026-08-25",
+  "observed_main_before_write": "2ca3405bd0bce2143836f10e16cbcdbfed1cf59e",
+  "priority": "P0_RUNTIME_QUIESCENCE",
+  "authority": {
+    "free_only": true,
+    "provider_routes_admitted": false,
+    "free_swarm_owner_emergency_stop": true,
+    "together_forbidden": true,
+    "non_provider_local_validation_allowed": true
+  },
+  "fresh_evidence": {
+    "supervisor_version": "8.97",
+    "supervisor_finding": "fresh clay-direct-dev telemetry still shows Clay-specific FreeSwarm/forge/distillery/evaluator/updater roots under HARD_OFF",
+    "post_8_97_repo_liveness": [
+      {
+        "commit": "5616e856d6976a68e52b5eb3d2f4a67914e60472",
+        "timestamp_utc": "2026-08-26T11:28:40Z",
+        "message": "metrics: autonomous Free Swarm + distillery + forge + root dashboard refresh"
+      },
+      {
+        "commit": "2ca3405bd0bce2143836f10e16cbcdbfed1cf59e",
+        "timestamp_utc": "2026-08-26T11:43:47Z",
+        "message": "metrics: autonomous Free Swarm + distillery + forge + root dashboard refresh"
+      }
+    ],
+    "interpretation_boundary": "These commits prove that a Clay metrics/update path remains live after supervisor 8.97. They do NOT by themselves prove provider calls or identify the owning host. Global provider counters remain insufficient for Clay attribution."
+  },
+  "exact_action": [
+    "On clay-direct-dev, run the existing quiescence enforcer in dry-run mode first against the freshly observed legacy process classes.",
+    "For every matched survivor record PID, PPID, full argv, executable, cwd, uid, start time, cgroup, session id, process group, namespace ids, and parent chain up to PID 1.",
+    "Before killing anything, identify the restart authority for each matched root: systemd system unit, systemd --user unit, cron/anacron, tmux/screen session, shell/nohup supervisor, container restart policy, self-hosted runner job, or UNKNOWN.",
+    "If restart authority is UNKNOWN or ownership is ambiguous, fail closed as INCOMPLETE and do not mass-kill unrelated processes.",
+    "For unambiguously Clay FreeSwarm/forge/distillery legacy roots only: disable/stop the restart authority first, then terminate the matched process tree descendants-first.",
+    "Wait at least 90 seconds and prove zero matching survivors, zero matching descendants, and zero restarts on the owning host.",
+    "Run the non-network provider-capability attribution probe and record only environment variable NAMES, never secret values.",
+    "Do not use global provider counters alone to attribute activity to Clay. If counters are sampled, label them fleet/global context only unless process-bound evidence links them.",
+    "Produce one receipt binding host identity, boot id, pid namespace, source HEAD/tree, dirty=false if repository code is used, commands, stdout/stderr hashes, before/after process manifests, restart-authority evidence, and observation window timestamps."
+  ],
+  "success_criteria": {
+    "matched_legacy_survivors_after": 0,
+    "matched_legacy_descendants_after": 0,
+    "matched_restart_events_during_observation": 0,
+    "observation_seconds_min": 90,
+    "restart_authority_for_each_killed_root": "KNOWN_AND_DISABLED_OR_PROVEN_NONRESTARTING",
+    "provider_secret_values_exposed": false
+  },
+  "forbidden": [
+    "NO_PROVIDER_OR_HOSTED_MODEL_CALLS",
+    "NO_TOGETHER",
+    "NO_BLIND_PKILL_BY_GENERIC_PYTHON_OR_SHELL_NAME",
+    "NO_GLOBAL_PROVIDER_COUNTER_ONLY_ATTRIBUTION",
+    "NO_PHYSICAL_GRID10_RERUN_BEFORE_QUIESCENCE_PASS",
+    "NO_TRAINING_SCALEUP_UNDER_GO"
+  ],
+  "after_pass": [
+    "execute direct provider-gate regression + direct CLI + guarded HARD_OFF path on a clean current non-provider checkout and prove zero provider/secret boundary crossings",
+    "return GO frontier to physical GRID10 recursive-scaling bridge runtime evidence",
+    "then measure coordinator fan-in, compression, S1 latency/contention, crash/replacement and worker rejoin"
+  ],
+  "credit_change": {
+    "runtime_quiescence_credit": 0,
+    "provider_path_runtime_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "training_credit": 0
+  }
+}

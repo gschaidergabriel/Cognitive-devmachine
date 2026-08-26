@@ -1787,6 +1787,42 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
         )
         self.assertEqual(result["content"], "ok")
 
+    def test_documented_vllm_service_tier_remains_compatible(self):
+        class Response:
+            status = 200
+
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *args):
+                return False
+
+            def read(self, limit):
+                return (
+                    b'{"object":"chat.completion","id":"chatcmpl-test",'
+                    b'"created":1,"model":"mock","service_tier":"default",'
+                    b'"usage":{"prompt_tokens":1,"completion_tokens":1,'
+                    b'"total_tokens":2},"choices":[{"index":0,'
+                    b'"finish_reason":"stop","message":{'
+                    b'"role":"assistant","content":"ok"}}]}'
+                )
+
+        env = {
+            "NVIDIA_API_KEY": "secret",
+            "FRANK_PROVIDER_BASE_URL": "http://localhost:8765/v1",
+            "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
+        }
+        result = MOD.execute_chat(
+            VALID_MESSAGES,
+            model="mock",
+            environ=env,
+            opener=lambda *args, **kwargs: Response(),
+            now=iter((50.26, 50.27)).__next__,
+        )
+        self.assertEqual(result["receipt"]["outcome"], "success")
+        self.assertEqual(result["receipt"]["provider_service_tier"], "default")
+        self.assertEqual(result["content"], "ok")
+
     def test_multiple_response_choices_cannot_be_partially_verified(self):
         class Response:
             status = 200

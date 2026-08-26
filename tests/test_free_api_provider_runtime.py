@@ -1718,7 +1718,8 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
                     b'"finish_reason":"stop","message":{'
                     b'"role":"assistant","content":"ok","refusal":null,'
                     b'"annotations":null,"audio":null,"function_call":null,'
-                    b'"tool_calls":[],"reasoning":null}}]}'
+                    b'"tool_calls":[],"reasoning":null},'
+                    b'"routed_experts":null}]}'
                 )
 
         env = {

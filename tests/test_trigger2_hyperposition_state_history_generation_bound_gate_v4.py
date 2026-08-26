@@ -71,10 +71,11 @@ def test_full_component_pass_remains_nonpromoting_zero_credit(monkeypatch):
     monkeypatch.setattr(gate.generation, "adjudicate", passed("generation"))
     monkeypatch.setattr(gate.a02, "adjudicate", passed("a02"))
     monkeypatch.setattr(gate.epistemic, "adjudicate", passed("epistemic"))
+    monkeypatch.setattr(gate.tokenizer_abi, "adjudicate", passed("tokenizer_abi"))
 
     result = gate.adjudicate({})
     assert result["pass"] is True
-    assert calls == ["generation", "a02", "epistemic"]
+    assert calls == ["generation", "a02", "epistemic", "tokenizer_abi"]
     assert result["positive_D_E_promotion_ready"] is False
     assert result["canonical_dataset_admission"] is False
     assert result["accepted_dataset_tokens_minted"] == 0

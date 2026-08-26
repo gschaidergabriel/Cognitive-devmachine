@@ -42,6 +42,16 @@ epistemic = _load_sibling(
     "trigger2_hyperposition_epistemic_preupdate_guard_v1.py",
     "trigger2_epistemic_preupdate_for_hp_v4",
 )
+tokenizer_abi = _load_sibling(
+    "trigger2_tokenizer_abi_gate_v1.py",
+    "trigger2_tokenizer_abi_for_hp_v4",
+)
+# NOTE: trigger2_family_provenance_gate_v1 is a BATCH-level gate (adjudicate(bundle)
+# with bundle["rows"] = [...]) that validates cross-split lineage/anti-echo across a
+# whole admission microbatch, not a single row. It cannot be wired into this per-row
+# adjudicate() the same way tokenizer_abi is -- same structural reason the rendered
+# nuisance gate can't be. It must be run separately over the full candidate batch
+# before/alongside per-row adjudication, not embedded here.
 
 
 def _failures_from(prefix: str, result: Any) -> list[str]:
@@ -85,6 +95,16 @@ def adjudicate(row: Any) -> dict[str, Any]:
             if not isinstance(epistemic_result, dict) or not epistemic_result.get("pass"):
                 failures.extend(_failures_from("EPISTEMIC_STATE_HISTORY:", epistemic_result))
 
+    tokenizer_abi_result = None
+    if not failures:
+        try:
+            tokenizer_abi_result = tokenizer_abi.adjudicate(row)
+        except Exception as exc:
+            failures.append("TOKENIZER_ABI_EXCEPTION:" + type(exc).__name__)
+        else:
+            if not isinstance(tokenizer_abi_result, dict) or not tokenizer_abi_result.get("pass"):
+                failures.extend(_failures_from("TOKENIZER_ABI:", tokenizer_abi_result))
+
     failures = sorted(set(failures))
     return {
         "schema": SCHEMA,
@@ -94,10 +114,16 @@ def adjudicate(row: Any) -> dict[str, Any]:
         "generation_provenance": generation_result,
         "a02_discriminator_producer_auth": a02_result,
         "epistemic_state_history_proof": epistemic_result,
+        "tokenizer_abi": tokenizer_abi_result,
+        "family_provenance_note": "trigger2_family_provenance_gate_v1 is batch-level (adjudicate(bundle) "
+            "over a whole admission microbatch's rows, anti-echo lineage across the batch) and is NOT "
+            "invoked by this per-row adjudicate() -- run it separately over the full candidate batch, "
+            "same treatment as the rendered nuisance gate",
         "required_order": [
             "GENERATION_PROVENANCE",
             "A02_DISCRIMINATOR_PRODUCER_AUTH",
             "EPISTEMIC_PREUPDATE_ADMISSION",
+            "TOKENIZER_ABI",
             "REPLAY_STATE_HISTORY_RETAINED_HYPERPOSITION_SEMANTICS",
         ],
         "semantic_authority": "DELEGATED_TO_EXISTING_V3_REFERENCE_LABELER",
@@ -106,7 +132,20 @@ def adjudicate(row: Any) -> dict[str, Any]:
         "remaining_p0": [
             "exact-current deterministic execution of the A02 mutation suite is required",
             "native seed must be rebound to this one retained successor before any pilot regeneration",
-            "rendered nuisance/full-cross-or-conditional-MI/family-provenance/tokenizer-ABI gates remain required",
+            "REPLAY_STATE_HISTORY_RETAINED_HYPERPOSITION_SEMANTICS (required_order step 6) is still not "
+            "actually invoked in this adjudicate() -- trigger2_hyperposition_state_history_proof_gate_v1 "
+            "exists and is used elsewhere, but is not wired into this v4 composer; a row passing this "
+            "function today has NOT been checked against the base replay/state-history gate",
+            "rendered nuisance / full-cross-or-conditional-MI leakage remains a BATCH-level statistical "
+            "check (trigger2_binding_router_visible_nuisance_gate_v1, executed once against a full "
+            "blueprint on 2026-08-26, PASS) rather than a per-row check -- it is not and structurally "
+            "cannot be wired into this per-row adjudicate() the same way; batch-level PASS must be "
+            "re-verified whenever the generator/blueprint changes, it does not certify any individual row",
+            "family-provenance: trigger2_family_provenance_gate_v1 EXISTS (closed concurrently by a "
+            "separate authority, commit 87ededd26) and is also BATCH-level (bundle of rows, anti-echo "
+            "lineage across model/checkpoint/generator/episode ancestry) -- same structural note as "
+            "nuisance above; not wired into this per-row adjudicate(), must be run separately over the "
+            "full candidate batch before/alongside per-row admission",
         ],
         "closed_p0": [
             "immutable genesis/ordered-history producer authority: trigger2_generation_provenance_gate_v1 "
@@ -120,6 +159,11 @@ def adjudicate(row: Any) -> dict[str, Any]:
             "authority instead of trusting caller-typed source/provenance/receipt_id strings; a fully forged "
             "receipt now fails OBSERVED_PRODUCER_AUTH:OBSERVED_RECEIPT_NOT_EXACTLY_RECOMPUTED, proven by "
             "tests/test_trigger2_hyperposition_state_history_proof_gate_v1.py",
+            "tokenizer-ABI: trigger2_tokenizer_abi_gate_v1 now resolves every claimed symbol against a "
+            "real, measured atoms_index.json (46-atom alphabet, target checkpoint "
+            "Goekdeniz-Guelmez/Josiefied-Qwen3.5-0.8B-gabliterated-v1 rev 591852bda6e1979f59e4b0f5ee2919697b12e936, "
+            "'or' explicitly excluded) instead of trusting a caller-declared token mapping; wired into this "
+            "composer's adjudicate().",
         ],
         "canonical_dataset_admission": False,
         "accepted_dataset_tokens_minted": 0,

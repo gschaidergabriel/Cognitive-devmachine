@@ -1,6 +1,6 @@
 {
   "schema": "ENTITYOS_HCU_FREE_PROVIDER_ADMISSION/v1",
-  "authority_epoch": "8.99",
+  "authority_epoch": "9.00",
   "mode": "FREE_ONLY",
   "product": "EntityOS",
   "compute_architecture": "HCU",
@@ -21,5 +21,5 @@
     "unknown_or_unbound_route": "FAIL_CLOSED",
     "paid_fallback_attempt_count": 0
   },
-  "note": "Owner emergency stop remains in force. Authority epoch is rebound to supervisor 8.99 while every provider remains admitted=false. This repairs the 8.98/8.97 epoch drift and preserves an explicit current HARD_OFF snapshot. Re-enabling requires a later explicit owner instruction and deliberate control-plane change."
+  "note": "Owner emergency stop remains in force. Authority epoch is rebound to supervisor 9.00 while every provider remains admitted=false. The 9.00 steering change only updates the Trigger-2 source frontier; it does not authorize provider execution. Re-enabling requires a later explicit owner instruction and deliberate control-plane change."
 }

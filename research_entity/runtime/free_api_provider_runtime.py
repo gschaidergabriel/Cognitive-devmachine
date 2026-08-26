@@ -1268,7 +1268,7 @@ def _execute_chat_locked(
             if reasoning is not None:
                 if (
                     not _is_unicode_scalar_text(reasoning)
-                    or not reasoning
+                    or not reasoning.strip()
                     or len(reasoning) > MAX_PROVIDER_RESPONSE_BYTES
                 ):
                     raise ValueError(

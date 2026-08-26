@@ -36,6 +36,9 @@ MAX_PROVIDER_SYSTEM_FINGERPRINT_CHARACTERS = 256
 MAX_PROVIDER_CREATED_UNIX_SECONDS = 9_999_999_999
 MAX_PROVIDER_CREATED_FUTURE_SKEW_SECONDS = 300
 MAX_PROVIDER_USAGE_TOKENS = 9_999_999_999
+PROVIDER_RESPONSE_ID_SUFFIX_CHARACTERS = frozenset(
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._"
+)
 MAX_ZERO_COST_ATTESTATION_CHARACTERS = 1_024
 MAX_BUDGET_EPOCH_CHARACTERS = 256
 MAX_PROVIDER_BASE_URL_CHARACTERS = 2_048
@@ -1095,17 +1098,26 @@ def _execute_chat_locked(
                 or payload["object"] != "chat.completion"
             ):
                 raise ValueError("response_object_must_be_chat_completion")
+            response_id = payload.get("id")
+            response_id_suffix = (
+                response_id[len("chatcmpl-"):]
+                if type(response_id) is str
+                and response_id.startswith("chatcmpl-")
+                else None
+            )
             if (
                 "id" not in payload
-                or not _is_unicode_scalar_text(payload["id"])
-                or not payload["id"]
-                or len(payload["id"]) > MAX_PROVIDER_RESPONSE_ID_CHARACTERS
-                or not payload["id"].startswith("chatcmpl-")
-                or not payload["id"][len("chatcmpl-"):].strip()
+                or type(response_id) is not str
+                or not response_id_suffix
+                or len(response_id) > MAX_PROVIDER_RESPONSE_ID_CHARACTERS
+                or not all(
+                    character in PROVIDER_RESPONSE_ID_SUFFIX_CHARACTERS
+                    for character in response_id_suffix
+                )
             ):
-                raise ValueError("response_id_must_be_bounded_unicode_string")
+                raise ValueError("response_id_must_be_canonical_ascii_identifier")
             provider_response_id_sha256 = hashlib.sha256(
-                payload["id"].encode("utf-8")
+                response_id.encode("ascii")
             ).hexdigest()
             if (
                 "created" not in payload

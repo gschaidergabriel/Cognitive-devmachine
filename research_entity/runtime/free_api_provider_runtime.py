@@ -72,6 +72,7 @@ TEXT_RESPONSE_CHOICE_FIELDS = frozenset(
         "index",
         "logprobs",
         "message",
+        "routed_experts",
         "stop_reason",
         "token_ids",
     }
@@ -1125,7 +1126,12 @@ def _execute_chat_locked(
                 or choice["index"] != 0
             ):
                 raise ValueError("response_choice_index_not_supported")
-            for metadata_field in ("logprobs", "stop_reason", "token_ids"):
+            for metadata_field in (
+                "logprobs",
+                "routed_experts",
+                "stop_reason",
+                "token_ids",
+            ):
                 if choice.get(metadata_field) is not None:
                     raise ValueError(
                         "response_choice_metadata_not_supported_by_text_adapter"

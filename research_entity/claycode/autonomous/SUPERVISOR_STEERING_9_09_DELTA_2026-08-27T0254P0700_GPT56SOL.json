@@ -1,0 +1,53 @@
+{
+  "schema": "CLAY_SUPERVISOR_STEERING_DELTA/v1",
+  "schema_version": "9.09",
+  "supervisor_schema_version": "9.09",
+  "generated_at": "2026-08-27T02:54:09+07:00",
+  "organ": "GPT-5.6 Sol / go",
+  "active_program": "ENTITYOS_HCU",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "integrated_cognition_compute_architecture": "HCU",
+  "scope": "P0_CONTROL_PLANE_COHERENCE_RUNTIME_QUIESCENCE_AND_MONITORING_TRUTH",
+  "finding": "Supervisor 9.08 advanced SUPERVISOR_INBOX to epoch 9.08 and claimed current HARD_OFF authority at 9.08 while canonical FREE_PROVIDER_ADMISSION.json remained authority_epoch 9.07. In addition, the 9.08 steering delta exposed supervisor_schema_version but not the schema_version/product/integrated-cognition fields required by tools/free_provider_admission.py successor-dynamic resolution. Therefore the canonical provider resolver could only fail closed with a supervisor/admission authority mismatch. This is a control-plane coherence regression, not evidence of provider execution. Monitoring provenance v4 remains SOURCE_CANDIDATE_ONLY with committed but repository-unexecuted tests; restart-authority attribution v3 remains source-closed but repository/runtime-unverified. Provider authority remains explicit FREE_ONLY HARD_OFF and all providers false.",
+  "hard_rules": [
+    "EXECUTABLE_EVIDENCE_OUTRANKS_MODEL_CONSENSUS",
+    "NO_BASE_WORK_PACKAGE_PASS_FROM_MODEL_CONSENSUS",
+    "NO_CANONICAL_SEMANTICS_PROMOTION_WITHOUT_EXECUTABLE_COUNTEREVIDENCE_AND_REVIEW",
+    "SOURCE_TESTS_WITHOUT_EXECUTION_ARE_NOT_RUNTIME_PASS",
+    "STALE_DIRTY_OR_SPLIT_CONTROL_PLANE_BYTES_CANNOT_MINT_EXECUTION_AUTHORITY",
+    "OWNER_EMERGENCY_STOP_REMAINS_PROVIDER_HARD_OFF_UNTIL_EXPLICIT_CURRENT_AUTHORITY_CHANGES_IT",
+    "GLOBAL_PROVIDER_COUNTERS_ALONE_DO_NOT_PROVE_CLAY_ACTIVITY",
+    "LIVE_PROC_AND_SNAPSHOT_FALLBACK_MUST_REMAIN_SEPARATE",
+    "SNAPSHOT_PROVIDER_ADMISSION_CANNOT_MINT_PROVIDER_AUTHORITY",
+    "GOODMAN_COLLAPSE_SHARED_MODEL_FAMILY_PIPELINE_ORCHESTRATION_AND_REPACKAGED_HISTORY",
+    "TRAIN_CALIBRATION_HOLDOUT_FAMILY_PROVENANCE_LEAKAGE_INVALIDATES_INDEPENDENCE_CREDIT",
+    "MODEL_FAMILY_AND_CHECKPOINT_ANCESTRY_MUST_REMAIN_EXPLICIT",
+    "FREE_ONLY_NO_PAID_FALLBACK_TOGETHER_FORBIDDEN",
+    "UBUNTU_ONLY_FRANK_V0_1_TARGET_REMAINS_UNCHANGED",
+    "RESTART_AUTHORITY_MUST_BE_UNAMBIGUOUS_AND_ROOT_SPECIFIC_BEFORE_ANY_QUIESCENCE_KILL",
+    "NO_CROSS_ROOT_RESTART_AUTHORITY_TRANSPLANT",
+    "DO_NOT_MODIFY_FRANK_HARNESS"
+  ],
+  "next_actions": [
+    "Keep canonical FREE_PROVIDER_ADMISSION and SUPERVISOR_INBOX on the same 9.09 epoch with every provider admitted=false and HARD_OFF.",
+    "Execute tests/test_free_swarm_restart_authority_attribution_v3.py and tests/test_update_system_analysis_v4.py on one clean current non-provider checkout and receipt HEAD/tree/source hashes/dirty=false/stdout/stderr.",
+    "Only after repository-bound v3 PASS run restart-authority v3 read-only on the live Clay host and fail closed on ambiguity; do not kill from source-only evidence.",
+    "Only after monitoring-v4 repository PASS switch the retained autonomous publisher to v4 and prove current authority plus separated live_proc_observed/snapshot_fallback provenance.",
+    "Only after live root-specific revalidation disable the exact restart owner and prove at least 90 seconds zero survivors/descendants/restarts before any provider-path runtime work.",
+    "Keep Trigger-2 tokenizer ABI/model-checkpoint ancestry and BASE release gates fail closed; no training or canonical-semantics promotion from model consensus."
+  ],
+  "credit_change": {
+    "control_plane_coherence": "RESTORED_BY_9_09_REBIND",
+    "monitoring_truth_source_credit": "CANDIDATE",
+    "monitoring_truth_runtime_credit": 0,
+    "restart_authority_attribution_v3_repository_test_credit": 0,
+    "restart_authority_attribution_v3_live_host_credit": 0,
+    "runtime_quiescence_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "training_credit": 0,
+    "canonical_semantics_credit": 0,
+    "base_work_package_promotion": false
+  }
+}

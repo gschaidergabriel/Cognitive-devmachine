@@ -1,6 +1,6 @@
 {
   "schema": "ENTITYOS_HCU_FREE_PROVIDER_ADMISSION/v1",
-  "authority_epoch": "8.78",
+  "authority_epoch": "8.91",
   "mode": "FREE_ONLY",
   "product": "EntityOS",
   "compute_architecture": "HCU",
@@ -37,5 +37,5 @@
     "unknown_or_unbound_route": "FAIL_CLOSED",
     "paid_fallback_attempt_count": 0
   },
-  "note": "Owner emergency stop on 2026-08-26: all autonomous FREE provider contingents are disabled. No FreeSwarm provider/model route is admitted. Re-enabling requires a later explicit owner instruction and a deliberate control-plane change. This stop does not claim termination of an already-running external OS process whose filesystem is not synchronized with canonical main; such a process must also be killed at its execution host if one exists."
+  "note": "Owner emergency stop remains in force. Authority epoch is rebound to current supervisor 8.91 so a current checkout resolves a valid explicit hard-off instead of relying only on epoch-mismatch fail-closed behavior. Any runtime/dashboard still reporting an older admission epoch is stale and has no current execution authority. Re-enabling requires a later explicit owner instruction and deliberate control-plane change."
 }

@@ -1,15 +1,16 @@
 {
-  "schema_version": "9.08",
-  "latest_cycle": "monitoring-provenance-v4-source-candidate-plus-restart-authority-v3-runtime-frontier",
+  "schema_version": "9.09",
+  "latest_cycle": "provider-authority-coherence-restored-plus-monitoring-provenance-v4-runtime-frontier",
   "needs_review": true,
   "active_program": "ENTITYOS_HCU",
   "product": "EntityOS",
   "integrated_cognition_compute_architecture": "HCU",
-  "material_finding": "Restart-authority attribution v3 remains source-closed but repository/runtime-unverified. Monitoring truth now has a provenance-safe v4 source candidate that separates current repository-bound provider authority from live /proc observations and stale snapshot fallback, explicitly preventing snapshot booleans or artifact SUPERVISOR.json from minting host-local runtime/provider authority. Four fail-closed tests are committed but unexecuted and the live autonomous publisher is not yet proven switched to v4. Canonical provider authority remains FREE_ONLY HARD_OFF 9.08, all providers false. No runtime quiescence, Physical GRID10, HCU, canonical semantics or training promotion.",
+  "material_finding": "Supervisor 9.08 introduced a control-plane coherence regression: SUPERVISOR_INBOX claimed current HARD_OFF authority at 9.08 while canonical FREE_PROVIDER_ADMISSION remained 9.07, and the 9.08 steering delta lacked fields required by the successor-dynamic provider resolver. This did not authorize or prove provider execution because tools/free_provider_admission.py fails closed on mismatch. Supervisor 9.09 restores coherent current FREE_ONLY HARD_OFF authority with all providers false. Monitoring provenance v4 remains source-candidate only with committed but repository-unexecuted tests; restart-authority attribution v3 remains source-closed but repository/runtime-unverified. No runtime quiescence, Physical GRID10, HCU, canonical semantics, BASE or training promotion.",
   "current_frontier": {
     "runtime_quiescence": "P0_OPEN_V3_REPOSITORY_TEST_AND_LIVE_HOST_ATTRIBUTION_REQUIRED_BEFORE_ANY_KILL",
-    "runtime_provider_authority": "CURRENT_EXPLICIT_HARD_OFF_9_08_ALL_PROVIDERS_FALSE",
-    "current_free_provider_admission": "9.08_ALL_PROVIDERS_FALSE_OWNER_EMERGENCY_STOP",
+    "runtime_provider_authority": "CURRENT_EXPLICIT_HARD_OFF_9_09_ALL_PROVIDERS_FALSE",
+    "current_free_provider_admission": "9.09_ALL_PROVIDERS_FALSE_OWNER_EMERGENCY_STOP",
+    "control_plane_coherence": "RESTORED_9_09_INBOX_STEERING_ADMISSION_EPOCHS_ALIGNED",
     "restart_authority_attribution_v3": "SOURCE_CANDIDATE_CLOSED_RUNTIME_UNVERIFIED_EXECUTION_FAILED_BEFORE_TESTS",
     "monitoring_truth": "P0_SOURCE_CANDIDATE_V4_COMMITTED_TESTS_UNEXECUTED_PUBLISHER_SWITCH_UNPROVEN",
     "base_claycode_release": "WP01_WP02_PASS_WP03_TO_WP14_OPEN_GENERAL_PURPOSE_AND_RELEASE_GATES_NOT_PASS",
@@ -85,5 +86,5 @@
     "canonical_semantics_promotion": false,
     "training_credit": 0
   },
-  "steering": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_9_08_DELTA_2026-08-27T0245P0700_GPT56SOL.json"
+  "steering": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_9_09_DELTA_2026-08-27T0254P0700_GPT56SOL.json"
 }

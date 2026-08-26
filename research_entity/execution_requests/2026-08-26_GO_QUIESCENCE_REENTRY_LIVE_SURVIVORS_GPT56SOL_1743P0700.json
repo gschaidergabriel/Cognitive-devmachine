@@ -1,0 +1,48 @@
+{
+  "schema": "GO_FREE_SWARM_RUNTIME_QUIESCENCE_REENTRY_REQUEST/v1",
+  "date": "2026-08-26",
+  "priority": "P0",
+  "program": "ENTITYOS_HCU",
+  "target_architecture": "autonomous self-organizing Xeno/HCU fabric",
+  "authority_context": "FREE_ONLY; owner emergency-stop FreeSwarm HARD_OFF; Together forbidden; no provider/model probes",
+  "trigger_evidence": {
+    "telemetry_branch": "chatgpt-vps-results",
+    "telemetry_commit": "f270bcd7b146857b18024c8920733c6d3ee1eeae",
+    "observed_at": "2026-08-26T10:45:34.060291+00:00",
+    "sandbox": "clay-direct-dev",
+    "live_classes": [
+      "tools/run_free_evidence_forge.py",
+      "tools/run_research_distillery_local.py",
+      "free swarm/evaluate.py --watch",
+      "free swarm/update_fabric_live.py --watch",
+      "tools/run_6000_free_swarm_supervisor.sh"
+    ]
+  },
+  "required_execution": [
+    "Re-read current research_entity/claycode/autonomous/FREE_PROVIDER_ADMISSION.json and stop unless owner emergency-stop FreeSwarm HARD_OFF is still current.",
+    "On the clay-direct-dev runtime owning the observed processes, capture timestamp plus exact PID/PPID/argv for the listed legacy classes and their descendants.",
+    "Use the existing fail-closed FreeSwarm runtime quiescence enforcer; dry-run first and preserve the receipt.",
+    "Only if every selected root is an exact legacy FreeSwarm/forge/distillery/evaluator/updater class, apply termination. Do not terminate unrelated Xeno, Trigger-2, Git, telemetry bridge, or repository service processes.",
+    "After termination, prove zero matching live roots/descendants and zero matching restart for at least 60 seconds.",
+    "Do not use aggregate global provider counters alone as Clay attribution. If a Clay-specific provider-capability/counter binding is available, record its delta; otherwise mark provider-counter attribution INCOMPLETE while still recording process quiescence separately.",
+    "Persist host/runtime identity, before/after process trees, enforcer source hash, stdout/stderr hashes and observation timestamps to the VPS result channel.",
+    "Do not run Physical GRID10, model experiments or training in the same authority step."
+  ],
+  "pass_conditions": {
+    "hard_off_current": true,
+    "selected_roots_exact_legacy_classes_only": true,
+    "remaining_matching_process_roots": 0,
+    "remaining_matching_descendants": 0,
+    "matching_restart_during_window": 0,
+    "observation_seconds_min": 60,
+    "unrelated_processes_terminated": 0
+  },
+  "fail_closed": [
+    "Ambiguous process ownership => do not terminate that process and return INCOMPLETE.",
+    "Authority no longer HARD_OFF => stop before termination.",
+    "Any matching survivor or restart => FAIL_RUNTIME_QUIESCENCE.",
+    "Missing host/process evidence => INCOMPLETE, not PASS."
+  ],
+  "next_if_pass": "Run the 8.95 provider-gate direct+guarded HARD_OFF runtime proof on a clean current non-provider checkout, then return GO to Physical GRID10/recursive scaling.",
+  "credit_boundary": "RUNTIME_QUIESCENCE_COMPONENT_ONLY; NO_PROVIDER_GRID10_HCU_TRAINING_OR_SEMANTICS_CREDIT"
+}

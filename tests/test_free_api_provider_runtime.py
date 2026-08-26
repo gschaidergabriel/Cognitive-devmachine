@@ -1038,6 +1038,47 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             )
         self.assertFalse(called)
 
+    def test_documented_nvidia_style_model_identifier_remains_compatible(self):
+        model = "meta/llama-3.1-8b-instruct"
+
+        class Response:
+            status = 200
+            headers = {}
+            def __enter__(self): return self
+            def __exit__(self, *args): pass
+            def read(self, limit):
+                return json.dumps({
+                    "object": "chat.completion",
+                    "id": "chatcmpl-test",
+                    "created": 1,
+                    "model": model,
+                    "usage": {
+                        "prompt_tokens": 1,
+                        "completion_tokens": 1,
+                        "total_tokens": 2,
+                    },
+                    "choices": [{
+                        "index": 0,
+                        "finish_reason": "stop",
+                        "message": {"role": "assistant", "content": "ok"},
+                    }],
+                }).encode("utf-8")
+
+        env = {
+            "NVIDIA_API_KEY": "secret",
+            "FRANK_PROVIDER_BASE_URL": "http://localhost:8765/v1",
+            "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
+        }
+        result = MOD.execute_chat(
+            VALID_MESSAGES,
+            model=model,
+            environ=env,
+            opener=lambda *args, **kwargs: Response(),
+        )
+
+        self.assertEqual(result["receipt"]["outcome"], "success")
+        self.assertEqual(result["receipt"]["model"], model)
+
     def test_empty_message_list_is_blocked_before_network(self):
         called = False
 

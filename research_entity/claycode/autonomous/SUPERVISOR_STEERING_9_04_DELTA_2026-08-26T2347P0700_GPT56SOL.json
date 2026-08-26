@@ -1,0 +1,29 @@
+{
+  "schema_version": "9.04",
+  "cycle": "strict-restart-authority-attribution-before-quiescence-kill",
+  "date": "2026-08-26",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "material_delta": [
+    "Fresh repository liveness continues through metrics commit b86a776feacbebc1e7884fbc9e87f3e250ecb70c at 2026-08-26T16:46:06Z, so the legacy publication/control-plane path remains live after owner HARD_OFF. This does not prove provider calls or identify the executing host.",
+    "The previous v1 restart-attribution probe classified container/tmux/screen/nohup ancestry at MEDIUM confidence but only failed the process on UNKNOWN. That was insufficient for a safe P0 kill decision because execution authority requires unambiguous ownership, not a plausible mechanism class.",
+    "New tools/free_swarm_restart_authority_attribution_v2.py keeps the probe read-only and makes MEDIUM-confidence mechanisms explicitly non-actionable. SYSTEMD becomes actionable only when exactly one unit is bound by systemctl show/cat to a legacy entrypoint. CRON becomes actionable only with one exact matching scheduler source/entry.",
+    "New mutation/unit tests cover UNKNOWN, medium-confidence container attribution, bound/unbound systemd, exact cron and missing Clay process binding. Source/test files exist; repository-bound runtime execution remains pending.",
+    "Trigger-2 real-tokenizer work independently found that digit atoms split under leading-space rendering on the pinned checkpoint tokenizer. This keeps tokenizer/render ABI P1 open and does not change GO P0 runtime-quiescence priority."
+  ],
+  "p0_decision": "DO_NOT_KILL_FROM_V1_MEDIUM_CONFIDENCE. EXECUTE_V2_READ_ONLY_ATTRIBUTION_ON_LIVE_CLAY_HOST. FAIL_CLOSED_UNLESS_EVERY_MATCHED_ROOT_HAS_AN_UNAMBIGUOUS_OWNING_RESTART_OBJECT. DISABLE_RESTART_AUTHORITY_BEFORE_TREE_TERMINATION. THEN_REQUIRE_AT_LEAST_90_SECONDS_ZERO_SURVIVORS_DESCENDANTS_RESTARTS.",
+  "next_after_p0": [
+    "RUN_DIRECT_AND_GUARDED_PROVIDER_GATES_AND_REQUIRE_ZERO_PROVIDER_CALLS_ZERO_SECRET_LOOKUPS",
+    "RETURN_TO_PHYSICAL_GRID10_AND_RECURSIVE_COORDINATOR_BRIDGE",
+    "MEASURE_REAL_FANIN_COMPRESSION_LATENCY_CONTENTION",
+    "COORDINATOR_CRASH_REPLACEMENT_AND_WORKER_REJOIN"
+  ],
+  "credit_change": {
+    "restart_attribution_v2_source_credit": true,
+    "runtime_quiescence_credit": 0,
+    "provider_path_runtime_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "training_credit": 0
+  },
+  "execution_request": "research_entity/execution_requests/2026-08-26_GO_QUIESCENCE_RESTART_ATTRIBUTION_V2_GPT56SOL_2347P0700.json"
+}

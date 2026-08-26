@@ -1,6 +1,6 @@
 {
   "schema": "ENTITYOS_HCU_FREE_PROVIDER_ADMISSION/v1",
-  "authority_epoch": "8.97",
+  "authority_epoch": "8.99",
   "mode": "FREE_ONLY",
   "product": "EntityOS",
   "compute_architecture": "HCU",
@@ -21,5 +21,5 @@
     "unknown_or_unbound_route": "FAIL_CLOSED",
     "paid_fallback_attempt_count": 0
   },
-  "note": "Owner emergency stop remains in force. Authority epoch is rebound to supervisor 8.97 while every provider remains admitted=false. This restores a current explicit HARD_OFF snapshot rather than relying on stale-epoch rejection alone. Re-enabling requires a later explicit owner instruction and deliberate control-plane change."
+  "note": "Owner emergency stop remains in force. Authority epoch is rebound to supervisor 8.99 while every provider remains admitted=false. This repairs the 8.98/8.97 epoch drift and preserves an explicit current HARD_OFF snapshot. Re-enabling requires a later explicit owner instruction and deliberate control-plane change."
 }

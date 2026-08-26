@@ -1,6 +1,6 @@
 {
   "schema": "CLAY_FREE_SWARM_SYSTEM_ANALYSIS/v3",
-  "generated_at": "2026-08-26T00:28:59.656589+00:00",
+  "generated_at": "2026-08-26T00:44:05.860895+00:00",
   "runtime": {
     "supervisor": "STOPPED/QUARANTINED",
     "go_swarm": "RUNNING",
@@ -65,17 +65,17 @@
   },
   "distillery": {
     "schema": "CLAY_RESEARCH_DISTILLERY_STATUS/v1",
-    "generated_at": "2026-08-26T00:28:21.712969+00:00",
-    "collected_source_tokens": 81401,
+    "generated_at": "2026-08-26T00:43:58.578900+00:00",
+    "collected_source_tokens": 88774,
     "accepted_dataset_tokens": 0,
     "dataset_yield": 0.0,
     "compression_factor": null,
-    "collected_chunks": 256,
+    "collected_chunks": 275,
     "accepted_packets": 0,
     "rejected_candidates": 0,
     "questions": {
       "CYCLIC": 851,
-      "OPEN": 69
+      "OPEN": 73
     },
     "source_metadata_rows": {
       "web_search_chunk": 8
@@ -107,23 +107,23 @@
         "model": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free"
       }
     ],
-    "model_input_tokens": 5688,
-    "model_output_tokens": 20771,
+    "model_input_tokens": 6116,
+    "model_output_tokens": 23481,
     "shared_provider_budget": {
       "schema": "CLAY_SHARED_PROVIDER_BUDGET/v1",
-      "generated_at": "2026-08-26T00:28:21.713478+00:00",
+      "generated_at": "2026-08-26T00:43:58.579335+00:00",
       "providers": {
         "arxiv": {
           "max_inflight": 1,
           "active_leases": 0,
           "min_interval_s": 3.1,
           "cooldown_seconds": 0.0,
-          "total_requests": 39,
-          "total_success": 13,
+          "total_requests": 43,
+          "total_success": 15,
           "total_429": 0,
           "total_errors": 13,
           "last_status": "200",
-          "last_observed_at": "2026-08-26T00:28:06.873330+00:00"
+          "last_observed_at": "2026-08-26T00:30:14.475371+00:00"
         },
         "crossref": {
           "max_inflight": 1,
@@ -154,12 +154,12 @@
           "active_leases": 0,
           "min_interval_s": 1.0,
           "cooldown_seconds": 0.0,
-          "total_requests": 939,
-          "total_success": 852,
+          "total_requests": 945,
+          "total_success": 858,
           "total_429": 0,
           "total_errors": 87,
           "last_status": "200",
-          "last_observed_at": "2026-08-26T00:28:13.218526+00:00"
+          "last_observed_at": "2026-08-26T00:30:17.327732+00:00"
         },
         "groq": {
           "max_inflight": 128,
@@ -213,13 +213,13 @@
           "max_inflight": 16,
           "active_leases": 0,
           "min_interval_s": 0.5,
-          "cooldown_seconds": 0.0,
-          "total_requests": 4791,
-          "total_success": 194,
-          "total_429": 4584,
+          "cooldown_seconds": 9.993404388427734,
+          "total_requests": 4878,
+          "total_success": 198,
+          "total_429": 4667,
           "total_errors": 12,
-          "last_status": "200",
-          "last_observed_at": "2026-08-26T00:28:21.689726+00:00"
+          "last_status": "429",
+          "last_observed_at": "2026-08-26T00:43:58.572794+00:00"
         },
         "semantic_scholar": {
           "max_inflight": 1,
@@ -249,16 +249,16 @@
     },
     "db_bytes": 1036288,
     "top_questions": [
-      "Gibt es offene Quellen- oder Forschungsprojekte, die ähnliche Optimierungsansätze für VM-Memory-Management verfolgen?",
-      "Welche Auswirkungen können die vorgeschlagenen Änderungen auf die Sicherheit von EntityOS/HCU haben?",
-      "How can the system prove zero secret lookups and zero network attempts for missing/malformed/unknown/paid/subscription/authority mismatch and unlisted providers?",
-      "What are the implications of the control breach on the system's security and reliability?",
-      "Does causal boundary injection generalize from synthetic DAG workloads to open-ended HCU computation traces?",
-      "Does NVIDIA NGC API expose per-credential quota_scope (not just org-level) for NIM free-tier models?",
-      "Do Groq HTTP responses include model-specific x-ratelimit-* headers that distinguish free vs paid tier enforcement?",
-      "Does OpenRouter /models endpoint reliably return pricing.prompt==0 AND pricing.completion==0 for genuinely free routes with signed attestation?",
-      "Can model-selection provenance be made tamper-evident without trusted hardware or external anchoring, given that all local state is mutable by the same process that emits records?",
-      "Does the minimal signature set change when J-Space causal controls require cross-model counterfactual queries?"
+      "How to effectively balance local optimization with external knowledge utilization?",
+      "What metrics best capture the trade-offs between local and external resource utilization?",
+      "Can the system's growth be hindered by over-reliance on local optimization?",
+      "Does NVIDIA's Developer Program API expose a per-credential (API key) model entitlement query that itself is free-tier accessible?",
+      "How to implement EffectGate non-bypass in causal trace fusion?",
+      "Welche zusätzlichen Sicherheitsmaßnahmen sind erforderlich, um denFREE_PROVIDER_ADMISSION-Controller vor Manipulationsversuchen zu schützen?",
+      "What is the exact boundary between static type checking and runtime validation in the current Entry Fabric implementation?",
+      "Can causal attribution of metric noise be automated without provider-specific heuristics?",
+      "Inwieweit kann der FREE_PROVIDER_ADMISSION-Controller auf andere kostenbasierte Providermodelle adaptiert werden?",
+      "What are the implications of the FREE_SWARM_ADMISSION_BOUNDARY_RECEIPT/v1 execution on the program convergence?"
     ],
     "candidate_states": {}
   },
@@ -429,10 +429,10 @@
   "costs": {
     "price_basis": "Claude Sonnet 5 introductory through 2026-08-31: $2/M input + $10/M output",
     "free_swarm_sonnet5_equivalent_usd": 148.815178,
-    "distillery_sonnet5_equivalent_usd": 0.219086,
-    "measured_total_sonnet5_equivalent_usd": 149.034264,
+    "distillery_sonnet5_equivalent_usd": 0.24704199999999998,
+    "measured_total_sonnet5_equivalent_usd": 149.06222,
     "verified_historical_savings_usd": null,
-    "nominal_avoided_if_zero_cost_usd": 149.034264,
-    "repo_output_only_proxy_usd": 141.20915
+    "nominal_avoided_if_zero_cost_usd": 149.06222,
+    "repo_output_only_proxy_usd": 141.2096
   }
 }

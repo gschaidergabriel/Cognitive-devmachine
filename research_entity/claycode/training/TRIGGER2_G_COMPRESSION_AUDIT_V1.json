@@ -1,0 +1,45 @@
+{
+  "families": {
+    "G_REF_UNION_PRESERVATION": {
+      "output_path": "/tmp/g_out/TRIGGER2_G_REF_UNION_PRESERVATION_CANDIDATE_V1.jsonl",
+      "output_sha256": "e7ddafb2d577947c559049e6c9ac5b5a0cd6cfbc59c6d63ce8cb5f6f607f0596",
+      "rows": 590,
+      "split_counts": {
+        "HOLDOUT_FROZEN": 74,
+        "TRAIN": 258,
+        "VALIDATION": 258
+      }
+    },
+    "G_TOPOLOGY_AND_UNKNOWN_PRESERVATION": {
+      "output_path": "/tmp/g_out/TRIGGER2_G_TOPOLOGY_AND_UNKNOWN_PRESERVATION_CANDIDATE_V1.jsonl",
+      "output_sha256": "9390c8487b4886516d6621a796d779e67423d4c77427839d8fe3988fb38c5b95",
+      "rows": 286,
+      "split_counts": {
+        "HOLDOUT_FROZEN": 30,
+        "TRAIN": 128,
+        "VALIDATION": 128
+      }
+    }
+  },
+  "overall_pass": true,
+  "reason_training_eligible_false": "no real tokenizer/atom-manifest binding, no admission gate run -- candidate/quarantined only per TRIGGERWORT_2 course Step 6.",
+  "reports": {
+    "G_REF_UNION_PRESERVATION": {
+      "decoy_drops_rows": 295,
+      "decoy_matches_rows": 295,
+      "failures": [],
+      "pass": true,
+      "rows": 590
+    },
+    "G_TOPOLOGY_AND_UNKNOWN_PRESERVATION": {
+      "decoy_matches_rows": 96,
+      "decoy_wrong_rows": 190,
+      "failures": [],
+      "pass": true,
+      "rows": 286
+    }
+  },
+  "schema": "CLAY_TRIGGER2_G_RECURSIVE_COORDINATOR_COMPRESSION_CANDIDATE/v1",
+  "total_rows": 876,
+  "training_eligible": false
+}

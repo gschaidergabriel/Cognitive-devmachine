@@ -1219,6 +1219,16 @@ def _execute_chat_locked(
                     raise ValueError(
                         "response_reasoning_must_be_bounded_unicode_string"
                     )
+                reasoning_usage = provider_usage.get(
+                    "completion_tokens_details"
+                )
+                if (
+                    reasoning_usage is None
+                    or reasoning_usage["reasoning_tokens"] == 0
+                ):
+                    raise ValueError(
+                        "response_reasoning_requires_token_provenance"
+                    )
                 provider_reasoning_characters = len(reasoning)
                 provider_reasoning_sha256 = hashlib.sha256(
                     reasoning.encode("utf-8")

@@ -1229,6 +1229,13 @@ def _execute_chat_locked(
                     raise ValueError(
                         "response_reasoning_requires_token_provenance"
                     )
+                if (
+                    reasoning_usage["reasoning_tokens"]
+                    >= provider_usage["completion_tokens"]
+                ):
+                    raise ValueError(
+                        "response_reasoning_must_leave_visible_token"
+                    )
                 provider_reasoning_characters = len(reasoning)
                 provider_reasoning_sha256 = hashlib.sha256(
                     reasoning.encode("utf-8")

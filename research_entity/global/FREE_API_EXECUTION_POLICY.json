@@ -736,6 +736,19 @@
     "counterhypothesis": "Rejecting every non-null usage detail is the safest compatible v0.1 policy; falsified because it rejects an officially documented NVIDIA success shape while a closed bounded sub-schema can preserve both safety and provenance.",
     "uncertainty": "Usage-detail schemas vary across backend versions and models. FRANK accepts only the two evidenced one-field objects; all other keys, non-integers, negative values and child counts exceeding their parent remain unverified. No Ubuntu NVIDIA live receipt is available on this host."
   },
+  "provider_response_passive_metadata_compatibility": {
+    "checked_at": "2026-08-26",
+    "claim": "The v0.1 text adapter accepts NVIDIA's documented passive message metadata only when refusal, annotations, audio, function_call and reasoning are null, tool_calls is an exact empty built-in list, and choice routed_experts is null. Nonempty tool calls, non-null values and unknown message or choice extensions remain unverified.",
+    "source": "https://docs.nvidia.com/nim/large-language-models/latest/get-started/quickstart.html",
+    "external_evidence": "NVIDIA's current expected non-streaming Chat Completions response, updated 2026-08-21, includes those five null message fields, an empty tool_calls list and null routed_experts on an ordinary stopped text answer.",
+    "internal_measurement": "A locally replayed response matching the documented passive message shape previously remained EXECUTED but was rejected as invalid_provider_response solely because the text adapter allowed only role and content.",
+    "executable_evidence": [
+      "test_documented_nvidia_passive_message_metadata_remains_compatible",
+      "test_response_tool_calls_cannot_reach_text_verified_state"
+    ],
+    "counterhypothesis": "Rejecting every message extension is the safest compatible text-only policy; falsified because it rejects NVIDIA's current ordinary text response even though exact null and empty passive forms can be separated from executable tool-call content.",
+    "uncertainty": "These fields are compatibility metadata and are not promoted into new semantic receipt claims. Backend- or model-specific non-null variants still require a separate typed adapter. No Ubuntu NVIDIA live receipt is available on this host."
+  },
   "http_200_provider_error_envelope": {
     "checked_at": "2026-08-25",
     "claim": "A syntactically valid HTTP 200 JSON body whose object discriminator is error, or which carries an explicit top-level error member, is classified as provider_error. It remains EXECUTED but cannot reach VERIFIED or DONE and does not create HTTP-status evidence that was not received.",

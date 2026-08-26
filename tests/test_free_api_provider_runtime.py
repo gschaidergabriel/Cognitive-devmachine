@@ -2308,6 +2308,45 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
         self.assertNotIn("DONE", receipt["lifecycle"])
         self.assertIsNone(result["content"])
 
+    def test_canonical_ascii_response_id_suffix_remains_compatible(self):
+        class Response:
+            status = 200
+
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *args):
+                return False
+
+            def read(self, limit):
+                return (
+                    b'{"object":"chat.completion",'
+                    b'"id":"chatcmpl-Az09._-",'
+                    b'"created":1,"model":"mock","usage":{'
+                    b'"prompt_tokens":1,"completion_tokens":1,'
+                    b'"total_tokens":2},"choices":[{"index":0,'
+                    b'"finish_reason":"stop","message":'
+                    b'{"role":"assistant","content":"ok"}}]}'
+                )
+
+        env = {
+            "NVIDIA_API_KEY": "secret",
+            "FRANK_PROVIDER_BASE_URL": "http://localhost:8765/v1",
+            "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
+        }
+        result = MOD.execute_chat(
+            VALID_MESSAGES,
+            model="mock",
+            environ=env,
+            opener=lambda *args, **kwargs: Response(),
+            now=iter((50.385, 50.386)).__next__,
+        )
+        self.assertEqual(result["receipt"]["outcome"], "success")
+        self.assertEqual(
+            result["receipt"]["lifecycle"][-2:], ["VERIFIED", "DONE"]
+        )
+        self.assertEqual(result["content"], "ok")
+
     def test_missing_response_created_cannot_reach_verified_state(self):
         class Response:
             status = 200

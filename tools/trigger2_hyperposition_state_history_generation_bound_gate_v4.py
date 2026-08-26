@@ -46,6 +46,10 @@ tokenizer_abi = _load_sibling(
     "trigger2_tokenizer_abi_gate_v1.py",
     "trigger2_tokenizer_abi_for_hp_v4",
 )
+hyperposition_replay = _load_sibling(
+    "trigger2_hyperposition_state_history_proof_gate_v1.py",
+    "trigger2_hyperposition_replay_for_hp_v4",
+)
 # NOTE: trigger2_family_provenance_gate_v1 is a BATCH-level gate (adjudicate(bundle)
 # with bundle["rows"] = [...]) that validates cross-split lineage/anti-echo across a
 # whole admission microbatch, not a single row. It cannot be wired into this per-row
@@ -105,6 +109,16 @@ def adjudicate(row: Any) -> dict[str, Any]:
             if not isinstance(tokenizer_abi_result, dict) or not tokenizer_abi_result.get("pass"):
                 failures.extend(_failures_from("TOKENIZER_ABI:", tokenizer_abi_result))
 
+    hyperposition_replay_result = None
+    if not failures:
+        try:
+            hyperposition_replay_result = hyperposition_replay.adjudicate(row)
+        except Exception as exc:
+            failures.append("HYPERPOSITION_REPLAY_EXCEPTION:" + type(exc).__name__)
+        else:
+            if not isinstance(hyperposition_replay_result, dict) or not hyperposition_replay_result.get("pass"):
+                failures.extend(_failures_from("HYPERPOSITION_REPLAY:", hyperposition_replay_result))
+
     failures = sorted(set(failures))
     return {
         "schema": SCHEMA,
@@ -115,6 +129,7 @@ def adjudicate(row: Any) -> dict[str, Any]:
         "a02_discriminator_producer_auth": a02_result,
         "epistemic_state_history_proof": epistemic_result,
         "tokenizer_abi": tokenizer_abi_result,
+        "hyperposition_replay_state_history": hyperposition_replay_result,
         "family_provenance_note": "trigger2_family_provenance_gate_v1 is batch-level (adjudicate(bundle) "
             "over a whole admission microbatch's rows, anti-echo lineage across the batch) and is NOT "
             "invoked by this per-row adjudicate() -- run it separately over the full candidate batch, "
@@ -164,6 +179,9 @@ def adjudicate(row: Any) -> dict[str, Any]:
             "Goekdeniz-Guelmez/Josiefied-Qwen3.5-0.8B-gabliterated-v1 rev 591852bda6e1979f59e4b0f5ee2919697b12e936, "
             "'or' explicitly excluded) instead of trusting a caller-declared token mapping; wired into this "
             "composer's adjudicate().",
+            "replay-bound state-history / retained Hyperposition semantics: trigger2_hyperposition_state_history_proof_gate_v1.adjudicate(row) "
+            "is now invoked as the 5th and final per-row check in this composer's adjudicate(); a row is no longer certified without "
+            "passing the base genesis/history replay proof (required_order step 5).",
         ],
         "canonical_dataset_admission": False,
         "accepted_dataset_tokens_minted": 0,

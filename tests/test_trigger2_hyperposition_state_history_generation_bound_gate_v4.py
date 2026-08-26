@@ -72,10 +72,11 @@ def test_full_component_pass_remains_nonpromoting_zero_credit(monkeypatch):
     monkeypatch.setattr(gate.a02, "adjudicate", passed("a02"))
     monkeypatch.setattr(gate.epistemic, "adjudicate", passed("epistemic"))
     monkeypatch.setattr(gate.tokenizer_abi, "adjudicate", passed("tokenizer_abi"))
+    monkeypatch.setattr(gate.hyperposition_replay, "adjudicate", passed("hyperposition_replay"))
 
     result = gate.adjudicate({})
     assert result["pass"] is True
-    assert calls == ["generation", "a02", "epistemic", "tokenizer_abi"]
+    assert calls == ["generation", "a02", "epistemic", "tokenizer_abi", "hyperposition_replay"]
     assert result["positive_D_E_promotion_ready"] is False
     assert result["canonical_dataset_admission"] is False
     assert result["accepted_dataset_tokens_minted"] == 0
@@ -86,3 +87,24 @@ def test_full_component_pass_remains_nonpromoting_zero_credit(monkeypatch):
     assert result["entityos_runtime_credit_minted"] == 0
     assert result["canonical_truth_minted"] is False
     assert result["direct_effect_authority_minted"] is False
+
+
+def test_hyperposition_replay_failure_rejects_row(monkeypatch):
+    def passed(name):
+        def inner(row):
+            return _pass_result()
+        return inner
+
+    def replay_fail(row):
+        return {"pass": False, "failures": ["GENESIS_STATE_HISTORY_MISMATCH"]}
+
+    monkeypatch.setattr(gate.generation, "adjudicate", passed("generation"))
+    monkeypatch.setattr(gate.a02, "adjudicate", passed("a02"))
+    monkeypatch.setattr(gate.epistemic, "adjudicate", passed("epistemic"))
+    monkeypatch.setattr(gate.tokenizer_abi, "adjudicate", passed("tokenizer_abi"))
+    monkeypatch.setattr(gate.hyperposition_replay, "adjudicate", replay_fail)
+
+    result = gate.adjudicate({})
+    assert result["pass"] is False
+    assert any("HYPERPOSITION_REPLAY" in f for f in result["failures"])
+    assert result["positive_D_E_promotion_ready"] is False

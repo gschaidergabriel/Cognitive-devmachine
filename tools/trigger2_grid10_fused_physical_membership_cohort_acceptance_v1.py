@@ -401,7 +401,8 @@ class FusedFabric(MembershipBoundFabric):
               node_result_digests_json TEXT NOT NULL,
               envelope_digests_json TEXT NOT NULL,
               resulting_epoch INTEGER NOT NULL,
-              summary_digest TEXT NOT NULL
+              summary_digest TEXT NOT NULL,
+              evidence_class TEXT NOT NULL DEFAULT 'PHYSICAL_OBSERVED'
             );
             CREATE TABLE fused_cohort_members(
               cohort_id TEXT NOT NULL,
@@ -597,6 +598,12 @@ class FusedFabric(MembershipBoundFabric):
             "envelope_digest": str(envelope["envelope_digest"]),
         }
 
+    # Evidence-class disjointness (Trigger-2 physical-witness-wrapper-closure-audit-v1,
+    # discriminator #2/#3): identical structural envelopes admitted under a different
+    # evidence_class MUST derive a different cohort_id and be persisted as a different
+    # class. PHYSICAL_OBSERVED and SOURCE_FIXTURE_ONLY are the only two accepted classes.
+    EVIDENCE_CLASSES = ("PHYSICAL_OBSERVED", "SOURCE_FIXTURE_ONLY")
+
     def derive_cohort_id(
         self,
         members: list[dict[str, Any]],
@@ -604,7 +611,10 @@ class FusedFabric(MembershipBoundFabric):
         lease: dict[str, Any],
         expected_identity: tuple[int, int, str],
         membership_digest: str,
+        evidence_class: str = "PHYSICAL_OBSERVED",
     ) -> str:
+        if evidence_class not in self.EVIDENCE_CLASSES:
+            raise FabricError("UNKNOWN_EVIDENCE_CLASS:" + str(evidence_class))
         canonical = sorted(
             members,
             key=lambda member: (
@@ -617,6 +627,7 @@ class FusedFabric(MembershipBoundFabric):
             {
                 "schema": COHORT_SCHEMA,
                 "scope": SCOPE,
+                "evidence_class": evidence_class,
                 "coordinator_lease_id": lease["lease_id"],
                 "starting_snapshot": expected_identity,
                 "starting_membership_digest": membership_digest,
@@ -624,9 +635,10 @@ class FusedFabric(MembershipBoundFabric):
             }
         )[:32]
 
-    def atomic_fused_cohort_commit(
+    def _commit_cohort_internal(
         self,
         *,
+        evidence_class: str,
         lease: dict[str, Any],
         token: str,
         envelopes: list[dict[str, Any]],
@@ -637,21 +649,42 @@ class FusedFabric(MembershipBoundFabric):
         expected_membership_digest: str,
         expected_cohort_id: str,
     ) -> dict[str, Any]:
+        """Private, class-agnostic atomic cohort mutation primitive.
+
+        Not a public API: callers must go through ``atomic_fused_cohort_commit``
+        (evidence_class=PHYSICAL_OBSERVED, requires the 8 physical-barrier proof
+        booleans) or ``atomic_fused_cohort_commit_source_fixture``
+        (evidence_class=SOURCE_FIXTURE_ONLY, skips physical-barrier proof, always
+        returns physical_credit=0). This closes
+        RETAINED_COORDINATOR_RAW_DICT_REJECTION: the two named, evidence-class-typed
+        entry points are the only supported physical-mutation front doors.
+        """
+        if evidence_class not in self.EVIDENCE_CLASSES:
+            raise FabricError("UNKNOWN_EVIDENCE_CLASS:" + str(evidence_class))
         if len(envelopes) != N:
             raise FabricError("COHORT_PACKET_COUNT_INVALID")
-        required_proof = {
-            "all_alive_at_barrier": proof.get("all_alive_at_barrier") is True,
-            "ten_distinct_os_pids": proof.get("distinct_os_pids") == N,
-            "parent_child_pid_binding": proof.get("parent_child_pid_binding") is True,
-            "same_snapshot_identity": proof.get("same_snapshot_identity") is True,
-            "all_transactions_open_at_barrier": proof.get("all_transactions_open_at_barrier") is True,
-            "all_hold_readonly_s1_fd_at_barrier": proof.get("all_hold_readonly_s1_fd_at_barrier") is True,
-            "writer_free_identity_stable": proof.get("writer_free_identity_stable") is True,
-            "process_intervals_overlap_release": proof.get("process_intervals_overlap_release") is True,
-        }
-        failed_proof = [name for name, passed in required_proof.items() if not passed]
-        if failed_proof:
-            raise FabricError("PHYSICAL_COHORT_PROOF_FAILED:" + ",".join(sorted(failed_proof)))
+        if evidence_class == "PHYSICAL_OBSERVED":
+            required_proof = {
+                "all_alive_at_barrier": proof.get("all_alive_at_barrier") is True,
+                "ten_distinct_os_pids": proof.get("distinct_os_pids") == N,
+                "parent_child_pid_binding": proof.get("parent_child_pid_binding") is True,
+                "same_snapshot_identity": proof.get("same_snapshot_identity") is True,
+                "all_transactions_open_at_barrier": proof.get("all_transactions_open_at_barrier") is True,
+                "all_hold_readonly_s1_fd_at_barrier": proof.get("all_hold_readonly_s1_fd_at_barrier") is True,
+                "writer_free_identity_stable": proof.get("writer_free_identity_stable") is True,
+                "process_intervals_overlap_release": proof.get("process_intervals_overlap_release") is True,
+            }
+            failed_proof = [name for name, passed in required_proof.items() if not passed]
+            if failed_proof:
+                raise FabricError("PHYSICAL_COHORT_PROOF_FAILED:" + ",".join(sorted(failed_proof)))
+        else:
+            # SOURCE_FIXTURE_ONLY: no physical barrier exists for a fixture, so the
+            # physical-proof booleans are intentionally not required here. This route
+            # can exercise persistence/replay semantics only; it is never confusable
+            # with PHYSICAL_OBSERVED because evidence_class is baked into cohort_id
+            # (derive_cohort_id) and into the persisted fused_cohort_admissions row.
+            if proof.get("synthetic_source_fixture_only") is not True:
+                raise FabricError("SOURCE_FIXTURE_MUST_BE_EXPLICITLY_MARKED")
 
         expected_identity = (expected_generation, expected_epoch, expected_digest)
         current_snapshot = self.snapshot()
@@ -682,6 +715,7 @@ class FusedFabric(MembershipBoundFabric):
             lease=lease,
             expected_identity=expected_identity,
             membership_digest=expected_membership_digest,
+            evidence_class=evidence_class,
         )
         if cohort_id != expected_cohort_id:
             raise FabricError("COHORT_ID_BINDING_MISMATCH")
@@ -704,6 +738,7 @@ class FusedFabric(MembershipBoundFabric):
                 or int(existing["start_epoch"]) != expected_epoch
                 or str(existing["start_digest"]) != expected_digest
                 or str(existing["start_membership_digest"]) != expected_membership_digest
+                or str(existing["evidence_class"]) != evidence_class
                 or json.loads(existing["node_result_digests_json"])
                 != [member["node_result_digest"] for member in canonical_members]
                 or json.loads(existing["envelope_digests_json"])
@@ -712,6 +747,8 @@ class FusedFabric(MembershipBoundFabric):
                 raise FabricError("COHORT_REPLAY_BINDING_MISMATCH")
             return {
                 "cohort_id": cohort_id,
+                "evidence_class": evidence_class,
+                "physical_credit": 0,
                 "replay": True,
                 "state_delta": 0,
                 "resulting_epoch": int(existing["resulting_epoch"]),
@@ -805,7 +842,7 @@ class FusedFabric(MembershipBoundFabric):
                     ),
                 )
             self.con.execute(
-                "INSERT INTO fused_cohort_admissions VALUES(?,?,?,?,?,?,?,?,?,?,?,?)",
+                "INSERT INTO fused_cohort_admissions VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)",
                 (
                     cohort_id,
                     SCOPE,
@@ -819,6 +856,7 @@ class FusedFabric(MembershipBoundFabric):
                     cj([member["envelope_digest"] for member in canonical_members]),
                     new_epoch,
                     summary_digest,
+                    evidence_class,
                 ),
             )
             self._set("epoch", str(new_epoch))
@@ -829,6 +867,12 @@ class FusedFabric(MembershipBoundFabric):
 
         return {
             "cohort_id": cohort_id,
+            "evidence_class": evidence_class,
+            # Source-closure fix only (physical-witness-wrapper-closure-audit-v1):
+            # this receipt never mints physical/HCU/training/canonical-truth/effect
+            # credit regardless of evidence_class. Promotion is a separate, later,
+            # explicit decision -- not automatic from a passing commit.
+            "physical_credit": 0,
             "replay": False,
             "state_delta": 1,
             "prior_epoch": expected_epoch,
@@ -838,6 +882,69 @@ class FusedFabric(MembershipBoundFabric):
             "canonical_truth": False,
             "effect_authority": False,
         }
+
+    def atomic_fused_cohort_commit(
+        self,
+        *,
+        lease: dict[str, Any],
+        token: str,
+        envelopes: list[dict[str, Any]],
+        proof: dict[str, Any],
+        expected_generation: int,
+        expected_epoch: int,
+        expected_digest: str,
+        expected_membership_digest: str,
+        expected_cohort_id: str,
+    ) -> dict[str, Any]:
+        """Public PHYSICAL_OBSERVED entry point (requires the 8 physical-barrier proofs)."""
+        return self._commit_cohort_internal(
+            evidence_class="PHYSICAL_OBSERVED",
+            lease=lease,
+            token=token,
+            envelopes=envelopes,
+            proof=proof,
+            expected_generation=expected_generation,
+            expected_epoch=expected_epoch,
+            expected_digest=expected_digest,
+            expected_membership_digest=expected_membership_digest,
+            expected_cohort_id=expected_cohort_id,
+        )
+
+    def atomic_fused_cohort_commit_source_fixture(
+        self,
+        *,
+        lease: dict[str, Any],
+        token: str,
+        envelopes: list[dict[str, Any]],
+        proof: dict[str, Any],
+        expected_generation: int,
+        expected_epoch: int,
+        expected_digest: str,
+        expected_membership_digest: str,
+        expected_cohort_id: str,
+    ) -> dict[str, Any]:
+        """Public SOURCE_FIXTURE_ONLY entry point.
+
+        Distinct, nonphysical front door (DISTINCT_SOURCE_FIXTURE_ROUTE): exercises
+        persistence/replay semantics without any physical-barrier proof, always
+        returns physical_credit=0, and can never collide with a PHYSICAL_OBSERVED
+        cohort_id for the same structural envelope because evidence_class is folded
+        into derive_cohort_id. Caller must set proof["synthetic_source_fixture_only"]
+        = True; this is not a convenience default, it is a deliberate caller assertion
+        that this is fixture data.
+        """
+        return self._commit_cohort_internal(
+            evidence_class="SOURCE_FIXTURE_ONLY",
+            lease=lease,
+            token=token,
+            envelopes=envelopes,
+            proof=proof,
+            expected_generation=expected_generation,
+            expected_epoch=expected_epoch,
+            expected_digest=expected_digest,
+            expected_membership_digest=expected_membership_digest,
+            expected_cohort_id=expected_cohort_id,
+        )
 
 
 def expect_error(fn: Any, code: str) -> bool:
@@ -990,6 +1097,118 @@ def run() -> dict[str, Any]:
                 membership_digest=fx["membership_start"]["digest"],
             )
             tests["P7_TRANSPORT_ARRIVAL_PERMUTATION_HAS_NO_AUTHORITY"] = forward_id == reverse_id
+
+            # Physical-witness-wrapper-closure-audit-v1 discriminator: an identical
+            # structural envelope (same lease/snapshot/membership/members) admitted
+            # under a different evidence_class MUST derive a different cohort_id.
+            structural_members = [
+                {
+                    "source_node_id": envelope["node_result"]["source_node_id"],
+                    "source_membership_id": envelope["source_membership_id"],
+                    "producer_pid": int(envelope["node_result"]["producer_pid"]),
+                    "node_result_digest": envelope["node_result_digest"],
+                    "envelope_digest": envelope["envelope_digest"],
+                }
+                for envelope in fx["envelopes"]
+            ]
+            physical_id = fabric.derive_cohort_id(
+                structural_members,
+                lease=fx["lease"],
+                expected_identity=snapshot_identity(fx["start"]),
+                membership_digest=fx["membership_start"]["digest"],
+                evidence_class="PHYSICAL_OBSERVED",
+            )
+            fixture_id = fabric.derive_cohort_id(
+                structural_members,
+                lease=fx["lease"],
+                expected_identity=snapshot_identity(fx["start"]),
+                membership_digest=fx["membership_start"]["digest"],
+                evidence_class="SOURCE_FIXTURE_ONLY",
+            )
+            tests["E1_EVIDENCE_CLASS_DISJOINT_COHORT_ID_FOR_IDENTICAL_ENVELOPE"] = (
+                physical_id == fx["cohort_id"] and fixture_id != physical_id
+            )
+            tests["E2_UNKNOWN_EVIDENCE_CLASS_REJECTED"] = expect_error(
+                lambda: fabric.derive_cohort_id(
+                    structural_members,
+                    lease=fx["lease"],
+                    expected_identity=snapshot_identity(fx["start"]),
+                    membership_digest=fx["membership_start"]["digest"],
+                    evidence_class="NOT_A_REAL_CLASS",
+                ),
+                "UNKNOWN_EVIDENCE_CLASS:NOT_A_REAL_CLASS",
+            )
+        finally:
+            fabric.close()
+
+    with tempfile.TemporaryDirectory(prefix="trigger2-fused-grid10-sf-") as td:
+        root = Path(td)
+        # Source-fixture-only route: same fixture-building path (still spawns real
+        # processes for structurally valid envelopes -- SOURCE_FIXTURE_ONLY marks the
+        # *evidence class of the commit*, not a shortcut for building fake envelopes),
+        # but committed via the distinct nonphysical front door with the explicit
+        # fixture marker set, and proven to persist a different, disjoint cohort_id
+        # and evidence_class than the PHYSICAL_OBSERVED path used zero physical credit.
+        fx = make_fixture(root, "source-fixture")
+        fabric = fx["fabric"]
+        try:
+            fixture_proof = dict(fx["proof"])
+            fixture_proof["synthetic_source_fixture_only"] = True
+            start = fx["start"]
+            structural_members = [
+                {
+                    "source_node_id": envelope["node_result"]["source_node_id"],
+                    "source_membership_id": envelope["source_membership_id"],
+                    "producer_pid": int(envelope["node_result"]["producer_pid"]),
+                    "node_result_digest": envelope["node_result_digest"],
+                    "envelope_digest": envelope["envelope_digest"],
+                }
+                for envelope in fx["envelopes"]
+            ]
+            fixture_cohort_id = fabric.derive_cohort_id(
+                structural_members,
+                lease=fx["lease"],
+                expected_identity=snapshot_identity(start),
+                membership_digest=fx["membership_start"]["digest"],
+                evidence_class="SOURCE_FIXTURE_ONLY",
+            )
+            receipt = fabric.atomic_fused_cohort_commit_source_fixture(
+                lease=fx["lease"],
+                token=fx["token"],
+                envelopes=fx["envelopes"],
+                proof=fixture_proof,
+                expected_generation=start.generation,
+                expected_epoch=start.epoch,
+                expected_digest=start.state_digest,
+                expected_membership_digest=fx["membership_start"]["digest"],
+                expected_cohort_id=fixture_cohort_id,
+            )
+            tests["E3_SOURCE_FIXTURE_ROUTE_ADMITS_WITHOUT_PHYSICAL_PROOF"] = (
+                receipt["evidence_class"] == "SOURCE_FIXTURE_ONLY"
+                and receipt["physical_credit"] == 0
+                and receipt["cohort_id"] == fixture_cohort_id
+            )
+            persisted = fabric.con.execute(
+                "SELECT evidence_class FROM fused_cohort_admissions WHERE cohort_id=?",
+                (fixture_cohort_id,),
+            ).fetchone()
+            tests["E4_EVIDENCE_CLASS_PERSISTED_AT_COHORT_AUTHORITY"] = (
+                persisted is not None and persisted[0] == "SOURCE_FIXTURE_ONLY"
+            )
+            tests["E5_SOURCE_FIXTURE_UNMARKED_PROOF_REJECTED"] = expect_error(
+                lambda: fabric.atomic_fused_cohort_commit_source_fixture(
+                    lease=fx["lease"],
+                    token=fx["token"],
+                    envelopes=fx["envelopes"],
+                    proof=dict(fx["proof"]),
+                    expected_generation=start.generation,
+                    expected_epoch=start.epoch,
+                    expected_digest=start.state_digest,
+                    expected_membership_digest=fx["membership_start"]["digest"],
+                    expected_cohort_id=fixture_cohort_id,
+                ),
+                "SOURCE_FIXTURE_MUST_BE_EXPLICITLY_MARKED",
+            )
         finally:
             fabric.close()
 

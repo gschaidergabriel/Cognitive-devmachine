@@ -736,9 +736,23 @@
     "counterhypothesis": "Rejecting every non-null usage detail is the safest compatible v0.1 policy; falsified because it rejects an officially documented NVIDIA success shape while a closed bounded sub-schema can preserve both safety and provenance.",
     "uncertainty": "Usage-detail schemas vary across backend versions and models. FRANK accepts only the two evidenced one-field objects; all other keys, non-integers, negative values and child counts exceeding their parent remain unverified. No Ubuntu NVIDIA live receipt is available on this host."
   },
+  "provider_response_reasoning_metadata_compatibility": {
+    "checked_at": "2026-08-26",
+    "claim": "A stopped v0.1 text response may carry message.reasoning as null or one exact built-in, nonempty Unicode-scalar string bounded by the 2000000-byte response envelope. FRANK returns only message.content, never raw reasoning, and receipts reasoning solely as its SHA-256 digest and character count.",
+    "sources": [
+      "https://docs.nvidia.com/nim/large-language-models/2.0.6/day-0/get-started-nemotron-3-ultra.html",
+      "https://docs.vllm.ai/en/v0.16.0/api/vllm/entrypoints/openai/engine/protocol/",
+      "https://docs.vllm.ai/en/v0.16.0/api/vllm/entrypoints/openai/chat_completion/serving/"
+    ],
+    "external_evidence": "NVIDIA documents that Nemotron 3 with its reasoning parser returns parsed reasoning text separately from visible content and explicitly instructs clients not to feed reasoning back into later messages. vLLM 0.16 types reasoning as str or null and constructs it separately from content.",
+    "internal_measurement": "An otherwise canonical status-200 response with visible content, consistent reasoning-token usage and a string message.reasoning previously remained EXECUTED but was rejected as invalid_provider_response solely because every non-null reasoning value was blocked.",
+    "executable_evidence": "test_documented_nvidia_reasoning_message_remains_compatible",
+    "counterhypothesis": "Rejecting all non-null reasoning is necessary to keep the plain-text adapter safe; falsified because a closed scalar boundary can preserve NVIDIA compatibility without treating reasoning as visible output, exposing it in receipts or admitting object-shaped active metadata.",
+    "uncertainty": "The digest proves only equality of provider-reported bytes within this receipt; it does not authenticate correctness, faithfulness or causal use of the reasoning. Character count is not a token count. Empty reasoning remains unverified because NVIDIA uses null for absence. No Ubuntu NVIDIA live receipt is available on this host."
+  },
   "provider_response_passive_metadata_compatibility": {
     "checked_at": "2026-08-26",
-    "claim": "The v0.1 text adapter accepts NVIDIA's documented passive message metadata only when refusal, annotations, audio, function_call and reasoning are null, tool_calls is an exact empty built-in list, and choice routed_experts is null. Nonempty tool calls, non-null values and unknown message or choice extensions remain unverified.",
+    "claim": "The v0.1 text adapter accepts NVIDIA's documented passive message metadata only when refusal, annotations, audio and function_call are null, tool_calls is an exact empty built-in list, and choice routed_experts is null. Nonempty tool calls, non-null values and unknown message or choice extensions remain unverified; reasoning has its separate typed scalar boundary.",
     "source": "https://docs.nvidia.com/nim/large-language-models/latest/get-started/quickstart.html",
     "external_evidence": "NVIDIA's current expected non-streaming Chat Completions response, updated 2026-08-21, includes those five null message fields, an empty tool_calls list and null routed_experts on an ordinary stopped text answer.",
     "internal_measurement": "A locally replayed response matching the documented passive message shape previously remained EXECUTED but was rejected as invalid_provider_response solely because the text adapter allowed only role and content.",
@@ -1013,7 +1027,7 @@
     "A choice explicitly finished because of length remains EXECUTED as provider_output_truncated, is nonretryable without a changed token budget, and cannot reach VERIFIED or DONE.",
     "A non-streaming text choice requires explicit finish_reason stop before VERIFIED or DONE; null, missing and unsupported finish reasons remain invalid_provider_response.",
     "A stopped non-streaming text choice requires nonblank scalar content before VERIFIED or DONE; empty and whitespace-only final content remain invalid_provider_response.",
-    "The text-only response adapter requires role assistant plus content; missing authorship, tool_calls, reasoning_content and other typed extensions cannot reach VERIFIED or DONE.",
+    "The text-only response adapter requires role assistant plus visible content; optional provider reasoning is exact scalar text retained only by digest and character count, while missing authorship, nonempty tool_calls, reasoning_content and other untyped extensions cannot reach VERIFIED or DONE.",
     "An HTTP status response, including 429 and 5xx, proves EXECUTED transport but never VERIFIED or DONE; connection and timeout failures without an HTTP response remain unexecuted.",
     "Every received non-2xx status remains unverified even when the transport returns it as a regular response object instead of raising HTTPError.",
     "Only HTTP 200 is final for this NVIDIA text-completion path; HTTP 202 remains EXECUTED as provider_result_pending, cannot reach VERIFIED/DONE, and is not blindly replayed without a requestId-bound polling adapter.",

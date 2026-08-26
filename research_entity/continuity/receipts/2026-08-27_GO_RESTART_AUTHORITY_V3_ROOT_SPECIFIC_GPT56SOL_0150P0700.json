@@ -1,0 +1,44 @@
+{
+  "schema": "CLAY_GO_RESTART_AUTHORITY_V3_ROOT_SPECIFIC/v1",
+  "date": "2026-08-27",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "trigger": "go",
+  "owner_target": "autonomously self-organizing shared-state Xeno/HCU fabric",
+  "source_head_after_patch": "1c9ae10cf530406406e5f99a149c1d4095a38561",
+  "source_tree_after_patch": "738e3bb6cf7d9076026f92b99d239194facac032",
+  "frontier_before": "P0 root-specific restart-authority attribution; v2 quarantined for cross-root authority transplant risk",
+  "work_completed": [
+    "added tools/free_swarm_restart_authority_attribution_v3.py",
+    "bound each candidate root to PID/PPID/argv digest/cgroup digest/namespaces/matched legacy entrypoint set",
+    "systemd authority now requires one unit derived from that root's own cgroup and exact legacy-entrypoint-set equality",
+    "scheduler authority now requires exactly one scheduler entry whose matched entrypoint set equals that root",
+    "added global collision rejection when one owning object is claimed by multiple distinct root identities",
+    "added fail-closed tests for cross-root systemd transplant, cross-root cron transplant, ambiguous duplicate scheduler entries, argv receipt transplant, multi-unit cgroup ambiguity and container non-actionability"
+  ],
+  "commits": {
+    "tool": "729cea13193df793bb6037ccf8135b6e84037ed9",
+    "tests": "1c9ae10cf530406406e5f99a149c1d4095a38561"
+  },
+  "runtime_attempt": {
+    "attempted": true,
+    "surface": "local tool/container execution surface",
+    "result": "INFRA_CLIENT_ERROR_BEFORE_TEST_EXECUTION",
+    "scientific_credit": 0,
+    "note": "No test PASS is claimed from the failed execution surface. Source and tests exist; repository-bound runtime execution remains required."
+  },
+  "evidence_boundaries": {
+    "source_gap_closed_candidate": true,
+    "repository_bound_test_pass": false,
+    "live_host_attribution_pass": false,
+    "safe_to_kill_from_source_only": false,
+    "runtime_quiescence_pass": false,
+    "physical_grid10_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "training_credit": 0
+  },
+  "next_exact_action": "On a clean current non-provider checkout, run pytest for test_free_swarm_restart_authority_attribution_v3.py, then run v3 read-only on the live Clay host. If and only if every matched root is root-specifically actionable with no cross-root collision, revalidate PID/cgroup/object identity immediately before disabling the exact restart authority; then terminate only bound Clay descendants and require >=90 seconds zero survivors/descendants/restarts. In parallel, patch SYSTEM_ANALYSIS_LIVE provenance so current provider admission and live-process observation cannot be conflated with stale snapshots.",
+  "provider_policy": "HARD_OFF; no provider calls performed by this GO step",
+  "canonical_claim": "SOURCE_PROGRESS_ONLY_NO_RUNTIME_PROMOTION"
+}

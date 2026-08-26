@@ -1095,6 +1095,8 @@ def _execute_chat_locked(
                 or not _is_unicode_scalar_text(payload["id"])
                 or not payload["id"]
                 or len(payload["id"]) > MAX_PROVIDER_RESPONSE_ID_CHARACTERS
+                or not payload["id"].startswith("chatcmpl-")
+                or not payload["id"][len("chatcmpl-"):].strip()
             ):
                 raise ValueError("response_id_must_be_bounded_unicode_string")
             provider_response_id_sha256 = hashlib.sha256(

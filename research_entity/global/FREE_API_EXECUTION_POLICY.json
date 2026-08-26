@@ -749,6 +749,23 @@
     "counterhypothesis": "Rejecting every message extension is the safest compatible text-only policy; falsified because it rejects NVIDIA's current ordinary text response even though exact null and empty passive forms can be separated from executable tool-call content.",
     "uncertainty": "These fields are compatibility metadata and are not promoted into new semantic receipt claims. Backend- or model-specific non-null variants still require a separate typed adapter. No Ubuntu NVIDIA live receipt is available on this host."
   },
+  "provider_response_top_level_schema_closure": {
+    "checked_at": "2026-08-26",
+    "claim": "A successful v0.1 text response has a closed top-level schema. In addition to the required object, id, created, model, usage and choices fields, prompt_routed_experts, service_tier, prompt_logprobs, prompt_token_ids, prompt_text and kv_transfer_params are accepted only as null. An optional nonempty Unicode-scalar system_fingerprint is locally bounded to 256 characters and retained only as a SHA-256 digest. Every other top-level extension remains unverified.",
+    "sources": [
+      "https://docs.nvidia.com/nim/large-language-models/latest/get-started/quickstart.html",
+      "https://docs.vllm.ai/en/v0.16.0/api/vllm/entrypoints/openai/chat_completion/protocol/"
+    ],
+    "external_evidence": "NVIDIA's current expected Chat Completions envelope, updated 2026-08-21, includes the six null metadata fields and a vLLM system fingerprint. Official vLLM documents these names as ChatCompletionResponse fields rather than arbitrary extension storage.",
+    "internal_measurement": "An otherwise canonical status-200 response containing an unknown active top-level object previously returned success and reached VERIFIED and DONE while the extension was silently discarded from both content and receipt.",
+    "executable_evidence": [
+      "test_unknown_top_level_response_extension_cannot_be_verified",
+      "test_documented_nvidia_passive_message_metadata_remains_compatible",
+      "test_overflowing_json_exponents_cannot_reach_verified_state"
+    ],
+    "counterhypothesis": "Validating the known required members is sufficient because unknown top-level fields cannot change visible text; falsified because VERIFIED then asserted complete interpretation while active provider metadata was neither typed nor preserved.",
+    "uncertainty": "Current backend versions can define non-null service-tier, routing, logprob, token-id or transfer metadata. FRANK v0.1 does not interpret those values, so they require a separately typed adapter before verification. The fingerprint digest identifies provider-reported software metadata but does not authenticate it. No Ubuntu NVIDIA live receipt is available on this host."
+  },
   "http_200_provider_error_envelope": {
     "checked_at": "2026-08-25",
     "claim": "A syntactically valid HTTP 200 JSON body whose object discriminator is error, or which carries an explicit top-level error member, is classified as provider_error. It remains EXECUTED but cannot reach VERIFIED or DONE and does not create HTTP-status evidence that was not received.",
@@ -991,7 +1008,7 @@
     "Attempt IDs include a fresh high-entropy nonce so equal-time concurrent attempts cannot alias; raw nonces are never serialized.",
     "Attempt-ID construction never decimal-formats injected clock values; request ID plus the fresh 128-bit nonce supply bounded identity material so extreme passive integers cannot suppress a post-execution receipt.",
     "Attempt nonces are exact built-in nonempty Unicode-scalar strings of at most 128 characters before authenticated execution; polymorphic formatting, unbounded identity processing or post-request UTF-8 encoding failure cannot suppress the mandatory receipt.",
-    "A response reaches VERIFIED only when choices is a non-empty list whose first message is an object with string content; malformed JSON shapes fail closed with a receipt.",
+    "A response reaches VERIFIED only when its top-level field set belongs to the closed text-response schema and choices is a non-empty list whose first message is an object with string content; unknown top-level extensions and malformed JSON shapes fail closed with a receipt.",
     "A choice explicitly finished because of length remains EXECUTED as provider_output_truncated, is nonretryable without a changed token budget, and cannot reach VERIFIED or DONE.",
     "A non-streaming text choice requires explicit finish_reason stop before VERIFIED or DONE; null, missing and unsupported finish reasons remain invalid_provider_response.",
     "A stopped non-streaming text choice requires nonblank scalar content before VERIFIED or DONE; empty and whitespace-only final content remain invalid_provider_response.",

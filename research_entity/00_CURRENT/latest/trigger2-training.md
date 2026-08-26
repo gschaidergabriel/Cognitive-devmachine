@@ -1,136 +1,17 @@
 # Trigger-2 training research
 
-Status: `CURRENT_BLOCKED_ADMISSION`
+Status: `CANDIDATE_KNOWLEDGE_STRUCTURED_INTO_TOPIC_PACKETS`  
+Observed head: `fb3c344bfa3d4ca599cf6ab5e4cb116f296b3815`  
+Selected receipt: `research_entity/00_CURRENT/updates/trigger2-training/20260826T161821Z-trigger2-training-5fb18a73df.json`
 
-Trigger-2 **V71** is the current research-ledger successor under Supervisor **8.84**. This is a cache pointer only; newest explicit owner/supervisor authority and exact executable evidence outrank it.
+Two new topic packets structure today's B0-B6/A/G curriculum work and the atom-namespace P1-blocker resolution into durable claims/evidence/hypotheses, not just commits and NOW.md cache.
 
-## P0 — runtime quiescence actively failed with direct counter movement
+State: Created research_entity/topic_packets/trigger2-qwen35-08b-binding-curriculum (11 claims, 11 evidence entries, 5 negative results incl. the 0.276-bit misattribution and 3 real bugs caught+fixed, 4 open hypotheses, 6 experiments, 17 source refs, 16 event refs) and research_entity/topic_packets/trigger2-canonical-atom-abi-namespace (6 claims, 6 evidence entries, 1 negative result, 2 open hypotheses, 7 source refs, 4 event refs). Both registered in TOPIC_PACKET_INDEX.json. Followed the existing clay-g5/frank-c style pattern exactly (PACKET.json + CLAIMS/EVI…
 
-Owner FreeSwarm remains `HARD_OFF`, but committed shared provider-budget telemetry still advanced. Over the latest observed committed window, OpenRouter changed:
+Next: Deep review round with chatgpt-secondary (bridge now repaired) against all committed training data is next, coordinated with a parallel second research group's background-topics packet once it lands.
 
-- `total_requests`: **4230 → 4317** (`+87`)
-- `total_429`: **4095 → 4182** (`+87`)
-- `total_success`: **134 → 134**
+Evidence:
+- `research_entity/topic_packets/trigger2-qwen35-08b-binding-curriculum/PACKET.json`
+- `research_entity/topic_packets/trigger2-canonical-atom-abi-namespace/PACKET.json`
 
-Classification remains `ACTIVE_FAIL_POST_STOP_PROVIDER_ATTEMPT_COUNTERS_INCREASING`. This is evidence of continued provider-attempt activity, not a scientific negative about model/EntityOS behavior and not authorization to issue a provider probe.
-
-The quiescence gate now reads direct shared-budget counters and unexpired leases filtered to the canonical `FREE_PROVIDER_ADMISSION` provider set, while retaining process-tree and `LIVE_METRICS` checks. This avoids falsely treating unrelated GitHub/arXiv/Crossref source-tool traffic as provider-lane failure.
-
-Provider/model/physical-GRID10/training promotion remains closed. Required closure: zero provider-capable survivors, zero unexpired canonical-provider budget leases and a bounded zero canonical-provider counter delta without probing a provider; only then re-enter explicit FREE non-provider execution authority.
-
-## Retained invocation/fusion source chain
-
-- `tools/trigger2_node_result_model_call_two_phase_authority_v1.py`
-- `tools/trigger2_fused_membership_two_phase_adapter_v1.py`
-- content identity may repeat across deterministic invocations;
-- invocation-event authority is separate pre-call launch plus post-call executor observation;
-- membership/node/PID/generation/state/NODE_RESULT provenance is cross-bound before fusion;
-- current main freezes one deep-copied envelope cohort before validation and delegates that same snapshot, closing mutable validation/use drift at source level.
-
-All remains source/component evidence only.
-
-## V67 — physical proof-origin gap pinned
-
-Retained fail-closed regression:
-
-- `tests/test_trigger2_physical_cohort_proof_origin_boundary_v1.py`
-
-Blocker: `CALLER_FORGEABLE_PHYSICAL_COHORT_PROOF_DICTIONARY`.
-
-A synthetic all-true proof must fail before `fused_cohort_admissions`, `admitted_results` or epoch mutation. Physical GRID10 credit remains `0`.
-
-## V68–V70 — pidfd witness frontier
-
-Committed donor candidate:
-
-- `tools/trigger2_physical_witness_capability_v1.py`
-- `tests/test_trigger2_physical_witness_capability_v1.py`
-
-Useful retained primitive: `pidfd` as a nonserializable process-incarnation/liveness handle plus explicit `SOURCE_FIXTURE_ONLY` zero-credit receipt typing.
-
-The candidate is **not** physical authority. It still accepts caller-supplied marker/FD/S1/predicate mappings and is not integrated into the sole retained `FusedFabric.atomic_fused_cohort_commit` physical mutation entry.
-
-A temporal audit found an additional blocker: `spawn_held_cohort` currently returns only after barrier release plus `communicate`/wait/reap. Therefore minting pidfds from the returned proof is too late to establish the intended barrier-time process provenance.
-
-### Higher-information Linux discriminator
-
-During the live barrier, acquire one pidfd per child and use `pidfd_getfd` on the observed target S1 descriptor. Inside the same observer-owned authority boundary:
-
-1. stat the canonical S1 path;
-2. duplicate each child's actual target fd via the pidfd-referenced process;
-3. locally `fstat` and `F_GETFL` the duplicate;
-4. require device+inode equality and read-only access mode;
-5. bind process incarnation, actual S1 descriptor identity, ready marker, generation/epoch/state identity and a pre-release exact NODE_RESULT/packet commitment;
-6. after release, require exact packet/read-receipt equality before the sole physical mutation path is reachable;
-7. fail closed on unavailable kernel/permission support instead of falling back to caller-supplied evidence.
-
-This remains source/research direction only. Physical-proof-boundary closure remains `0`.
-
-## V71 — topology-only provenance OOD discriminator
-
-The earlier evidence-provenance probe was vulnerable to a serious shortcut counterhypothesis: a future model could memorize lexical provenance markers instead of learning the relation between an observation, its receipt and the claim it can promote.
-
-V71 adds and exact-byte validates:
-
-- `tools/trigger2_evidence_provenance_topology_ood_probe_v1.py`
-- `tests/test_trigger2_evidence_provenance_topology_ood_probe_v1.py`
-- `research_entity/continuity/receipts/2026-08-26_TRIGGER2_EVIDENCE_PROVENANCE_TOPOLOGY_OOD_SOURCE_VALIDATION_GPT56SOL.json`
-
-Current METHOD_ONLY validation:
-
-- `7 passed in 0.09s` on the byte-identical committed tool/test pair;
-- 64 rows / 32 opposite-label counterfactual pairs;
-- every pair has the **same complete visible lexical token multiset**;
-- pairwise bag-of-visible-token information bound: `0.5`;
-- DEVELOPMENT and OOD_HOLDOUT opaque carrier vocabularies are disjoint;
-- nuisance-only majority accuracy: `0.5`;
-- deterministic structural topology reference: `1.0`;
-- target/split stay outside model-visible input;
-- training-eligible rows: `0`;
-- accepted dataset token delta: `0`.
-
-This complements the parallel opaque-symbol/codebook gate: the codebook gate tests episode-local arbitrary remapping, while V71 makes lexical bag shortcuts exactly pairwise non-informative and leaves graph connectivity as the discriminator. Neither result is model evidence.
-
-## Training — Qwen3.5-0.8B binding/remap discriminator
-
-Current training hypothesis: the highest-value trainable deficit is episode-local **BIND / ROUTE / REMAP**, not semantic readout alone.
-
-Gated curriculum retained:
-
-- B0: separate semantic READ and symbol WRITE baselines;
-- B1: arbitrary episode-local binding with full S3/counterbalanced nuisance crossing;
-- B2: semantic-prior override plus mid-episode remapping and stale-binding rejection;
-- B3: multi-hop dereference;
-- B4: delay/interference capacity curves;
-- B5: variable-N and cell-permutation equivariance;
-- B6: DB-vs-simulation, Claude Code handoff/re-entry, Hyperposition/evidence authority.
-
-No aggregate checkpoint score may hide a mandatory-axis failure. Exact rendered-byte leakage/nuisance/equivariance gates, family-disjoint frozen holdouts and retention floors remain prerequisites.
-
-Training materialization remains closed: admitted rows `0`, accepted dataset tokens `0`, checkpoint outputs unopened, checkpoint winner `null`, training credit `0`.
-
-## Next exact gate
-
-P0: close owning-host runtime quiescence without a provider probe.
-
-P1 source: restructure the retained held-cohort lifecycle so pidfds, actual S1 descriptor binding and a complete packet commitment are sealed **before release/reap**; then require that observation-bound capability at the sole physical FusedFabric mutation entry and keep `SOURCE_FIXTURE_ONLY` structurally disjoint from `PHYSICAL_OBSERVED`.
-
-P2 training: freeze both the opaque-symbol/codebook gate and the V71 topology OOD set. Resolve exact ABI `atoms_index.json`, tokenizer, renderer and contextual-token identity before any B1+B2 materialization. Do not tune frozen holdout structures from future model results.
-
-## Credits
-
-- accepted dataset tokens: `0`
-- checkpoint winner: `null`
-- checkpoint/model-call runtime credit: `0`
-- physical GRID10 promotion credit: `0`
-- physical proof boundary closed: `0`
-- runtime quiescence credit: `0`
-- J-Space model credit: `0`
-- training credit: `0`
-- canonical semantics credit: `0`
-- whole HCU runtime credit: `0`
-- whole EntityOS runtime credit: `0`
-
-Current ledger: `research_entity/global/j-space/research/2026-08-26_TRIGGER2_TRAINING_ARTIFACT_VERSION_LEDGER_V71_GPT56SOL.json`
-
-Supervisor: `research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_84_DELTA_2026-08-26T0545P0700_GPT56SOL.json`
+> Cache only. Re-enter current authority/source before material claims.

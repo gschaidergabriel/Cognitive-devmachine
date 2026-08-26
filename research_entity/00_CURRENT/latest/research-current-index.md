@@ -1,18 +1,14 @@
 # Research current-state index / fast re-entry
 
-Status: `CURRENT_INFRASTRUCTURE`
+Status: `CURRENT_INFRASTRUCTURE`  
+Observed head: `71879188e361310613e066f3bcab2da01e0829d5`  
+Selected receipt: `research_entity/00_CURRENT/updates/research-current-index/20260826T032200P0700-research-current-index-gpt56sol.json`
 
-Token-efficient current-state pyramid is installed:
+Token-efficient Clay current-state pyramid installed with mandatory append-only worker receipts and per-direction latest results.
 
-- L0 `NOW.md` — whole-project current synthesis;
-- L1 `INDEX.tsv` / `ACTIVE.tsv` / `RECENT.tsv` — cheap scan and branch/work awareness;
-- L2 `latest/<direction>.md` — newest compact result per direction;
-- L3 `updates/<direction>/<FAST_RESULT>.json` — append-only worker deltas;
-- L4 exact original research/source/test/receipt evidence.
+State: L0 NOW; L1 INDEX/ACTIVE/RECENT; L2 latest per direction; L3 append-only FAST_RESULT receipts; L4 exact evidence. Worker emitter refreshes locally. GitHub-hosted backup refresh is configured but first observed run lacked successful executor evidence.
 
-Every substantive worker is required by `AGENTS.md` and the all-workers directive to emit `CLAY_FAST_RESULT/v1`; `tools/clay_current_emit_v1.py` immediately refreshes the generated cache in that checkout. The GitHub-hosted backup refresh is configured but its first observed run did not produce successful executor evidence, so it is not the sole maintenance mechanism.
-
-Next: all researchers keep emitting small receipts; observe a green backup workflow run before crediting that redundant path as operational.
+Next: All substantive workers emit FAST_RESULT for affected directions; observe a green backup workflow run before treating GitHub-hosted refresh as proven.
 
 Evidence:
 - `research_entity/00_CURRENT/README.md`
@@ -20,6 +16,5 @@ Evidence:
 - `tools/clay_current_refresh_v1.py`
 - `AGENTS.md`
 - `research_entity/claycode/CLAYCODE_ALL_WORKERS_EXECUTION_DIRECTIVE.md`
-- `research_entity/00_CURRENT/updates/research-current-index/20260826T032200P0700-research-current-index-gpt56sol.json`
 
-> Cache only. Current owner/supervisor/executable evidence outranks this summary.
+> Cache only. Re-enter current authority/source before material claims.

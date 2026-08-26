@@ -12,6 +12,7 @@ SPEC = importlib.util.spec_from_file_location("free_api_provider_runtime_hardsto
 MOD = importlib.util.module_from_spec(SPEC)
 sys.modules[SPEC.name] = MOD
 SPEC.loader.exec_module(MOD)
+MOD.execute_chat.__kwdefaults__["wall_time"] = lambda: 1.0
 
 VALID_MESSAGES = [{"role": "user", "content": "test"}]
 

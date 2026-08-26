@@ -1,0 +1,205 @@
+{
+  "blueprint_schema": "CLAY_TRIGGER2_DYNAMIC_BINDING_EPISODE_BLUEPRINT/v2.1",
+  "checks": {
+    "bag_of_words_shortcut_probe": {
+      "accuracy": 0.2808159722222222,
+      "accuracy_minus_chance": -0.052517361111111105,
+      "chance_accuracy": 0.3333333333333333,
+      "folds": 5,
+      "n": 6912,
+      "note": "PASS means the bag-of-words shortcut probe could not beat chance by more than 5pp (one-sided; below-chance is classifier noise, not a leak signal). It does not by itself prove zero information -- check_text_conditional_target_uniformity is the exact proof for that; this probe is a secondary, weaker corroboration.",
+      "pass": true,
+      "per_fold_accuracy": [
+        0.2848879248011569,
+        0.2783803326102675,
+        0.29160636758321273,
+        0.2771345875542692,
+        0.27206946454413894
+      ]
+    },
+    "cross_split_disjointness": {
+      "pairwise_overlaps": {},
+      "pass": true,
+      "splits": {
+        "HOLDOUT_FROZEN": 12,
+        "TRAIN": 48,
+        "VALIDATION": 12
+      }
+    },
+    "higher_order_joint_mi": {
+      "excess_failures": [],
+      "excess_mi_over_template_baseline_bits": {
+        "c__templatexlay": 0.0,
+        "c__templatexord": 0.0,
+        "c__templatexp": 0.0,
+        "c__templatexperm": 0.0,
+        "target__templatexlay": 0.0,
+        "target__templatexord": 1.1102230246251565e-16,
+        "target__templatexp": 0.0,
+        "target__templatexperm": 1.1102230246251565e-16
+      },
+      "failures": [],
+      "informational_combined_corpus_joint_mi_bits": {
+        "c__layxp": 0.0,
+        "c__layxt": 0.0,
+        "c__ordxlay": 0.0,
+        "c__ordxp": 0.0,
+        "c__ordxt": 0.0,
+        "c__permxlay": 0.0,
+        "c__permxord": 0.0,
+        "c__permxp": 0.0,
+        "c__permxt": 0.0,
+        "c__pxt": 0.0,
+        "target__layxp": 0.0,
+        "target__layxt": 0.2761954276479391,
+        "target__ordxlay": 0.0,
+        "target__ordxp": 0.0,
+        "target__ordxt": 0.2761954276479392,
+        "target__permxlay": 0.0,
+        "target__permxord": 0.0,
+        "target__permxp": 0.0,
+        "target__permxt": 0.2761954276479392,
+        "target__pxt": 0.2761954276479391
+      },
+      "informational_note": "combined-corpus numbers above are EXPECTED_HOLDOUT_SUPPORT_SHIFT (HOLDOUT_FROZEN's intentional disjoint symbol pool under template T6), not a leak; see module CORRECTION docstring. They are informational/regression-tracking only and do not gate pass.",
+      "pass": true,
+      "template_baseline_mi_bits": {
+        "c": 0.0,
+        "target": 0.2761954276479391
+      },
+      "within_split_failures": [],
+      "within_split_joint_mi_bits": {
+        "HOLDOUT_FROZEN": {
+          "c__layxp": 0.0,
+          "c__layxt": 0.0,
+          "c__ordxlay": 0.0,
+          "c__ordxp": 0.0,
+          "c__ordxt": 0.0,
+          "c__permxlay": 0.0,
+          "c__permxord": 0.0,
+          "c__permxp": 0.0,
+          "c__permxt": 0.0,
+          "c__pxt": 0.0,
+          "target__layxp": 0.0,
+          "target__layxt": 0.0,
+          "target__ordxlay": 0.0,
+          "target__ordxp": 0.0,
+          "target__ordxt": 0.0,
+          "target__permxlay": 0.0,
+          "target__permxord": 0.0,
+          "target__permxp": 0.0,
+          "target__permxt": 0.0,
+          "target__pxt": 0.0
+        },
+        "TRAIN": {
+          "c__layxp": 0.0,
+          "c__layxt": 0.0,
+          "c__ordxlay": 0.0,
+          "c__ordxp": 0.0,
+          "c__ordxt": 0.0,
+          "c__permxlay": 0.0,
+          "c__permxord": 0.0,
+          "c__permxp": 0.0,
+          "c__permxt": 0.0,
+          "c__pxt": 0.0,
+          "target__layxp": 0.0,
+          "target__layxt": 0.0,
+          "target__ordxlay": 0.0,
+          "target__ordxp": 0.0,
+          "target__ordxt": 0.0,
+          "target__permxlay": 0.0,
+          "target__permxord": 0.0,
+          "target__permxp": 0.0,
+          "target__permxt": 0.0,
+          "target__pxt": 0.0
+        },
+        "VALIDATION": {
+          "c__layxp": 0.0,
+          "c__layxt": 0.0,
+          "c__ordxlay": 0.0,
+          "c__ordxp": 0.0,
+          "c__ordxt": 0.0,
+          "c__permxlay": 0.0,
+          "c__permxord": 0.0,
+          "c__permxp": 0.0,
+          "c__permxt": 0.0,
+          "c__pxt": 0.0,
+          "target__layxp": 0.0,
+          "target__layxt": 0.0,
+          "target__ordxlay": 0.0,
+          "target__ordxp": 0.0,
+          "target__ordxt": 0.0,
+          "target__permxlay": 0.0,
+          "target__permxord": 0.0,
+          "target__permxp": 0.0,
+          "target__permxt": 0.0,
+          "target__pxt": 0.0
+        }
+      }
+    },
+    "intended_split_support_shift": {
+      "holdout_disjoint_from_train": true,
+      "holdout_symbols": [
+        "ABI_ACCEPTED_ORDINAL:12",
+        "ABI_ACCEPTED_ORDINAL:13",
+        "ABI_ACCEPTED_ORDINAL:14"
+      ],
+      "note": "This IS the intended unseen-symbol holdout design (not a leak). It is exactly what makes template alone informative about target in the combined corpus -- see check_higher_order_joint_mi's informational_combined_corpus_joint_mi_bits.",
+      "pass": true,
+      "train_equals_validation_symbols": true,
+      "train_symbols": [
+        "ABI_ACCEPTED_ORDINAL:00",
+        "ABI_ACCEPTED_ORDINAL:01",
+        "ABI_ACCEPTED_ORDINAL:02",
+        "ABI_ACCEPTED_ORDINAL:03",
+        "ABI_ACCEPTED_ORDINAL:04",
+        "ABI_ACCEPTED_ORDINAL:05",
+        "ABI_ACCEPTED_ORDINAL:06",
+        "ABI_ACCEPTED_ORDINAL:07",
+        "ABI_ACCEPTED_ORDINAL:08",
+        "ABI_ACCEPTED_ORDINAL:09",
+        "ABI_ACCEPTED_ORDINAL:10",
+        "ABI_ACCEPTED_ORDINAL:11"
+      ],
+      "validation_symbols": [
+        "ABI_ACCEPTED_ORDINAL:00",
+        "ABI_ACCEPTED_ORDINAL:01",
+        "ABI_ACCEPTED_ORDINAL:02",
+        "ABI_ACCEPTED_ORDINAL:03",
+        "ABI_ACCEPTED_ORDINAL:04",
+        "ABI_ACCEPTED_ORDINAL:05",
+        "ABI_ACCEPTED_ORDINAL:06",
+        "ABI_ACCEPTED_ORDINAL:07",
+        "ABI_ACCEPTED_ORDINAL:08",
+        "ABI_ACCEPTED_ORDINAL:09",
+        "ABI_ACCEPTED_ORDINAL:10",
+        "ABI_ACCEPTED_ORDINAL:11"
+      ]
+    },
+    "text_conditional_target_uniformity": {
+      "cell_sizes_seen": [
+        36,
+        144
+      ],
+      "failures": [],
+      "groups_checked": 72,
+      "pass": true
+    },
+    "uniqueness": {
+      "duplicate_prompt_count": 0,
+      "pass": true,
+      "total_rendered": 9072,
+      "unique_full_prompts": 9072
+    }
+  },
+  "overall_pass": true,
+  "reason_training_eligible_false": "audit passing does not admit rows; real ABI atom manifest + pinned tokenizer binding + separate admission gate remain required per TRIGGERWORT_2 course Step 6/1.",
+  "render_note": "PLACEHOLDER ABI_ACCEPTED_ORDINAL atoms; tests generation-method leakage, not real-tokenizer boundary leakage (see module docstring).",
+  "rows_audited": 9072,
+  "schema": "CLAY_TRIGGER2_DYNAMIC_BINDING_BLUEPRINT_V2_LEAKAGE_AUDIT/v1",
+  "source_module": {
+    "path": "tools/trigger2_dynamic_binding_blueprint_v2.py",
+    "sha256": "d57793bdc721fb58d166757b2eb4cd5ca5d7e2b077cd7dd8a0c98926e32b23fb"
+  },
+  "training_eligible": false
+}

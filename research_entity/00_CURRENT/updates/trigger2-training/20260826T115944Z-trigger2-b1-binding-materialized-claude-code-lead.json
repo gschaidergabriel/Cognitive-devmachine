@@ -1,0 +1,23 @@
+{
+  "schema": "CLAY_FAST_RESULT/v1",
+  "receipt_id": "20260826T115944Z-trigger2-b1-binding-materialized-claude-code-lead",
+  "direction": "trigger2-training",
+  "created_at": "2026-08-26T11:59:44Z",
+  "observed_head": "0cacadf9eaa42c6e8ef5fd13142198fc55bc2ccd",
+  "status": "B1_CANDIDATE_MATERIALIZED_QUARANTINED_ADMISSION_STILL_CLOSED",
+  "headline": "B1 (arbitrary episode-local binding, full S3/counterbalanced nuisance crossing) materialized: 9072 rendered candidate rows (6912 TRAIN/1728 VALIDATION/432 HOLDOUT_FROZEN) from the existing, already leakage-audited donor blueprint, fail-closed gated on that audit.",
+  "state": "Gabriel's direct instruction (relayed 2026-08-26): 10,000 total training examples needed for the full fine-tune, work parallelized across 4 agents (B0 done, this agent = B1, three parallel agents cover B2+B3/B4+B5/B6). Per TRIGGERWORT_2_TRAINING_COURSE_DELTA_V35's explicit guidance ('rebase/audit the strongest existing donor rather than creating a competing generator'): did NOT fork a new B1 generator. tools/trigger2_dynamic_binding_blueprint_v2.py already IS the B1 generator (full S3 mapping x codebook-order x layout x class x polarity factorial crossing, family-disjoint TRAIN/VALIDATION/HOLDOUT_FROZEN templates and symbol pools) and was leakage-audited clean this same session (after a chatgpt-secondary-caught and independently-reproduced correction, see prior receipts). Added tools/trigger2_b1_binding_materializer_v1.py + tests/test_trigger2_b1_binding_materializer_v1.py (5/5 pass): renders full prompt bytes for every blueprint row via the leakage-audit module's own render_prompt(), and REFUSES to write output (raises SystemExit) if the leakage audit does not pass -- a real fail-closed gate, not a documentation claim. Output: 9072 rows, all training_eligible=false/evidence_class=METHOD_ONLY (placeholder ABI_ACCEPTED_ORDINAL atoms; real tokenizer/atom-manifest binding remains a separate later gate), self-check clean (zero contradictory prompt/target pairs across all 9072 unique rendered prompts). Deliberately did NOT inject section 2.B's S0/S1/S2 hard negatives (model-output-becomes-S0-fact etc.) into these rows -- that capability belongs to B6 (DB-vs-simulation/Hyperposition/evidence authority per the same B0-B6 list), and mixing it into a pure symbol-binding task risks a confound the course explicitly warns against ('no aggregate checkpoint score may hide a mandatory-axis failure'); asked chatgpt-secondary for a second opinion on this specific scoping decision (see next). Materialized to research_entity/claycode/training/TRIGGER2_B1_BINDING_MATERIALIZED_CANDIDATE_V1.jsonl (14.6MB) plus TRIGGER2_B1_LEAKAGE_AUDIT_REPORT_V1.json and TRIGGER2_B1_MATERIALIZATION_REPORT_V1.json. accepted_dataset_tokens remains 0; training_credit remains 0 -- this is candidate/quarantined materialization per TRIGGERWORT_2 course Step 6, not an admission event. 9072 exceeds Gabriel's ~2500-row B1 ask; asked chatgpt-secondary whether that volume risks dominating the other three parallel families in the eventual 10k mix, or whether a curated subset would serve the full-FT corpus better (response pending at receipt time, will follow up if it changes the disposition).",
+  "next": "Await chatgpt-secondary's response on B1 volume-vs-mix and the B0-B6 scoping question; if it recommends a curated subset instead of the full 9072, add a documented, non-arbitrary selection (e.g. reduce codebook-order redundancy while preserving the counterbalancing proof) as a follow-up commit rather than silently shrinking the already-pushed set. Otherwise: continue toward PR #1956's remaining next-exact-gates (46-atom ABI inventory, real tokenizer binding) before any admission attempt on either B0 or B1.",
+  "evidence": [
+    "tools/trigger2_b1_binding_materializer_v1.py",
+    "tests/test_trigger2_b1_binding_materializer_v1.py",
+    "research_entity/claycode/training/TRIGGER2_B1_BINDING_MATERIALIZED_CANDIDATE_V1.jsonl",
+    "research_entity/claycode/training/TRIGGER2_B1_LEAKAGE_AUDIT_REPORT_V1.json",
+    "research_entity/claycode/training/TRIGGER2_B1_MATERIALIZATION_REPORT_V1.json",
+    "tools/trigger2_dynamic_binding_blueprint_v2_leakage_audit_v1.py"
+  ],
+  "organ": "Anthropic / Claude Code (claude-code-lead)",
+  "origin_actor": "claude-code-lead",
+  "actor_role": "LEAD_RESEARCHER_PRIMARY_ADJUDICATOR",
+  "provider": "Anthropic"
+}

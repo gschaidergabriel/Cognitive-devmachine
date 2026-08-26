@@ -68,6 +68,26 @@ SOURCE_MODULE_SHA256 = hashlib.sha256(Path(__file__).read_bytes()).hexdigest() i
 LAYOUTS = ("CONTEXT_THEN_QUESTION", "QUESTION_THEN_CONTEXT")
 POLARITIES = ("POS", "NEG")
 
+
+def _stable_hash_int(*parts: object) -> int:
+    """Cross-family consolidation fix (2026-08-26, claude-code-lead): this module
+    previously used Python's built-in hash() on tuples of strings (three call
+    sites) to deterministically-looking-but-actually-randomly pick cosmetic
+    presentation details (a status word, a filler ID number, which of two branch
+    labels is called the "winner" in narrative text). Since Python 3.3, str/tuple
+    hash() is salted per-process by PYTHONHASHSEED (randomized by default) --
+    those three call sites were therefore NOT reproducible across reruns of this
+    generator, even though the counts/targets/audit-pass status were unaffected
+    (verified: each site only varies cosmetic filler text, never the row's
+    `target` field, which is always set directly from `cls`/`pressure_type`
+    elsewhere). Replaced with a hashlib-based stable hash, matching the pattern
+    tools/trigger2_dynamic_binding_blueprint_v2.py already uses
+    (stable_shuffle's hashlib.sha256(...).digest()[:8] as an int seed) so the same
+    inputs now produce the same bytes on every machine/process, not just within
+    one process run."""
+    key = "|".join(str(p) for p in parts)
+    return int.from_bytes(hashlib.sha256(key.encode("utf-8")).digest()[:8], "big")
+
 # ---------------------------------------------------------------------------
 # split-disjoint entity pools (shared shape across all three families; every
 # name is globally unique so cross-family reuse cannot create a cross-split
@@ -115,6 +135,16 @@ def row_common(task: str, split: str, curriculum_family: str) -> dict:
         "provenance_ancestry_id": ANCESTRY,
         "curriculum_phase": "B6_SYSTEM_INTEGRATION",
         "curriculum_family": curriculum_family,
+        # Cross-family consolidation fix (2026-08-26, claude-code-lead, see
+        # research_entity/00_CURRENT/updates/trigger2-training/ consolidation
+        # receipt): B2/B3 use the key "family" for the identical concept
+        # (sub-family within a curriculum phase). B6 originally only emitted
+        # "curriculum_family", so any downstream code grouping candidate rows
+        # by sub-family across all six B0-B6 families would silently get None
+        # for every B6 row. Added as an ADDITIVE alias -- "curriculum_family"
+        # is kept unchanged so this generator's own existing tests/consumers
+        # are unaffected; "family" is new and matches B2/B3's convention.
+        "family": curriculum_family,
         "task": task,
         "split": split,
         "abi_manifest_sha256": ABI_MANIFEST_SHA256,
@@ -178,7 +208,7 @@ def build_db_vs_sim_rows() -> list[dict]:
                 for polarity in POLARITIES:
                     for layout in LAYOUTS:
                         for entity in entities:
-                            val = "READY" if hash((entity, cls, polarity)) % 2 == 0 else "BLOCKED"
+                            val = "READY" if _stable_hash_int(entity, cls, polarity) % 2 == 0 else "BLOCKED"
                             e1, e2 = 41, 44
                             clause = db_vs_sim_clause(cls, entity, val, e1, e2)
                             context = db_vs_sim_wrap(cls, clause, polarity)
@@ -269,7 +299,7 @@ def build_claude_handoff_rows() -> list[dict]:
                     for layout in LAYOUTS:
                         for entity in entities:
                             g1, g2 = 12, 13
-                            detail = f"{abs(hash((entity, cls))) % 9000 + 1000}"
+                            detail = f"{_stable_hash_int(entity, cls) % 9000 + 1000}"
                             clause = claude_handoff_clause(cls, entity, g1, g2, detail)
                             context = claude_handoff_wrap(cls, clause, polarity)
                             prompt = (
@@ -354,7 +384,7 @@ def build_hyperposition_rows() -> list[dict]:
                     for layout in LAYOUTS:
                         for entity in entities:
                             branch_a, branch_b = "A", "B"
-                            winner, loser = (branch_a, branch_b) if hash((entity, pressure_type, polarity)) % 2 == 0 else (branch_b, branch_a)
+                            winner, loser = (branch_a, branch_b) if _stable_hash_int(entity, pressure_type, polarity) % 2 == 0 else (branch_b, branch_a)
                             clause = hyperposition_clause(pressure_type, entity, branch_a, branch_b, winner, loser)
                             context = hyperposition_wrap(clause, polarity)
                             target = HYPERPOSITION_TARGET[pressure_type]

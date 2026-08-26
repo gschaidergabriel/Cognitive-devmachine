@@ -147,10 +147,18 @@ def adjudicate(row: Any) -> dict[str, Any]:
         "remaining_p0": [
             "exact-current deterministic execution of the A02 mutation suite is required",
             "native seed must be rebound to this one retained successor before any pilot regeneration",
-            "REPLAY_STATE_HISTORY_RETAINED_HYPERPOSITION_SEMANTICS (required_order step 6) is still not "
-            "actually invoked in this adjudicate() -- trigger2_hyperposition_state_history_proof_gate_v1 "
-            "exists and is used elsewhere, but is not wired into this v4 composer; a row passing this "
-            "function today has NOT been checked against the base replay/state-history gate",
+            "STALE-NOTE FIX 2026-08-26: the previous entry here claiming "
+            "REPLAY_STATE_HISTORY_RETAINED_HYPERPOSITION_SEMANTICS was 'still not actually invoked' was "
+            "WRONG and contradicted both the code below and this array's own closed_p0 entry -- "
+            "hyperposition_replay.adjudicate(row) IS invoked as the 5th/final per-row check (see code); "
+            "corrected during production DB_MATCH row-assembler build, see "
+            "tests/test_trigger2_db_match_row_assembler_v1.py",
+            "NEW P0 (found 2026-08-26 building the production DB_MATCH assembler): none of the 5 wired "
+            "per-row checks bind or verify model_visible content -- 'prompt' text can be swapped after "
+            "row assembly with zero detection, candidate_pre_admission_pass says nothing about prompt "
+            "integrity; see tests/test_trigger2_db_match_row_assembler_v1.py::"
+            "test_tampered_prompt_after_generation_receipt_fails_closed (tracked xfail, must close before "
+            "real admission)",
             "rendered nuisance / full-cross-or-conditional-MI leakage remains a BATCH-level statistical "
             "check (trigger2_binding_router_visible_nuisance_gate_v1, executed once against a full "
             "blueprint on 2026-08-26, PASS) rather than a per-row check -- it is not and structurally "

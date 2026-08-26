@@ -1,18 +1,18 @@
 {
-  "schema_version": "8.97",
-  "latest_cycle": "live-legacy-survivors-still-present-control-invariants-restored-current-explicit-hardoff-rebound",
+  "schema_version": "8.98",
+  "latest_cycle": "persistent-legacy-control-plane-liveness-target-restart-authority-before-kill",
   "needs_review": true,
   "active_program": "ENTITYOS_HCU",
   "product": "EntityOS",
   "integrated_cognition_compute_architecture": "HCU",
-  "material_finding": "Fresh clay-direct-dev telemetry at 2026-08-26T10:52:24.963499Z still shows live Clay-specific FreeSwarm/forge/distillery/evaluator/updater roots under owner HARD_OFF, so runtime quiescence remains P0. Supervisor 8.96 also dropped required Goodman/model-ancestry/Ubuntu-Frank/training-admission evidence invariants and its provider admission epoch remained stale at 8.91. Supervisor 8.97 restores those invariants and rebinds an explicit current HARD_OFF provider snapshot with all routes admitted=false; no runtime/provider/GRID10/HCU/training/BASE/semantics credit is added.",
+  "material_finding": "Runtime quiescence remains P0. Fresh post-8.97 repository activity includes repeated 'metrics: autonomous Free Swarm + distillery + forge + root dashboard refresh' commits at 2026-08-26T11:28:40Z and 11:43:47Z. This proves that a Clay legacy metrics/update control-plane path is still live after the 8.97 HARD_OFF rebound, but does not by itself prove provider calls or identify the owning host. The next action is to identify and disable the restart authority/parent control mechanism for each freshly matched legacy process root, then prove zero survivors and zero restarts for at least 90 seconds. No runtime/provider/GRID10/HCU/training/BASE/semantics credit is added.",
   "current_frontier": {
-    "runtime_quiescence": "P0_OPEN_FRESH_LIVE_LEGACY_PROCESS_SURVIVORS_CONFIRMED_2026_08_26T105224Z",
-    "runtime_provider_authority": "CURRENT_EXPLICIT_HARD_OFF_8_97_ALL_PROVIDERS_FALSE_RUNTIME_GATE_TEST_DEFERRED_UNTIL_QUIESCENCE_REPASS",
+    "runtime_quiescence": "P0_OPEN_RESTART_AUTHORITY_ATTRIBUTION_REQUIRED_FOR_PERSISTENT_LEGACY_CONTROL_PLANE",
+    "runtime_provider_authority": "CURRENT_EXPLICIT_HARD_OFF_8_98_ALL_PROVIDERS_FALSE_RUNTIME_GATE_TEST_DEFERRED_UNTIL_QUIESCENCE_REPASS",
     "autonomous_cycle_provider_safety": "SOURCE_CLOSED_DIRECT_AND_CANONICAL_WORKFLOW_RUNTIME_UNVERIFIED",
-    "current_free_provider_admission": "8.97_ALL_PROVIDERS_FALSE_OWNER_EMERGENCY_STOP",
-    "github_actions_execution": "LATEST_IDENTITY_GUARD_ON_8_96_ZERO_STEP_RUNNER_FAILURE_INFRASTRUCTURE_ONLY_NOT_SEMANTIC_FAIL",
-    "clay_direct_dev_runtime": "LIVE_LEGACY_FREESWARM_FORGE_DISTILLERY_PROCESS_TREE_OBSERVED_2026_08_26T105224Z",
+    "current_free_provider_admission": "8.98_ALL_PROVIDERS_FALSE_OWNER_EMERGENCY_STOP",
+    "github_actions_execution": "LATEST_KNOWN_HOSTED_RUNNER_FAILURE_INFRASTRUCTURE_ONLY_NOT_SEMANTIC_FAIL",
+    "clay_direct_dev_runtime": "FRESH_MATCH_AND_RESTART_AUTHORITY_CLASSIFICATION_REQUIRED",
     "base_claycode_release": "WP01_WP02_PASS_WP03_TO_WP14_OPEN_GENERAL_PURPOSE_AND_RELEASE_GATES_NOT_PASS",
     "trigger2_diverse_content_generator_authority": "MISSING_TRAINING_P0_SEPARATE_FROM_GO_ARCHITECTURE_FRONTIER",
     "canonical_dataset_rows_admitted": 0,
@@ -49,11 +49,15 @@
     "DO_NOT_MODIFY_FRANK_HARNESS"
   ],
   "next_focus": [
-    "EXECUTE_EXISTING_FREE_SWARM_RUNTIME_QUIESCENCE_ENFORCER_ON_CLAY_DIRECT_DEV_AGAINST_FRESHLY_OBSERVED_LEGACY_PROCESS_TREE_WITH_DRY_RUN_FIRST_AND_FAIL_CLOSED_OWNERSHIP_MATCHING",
-    "REQUIRE_ZERO_MATCHING_SURVIVORS_AND_DESCENDANTS_ZERO_RESTARTS_AT_LEAST_60_SECONDS_AND_HOST_PROCESS_EVIDENCE_WITHOUT_USING_GLOBAL_PROVIDER_COUNTERS_ALONE_FOR_ATTRIBUTION",
+    "RUN_EXISTING_QUIESCENCE_ENFORCER_DRY_RUN_FIRST_ON_CLAY_DIRECT_DEV_AGAINST_FRESH_LEGACY_ROOTS",
+    "FOR_EACH_MATCHED_ROOT_RECORD_PARENT_CHAIN_AND_CLASSIFY_RESTART_AUTHORITY_SYSTEMD_USER_SYSTEMD_CRON_TMUX_SCREEN_NOHUP_CONTAINER_RUNNER_OR_UNKNOWN",
+    "FAIL_CLOSED_IF_OWNERSHIP_OR_RESTART_AUTHORITY_IS_AMBIGUOUS_DO_NOT_BLIND_KILL",
+    "DISABLE_UNAMBIGUOUS_CLAY_RESTART_AUTHORITY_THEN_TERMINATE_MATCHED_TREE_DESCENDANTS_FIRST",
+    "REQUIRE_ZERO_MATCHING_SURVIVORS_AND_DESCENDANTS_ZERO_RESTARTS_FOR_AT_LEAST_90_SECONDS_WITH_HOST_BOOT_PID_NAMESPACE_EVIDENCE",
+    "DO_NOT_USE_GLOBAL_PROVIDER_COUNTERS_ALONE_FOR_CLAY_ATTRIBUTION",
     "AFTER_QUIESCENCE_PASS_EXECUTE_PROVIDER_GATE_DIRECT_ENTRYPOINT_REGRESSION_DIRECT_CLI_AND_GUARDED_HARD_OFF_PATH_ON_CLEAN_CURRENT_NON_PROVIDER_CHECKOUT_WITH_ZERO_PROVIDER_SECRET_BOUNDARY_CROSSINGS",
     "AFTER_RUNTIME_PROVIDER_PATH_CLOSURE_RETURN_GO_TO_PHYSICAL_GRID10_RECURSIVE_SCALING_BRIDGE_RUNTIME_EVIDENCE",
-    "CONTINUE_TRIGGER2_DIVERSE_GENERATOR_AUTHORITY_WORK_ONLY_UNDER_EXACT_2_AND_DO_NOT_SCALE_TRAINING_BEFORE_REAL_CANONICAL_ACCEPTANCE_RECEIPTS_PLUS_IDENTICAL_REPLAY_PLUS_ZERO"
+    "CONTINUE_TRIGGER2_DIVERSE_GENERATOR_AUTHORITY_WORK_ONLY_UNDER_EXACT_2"
   ],
   "promotion_state": {
     "runtime_quiescence_pass": false,
@@ -74,6 +78,6 @@
     "jspace_model_credit": 0,
     "training_credit": 0
   },
-  "execution_request": "research_entity/execution_requests/2026-08-26_GO_QUIESCENCE_REENTRY_LIVE_SURVIVORS_GPT56SOL_1743P0700.json",
-  "steering": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_97_DELTA_2026-08-26T1754P0700_GPT56SOL.json"
+  "execution_request": "research_entity/execution_requests/2026-08-26_GO_QUIESCENCE_RESTART_AUTHORITY_ATTRIBUTION_GPT56SOL_1848P0700.json",
+  "steering": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_98_DELTA_2026-08-26T1848P0700_GPT56SOL.json"
 }

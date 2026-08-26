@@ -462,7 +462,7 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
 
         # CPython's default encoder escapes ASCII DEL as six-byte \\u007f.
         # Counting it as one byte lets an oversized document reach dumps.
-        escaped_overflow = "\x7f" * (
+        escaped_overflow = "x" + "\x7f" * (
             MOD.MAX_PROVIDER_REQUEST_BYTES // 6 + 1
         )
         MOD.json.dumps = tracking_dumps
@@ -1161,7 +1161,7 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
                 )
 
             with self.assertRaisesRegex(
-                ValueError, "message_content_must_be_semantic_text"
+                ValueError, "message_content_must_be_nonempty_string"
             ):
                 MOD.execute_chat(
                     [{"role": "user", "content": "\x00"}],

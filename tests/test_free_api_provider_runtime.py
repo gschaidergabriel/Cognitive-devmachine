@@ -1753,7 +1753,11 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             def read(self, limit):
                 return (
                     b'{"object":"chat.completion","id":"chatcmpl-test",'
-                    b'"created":1,"model":"mock","usage":{'
+                    b'"created":1,"model":"mock",'
+                    b'"prompt_routed_experts":null,"service_tier":null,'
+                    b'"system_fingerprint":"vllm-test",'
+                    b'"prompt_logprobs":null,"prompt_token_ids":null,'
+                    b'"prompt_text":null,"kv_transfer_params":null,"usage":{'
                     b'"prompt_tokens":1,"completion_tokens":1,'
                     b'"total_tokens":2},"choices":[{"index":0,'
                     b'"finish_reason":"stop","message":{'
@@ -1776,6 +1780,11 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             now=iter((50.24, 50.25)).__next__,
         )
         self.assertEqual(result["receipt"]["outcome"], "success")
+        self.assertEqual(
+            result["receipt"]["provider_system_fingerprint_sha256"],
+            "e2781078d590a3596c9c00c003f5e15"
+            "e11bb0112dcf8ac52dfdfe8a18cb9897f",
+        )
         self.assertEqual(result["content"], "ok")
 
     def test_multiple_response_choices_cannot_be_partially_verified(self):
@@ -2355,8 +2364,11 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             opener=lambda *args, **kwargs: Response(finite_body),
             now=iter((57.6, 57.61)).__next__,
         )
-        self.assertEqual(finite_result["receipt"]["outcome"], "success")
-        self.assertEqual(finite_result["content"], "finite-ok")
+        self.assertEqual(
+            finite_result["receipt"]["outcome"],
+            "invalid_provider_response",
+        )
+        self.assertIsNone(finite_result["content"])
 
     def test_duplicate_json_names_cannot_reach_verified_state(self):
         class Response:

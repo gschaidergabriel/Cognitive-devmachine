@@ -34,6 +34,7 @@ MAX_ATTEMPT_NONCE_CHARACTERS = 128
 MAX_PROVIDER_RESPONSE_ID_CHARACTERS = 256
 MAX_PROVIDER_SYSTEM_FINGERPRINT_CHARACTERS = 256
 MAX_PROVIDER_CREATED_UNIX_SECONDS = 9_999_999_999
+MAX_PROVIDER_CREATED_FUTURE_SKEW_SECONDS = 300
 MAX_PROVIDER_USAGE_TOKENS = 9_999_999_999
 MAX_ZERO_COST_ATTESTATION_CHARACTERS = 1_024
 MAX_BUDGET_EPOCH_CHARACTERS = 256
@@ -956,6 +957,7 @@ def _execute_chat_locked(
     provider_service_tier = None
     provider_system_fingerprint_sha256 = None
     provider_created_unix_seconds = None
+    response_received_unix_seconds = None
     provider_usage = None
 
     try:
@@ -974,6 +976,9 @@ def _execute_chat_locked(
                     )
                     lifecycle.append("EXECUTED")
                     if status == 200:
+                        response_received_unix_seconds = (
+                            _passive_clock_value_or_none(wall_time)
+                        )
                         response_body = response.read(
                             MAX_PROVIDER_RESPONSE_BYTES + 1
                         )
@@ -1109,6 +1114,18 @@ def _execute_chat_locked(
             ):
                 raise ValueError("response_created_must_be_bounded_unix_seconds")
             provider_created_unix_seconds = payload["created"]
+            if (
+                response_received_unix_seconds is None
+                or not 0
+                < response_received_unix_seconds
+                <= MAX_PROVIDER_CREATED_UNIX_SECONDS
+                or provider_created_unix_seconds
+                > response_received_unix_seconds
+                + MAX_PROVIDER_CREATED_FUTURE_SKEW_SECONDS
+            ):
+                raise ValueError(
+                    "response_created_exceeds_local_receipt_time"
+                )
             if (
                 "model" not in payload
                 or type(payload["model"]) is not str
@@ -1386,6 +1403,10 @@ def _execute_chat_locked(
             provider_system_fingerprint_sha256
         ),
         "provider_created_unix_seconds": provider_created_unix_seconds,
+        "response_received_unix_seconds": response_received_unix_seconds,
+        "provider_created_max_future_skew_seconds": (
+            MAX_PROVIDER_CREATED_FUTURE_SKEW_SECONDS
+        ),
         "provider_usage": provider_usage,
         "attempt_id": _safe_attempt_id(
             # The nonce supplies attempt uniqueness.  Keeping an unbounded

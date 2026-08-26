@@ -15,6 +15,7 @@ import os
 import secrets
 import threading
 import time
+import unicodedata
 import urllib.error
 import urllib.request
 from dataclasses import asdict, dataclass
@@ -480,12 +481,13 @@ def _contains_unicode_control_character(value: str) -> bool:
 
 
 def _has_semantic_text(value: str) -> bool:
-    """Require content beyond whitespace and transport control characters."""
+    """Require content beyond whitespace, controls and format characters."""
     return any(
         not character.isspace()
         and not (
             ord(character) <= 0x1F or 0x7F <= ord(character) <= 0x9F
         )
+        and unicodedata.category(character) != "Cf"
         for character in value
     )
 

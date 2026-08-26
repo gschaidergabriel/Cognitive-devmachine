@@ -738,17 +738,17 @@
   },
   "provider_response_reasoning_metadata_compatibility": {
     "checked_at": "2026-08-26",
-    "claim": "A stopped v0.1 text response may carry message.reasoning as null or one exact built-in, nonempty Unicode-scalar string bounded by the 2000000-byte response envelope. FRANK returns only message.content, never raw reasoning, and receipts reasoning solely as its SHA-256 digest and character count.",
+    "claim": "A stopped v0.1 text response may carry message.reasoning as null or one exact built-in, nonempty Unicode-scalar string bounded by the 2000000-byte response envelope. Non-null reasoning additionally requires a present, positive and already parent-bounded completion_tokens_details.reasoning_tokens value. FRANK returns only message.content, never raw reasoning, and receipts reasoning solely as its SHA-256 digest and character count.",
     "sources": [
       "https://docs.nvidia.com/nim/large-language-models/2.0.6/day-0/get-started-nemotron-3-ultra.html",
       "https://docs.vllm.ai/en/v0.16.0/api/vllm/entrypoints/openai/engine/protocol/",
       "https://docs.vllm.ai/en/v0.16.0/api/vllm/entrypoints/openai/chat_completion/serving/"
     ],
-    "external_evidence": "NVIDIA documents that Nemotron 3 with its reasoning parser returns parsed reasoning text separately from visible content and explicitly instructs clients not to feed reasoning back into later messages. vLLM 0.16 types reasoning as str or null and constructs it separately from content.",
-    "internal_measurement": "An otherwise canonical status-200 response with visible content, consistent reasoning-token usage and a string message.reasoning previously remained EXECUTED but was rejected as invalid_provider_response solely because every non-null reasoning value was blocked.",
-    "executable_evidence": "test_documented_nvidia_reasoning_message_remains_compatible",
-    "counterhypothesis": "Rejecting all non-null reasoning is necessary to keep the plain-text adapter safe; falsified because a closed scalar boundary can preserve NVIDIA compatibility without treating reasoning as visible output, exposing it in receipts or admitting object-shaped active metadata.",
-    "uncertainty": "The digest proves only equality of provider-reported bytes within this receipt; it does not authenticate correctness, faithfulness or causal use of the reasoning. Character count is not a token count. Empty reasoning remains unverified because NVIDIA uses null for absence. No Ubuntu NVIDIA live receipt is available on this host."
+    "external_evidence": "NVIDIA documents that Nemotron 3 with its reasoning parser returns parsed reasoning text separately from visible content, reports how many generated tokens were reasoning tokens, and explicitly instructs clients not to feed reasoning back into later messages. vLLM 0.16 types reasoning as str or null and constructs it separately from content.",
+    "internal_measurement": "A canonical status-200 response with non-null message.reasoning but no completion_tokens_details previously returned success and reached VERIFIED and DONE. A documented response with visible content, string reasoning and positive parent-bounded reasoning_tokens remains accepted after coupling the two response subtrees.",
+    "executable_evidence": "test_documented_nvidia_reasoning_message_remains_compatible; test_reasoning_message_requires_reasoning_token_provenance",
+    "counterhypothesis": "A bounded reasoning string alone is sufficient provenance; falsified because it allowed FRANK to verify reasoning metadata while discarding the provider's documented reasoning-token accounting. Requiring a positive bounded count preserves the documented success shape and blocks the unaccounted form.",
+    "uncertainty": "The provider-reported token count and digest do not authenticate correctness, faithfulness or causal use of the reasoning, and FRANK does not infer an exact character-to-token relationship. Hidden reasoning tokens may legitimately accompany null message.reasoning and remain accepted. Empty reasoning remains unverified because NVIDIA uses null for absence. No Ubuntu NVIDIA live receipt is available on this host."
   },
   "provider_response_passive_metadata_compatibility": {
     "checked_at": "2026-08-26",

@@ -1784,6 +1784,26 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
         )
         self.assertNotIn("private-thought", repr(result))
 
+        class UnsupportedReasoningResponse(Response):
+            def read(self, limit):
+                return super().read(limit).replace(
+                    b'"reasoning":"private-thought"',
+                    b'"reasoning":{"active":true}',
+                )
+
+        rejected = MOD.execute_chat(
+            VALID_MESSAGES,
+            model="mock",
+            environ=env,
+            opener=lambda *args, **kwargs: UnsupportedReasoningResponse(),
+            now=iter((50.237, 50.238)).__next__,
+        )
+        self.assertEqual(
+            rejected["receipt"]["outcome"], "invalid_provider_response"
+        )
+        self.assertNotIn("VERIFIED", rejected["receipt"]["lifecycle"])
+        self.assertIsNone(rejected["content"])
+
     def test_documented_nvidia_passive_message_metadata_remains_compatible(self):
         class Response:
             status = 200

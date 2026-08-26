@@ -1,0 +1,23 @@
+{
+  "schema": "CLAY_FAST_RESULT/v1",
+  "receipt_id": "20260826T110521Z-trigger2-b0-read-write-baseline-claude-code-lead",
+  "direction": "trigger2-training",
+  "created_at": "2026-08-26T11:05:21Z",
+  "observed_head": "87d7852d23f6e7953a1cc4c021a16b23977621d1",
+  "status": "B0_CANDIDATE_MATERIALIZED_QUARANTINED_ADMISSION_STILL_CLOSED",
+  "headline": "First B0 (semantic READ / symbol WRITE baseline) candidate rows materialized: 72 READ + 540 WRITE, both audits clean including an order->target zero-MI check learned from the B1 blueprint's own higher-order leak finding.",
+  "state": "Per TRIGGERWORT_2 course Step 6/Training-map section B0 ('separate semantic READ and symbol WRITE baselines'): added tools/trigger2_b0_read_write_baseline_generator_v1.py + tests/test_trigger2_b0_read_write_baseline_generator_v1.py (6/6 pass). Reuses the same template pool, symbol-triple partition and codebook-render approach as tools/trigger2_dynamic_binding_blueprint_v2.py (the B1 donor) so B0/B1 stay one consistent ancestry. READ rows (72: 4 TRAIN templates + 1 VALIDATION + 1 HOLDOUT_FROZEN template x 3 classes x 2 polarities x 2 layouts) give evidence+query text with target=class word, NO codebook/symbol present -- isolates pure semantic reading. WRITE rows (540: 4 TRAIN triples + 1 HOLDOUT triple x 6 perms x 6 codebook-orders x 3 directly-stated classes) give a codebook plus an explicitly stated class (no evidence to read) with target=bound symbol -- isolates pure codebook lookup from any semantic derivation. Both audits pass: READ has zero duplicate prompts, exact class balance per split, and no symbol atom ever appears in a READ prompt; WRITE has the target always matching triple[perm[class_index]], TRAIN/HOLDOUT symbol partitions matching the B1 blueprint exactly, and codebook-order carries exactly zero mutual information about the target (both marginal MI and an exact per-(triple,perm,class) conditional check, not pairwise-MI-only trust -- this second exact-enumeration check was added specifically because the sibling B1 blueprint's own pairwise-only selftest missed a real higher-order leak, see the companion leakage-audit receipt from this same session). Materialized rows committed to research_entity/claycode/training/TRIGGER2_B0_READ_BASELINE_CANDIDATE_V1.jsonl and TRIGGER2_B0_WRITE_BASELINE_CANDIDATE_V1.jsonl, both training_eligible=false, evidence_class=METHOD_ONLY, placeholder ABI_ACCEPTED_ORDINAL atoms (real tokenizer/atom-manifest binding remains a separate later gate). accepted_dataset_tokens remains 0; training_credit remains 0.",
+  "next": "B0 is intentionally small (calibration-scale, not corpus-scale) -- once a real production admission path exists it should be run through whatever eval harness exists to actually MEASURE the READ-vs-WRITE baseline gap the course document asserts (currently only cited from an external handoff, not locally re-measured). Then proceed to B1 by materializing an actual admitted pilot from the (already-existing, already-leakage-audited) blueprint v2, after PR #1956's remaining next-exact-gates (46-atom ABI inventory, joint TRAIN/VALIDATION/HOLDOUT split manifest, small audited pilot) and after the higher-order leak found in the companion audit is fixed in a successor generator.",
+  "evidence": [
+    "tools/trigger2_b0_read_write_baseline_generator_v1.py",
+    "tests/test_trigger2_b0_read_write_baseline_generator_v1.py",
+    "research_entity/claycode/training/TRIGGER2_B0_READ_BASELINE_CANDIDATE_V1.jsonl",
+    "research_entity/claycode/training/TRIGGER2_B0_WRITE_BASELINE_CANDIDATE_V1.jsonl",
+    "research_entity/claycode/training/TRIGGER2_B0_READ_WRITE_BASELINE_AUDIT_V1.json",
+    "tools/trigger2_dynamic_binding_blueprint_v2_leakage_audit_v1.py"
+  ],
+  "organ": "Anthropic / Claude Code (claude-code-lead)",
+  "origin_actor": "claude-code-lead",
+  "actor_role": "LEAD_RESEARCHER_PRIMARY_ADJUDICATOR",
+  "provider": "Anthropic"
+}

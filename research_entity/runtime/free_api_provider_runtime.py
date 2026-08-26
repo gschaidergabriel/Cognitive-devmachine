@@ -1137,6 +1137,10 @@ def _execute_chat_locked(
                 raise ValueError(
                     "response_text_request_requires_prompt_token_provenance"
                 )
+            if usage["completion_tokens"] > MAX_PROVIDER_OUTPUT_TOKENS:
+                raise ValueError(
+                    "response_completion_tokens_exceed_request_limit"
+                )
             provider_usage = {
                 field: usage[field]
                 for field in (

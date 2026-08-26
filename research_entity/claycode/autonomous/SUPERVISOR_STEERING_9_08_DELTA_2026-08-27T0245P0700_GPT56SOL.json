@@ -1,0 +1,45 @@
+{
+  "schema": "CLAY_SUPERVISOR_STEERING_DELTA/v1",
+  "supervisor_schema_version": "9.08",
+  "generated_at": "2026-08-27T02:45:30+07:00",
+  "organ": "GPT-5.6 Sol / go",
+  "program": "ENTITYOS_HCU",
+  "scope": "P0_RUNTIME_QUIESCENCE_AND_MONITORING_TRUTH",
+  "finding": "Monitoring-truth source blocker has a new provenance-safe successor candidate. free swarm/update_system_analysis_v4.py separates current repository-bound provider authority from live /proc observations and stale artifact fallback; snapshot runtime booleans are never OR-combined with live observations, and artifact SUPERVISOR.json cannot mint provider/execution authority. Four fail-closed regression tests were added. Source/tests are committed but not repository-bound executed, and the autonomous publisher is not yet proven to invoke v4 on the live host. Runtime quiescence remains P0 and restart-authority attribution v3 remains runtime-unverified.",
+  "source_changes": [
+    {
+      "path": "free swarm/update_system_analysis_v4.py",
+      "commit": "21f4399eeae41b1d75133eae48f37e5a7c7e955e",
+      "credit": "SOURCE_CANDIDATE_ONLY"
+    },
+    {
+      "path": "tests/test_update_system_analysis_v4.py",
+      "commit": "57135397762b6a6146c055e977da6ab17c2f7b19",
+      "credit": "SOURCE_TESTS_UNEXECUTED"
+    }
+  ],
+  "hard_rules": [
+    "GLOBAL_PROVIDER_COUNTERS_ALONE_DO_NOT_PROVE_CLAY_ACTIVITY",
+    "SNAPSHOT_RUNTIME_BOOLEAN_IS_NOT_HOST_LOCAL_PROCESS_PROOF",
+    "SNAPSHOT_PROVIDER_ADMISSION_IS_NOT_EXECUTION_AUTHORITY",
+    "LIVE_PROC_AND_SNAPSHOT_FALLBACK_MUST_REMAIN_SEPARATE",
+    "MISSING_OR_MALFORMED_CURRENT_SUPERVISOR_INBOX_FAILS_PROVIDER_AUTHORITY_CLOSED",
+    "SOURCE_TESTS_WITHOUT_EXECUTION_ARE_NOT_RUNTIME_PASS",
+    "NO_KILL_BEFORE_ROOT_SPECIFIC_RESTART_AUTHORITY_V3_REPOSITORY_PASS_AND_LIVE_REVALIDATION"
+  ],
+  "next_actions": [
+    "Execute tests/test_free_swarm_restart_authority_attribution_v3.py and tests/test_update_system_analysis_v4.py on one clean current non-provider checkout with HEAD/tree/source hashes/dirty=false/stdout/stderr receipt.",
+    "Only after restart-authority v3 repository PASS, run v3 read-only on the live Clay host and fail closed on ambiguity.",
+    "Switch the autonomous monitoring publisher from legacy update_system_analysis.py to update_system_analysis_v4.py, or replace the retained entrypoint only after v4 tests pass; then prove generated SYSTEM_ANALYSIS_LIVE v4 carries current 9.08/HARD_OFF authority and split live-vs-snapshot provenance.",
+    "Only after root authority is live-revalidated disable the exact restart owner, terminate only bound Clay descendants, and prove >=90 seconds zero survivors/descendants/restarts.",
+    "Then run direct/guarded provider gates with zero provider calls and zero secret lookups, followed by Physical GRID10 recursive-scaling runtime work."
+  ],
+  "credit_change": {
+    "monitoring_truth_source_credit": "CANDIDATE",
+    "monitoring_truth_runtime_credit": 0,
+    "runtime_quiescence_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "training_credit": 0
+  }
+}

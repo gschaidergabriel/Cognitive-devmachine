@@ -1,0 +1,65 @@
+{
+  "families": {
+    "GWT_CAUSAL_REENTRY": {
+      "output_path": "/tmp/gwt_out/TRIGGER2_B6_GWT_CAUSAL_REENTRY_CANDIDATE_V1.jsonl",
+      "output_sha256": "3ce23edc2aaf6c7519423326e77117c9c489a1ccee5f207a4f7702689a780b27",
+      "rows": 864,
+      "split_counts": {
+        "HOLDOUT_FROZEN": 216,
+        "TRAIN": 432,
+        "VALIDATION": 216
+      }
+    },
+    "GWT_COMPETITION_BROADCAST": {
+      "output_path": "/tmp/gwt_out/TRIGGER2_B6_GWT_COMPETITION_BROADCAST_CANDIDATE_V1.jsonl",
+      "output_sha256": "226784cda4ba944a9d7aa563409c40d5322fd535efcb5d14c7c768c92f7d5140",
+      "rows": 864,
+      "split_counts": {
+        "HOLDOUT_FROZEN": 216,
+        "TRAIN": 432,
+        "VALIDATION": 216
+      }
+    },
+    "GWT_UPTAKE": {
+      "output_path": "/tmp/gwt_out/TRIGGER2_B6_GWT_UPTAKE_CANDIDATE_V1.jsonl",
+      "output_sha256": "5e8ef119a97dcc93e887bd183de063805c9688d484f5d1146a014b6241740bab",
+      "rows": 432,
+      "split_counts": {
+        "HOLDOUT_FROZEN": 108,
+        "TRAIN": 216,
+        "VALIDATION": 108
+      }
+    }
+  },
+  "overall_pass": true,
+  "reason_training_eligible_false": "no real tokenizer/atom-manifest binding, no admission gate run -- candidate/quarantined only per TRIGGERWORT_2 course Step 6.",
+  "reports": {
+    "GWT_CAUSAL_REENTRY": {
+      "distinguishing_rows": 576,
+      "failures": [],
+      "note": "distinguishing_rows = rows where using round-1's majority/repeat-count winner instead of the true score winner would have produced a DIFFERENT round-2 answer -- these are the rows that actually test causal re-entry, not just round-2-in-isolation pattern matching. Zero would mean the family is vacuous (fails closed on that via ZERO_DISTINGUISHING_ROWS_TEST_IS_VACUOUS).",
+      "pass": true,
+      "rows": 864
+    },
+    "GWT_COMPETITION_BROADCAST": {
+      "agree_rows": 288,
+      "disagree_rows": 576,
+      "failures": [],
+      "pass": true,
+      "rows": 864
+    },
+    "GWT_UPTAKE": {
+      "failures": [],
+      "pass": true,
+      "rows": 432,
+      "winner_role_counts": {
+        "P": 144,
+        "Q": 144,
+        "R": 144
+      }
+    }
+  },
+  "schema": "CLAY_TRIGGER2_B6_GWT_BROADCAST_UPTAKE_REENTRY_CANDIDATE/v1",
+  "total_rows": 2160,
+  "training_eligible": false
+}

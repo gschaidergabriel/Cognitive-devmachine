@@ -343,14 +343,21 @@
     "counterhypothesis": "An arbitrary nonempty role can be delegated to provider-side validation; falsified for this adapter because it causes an avoidable authenticated network call before the provider can reject it."
   },
   "exact_model_identifier": {
-    "checked_at": "2026-08-14",
-    "claim": "The model field must match the model identifier served by NVIDIA NIM exactly; leading or trailing whitespace is rejected before credential use or network access rather than silently normalized.",
+    "checked_at": "2026-08-27",
+    "claim": "The model field must match the model identifier served by NVIDIA NIM exactly. Leading or trailing whitespace and embedded C0/C1 control characters are rejected before credential use or network access rather than normalized or serialized into the authenticated request.",
     "sources": [
       "https://docs.nvidia.com/nim/large-language-models/latest/ai-assistant-integrations/codex-cli.html",
       "https://docs.nvidia.com/nim/large-language-models/latest/get-started/quickstart.html"
     ],
-    "executable_evidence": "test_model_name_with_surrounding_whitespace_is_blocked_before_network",
-    "counterhypothesis": "Any nonblank model string can be delegated to provider-side validation or trimmed locally; falsified because leading, trailing and newline whitespace all reached the authenticated opener, while silent normalization would change request identity rather than validate the caller's exact identifier."
+    "external_evidence": "NVIDIA instructs clients to use the id returned by /v1/models and documents meta/llama-3.1-8b-instruct as a representative identifier. vLLM types the request model as an optional string but specifies no control-character grammar.",
+    "internal_measurement": "An internally embedded JSON-escaped newline in mock\\nforged passed local validation, reached the authenticated opener and could be echoed into a successful receipt. After the fix it fails before network access, while meta/llama-3.1-8b-instruct remains successful.",
+    "executable_evidence": [
+      "test_model_name_with_surrounding_whitespace_is_blocked_before_network",
+      "test_model_name_with_internal_control_character_is_blocked_before_network",
+      "test_documented_nvidia_style_model_identifier_remains_compatible"
+    ],
+    "counterhypothesis": "Any nonblank Unicode-scalar model string can be delegated to provider-side validation; falsified locally because an embedded control character crossed the authenticated request boundary and entered verified provenance.",
+    "uncertainty": "Rejecting all C0/C1 controls is local FRANK safety and canonicalization policy, not an NVIDIA or vLLM identifier guarantee. Printable Unicode identifiers remain permitted because NIM_SERVED_MODEL_NAME is configurable."
   },
   "bearer_credential_syntax": {
     "checked_at": "2026-08-24",

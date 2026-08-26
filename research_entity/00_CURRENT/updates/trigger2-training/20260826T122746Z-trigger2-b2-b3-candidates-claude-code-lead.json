@@ -1,0 +1,26 @@
+{
+  "schema": "CLAY_FAST_RESULT/v1",
+  "receipt_id": "20260826T122746Z-trigger2-b2-b3-candidates-claude-code-lead",
+  "direction": "trigger2-training",
+  "created_at": "2026-08-26T12:27:46Z",
+  "observed_head": "7b60d20eaf9843b1ea658e3ce4dfabc25947f10d",
+  "status": "B2_B3_CANDIDATE_MATERIALIZED_QUARANTINED_ADMISSION_STILL_CLOSED",
+  "headline": "B2 (semantic-prior override + mid-episode remap + stale-binding rejection, 1800 rows) and B3 (multi-hop dereference, 2160 rows) materialized. Reassigned to claude-code-lead: the agent originally slotted for B2+B3 declined on identity-continuity grounds (commits under Gabriel's account require Gabriel's direct word, not a relayed coordinator message) -- Gabriel then directed this already-onboarded/trusted agent to take B2+B3 in addition to B1.",
+  "state": "Per TRIGGERWORT_2 course Step 6 and the same balance discipline just demonstrated on B1 (empirically-checked, fail-closed audited, not maximal-pool-first): built two new generators reusing the same symbol-triple partition / atom-naming ancestry as tools/trigger2_dynamic_binding_blueprint_v2.py (the B1 donor). tools/trigger2_b2_prior_override_remap_stale_generator_v1.py + tests (5/5 pass): PRIOR_OVERRIDE (1080 rows -- a reference-only distractor binding from a different episode, half agreeing/half disagreeing with the current codebook, two presentation orders, so a model cannot pass by ignoring the distractor OR by reflexively contradicting it); MID_EPISODE_REMAP (540 rows -- an explicit UPDATE reassigns exactly one class's symbol from another class's old value, queries probe the updated class, the untouched-donor class, and the untouched third class separately); STALE_BINDING_REJECTION (180 rows -- identical codebook structure marked either CURRENT or STALE_REJECTED, correct behavior on stale rows is the literal token STALE_REJECTED, not a guessed symbol). One real audit bug was caught and fixed during development (not shipped wrong): an overly strict PRIOR_OVERRIDE check flagged 180 rows as 'target leaked from distractor' when the target coincidentally matched the distractor's prediction on the disagree rows -- this is unavoidable permutation combinatorics (two different 3-element permutations can coincide on one position), not a real leak; the check was corrected to verify only that target always equals the CURRENT codebook's binding, which held throughout. tools/trigger2_b3_multihop_dereference_generator_v1.py + tests (5/5 pass): MULTI_HOP_DEREF (540 rows -- each row assigns hop-depths 1/2/3 as a PERMUTATION across the three classes, so depth cannot be predicted from class identity, target is always verified to be the final resolved symbol atom and never an intermediate PTR_ token); UNRESOLVABLE_CHAIN_REJECTION (1620 rows -- one class's chain is deliberately broken/dangling per row, correct behavior is the literal token UNRESOLVABLE only for the broken class's query, verified the other two classes in the same row remain normally resolvable so a model cannot pass by blanket-rejecting). Target size was 2500-3000; actual total is 1800+2160=3960 -- not padded (every row is a genuinely distinct, audit-verified case across 5 different families, not repeated factorial expansion of one structure like B1's dominant-pool problem). Asked chatgpt-secondary whether a B1-style balanced-mix-tier reduction is warranted here too, given B2/B3 span five distinct families rather than one factorially-exploding structure (response pending at receipt time). Materialized to research_entity/claycode/training/TRIGGER2_B2_*.jsonl and TRIGGER2_B3_*.jsonl plus audit report JSONs. accepted_dataset_tokens remains 0; training_credit remains 0.",
+  "next": "Await chatgpt-secondary's volume/mix assessment; if it recommends a reduction, derive a documented balanced-mix-tier the same way as the B1 2304-row selection (fail-closed re-audited, not just capped). Otherwise treat 3960 as the delivered B2+B3 contribution toward the shared 10k target. Coordinate final combined total with the B0/B1/B4/B5/B6 agents before any actual mix assembly.",
+  "evidence": [
+    "tools/trigger2_b2_prior_override_remap_stale_generator_v1.py",
+    "tests/test_trigger2_b2_prior_override_remap_stale_generator_v1.py",
+    "tools/trigger2_b3_multihop_dereference_generator_v1.py",
+    "tests/test_trigger2_b3_multihop_dereference_generator_v1.py",
+    "research_entity/claycode/training/TRIGGER2_B2_PRIOR_OVERRIDE_CANDIDATE_V1.jsonl",
+    "research_entity/claycode/training/TRIGGER2_B2_MID_EPISODE_REMAP_CANDIDATE_V1.jsonl",
+    "research_entity/claycode/training/TRIGGER2_B2_STALE_BINDING_REJECTION_CANDIDATE_V1.jsonl",
+    "research_entity/claycode/training/TRIGGER2_B3_MULTI_HOP_DEREF_CANDIDATE_V1.jsonl",
+    "research_entity/claycode/training/TRIGGER2_B3_UNRESOLVABLE_CHAIN_REJECTION_CANDIDATE_V1.jsonl"
+  ],
+  "organ": "Anthropic / Claude Code (claude-code-lead)",
+  "origin_actor": "claude-code-lead",
+  "actor_role": "LEAD_RESEARCHER_PRIMARY_ADJUDICATOR",
+  "provider": "Anthropic"
+}

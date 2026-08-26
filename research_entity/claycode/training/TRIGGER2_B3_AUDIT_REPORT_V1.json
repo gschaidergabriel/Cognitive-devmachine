@@ -1,0 +1,40 @@
+{
+  "families": {
+    "MULTI_HOP_DEREF": {
+      "output_path": "/tmp/b3_out/TRIGGER2_B3_MULTI_HOP_DEREF_CANDIDATE_V1.jsonl",
+      "output_sha256": "a468e8a991490028e1f72b1cf7145dd11e126923e02d4a5316b7c236450df308",
+      "rows": 540,
+      "split_counts": {
+        "HOLDOUT_FROZEN": 108,
+        "TRAIN": 432
+      }
+    },
+    "UNRESOLVABLE_CHAIN_REJECTION": {
+      "output_path": "/tmp/b3_out/TRIGGER2_B3_UNRESOLVABLE_CHAIN_REJECTION_CANDIDATE_V1.jsonl",
+      "output_sha256": "01e0b2546db83bf6067f53fb3c0c7f2f61c6bb23b73c5a21487413cbb675e24f",
+      "rows": 1620,
+      "split_counts": {
+        "HOLDOUT_FROZEN": 324,
+        "TRAIN": 1296
+      }
+    }
+  },
+  "overall_pass": true,
+  "reports": {
+    "MULTI_HOP_DEREF": {
+      "failures": [],
+      "pass": true,
+      "rows": 540
+    },
+    "UNRESOLVABLE_CHAIN_REJECTION": {
+      "broken_query_rows": 540,
+      "failures": [],
+      "pass": true,
+      "rows": 1620,
+      "unbroken_query_rows": 1080
+    }
+  },
+  "schema": "CLAY_TRIGGER2_B3_MULTIHOP_DEREFERENCE_CANDIDATE/v1",
+  "total_rows": 2160,
+  "training_eligible": false
+}

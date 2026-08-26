@@ -53,10 +53,12 @@
     "reviewer": "claude-code-lead",
     "verdict": "Net: 1 flagged risk REFUTED (B0/B1 codebook order, verified fine in B1_TRAIN_BALANCED_2ORDER), 1 real bug CONFIRMED (B3 queried_class_ typo, 1620 rows affected, not yet fixed), 1 doc/data mismatch CONFIRMED (B2 'half' docstring vs actual 1/6-5/6 split, cosmetic), 2 items plausible but not independently re-verified this pass (B4/B5 tokenization, B6 field-shape) -- correctly left as open rather than promoted. Precedent from the brief ('0.276-bit leak was actually intended') held again here: the single highest-ranked risk in ChatGPT's own cross-cutting answer turned out, on independent check, to not apply to the actual shipped file. ChatGPT's answers were specific, hedged appropriately where it lacked data, and explicitly declined to manufacture problems in 2 of 4 families when asked to rank -- consistent with a genuine secondary-researcher pass, not sycophantic agreement.",
     "not_yet_done": [
-      "Fix the confirmed B3 queried_class_ typo (rename, regenerate 1620 rows, update audit_unresolvable(), add cross-family schema-contract test)",
-      "Correct or verify the B2 docstring/test against the actual 1/6-5/6 distribution",
       "Real tokenizer sweep for B4/B5 multi-digit ordinals (both already quarantined training_eligible=false, so not urgent)",
       "Independent read of the B6 GWT generator source to confirm/refute the round1_/flat field-shape assessment"
+    ],
+    "done_2026-08-27_followup": [
+      "Fixed B3 queried_class_ typo in tools/trigger2_b3_multihop_dereference_generator_v1.py (both branches now emit queried_class), added audit_cross_family_schema_consistency() as a standing regression + 2 new pytest cases, regenerated all 2160 rows from scratch via the generator CLI (not renamed in place) -- byte-identical output for the never-buggy MULTI_HOP_DEREF family (sha256 unchanged), UNRESOLVABLE_CHAIN_REJECTION content diff-verified identical to the old file except the one key rename (0 other mismatches across all 1620 rows). Re-audit: TRAIN/HOLDOUT_FROZEN triple + exact-prompt disjointness both re-verified at 0 overlap. tests/test_trigger2_b3_multihop_dereference_generator_v1.py 7/7 green.",
+      "Fixed B2 docstring cosmetic mismatch in tools/trigger2_b2_prior_override_remap_stale_generator_v1.py (no data change -- test already only asserted agree_rows>0/disagree_rows>0, not a 50/50 ratio)."
     ]
   },
   "evidence_refs": [

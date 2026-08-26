@@ -8,6 +8,17 @@ donor). Status: METHOD_ONLY / candidate-and-quarantined per TRIGGERWORT_2 course
 Step 6 -- placeholder ABI_ACCEPTED_ORDINAL atoms, no real tokenizer binding, no
 admission gate run.
 
+FIX (2026-08-27, Gabriel-directed, found by chatgpt-secondary review + confirmed
+independently before fixing, see research_entity/topic_packets/trigger2-b0-b6-
+chatgpt-secondary-review-20260827/): UNRESOLVABLE_CHAIN_REJECTION rows used to
+emit "queried_class_" (trailing underscore) for the same concept
+MULTI_HOP_DEREF calls "queried_class", under the identical SCHEMA string --
+audit_unresolvable() read the typo'd key itself, so the old self-audit could
+never catch it. Renamed to "queried_class" in both places; all 1620
+UNRESOLVABLE_CHAIN_REJECTION + 540 MULTI_HOP_DEREF rows regenerated from
+scratch (not renamed in place); added audit_cross_family_schema_consistency()
+below as a standing regression against this whole class of bug recurring.
+
 Two families:
 
 MULTI_HOP_DEREF
@@ -192,7 +203,7 @@ def build_unresolvable_rows() -> list[dict]:
                                 "triple": list(triple),
                                 "perm": list(perm),
                                 "broken_class": broken_class,
-                                "queried_class_": queried_class,
+                                "queried_class": queried_class,
                                 "prompt": (
                                     f"CODEBOOK (entry points): {codebook_line}\n"
                                     f"CHAIN (pointer definitions): {chain_block}\n"
@@ -211,7 +222,7 @@ def audit_unresolvable(rows: list[dict]) -> dict:
     failures = []
     for r in rows:
         sym = [bp.atom_ref(n) for n in r["triple"]]
-        expected = UNRESOLVABLE_TOKEN if r["queried_class_"] == r["broken_class"] else sym[r["perm"][bp.CLASSES.index(r["queried_class_"])]]
+        expected = UNRESOLVABLE_TOKEN if r["queried_class"] == r["broken_class"] else sym[r["perm"][bp.CLASSES.index(r["queried_class"])]]
         if r["target"] != expected:
             failures.append(f"TARGET_WRONG:{r['id']}")
 
@@ -220,8 +231,8 @@ def audit_unresolvable(rows: list[dict]) -> dict:
     if dupes:
         failures.append(f"DUPLICATE_PROMPTS:{len(dupes)}")
 
-    broken_q = [r for r in rows if r["queried_class_"] == r["broken_class"]]
-    unbroken_q = [r for r in rows if r["queried_class_"] != r["broken_class"]]
+    broken_q = [r for r in rows if r["queried_class"] == r["broken_class"]]
+    unbroken_q = [r for r in rows if r["queried_class"] != r["broken_class"]]
     if not all(r["target"] == UNRESOLVABLE_TOKEN for r in broken_q):
         failures.append("SOME_BROKEN_QUERIES_NOT_REJECTED")
     if any(r["target"] == UNRESOLVABLE_TOKEN for r in unbroken_q):
@@ -231,12 +242,41 @@ def audit_unresolvable(rows: list[dict]) -> dict:
             "broken_query_rows": len(broken_q), "unbroken_query_rows": len(unbroken_q)}
 
 
+def audit_cross_family_schema_consistency(families: dict[str, list[dict]]) -> dict:
+    """Adversarial schema-consistency regression (added 2026-08-27, fixing a
+    real bug: UNRESOLVABLE_CHAIN_REJECTION rows used to emit "queried_class_"
+    (trailing underscore) while MULTI_HOP_DEREF emitted "queried_class" for
+    the identical concept, under the same SCHEMA string -- and
+    audit_unresolvable() read the typo'd name itself, so the self-audit never
+    caught it. This check would have failed on that mixed-key corpus: it
+    asserts every family sharing SCHEMA exposes the exact same key for each
+    concept present in more than one family, and explicitly rejects any
+    trailing-underscore variant of a key that also exists without one."""
+    failures: list[str] = []
+    per_family_keys = {name: set().union(*(set(r.keys()) for r in rows)) if rows else set()
+                        for name, rows in families.items()}
+    shared_concept_keys = set.intersection(*per_family_keys.values()) if per_family_keys else set()
+    all_keys = set().union(*per_family_keys.values()) if per_family_keys else set()
+    for key in sorted(all_keys):
+        if not key.endswith("_") or key == "_":
+            continue
+        bare = key.rstrip("_")
+        if bare and bare in all_keys:
+            offenders = [name for name, keys in per_family_keys.items() if key in keys]
+            failures.append(f"TRAILING_UNDERSCORE_KEY_ALIAS:{key}~{bare}:families={offenders}")
+    return {"per_family_keys": {k: sorted(v) for k, v in per_family_keys.items()},
+            "shared_concept_keys": sorted(shared_concept_keys),
+            "failures": failures, "pass": not failures}
+
+
 def run() -> dict:
     multihop = build_multihop_rows()
     unresolvable = build_unresolvable_rows()
+    families_for_schema_check = {"MULTI_HOP_DEREF": multihop, "UNRESOLVABLE_CHAIN_REJECTION": unresolvable}
     reports = {
         "MULTI_HOP_DEREF": audit_multihop(multihop),
         "UNRESOLVABLE_CHAIN_REJECTION": audit_unresolvable(unresolvable),
+        "CROSS_FAMILY_SCHEMA_CONSISTENCY": audit_cross_family_schema_consistency(families_for_schema_check),
     }
     overall_pass = all(r["pass"] for r in reports.values())
     return {

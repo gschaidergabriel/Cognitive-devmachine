@@ -1,7 +1,7 @@
 {
   "families": {
     "MULTI_HOP_DEREF": {
-      "output_path": "/tmp/b3_out/TRIGGER2_B3_MULTI_HOP_DEREF_CANDIDATE_V1.jsonl",
+      "output_path": "research_entity/claycode/training/TRIGGER2_B3_MULTI_HOP_DEREF_CANDIDATE_V1.jsonl",
       "output_sha256": "a468e8a991490028e1f72b1cf7145dd11e126923e02d4a5316b7c236450df308",
       "rows": 540,
       "split_counts": {
@@ -10,8 +10,8 @@
       }
     },
     "UNRESOLVABLE_CHAIN_REJECTION": {
-      "output_path": "/tmp/b3_out/TRIGGER2_B3_UNRESOLVABLE_CHAIN_REJECTION_CANDIDATE_V1.jsonl",
-      "output_sha256": "01e0b2546db83bf6067f53fb3c0c7f2f61c6bb23b73c5a21487413cbb675e24f",
+      "output_path": "research_entity/claycode/training/TRIGGER2_B3_UNRESOLVABLE_CHAIN_REJECTION_CANDIDATE_V1.jsonl",
+      "output_sha256": "e47c02d6d3c67e3af7978bc09b2d32f54c2ccec6973d20f0c87361af9ac5f86b",
       "rows": 1620,
       "split_counts": {
         "HOLDOUT_FROZEN": 324,
@@ -21,6 +21,71 @@
   },
   "overall_pass": true,
   "reports": {
+    "CROSS_FAMILY_SCHEMA_CONSISTENCY": {
+      "failures": [],
+      "pass": true,
+      "per_family_keys": {
+        "MULTI_HOP_DEREF": [
+          "abi_manifest_sha256",
+          "canonical_truth_allowed",
+          "curriculum_phase",
+          "depth_by_class",
+          "evidence_class",
+          "family",
+          "id",
+          "perm",
+          "positive_jspace_label",
+          "prompt",
+          "provenance_ancestry_id",
+          "queried_class",
+          "schema",
+          "selected_using_holdout",
+          "split",
+          "target",
+          "training_eligible",
+          "triple"
+        ],
+        "UNRESOLVABLE_CHAIN_REJECTION": [
+          "abi_manifest_sha256",
+          "broken_class",
+          "canonical_truth_allowed",
+          "curriculum_phase",
+          "evidence_class",
+          "family",
+          "id",
+          "perm",
+          "positive_jspace_label",
+          "prompt",
+          "provenance_ancestry_id",
+          "queried_class",
+          "schema",
+          "selected_using_holdout",
+          "split",
+          "target",
+          "training_eligible",
+          "triple"
+        ]
+      },
+      "shared_concept_keys": [
+        "abi_manifest_sha256",
+        "canonical_truth_allowed",
+        "curriculum_phase",
+        "evidence_class",
+        "family",
+        "id",
+        "perm",
+        "positive_jspace_label",
+        "prompt",
+        "provenance_ancestry_id",
+        "queried_class",
+        "schema",
+        "selected_using_holdout",
+        "split",
+        "target",
+        "training_eligible",
+        "triple"
+      ]
+    },
     "MULTI_HOP_DEREF": {
       "failures": [],
       "pass": true,

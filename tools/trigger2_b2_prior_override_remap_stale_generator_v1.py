@@ -16,10 +16,16 @@ condition entirely:
 
 PRIOR_OVERRIDE
   A distractor line states a binding from a different, explicitly-marked
-  reference-only episode. Half the rows have the distractor AGREE with the
-  current codebook (control -- uninformative either way), half DISAGREE
-  (adversarial -- only the CURRENT codebook may determine the target). Two
-  presentation orders (distractor-first / codebook-first) rule out a
+  reference-only episode. The distractor permutation is enumerated over all 6
+  possible class->symbol permutations against each current permutation, so
+  the distractor AGREES with the current codebook (full-permutation equality;
+  control -- uninformative either way) on exactly 1/6 of rows and DISAGREES
+  on 5/6 (adversarial -- only the CURRENT codebook may determine the target).
+  This is NOT a 50/50 split -- CORRECTED 2026-08-27, verified directly against
+  TRIGGER2_B2_PRIOR_OVERRIDE_CANDIDATE_V1.jsonl (n=1080): 180 agree / 900
+  disagree, exactly 1/6 vs 5/6. Docstring/comment fix only, data unchanged
+  (this was always the actual generation behavior, just misdescribed here).
+  Two presentation orders (distractor-first / codebook-first) rule out a
   position-based shortcut.
 
 MID_EPISODE_REMAP

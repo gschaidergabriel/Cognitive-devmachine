@@ -1,5 +1,5 @@
-Warning: truncated output (original token count: 49275)
-Total output lines: 5090
+Warning: truncated output (original token count: 49429)
+Total output lines: 5104
 
 import builtins
 import importlib.util
@@ -1289,6 +1289,20 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
                 self.assertNotIn("DONE", result["receipt"]["lifecycle"])
                 self.assertIsNone(result["content"])
 
+        compatible = MOD.execute_chat(
+            [{"role": "user", "content": "visible\u200bprompt"}],
+            model="mock",
+            environ=env,
+            opener=lambda *args, **kwargs: Response(
+                b'{"role":"assistant","content":"visible\\u200banswer",'
+                b'"reasoning":"reasoned\\u200btrace"}'
+            ),
+            now=iter((50.35, 50.36)).__next__,
+        )
+        self.assertEqual(compatible["receipt"]["outcome"], "success")
+        self.assertIn("VERIFIED", compatible["receipt"]["lifecycle"])
+        self.assertIn("DONE", compatible["receipt"]["lifecycle"])
+
     def test_invalid_conversation_sequence_is_blocked_before_network(self):
         called = False
 
@@ -2095,25 +2109,7 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
         result = MOD.execute_chat(
             VALID_MESSAGES,
             model="mock",
-            environ=env,
-            opener=lambda *args, **kwargs: Response(),
-            now=iter((50.239, 50.24)).__next__,
-        )
-        self.assertEqual(
-            result["receipt"]["outcome"], "invalid_provider_response"
-        )
-        self.assertNotIn("VERIFIED", result["receipt"]["lifecycle"])
-        self.assertNotIn("DONE", result["receipt"]["lifecycle"])
-        self.assertIsNone(result["content"])
-
-    def test_blank_reasoning_cannot_enter_verified_receipt(self):
-        class Response:
-            status = 200
-
-            def __enter__(self):
-                return self
-
-            def __exit_…9275 tokens truncated…":2},'
+         …9429 tokens truncated…":2},'
                     b'"choices":[{"index":0,"finish_reason":"stop",'
                     b'"message":{"role":"assistant","content":"ok"}}]}'
                 )

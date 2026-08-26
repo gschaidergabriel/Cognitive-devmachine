@@ -1,0 +1,45 @@
+{
+  "schema": "CLAY_GO_RECEIPT/v1",
+  "date": "2026-08-27",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "target_architecture": "autonomous self-organizing Xeno/HCU shared-state fabric",
+  "trigger": "go",
+  "supervisor_epoch_observed": "9.09",
+  "finding": "Monitoring provenance v4 still trusted SUPERVISOR_INBOX alone for current provider authority. That was insufficient because supervisor 9.08 had already demonstrated a real split-control-plane failure mode where inbox epoch and canonical FREE_PROVIDER_ADMISSION epoch diverged. A monitoring publisher must not silently choose one side of such a split.",
+  "source_changes": [
+    {
+      "path": "free swarm/update_system_analysis_v4.py",
+      "commit": "23256cea08f695ea5dcea83c448f96c10821a05d",
+      "change": "Provider authority is now accepted as current only when SUPERVISOR_INBOX and FREE_PROVIDER_ADMISSION are both well formed, authority_epoch equals inbox schema_version, mode is FREE_ONLY, provider map booleans are valid, route-level admission agrees with the provider map, emergency stop cannot coexist with admitted providers, and Together remains forbidden. Any split fails closed."
+    },
+    {
+      "path": "tests/test_update_system_analysis_v4.py",
+      "commit": "b7d4c88aa55c98b8a7d2d2c0bd21bcaaf4108e38",
+      "change": "Added fail-closed negatives for inbox/admission epoch split, route/provider-map split, emergency-stop/provider split, and Together-policy split while retaining live-/proc versus snapshot-separation tests."
+    }
+  ],
+  "authority_boundary": {
+    "provider_execution_changed": false,
+    "provider_calls_performed": 0,
+    "secret_lookups_performed": 0,
+    "together_used": false,
+    "free_swarm_hard_off_changed": false
+  },
+  "credit": {
+    "source_progress": true,
+    "repository_test_credit": 0,
+    "runtime_quiescence_credit": 0,
+    "provider_path_runtime_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "training_credit": 0
+  },
+  "execution_attempt": {
+    "local_container_attempted": true,
+    "result": "INFRASTRUCTURE_CLIENT_ERROR_BEFORE_REPOSITORY_TEST_EXECUTION",
+    "scientific_interpretation": "NO_RUNTIME_EVIDENCE"
+  },
+  "next_exact_action": "On a clean current non-provider checkout, execute tests/test_free_swarm_restart_authority_attribution_v3.py and tests/test_update_system_analysis_v4.py and bind HEAD/tree/source hashes/dirty=false/stdout/stderr. Only after both repository-bound test suites pass may restart-authority v3 be used read-only on the live Clay host and monitoring v4 be switched into the retained publisher. Do not advance the supervisor authority epoch merely for this source change; FREE_PROVIDER_ADMISSION and SUPERVISOR_INBOX must remain coherent."
+}

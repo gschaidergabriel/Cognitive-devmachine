@@ -1085,12 +1085,14 @@ def _execute_chat_locked(
             if system_fingerprint is not None:
                 if (
                     not _is_unicode_scalar_text(system_fingerprint)
-                    or not system_fingerprint
+                    or not system_fingerprint.strip()
+                    or system_fingerprint != system_fingerprint.strip()
+                    or _contains_unicode_control_character(system_fingerprint)
                     or len(system_fingerprint)
                     > MAX_PROVIDER_SYSTEM_FINGERPRINT_CHARACTERS
                 ):
                     raise ValueError(
-                        "response_system_fingerprint_must_be_bounded_unicode_string"
+                        "response_system_fingerprint_must_be_canonical_bounded_string"
                     )
                 provider_system_fingerprint_sha256 = hashlib.sha256(
                     system_fingerprint.encode("utf-8")

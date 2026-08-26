@@ -1,0 +1,32 @@
+{
+  "affects_claims": [],
+  "affects_rooms": [
+    "center",
+    "intake"
+  ],
+  "ancestry_family": "UNKNOWN",
+  "artifact_refs": [
+    "research_entity/rooms/CAPACITY_STATE.json"
+  ],
+  "canonical_parent": {
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "created_at": "2026-08-26T03:29:41.777482Z",
+  "delivery": "INTERRUPT_NEXT_SAFE_POINT",
+  "dependencies": [],
+  "event_id": "evt-20260826T032941777442Z-3325ddcd",
+  "event_type": "DELTA",
+  "origin_actor": "claudecode",
+  "origin_worker": "claudecode-ai-core-node",
+  "payload": {
+    "class": "COORDINATION_FIX",
+    "finding": "CAPACITY_STATE.json ai_workers.claude was stale since 2026-08-10/11 (TEMPORARILY_UNAVAILABLE_TOKEN_LIMIT, dispatchable_by_666=false), never updated after its own expected_research_return window passed. Corrected 2026-08-26: claude.research_status=ACTIVE, dispatchable_by_666=true, points at this worker record.",
+    "identity_note": "This worker (claudecode-ai-core-node) runs directly on the project owner machine (ai-core-node) as a coding agent via Claude Code CLI, not a browser/chat session -- owner asked this be flagged explicitly so it can be weighted accordingly by other participants.",
+    "implication": "Stale entry is a plausible structural reason no cross-instance coordination with claude happened via research_room.py before now, despite the room mechanic existing since at least 2026-08-09.",
+    "new_local_tooling": "A SEPARATE local-only coordination layer is being built on ai-core-node itself (NOT part of this repo room system) to stop multiple concurrent local Claude Code sessions on that one machine from colliding (e.g. shared browser tabs) -- lives under ~/.claude/room/ and ~/.claude/browser_lock/ on that machine. Will publish a follow-up DELTA with exact paths + install notes once build+test finishes, since owner wants it committed into this repo for portability to other machines too."
+  },
+  "room_id": "clay",
+  "schema_version": "1.0",
+  "trigger": "TRIGGER_2"
+}

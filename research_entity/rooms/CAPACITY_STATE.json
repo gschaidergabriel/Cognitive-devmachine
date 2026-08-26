@@ -1,8 +1,7 @@
 {
   "schema_version": "1.4",
   "status": "ACTIVE",
-  "effective_from": "2026-08-10",
-  "next_expected_change": "2026-08-11",
+  "effective_from": "2026-08-26",
   "ai_workers": {
     "chatgpt": {
       "research_status": "PRIMARY_AVAILABLE",
@@ -10,14 +9,12 @@
       "dispatchable_by_666": true
     },
     "claude": {
-      "research_status": "TEMPORARILY_UNAVAILABLE_TOKEN_LIMIT",
-      "expected_research_return": "2026-08-11",
-      "dispatchable_by_666": false,
-      "current_external_lane": {
-        "task": "Finish Claude Code Harness for Andreas",
-        "status": "ACTIVE_SEPARATE_LANE",
-        "non_overlap_rule": "Do not assign overlapping FRANK/Clay research work until the lane is complete and/or Claude research capacity returns."
-      }
+      "research_status": "ACTIVE",
+      "dispatchable_by_666": true,
+      "current_scope": "Trigger-2/GRID10/Xeno-Shell-Harness admission-gate work on canonical repo; runs directly on project-owner machine as a coding agent (ai-core-node) via Claude Code CLI",
+      "session_worker_ref": "research_entity/rooms/rooms/clay/workers/claudecode-ai-core-node.json",
+      "correction_note": "PREVIOUS VALUE (TEMPORARILY_UNAVAILABLE_TOKEN_LIMIT, dispatchable_by_666=false, expected_research_return 2026-08-11) WAS STALE for over two weeks and never updated after that window passed. Discovered 2026-08-26 after an unrelated cross-instance ChatGPT-browser-tab collision prompted an audit of this coordination file. A stale TEMPORARILY_UNAVAILABLE entry here means other participants (chatgpt worker, project owner tooling) had no reason to look for or dispatch to a claude worker via this file, which is a plausible structural contributor to why no coordination with claude happened via research_room.py before this date. Corrected honestly, not fabricated as always-was-fine.",
+      "non_overlap_rule": "None currently declared; if a separate non-overlapping external lane exists for another claude instance, that instance should register its OWN worker entry under research_entity/rooms/rooms/<room>/workers/ rather than relying on this single aggregate field, since multiple claude sessions can now be concurrently active (see local ai-core-node room coordination system for cross-session lane assignment on the owner machine)."
     }
   },
   "compute": {
@@ -63,5 +60,6 @@
   "routing_rule": "Dispatch Frank v0.1 build/integration/benchmark/runtime work to the verified Hostinger target VPS whenever compatible and authorized. Target-VPS execution is final-target evidence, not proxy evidence. Runner repository scope is a build/test transport property; use hash-bound bridge execution or a Clay-eligible runner registration as needed. Final v0.1 communication must use the separate full token-authenticated Frank API and satisfy its acceptance receipt. Andreas-local-PC execution is not a mandatory v0.1 release gate unless explicitly reopened by the project owner.",
   "handoff_rule": "When Claude research capacity returns, first ingest current server-binary/API directive, target-VPS host/runner/Qwen/API receipts, canonical deltas, current q23/GO deltas and the completion status of active non-overlap lanes before assigning overlapping work.",
   "forecast_rule": "DOOMSDAY forecasting must treat the already-online Hostinger target VPS as the current release host, include the mandatory server-binary token-API gate, and must not delay v0.1 waiting for separately planned GPU/storage hardware. Planned accelerator availability may change throughput only after verified availability and explicit architecture/target decision.",
-  "source": "PROJECT_OWNER_SERVER_BINARY_TARGET_VPS_API_SUPERSESSION_2026-08-10_PLUS_EXISTING_TARGET_VPS_RECEIPTS"
+  "source": "PROJECT_OWNER_SERVER_BINARY_TARGET_VPS_API_SUPERSESSION_2026-08-10_PLUS_EXISTING_TARGET_VPS_RECEIPTS",
+  "claude_status_stale_correction_2026-08-26": true
 }

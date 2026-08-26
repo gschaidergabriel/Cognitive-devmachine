@@ -1,6 +1,6 @@
 {
   "schema": "CLAY_FREE_SWARM_SYSTEM_ANALYSIS/v3",
-  "generated_at": "2026-08-26T00:13:53.821640+00:00",
+  "generated_at": "2026-08-26T00:28:59.656589+00:00",
   "runtime": {
     "supervisor": "STOPPED/QUARANTINED",
     "go_swarm": "RUNNING",
@@ -65,17 +65,17 @@
   },
   "distillery": {
     "schema": "CLAY_RESEARCH_DISTILLERY_STATUS/v1",
-    "generated_at": "2026-08-26T00:13:05.987985+00:00",
-    "collected_source_tokens": 30953,
+    "generated_at": "2026-08-26T00:28:21.712969+00:00",
+    "collected_source_tokens": 81401,
     "accepted_dataset_tokens": 0,
     "dataset_yield": 0.0,
     "compression_factor": null,
-    "collected_chunks": 114,
+    "collected_chunks": 256,
     "accepted_packets": 0,
     "rejected_candidates": 0,
     "questions": {
       "CYCLIC": 851,
-      "OPEN": 41
+      "OPEN": 69
     },
     "source_metadata_rows": {
       "web_search_chunk": 8
@@ -107,23 +107,23 @@
         "model": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free"
       }
     ],
-    "model_input_tokens": 2586,
-    "model_output_tokens": 9553,
+    "model_input_tokens": 5688,
+    "model_output_tokens": 20771,
     "shared_provider_budget": {
       "schema": "CLAY_SHARED_PROVIDER_BUDGET/v1",
-      "generated_at": "2026-08-26T00:13:05.988570+00:00",
+      "generated_at": "2026-08-26T00:28:21.713478+00:00",
       "providers": {
         "arxiv": {
           "max_inflight": 1,
           "active_leases": 0,
           "min_interval_s": 3.1,
           "cooldown_seconds": 0.0,
-          "total_requests": 16,
-          "total_success": 4,
+          "total_requests": 39,
+          "total_success": 13,
           "total_429": 0,
-          "total_errors": 8,
-          "last_status": "0",
-          "last_observed_at": "2026-08-26T00:12:40.078594+00:00"
+          "total_errors": 13,
+          "last_status": "200",
+          "last_observed_at": "2026-08-26T00:28:06.873330+00:00"
         },
         "crossref": {
           "max_inflight": 1,
@@ -154,12 +154,12 @@
           "active_leases": 0,
           "min_interval_s": 1.0,
           "cooldown_seconds": 0.0,
-          "total_requests": 897,
-          "total_success": 810,
+          "total_requests": 939,
+          "total_success": 852,
           "total_429": 0,
           "total_errors": 87,
           "last_status": "200",
-          "last_observed_at": "2026-08-26T00:12:43.034336+00:00"
+          "last_observed_at": "2026-08-26T00:28:13.218526+00:00"
         },
         "groq": {
           "max_inflight": 128,
@@ -214,12 +214,12 @@
           "active_leases": 0,
           "min_interval_s": 0.5,
           "cooldown_seconds": 0.0,
-          "total_requests": 4734,
-          "total_success": 161,
-          "total_429": 4565,
-          "total_errors": 7,
-          "last_status": "503",
-          "last_observed_at": "2026-08-26T00:13:05.979208+00:00"
+          "total_requests": 4791,
+          "total_success": 194,
+          "total_429": 4584,
+          "total_errors": 12,
+          "last_status": "200",
+          "last_observed_at": "2026-08-26T00:28:21.689726+00:00"
         },
         "semantic_scholar": {
           "max_inflight": 1,
@@ -247,18 +247,18 @@
         }
       }
     },
-    "db_bytes": 983040,
+    "db_bytes": 1036288,
     "top_questions": [
-      "Does per-model TEW specialization (e.g., nemotron-3-ultra vs nemotron-mini) yield additional gains beyond per-provider adaptation?",
-      "How does the Global J-Space/GWT prototype impact system convergence?",
-      "What are the potential risks and unintended consequences of refining the HCU architecture?",
-      "Does NVIDIA's NIM/Developer Program API expose any observable free-tier distinguishing signal (rate-limit headers, quota headers, model access restrictions) at pre-call time without consuming billable quota?",
-      "What are the long-term cost implications of relying on FREE providers?",
-      "How to audit deterministic hard negative coverage?",
-      "What defines 'exact-source isolated execution' for PASS?",
-      "Wie kann die admission‑boundary‑Prüfung in der go‑Macrocycle automatisiert werden, ohne dass Skripte manuell umstrukturiert werden müssen?",
-      "Does explicit counterfactual simulation generalize to novel causal structures not seen during HCU training, or does it only improve interpolation on known causal motifs?",
-      "Welche minimalen Tests (z. B. Dry‑Run‑Checks) können die Einhaltung der FREE_ONLY‑Zulassung ohne zusätzliche Infrastruktur belegen?"
+      "Gibt es offene Quellen- oder Forschungsprojekte, die ähnliche Optimierungsansätze für VM-Memory-Management verfolgen?",
+      "Welche Auswirkungen können die vorgeschlagenen Änderungen auf die Sicherheit von EntityOS/HCU haben?",
+      "How can the system prove zero secret lookups and zero network attempts for missing/malformed/unknown/paid/subscription/authority mismatch and unlisted providers?",
+      "What are the implications of the control breach on the system's security and reliability?",
+      "Does causal boundary injection generalize from synthetic DAG workloads to open-ended HCU computation traces?",
+      "Does NVIDIA NGC API expose per-credential quota_scope (not just org-level) for NIM free-tier models?",
+      "Do Groq HTTP responses include model-specific x-ratelimit-* headers that distinguish free vs paid tier enforcement?",
+      "Does OpenRouter /models endpoint reliably return pricing.prompt==0 AND pricing.completion==0 for genuinely free routes with signed attestation?",
+      "Can model-selection provenance be made tamper-evident without trusted hardware or external anchoring, given that all local state is mutable by the same process that emits records?",
+      "Does the minimal signature set change when J-Space causal controls require cross-model counterfactual queries?"
     ],
     "candidate_states": {}
   },
@@ -429,10 +429,10 @@
   "costs": {
     "price_basis": "Claude Sonnet 5 introductory through 2026-08-31: $2/M input + $10/M output",
     "free_swarm_sonnet5_equivalent_usd": 148.815178,
-    "distillery_sonnet5_equivalent_usd": 0.100702,
-    "measured_total_sonnet5_equivalent_usd": 148.91588000000002,
+    "distillery_sonnet5_equivalent_usd": 0.219086,
+    "measured_total_sonnet5_equivalent_usd": 149.034264,
     "verified_historical_savings_usd": null,
-    "nominal_avoided_if_zero_cost_usd": 148.91588000000002,
-    "repo_output_only_proxy_usd": 141.20955
+    "nominal_avoided_if_zero_cost_usd": 149.034264,
+    "repo_output_only_proxy_usd": 141.20915
   }
 }

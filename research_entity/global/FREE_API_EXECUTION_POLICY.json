@@ -361,22 +361,25 @@
   },
   "semantic_text_presence_boundary": {
     "checked_at": "2026-08-27",
-    "claim": "Plain-text request content, verified response content and exposed reasoning each require at least one Unicode-scalar character that is neither Unicode whitespace nor a C0/C1 transport control. Controls and whitespace remain permitted around or within real text, but cannot alone satisfy the adapter's semantic-content requirement.",
+    "claim": "Plain-text request content, verified response content and exposed reasoning each require at least one Unicode-scalar character that is neither Unicode whitespace, a C0/C1 transport control nor a Unicode General_Category=Cf format control. Controls, format characters and whitespace remain permitted around or within real text, but cannot alone satisfy the adapter's semantic-content requirement.",
     "sources": [
       "https://docs.python.org/3/library/stdtypes.html#str.strip",
+      "https://docs.python.org/3/library/unicodedata.html#unicodedata.category",
+      "https://www.unicode.org/reports/tr44/",
       "https://www.rfc-editor.org/rfc/rfc8259.html#section-7",
       "https://docs.nvidia.com/nim/large-language-models/3.0.0/get-started/quickstart.html"
     ],
-    "external_evidence": "Python defines str.strip without an explicit character set as removal of str.isspace characters, so NUL and other non-whitespace controls survive. RFC 8259 permits U+0000 through U+001F inside JSON strings when escaped, which proves transport validity but not semantic text. NVIDIA's current Chat Completions examples use natural-language message content; they do not specify that a control-only scalar is a meaningful prompt or final answer.",
-    "internal_measurement": "A user message containing only U+0000 passed the former strip predicate and reached the authenticated opener. Canonical status-200 responses whose visible content or parsed reasoning contained only escaped U+0000 each reached success, VERIFIED and DONE; the reasoning case also produced digest and character-count provenance. The repaired shared predicate rejects all three paths, while ordinary text with line breaks remains allowed.",
+    "external_evidence": "Python defines str.strip without an explicit character set as removal of str.isspace characters, so NUL and U+200B survive; unicodedata.category exposes the Unicode general category. Unicode Standard Annex #44 classifies Cf as Format and specifically records U+200B ZERO WIDTH SPACE as a format control rather than a space character. RFC 8259 permits U+0000 through U+001F inside JSON strings when escaped, which proves transport validity but not semantic text. NVIDIA's current Chat Completions examples use natural-language message content; they do not specify that a control-only or format-only scalar is a meaningful prompt or final answer.",
+    "internal_measurement": "A user message containing only U+0000 passed the former strip predicate and reached the authenticated opener. Canonical status-200 responses whose visible content or parsed reasoning contained only escaped U+0000 each reached success, VERIFIED and DONE; the reasoning case also produced digest and character-count provenance. After closing C0/C1, U+200B reproduced the same three failures: authenticated request opening, verified visible content and verified reasoning. The repaired shared predicate rejects all six paths, while ordinary text with line breaks and embedded format characters remains allowed.",
     "executable_evidence": [
       "test_control_only_text_cannot_cross_semantic_text_boundaries",
+      "test_format_only_text_cannot_cross_semantic_text_boundaries",
       "test_blank_text_message_is_blocked_before_network",
       "test_documented_nvidia_reasoning_message_remains_compatible",
       "test_del_escape_overflow_is_rejected_before_json_materialization"
     ],
-    "counterhypothesis": "Successful JSON decoding plus value.strip() is sufficient proof of nonblank text; falsified because escaped NUL is valid JSON, is not whitespace to Python, and crossed all three semantic boundaries without carrying visible or reasoned content.",
-    "uncertainty": "This is an explicit local FRANK text-adapter policy, not a claim that every control character is invalid model output. Tool, binary, multimodal and protocol-specific payloads require separate typed adapters. Format controls outside C0/C1 are not classified by this boundary."
+    "counterhypothesis": "Successful JSON decoding plus value.strip() and a C0/C1 exclusion are sufficient proof of nonblank text; falsified because U+200B is neither Python whitespace nor C0/C1 and crossed all three semantic boundaries without carrying visible or reasoned content.",
+    "uncertainty": "This is an explicit local FRANK text-adapter policy, not a claim that every control or format character is invalid model output. Cf characters remain permitted when another semantic witness is present. Tool, binary, multimodal and protocol-specific payloads require separate typed adapters. Other invisible categories, including combining marks, remain deliberately unclassified pending a falsifier and compatibility evidence."
   },
   "bearer_credential_syntax": {
     "checked_at": "2026-08-24",

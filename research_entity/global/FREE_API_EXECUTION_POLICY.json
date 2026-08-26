@@ -697,16 +697,16 @@
   },
   "provider_response_created_provenance": {
     "checked_at": "2026-08-26",
-    "claim": "Every successful non-streaming Chat Completions response must contain created as an exact built-in integer between 1 and 9999999999 inclusive. FRANK retains that provider-asserted Unix-seconds value separately from its own receipt clocks.",
+    "claim": "Every successful non-streaming Chat Completions response must contain created as an exact built-in integer between 1 and 9999999999 inclusive. It may be no more than the local response-receipt wall time plus FRANK's explicit 300-second clock-skew allowance. The receipt retains the provider assertion, local observation and allowance separately.",
     "sources": [
       "https://docs.nvidia.com/nim/large-language-models/latest/reference/api-reference.html",
       "https://docs.vllm.ai/en/v0.16.0/api/vllm/entrypoints/openai/chat_completion/protocol/"
     ],
     "external_evidence": "NVIDIA identifies vLLM as the NIM inference backend and directs full schemas to it. The official vLLM ChatCompletionResponse serializes created from int(time.time()), and NVIDIA's current expected response carries a positive Unix-seconds value.",
-    "internal_measurement": "Status-200 responses containing the required object, provider id, matching model and exact terminal choice previously returned success and reached VERIFIED and DONE both when created was omitted and when it asserted zero, the Unix epoch rather than a current provider creation time.",
-    "executable_evidence": "test_missing_response_created_cannot_reach_verified_state; test_zero_response_created_cannot_reach_verified_state",
-    "counterhypothesis": "FRANK's local receipt clock can substitute for missing or epoch-zero provider creation provenance; falsified because the local clock measures the client-side attempt and cannot assert when the provider created its response object, while the official backend generates created from current Unix time.",
-    "uncertainty": "The upper bound 9999999999 is local FRANK v0.1 policy rather than an NVIDIA limit. No comparison with local wall time is claimed because clock skew is not measured, and no Ubuntu NVIDIA live receipt is available on this host."
+    "internal_measurement": "Status-200 responses containing the required object, provider id, matching model and exact terminal choice previously returned success and reached VERIFIED and DONE when created was omitted, asserted zero, or asserted 301 seconds after the locally observed response receipt. After the fix, 301 seconds is rejected while the explicit 300-second boundary remains compatible.",
+    "executable_evidence": "test_missing_response_created_cannot_reach_verified_state; test_zero_response_created_cannot_reach_verified_state; test_future_response_created_cannot_reach_verified_state; test_response_created_at_future_skew_boundary_remains_compatible",
+    "counterhypothesis": "A positive bounded provider timestamp is self-consistent without relation to client observation; falsified because an arbitrary future assertion crossed VERIFIED/DONE even though the official backend derives created from its current wall time. The exact 300-second allowance is a conservative local compatibility policy, not an external guarantee.",
+    "uncertainty": "created and the client wall clock are unauthenticated assertions and neither proves provider authorship. The 300-second skew allowance is local FRANK model judgment; transport latency cannot explain a future provider timestamp, but real host clocks can be misconfigured. No Ubuntu NVIDIA live receipt is available on this host."
   },
   "provider_response_usage_provenance": {
     "checked_at": "2026-08-26",

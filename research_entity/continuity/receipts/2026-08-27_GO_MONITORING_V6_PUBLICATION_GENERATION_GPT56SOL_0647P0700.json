@@ -1,0 +1,41 @@
+{
+  "schema": "GO_MONITORING_V6_PUBLICATION_GENERATION/v1",
+  "date": "2026-08-27",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "trigger": "go",
+  "source_head_after_change": "ca9082624c1bf949d20e0ca9aa0efb61ae6408ab",
+  "source_tree_after_change": "835d7f7f3e89f93abc86d30f0d5ac2afe1f132af",
+  "problem": "Monitoring v5 atomically replaces each canonical output independently. A concurrent reader can therefore observe SYSTEM_ANALYSIS_LIVE, provenance and README from different publication generations even though each individual file replacement is atomic.",
+  "change": {
+    "source": "free swarm/update_system_analysis_v6.py",
+    "tests": "tests/test_update_system_analysis_v6_publication_set.py",
+    "source_commit": "632429b5bfdf46f1a901f0e1fb5d893b157176b0",
+    "test_commit": "ca9082624c1bf949d20e0ca9aa0efb61ae6408ab",
+    "mechanism": [
+      "construct complete authority/runtime publication set before publication",
+      "write immutable publication_generations/<generation>/ files plus MANIFEST.json",
+      "bind every file by SHA-256 in the manifest",
+      "atomically switch one SYSTEM_ANALYSIS_CURRENT.json pointer containing generation root and manifest digest",
+      "declare legacy canonical mirror files non-authoritative for execution/quiescence credit"
+    ]
+  },
+  "adversarial_regressions_added": [
+    "unpointed next generation cannot become authoritative",
+    "mixed/interleaved compatibility mirrors cannot alter authoritative generation",
+    "generation-file tamper detected by manifest hash",
+    "manifest transplant detected by pointer manifest digest",
+    "generation collision fails closed"
+  ],
+  "evidence_boundary": {
+    "source_credit": "CANDIDATE_V6",
+    "repository_bound_test_credit": 0,
+    "runtime_credit": 0,
+    "runtime_quiescence_pass": false,
+    "physical_grid10_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "training_credit": 0
+  },
+  "next_exact_action": "Execute restart-authority v3/v4 and monitoring v4/v5/v6 tests on one clean current non-provider checkout with HEAD/tree/source hashes/dirty=false/stdout/stderr bound. Only after those tests pass, run restart-authority v4 read-only on the live Clay host and revalidate owner object/cgroup/command path immediately before any disable/termination action."
+}

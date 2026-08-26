@@ -6,7 +6,9 @@ Single retained positive-candidate proof order:
     generation provenance
       -> authority-pinned A02 discriminator producer authentication
       -> epistemic pre-update admission
+      -> tokenizer-ABI atom binding
       -> replay-bound state-history / retained Hyperposition semantics
+      -> model-visible prompt content binding
 
 No second labeler or truth/effect authority is introduced. PASS remains source/component
 candidate evidence only and mints zero dataset/training/runtime/J-Space/HCU/EntityOS credit.
@@ -49,6 +51,10 @@ tokenizer_abi = _load_sibling(
 hyperposition_replay = _load_sibling(
     "trigger2_hyperposition_state_history_proof_gate_v1.py",
     "trigger2_hyperposition_replay_for_hp_v4",
+)
+prompt_content_binding = _load_sibling(
+    "trigger2_prompt_content_binding_gate_v1.py",
+    "trigger2_prompt_content_binding_for_hp_v4",
 )
 # NOTE: trigger2_family_provenance_gate_v1 is a BATCH-level gate (adjudicate(bundle)
 # with bundle["rows"] = [...]) that validates cross-split lineage/anti-echo across a
@@ -119,6 +125,16 @@ def adjudicate(row: Any) -> dict[str, Any]:
             if not isinstance(hyperposition_replay_result, dict) or not hyperposition_replay_result.get("pass"):
                 failures.extend(_failures_from("HYPERPOSITION_REPLAY:", hyperposition_replay_result))
 
+    prompt_content_binding_result = None
+    if not failures:
+        try:
+            prompt_content_binding_result = prompt_content_binding.adjudicate(row)
+        except Exception as exc:
+            failures.append("PROMPT_CONTENT_BINDING_EXCEPTION:" + type(exc).__name__)
+        else:
+            if not isinstance(prompt_content_binding_result, dict) or not prompt_content_binding_result.get("pass"):
+                failures.extend(_failures_from("PROMPT_CONTENT_BINDING:", prompt_content_binding_result))
+
     failures = sorted(set(failures))
     return {
         "schema": SCHEMA,
@@ -130,6 +146,7 @@ def adjudicate(row: Any) -> dict[str, Any]:
         "epistemic_state_history_proof": epistemic_result,
         "tokenizer_abi": tokenizer_abi_result,
         "hyperposition_replay_state_history": hyperposition_replay_result,
+        "prompt_content_binding": prompt_content_binding_result,
         "family_provenance_note": "trigger2_family_provenance_gate_v1 is batch-level (adjudicate(bundle) "
             "over a whole admission microbatch's rows, anti-echo lineage across the batch) and is NOT "
             "invoked by this per-row adjudicate() -- run it separately over the full candidate batch, "
@@ -140,6 +157,7 @@ def adjudicate(row: Any) -> dict[str, Any]:
             "EPISTEMIC_PREUPDATE_ADMISSION",
             "TOKENIZER_ABI",
             "REPLAY_STATE_HISTORY_RETAINED_HYPERPOSITION_SEMANTICS",
+            "PROMPT_CONTENT_BINDING",
         ],
         "semantic_authority": "DELEGATED_TO_EXISTING_V3_REFERENCE_LABELER",
         "second_semantic_authority_created": False,
@@ -153,12 +171,6 @@ def adjudicate(row: Any) -> dict[str, Any]:
             "hyperposition_replay.adjudicate(row) IS invoked as the 5th/final per-row check (see code); "
             "corrected during production DB_MATCH row-assembler build, see "
             "tests/test_trigger2_db_match_row_assembler_v1.py",
-            "NEW P0 (found 2026-08-26 building the production DB_MATCH assembler): none of the 5 wired "
-            "per-row checks bind or verify model_visible content -- 'prompt' text can be swapped after "
-            "row assembly with zero detection, candidate_pre_admission_pass says nothing about prompt "
-            "integrity; see tests/test_trigger2_db_match_row_assembler_v1.py::"
-            "test_tampered_prompt_after_generation_receipt_fails_closed (tracked xfail, must close before "
-            "real admission)",
             "rendered nuisance / full-cross-or-conditional-MI leakage remains a BATCH-level statistical "
             "check (trigger2_binding_router_visible_nuisance_gate_v1, executed once against a full "
             "blueprint on 2026-08-26, PASS) rather than a per-row check -- it is not and structurally "
@@ -190,6 +202,13 @@ def adjudicate(row: Any) -> dict[str, Any]:
             "replay-bound state-history / retained Hyperposition semantics: trigger2_hyperposition_state_history_proof_gate_v1.adjudicate(row) "
             "is now invoked as the 5th and final per-row check in this composer's adjudicate(); a row is no longer certified without "
             "passing the base genesis/history replay proof (required_order step 5).",
+            "model-visible prompt content binding: trigger2_prompt_content_binding_gate_v1.adjudicate(row) is now "
+            "invoked as the 6th and final per-row check; it independently re-renders the expected prompt from "
+            "trigger2_trusted_hyperposition_pilot_generator_v1.render_prompt using only "
+            "generation_case_id_evaluator_only + generation_parameters_evaluator_only (does not trust row['prompt'] "
+            "or any caller-declared hash), and fails closed on any mismatch; closes the gap found 2026-08-26 where "
+            "prompt text could be swapped after row assembly with zero detection, proven by "
+            "tests/test_trigger2_db_match_row_assembler_v1.py (formerly xfail, now a real passing fail-closed test).",
         ],
         "canonical_dataset_admission": False,
         "accepted_dataset_tokens_minted": 0,

@@ -126,6 +126,33 @@ def build_subjects(case_id: str, parameters: dict[str, Any]) -> dict[str, Any]:
     raise ValueError("UNKNOWN_GENERATION_CASE_ID")
 
 
+# Pinned model-visible prompt text per authorized generation_case_id. Added 2026-08-26
+# alongside tools/trigger2_prompt_content_binding_gate_v1.py to close a gap where a
+# row's model_visible 'prompt' field was not bound to any generator authority and
+# could be swapped after row assembly with zero detection by any of the previously
+# wired v4 per-row checks. Same recompute-don't-trust pattern as A02's producer.produce().
+_PROMPT_TEXT_BY_CASE_ID = {
+    CASE_ID: (
+        "DB_MATCH gold-pilot candidate: canonical database fact must win over a "
+        "contradicting simulation."
+    ),
+}
+
+
+def render_prompt(case_id: str, parameters: dict[str, Any]) -> str:
+    """Deterministically render the authorized model-visible prompt for case_id.
+
+    Pure function of (case_id, parameters); raises ValueError for any case_id/parameters
+    pair this authority does not explicitly pin a prompt for -- fail-closed, no fallback
+    to caller-supplied text.
+    """
+    if case_id == CASE_ID:
+        if parameters != default_parameters():
+            raise ValueError("PARAMETERS_NOT_AUTHORIZED_FOR_CASE_ID")
+        return _PROMPT_TEXT_BY_CASE_ID[CASE_ID]
+    raise ValueError("NO_PINNED_PROMPT_FOR_GENERATION_CASE_ID")
+
+
 def _build_db_match_subjects(parameters: dict[str, Any]) -> dict[str, Any]:
     if parameters != default_parameters():
         raise ValueError("GENERATION_PARAMETERS_MISMATCH")

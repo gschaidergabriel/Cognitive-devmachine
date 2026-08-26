@@ -24,6 +24,8 @@ from copy import deepcopy
 from pathlib import Path
 from typing import Any
 
+from hashlib import sha256
+
 from tools import trigger2_generation_provenance_gate_v1 as gp
 from tools import trigger2_hyperposition_state_history_proof_gate_v1 as proof
 from tools import trigger2_trusted_hyperposition_pilot_generator_v1 as generator
@@ -38,11 +40,6 @@ AUTHORITY_PATH = (
 
 # The DB_MATCH prompt only asserts a binary fact-wins-over-simulation claim.
 DEFAULT_TOKENIZER_ATOMS = ["yes", "no"]
-
-DEFAULT_PROMPT = (
-    "DB_MATCH gold-pilot candidate: canonical database fact must win over a "
-    "contradicting simulation."
-)
 
 
 def _load_authority() -> dict[str, Any]:
@@ -70,19 +67,21 @@ def _authorized_generation_fields(bundle: dict, case_id: str, parameters: dict) 
 
 
 def assemble_db_match_row(
-    prompt_text: str | None = None,
     tokenizer_atoms_used: list[str] | None = None,
 ) -> dict[str, Any]:
     """Assemble exactly one authorized, empty-history DB_MATCH candidate row.
 
     Uses generator.CASE_ID (T2_GP_PILOT_DB_MATCH_V1) with default_parameters(),
-    the pinned A02 discriminator producer authority, and the measured
-    tokenizer atoms index. Deterministic for fixed inputs: identical output on
-    every call (no randomness, no mutating I/O -- only reads the pinned
-    authority JSON file).
+    the pinned A02 discriminator producer authority, the measured tokenizer
+    atoms index, and generator.render_prompt() for the model-visible prompt
+    text (not freely authored -- prompt content is a pinned authority artifact
+    so trigger2_prompt_content_binding_gate_v1 can independently re-derive and
+    verify it). Deterministic for fixed inputs: identical output on every call
+    (no randomness, no mutating I/O -- only reads the pinned authority JSON file).
     """
     case_id = generator.CASE_ID
     parameters = generator.default_parameters()
+    prompt_text = generator.render_prompt(case_id, parameters)
     bundle = generator.build_subjects(case_id, parameters)
     world = bundle["formal_world"]
     genesis = bundle["genesis_state"]
@@ -135,7 +134,7 @@ def assemble_db_match_row(
         "direct_effect_authority": False,
         "training_eligible": False,
         "model_visible_fields": ["prompt"],
-        "prompt": prompt_text or DEFAULT_PROMPT,
+        "prompt": prompt_text,
         "split": "TRAIN",
         "split_unit": "CAUSAL_FAMILY_AND_PROVENANCE_ANCESTRY",
         "selected_using_holdout": False,
@@ -170,6 +169,10 @@ def assemble_db_match_row(
             "formal_discriminator_spec_jcs_sha256": policy["formal_discriminator_spec_jcs_sha256"],
         },
         "tokenizer_atoms_used": list(tokenizer_atoms_used or DEFAULT_TOKENIZER_ATOMS),
+        "prompt_binding_evaluator_only": {
+            "prompt_sha256": sha256(prompt_text.encode("utf-8")).hexdigest(),
+            "render_source": "trigger2_trusted_hyperposition_pilot_generator_v1.render_prompt",
+        },
     }
     row.update(fields)
     return row

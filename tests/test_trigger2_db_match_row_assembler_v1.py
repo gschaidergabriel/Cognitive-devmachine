@@ -2,8 +2,6 @@ from __future__ import annotations
 
 from copy import deepcopy
 
-import pytest
-
 from tools import trigger2_db_match_row_assembler_v1 as assembler
 from tools import trigger2_hyperposition_state_history_generation_bound_gate_v4 as v4
 
@@ -93,22 +91,28 @@ def test_nonempty_history_transplant_fails_closed_under_a02():
     assert result["pass"] is False
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason=(
-        "KNOWN P0 GAP (found 2026-08-26, DB_MATCH production assembler build): none "
-        "of the 5 wired v4 per-row gates (generation/A02/epistemic/tokenizer-ABI/replay) "
-        "bind or verify the actual model_visible content -- 'prompt' is not covered by "
-        "generation_receipt_evaluator_only, the A02 discriminator binding, the digest "
-        "registry, or the replay proof. A row's candidate_pre_admission_pass is entirely "
-        "about *_evaluator_only provenance/formal-world fields; the literal text a model "
-        "would actually be trained on can be swapped after assembly with zero detection. "
-        "Must be closed (e.g. prompt content hashed into generation_receipt_evaluator_only "
-        "or a new prompt-binding gate) before any real admission, not just before scaling."
-    ),
-)
 def test_tampered_prompt_after_generation_receipt_fails_closed():
+    # Was a tracked strict-xfail P0 gap (found 2026-08-26): none of the previously wired
+    # 5 gates bound row['prompt']. Closed by tools/trigger2_prompt_content_binding_gate_v1.py,
+    # wired as the v4 composer's 6th and final per-row check.
     row = assembler.assemble_db_match_row()
     row["prompt"] = "UNAUTHORIZED PROMPT SWAP"
     result = v4.adjudicate(row)
     assert result["pass"] is False
+    assert any("PROMPT_CONTENT_BINDING" in f for f in result["failures"])
+
+
+def test_forged_prompt_binding_sha256_without_touching_prompt_fails_closed():
+    row = assembler.assemble_db_match_row()
+    row["prompt_binding_evaluator_only"]["prompt_sha256"] = "0" * 64
+    result = v4.adjudicate(row)
+    assert result["pass"] is False
+    assert any("PROMPT_CONTENT_BINDING" in f for f in result["failures"])
+
+
+def test_missing_prompt_binding_evaluator_only_fails_closed():
+    row = assembler.assemble_db_match_row()
+    del row["prompt_binding_evaluator_only"]
+    result = v4.adjudicate(row)
+    assert result["pass"] is False
+    assert any("PROMPT_CONTENT_BINDING" in f for f in result["failures"])

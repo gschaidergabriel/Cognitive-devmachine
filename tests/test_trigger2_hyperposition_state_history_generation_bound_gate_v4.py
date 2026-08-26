@@ -73,10 +73,14 @@ def test_full_component_pass_remains_nonpromoting_zero_credit(monkeypatch):
     monkeypatch.setattr(gate.epistemic, "adjudicate", passed("epistemic"))
     monkeypatch.setattr(gate.tokenizer_abi, "adjudicate", passed("tokenizer_abi"))
     monkeypatch.setattr(gate.hyperposition_replay, "adjudicate", passed("hyperposition_replay"))
+    monkeypatch.setattr(gate.prompt_content_binding, "adjudicate", passed("prompt_content_binding"))
 
     result = gate.adjudicate({})
     assert result["pass"] is True
-    assert calls == ["generation", "a02", "epistemic", "tokenizer_abi", "hyperposition_replay"]
+    assert calls == [
+        "generation", "a02", "epistemic", "tokenizer_abi", "hyperposition_replay",
+        "prompt_content_binding",
+    ]
     assert result["positive_D_E_promotion_ready"] is False
     assert result["canonical_dataset_admission"] is False
     assert result["accepted_dataset_tokens_minted"] == 0
@@ -107,4 +111,26 @@ def test_hyperposition_replay_failure_rejects_row(monkeypatch):
     result = gate.adjudicate({})
     assert result["pass"] is False
     assert any("HYPERPOSITION_REPLAY" in f for f in result["failures"])
+    assert result["positive_D_E_promotion_ready"] is False
+
+
+def test_prompt_content_binding_failure_rejects_row(monkeypatch):
+    def passed(name):
+        def inner(row):
+            return _pass_result()
+        return inner
+
+    def prompt_binding_fail(row):
+        return {"pass": False, "failures": ["PROMPT_DOES_NOT_MATCH_RENDERED_AUTHORITY"]}
+
+    monkeypatch.setattr(gate.generation, "adjudicate", passed("generation"))
+    monkeypatch.setattr(gate.a02, "adjudicate", passed("a02"))
+    monkeypatch.setattr(gate.epistemic, "adjudicate", passed("epistemic"))
+    monkeypatch.setattr(gate.tokenizer_abi, "adjudicate", passed("tokenizer_abi"))
+    monkeypatch.setattr(gate.hyperposition_replay, "adjudicate", passed("hyperposition_replay"))
+    monkeypatch.setattr(gate.prompt_content_binding, "adjudicate", prompt_binding_fail)
+
+    result = gate.adjudicate({})
+    assert result["pass"] is False
+    assert any("PROMPT_CONTENT_BINDING" in f for f in result["failures"])
     assert result["positive_D_E_promotion_ready"] is False

@@ -4,9 +4,10 @@
   "purpose": "Pin one deterministic evaluator-subject generator for Trigger-2 generation-provenance property testing without creating training/canonical/runtime credit. Now covers both a single current event (T2_GP_PILOT_DB_MATCH_V1) and a genesis-plus-ordered-history-plus-current-event bundle (T2_GP_PILOT_HIST_CHAIN_V1), closing the previously open nonempty-history content-provenance gap under the same one authority.",
   "generator": {
     "repo_path": "tools/trigger2_trusted_hyperposition_pilot_generator_v1.py",
-    "source_sha256": "3881fe02e37165ccba9e2be7fc84974265c8d4fcf6f3f2dcdd7ebe3e6b57573d",
+    "source_sha256": "8b3c5480d9317050e57f0aaee84e9570ed80440eda27e2c4ebff90026868655d",
     "git_commit_sha": "84ebcb65f82f32428642032ee4023e4ba47acda4",
-    "generator_schema_or_version": "CLAY_TRIGGER2_TRUSTED_HYPERPOSITION_PILOT_GENERATOR/v1"
+    "generator_schema_or_version": "CLAY_TRIGGER2_TRUSTED_HYPERPOSITION_PILOT_GENERATOR/v1",
+    "_repin_note_2026_08_26": "source_sha256 re-pinned after adding render_prompt() (additive, backward-compatible with CASE_ID/default_parameters()/build_subjects()) to close the prompt-content-binding gap; git_commit_sha will be updated in a fast-follow commit once this change lands and its own commit sha is known (self-referential pin, cannot be known before commit)."
   },
   "allowed_cases": {
     "T2_GP_PILOT_DB_MATCH_V1": {

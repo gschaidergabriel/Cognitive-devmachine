@@ -1,0 +1,51 @@
+{
+  "schema": "GO_QUIESCENCE_RESTART_ATTRIBUTION_TOOL/v2",
+  "date": "2026-08-26",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "trigger": "go",
+  "priority": "P0_RUNTIME_QUIESCENCE",
+  "source_commit": "3ad09d27a07c03de7b77e65c0c09055cbe31504a",
+  "entrypoint": "tools/free_swarm_restart_authority_attribution_v2.py",
+  "tests": "tests/test_free_swarm_restart_authority_attribution_v2.py",
+  "fresh_repository_liveness": {
+    "latest_metrics_commit_observed": "b86a776feacbebc1e7884fbc9e87f3e250ecb70c",
+    "committed_at_utc": "2026-08-26T16:46:06Z",
+    "meaning": "Legacy metrics/control-plane publication remains live after HARD_OFF; this is not itself proof of provider calls or host identity."
+  },
+  "authority": {
+    "free_only": true,
+    "provider_routes_admitted": false,
+    "free_swarm_owner_emergency_stop": true,
+    "together_forbidden": true,
+    "non_provider_local_validation_allowed": true
+  },
+  "exact_action": [
+    "On the live Clay host, use a clean checkout containing source_commit 3ad09d27a07c03de7b77e65c0c09055cbe31504a or later main with byte-identical v1/v2 attribution tools.",
+    "Run pytest -q tests/test_free_swarm_restart_authority_attribution_v2.py.",
+    "Run python3 tools/free_swarm_restart_authority_attribution_v2.py --output /tmp/free_swarm_restart_authority_attribution_v2.json.",
+    "Do not kill or mutate any process/service/scheduler in the attribution step.",
+    "v2 is deliberately stricter than v1: MEDIUM-confidence container/tmux/screen/nohup hints are not actionable. SYSTEMD requires exactly one unit whose show/cat content binds a legacy entrypoint; CRON requires exactly one matching scheduler source/entry.",
+    "If decision is INCOMPLETE_FAIL_CLOSED_NO_KILL, perform secondary read-only attribution of the concrete owning container/session/supervisor. Do not guess.",
+    "Only if every matched root is actionable may the next step disable the exact restart authority first and then terminate only the bound Clay legacy tree descendants-first.",
+    "After disable+termination require >=90 seconds zero matched survivors, zero descendants and zero restart events before provider-gate runtime validation or GRID10 work resumes."
+  ],
+  "forbidden": [
+    "NO_PROVIDER_OR_HOSTED_MODEL_CALLS",
+    "NO_TOGETHER",
+    "NO_SECRET_VALUE_EXPORT",
+    "NO_KILL_DURING_ATTRIBUTION_PROBE",
+    "NO_MEDIUM_CONFIDENCE_KILL_AUTHORITY",
+    "NO_GLOBAL_PROVIDER_COUNTER_ONLY_ATTRIBUTION",
+    "NO_GRID10_BEFORE_QUIESCENCE_PASS"
+  ],
+  "credit_change": {
+    "source_tooling_progress": true,
+    "runtime_quiescence_credit": 0,
+    "provider_path_runtime_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "training_credit": 0
+  }
+}

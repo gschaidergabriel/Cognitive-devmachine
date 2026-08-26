@@ -7,8 +7,9 @@ This wrapper intentionally separates three things that the legacy v3 publisher m
 3) stale artifact/snapshot fallback.
 
 Snapshot booleans are retained for diagnostics but can never be OR-combined with /proc
-observations or mint provider/runtime authority. Provider authority comes only from the
-current repository-bound SUPERVISOR_INBOX and fails closed when it is absent/malformed.
+observations or mint provider/runtime authority. Provider authority is diagnostic-only and
+is accepted as current only when SUPERVISOR_INBOX and FREE_PROVIDER_ADMISSION are both
+well-formed and epoch/policy coherent. Any split control plane fails closed.
 No secret values are read and this tool makes no provider/network calls.
 """
 from __future__ import annotations
@@ -66,39 +67,89 @@ def proc_observed(needles: tuple[str, ...], proc_root: Path = Path("/proc")) -> 
     return False
 
 
+def _fail_closed_authority(repo: Path, inbox_path: Path, admission_path: Path,
+                           schema: str | None = None, reason: str = "NO_CURRENT_AUTHORITY") -> dict[str, Any]:
+    return {
+        "valid": False,
+        "source": str(inbox_path.relative_to(repo)),
+        "source_sha256": sha256_file(inbox_path),
+        "admission_source": str(admission_path.relative_to(repo)),
+        "admission_source_sha256": sha256_file(admission_path),
+        "schema_version": schema or None,
+        "authority_epoch": None,
+        "provider_routes_admitted": False,
+        "providers_admitted": {},
+        "current_free_provider_admission": "FAIL_CLOSED_" + reason,
+        "free_swarm_owner_emergency_stop": True,
+        "together_forbidden": True,
+        "authority_state": "FAIL_CLOSED",
+        "coherence_reason": reason,
+    }
+
+
 def authority_from_inbox(repo: Path) -> dict[str, Any]:
-    path = repo / "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json"
-    inbox = load_json(path)
+    inbox_path = repo / "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json"
+    admission_path = repo / "research_entity/claycode/autonomous/FREE_PROVIDER_ADMISSION.json"
+    inbox = load_json(inbox_path)
+    admission = load_json(admission_path)
     free = inbox.get("free_only") if isinstance(inbox.get("free_only"), dict) else {}
     schema = str(inbox.get("schema_version") or "")
-    valid = bool(schema and free and isinstance(free.get("provider_routes_admitted"), bool))
-    if not valid:
-        return {
-            "valid": False,
-            "source": str(path.relative_to(repo)),
-            "source_sha256": sha256_file(path),
-            "schema_version": schema or None,
-            "provider_routes_admitted": False,
-            "current_free_provider_admission": "FAIL_CLOSED_NO_CURRENT_AUTHORITY",
-            "free_swarm_owner_emergency_stop": True,
-            "together_forbidden": True,
-            "authority_state": "FAIL_CLOSED",
-        }
+
+    if not (schema and free and isinstance(free.get("provider_routes_admitted"), bool)):
+        return _fail_closed_authority(repo, inbox_path, admission_path, schema, "MALFORMED_INBOX")
+
+    if admission.get("schema") != "ENTITYOS_HCU_FREE_PROVIDER_ADMISSION/v1":
+        return _fail_closed_authority(repo, inbox_path, admission_path, schema, "MALFORMED_PROVIDER_ADMISSION")
+
+    epoch = str(admission.get("authority_epoch") or "")
+    if not epoch or epoch != schema:
+        return _fail_closed_authority(repo, inbox_path, admission_path, schema, "AUTHORITY_EPOCH_SPLIT")
+
+    if admission.get("mode") != "FREE_ONLY":
+        return _fail_closed_authority(repo, inbox_path, admission_path, schema, "NON_FREE_ONLY_ADMISSION")
+
+    providers = admission.get("providers")
+    if not isinstance(providers, dict) or not providers:
+        return _fail_closed_authority(repo, inbox_path, admission_path, schema, "MALFORMED_PROVIDER_MAP")
+
+    provider_admitted: dict[str, bool] = {}
+    for name, spec in providers.items():
+        if not isinstance(spec, dict) or not isinstance(spec.get("admitted"), bool):
+            return _fail_closed_authority(repo, inbox_path, admission_path, schema, "MALFORMED_PROVIDER_ENTRY")
+        provider_admitted[str(name)] = bool(spec["admitted"])
+
     routes = bool(free.get("provider_routes_admitted"))
     emergency = bool(free.get("free_swarm_owner_emergency_stop"))
     together = bool(free.get("together_forbidden", True))
+    any_provider = any(provider_admitted.values())
+
+    # The monitoring plane must not silently choose one side of a split control plane.
+    if routes != any_provider:
+        return _fail_closed_authority(repo, inbox_path, admission_path, schema, "ROUTE_PROVIDER_MAP_SPLIT")
+    if emergency and any_provider:
+        return _fail_closed_authority(repo, inbox_path, admission_path, schema, "EMERGENCY_STOP_PROVIDER_SPLIT")
+    if together is False:
+        # Current owner law is FREE_ONLY / no paid fallback. Monitoring must fail closed if
+        # the inbox ceases to state this rather than normalizing it silently.
+        return _fail_closed_authority(repo, inbox_path, admission_path, schema, "TOGETHER_POLICY_SPLIT")
+
     explicit = str((inbox.get("current_frontier") or {}).get("current_free_provider_admission") or "UNKNOWN")
-    admitted = routes and not emergency
+    admitted = routes and not emergency and any_provider
     return {
         "valid": True,
-        "source": str(path.relative_to(repo)),
-        "source_sha256": sha256_file(path),
+        "source": str(inbox_path.relative_to(repo)),
+        "source_sha256": sha256_file(inbox_path),
+        "admission_source": str(admission_path.relative_to(repo)),
+        "admission_source_sha256": sha256_file(admission_path),
         "schema_version": schema,
+        "authority_epoch": epoch,
         "provider_routes_admitted": admitted,
+        "providers_admitted": provider_admitted,
         "current_free_provider_admission": explicit,
         "free_swarm_owner_emergency_stop": emergency,
         "together_forbidden": together,
         "authority_state": "ADMITTED" if admitted else "HARD_OFF",
+        "coherence_reason": "INBOX_AND_PROVIDER_ADMISSION_COHERENT",
     }
 
 
@@ -164,10 +215,10 @@ def render_block(p: dict[str, Any]) -> str:
         PROVENANCE_BEGIN,
         "### Runtime-/Authority-Provenienz v4",
         "",
-        f"Aktuelle Provider-Authority: **{a['authority_state']}** aus `{a['source']}` / Schema `{a.get('schema_version')}`.",
-        f"`provider_routes_admitted={str(a['provider_routes_admitted']).lower()}`; `emergency_stop={str(a['free_swarm_owner_emergency_stop']).lower()}`; Admission `{a['current_free_provider_admission']}`.",
+        f"Aktuelle Provider-Authority: **{a['authority_state']}** aus `{a['source']}` / Schema `{a.get('schema_version')}`; Admission `{a.get('admission_source')}` / Epoch `{a.get('authority_epoch')}`.",
+        f"`provider_routes_admitted={str(a['provider_routes_admitted']).lower()}`; `emergency_stop={str(a['free_swarm_owner_emergency_stop']).lower()}`; Admission `{a['current_free_provider_admission']}`; coherence `{a.get('coherence_reason')}`.",
         "",
-        "**Regel:** `/proc`-Beobachtung und Snapshot-Fallback werden nie per OR zusammengeführt. Snapshot-Felder sind Diagnose, keine Runtime-/Provider-Authority.",
+        "**Regel:** `/proc`-Beobachtung und Snapshot-Fallback werden nie per OR zusammengeführt. Snapshot-Felder sind Diagnose, keine Runtime-/Provider-Authority. Split control-plane authority fails closed.",
         "",
         "| Subsystem | live /proc | snapshot fallback | Status |",
         "|---|---:|---:|---|",
@@ -219,9 +270,10 @@ def main() -> int:
         "legacy_rc": legacy_rc,
         "provider_authority": p["authority"]["authority_state"],
         "provider_routes_admitted": p["authority"]["provider_routes_admitted"],
+        "control_plane_coherent": p["authority"]["valid"],
         "output": str(out),
     }))
-    return 0
+    return 0 if p["authority"]["valid"] else 2
 
 
 if __name__ == "__main__":

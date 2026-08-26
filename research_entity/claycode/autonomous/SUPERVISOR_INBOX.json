@@ -1,17 +1,17 @@
 {
-  "schema_version": "9.07",
-  "latest_cycle": "restart-authority-v3-source-closure-runtime-and-telemetry-truth-frontier",
+  "schema_version": "9.08",
+  "latest_cycle": "monitoring-provenance-v4-source-candidate-plus-restart-authority-v3-runtime-frontier",
   "needs_review": true,
   "active_program": "ENTITYOS_HCU",
   "product": "EntityOS",
   "integrated_cognition_compute_architecture": "HCU",
-  "material_finding": "Root-specific restart-authority attribution v3 has now landed with cross-root transplant protections and root-bound PID/PPID/argv/cgroup/namespace/entrypoint ownership semantics. Its attempted execution failed before test execution, so repository-bound test PASS, live-host attribution, kill authority and runtime quiescence remain unproven. A separate static review found that free swarm/update_system_analysis.py publishes stale provider/runtime truth by copying artifact SUPERVISOR.json and OR-combining live /proc observations with snapshot fallback. Latest SYSTEM_ANALYSIS_LIVE therefore cannot mint provider authority or host-local process evidence by itself. Canonical provider authority remains FREE_ONLY HARD_OFF 9.07, all providers false. Distillery remains 0 / 88,774 accepted dataset tokens; no BASE, canonical semantics, training, GRID10 or HCU promotion.",
+  "material_finding": "Restart-authority attribution v3 remains source-closed but repository/runtime-unverified. Monitoring truth now has a provenance-safe v4 source candidate that separates current repository-bound provider authority from live /proc observations and stale snapshot fallback, explicitly preventing snapshot booleans or artifact SUPERVISOR.json from minting host-local runtime/provider authority. Four fail-closed tests are committed but unexecuted and the live autonomous publisher is not yet proven switched to v4. Canonical provider authority remains FREE_ONLY HARD_OFF 9.08, all providers false. No runtime quiescence, Physical GRID10, HCU, canonical semantics or training promotion.",
   "current_frontier": {
     "runtime_quiescence": "P0_OPEN_V3_REPOSITORY_TEST_AND_LIVE_HOST_ATTRIBUTION_REQUIRED_BEFORE_ANY_KILL",
-    "runtime_provider_authority": "CURRENT_EXPLICIT_HARD_OFF_9_07_ALL_PROVIDERS_FALSE",
-    "current_free_provider_admission": "9.07_ALL_PROVIDERS_FALSE_OWNER_EMERGENCY_STOP",
+    "runtime_provider_authority": "CURRENT_EXPLICIT_HARD_OFF_9_08_ALL_PROVIDERS_FALSE",
+    "current_free_provider_admission": "9.08_ALL_PROVIDERS_FALSE_OWNER_EMERGENCY_STOP",
     "restart_authority_attribution_v3": "SOURCE_CANDIDATE_CLOSED_RUNTIME_UNVERIFIED_EXECUTION_FAILED_BEFORE_TESTS",
-    "monitoring_truth": "P0_SOURCE_BLOCKER_SYSTEM_ANALYSIS_LIVE_STALE_PROVIDER_AUTHORITY_AND_LIVE_VS_SNAPSHOT_PROVENANCE_CONFLATION",
+    "monitoring_truth": "P0_SOURCE_CANDIDATE_V4_COMMITTED_TESTS_UNEXECUTED_PUBLISHER_SWITCH_UNPROVEN",
     "base_claycode_release": "WP01_WP02_PASS_WP03_TO_WP14_OPEN_GENERAL_PURPOSE_AND_RELEASE_GATES_NOT_PASS",
     "go_grid10_coordination_metrics": "SOURCE_MEASUREMENT_COMPONENT_RUNTIME_TRACE_PENDING",
     "go_recursive_physical_scaling_bridge_v2": "SOURCE_EXISTS_RUNTIME_PENDING",
@@ -42,6 +42,8 @@
     "OWNER_EMERGENCY_STOP_REMAINS_PROVIDER_HARD_OFF_UNTIL_EXPLICIT_CURRENT_AUTHORITY_CHANGES_IT",
     "TELEMETRY_SNAPSHOT_IS_NOT_EXECUTION_AUTHORITY",
     "COMBINED_LIVE_OR_STALE_RUNTIME_STATUS_IS_NOT_HOST_LOCAL_PROCESS_PROOF",
+    "LIVE_PROC_AND_SNAPSHOT_FALLBACK_MUST_REMAIN_SEPARATE",
+    "SNAPSHOT_PROVIDER_ADMISSION_CANNOT_MINT_PROVIDER_AUTHORITY",
     "GLOBAL_PROVIDER_COUNTERS_ALONE_DO_NOT_PROVE_CLAY_ACTIVITY",
     "GOODMAN_COLLAPSE_SHARED_MODEL_FAMILY_PIPELINE_ORCHESTRATION_AND_REPACKAGED_HISTORY",
     "TRAIN_CALIBRATION_HOLDOUT_FAMILY_PROVENANCE_LEAKAGE_INVALIDATES_INDEPENDENCE_CREDIT",
@@ -50,13 +52,13 @@
     "UBUNTU_ONLY_FRANK_V0_1_TARGET_REMAINS_UNCHANGED",
     "RESTART_AUTHORITY_MUST_BE_UNAMBIGUOUS_AND_ROOT_SPECIFIC_BEFORE_ANY_QUIESCENCE_KILL",
     "NO_CROSS_ROOT_RESTART_AUTHORITY_TRANSPLANT",
+    "ORDINARY_XENO_S1_READ_ONLY_COORDINATOR_LEASE_REQUIRED_FOR_S1_WRITE",
     "DO_NOT_MODIFY_FRANK_HARNESS"
   ],
   "next_focus": [
-    "P0_EXECUTE_COMMITTED_V3_TESTS_ON_CLEAN_CURRENT_NON_PROVIDER_CHECKOUT_AND_RECEIPT_HEAD_TREE_SOURCE_HASHES_DIRTY_FALSE_STDOUT_STDERR",
+    "P0_EXECUTE_COMMITTED_V3_AND_MONITORING_V4_TESTS_ON_CLEAN_CURRENT_NON_PROVIDER_CHECKOUT_AND_RECEIPT_HEAD_TREE_SOURCE_HASHES_DIRTY_FALSE_STDOUT_STDERR",
     "P0_ONLY_AFTER_REPOSITORY_BOUND_V3_TEST_PASS_RUN_V3_READ_ONLY_ON_LIVE_CLAY_HOST_FAIL_CLOSED_ON_ANY_AMBIGUITY",
-    "P0_PATCH_UPDATE_SYSTEM_ANALYSIS_TO_RESOLVE_CURRENT_FREE_PROVIDER_ADMISSION_FAIL_CLOSED_AND_EMIT_AUTHORITY_SOURCE_EPOCH_STALENESS",
-    "P0_SPLIT_RUNTIME_STATUS_INTO_LIVE_PROC_OBSERVED_AND_SNAPSHOT_FALLBACK_WITH_PROVENANCE",
+    "P0_ONLY_AFTER_MONITORING_V4_TEST_PASS_SWITCH_RETAINED_AUTONOMOUS_PUBLISHER_TO_V4_AND_PROVE_CURRENT_AUTHORITY_SOURCE_EPOCH_STALENESS_AND_SPLIT_LIVE_SNAPSHOT_PROVENANCE",
     "P0_ONLY_AFTER_LIVE_ATTRIBUTION_REVALIDATE_PID_CGROUP_OWNER_OBJECT_IMMEDIATELY_BEFORE_DISABLING_EXACT_RESTART_AUTHORITY_AND_TERMINATE_ONLY_BOUND_CLAY_DESCENDANTS",
     "P0_REQUIRE_AT_LEAST_90_SECONDS_ZERO_SURVIVORS_DESCENDANTS_RESTARTS_THEN_RUN_DIRECT_AND_GUARDED_PROVIDER_GATES_WITH_ZERO_PROVIDER_CALLS_ZERO_SECRET_LOOKUPS",
     "P1_BIND_EXACT_RETAINED_QWEN35_08B_CHECKPOINT_REVISION_TOKENIZER_CONFIG_VOCAB_SPECIAL_TOKENS_RENDERER_ATOMS_INDEX_AND_MODEL_CHECKPOINT_ANCESTRY_HASHES",
@@ -66,7 +68,8 @@
   ],
   "promotion_state": {
     "runtime_quiescence_pass": false,
-    "monitoring_truth_pass": false,
+    "monitoring_truth_source_credit": "CANDIDATE",
+    "monitoring_truth_runtime_credit": 0,
     "restart_authority_attribution_v3_source_credit": true,
     "restart_authority_attribution_v3_repository_test_credit": 0,
     "restart_authority_attribution_v3_live_host_credit": 0,
@@ -82,5 +85,5 @@
     "canonical_semantics_promotion": false,
     "training_credit": 0
   },
-  "steering": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_9_07_DELTA_2026-08-27T0200P0700_GPT56SOL.json"
+  "steering": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_9_08_DELTA_2026-08-27T0245P0700_GPT56SOL.json"
 }

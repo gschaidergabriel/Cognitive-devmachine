@@ -1133,6 +1133,10 @@ def _execute_chat_locked(
                 usage["prompt_tokens"] + usage["completion_tokens"]
             ):
                 raise ValueError("response_usage_total_must_match_components")
+            if usage["prompt_tokens"] == 0:
+                raise ValueError(
+                    "response_text_request_requires_prompt_token_provenance"
+                )
             provider_usage = {
                 field: usage[field]
                 for field in (

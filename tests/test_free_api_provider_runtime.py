@@ -1935,6 +1935,49 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
         self.assertNotIn("DONE", result["receipt"]["lifecycle"])
         self.assertIsNone(result["content"])
 
+    def test_blank_reasoning_cannot_enter_verified_receipt(self):
+        class Response:
+            status = 200
+
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *args):
+                return False
+
+            def read(self, limit):
+                return (
+                    b'{"object":"chat.completion","id":"chatcmpl-test",'
+                    b'"created":1,"model":"mock","usage":{'
+                    b'"prompt_tokens":1,"completion_tokens":2,'
+                    b'"total_tokens":3,"completion_tokens_details":{'
+                    b'"reasoning_tokens":1}},"choices":[{"index":0,'
+                    b'"finish_reason":"stop","message":{'
+                    b'"role":"assistant","content":"visible-ok",'
+                    b'"reasoning":"   "}}]}'
+                )
+
+        env = {
+            "NVIDIA_API_KEY": "secret",
+            "FRANK_PROVIDER_BASE_URL": "http://localhost:8765/v1",
+            "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
+        }
+        result = MOD.execute_chat(
+            VALID_MESSAGES,
+            model="mock",
+            environ=env,
+            opener=lambda *args, **kwargs: Response(),
+            now=iter((50.2401, 50.2402)).__next__,
+        )
+        self.assertEqual(
+            result["receipt"]["outcome"], "invalid_provider_response"
+        )
+        self.assertNotIn("VERIFIED", result["receipt"]["lifecycle"])
+        self.assertNotIn("DONE", result["receipt"]["lifecycle"])
+        self.assertIsNone(result["receipt"]["provider_reasoning_sha256"])
+        self.assertIsNone(result["receipt"]["provider_reasoning_characters"])
+        self.assertIsNone(result["content"])
+
     def test_visible_content_requires_non_reasoning_completion_token(self):
         class Response:
             status = 200

@@ -1823,6 +1823,26 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
         self.assertEqual(result["receipt"]["provider_service_tier"], "default")
         self.assertEqual(result["content"], "ok")
 
+        class UnsupportedTierResponse(Response):
+            def read(self, limit):
+                return super().read(limit).replace(
+                    b'"service_tier":"default"',
+                    b'"service_tier":"paid-unverified"',
+                )
+
+        rejected = MOD.execute_chat(
+            VALID_MESSAGES,
+            model="mock",
+            environ=env,
+            opener=lambda *args, **kwargs: UnsupportedTierResponse(),
+            now=iter((50.28, 50.29)).__next__,
+        )
+        self.assertEqual(
+            rejected["receipt"]["outcome"], "invalid_provider_response"
+        )
+        self.assertNotIn("VERIFIED", rejected["receipt"]["lifecycle"])
+        self.assertIsNone(rejected["content"])
+
     def test_multiple_response_choices_cannot_be_partially_verified(self):
         class Response:
             status = 200

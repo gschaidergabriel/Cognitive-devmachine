@@ -697,15 +697,15 @@
   },
   "provider_response_created_provenance": {
     "checked_at": "2026-08-26",
-    "claim": "Every successful non-streaming Chat Completions response must contain created as an exact built-in integer between zero and 9999999999 inclusive. FRANK retains that provider-asserted Unix-seconds value separately from its own receipt clocks.",
+    "claim": "Every successful non-streaming Chat Completions response must contain created as an exact built-in integer between 1 and 9999999999 inclusive. FRANK retains that provider-asserted Unix-seconds value separately from its own receipt clocks.",
     "sources": [
       "https://docs.nvidia.com/nim/large-language-models/latest/reference/api-reference.html",
       "https://docs.vllm.ai/en/v0.16.0/api/vllm/entrypoints/openai/chat_completion/protocol/"
     ],
-    "external_evidence": "NVIDIA identifies vLLM as the NIM inference backend and directs full schemas to it. The official vLLM ChatCompletionResponse serializes created as an integer produced from the server's current Unix time.",
-    "internal_measurement": "A status-200 response containing the required object, provider id, matching model and exact terminal choice but omitting created previously returned success and reached VERIFIED and DONE.",
-    "executable_evidence": "test_missing_response_created_cannot_reach_verified_state",
-    "counterhypothesis": "FRANK's local receipt clock can substitute for a missing provider creation time; falsified because the local clock measures the client-side attempt and cannot assert when the provider created its response object.",
+    "external_evidence": "NVIDIA identifies vLLM as the NIM inference backend and directs full schemas to it. The official vLLM ChatCompletionResponse serializes created from int(time.time()), and NVIDIA's current expected response carries a positive Unix-seconds value.",
+    "internal_measurement": "Status-200 responses containing the required object, provider id, matching model and exact terminal choice previously returned success and reached VERIFIED and DONE both when created was omitted and when it asserted zero, the Unix epoch rather than a current provider creation time.",
+    "executable_evidence": "test_missing_response_created_cannot_reach_verified_state; test_zero_response_created_cannot_reach_verified_state",
+    "counterhypothesis": "FRANK's local receipt clock can substitute for missing or epoch-zero provider creation provenance; falsified because the local clock measures the client-side attempt and cannot assert when the provider created its response object, while the official backend generates created from current Unix time.",
     "uncertainty": "The upper bound 9999999999 is local FRANK v0.1 policy rather than an NVIDIA limit. No comparison with local wall time is claimed because clock skew is not measured, and no Ubuntu NVIDIA live receipt is available on this host."
   },
   "provider_response_usage_provenance": {

@@ -71,6 +71,7 @@ def test_valid_small_patch_passes_without_applying(tmp_path):
     assert report["files"][0]["base"]["git_index"]["mode"] == "100644"
     assert report["files"][0]["base"]["git_index"]["stage"] == 0
     assert report["files"][0]["base"]["git_index"]["oid"] == git(repo, "rev-parse", "HEAD:tools/grid10_fabric.py")
+    assert report["files"][0]["base"]["head_tree"]["oid"] == report["files"][0]["base"]["git_index"]["oid"]
     assert (repo / "tools" / "grid10_fabric.py").read_text() == original
 
 
@@ -170,6 +171,7 @@ new file mode 100644
     report = preflight_patch(repo, patch, p)
     assert report["files"][0]["base"]["exists"] is False
     assert report["files"][0]["base"]["git_index"] is None
+    assert report["files"][0]["base"]["head_tree"] is None
     assert not (repo / "tools" / "new_helper.py").exists()
 
 
@@ -273,3 +275,42 @@ def test_tracked_executable_base_is_rejected(tmp_path):
 """
     with pytest.raises(PatchGuardError, match="regular non-executable mode 100644"):
         preflight_patch(repo, patch, policy(repo))
+
+
+def test_staged_modified_base_is_rejected_even_when_worktree_matches_index(tmp_path):
+    repo = make_repo(tmp_path)
+    path = repo / "tools" / "grid10_fabric.py"
+    path.write_text(path.read_text().replace("return 'a'", "return 'staged'"))
+    git(repo, "add", "tools/grid10_fabric.py")
+    patch = """diff --git a/tools/grid10_fabric.py b/tools/grid10_fabric.py
+--- a/tools/grid10_fabric.py
++++ b/tools/grid10_fabric.py
+@@ -1,2 +1,2 @@
+ def keep_a():
+-    return 'staged'
++    return 'next'
+"""
+    p = policy(repo, base={"tools/grid10_fabric.py": sha256(path)})
+    with pytest.raises(PatchGuardError, match="index blob differs from expected HEAD"):
+        preflight_patch(repo, patch, p)
+
+
+def test_staged_deletion_cannot_be_reclassified_as_new_file(tmp_path):
+    repo = make_repo(tmp_path)
+    path = repo / "tools" / "grid10_fabric.py"
+    path.unlink()
+    git(repo, "add", "tools/grid10_fabric.py")
+    patch = """diff --git a/tools/grid10_fabric.py b/tools/grid10_fabric.py
+new file mode 100644
+--- /dev/null
++++ b/tools/grid10_fabric.py
+@@ -0,0 +1 @@
++replacement = True
+"""
+    p = policy(
+        repo,
+        allowed=("tools/grid10_fabric.py",),
+        base={"tools/grid10_fabric.py": None},
+    )
+    with pytest.raises(PatchGuardError, match="already exists in expected HEAD"):
+        preflight_patch(repo, patch, p)

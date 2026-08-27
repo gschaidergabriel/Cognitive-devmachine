@@ -1,0 +1,30 @@
+{
+  "schema": "GRID10_RAM_RELEASE_EXPERIMENT_RESULTS/v1",
+  "concept_source": "research_entity/topic_packets/grid10-ram-efficiency-concept/CONCEPT.md",
+  "topic": "Real before/after measurement of release_idle_memory() (gc.collect() + malloc_trim()), built via a successful free-pool delegation and promoted after independent review.",
+
+  "experiment_design": "6 real forked processes. All 6 do one real generate() call first (establishing the baseline ~379MB Private_Dirty measured earlier). Split into two groups of 3: 'trimmed' calls release_idle_memory() during a 1s idle window (matching a real elastic-poll standby interval), 'control' does nothing during the same window. Both groups then do a second real generate() call, measuring latency and post-call memory.",
+
+  "results": {
+    "private_dirty_before_kb_all_groups": "~378,850 KB (378.8 MB) per process, consistent across all 6 -- matches the earlier grounding measurement exactly.",
+    "trimmed_group_after_idle_window_kb": "~279,190 KB (279.2 MB) per process -- a real, consistent ~99,675 KB (~97.4 MB, ~26%) reduction across all 3 trimmed processes (variance under 40 KB between them -- a tight, reproducible effect, not noise).",
+    "control_group_after_idle_window_kb": "~378,840 KB -- essentially unchanged (-13.3 KB average, within measurement noise) -- confirms the reduction is genuinely caused by the trim call, not natural fluctuation or the passage of time alone.",
+    "second_generate_latency_comparison": "Trimmed group average 3.4248s, control group average 3.3583s -- a ~66ms difference, well within normal per-call variance (individual trimmed-group latencies ranged 3.21-3.54s, individual control-group latencies ranged 3.13-3.65s, overlapping ranges). The feared page-fault-on-next-touch cost did NOT materialize as a measurable slowdown in practice.",
+    "unexpected_bonus_finding": "After the SECOND real generate() call, the trimmed group settled at ~306,900 KB Private_Dirty -- still ~72,000 KB (~72 MB) BELOW the control group's ~378,900 KB. This means the reduction is not just a temporary dip during idle time that immediately re-inflates on the next real use -- it appears to lower the allocator's cached high-water-mark, producing a persistent, ongoing memory saving even after the node resumes real work, not just a one-time idle-window effect."
+  },
+
+  "honest_assessment": {
+    "the_mechanism_works_as_hoped": "Real, substantial, reproducible RAM reduction (~26% of the per-process private/marginal cost during idle, and a persistent ~19% reduction even after resuming work) with no measurable latency cost -- this is a genuinely good result, not oversold.",
+    "scope_of_what_was_tested": "Tested with a SINGLE idle-window-then-resume cycle on 3+3 processes. Not tested: repeated trim/resume cycles over a long-running session (does the benefit hold or degrade after many cycles?), behavior under real concurrent multi-node load (this experiment ran the two groups' processes independently, not inside the full 10-node fabric-coordinated GRID10 system with real task claiming/CAS/lease traffic happening simultaneously), or the specific number chosen for the idle-window duration (1s here; the real elastic-poll standby mechanism could hold much longer idle windows, e.g. minutes, where the effect might compound differently).",
+    "not_yet_wired_into_a_full_live_multi_node_run": "This is a clean, isolated, controlled A/B measurement, deliberately not run inside the full 10-node coordination fabric (to isolate the memory effect from fabric-related noise) -- a follow-up combining this with the actual 10-node elastic_poll experiment (already built, tools/grid10_cybernetic_regulator_experiment_v1.py / tools/grid10_elastic_scaling_experiment_v1.py) would show the combined CPU+RAM savings together, not attempted in this pass given time constraints."
+  },
+
+  "delegation_note": "The core mechanism (release_idle_memory() + its wiring into node_loop) was built via a SUCCESSFUL free-pool delegation (mistral-small, harness_aider.py, paket-1787844621706-e2ac30) -- the first genuinely clean, correct, promotable free-pool programming result this session after several earlier harness-level failures. The harness's own audit marked the run 'gescheitert' due to an unrelated Mistral API rate-limit hitting the final answer-writing step (the new antwort_ok check correctly caught that the protocol did not fully complete) -- the actual code was still real, correct, and already pushed. Promoted manually after independent review (diffed against the pre-change file, ran the generated test, ran the full regression suite) rather than trusting or discarding the harness's verdict blindly.",
+
+  "files": {
+    "mechanism": "tools/grid10_node.py::release_idle_memory()",
+    "unit_test": "tests/test_grid10_node_release_idle_memory_v1.py (3 tests, passing)",
+    "live_experiment_driver": "tools/grid10_ram_release_experiment_v1.py",
+    "raw_run_receipt": "research_entity/topic_packets/grid10-ram-efficiency-concept/RAM_RELEASE_RUN_20260827.json"
+  }
+}

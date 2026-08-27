@@ -1,0 +1,68 @@
+{
+  "schema": "FRANKENSTEIN_AI_INSTALL_CONTRACT/v1",
+  "root_resolution": {
+    "rule": "REPO_ROOT = parent(parent(absolute_path_of_this_file))",
+    "forbid_assumptions": ["Downloads", "home directory", "clone name", "current working directory", "attachment mount"]
+  },
+  "minimal_read_set": [
+    "AI_START_HERE_DO_NOT_SCAN_REPO/INSTALL_CONTRACT.json",
+    "HUMAN_READ_THIS/START_HERE.md",
+    "DEV_SOURCE_RESEARCH/README.md",
+    "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json"
+  ],
+  "do_not_scan_repo_by_default": true,
+  "result_enum": ["NATIVE", "ADAPTED", "DEGRADED", "BLOCKED"],
+  "host_routes": {
+    "claude-code": {
+      "instruction_surface": "CLAUDE.md",
+      "executable_candidates": ["claude"],
+      "native_requires": ["instruction_surface", "host_executable", "observable_lifecycle_if_claimed", "durable_state_write_if_claimed", "effect_receipt_if_effects_claimed"]
+    },
+    "codex-cli": {
+      "instruction_surface": "AGENTS.md",
+      "executable_candidates": ["codex"],
+      "native_requires": ["instruction_surface", "host_executable", "observable_lifecycle_if_claimed", "durable_state_write_if_claimed", "effect_receipt_if_effects_claimed"]
+    },
+    "hermes-agent": {
+      "instruction_surface": null,
+      "executable_candidates": ["hermes"],
+      "rule": "discover actual lifecycle/tool/state capabilities; never invent hook names"
+    },
+    "chatgpt-web": {
+      "instruction_surface": null,
+      "web_only_default": "DEGRADED",
+      "rule": "promote only from observed connected capabilities"
+    },
+    "claude-web": {
+      "instruction_surface": null,
+      "web_only_default": "DEGRADED",
+      "rule": "promote only from observed connected capabilities"
+    },
+    "grok-web": {
+      "instruction_surface": null,
+      "web_only_default": "DEGRADED",
+      "rule": "promote only from observed connected capabilities"
+    },
+    "generic": {
+      "instruction_surface": null,
+      "rule": "inventory actual capabilities and map only what exists"
+    }
+  },
+  "proof_obligations": [
+    "repository_resolved_dynamically",
+    "current_supervisor_inbox_read",
+    "capabilities_detected_not_guessed",
+    "real_hook_firing_verified_if_hook_claimed",
+    "durable_state_write_and_readback_verified_if_state_write_claimed",
+    "request_distinguished_from_effect",
+    "effect_or_result_receipt_verified_if_effect_path_claimed",
+    "current_forbidden_provider_paths_not_activated"
+  ],
+  "current_authority_at_creation": {
+    "supervisor_schema": "9.13",
+    "hard_off_external_providers": true,
+    "provider_routes_admitted": false,
+    "together_forbidden": true,
+    "note": "This is a creation-time snapshot. Installer must always re-read the current inbox before acting."
+  }
+}

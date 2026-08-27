@@ -36,4 +36,4 @@ This is a good example of the project's evidence rule:
 
 The current supervisor keeps retained runtime credit for this Frankenstein direct-dispatch path **unpromoted** until an independent, clean, non-provider review and re-execution succeeds. Whole EntityOS/HCU, full HCU, Physical GRID10, canonical-semantics, and training credit remain zero at this frontier.
 
-For the technical evidence and falsifiers, see [`../DEV_SOURCE_RESEARCH/chronicle/FRANKENSTEIN_DIRECT_DISPATCH_EDIT_SAFETY_20260828.md`](../DEV_SOURCE_RESEARCH/chronicle/FRANKENSTEIN_DIRECT_DISPATCH_EDIT_SAFETY_20260828.md).
+For the fused technical evidence and falsifiers, see [`../DEV_SOURCE_RESEARCH/research/FRANKENSTEIN_DIRECT_DISPATCH_NEGATIVE_RESULT_2026-08-28.md`](../DEV_SOURCE_RESEARCH/research/FRANKENSTEIN_DIRECT_DISPATCH_NEGATIVE_RESULT_2026-08-28.md).

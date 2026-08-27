@@ -1,3 +1,0 @@
-
-oder über die Python‑Wrapper `ctypes.call` zu `libc.so.6`’s `madvise`.  
-In ersten Tests reduziert dies den `Private_Dirty`‑Anteil von ~379 MB auf < 50 MB pro Prozess, wobei die Wieder‑Allokationszeit bei einem nachfolgenden `generate()` nur leicht erhöht bleibt (einzelne‑Digit‑Millisekunden). Damit lässt sich der RAM‑Verbrauch von GRID10 bei zehn parallelen Prozessen von ~21 GB auf unter ~3 GB senken, ohne Funktionalität zu verlieren.

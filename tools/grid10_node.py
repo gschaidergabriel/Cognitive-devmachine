@@ -113,7 +113,16 @@ def node_loop(
                     events.append({"event": "CLAIM_AWARENESS_CLAIM_OK", "node_id": node_id, "task_id": task["task_id"], "ts": time.time()})
                     payload_in = json.loads(task["payload_json"])
                     prompt = payload_in.get("prompt")
-                    answer = cognitive_answer(prompt) if prompt else payload_in.get("answer", "no-op")
+                    # Found empirically 2026-08-27 (GRID10 use-case-3 trajectory
+                    # experiment): the hardcoded max_new_tokens=6 default (fine for the
+                    # short YES/NO-style tasks used elsewhere) left a real reasoning
+                    # task's answer completely empty on this checkpoint's thinking
+                    # template (output was just the opening "<think></think>" wrapper,
+                    # cut off before any real content). A task can now declare its own
+                    # budget via payload["max_new_tokens"]; unset tasks keep the same
+                    # default 6 as before (no behavior change for existing callers).
+                    max_new_tokens = int(payload_in.get("max_new_tokens", 6))
+                    answer = cognitive_answer(prompt, max_new_tokens=max_new_tokens) if prompt else payload_in.get("answer", "no-op")
                     fresh = f.snapshot()
                     result_payload = {"task_id": task["task_id"], "answer": answer}
                     # Hyperposition rule: if the task itself declares genuinely unresolved

@@ -1,0 +1,80 @@
+{
+  "schema": "FRANKENSTEIN_AI_ENTRY_INSTALL_CONTRACT/v1",
+  "purpose": "Minimal capability-first entry into the repository without assuming cwd, clone path, home directory, downloads, attachment mount, lifecycle hooks or background execution.",
+  "path_resolution": {
+    "entry_directory": "DIRECTORY_CONTAINING_THIS_CONTRACT_OR_verify_entry.py",
+    "repository_root": "PARENT_OF_ENTRY_DIRECTORY",
+    "cwd_is_authority": false,
+    "root_scan_required": false
+  },
+  "required_first_reads": [
+    "AI_START_HERE_DO_NOT_SCAN_REPO/INSTALL_CONTRACT.json",
+    "HUMAN_READ_THIS/README.md",
+    "DEV_SOURCE_RESEARCH/README.md"
+  ],
+  "current_state_reads_when_execution_or_current_claims_are_needed": [
+    "CLAY_EXECUTION_AUTHORITY.md",
+    "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json"
+  ],
+  "capability_probe": [
+    "filesystem_read",
+    "filesystem_durable_write",
+    "shell",
+    "git",
+    "lifecycle_hook_observation",
+    "cross_session_state",
+    "effect_result_receipt_observation",
+    "project_connector_or_tool_access"
+  ],
+  "unknown_rule": "UNKNOWN_NEVER_UPGRADES_TO_TRUE",
+  "authority_resolution": [
+    "NEWEST_EXPLICIT_OWNER_AUTHORITY",
+    "CURRENT_SUPERVISOR_INBOX_SELECTION",
+    "EXACT_CURRENT_SOURCE_RUNTIME_EVIDENCE",
+    "OLDER_BOOTSTRAP_PROGRAM_CACHE"
+  ],
+  "host_routes": {
+    "claude_code": {
+      "default": "ADAPTED",
+      "native_requires": ["real_lifecycle_hook_firing", "durable_state_write", "effect_or_result_receipt_if_claimed"]
+    },
+    "codex_cli": {
+      "default": "ADAPTED",
+      "native_requires": ["real_lifecycle_hook_firing", "durable_state_write", "effect_or_result_receipt_if_claimed"]
+    },
+    "hermes_agent": {
+      "default": "DEGRADED",
+      "upgrade_requires": ["observed_filesystem_shell_state_lifecycle_and_receipt_capabilities_as_needed"]
+    },
+    "chatgpt_web": {
+      "default": "DEGRADED",
+      "upgrade_requires": ["actual_connected_repository_or_filesystem_surface", "verified_writes_if_claimed"]
+    },
+    "claude_web": {
+      "default": "DEGRADED",
+      "upgrade_requires": ["actual_connected_repository_or_filesystem_surface", "verified_writes_if_claimed"]
+    },
+    "grok_web": {
+      "default": "DEGRADED",
+      "upgrade_requires": ["actual_repository_filesystem_lifecycle_surfaces", "verified_writes_if_claimed"]
+    },
+    "generic": {
+      "default": "BLOCKED_UNTIL_PROBED"
+    }
+  },
+  "classifications": {
+    "NATIVE": "Required lifecycle hooks, durable state writes and claimed effect/result receipt behavior are observed on the host's normal integration path.",
+    "ADAPTED": "Core behavior works through a verified adapter but not the host's native lifecycle path.",
+    "DEGRADED": "Useful subset exists but one or more required lifecycle/state/effect capabilities are absent or unverified.",
+    "BLOCKED": "Minimum read, identity or authority requirements cannot be safely established."
+  },
+  "promotion_fences": [
+    "SOURCE_EXISTENCE_IS_NOT_HOOK_FIRING",
+    "WRITE_REQUEST_IS_NOT_DURABLE_WRITE",
+    "MODEL_OUTPUT_IS_NOT_EFFECT_RECEIPT",
+    "CHAT_CONTINUITY_IS_NOT_LOCAL_PERSISTENT_STATE",
+    "BACKGROUND_WORK_IS_NOT_PRESENT_WITHOUT_AN_ACTUAL_SCHEDULER_OR_RUNTIME",
+    "OLD_PROVIDER_ALLOWLIST_IS_NOT_CURRENT_EXECUTION_AUTHORITY"
+  ],
+  "snapshot_note": "At Trigger-3 curation main@854f6bc87780f4a5242489a6c807d186b16a8c3d, SUPERVISOR_INBOX selects 9.13O steering while provider authority epoch remains 9.13 HARD_OFF. This note is snapshot metadata, not a future authority override."
+}

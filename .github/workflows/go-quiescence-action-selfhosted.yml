@@ -1,0 +1,93 @@
+name: EntityOS GO fail-closed legacy quiescence action
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'tools/free_swarm_quiescence_action_v1.py'
+      - '.github/workflows/go-quiescence-action-selfhosted.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: entityos-go-quiescence-action
+  cancel-in-progress: false
+
+jobs:
+  quiesce-clay-legacy:
+    if: github.actor == 'gschaidergabriel'
+    runs-on: self-hosted
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Bind exact source
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          OUT=/tmp/entityos-go-quiescence
+          rm -rf "$OUT"; mkdir -p "$OUT"
+          test -z "$(git status --porcelain=v1)"
+          printf 'HEAD=%s\nTREE=%s\n' "$(git rev-parse HEAD)" "$(git rev-parse 'HEAD^{tree}')" > "$OUT/source.txt"
+          sha256sum tools/free_swarm_quiescence_action_v1.py tools/free_provider_admission.py > "$OUT/source.sha256"
+
+      - name: Require current HARD_OFF authority
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          OUT=/tmp/entityos-go-quiescence
+          python3 tools/free_provider_admission.py --json > "$OUT/provider-admission.json"
+          python3 - <<'PY'
+          import json
+          x=json.load(open('/tmp/entityos-go-quiescence/provider-admission.json'))
+          if bool(x.get('provider_routes_admitted')):
+              raise SystemExit('FAIL: provider routes admitted')
+          if not str(x.get('authority_epoch') or '').strip():
+              raise SystemExit('FAIL: missing authority epoch')
+          print('PASS_HARD_OFF',x.get('authority_epoch'))
+          PY
+
+      - name: Dry-run exact Clay legacy matches
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          OUT=/tmp/entityos-go-quiescence
+          python3 tools/free_swarm_quiescence_action_v1.py --window-seconds 2 --output "$OUT/dry-run.json"
+          cat "$OUT/dry-run.json"
+
+      - name: Apply Clay-only quiescence and prove 90s no restart
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          OUT=/tmp/entityos-go-quiescence
+          python3 tools/free_swarm_quiescence_action_v1.py --apply --window-seconds 90 --output "$OUT/apply.json"
+          python3 - <<'PY'
+          import json
+          x=json.load(open('/tmp/entityos-go-quiescence/apply.json'))
+          assert x['state']=='PASS_QUIESCENT',x
+          assert x['after_matched_count']==0,x
+          assert x['restart_observed'] is False,x
+          assert x['provider_calls']==0,x
+          assert x['secret_values_read'] is False,x
+          assert x['unrelated_processes_targeted']==0,x
+          print('PASS_QUIESCENT')
+          PY
+
+      - name: Upload sanitized evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: entityos-go-quiescence-action
+          path: |
+            /tmp/entityos-go-quiescence/source.txt
+            /tmp/entityos-go-quiescence/source.sha256
+            /tmp/entityos-go-quiescence/provider-admission.json
+            /tmp/entityos-go-quiescence/dry-run.json
+            /tmp/entityos-go-quiescence/apply.json
+          if-no-files-found: warn
+          retention-days: 7

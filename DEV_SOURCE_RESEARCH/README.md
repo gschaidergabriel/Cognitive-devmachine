@@ -1,66 +1,73 @@
 # Project Frankenstein — developer / research chronicle
 
-This directory is the **technical navigation layer** for Project Frankenstein. It is not a second authority surface and it does not replace canonical source, receipts, owner directives, or current supervisor steering.
+This is the technical navigation layer for Project Frankenstein. It is **not** a second authority surface. Current owner/supervisor authority and exact executable evidence always outrank this index.
 
-## 0. Read current authority before interpreting history
+## 0. Current re-entry
 
-At the start of this Triggerword‑3 pass, canonical `main` was observed at:
+Triggerword‑3 began from:
 
-`854f6bc87780f4a5242489a6c807d186b16a8c3d`
+`main@854f6bc87780f4a5242489a6c807d186b16a8c3d`
 
-Current precedence used for this curation pass:
+During this pass, `main` advanced to:
 
-1. newest explicit owner authority;
-2. `research_entity/claycode/autonomous/SUPERVISOR_INBOX.json` and the steering file it selects;
-3. current owner/product target and canonical source;
-4. exact executable evidence at the exact claimed identity;
-5. historical source / receipts / donor branches;
-6. summaries and bootstrap caches.
+`3c3dbe5020f57065f47bd4d0a2dce3c537128797`
 
-The current supervisor inbox selects **9.13O** and retains **9.13 HARD_OFF** for external provider routes. Together is forbidden; paid fallback is forbidden; the current 72‑hour Frankenstein provider orchestration is quarantined/non-operative as written.
+That successor is important: it closes the current Frankenstein source-side provider boundary by adding a stdlib authority gate before provider import/secret/network/Aider/fallback and replacing the old provider-capable entrypoints with fail-closed wrappers. The old provider-backed implementations and old v1 plan are preserved under explicit `_PROVIDER_QUARANTINED_854f6bc` provenance names. Commit `3c3dbe5…` reports 10/10 focused local tests green; this curation organ did not independently re-run them, so that remains `COMMIT_REPORTED_RESULT`, not provider/runtime promotion. 
 
-The highest-precedence current owner target is:
+Current authority still says:
 
-`VARIABLE COGNITIVE GRID + PERSISTENT DATABASE + CLAUDE CODE`
+- **9.13 HARD_OFF** for external provider routes;
+- Together **FORBIDDEN**;
+- paid fallback **FORBIDDEN**;
+- remaining Together paid runs authorized: **0**;
+- provider route runtime credit: **0**.
 
-GRID10 is an important benchmark and engineering configuration, not the final architecture identity. `N` is runtime-variable.
+Current owner target remains:
 
-## 1. Evidence labels used here
+> **VARIABLE COGNITIVE GRID + PERSISTENT DATABASE + CLAUDE CODE**
+
+`N` is runtime-variable. GRID10 is a benchmark/engineering configuration, not the final architecture identity.
+
+## 1. Evidence vocabulary
 
 | Label | Meaning |
 |---|---|
-| `CURRENT_SOURCE` | Present in current canonical source / current authority surface. |
-| `HISTORICAL_SOURCE` | Preserved source or document from an older authority/architecture epoch. |
-| `PROJECT_MEASUREMENT` | Measured project result with an identified scope; never broadened automatically. |
-| `COMMIT_REPORTED_RESULT` | A result stated in a commit/receipt that this curation organ did not independently re-run. |
-| `EXTERNAL_PRIMARY` | Primary literature, standards, or vendor-primary documentation used as research input. |
-| `INFERENCE` | Reasoned interpretation from observed material. |
-| `OPEN_HYPOTHESIS` | Plausible but not established; must carry a falsifier. |
-| `NEGATIVE_RESULT` | Failure/counterevidence that constrains the architecture. |
-| `BLOCKED` | Required gate unavailable or forbidden under current authority. |
-| `QUARANTINED` | Source is preserved but is explicitly non-operative under current authority. |
+| `CURRENT_SOURCE` | Present in current source or current authority. |
+| `HISTORICAL_SOURCE` | Preserved older source/provenance. |
+| `PROJECT_MEASUREMENT` | Measured project result at an identified scope. |
+| `COMMIT_REPORTED_RESULT` | Result reported by a commit/receipt but not independently rerun in this curation organ. |
+| `EXTERNAL_PRIMARY` | Primary paper/standard/vendor doc used as research input. |
+| `INFERENCE` | Reasoned interpretation. |
+| `OPEN_HYPOTHESIS` | Candidate claim with explicit falsifier. |
+| `NEGATIVE_RESULT` | Failure/counterevidence constraining the architecture. |
+| `BLOCKED` | A required gate is unavailable/forbidden. |
+| `QUARANTINED` | Preserved source that is not current executable authority. |
 | `RETIRED` | Historical mechanism/name no longer defines the current product. |
 
-The two central anti-inflation rules are:
+Core discipline:
 
 > request ≠ effect
 
+> source-ready ≠ runtime-observed
+
 > component PASS ≠ whole-product PASS
 
-Also: model output ≠ world fact; method exists ≠ result exists; consensus/repetition ≠ independent evidence.
+> model output ≠ world fact
 
-## 2. Current target architecture
+> consensus/repetition ≠ independent evidence
+
+## 2. Current architecture
 
 ```mermaid
 flowchart TD
     U[User / environment] --> E[Typed input / perception]
-    E --> DB[(Persistent DB / durable exact state)]
+    E --> DB[(Persistent database / exact durable state)]
     E --> G[Variable cognitive grid N]
     DB <--> G
     G <--> W[Global workspace / bridge]
     W <--> C[Claude Code strong model/tool partner]
     C <--> T[Tools / code / environment]
-    G --> P[Action / effect proposal]
+    G --> P[Effect proposal]
     P --> EG[Deterministic effect authority]
     EG --> T
     T --> R[Observed result / receipt]
@@ -68,266 +75,263 @@ flowchart TD
     R --> G
 ```
 
-**CURRENT_SOURCE / owner target:** simulate cognition; store durable data. The grid distributes cognitive processes; the persistent database owns durable exact state where deterministic storage is superior; Claude Code remains the strong external model/tool/code partner. A Global‑Workspace/J‑Space bridge is pursued only to the strongest interface that is actually exposed and causally evidenced.
+**Owner rule:** `SIMULATE COGNITION; STORE DURABLE DATA.`
 
-### Functional decomposition
+The variable small-model grid distributes cognitive work that historically lived across Zero/EntityOS modules. Exact durable state belongs in the database when deterministic storage is more reliable/cheap than repeated cognitive simulation. Claude Code remains the strong model/tool/code partner; the 0.8B grid is not intended to replace it.
 
-- **State / memory:** durable exact data in canonical DB substrate; transient high-rate state may remain in RAM.
-- **Cognition:** runtime-variable small-model grid reproducing/distributing historical Zero/EntityOS cognitive functions.
-- **Workspace:** competition, broadcast, uptake, re-entry, typed state transfer and compression.
-- **Strong-model bridge:** Claude Code at the strongest supported observable interface; no invented hidden-state access.
-- **Action:** proposals are not effects. Deterministic effect authority remains the real state-changing boundary.
-- **Verification:** result receipts re-enter state; unknown outcomes remain unknown.
+The Global Workspace/J-Space bridge is allowed to be only as deep as the actually exposed and causally evidenced interface. No unproven Claude Code activation access may be claimed.
 
-## 3. Project Frankenstein lineage — evidence-bearing chronology
+## 3. Research lineage
 
-This is a reconstruction index, not a claim that each mechanism was first *created* on the date its first accessible Git evidence appears.
-
-### A. Historical Frank / Zero / fragmented cognition
+### 3.1 Historical Frank / Zero / Project Frankenstein
 
 `HISTORICAL_SOURCE`
 
-The repository preserves historical Frank / Project Frankenstein / Agent Zero mechanisms across source, archive-assimilation manifests, architecture archaeology, trigger runs, old boot files and topic packets. Useful starting points:
+Useful reconstruction anchors:
 
 - `research_entity/archive_assimilation/manifests/PROJECT_FRANKENSTEIN_HISTORY_SEMANTIC_K128_K159_20260809T1306p0700.json`
 - `research_entity/archive_assimilation/manifests/PROJECT_FRANKENSTEIN_HISTORY_K128_K157_SEMANTIC_DISPOSITION_20260809T1310p0700.json`
 - `research_entity/architecture_archaeology/MECHANISM_INDEX.json`
 - `research_entity/architecture_archaeology/ARCHAEOLOGY_WORKSPACE.json`
 - `agentZero/`
-- historical Frank/ClayVerse boot and compatibility files in repository root and archives.
+- historical Frank/ClayVerse boot and compatibility material.
 
-These sources are an evidence archive, not a truth oracle. Historical naming cannot override current EntityOS/owner authority.
+These are evidence archives, not truth or current product authority. “First verified in accessible Git” must not be rewritten as “created on this date.”
 
-### B. State fragmentation → UnifiedDB direction
+### 3.2 Fragmented state → UnifiedDB
 
-`HISTORICAL_SOURCE` + `CURRENT_SOURCE` + `INFERENCE`
+`HISTORICAL_SOURCE + CURRENT_SOURCE + INFERENCE`
 
-A recurring engineering pressure was fragmented state spread across modules/services. The convergence direction is one canonical durable SQLite substrate containing many typed tables, indexes, views, policies and journals, plus rebuildable projections and optional transient RAM state.
+A recurring failure pressure was state fragmentation across databases/services/modules. The convergence direction is one canonical durable SQLite substrate with many typed tables, indexes, views, policies and journals plus rebuildable projections. High-rate transient state may still live in RAM.
 
-This is why “UnifiedDB” must not be described as a giant untyped file. One authority substrate can still contain strong internal type and ownership boundaries.
+UnifiedDB is therefore not a “god file.” The architectural claim is one durable authority substrate, not one untyped table or one writer.
 
-**Project term — Emergent Retrieval:** relevance that appears when independently stored evidence dimensions intersect at query time: semantic similarity, time, causal lineage, current state, goals, perception, effects, confidence, provenance, and related dimensions. No information is created from nothing.
+**Emergent Retrieval** is the project term for relevance that appears when independently stored evidence dimensions overlap at query time: semantic similarity, time, causal lineage, current state, goals, perception, effects, confidence, provenance, etc. It never means information appears from nowhere.
 
-External systems analogy only: SQLite WAL allows concurrent readers with one writer on the same host while preserving transaction boundaries. Primary documentation: https://www.sqlite.org/wal.html
+External implementation reference: SQLite WAL permits readers and a writer to proceed concurrently on one host while retaining transaction semantics: https://www.sqlite.org/wal.html
 
-NVIDIA Unified Memory is only a systems analogy for reducing ownership/copy boundaries. Hardware memory migration/coherence is not database semantics. Primary documentation: https://docs.nvidia.com/cuda/cuda-programming-guide/02-basics/understanding-memory.html
+NVIDIA Unified Memory is only a systems analogy for reducing ownership/copy boundaries. Hardware coherence/migration is not database semantics: https://docs.nvidia.com/cuda/cuda-programming-guide/02-basics/understanding-memory.html
 
-### C. Reflection / rumination → explicit exit requirement
+### 3.3 Reflection / rumination → measurable exit
 
-`HISTORICAL_SOURCE` + `NEGATIVE_RESULT` + `ADOPTED`
+`NEGATIVE_RESULT + ADOPTED`
 
 Self-reflection is treated as an engineering control operation:
 
 `inspect state/outcome -> detect mismatch -> generate correction -> store/retrieve correction -> alter later behavior`
 
-A useful reflection loop must terminate into **ACT / ASK / WAIT / re-observe / another measurable transition**. Endless recursive reflection is a failure mode. This requirement exists because rumination/fixation and context contamination can make “more reflection” look active while producing no state-changing progress.
+Reflection must terminate into **ACT / ASK / WAIT / re-observe / another measurable transition**. Recursive self-reflection without an exit is a failure mode because it consumes time/context without closing the state→action→verification loop.
 
-### D. Global workspace / GWT → empirical J-Space research
+### 3.4 GWT / global workspace → causal J-Space research
 
-`HISTORICAL_SOURCE` + `CURRENT_SOURCE` + `OPEN_HYPOTHESIS`
+`CURRENT_SOURCE + OPEN_HYPOTHESIS`
 
-Relevant project indices:
+Project anchors:
 
 - `research_entity/triggers/GWT_RESEARCH_PROTOCOL.md`
 - `research_entity/triggers/HYPERPOSITION_RESEARCH_PROTOCOL.md`
-- current owner target document for `GLOBAL WORKSPACE -> GLOBAL J-SPACE`.
+- current owner target document.
 
-External primary research provides architecture inspiration, not project proof:
+External primary research is architecture input only:
 
-- Baars, 2005, *Global workspace theory of consciousness: toward a cognitive neuroscience of human experience*, DOI `10.1016/S0079-6123(05)50004-9`.
-- Dehaene & Changeux, 2011, *Experimental and theoretical approaches to conscious processing*, DOI `10.1016/j.neuron.2011.03.018`.
+- Baars (2005), DOI `10.1016/S0079-6123(05)50004-9`.
+- Dehaene & Changeux (2011), DOI `10.1016/j.neuron.2011.03.018`.
 
-Project use is engineering/causal: competition, broadcast, uptake and re-entry. No present architecture claim depends on consciousness, sentience or subjective experience.
+Project use is engineering: competition, broadcast, uptake and re-entry. No present architecture claim depends on consciousness, sentience or subjective experience.
 
-**OPEN_HYPOTHESIS — confidence 0.55:** sufficiently rich external state/memory/perception/arbitration/effect receipts plus workspace re-entry can supply much of the useful reflective agency historically spread across a monolithic agent stack.
+**OPEN_HYPOTHESIS — confidence 0.55:** a rich external substrate of state, memory, perception, arbitration, effect receipts and verified re-entry can reproduce much of the useful reflective agency historically spread across a monolithic agent stack.
 
-**Falsifier:** a controlled matched system with the external substrate fails to preserve/reproduce the required cognitive transitions while a simpler alternative does, or the measured behavior depends mainly on hidden prompt scaffolding rather than the state substrate.
+**Falsifier:** matched systems show the substrate does not preserve required cognitive transitions, or behavior depends mainly on hidden prompt scaffolding rather than state/memory/effect re-entry.
 
-### E. GRID / HCU computerization → variable-N correction
+### 3.5 GRID/HCU → variable-N correction
 
-`CURRENT_SOURCE` + `PROJECT_MEASUREMENT` + `NEGATIVE_RESULT`
+`CURRENT_SOURCE + PROJECT_MEASUREMENT + NEGATIVE_RESULT`
 
-GRID10 supplied a concrete engineering surface for shared fabric, regulators, task claiming, stale recovery and concurrency experiments. Current owner authority later corrected the finished architecture: **GRID10 is a benchmark, N is runtime-variable.**
+GRID10 remains a useful benchmark surface for shared fabric, claiming, stale recovery, regulators and concurrency measurement. Current owner authority corrected fixed-GRID interpretations: final identity is variable `N`.
 
-A current 4-process / 4-vCPU thread-count A/B measured:
+Current 4-process / 4-vCPU thread A/B:
 
-| torch intra-op threads/process | result |
+| torch intra-op threads/process | measured result |
 |---:|---|
 | 1 | 8.3197 s/call average, 12 samples |
 | 2 | 23.1806 s/call average, 12 samples |
 | 4 | zero completed samples inside experiment timeouts |
 
-**PROJECT_MEASUREMENT boundary:** this supports default `1` for that measured topology only. It does not prove general GRID performance, HCU acceptance, or a universal optimum.
+This falsified the tested recommendation that 2 threads/process should be faster for this topology. It supports default=1 **only** for the measured 4proc/4vCPU workload and grants no Physical-GRID10/HCU/release promotion.
 
-The important lineage lesson is negative: a plausible external recommendation (“more threads should help”) was falsified by matched execution. Measurement beats model consensus.
+### 3.6 J-Space / vector steering → evidence ceiling
 
-### F. J-Space/vector work → causal evidence ceiling
+`CURRENT_SOURCE + NEGATIVE_RESULT + OPEN_HYPOTHESIS`
 
-`CURRENT_SOURCE` + `NEGATIVE_RESULT` + `OPEN_HYPOTHESIS`
+Project history contains cvec, hidden-state, vector-control and semantic-binding work. A vector changing output is not by itself a semantic J-Space result.
 
-The repository contains extensive vector-control, cvec, hidden-state and J-Space research. The current evidence discipline is stricter than “vector changed output.” Promotion-grade claims require exact model/runtime identity, intervention site/vector identity, matched controls, disjoint holdouts, lesion/shuffle/rescue or equivalent discriminators where applicable, and causal re-entry evidence.
+Promotion-grade evidence needs exact model/runtime/site/vector identity, disjoint semantic/template holdouts, matched nuisance/off-target/null/sign-flip/permutation controls, and causal re-entry evidence. Known failure classes include lexical target leakage, fixed label/code associations, prompt/schema recurrence, terminal-readout steering overinterpreted as intermediate representation, and same-family replication treated as independent confirmation.
 
-Known anti-patterns preserved in the research archive include lexical target leakage, fixed label/code associations, prompt/schema recurrence mistaken for representation, terminal-readout steering overinterpreted as internal J-Space causality, and same-family replication treated as independence.
+**OPEN_HYPOTHESIS — confidence 0.42:** an intermediate model-specific representation can become a useful causal control interface after label-free/disjoint controls and representation-derived intervention vectors close shortcut alternatives.
 
-**OPEN_HYPOTHESIS — confidence 0.42:** a model-specific intermediate representation can become a useful causal J-Space control interface after label-free/disjoint controls and representation-derived intervention vectors close shortcut alternatives.
+**Falsifier:** nuisance/off-target controls explain equal or larger behavior, or the effect fails on disjoint semantic/template families.
 
-**Falsifier:** matched nuisance/off-target/sign-flip/null/permutation controls explain equal or greater behavior than the semantic intervention, or the effect fails on disjoint semantic/template families.
+### 3.7 0.8B training → separate from execution authority
 
-### G. 0.8B training research → separate from runtime authority
+`CURRENT_SOURCE + PREPARED_NOT_RUN/BLOCKED`
 
-`CURRENT_SOURCE` + `PREPARED_NOT_RUN/BLOCKED`
+Current training target is a Qwen3.5‑0.8B-class low-refusal/abliterated cognitive module for the **actual cognitive-process workload**, not generic chatbot quality and not fixed GRID10 personalities.
 
-The current owner direction targets a Qwen3.5‑0.8B-class low-refusal/abliterated cognitive module, but the model is trained for the **actual cognitive-process workload**, not generic chatbot quality and not a fixed GRID10 personality.
+Important families: process-state interpretation, DB-vs-simulation, planning/replanning, uncertainty/Hyperposition, evidence reconciliation, variable-N coordination, compression/state transfer, Claude Code handoff/return, workspace re-entry, failure/restart/rejoin and fail-closed authority behavior.
 
-Training families include process-state interpretation, DB-vs-simulation boundaries, planning/replanning, evidence/uncertainty/Hyperposition, variable-N coordination, compression/state transfer, Claude Code handoff/return, workspace re-entry, failure/restart/rejoin and fail-closed authority behavior.
+Training research ≠ training authorization. Current 9.13 authorizes zero Together runs.
 
-Training preparation and paid training authorization are distinct. Current 9.13 authority authorizes **zero** Together runs and forbids external provider execution.
-
-### H. 2026-08-27 master cognition concept → useful source, bounded claims
+### 3.8 2026-08-27 master cognition concept
 
 `CURRENT_SOURCE`
 
-`research_entity/topic_packets/frankenstein-master-cognition-concept/CONCEPT.md` deliberately distinguishes currently implemented GRID10/Fabric mechanisms from aspirational alignment/reflex/web UI/bridge work. That honesty boundary is retained.
+`research_entity/topic_packets/frankenstein-master-cognition-concept/CONCEPT.md` explicitly separates implemented GRID10/Fabric mechanisms from aspirational alignment/reflex/UI/bridge work. Useful donor principles include deterministic reflexes outside LLM inference, regulator-driven adaptive behavior, measured deviation, failure-visible state and an optional strong-model bridge.
 
-Useful reusable ideas include:
+Where the concept speaks in fixed GRID10 terms, current owner authority narrows that to benchmark/donor scope.
 
-- deterministic reflex path outside LLM inference;
-- regulator-driven adaptive polling/correction;
-- explicit user-visible targets and measured deviation;
-- Claude bridge as an optional integration rather than an invisible authority;
-- failure-visible state rather than silent fallback.
+### 3.9 72h Bauleiter / Bugfix / Package dispenser
 
-Because the final owner target is now variable-N, any GRID10-specific language is interpreted as a benchmark/donor implementation, not the final product identity.
+`CURRENT_SOURCE + HISTORICAL_SOURCE + COMMIT_REPORTED_RESULT + QUARANTINED`
 
-### I. 72-hour Bauleiter/Bugfix/Package dispenser → source exists, execution quarantined
+Commit `854f6bc…` originally added the package dispenser, provider-backed Bauleiter and provider-backed Bugfix watchdog. It reports 29 focused tests green (12 package, 7 orchestrator, 10 bugfix).
 
-`CURRENT_SOURCE` + `COMMIT_REPORTED_RESULT` + `QUARANTINED`
+The supervisor then retained HARD_OFF and quarantined provider/Together assumptions. During this Triggerword‑3 pass, current `main@3c3dbe5…` closed the source-side entrypoint boundary:
 
-Commit `854f6bc87780f4a5242489a6c807d186b16a8c3d` added:
+```text
+canonical entrypoint
+  -> stdlib current-authority resolver
+  -> HARD_OFF? stop before provider import/secret/network/Aider/fallback
+  -> only later admitted authority could load preserved provider donor
+```
 
-- `frankenstein_packages_v1.py`
-- `frankenstein_orchestrator_v1.py`
-- `frankenstein_bugfix_v1.py`
-- focused tests.
+The old provider implementations now survive under `_PROVIDER_QUARANTINED_854f6bc.py`; the old plan survives under `BUILD_ORCHESTRATION_PLAN_20260827_PROVIDER_QUARANTINED_854f6bc.json`.
 
-The commit reports 29 tests green (12 package, 7 orchestrator, 10 bugfix). This curation pass did **not** independently re-run those exact tests, so the statement remains `COMMIT_REPORTED_RESULT`, not newly observed runtime evidence.
+`3c3dbe5…` reports 10/10 focused local gate tests green. This is **source/local-unit scope only**. Current provider routes remain OFF, Together remains forbidden, and provider runtime credit remains zero.
 
-The provider-calling portions are **QUARANTINED** under current 9.13 HARD_OFF. The bugfix script contains direct NVIDIA/Groq/Mistral fallback logic; the orchestration plan also treated one Together training run as available. Current authority says the opposite: external provider routes are hard-off, Together is forbidden, and remaining paid-run authorization is zero.
-
-Read the sidecar before these files:
+Read:
 
 `research_entity/topic_packets/frankenstein-master-cognition-concept/CURRENT_AUTHORITY_OVERRIDE_20260827.md`
 
-## 4. Failure → engineering move map
+## 4. Failure → engineering move
 
 ```mermaid
 flowchart LR
-    F1[Fragmented durable state] --> M1[Canonical DB / typed state boundary]
-    F2[Rumination / fixation] --> M2[Reflection with explicit exit transition]
-    F3[Prompt/context contamination] --> M3[Typed packets + state/provenance identities]
-    F4[Consensus / plausible advice wrong] --> M4[Matched executable falsifiers]
-    F5[Component PASS inflation] --> M5[Scope-bound receipts / promotion gates]
-    F6[Provider/rate/auth ambiguity] --> M6[Fail-closed provider authority + receipts]
-    F7[Fixed GRID10 interpretation] --> M7[Runtime-variable N owner correction]
-    F8[Vector effect ≠ semantic causality] --> M8[Disjoint controls / causal J-Space gate]
-    F9[Fallback caller bypass after HARD_OFF] --> M9[Gate before secret/import/network boundary]
+    F1[Fragmented durable state] --> M1[Canonical typed DB substrate]
+    F2[Rumination/fixation] --> M2[Reflection with explicit exit]
+    F3[Context contamination] --> M3[Typed packets + exact identities]
+    F4[Plausible advice wrong] --> M4[Matched executable falsifier]
+    F5[Component PASS inflation] --> M5[Scope-bound receipts]
+    F6[Provider/auth ambiguity] --> M6[Authority gate before caller boundary]
+    F7[Fixed GRID10 interpretation] --> M7[Runtime-variable N]
+    F8[Vector effect != semantic causality] --> M8[Disjoint causal controls]
+    F9[Provider fallback survived HARD_OFF] --> M9[Gate before import/secret/network]
 ```
 
-Failures are not editorial debris. They explain why the current architecture has the boundaries it has.
+Failures are first-class evidence because they explain each architecture move.
 
-## 5. Interconnected research index
+## 5. Interconnected source map
 
 ### State / memory / retrieval
 
 - `research_entity/continuity/`
 - `research_entity/global/`
-- current UnifiedDB / SQLite implementations and migrations
+- UnifiedDB / SQLite implementations and migrations
 - `agentZero/code/udb/`
-- architecture archaeology manifests and source references.
+- architecture archaeology.
 
-### GWT / workspace / Hyperposition / GRF
+### GWT / Hyperposition / GRF / ClayCode
 
 - `research_entity/triggers/GWT_RESEARCH_PROTOCOL.md`
 - `research_entity/triggers/HYPERPOSITION_RESEARCH_PROTOCOL.md`
-- GRF / HyperMath / ClayCode source and topic packets
-- current cognitive process ABI / workspace / restart-resize work.
+- current GRF / HyperMath / ClayCode source and topic packets
+- cognitive-process ABI / workspace / restart-resize work.
 
-### HCU / grid / Typed Entry
+### HCU / Typed Entry / grid
 
-- retained donor lane: repository-qualified PR `gschaidergabriel/clay-global-research-entity#1263` (description may be stale; refresh before use)
+- retained HCU donor: repository-qualified PR `gschaidergabriel/clay-global-research-entity#1263` (refresh; its description may lag authority)
 - `tools/grid10_*`
-- Typed Entry / engine-admission / inference receipt / workspace primitives
-- physical GRID evidence and negative receipts.
+- Typed Entry / engine-admission / inference-receipt / workspace primitives.
 
 ### Training / model research
 
-- current Trigger‑2 research lanes and training registries
-- dynamic episode-local binding, nuisance/leakage gates, family-level split controls
-- Qwen3.5‑0.8B target materials
-- historical LoRA/IAPT/SOMA/adapter research retained as lineage rather than automatic current practice.
+- current Trigger‑2 lanes and registries
+- dynamic episode-local binding
+- nuisance/leakage/family split controls
+- Qwen3.5‑0.8B preparation
+- historical LoRA/IAPT/SOMA as lineage, not automatic current practice.
 
-### Effects / tools / verification
+### Effects / tools
 
 - deterministic effect gate/journal authority
-- tool and action proposal boundaries
-- receipts / result re-entry
-- unknown-outcome and replay controls.
+- proposal vs effect boundaries
+- receipts and result re-entry
+- unknown-outcome/replay controls.
 
 ### FreeSwarm / Forge / Distillery
 
-Treat token volume as collection telemetry, not utility. Current authority retains zero training credit while accepted dataset yield remains unresolved/zero at the last confirmed supervisor state. Forge/Distillery failures and replay work are first-class evidence because they reveal the conversion gap between generated text and admitted training data.
+Token volume is collection telemetry, not utility or training evidence. Current training credit remains zero; Forge/Distillery negative results remain essential because they reveal the conversion gap from generated text to evidence-qualified admitted data.
 
-## 6. Current authority conflict: why the 72h scripts are not “ready to run”
+Machine-readable cross-topic index:
 
-Timeline matters:
+`DEV_SOURCE_RESEARCH/research/FRANKENSTEIN_EVIDENCE_INDEX_2026-08-27.json`
 
-1. current 9.13 steering explicitly quarantined the provider-calling Frankenstein orchestration;
-2. after that authority change, commit `854f6bc…` added working source and non-networked tests for Bauleiter/Bugfix/Package modules;
-3. source existence and test greenness do not override authority;
-4. therefore the current status is **SOURCE PRESENT / EXECUTION QUARANTINED**.
+## 6. Current provider closure boundary
 
-A future admissible version must resolve current authority **before** secret lookup, provider import, network I/O, Aider or fallback dispatch. Under HARD_OFF it must prove `provider_calls=0` and `secret_lookups=0`. Do not modify Frank's own Harness to bypass this boundary.
+The previous statement “the provider caller is still entirely ungated” is now stale after `3c3dbe5…`.
 
-## 7. Current evidence-credit ledger
+**Now observed in current source:** canonical Frankenstein entrypoints call a current-authority gate before provider import/secret/network/Aider/fallback and preserve provider-backed donors separately.
 
-At this curation pass:
+**Still unproven at promotion scope:** a clean exact-current non-provider runtime receipt binding exact source/authority bytes and proving under HARD_OFF:
 
-| Scope | Credit |
+```text
+provider_calls = 0
+secret_lookups = 0
+external_fallback_dispatches = 0
+together_calls = 0
+```
+
+No credentials need to be probed to run that discriminator.
+
+A later provider re-admission must come from later explicit current authority and be re-resolved dynamically. Historical plan text, configured keys or “free” labels never self-authorize.
+
+## 7. Current credit ledger
+
+| Scope | Current credit |
 |---|---:|
 | Whole EntityOS runtime | 0 |
 | Full HCU runtime | 0 |
 | Physical GRID10 promotion | 0 |
 | Canonical semantics promotion | 0 |
 | Model-specific Global J-Space promotion | 0 |
+| Provider runtime | 0 |
 | Training | 0 |
-| 72h Frankenstein provider orchestration authority | false |
-
-This ledger deliberately resists “the code exists, therefore the system works.”
 
 ## 8. Repository curation state
 
-The desired human-facing root is intentionally small:
+Desired public root:
 
 - `README.md`
 - `HUMAN_READ_THIS/`
 - `DEV_SOURCE_RESEARCH/`
 - `AI_START_HERE_DO_NOT_SCAN_REPO/`
 
-The current repository root still contains many legacy/technical files. This Triggerword‑3 pass **does not mass-move them blindly** because root paths can be referenced by workflows, agents, bootstraps, docs, receipts or external automation. The migration manifest is:
+Current root is still cluttered. This pass does **not** mass-move technical files blindly because workflows, agent discovery, bootstraps, external automation and evidence links can be path-sensitive.
+
+Migration manifest:
 
 `DEV_SOURCE_RESEARCH/repository/TRIGGERWORD3_REPOSITORY_MIGRATION_MANIFEST_2026-08-27.json`
 
-Mass moves remain `PREPARED_NOT_RUN` until consumer/path audits prove they are safe. Historical receipts are never rewritten merely to make the tree prettier.
+Root movement remains `PREPARED_NOT_RUN` until an exact consumer index is built. The root README is intentionally untouched because Triggerword‑3 says not to silently rewrite it.
 
-## 9. Research-quality rule
+## 9. Research quality law
 
-For every important claim, keep these adjacent:
+Keep every important claim adjacent to:
 
-- exact source / measurement;
+- exact source/measurement;
 - scope;
 - counterhypothesis;
 - falsifier;
-- current status;
+- status;
 - next discriminator.
 
-The target is not maximum documentation volume. It is maximum **useful compression without destroying evidence lineage**.
+The target is maximum **useful compression without destroying evidence lineage**, not maximum page count.

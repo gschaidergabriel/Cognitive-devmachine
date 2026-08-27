@@ -134,3 +134,42 @@ def test_controller_can_supply_explicit_broader_policy_without_worker_payload(tm
     got = policy.evaluate_worktree(repo, source, ["sample.py"], policy=broad)
     assert got["ok"] is True
     assert got["policy_authority"] == "CONTROLLER_ARGUMENT_ONLY_NOT_WORKER_PAYLOAD"
+
+
+def test_small_file_full_rewrite_is_not_exempted_by_default_floors(tmp_path):
+    repo, source = make_repo(tmp_path, lines=5)
+    (repo / "sample.py").write_text("q=9\nr=8\ns=7\nt=6\nu=5\n", encoding="utf-8")
+    got = policy.evaluate_worktree(repo, source, ["sample.py"])
+    assert got["ok"] is False
+    assert any(v["reason"] == "DELETION_FRACTION_EXCEEDED" for v in got["violations"])
+
+
+def test_untracked_side_effect_path_fails_closed(tmp_path):
+    repo, source = make_repo(tmp_path)
+    path = repo / "sample.py"
+    path.write_text(path.read_text().replace("value_3 = 3\n", "value_3 = 300\n"), encoding="utf-8")
+    (repo / "unexpected.py").write_text("print('side effect')\n", encoding="utf-8")
+    with pytest.raises(policy.PreservationError, match="UNTRACKED_PATHS_PRESENT"):
+        policy.evaluate_worktree(repo, source, ["sample.py"])
+
+
+def test_symlink_type_change_requires_separate_authority_even_for_small_file(tmp_path):
+    repo, source = make_repo(tmp_path, lines=5)
+    outside = tmp_path / "outside.py"
+    outside.write_text((repo / "sample.py").read_text(), encoding="utf-8")
+    (repo / "sample.py").unlink()
+    (repo / "sample.py").symlink_to(outside)
+    got = policy.evaluate_worktree(repo, source, ["sample.py"])
+    assert got["ok"] is False
+    assert got["violations"][0]["reason"] == "TARGET_SYMLINK_REQUIRES_SEPARATE_AUTHORITY"
+
+
+def test_huge_pure_addition_is_bounded(tmp_path):
+    repo, source = make_repo(tmp_path)
+    with (repo / "sample.py").open("a", encoding="utf-8") as fh:
+        fh.write("injected = True\n" * 2000)
+    got = policy.evaluate_worktree(repo, source, ["sample.py"])
+    assert got["ok"] is False
+    reasons = {v["reason"] for v in got["violations"]}
+    assert "ADDITION_FRACTION_EXCEEDED" in reasons
+    assert "POSTIMAGE_GROWTH_FRACTION_EXCEEDED" in reasons

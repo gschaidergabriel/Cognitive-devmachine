@@ -1,15 +1,20 @@
 #!/usr/bin/env bash
 set -u
 
-# Trigger-3 installer discovery helper.
-# Read-only and non-networking: no provider calls, no secret lookup, no writes.
-# This is discovery input only, never installation/runtime PASS evidence.
+# Trigger-3 installer helper.
+# Discovery only: no network, no provider calls, no secret lookup, no writes.
+# It does NOT prove lifecycle hooks, durable state, or installation success.
 
 start_path="${1:-.}"
 repo_root=""
 
-have() { command -v "$1" >/dev/null 2>&1; }
-yn() { if "$@"; then printf 'yes'; else printf 'no'; fi; }
+have() {
+  command -v "$1" >/dev/null 2>&1
+}
+
+yn() {
+  if "$@"; then printf 'yes'; else printf 'no'; fi
+}
 
 if have git; then
   repo_root="$(git -C "$start_path" rev-parse --show-toplevel 2>/dev/null || true)"

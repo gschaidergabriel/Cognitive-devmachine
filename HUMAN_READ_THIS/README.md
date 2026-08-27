@@ -1,111 +1,114 @@
-# Project Frankenstein — the human version
+# Project Frankenstein — human entry
 
-Project Frankenstein is a long-running research and engineering project about a practical question:
+This folder is the short human-readable entrance to Project Frankenstein.
 
-> How much useful agency can a software system gain when **state, memory, perception, decisions, actions, and verified outcomes** are connected instead of living as isolated chat turns?
+**Provenance:** `iar.frank.ink`  
+**Lead researcher / developer:** Gabriel Gschaider  
+**Institute director / developer:** Dr. Andreas Unterweger
 
-It is research software, not a claim of consciousness or sentience. Old biologically inspired names are part of the historical lineage; the present engineering claims stand or fall on code, measurements, failure records, and reproducible evidence.
+## What this project is
 
-**Lead researcher/developer:** Gabriel Gschaider  
-**Institute director/developer:** Dr. Andreas Unterweger  
-**Project provenance:** `iar.frank.ink`
+Project Frankenstein is an engineering and research program about building software that can keep state, remember what happened, choose an action, observe the result, and change later behavior from verified outcomes.
 
-## The loop
+The current product identity in the research repository is **EntityOS**. The current integrated cognition/compute architecture is **HCU**. Older names such as Frank, ClayVerse, Mini Entity, MicroEntity, Xeno and XCU are useful for lineage or compatibility, but they must not silently become competing current products or truth stores.
+
+The central loop is deliberately ordinary:
 
 ```mermaid
 flowchart LR
-    S[State<br/>What is true now?] --> M[Memory<br/>What matters from before?]
-    M --> D[Decision<br/>What should happen next?]
-    D --> E[Effect request<br/>What may we try to change?]
-    E --> V[Verification<br/>What actually happened?]
+    P[Perception / input] --> S[State]
+    S --> M[Memory / retrieval]
+    M --> D[Decision / candidate]
+    D --> E[Effect request]
+    E --> G[Deterministic effect gate]
+    G --> O[Observed outcome]
+    O --> V[Verification / receipt]
     V --> S
-    P[Perception<br/>New evidence] --> S
-    R[Reflection<br/>Mismatch → correction] --> D
-    V --> R
+    V --> M
 ```
 
-The important part is the last arrow: **the result comes back in**. A requested action is not treated as a successful action merely because a model said it happened.
+The difficult part is not drawing the loop. The difficult part is making every arrow auditable, terminating, recoverable after failure, and honest about what is known versus guessed.
 
-## What the project learned the hard way
+## One state substrate, not one giant file
 
-Frankenstein did not arrive as one clean architecture. It accumulated mechanisms, failed experiments, competing databases, model prompts, LoRAs, perception systems, goal systems, global-workspace ideas, reflection loops, and increasingly strict evidence rules.
+The project converged away from many loosely synchronized databases and services toward a canonical SQLite-based state/evidence substrate, historically called UnifiedDB or MiniUnifiedDB in different implementation epochs.
 
-Several failures became design requirements:
+That does **not** mean "put everything in one giant table." A single authority substrate can still contain many typed tables, indexes, views, journals, writers, readers and rebuildable projections. High-rate transient sensor state can remain in RAM. The design goal is one answer to "what state is authoritative?", not one data structure for every workload.
 
-- **Fragmented state was expensive and contradictory.** This pushed the project toward a canonical SQLite authority substrate: UnifiedDB (or current compatibility forms where migration is incomplete).
-- **Reflection can become rumination.** Reflection is useful only if it terminates into `ACT`, `ASK`, `WAIT`, re-observation, or another measurable transition.
-- **Model output is persuasive but not authoritative.** Generated explanations, consensus, and self-reports cannot create world facts.
-- **Prompts and weights can fight each other.** Training, inference interfaces, and output protocols must be tested against exact checkpoint/tokenizer/runtime identity rather than inferred from fluent text.
-- **More parallelism is not automatically faster.** A current GRID10 diagnostic on four concurrent processes/four vCPUs measured about 8.32 s/call at one Torch thread per process and about 23.18 s/call at two; four threads produced no completed samples within the experiment timeout. That result is topology-specific, but it is a useful counterexample to “more threads = more speed.”
-- **External helpers can hallucinate architecture.** A recent Frankenstein concept pass explicitly rejected invented components from a helper model and retained only ideas that could be grounded in the real code.
-- **A working mechanism may still be non-operative.** The 2026-08-27 Bauleiter/Bugfix provider orchestration was quarantined when its caller boundary conflicted with current HARD_OFF authority. That negative result was preserved rather than hidden, and `main` now contains a fail-closed authority-gated form while retaining the original provider-backed implementation as donor provenance.
+## Emergent Retrieval
 
-## UnifiedDB and “Emergent Retrieval”
+`Emergent Retrieval` is the project term for relevance that appears when independently stored evidence dimensions overlap at query time. Examples include semantic similarity, time, causal lineage, current state, goals, perception, effects, confidence and provenance.
 
-UnifiedDB is not a single giant file containing everything in one table. It means **one canonical authority substrate** can contain many typed tables, indexes, views, journals, writers, readers, and rebuildable projections without splitting truth across competing databases.
+Nothing appears from nowhere. The information was already stored. What emerges is the *relevance ordering* produced by multiple constraints meeting at the same query.
 
-`Emergent Retrieval` is the project term for relevance that appears when independently stored evidence dimensions overlap at query time — for example semantic similarity + time + causal lineage + current state + goals + perception + effect receipts + confidence + provenance.
+## Reflection must end
 
-Nothing appears from nowhere. Retrieval becomes useful because multiple measured dimensions meet.
+Self-reflection is treated as an engineering control operation, not as a claim about consciousness.
 
-## Reflection, without mysticism
+A useful reflection step can:
 
-Here, self-reflection is an engineering operation:
-
-1. inspect current state and observed outcome;
+1. inspect state and the last outcome;
 2. detect a mismatch;
 3. generate a correction candidate;
-4. store/retrieve the correction;
-5. alter later behavior;
-6. **exit the reflection loop into a measurable next transition.**
+4. store or retrieve the correction;
+5. change later behavior.
 
-A reflection loop that only produces more reflection is a bug, not deeper cognition.
+But reflection that only produces more reflection is a failure mode. A reflective cycle must terminate into a measurable transition such as **ACT**, **ASK**, **WAIT**, **RE-OBSERVE**, or another bounded state transition.
 
-## Memory
+## Global workspace, GRF, Hyperposition and J-Space
 
-Historical Frankenstein contained several memory mechanisms: vector retrieval, claims, graph relations, replay/consolidation, project/task memory, event learning, and world/body state. The present research direction treats these as donor mechanisms and evidence, not as automatically current truth.
+The repository contains a long lineage of workspace/GWT, GRF, Hyperposition and Global J-Space research. These mechanisms are treated as engineering hypotheses and interfaces, not as evidence that the software is conscious or sentient.
 
-The key distinction is simple:
-
-> **memory is not observation.**
-
-A remembered statement can help decide what to check; it cannot prove that the world still matches it.
+The current repository cache explicitly labels Hyperposition/GWT/GRF as `PARTIAL_COMPONENT_EVIDENCE`: component-level repair exists, while physical GRID10 re-entry and stronger causal tests remain open. That distinction matters.
 
 ## Perception and action
 
-The archive records multiple visual lineages: adaptive routing, YOLO/OCR-era pipelines, FrankEye/Retina artifacts, and a later native multimodal vision replacement claim. They are kept as lineage because different generations solved different parts of the problem and sometimes superseded one another.
+Historical Frankenstein code contains several perception lineages, including visual pipelines, gating/attention code and later multimodal replacements. The research archive preserves superseded implementations because failures and replacement paths explain why the architecture changed.
 
-Actions are stricter: a requested effect is only a candidate until the deterministic effect authority admits it and the outcome is re-observed. Unknown outcomes stay unknown rather than being blindly replayed.
+Action is separated from model text. A model can propose a candidate. Real state-changing effects must pass deterministic authority and be recorded with outcome evidence. A request is not an effect; a successful submission is not necessarily a known outcome; an unknown outcome stays unknown until verified.
 
-## Training
+## Memory and training
 
-The research archive includes LoRA/IAPT/SOMA work, before/after probes, feedback weighting, and negative-result methodology. Current policy is much stricter than “training completed = success.” A training result only earns promotion if it improves the intended behavior under an exact model/runtime identity **without unacceptable regressions** and survives appropriate causal/fail-closed tests.
+The project has experimented with retrieval, graph/vector memory, replay, forgetting, LoRA/IAPT/SOMA-style training and later J-Space/vector-control specialization ideas.
 
-At the current authority frontier, whole-product, full-HCU, J-Space-model, and training credit remain unpromoted.
+Training is not credited merely because a training job completed. The current authority state still records **training credit = 0** and **canonical admitted dataset rows = 0** at the strongest current supervisor surface reviewed for this entry layer. That negative result is important: the research may be extensive while the release-grade causal training gate remains open.
 
-## The current system identity
+## What failed, and why it matters
 
-The persistent research entity is **Clay**. The current product/system is **EntityOS**. The integrated cognition/compute architecture is **HCU**. Frankenstein, Frank, Xeno, and other names survive where they are useful as historical or compatibility lineage, not as competing truth authorities.
+The archive intentionally keeps failures visible. Important examples include:
 
-```mermaid
-flowchart TD
-    I[Typed Entry<br/>new evidence enters with identity + provenance] --> C[Deterministic control]
-    C --> H[HCU<br/>shared-weight / vector / inference / J-Space candidate computation]
-    H --> W[Workspace / Hyperposition<br/>alternatives may remain unresolved]
-    W --> A[ActionCandidate]
-    A --> G[EffectGate + EffectJournal]
-    G --> O[Observed outcome]
-    O --> I
-    U[UnifiedDB<br/>canonical durable state/evidence] <--> C
-```
+- rumination/fixation and recursive loops that did not terminate cleanly;
+- context contamination and prompt/weight conflicts;
+- latency, CPU oversubscription and timeout failures;
+- fragmented state across services/databases;
+- provider orchestration that violated a later HARD_OFF authority boundary;
+- component tests that were real but too narrow for whole-system claims;
+- generated or external model suggestions that invented nonexistent architecture;
+- Distillery/Forge collection with zero accepted dataset-token yield at the latest confirmed supervisor state.
 
-The model plane can propose, simulate, rank, or measure. It does not mint canonical truth.
+A negative result is not dead weight. It constrains the next design.
+
+## Current honesty line
+
+As of the repository state used to build this entry layer on 2026-08-27:
+
+- current canonical repo head inspected: `854f6bc87780f4a5242489a6c807d186b16a8c3d`;
+- current supervisor inbox selected 9.13O non-authority steering on top of provider epoch 9.13;
+- provider state: HARD_OFF / all provider routes false / Together forbidden / no paid fallback;
+- whole EntityOS runtime credit: `0`;
+- full HCU runtime credit: `0`;
+- physical GRID10 runtime credit: `0`;
+- canonical semantics credit: `0`;
+- training credit: `0`;
+- a real GRID10 4-process/4-vCPU thread-count A/B supported 1 torch thread/process for that topology and falsified the recommendation that 2 threads/process would be faster;
+- the new 72-hour provider-calling Frankenstein Bauleiter/Bugfixer plan is quarantined and must not be deployed unchanged under HARD_OFF.
+
+These statements are deliberately narrower than "the system works".
 
 ## Where to go next
 
-- Technical/research readers: [`../DEV_SOURCE_RESEARCH/README.md`](../DEV_SOURCE_RESEARCH/README.md)
-- AI/tool installer entry: [`../AI_START_HERE_DO_NOT_SCAN_REPO/README.md`](../AI_START_HERE_DO_NOT_SCAN_REPO/README.md)
-- Current Frankenstein concept packet: [`../research_entity/topic_packets/frankenstein-master-cognition-concept/`](../research_entity/topic_packets/frankenstein-master-cognition-concept/)
-- Historical archaeology manifest: [`../research_entity/archive_assimilation/manifests/PROJECT_FRANKENSTEIN_MANIFEST.json`](../research_entity/archive_assimilation/manifests/PROJECT_FRANKENSTEIN_MANIFEST.json)
+- Technical/research synthesis: `../DEV_SOURCE_RESEARCH/README.md`
+- Evidence-oriented trigger-3 report: `../DEV_SOURCE_RESEARCH/repository/FRANKENSTEIN_TRIGGER3_SYNTHESIS_2026-08-27.md`
+- AI/tool installation entrance: `../AI_START_HERE_DO_NOT_SCAN_REPO/README.md`
 
-The project is large. The useful story is not “everything worked.” The useful story is **which failure forced which architecture change, what was measured, and what still remains unproven.**
+The repository root is currently still technically cluttered. This folder is a non-destructive first curation layer; it does not pretend that the final root topology migration has already been completed.

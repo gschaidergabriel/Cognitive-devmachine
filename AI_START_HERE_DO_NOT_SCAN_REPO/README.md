@@ -1,238 +1,152 @@
-# AI START HERE. DO NOT SCAN THE REPO.
+# AI START HERE — DO NOT SCAN THE REPO
 
-Small steps. No guessing.
+Use this folder when an AI/tool needs to work with the project without first crawling the whole repository.
 
-## 1. Find the repo you actually have
+## Rule zero
 
-Do **not** assume Downloads. Do **not** assume home. Do **not** assume current directory.
+Do **not** guess where the repository lives.
 
-If you have a shell:
+Do **not** assume:
 
-```bash
-pwd
-git rev-parse --show-toplevel 2>/dev/null || true
-```
+- `~/Downloads`;
+- the home directory;
+- a clone path;
+- an attachment mount;
+- the current working directory;
+- that a tool has hooks, durable memory, a terminal, GitHub write access or background execution.
 
-If that prints a repo root, set it dynamically:
+Find the actual repository path or ask the host/tool for it through its native file/repository interface.
 
-```bash
-REPO="$(git rev-parse --show-toplevel)"
-printf '%s\n' "$REPO"
-```
+## Minimum read order
 
-If it prints nothing: you do not have a verified checkout yet. Use your host's real repository/connector checkout mechanism. Do not invent a path.
+Read only these first:
 
-## 2. Read only these first
+1. `../CLAY_EXECUTION_AUTHORITY.md`
+2. `../research_entity/claycode/autonomous/SUPERVISOR_INBOX.json`
+3. the steering file named by that inbox
+4. `../HUMAN_READ_THIS/README.md`
+5. `../DEV_SOURCE_RESEARCH/README.md`
+6. task-relevant exact source/evidence only
 
-From the verified repo root:
+If a listed path moved, discover the current equivalent. Do not force an old filename to remain authoritative.
 
-```text
-CLAY_EXECUTION_AUTHORITY.md
-research_entity/claycode/autonomous/SUPERVISOR_INBOX.json
-research_entity/continuity/BOOTSTRAP_MINIMAL.json
-AI_START_HERE_DO_NOT_SCAN_REPO/README.md
-```
+## Capability test
 
-Then read the steering file named by `SUPERVISOR_INBOX.json`.
+Before installation/integration, determine whether the host has these capabilities:
 
-For Frankenstein work also read:
+- `FILES_READ`
+- `FILES_WRITE`
+- `SHELL`
+- `GIT_READ`
+- `GIT_WRITE`
+- `LIFECYCLE_HOOK`
+- `DURABLE_STATE`
+- `EFFECT_RECEIPT`
+- `NETWORK` (only when current authority permits the exact route)
 
-```text
-research_entity/topic_packets/frankenstein-master-cognition-concept/TRIGGERWORD3_HARD_OFF_CLOSURE_20260827_GPT56SOL.json
-research_entity/topic_packets/frankenstein-master-cognition-concept/CONCEPT.md
-```
+Unknown means unknown. A tool description is not proof that a hook really fires.
 
-Do not treat old plan text as newer authority.
+## Final result vocabulary
 
-## 3. Current expected provider result
+Every installation attempt ends in exactly one class:
 
-At the 2026-08-27 Trigger-3 authority snapshot:
+- **NATIVE** — the host exposes the needed primitive directly and you verified it.
+- **ADAPTED** — the host uses a different primitive, but the mapped behavior was verified.
+- **DEGRADED** — useful subset works; missing capabilities are named.
+- **BLOCKED** — a required capability is absent or cannot be verified.
 
-```text
-providers: HARD_OFF
-together: FORBIDDEN
-paid fallback: FORBIDDEN
-```
+Never report success just because files were copied.
 
-So a provider-capable Frankenstein launch is expected to **BLOCK before provider import, secret lookup, network, Aider, or fallback dispatch**.
-
-That is correct behavior, not installation failure.
-
-## 4. Detect what this host can really do
-
-Check capabilities. Do not infer them from product name.
+## Common verification loop
 
 ```text
-filesystem read?       yes/no
-filesystem write?      yes/no
-shell?                  yes/no
-git read?               yes/no
-git write?              yes/no
-python?                 yes/no
-persistent local state? yes/no
-lifecycle hooks?        yes/no/unknown
-real effect execution?  yes/no/unknown
+DETECT host + repo path
+-> RESOLVE current authority
+-> MAP host capabilities
+-> INSTALL smallest adapter
+-> TRIGGER one real lifecycle event if supported
+-> VERIFY durable state changed where expected
+-> VERIFY effect/result receipt where an effect occurred
+-> RESTART/REOPEN if persistence is claimed
+-> REPORT NATIVE / ADAPTED / DEGRADED / BLOCKED
 ```
 
-Unknown means unknown.
+## Claude Code
 
-## 5. Result words
+Use Claude Code's actual working repository/session primitives.
 
-Every installation/integration route ends with exactly one of these meanings:
+1. Confirm the repository root from Git, not from the shell prompt text alone.
+2. Read the minimum read order above.
+3. Detect existing project instructions such as `CLAUDE.md` only after current authority is resolved.
+4. If lifecycle hooks are available, install an adapter that records a deterministic receipt when the hook fires.
+5. Re-open or restart once if durable state is claimed.
+6. Do not modify Frank's own Harness to work around provider authority; current supervisor explicitly forbids that closure path.
 
-- `NATIVE` — host has the needed lifecycle/tool/state capabilities directly and they were verified.
-- `ADAPTED` — equivalent behavior is mapped through a different verified host mechanism.
-- `DEGRADED` — useful subset works; missing capabilities are named.
-- `BLOCKED` — required capability/authority is absent or explicitly denied.
+Target classification: `NATIVE` when repo/files/shell/Git and the required lifecycle receipt are directly observable; otherwise `ADAPTED` or `DEGRADED`.
 
-Never write `NATIVE` because a config file exists. Verify real firing/state/effect receipts.
+## Codex CLI
 
-## 6. Claude Code route
+1. Start from the actual checked-out repository.
+2. Resolve current authority before code changes.
+3. Detect shell/Git/write capability.
+4. Use repository-native tests rather than inventing a host-specific state store.
+5. If no lifecycle hook exists, do not fake one. Store explicit task/reentry receipts in an approved repository path only when the task requires persistence.
 
-If Claude Code has a real shell + repo checkout:
+Target classification: usually `NATIVE` for source editing/testing if shell/Git are available; lifecycle automation may be `DEGRADED` if no hook exists.
 
-1. locate repo dynamically with `git rev-parse --show-toplevel`;
-2. read authority files above;
-3. inspect current Frankenstein gate/entrypoint files;
-4. run only tests/actions allowed by current authority;
-5. if adding hooks, prove the hook actually fires with a disposable local receipt;
-6. prove a durable state write if persistence is claimed;
-7. prove an effect/result receipt if effects are claimed.
+## Hermes Agent
 
-Under current HARD_OFF, provider-backed Frankenstein operation stays blocked even if Claude Code itself is installed.
+1. Detect its real file/shell/tool surfaces first.
+2. Map each requested project capability to an actually exposed Hermes primitive.
+3. Where a lifecycle feature differs, use an adapter only if its firing can be observed.
+4. If durable state cannot be verified across a restart/reopen, mark `DEGRADED`.
 
-Possible result: `NATIVE` for repo editing/testing, `BLOCKED` for provider orchestration.
+Do not assume Hermes-specific plugin names or directories without host evidence.
 
-## 7. Codex CLI route
+## ChatGPT Web
 
-Same rule as Claude Code:
+1. Use connected GitHub/file tools when available; do not pretend the browser has a local shell.
+2. Read current authority through the connected repository before current-state claims.
+3. Repository writes must use the connected GitHub write surface when authorized.
+4. A chat response is not a durable repository write.
+5. A scheduled/background process does not exist unless an actual supported scheduling surface was invoked.
 
-1. discover real repo root;
-2. read current authority;
-3. use exact source paths, not repo-wide scanning by default;
-4. run bounded non-provider tests only when admitted;
-5. verify any lifecycle integration by an observed receipt.
+Typical classification: `ADAPTED` for repository research/edit workflows; local runtime hooks may be `BLOCKED` or `DEGRADED` depending on available connectors.
 
-Possible result: `NATIVE` for code/research work, `BLOCKED` for provider orchestration under HARD_OFF.
+## Claude Web
 
-## 8. Hermes Agent route
+1. Use its real project/connector/file surfaces only.
+2. Do not assume Claude Code shell/hooks exist in Claude Web.
+3. If GitHub is connected, resolve exact current files there; otherwise imported snapshots are caches.
+4. Mark local runtime integration `BLOCKED` when no real execution surface exists.
 
-First detect whether Hermes really has:
+## Grok Web
 
-- local filesystem access;
-- shell/process execution;
-- Git access;
-- persistent state/lifecycle hooks.
+1. Detect repository/file/connectors before assuming access.
+2. Treat pasted or uploaded repository archives as snapshots unless current Git state can be verified.
+3. Do not invent shell or lifecycle-hook support.
+4. Use `DEGRADED` when it can analyze sources but cannot verify durable writes/runtime effects.
 
-If yes, map the same authority-first steps.
+## Generic fallback
 
-If it only has messages/tools but no durable repo lifecycle, use `ADAPTED` or `DEGRADED`. Do not fake a native hook.
+For any other tool:
 
-## 9. ChatGPT Web route
+1. Find repository root.
+2. Read current authority.
+3. Make a capability table.
+4. Map only supported primitives.
+5. Install the smallest reversible adapter.
+6. Fire one observable test event.
+7. Check state/receipt.
+8. Reopen/restart if persistence is claimed.
+9. Report one final class.
 
-ChatGPT Web may have a GitHub connector without a normal local shell.
+## Authority warning for the current 2026-08-27 state
 
-Use the connector to:
+At the authority state inspected when this file was written, provider epoch 9.13 is HARD_OFF: all provider routes false, Together forbidden, no paid fallback. A recently authored 72-hour Frankenstein Bauleiter/Bugfixer orchestration that directly selects NVIDIA/Groq/Mistral and treats Together as available is quarantined and non-operative.
 
-1. read current `main` and authority;
-2. read exact files;
-3. create/update bounded repo artifacts when authorized;
-4. keep runtime claims separate from source writes.
+Do not use an installer/agent integration as a side door around that boundary.
 
-If no authorized runtime surface is attached, do not call source writes “runtime installation.”
+## Source-only helper
 
-Typical result: `ADAPTED` for repository research/editing; runtime status depends on actual connected execution capability.
-
-## 10. Claude Web route
-
-If Claude Web only has uploaded files/repository context and no verified executable host:
-
-- use it for source/research analysis;
-- produce exact patches/artifacts;
-- do not claim hooks fired;
-- do not claim state/effects executed.
-
-Result is usually `ADAPTED` or `DEGRADED` until an executable host is verified.
-
-## 11. Grok Web route
-
-Same principle:
-
-- detect connector/filesystem/runtime capability first;
-- do not infer shell or hooks;
-- source analysis may be useful without runtime authority;
-- runtime claims need real receipts.
-
-Use `ADAPTED`, `DEGRADED`, or `BLOCKED` according to observed capability.
-
-## 12. Generic fallback route
-
-If host is unknown:
-
-```text
-A. Can it read exact repo files?
-   no  -> BLOCKED
-   yes -> continue
-
-B. Can it persist changes/state?
-   no  -> DEGRADED (analysis only)
-   yes -> continue
-
-C. Can it execute bounded tests/processes?
-   no  -> ADAPTED/DEGRADED (source work only)
-   yes -> continue
-
-D. Does current authority admit the requested action?
-   no  -> BLOCKED for that action
-   yes -> execute the smallest exact test
-
-E. Did a real hook/state/effect receipt appear?
-   no  -> do not claim native lifecycle integration
-   yes -> NATIVE or ADAPTED, depending on mechanism
-```
-
-## 13. Frankenstein HARD_OFF check
-
-Current main contains authority-gated Frankenstein entrypoints and focused tests.
-
-Relevant source:
-
-```text
-research_entity/topic_packets/frankenstein-master-cognition-concept/frankenstein_authority_gate_v1.py
-research_entity/topic_packets/frankenstein-master-cognition-concept/frankenstein_orchestrator_v1.py
-research_entity/topic_packets/frankenstein-master-cognition-concept/frankenstein_bugfix_v1.py
-tests/test_frankenstein_provider_hardoff_gate_v1.py
-```
-
-The original provider-backed implementations are retained as quarantined provenance files. Do not bypass the supported gate by invoking historical donor files.
-
-A valid HARD_OFF witness must demonstrate the boundary stops before provider/secret/network work. A source file existing is not enough.
-
-## 14. Verify lifecycle claims
-
-For any future host integration claiming “automatic start”, “hook”, “memory”, or “effect”:
-
-1. create a unique local test receipt ID;
-2. trigger the real lifecycle event;
-3. observe the receipt generated by the hook itself;
-4. restart/re-enter the host if persistence is claimed;
-5. verify the receipt/state survives;
-6. for effects, verify actual result/outcome re-entry;
-7. delete disposable test state if appropriate.
-
-No receipt = no lifecycle credit.
-
-## 15. Do not scan the whole repository unless the task requires it
-
-Use the curated routes:
-
-```text
-HUMAN_READ_THIS/README.md
-DEV_SOURCE_RESEARCH/README.md
-DEV_SOURCE_RESEARCH/repository/FRANKENSTEIN_SOURCE_INDEX.json
-research_entity/archive_assimilation/manifests/PROJECT_FRANKENSTEIN_MANIFEST.json
-```
-
-Then follow deep links.
-
-Minimum tokens. Exact evidence. No fake success.
+`detect_install_mode.sh` in this folder performs only local, non-network capability hints. It does not prove lifecycle hooks, durable state, provider authority or whole installation PASS. Treat its output as discovery input, then run the verification loop above.

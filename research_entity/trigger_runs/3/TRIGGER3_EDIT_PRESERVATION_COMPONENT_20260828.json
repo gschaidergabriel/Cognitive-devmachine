@@ -4,7 +4,7 @@
   "macrocycle_identity": "LEGACY_MACROCYCLE_ID_UNRESOLVED",
   "classification": [
     "CURRENT_SOURCE_DELTA_PREPARED",
-    "LOCAL_COMPONENT_TEST",
+    "EXACT_BRANCH_BLOB_LOCAL_COMPONENT_TEST",
     "NON_PROVIDER",
     "NON_PROMOTING"
   ],
@@ -24,12 +24,16 @@
     "changed-file-set exactness",
     "explicit full-file replacement authorization boundary",
     "postimage SHA-256 receipt",
-    "nine focused local tests"
+    "nine focused exact-branch-blob local tests"
   ],
   "local_test": {
-    "command": "python -m pytest -q",
+    "command": "python -m pytest -q tests/test_frankenstein_edit_preservation_v1.py",
+    "source_git_blob_sha": "49403ff73ac38e4ff6d7458b949f16f04f1833be",
+    "test_git_blob_sha": "3e136ba911e1027a9dd3858288e6a37e8f24a5f8",
+    "identity_verification": "git hash-object on reconstructed bytes matched both GitHub branch blob IDs before execution",
     "result": "9 passed",
-    "elapsed_reported": "0.07s",
+    "elapsed_reported": "0.04s",
+    "surface": "LOCAL_ISOLATED_CONTAINER_NON_PROVIDER_EXACT_BRANCH_BLOBS",
     "provider_calls": 0,
     "secret_lookups": 0,
     "network_calls_by_component": 0
@@ -45,5 +49,5 @@
     "canonical semantics promotion",
     "training credit"
   ],
-  "next_exact_gate": "Run the guard inside a clean exact-current non-provider repository mutation harness against the real Frankenstein edit path, including stale-preimage, undeclared deletion, concurrent edit, expected changed-file-set and legitimate broad-refactor cases, while provider_calls=0 and secret_lookups=0."
+  "next_exact_gate": "Reuse the current deterministic patch donor and run this preservation policy inside a clean exact-current non-provider repository mutation harness against the real Frankenstein edit path, including stale-preimage, undeclared deletion, concurrent edit, expected changed-file-set and legitimate broad-refactor cases, while provider_calls=0 and secret_lookups=0."
 }

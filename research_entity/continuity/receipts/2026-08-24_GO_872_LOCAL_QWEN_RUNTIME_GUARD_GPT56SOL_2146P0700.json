@@ -1,0 +1,83 @@
+{
+  "schema": "CLAY_GO_872_LOCAL_QWEN_RUNTIME_GUARD_RECEIPT/v1",
+  "trigger": "go",
+  "observed_trigger_local_time": "2026-08-24T21:46+07:00",
+  "macrocycle_identity": "MACROCYCLE_ID_UNRESOLVED",
+  "unusual_experiment": "NOT_EXECUTED_COORDINATION_FAIL_CLOSED",
+  "coordination_reason": "Only minute-precision trigger metadata is exposed to this organ. Under GO_EXPERIMENT_ATOMIC_LEASE_PROTOCOL, no reproducible shared trigger_key may be invented from minute-only or inferred metadata, so the local hidden-state intervention was not executed.",
+  "authority": {
+    "product": "EntityOS",
+    "architecture": "HCU",
+    "mode": "FREE_ONLY",
+    "supervisor_inbox_schema": "8.72",
+    "steering": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_72.json",
+    "canonical_main_observed_before_branch": "a242596701f34b32cec6a794ce45c275bbfbd412",
+    "canonical_tree_observed_before_branch": "29573d00ec10fa350ac5fe38e3980e0a7a676514",
+    "branch": "gpt56sol/go872-qwen-runtime-guard-20260824",
+    "branch_base": "a242596701f34b32cec6a794ce45c275bbfbd412"
+  },
+  "finding": {
+    "classification": "LOCAL_QWEN_RUNTIME_EVIDENCE_DECLARATIONS_NOT_YET_ENFORCED_BY_EXECUTION_FENCE",
+    "target": "tools/trigger1_local_qwen06_activation_api_execute.py",
+    "observed_gap": [
+      "The target result declares external_provider_credentials_read=false and zero_provider_billing=true, but the target itself does not enforce a credential-unavailable child environment or fail closed on non-loopback provider egress.",
+      "The compact local runtime receipt does not directly bind a clean Git dirty-state observation and expected exact head/tree at launch.",
+      "Supervisor 8.72 explicitly requires exact source/tree/dirty-state/executor/Python/torch/transformers/checkpoint/tokenizer/local-endpoint binding plus zero external LLM credential lookup and zero paid-provider calls."
+    ]
+  },
+  "delta": {
+    "path": "tools/trigger1_local_qwen06_guarded_execute.py",
+    "commit": "1d62747b9c13916fc01779a4ebabe90e283f0797",
+    "git_blob_sha1": "664d4d8fa0e783b32a965d1c7c8c71498383efe0",
+    "file_sha256": "0fd7d26fcc980e22c6e79197cc8c6bec9e7f12ca02785f5fe66b2e64f7e694b3",
+    "mechanisms": [
+      "require clean observed Git source and explicit --expected-head, with optional --expected-tree",
+      "require output outside the repository so runtime evidence does not dirty the source tree",
+      "strip named external LLM provider credential material from the child environment without recording secret values",
+      "force Hugging Face/Transformers offline mode so exact cached model bytes are required at experiment time",
+      "inject a guard before target execution that rejects named provider credential lookups",
+      "reject non-loopback DNS/connect/connect_ex while preserving localhost loopback API traffic",
+      "bind Python executable hash, target script hash, guard hash, source before/after, target result file hash and declared result digest",
+      "validate target source head/tree equality and runtime identity fields before guarded PASS classification",
+      "emit zero whole-EntityOS/HCU/J-Space/training/canonical-semantics credit by construction"
+    ]
+  },
+  "component_selftest": {
+    "surface": "ChatGPT isolated local container",
+    "model_or_project_runtime_executed": false,
+    "python_compile": "PASS",
+    "static_helper_assertions": "PASS",
+    "guard_selftest": "PASS",
+    "observed_audit_events": [
+      "guard_installed",
+      "blocked_provider_credential_lookup",
+      "blocked_non_loopback_dns"
+    ],
+    "loopback_dns_allowed": true,
+    "external_dns_blocked": true,
+    "provider_credential_lookup_blocked": true,
+    "local_python_executable_sha256": "17b78e0a93175e86f9ac03141924fd7a7f0c0c52e66b34bfa0de20ffef989df1",
+    "exact_uploaded_blob_matches_locally_tested_file": true
+  },
+  "go_tracks": {
+    "track_a_entityos_executable_convergence": "ADVANCED: exact-source local model execution now has a fail-closed guarded launcher that binds clean source identity and runtime result integrity before any promotion classification.",
+    "track_b_hcu_and_typed_entry": "ADVANCED_HCU: the reusable HCU/J-Space model-execution boundary now has a credential/egress/source-identity guard primitive; Typed Entry semantics were intentionally not forked.",
+    "track_c_global_jspace_gwt_free_only_readiness": "ADVANCED: the Supervisor-8.72 local Qwen3-0.6B discriminator can be run from an offline cached checkpoint with enforced zero external LLM credential material and loopback-only network, while retaining zero J-Space credit until the actual controlled runtime executes."
+  },
+  "parallel_coordination": {
+    "retained_hcu_donor": "gschaidergabriel/clay-global-research-entity#1263",
+    "retained_execution_controller": "gschaidergabriel/Dr.-Unterweger#810",
+    "observed_parallel_research_pr": "gschaidergabriel/clay-global-research-entity#1586",
+    "duplicate_avoided": "PR1586 handles the readout-algebraic/J-Space interpretation boundary; this delta handles execution evidence, credential and egress fencing instead."
+  },
+  "evidence_scope": "SOURCE_PLUS_GUARD_COMPONENT_SELFTEST_ONLY",
+  "credits": {
+    "whole_entityos_hcu_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "provider_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_action": "After obtaining a reproducible upstream macrocycle/request identity and successful canonical create-only unusual-experiment lease, re-enter current main, rebase this guard if needed, and run the guarded launcher on an authorized zero-cost Ubuntu normal-user/clay-direct-dev surface with the pinned Qwen3-0.6B checkpoint already cached. Bind exact head/tree, target runtime manifest, checkpoint/tokenizer hashes, six-control result, zero credential lookup attempts, zero non-loopback attempts, and the guarded runtime receipt."
+}

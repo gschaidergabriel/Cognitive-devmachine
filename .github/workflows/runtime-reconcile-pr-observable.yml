@@ -1,4 +1,4 @@
-name: EntityOS runtime reconcile observable
+name: EntityOS runtime authority observable
 
 on:
   pull_request:
@@ -10,7 +10,7 @@ permissions:
   contents: read
 
 jobs:
-  reconcile-runtime:
+  audit-runtime-authority:
     if: github.event.pull_request.user.login == 'gschaidergabriel'
     runs-on: self-hosted
     timeout-minutes: 12
@@ -21,13 +21,13 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
 
-      - name: Execute bounded live reconciliation
+      - name: Execute non-mutating runtime authority audit
         shell: bash
         run: |
-          set -u
+          set -Eeuo pipefail
           LIVE=/workspace/clay-global-research-entity
           ART=/artifacts/clay-entityos-swarm
-          OUT=/tmp/clay-runtime-reconcile-pr-${GITHUB_RUN_ID}
+          OUT=/tmp/clay-runtime-authority-audit-pr-${GITHUB_RUN_ID}
           mkdir -p "$OUT"
           status=EXECUTED
           before=""; after=""; target=""
@@ -41,7 +41,7 @@ jobs:
             else
               target="$(git -C "$LIVE" rev-parse origin/main 2>/dev/null || true)"
               dirty="$(git -C "$LIVE" status --porcelain=v1 2>/dev/null || true)"
-              unknown_dirty="$(printf '%s\n' "$dirty" | grep -Ev '^[ MARC?]{2} (free swarm/(README.md|LIVE_METRICS.json|DISTILLERY_LIVE.json|FORGE_LIVE.json|SYSTEM_ANALYSIS_LIVE.json|FABRIC_6000_LIVE.json)|000_FREE_SWARM_LIVE_DASHBOARD.md)$' || true)"
+              unknown_dirty="$(printf '%s\n' "$dirty" | grep -Ev '^[ MARC?]{2} (free swarm/(README.md|LIVE_METRICS.json|DISTILLERY_LIVE.json|FORGE_LIVE.json|SYSTEM_ANALYSIS_LIVE.json|FABRIC_6000_LIVE.json|SYSTEM_ANALYSIS_CURRENT.json)|000_FREE_SWARM_LIVE_DASHBOARD.md)$' || true)"
               if [[ -n "$unknown_dirty" ]]; then
                 status=BLOCKED_LIVE_CHECKOUT_DIRTY_NONGENERATED
                 printf '%s\n' "$unknown_dirty" >"$OUT/unknown-dirty.txt"
@@ -53,6 +53,7 @@ jobs:
                   'free swarm/FORGE_LIVE.json' \
                   'free swarm/SYSTEM_ANALYSIS_LIVE.json' \
                   'free swarm/FABRIC_6000_LIVE.json' \
+                  'free swarm/SYSTEM_ANALYSIS_CURRENT.json' \
                   '000_FREE_SWARM_LIVE_DASHBOARD.md'; do
                   git -C "$LIVE" restore --worktree -- "$p" 2>/dev/null || true
                 done
@@ -60,89 +61,96 @@ jobs:
                   status=BLOCKED_FAST_FORWARD_FAILED
                 else
                   after="$(git -C "$LIVE" rev-parse HEAD 2>/dev/null || true)"
-                  if ! python3 "$LIVE/tools/free_provider_admission.py" --json >"$OUT/admission.json" 2>"$OUT/admission.err"; then
+                  tree="$(git -C "$LIVE" rev-parse HEAD^{tree})"
+                  if [[ -n "$(git -C "$LIVE" status --porcelain=v1)" ]]; then
+                    status=BLOCKED_POST_UPDATE_DIRTY
+                  elif ! python3 "$LIVE/tools/free_provider_admission.py" --json >"$OUT/admission.json" 2>"$OUT/admission.err"; then
                     status=BLOCKED_CANONICAL_ADMISSION_INVALID
                   else
-                    bash "$LIVE/tools/activate_6000_free_swarm.sh" >"$OUT/activate.log" 2>&1
-                    activate_rc=$?
-                    python3 "$LIVE/free swarm/update_root_results.py" --repo "$LIVE" --artifacts "$ART" >"$OUT/reconcile-1.log" 2>&1 || true
-                    sleep 20
-                    python3 "$LIVE/free swarm/update_root_results.py" --repo "$LIVE" --artifacts "$ART" >"$OUT/reconcile-2.log" 2>&1 || true
-                    if [[ $activate_rc -ne 0 ]]; then status=ACTIVATION_NONZERO; fi
+                    # Non-mutating only. Do NOT invoke activate_6000_free_swarm.sh,
+                    # update_root_results.py, update_system_analysis legacy publishers,
+                    # process termination, process restart, or any provider-capable code.
+                    python3 "$LIVE/tools/free_swarm_restart_authority_attribution_v4.py" \
+                      --repo "$LIVE" >"$OUT/restart-authority.json" 2>"$OUT/restart-authority.err" || true
+                    python3 "$LIVE/tools/system_analysis_authority_consumer_audit_v1.py" \
+                      --repo "$LIVE" >"$OUT/consumer-audit.json" 2>"$OUT/consumer-audit.err" || true
+                    python3 "$LIVE/tools/system_analysis_current_reader_v1.py" \
+                      --repo "$LIVE" >"$OUT/current-readback.json" 2>"$OUT/current-readback.err" || true
+                    printf '%s\n' "$after" >"$OUT/head.txt"
+                    printf '%s\n' "$tree" >"$OUT/tree.txt"
+                    sha256sum \
+                      "$LIVE/tools/free_provider_admission.py" \
+                      "$LIVE/tools/free_swarm_restart_authority_attribution_v4.py" \
+                      "$LIVE/tools/system_analysis_authority_consumer_audit_v1.py" \
+                      "$LIVE/tools/system_analysis_current_reader_v1.py" \
+                      >"$OUT/source-sha256.txt"
                   fi
                 fi
               fi
             fi
           fi
 
-          cp "$ART/RUNTIME_RECONCILIATION.json" "$OUT/runtime.json" 2>/dev/null || true
-          cp "$ART/SUPERVISOR_6000.json" "$OUT/supervisor6000.json" 2>/dev/null || true
-          cp "$ART/SUPERVISOR.json" "$OUT/supervisor.json" 2>/dev/null || true
-          cp "$ART/local-model.json" "$OUT/local-model.json" 2>/dev/null || true
-          cp "$LIVE/free swarm/SYSTEM_ANALYSIS_LIVE.json" "$OUT/system-analysis.json" 2>/dev/null || true
-
           STATUS="$status" BEFORE="$before" AFTER="$after" TARGET="$target" OUT="$OUT" python3 - <<'PY'
-          import datetime,json,os
+          import datetime, json, os
           from pathlib import Path
-          out=Path(os.environ['OUT'])
+          out = Path(os.environ['OUT'])
           def load(name):
               try:
-                  x=json.loads((out/name).read_text(encoding='utf-8'));return x if isinstance(x,dict) else {}
-              except Exception:return {}
-          rec=load('runtime.json'); ana=load('system-analysis.json'); sup=load('supervisor6000.json'); local=load('local-model.json')
-          rt=ana.get('runtime') or rec.get('runtime') or {}
-          result={
-            'schema':'CLAY_RUNTIME_RECONCILE_PR_PROOF/v1',
-            'generated_at':datetime.datetime.now(datetime.timezone.utc).isoformat(),
-            'run_id':os.environ.get('GITHUB_RUN_ID'),
-            'status':os.environ['STATUS'],
-            'live_head_before':os.environ['BEFORE'] or None,
-            'live_head_after':os.environ['AFTER'] or None,
-            'origin_main_target':os.environ['TARGET'] or None,
-            'supervisor':rt.get('supervisor'),
-            'go_swarm':rt.get('go_swarm'),
-            'distillery':rt.get('distillery'),
-            'evidence_forge':rt.get('evidence_forge'),
-            'dashboard':rt.get('dashboard'),
-            'local_model':rt.get('local_model'),
-            'local_model_bootstrap':rt.get('local_model_bootstrap'),
-            'authority_alignment':rt.get('authority_alignment'),
-            'canonical_provider_admission':rt.get('provider_admission'),
-            'runtime_provider_admission':rt.get('provider_admission_runtime') or sup.get('provider_admission'),
-            'local_model_state':local,
-            'reconciliation_actions':rec.get('actions'),
-            'provider_secret_values_inspected':False,
-            'paid_fallback_attempt_count':0,
-            'together_used':False,
-            'provider_runtime_credit':0,
-            'whole_hcu_runtime_credit':0,
-            'jspace_model_runtime_credit':0,
-            'training_credit':0
+                  v = json.loads((out/name).read_text(encoding='utf-8'))
+                  return v if isinstance(v, dict) else {}
+              except Exception:
+                  return {}
+          admission = load('admission.json')
+          restart = load('restart-authority.json')
+          consumer = load('consumer-audit.json')
+          current = load('current-readback.json')
+          result = {
+            'schema': 'CLAY_RUNTIME_AUTHORITY_PR_AUDIT/v2',
+            'generated_at': datetime.datetime.now(datetime.timezone.utc).isoformat(),
+            'run_id': os.environ.get('GITHUB_RUN_ID'),
+            'status': os.environ['STATUS'],
+            'live_head_before': os.environ['BEFORE'] or None,
+            'live_head_after': os.environ['AFTER'] or None,
+            'origin_main_target': os.environ['TARGET'] or None,
+            'canonical_provider_admission': admission,
+            'restart_authority_read_only': restart,
+            'authority_consumer_audit': consumer,
+            'current_publication_readback': current,
+            'process_mutations_performed': False,
+            'provider_calls_performed': 0,
+            'secret_lookups_performed': 0,
+            'legacy_update_root_results_invoked': False,
+            'legacy_system_analysis_invoked': False,
+            'physical_grid10_runtime_credit': 0,
+            'whole_hcu_runtime_credit': 0,
+            'training_credit': 0,
+            'evidence_boundary': 'READ_ONLY_RUNTIME_AUTHORITY_OBSERVATION_ONLY; NO QUIESCENCE OR HCU CREDIT'
           }
-          (out/'result.json').write_text(json.dumps(result,indent=2,ensure_ascii=False)+'\n',encoding='utf-8')
-          print('RUNTIME_RECONCILIATION_RESULT='+json.dumps(result,separators=(',',':'),ensure_ascii=False))
+          (out/'result.json').write_text(json.dumps(result, indent=2, ensure_ascii=False)+'\n', encoding='utf-8')
+          print('RUNTIME_AUTHORITY_AUDIT_RESULT='+json.dumps(result, separators=(',',':'), ensure_ascii=False))
           PY
           echo "OUT=$OUT" >> "$GITHUB_ENV"
-          exit 0
 
       - name: Upload sanitized evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: runtime-reconcile-observable-${{ github.run_id }}
+          name: runtime-authority-observable-${{ github.run_id }}
           path: |
             ${{ env.OUT }}/result.json
             ${{ env.OUT }}/admission.json
-            ${{ env.OUT }}/runtime.json
-            ${{ env.OUT }}/supervisor6000.json
-            ${{ env.OUT }}/supervisor.json
-            ${{ env.OUT }}/local-model.json
-            ${{ env.OUT }}/system-analysis.json
+            ${{ env.OUT }}/admission.err
+            ${{ env.OUT }}/restart-authority.json
+            ${{ env.OUT }}/restart-authority.err
+            ${{ env.OUT }}/consumer-audit.json
+            ${{ env.OUT }}/consumer-audit.err
+            ${{ env.OUT }}/current-readback.json
+            ${{ env.OUT }}/current-readback.err
+            ${{ env.OUT }}/head.txt
+            ${{ env.OUT }}/tree.txt
+            ${{ env.OUT }}/source-sha256.txt
             ${{ env.OUT }}/fetch.log
             ${{ env.OUT }}/fast-forward.log
-            ${{ env.OUT }}/activate.log
-            ${{ env.OUT }}/reconcile-1.log
-            ${{ env.OUT }}/reconcile-2.log
             ${{ env.OUT }}/unknown-dirty.txt
           if-no-files-found: warn
           retention-days: 7

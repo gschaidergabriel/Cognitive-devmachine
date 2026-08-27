@@ -233,3 +233,66 @@ def test_control_character_policy_path_is_forbidden(tmp_path):
     )
     with pytest.raises(PatchGuardError, match="unsafe path spelling"):
         preflight_patch(repo, "not parsed yet", p)
+
+
+def _patch_for_text_change(repo: Path, rel: str, new_text: str) -> str:
+    path = repo / rel
+    original = path.read_text()
+    path.write_text(new_text)
+    patch = git(repo, "diff", "--", rel) + "\n"
+    path.write_text(original)
+    return patch
+
+
+def test_relative_deletion_budget_blocks_complete_small_file_rewrite(tmp_path):
+    repo = make_repo(tmp_path)
+    rel = "tools/grid10_fabric.py"
+    path = repo / rel
+    original_lines = path.read_text().splitlines()
+    rewritten = "\n".join(f"replacement_{i} = {i}" for i in range(len(original_lines))) + "\n"
+    patch = _patch_for_text_change(repo, rel, rewritten)
+    with pytest.raises(PatchGuardError, match="relative deletion budget exceeded"):
+        preflight_patch(repo, patch, policy(repo))
+
+
+def test_relative_deletion_budget_blocks_ninety_percent_small_file_deletion(tmp_path):
+    repo = make_repo(tmp_path)
+    rel = "tools/grid10_fabric.py"
+    path = repo / rel
+    path.write_text("".join(f"line_{i} = {i}\n" for i in range(1, 11)))
+    git(repo, "add", rel)
+    git(repo, "commit", "-qm", "ten lines")
+    patch = _patch_for_text_change(repo, rel, "line_10 = 10\n")
+    with pytest.raises(PatchGuardError, match="relative deletion budget exceeded"):
+        preflight_patch(repo, patch, policy(repo))
+
+
+def test_relative_deletion_budget_blocks_forty_percent_small_file_deletion(tmp_path):
+    repo = make_repo(tmp_path)
+    rel = "tools/grid10_fabric.py"
+    path = repo / rel
+    lines = [f"line_{i} = {i}\n" for i in range(1, 11)]
+    path.write_text("".join(lines))
+    git(repo, "add", rel)
+    git(repo, "commit", "-qm", "ten lines")
+    patch = _patch_for_text_change(repo, rel, "".join(lines[:3] + lines[7:]))
+    with pytest.raises(PatchGuardError, match="relative deletion budget exceeded"):
+        preflight_patch(repo, patch, policy(repo))
+
+
+def test_explicit_relative_deletion_budget_can_authorize_large_refactor(tmp_path):
+    repo = make_repo(tmp_path)
+    rel = "tools/grid10_fabric.py"
+    path = repo / rel
+    original_lines = path.read_text().splitlines()
+    rewritten = "\n".join(f"replacement_{i} = {i}" for i in range(len(original_lines))) + "\n"
+    patch = _patch_for_text_change(repo, rel, rewritten)
+    report = preflight_patch(repo, patch, policy(repo, max_deleted_fraction=1.0))
+    assert report["files"][0]["base"]["deleted_fraction"] == 1.0
+    assert report["applied"] is False
+
+
+def test_invalid_relative_deletion_budget_fails_closed(tmp_path):
+    repo = make_repo(tmp_path)
+    with pytest.raises(PatchGuardError, match="max_deleted_fraction"):
+        preflight_patch(repo, "not parsed yet", policy(repo, max_deleted_fraction=1.01))

@@ -21,10 +21,13 @@ The primitive is intentionally **preflight-only and write-free**. It accepts a u
 - explicit allowed-path set;
 - exact SHA-256 preimage for every existing allowed file;
 - explicit `None` preimage only for allowed new files;
-- path containment and symlink rejection;
+- path containment and existing-symlink rejection;
+- control-character / ambiguous path spelling rejection;
 - binary patch rejection;
 - rename/copy rejection by default;
 - file deletion rejection by default;
+- existing-file mode changes rejected;
+- new files restricted to regular non-executable mode `100644`, rejecting symlink/submodule/executable-file mode mutations by default;
 - bounded patch bytes, touched-file count, additions, deletions and total changed lines;
 - actual touched paths must be a subset of the task allowlist;
 - `git apply --check --index --whitespace=error-all` must succeed against the exact current index/worktree.
@@ -33,12 +36,12 @@ Passing returns `FRANKENSTEIN_PATCH_GUARD_PREFLIGHT/v1` with `applied: false`. I
 
 ## Deterministic regression
 
-Local provider-independent regression against the repo-shaped source/test layout:
+Local provider-independent regression against the repo-shaped source/test layout after the second hardening review:
 
 ```text
 python -m pytest -q tests/test_frankenstein_patch_guard_v1.py
-.........                                                                [100%]
-9 passed in 0.18s
+............                                                             [100%]
+12 passed in 0.22s
 ```
 
 Covered cases:
@@ -49,9 +52,12 @@ Covered cases:
 4. unauthorized touched path fails closed;
 5. padded whole-file replacement is rejected by deletion budget even when resulting size is not tiny;
 6. a dirty/concurrently changed touched path fails `git apply --check --index` even if the caller updates the policy digest to that dirty working-tree copy;
-7. explicitly declared new file can be preflighted without creation;
+7. explicitly declared regular new file can be preflighted without creation;
 8. deletion is forbidden by default;
-9. rename is forbidden by default.
+9. rename is forbidden by default;
+10. existing-file mode-only change is forbidden;
+11. a new symlink-mode patch is forbidden;
+12. task policy paths containing control characters are forbidden.
 
 This is **local deterministic utility-test evidence only**. It is not an EntityOS/HCU runtime test and it does not independently promote the provider-authored direct-dispatch repair.
 
@@ -61,7 +67,7 @@ This is **local deterministic utility-test evidence only**. It is not an EntityO
 
 **COUNTERHYPOTHESIS:** patch syntax alone is not safe. Broad authorized hunks, over-large deletion budgets, an incorrect allowlist, weak post-apply verification or a malicious/incorrect patch can still destroy semantics while satisfying syntactic preflight.
 
-**Falsifier:** a clean non-provider mutation harness produces an unauthorized deletion, stale-preimage apply, unrelated-path mutation or lost update that passes this guard under a correctly scoped policy; or matched trials show no meaningful reduction in destructive edits relative to whole-file replacement.
+**Falsifier:** a clean non-provider mutation harness produces an unauthorized deletion, stale-preimage apply, unrelated-path mutation, special-file/mode mutation or lost update that passes this guard under a correctly scoped policy; or matched trials show no meaningful reduction in destructive edits relative to whole-file replacement.
 
 ## Remaining integration gates
 
@@ -72,7 +78,7 @@ The guard is deliberately not wired into the live/quarantined dispatcher in this
 3. preimage digests are captured from the exact starting source generation;
 4. preflight passes immediately before apply;
 5. apply occurs with rollback/transactional handling;
-6. resulting changed-file set and diff budgets are rechecked post-apply;
+6. resulting changed-file set, mode/type and diff budgets are rechecked post-apply;
 7. requested-feature tests plus broader regression/destructive-delta checks pass;
 8. only then may a source commit be proposed;
 9. independent clean non-provider re-execution is still required before any retained runtime credit under supervisor 9.13Q.

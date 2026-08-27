@@ -16,6 +16,12 @@ Read in this order before current-state/runtime claims:
 
 Do not average authority disagreements. A stale self-consistent surface is still stale.
 
+Curated companions:
+
+- [`repository/CURRENT_AUTHORITY_AND_EVIDENCE.md`](repository/CURRENT_AUTHORITY_AND_EVIDENCE.md) — compact current-vs-historical evidence matrix;
+- [`research/FRANKENSTEIN_RESEARCH_CHRONICLE.md`](research/FRANKENSTEIN_RESEARCH_CHRONICLE.md) — failure-driven architecture/research lineage with explicit hypotheses and falsifiers;
+- [`repository/FRANKENSTEIN_SOURCE_INDEX.json`](repository/FRANKENSTEIN_SOURCE_INDEX.json) — machine-readable source/history index.
+
 ## 1. Evidence vocabulary
 
 - **CURRENT_SOURCE** — source present at the exact current identity.
@@ -51,11 +57,24 @@ This closes a source/local-unit boundary; it does **not** grant provider, HCU, t
 
 ## 3. Historical Project-Frankenstein archive
 
-Archaeology entry point:
+Archaeology entry points:
 
-[`../research_entity/archive_assimilation/manifests/PROJECT_FRANKENSTEIN_MANIFEST.json`](../research_entity/archive_assimilation/manifests/PROJECT_FRANKENSTEIN_MANIFEST.json)
+- [`../research_entity/archive_assimilation/manifests/PROJECT_FRANKENSTEIN_MANIFEST.json`](../research_entity/archive_assimilation/manifests/PROJECT_FRANKENSTEIN_MANIFEST.json)
+- [`../research_entity/archive_assimilation/manifests/PROJECT_FRANKENSTEIN_SOURCE_IDENTITY_HISTORY_ANCHOR_20260827.json`](../research_entity/archive_assimilation/manifests/PROJECT_FRANKENSTEIN_SOURCE_IDENTITY_HISTORY_ANCHOR_20260827.json)
 
-The manifest is explicitly `PARTIAL_NOT_FROZEN`. It pins a historical Project-Frankenstein head `abba90a5767d85abc8a1ac340bae92842dab35c1`, but exact whole-tree/history enumeration and a denominator were not frozen. Therefore no repository-wide completion percentage is justified.
+The older manifest remains explicitly `PARTIAL_NOT_FROZEN` and pins historical Project-Frankenstein head `abba90a5767d85abc8a1ac340bae92842dab35c1`.
+
+Trigger-3 now freezes a **narrower exact history denominator** for that snapshot:
+
+```text
+root tree SHA = ec21e66c4672fde1f0a5d948ebc51457b69b620a
+default-branch reachable commits = 545
+oldest reachable commit = e1a8812767668091d146ee958bbc2ebb2743031c
+```
+
+The 545 count is proven by the GitHub REST default-branch listing with `per_page=1`: page 545 non-empty, page 546 empty.
+
+This does **not** freeze the recursive path/topology denominator, every ref/deleted/unreachable commit, or repository-wide semantic coverage. No whole-repository completion percentage is justified yet.
 
 Deep-read lineage includes:
 
@@ -83,12 +102,14 @@ When reconstructing history, use Git and say **“first verified in accessible G
 
 Current anchors include:
 
-- `96623ef096ba189b771ca10835cd5a20499c1da9` — first archaeology-workspace commit returned by the accessible Frankenstein commit search in this pass (2026-08-09); not a project-creation-date claim.
-- historical snapshot `abba90a5767d85abc8a1ac340bae92842dab35c1` — partial archive head.
+- `e1a8812767668091d146ee958bbc2ebb2743031c` — oldest commit reachable from the frozen historical default branch through the observed GitHub REST listing (2026-02-14T17:05:27Z); not proof of pre-Git real-world creation time.
+- historical snapshot `abba90a5767d85abc8a1ac340bae92842dab35c1` — frozen default-branch head for the source/history anchor, while recursive topology/semantic coverage remains partial.
+- `96623ef096ba189b771ca10835cd5a20499c1da9` — first archaeology-workspace commit returned by the accessible Frankenstein commit search in the earlier archive pass (2026-08-09); not a project-creation-date claim.
 - `ab15b482caff1fa5e446d7795cea8df81bc41b97` — 2026-08-27 grounded master-cognition concept; rejects helper-model architecture inventions not present in real code.
 - `854f6bc87780f4a5242489a6c807d186b16a8c3d` — provider-capable Bauleiter/Bugfix/package-dispenser source lands.
 - supervisor 9.13O — quarantines provider-calling orchestration under HARD_OFF.
 - `3c3dbe5020f57065f47bd4d0a2dce3c537128797` — source/local-unit HARD_OFF caller closure fused on `main`.
+- `bf10a71a1d6b69ac63654ab01724b2879bc05003` — exact 545-commit default-branch history denominator fused into the machine-readable source index.
 
 The useful chronology is **failure → correction → stricter evidence boundary**, not a victory timeline.
 
@@ -198,7 +219,8 @@ External donor mechanisms such as ReAct and Reflexion are relevant because they 
 | provider caller crossed authority boundary | pre-provider fail-closed gate + quarantined donor provenance |
 | stale Together allowance contradicted current zero | current authority wins; stale plan cannot spend |
 | Distillery zero-yield | no training credit from raw token volume |
-| archive denominator incomplete | no fabricated completion percentage |
+| historical default-branch denominator was unknown | freeze exact reachable history count while keeping recursive topology/all-ref limits explicit |
+| component/source PASS | never promote automatically to whole-product runtime PASS |
 
 ## 11. Training lineage and current credit
 
@@ -227,9 +249,10 @@ Machine-readable/source topology material belongs under [`repository/`](reposito
 
 1. re-enter current authority after every parallel `main` move;
 2. prove supported Frankenstein callers remain blocked before provider/secret/network boundary under HARD_OFF;
-3. bind exact SQLite runtime/journal/concurrency identity before UnifiedDB WAL durability claims;
-4. run label-free causal J-Space lesion/shuffle/rescue at exact model identity when authority permits;
-5. continue Git-backed chronology using “first verified in accessible Git”;
-6. verify each AI host installer route as `NATIVE`, `ADAPTED`, `DEGRADED`, or `BLOCKED` from observed capabilities and receipts.
+3. obtain the complete recursive historical path inventory for root tree `ec21e66c...` and freeze its path-count denominator;
+4. bind exact SQLite runtime/journal/concurrency identity before UnifiedDB WAL durability claims;
+5. run label-free causal J-Space lesion/shuffle/rescue at exact model identity when authority permits;
+6. derive a Zero/EntityOS cognitive-process census and stable ABI that is independent of fixed `N`;
+7. verify each AI host installer route as `NATIVE`, `ADAPTED`, `DEGRADED`, or `BLOCKED` from observed capabilities and receipts.
 
 This index should grow through deep links, evidence maps, and machine-readable indices — not by copying the entire archive into prose.

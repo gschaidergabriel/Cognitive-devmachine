@@ -2,17 +2,26 @@
 
 This is the technical entry point for Triggerword 3 curation. It is an evidence map, not a truth oracle.
 
+Machine-readable companions:
+
+- `RESEARCH_ARCHIVE_INDEX.json` — discoverability map across current and historical research domains without copying the archive into prose.
+- `ROOT_MIGRATION_MANIFEST.json` — conservative root-to-technical-archive migration plan with exact observed Git identities and compatibility blockers.
+- `AUTHORITY_DRIFT_20260827.md` — current-facing authority drift and its fail-closed resolution, including the provider-HARD_OFF vs non-provider-sandbox distinction.
+- `EXTERNAL_PRIMARY_NOTES.md` — outside primary references and explicit analogy boundaries.
+
 ## Current authority snapshot
 
 Observed at trigger execution:
 
 - canonical branch: `main`
 - canonical head before this curation branch: `854f6bc87780f4a5242489a6c807d186b16a8c3d`
+- later observed moving main during the same trigger: `551ed48f9ebf8c610311c98ccaf84cdca3f487a7` (Free-Swarm/Distillery/Forge metrics refresh)
 - product: `EntityOS`
 - integrated cognition/compute architecture: `HCU`
 - supervisor schema: `9.13`
 - latest steering delta: `9.13O_NON_AUTHORITY`
 - provider state: `FREE_ONLY_HARD_OFF_ALL_PROVIDER_ROUTES_FALSE_TOGETHER_FORBIDDEN_NO_PAID_FALLBACK`
+- non-provider local/sandbox validation: allowed by the 9.13 inbox under current FREE_ONLY authority; this is distinct from provider admission
 - whole EntityOS runtime credit: `0`
 - full HCU runtime credit: `0`
 - Physical-GRID10 runtime credit: `0`
@@ -25,6 +34,8 @@ Primary current surfaces:
 - `research_entity/claycode/autonomous/SUPERVISOR_STEERING_9_13O_DELTA_2026-08-27T2341P0700_GPT56SOL.json`
 - `research_entity/topic_packets/frankenstein-master-cognition-concept/CONCEPT.md`
 - `research_entity/topic_packets/frankenstein-master-cognition-concept/BUILD_ORCHESTRATION_PLAN_20260827.json`
+
+Authority warning: `BOOTSTRAP_MINIMAL.json` and `PROGRAM_STATE.json` still expose the older 8.78 epoch at this snapshot. For provider/runtime policy, the newer inbox-selected 9.13 state wins; do not average the surfaces. The active owner dual-machine sandbox authority is not erased by provider HARD_OFF, and 9.13 explicitly preserves non-provider local/sandbox validation.
 
 ## Evidence classification used here
 
@@ -145,6 +156,8 @@ These ideas remain useful research lenses only at the evidence level actually me
 - Global J-Space: empirical causal interface hypothesis requiring model/runtime-specific evidence.
 - GRF: preserve its mathematical/engineering lineage with exact source links where available; do not promote analogy into measured mechanism.
 
+Representative discoverable anchors are maintained in `RESEARCH_ARCHIVE_INDEX.json`, including current/latest GRF-Hyperposition-GWT material, J-Space/vector-binding research, ClayCode, SOMA/LoRA/IAPT lineage, Xeno/HCU compatibility source, FreeSwarm/Forge/Distillery and evidence/bridge history.
+
 ## Negative-result index that must remain visible
 
 - provider HARD_OFF bypass surfaces after authority closure;
@@ -167,15 +180,14 @@ DEV_SOURCE_RESEARCH/
 AI_START_HERE_DO_NOT_SCAN_REPO/
 ```
 
-This trigger creates the three navigational layers but **does not yet move historical root clutter**. Moving files safely requires a byte-preserving migration manifest and link/reference rewrite audit. That is the next topology gate; deleting or silently renaming evidence would be worse than temporary clutter.
+This trigger creates the three navigational layers but **does not yet perform destructive or compatibility-breaking root moves**. `ROOT_MIGRATION_MANIFEST.json` now records an observed root snapshot, candidate targets, Git identities and explicit blockers. High-risk current paths such as `research_entity/`, `governance/`, `the artefact/`, active generated dashboards/results, host-convention files and runtime/import/test trees remain blocked until references and lifecycle assumptions are closed.
 
 The root `README.md` is intentionally not rewritten by this trigger.
 
 ## Next exact curation gates
 
-1. Build a machine-readable root migration manifest: current path -> target path -> blob SHA -> reference count -> compatibility requirement.
-2. Move only files whose references can be updated deterministically while preserving Git lineage and exact bytes.
-3. Add an archive metadata index over `research_entity/` rather than copying thousands of source files into prose.
-4. Add a non-provider static authority audit for Frankenstein external caller surfaces.
-5. Reconstruct Git chronology by “first verified in accessible Git”, never by invented creation dates.
-6. Expand deep links for GRF, E-PQ/state, memory, perception, reflection, goals, LoRA/IAPT/SOMA, FreeSwarm/Forge/Distillery and current Frankenstein modules.
+1. Complete the root inventory on latest `main` and compute repository-wide path-reference counts for every manifest entry.
+2. Select the first byte-preserving low-risk move set; update references deterministically and verify compatibility before deleting old paths.
+3. Add a non-provider static authority audit for the actual Frankenstein external caller chain (`stern.py -> harness_aider.py -> last-resort/llm.py`) and prove the intended gate location in source without invoking providers.
+4. Reconstruct major module chronology as `first verified in accessible Git`, with commit identities rather than guessed creation dates.
+5. Continue progressive-disclosure deep links from `RESEARCH_ARCHIVE_INDEX.json`; do not expand the README into a duplicate of the archive.

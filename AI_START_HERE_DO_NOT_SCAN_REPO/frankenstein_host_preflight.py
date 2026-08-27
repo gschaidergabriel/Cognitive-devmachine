@@ -20,6 +20,7 @@ AUTHORITY_FILES = (
     "research_entity/rooms/PROGRAM_STATE.json",
     "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
 )
+INBOX_RELATIVE_PATH = "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json"
 
 
 def is_repo_root(path: Path) -> bool:
@@ -53,13 +54,77 @@ def run_git(root: Path, *args: str) -> tuple[bool, str]:
     return True, proc.stdout.strip()
 
 
-def classify(root: Path | None, authority_present: dict[str, bool], git_ok: bool) -> str:
+def resolve_dynamic_steering(root: Path) -> dict[str, Any]:
+    """Resolve the steering path selected by the current inbox, fail-closed.
+
+    Presence of three static authority filenames is not enough: the inbox is a
+    moving pointer and the pointed steering document must itself resolve inside
+    this repository. Absolute paths and traversal outside the repo are rejected.
+    """
+    repo_root = root.resolve()
+    inbox_path = repo_root / INBOX_RELATIVE_PATH
+    try:
+        inbox = json.loads(inbox_path.read_text())
+    except (OSError, json.JSONDecodeError) as exc:
+        return {
+            "verified": False,
+            "pointer": None,
+            "resolved_path": None,
+            "reason": f"INBOX_UNREADABLE:{type(exc).__name__}",
+        }
+
+    pointer = inbox.get("steering")
+    if not isinstance(pointer, str) or not pointer.strip():
+        return {
+            "verified": False,
+            "pointer": pointer,
+            "resolved_path": None,
+            "reason": "STEERING_POINTER_MISSING_OR_INVALID",
+        }
+
+    pointer_path = Path(pointer)
+    if pointer_path.is_absolute():
+        return {
+            "verified": False,
+            "pointer": pointer,
+            "resolved_path": None,
+            "reason": "STEERING_POINTER_ABSOLUTE_REJECTED",
+        }
+
+    resolved = (repo_root / pointer_path).resolve()
+    try:
+        resolved.relative_to(repo_root)
+    except ValueError:
+        return {
+            "verified": False,
+            "pointer": pointer,
+            "resolved_path": str(resolved),
+            "reason": "STEERING_POINTER_ESCAPES_REPOSITORY",
+        }
+
+    present = resolved.is_file()
+    return {
+        "verified": present,
+        "pointer": pointer,
+        "resolved_path": str(resolved),
+        "reason": "OK" if present else "STEERING_TARGET_MISSING",
+    }
+
+
+def classify(
+    root: Path | None,
+    authority_present: dict[str, bool],
+    git_ok: bool,
+    steering_verified: bool,
+) -> str:
     if root is None:
         return "BLOCKED"
-    if all(authority_present.values()) and git_ok:
+    if all(authority_present.values()) and steering_verified and git_ok:
         return "NATIVE"
-    if all(authority_present.values()):
-        return "ADAPTED"
+    # A local adapter is not inferred from missing Git/authority evidence.
+    # Triggerword-3 explicitly requires DEGRADED when current Git/authority
+    # cannot be verified. ADAPTED is reserved for a separately documented,
+    # actually verified equivalent adapter.
     return "DEGRADED"
 
 
@@ -75,6 +140,11 @@ def main() -> int:
     authority_present = {
         path: bool(root and (root / path).is_file()) for path in AUTHORITY_FILES
     }
+    steering = (
+        resolve_dynamic_steering(root)
+        if root is not None
+        else {"verified": False, "pointer": None, "resolved_path": None, "reason": "REPOSITORY_ROOT_UNRESOLVED"}
+    )
 
     git_ok = False
     git_head = None
@@ -87,12 +157,25 @@ def main() -> int:
             status_ok, status_value = run_git(root, "status", "--porcelain")
             git_dirty = bool(status_value) if status_ok else None
 
+    authority_ready = all(authority_present.values()) and bool(steering["verified"])
+    installation_class = classify(root, authority_present, git_ok, bool(steering["verified"]))
+
+    if root is None:
+        next_action = "Resolve the repository root before any execution claim."
+    elif not authority_ready:
+        next_action = "Resolve missing/current authority surfaces, including the inbox-selected steering file."
+    elif not git_ok:
+        next_action = "Verify the current Git repository/head; remain DEGRADED until that succeeds."
+    else:
+        next_action = "Read current authority and task-relevant source only."
+
     result: dict[str, Any] = {
         "schema": "FRANKENSTEIN_HOST_PREFLIGHT/v1",
         "mode": "READ_ONLY_NO_NETWORK_NO_SECRETS",
         "root": str(root) if root else None,
         "markers": {m: bool(root and (root / m).exists()) for m in MARKERS},
         "authority_files": authority_present,
+        "dynamic_steering": steering,
         "capabilities": {
             "can_read_files": bool(root and os.access(root, os.R_OK)),
             "can_write_repo": bool(root and os.access(root, os.W_OK)),
@@ -106,15 +189,11 @@ def main() -> int:
             "can_receive_hooks_events": "NOT_PROBED"
         },
         "git": {"head": git_head, "dirty": git_dirty},
-        "installation_class": classify(root, authority_present, git_ok),
-        "next": (
-            "Read current authority and task-relevant source only."
-            if root and all(authority_present.values())
-            else "Resolve missing repository/authority surfaces before execution claims."
-        )
+        "installation_class": installation_class,
+        "next": next_action,
     }
     print(json.dumps(result, indent=2, sort_keys=True))
-    return 0 if result["installation_class"] != "BLOCKED" else 2
+    return 0 if installation_class != "BLOCKED" else 2
 
 
 if __name__ == "__main__":

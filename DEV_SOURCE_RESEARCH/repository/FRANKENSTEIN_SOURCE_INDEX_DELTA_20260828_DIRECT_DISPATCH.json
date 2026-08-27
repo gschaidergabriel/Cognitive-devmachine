@@ -11,6 +11,19 @@
     "provider_routes_admitted_observed": false,
     "together_authorized_runs_observed": 0
   },
+  "authority_mirror_conflict": {
+    "classification": ["CURRENT_SOURCE_CONFLICT", "STALE_MIRROR"],
+    "higher_precedence_surface": "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
+    "higher_precedence_observed": "schema 9.13, selected steering 9.13Q, FREE_ONLY/HARD_OFF, provider_routes_admitted=false, together authorized=0",
+    "lower_mirrors": [
+      "research_entity/rooms/PROGRAM_STATE.json",
+      "the artefact/manifest.json",
+      "research_entity/continuity/BOOTSTRAP_MINIMAL.json"
+    ],
+    "lower_mirror_observed": "still points to supervisor/authority epoch 8.78 in current source",
+    "resolution": "DO_NOT_AVERAGE; FOLLOW_NEWEST_INBOX_SELECTED_STEERING_FOR_CURRENT_EXECUTION CLAIMS; PRESERVE CONFLICT UNTIL MIRRORS ARE SUCCESSOR-DYNAMICALLY SYNCHRONIZED",
+    "runtime_credit_added": 0
+  },
   "new_negative_result": {
     "id": "FAIL-DIRECT-DISPATCH-DESTRUCTIVE-WHOLE-FILE-REWRITE",
     "evidence_class": [

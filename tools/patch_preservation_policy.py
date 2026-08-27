@@ -31,15 +31,15 @@ class PreservationError(ValueError):
 @dataclass(frozen=True)
 class Policy:
     max_deleted_fraction: float = 0.25
-    deleted_lines_floor: int = 0
+    deleted_lines_floor: int = 1
     max_added_fraction: float = 1.00
-    added_lines_floor: int = 0
+    added_lines_floor: int = 1
     max_net_shrink_fraction: float = 0.20
-    net_shrink_lines_floor: int = 0
+    net_shrink_lines_floor: int = 1
     max_old_changed_fraction: float = 0.30
-    old_changed_chars_floor: int = 0
+    old_changed_chars_floor: int = 64
     max_postimage_growth_fraction: float = 1.00
-    postimage_growth_chars_floor: int = 0
+    postimage_growth_chars_floor: int = 256
     max_analyzed_chars: int = MAX_ANALYZED_CHARS
 
     def validate(self) -> None:
@@ -227,7 +227,11 @@ def evaluate_worktree(
         }
         files.append(row)
 
-        if deleted_lines > policy.deleted_lines_floor and deleted_fraction > policy.max_deleted_fraction:
+        deletion_fraction_applies = (
+            deleted_lines > policy.deleted_lines_floor
+            or (before_lines > 0 and deleted_lines >= before_lines)
+        )
+        if deletion_fraction_applies and deleted_fraction > policy.max_deleted_fraction:
             violations.append({"path": target, "reason": "DELETION_FRACTION_EXCEEDED", "observed": deleted_fraction})
         if added_lines > policy.added_lines_floor and added_fraction > policy.max_added_fraction:
             violations.append({"path": target, "reason": "ADDITION_FRACTION_EXCEEDED", "observed": added_fraction})

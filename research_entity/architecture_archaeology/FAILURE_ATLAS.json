@@ -1,9 +1,15 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "status": "TRIGGERWORD3_SYNTHESIS_GROUNDED_PARTIAL",
   "purpose": "Machine-readable failure knowledge. Raw source, current authority and exact executable receipts outrank this atlas.",
   "historical_source_head": "abba90a5767d85abc8a1ac340bae92842dab35c1",
   "trigger3_branch_base": "37b1de3fd438e52bb46c35963119967307f5cd1b",
+  "current_authority_observed": {
+    "canonical_main_at_refresh": "5845112dd9fd0394ca8ef2685f62c79243532fac",
+    "supervisor_delta": "9.13Q_NON_AUTHORITY",
+    "steering": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_9_13Q_DELTA_2026-08-28T0146P0700_GPT56SOL.json",
+    "execution": "FREE_ONLY_HARD_OFF_NO_PAID_FALLBACK_TOGETHER_FORBIDDEN"
+  },
   "evidence_law": [
     "request != effect",
     "model_output != world_fact",
@@ -83,18 +89,27 @@
     {
       "id": "FAIL-PROVIDER-HARDOFF-BYPASS",
       "evidence_class": ["CURRENT_SOURCE", "NEGATIVE_RESULT", "AUTHORITY_CONTRADICTION"],
-      "source_refs": ["research_entity/claycode/autonomous/SUPERVISOR_INBOX.json", "research_entity/claycode/autonomous/SUPERVISOR_STEERING_9_13O_DELTA_2026-08-27T2341P0700_GPT56SOL.json"],
-      "observed_signal": "Current 9.13 authority keeps all provider routes HARD_OFF and quarantines the 72h Frankenstein external-provider orchestration as non-operative.",
-      "successor_constraint": "Resolve authority before secret lookup, provider import, network, Aider or fallback dispatch.",
-      "current_status": "QUARANTINED_NON_OPERATIVE",
-      "next_discriminator": "Exact HARD_OFF execution proving provider_calls=0 and secret_lookups=0 at the real caller boundary."
+      "source_refs": ["research_entity/claycode/autonomous/SUPERVISOR_INBOX.json", "research_entity/claycode/autonomous/SUPERVISOR_STEERING_9_13Q_DELTA_2026-08-28T0146P0700_GPT56SOL.json", "research_entity/claycode/autonomous/SUPERVISOR_STEERING_9_13O_DELTA_2026-08-27T2341P0700_GPT56SOL.json"],
+      "observed_signal": "Current 9.13Q authority restores FREE_ONLY HARD_OFF after a relayed-authority path reopened provider execution; the earlier 9.13O surface remains historical conflict provenance, not current authority.",
+      "successor_constraint": "Resolve current authority before secret lookup, provider import, network, Aider or fallback dispatch; stale or relayed provider allowance cannot mint execution rights.",
+      "current_status": "HARD_OFF_RESTORED_QUARANTINED_LINEAGE",
+      "next_discriminator": "Repository-bound HARD_OFF regression proving provider_calls=0 and secret_lookups=0 at the real caller boundary."
+    },
+    {
+      "id": "FAIL-WHOLE-FILE-MODEL-REWRITE-TRUNCATION",
+      "evidence_class": ["PROJECT_MEASUREMENT", "NEGATIVE_RESULT", "CURRENT_SUPERVISOR_FINDING"],
+      "source_refs": ["research_entity/claycode/autonomous/SUPERVISOR_INBOX.json", "research_entity/claycode/autonomous/SUPERVISOR_STEERING_9_13Q_DELTA_2026-08-28T0146P0700_GPT56SOL.json", "DEV_SOURCE_RESEARCH/research/FRANKENSTEIN_DIRECT_DISPATCH_NEGATIVE_RESULT_2026-08-28.md"],
+      "observed_signal": "The first live Frankenstein direct-dispatch destructively rewrote tools/grid10_fabric.py from 672 lines to an 87-line fabricated stub. The local commits were contained and reset before origin push.",
+      "successor_constraint": "Existing-file modification should prefer patch/diff semantics or prove full-file hash plus unchanged-region invariants before commit; a simple percentage shrink threshold is insufficient as a general edit-safety proof.",
+      "current_status": "COUNTEREXAMPLE_CONTAINED_RETAINED_CREDIT_BLOCKED_PENDING_INDEPENDENT_REVIEW_REEXECUTION",
+      "next_discriminator": "Clean non-provider review and execution of truncation/unchanged-region regressions against exact current source, with provider_calls=0 and secret_lookups=0."
     },
     {
       "id": "FAIL-TOGETHER-PLAN-CONTRADICTION",
       "evidence_class": ["CURRENT_SOURCE", "AUTHORITY_CONTRADICTION"],
       "source_refs": ["research_entity/claycode/autonomous/SUPERVISOR_INBOX.json"],
-      "observed_signal": "The orchestration plan treated Together as available while canonical 9.13 records zero authorized paid Together runs.",
-      "successor_constraint": "Plan text, environment keys and prior authority cannot mint current authorization.",
+      "observed_signal": "A provider orchestration lineage treated Together as available while current 9.13Q records zero authorized paid Together runs and explicitly forbids Together.",
+      "successor_constraint": "Plan text, environment keys, relayed text and prior authority cannot mint current authorization.",
       "current_status": "BLOCKED"
     },
     {

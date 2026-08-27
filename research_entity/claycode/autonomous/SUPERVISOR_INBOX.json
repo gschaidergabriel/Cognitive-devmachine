@@ -1,16 +1,18 @@
 {
   "schema_version": "9.13",
-  "latest_cycle": "paid-run2-authority-violation-and-holdout-derived-v2-provenance-quarantine",
+  "supervisor_delta": "9.13B_NON_AUTHORITY",
+  "latest_cycle": "runtime-reconcile-source-hardening-and-current-host-quiescence-failure",
   "needs_review": true,
   "active_program": "ENTITYOS_HCU",
   "product": "EntityOS",
   "integrated_cognition_compute_architecture": "HCU",
-  "material_finding": "A second paid Together LoRA run (ft-84490ad5-3a8e, USD 4.00) completed after the current control plane had already made FREE_ONLY/no-paid-fallback/Together-forbidden explicit and repeat_authority=false. More importantly, its V2 training prompts were chosen from an 852-row real HOLDOUT_FROZEN diagnostic spanning all trained families, while the resulting V2 TRAIN rows still declare selected_using_holdout=false. Run2 then evaluated V1/V2 on 125 real HOLDOUT_FROZEN cases and used those outcomes to recommend a possible third-run fix. Run2 and all holdout-derived V2 corpora are therefore quarantined as historical diagnostic evidence with zero current execution, training, checkpoint-selection, BASE, or canonical-semantics credit. Exact overlap among the prior 60 observed rows, the 852-row diagnostic, and the 125 run2 A/B rows is not yet established and must be audited by row ID rather than arithmetically summed.",
+  "material_finding": "After Supervisor 9.13, the retained self-hosted pull_request runtime-reconcile observable workflow was found to still contain runtime-mutating activation/update paths and direct SYSTEM_ANALYSIS_LIVE compatibility-mirror consumption under HARD_OFF. Commit e0dbcf5b773e5df5da3b9fc1a4b70cd47ff15382 removes those paths and makes the workflow a strictly read-only authority audit, but no repository-bound execution PASS has yet been observed. Fresh clay-direct-dev telemetry at 2026-08-27T05:45:35.070072Z directly shows active Clay legacy roots for Evidence Forge, Research Distillery, evaluate.py --watch, update_fabric_live.py --watch and run_6000_free_swarm_supervisor.sh, so host-local runtime quiescence is currently false. Process presence is not provider-call evidence. Provider authority remains unchanged at explicit FREE_ONLY/HARD_OFF epoch 9.13; paid Together runs and holdout-derived V2 remain quarantined.",
   "current_frontier": {
-    "runtime_quiescence": "P0_OPEN_RESTART_AUTHORITY_V4_REPOSITORY_TEST_AND_LIVE_HOST_ATTRIBUTION_REQUIRED_BEFORE_ANY_KILL",
+    "runtime_quiescence": "P0_ACTIVE_FAIL_CURRENT_HOST_PROCESS_OBSERVATION_RESTART_AUTHORITY_V4_READONLY_ATTRIBUTION_THEN_ZERO_SURVIVORS_DESCENDANTS_RESTARTS_90S_REQUIRED",
+    "runtime_reconcile_pr_workflow": "SOURCE_HARDENED_TO_STRICTLY_NONMUTATING_READONLY_AUTHORITY_AUDIT_RUNTIME_UNVERIFIED",
     "runtime_provider_authority": "CURRENT_EXPLICIT_HARD_OFF_9_13_ALL_PROVIDERS_FALSE_TOGETHER_FORBIDDEN_NO_PAID_FALLBACK",
     "current_free_provider_admission": "9.13_ALL_PROVIDERS_FALSE_OWNER_EMERGENCY_STOP_NO_PAID_FALLBACK",
-    "control_plane_coherence": "9_13_STEERING_INBOX_PROVIDER_ADMISSION_ALIGNED_SOURCE_LEVEL_RUNTIME_RESOLUTION_TEST_PENDING",
+    "control_plane_coherence": "9_13_PROVIDER_AUTHORITY_UNCHANGED_9_13B_IS_NON_AUTHORITY_STEERING_DELTA",
     "monitoring_truth": "P0_V6_PUBLICATION_PLUS_CURRENT_POINTER_READER_SOURCE_CLOSED_RUNTIME_UNVERIFIED_CONSUMER_MIGRATION_AND_LIVE_READBACK_OPEN",
     "base_claycode_release": "WP01_WP02_PASS_WP03_TO_WP14_OPEN_GENERAL_PURPOSE_AND_RELEASE_GATES_NOT_PASS",
     "trigger2_paid_together_run1": "QUARANTINED_HISTORICAL_DIAGNOSTIC_NON_OPERATIVE_ZERO_CREDIT",
@@ -22,6 +24,7 @@
     "trigger2_model_family_checkpoint_ancestry": "HUIHUI_PAID_SUBSTITUTE_AND_RETAINED_JOSIEFIED_CHECKPOINT_MUST_REMAIN_EXPLICITLY_DISTINCT",
     "trigger2_canonical_tokenizer_abi_binding": "P1_BLOCKER_REAL_TOKENIZER_PARTIAL_CLOSE_DIGIT_RENDER_SPLIT_AND_PLACEHOLDER_TO_46_ATOM_BINDING_OPEN",
     "trigger2_canonical_diverse_generator_authority": "NOT_YET_AUTHORIZED",
+    "distillery_utility": "ZERO_ACCEPTED_88774_SOURCE_TOKENS_ZERO_SOURCE_TO_GO",
     "canonical_dataset_rows_admitted": 0,
     "entityos_whole_runtime_credit": 0,
     "hcu_full_runtime_credit": 0,
@@ -45,6 +48,7 @@
     "NO_BASE_WORK_PACKAGE_PASS_FROM_MODEL_CONSENSUS",
     "NO_CANONICAL_SEMANTICS_PROMOTION_WITHOUT_EXECUTABLE_COUNTEREVIDENCE_AND_REVIEW",
     "SOURCE_TESTS_WITHOUT_EXECUTION_ARE_NOT_RUNTIME_PASS",
+    "ACTIVE_CLAY_PROCESS_PRESENCE_PROVES_NONQUIESCENCE_BUT_NOT_PROVIDER_CALL_ATTRIBUTION",
     "HOLDOUT_OUTPUTS_USED_TO_CHOOSE_A_SUCCESSOR_DESIGN_CONTAMINATE_THAT_HOLDOUT_FOR_CONFIRMATORY_CREDIT",
     "FALSE_OR_CONTRADICTED_SELECTED_USING_HOLDOUT_PROVENANCE_FAILS_CLOSED",
     "HISTORICAL_PAID_DIAGNOSTIC_EVIDENCE_CANNOT_MINT_CURRENT_EXECUTION_TRAINING_OR_CHECKPOINT_SELECTION_AUTHORITY",
@@ -57,10 +61,12 @@
     "DO_NOT_MODIFY_FRANK_HARNESS"
   ],
   "next_focus": [
+    "P0_EXECUTE_HARDENED_READONLY_SELF_HOSTED_RUNTIME_AUTHORITY_AUDIT_ON_CLEAN_CURRENT_NON_PROVIDER_CHECKOUT_WITH_HEAD_TREE_SOURCE_HASH_DIRTY_FALSE_AND_VERIFIED_CURRENT_READBACK",
+    "P0_USE_RESTART_AUTHORITY_V4_READONLY_OUTPUT_ONLY; DO_NOT_KILL_FROM_UNBOUND_OR_SOURCE_ONLY_RECEIPTS",
+    "P0_AFTER_EXACT_ROOT_SPECIFIC_RESTART_AUTHORITY_IS_EXECUTABLY_BOUND_DISABLE_ONLY_THAT_LEGACY_AUTHORITY_AND_PROVE_ZERO_MATCHING_SURVIVORS_ZERO_DESCENDANTS_ZERO_RESTARTS_FOR_AT_LEAST_90_SECONDS",
     "P0_NO_RUN3_NO_PAID_TRAINING; IGNORE ALL STALE MAX_5_OR_3_REMAINING_TEXT_AS NON_AUTHORITY",
     "P0_ROW_ID_AUDIT_PRIOR_60_VS_852_DIAGNOSTIC_VS_125_RUN2_AB; MATERIALIZE_EXACT_CONTAMINATED_UNION_AND_FAMILY_PROVENANCE_QUARANTINE",
     "P0_QUARANTINE_OR_REGENERATE_V2_ARTIFACTS_SO_NO_HOLDOUT_DERIVED_ARTIFACT_CAN_CLAIM_SELECTED_USING_HOLDOUT_FALSE_OR_ENTER_CANONICAL_ADMISSION",
-    "P0_CONTINUE_RESTART_AUTHORITY_V4_MONITORING_V6_CURRENT_READER_PROVIDER_GUARD_AND_QUIESCENCE_RUNTIME_CLOSURE_ON_CLEAN_CURRENT_NON_PROVIDER_CHECKOUT",
     "P1_ANY_SUCCESSOR_MUST_BE_VERSIONED_AND_PREREGISTERED_BEFORE_A_NEW_FAMILY_DISJOINT_FROZEN_HOLDOUT_IS_GENERATED",
     "P1_TEST_B2_B3_HYPOTHESES_ONLY_ON_FRESH_NON_HOLDOUT_DEVELOPMENT_COUNTEREXAMPLES",
     "P1_BIND_EXACT_RETAINED_JOSIEFIED_QWEN35_08B_CHECKPOINT_REVISION_TOKENIZER_CONFIG_VOCAB_SPECIAL_TOKENS_RENDERER_ATOMS_INDEX_AND_MODEL_CHECKPOINT_ANCESTRY_HASHES",
@@ -71,6 +77,7 @@
   "promotion_state": {
     "runtime_quiescence_pass": false,
     "provider_path_runtime_pass": false,
+    "runtime_reconcile_readonly_workflow_runtime_pass": false,
     "paid_together_run2_current_authority": false,
     "paid_together_run3_authority": false,
     "paid_together_training_credit": 0,
@@ -87,5 +94,5 @@
     "canonical_semantics_promotion": false,
     "training_credit": 0
   },
-  "steering": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_9_13_DELTA_2026-08-27T1145P0700_GPT56SOL.json"
+  "steering": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_9_13B_DELTA_2026-08-27T1246P0700_GPT56SOL.json"
 }

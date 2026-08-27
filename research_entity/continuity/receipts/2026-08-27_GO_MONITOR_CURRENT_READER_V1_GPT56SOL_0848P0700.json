@@ -1,0 +1,51 @@
+{
+  "schema": "CLAY_GO_MONITOR_CURRENT_READER/v1",
+  "date": "2026-08-27",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "go_target": "XENO_HCU_GO_TARGET_ARCHITECTURE",
+  "source_head_after_change": "c63bd977f77be140a043b2a61211d15f809eb350",
+  "source_tree_after_change": "f1b8e61c069c63ce0acf1a61426fa113e4453ede",
+  "frontier_before": "P0_IMPLEMENT_PRODUCTION_FAIL_CLOSED_CURRENT_POINTER_READER_VERIFY_MANIFEST_GENERATION_AND_PER_FILE_HASHES_REJECT_PATH_ESCAPE_MISSING_TAMPER_AND_MIGRATE_AUTHORITY_RUNTIME_CREDIT_CONSUMERS_OFF_COMPATIBILITY_MIRRORS",
+  "implemented": {
+    "reader": "tools/system_analysis_current_reader_v1.py",
+    "tests": "tests/test_system_analysis_current_reader_v1.py",
+    "rules": [
+      "SYSTEM_ANALYSIS_CURRENT.json is the only authority-bearing entry point",
+      "generation_root must equal publication_generations/<publication_generation> and remain inside free swarm",
+      "pointer manifest_sha256 must match MANIFEST.json bytes",
+      "manifest generation must match pointer generation",
+      "manifest file set is exact and fixed",
+      "every generation file sha256 must match manifest",
+      "JSON artifacts must bind the same publication_generation",
+      "compatibility mirrors cannot override the authoritative generation",
+      "control_plane_coherent=false remains fail-closed for authority"
+    ]
+  },
+  "adversarial_tests_added": [
+    "path escape",
+    "manifest tamper",
+    "generation file tamper",
+    "missing generation file",
+    "generation transplant",
+    "compatibility mirror override attempt",
+    "incoherent publication authority"
+  ],
+  "execution_attempt": {
+    "attempted": true,
+    "surface": "local container tool",
+    "result": "INFRASTRUCTURE_CLIENT_ERROR_BEFORE_TEST_EXECUTION",
+    "runtime_credit": 0
+  },
+  "credit_change": {
+    "monitoring_reader_source_credit": true,
+    "monitoring_reader_repository_test_credit": 0,
+    "monitoring_truth_runtime_credit": 0,
+    "runtime_quiescence_pass": false,
+    "physical_grid10_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "training_credit": 0
+  },
+  "next_exact_action": "Execute test_system_analysis_current_reader_v1.py together with restart-authority v3/v4 and monitoring v4/v5/v6 tests on one clean current non-provider checkout; then migrate authority/runtime-credit consumers from compatibility mirrors to this verified reader before switching retained publisher to v6."
+}

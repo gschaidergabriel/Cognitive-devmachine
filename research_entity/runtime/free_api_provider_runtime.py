@@ -498,6 +498,7 @@ def _has_semantic_text(value: str) -> bool:
         )
         and unicodedata.category(character) != "Cf"
         and unicodedata.category(character) not in {"Mn", "Mc", "Me"}
+        and unicodedata.category(character) != "Co"
         and not _is_unicode_noncharacter(character)
         for character in value
     )

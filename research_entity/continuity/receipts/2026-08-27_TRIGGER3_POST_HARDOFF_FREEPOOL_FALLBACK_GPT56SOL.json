@@ -1,0 +1,62 @@
+{
+  "schema": "TRIGGERWORD3_POST_HARDOFF_PROVIDER_ACTIVITY_RECEIPT/v1",
+  "evidence_class": "NEGATIVE_RESULT",
+  "lifecycle": "MEASURED_CURRENT_GIT_PROVENANCE_ZERO_RUNTIME_CREDIT",
+  "observed_date": "2026-08-27",
+  "organ": "GPT-5.6 Sol triggerword-3 curation organ",
+  "canonical_main_at_receipt_branch_reentry": "2701063549a803ebbfe926ad1f00c94ffb9f3f09",
+  "authority": {
+    "inbox_path": "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
+    "inbox_blob_sha_observed": "169477dca8f3b5fe673c6238d47fa95077e4449a",
+    "schema_version": "9.13",
+    "supervisor_delta": "9.13O_NON_AUTHORITY",
+    "runtime_provider_authority": "CURRENT_EXPLICIT_HARD_OFF_9_13_ALL_PROVIDERS_FALSE_TOGETHER_FORBIDDEN_NO_PAID_FALLBACK",
+    "provider_routes_admitted": false,
+    "free_swarm_owner_emergency_stop": true,
+    "together_forbidden": true,
+    "remaining_together_paid_runs_authorized": 0
+  },
+  "preceding_frankenstein_entrypoint_closure": {
+    "commit": "3c3dbe5020f57065f47bd4d0a2dce3c537128797",
+    "committed_at": "2026-08-27T16:59:37Z",
+    "scope": "FRANKENSTEIN_SUPPORTED_ENTRYPOINT_SOURCE_LOCAL_UNIT_CLOSURE_ONLY",
+    "reported_tests": "10_OF_10_PASS_LOCAL_FOCUSED",
+    "does_not_claim": [
+      "system_wide_freepool_caller_closure",
+      "provider_runtime_pass",
+      "runtime_quiescence_pass"
+    ]
+  },
+  "observed_post_closure_event": {
+    "commit": "05c66f47495b22b5366e1471d842e77e5ca174ba",
+    "authored_at": "2026-08-27T17:03:19Z",
+    "committed_at": "2026-08-27T17:03:23Z",
+    "commit_author": "harness-mistral-small",
+    "path": "research_entity/topic_packets/fallback-runs/paket-1787850064289-324764/PROVENANCE.json",
+    "origin_actor": "freepool-fallback-secondary",
+    "provider_claim": "NVIDIA NIM / Mistral AI (free-tier pool)",
+    "runtime_model_claim": "mistral-small",
+    "paket_id": "paket-1787850064289-324764",
+    "session_id": "harness-sess-1787850064289-4e0496",
+    "fallback_reason_scope": "post-build Frankenstein package hardening through Aider/free-pool fallback"
+  },
+  "adjudication": {
+    "finding": "A provider-backed FreePool fallback provenance commit landed after the Frankenstein supported-entrypoint HARD_OFF closure while canonical 9.13 still had all provider routes false. This is consistent with and strengthens the current Supervisor Inbox finding that the real external FreePool caller boundary remains open outside the newly gated Frankenstein entrypoints.",
+    "system_wide_hardoff_closed": false,
+    "frankenstein_supported_entrypoint_gate_falsified": false,
+    "reason_not_falsified": "The observed fallback is evidence of an external Harness/FreePool caller path; the 3c3 closure explicitly had narrower source/local-unit supported-entrypoint scope.",
+    "current_p0_boundary": "stern.py -> harness_aider.py -> last-resort/llm.py",
+    "required_next_gate": "Canonical authority must be checked before secret lookup, provider import, network or Aider/external fallback at the real external caller boundary, then a clean HARD_OFF receipt must show provider_calls=0 and secret_lookups=0 without modifying Frank Harness.",
+    "provider_runtime_credit_added": 0,
+    "hcu_runtime_credit_added": 0,
+    "jspace_model_runtime_credit_added": 0,
+    "training_credit_added": 0,
+    "whole_product_credit_added": 0
+  },
+  "epistemic_boundary": {
+    "git_provenance_is_not_payment_proof": true,
+    "provider_global_free_label_is_not_concrete_economic_admission": true,
+    "current_canonical_inbox_explicitly_treats_repeated_post_hardoff_fallback_commits_as_real_caller_boundary_bypass": true,
+    "do_not_replay_or_probe_provider_to_confirm": true
+  }
+}

@@ -1,0 +1,105 @@
+{
+  "schema": "FRANKENSTEIN_AI_ENTRY_INSTALL_CONTRACT/v2",
+  "purpose": "Capability-first Frankenstein/EntityOS repository entry contract. No root scan, guessed path, provider call, secret lookup, or self-attested NATIVE promotion.",
+  "authority": {
+    "persistent_research_entity": "Clay",
+    "product": "EntityOS",
+    "integrated_cognition_compute_architecture": "HCU",
+    "current_state_rule": "Refresh current main, CLAY_EXECUTION_AUTHORITY.md, research_entity/claycode/autonomous/SUPERVISOR_INBOX.json, and the steering selected by that inbox before execution or present-tense authority claims.",
+    "historical_text_never_self_authorizes": true
+  },
+  "path_resolution": {
+    "repository_root_if_inside_git_checkout": "git rev-parse --show-toplevel",
+    "cwd_is_authority": false,
+    "downloads_assumption_allowed": false,
+    "home_assumption_allowed": false,
+    "attachment_mount_assumption_allowed": false,
+    "root_scan_required": false
+  },
+  "required_first_reads": [
+    "AI_START_HERE_DO_NOT_SCAN_REPO/README.md",
+    "HUMAN_READ_THIS/README.md",
+    "DEV_SOURCE_RESEARCH/README.md"
+  ],
+  "required_current_state_reads_before_execution": [
+    "CLAY_EXECUTION_AUTHORITY.md",
+    "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
+    "<steering file selected by SUPERVISOR_INBOX.json>"
+  ],
+  "discovery_helper": {
+    "path": "AI_START_HERE_DO_NOT_SCAN_REPO/detect_install_mode.sh",
+    "scope": "READ_ONLY_DISCOVERY",
+    "network": false,
+    "provider_call": false,
+    "secret_lookup": false,
+    "promotion_credit": 0,
+    "unknown_fields_must_remain_unknown": true
+  },
+  "capabilities_to_resolve": [
+    "filesystem_read",
+    "filesystem_write_if_needed",
+    "shell_or_process_execution_if_needed",
+    "git_read",
+    "git_write_if_needed",
+    "lifecycle_hook_firing_if_claimed",
+    "cross_session_durable_state_if_claimed",
+    "effect_result_receipt_if_claimed",
+    "project_connector_or_tool_access"
+  ],
+  "classification": {
+    "NATIVE": {
+      "meaning": "Required lifecycle, durable-state, and claimed effect/result boundaries work through the host's normal integration path and were independently observed at the claimed scope.",
+      "minimum_evidence": [
+        "real lifecycle event triggered",
+        "receipt produced by the lifecycle mechanism itself",
+        "durable state survives the required restart/re-entry boundary when persistence is claimed",
+        "actual effect/result receipt plus outcome re-entry when effects are claimed"
+      ],
+      "forbidden_shortcuts": [
+        "boolean command-line flag",
+        "model self-report",
+        "copied config file",
+        "source existence",
+        "requested write without observed durable write",
+        "chat continuity",
+        "manually authored receipt that is not produced or verified by the claimed lifecycle/effect mechanism"
+      ]
+    },
+    "ADAPTED": "Equivalent useful behavior is verified through a host-specific adapter, while one or more native lifecycle boundaries are absent or not native.",
+    "DEGRADED": "Useful subset works, but one or more required lifecycle/state/effect capabilities are absent or remain unverified.",
+    "BLOCKED": "A required capability or current authority is absent, denied, ambiguous, or cannot be safely established."
+  },
+  "host_routes": {
+    "claude_code": "Detect actual checkout, shell, hook, durable-state and receipt behavior; do not infer from product name.",
+    "codex_cli": "Detect actual checkout, shell, hook, durable-state and receipt behavior; do not infer from product name.",
+    "hermes_agent": "Detect actual workspace/tool/lifecycle surfaces; missing persistent lifecycle is DEGRADED or ADAPTED, not NATIVE.",
+    "chatgpt_web": "Use actually connected repository/file/tool surfaces; source writes are not runtime installation and no local daemon is assumed.",
+    "claude_web": "Use actually exposed project/file/tool surfaces; no local path, hook or runtime is assumed.",
+    "grok_web": "Use actually exposed project/file/tool surfaces; no local path, hook or runtime is assumed.",
+    "generic": "Probe capabilities first and classify only from observed boundaries."
+  },
+  "promotion_fences": [
+    "UNKNOWN_NEVER_UPGRADES_TO_TRUE",
+    "SOURCE_EXISTENCE_IS_NOT_HOOK_FIRING",
+    "WRITE_REQUEST_IS_NOT_DURABLE_WRITE",
+    "MODEL_OUTPUT_IS_NOT_EFFECT_RECEIPT",
+    "REQUEST_IS_NOT_EFFECT",
+    "CHAT_CONTINUITY_IS_NOT_LOCAL_PERSISTENT_STATE",
+    "DISCOVERY_HELPER_PASS_IS_NOT_INSTALLATION_PASS",
+    "PROVIDER_HARD_OFF_IS_NOT_INSTALLATION_FAILURE",
+    "OLD_PROVIDER_ALLOWLIST_IS_NOT_CURRENT_EXECUTION_AUTHORITY",
+    "INSTALLATION_PASS_GRANTS_ZERO_ENTITYOS_HCU_JSPACE_MODEL_TRAINING_CREDIT"
+  ],
+  "acceptance_sequence": [
+    "resolve actual repository identity",
+    "resolve current authority",
+    "detect only required host capabilities",
+    "trigger the real lifecycle boundary if native lifecycle is claimed",
+    "observe mechanism-produced receipt",
+    "verify durable state across required re-entry if claimed",
+    "verify actual effect/result and outcome re-entry if effects are claimed",
+    "classify exactly NATIVE, ADAPTED, DEGRADED, or BLOCKED",
+    "record missing/unverified boundaries without upgrading them"
+  ],
+  "evidence_boundary": "This contract and the discovery helper define/inspect an installation surface only. They mint zero provider-runtime, whole EntityOS/HCU, full HCU, GRID10, Global J-Space, model, or training credit."
+}

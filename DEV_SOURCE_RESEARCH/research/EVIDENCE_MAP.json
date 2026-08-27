@@ -1,0 +1,231 @@
+{
+  "schema": "FRANKENSTEIN_TRIGGER3_EVIDENCE_MAP/v1",
+  "generated_for_trigger": "triggerwort 3",
+  "reentry_main": "854f6bc87780f4a5242489a6c807d186b16a8c3d",
+  "authority_seen": {
+    "supervisor_inbox_schema": "9.13",
+    "selected_steering": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_9_13O_DELTA_2026-08-27T2341P0700_GPT56SOL.json",
+    "provider_state": "FREE_ONLY_HARD_OFF_ALL_PROVIDER_ROUTES_FALSE_TOGETHER_FORBIDDEN_NO_PAID_FALLBACK"
+  },
+  "evidence_classes": [
+    "CURRENT_SOURCE",
+    "HISTORICAL_SOURCE",
+    "PROJECT_MEASUREMENT",
+    "REPRODUCED",
+    "CONTRADICTED",
+    "BLOCKED",
+    "PREPARED_NOT_RUN",
+    "ADOPTED",
+    "RETIRED",
+    "EXTERNAL_PRIMARY",
+    "INFERENCE",
+    "OPEN_HYPOTHESIS",
+    "NEGATIVE_RESULT"
+  ],
+  "claims": [
+    {
+      "id": "current-product-entityos-hcu",
+      "claim": "EntityOS is the current product and HCU is the current integrated cognition/compute architecture.",
+      "class": ["CURRENT_SOURCE", "ADOPTED"],
+      "sources": [
+        "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
+        "research_entity/continuity/BOOTSTRAP_MINIMAL.json",
+        "research_entity/rooms/PROGRAM_STATE.json"
+      ],
+      "confidence": 0.99,
+      "falsifier": "A newer explicit owner authority or newer admitted supervisor authority changes the product/architecture identity."
+    },
+    {
+      "id": "whole-runtime-credit-zero",
+      "claim": "Whole EntityOS runtime credit and full HCU runtime credit remain zero at the 9.13 re-entry used by this Trigger-3 pass.",
+      "class": ["CURRENT_SOURCE"],
+      "sources": ["research_entity/claycode/autonomous/SUPERVISOR_INBOX.json"],
+      "confidence": 0.99,
+      "falsifier": "A newer admitted exact-source runtime acceptance receipt at whole-product/full-HCU scope."
+    },
+    {
+      "id": "training-credit-zero",
+      "claim": "Training credit remains zero at this re-entry.",
+      "class": ["CURRENT_SOURCE"],
+      "sources": [
+        "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
+        "research_entity/claycode/autonomous/SUPERVISOR_STEERING_9_13O_DELTA_2026-08-27T2341P0700_GPT56SOL.json"
+      ],
+      "confidence": 0.99,
+      "falsifier": "A newer authority-admitted training result satisfying the declared promotion/retention gates."
+    },
+    {
+      "id": "distillery-zero",
+      "claim": "Latest confirmed Distillery accepted dataset tokens are zero.",
+      "class": ["CURRENT_SOURCE", "NEGATIVE_RESULT"],
+      "sources": ["research_entity/claycode/autonomous/SUPERVISOR_STEERING_9_13O_DELTA_2026-08-27T2341P0700_GPT56SOL.json"],
+      "measurement": "0 accepted dataset tokens / 88774 collected source tokens",
+      "confidence": 0.99,
+      "falsifier": "A newer exact persistent Distillery receipt with accepted_dataset_tokens > 0 and replay-idempotence evidence."
+    },
+    {
+      "id": "frankenstein-orchestration-source-real",
+      "claim": "The current main contains source for Frankenstein package-dispenser, Bauleiter and Bugfixer orchestration.",
+      "class": ["CURRENT_SOURCE"],
+      "sources": [
+        "research_entity/topic_packets/frankenstein-master-cognition-concept/frankenstein_packages_v1.py",
+        "research_entity/topic_packets/frankenstein-master-cognition-concept/frankenstein_orchestrator_v1.py",
+        "research_entity/topic_packets/frankenstein-master-cognition-concept/frankenstein_bugfix_v1.py",
+        "commit:854f6bc87780f4a5242489a6c807d186b16a8c3d"
+      ],
+      "confidence": 0.99,
+      "falsifier": "Source removed or superseded on a newer current main; historical existence remains true."
+    },
+    {
+      "id": "frankenstein-orchestration-quarantined",
+      "claim": "The current 72h Bauleiter/Bugfixer provider-calling orchestration is non-operative under current 9.13 HARD_OFF authority.",
+      "class": ["CURRENT_SOURCE", "BLOCKED", "NEGATIVE_RESULT"],
+      "sources": [
+        "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
+        "research_entity/claycode/autonomous/SUPERVISOR_STEERING_9_13O_DELTA_2026-08-27T2341P0700_GPT56SOL.json",
+        "research_entity/topic_packets/frankenstein-master-cognition-concept/frankenstein_orchestrator_v1.py",
+        "research_entity/topic_packets/frankenstein-master-cognition-concept/frankenstein_bugfix_v1.py"
+      ],
+      "confidence": 0.99,
+      "falsifier": "A newer explicit authority re-admits the routes and/or a current caller-boundary gate proves the required authority semantics before secrets/import/network/dispatch."
+    },
+    {
+      "id": "grid10-thread-ab",
+      "claim": "On the measured four-process/four-vCPU topology, one intra-op thread/process outperformed two, while four completed no samples within experiment timeouts.",
+      "class": ["PROJECT_MEASUREMENT", "NEGATIVE_RESULT"],
+      "sources": ["research_entity/claycode/autonomous/SUPERVISOR_STEERING_9_13O_DELTA_2026-08-27T2341P0700_GPT56SOL.json"],
+      "measurement": {
+        "1_thread_avg_seconds_per_call": 8.3197,
+        "1_thread_samples": 12,
+        "2_threads_avg_seconds_per_call": 23.1806,
+        "2_threads_samples": 12,
+        "4_threads_completed_samples": 0
+      },
+      "scope": "4 concurrent processes / 4 vCPU diagnostic topology only",
+      "confidence": 0.98,
+      "falsifier": "Matched rerun at the exact same topology/source shows materially different ordering beyond declared variance; other topologies require their own measurement."
+    },
+    {
+      "id": "hyperposition-gwt-grf-partial",
+      "claim": "Hyperposition/GWT/GRF has partial component evidence but not physical-grid/full-system promotion.",
+      "class": ["CURRENT_SOURCE", "BLOCKED"],
+      "sources": ["research_entity/00_CURRENT/latest/hyperposition-gwt-grf.md"],
+      "confidence": 0.95,
+      "falsifier": "New exact physical-grid/full-path evidence promotes the declared scope."
+    },
+    {
+      "id": "unifieddb-first-accessible-git",
+      "claim": "The first UnifiedDB foundation commit located by this Trigger-3 accessible-Git search is 08793cdecdd8a54df06daedd206ff55688c24381 on 2026-08-08.",
+      "class": ["HISTORICAL_SOURCE"],
+      "sources": ["commit:08793cdecdd8a54df06daedd206ff55688c24381"],
+      "confidence": 0.95,
+      "boundary": "first verified in the search used here, not necessarily conceptual creation date",
+      "falsifier": "An earlier reachable commit/source containing the UnifiedDB foundation is located."
+    },
+    {
+      "id": "grf-first-accessible-git",
+      "claim": "The first GRF commit located by this Trigger-3 accessible-Git search is 7367f0e4cbac47d4f1782fd0d2e3f1354808ce6f on 2026-08-10, adding an executable C-GRF candidate contract.",
+      "class": ["HISTORICAL_SOURCE"],
+      "sources": ["commit:7367f0e4cbac47d4f1782fd0d2e3f1354808ce6f"],
+      "confidence": 0.9,
+      "boundary": "first verified in the search used here; candidate/executable source is not broad runtime evidence",
+      "falsifier": "An earlier reachable GRF source/commit is located."
+    },
+    {
+      "id": "frankenstein-v07-gap",
+      "claim": "This Trigger-3 pass did not locate verifiable current repository evidence for the literal release identity Frankenstein v0.7.",
+      "class": ["BLOCKED", "OPEN_HYPOTHESIS"],
+      "sources": ["repository search: Frankenstein v0.7", "repository search: v0.7"],
+      "confidence": 0.95,
+      "falsifier": "Locate an exact tag, commit, manifest or source file binding v0.7 to an artifact/tree."
+    },
+    {
+      "id": "emergent-retrieval-definition",
+      "claim": "Emergent Retrieval is the project term for relevance produced when independently stored evidence dimensions overlap at query time; it does not mean information appears from nowhere.",
+      "class": ["ADOPTED", "CURRENT_SOURCE"],
+      "sources": [
+        "research_entity/harness/reference/unifieddb_emergent_compact.py",
+        "research_entity/harness/reference/unifieddb_emergent_exact_topk.py",
+        "research_entity/harness/reference/unifieddb_emergent_incremental.py"
+      ],
+      "confidence": 0.95,
+      "falsifier": "A newer explicit owner/project definition supersedes this term."
+    },
+    {
+      "id": "emergent-retrieval-utility-hypothesis",
+      "claim": "Combining independent evidence dimensions can improve useful retrieval over the strongest single-axis baseline on realistic project tasks.",
+      "class": ["OPEN_HYPOTHESIS"],
+      "confidence": 0.70,
+      "counterhypothesis": "Any observed gain is explained by a larger candidate budget, leakage, or semantic similarity alone.",
+      "falsifier": "Preregistered matched retrieval benchmark fails to improve task-relevant precision/recall/decision utility after controlling candidate budget and leakage."
+    },
+    {
+      "id": "reflection-substrate-hypothesis",
+      "claim": "Useful reflective agency improves when a capable model is coupled to typed persistent state, memory, perception, effect receipts and verified outcome re-entry plus an explicit reflection exit policy.",
+      "class": ["OPEN_HYPOTHESIS", "INFERENCE"],
+      "confidence": 0.75,
+      "counterhypothesis": "A simpler scratchpad/tool loop with the same model and budget performs equally well, making the specific substrate unnecessary.",
+      "falsifier": "Matched end-to-end tasks show no improvement in recovery, state consistency, effect correctness, repeated-task adaptation or calibrated abstention versus the simpler baseline."
+    },
+    {
+      "id": "jspace-causal-control-hypothesis",
+      "claim": "A model-specific vector-control ABI can produce stable label-independent semantic control across counterbalanced tasks.",
+      "class": ["OPEN_HYPOTHESIS", "CONTRADICTED"],
+      "confidence": 0.35,
+      "counterhypothesis": "Observed effects are prompt/token/nuisance routing or activation transport without general semantic binding.",
+      "falsifier": "Preregistered model/runtime-specific dynamic-codebook interventions with nuisance/off-target controls and frozen holdouts fail to change behavior in the predicted semantic direction."
+    },
+    {
+      "id": "hyperposition-utility-hypothesis",
+      "claim": "Preserving competing causal candidates until an evidence-bearing discriminator improves reversal/calibration over early single-candidate collapse.",
+      "class": ["OPEN_HYPOTHESIS"],
+      "confidence": 0.65,
+      "counterhypothesis": "The extra branching mainly adds latency and complexity without outcome gains.",
+      "falsifier": "Matched tasks show no improvement in calibration, reversal accuracy or downstream outcome quality at comparable resource budgets."
+    },
+    {
+      "id": "external-react",
+      "claim": "ReAct is a methodological precedent for interleaving reasoning with actions that gather external information.",
+      "class": ["EXTERNAL_PRIMARY"],
+      "source": "https://arxiv.org/abs/2210.03629",
+      "project_credit": 0
+    },
+    {
+      "id": "external-reflexion",
+      "claim": "Reflexion is a methodological precedent for feedback-driven reflection stored in episodic memory to affect later trials.",
+      "class": ["EXTERNAL_PRIMARY"],
+      "source": "https://arxiv.org/abs/2303.11366",
+      "project_credit": 0
+    },
+    {
+      "id": "external-variable-binding",
+      "claim": "Wu, Geiger and Milliere (ICML 2025) show a Transformer in a controlled symbolic-program setting progressing toward systematic variable dereferencing, studied with causal interventions.",
+      "class": ["EXTERNAL_PRIMARY"],
+      "source": "https://proceedings.mlr.press/v267/wu25j.html",
+      "project_credit": 0,
+      "boundary": "not Qwen/EntityOS-specific evidence"
+    },
+    {
+      "id": "external-sqlite-wal",
+      "claim": "SQLite WAL is an implementation mechanism for journaling/checkpointing database changes; it does not define EntityOS semantics.",
+      "class": ["EXTERNAL_PRIMARY"],
+      "source": "https://www.sqlite.org/wal.html",
+      "project_credit": 0
+    },
+    {
+      "id": "external-nvidia-unified-memory",
+      "claim": "CUDA Unified Memory is used only as a systems analogy for reducing explicit CPU/GPU memory ownership/copy boundaries; hardware coherence is not database/evidence semantics.",
+      "class": ["EXTERNAL_PRIMARY"],
+      "source": "https://docs.nvidia.com/cuda/cuda-programming-guide/02-basics/understanding-memory.html",
+      "project_credit": 0
+    }
+  ],
+  "non_promotions": {
+    "whole_entityos_runtime": 0,
+    "full_hcu_runtime": 0,
+    "physical_grid10_promotion": 0,
+    "canonical_semantics": 0,
+    "provider_path_runtime": 0,
+    "training": 0
+  }
+}

@@ -1110,7 +1110,7 @@ def _execute_chat_locked(
             if system_fingerprint is not None:
                 if (
                     not _is_unicode_scalar_text(system_fingerprint)
-                    or not system_fingerprint.strip()
+                    or not _has_semantic_text(system_fingerprint)
                     or system_fingerprint != system_fingerprint.strip()
                     or _contains_unicode_control_character(system_fingerprint)
                     or len(system_fingerprint)

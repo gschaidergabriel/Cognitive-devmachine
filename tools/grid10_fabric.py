@@ -539,7 +539,11 @@ class Fabric:
             row = con.execute("SELECT version FROM regulators WHERE name=?", (name,)).fetchone()
             current_version = row["version"] if row is not None else 0
             if expected_version is not None and expected_version != current_version:
-                con.execute("ROLLBACK")
+                # NOTE: no explicit ROLLBACK here -- raising lets the except block
+                # below do it exactly once (found+fixed 2026-08-27: an explicit
+                # ROLLBACK here plus the except block's ROLLBACK was a real double-
+                # rollback, sqlite3.OperationalError "cannot rollback - no
+                # transaction is active", caught by this file's own test suite).
                 raise FabricError("REGULATOR_CAS_FAILED")
             new_version = current_version + 1
             ts_ms = time.time() * 1000

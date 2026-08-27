@@ -1,0 +1,33 @@
+{
+  "schema": "LARGE_SCALE_EVAL_NOTE/v1",
+  "packet_id": "trigger2-together-diagnostic-finetune-20260827",
+  "topic": "Full-scale honest evaluation of the trigger2 diagnostic model+shell against 852 real never-seen HOLDOUT_FROZEN rows (up to 60/family, all 16 trained families), run live in the claylab sandbox",
+  "scope": "2534 total HOLDOUT_FROZEN rows exist across the 16 trained B0-B6 files; running literally all of them on CPU would take ~105 minutes. Ran a stratified sample instead: every real HOLDOUT_FROZEN row up to a cap of 60/family (852 rows total, full coverage of every family, none capped below its true size except B0_READ at 12/12, B2_STALE at 36/36, B6_CLAUDE_HANDOFF at 48/48, B6_DB_VS_SIM at 36/36 which have fewer than 60 holdout rows total -- those are fully exhaustive, not sampled).",
+  "raw_data": "SHELL_WRAPPER_LARGE_852_RESULTS_20260827.jsonl in this packet directory -- one real generation + shell-validation result per line, all 852.",
+  "per_family_results": {
+    "B0_READ_BASELINE": {"n": 12, "validated_pct": 100, "correct_pct": 33, "note": "at chance for a 3-way ALLOW/DENY/ABSTAIN task -- not really learned"},
+    "B0_WRITE_BASELINE": {"n": 60, "validated_pct": 98, "correct_pct": 52, "note": "well above chance (~7% for 15-way ordinal)"},
+    "B1_TRAIN_BALANCED_2ORDER": {"n": 60, "validated_pct": 25, "correct_pct": 0, "note": "sometimes produces a real atom, never the right one"},
+    "B2_MID_EPISODE_REMAP": {"n": 60, "validated_pct": 15, "correct_pct": 0, "note": "same shape as B1"},
+    "B2_PRIOR_OVERRIDE": {"n": 60, "validated_pct": 100, "correct_pct": 0, "note": "CONFIRMED systematic bug at full scale: always answers with a codebook KEY (ALLOW/DENY/ABSTAIN) instead of the VALUE it maps to -- 60/60, not a sampling artifact"},
+    "B2_STALE_BINDING_REJECTION": {"n": 36, "validated_pct": 100, "correct_pct": 50, "note": "well above chance"},
+    "B3_MULTI_HOP_DEREF": {"n": 60, "validated_pct": 0, "correct_pct": 0, "note": "CONFIRMED total collapse at full scale -- every single generation derailed"},
+    "B3_UNRESOLVABLE_CHAIN_REJECTION": {"n": 60, "validated_pct": 0, "correct_pct": 0, "note": "same total collapse"},
+    "B4_CAPACITY_INTERFERENCE": {"n": 60, "validated_pct": 0, "correct_pct": 0, "note": "CONFIRMED total collapse -- consistently echoes the queried entity name instead of its mapped atom"},
+    "B5_VARIABLE_N_EQUIVARIANCE": {"n": 60, "validated_pct": 0, "correct_pct": 0, "note": "CONFIRMED total collapse -- consistently emits a bare single letter instead of the ordinal atom"},
+    "B6_CLAUDE_HANDOFF_REENTRY": {"n": 48, "validated_pct": 100, "correct_pct": 88, "note": "strongest family in the whole curriculum"},
+    "B6_DB_VS_SIM": {"n": 36, "validated_pct": 100, "correct_pct": 39, "note": "well above chance (~17% for 6-way)"},
+    "B6_GWT_CAUSAL_REENTRY": {"n": 60, "validated_pct": 100, "correct_pct": 48, "note": "well above chance (~33% for 3-way P/Q/R)"},
+    "B6_GWT_COMPETITION_BROADCAST": {"n": 60, "validated_pct": 100, "correct_pct": 55, "note": "well above chance"},
+    "B6_GWT_UPTAKE": {"n": 60, "validated_pct": 100, "correct_pct": 45, "note": "well above chance (~33% for 3-way alpha/beta/gamma)"},
+    "B6_HYPERPOSITION_EVIDENCE_AUTHORITY": {"n": 60, "validated_pct": 100, "correct_pct": 80, "note": "second-strongest family"}
+  },
+  "totals": {"n": 852, "validated": 515, "validated_pct": 60.4, "correct": 246, "correct_pct": 28.9},
+  "the_real_finding_not_just_the_number": "The result is sharply BIMODAL, not uniformly mediocre. Two clean groups: (A) direct-classification/system-integration families -- all of B6 (Claude-handoff, DB-vs-sim, GWT x3, Hyperposition), plus B0_WRITE and B2_STALE_BINDING_REJECTION -- validate at ~100% and score 33-88% correct, meaningfully to strongly above chance on every one. (B) indirection/binding/multi-step families -- B1 (arbitrary binding), B2_MID_EPISODE_REMAP, B2_PRIOR_OVERRIDE, both B3 variants (multi-hop dereference), B4 (capacity/interference), B5 (variable-N equivariance) -- are at or near 0% correct, several at literal 0% shell-validation (every single generation rejected). This is coherent, not noise: group (B) is exactly the set of families whose whole research point was teaching NEW indirection/binding mechanics the base model has no pretrained prior for, versus group (A) which is closer to direct in-context classification given an already-present answer. One epoch of light LoRA on 9544 rows taught the easier half convincingly and did not move the harder half off its pretrained priors at all.",
+  "confirmed_bugs_grounded_in_full_data": [
+    "B2_PRIOR_OVERRIDE codebook-key-leak: 60/60 rows, always answers with the ALLOW/DENY/ABSTAIN key instead of the ABI_ACCEPTED_ORDINAL value it maps to. Root cause hypothesis (same shape as the earlier B3 finding): the prompt's own surface text contains those exact words as codebook keys, and the model echoes a nearby key instead of performing the lookup.",
+    "B3 (both variants) total code-derailment collapse: 120/120 rows, 0 validated. Confirms the earlier smaller-sample finding (pointer/dereference/CHAIN vocabulary triggers a strong pretrained code-completion prior) at full statistical confidence, not an artifact of a small sample.",
+    "B4 entity-echo and B5 bare-letter collapse: 120/120 rows, 0 validated. Both are format failures, not vocabulary/reasoning failures per se -- the model is engaging with the task (echoing a real entity name from the prompt, or picking a plausible-looking short answer) but never emitting the required ABI_ACCEPTED_ORDINAL:NN wrapper."
+  ],
+  "next_step": "See PROPOSED_NEXT_TRAINING_RUN_20260827.json for the bundled fix proposal (owner directive: max 5 Together runs total, 1 used, bundle fixes into ONE well-prepared next run rather than testing them separately)."
+}

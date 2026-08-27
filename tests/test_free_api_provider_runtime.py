@@ -898,7 +898,6 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
                     self.mutated = True
                     messages[0]["content"] = ""
                     messages[0]["tool_calls"] = [{"id": "unvalidated"}]
-
                 return super().get(key, default)
 
         class Response:
@@ -1799,7 +1798,6 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             VALID_MESSAGES, model="mock", environ=env,
             opener=lambda *args, **kwargs: Response(),
             now=iter((28.0, 28.01)).__next__,
-
         )
         receipt = result["receipt"]
         self.assertEqual(receipt["status"], 200)
@@ -2700,7 +2698,6 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             "NVIDIA_API_KEY": "secret",
             "FRANK_PROVIDER_BASE_URL": "http://localhost:8765/v1",
             "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
-
         }
         result = MOD.execute_chat(
             VALID_MESSAGES,
@@ -3601,7 +3598,6 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
         }
         result = MOD.execute_chat(
             VALID_MESSAGES, model="mock", environ=env,
-
             opener=lambda *args, **kwargs: Response(),
             now=iter((10.0, 10.25)).__next__,
             wall_time=lambda: 200.0,
@@ -4502,7 +4498,6 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
         MOD.any = mutate_during_any
         try:
             result = MOD.execute_chat(
-
                 VALID_MESSAGES,
                 model="mock",
                 environ=env,
@@ -5107,4 +5102,3 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
-

@@ -1,0 +1,48 @@
+{
+  "schema": "TRIGGERWORD3_EDIT_INTEGRITY_CI_REENTRY/v1",
+  "trigger": "triggerwort 3",
+  "branch": "trigger3-edit-integrity-gpt56sol-20260828",
+  "head_sha_observed": "aa5eaa136384814b023aa78f91ae1b08b93b5f36",
+  "pull_request": 2104,
+  "observed_runs": [
+    {
+      "run_id": 33109615693,
+      "workflow": "Research Entity Identity Guard",
+      "conclusion": "failure",
+      "job": "identity-guard",
+      "runner_id": 0,
+      "steps": []
+    },
+    {
+      "run_id": 33109615714,
+      "workflow": "Research Entity Verify",
+      "conclusion": "failure",
+      "job": "verify",
+      "runner_id": 0,
+      "steps": []
+    },
+    {
+      "run_id": 33109615738,
+      "workflow": "Trigger1 structural native observable PR run",
+      "conclusion": "skipped"
+    },
+    {
+      "run_id": 33109615722,
+      "workflow": "Trigger1 VPS recover and execute",
+      "conclusion": "skipped"
+    }
+  ],
+  "classification": "CI_INFRASTRUCTURE_PRE_STEP_FAILURE_NO_TEST_EXECUTION_CREDIT",
+  "reason": "Both failed repository workflows report runner_id=0 and steps=[]; therefore no test step executed. This is CI/runner infrastructure evidence, not a negative result for the edit-integrity component.",
+  "retained_component_evidence": "isolated local non-provider 10/10 PASS on authored source/test bytes",
+  "repository_bound_test_credit": 0,
+  "credits": {
+    "frankenstein_direct_dispatch_retained_runtime": 0,
+    "provider_runtime": 0,
+    "entityos_whole_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0
+  },
+  "next_exact_gate": "Obtain a clean exact-head checkout execution of tests/test_frankenstein_edit_integrity_gate_v1.py on an admitted non-provider surface; do not reinterpret runner_id=0/steps=[] as product failure."
+}

@@ -1,0 +1,97 @@
+{
+  "schema": "FRANKENSTEIN_ROOT_MIGRATION_MANIFEST/v1",
+  "date": "2026-08-27",
+  "organ": "GPT-5.6 Sol / ChatGPT",
+  "source_repository": "gschaidergabriel/clay-global-research-entity",
+  "source_main": "854f6bc87780f4a5242489a6c807d186b16a8c3d",
+  "target_public_root": [
+    "README.md",
+    "HUMAN_READ_THIS/",
+    "DEV_SOURCE_RESEARCH/",
+    "AI_START_HERE_DO_NOT_SCAN_REPO/"
+  ],
+  "migration_executed": false,
+  "reason": "Root cleanup is not safe until host-discovery files, runtime entry points, workflow/import references, authority pointers, receipt paths and historical source identities are dependency-bound. This manifest deliberately classifies uncertainty instead of moving files cosmetically.",
+  "classification_legend": {
+    "PUBLIC_KEEP": "part of intended public root",
+    "MOVE_BYTE_IDENTICAL": "candidate for relocation preserving exact blob/tree bytes; still needs reference closure",
+    "MOVE_WITH_COMPAT_SHIM": "semantic/runtime/tool discovery depends on current path or likely does; relocation requires an explicit compatibility mechanism",
+    "HISTORICAL_PRESERVE": "historical/evidence material should be archived without rewriting its content or identity claims",
+    "GENERATED_OR_VENDOR": "generated/vendor/cache-like material; disposition requires provenance check",
+    "UNKNOWN_BLOCK": "do not move until dependency/provenance is resolved"
+  },
+  "entries": [
+    {"path":"README.md","type":"file","class":"PUBLIC_KEEP","reason":"explicit Triggerword-3 public-root target; intentionally not rewritten in this pass"},
+    {"path":".claude/","type":"dir","class":"MOVE_WITH_COMPAT_SHIM","reason":"host/tool discovery semantics may depend on repository-root placement; inspect Claude lifecycle before relocation"},
+    {"path":".env.example","type":"file","class":"MOVE_WITH_COMPAT_SHIM","reason":"conventional root discovery path; moving can break setup documentation/scripts"},
+    {"path":".github/","type":"dir","class":"MOVE_WITH_COMPAT_SHIM","reason":"GitHub workflows/configuration require repository-defined locations; not ordinary documentation clutter"},
+    {"path":".gitignore","type":"file","class":"MOVE_WITH_COMPAT_SHIM","reason":"Git root semantics; must remain effective at root or be replaced by equivalent ignore rules"},
+    {"path":"000_CLAY_CURRENT.md","type":"file","class":"MOVE_WITH_COMPAT_SHIM","reason":"current-facing compatibility/bootstrap pointer; search all references before relocation"},
+    {"path":"000_FRANK_GLOBAL_RESEARCH_ENTITY_AUTOBOOT.txt","type":"file","class":"HISTORICAL_PRESERVE","reason":"legacy Frank autoboot/provenance surface; preserve byte identity and references while moving only after dependency closure"},
+    {"path":"000_FREE_SWARM_LIVE_DASHBOARD.md","type":"file","class":"HISTORICAL_PRESERVE","reason":"live/historical metrics evidence; current supervisor authority outranks it, but provenance must remain inspectable"},
+    {"path":"AGENTS.md","type":"file","class":"MOVE_WITH_COMPAT_SHIM","reason":"agent host discovery convention can depend on root placement; installer reliability outranks cosmetic root reduction"},
+    {"path":"AUTHORITATIVE_STATE_RESOLUTION.md","type":"file","class":"MOVE_WITH_COMPAT_SHIM","reason":"authority-resolution surface; current references must be enumerated before relocation"},
+    {"path":"CLAUDE.md","type":"file","class":"MOVE_WITH_COMPAT_SHIM","reason":"Claude Code project-instruction discovery may depend on location"},
+    {"path":"CLAUDE_CODE_INTRODUCTION.md","type":"file","class":"MOVE_WITH_COMPAT_SHIM","reason":"legacy/current host onboarding reference; preserve compatibility until new no-scan installer route is proven"},
+    {"path":"CLAYCODE_GENERAL_PURPOSE_COMPILER_MANIFEST.json","type":"file","class":"HISTORICAL_PRESERVE","reason":"compiler evidence/manifest identity; relocation must preserve exact provenance and links"},
+    {"path":"CLAYVERSE_CANONICAL_DIRECTIVE.md","type":"file","class":"HISTORICAL_PRESERVE","reason":"name is superseded as current product law but path remains historical authority/provenance evidence"},
+    {"path":"CLAY_EXECUTION_AUTHORITY.md","type":"file","class":"MOVE_WITH_COMPAT_SHIM","reason":"owner-authority pointer is referenced by current continuity surfaces; cannot move until pointer migration is atomic"},
+    {"path":"JOIN_RAE_CLAUDE_CODE.txt","type":"file","class":"HISTORICAL_PRESERVE","reason":"legacy host join/provenance surface; replace discovery only after compatibility mapping"},
+    {"path":"PROJECT_AUTO_BOOT_KERNEL_FINAL.txt","type":"file","class":"MOVE_WITH_COMPAT_SHIM","reason":"legacy bootstrap paths are referenced by root README and possibly workers; dependency closure required"},
+    {"path":"PROJECT_SOURCE_SINGLE_BOOTSTRAP.txt","type":"file","class":"HISTORICAL_PRESERVE","reason":"bootstrap provenance; current authority is newer, but byte/history identity should survive relocation"},
+    {"path":"PROJECT_SOURCE_SINGLE_BOOTSTRAP_V2.txt","type":"file","class":"HISTORICAL_PRESERVE","reason":"bootstrap provenance; preserve without promoting stale content"},
+    {"path":"RAE_VNEXT_RUNTIME.md","type":"file","class":"HISTORICAL_PRESERVE","reason":"legacy RAE runtime research lineage"},
+    {"path":"ZZZ_FREE_SWARM_RESULTS.md","type":"file","class":"HISTORICAL_PRESERVE","reason":"negative/metrics lineage; preserve but do not treat as current authority"},
+    {"path":"agentZero/","type":"dir","class":"HISTORICAL_PRESERVE","reason":"substantial donor/provenance tree; moving changes many deep links and imports"},
+    {"path":"agentzeroforschung/","type":"dir","class":"HISTORICAL_PRESERVE","reason":"research archive/provenance tree; move only with deep-link migration map"},
+    {"path":"benchmarks/","type":"dir","class":"MOVE_WITH_COMPAT_SHIM","reason":"tests/scripts can depend on current relative benchmark paths"},
+    {"path":"dump archive/","type":"dir","class":"GENERATED_OR_VENDOR","reason":"archive-like surface; exact provenance/content denominator must be inspected before dedup/removal/relocation"},
+    {"path":"dump/","type":"dir","class":"GENERATED_OR_VENDOR","reason":"dump-like surface; inspect generators, references and unique evidence before relocation"},
+    {"path":"frank_reference/","type":"dir","class":"HISTORICAL_PRESERVE","reason":"historical Frank reference source; byte identity and links matter"},
+    {"path":"free swarm/","type":"dir","class":"HISTORICAL_PRESERVE","reason":"FreeSwarm source/evidence lineage; current HARD_OFF and zero-yield results do not justify deleting history"},
+    {"path":"gemeinsamer State)","type":"file","class":"UNKNOWN_BLOCK","reason":"empty root blob with malformed-looking name; content search for phrase is broad and does not prove filename references; require exact path-history/reference check before move/delete"},
+    {"path":"governance/","type":"dir","class":"MOVE_WITH_COMPAT_SHIM","reason":"current owner/economic authority paths are referenced from continuity; cannot relocate piecemeal"},
+    {"path":"libc.malloc_trim(0)","type":"file","class":"HISTORICAL_PRESERVE","reason":"stray partial research prose containing strong RAM/latency claims; 9.13O explicitly denies physical-RAM promotion from Private_Dirty alone; archive as evidence, do not present as current truth"},
+    {"path":"madvise(ptr, length, MADV_FREE);","type":"file","class":"HISTORICAL_PRESERVE","reason":"stray continuation prose claiming <3GB GRID10 and Private_Dirty reduction; current 9.13O requires PSS/full smaps accounting before RAM credit; preserve as historical claim"},
+    {"path":"rae.py","type":"file","class":"MOVE_WITH_COMPAT_SHIM","reason":"verified stable runtime entry point importing rae_core.cli; relocation without root shim would break invocation semantics"},
+    {"path":"rae_core/","type":"dir","class":"MOVE_WITH_COMPAT_SHIM","reason":"import target of root rae.py and likely runtime package"},
+    {"path":"receipts/","type":"dir","class":"HISTORICAL_PRESERVE","reason":"evidence receipts; path identity may be cited externally and by validators"},
+    {"path":"research_entity/","type":"dir","class":"MOVE_WITH_COMPAT_SHIM","reason":"canonical research/continuity/authority tree and many exact paths depend on root placement"},
+    {"path":"research_sources/","type":"dir","class":"HISTORICAL_PRESERVE","reason":"source archive; deep links/provenance need preservation"},
+    {"path":"runtime_checks/","type":"dir","class":"MOVE_WITH_COMPAT_SHIM","reason":"runtime/check scripts may use relative paths and are part of evidence closure"},
+    {"path":"schemas/","type":"dir","class":"MOVE_WITH_COMPAT_SHIM","reason":"schema consumers may resolve root-relative paths"},
+    {"path":"tests/","type":"dir","class":"MOVE_WITH_COMPAT_SHIM","reason":"test discovery/imports frequently assume root placement"},
+    {"path":"the artefact/","type":"dir","class":"MOVE_WITH_COMPAT_SHIM","reason":"current canonical product/research workspace is explicitly named by continuity state; cannot relocate without authority migration"},
+    {"path":"tools/","type":"dir","class":"MOVE_WITH_COMPAT_SHIM","reason":"live code imports and GRID10 source paths depend on current repository topology"},
+    {"path":"vps_bridge/","type":"dir","class":"MOVE_WITH_COMPAT_SHIM","reason":"control/runtime integration surface; relocation is unsafe before current control-sync/quiescence closure"}
+  ],
+  "observed_special_cases": {
+    "rae.py": {
+      "observation": "verified stable runtime entry point",
+      "source_sha": "e911bc9cf3253c08fb82194053920568bd82a456"
+    },
+    "libc.malloc_trim(0)": {
+      "observation": "partial prose fragment, not executable source; contains unpromoted RAM/wakeup claims",
+      "source_sha": "56449f7a37c0593798d05e67687af3ed244ef058"
+    },
+    "madvise(ptr, length, MADV_FREE);": {
+      "observation": "partial prose continuation, not executable source; contains unpromoted physical-RAM claim",
+      "source_sha": "d4b4da997a55a9567842f2a182f7cc6046b708d8"
+    },
+    "gemeinsamer State)": {
+      "observation": "zero-byte blob with malformed-looking root name",
+      "source_sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    }
+  },
+  "next_required_checks": [
+    "enumerate exact references to every MOVE_WITH_COMPAT_SHIM and UNKNOWN_BLOCK path from current main",
+    "inspect .github workflows/config locations before any relocation",
+    "derive host-specific discovery requirements for AGENTS.md CLAUDE.md and .claude",
+    "bind all current authority pointers before moving governance research_entity or the artefact",
+    "run import/test discovery analysis for rae.py rae_core tools tests schemas runtime_checks",
+    "build old_path -> new_path -> compatibility mechanism table",
+    "preserve original blob/tree SHA for historical material",
+    "move only after UNKNOWN_BLOCK count reaches zero and required compatibility tests are defined"
+  ],
+  "acceptance": "PREPARED_NOT_RUN"
+}

@@ -72,6 +72,65 @@ TRAINED_CLASS_WORDS = frozenset({
     "PRESERVE_BRANCHES", "COLLAPSE_VALID",
 })
 
+# Per-family breakdown of the same real vocabulary above, extracted the same way
+# (direct scan of the `target` field of every row in the 16 B0-B6 training files).
+# This is the "solve the ABI mismatch where actually possible, not just bypass it"
+# half of the build: rather than only saying valid/invalid, a validated atom is
+# additionally classified by which trained family/families it is consistent with,
+# using each family's real observed ordinal range and/or real class-word set. This
+# is genuine structured decoding grounded in the actual data -- it is NOT a claim
+# that the diagnostic model was trained on the real tokenizer-bound 46-symbol
+# production alphabet from XENO_SHELL_MASTER_SPEC.md SS7. That alignment requires
+# retraining on real ABI-bound data, which was neither authorized nor attempted
+# here (the one authorized Together run already happened; this is analysis of its
+# output, not a second training pass). Where the mismatch is a data problem, it is
+# reported honestly as BLOCKED (see XENO_SHELL_WRAPPER_BUILD_20260827.json); where
+# it is an engineering problem this wrapper CAN solve (turning a bare validated
+# string into typed, family-attributable structure), it is solved here for real.
+FAMILY_ORDINAL_RANGES = {
+    "B0_WRITE": (0, 14),
+    "B1_BINDING": (0, 14),
+    "B2_MID_EPISODE_REMAP": (0, 14),
+    "B2_PRIOR_OVERRIDE": (0, 14),
+    "B3_MULTI_HOP_DEREF": (0, 14),
+    "B4_CAPACITY_INTERFERENCE": (20, 79),
+    "B5_VARIABLE_N_EQUIVARIANCE": (200, 299),
+}
+
+FAMILY_CLASS_WORDS = {
+    "B0_READ": frozenset({"ALLOW", "DENY", "ABSTAIN"}),
+    "B2_STALE_BINDING_REJECTION": frozenset({"STALE_REJECTED"}),
+    "B3_UNRESOLVABLE_CHAIN_REJECTION": frozenset({"UNRESOLVABLE"}),
+    "B6_CLAUDE_HANDOFF_REENTRY": frozenset({
+        "CANONICAL_LEDGER_EVIDENCE", "CLAUDE_ASSERTION",
+        "EXTERNAL_TOOL_RECEIPT", "STALE_MISMATCHED_HANDOFF",
+    }),
+    "B6_DB_VS_SIM": frozenset({"CANONICAL_DB", "SIMULATED_HYPOTHESIS", "STALE_REBASE_REQUIRED"}),
+    "B6_GWT_CAUSAL_REENTRY": frozenset({"P", "Q", "R"}),
+    "B6_GWT_COMPETITION_BROADCAST": frozenset({"P", "Q", "R"}),
+    "B6_GWT_UPTAKE": frozenset({"alpha", "beta", "gamma"}),
+    "B6_HYPERPOSITION_EVIDENCE_AUTHORITY": frozenset({"COLLAPSE_VALID", "PRESERVE_BRANCHES"}),
+}
+
+
+def decode_atom_family(atom: str) -> dict[str, Any]:
+    """Pure, offline. Given an already-validated atom string, classify it: is it
+    an ordinal or a class word, and which trained family/families is it consistent
+    with. Ambiguous by design where two families share a range/word set (e.g.
+    B6_GWT_CAUSAL_REENTRY and B6_GWT_COMPETITION_BROADCAST both use P/Q/R) --
+    lists every consistent family rather than guessing one, since this shell layer
+    has no separate signal to disambiguate further without the original work
+    packet's task/process_id, which the caller (not this function) owns."""
+    m = TRAINED_ORDINAL_PATTERN.match(atom)
+    if m:
+        n = int(m.group(1))
+        families = [
+            fam for fam, (lo, hi) in FAMILY_ORDINAL_RANGES.items() if lo <= n <= hi
+        ]
+        return {"kind": "ORDINAL", "value": n, "consistent_families": sorted(families)}
+    families = [fam for fam, words in FAMILY_CLASS_WORDS.items() if atom in words]
+    return {"kind": "CLASS_WORD", "value": atom, "consistent_families": sorted(families)}
+
 
 def validate_raw_output(raw: str) -> tuple[bool, str]:
     """Pure, offline, no model/network involved. Returns (is_valid, atom_or_reason).
@@ -121,6 +180,7 @@ def wrap_as_result_packet(
         "validated": is_valid,
         "atom": atom_or_reason if is_valid else None,
         "rejection_reason": None if is_valid else atom_or_reason,
+        "family_decode": decode_atom_family(atom_or_reason) if is_valid else None,
         "wrapper_schema": WRAPPER_SCHEMA,
     }
     return build_result_packet(

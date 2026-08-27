@@ -1,0 +1,12 @@
+{
+  "schema": "CLAY_OPENROUTER_RESEARCH_REQUEST/v2",
+  "request_id": "trigger1-qwen06-route-bound-20260824-gpt56sol",
+  "mode": "trigger1_qwen06_logit_vector",
+  "model": "qwen/qwen3-0.6b-04-28:free",
+  "free_only": true,
+  "paid_fallback": false,
+  "together": false,
+  "executor": "tools/trigger1_openrouter_qwen06_route_bound_execute.py",
+  "goal": "Execute the bounded six-control hosted output-logit vector experiment with observed invariant OpenRouter selected-route and system_fingerprint identity across calibration and disjoint holdout.",
+  "credit_boundary": "DIRECT_HOSTED_OUTPUT_LOGIT_VECTOR_CONTROL_COMPONENT_ONLY; NO_HIDDEN_STATE_CVEC_JSPACE_HCU_TRAINING_CREDIT"
+}

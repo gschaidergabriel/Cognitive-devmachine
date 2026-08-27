@@ -7,6 +7,8 @@ on:
       - 'research_entity/runtime/openrouter_requests/*.json'
       - 'tools/openrouter_inference.py'
       - 'tools/trigger1_openrouter_qwen06_logit_vector_execute.py'
+      - 'tools/trigger1_openrouter_qwen06_route_bound_execute.py'
+      - 'tools/trigger1_openrouter_runtime_identity.py'
       - 'tools/trigger1_openrouter_logit_bias_control.py'
       - 'governance/FREE_LANE_ECONOMIC_PROVENANCE_2026-08-24.json'
       - 'research_entity/private/API_TOKENS.env'
@@ -50,7 +52,7 @@ jobs:
             if [ "$mode" = "trigger1_qwen06_logit_vector" ]; then
               set +e
               python3 tools/free_swarm_exec_with_vault.py \
-                python3 tools/trigger1_openrouter_qwen06_logit_vector_execute.py \
+                python3 tools/trigger1_openrouter_qwen06_route_bound_execute.py \
                 --output "$out" \
                 > /tmp/openrouter-last.json 2>&1
               rc=$?

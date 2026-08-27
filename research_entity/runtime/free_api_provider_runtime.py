@@ -491,17 +491,17 @@ def _is_unicode_noncharacter(character: str) -> bool:
 
 def _has_semantic_text(value: str) -> bool:
     """Require content beyond whitespace and non-semantic Unicode classes."""
-    return any(
-        not character.isspace()
-        and not (
-            ord(character) <= 0x1F or 0x7F <= ord(character) <= 0x9F
-        )
-        and unicodedata.category(character) != "Cf"
-        and unicodedata.category(character) not in {"Mn", "Mc", "Me"}
-        and unicodedata.category(character) != "Co"
-        and not _is_unicode_noncharacter(character)
-        for character in value
-    )
+    for character in value:
+        codepoint = ord(character)
+        category = unicodedata.category(character)
+        if (
+            not character.isspace()
+            and not (codepoint <= 0x1F or 0x7F <= codepoint <= 0x9F)
+            and category not in {"Cf", "Mn", "Mc", "Me", "Co", "Cn"}
+            and not _is_unicode_noncharacter(character)
+        ):
+            return True
+    return False
 
 
 def _ascii_json_string_payload_size(value: str, stop_after: int) -> int:

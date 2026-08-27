@@ -1,0 +1,56 @@
+{
+  "schema": "PROJECT_FRANKENSTEIN_SOURCE_IDENTITY_HISTORY_ANCHOR/v1",
+  "evidence_class": "HISTORICAL_SOURCE",
+  "observed_at_local_date": "2026-08-27",
+  "source_repository": "gschaidergabriel/Project-Frankenstein",
+  "default_branch": "main",
+  "default_branch_head": {
+    "commit_sha": "abba90a5767d85abc8a1ac340bae92842dab35c1",
+    "committed_at": "2026-04-05T18:10:31Z",
+    "root_tree_sha": "ec21e66c4672fde1f0a5d948ebc51457b69b620a"
+  },
+  "default_branch_reachable_history": {
+    "commit_count": 545,
+    "count_semantics": "Number of commits reachable through the GitHub REST default-branch commit listing at the observed snapshot. This is not claimed as the count of every commit on every ref or deleted/unreachable history.",
+    "oldest_reachable_commit": {
+      "sha": "e1a8812767668091d146ee958bbc2ebb2743031c",
+      "committed_at": "2026-02-14T17:05:27Z",
+      "message_prefix": "Initial commit: AI-Core / Frank — local AI desktop companion",
+      "parents": 0
+    },
+    "proof": {
+      "pagination": "per_page=1",
+      "last_nonempty_page": 545,
+      "first_empty_page": 546,
+      "endpoint_family": "https://api.github.com/repos/gschaidergabriel/Project-Frankenstein/commits"
+    }
+  },
+  "topology_identity": {
+    "root_tree_merkle_anchor": "ec21e66c4672fde1f0a5d948ebc51457b69b620a",
+    "root_tree_identity_status": "EXACT",
+    "recursive_path_inventory_status": "NOT_CLAIMED_COMPLETE",
+    "reason": "The exact root tree object is cryptographically identified, but this trigger did not promote a complete recursive path enumeration with a verified path-count denominator."
+  },
+  "chronology_rule": "Commit timestamps establish first verified presence in accessible Git only at the inspected commit/path scope; they do not prove a module's real-world creation date.",
+  "promotion_boundary": {
+    "whole_repository_semantic_analysis": "NOT_GRANTED",
+    "entityos_hcu_runtime_credit": 0,
+    "hcu_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "canonical_semantics_credit": 0
+  },
+  "supersedes_only": [
+    "the prior claim that no reproducible default-branch history denominator had been established"
+  ],
+  "does_not_supersede": [
+    "PROJECT_FRANKENSTEIN_MANIFEST status PARTIAL_NOT_FROZEN",
+    "the requirement to enumerate the exact recursive repository tree before claiming repository-wide topology coverage",
+    "the requirement to distinguish generated/vendor/binary identity obligations from semantic-analysis obligations"
+  ],
+  "next_exact_gates": [
+    "obtain and verify a complete recursive path inventory for root tree ec21e66c4672fde1f0a5d948ebc51457b69b620a, including whether the GitHub tree response is truncated",
+    "freeze a path-count denominator and classify generated/vendor/binary paths without deleting identity evidence",
+    "recompute repository-wide semantic-coverage obligations against that frozen path denominator"
+  ]
+}

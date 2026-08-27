@@ -125,6 +125,28 @@ def _index_entry(repo_root: Path, rel: str) -> dict | None:
     return {"mode": mode, "oid": oid, "stage": stage}
 
 
+def _head_tree_entry(repo_root: Path, head: str, rel: str) -> dict | None:
+    proc = _run_git(repo_root, ["ls-tree", "-z", head, "--", rel])
+    records = [record for record in proc.stdout.split(b"\x00") if record]
+    if not records:
+        return None
+    if len(records) != 1:
+        raise PatchGuardError(f"path has ambiguous HEAD tree entries: {rel}")
+    record = records[0]
+    try:
+        meta_raw, path_raw = record.split(b"\t", 1)
+        mode_raw, type_raw, oid_raw = meta_raw.split(b" ", 2)
+        tree_path = path_raw.decode("utf-8", errors="strict")
+        mode = mode_raw.decode("ascii")
+        obj_type = type_raw.decode("ascii")
+        oid = oid_raw.decode("ascii")
+    except (ValueError, UnicodeDecodeError) as exc:
+        raise PatchGuardError(f"could not parse HEAD tree entry for {rel}") from exc
+    if _normalize_policy_path(tree_path) != rel:
+        raise PatchGuardError(f"HEAD tree path identity mismatch for {rel}: {tree_path!r}")
+    return {"mode": mode, "type": obj_type, "oid": oid}
+
+
 def _reject_unsupported_patch_features(patch_text: str, policy: PatchPolicy) -> None:
     if "GIT binary patch" in patch_text or "Binary files " in patch_text:
         raise PatchGuardError("binary patches are forbidden")
@@ -218,27 +240,47 @@ def preflight_patch(repo_root: str | os.PathLike[str], patch_text: str, policy: 
         target = _assert_path_contained(repo, rel, may_be_new=policy.allow_new_files and expected is None)
         exists = target.exists()
         index_entry = _index_entry(repo, rel)
+        head_entry = _head_tree_entry(repo, actual_head, rel)
         if expected is None:
             if exists:
                 raise PatchGuardError(f"path declared new but already exists: {rel}")
             if index_entry is not None:
                 raise PatchGuardError(f"path declared new but already exists in Git index: {rel}")
+            if head_entry is not None:
+                raise PatchGuardError(f"path declared new but already exists in expected HEAD: {rel}")
             if not policy.allow_new_files:
                 raise PatchGuardError(f"new files forbidden by policy: {rel}")
-            base_evidence[rel] = {"exists": False, "sha256": None, "git_index": None}
+            base_evidence[rel] = {"exists": False, "sha256": None, "git_index": None, "head_tree": None}
         else:
             if not exists:
                 raise PatchGuardError(f"expected base file missing: {rel}")
             if index_entry is None:
                 raise PatchGuardError(f"expected base file is not tracked in Git index: {rel}")
+            if head_entry is None:
+                raise PatchGuardError(f"expected base file is absent from expected HEAD: {rel}")
             if index_entry["mode"] != "100644":
                 raise PatchGuardError(
                     f"expected base file is not regular non-executable mode 100644: {rel} ({index_entry['mode']})"
                 )
+            if head_entry["type"] != "blob" or head_entry["mode"] != "100644":
+                raise PatchGuardError(
+                    f"expected HEAD object is not regular non-executable blob 100644: {rel} "
+                    f"({head_entry['mode']} {head_entry['type']})"
+                )
+            if index_entry["oid"] != head_entry["oid"]:
+                raise PatchGuardError(
+                    f"Git index blob differs from expected HEAD for {rel}: "
+                    f"{index_entry['oid']} != {head_entry['oid']}"
+                )
             actual_digest = _sha256(target)
             if actual_digest != expected:
                 raise PatchGuardError(f"base SHA-256 mismatch for {rel}: expected {expected}, got {actual_digest}")
-            base_evidence[rel] = {"exists": True, "sha256": actual_digest, "git_index": index_entry}
+            base_evidence[rel] = {
+                "exists": True,
+                "sha256": actual_digest,
+                "git_index": index_entry,
+                "head_tree": head_entry,
+            }
 
     # `--index` requires the index and working-tree copies for touched tracked
     # paths to agree. This catches a second class of lost-update/dirty-tree

@@ -1,0 +1,51 @@
+{
+  "schema": "SUPERVISOR_STEERING_DELTA/v1",
+  "authority": "NON_AUTHORITY_STEERING_ONLY",
+  "date": "2026-08-28T02:44:00+07:00",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "trigger": "go",
+  "program": "ENTITYOS_HCU",
+  "target": "autonomously self-organizing shared-state Xeno/HCU fabric",
+  "owner_target_reference": "research_entity/global/XENO_HCU_GO_TARGET_ARCHITECTURE_OWNER_DIRECTIVE_2026-08-25.md",
+  "material_finding": "The destructive whole-file rewrite counterexample is a direct blocker to safely continuing autonomous construction of the Xeno/HCU target: a narrow requested-feature test can pass while unrelated retained fabric code is deleted. The previously added 50% shrink heuristic is defense-in-depth but not a general preservation proof. This GO cycle therefore added an independent deterministic preimage-bound existing-file edit guard rather than granting retained credit to the provider-authored donor repair.",
+  "source_delta": {
+    "guard": "tools/preimage_bound_edit_guard_v1.py",
+    "tests": "tests/test_preimage_bound_edit_guard_v1.py",
+    "properties": [
+      "exact preimage SHA-256 binding",
+      "current-preimage revalidation / stale edit rejection",
+      "repo-relative path boundary",
+      "explicit old-line edit scope",
+      "reject any changed opcode outside declared scope",
+      "broad deletion requires explicit authorization even when scoped",
+      "provider_calls=0 and secret_lookups=0 in receipt"
+    ],
+    "adversarial_cases": [
+      "narrow additive edit",
+      "stale concurrent preimage",
+      "task-local valid edit plus unrelated modification",
+      "large deletion below/above heuristic concerns",
+      "explicit broad deletion with exact scope",
+      "path traversal",
+      "wrong expected preimage hash",
+      "missing declared edit scope"
+    ]
+  },
+  "evidence_boundary": {
+    "source_candidate_present": true,
+    "repository_bound_tests_executed": false,
+    "reason": "available execution surface failed before test execution with infrastructure client error",
+    "runtime_credit_delta": 0,
+    "physical_grid10_credit_delta": 0,
+    "hcu_credit_delta": 0,
+    "training_credit_delta": 0
+  },
+  "next_focus": [
+    "Run tests/test_preimage_bound_edit_guard_v1.py on a clean exact-current non-provider checkout and bind HEAD/tree/dirty/source hashes.",
+    "Only after independent PASS, wire the guard ahead of every autonomous existing-file commit path; whole-file provider reconstruction must remain quarantined unless it can satisfy the same preimage/scope preservation contract.",
+    "Resume the shortest Xeno target path immediately after mutation safety: decode-safe heartbeat integration -> real SIGKILL coordinator/worker failure test -> exactly-once NODE_RESULT recovery -> recursive coordinator scaling."
+  ],
+  "go_target_unchanged": true,
+  "provider_execution_authority": false,
+  "paid_execution_authority": false
+}

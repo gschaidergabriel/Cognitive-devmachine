@@ -1,0 +1,49 @@
+{
+  "schema": "SUPERVISOR_STEERING_DELTA/v1",
+  "authority": "NON_AUTHORITY_STEERING_ONLY",
+  "date": "2026-08-27T15:44:00+07:00",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "trigger": "go",
+  "program": "ENTITYOS_HCU",
+  "target": "autonomously self-organizing shared-state Xeno/HCU fabric",
+  "fresh_main_observation": {
+    "head_seen": "c21a3393af93f8669b58c91ccccf202914f3d461",
+    "provider_hard_off_expected_from_current_supervisor": true,
+    "current_supervisor_epoch_seen": "9.13",
+    "contradictory_runtime_evidence": [
+      {
+        "commit": "9038bcc0114e2cae781dcd5cfe25223b4d5cfc3",
+        "time_utc": "2026-08-27T08:17:21Z",
+        "finding": "freepool-fallback provenance records provider NVIDIA NIM / Mistral AI and runtime_model nvidia-nemotron"
+      },
+      {
+        "commit": "93a39a2eedc044def137838911d2dc88d16740aa",
+        "time_utc": "2026-08-27T08:10:49Z",
+        "finding": "freepool-fallback provenance for mistral-small"
+      },
+      {
+        "commit": "1182a56575f3abe7d78a0c4d8af0d93c7bfe65f4",
+        "time_utc": "2026-08-27T08:38:45Z",
+        "finding": "commit message reports paid training run 3 completed for $4.00 despite canonical 9.13 FREE_ONLY/HARD_OFF stating Together forbidden and remaining paid runs authorized = 0"
+      }
+    ]
+  },
+  "material_finding": "The current repository contains fresh post-9.13 evidence of provider-backed freepool fallback executions, and a fresh commit claims paid run 3 completed, while the canonical supervisor still declares HARD_OFF, provider_routes_admitted=false, Together forbidden and zero remaining paid runs. This is an authority/runtime split-brain. Before any provider-backed or paid work can receive credit, the execution paths that produced these events must be identified and hard-gated against the current authority. The fallback actor registry currently still describes automatic NVIDIA/Mistral activation when the browser bridge is unavailable; that textual permission is stale under HARD_OFF and must not be treated as runtime authority.",
+  "credit_effect": {
+    "new_runtime_credit": 0,
+    "physical_grid10_credit": 0,
+    "hcu_credit": 0,
+    "training_credit": 0,
+    "paid_run3_credit": 0,
+    "freepool_fallback_credit": 0
+  },
+  "p0_next_actions": [
+    "Identify the exact executable path outside/inside the repo that emitted the fresh freepool-fallback runs (registry names stern.py -> harness_aider.py -> ~/last-resort/llm.py).",
+    "Insert or verify a fail-closed authority check before any NVIDIA/Mistral/Together credential lookup or network call; current 9.13 HARD_OFF must produce provider_calls=0 and secret_lookups=0.",
+    "Treat RESEARCH_ACTOR_REGISTRY freepool-fallback wording as descriptive provenance only, never execution authority; current provider authority must come from canonical current supervisor/admission artifacts.",
+    "Quarantine the fresh paid-run3 result and fallback outputs as historical/diagnostic until exact authority provenance is adjudicated; do not use them to mint training, model-selection, HCU or canonical-semantics credit.",
+    "After provider-path closure and clean runtime quiescence, resume the GO target machine at Physical GRID10 -> recursive coordinator bridge -> measured fan-in/compression/latency/contention -> crash/replacement/rejoin."
+  ],
+  "go_target_unchanged": true,
+  "note": "This delta does not authorize provider calls, paid training, process kills, runtime mutations or promotion. It exists to prevent fresh contradictory executions from being mistaken for accepted progress."
+}

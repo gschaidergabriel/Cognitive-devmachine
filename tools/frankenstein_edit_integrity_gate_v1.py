@@ -95,6 +95,30 @@ def _require_git_root(repo_root: Path) -> None:
         raise EditIntegrityError(f"repo_root is not the worktree root: {observed}")
 
 
+def _regular_repo_file(repo_root: Path, path: str) -> Path:
+    """Resolve a declared path without permitting a symlink hop.
+
+    Checking only ``full.is_symlink()`` is insufficient because an ancestor
+    directory can itself be a symlink to outside the worktree. Reject every
+    symlink component and require the strict resolved file to remain below
+    the exact Git root.
+    """
+    current = repo_root
+    for part in PurePosixPath(path).parts:
+        current = current / part
+        if current.is_symlink():
+            raise EditIntegrityError(f"symlink path component forbidden: {path}")
+    try:
+        resolved = current.resolve(strict=True)
+    except OSError as exc:
+        raise EditIntegrityError(f"declared path cannot be resolved: {path}") from exc
+    if repo_root not in resolved.parents:
+        raise EditIntegrityError(f"declared path resolves outside repo_root: {path}")
+    if not resolved.is_file():
+        raise EditIntegrityError(f"declared path is not a regular existing file: {path}")
+    return current
+
+
 def _numstat(repo_root: Path, patch: bytes) -> dict[str, tuple[int, int]]:
     cp = _git(repo_root, ["apply", "--numstat", "-z", "-"], patch=patch)
     if cp.returncode != 0:
@@ -168,9 +192,7 @@ def apply_existing_file_patch(
     snapshots: dict[str, bytes] = {}
     line_counts: dict[str, int] = {}
     for path, expected in declared.items():
-        full = repo_root / path
-        if full.is_symlink() or not full.is_file():
-            raise EditIntegrityError(f"declared path is not a regular existing file: {path}")
+        full = _regular_repo_file(repo_root, path)
         data = full.read_bytes()
         actual = sha256_bytes(data)
         if actual != expected:
@@ -206,9 +228,7 @@ def apply_existing_file_patch(
         post: dict[str, str] = {}
         changed = False
         for path, old in snapshots.items():
-            full = repo_root / path
-            if full.is_symlink() or not full.is_file():
-                raise EditIntegrityError(f"postimage is not a regular file: {path}")
+            full = _regular_repo_file(repo_root, path)
             new = full.read_bytes()
             if new != old:
                 changed = True

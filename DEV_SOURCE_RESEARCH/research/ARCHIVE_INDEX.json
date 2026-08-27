@@ -1,287 +1,72 @@
 {
-  "schema": "TRIGGERWORD3_RESEARCH_ARCHIVE_INDEX/v1",
-  "generated_for_base": "854f6bc87780f4a5242489a6c807d186b16a8c3d",
+  "schema": "TRIGGERWORD3_RESEARCH_ARCHIVE_INDEX/v2",
+  "initial_curation_base": "854f6bc87780f4a5242489a6c807d186b16a8c3d",
+  "refreshed_through_main": "3c3dbe5020f57065f47bd4d0a2dce3c537128797",
   "purpose": "Navigation index only. Paths are evidence/archive pointers, not a second truth authority.",
   "authority_rule": "newest explicit owner authority > newest inbox-selected supervisor > exact executable evidence > current source/tests/receipts > historical material > summaries/caches",
-  "evidence_labels": [
-    "CURRENT_SOURCE",
-    "HISTORICAL_SOURCE",
-    "PROJECT_MEASUREMENT",
-    "EXTERNAL_PRIMARY",
-    "INFERENCE",
-    "OPEN_HYPOTHESIS",
-    "NEGATIVE_RESULT"
-  ],
-  "lifecycle_labels": [
-    "attempted",
-    "source-ready",
-    "measured",
-    "reproduced",
-    "contradicted",
-    "blocked",
-    "prepared-not-run",
-    "adopted",
-    "retired"
-  ],
+  "evidence_labels": ["CURRENT_SOURCE", "HISTORICAL_SOURCE", "PROJECT_MEASUREMENT", "EXTERNAL_PRIMARY", "INFERENCE", "OPEN_HYPOTHESIS", "NEGATIVE_RESULT"],
+  "lifecycle_labels": ["attempted", "source-ready", "measured", "reproduced", "contradicted", "blocked", "prepared-not-run", "adopted", "retired", "quarantined"],
   "current_authority": [
-    {
-      "path": "CLAY_EXECUTION_AUTHORITY.md",
-      "role": "owner authority pointer",
-      "status": "adopted",
-      "evidence": "CURRENT_SOURCE"
-    },
-    {
-      "path": "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
-      "role": "current supervisor selector",
-      "status": "adopted",
-      "evidence": "CURRENT_SOURCE",
-      "note": "At base selects 9.13O; provider HARD_OFF."
-    },
-    {
-      "path": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_9_13O_DELTA_2026-08-27T2341P0700_GPT56SOL.json",
-      "role": "current steering delta at curation base",
-      "status": "adopted",
-      "evidence": "CURRENT_SOURCE"
-    },
-    {
-      "path": "research_entity/continuity/BOOTSTRAP_MINIMAL.json",
-      "role": "bootstrap surface",
-      "status": "contradicted",
-      "evidence": "CURRENT_SOURCE",
-      "note": "Contains older 8.78-era execution fields; lower authority where it conflicts with inbox-selected 9.13 state."
-    },
-    {
-      "path": "research_entity/rooms/PROGRAM_STATE.json",
-      "role": "program-state surface",
-      "status": "contradicted",
-      "evidence": "CURRENT_SOURCE",
-      "note": "Contains older 8.78-era execution fields; lower authority where it conflicts with inbox-selected 9.13 state."
-    }
+    {"path": "CLAY_EXECUTION_AUTHORITY.md", "role": "owner authority pointer", "status": "adopted", "evidence": "CURRENT_SOURCE"},
+    {"path": "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json", "role": "current supervisor selector", "status": "adopted", "evidence": "CURRENT_SOURCE", "note": "9.13 HARD_OFF at refresh: provider routes false, Together forbidden, no paid fallback."},
+    {"path": "research_entity/continuity/BOOTSTRAP_MINIMAL.json", "role": "bootstrap surface", "status": "contradicted", "evidence": "CURRENT_SOURCE", "note": "Older 8.78-era provider fields are lower authority where they conflict with inbox-selected 9.13."},
+    {"path": "research_entity/rooms/PROGRAM_STATE.json", "role": "program-state surface", "status": "contradicted", "evidence": "CURRENT_SOURCE", "note": "Older 8.78-era provider fields are lower authority where they conflict with inbox-selected 9.13."}
   ],
   "frankenstein_current": [
-    {
-      "path": "research_entity/topic_packets/frankenstein-master-cognition-concept/CONCEPT.md",
-      "role": "master cognition concept with built-vs-aspirational separation",
-      "status": "source-ready",
-      "evidence": "CURRENT_SOURCE"
-    },
-    {
-      "path": "research_entity/topic_packets/frankenstein-master-cognition-concept/BUILD_ORCHESTRATION_PLAN_20260827.json",
-      "role": "72h build/orchestration plan",
-      "status": "blocked",
-      "evidence": "CURRENT_SOURCE",
-      "note": "Provider/Together execution portions quarantined under 9.13 HARD_OFF."
-    },
-    {
-      "path": "research_entity/topic_packets/frankenstein-master-cognition-concept/frankenstein_packages_v1.py",
-      "role": "phase/package/dependency dispenser",
-      "status": "source-ready",
-      "evidence": "CURRENT_SOURCE"
-    },
-    {
-      "path": "research_entity/topic_packets/frankenstein-master-cognition-concept/frankenstein_orchestrator_v1.py",
-      "role": "Bauleiter continuity/orchestration",
-      "status": "blocked",
-      "evidence": "CURRENT_SOURCE",
-      "note": "Local orchestration source is useful; provider-facing execution is not current authority."
-    },
-    {
-      "path": "research_entity/topic_packets/frankenstein-master-cognition-concept/frankenstein_bugfix_v1.py",
-      "role": "independent watchdog/rollback source",
-      "status": "blocked",
-      "evidence": "CURRENT_SOURCE",
-      "note": "Contains direct NVIDIA/Groq/Mistral provider path; non-operative under current HARD_OFF."
-    },
-    {
-      "path": "research_entity/archive_assimilation/manifests/PROJECT_FRANKENSTEIN_MANIFEST.json",
-      "role": "Project Frankenstein archive-assimilation index",
-      "status": "adopted",
-      "evidence": "HISTORICAL_SOURCE"
-    },
-    {
-      "path": "research_entity/trigger_runs/fusion/fusion-20260809T1538p0700-frank-architecture-lineage/FRANK_ARCHITECTURE_LINEAGE.json",
-      "role": "reconstructed Frank architecture lineage",
-      "status": "adopted",
-      "evidence": "HISTORICAL_SOURCE"
-    },
-    {
-      "path": "research_entity/trigger_runs/fusion/fusion-20260809T1538p0700-frank-architecture-lineage/DREAM_SOMA_LORA_DEEP_LINEAGE.md",
-      "role": "DREAM/SOMA/LoRA training lineage source",
-      "status": "adopted",
-      "evidence": "HISTORICAL_SOURCE"
-    },
-    {
-      "path": "research_entity/architecture_archaeology/MECHANISM_INDEX.json",
-      "role": "architecture archaeology/mechanism index",
-      "status": "adopted",
-      "evidence": "HISTORICAL_SOURCE"
-    }
+    {"path": "research_entity/topic_packets/frankenstein-master-cognition-concept/CONCEPT.md", "role": "master cognition concept with built-vs-aspirational separation", "status": "source-ready", "evidence": "CURRENT_SOURCE"},
+    {"path": "research_entity/topic_packets/frankenstein-master-cognition-concept/BUILD_ORCHESTRATION_PLAN_20260827.json", "role": "current v2 HARD_OFF quarantine/authority manifest", "status": "adopted", "evidence": "CURRENT_SOURCE", "note": "No provider/Together execution authority."},
+    {"path": "research_entity/topic_packets/frankenstein-master-cognition-concept/BUILD_ORCHESTRATION_PLAN_20260827_PROVIDER_QUARANTINED_854f6bc.json", "role": "byte-preserved legacy 72h provider/Together plan", "status": "quarantined", "evidence": "HISTORICAL_SOURCE", "note": "Donor provenance only; never current execution authority."},
+    {"path": "research_entity/topic_packets/frankenstein-master-cognition-concept/frankenstein_authority_gate_v1.py", "role": "stdlib-only fail-closed provider-boundary authority gate", "status": "source-ready", "evidence": "CURRENT_SOURCE", "note": "Evaluated before provider import, secret lookup, network, Aider or fallback dispatch."},
+    {"path": "research_entity/topic_packets/frankenstein-master-cognition-concept/frankenstein_packages_v1.py", "role": "phase/package/dependency dispenser", "status": "source-ready", "evidence": "CURRENT_SOURCE"},
+    {"path": "research_entity/topic_packets/frankenstein-master-cognition-concept/frankenstein_orchestrator_v1.py", "role": "canonical authority-gated Bauleiter entrypoint", "status": "source-ready", "evidence": "CURRENT_SOURCE", "note": "Provider execution remains blocked under 9.13 HARD_OFF."},
+    {"path": "research_entity/topic_packets/frankenstein-master-cognition-concept/frankenstein_bugfix_v1.py", "role": "canonical authority-gated Bugfix entrypoint", "status": "source-ready", "evidence": "CURRENT_SOURCE", "note": "Provider execution remains blocked under 9.13 HARD_OFF."},
+    {"path": "research_entity/topic_packets/frankenstein-master-cognition-concept/frankenstein_orchestrator_v1_PROVIDER_QUARANTINED_854f6bc.py", "role": "original provider-backed Bauleiter donor", "status": "quarantined", "evidence": "HISTORICAL_SOURCE"},
+    {"path": "research_entity/topic_packets/frankenstein-master-cognition-concept/frankenstein_bugfix_v1_PROVIDER_QUARANTINED_854f6bc.py", "role": "original provider-backed Bugfix donor", "status": "quarantined", "evidence": "HISTORICAL_SOURCE"},
+    {"path": "research_entity/topic_packets/frankenstein-master-cognition-concept/TRIGGERWORD3_HARD_OFF_CLOSURE_20260827_GPT56SOL.json", "role": "bounded source/local-unit closure receipt", "status": "measured", "evidence": "PROJECT_MEASUREMENT", "note": "10/10 focused local tests reported by commit 3c3dbe5; no provider/runtime/HCU/J-Space/training promotion."},
+    {"path": "research_entity/archive_assimilation/manifests/PROJECT_FRANKENSTEIN_MANIFEST.json", "role": "Project Frankenstein archive-assimilation index", "status": "adopted", "evidence": "HISTORICAL_SOURCE"},
+    {"path": "research_entity/trigger_runs/fusion/fusion-20260809T1538p0700-frank-architecture-lineage/FRANK_ARCHITECTURE_LINEAGE.json", "role": "reconstructed Frank architecture lineage", "status": "adopted", "evidence": "HISTORICAL_SOURCE"},
+    {"path": "research_entity/trigger_runs/fusion/fusion-20260809T1538p0700-frank-architecture-lineage/DREAM_SOMA_LORA_DEEP_LINEAGE.md", "role": "DREAM/SOMA/LoRA training lineage source", "status": "adopted", "evidence": "HISTORICAL_SOURCE"}
   ],
   "grid_hcu": [
-    {
-      "path": "tools/grid10_fabric.py",
-      "role": "SQLite/WAL shared fabric and coordination source",
-      "status": "source-ready",
-      "evidence": "CURRENT_SOURCE"
-    },
-    {
-      "path": "tools/grid10_node.py",
-      "role": "GRID10 node/regulator/elastic-poll source",
-      "status": "source-ready",
-      "evidence": "CURRENT_SOURCE"
-    },
-    {
-      "path": "research_entity/topic_packets/frankenstein-master-cognition-concept/CONCEPT.md",
-      "role": "current Frankenstein interpretation of GRID10 substrate",
-      "status": "source-ready",
-      "evidence": "CURRENT_SOURCE"
-    }
+    {"path": "tools/grid10_fabric.py", "role": "SQLite/WAL shared fabric and coordination source", "status": "source-ready", "evidence": "CURRENT_SOURCE"},
+    {"path": "tools/grid10_node.py", "role": "GRID10 node/regulator/elastic-poll source", "status": "source-ready", "evidence": "CURRENT_SOURCE"},
+    {"path": "research_entity/topic_packets/frankenstein-master-cognition-concept/CONCEPT.md", "role": "Frankenstein interpretation of GRID10 substrate", "status": "source-ready", "evidence": "CURRENT_SOURCE"}
   ],
   "unifieddb_emergent_retrieval": [
-    {
-      "path": "research_entity/harness/reference/unifieddb_emergent_cascade.py",
-      "role": "Emergent Retrieval cascade reference",
-      "status": "source-ready",
-      "evidence": "HISTORICAL_SOURCE"
-    },
-    {
-      "path": "research_entity/harness/reference/benchmark_unifieddb_emergent_cascade.py",
-      "role": "cascade benchmark source",
-      "status": "source-ready",
-      "evidence": "HISTORICAL_SOURCE"
-    },
-    {
-      "path": "research_entity/harness/reference/benchmark_unifieddb_emergent_assembly.py",
-      "role": "assembly benchmark source",
-      "status": "source-ready",
-      "evidence": "HISTORICAL_SOURCE"
-    },
-    {
-      "path": "agentZero/code/udb/abruf/paket.py",
-      "role": "AgentZero UnifiedDB retrieval lineage",
-      "status": "adopted",
-      "evidence": "HISTORICAL_SOURCE"
-    }
+    {"path": "research_entity/harness/reference/unifieddb_emergent_cascade.py", "role": "Emergent Retrieval cascade reference", "status": "source-ready", "evidence": "HISTORICAL_SOURCE"},
+    {"path": "research_entity/harness/reference/benchmark_unifieddb_emergent_cascade.py", "role": "cascade benchmark source", "status": "source-ready", "evidence": "HISTORICAL_SOURCE"},
+    {"path": "research_entity/harness/reference/benchmark_unifieddb_emergent_assembly.py", "role": "assembly benchmark source", "status": "source-ready", "evidence": "HISTORICAL_SOURCE"},
+    {"path": "agentZero/code/udb/abruf/paket.py", "role": "AgentZero UnifiedDB retrieval lineage", "status": "adopted", "evidence": "HISTORICAL_SOURCE"}
   ],
   "jspace_gwt_grf_hyperposition": [
-    {
-      "path": "research_entity/00_CURRENT/latest/hyperposition-gwt-grf.md",
-      "role": "current-facing compressed topic surface",
-      "status": "adopted",
-      "evidence": "CURRENT_SOURCE",
-      "note": "Still subordinate to exact current authority/evidence."
-    },
-    {
-      "path": "research_entity/00_CURRENT/latest/hyperposition-gwt-grf.json",
-      "role": "machine-readable compressed topic surface",
-      "status": "adopted",
-      "evidence": "CURRENT_SOURCE"
-    },
-    {
-      "path": "agentZero/GWT-GRF-Messung-2026-08-22.md",
-      "role": "GWT/GRF measurement-lineage document",
-      "status": "measured",
-      "evidence": "PROJECT_MEASUREMENT",
-      "note": "Use exact scope from document; do not infer whole-system causality."
-    },
-    {
-      "path": "research_entity/global/j-space/README.md",
-      "role": "Global J-Space research index",
-      "status": "adopted",
-      "evidence": "CURRENT_SOURCE"
-    },
-    {
-      "path": "research_entity/global/j-space/concepts/AGENT_ZERO_JSPACE_IDENTITY_GRF_INJECTION.md",
-      "role": "J-Space/GRF injection concept lineage",
-      "status": "source-ready",
-      "evidence": "HISTORICAL_SOURCE"
-    },
-    {
-      "path": "research_entity/trigger_runs/hyperposition/hyperposition-20260810T2342p0700-chatgpt-secondary-hypermath-grf-fusion/FINAL_REPORT.md",
-      "role": "Hyperposition/GRF fusion research report",
-      "status": "adopted",
-      "evidence": "HISTORICAL_SOURCE"
-    },
-    {
-      "path": "research_entity/trigger_runs/hyperposition/hyperposition-20260810T2342p0700-chatgpt-secondary-hypermath-grf-fusion/architecture/HYPERMATH_GRF_PROOF_CARRYING_IR_V11.clay",
-      "role": "GRF/Hypermath proof-carrying IR source",
-      "status": "source-ready",
-      "evidence": "HISTORICAL_SOURCE"
-    },
-    {
-      "path": "research_entity/trigger_runs/hyperposition/hyperposition-20260810T2342p0700-chatgpt-secondary-hypermath-grf-fusion/prototype/hypermath_grf_reference.py",
-      "role": "GRF reference prototype",
-      "status": "source-ready",
-      "evidence": "HISTORICAL_SOURCE"
-    }
+    {"path": "research_entity/00_CURRENT/latest/hyperposition-gwt-grf.md", "role": "current-facing compressed topic surface", "status": "adopted", "evidence": "CURRENT_SOURCE", "note": "Subordinate to exact current authority/evidence."},
+    {"path": "research_entity/00_CURRENT/latest/hyperposition-gwt-grf.json", "role": "machine-readable compressed topic surface", "status": "adopted", "evidence": "CURRENT_SOURCE"},
+    {"path": "agentZero/GWT-GRF-Messung-2026-08-22.md", "role": "GWT/GRF measurement-lineage document", "status": "measured", "evidence": "PROJECT_MEASUREMENT", "note": "Use exact document scope; no whole-system causality inference."},
+    {"path": "research_entity/global/j-space/README.md", "role": "Global J-Space research index", "status": "adopted", "evidence": "CURRENT_SOURCE"},
+    {"path": "research_entity/global/j-space/concepts/AGENT_ZERO_JSPACE_IDENTITY_GRF_INJECTION.md", "role": "J-Space/GRF injection concept lineage", "status": "source-ready", "evidence": "HISTORICAL_SOURCE"},
+    {"path": "research_entity/trigger_runs/hyperposition/hyperposition-20260810T2342p0700-chatgpt-secondary-hypermath-grf-fusion/FINAL_REPORT.md", "role": "Hyperposition/GRF fusion research report", "status": "adopted", "evidence": "HISTORICAL_SOURCE"}
   ],
   "training": [
-    {
-      "path": "research_entity/trigger_runs/fusion/fusion-20260809T1538p0700-frank-architecture-lineage/DREAM_SOMA_LORA_DEEP_LINEAGE.md",
-      "role": "historical training architecture lineage",
-      "status": "adopted",
-      "evidence": "HISTORICAL_SOURCE"
-    },
-    {
-      "path": "research_entity/archive_assimilation/receipts/666_20260809T0434p0700_chatgpt_secondary_drive_training_lineage_v14_v26.json",
-      "role": "training-lineage archive receipt",
-      "status": "adopted",
-      "evidence": "HISTORICAL_SOURCE"
-    },
-    {
-      "path": "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
-      "role": "current training/provider credit boundary",
-      "status": "blocked",
-      "evidence": "CURRENT_SOURCE",
-      "note": "At base training credit 0, canonical dataset rows 0, Together forbidden."
-    }
+    {"path": "research_entity/trigger_runs/fusion/fusion-20260809T1538p0700-frank-architecture-lineage/DREAM_SOMA_LORA_DEEP_LINEAGE.md", "role": "historical training architecture lineage", "status": "adopted", "evidence": "HISTORICAL_SOURCE"},
+    {"path": "research_entity/archive_assimilation/receipts/666_20260809T0434p0700_chatgpt_secondary_drive_training_lineage_v14_v26.json", "role": "training-lineage archive receipt", "status": "adopted", "evidence": "HISTORICAL_SOURCE"},
+    {"path": "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json", "role": "current training/provider credit boundary", "status": "blocked", "evidence": "CURRENT_SOURCE", "note": "Training credit 0, canonical dataset rows 0, Together forbidden at 9.13 refresh."}
   ],
   "free_swarm_forge_distillery": [
-    {
-      "path": "000_FREE_SWARM_LIVE_DASHBOARD.md",
-      "role": "live/historical FreeSwarm metrics surface",
-      "status": "measured",
-      "evidence": "PROJECT_MEASUREMENT",
-      "note": "Raw token volume is not semantic/training credit."
-    },
-    {
-      "path": "ZZZ_FREE_SWARM_RESULTS.md",
-      "role": "FreeSwarm results summary",
-      "status": "adopted",
-      "evidence": "HISTORICAL_SOURCE"
-    },
-    {
-      "path": "tools/run_research_distillery_local.py",
-      "role": "Distillery local runner source",
-      "status": "source-ready",
-      "evidence": "CURRENT_SOURCE"
-    },
-    {
-      "path": "tools/run_research_distillery_entry.py",
-      "role": "Distillery entry runner source",
-      "status": "source-ready",
-      "evidence": "CURRENT_SOURCE"
-    }
+    {"path": "000_FREE_SWARM_LIVE_DASHBOARD.md", "role": "FreeSwarm metrics surface", "status": "measured", "evidence": "PROJECT_MEASUREMENT", "note": "Raw token volume is not semantic/training credit."},
+    {"path": "ZZZ_FREE_SWARM_RESULTS.md", "role": "FreeSwarm results summary", "status": "adopted", "evidence": "HISTORICAL_SOURCE"},
+    {"path": "tools/run_research_distillery_local.py", "role": "Distillery local runner source", "status": "source-ready", "evidence": "CURRENT_SOURCE"},
+    {"path": "tools/run_research_distillery_entry.py", "role": "Distillery entry runner source", "status": "source-ready", "evidence": "CURRENT_SOURCE"}
   ],
   "provenance_people": [
-    {
-      "path": "agentZero/menschen/PROFILE.md",
-      "role": "project/person provenance archive",
-      "status": "adopted",
-      "evidence": "HISTORICAL_SOURCE"
-    },
-    {
-      "path": "research_entity/global/FRANK_ANDREAS_UNIVERSE_BEHAVIOR_TO_TRAINING_RESEARCH_CONTRACT.md",
-      "role": "Frank/Andreas training-research contract lineage",
-      "status": "adopted",
-      "evidence": "HISTORICAL_SOURCE"
-    }
+    {"path": "agentZero/menschen/PROFILE.md", "role": "project/person provenance archive", "status": "adopted", "evidence": "HISTORICAL_SOURCE"},
+    {"path": "research_entity/global/FRANK_ANDREAS_UNIVERSE_BEHAVIOR_TO_TRAINING_RESEARCH_CONTRACT.md", "role": "Frank/Andreas training-research contract lineage", "status": "adopted", "evidence": "HISTORICAL_SOURCE"}
   ],
   "open_index_work": [
     "Generate a complete Git-tree inventory with blob/tree SHA and size.",
     "Generate inbound path-reference/readers before mass root migration.",
     "Add Git-supported chronology pages for GRF, state/E-PQ, memory, perception, effects, prediction, reflection, goals, LoRA/IAPT/SOMA, and Frankenstein releases.",
     "Attach exact commit/source links to public project measurements.",
-    "Do not infer creation date from a filename or report date; use 'first verified in accessible Git' unless creation is proven."
+    "Execute clean exact-current non-provider authority-gate witness proving provider_calls=0 and secret_lookups=0 before claiming runtime closure.",
+    "Do not infer creation date from filename/report date; use first-verified-in-accessible-Git unless creation is proven."
   ]
 }

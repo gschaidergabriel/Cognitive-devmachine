@@ -15,9 +15,11 @@ For current claims, resolve in this order:
 7. older branches, topic packets, historical receipts
 8. summaries and caches
 
-At trigger base `854f6bc87780f4a5242489a6c807d186b16a8c3d`, `SUPERVISOR_INBOX.json` is schema 9.13 and selects the 9.13O delta. Provider state is HARD_OFF: provider routes are not admitted, Together is forbidden, paid fallback is forbidden, and provider-backed Frankenstein orchestration is non-operative until a current authority change and boundary closure.
+At the Trigger-3 curation base `854f6bc87780f4a5242489a6c807d186b16a8c3d`, `SUPERVISOR_INBOX.json` is schema 9.13 and selects the 9.13O delta. Provider state is HARD_OFF: provider routes are not admitted, Together is forbidden and paid fallback is forbidden.
 
 `BOOTSTRAP_MINIMAL.json` and `PROGRAM_STATE.json` still carry older 8.78-era fields; treat those as stale current-facing surfaces where they conflict with the newer inbox-selected steering.
+
+During this curation, `main` advanced to `3c3dbe5020f57065f47bd4d0a2dce3c537128797`, which closed the obvious Frankenstein caller-boundary source flaw: canonical Bauleiter/Bugfix entrypoints now resolve the current authority before provider import, secret lookup, network, Aider or fallback dispatch and fail closed under HARD_OFF. Provider-backed implementations and the old provider/Together plan are retained as quarantined donor provenance. The closure reports 10/10 focused local tests; this remains source/local-unit scope only.
 
 ## Evidence labels used in this layer
 
@@ -57,15 +59,20 @@ No arrow from model/J-Space/HCU output directly to canonical truth is permitted.
 
 `research_entity/topic_packets/frankenstein-master-cognition-concept/`
 
-Current notable files at the trigger base:
+Current notable files after `3c3dbe5`:
 
 - `CONCEPT.md` — grounded master concept; explicitly separates real mechanisms from aspirational ones.
-- `BUILD_ORCHESTRATION_PLAN_20260827.json` — historical/current-plan source but **quarantined as execution authority** under 9.13 HARD_OFF.
+- `BUILD_ORCHESTRATION_PLAN_20260827.json` — current v2 quarantine/authority manifest. It does not authorize provider execution.
+- `BUILD_ORCHESTRATION_PLAN_20260827_PROVIDER_QUARANTINED_854f6bc.json` — preserved legacy provider/Together plan as donor provenance.
+- `frankenstein_authority_gate_v1.py` — stdlib-only fail-closed authority gate evaluated before provider boundaries.
 - `frankenstein_packages_v1.py` — package/dependency/CAS claim logic.
-- `frankenstein_orchestrator_v1.py` — Bauleiter continuity/orchestration source.
-- `frankenstein_bugfix_v1.py` — independent watchdog/rollback source.
+- `frankenstein_orchestrator_v1.py` — canonical authority-gated Bauleiter entrypoint.
+- `frankenstein_bugfix_v1.py` — canonical authority-gated Bugfix entrypoint.
+- `frankenstein_orchestrator_v1_PROVIDER_QUARANTINED_854f6bc.py` — preserved original provider-backed donor.
+- `frankenstein_bugfix_v1_PROVIDER_QUARANTINED_854f6bc.py` — preserved original provider-backed donor.
+- `TRIGGERWORD3_HARD_OFF_CLOSURE_20260827_GPT56SOL.json` — bounded closure receipt.
 
-The commit that introduced the first working versions reports 29 local tests across these three modules. That is source/test evidence only. It does not authorize their external provider paths and does not promote EntityOS/HCU/BASE/runtime credit.
+The first implementation commit (`854f6bc…`) reported 29 local tests across package/orchestrator/bugfix modules. The later HARD_OFF closure (`3c3dbe5…`) reports 10/10 focused local tests for the authority-bound source path. Neither result promotes provider runtime, EntityOS/HCU/BASE, J-Space, canonical semantics or training credit.
 
 ### GRID10 / Fabric lineage
 
@@ -121,24 +128,26 @@ A reflection episode must end in `ACT`, `ASK`, `WAIT`, re-observation, or anothe
 
 ## Training research boundary
 
-Training and model-specialization material belongs in the evidence map with explicit ancestry, tokenizer/renderer binding, family-level split discipline, hard negatives, and exact runtime identity. Completed training is not a PASS by itself. At the trigger base the supervisor records training credit = 0 and canonical dataset rows admitted = 0.
+Training and model-specialization material belongs in the evidence map with explicit ancestry, tokenizer/renderer binding, family-level split discipline, hard negatives, and exact runtime identity. Completed training is not a PASS by itself. The 9.13 supervisor state records training credit = 0 and canonical dataset rows admitted = 0.
 
 ## Frankenstein provider-orchestration quarantine
 
-The 72-hour plan contains direct NVIDIA/Groq/Mistral fallback logic and a Together training allowance. Under current 9.13 HARD_OFF:
+The current canonical source now implements the right **source-level** fail-closed pattern: authority is resolved before the provider boundary, and the old provider-backed implementations are isolated under explicit `_PROVIDER_QUARANTINED_854f6bc` names. Under current 9.13 HARD_OFF:
 
-- do not deploy these provider loops;
-- do not use plan text as execution authority;
-- do not treat historical or provider-authored changes as runtime credit without independent clean review/re-execution;
-- future orchestration must resolve authority before secret lookup, provider import, network I/O, Aider or fallback dispatch;
-- under HARD_OFF, executable proof should show provider calls = 0 and secret lookups = 0.
+- canonical entrypoints must fail closed before provider import/secret lookup/network/Aider/fallback;
+- quarantined donor files are historical implementation material, not executable authority;
+- the current plan explicitly authorizes zero Together runs;
+- historical/provider-authored changes still receive no runtime credit without admitted clean execution evidence;
+- future provider reopening requires a later explicit canonical authority plus then-current economic/provenance gates;
+- under HARD_OFF, any runtime safety witness must show provider calls = 0 and secret lookups = 0 without probing a real provider.
 
-The source remains valuable as a donor for package decomposition, continuity, rollback and supervision mechanics.
+The donor source remains useful for package decomposition, continuity, rollback and supervision mechanics.
 
 ## Deep links
 
 - Human overview: [`../HUMAN_READ_THIS/README.md`](../HUMAN_READ_THIS/README.md)
 - Evidence/status map: [`research/FRANKENSTEIN_EVIDENCE_MAP.md`](research/FRANKENSTEIN_EVIDENCE_MAP.md)
+- Archive navigation: [`research/ARCHIVE_INDEX.json`](research/ARCHIVE_INDEX.json)
 - Root migration plan: [`repository/ROOT_MIGRATION_MANIFEST.md`](repository/ROOT_MIGRATION_MANIFEST.md)
 - AI installer layer: [`../AI_START_HERE_DO_NOT_SCAN_REPO/README.md`](../AI_START_HERE_DO_NOT_SCAN_REPO/README.md)
 

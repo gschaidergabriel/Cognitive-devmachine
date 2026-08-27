@@ -35,6 +35,7 @@ From the verified repo root:
 AI_START_HERE_DO_NOT_SCAN_REPO/INSTALL_CONTRACT.json
 CLAY_EXECUTION_AUTHORITY.md
 research_entity/claycode/autonomous/SUPERVISOR_INBOX.json
+research_entity/global/OWNER_CORRECTION_ZERO_ENTITYOS_COGNITIVE_GRID_DB_CLAUDECODE_GLOBAL_JSPACE_2026-08-25.md
 research_entity/continuity/BOOTSTRAP_MINIMAL.json
 AI_START_HERE_DO_NOT_SCAN_REPO/README.md
 ```
@@ -48,7 +49,7 @@ research_entity/topic_packets/frankenstein-master-cognition-concept/TRIGGERWORD3
 research_entity/topic_packets/frankenstein-master-cognition-concept/CONCEPT.md
 ```
 
-Do not treat old plan text as newer authority.
+Do not treat old plan text as newer authority. If fixed GRID10/HCU wording conflicts with the newest explicit owner correction, the owner correction wins.
 
 ## 3. Current expected provider result
 
@@ -64,7 +65,30 @@ So a provider-capable Frankenstein launch is expected to **BLOCK before provider
 
 That is correct behavior, not installation failure.
 
-## 4. Detect what this host can really do
+## 4. Current machine target
+
+Do **not** install toward a fixed GRID10 identity.
+
+Current explicit owner target:
+
+```text
+VARIABLE COGNITIVE GRID + PERSISTENT DATABASE + CLAUDE CODE
+```
+
+Rules:
+
+```text
+N = runtime parameter
+GRID10 = benchmark/configuration
+SIMULATE COGNITION; STORE DURABLE DATA
+Claude Code = strong model/tool/code partner
+```
+
+The small-model grid distributes/simulates cognitive processes. Durable exact state belongs in the persistent database where deterministic storage is better. Claude Code is not replaced by the ~0.8B grid.
+
+Global J-Space depth must never exceed the strongest interface actually exposed and causally evidenced. Do not invent activation access to Claude Code from a text/tool/session interface.
+
+## 5. Detect what this host can really do
 
 Check capabilities. Do not infer them from product name.
 
@@ -91,7 +115,7 @@ real effect execution?  yes/no/unknown
 
 Unknown means unknown.
 
-## 5. Result words
+## 6. Result words
 
 Every installation/integration route ends with exactly one of these meanings:
 
@@ -102,12 +126,12 @@ Every installation/integration route ends with exactly one of these meanings:
 
 Never write `NATIVE` because a config file exists, a model says so, or a boolean flag says a hook was observed. Verify real firing/state/effect receipts produced or independently verified by the claimed mechanism.
 
-## 6. Claude Code route
+## 7. Claude Code route
 
 If Claude Code has a real shell + repo checkout:
 
 1. locate repo dynamically with `git rev-parse --show-toplevel`;
-2. read authority files above;
+2. read authority and owner-target files above;
 3. inspect current Frankenstein gate/entrypoint files;
 4. run only tests/actions allowed by current authority;
 5. if adding hooks, prove the hook actually fires with a disposable local receipt;
@@ -118,19 +142,19 @@ Under current HARD_OFF, provider-backed Frankenstein operation stays blocked eve
 
 Possible result: `NATIVE` for repo editing/testing, `BLOCKED` for provider orchestration.
 
-## 7. Codex CLI route
+## 8. Codex CLI route
 
 Same rule as Claude Code:
 
 1. discover real repo root;
-2. read current authority;
+2. read current authority + owner target;
 3. use exact source paths, not repo-wide scanning by default;
 4. run bounded non-provider tests only when admitted;
 5. verify any lifecycle integration by an observed receipt.
 
 Possible result: `NATIVE` for code/research work, `BLOCKED` for provider orchestration under HARD_OFF.
 
-## 8. Hermes Agent route
+## 9. Hermes Agent route
 
 First detect whether Hermes really has:
 
@@ -143,13 +167,13 @@ If yes, map the same authority-first steps.
 
 If it only has messages/tools but no durable repo lifecycle, use `ADAPTED` or `DEGRADED`. Do not fake a native hook.
 
-## 9. ChatGPT Web route
+## 10. ChatGPT Web route
 
 ChatGPT Web may have a GitHub connector without a normal local shell.
 
 Use the connector to:
 
-1. read current `main` and authority;
+1. read current `main`, authority and owner target;
 2. read exact files;
 3. create/update bounded repo artifacts when authorized;
 4. keep runtime claims separate from source writes.
@@ -158,7 +182,7 @@ If no authorized runtime surface is attached, do not call source writes “runti
 
 Typical result: `ADAPTED` for repository research/editing; runtime status depends on actual connected execution capability.
 
-## 10. Claude Web route
+## 11. Claude Web route
 
 If Claude Web only has uploaded files/repository context and no verified executable host:
 
@@ -169,7 +193,7 @@ If Claude Web only has uploaded files/repository context and no verified executa
 
 Result is usually `ADAPTED` or `DEGRADED` until an executable host is verified.
 
-## 11. Grok Web route
+## 12. Grok Web route
 
 Same principle:
 
@@ -180,7 +204,7 @@ Same principle:
 
 Use `ADAPTED`, `DEGRADED`, or `BLOCKED` according to observed capability.
 
-## 12. Generic fallback route
+## 13. Generic fallback route
 
 If host is unknown:
 
@@ -206,7 +230,7 @@ E. Did a real hook/state/effect receipt appear from or get independently verifie
    yes -> NATIVE or ADAPTED, depending on mechanism
 ```
 
-## 13. Frankenstein HARD_OFF check
+## 14. Frankenstein HARD_OFF check
 
 Current main contains authority-gated Frankenstein entrypoints and focused tests.
 
@@ -223,7 +247,7 @@ The original provider-backed implementations are retained as quarantined provena
 
 A valid HARD_OFF witness must demonstrate the boundary stops before provider/secret/network work. A source file existing is not enough.
 
-## 14. Verify lifecycle claims
+## 15. Verify lifecycle and variable-grid claims
 
 For any future host integration claiming “automatic start”, “hook”, “memory”, or “effect”:
 
@@ -237,7 +261,9 @@ For any future host integration claiming “automatic start”, “hook”, “m
 
 A manually asserted boolean or model claim is not a receipt. No mechanism-produced or independently verified receipt = no native lifecycle credit.
 
-## 15. Do not scan the whole repository unless the task requires it
+For a variable-grid claim, also verify that changing `N`, restarting cells, or resizing the grid does not silently change the identity/semantics of the required cognitive process merely because the module count changed. Durable state and workspace handoff/re-entry need exact receipts too.
+
+## 16. Do not scan the whole repository unless the task requires it
 
 Use the curated routes:
 

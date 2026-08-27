@@ -210,33 +210,49 @@ def test_run_bauleiter_instance_writes_marker_once_gate_genuinely_satisfied(tmp_
 
 
 # ---- canonical entrypoint authority-gate behavior, injected fixture (not live global state) ----
+# 2026-08-28: frankenstein_authority_gate_v1.py was hardened (supervisor 9.13P) to
+# require BOTH SUPERVISOR_INBOX.json AND a second canonical FREE_PROVIDER_ADMISSION.json
+# to coherently agree -- the single-file _write_inbox() helper this section used to have
+# is stale under that schema (dual-authority tests already live in the dedicated
+# tests/test_frankenstein_provider_hardoff_gate_v1.py::_write_authority, which is the
+# current ground truth). Kept here only as two thin smoke tests reusing that same helper,
+# so this file still directly exercises the canonical entrypoint modules it imports.
 
-def _write_inbox(repo_root: Path, provider_routes_admitted: bool) -> None:
+def _write_authority(repo_root: Path, *, admitted: bool) -> None:
     inbox_path = repo_root / authority_gate.INBOX_RELATIVE_PATH
+    canonical_path = repo_root / authority_gate.PROVIDER_ADMISSION_RELATIVE_PATH
     inbox_path.parent.mkdir(parents=True, exist_ok=True)
     inbox_path.write_text(json.dumps({
         "free_only": {
             "enabled": True,
-            "provider_routes_admitted": provider_routes_admitted,
-            "free_swarm_owner_emergency_stop": not provider_routes_admitted,
-            "together_forbidden": True,
-            "remaining_together_paid_runs_authorized": 0,
+            "no_paid_fallback": not admitted,
+            "provider_routes_admitted": admitted,
+            "free_swarm_owner_emergency_stop": not admitted,
+            "together_forbidden": not admitted,
+            "remaining_together_paid_runs_authorized": 1 if admitted else 0,
         }
+    }))
+    providers = {name: {"admitted": admitted} for name in ("groq", "mistral", "nvidia", "openrouter")}
+    canonical_path.write_text(json.dumps({
+        "authority_epoch": "test",
+        "mode": "FREE_ONLY",
+        "execution_state": "PROVIDER_ROUTES_ADMITTED" if admitted else "OWNER_EMERGENCY_STOP_FREE_SWARM_HARD_OFF",
+        "providers": providers,
     }))
 
 
 def test_entrypoint_blocks_when_authority_denies(tmp_path, monkeypatch):
-    _write_inbox(tmp_path, provider_routes_admitted=False)
+    _write_authority(tmp_path, admitted=False)
     monkeypatch.setattr(entrypoint, "REPO_ROOT", tmp_path)
     try:
         authority_gate.require_provider_routes("test", tmp_path)
-        assert False, "must raise when provider_routes_admitted is False"
+        assert False, "must raise when authority denies"
     except authority_gate.ProviderAuthorityBlocked:
         pass
 
 
 def test_entrypoint_admits_when_authority_allows(tmp_path):
-    _write_inbox(tmp_path, provider_routes_admitted=True)
+    _write_authority(tmp_path, admitted=True)
     state = authority_gate.require_provider_routes("test", tmp_path)
     assert state["provider_routes_admitted"] is True
 

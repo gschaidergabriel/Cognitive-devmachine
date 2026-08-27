@@ -1,0 +1,99 @@
+{
+  "schema": "FRANKENSTEIN_AI_INSTALL_CONTRACT/v1",
+  "purpose": "Install or adapt the Project Frankenstein/EntityOS research interface without scanning the whole repository or inventing host capabilities.",
+  "root_discovery": {
+    "method": "START_FROM_THIS_FILE_AND_WALK_PARENTS_FOR_GIT_OR_KNOWN_SENTINELS",
+    "forbidden_assumptions": [
+      "Downloads directory",
+      "home directory",
+      "current working directory",
+      "clone path",
+      "attachment mount path"
+    ],
+    "known_sentinels": [
+      ".git",
+      "CLAY_EXECUTION_AUTHORITY.md",
+      "research_entity/",
+      "AI_START_HERE_DO_NOT_SCAN_REPO/INSTALL_CONTRACT.json"
+    ]
+  },
+  "minimum_read_set": [
+    "AI_START_HERE_DO_NOT_SCAN_REPO/INSTALL_CONTRACT.json",
+    "AI_START_HERE_DO_NOT_SCAN_REPO/INSTALL.md",
+    "CLAY_EXECUTION_AUTHORITY.md",
+    "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
+    "HUMAN_READ_THIS/START_HERE.md",
+    "DEV_SOURCE_RESEARCH/README.md"
+  ],
+  "capability_detection": [
+    "filesystem_read",
+    "filesystem_write",
+    "shell_or_process_execution",
+    "git_read",
+    "git_write",
+    "project_instruction_surface",
+    "native_lifecycle_hook_surface",
+    "durable_state_surface",
+    "effect_execution_surface",
+    "effect_receipt_surface"
+  ],
+  "host_routes": {
+    "claude_code": {
+      "local_executable_candidates": ["claude"],
+      "project_instruction_candidates": ["CLAUDE.md", ".claude/"],
+      "minimum_classification_without_verified_hook": "ADAPTED_OR_DEGRADED"
+    },
+    "codex_cli": {
+      "local_executable_candidates": ["codex"],
+      "project_instruction_candidates": ["AGENTS.md"],
+      "minimum_classification_without_verified_hook": "ADAPTED_OR_DEGRADED"
+    },
+    "hermes_agent": {
+      "local_executable_candidates": ["hermes", "hermes-agent", "hermes_agent"],
+      "project_instruction_candidates": [],
+      "minimum_classification_without_verified_hook": "ADAPTED_OR_DEGRADED"
+    },
+    "chatgpt_web": {
+      "local_executable_candidates": [],
+      "mode": "WEB_CONTEXT_OR_CONNECTED_REPO",
+      "default_without_external_runtime_bridge": "DEGRADED"
+    },
+    "claude_web": {
+      "local_executable_candidates": [],
+      "mode": "WEB_CONTEXT_OR_CONNECTED_REPO",
+      "default_without_external_runtime_bridge": "DEGRADED"
+    },
+    "grok_web": {
+      "local_executable_candidates": [],
+      "mode": "WEB_CONTEXT_OR_CONNECTED_REPO",
+      "default_without_external_runtime_bridge": "DEGRADED"
+    },
+    "generic": {
+      "mode": "CAPABILITY_FIRST",
+      "default": "DEGRADED_OR_BLOCKED"
+    }
+  },
+  "proof_requirements": {
+    "filesystem_write": "CREATE_READBACK_FSYNC_REMOVE_PROBE_AT_DYNAMIC_REPO_PATH",
+    "native_lifecycle_hook": "HOST_MUST_INVOKE_THE_PROBE_FROM_A_REAL_DECLARED_LIFECYCLE_HOOK; MANUAL_RECEIPT_CREATION_IS_NOT_PROOF",
+    "durable_state": "WRITE_THEN_REOPEN_AND_VERIFY_AT_AN_ALLOWED_STATE_PATH",
+    "effect_receipt": "EXECUTE_AN_ALLOWED_BOUNDED_EFFECT_AND_BIND_REQUEST_RESULT_OUTCOME_IDENTITY; REQUEST_ALONE_IS_NOT_EFFECT_PROOF",
+    "authority": "CURRENT_AUTHORITY_MUST_BE_READ_BEFORE_ANY_EXTERNAL_PROVIDER_OR_REAL_WORLD_EFFECT"
+  },
+  "classifications": {
+    "NATIVE": "Host has an actual supported integration path and the declared lifecycle/state/effect receipts were observed from that path.",
+    "ADAPTED": "Useful filesystem/project/tool integration is verified, but one or more required lifecycle features are supplied by an adapter rather than native host semantics.",
+    "DEGRADED": "Context/instructions can be used but durable lifecycle/state/effect verification is incomplete or unavailable.",
+    "BLOCKED": "The host cannot access the required project material or cannot safely establish the minimum integration path."
+  },
+  "anti_fake_success": [
+    "Presence of a CLI binary is not a successful install.",
+    "Presence of CLAUDE.md or AGENTS.md is not proof the host loaded it.",
+    "A generated receipt is not proof a native hook fired unless the host invoked it through the declared hook path.",
+    "A write request is not proof the file/state exists after reopen.",
+    "A tool request is not proof the external effect occurred.",
+    "Unknown outcome remains UNKNOWN.",
+    "Do not classify NATIVE from documentation alone."
+  ],
+  "current_authority_warning": "At Trigger-3 re-entry, supervisor 9.13 has external provider routes HARD_OFF and Together forbidden. Installer/adapters must not probe provider credentials or network routes merely to discover capabilities."
+}

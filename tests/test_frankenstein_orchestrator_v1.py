@@ -87,7 +87,7 @@ def test_run_bauleiter_instance_claims_and_dispatches_a_real_package(tmp_path, m
 
     dispatched_descriptions = []
 
-    def fake_dispatch(task_description, reason, log_path_arg, max_retries=4):
+    def fake_dispatch(task_description, reason, log_path_arg, max_retries=4, **kwargs):
         dispatched_descriptions.append(task_description)
         return {"ok": True}
 
@@ -239,3 +239,101 @@ def test_entrypoint_admits_when_authority_allows(tmp_path):
     _write_inbox(tmp_path, provider_routes_admitted=True)
     state = authority_gate.require_provider_routes("test", tmp_path)
     assert state["provider_routes_admitted"] is True
+
+
+# ---- direct-dispatch fallback (2026-08-28: harness_aider.py is coordinator-local,
+# not present on a fresh VPS deployment -- these tests cover the portable fallback) ----
+
+def test_parse_file_blocks_extracts_path_and_content():
+    text = (
+        "Here is the implementation:\n\n"
+        "FILE: tools/example.py\n```python\ndef f():\n    return 1\n```\n\n"
+        "FILE: tests/test_example.py\n```python\nfrom tools.example import f\n"
+        "def test_f():\n    assert f() == 1\n```\n"
+    )
+    blocks = orch.parse_file_blocks(text)
+    assert set(blocks.keys()) == {"tools/example.py", "tests/test_example.py"}
+    assert "def f():" in blocks["tools/example.py"]
+    assert "assert f() == 1" in blocks["tests/test_example.py"]
+
+
+def test_parse_file_blocks_returns_empty_dict_when_no_blocks_present():
+    assert orch.parse_file_blocks("I refuse to implement this.") == {}
+
+
+def test_apply_file_blocks_refuses_path_outside_repo_root(tmp_path):
+    repo_root = tmp_path / "repo"
+    repo_root.mkdir()
+    try:
+        orch.apply_file_blocks(repo_root, {"../../etc/evil.py": "x = 1"})
+        assert False, "must refuse to write outside repo_root"
+    except ValueError:
+        pass
+
+
+def test_apply_file_blocks_writes_real_files(tmp_path):
+    repo_root = tmp_path / "repo"
+    repo_root.mkdir()
+    written = orch.apply_file_blocks(repo_root, {"pkg/mod.py": "x = 1\n"})
+    assert len(written) == 1
+    assert (repo_root / "pkg" / "mod.py").read_text() == "x = 1\n"
+
+
+def test_dispatch_helper_task_direct_commits_on_successful_verification(tmp_path, monkeypatch):
+    repo_root = tmp_path / "repo"
+    repo_root.mkdir()
+    subprocess_module = orch.subprocess
+    subprocess_module.run(["git", "init"], cwd=repo_root, capture_output=True)
+    subprocess_module.run(["git", "config", "user.email", "t@t"], cwd=repo_root, capture_output=True)
+    subprocess_module.run(["git", "config", "user.name", "t"], cwd=repo_root, capture_output=True)
+
+    def fake_call(tier, messages, **kwargs):
+        return "FILE: mod.py\n```python\nx = 42\n```"
+
+    monkeypatch.setattr(orch, "call_specific_tier", fake_call)
+    log_path = tmp_path / "log.txt"
+
+    result = orch.dispatch_helper_task_direct("write a module with x=42", "python3 -c \"import mod; assert mod.x == 42\"",
+                                                repo_root, log_path)
+    assert result["ok"] is True
+    assert (repo_root / "mod.py").read_text() == "x = 42"
+    log = subprocess_module.run(["git", "log", "--oneline"], cwd=repo_root, capture_output=True, text=True).stdout
+    assert "direct-dispatch" in log
+
+
+def test_dispatch_helper_task_direct_reverts_on_failed_verification(tmp_path, monkeypatch):
+    repo_root = tmp_path / "repo"
+    repo_root.mkdir()
+    (repo_root / "mod.py").write_text("x = 1\n")  # pre-existing content must survive a failed attempt
+
+    def fake_call(tier, messages, **kwargs):
+        return "FILE: mod.py\n```python\nx = 999\n```"
+
+    monkeypatch.setattr(orch, "call_specific_tier", fake_call)
+    log_path = tmp_path / "log.txt"
+
+    result = orch.dispatch_helper_task_direct("write a module with x=42", "python3 -c \"import mod; assert mod.x == 42\"",
+                                                repo_root, log_path, max_retries=1)
+    assert result["ok"] is False
+    assert (repo_root / "mod.py").read_text() == "x = 1\n", "must revert to prior content after failed verification"
+
+
+def test_dispatch_helper_task_falls_back_to_direct_when_harness_missing(tmp_path, monkeypatch):
+    monkeypatch.setattr(orch, "HARNESS_PATH", str(tmp_path / "does-not-exist.py"))
+    called = {}
+
+    def fake_direct(task_description, acceptance_criteria, repo_root, log_path, **kwargs):
+        called["args"] = (task_description, acceptance_criteria, repo_root)
+        return {"ok": True, "files": ["x.py"]}
+
+    monkeypatch.setattr(orch, "dispatch_helper_task_direct", fake_direct)
+    result = orch.dispatch_helper_task("do the thing", "reason", tmp_path / "log.txt",
+                                        acceptance_criteria="true", repo_root=tmp_path)
+    assert result["ok"] is True
+    assert called["args"] == ("do the thing", "true", tmp_path)
+
+
+def test_dispatch_helper_task_reports_honestly_when_harness_missing_and_no_fallback_params(tmp_path, monkeypatch):
+    monkeypatch.setattr(orch, "HARNESS_PATH", str(tmp_path / "does-not-exist.py"))
+    result = orch.dispatch_helper_task("do the thing", "reason", tmp_path / "log.txt")
+    assert result["ok"] is False

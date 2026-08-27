@@ -156,13 +156,108 @@ def _log(log_path: Path, line: str) -> None:
         f.write(f"{time.strftime('%Y-%m-%dT%H:%M:%S')} {line}\n")
 
 
+FILE_BLOCK_RE = None  # set lazily in parse_file_blocks() to avoid importing re at module load if unused
+
+
+def parse_file_blocks(response_text: str) -> dict[str, str]:
+    """Parses 'FILE: <path>\\n```lang\\n<content>\\n```' blocks out of a
+    direct-dispatch model response into {relative_path: full_content}. Pure
+    string processing, no exotic dependency -- deliberately simple and
+    testable in isolation."""
+    import re
+    pattern = re.compile(r"FILE:\s*(\S+)\s*\n```[a-zA-Z0-9_+-]*\n(.*?)\n```", re.DOTALL)
+    return {m.group(1).strip(): m.group(2) for m in pattern.finditer(response_text)}
+
+
+def apply_file_blocks(repo_root: Path, blocks: dict[str, str]) -> list[Path]:
+    written = []
+    for rel_path, content in blocks.items():
+        full = (repo_root / rel_path).resolve()
+        if repo_root.resolve() not in full.parents and full != repo_root.resolve():
+            raise ValueError(f"refusing to write outside repo_root: {rel_path}")
+        full.parent.mkdir(parents=True, exist_ok=True)
+        full.write_text(content)
+        written.append(full)
+    return written
+
+
+def dispatch_helper_task_direct(task_description: str, acceptance_criteria: str, repo_root: Path,
+                                 log_path: Path, tier: str = PRIMARY_TIER, max_retries: int = 2) -> dict:
+    """Portable fallback used when harness_aider.py (a coordinator-local
+    tool, not part of this repo) is not present in the current environment
+    -- e.g. on a fresh VPS deployment. Asks a single free-pool model call to
+    write the complete content of every file the package needs, applies it,
+    runs the package's own acceptance_criteria command as a real
+    verify-before-commit gate, and reverts cleanly (restores prior file
+    content, or deletes newly-created files) if verification fails -- never
+    leaves a broken, half-applied state committed."""
+    prompt = (
+        "You are a focused coding helper working on ONE small, self-contained "
+        "task. Implement EXACTLY this, nothing more:\n\n" + task_description +
+        "\n\nRespond with one or more blocks, one per file you create or "
+        "modify, in EXACTLY this format (paths relative to the repository "
+        "root):\n\nFILE: path/to/file.py\n```python\n<complete file content>\n```"
+        "\n\nWrite the COMPLETE content of each file (not a diff/patch). No "
+        "prose outside the FILE blocks."
+    )
+    for attempt in range(1, max_retries + 1):
+        try:
+            response = call_specific_tier(tier, [{"role": "user", "content": prompt}], max_tokens=4000)
+        except TierUnavailable as e:
+            _log(log_path, f"DIRECT_DISPATCH_TIER_UNAVAILABLE attempt={attempt} {e}")
+            continue
+        blocks = parse_file_blocks(response)
+        if not blocks:
+            _log(log_path, f"DIRECT_DISPATCH_NO_FILE_BLOCKS attempt={attempt}")
+            continue
+        touched = {rel: ((repo_root / rel).read_text() if (repo_root / rel).exists() else None)
+                   for rel in blocks}
+        try:
+            apply_file_blocks(repo_root, blocks)
+        except ValueError as e:
+            _log(log_path, f"DIRECT_DISPATCH_REJECTED_UNSAFE_PATH attempt={attempt} {e}")
+            continue
+        verify = subprocess.run(acceptance_criteria, shell=True, cwd=str(repo_root),
+                                 capture_output=True, text=True, timeout=300)
+        if verify.returncode == 0:
+            subprocess.run(["git", "-C", str(repo_root), "add", *blocks.keys()], check=False)
+            subprocess.run(["git", "-C", str(repo_root), "commit", "-m",
+                             f"frankenstein-bauleiter(direct-dispatch): {task_description[:72]}"],
+                            check=False)
+            _log(log_path, f"DIRECT_DISPATCH_SUCCESS attempt={attempt} files={list(blocks.keys())}")
+            return {"ok": True, "files": list(blocks.keys()), "attempt": attempt}
+        for rel, old in touched.items():
+            p = repo_root / rel
+            if old is None and p.exists():
+                p.unlink()
+            elif old is not None:
+                p.write_text(old)
+        _log(log_path, f"DIRECT_DISPATCH_VERIFY_FAILED attempt={attempt} "
+                        f"stderr={verify.stderr[-500:]}")
+    return {"ok": False, "reason": "direct-dispatch exhausted retries with no verified change"}
+
+
 def dispatch_helper_task(task_description: str, reason: str, log_path: Path,
-                          max_retries: int = 4) -> dict:
+                          max_retries: int = 4, acceptance_criteria: str | None = None,
+                          repo_root: Path | None = None) -> dict:
     """Shells out to the real harness_aider.py fallback-start CLI (verified
     via --help: --auftrag, --kandidaten, --grund) to dispatch a well-scoped
     helper subtask to the free-pool cascade. Backs off exponentially on
     real rate-limit signals surfaced in stdout/stderr rather than hammering
-    a rate-limited provider."""
+    a rate-limited provider.
+
+    harness_aider.py is a coordinator-local tool (lives under
+    ~/.claude/star/, not part of this git repo), so it will not exist on a
+    fresh deployment (e.g. a VPS). When it is missing, this function falls
+    back to dispatch_helper_task_direct() (needs acceptance_criteria +
+    repo_root) instead of retrying a call that can never succeed."""
+    if not os.path.isfile(HARNESS_PATH):
+        if acceptance_criteria and repo_root:
+            _log(log_path, f"HARNESS_AIDER_NOT_PRESENT falling back to direct dispatch: {HARNESS_PATH}")
+            return dispatch_helper_task_direct(task_description, acceptance_criteria, repo_root, log_path)
+        _log(log_path, f"HARNESS_AIDER_NOT_PRESENT no acceptance_criteria/repo_root given, cannot fall back")
+        return {"ok": False, "reason": f"harness_aider.py not present at {HARNESS_PATH} and no direct-dispatch fallback params given"}
+
     delay = 5.0
     last_result = None
     for attempt in range(1, max_retries + 1):
@@ -355,7 +450,9 @@ def run_bauleiter_instance(continuation_context: str | None, fabric_path: str,
             record_build_event(fabric, BAULEITER_NODE_ID,
                                 {"event": "PACKAGE_DISPATCH_STARTED", "package_id": claimed["task_id"], "ts": time.time()},
                                 log_path)
-            dispatch_result = dispatch_helper_task(claimed["description"], "frankenstein-bauleiter-package", log_path)
+            dispatch_result = dispatch_helper_task(claimed["description"], "frankenstein-bauleiter-package", log_path,
+                                                    acceptance_criteria=claimed.get("acceptance_criteria"),
+                                                    repo_root=REPO_ROOT)
             ok = bool(dispatch_result.get("ok", False))
             packages.mark_package_done(fabric, claimed["task_id"], ok=ok, node_id=BAULEITER_NODE_ID,
                                         log_fn=lambda m: _log(log_path, m))

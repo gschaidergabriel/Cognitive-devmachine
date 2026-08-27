@@ -198,6 +198,59 @@ def _read_json(path: Path, max_chars: int = 12000):
         return None
 
 
+def forge_failure_feedback(path: Path | None = None, max_records: int = 96) -> dict:
+    """Compress recent Forge outcomes into causal worker feedback, never authority.
+
+    This deliberately carries only status/reason aggregates, not model prose or accepted
+    facts. It lets the next workers observe when the bottleneck is proposal transport
+    quality (for example malformed unified diffs) rather than generating more tokens.
+    """
+    eval_path = path or (ARTIFACT_ROOT / "forge/architecture_delta_evaluations.jsonl")
+    try:
+        lines = eval_path.read_text(encoding="utf-8", errors="replace").splitlines()[-max(1, max_records):]
+    except OSError:
+        return {"authority": "NONCANONICAL_FEEDBACK_ONLY", "evaluations_sampled": 0}
+    statuses: collections.Counter[str] = collections.Counter()
+    reasons: collections.Counter[str] = collections.Counter()
+    sampled = 0
+    for line in lines:
+        try:
+            row = json.loads(line)
+        except Exception:
+            continue
+        if not isinstance(row, dict) or row.get("record_type") == "schema_marker":
+            continue
+        status = str(row.get("status") or "UNKNOWN").strip().lower()
+        reason = str(row.get("reason") or "").strip()
+        statuses[status] += 1
+        if reason:
+            low = reason.lower()
+            if "no valid patches" in low:
+                reason = "NO_VALID_UNIFIED_PATCH"
+            elif "corrupt patch" in low:
+                reason = "CORRUPT_UNIFIED_PATCH"
+            elif "missing/safety-invalid patch" in low:
+                reason = "MISSING_OR_SAFETY_INVALID_PATCH_TARGETS_OR_TESTS"
+            elif "no such file or directory" in low:
+                reason = "TARGET_PATH_NOT_IN_REPOSITORY"
+            else:
+                reason = reason[:240]
+            reasons[reason] += 1
+        sampled += 1
+    pre_execution = sum(
+        statuses.get(key, 0)
+        for key in ("patch_rejected", "needs_implementation")
+    )
+    return {
+        "authority": "NONCANONICAL_FEEDBACK_ONLY",
+        "evaluations_sampled": sampled,
+        "status_counts": dict(statuses),
+        "pre_execution_reject_count": pre_execution,
+        "accepted_count": statuses.get("accepted", 0),
+        "top_failure_reasons": reasons.most_common(6),
+    }
+
+
 def live_runtime_truth(max_chars: int) -> str:
     """Current artifact truth outranks stale repo narrative inside worker prompts."""
     current_status = None
@@ -209,6 +262,8 @@ def live_runtime_truth(max_chars: int) -> str:
         "supervisor": _read_json(ARTIFACT_ROOT / "SUPERVISOR.json", 10000),
         "current_swarm_status": current_status,
         "distillery_status": _read_json(ARTIFACT_ROOT / "distillery/STATUS.json", 12000),
+        "forge_status": _read_json(ARTIFACT_ROOT / "forge/STATUS.json", 12000),
+        "forge_failure_feedback": forge_failure_feedback(),
     }
     return json.dumps(payload, ensure_ascii=False, separators=(",", ":"))[:max_chars]
 
@@ -256,9 +311,19 @@ PRODUCTIVITY CONTRACT — MANDATORY
 - Do not claim a credential/provider is absent when CURRENT_RUNTIME_TRUTH shows it active.
 - If you cannot produce a credible delta, say NO_DELTA and give the missing evidence instead of padding.
 - Prefer minimal diffs and commands that can run in disposable worktrees/sandboxes.
+- Read CURRENT_RUNTIME_TRUTH.forge_failure_feedback before producing another delta. Repeating a dominant rejection class without a new repair mechanism is a failed worker result.
+
+FORGE DELTA ABI — FAIL CLOSED
+- ready_for_forge=true is an executable transport claim, not a confidence score.
+- Set ready_for_forge=true ONLY when target_files is nonempty, patch_unified_diff is a complete real unified diff, and test_commands contains at least one safe repo-root command.
+- A real patch must contain file headers (---/+++), at least one @@ hunk, exact hunk line counts, literal newlines, and NO Markdown/code fences. Prefer standard `git diff` form with `diff --git a/... b/...`.
+- target_files must exactly name repository paths changed by the patch. Do not invent a path unless the patch explicitly creates that file from /dev/null.
+- Keep the primary patch minimal enough to fit intact in this response; a truncated or illustrative diff MUST use ready_for_forge=false.
+- test_commands must exercise the changed behavior; negative_test_commands must exercise the strongest fail-closed/falsifier path when applicable.
+- If you cannot guarantee those invariants, emit the best hypothesis/falsifier but set ready_for_forge=false. Do not send placeholders to Forge.
 
 After DEUTSCHE_ZUSAMMENFASSUNG emit BOTH machine-readable lines, with valid compact JSON and no Markdown fence:
-ARCHITECTURE_DELTA_JSON={"delta_id":"worker-<serial>-short-name","hypothesis":"...","mechanism":"...","target_files":["..."],"patch_unified_diff":"optional unified diff or empty string","test_commands":["..."],"benchmark_command":"... or empty","metric":"...","expected_direction":"higher|lower|boolean","baseline_needed":true,"falsifier":"...","risk":"...","ready_for_forge":true}
+ARCHITECTURE_DELTA_JSON={"delta_id":"worker-<serial>-short-name","hypothesis":"...","mechanism":"...","target_files":["..."],"patch_unified_diff":"complete unified diff or empty string","test_commands":["..."],"negative_test_commands":["..."],"benchmark_command":"... or empty","metric":"...","expected_direction":"higher|lower|boolean","baseline_needed":true,"falsifier":"...","risk":"...","ready_for_forge":true}
 OPEN_RESEARCH_QUESTIONS_JSON=["question 1","question 2","question 3"]
 Set ready_for_forge=false when the proposal is not executable yet. Questions must be unresolved and causally distinct from accepted distilled packets.
 """
@@ -314,7 +379,6 @@ def choose_models(provider: str, rows: list[dict]) -> list[str]:
         if b is not None and b < 12.0: continue
         if b is None and not any(x in low for x in UNKNOWN_HIGH_VALUE): continue
         attempts,successes,errors=history.get(model_id,(0,0,0))
-        # Stop burning requests on empirically dead routes until the catalog identity changes.
         if attempts >= 2 and successes == 0 and errors >= 2: continue
         ratio=successes/max(1,attempts)
         score=(b or 0.0)

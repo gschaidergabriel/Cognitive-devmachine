@@ -1,0 +1,67 @@
+{
+  "schema": "TRIGGERWORD3_EXACT_CURRENT_COMPONENT_TEST_RECEIPT/v1",
+  "trigger": "triggerwort 3",
+  "organ": "GPT-5.6 Sol",
+  "canonical_main": "de397c71db9f87b2d6d234af60096b0dac4d6813",
+  "source_introduced_by": "3cf4a76b8ffa2e9bdedca3cbd2d49c5d81f1033a",
+  "source_unchanged_from_introduction_to_tested_main": true,
+  "tested_files": {
+    "AI_START_HERE_DO_NOT_SCAN_REPO/frankenstein_host_preflight.py": {
+      "git_blob_sha": "35934129dbd917237ba8a35e7ba10f2ebf59ea14"
+    },
+    "tests/test_triggerword3_host_preflight.py": {
+      "git_blob_sha": "5fd91305bf3f644aa575ba97285115d31a95342f"
+    }
+  },
+  "identity_verification": {
+    "method": "git hash-object on exact reconstructed file bytes",
+    "preflight_hash": "35934129dbd917237ba8a35e7ba10f2ebf59ea14",
+    "test_hash": "5fd91305bf3f644aa575ba97285115d31a95342f",
+    "matches_github_blob_ids": true
+  },
+  "execution": {
+    "surface": "LOCAL_ISOLATED_CONTAINER_NON_PROVIDER",
+    "command": "python -m pytest -q tests/test_triggerword3_host_preflight.py",
+    "result": "7 passed in 0.06s",
+    "scope": "HOST_PREFLIGHT_COMPONENT_REGRESSION_ONLY"
+  },
+  "verified_behaviors": [
+    "read-only preflight cannot self-promote repository integration to NATIVE or ADAPTED",
+    "missing repository or required authority fails closed",
+    "inbox-selected steering must resolve inside the repository and rejects escape or malformed JSON",
+    "current HARD_OFF provider authority shape classifies provider orchestration BLOCKED",
+    "a hypothetical source-level provider-open shape remains DEGRADED because execution was not probed",
+    "preflight source contains no listed provider/network client imports"
+  ],
+  "authority_observed_at_tested_main": {
+    "schema_version": "9.13",
+    "supervisor_delta": "9.13Q_NON_AUTHORITY",
+    "free_only": true,
+    "no_paid_fallback": true,
+    "together_forbidden": true,
+    "provider_routes_admitted": false,
+    "free_swarm_owner_emergency_stop": true,
+    "remaining_together_paid_runs_authorized": 0
+  },
+  "negative_evidence_and_boundaries": [
+    "This test does not fire real host lifecycle hooks.",
+    "This test does not prove cross-session durable state.",
+    "This test does not perform or verify real external effects.",
+    "This test makes zero provider calls and zero secret lookups.",
+    "Component regression PASS does not imply provider-runtime, EntityOS, HCU, GRID10, Global J-Space, canonical-semantics, or training PASS."
+  ],
+  "promotion": {
+    "provider_runtime": 0,
+    "entityos_whole_runtime": 0,
+    "hcu_full_runtime": 0,
+    "physical_grid10_runtime": 0,
+    "jspace_model_runtime": 0,
+    "canonical_semantics": 0,
+    "training": 0
+  },
+  "coordination": {
+    "merged_implementation_pr": 2073,
+    "discarded_duplicate_pr": 2082,
+    "duplicate_resolution": "PR 2082 closed after re-entry because PR 2073 landed an equal-or-stronger implementation; only the new exact-current component evidence is retained here."
+  }
+}

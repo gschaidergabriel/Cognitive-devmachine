@@ -1,0 +1,34 @@
+{
+  "schema": "FRANKENSTEIN_AI_INSTALL_CONTRACT/v1",
+  "purpose": "minimum-scan capability-first onboarding",
+  "must_read": [
+    "CLAY_EXECUTION_AUTHORITY.md",
+    "research_entity/continuity/BOOTSTRAP_MINIMAL.json",
+    "research_entity/rooms/PROGRAM_STATE.json",
+    "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
+    "DEV_SOURCE_RESEARCH/README.md"
+  ],
+  "must_not_assume": [
+    "Downloads path",
+    "home directory",
+    "clone path",
+    "attachment mount",
+    "current working directory",
+    "local filesystem access from a web chat",
+    "provider credentials or provider authority",
+    "hook support",
+    "durable state support"
+  ],
+  "final_status_enum": ["NATIVE", "ADAPTED", "DEGRADED", "BLOCKED"],
+  "native_requires": [
+    "dynamic repository resolution",
+    "current authority read",
+    "task-relevant tool access",
+    "verified lifecycle hook firing when hooks are claimed",
+    "verified durable state write",
+    "verified effect/result receipt when effects are claimed"
+  ],
+  "failure_law": "missing or unverified capability lowers the status; never synthesize success",
+  "detector": "AI_START_HERE_DO_NOT_SCAN_REPO/detect_host_capabilities.py",
+  "detector_scope": "local capability snapshot only; no network, provider credentials, hook execution, state mutation or effect execution"
+}

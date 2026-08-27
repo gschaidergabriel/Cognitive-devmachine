@@ -1,0 +1,325 @@
+{
+  "schema": "FRANKENSTEIN_SOURCE_INDEX/v1",
+  "created_at": "2026-08-27T23:50:00+07:00",
+  "purpose": "Machine-readable navigation and evidence classification for Triggerword 3. This is an index over source/evidence, never a replacement authority or truth store.",
+  "repository": "gschaidergabriel/clay-global-research-entity",
+  "index_branch_base": "ed70385760c03a30dea7b6ecf8f6b78cbbaa584a",
+  "root_readme_modified": false,
+  "evidence_classes": [
+    "CURRENT_SOURCE",
+    "HISTORICAL_SOURCE",
+    "PROJECT_MEASUREMENT",
+    "EXTERNAL_PRIMARY",
+    "INFERENCE",
+    "OPEN_HYPOTHESIS",
+    "NEGATIVE_RESULT"
+  ],
+  "lifecycle_states": [
+    "attempted",
+    "source-ready",
+    "measured",
+    "reproduced",
+    "contradicted",
+    "blocked",
+    "prepared-not-run",
+    "adopted",
+    "retired"
+  ],
+  "authority": {
+    "read_first": [
+      "CLAY_EXECUTION_AUTHORITY.md",
+      "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
+      "research_entity/claycode/autonomous/SUPERVISOR_STEERING_9_13O_DELTA_2026-08-27T2341P0700_GPT56SOL.json",
+      "research_entity/continuity/BOOTSTRAP_MINIMAL.json",
+      "research_entity/rooms/PROGRAM_STATE.json"
+    ],
+    "observed_supervisor_schema": "9.13",
+    "observed_supervisor_delta": "9.13O_NON_AUTHORITY",
+    "external_provider_authority": "HARD_OFF",
+    "provider_routes_admitted": false,
+    "together_forbidden": true,
+    "remaining_together_paid_runs_authorized": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "canonical_semantics_credit": 0,
+    "training_credit": 0,
+    "authority_source_conflict_note": "SUPERVISOR_INBOX 9.13O still names the Frankenstein freepool caller boundary as open/ungated. Current main contains later commit 3c3dbe5020f57065f47bd4d0a2dce3c537128797 adding a source/local-unit fail-closed authority gate before provider import/secret lookup/network/Aider/fallback. This lower-level source evidence does not rewrite or relax HARD_OFF authority; it only narrows the implementation blocker. The inbox remains the authority until explicitly advanced."
+  },
+  "project_frankenstein_source_identity": {
+    "repository": "gschaidergabriel/Project-Frankenstein",
+    "default_branch": "main",
+    "observed_head": "abba90a5767d85abc8a1ac340bae92842dab35c1",
+    "observed_root_tree_sha": "ec21e66c4672fde1f0a5d948ebc51457b69b620a",
+    "reachable_default_branch_commit_count": 545,
+    "oldest_reachable_commit": "e1a8812767668091d146ee958bbc2ebb2743031c",
+    "oldest_commit_message_prefix": "Initial commit: AI-Core / Frank — local AI desktop companion",
+    "history_scope_status": "EXACT_DEFAULT_BRANCH_REACHABLE_COUNT",
+    "recursive_path_inventory_status": "NOT_YET_FROZEN_COMPLETE",
+    "canonical_anchor": "research_entity/archive_assimilation/manifests/PROJECT_FRANKENSTEIN_SOURCE_IDENTITY_HISTORY_ANCHOR_20260827.json",
+    "older_archive_manifest": "research_entity/archive_assimilation/manifests/PROJECT_FRANKENSTEIN_MANIFEST.json",
+    "older_archive_manifest_status": "PARTIAL_NOT_FROZEN",
+    "chronology_rule": "Use first verified in accessible Git unless an independent source establishes creation time."
+  },
+  "public_navigation": {
+    "human": "HUMAN_READ_THIS/README.md",
+    "developer_research": "DEV_SOURCE_RESEARCH/README.md",
+    "ai_installer": "AI_START_HERE_DO_NOT_SCAN_REPO/README.md",
+    "machine_index": "DEV_SOURCE_RESEARCH/repository/FRANKENSTEIN_SOURCE_INDEX.json",
+    "git_chronology": "DEV_SOURCE_RESEARCH/FRANKENSTEIN_GIT_CHRONOLOGY.md",
+    "root_migration_protocol": "DEV_SOURCE_RESEARCH/repository/ROOT_MIGRATION_PLAN.md",
+    "root_inventory_tool": "DEV_SOURCE_RESEARCH/repository/root_migration_inventory.py"
+  },
+  "domains": [
+    {
+      "id": "historical_frankenstein_architecture",
+      "status": "adopted",
+      "evidence_class": "HISTORICAL_SOURCE",
+      "entrypoints": [
+        "research_entity/archive_assimilation/manifests/PROJECT_FRANKENSTEIN_MANIFEST.json",
+        "research_entity/archive_assimilation/manifests/PROJECT_FRANKENSTEIN_SOURCE_IDENTITY_HISTORY_ANCHOR_20260827.json",
+        "DEV_SOURCE_RESEARCH/FRANKENSTEIN_GIT_CHRONOLOGY.md"
+      ],
+      "representative_historical_paths": [
+        "services/consciousness_daemon.py",
+        "personality/e_pq.py",
+        "services/thalamus.py",
+        "services/global_workspace.py",
+        "tools/lcme/lcme_core.py",
+        "services/nucleus_accumbens.py",
+        "services/subconscious.py",
+        "services/spatial_state.py",
+        "services/dream_daemon.py",
+        "services/project_engine.py",
+        "services/hypothesis_engine/service.py",
+        "services/experiment_lab.py",
+        "services/soma/micro_trainer.py",
+        "papers/IAPT_METHOD.md"
+      ],
+      "claim_boundary": "Historical source presence does not imply current EntityOS/HCU runtime presence or whole-system stability."
+    },
+    {
+      "id": "frankenstein_provider_orchestration",
+      "status": "blocked",
+      "evidence_class": "NEGATIVE_RESULT",
+      "entrypoints": [
+        "research_entity/topic_packets/frankenstein-master-cognition-concept/CONCEPT.md",
+        "research_entity/topic_packets/frankenstein-master-cognition-concept/BUILD_ORCHESTRATION_PLAN_20260827.json",
+        "research_entity/topic_packets/frankenstein-master-cognition-concept/frankenstein_authority_gate_v1.py",
+        "research_entity/topic_packets/frankenstein-master-cognition-concept/frankenstein_orchestrator_v1.py",
+        "research_entity/topic_packets/frankenstein-master-cognition-concept/frankenstein_bugfix_v1.py",
+        "research_entity/topic_packets/frankenstein-master-cognition-concept/TRIGGERWORD3_HARD_OFF_CLOSURE_20260827_GPT56SOL.json",
+        "tests/test_frankenstein_provider_hardoff_gate_v1.py"
+      ],
+      "current_interpretation": "Provider-backed donor source is quarantined. Current entrypoints add a fail-closed source/local-unit gate before provider boundary, but external provider execution remains HARD_OFF and has zero runtime credit.",
+      "source_local_validation": "10/10 focused tests reported PASS by commit 3c3dbe5020f57065f47bd4d0a2dce3c537128797; source/local-unit scope only."
+    },
+    {
+      "id": "unifieddb_emergent_retrieval",
+      "status": "source-ready",
+      "evidence_class": "CURRENT_SOURCE",
+      "entrypoints": [
+        "research_entity/harness/reference/unifieddb_emergent_cascade.py",
+        "research_entity/harness/reference/benchmark_unifieddb_emergent_cascade.py",
+        "research_entity/harness/reference/benchmark_unifieddb_emergent_assembly.py",
+        "research_entity/unifieddb/",
+        "research_entity/knowledge_micro_packets/unifieddb/"
+      ],
+      "project_definition": "Emergent Retrieval is relevance arising when independently stored evidence dimensions overlap at query time; it is not information creation from nowhere.",
+      "open_hypothesis": "Multi-dimensional evidence overlap improves decision-relevant retrieval over semantic-only retrieval under leakage-controlled matched evaluation.",
+      "engineering_confidence": 0.66,
+      "falsifier": "No material gain in preregistered retrieval/downstream-task quality after accounting for latency and complexity."
+    },
+    {
+      "id": "grf_hyperposition_gwt",
+      "status": "attempted",
+      "evidence_class": "CURRENT_SOURCE",
+      "entrypoints": [
+        "research_entity/00_CURRENT/latest/hyperposition-gwt-grf.md",
+        "research_entity/00_CURRENT/latest/hyperposition-gwt-grf.json",
+        "research_entity/trigger_runs/hyperposition/",
+        "research_entity/global/AGENT_ZERO_JSPACE_IDENTITY_GRF_INJECTION.md",
+        "research_entity/global/j-space/concepts/AGENT_ZERO_JSPACE_IDENTITY_GRF_INJECTION.md"
+      ],
+      "rules": [
+        "Hyperposition preserves unresolved alternatives; recurrence/majority cannot mint truth.",
+        "GWT/workspace is a coordination donor/hypothesis, not a consciousness claim.",
+        "GRF statements must be tied to exact project mathematics/receipts and version lineage."
+      ],
+      "open_hypothesis": "Preserving structured alternatives until an evidence-bearing discriminator reduces premature hypothesis collapse on suitable tasks.",
+      "engineering_confidence": 0.62,
+      "falsifier": "Matched evaluations show no accuracy/calibration gain and only increased latency/compute."
+    },
+    {
+      "id": "global_jspace_vector_binding",
+      "status": "source-ready",
+      "evidence_class": "OPEN_HYPOTHESIS",
+      "entrypoints": [
+        "research_entity/claycode/HCU_JSPACE_MODEL_INPUT_CONTROL_CAUSALITY_GATE_V1.md",
+        "research_entity/claycode/HCU_JSPACE_OBSERVE_CONTROL_TRANSLATE_ARCHITECTURE_V1.md",
+        "research_entity/global/j-space/",
+        "tools/trigger2_semantic_hyperposition_native_seed_generator_v1.py",
+        "tools/trigger2_semantic_hyperposition_reference_labelers_v2.py",
+        "tools/trigger2_hyperposition_reference_labelers_v3.py"
+      ],
+      "open_hypothesis": "A shared J-Space/vector control channel causes reproducible target-model behavior changes beyond prompt/schema recurrence, lexical leakage, and shared preprocessing.",
+      "engineering_confidence": 0.44,
+      "counterhypotheses": [
+        "prompt recurrence",
+        "schema recurrence",
+        "lexical leakage",
+        "shared preprocessing"
+      ],
+      "falsifier": "Label-free, counterbalanced, disjoint interventions with shuffle/lesion/rescue controls fail to show a stable channel-specific effect at exact model identity.",
+      "runtime_credit": 0
+    },
+    {
+      "id": "entityos_hcu_grid10_xeno",
+      "status": "attempted",
+      "evidence_class": "CURRENT_SOURCE",
+      "entrypoints": [
+        "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
+        "research_entity/continuity/BOOTSTRAP_MINIMAL.json",
+        "the artefact/manifest.json",
+        "the artefact/Xeno/XENO_HARNESS_V1_ACCEPTANCE_CONTRACT.md",
+        "tools/grid10_fabric.py",
+        "tools/grid10_node.py"
+      ],
+      "naming": {
+        "product": "EntityOS",
+        "integrated_cognition_compute_architecture": "HCU",
+        "Xeno": "transitional implementation compatibility codename only",
+        "XCU": "transitional/research alias for HCU only"
+      },
+      "grid10_thread_measurement": {
+        "evidence_class": "PROJECT_MEASUREMENT",
+        "topology": "4 concurrent processes / 4 vCPU",
+        "one_thread_seconds_per_call_mean": 8.3197,
+        "two_threads_seconds_per_call_mean": 23.1806,
+        "four_threads_completed_samples": 0,
+        "interpretation": "Supports one thread/process for this measured topology and contradicts the tested recommendation that two would improve latency; no broader release promotion."
+      },
+      "whole_runtime_credit": 0
+    },
+    {
+      "id": "claycode",
+      "status": "blocked",
+      "evidence_class": "CURRENT_SOURCE",
+      "entrypoints": [
+        "CLAYCODE_GENERAL_PURPOSE_COMPILER_MANIFEST.json",
+        "research_entity/global/CLAYCODE_GENERAL_PURPOSE_COMPILER_ACCEPTANCE_CONTRACT.md",
+        "research_entity/triggers/CLAYCODE_GENERAL_PURPOSE_COMPILER_ADDENDUM.md",
+        "tools/claycode_base_release_audit.py",
+        "tools/claycode_base_wp14_strict_audit.py"
+      ],
+      "current_supervisor_summary": "WP01/WP02 pass; WP03-WP14/general-purpose/release gates remain open.",
+      "claim_boundary": "Source-ready or sub-work-package PASS is not a general-purpose compiler release."
+    },
+    {
+      "id": "training_lora_iapt_soma_jspace",
+      "status": "blocked",
+      "evidence_class": "NEGATIVE_RESULT",
+      "entrypoints": [
+        "research_entity/global/j-space/research/2026-08-25_FORSCHUNGSRUN_2_QWEN35_08B_ENTITYOS_HCU_TRAINING_CURRICULUM_GPT56SOL.json",
+        "research_entity/trigger_runs/2/",
+        "historical:services/soma/micro_trainer.py",
+        "historical:papers/IAPT_METHOD.md"
+      ],
+      "current_training_credit": 0,
+      "distillery_last_confirmed": "0 accepted dataset tokens of 88774 candidate tokens",
+      "promotion_requires": [
+        "exact checkpoint/tokenizer/runtime/build identity",
+        "leak-resistant family split",
+        "deterministic hard negatives",
+        "frozen baseline",
+        "intended-behavior gain",
+        "retention/regression checks",
+        "causal/fail-closed controls",
+        "current execution authority"
+      ]
+    },
+    {
+      "id": "free_swarm_forge_distillery",
+      "status": "blocked",
+      "evidence_class": "NEGATIVE_RESULT",
+      "entrypoints": [
+        "000_FREE_SWARM_LIVE_DASHBOARD.md",
+        "research_entity/global/provider_usage_ledger/",
+        "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json"
+      ],
+      "current_authority": "free_swarm_owner_emergency_stop=true",
+      "research_lesson": "Raw generated token volume is not dataset utility. Forge/Distillery acceptance and replay-stable causal provenance are the relevant conversion evidence."
+    },
+    {
+      "id": "claude_bridge_and_external_agent_hosts",
+      "status": "prepared-not-run",
+      "evidence_class": "CURRENT_SOURCE",
+      "entrypoints": [
+        "CLAUDE.md",
+        "AGENTS.md",
+        "AI_START_HERE_DO_NOT_SCAN_REPO/README.md",
+        "AI_START_HERE_DO_NOT_SCAN_REPO/INSTALL_CONTRACT.json",
+        "AI_START_HERE_DO_NOT_SCAN_REPO/install_probe.py",
+        "research_entity/topic_packets/frankenstein-master-cognition-concept/CONCEPT.md"
+      ],
+      "rule": "Host product name never proves lifecycle/tool/state capability. Installation must end NATIVE/ADAPTED/DEGRADED/BLOCKED from observed capability and receipts."
+    },
+    {
+      "id": "evidence_lineage",
+      "status": "adopted",
+      "evidence_class": "CURRENT_SOURCE",
+      "entrypoints": [
+        "research_entity/continuity/receipts/",
+        "research_entity/archive_assimilation/manifests/",
+        "research_entity/unifieddb/receipts/",
+        "research_entity/trigger_runs/",
+        "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json"
+      ],
+      "invariants": [
+        "request != effect",
+        "model output != world fact",
+        "method exists != result exists",
+        "memory != observation",
+        "source-ready != runtime-observed",
+        "consensus/repetition != independent evidence",
+        "component PASS != whole-product PASS"
+      ]
+    }
+  ],
+  "external_primary_index": [
+    {
+      "topic": "global workspace",
+      "reference": "Bernard J. Baars, Prog Brain Res. 2005;150:45-53. DOI 10.1016/S0079-6123(05)50004-9",
+      "use": "background/analogy only"
+    },
+    {
+      "topic": "SQLite WAL",
+      "reference": "https://www.sqlite.org/wal.html",
+      "use": "storage/concurrency semantics and current WAL-reset risk context; not evidence the project encountered the bug"
+    },
+    {
+      "topic": "NVIDIA CUDA Unified Memory",
+      "reference": "https://docs.nvidia.com/cuda/cuda-programming-guide/04-special-topics/unified-memory.html",
+      "use": "systems-design analogy for reduced ownership/copy boundaries only; not database semantics"
+    }
+  ],
+  "root_topology": {
+    "target_public_navigation": [
+      "README.md",
+      "HUMAN_READ_THIS/",
+      "DEV_SOURCE_RESEARCH/",
+      "AI_START_HERE_DO_NOT_SCAN_REPO/"
+    ],
+    "strict_physical_target_reached": false,
+    "reason": "Current root retains many technical and tool-discovery/control paths. Blind relocation risks breaking imports, GitHub workflows, host-native discovery, links and evidence reproducibility.",
+    "next_gate": "Run the read-only root inventory/reference audit, classify fixed-location consumers, then relocate only dependency-safe paths with old-to-new identity mapping."
+  },
+  "promotion_boundary": {
+    "whole_repository_semantic_analysis": "NOT_GRANTED",
+    "entityos_hcu_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "canonical_semantics_credit": 0
+  }
+}

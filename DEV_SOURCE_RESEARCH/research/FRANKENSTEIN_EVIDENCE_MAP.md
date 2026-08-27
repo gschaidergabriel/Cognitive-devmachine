@@ -1,6 +1,7 @@
 # Frankenstein evidence map
 
-Base commit for this curation: `854f6bc87780f4a5242489a6c807d186b16a8c3d`.
+Initial curation base: `854f6bc87780f4a5242489a6c807d186b16a8c3d`.
+Refreshed through current-main change: `3c3dbe5020f57065f47bd4d0a2dce3c537128797`.
 
 This file is a navigation/evidence layer, not a replacement for current source or supervisor authority.
 
@@ -11,9 +12,10 @@ This file is a navigation/evidence layer, not a replacement for current source o
 | Persistent research entity = Clay | adopted | `CURRENT_SOURCE` | identity only |
 | Product = EntityOS | adopted | `CURRENT_SOURCE` | current product/system naming |
 | Integrated cognition/compute = HCU | adopted | `CURRENT_SOURCE` | current architecture naming |
-| Provider routes | blocked | `CURRENT_SOURCE` | 9.13 HARD_OFF; all provider routes false |
+| Provider routes | blocked | `CURRENT_SOURCE` | 9.13 HARD_OFF; provider routes false |
 | Together | blocked | `CURRENT_SOURCE` | forbidden; remaining paid runs authorized = 0 |
-| 72h Frankenstein provider orchestration | blocked/quarantined | `CURRENT_SOURCE` + `NEGATIVE_RESULT` | non-operative while direct provider paths remain |
+| Frankenstein provider caller boundary | source-closed under HARD_OFF | `CURRENT_SOURCE` + `NEGATIVE_RESULT` | canonical entrypoints now authority-gated before provider import/secret/network/Aider/fallback; runtime credit still 0 |
+| Legacy 72h provider orchestration | quarantined donor | `HISTORICAL_SOURCE` | preserved for mechanisms/provenance, not executable authority |
 | Whole EntityOS runtime | not passed | `CURRENT_SOURCE` | credit 0 |
 | Full HCU runtime | not passed | `CURRENT_SOURCE` | credit 0 |
 | Canonical semantics | not promoted | `CURRENT_SOURCE` | credit 0 |
@@ -24,26 +26,33 @@ Primary current files:
 
 - `/CLAY_EXECUTION_AUTHORITY.md`
 - `/research_entity/claycode/autonomous/SUPERVISOR_INBOX.json`
-- `/research_entity/claycode/autonomous/SUPERVISOR_STEERING_9_13O_DELTA_2026-08-27T2341P0700_GPT56SOL.json`
+- inbox-selected 9.13 steering
+- `/research_entity/topic_packets/frankenstein-master-cognition-concept/frankenstein_authority_gate_v1.py`
+- `/research_entity/topic_packets/frankenstein-master-cognition-concept/BUILD_ORCHESTRATION_PLAN_20260827.json`
 - `/research_entity/continuity/BOOTSTRAP_MINIMAL.json`
 - `/research_entity/rooms/PROGRAM_STATE.json`
 
-Important conflict: the bootstrap/program-state surfaces still expose older 8.78-era provider-admission descriptions. The newer inbox-selected 9.13 steering wins for the current provider boundary.
+Important conflict: bootstrap/program-state still expose older 8.78-era provider-admission descriptions. Newer owner/inbox-selected authority wins where they conflict.
 
 ## Research lineage matrix
 
 | Area | Current classification | Evidence / source path | What it does **not** establish |
 |---|---|---|---|
 | Frankenstein master concept | source-ready / partially grounded | `research_entity/topic_packets/frankenstein-master-cognition-concept/CONCEPT.md` | runtime acceptance of aspirational layers |
-| Package dispenser | source-ready + locally tested | `.../frankenstein_packages_v1.py`, `tests/test_frankenstein_packages_v1.py` | autonomous 72h operation |
-| Bauleiter orchestrator | source-ready + locally tested, execution blocked | `.../frankenstein_orchestrator_v1.py`, tests | provider authority or safe deployment |
-| Bugfix watchdog | source-ready + locally tested, execution blocked | `.../frankenstein_bugfix_v1.py`, tests | provider authority or whole-system robustness |
+| Package dispenser | source-ready + locally tested | `.../frankenstein_packages_v1.py`, package tests | autonomous 72h operation |
+| HARD_OFF authority gate | source-ready + focused local tests | `.../frankenstein_authority_gate_v1.py`, `3c3dbe5…` closure | provider runtime PASS or whole-system quiescence |
+| Canonical Bauleiter entrypoint | source-ready / provider execution blocked | `.../frankenstein_orchestrator_v1.py` | permission to dispatch providers under HARD_OFF |
+| Canonical Bugfix entrypoint | source-ready / provider execution blocked | `.../frankenstein_bugfix_v1.py` | provider runtime or whole-system robustness |
+| Provider-backed Bauleiter donor | quarantined | `.../frankenstein_orchestrator_v1_PROVIDER_QUARANTINED_854f6bc.py` | current executable authority |
+| Provider-backed Bugfix donor | quarantined | `.../frankenstein_bugfix_v1_PROVIDER_QUARANTINED_854f6bc.py` | current executable authority |
+| Legacy provider/Together build plan | quarantined | `.../BUILD_ORCHESTRATION_PLAN_20260827_PROVIDER_QUARANTINED_854f6bc.json` | current provider or paid-run authority |
+| Current build plan v2 | adopted quarantine manifest | `.../BUILD_ORCHESTRATION_PLAN_20260827.json` | runtime evidence by itself |
 | GRID10 Fabric | built / measured in bounded scopes | `tools/grid10_fabric.py` and receipts/tests | Physical-GRID10 or HCU release promotion |
 | GRID10 node/regulators | built / measured in bounded scopes | `tools/grid10_node.py` and receipts/tests | general-purpose cognition |
 | 4proc/4vCPU thread A/B | measured counterexample | supervisor 9.13O cites commit `636290883bfddc79a588e554d8014339ae1e98e2` | universal thread optimum |
 | RAM release | diagnostic signal only | supervisor 9.13O | physical RAM win; PSS/full smaps still required |
 | UnifiedDB direction | adopted architecture direction | current bootstrap/program source + historical migration evidence | every historical store already migrated |
-| Emergent Retrieval | project mechanism/term | project instructions/research lineage | facts appearing without stored evidence |
+| Emergent Retrieval | project mechanism/term | project research lineage | facts appearing without stored evidence |
 | GWT/J-Space | open empirical hypothesis | J-Space traces/dataset machinery + current steering | consciousness or hidden-state causality |
 | Hyperposition | adopted research method | research lineage | truth by recurrence/majority |
 | GRF | historical/current research lineage | GRF topic material and code history | universal mathematical optimality |
@@ -60,7 +69,9 @@ flowchart TD
   C[Prompt/context contamination] -->|state not reliably controlling output| D[explicit state/vector/J-Space research]
   E[Reflection loops / fixation] -->|no measurable transition| F[reflection exit law: ACT/ASK/WAIT/re-observe]
   G[Component tests pass] -->|insufficient scope| H[exact runtime/evidence receipts]
-  I[Provider path persists after HARD_OFF] -->|authority bypass| J[gate before secrets/import/network/provider dispatch]
+  I[Provider path persisted after HARD_OFF] -->|authority bypass| J[gate before secret/import/network/Aider]
+  J -->|3c3dbe5 source closure| J2[canonical wrappers + donor quarantine]
+  J2 -->|next discriminator| J3[clean exact-current non-provider witness: provider_calls=0, secret_lookups=0]
   K[2 threads expected faster] -->|measured much slower| L[retain 1 thread on measured topology]
   M[raw swarm token growth] -->|Distillery utility remains zero| N[optimize conversion/evidence funnel before scale]
 ```
@@ -126,7 +137,8 @@ When reconstructing chronology:
 ## Open Trigger-3 migration tasks
 
 1. Root topology is not yet at the four-item public target. See `../repository/ROOT_MIGRATION_MANIFEST.md`.
-2. Build an automated archive index over topic packets/receipts rather than copying thousands of files into prose.
-3. Add Git-supported chronology pages for GRF, state/E-PQ, memory, perception, effects, prediction, reflection, goals, LoRA/IAPT/SOMA, and Frankenstein v0.7.
+2. Extend the archive index into a complete Git-tree index with exact blob/tree SHAs and inbound path readers rather than copying thousands of files into prose.
+3. Add Git-supported chronology pages for GRF, state/E-PQ, memory, perception, effects, prediction, reflection, goals, LoRA/IAPT/SOMA, and Frankenstein releases.
 4. Add exact commit/source links beside every project measurement used in public-facing claims.
-5. Keep the 72h provider orchestration quarantined until current authority explicitly changes and the actual external caller boundary is gated and re-executed cleanly.
+5. Execute the current authority-gated Frankenstein path on a clean, admitted non-provider surface and bind an exact receipt proving `provider_calls=0` and `secret_lookups=0`; this is the next runtime discriminator, not a provider call.
+6. Keep provider execution blocked until a later explicit canonical authority reopens routes and all then-current economic/provenance gates pass.

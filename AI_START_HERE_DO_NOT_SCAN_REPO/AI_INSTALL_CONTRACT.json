@@ -1,0 +1,59 @@
+{
+  "schema": "FRANKENSTEIN_AI_HOST_INTEGRATION_CONTRACT/v1",
+  "purpose": "Host-neutral no-scan installation/adaptation evidence contract. It cannot mint project authority and it cannot declare success from configuration alone.",
+  "repo_path_rule": "DISCOVER_OR_PASS_EXPLICITLY_NEVER_ASSUME_HOME_DOWNLOADS_CLONE_ATTACHMENT_OR_CWD",
+  "minimum_reads": [
+    "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
+    "STEERING_FILE_NAMED_BY_SUPERVISOR_INBOX",
+    "HUMAN_READ_THIS/README.md",
+    "DEV_SOURCE_RESEARCH/README.md",
+    "DEV_SOURCE_RESEARCH/repository/FRANKENSTEIN_EVIDENCE_INDEX_2026-08-27.json"
+  ],
+  "supported_host_labels": [
+    "claude-code",
+    "codex-cli",
+    "hermes-agent",
+    "chatgpt-web",
+    "claude-web",
+    "grok-web",
+    "generic"
+  ],
+  "capability_schema": {
+    "host": "string",
+    "can_read_files": "boolean",
+    "can_write_files": "boolean",
+    "can_run_commands": "boolean",
+    "can_use_git": "boolean",
+    "can_persist_state": "boolean",
+    "can_register_hooks": "boolean",
+    "native_repo_lifecycle": "boolean",
+    "adapter_lifecycle_available": "boolean",
+    "can_make_external_effects": "boolean"
+  },
+  "evidence_schema": {
+    "minimum_reads_verified": "boolean",
+    "authority_resolved_from_current_inbox": "boolean",
+    "hook_fire_verified": "boolean",
+    "adapter_lifecycle_verified": "boolean",
+    "durable_state_write_verified": "boolean",
+    "effect_request_receipt_verified": "boolean",
+    "effect_result_receipt_verified": "boolean",
+    "notes": "string"
+  },
+  "classification": {
+    "NATIVE": "Minimum reads and current authority resolve; native lifecycle is actually available; hook fire is observed; durable state write is observed; and effect request/result receipts are observed when effects are part of the integration.",
+    "ADAPTED": "Minimum reads/current authority resolve; a non-native adapter lifecycle is actually verified; durable state write is observed; effect request/result receipts are observed when effects are part of the integration.",
+    "DEGRADED": "Repository/source access works, but lifecycle, durable state, hook, or effect/result evidence required for NATIVE/ADAPTED is missing.",
+    "BLOCKED": "Minimum required repository reads or current authority resolution cannot be verified."
+  },
+  "fail_closed_rules": [
+    "configuration_file_exists != hook_fired",
+    "write_api_exists != durable_state_write_observed",
+    "effect_requested != effect_happened",
+    "effect_happened != result_reobserved",
+    "provider_name_or_key_presence != execution_authority",
+    "stale_bootstrap != current_authority",
+    "unknown_capability_or_missing_receipt_cannot_be_promoted_to_true"
+  ],
+  "current_snapshot_note": "At the Trigger-3 base observed on 2026-08-27, supervisor 9.13 HARD_OFF disables all provider routes, forbids Together and paid fallback. Re-read the live inbox/selected steering; do not hardcode that snapshot as permanent authority."
+}

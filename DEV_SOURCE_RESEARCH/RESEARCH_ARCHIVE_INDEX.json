@@ -1,0 +1,201 @@
+{
+  "schema": "TRIGGERWORD3_RESEARCH_ARCHIVE_INDEX/v1",
+  "snapshot_main": "ed70385760c03a30dea7b6ecf8f6b78cbbaa584a",
+  "purpose": "Discovery index over the Clay/Frankenstein research archive. This file points to evidence; it does not promote the pointed material into truth or runtime credit.",
+  "authority_first": [
+    "CLAY_EXECUTION_AUTHORITY.md",
+    "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
+    "steering path named by SUPERVISOR_INBOX.json",
+    "research_entity/continuity/BOOTSTRAP_MINIMAL.json",
+    "research_entity/rooms/PROGRAM_STATE.json"
+  ],
+  "classification_vocabulary": [
+    "attempted",
+    "source-ready",
+    "measured",
+    "reproduced",
+    "contradicted",
+    "blocked",
+    "prepared-not-run",
+    "adopted",
+    "retired"
+  ],
+  "evidence_labels": [
+    "CURRENT_SOURCE",
+    "HISTORICAL_SOURCE",
+    "PROJECT_MEASUREMENT",
+    "EXTERNAL_PRIMARY",
+    "INFERENCE",
+    "OPEN_HYPOTHESIS",
+    "NEGATIVE_RESULT"
+  ],
+  "promotion_law": [
+    "request != effect",
+    "model output != world fact",
+    "method exists != result exists",
+    "memory != observation",
+    "source-ready != runtime-observed",
+    "consensus/repetition != independent evidence",
+    "component PASS != whole-product PASS"
+  ],
+  "domains": [
+    {
+      "id": "entityos-runtime",
+      "label": "EntityOS runtime / deterministic state-effect boundary",
+      "status": ["adopted", "source-ready", "measured", "blocked"],
+      "current_credit_boundary": "whole EntityOS runtime credit remains 0 in the selected supervisor frontier",
+      "anchors": [
+        "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
+        "research_entity/global/ENTITYOS_SINGLE_FILE_PRODUCT_DIRECTIVE.md",
+        "the artefact/"
+      ],
+      "search_terms": ["EntityOS", "EffectGate", "EffectJournal", "UnifiedDB", "Typed Entry", "repository-bound acceptance"]
+    },
+    {
+      "id": "hcu-grid",
+      "label": "HCU / GRID / physical-vs-logical compute",
+      "status": ["adopted", "source-ready", "measured", "blocked", "contradicted"],
+      "current_credit_boundary": "full HCU and Physical-GRID10 runtime credit remain 0; the 4-process/4-vCPU thread-count A/B is diagnostic component evidence only",
+      "anchors": [
+        "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
+        "research_entity/global/XENO_HCU_GO_TARGET_ARCHITECTURE_OWNER_DIRECTIVE_2026-08-25.md",
+        "tools/xeno_self_organizing_fabric_acceptance_v1.py",
+        "tools/xeno_autonomous_boot_acceptance_v1.py",
+        "tools/xeno_node_result_coordinator_acceptance_v1.py"
+      ],
+      "search_terms": ["GRID10", "Physical-GRID10", "HCU", "torch threads", "PSS", "smaps", "shared weights", "coordinator lease"]
+    },
+    {
+      "id": "xeno",
+      "label": "Xeno compatibility implementation lineage",
+      "status": ["source-ready", "measured", "historical"],
+      "current_credit_boundary": "Xeno is a transitional implementation codename, not a competing product or persistent authority",
+      "anchors": [
+        "research_entity/global/XENO_HCU_GO_TARGET_ARCHITECTURE_OWNER_DIRECTIVE_2026-08-25.md",
+        "tools/xeno_self_organizing_fabric_acceptance_v1.py",
+        "tools/xeno_autonomous_boot_acceptance_v1.py"
+      ],
+      "search_terms": ["Xeno", "self organizing fabric", "autonomous boot", "node result coordinator"]
+    },
+    {
+      "id": "grf-hyperposition-gwt",
+      "label": "GRF / Hyperposition / GWT lineage",
+      "status": ["attempted", "source-ready", "measured", "open-hypothesis"],
+      "current_credit_boundary": "workspace recurrence or conceptual lineage does not prove consciousness, hidden-state causality or canonical semantics",
+      "anchors": [
+        "research_entity/00_CURRENT/latest/hyperposition-gwt-grf.md",
+        "research_entity/00_CURRENT/latest/hyperposition-gwt-grf.json",
+        "research_entity/global/AGENT_ZERO_JSPACE_IDENTITY_GRF_INJECTION.md",
+        "agentZero/GWT-GRF-Messung-2026-08-22.md"
+      ],
+      "search_terms": ["GRF", "Hyperposition", "GWT", "workspace", "global broadcast", "unresolved alternatives"]
+    },
+    {
+      "id": "global-jspace-vector-binding",
+      "label": "Global J-Space / vector binding / causal control",
+      "status": ["source-ready", "measured", "contradicted", "blocked"],
+      "current_credit_boundary": "J-Space model runtime and canonical-semantics credit remain 0; bounded hidden-state/cvec component measurements do not promote canonical semantics",
+      "anchors": [
+        "research_entity/global/j-space/",
+        "research_entity/global/AGENT_ZERO_JSPACE_IDENTITY_GRF_INJECTION.md",
+        "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json"
+      ],
+      "search_terms": ["JSPACE_VECTOR_CONTROL_ABI", "cvec", "hidden state", "label-free", "counterbalanced", "vector binding", "checkpoint ancestry"]
+    },
+    {
+      "id": "claycode",
+      "label": "ClayCode / compiler / VM / control lineage",
+      "status": ["attempted", "source-ready", "measured", "blocked"],
+      "current_credit_boundary": "current BASE/release remains fail-closed beyond work packages explicitly passed by current supervisor evidence",
+      "anchors": [
+        "research_entity/claycode/",
+        "research_entity/claycode/CLAYCODE_AUTONOMOUS_RESEARCH_CONTROL.json",
+        "CLAYCODE_GENERAL_PURPOSE_COMPILER_MANIFEST.json"
+      ],
+      "search_terms": ["ClayCode", "compiler", "VM", "Clay Machine", "proof carrying", "work package", "BASE"]
+    },
+    {
+      "id": "training-lora-iapt-soma",
+      "label": "Training lineage: LoRA / IAPT / SOMA / small-model specialization",
+      "status": ["attempted", "prepared-not-run", "measured", "contradicted", "blocked", "historical"],
+      "current_credit_boundary": "training credit is 0 under current authority; authority-invalid paid runs and ancestry-leaky evaluation do not promote training",
+      "anchors": [
+        "research_entity/trigger_runs/fusion/fusion-20260809T1538p0700-frank-architecture-lineage/DREAM_SOMA_LORA_DEEP_LINEAGE.md",
+        "research_entity/archive_assimilation/receipts/666_20260809T0434p0700_chatgpt_secondary_drive_training_lineage_v14_v26.json",
+        "research_entity/global/TRIGGERWORT_2_CURRENT_TRAINING_COURSE_XENO_HARNESS_2026-08-26.md",
+        "research_entity/global/j-space/"
+      ],
+      "search_terms": ["LoRA", "IAPT", "SOMA", "training", "Qwen", "tokenizer ABI", "renderer", "holdout", "checkpoint ancestry", "Goodman collapse"]
+    },
+    {
+      "id": "frankenstein-architecture-lineage",
+      "label": "Historical Frank / Project Frankenstein architecture and assimilation",
+      "status": ["historical", "adopted", "retired", "source-ready"],
+      "current_credit_boundary": "historical Frank/ClayVerse mechanisms are donor provenance unless newer authority explicitly re-admits a mechanism",
+      "anchors": [
+        "research_entity/archive_assimilation/manifests/PROJECT_FRANKENSTEIN_MANIFEST.json",
+        "research_entity/archive_assimilation/manifests/PROJECT_FRANKENSTEIN_SOURCE_IDENTITY_HISTORY_ANCHOR_20260827.json",
+        "research_entity/architecture_archaeology/MECHANISM_INDEX.json",
+        "frank_reference/"
+      ],
+      "search_terms": ["Frank", "Frankenstein", "E-PQ", "reflection", "perception", "memory", "goal", "prediction", "dead modules", "rumination", "context contamination"]
+    },
+    {
+      "id": "frankenstein-current-orchestration",
+      "label": "Current Frankenstein Bauleiter/Bugfixer authority-gated orchestration lineage",
+      "status": ["source-ready", "measured-local-unit", "blocked-runtime", "negative-result-preserved"],
+      "current_credit_boundary": "current supported entrypoints are source/local-unit gated under 9.13 HARD_OFF; provider/runtime credit remains 0 and old provider-backed implementations are quarantined donor provenance",
+      "anchors": [
+        "research_entity/topic_packets/frankenstein-master-cognition-concept/TRIGGERWORD3_HARD_OFF_CLOSURE_20260827_GPT56SOL.json",
+        "research_entity/topic_packets/frankenstein-master-cognition-concept/frankenstein_authority_gate_v1.py",
+        "research_entity/topic_packets/frankenstein-master-cognition-concept/frankenstein_orchestrator_v1.py",
+        "research_entity/topic_packets/frankenstein-master-cognition-concept/frankenstein_bugfix_v1.py",
+        "tests/test_frankenstein_provider_hardoff_gate_v1.py"
+      ],
+      "search_terms": ["frankenstein_authority_gate_v1", "PROVIDER_QUARANTINED", "Bauleiter", "provider HARD_OFF", "secret lookup", "Aider"]
+    },
+    {
+      "id": "freeswarm-forge-distillery",
+      "label": "FreeSwarm / Forge / Distillery conversion funnel",
+      "status": ["measured", "source-ready", "blocked", "negative-result"],
+      "current_credit_boundary": "selected supervisor evidence confirms canonical dataset rows/accepted training yield remain unpromoted; raw token volume does not mint training or independent semantic credit",
+      "anchors": [
+        "000_FREE_SWARM_LIVE_DASHBOARD.md",
+        "ZZZ_FREE_SWARM_RESULTS.md",
+        "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
+        "free swarm/"
+      ],
+      "search_terms": ["Free Swarm", "Forge", "Distillery", "accepted_dataset_tokens", "historical backfill", "replay"]
+    },
+    {
+      "id": "claude-agent-bridge-lineage",
+      "label": "Claude / agent bridge / remote delegation lineage",
+      "status": ["historical", "source-ready", "measured"],
+      "current_credit_boundary": "bridge/config/source existence is not proof that hooks fired, state persisted or effects occurred",
+      "anchors": [
+        ".claude/",
+        "CLAUDE.md",
+        "CLAUDE_CODE_INTRODUCTION.md",
+        "agentZero/code/produkt/mcp_server.py"
+      ],
+      "search_terms": ["Claude", "bridge", "MCP", "remote delegation", "hook", "lifecycle", "receipt", "re-entry"]
+    },
+    {
+      "id": "evidence-lineage",
+      "label": "Evidence / receipts / authority / provenance",
+      "status": ["adopted", "measured"],
+      "current_credit_boundary": "exact authority and executable receipts outrank stale caches, prose, model consensus and source presence",
+      "anchors": [
+        "research_entity/continuity/",
+        "research_entity/receipts/",
+        "receipts/",
+        "the artefact/receipts/",
+        "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
+        "DEV_SOURCE_RESEARCH/AUTHORITY_DRIFT_20260827.md"
+      ],
+      "search_terms": ["receipt", "source hash", "HEAD", "tree", "dirty=false", "authority", "generation", "provenance", "replay", "negative evidence"]
+    }
+  ],
+  "discovery_rule": "Start from authority_first, select a domain here, inspect its anchors, then repository-search the domain search_terms at exact current main. Never infer current state solely from this snapshot index.",
+  "next_index_gate": "Run the deterministic filesystem indexer on an exact clean checkout, bind its output to HEAD/tree/dirty=false, and add first_verified_in_accessible_git commit anchors for major historical mechanisms without promoting archive recurrence into truth."
+}

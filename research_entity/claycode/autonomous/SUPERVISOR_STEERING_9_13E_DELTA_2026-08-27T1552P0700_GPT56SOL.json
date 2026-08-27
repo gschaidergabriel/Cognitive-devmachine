@@ -20,10 +20,9 @@
       "kind": "FREEPOOL_FALLBACK_AUTHORITY_SPLIT_BRAIN",
       "evidence_commits": [
         "93a39a2eedc044def137838911d2dc88d16740aa",
-        "9038bcc0114e2cae781dcd5c4c0ee38f123f6f34b5bf"
+        "9038bcc0114e2cae781dcd5cfe25223b4d5cfc3"
       ],
-      "note": "Second commit id above is intentionally not relied on for exact identity; current repository history contains fresh NVIDIA/Mistral freepool-fallback provenance while HARD_OFF remained current.",
-      "finding": "tools/freepool_fallback_provider_gate_v1.py and tests/test_freepool_fallback_provider_gate_v1.py now exist as fail-closed source hardening, but the repository does not demonstrate that the actual external caller chain stern.py -> harness_aider.py -> ~/last-resort/llm.py invokes this gate before credential lookup/network/provider import.",
+      "finding": "Fresh Mistral/NVIDIA freepool-fallback provenance was committed while HARD_OFF remained current. tools/freepool_fallback_provider_gate_v1.py and tests/test_freepool_fallback_provider_gate_v1.py now exist as fail-closed source hardening, but the repository does not demonstrate that the actual external caller chain stern.py -> harness_aider.py -> ~/last-resort/llm.py invokes this gate before credential lookup/network/provider import.",
       "credit": "SOURCE_GATE_CANDIDATE_ONLY_RUNTIME_PROVIDER_PATH_CREDIT_0",
       "required_action": "Do not treat standalone gate existence as closure. Obtain executable caller-bound evidence with HARD_OFF producing provider_calls=0 and secret_lookups=0 at the real fallback entrypoint. If the real caller is outside this repository, bind its exact source hash/path/runtime receipt rather than assuming integration."
     },

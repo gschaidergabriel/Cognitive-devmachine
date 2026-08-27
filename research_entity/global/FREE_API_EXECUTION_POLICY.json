@@ -361,26 +361,29 @@
   },
   "semantic_text_presence_boundary": {
     "checked_at": "2026-08-28",
-    "claim": "Plain-text request content, verified response content and exposed reasoning each require at least one Unicode-scalar character that is neither Unicode whitespace, a C0/C1 transport control, a Unicode General_Category=Cf format control nor a Unicode Mark (Mn, Mc or Me). Controls, format characters, combining marks and whitespace remain permitted around or within real text, but cannot alone satisfy the adapter's semantic-content requirement.",
+    "claim": "Plain-text request content, verified response content and exposed reasoning each require at least one Unicode-scalar character that is neither Unicode whitespace, a C0/C1 transport control, a Unicode General_Category=Cf format control, a Unicode Mark (Mn, Mc or Me) nor one of Unicode's 66 permanently reserved noncharacters. These code points remain permitted around or within real text, but cannot alone satisfy the adapter's semantic-content requirement.",
     "sources": [
       "https://docs.python.org/3/library/stdtypes.html#str.strip",
       "https://docs.python.org/3/library/unicodedata.html#unicodedata.category",
       "https://www.unicode.org/reports/tr44/",
+      "https://www.unicode.org/versions/Unicode17.0.0/core-spec/chapter-3/",
+      "https://www.unicode.org/versions/Unicode17.0.0/core-spec/chapter-23/",
       "https://www.rfc-editor.org/rfc/rfc8259.html#section-7",
       "https://docs.nvidia.com/nim/large-language-models/3.0.0/get-started/quickstart.html"
     ],
-    "external_evidence": "Python defines str.strip without an explicit character set as removal of str.isspace characters, so NUL, U+200B and U+0301 survive; unicodedata.category exposes the Unicode general category. Unicode Standard Annex #44 classifies Cf as Format, Mn as Nonspacing_Mark with zero advance width and M as the union of Mn, Mc and Me. RFC 8259 permits U+0000 through U+001F inside JSON strings when escaped, which proves transport validity but not semantic text. NVIDIA's current Chat Completions examples use natural-language message content; they do not specify that a control-only, format-only or mark-only scalar is a meaningful prompt or final answer.",
-    "internal_measurement": "A user message containing only U+0000 passed the former strip predicate and reached the authenticated opener. Canonical status-200 responses whose visible content or parsed reasoning contained only escaped U+0000 each reached success, VERIFIED and DONE; the reasoning case also produced digest and character-count provenance. After closing C0/C1, U+200B and then U+0301 independently reproduced the same three failures: authenticated request opening, verified visible content and verified reasoning. The repaired shared predicate rejects all nine paths, while ordinary text with line breaks, embedded format characters and e followed by U+0301 remains allowed.",
+    "external_evidence": "Python defines str.strip without an explicit character set as removal of str.isspace characters, so NUL, U+200B, U+0301 and noncharacters survive; unicodedata.category exposes the Unicode general category. Unicode Standard Annex #44 classifies Cf as Format, Mn as Nonspacing_Mark with zero advance width and M as the union of Mn, Mc and Me. Unicode 17 defines exactly 66 noncharacters—U+FDD0..U+FDEF plus the last two code points of every plane—as permanently reserved for internal use, not intended for interchange and without interpretation outside internal context, while explicitly noting that their encoding is well-formed. RFC 8259 transport validity therefore does not prove semantic text. NVIDIA's current Chat Completions examples use natural-language message content but define no meaning for control-only, format-only, mark-only or noncharacter-only strings.",
+    "internal_measurement": "A user message containing only U+0000 passed the former strip predicate and reached the authenticated opener. Canonical status-200 responses whose visible content or parsed reasoning contained only escaped U+0000 each reached success, VERIFIED and DONE; the reasoning case also produced digest and character-count provenance. After closing C0/C1, U+200B and then U+0301 independently reproduced the same three failures. U+FDD0 then reached authenticated request execution and visible VERIFIED/DONE, while U+10FFFF reached verified reasoning provenance. The repaired shared predicate rejects all twelve paths, while ordinary text with embedded format characters, marks and noncharacters remains allowed.",
     "executable_evidence": [
       "test_control_only_text_cannot_cross_semantic_text_boundaries",
       "test_format_only_text_cannot_cross_semantic_text_boundaries",
       "test_combining_mark_only_text_cannot_cross_semantic_boundaries",
+      "test_noncharacter_only_text_cannot_cross_semantic_boundaries",
       "test_blank_text_message_is_blocked_before_network",
       "test_documented_nvidia_reasoning_message_remains_compatible",
       "test_del_escape_overflow_is_rejected_before_json_materialization"
     ],
-    "counterhypothesis": "Successful JSON decoding plus exclusion of whitespace, C0/C1 and Cf is sufficient proof of nonblank text; falsified because standalone U+0301 is Mn, crossed all three semantic boundaries and supplied no base character to modify.",
-    "uncertainty": "This is an explicit local FRANK text-adapter policy, not a claim that every control, format character or mark is invalid model output. Cf and M characters remain permitted when another semantic witness is present. Tool, binary, multimodal and protocol-specific payloads require separate typed adapters. Modifier symbols, private-use and unassigned code points remain deliberately unclassified pending falsifiers and compatibility evidence."
+    "counterhypothesis": "Any well-formed Unicode scalar remaining after whitespace, C0/C1, Cf and Mark exclusion is sufficient semantic evidence; falsified because Unicode explicitly gives noncharacters no interpretation outside internal use, yet U+FDD0 and U+10FFFF crossed all three adapter boundaries.",
+    "uncertainty": "This is an explicit local FRANK text-adapter policy, not a claim that every control, format character, mark or noncharacter is invalid in all data. They remain permitted when another semantic witness is present; Unicode explicitly permits internal noncharacter use and requires preservation rather than silent deletion. Tool, binary, multimodal and protocol-specific payloads require separate typed adapters. Modifier symbols, private-use and other unassigned code points remain deliberately unclassified pending falsifiers and compatibility evidence."
   },
   "canonical_blob_write_boundary": {
     "checked_at": "2026-08-27",

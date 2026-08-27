@@ -1,216 +1,94 @@
-# DEV_SOURCE_RESEARCH — progressive technical index
+# Developer / Source / Research map
 
-This directory is the technical/research route for Project Frankenstein → EntityOS + HCU. It is an **index over evidence**, not a replacement truth store and not a second authority.
+This directory is the progressive-disclosure entrance for people who need more than the human overview but should not have to scan the whole repository.
 
-Re-resolve `main` and current authority before live execution decisions. During the 2026-08-27 Trigger-3 pass, the admitted supervisor semantics were **9.13 HARD_OFF**; `main` advanced during the pass and fused a source/local-unit closure of the Frankenstein provider caller boundary.
+> Evidence rule: **current authority and exact executable evidence outrank old caches, prose, model consensus, and historical naming.** Component evidence never silently becomes whole-product evidence.
 
-## 0. Authority first
+## Start here
 
-Read in this order before current-state/runtime claims:
-
-1. [`../CLAY_EXECUTION_AUTHORITY.md`](../CLAY_EXECUTION_AUTHORITY.md)
-2. [`../research_entity/claycode/autonomous/SUPERVISOR_INBOX.json`](../research_entity/claycode/autonomous/SUPERVISOR_INBOX.json)
-3. the steering file named by the inbox
-4. [`../research_entity/continuity/BOOTSTRAP_MINIMAL.json`](../research_entity/continuity/BOOTSTRAP_MINIMAL.json) and [`../research_entity/rooms/PROGRAM_STATE.json`](../research_entity/rooms/PROGRAM_STATE.json)
-5. exact source/tests/receipts at the exact identity relevant to the claim
-
-Do not average authority disagreements. A stale self-consistent surface is still stale.
-
-## 1. Evidence vocabulary
-
-- **CURRENT_SOURCE** — source present at the exact current identity.
-- **HISTORICAL_SOURCE** — retained lineage, not current authority.
-- **PROJECT_MEASUREMENT** — observed project measurement with bounded scope.
-- **EXTERNAL_PRIMARY** — original paper/spec/vendor-primary documentation.
-- **INFERENCE** — conclusion drawn from observations.
-- **OPEN_HYPOTHESIS** — candidate mechanism with an explicit falsifier.
-- **NEGATIVE_RESULT** — failure/blocker/contradiction worth preserving.
-
-Lifecycle qualifiers: `attempted`, `source-ready`, `measured`, `reproduced`, `contradicted`, `blocked`, `prepared-not-run`, `adopted`, `retired`.
-
-`SOURCE_READY != RUNTIME_VERIFIED`. Component PASS never implies whole-product PASS. Model output does not create world facts.
-
-## 2. Current Frankenstein control boundary
-
-The 2026-08-27 Bauleiter/Bugfix provider-capable implementation initially crossed into provider-capable imports/fallbacks before satisfying the current 9.13 authority boundary. That became a first-class negative result.
-
-Current `main` now preserves the original provider-backed implementations as quarantined donor provenance and puts the supported entrypoints behind an authority gate that must resolve before provider import, secret lookup, network, Aider, or fallback dispatch. The fused commit reports **10/10 focused local tests PASS**, explicitly source/local-unit scope only.
-
-Key current packet:
-
-- [`../research_entity/topic_packets/frankenstein-master-cognition-concept/`](../research_entity/topic_packets/frankenstein-master-cognition-concept/)
-- `frankenstein_authority_gate_v1.py`
-- `frankenstein_orchestrator_v1.py`
-- `frankenstein_bugfix_v1.py`
-- quarantined `*_PROVIDER_QUARANTINED_854f6bc.py` provenance files
-- `BUILD_ORCHESTRATION_PLAN_20260827_PROVIDER_QUARANTINED_854f6bc.json`
-- `TRIGGERWORD3_HARD_OFF_CLOSURE_20260827_GPT56SOL.json`
-- [`../tests/test_frankenstein_provider_hardoff_gate_v1.py`](../tests/test_frankenstein_provider_hardoff_gate_v1.py)
-
-This closes a source/local-unit boundary; it does **not** grant provider, HCU, training, or whole-product runtime credit.
-
-## 3. Historical Project-Frankenstein archive
-
-Archaeology entry point:
-
-[`../research_entity/archive_assimilation/manifests/PROJECT_FRANKENSTEIN_MANIFEST.json`](../research_entity/archive_assimilation/manifests/PROJECT_FRANKENSTEIN_MANIFEST.json)
-
-The manifest is explicitly `PARTIAL_NOT_FROZEN`. It pins a historical Project-Frankenstein head `abba90a5767d85abc8a1ac340bae92842dab35c1`, but exact whole-tree/history enumeration and a denominator were not frozen. Therefore no repository-wide completion percentage is justified.
-
-Deep-read lineage includes:
-
-| Source | Historical engineering role |
+| Need | Read |
 |---|---|
-| `services/consciousness_daemon.py` | persistent/multi-timescale loop; workspace precursor |
-| `personality/e_pq.py` | persistent state, homeostasis, event learning |
-| `services/thalamus.py` | sensory gating, attention, habituation, prediction error |
-| `services/global_workspace.py` | broadcast/salience workspace |
-| `tools/lcme/lcme_core.py` | memory, claims, graph/vector retrieval, forgetting |
-| `services/soma/micro_trainer.py` | LoRA training, feedback weighting, before/after probes |
-| `services/nucleus_accumbens.py` | reward prediction, motivation, habituation |
-| `services/subconscious.py` | actor-critic/PPO/idle-policy lineage |
-| `services/spatial_state.py` | persistent world/body state |
-| `services/dream_daemon.py` | replay, synthesis, consolidation, interrupt/resume |
-| `services/project_engine.py` | projects, goals, strategies, tasks, tool learning |
-| hypothesis-engine/lab sources | hypothesis lifecycle, test translation, experiment persistence |
-| vision sources | adaptive routing → FrankEye/Retina → native multimodal vision claims |
+| Human explanation | [`../HUMAN_READ_THIS/README.md`](../HUMAN_READ_THIS/README.md) |
+| Current Frankenstein research synthesis | [`research/FRANKENSTEIN_RESEARCH_CHRONICLE.md`](research/FRANKENSTEIN_RESEARCH_CHRONICLE.md) |
+| Evidence labels and promotion law | [`research/EVIDENCE_LABELS.md`](research/EVIDENCE_LABELS.md) |
+| Machine-readable evidence index | [`research/FRANKENSTEIN_EVIDENCE_INDEX.json`](research/FRANKENSTEIN_EVIDENCE_INDEX.json) |
+| External research anchors | [`research/EXTERNAL_RESEARCH_NOTES.md`](research/EXTERNAL_RESEARCH_NOTES.md) |
+| Root cleanup / move contract | [`repository/ROOT_TOPOLOGY_MIGRATION_PLAN.md`](repository/ROOT_TOPOLOGY_MIGRATION_PLAN.md) |
+| AI/tool installation | [`../AI_START_HERE_DO_NOT_SCAN_REPO/README.md`](../AI_START_HERE_DO_NOT_SCAN_REPO/README.md) |
 
-These establish source lineage, not current runtime presence.
+## Current authority resolution
 
-## 4. Chronology law
+For a current claim, resolve in this order:
 
-When reconstructing history, use Git and say **“first verified in accessible Git”** unless creation time is independently evidenced.
+1. newest explicit owner authority;
+2. current `research_entity/claycode/autonomous/SUPERVISOR_INBOX.json` selection and its governing authority epoch;
+3. exact current executable evidence at exact source/artifact identity;
+4. current source/tests/receipts;
+5. historical repositories, branches, manifests, topic packets, and caches;
+6. conversational summaries.
 
-Current anchors include:
+The 2026-08-27 repository currently contains stale lower-level surfaces alongside a newer authority epoch. That inconsistency must remain visible rather than being averaged into a convenient story.
 
-- `96623ef096ba189b771ca10835cd5a20499c1da9` — first archaeology-workspace commit returned by the accessible Frankenstein commit search in this pass (2026-08-09); not a project-creation-date claim.
-- historical snapshot `abba90a5767d85abc8a1ac340bae92842dab35c1` — partial archive head.
-- `ab15b482caff1fa5e446d7795cea8df81bc41b97` — 2026-08-27 grounded master-cognition concept; rejects helper-model architecture inventions not present in real code.
-- `854f6bc87780f4a5242489a6c807d186b16a8c3d` — provider-capable Bauleiter/Bugfix/package-dispenser source lands.
-- supervisor 9.13O — quarantines provider-calling orchestration under HARD_OFF.
-- `3c3dbe5020f57065f47bd4d0a2dce3c537128797` — source/local-unit HARD_OFF caller closure fused on `main`.
-
-The useful chronology is **failure → correction → stricter evidence boundary**, not a victory timeline.
-
-## 5. Architecture dependency graph
+## Current product map
 
 ```mermaid
-flowchart TD
-    ENTRY[Typed Entry Fabric\nidentity + provenance + generation] --> CTRL[Deterministic control plane]
-    UDB[UnifiedDB / canonical state\nevidence + journals] <--> CTRL
-    CTRL --> HCU[HCU\nshared-weight/vector/inference/J-Space]
-    HCU --> GWT[Global J-Space / GWT trace\nempirical coordination hypothesis]
-    GWT --> HP[Hyperposition\npreserve unresolved candidates]
-    HP --> CAND[ActionCandidate]
-    CAND --> EG[EffectGate]
-    EG --> EJ[EffectJournal]
-    EJ --> OBS[verified outcome re-entry]
-    OBS --> ENTRY
-    MEM[retrieval / correction memory] <--> UDB
-    PER[perception] --> ENTRY
+flowchart TB
+    ENTRY[Typed Entry Fabric] --> CONTROL[Deterministic control plane]
+    STATE[(UnifiedDB canonical state/evidence)] <--> CONTROL
+    CONTROL --> HCU[HCU shared-weight / vector / inference / J-Space plane]
+    HCU --> CAND[Typed candidates / workspace / Hyperposition]
+    CAND --> EFFECT[Typed effect request]
+    EFFECT --> GATE[EffectGate]
+    GATE --> JOURNAL[EffectJournal]
+    JOURNAL --> WORLD[External world]
+    WORLD --> VERIFY[Observed result / verification]
+    VERIFY --> ENTRY
+    HCU -. measurement only .-> J[J-Space / GWT research traces]
+    J -. no truth authority .-> STATE
 ```
 
-If effect outcome does not re-enter as verified evidence, reflection can optimize against imagined success. If state fragments into competing truth stores, retrieval and arbitration lose a common reference. If model outputs bypass EffectGate, fluency becomes accidental authority.
+**Current system identity:** EntityOS  
+**Integrated cognition/compute architecture:** HCU  
+**Persistent research entity:** Clay  
+**Temporary model/session/worker:** organ, not a second entity
 
-## 6. UnifiedDB + Emergent Retrieval
+Compatibility/history names are preserved where they carry lineage or ABI value; they do not create competing present-day products.
 
-UnifiedDB is an authority pattern, not a “god file.” One canonical SQLite substrate may contain many typed tables, indexes, views, policies, journals, and rebuildable projections while high-rate transient sensor state can remain outside in RAM.
+## Main research threads
 
-**Emergent Retrieval** means relevance appearing when independently stored dimensions overlap at query time: semantics, time, causal lineage, current state, goals, perception, effect receipts, confidence, provenance, etc. Nothing appears from nowhere.
+### State, memory, and retrieval
 
-Representative source paths:
+UnifiedDB is the deterministic durable authority substrate. Rebuildable graph/workspace/search projections may derive context from it but must retain source identity and epistemic status. Current reference code for Emergent Retrieval explicitly returns derived context with `persistent_second_store=False` and `authority='ASSEMBLY_CONTEXT_ONLY'`.
 
-- [`../research_entity/harness/reference/unifieddb_emergent_cascade.py`](../research_entity/harness/reference/unifieddb_emergent_cascade.py)
-- [`../research_entity/harness/reference/benchmark_unifieddb_emergent_cascade.py`](../research_entity/harness/reference/benchmark_unifieddb_emergent_cascade.py)
-- [`../research_entity/harness/reference/benchmark_unifieddb_emergent_assembly.py`](../research_entity/harness/reference/benchmark_unifieddb_emergent_assembly.py)
-- [`../research_entity/unifieddb/`](../research_entity/unifieddb/)
+### HCU / GRID
 
-### Current SQLite discriminator
+HCU separates logical module/cell structure from physical model residency and physical decode concurrency. `GRID10` is the baseline ten-logical-cell mode; current measurements must be reported with the exact process/core/model topology rather than generalized from the logical count.
 
-**EXTERNAL_PRIMARY:** SQLite documents a rare WAL-reset corruption bug affecting 3.7.0 through 3.51.2 under a specific concurrent WAL write/checkpoint pattern, fixed in 3.51.3 and later (with some backports). Primary sources:
+### Global J-Space / GWT
 
-- https://www.sqlite.org/wal.html
-- https://sqlite.org/releaselog/3_51_3.html
+J-Space/GWT is a measurable causal hypothesis. Useful evidence includes exact checkpoint/tokenizer/lens identity, matched traces, perturbation, lesion/shuffle/rescue, dose-response and behavior change. Textual coherence, labels, recurrence or self-report are insufficient.
 
-**OPEN_HYPOTHESIS / CHECK_REQUIRED:** this does not establish that UnifiedDB is affected. Before a concrete concurrent-WAL durability claim, bind the runtime SQLite version, journal mode, connection topology and concurrency pattern.
+### Hyperposition and GRF
 
-## 7. NVIDIA Unified Memory: analogy only
+Hyperposition preserves unresolved alternatives without promoting a majority into truth. The Clay Generative Reality Framework (C-GRF) is a historical/current research direction for typed possible-world planning, not metaphysics. Generated branches remain prediction/hypothesis until verified outcomes reconcile them.
 
-**EXTERNAL_PRIMARY:** NVIDIA documents CUDA Unified Memory as CPU/GPU accessible managed/system memory with platform-dependent hardware/software coherency and performance/migration constraints:
+### Agency and reflection
 
-https://docs.nvidia.com/cuda/cuda-programming-guide/02-basics/understanding-memory.html
+The target is useful agency with externalized state, memory, perception, arbitration, effect receipts and verified re-entry. Reflection must end in an observable transition such as ACT / ASK / WAIT / re-observe; recursive reflection without an exit is a failure mode.
 
-Project use is analogy only: reducing ownership/copy boundaries can make coherent computation easier. CUDA memory coherence is not SQLite transaction semantics, evidence authority, or retrieval semantics.
+### Training
 
-## 8. GRF / Hyperposition / GWT / Global J-Space
+Training evidence must bind exact lineage and evaluation partitions. The current 2026-08-27 authority places autonomous external providers under HARD-OFF and Together under explicit prohibition. Historical training artifacts can be analyzed as evidence, but they do not authorize another run or create training credit.
 
-Current cache entry:
+## Historical Project Frankenstein archive
 
-[`../research_entity/00_CURRENT/latest/hyperposition-gwt-grf.md`](../research_entity/00_CURRENT/latest/hyperposition-gwt-grf.md)
+The archive assimilation layer freezes a historical Git scope from `e1a881…` inclusive through `abba90a…` inclusive, with 545 commit obligations derived from one inclusive base plus 544 verified descendants. This defines a reproducible historical denominator without claiming unobserved pre-base history.
 
-Its classification is `PARTIAL_COMPONENT_EVIDENCE`: component source/test repair exists while physical-grid Hyperposition/GWT re-entry remains blocked pending true GRID10 runtime acceptance.
+The broader historical manifest remains intentionally `PARTIAL_NOT_FROZEN`: source deep-reads exist, but exact tree/history enumeration is not complete. That is a useful example of the project's evidence discipline: a large amount of analysis is not the same thing as a complete denominator.
 
-Rules:
+## Repository topology status
 
-- **Hyperposition** preserves unresolved alternatives; majority cannot mint truth.
-- **GWT/workspace** is an engineering coordination donor/hypothesis, not a consciousness claim.
-- **GRF** must remain tied to exact project mathematics/receipts, not become a poetic synonym for emergence.
-- **Global J-Space** is an empirical causal interface hypothesis requiring model-specific intervention evidence.
-
-**EXTERNAL_PRIMARY conceptual donor:** Global Neuronal Workspace review: https://pmc.ncbi.nlm.nih.gov/articles/PMC8770991/
-
-Strong J-Space falsifiers include label-free counterbalanced intervention, lesion/shuffle/rescue, prompt/schema-leak controls, and exact checkpoint/tokenizer/runtime identity.
-
-## 9. Reflection and agency
-
-Reflection is an engineering control operation:
-
-```text
-observe state/outcome
-→ compare against expectation/goal
-→ detect mismatch
-→ propose correction
-→ store/retrieve correction evidence
-→ ACT | ASK | WAIT | RE-OBSERVE | measurable transition
-```
-
-Reflection with no exit is rumination/fixation.
-
-External donor mechanisms such as ReAct and Reflexion are relevant because they connect reasoning/reflection to environment interaction or later trials, but they are not Project-Frankenstein runtime proof:
-
-- ReAct: https://arxiv.org/abs/2210.03629
-- Reflexion: https://arxiv.org/abs/2303.11366
-
-**OPEN_HYPOTHESIS:** useful reflective agency improves with a sufficiently rich external substrate of state, memory, perception, arbitration, effect receipts, and verified outcome re-entry.
-
-**Engineering confidence:** medium.  
-**Falsifier:** a materially simpler substrate matches/exceeds it on preregistered long-horizon correction/recovery tasks, or controlled ablation shows no benefit from the richer substrate.
-
-## 10. Failure → engineering move
-
-| Failure / contradiction | Move forced by the evidence |
-|---|---|
-| fragmented state/authority | converge toward one canonical deterministic state/evidence substrate |
-| recursive reflection | explicit exit transitions + verified outcome re-entry |
-| helper-model invented architecture | source-grounding before adoption |
-| coherence mistaken for hidden-state causality | causal intervention controls for J-Space/GWT |
-| more threads presumed faster | matched topology measurement; one thread/process retained for measured 4proc/4vCPU case |
-| provider caller crossed authority boundary | pre-provider fail-closed gate + quarantined donor provenance |
-| stale Together allowance contradicted current zero | current authority wins; stale plan cannot spend |
-| Distillery zero-yield | no training credit from raw token volume |
-| archive denominator incomplete | no fabricated completion percentage |
-
-## 11. Training lineage and current credit
-
-Historical LoRA/IAPT/SOMA and later ClayCode/J-Space/vector-binding work are separate evidence families. Training completion alone is not PASS.
-
-Promotion requires exact model/checkpoint/tokenizer/runtime identity, frozen baseline, leak-resistant family splits, deterministic hard negatives, intended behavior gain, and appropriate regression/fail-closed tests.
-
-At the current 9.13 frontier, whole EntityOS/HCU, full HCU, Physical GRID10, canonical semantics, and training promotion remain zero/unpromoted unless newer exact executable evidence says otherwise.
-
-## 12. Repository curation
-
-Intended public root:
+The intended public root is eventually:
 
 ```text
 README.md
@@ -219,17 +97,16 @@ DEV_SOURCE_RESEARCH/
 AI_START_HERE_DO_NOT_SCAN_REPO/
 ```
 
-This Trigger-3 pass is additive first. Existing technical trees are **not** mass-moved until exact root/tree inventory, blob identity, deep-link impact, active-work overlap, and old→new mapping are verified. Root `README.md` is deliberately unchanged.
+That move is **not yet complete**. Current technical root files remain in place until path/import/automation dependencies are inventoried and moves can be performed without silently breaking execution or evidence links. See the migration plan.
 
-Machine-readable/source topology material belongs under [`repository/`](repository/).
+## Do not infer
 
-## 13. Next high-information gates
-
-1. re-enter current authority after every parallel `main` move;
-2. prove supported Frankenstein callers remain blocked before provider/secret/network boundary under HARD_OFF;
-3. bind exact SQLite runtime/journal/concurrency identity before UnifiedDB WAL durability claims;
-4. run label-free causal J-Space lesion/shuffle/rescue at exact model identity when authority permits;
-5. continue Git-backed chronology using “first verified in accessible Git”;
-6. verify each AI host installer route as `NATIVE`, `ADAPTED`, `DEGRADED`, or `BLOCKED` from observed capabilities and receipts.
-
-This index should grow through deep links, evidence maps, and machine-readable indices — not by copying the entire archive into prose.
+- a test exists → it ran;
+- a run happened → it was authorized;
+- a provider said 200 OK → the route was free or admitted;
+- a component passed → EntityOS/HCU passed;
+- a workspace token appeared → the model 'knew the truth';
+- a reflection was generated → later behavior improved;
+- a simulated future looked plausible → it happened;
+- many workers agreed → evidence became independent;
+- a file was recently modified → its internal authority is current.

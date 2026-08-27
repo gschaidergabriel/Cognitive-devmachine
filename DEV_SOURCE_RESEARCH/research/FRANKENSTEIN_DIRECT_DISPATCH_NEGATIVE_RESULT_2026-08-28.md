@@ -136,6 +136,18 @@ Reason: patch application naturally constrains edits to declared hunks and expos
 
 Patch generation can still be destructive through broad hunks, incorrect context, intentional deletion, stale preimages, or a patch applier that accepts fuzzy/ambiguous matches. Therefore **patch format alone is insufficient**.
 
+### External-primary mechanism check
+
+`EXTERNAL_PRIMARY`: Git's current official `git apply` documentation provides two concrete mechanisms relevant to the proposed contract: `git apply --check` tests whether a patch is applicable without applying it, and normal unified diffs rely on surrounding context; the documentation explicitly discourages context-free patches because that context supplies a safety check. Git also fails an ordinary patch atomically by default when some hunks do not apply unless `--reject` is requested.
+
+Primary source: <https://git-scm.com/docs/git-apply>
+
+`EXTERNAL_PRIMARY`: Git's `git diff` documentation can expose full pre/post object names with `--full-index` and provides `--check` for conflict-marker/whitespace diagnostics.
+
+Primary source: <https://git-scm.com/docs/git-diff>
+
+These are **mechanism donors only**. Applicability, context matching, full object identities, and whitespace checks do not establish semantic preservation, Frankenstein runtime safety, or any current promotion. The project-specific contract still requires exact preimage binding, changed/unchanged-region invariants, declared edit scope, and task-appropriate tests.
+
 ### Cheapest high-information discriminator
 
 On a clean exact-current non-provider checkout, run a deterministic mutation harness over existing files with cases for:

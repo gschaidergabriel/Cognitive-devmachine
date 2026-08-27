@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "FRANKENSTEIN_INSTALL_RESULT/v1",
+  "title": "Frankenstein host installation result",
+  "description": "Machine-readable final classification for one observed host integration. Source/config presence alone is insufficient; verification fields record what was actually observed.",
+  "type": "object",
+  "required": [
+    "schema",
+    "host",
+    "repository_root_resolution",
+    "capabilities",
+    "verification",
+    "result"
+  ],
+  "properties": {
+    "schema": {"const": "FRANKENSTEIN_INSTALL_RESULT/v1"},
+    "host": {"type": "string", "minLength": 1},
+    "repository_root_resolution": {
+      "type": "object",
+      "required": ["method", "resolved"],
+      "properties": {
+        "method": {"type": "string", "minLength": 1},
+        "resolved": {"type": "boolean"},
+        "path": {"type": ["string", "null"]},
+        "head": {"type": ["string", "null"]}
+      },
+      "additionalProperties": false
+    },
+    "capabilities": {
+      "type": "object",
+      "required": [
+        "filesystem_read",
+        "filesystem_write",
+        "shell",
+        "git_read",
+        "git_write",
+        "lifecycle_hooks",
+        "durable_state",
+        "effect_receipts"
+      ],
+      "properties": {
+        "filesystem_read": {"type": "boolean"},
+        "filesystem_write": {"type": "boolean"},
+        "shell": {"type": "boolean"},
+        "git_read": {"type": "boolean"},
+        "git_write": {"type": "boolean"},
+        "lifecycle_hooks": {"type": ["boolean", "null"]},
+        "durable_state": {"type": ["boolean", "null"]},
+        "effect_receipts": {"type": ["boolean", "null"]}
+      },
+      "additionalProperties": false
+    },
+    "verification": {
+      "type": "object",
+      "required": [
+        "authority_resolved",
+        "hook_fired",
+        "state_roundtrip",
+        "effect_receipt_observed"
+      ],
+      "properties": {
+        "authority_resolved": {"type": "boolean"},
+        "authority_identity": {"type": ["string", "null"]},
+        "hook_fired": {"type": ["boolean", "null"]},
+        "state_roundtrip": {"type": ["boolean", "null"]},
+        "effect_receipt_observed": {"type": ["boolean", "null"]},
+        "notes": {"type": "array", "items": {"type": "string"}}
+      },
+      "additionalProperties": false
+    },
+    "result": {"enum": ["NATIVE", "ADAPTED", "DEGRADED", "BLOCKED"]}
+  },
+  "additionalProperties": false
+}

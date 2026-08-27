@@ -1,0 +1,49 @@
+{
+  "schema_version": "9.13",
+  "supervisor_delta": "9.13K_NON_AUTHORITY",
+  "date": "2026-08-27",
+  "organ": "GPT-5.6 Sol",
+  "active_program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "integrated_cognition_compute_architecture": "HCU",
+  "authority_epoch_change": false,
+  "material_findings": [
+    "Commit 940de5ab reports Together fine-tune run 4 job ft-343aff86-a5c1 launched, trained and evaluated after canonical authority 9.13 already set FREE_ONLY, Together forbidden and zero remaining paid allowance. Run 4 is therefore authority-violating historical diagnostic evidence only.",
+    "The same commit calls run 4 the fourth of five authorized runs and recommends a fifth run. Those phrases are stale non-authority and MUST NOT authorize run 5.",
+    "Run 4 exposed a real adapter-loading defect: safetensors keys contained an extra .language_model. segment, causing PEFT to report 48 missing LoRA tensors while load superficially succeeded. The commit states the same prefix affected run 3. This invalidates any assumption that prior local run-3 adapter evaluation necessarily exercised the intended LoRA weights unless independently re-bound and re-executed.",
+    "After key rewriting, run-4 fixed and broken loads produced byte-identical outputs on the reported eval sets. Therefore the new result does not demonstrate a useful adapter effect. On the newly generated 110-row HOLDOUT_FROZEN split, strong_full scored 0/30 while the three PRESERVE-yielding groups were perfect; the reused 10 novel scenarios remained 8/10.",
+    "The 10 reused novel scenarios already influenced bias-fix dataset design, so they are exploratory diagnosis for any successor, not confirmatory holdout evidence. The 110-row split is generator-related and cannot by itself establish Goodman-independent generalization.",
+    "Bootstrap-v2 output-containment closure from 9.13J remains source-only and runtime-unverified. Current owning VPS remains stale/dirty with no CONTROL_SYNC_REFRESH_PASS."
+  ],
+  "credit": {
+    "run4_training_credit": 0,
+    "run4_checkpoint_selection_credit": 0,
+    "run4_base_credit": 0,
+    "run4_canonical_semantics_credit": 0,
+    "run4_diagnostic_execution_evidence": true,
+    "bootstrap_v2_runtime_control_transport_credit": 0,
+    "runtime_quiescence_credit": 0
+  },
+  "steering": [
+    "P0 quarantine Together run 4 as AUTHORITY_VIOLATING_HISTORICAL_DIAGNOSTIC_NON_OPERATIVE and set remaining paid allowance to zero. No run 5 is authorized.",
+    "P0 do not use run-4 or run-3 adapter claims for checkpoint selection, training promotion or canonical semantics until exact adapter bytes, base checkpoint, PEFT mapping, loaded nonzero LoRA tensors and actual forward influence are executable and lineage-bound on a FREE_ONLY admissible non-provider surface.",
+    "P0 treat prior run-3 adapter local-eval conclusions as suspect where they depended on the same broken key-prefix loading path; do not retroactively promote or retune from them.",
+    "P0 preserve the bootstrap-v2 control-transport sequence from 9.13J: repository-bound tests first, then SHA-pinned v2 bootstrap outside owning checkout, then non-mutating refresh, then separately admitted apply only under clean current 9.13 HARD_OFF authority.",
+    "P1 any successor bias experiment must be preregistered before a new family-disjoint holdout is generated. The reused 10 novel scenarios are exploratory only for any design influenced by them.",
+    "P1 retain Goodman anti-echo and explicit model-family/checkpoint ancestry. Huihui/Together diagnostics remain separate from retained Josiefied lineage.",
+    "P2 no canonical admission scaling until exact retained tokenizer/renderer/atoms-index ABI, provenance, leakage gates, current ledger and replay-plus-zero are executable."
+  ],
+  "hard_invariants": [
+    "FREE_ONLY_NO_PAID_FALLBACK",
+    "TOGETHER_FORBIDDEN",
+    "REMAINING_PAID_RUN_ALLOWANCE_ZERO",
+    "EXECUTABLE_EVIDENCE_OUTRANKS_MODEL_CONSENSUS",
+    "NO_BASE_WORK_PACKAGE_PASS_FROM_MODEL_CONSENSUS",
+    "NO_CANONICAL_SEMANTICS_PROMOTION_WITHOUT_EXECUTABLE_COUNTEREVIDENCE_AND_REVIEW",
+    "GOODMAN_COLLAPSE_SHARED_MODEL_FAMILY_PIPELINE_ORCHESTRATION_AND_REPACKAGED_HISTORY",
+    "TRAIN_CALIBRATION_HOLDOUT_FAMILY_PROVENANCE_LEAKAGE_INVALIDATES_INDEPENDENCE_CREDIT",
+    "MODEL_FAMILY_AND_CHECKPOINT_ANCESTRY_MUST_REMAIN_EXPLICIT",
+    "UBUNTU_ONLY_FRANK_V0_1_TARGET_REMAINS_UNCHANGED",
+    "DO_NOT_MODIFY_FRANK_HARNESS"
+  ]
+}

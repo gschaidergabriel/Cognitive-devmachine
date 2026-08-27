@@ -210,9 +210,9 @@ A variable still present in the same process is not durable-state proof.
 
 Request != effect.
 
-## 7. Frankenstein-specific quarantine
+## 7. Frankenstein-specific quarantine and safe source-ready entry
 
-Do **not** launch these current source files as provider-calling long-running workers under 9.13 HARD_OFF:
+Do **not** launch these current source files directly as provider-calling long-running workers under 9.13 HARD_OFF:
 
 ```text
 research_entity/topic_packets/frankenstein-master-cognition-concept/frankenstein_orchestrator_v1.py
@@ -220,6 +220,31 @@ research_entity/topic_packets/frankenstein-master-cognition-concept/frankenstein
 ```
 
 Their non-network scheduling/rollback logic may be inspected/tested on an admitted non-provider surface, but current supervisor steering says the real external caller boundary must be gated before secret lookup/provider import/network/Aider/fallback dispatch.
+
+This Triggerword 3 branch adds a **source-ready fail-closed entry candidate**:
+
+```text
+research_entity/topic_packets/frankenstein-master-cognition-concept/frankenstein_authority_launcher_v1.py
+```
+
+It runs the canonical standard-library provider gate before importing either provider-capable target. Under current HARD_OFF, a bounded non-provider check may invoke the launcher and should observe exit `77` plus a receipt with:
+
+```text
+provider_calls = 0
+secret_lookups = 0
+target_imports = 0
+target_processes_started = 0
+```
+
+Do not infer runtime PASS merely because the launcher source exists. Its test is `tests/test_frankenstein_authority_launcher_v1.py`; exact execution evidence must be observed before component runtime credit.
+
+Also do not overclaim the repair: legacy target files can still be directly invoked by a bypassing caller until every operational entrypoint is enumerated and proven to route through the gate or the targets are safely refactored. Until then, direct provider-capable entry remains quarantined.
+
+Detailed boundary map:
+
+```text
+DEV_SOURCE_RESEARCH/FRANKENSTEIN_AUTHORITY_BOUNDARY.md
+```
 
 Do not "fix" this by modifying Frank's own Harness unless newer explicit authority says so.
 
@@ -232,6 +257,8 @@ HUMAN_READ_THIS/README.md
 DEV_SOURCE_RESEARCH/README.md
 DEV_SOURCE_RESEARCH/FRANKENSTEIN_RESEARCH_CHRONICLE.md
 DEV_SOURCE_RESEARCH/EVIDENCE_INDEX.json
+DEV_SOURCE_RESEARCH/EXTERNAL_PRIMARY_NOTES.md
+DEV_SOURCE_RESEARCH/ROOT_MIGRATION_MANIFEST.json
 ```
 
 These are fast navigation aids. When they disagree with current canonical source, **current canonical source wins**.

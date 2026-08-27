@@ -118,7 +118,7 @@ def test_stale_clean_without_apply_is_read_only(tmp_path):
     rc, receipt = call(mod, clone, bare, apply=False)
     assert rc == 77
     assert receipt["execution_authority"] == "REFRESH_REQUIRED_APPLY_NOT_REQUESTED"
-    assert receipt["git_worktree_fast_forward_applied"] if "git_worktree_fast_forward_applied" in receipt else True
+    assert receipt.get("git_worktree_fast_forward_applied") is not True
     assert run("git", "rev-parse", "HEAD", cwd=clone) == before != remote
 
 
@@ -129,6 +129,7 @@ def test_safe_fast_forward_apply_reaches_exact_remote(tmp_path):
     assert rc == 0 and receipt["pass"] is True
     assert receipt["execution_authority"] == "CONTROL_SYNC_REFRESH_PASS"
     assert receipt["dirty_after"] is False
+    assert receipt["remote_main_head_initial"] == receipt["remote_main_head_final"] == remote
     assert run("git", "rev-parse", "HEAD", cwd=clone) == remote
 
 
@@ -153,7 +154,6 @@ def test_diverged_checkout_rejected_without_reset(tmp_path):
 )
 def test_remote_authority_violation_blocks_apply(tmp_path, kwargs, needle):
     mod = load_mod(); bare, seed, clone = init_remote(tmp_path)
-    # epoch mismatch requires editing only one side after the normal writer
     if kwargs.get("epoch"):
         write_tree(seed, epoch="9.14")
         adm_p = seed / "research_entity/claycode/autonomous/FREE_PROVIDER_ADMISSION.json"
@@ -183,11 +183,11 @@ def test_remote_race_after_resolution_cannot_mint_pass(tmp_path, monkeypatch):
 
     monkeypatch.setattr(mod, "validate_commit", validate_then_advance)
     rc, receipt = call(mod, clone, bare, apply=True)
-    # v1 pins the initially resolved SHA; this test documents that a later remote move
-    # must not be silently represented as current-main authority.
-    assert rc == 0
-    assert receipt["local_head_after"] == first
-    assert receipt["local_head_after"] != run("git", "rev-parse", "HEAD", cwd=seed)
+    assert rc == 77
+    assert receipt["pass"] is False
+    assert "remote_main_moved_during_refresh" in receipt["errors"][0]
+    assert receipt["remote_main_head_initial"] == first
+    assert receipt["remote_main_head_final"] != first
 
 
 def test_post_reset_validation_failure_does_not_mint_pass(tmp_path, monkeypatch):

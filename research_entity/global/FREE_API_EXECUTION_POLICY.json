@@ -381,6 +381,24 @@
     "counterhypothesis": "Successful JSON decoding plus value.strip() and a C0/C1 exclusion are sufficient proof of nonblank text; falsified because U+200B is neither Python whitespace nor C0/C1 and crossed all three semantic boundaries without carrying visible or reasoned content.",
     "uncertainty": "This is an explicit local FRANK text-adapter policy, not a claim that every control or format character is invalid model output. Cf characters remain permitted when another semantic witness is present. Tool, binary, multimodal and protocol-specific payloads require separate typed adapters. Other invisible categories, including combining marks, remain deliberately unclassified pending a falsifier and compatibility evidence."
   },
+  "canonical_blob_write_boundary": {
+    "checked_at": "2026-08-27",
+    "claim": "A successful repository contents write is not accepted as canonical evidence until the returned remote content blob SHA exactly matches git hash-object for the intended local bytes. Large replacement files are assembled from bounded lossless chunks before the write; textual success alone cannot establish byte identity.",
+    "sources": [
+      "https://docs.github.com/rest/repos/contents#create-or-update-file-contents",
+      "https://git-scm.com/docs/git-hash-object",
+      "https://git-scm.com/docs/gitformat-loose"
+    ],
+    "external_evidence": "GitHub's Contents API returns the resulting content object's sha separately from the commit SHA. Git documents git hash-object as computing the blob object ID from a file's contents and defines a blob object ID over its type, byte size and bytes.",
+    "internal_measurement": "A whole-file connector write reported success but its returned blob SHA 932f845e did not match the intended local blob e2b8e662. Remote line-range inspection showed the committed test file ended at line 4098 while the intended suite had 5104 lines: the intermediate command output had been truncated before the write. A first chunk repair was deliberately rejected because redundant join newlines produced cc94fcca. Concatenating bounded chunks without modification produced the exact expected remote blob e2b8e662.",
+    "executable_evidence": [
+      "git hash-object tests/test_free_api_provider_runtime.py",
+      "GitHub Contents API response content.sha",
+      "post-write fetch_file blob sha reread"
+    ],
+    "counterhypothesis": "A successful Contents API response proves that the caller's intended complete bytes were committed; falsified because the API correctly committed the truncated bytes it received and returned success, while only the content-SHA comparison exposed the upstream truncation.",
+    "uncertainty": "This operational invariant detects byte divergence but does not by itself prove semantic correctness, review quality or CI execution. SHA-1 collision resistance is not treated as an authorship guarantee; within this workflow the equality check is an integrity discriminator between two directly measured byte sequences."
+  },
   "bearer_credential_syntax": {
     "checked_at": "2026-08-24",
     "claim": "A configured provider credential is routable only when it is at most 8192 characters and matches the RFC 6750 b64token grammar before normalization, scanning or Authorization-header construction; oversized values, whitespace, CR/LF, non-ASCII and other separators fail closed before network access.",
@@ -580,6 +598,9 @@
       "https://docs.python.org/3/library/json.html#json.loads"
     ],
     "executable_evidence": "test_non_utf8_network_json_cannot_reach_verified_state",
+Warning: truncated output (original token count: 16441)
+Total output lines: 529
+
     "counterhypothesis": "Passing response bytes directly to Python json.loads enforces the network JSON encoding contract; falsified because the decoder automatically recognized UTF-16 and UTF-32 bodies and both reached success, VERIFIED and DONE."
   },
   "strict_json_numbers": {
@@ -834,24 +855,7 @@
     "checked_at": "2026-08-25",
     "claim": "Every non-streaming provider success response must contain a top-level model field that is an exact built-in string equal to the requested model before content can reach VERIFIED or DONE.",
     "sources": [
-      "https://docs.nvidia.com/nim/large-language-models/2.0.10/reference/api-reference.html",
-      "https://docs.vllm.ai/en/v0.16.0/api/vllm/entrypoints/openai/chat_completion/protocol/"
-    ],
-    "external_evidence": "NVIDIA documents that its OpenAI-compatible inference endpoints are provided by the vLLM backend and directs full schema questions to vLLM. The official vLLM ChatCompletionResponse declares model as a required string while object has the fixed chat.completion discriminator.",
-    "internal_measurement": "Both a status-200 response explicitly naming other-model and a response omitting model entirely previously returned success and reached VERIFIED and DONE while the receipt represented the requested model as verified provenance.",
-    "executable_evidence": [
-      "test_response_model_mismatch_cannot_reach_verified_state",
-      "test_missing_response_model_cannot_reach_verified_state"
-    ],
-    "counterhypothesis": "Endpoint binding or a Chat-shaped choice is sufficient to infer response model identity; falsified because the adapter promoted an unasserted model name into a VERIFIED receipt despite the backend schema requiring the field.",
-    "uncertainty": "No Ubuntu NVIDIA live receipt is available on this host; compatibility is supported by the official NVIDIA backend contract and executable local boundary tests rather than a live provider measurement."
-  },
-  "response_object_provenance": {
-    "checked_at": "2026-08-25",
-    "claim": "Every non-streaming provider success response must contain the exact built-in top-level discriminator object=chat.completion before content can reach VERIFIED or DONE. Explicit error discriminators remain separately classified as provider_error.",
-    "sources": [
-      "https://docs.nvidia.com/nim/large-language-models/2.0.10/reference/api-reference.html",
-      "https://docs.nvidia.com/nim/large-language-models/2.0.0/get-started/quickstart.html",
+      "https://docs.nvidia.com/nim/large-language-models/2.0.10/reference/api-referenc…441 tokens truncated…"https://docs.nvidia.com/nim/large-language-models/2.0.0/get-started/quickstart.html",
       "https://docs.vllm.ai/en/v0.16.0/api/vllm/entrypoints/openai/chat_completion/protocol/"
     ],
     "external_evidence": "NVIDIA documents Chat Completions, text Completions and Responses as distinct vLLM-backed API surfaces and directs full response-schema questions to vLLM. The official vLLM ChatCompletionResponse defines object as the fixed Literal chat.completion with that serialized default.",

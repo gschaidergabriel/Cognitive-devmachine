@@ -1,0 +1,73 @@
+name: GO877 collective metrics freshness exact-source regression
+
+on:
+  push:
+    branches:
+      - gpt56sol/go877-collective-freshness
+    paths:
+      - '.github/workflows/go877-metrics-freshness-selfhosted.yml'
+      - 'free swarm/go_collective_metrics.py'
+      - 'free swarm/go_collective_metrics_freshness_v1.py'
+      - 'free swarm/_internal/go_collective_metrics_core_v1.py'
+      - 'tests/test_go_collective_metrics_v1.py'
+      - 'tests/test_go_collective_metrics_freshness_v1.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: go877-metrics-freshness-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  freshness-regression:
+    if: github.repository == 'gschaidergabriel/clay-global-research-entity' && github.actor == 'gschaidergabriel'
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 1
+          clean: true
+          persist-credentials: false
+
+      - name: Execute exact checked-out source inside clay-direct-dev
+        shell: bash
+        run: |
+          set -euo pipefail
+          expected='${{ github.sha }}'
+          observed="$(git rev-parse HEAD)"
+          test "$observed" = "$expected"
+          scratch="/tmp/clay-go877-metrics-${GITHUB_RUN_ID}"
+
+          prefix=()
+          if command -v docker >/dev/null 2>&1 && docker inspect clay-direct-dev >/dev/null 2>&1; then
+            prefix=(docker)
+          elif command -v sudo >/dev/null 2>&1 && sudo -n docker inspect clay-direct-dev >/dev/null 2>&1; then
+            prefix=(sudo -n docker)
+          elif command -v podman >/dev/null 2>&1 && podman inspect clay-direct-dev >/dev/null 2>&1; then
+            prefix=(podman)
+          elif command -v sudo >/dev/null 2>&1 && sudo -n podman inspect clay-direct-dev >/dev/null 2>&1; then
+            prefix=(sudo -n podman)
+          else
+            echo 'CLAY_DIRECT_DEV_UNAVAILABLE' >&2
+            exit 41
+          fi
+
+          "${prefix[@]}" exec clay-direct-dev sh -lc "rm -rf '$scratch'; mkdir -p '$scratch'"
+          "${prefix[@]}" cp "$GITHUB_WORKSPACE/." "clay-direct-dev:$scratch"
+          "${prefix[@]}" exec clay-direct-dev sh -lc "set -eu; cd '$scratch'; test \"\$(git rev-parse HEAD)\" = '$expected'; python3 -m py_compile 'free swarm/go_collective_metrics.py' 'free swarm/go_collective_metrics_freshness_v1.py' 'free swarm/_internal/go_collective_metrics_core_v1.py' tests/test_go_collective_metrics_v1.py tests/test_go_collective_metrics_freshness_v1.py; python3 -m unittest -v tests.test_go_collective_metrics_v1 tests.test_go_collective_metrics_freshness_v1"
+          "${prefix[@]}" exec clay-direct-dev sh -lc "rm -rf '$scratch'"
+
+      - name: Evidence boundary
+        shell: bash
+        run: |
+          printf '%s\n' \
+            'scope=GO_COLLECTIVE_METRICS_COMPONENT_REGRESSION_ONLY' \
+            'external_provider_calls=0' \
+            'whole_entityos_hcu_runtime_credit_added=0' \
+            'hcu_full_runtime_credit_added=0' \
+            'jspace_model_runtime_credit_added=0' \
+            'training_credit_added=0'

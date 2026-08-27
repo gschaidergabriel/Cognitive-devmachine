@@ -1,18 +1,21 @@
 {
   "schema_version": "9.13",
-  "supervisor_delta": "9.13B_NON_AUTHORITY",
-  "latest_cycle": "runtime-reconcile-source-hardening-and-current-host-quiescence-failure",
+  "supervisor_delta": "9.13C_NON_AUTHORITY",
+  "latest_cycle": "quiescence-mutation-bypass-source-closed-and-vps-control-transport-degraded",
   "needs_review": true,
   "active_program": "ENTITYOS_HCU",
   "product": "EntityOS",
   "integrated_cognition_compute_architecture": "HCU",
-  "material_finding": "After Supervisor 9.13, the retained self-hosted pull_request runtime-reconcile observable workflow was found to still contain runtime-mutating activation/update paths and direct SYSTEM_ANALYSIS_LIVE compatibility-mirror consumption under HARD_OFF. Commit e0dbcf5b773e5df5da3b9fc1a4b70cd47ff15382 removes those paths and makes the workflow a strictly read-only authority audit, but no repository-bound execution PASS has yet been observed. Fresh clay-direct-dev telemetry at 2026-08-27T05:45:35.070072Z directly shows active Clay legacy roots for Evidence Forge, Research Distillery, evaluate.py --watch, update_fabric_live.py --watch and run_6000_free_swarm_supervisor.sh, so host-local runtime quiescence is currently false. Process presence is not provider-call evidence. Provider authority remains unchanged at explicit FREE_ONLY/HARD_OFF epoch 9.13; paid Together runs and holdout-derived V2 remain quarantined.",
+  "material_finding": "The transient self-hosted quiescence mutation bypass is source-closed by ac52521584a2c36e83e7b4febac46b34d14fd945, and the dangerous run 33043786371 remained queued with no executed job steps, so there is no executable evidence that --apply killed anything. The replacement attribution-only run 33047256348 is also queued and mints no runtime credit. Direct clay-direct-dev telemetry at 2026-08-27T06:52:55.699233Z still observed active Clay legacy roots, so host quiescence was false at that observation time, without proving provider calls. At 2026-08-27T06:53:43.875940Z the VPS bridge then failed sync_control() because github.com:22 returned No route to host. Until a read-only authenticated control fetch of current main succeeds and binds HEAD/tree/current 9.13 authority/dirty=false, the bridge checkout is stale and has NO_EXECUTION_AUTHORITY. Provider authority remains unchanged at explicit FREE_ONLY/HARD_OFF epoch 9.13; paid Together runs and holdout-derived V2 remain quarantined.",
   "current_frontier": {
-    "runtime_quiescence": "P0_ACTIVE_FAIL_CURRENT_HOST_PROCESS_OBSERVATION_RESTART_AUTHORITY_V4_READONLY_ATTRIBUTION_THEN_ZERO_SURVIVORS_DESCENDANTS_RESTARTS_90S_REQUIRED",
+    "runtime_control_transport": "P0_DEGRADED_VPS_BRIDGE_GITHUB_SSH22_NO_ROUTE_TO_HOST_FRESH_CONTROL_SYNC_REQUIRED_BEFORE_ANY_MUTATION",
+    "runtime_quiescence": "P0_ACTIVE_FAIL_AT_2026_08_27T065255Z_RESTART_AUTHORITY_V4_READONLY_ATTRIBUTION_ONLY_AFTER_FRESH_CONTROL_SYNC_THEN_ZERO_SURVIVORS_DESCENDANTS_RESTARTS_90S_REQUIRED",
+    "quiescence_mutation_bypass": "SOURCE_CLOSED_OBSOLETE_MUTATING_RUN_33043786371_QUEUED_NO_EXECUTED_STEPS_NO_MUTATION_EVIDENCE",
+    "quiescence_attribution_workflow": "SOURCE_HARDENED_ATTRIBUTION_ONLY_RUN_33047256348_QUEUED_RUNTIME_UNVERIFIED",
     "runtime_reconcile_pr_workflow": "SOURCE_HARDENED_TO_STRICTLY_NONMUTATING_READONLY_AUTHORITY_AUDIT_RUNTIME_UNVERIFIED",
     "runtime_provider_authority": "CURRENT_EXPLICIT_HARD_OFF_9_13_ALL_PROVIDERS_FALSE_TOGETHER_FORBIDDEN_NO_PAID_FALLBACK",
     "current_free_provider_admission": "9.13_ALL_PROVIDERS_FALSE_OWNER_EMERGENCY_STOP_NO_PAID_FALLBACK",
-    "control_plane_coherence": "9_13_PROVIDER_AUTHORITY_UNCHANGED_9_13B_IS_NON_AUTHORITY_STEERING_DELTA",
+    "control_plane_coherence": "9_13_PROVIDER_AUTHORITY_UNCHANGED_9_13C_IS_NON_AUTHORITY_STEERING_DELTA",
     "monitoring_truth": "P0_V6_PUBLICATION_PLUS_CURRENT_POINTER_READER_SOURCE_CLOSED_RUNTIME_UNVERIFIED_CONSUMER_MIGRATION_AND_LIVE_READBACK_OPEN",
     "base_claycode_release": "WP01_WP02_PASS_WP03_TO_WP14_OPEN_GENERAL_PURPOSE_AND_RELEASE_GATES_NOT_PASS",
     "trigger2_paid_together_run1": "QUARANTINED_HISTORICAL_DIAGNOSTIC_NON_OPERATIVE_ZERO_CREDIT",
@@ -48,7 +51,10 @@
     "NO_BASE_WORK_PACKAGE_PASS_FROM_MODEL_CONSENSUS",
     "NO_CANONICAL_SEMANTICS_PROMOTION_WITHOUT_EXECUTABLE_COUNTEREVIDENCE_AND_REVIEW",
     "SOURCE_TESTS_WITHOUT_EXECUTION_ARE_NOT_RUNTIME_PASS",
+    "QUEUED_WORKFLOWS_WITH_NO_EXECUTED_STEPS_MINT_ZERO_RUNTIME_CREDIT",
+    "STALE_OR_UNSYNCHRONIZED_VPS_CONTROL_CHECKOUT_HAS_NO_EXECUTION_AUTHORITY",
     "ACTIVE_CLAY_PROCESS_PRESENCE_PROVES_NONQUIESCENCE_BUT_NOT_PROVIDER_CALL_ATTRIBUTION",
+    "GIT_CONTROL_TRANSPORT_FAILURE_IS_NOT_PROVIDER_CALL_EVIDENCE",
     "HOLDOUT_OUTPUTS_USED_TO_CHOOSE_A_SUCCESSOR_DESIGN_CONTAMINATE_THAT_HOLDOUT_FOR_CONFIRMATORY_CREDIT",
     "FALSE_OR_CONTRADICTED_SELECTED_USING_HOLDOUT_PROVENANCE_FAILS_CLOSED",
     "HISTORICAL_PAID_DIAGNOSTIC_EVIDENCE_CANNOT_MINT_CURRENT_EXECUTION_TRAINING_OR_CHECKPOINT_SELECTION_AUTHORITY",
@@ -61,10 +67,13 @@
     "DO_NOT_MODIFY_FRANK_HARNESS"
   ],
   "next_focus": [
+    "P0_RESTORE_OR_ESTABLISH_READONLY_AUTHENTICATED_VPS_TO_GITHUB_CONTROL_SYNC_AND_PROVE_SUCCESSFUL_FETCH_OF_CURRENT_MAIN; HTTPS_OR_GITHUB_SSH_OVER_HTTPS_PORT_443_MAY_BE_TESTED_IF_PORT22_IS_BLOCKED_BUT_NO_TRANSPORT_IS_TRUSTED_UNTIL_FETCH_AUTH_SUCCEEDS",
+    "P0_BIND_FETCHED_HEAD_TREE_SUPERVISOR_INBOX_FREE_PROVIDER_ADMISSION_RELEVANT_SOURCE_HASHES_AND_DIRTY_FALSE; STALE_OR_UNSYNCHRONIZED_BRIDGE_CHECKOUT_IS_NO_EXECUTION_AUTHORITY",
+    "P0_DO_NOT_RERUN_OR_RECONSTRUCT_OBSOLETE_MUTATING_QUIESCENCE_WORKFLOW; RETAIN_ATTRIBUTION_ONLY_SOURCE",
+    "P0_AFTER_FRESH_CONTROL_SYNC_EXECUTE_RESTART_AUTHORITY_V4_READONLY_AND_BIND_EACH_LIVE_ROOT_TO_EXACT_PID_CGROUP_ENTRYPOINT_AND_OWNING_RESTART_AUTHORITY",
+    "P0_AFTER_EXACT_ROOT_SPECIFIC_RESTART_AUTHORITY_IS_EXECUTABLY_BOUND_DISABLE_ONLY_THAT_LEGACY_AUTHORITY_REVALIDATE_BINDING_IMMEDIATELY_AND_THEN_TERMINATE_ONLY_BOUND_ROOT; PROVE ZERO_MATCHING_SURVIVORS_ZERO_DESCENDANTS_ZERO_RESTARTS_FOR_AT_LEAST_90_SECONDS",
     "P0_EXECUTE_HARDENED_READONLY_SELF_HOSTED_RUNTIME_AUTHORITY_AUDIT_ON_CLEAN_CURRENT_NON_PROVIDER_CHECKOUT_WITH_HEAD_TREE_SOURCE_HASH_DIRTY_FALSE_AND_VERIFIED_CURRENT_READBACK",
-    "P0_USE_RESTART_AUTHORITY_V4_READONLY_OUTPUT_ONLY; DO_NOT_KILL_FROM_UNBOUND_OR_SOURCE_ONLY_RECEIPTS",
-    "P0_AFTER_EXACT_ROOT_SPECIFIC_RESTART_AUTHORITY_IS_EXECUTABLY_BOUND_DISABLE_ONLY_THAT_LEGACY_AUTHORITY_AND_PROVE_ZERO_MATCHING_SURVIVORS_ZERO_DESCENDANTS_ZERO_RESTARTS_FOR_AT_LEAST_90_SECONDS",
-    "P0_NO_RUN3_NO_PAID_TRAINING; IGNORE ALL STALE MAX_5_OR_3_REMAINING_TEXT_AS NON_AUTHORITY",
+    "P0_NO_RUN3_NO_PAID_TRAINING; IGNORE_ALL_STALE_MAX_5_OR_3_REMAINING_TEXT_AS_NON_AUTHORITY",
     "P0_ROW_ID_AUDIT_PRIOR_60_VS_852_DIAGNOSTIC_VS_125_RUN2_AB; MATERIALIZE_EXACT_CONTAMINATED_UNION_AND_FAMILY_PROVENANCE_QUARANTINE",
     "P0_QUARANTINE_OR_REGENERATE_V2_ARTIFACTS_SO_NO_HOLDOUT_DERIVED_ARTIFACT_CAN_CLAIM_SELECTED_USING_HOLDOUT_FALSE_OR_ENTER_CANONICAL_ADMISSION",
     "P1_ANY_SUCCESSOR_MUST_BE_VERSIONED_AND_PREREGISTERED_BEFORE_A_NEW_FAMILY_DISJOINT_FROZEN_HOLDOUT_IS_GENERATED",
@@ -75,6 +84,7 @@
     "P3_ONLY_AFTER_RUNTIME_QUIESCENCE_AND_PROVIDER_PATH_CLOSURE_RETURN_TO_PHYSICAL_GRID10_RECURSIVE_SCALING"
   ],
   "promotion_state": {
+    "runtime_control_transport_pass": false,
     "runtime_quiescence_pass": false,
     "provider_path_runtime_pass": false,
     "runtime_reconcile_readonly_workflow_runtime_pass": false,
@@ -94,5 +104,5 @@
     "canonical_semantics_promotion": false,
     "training_credit": 0
   },
-  "steering": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_9_13B_DELTA_2026-08-27T1246P0700_GPT56SOL.json"
+  "steering": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_9_13C_DELTA_2026-08-27T1356P0700_GPT56SOL.json"
 }

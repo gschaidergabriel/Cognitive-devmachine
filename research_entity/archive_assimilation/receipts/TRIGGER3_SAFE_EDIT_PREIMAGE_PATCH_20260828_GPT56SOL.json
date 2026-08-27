@@ -1,0 +1,73 @@
+{
+  "schema": "TRIGGER3_SAFE_EDIT_COMPONENT_RECEIPT/v1",
+  "trigger": "triggerword 3",
+  "date_local": "2026-08-28",
+  "organ": "GPT-5.6 Sol",
+  "repository": "gschaidergabriel/clay-global-research-entity",
+  "base_main_sha": "f400878d85769361095632067b5f6857bf0f7d3f",
+  "branch": "trigger3-safe-edit-preimage-patch-gpt56sol",
+  "authority_observed": {
+    "supervisor_inbox_schema": "9.13",
+    "supervisor_delta": "9.13Q_NON_AUTHORITY",
+    "free_only": true,
+    "provider_routes_admitted": false,
+    "together_forbidden": true,
+    "runtime_credit_promoted": false
+  },
+  "negative_result_anchor": {
+    "incident_repair_commit": "a624461e4745870f918dfee2c541ef046cc93f97",
+    "curated_main_commit": "f400878d85769361095632067b5f6857bf0f7d3f",
+    "observed_failure": "whole-file direct dispatch could replace a 672-line existing file with an 87-line model reconstruction while narrow task-local verification remained an insufficient preservation invariant"
+  },
+  "delta": {
+    "safe_edit_module": "research_entity/topic_packets/frankenstein-master-cognition-concept/frankenstein_safe_edit_v1.py",
+    "canonical_entrypoint": "research_entity/topic_packets/frankenstein-master-cognition-concept/frankenstein_orchestrator_v1.py",
+    "tests": [
+      "tests/test_frankenstein_safe_edit_v1.py",
+      "tests/test_frankenstein_safe_edit_entrypoint_v1.py"
+    ],
+    "mechanism": [
+      "clean-checkout precondition",
+      "approved-path boundary",
+      "full-file SHA-256 preimage binding",
+      "unified diff only",
+      "git apply --check exact-context admission",
+      "post-apply changed-path boundary",
+      "caller verification argv",
+      "git diff --check",
+      "rollback to exact clean pre-call checkout on post-apply failure",
+      "canonical entrypoint refuses the current provider-authored donor even under a hypothetical future provider-open state until dispatch_helper_task_direct actually uses safe_apply_verified_patch and no longer calls apply_file_blocks"
+    ]
+  },
+  "local_noncanonical_mechanism_validation": {
+    "environment": "OpenAI isolated container; no provider/model/network execution",
+    "result": "9 checks PASS",
+    "checks": [
+      "exact preimage narrow patch + verify",
+      "stale preimage rejection without mutation",
+      "patch-context mismatch rejection",
+      "unapproved path rejection",
+      "dirty checkout rejection",
+      "verify-failure exact rollback and clean status",
+      "static donor gate rejects legacy/mixed whole-file apply and accepts safe-call shape",
+      "entrypoint reports/rejects unsafe donor shape",
+      "entrypoint accepts safe donor shape"
+    ],
+    "evidence_scope": "NONCANONICAL_ISOLATED_COMPONENT_MECHANISM_ONLY"
+  },
+  "provider_calls": 0,
+  "secret_lookups": 0,
+  "paid_execution": 0,
+  "together_calls": 0,
+  "unusual_experiments": 0,
+  "credit": {
+    "frankenstein_direct_dispatch_retained_runtime_pass": false,
+    "entityos_whole_runtime": 0,
+    "hcu_full_runtime": 0,
+    "physical_grid_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0
+  },
+  "remaining_gate": "Integrate the safe patch primitive into the quarantined provider-authored donor on exact current source, then independently execute the exact committed tests on a clean non-provider checkout. Until then the canonical entrypoint intentionally blocks provider donor execution after authority admission and before donor load.",
+  "non_promotion": "Source and local isolated component checks do not establish retained Frankenstein runtime, provider execution, EntityOS/HCU runtime, J-Space causality, canonical semantics, or training credit."
+}

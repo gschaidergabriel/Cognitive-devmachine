@@ -20,7 +20,9 @@ The primitive is intentionally **preflight-only and write-free**. It accepts a u
 - exact expected Git `HEAD`;
 - explicit allowed-path set;
 - exact SHA-256 preimage for every existing allowed file;
-- explicit `None` preimage only for allowed new files;
+- exact Git index Stage-0 blob OID and mode for every existing allowed file;
+- existing preimages must be tracked regular non-executable `100644` files;
+- explicit `None` preimage only for paths absent from both filesystem and Git index;
 - path containment and existing-symlink rejection;
 - control-character / ambiguous path spelling rejection;
 - binary patch rejection;
@@ -36,38 +38,40 @@ Passing returns `FRANKENSTEIN_PATCH_GUARD_PREFLIGHT/v1` with `applied: false`. I
 
 ## Deterministic regression
 
-Local provider-independent regression against the repo-shaped source/test layout after the second hardening review:
+Local provider-independent regression against the repo-shaped source/test layout after three review passes:
 
 ```text
 python -m pytest -q tests/test_frankenstein_patch_guard_v1.py
-............                                                             [100%]
-12 passed in 0.22s
+..............                                                           [100%]
+14 passed in 0.26s
 ```
 
 Covered cases:
 
 1. bounded small patch passes while the target file stays byte-identical because preflight never applies;
-2. wrong `HEAD` fails closed;
-3. wrong base SHA-256 fails closed;
-4. unauthorized touched path fails closed;
-5. padded whole-file replacement is rejected by deletion budget even when resulting size is not tiny;
-6. a dirty/concurrently changed touched path fails `git apply --check --index` even if the caller updates the policy digest to that dirty working-tree copy;
-7. explicitly declared regular new file can be preflighted without creation;
-8. deletion is forbidden by default;
-9. rename is forbidden by default;
-10. existing-file mode-only change is forbidden;
-11. a new symlink-mode patch is forbidden;
-12. task policy paths containing control characters are forbidden.
+2. successful evidence binds Git Stage-0 mode and blob OID to the expected tracked preimage;
+3. wrong `HEAD` fails closed;
+4. wrong base SHA-256 fails closed;
+5. unauthorized touched path fails closed;
+6. padded whole-file replacement is rejected by deletion budget even when resulting size is not tiny;
+7. a dirty/concurrently changed touched path fails `git apply --check --index` even if the caller updates the policy digest to that dirty working-tree copy;
+8. explicitly declared regular new file can be preflighted without creation and must be absent from the index;
+9. deletion is forbidden by default;
+10. rename is forbidden by default;
+11. existing-file mode-only change is forbidden;
+12. a new symlink-mode patch is forbidden;
+13. task policy paths containing control characters are forbidden;
+14. an untracked existing file cannot masquerade as a valid preimage, and a tracked executable base is rejected.
 
 This is **local deterministic utility-test evidence only**. It is not an EntityOS/HCU runtime test and it does not independently promote the provider-authored direct-dispatch repair.
 
 ## Hypothesis and counterhypothesis
 
-**OPEN_HYPOTHESIS — engineering confidence 0.90:** a task-scoped, preimage-bound patch contract materially reduces accidental destructive source mutation compared with asking a model to regenerate complete existing files.
+**OPEN_HYPOTHESIS — engineering confidence 0.91:** a task-scoped, preimage-bound patch contract that binds both working bytes and Git index identity materially reduces accidental destructive source mutation compared with asking a model to regenerate complete existing files.
 
-**COUNTERHYPOTHESIS:** patch syntax alone is not safe. Broad authorized hunks, over-large deletion budgets, an incorrect allowlist, weak post-apply verification or a malicious/incorrect patch can still destroy semantics while satisfying syntactic preflight.
+**COUNTERHYPOTHESIS:** patch syntax and preimage identity alone are not safe. Broad authorized hunks, over-large deletion budgets, an incorrect allowlist, weak post-apply verification or a malicious/incorrect patch can still destroy semantics while satisfying syntactic preflight.
 
-**Falsifier:** a clean non-provider mutation harness produces an unauthorized deletion, stale-preimage apply, unrelated-path mutation, special-file/mode mutation or lost update that passes this guard under a correctly scoped policy; or matched trials show no meaningful reduction in destructive edits relative to whole-file replacement.
+**Falsifier:** a clean non-provider mutation harness produces an unauthorized deletion, stale/untracked/wrong-mode preimage apply, unrelated-path mutation, special-file/mode mutation or lost update that passes this guard under a correctly scoped policy; or matched trials show no meaningful reduction in destructive edits relative to whole-file replacement.
 
 ## Remaining integration gates
 
@@ -75,7 +79,7 @@ The guard is deliberately not wired into the live/quarantined dispatcher in this
 
 1. model/helper output changes from whole-file `FILE:` blocks to bounded unified patches or structured edits;
 2. policy is derived from the package/task before model execution, not from model output;
-3. preimage digests are captured from the exact starting source generation;
+3. preimage digests and Git blob/index identity are captured from the exact starting source generation;
 4. preflight passes immediately before apply;
 5. apply occurs with rollback/transactional handling;
 6. resulting changed-file set, mode/type and diff budgets are rechecked post-apply;

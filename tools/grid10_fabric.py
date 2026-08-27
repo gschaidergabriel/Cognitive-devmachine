@@ -126,6 +126,14 @@ def init_schema(con: sqlite3.Connection) -> None:
           consumed INTEGER NOT NULL DEFAULT 0,
           submitted_ts REAL NOT NULL
         );
+        CREATE TABLE IF NOT EXISTS regulators(
+          name TEXT PRIMARY KEY,
+          value_real REAL NOT NULL,
+          version INTEGER NOT NULL,
+          epoch INTEGER NOT NULL,
+          writer TEXT NOT NULL,
+          ts_ms REAL NOT NULL
+        );
         """
     )
     if con.execute("SELECT v FROM meta WHERE k='epoch'").fetchone() is None:
@@ -488,6 +496,67 @@ class Fabric:
             con.execute("COMMIT")
         finally:
             con.close()
+
+    # ---- named regulators: real, CAS-safe shared control values (2026-08-27,
+    # GRID10-as-cybernetic-cognition-architecture experiment). Any node/actor can read
+    # the current value of a named regulator (e.g. "temperature", "top_p") and any
+    # node/actor can attempt to write a new value; concurrent writers are protected by
+    # an explicit version counter, NOT the "read old value, only UPDATE if it still
+    # matches" pattern (that pattern is a real race: two concurrent readers can both
+    # read the OLD value before either writes, and neither write would then be blocked
+    # by the other, silently losing one of the two updates).
+    def get_regulator(self, name: str, default: float | None = None) -> dict[str, Any] | None:
+        """Read the current value of a named regulator. Returns None if the regulator
+        has never been set and no default was given; otherwise returns a dict with
+        keys name/value_real/version/epoch/writer/ts_ms (version=0 for a not-yet-set
+        regulator returning the caller's default, so callers can tell 'real committed
+        value' apart from 'nothing written yet, here is the default')."""
+        con = connect(self.path)
+        try:
+            row = con.execute(
+                "SELECT name, value_real, version, epoch, writer, ts_ms FROM regulators WHERE name=?", (name,)
+            ).fetchone()
+            if row is None:
+                if default is None:
+                    return None
+                return {"name": name, "value_real": default, "version": 0, "epoch": 0, "writer": None, "ts_ms": None}
+            return dict(row)
+        finally:
+            con.close()
+
+    def set_regulator(self, name: str, value_real: float, *, writer: str, expected_version: int | None = None) -> dict[str, Any]:
+        """Write a named regulator value with real optimistic-concurrency control: if
+        expected_version is given and does not match the CURRENT stored version, raises
+        FabricError("REGULATOR_CAS_FAILED") and writes NOTHING. If expected_version is
+        None, always writes unconditionally (used for the very first write of a
+        never-set regulator, or when the caller genuinely does not care about racing
+        with anyone else). Returns the new stored row as a dict, same shape as
+        get_regulator()."""
+        con = connect(self.path)
+        try:
+            con.execute("BEGIN IMMEDIATE")
+            epoch = self._int(con, "epoch")
+            row = con.execute("SELECT version FROM regulators WHERE name=?", (name,)).fetchone()
+            current_version = row["version"] if row is not None else 0
+            if expected_version is not None and expected_version != current_version:
+                con.execute("ROLLBACK")
+                raise FabricError("REGULATOR_CAS_FAILED")
+            new_version = current_version + 1
+            ts_ms = time.time() * 1000
+            con.execute(
+                "INSERT INTO regulators(name,value_real,version,epoch,writer,ts_ms) VALUES(?,?,?,?,?,?) "
+                "ON CONFLICT(name) DO UPDATE SET value_real=excluded.value_real, version=excluded.version, "
+                "epoch=excluded.epoch, writer=excluded.writer, ts_ms=excluded.ts_ms",
+                (name, value_real, new_version, epoch, writer, ts_ms),
+            )
+            self._bump(con)
+            con.execute("COMMIT")
+        except Exception:
+            con.execute("ROLLBACK")
+            raise
+        finally:
+            con.close()
+        return {"name": name, "value_real": value_real, "version": new_version, "epoch": epoch, "writer": writer, "ts_ms": ts_ms}
 
     def coordinator_commit(
         self,

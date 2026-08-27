@@ -17,11 +17,15 @@ spec.loader.exec_module(preflight)
 def _make_repo_root(tmp_path: Path) -> Path:
     root = tmp_path / "repo"
     (root / "research_entity" / "continuity").mkdir(parents=True)
+    (root / "research_entity" / "rooms").mkdir(parents=True)
     (root / "research_entity" / "claycode" / "autonomous").mkdir(parents=True)
     (root / "the artefact").mkdir()
     (root / "AI_START_HERE_DO_NOT_SCAN_REPO").mkdir()
     (root / "CLAY_EXECUTION_AUTHORITY.md").write_text("authority\n", encoding="utf-8")
     (root / "research_entity" / "continuity" / "BOOTSTRAP_MINIMAL.json").write_text(
+        "{}\n", encoding="utf-8"
+    )
+    (root / "research_entity" / "rooms" / "PROGRAM_STATE.json").write_text(
         "{}\n", encoding="utf-8"
     )
     return root
@@ -82,6 +86,13 @@ def test_missing_root_or_required_authority_blocks(tmp_path):
         "BLOCKED",
         "CURRENT_STEERING_AUTHORITY_UNRESOLVED",
     )
+
+
+def test_authority_surface_includes_program_state_and_v3_contract():
+    assert "research_entity/rooms/PROGRAM_STATE.json" in preflight.AUTHORITY_FILES
+    source = PREFLIGHT_PATH.read_text(encoding="utf-8")
+    assert '"FRANKENSTEIN_HOST_PREFLIGHT/v3"' in source
+    assert "final_native_or_adapted_claim_allowed" in source
 
 
 def test_dynamic_steering_must_resolve_inside_repository(tmp_path):

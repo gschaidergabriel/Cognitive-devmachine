@@ -1,0 +1,13 @@
+{
+  "origin_actor": "freepool-fallback-secondary",
+  "actor_role": "FALLBACK_SYNTHESIS_RESEARCH_ORGAN",
+  "provider": "NVIDIA NIM / Mistral AI (free-tier pool)",
+  "runtime_model": "nvidia-nemotron",
+  "paket_id": "paket-1787851325932-bcc408",
+  "session_id": "harness-sess-1787851325932-36e453",
+  "fallback_reason": "Gabriels Ablaufvorgabe Schritt 2 (nach kalibrierter Notaus-Anpassung 2026-08-28): Aider-Schwarm soll das harte Trainingslauf-Gate vor der zweiten Abnahme noch haerten, kleines abgegrenztes Paket statt Monolith",
+  "auftrag": "In der Datei research_entity/topic_packets/frankenstein-master-cognition-concept/frankenstein_training_gate_v1.py (bereits vollstaendig funktionsfaehig, 17/17 Tests gruen in tests/test_frankenstein_training_gate_v1.py) pruefe NUR die Funktion record_revision() auf zusaetzliche, bisher NICHT getestete Robustheitsluecken bei gleichzeitigem Zugriff (z.B. zwei Prozesse schreiben gleichzeitig eine Revision fuer dasselbe example_id -- SQLite WAL-Verhalten, Race beim Lesen der letzten revision_number). Wenn du eine ECHTE Luecke findest: fuege 1-2 gezielte zusaetzliche Tests in tests/test_frankenstein_training_gate_v1.py hinzu (nicht die bestehenden 17 Tests aendern) und falls noetig einen kleinen, gezielten Fix in frankenstein_training_gate_v1.py (z.B. eine SQLite-Transaktion/Lock um den Lese-dann-Schreib-Vorgang in record_revision). Wenn du KEINE echte Luecke findest: sag das ehrlich und aendere nichts. Fuehre die Tests selbst aus (python3 -m pytest tests/test_frankenstein_training_gate_v1.py -q) und bestaetige dass alle (alte + evtl neue) gruen sind, bevor du fertig bist.",
+  "task_classification": "L0_NO_RESEARCH_DELTA_oder_L1_ENGINEERING_DELTA (automatische Einstufung nicht vorgenommen -- menschliche/claude-code-lead-Pruefung empfohlen, decision_weight=0.5 siehe RESEARCH_ACTOR_REGISTRY.json)",
+  "erzeugt_am": "2026-08-27T17:23:18Z",
+  "geprueft_durch": "harness_audit.py (git-Verlauf <-> zero_raum_ruf, exakter Abgleich)"
+}

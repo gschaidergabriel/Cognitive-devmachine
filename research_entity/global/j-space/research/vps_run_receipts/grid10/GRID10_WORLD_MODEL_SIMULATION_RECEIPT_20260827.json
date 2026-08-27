@@ -1,0 +1,705 @@
+{
+  "schema": "GRID10_WORLD_MODEL_SIMULATION/v2",
+  "corrects_v1_bugs": [
+    "classify_evidence_strength() substring false-positive ('confirmed' matched inside 'unconfirmed' and inside 'neither confirmed') -- v2 uses explicit hand-authored (strength, supports_index) triples per evidence item instead of inferring from substrings",
+    "hp_status collapse logic never actually checked agreement across STRONG evidence despite the v1 code comment claiming it did -- v2 requires all STRONG items seen so far to agree on the same alternative, and correctly stays PRESERVE_BRANCHES when STRONG evidence disagrees (a real case v1 could not represent)"
+  ],
+  "honest_scope_statement": "Real 10-node multi-process coordination over a genuinely multi-tick, multi-scope task graph (5 regional/domain scopes + GLOBAL, 6 ticks, GWT broadcast/uptake each tick). The Hyperposition collapse/preserve state is computed by THIS DRIVER from hand-authored evidence strength/direction labels, not by the small model -- the model's role is answering short completion prompts per task as its 'sensing' contribution, separately recorded but NOT the source of the collapse decision.",
+  "model_load_time_s": 6.83,
+  "n_ticks": 6,
+  "n_regional_scopes": 5,
+  "physical_node_count": 10,
+  "tick_log": [
+    {
+      "tick": 0,
+      "global_commit_error": "S1_COMPARE_AND_SWAP_FAILED"
+    },
+    {
+      "tick": 0,
+      "coordinator_candidate": "xeno-09",
+      "injected_tasks": [
+        {
+          "task_id": "t0-region-north",
+          "scope": "region:north",
+          "evidence_text": "A supply report notes stock levels are within normal range this week.",
+          "evidence_strength": "WEAK",
+          "evidence_supports": "SUFFICIENT"
+        },
+        {
+          "task_id": "t0-region-south",
+          "scope": "region:south",
+          "evidence_text": "An initial spot-check suggests stock may be running low.",
+          "evidence_strength": "WEAK",
+          "evidence_supports": "CRITICAL"
+        },
+        {
+          "task_id": "t0-region-east",
+          "scope": "region:east",
+          "evidence_text": "Routine check shows stock at expected levels.",
+          "evidence_strength": "WEAK",
+          "evidence_supports": "SUFFICIENT"
+        },
+        {
+          "task_id": "t0-weather-forecast",
+          "scope": "weather:forecast",
+          "evidence_text": "Satellite imagery shows clear skies over the region.",
+          "evidence_strength": "WEAK",
+          "evidence_supports": "CLEAR"
+        },
+        {
+          "task_id": "t0-threat-assessment",
+          "scope": "threat:assessment",
+          "evidence_text": "An unverified report mentions unusual movement near the border.",
+          "evidence_strength": "WEAK",
+          "evidence_supports": "CONFIRMED"
+        }
+      ],
+      "region_status_snapshot": {
+        "region:north": {
+          "latest_answer": "- 100",
+          "evidence_count": 1
+        },
+        "region:south": {
+          "latest_answer": "region:south (stock",
+          "evidence_count": 1
+        },
+        "region:east": {
+          "latest_answer": "region: east\nstock",
+          "evidence_count": 1
+        },
+        "weather:forecast": {
+          "latest_answer": "weather:forecast (storm",
+          "evidence_count": 1
+        },
+        "threat:assessment": {
+          "latest_answer": "threat:assessment (host",
+          "evidence_count": 1
+        }
+      },
+      "hyperposition_status": {
+        "region:north": {
+          "state": "PRESERVE_BRANCHES",
+          "reason": "no STRONG evidence yet"
+        },
+        "region:south": {
+          "state": "PRESERVE_BRANCHES",
+          "reason": "no STRONG evidence yet"
+        },
+        "region:east": {
+          "state": "PRESERVE_BRANCHES",
+          "reason": "no STRONG evidence yet"
+        },
+        "weather:forecast": {
+          "state": "PRESERVE_BRANCHES",
+          "reason": "no STRONG evidence yet"
+        },
+        "threat:assessment": {
+          "state": "PRESERVE_BRANCHES",
+          "reason": "no STRONG evidence yet"
+        }
+      },
+      "global_broadcast_committed": false,
+      "global_new_epoch": null,
+      "tick_wallclock_s": 4.07
+    },
+    {
+      "tick": 1,
+      "coordinator_candidate": "xeno-08",
+      "injected_tasks": [
+        {
+          "task_id": "t1-region-north",
+          "scope": "region:north",
+          "evidence_text": "A separate, unverified report suggests stock may be somewhat lower, cause unclear.",
+          "evidence_strength": "WEAK",
+          "evidence_supports": "CRITICAL"
+        },
+        {
+          "task_id": "t1-region-south",
+          "scope": "region:south",
+          "evidence_text": "A formal audit confirms stock has dropped below the safety threshold.",
+          "evidence_strength": "STRONG",
+          "evidence_supports": "CRITICAL"
+        },
+        {
+          "task_id": "t1-region-east",
+          "scope": "region:east",
+          "evidence_text": "Nothing unusual reported this cycle.",
+          "evidence_strength": "NEUTRAL",
+          "evidence_supports": "SUFFICIENT"
+        },
+        {
+          "task_id": "t1-weather-forecast",
+          "scope": "weather:forecast",
+          "evidence_text": "Regional forecast models agree conditions will stay clear this week.",
+          "evidence_strength": "WEAK",
+          "evidence_supports": "CLEAR"
+        },
+        {
+          "task_id": "t1-threat-assessment",
+          "scope": "threat:assessment",
+          "evidence_text": "A follow-up patrol finds no evidence supporting the initial report.",
+          "evidence_strength": "WEAK",
+          "evidence_supports": "FALSE_POSITIVE"
+        }
+      ],
+      "region_status_snapshot": {
+        "region:north": {
+          "latest_answer": "- 100",
+          "evidence_count": 1
+        },
+        "region:south": {
+          "latest_answer": "region:south (stock",
+          "evidence_count": 1
+        },
+        "region:east": {
+          "latest_answer": "region: east\nstock",
+          "evidence_count": 1
+        },
+        "weather:forecast": {
+          "latest_answer": "weather:forecast (storm",
+          "evidence_count": 1
+        },
+        "threat:assessment": {
+          "latest_answer": "threat:assessment (host",
+          "evidence_count": 1
+        }
+      },
+      "hyperposition_status": {
+        "region:north": {
+          "state": "PRESERVE_BRANCHES",
+          "reason": "no STRONG evidence yet"
+        },
+        "region:south": {
+          "state": "COLLAPSE_VALID",
+          "reason": "all STRONG evidence agrees on alternative[1]=CRITICAL",
+          "collapsed_to": "CRITICAL",
+          "collapsed_at_tick": 1
+        },
+        "region:east": {
+          "state": "PRESERVE_BRANCHES",
+          "reason": "no STRONG evidence yet"
+        },
+        "weather:forecast": {
+          "state": "PRESERVE_BRANCHES",
+          "reason": "no STRONG evidence yet"
+        },
+        "threat:assessment": {
+          "state": "PRESERVE_BRANCHES",
+          "reason": "no STRONG evidence yet"
+        }
+      },
+      "global_broadcast_committed": true,
+      "global_new_epoch": 179,
+      "tick_wallclock_s": 4.5
+    },
+    {
+      "tick": 2,
+      "coordinator_candidate": "xeno-07",
+      "injected_tasks": [
+        {
+          "task_id": "t2-region-north",
+          "scope": "region:north",
+          "evidence_text": "No new supply data available this cycle.",
+          "evidence_strength": "NEUTRAL",
+          "evidence_supports": "SUFFICIENT"
+        },
+        {
+          "task_id": "t2-region-south",
+          "scope": "region:south",
+          "evidence_text": "A second, independent audit team reaches the same conclusion: below threshold.",
+          "evidence_strength": "STRONG",
+          "evidence_supports": "CRITICAL"
+        },
+        {
+          "task_id": "t2-region-east",
+          "scope": "region:east",
+          "evidence_text": "A minor discrepancy noted but attributed to counting error.",
+          "evidence_strength": "WEAK",
+          "evidence_supports": "SUFFICIENT"
+        },
+        {
+          "task_id": "t2-weather-forecast",
+          "scope": "weather:forecast",
+          "evidence_text": "No storm systems detected in the surrounding area.",
+          "evidence_strength": "NEUTRAL",
+          "evidence_supports": "CLEAR"
+        },
+        {
+          "task_id": "t2-threat-assessment",
+          "scope": "threat:assessment",
+          "evidence_text": "A second, unrelated report raises similar but still unverified concerns.",
+          "evidence_strength": "WEAK",
+          "evidence_supports": "CONFIRMED"
+        }
+      ],
+      "region_status_snapshot": {
+        "region:north": {
+          "latest_answer": "- 100",
+          "evidence_count": 1
+        },
+        "region:south": {
+          "latest_answer": "region:south (stock",
+          "evidence_count": 1
+        },
+        "region:east": {
+          "latest_answer": "region: east\nstock",
+          "evidence_count": 1
+        },
+        "weather:forecast": {
+          "latest_answer": "weather:forecast (storm",
+          "evidence_count": 1
+        },
+        "threat:assessment": {
+          "latest_answer": "threat:assessment (host",
+          "evidence_count": 1
+        }
+      },
+      "hyperposition_status": {
+        "region:north": {
+          "state": "PRESERVE_BRANCHES",
+          "reason": "no STRONG evidence yet"
+        },
+        "region:south": {
+          "state": "COLLAPSE_VALID",
+          "reason": "all STRONG evidence agrees on alternative[1]=CRITICAL",
+          "collapsed_to": "CRITICAL",
+          "collapsed_at_tick": 1
+        },
+        "region:east": {
+          "state": "PRESERVE_BRANCHES",
+          "reason": "no STRONG evidence yet"
+        },
+        "weather:forecast": {
+          "state": "PRESERVE_BRANCHES",
+          "reason": "no STRONG evidence yet"
+        },
+        "threat:assessment": {
+          "state": "PRESERVE_BRANCHES",
+          "reason": "no STRONG evidence yet"
+        }
+      },
+      "global_broadcast_committed": true,
+      "global_new_epoch": 191,
+      "tick_wallclock_s": 4.38
+    },
+    {
+      "tick": 3,
+      "coordinator_candidate": "xeno-06",
+      "injected_tasks": [
+        {
+          "task_id": "t3-region-north",
+          "scope": "region:north",
+          "evidence_text": "Two depots report conflicting counts; neither has been independently verified.",
+          "evidence_strength": "NEUTRAL",
+          "evidence_supports": "CRITICAL"
+        },
+        {
+          "task_id": "t3-region-south",
+          "scope": "region:south",
+          "evidence_text": "Warehouse logs, cross-checked against the audits, corroborate the shortfall.",
+          "evidence_strength": "STRONG",
+          "evidence_supports": "CRITICAL"
+        },
+        {
+          "task_id": "t3-region-east",
+          "scope": "region:east",
+          "evidence_text": "Two independent formal counts both confirm stock is at normal levels.",
+          "evidence_strength": "STRONG",
+          "evidence_supports": "SUFFICIENT"
+        },
+        {
+          "task_id": "t3-weather-forecast",
+          "scope": "weather:forecast",
+          "evidence_text": "Atmospheric pressure remains stable, consistent with clear conditions.",
+          "evidence_strength": "WEAK",
+          "evidence_supports": "CLEAR"
+        },
+        {
+          "task_id": "t3-threat-assessment",
+          "scope": "threat:assessment",
+          "evidence_text": "Aerial reconnaissance finds nothing conclusive either way.",
+          "evidence_strength": "NEUTRAL",
+          "evidence_supports": "FALSE_POSITIVE"
+        }
+      ],
+      "region_status_snapshot": {
+        "region:north": {
+          "latest_answer": "- 100",
+          "evidence_count": 1
+        },
+        "region:south": {
+          "latest_answer": "region:south (stock",
+          "evidence_count": 1
+        },
+        "region:east": {
+          "latest_answer": "region: east\nstock",
+          "evidence_count": 1
+        },
+        "weather:forecast": {
+          "latest_answer": "weather:forecast (storm",
+          "evidence_count": 1
+        },
+        "threat:assessment": {
+          "latest_answer": "threat:assessment (host",
+          "evidence_count": 1
+        }
+      },
+      "hyperposition_status": {
+        "region:north": {
+          "state": "PRESERVE_BRANCHES",
+          "reason": "no STRONG evidence yet"
+        },
+        "region:south": {
+          "state": "COLLAPSE_VALID",
+          "reason": "all STRONG evidence agrees on alternative[1]=CRITICAL",
+          "collapsed_to": "CRITICAL",
+          "collapsed_at_tick": 1
+        },
+        "region:east": {
+          "state": "COLLAPSE_VALID",
+          "reason": "all STRONG evidence agrees on alternative[0]=SUFFICIENT",
+          "collapsed_to": "SUFFICIENT",
+          "collapsed_at_tick": 3
+        },
+        "weather:forecast": {
+          "state": "PRESERVE_BRANCHES",
+          "reason": "no STRONG evidence yet"
+        },
+        "threat:assessment": {
+          "state": "PRESERVE_BRANCHES",
+          "reason": "no STRONG evidence yet"
+        }
+      },
+      "global_broadcast_committed": true,
+      "global_new_epoch": 208,
+      "tick_wallclock_s": 4.14
+    },
+    {
+      "tick": 4,
+      "coordinator_candidate": "xeno-05",
+      "injected_tasks": [
+        {
+          "task_id": "t4-region-north",
+          "scope": "region:north",
+          "evidence_text": "A partial recount shows numbers close to normal again, but the recount itself is informal.",
+          "evidence_strength": "WEAK",
+          "evidence_supports": "SUFFICIENT"
+        },
+        {
+          "task_id": "t4-region-south",
+          "scope": "region:south",
+          "evidence_text": "No new information contradicts the two confirmed audits.",
+          "evidence_strength": "NEUTRAL",
+          "evidence_supports": "CRITICAL"
+        },
+        {
+          "task_id": "t4-region-east",
+          "scope": "region:east",
+          "evidence_text": "No concerns raised in this cycle's report.",
+          "evidence_strength": "NEUTRAL",
+          "evidence_supports": "SUFFICIENT"
+        },
+        {
+          "task_id": "t4-weather-forecast",
+          "scope": "weather:forecast",
+          "evidence_text": "A new pressure system is now forming rapidly offshore, still unconfirmed as a storm.",
+          "evidence_strength": "WEAK",
+          "evidence_supports": "STORM_ARRIVING"
+        },
+        {
+          "task_id": "t4-threat-assessment",
+          "scope": "threat:assessment",
+          "evidence_text": "Local sources offer conflicting accounts, none independently verified.",
+          "evidence_strength": "NEUTRAL",
+          "evidence_supports": "FALSE_POSITIVE"
+        }
+      ],
+      "region_status_snapshot": {
+        "region:north": {
+          "latest_answer": "- 100",
+          "evidence_count": 1
+        },
+        "region:south": {
+          "latest_answer": "region:south (stock",
+          "evidence_count": 1
+        },
+        "region:east": {
+          "latest_answer": "region: east\nstock",
+          "evidence_count": 1
+        },
+        "weather:forecast": {
+          "latest_answer": "weather:forecast (storm",
+          "evidence_count": 1
+        },
+        "threat:assessment": {
+          "latest_answer": "threat:assessment (host",
+          "evidence_count": 1
+        }
+      },
+      "hyperposition_status": {
+        "region:north": {
+          "state": "PRESERVE_BRANCHES",
+          "reason": "no STRONG evidence yet"
+        },
+        "region:south": {
+          "state": "COLLAPSE_VALID",
+          "reason": "all STRONG evidence agrees on alternative[1]=CRITICAL",
+          "collapsed_to": "CRITICAL",
+          "collapsed_at_tick": 1
+        },
+        "region:east": {
+          "state": "COLLAPSE_VALID",
+          "reason": "all STRONG evidence agrees on alternative[0]=SUFFICIENT",
+          "collapsed_to": "SUFFICIENT",
+          "collapsed_at_tick": 3
+        },
+        "weather:forecast": {
+          "state": "PRESERVE_BRANCHES",
+          "reason": "no STRONG evidence yet"
+        },
+        "threat:assessment": {
+          "state": "PRESERVE_BRANCHES",
+          "reason": "no STRONG evidence yet"
+        }
+      },
+      "global_broadcast_committed": true,
+      "global_new_epoch": 228,
+      "tick_wallclock_s": 4.13
+    },
+    {
+      "tick": 5,
+      "coordinator_candidate": "xeno-04",
+      "injected_tasks": [
+        {
+          "task_id": "t5-region-north",
+          "scope": "region:north",
+          "evidence_text": "Still no confirmed audit either way.",
+          "evidence_strength": "NEUTRAL",
+          "evidence_supports": "SUFFICIENT"
+        },
+        {
+          "task_id": "t5-region-south",
+          "scope": "region:south",
+          "evidence_text": "A third confirmation arrives, consistent with the prior two audits.",
+          "evidence_strength": "STRONG",
+          "evidence_supports": "CRITICAL"
+        },
+        {
+          "task_id": "t5-region-east",
+          "scope": "region:east",
+          "evidence_text": "Levels remain steady per the latest formally confirmed count.",
+          "evidence_strength": "STRONG",
+          "evidence_supports": "SUFFICIENT"
+        },
+        {
+          "task_id": "t5-weather-forecast",
+          "scope": "weather:forecast",
+          "evidence_text": "Meteorologists issue a formal storm warning: the system will make landfall within 24 hours.",
+          "evidence_strength": "STRONG",
+          "evidence_supports": "STORM_ARRIVING"
+        },
+        {
+          "task_id": "t5-threat-assessment",
+          "scope": "threat:assessment",
+          "evidence_text": "Command formally closes the inquiry, citing the pattern as consistent with prior false alarms and no verified evidence.",
+          "evidence_strength": "STRONG",
+          "evidence_supports": "FALSE_POSITIVE"
+        }
+      ],
+      "region_status_snapshot": {
+        "region:north": {
+          "latest_answer": "- 100",
+          "evidence_count": 1
+        },
+        "region:south": {
+          "latest_answer": "region:south (stock",
+          "evidence_count": 1
+        },
+        "region:east": {
+          "latest_answer": "region: east\nstock",
+          "evidence_count": 1
+        },
+        "weather:forecast": {
+          "latest_answer": "weather:forecast (storm",
+          "evidence_count": 1
+        },
+        "threat:assessment": {
+          "latest_answer": "threat:assessment (host",
+          "evidence_count": 1
+        }
+      },
+      "hyperposition_status": {
+        "region:north": {
+          "state": "PRESERVE_BRANCHES",
+          "reason": "no STRONG evidence yet"
+        },
+        "region:south": {
+          "state": "COLLAPSE_VALID",
+          "reason": "all STRONG evidence agrees on alternative[1]=CRITICAL",
+          "collapsed_to": "CRITICAL",
+          "collapsed_at_tick": 1
+        },
+        "region:east": {
+          "state": "COLLAPSE_VALID",
+          "reason": "all STRONG evidence agrees on alternative[0]=SUFFICIENT",
+          "collapsed_to": "SUFFICIENT",
+          "collapsed_at_tick": 3
+        },
+        "weather:forecast": {
+          "state": "COLLAPSE_VALID",
+          "reason": "all STRONG evidence agrees on alternative[1]=STORM_ARRIVING",
+          "collapsed_to": "STORM_ARRIVING",
+          "collapsed_at_tick": 5
+        },
+        "threat:assessment": {
+          "state": "COLLAPSE_VALID",
+          "reason": "all STRONG evidence agrees on alternative[0]=FALSE_POSITIVE",
+          "collapsed_to": "FALSE_POSITIVE",
+          "collapsed_at_tick": 5
+        }
+      },
+      "global_broadcast_committed": true,
+      "global_new_epoch": 236,
+      "tick_wallclock_s": 4.16
+    }
+  ],
+  "final_fabric_snapshot": {
+    "epoch": 247,
+    "generation": 1,
+    "scopes": [
+      {
+        "scope": "GLOBAL",
+        "summary_json": "{\"latest\":{\"hyperposition_status\":{\"region:east\":{\"collapsed_at_tick\":3,\"collapsed_to\":\"SUFFICIENT\",\"reason\":\"all STRONG evidence agrees on alternative[0]=SUFFICIENT\",\"state\":\"COLLAPSE_VALID\"},\"region:north\":{\"reason\":\"no STRONG evidence yet\",\"state\":\"PRESERVE_BRANCHES\"},\"region:south\":{\"collapsed_at_tick\":1,\"collapsed_to\":\"CRITICAL\",\"reason\":\"all STRONG evidence agrees on alternative[1]=CRITICAL\",\"state\":\"COLLAPSE_VALID\"},\"threat:assessment\":{\"collapsed_at_tick\":5,\"collapsed_to\":\"FALSE_POSITIVE\",\"reason\":\"all STRONG evidence agrees on alternative[0]=FALSE_POSITIVE\",\"state\":\"COLLAPSE_VALID\"},\"weather:forecast\":{\"collapsed_at_tick\":5,\"collapsed_to\":\"STORM_ARRIVING\",\"reason\":\"all STRONG evidence agrees on alternative[1]=STORM_ARRIVING\",\"state\":\"COLLAPSE_VALID\"}},\"region_status\":{\"region:east\":{\"evidence_count\":1,\"latest_answer\":\"region: east\\nstock\"},\"region:north\":{\"evidence_count\":1,\"latest_answer\":\"- 100\"},\"region:south\":{\"evidence_count\":1,\"latest_answer\":\"region:south (stock\"},\"threat:assessment\":{\"evidence_count\":1,\"latest_answer\":\"threat:assessment (host\"},\"weather:forecast\":{\"evidence_count\":1,\"latest_answer\":\"weather:forecast (storm\"}},\"tick\":5},\"previous\":{\"latest\":{\"hyperposition_status\":{\"region:east\":{\"collapsed_at_tick\":3,\"collapsed_to\":\"SUFFICIENT\",\"reason\":\"all STRONG evidence agrees on alternative[0]=SUFFICIENT\",\"state\":\"COLLAPSE_VALID\"},\"region:north\":{\"reason\":\"no STRONG evidence yet\",\"state\":\"PRESERVE_BRANCHES\"},\"region:south\":{\"collapsed_at_tick\":1,\"collapsed_to\":\"CRITICAL\",\"reason\":\"all STRONG evidence agrees on alternative[1]=CRITICAL\",\"state\":\"COLLAPSE_VALID\"},\"threat:assessment\":{\"reason\":\"no STRONG evidence yet\",\"state\":\"PRESERVE_BRANCHES\"},\"weather:forecast\":{\"reason\":\"no STRONG evidence yet\",\"state\":\"PRESERVE_BRANCHES\"}},\"region_status\":{\"region:east\":{\"evidence_count\":1,\"latest_answer\":\"region: east\\nstock\"},\"region:north\":{\"evidence_count\":1,\"latest_answer\":\"- 100\"},\"region:south\":{\"evidence_count\":1,\"latest_answer\":\"region:south (stock\"},\"threat:assessment\":{\"evidence_count\":1,\"latest_answer\":\"threat:assessment (host\"},\"weather:forecast\":{\"evidence_count\":1,\"latest_answer\":\"weather:forecast (storm\"}},\"tick\":4},\"previous\":{\"latest\":{\"hyperposition_status\":{\"region:east\":{\"collapsed_at_tick\":3,\"collapsed_to\":\"SUFFICIENT\",\"reason\":\"all STRONG evidence agrees on alternative[0]=SUFFICIENT\",\"state\":\"COLLAPSE_VALID\"},\"region:north\":{\"reason\":\"no STRONG evidence yet\",\"state\":\"PRESERVE_BRANCHES\"},\"region:south\":{\"collapsed_at_tick\":1,\"collapsed_to\":\"CRITICAL\",\"reason\":\"all STRONG evidence agrees on alternative[1]=CRITICAL\",\"state\":\"COLLAPSE_VALID\"},\"threat:assessment\":{\"reason\":\"no STRONG evidence yet\",\"state\":\"PRESERVE_BRANCHES\"},\"weather:forecast\":{\"reason\":\"no STRONG evidence yet\",\"state\":\"PRESERVE_BRANCHES\"}},\"region_status\":{\"region:east\":{\"evidence_count\":1,\"latest_answer\":\"region: east\\nstock\"},\"region:north\":{\"evidence_count\":1,\"latest_answer\":\"- 100\"},\"region:south\":{\"evidence_count\":1,\"latest_answer\":\"region:south (stock\"},\"threat:assessment\":{\"evidence_count\":1,\"latest_answer\":\"threat:assessment (host\"},\"weather:forecast\":{\"evidence_count\":1,\"latest_answer\":\"weather:forecast (storm\"}},\"tick\":3},\"previous\":{\"latest\":{\"hyperposition_status\":{\"region:east\":{\"reason\":\"no STRONG evidence yet\",\"state\":\"PRESERVE_BRANCHES\"},\"region:north\":{\"reason\":\"no STRONG evidence yet\",\"state\":\"PRESERVE_BRANCHES\"},\"region:south\":{\"collapsed_at_tick\":1,\"collapsed_to\":\"CRITICAL\",\"reason\":\"all STRONG evidence agrees on alternative[1]=CRITICAL\",\"state\":\"COLLAPSE_VALID\"},\"threat:assessment\":{\"reason\":\"no STRONG evidence yet\",\"state\":\"PRESERVE_BRANCHES\"},\"weather:forecast\":{\"reason\":\"no STRONG evidence yet\",\"state\":\"PRESERVE_BRANCHES\"}},\"region_status\":{\"region:east\":{\"evidence_count\":1,\"latest_answer\":\"region: east\\nstock\"},\"region:north\":{\"evidence_count\":1,\"latest_answer\":\"- 100\"},\"region:south\":{\"evidence_count\":1,\"latest_answer\":\"region:south (stock\"},\"threat:assessment\":{\"evidence_count\":1,\"latest_answer\":\"threat:assessment (host\"},\"weather:forecast\":{\"evidence_count\":1,\"latest_answer\":\"weather:forecast (storm\"}},\"tick\":2},\"previous\":{\"latest\":{\"hyperposition_status\":{\"region:east\":{\"reason\":\"no STRONG evidence yet\",\"state\":\"PRESERVE_BRANCHES\"},\"region:north\":{\"reason\":\"no STRONG evidence yet\",\"state\":\"PRESERVE_BRANCHES\"},\"region:south\":{\"collapsed_at_tick\":1,\"collapsed_to\":\"CRITICAL\",\"reason\":\"all STRONG evidence agrees on alternative[1]=CRITICAL\",\"state\":\"COLLAPSE_VALID\"},\"threat:assessment\":{\"reason\":\"no STRONG evidence yet\",\"state\":\"PRESERVE_BRANCHES\"},\"weather:forecast\":{\"reason\":\"no STRONG evidence yet\",\"state\":\"PRESERVE_BRANCHES\"}},\"region_status\":{\"region:east\":{\"evidence_count\":1,\"latest_answer\":\"region: east\\nstock\"},\"region:north\":{\"evidence_count\":1,\"latest_answer\":\"- 100\"},\"region:south\":{\"evidence_count\":1,\"latest_answer\":\"region:south (stock\"},\"threat:assessment\":{\"evidence_count\":1,\"latest_answer\":\"threat:assessment (host\"},\"weather:forecast\":{\"evidence_count\":1,\"latest_answer\":\"weather:forecast (storm\"}},\"tick\":1},\"previous\":{\"status\":\"open\"},\"source_schema\":\"COORDINATOR_SUMMARY/v1\"},\"source_schema\":\"COORDINATOR_SUMMARY/v1\"},\"source_schema\":\"COORDINATOR_SUMMARY/v1\"},\"source_schema\":\"COORDINATOR_SUMMARY/v1\"},\"source_schema\":\"COORDINATOR_SUMMARY/v1\"}",
+        "evidence_count": 5,
+        "last_writer_lease_id": "lease-f62c37bc07de44dca393acb7",
+        "last_result_digest": "e8040409b841a7f7bb80e4d9f3d540cec257af196911a2774fa0887cf948b7d5",
+        "state_epoch": 236
+      },
+      {
+        "scope": "region:east",
+        "summary_json": "{\"latest\":{\"answer\":\"- stockpile status:\",\"task_id\":\"t2-region-east\"},\"previous\":{\"latest\":{\"answer\":\"- SUFFICIENT\",\"task_id\":\"t1-region-east\"},\"previous\":{\"latest\":{\"answer\":\"- SUFFICIENT:\",\"task_id\":\"t0-region-east\"},\"previous\":{\"latest\":{\"answer\":\"region: east\\nstock\",\"task_id\":\"hp-init-region-east\",\"unresolved_alternatives\":[\"SUFFICIENT\",\"CRITICAL\"]},\"previous\":{\"status\":\"open\"},\"source_schema\":\"NODE_RESULT/v1\"},\"source_schema\":\"NODE_RESULT/v1\"},\"source_schema\":\"NODE_RESULT/v1\"},\"source_schema\":\"NODE_RESULT/v1\"}",
+        "evidence_count": 4,
+        "last_writer_lease_id": "lease-a315fcb8892a0609562c3206",
+        "last_result_digest": "f74bd9443bbbbabe1cc428ed8c7b239f0cc41e2e4512f5bd8acec1823ffb5d51",
+        "state_epoch": 245
+      },
+      {
+        "scope": "region:north",
+        "summary_json": "{\"latest\":{\"answer\":\"- 100\",\"task_id\":\"hp-init-region-north\",\"unresolved_alternatives\":[\"SUFFICIENT\",\"CRITICAL\"]},\"previous\":{\"status\":\"open\"},\"source_schema\":\"NODE_RESULT/v1\"}",
+        "evidence_count": 1,
+        "last_writer_lease_id": "lease-899d13f233227dcfdba65ebf",
+        "last_result_digest": "1836226ce3192a768a6781ed49e049af0b8677fb613e07aa915abdc1f1d5bce1",
+        "state_epoch": 141
+      },
+      {
+        "scope": "region:south",
+        "summary_json": "{\"latest\":{\"answer\":\"region:south (stock\",\"task_id\":\"hp-init-region-south\",\"unresolved_alternatives\":[\"SUFFICIENT\",\"CRITICAL\"]},\"previous\":{\"status\":\"open\"},\"source_schema\":\"NODE_RESULT/v1\"}",
+        "evidence_count": 1,
+        "last_writer_lease_id": "lease-0d99f62fb52aeb1ef4046dc2",
+        "last_result_digest": "89775718fd1f0b6c598de0a088797d7b62324cb5bd5ae34df0e692a2a6f853d4",
+        "state_epoch": 131
+      },
+      {
+        "scope": "threat:assessment",
+        "summary_json": "{\"latest\":{\"answer\":\"- FALSE_POSITIVE\",\"task_id\":\"t1-threat-assessment\"},\"previous\":{\"latest\":{\"answer\":\"- FALSE_POSITIVE\",\"task_id\":\"t0-threat-assessment\"},\"previous\":{\"latest\":{\"answer\":\"threat:assessment (host\",\"task_id\":\"hp-init-threat-assessment\",\"unresolved_alternatives\":[\"FALSE_POSITIVE\",\"CONFIRMED\"]},\"previous\":{\"status\":\"open\"},\"source_schema\":\"NODE_RESULT/v1\"},\"source_schema\":\"NODE_RESULT/v1\"},\"source_schema\":\"NODE_RESULT/v1\"}",
+        "evidence_count": 3,
+        "last_writer_lease_id": "lease-cdb92e51de85521a5908f07a",
+        "last_result_digest": "cb359123aeffb69421510505f3428c05a46cf91a4dfe432f230dd1caa83fa93e",
+        "state_epoch": 239
+      },
+      {
+        "scope": "weather:forecast",
+        "summary_json": "{\"latest\":{\"answer\":\"weather:forecast (storm\",\"task_id\":\"hp-init-weather-forecast\",\"unresolved_alternatives\":[\"CLEAR\",\"STORM_ARRIVING\"]},\"previous\":{\"status\":\"open\"},\"source_schema\":\"NODE_RESULT/v1\"}",
+        "evidence_count": 1,
+        "last_writer_lease_id": "lease-c7fb88cabfcd0c30350abe6a",
+        "last_result_digest": "907b226aad7b446862c944c8d6aff021910cc254a13c300a5b3144a1fcd450d2",
+        "state_epoch": 135
+      }
+    ]
+  },
+  "mid_run_rss_sample": {
+    "xeno-00": {
+      "Rss": 2059472,
+      "Shared_Clean": 1517496
+    },
+    "xeno-01": {
+      "Rss": 549520,
+      "Shared_Clean": 8032
+    },
+    "xeno-02": {
+      "Rss": 2059592,
+      "Shared_Clean": 1517496
+    },
+    "xeno-03": {
+      "Rss": 2059592,
+      "Shared_Clean": 1517496
+    },
+    "xeno-04": {
+      "Rss": 549520,
+      "Shared_Clean": 8032
+    },
+    "xeno-05": {
+      "Rss": 2059508,
+      "Shared_Clean": 1517496
+    },
+    "xeno-06": {
+      "Rss": 2059576,
+      "Shared_Clean": 1517496
+    },
+    "xeno-07": {
+      "Rss": 549488,
+      "Shared_Clean": 7968
+    },
+    "xeno-08": {
+      "Rss": 549456,
+      "Shared_Clean": 7968
+    },
+    "xeno-09": {
+      "Rss": 549488,
+      "Shared_Clean": 7968
+    }
+  },
+  "nodes_left_running": {
+    "xeno-00": {
+      "pid": 749019,
+      "alive": true
+    },
+    "xeno-01": {
+      "pid": 749020,
+      "alive": true
+    },
+    "xeno-02": {
+      "pid": 749025,
+      "alive": true
+    },
+    "xeno-03": {
+      "pid": 749026,
+      "alive": true
+    },
+    "xeno-04": {
+      "pid": 749031,
+      "alive": true
+    },
+    "xeno-05": {
+      "pid": 749036,
+      "alive": true
+    },
+    "xeno-06": {
+      "pid": 749037,
+      "alive": true
+    },
+    "xeno-07": {
+      "pid": 749042,
+      "alive": true
+    },
+    "xeno-08": {
+      "pid": 749047,
+      "alive": true
+    },
+    "xeno-09": {
+      "pid": 749048,
+      "alive": true
+    }
+  },
+  "fabric_path": "/workspace/grid10_world_model_v3/grid10_world_s1.sqlite"
+}

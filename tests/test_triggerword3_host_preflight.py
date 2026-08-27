@@ -20,13 +20,22 @@ def _make_repo_root(tmp_path: Path) -> Path:
     return root
 
 
-def test_classification_fails_degraded_when_git_is_not_verified(tmp_path):
+def test_read_only_classification_never_promotes_without_lifecycle_witness(tmp_path):
     root = _make_repo_root(tmp_path)
     present = {path: True for path in preflight.AUTHORITY_FILES}
+
     assert preflight.classify(root, present, False, True) == "DEGRADED"
     assert preflight.classify(root, present, True, False) == "DEGRADED"
-    assert preflight.classify(root, present, True, True) == "NATIVE"
+    assert preflight.classify(root, present, True, True) == "DEGRADED"
     assert preflight.classify(None, present, True, True) == "BLOCKED"
+
+    observed = {
+        preflight.classify(root, present, git_ok, steering_ok)
+        for git_ok in (False, True)
+        for steering_ok in (False, True)
+    }
+    assert "NATIVE" not in observed
+    assert "ADAPTED" not in observed
 
 
 def test_dynamic_steering_must_exist_inside_repository(tmp_path):

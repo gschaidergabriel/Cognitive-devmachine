@@ -1,0 +1,39 @@
+{
+  "schema": "GO_GRID10_DECODE_SAFE_NODE_INTEGRATION/v1",
+  "date": "2026-08-28",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "program": "ENTITYOS_HCU",
+  "target_architecture": "autonomous self-organizing Xeno fabric; ordinary nodes S1-read-only; dynamic coordinator-only S1 writes; recursive scalable coordination",
+  "source_progress": {
+    "decode_safe_wrapper": "tools/grid10_decode_safe_node_wrapper_v1.py",
+    "wrapper_commit": "a62288bbd699120ecf333ad62263230b71cfc3b8",
+    "tests": "tests/test_grid10_decode_safe_node_wrapper_v1.py",
+    "tests_commit": "617746b6489a2312c0f30d9404079c8c9e38e5fb",
+    "retained_liveness_primitive": "tools/grid10_liveness_heartbeat_v1.py",
+    "retained_node_path": "tools/grid10_node.py"
+  },
+  "mechanism": "A DecodeSafeFabric subclass is installed into the retained grid10_node module before node_loop runs. After deterministic runtime_join it starts HeartbeatPump, which refreshes nodes.healthy/last_seen_ts without advancing the cognitive S1 epoch. The retained task claim, NODE_RESULT, dynamic coordinator lease, coordinator-only commit, regulator and Hyperposition code remains unchanged.",
+  "why": "A healthy Xeno can spend longer than an aggressive reclaim threshold inside blocking model generation. Without an independent liveness signal that healthy worker can be falsely reclaimed. Using the old runtime_heartbeat in a fast background thread would create global S1 epoch churn; the epoch-neutral pump avoids that.",
+  "tests_added": [
+    "pump starts after admitted runtime_join",
+    "last_seen advances during a simulated blocking decode while S1 epoch stays constant",
+    "repeated runtime_join does not create duplicate pumps",
+    "wrapper installation changes only the retained node module Fabric constructor",
+    "invalid heartbeat intervals fail closed",
+    "pump stop is observable and returns heartbeat stats"
+  ],
+  "execution_attempt": {
+    "repository_bound_test_attempted": true,
+    "result": "INFRASTRUCTURE_CLIENT_ERROR_BEFORE_TEST_EXECUTION",
+    "runtime_test_credit": 0,
+    "scientific_failure": false
+  },
+  "credit": {
+    "source_progress": true,
+    "runtime_pass": false,
+    "physical_grid10_runtime_credit": 0,
+    "whole_hcu_runtime_credit": 0,
+    "training_credit": 0
+  },
+  "next_exact_action": "Run both liveness and wrapper test files on a clean current non-provider checkout; if PASS, use the wrapper in the real SIGKILL/reclaim experiment with an aggressive stale threshold and prove: no false reclaim during long decode, real reclaim after heartbeat cessation, coordinator replacement, and no S1 epoch heartbeat churn. Then integrate the mechanism directly into the retained node path or promote the wrapper as the retained entrypoint based on the runtime evidence."
+}

@@ -1,0 +1,48 @@
+{
+  "schema": "XENO_GO_EXECUTION_REQUEST/v1",
+  "date": "2026-08-27",
+  "organ": "GPT-5.6 Sol / GO",
+  "program": "ENTITYOS_HCU",
+  "target_architecture": "autonomous self-organizing Xeno fabric with ordinary S1 read-only nodes and dynamically leased coordinator-only S1 writes",
+  "priority": "P0_RUNTIME_CONTROL_TRANSPORT",
+  "authority_observed": {
+    "supervisor_schema_version": "9.13",
+    "mode": "FREE_ONLY",
+    "provider_routes_admitted": false,
+    "together_forbidden": true,
+    "free_swarm_owner_emergency_stop": true
+  },
+  "new_source": {
+    "guard": "tools/vps_control_sync_guard_v1.py",
+    "tests": "tests/test_vps_control_sync_guard_v1.py",
+    "guard_commit": "f612871f6f01a5657331d834ee0622734575750e",
+    "test_commit": "e167eaa18c1f6f304cf538953d1b47a6b57ed496"
+  },
+  "execution_surface": "clay-direct-dev or owning VPS checkout only",
+  "network_policy": "READ_ONLY_GITHUB_CONTROL_QUERY_ONLY; NO_PROVIDER_OR_MODEL_NETWORK_CALLS",
+  "required_sequence": [
+    "On the owning checkout, do not pull/reset/checkout/mutate yet.",
+    "Run: python3 tools/vps_control_sync_guard_v1.py --repo . --receipt /srv/claylab/go_control_sync_guard_v1.json",
+    "The guard itself resolves current GitHub main through read-only HTTPS git ls-remote and requires local HEAD == remote main, dirty=false, coherent SUPERVISOR_INBOX/FREE_PROVIDER_ADMISSION authority, HARD_OFF, all provider admissions false, Together forbidden, and exact SHA-256 bindings for critical downstream sources.",
+    "If it exits 77, classify STALE_OR_DIRTY_NO_EXECUTION_AUTHORITY and perform no process mutation, restart-authority disable, provider call, secret lookup, or GRID10 promotion action.",
+    "Only if the guard PASSes, execute tools/free_swarm_restart_authority_attribution_v4.py read-only and preserve its full receipt. This request does NOT authorize disabling an owning object or killing a process tree.",
+    "Return HEAD/tree/dirty, guard receipt SHA-256, restart-attribution receipt SHA-256 if executed, stdout/stderr digests, hostname/machine-id digest/boot-id/PID namespace, and wall-clock timestamps. Never include secret values."
+  ],
+  "pass_definition": {
+    "control_sync_guard": "PASS only when existing checkout already equals current remote main and is clean and current 9.13 FREE_ONLY/HARD_OFF authority is coherent",
+    "restart_attribution": "READ_ONLY evidence only; no kill authority is minted by this request",
+    "provider_calls": 0,
+    "secret_lookups": 0,
+    "working_tree_mutations_before_guard": 0,
+    "process_mutations": 0
+  },
+  "credit": {
+    "source_credit": "guard + tests present",
+    "runtime_control_transport_credit": 0,
+    "runtime_quiescence_credit": 0,
+    "physical_grid10_credit": 0,
+    "whole_hcu_credit": 0,
+    "training_credit": 0
+  },
+  "next_if_pass": "With a fresh read-only control binding, inspect the root-specific restart-authority-v4 receipt and only under a separately admitted least-privilege mutation step disable the exact owning restart object, revalidate PID/cgroup/entrypoint identity, terminate only the bound Clay legacy tree, and prove >=90 s zero survivors/descendants/restarts."
+}

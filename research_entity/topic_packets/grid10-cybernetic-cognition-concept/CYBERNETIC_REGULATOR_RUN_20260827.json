@@ -1,0 +1,461 @@
+{
+  "schema": "GRID10_CYBERNETIC_REGULATOR_EXPERIMENT/v1",
+  "concept_source": "research_entity/topic_packets/grid10-cybernetic-cognition-concept/CONCEPT.md, Part 7 -- adapted onto real API, not literal transcription",
+  "model_load_time_s": 17.58,
+  "n_rounds": 5,
+  "meta_evaluator_node_count": 4,
+  "human_override_round": 3,
+  "round_log": [
+    {
+      "round": 1,
+      "task_id": "cyber-r1",
+      "answer": null,
+      "temperature_used": null,
+      "top_p_used": null,
+      "regulator_temperature_after_round": {
+        "name": "temperature",
+        "value_real": 0.85,
+        "version": 1,
+        "epoch": 2,
+        "writer": "init",
+        "ts_ms": 1787841978211.7832
+      },
+      "round_wallclock_s": 5.01
+    },
+    {
+      "round": 2,
+      "task_id": "cyber-r2",
+      "answer": null,
+      "temperature_used": null,
+      "top_p_used": null,
+      "regulator_temperature_after_round": {
+        "name": "temperature",
+        "value_real": 0.85,
+        "version": 1,
+        "epoch": 2,
+        "writer": "init",
+        "ts_ms": 1787841978211.7832
+      },
+      "round_wallclock_s": 5.0
+    },
+    {
+      "round": 3,
+      "event": "HUMAN_OVERRIDE_INJECTED",
+      "new_temperature": 0.65,
+      "cas_attempts": 1
+    },
+    {
+      "round": 3,
+      "task_id": "cyber-r3",
+      "answer": null,
+      "temperature_used": null,
+      "top_p_used": null,
+      "regulator_temperature_after_round": {
+        "name": "temperature",
+        "value_real": 0.65,
+        "version": 2,
+        "epoch": 639,
+        "writer": "human-simulated",
+        "ts_ms": 1787841989973.5562
+      },
+      "round_wallclock_s": 5.0
+    },
+    {
+      "round": 4,
+      "task_id": "cyber-r4",
+      "answer": null,
+      "temperature_used": null,
+      "top_p_used": null,
+      "regulator_temperature_after_round": {
+        "name": "temperature",
+        "value_real": 0.65,
+        "version": 2,
+        "epoch": 639,
+        "writer": "human-simulated",
+        "ts_ms": 1787841989973.5562
+      },
+      "round_wallclock_s": 5.0
+    },
+    {
+      "round": 5,
+      "task_id": "cyber-r5",
+      "answer": null,
+      "temperature_used": null,
+      "top_p_used": null,
+      "regulator_temperature_after_round": {
+        "name": "temperature",
+        "value_real": 0.65,
+        "version": 2,
+        "epoch": 639,
+        "writer": "human-simulated",
+        "ts_ms": 1787841989973.5562
+      },
+      "round_wallclock_s": 5.01
+    }
+  ],
+  "meta_regulator_ticks_total": 27,
+  "meta_regulator_ticks": [
+    {
+      "event": "META_REGULATOR_TICK",
+      "node_id": "cyber-01",
+      "regulator_result": {
+        "name": "temperature",
+        "value_real": 0.781,
+        "version": 5,
+        "epoch": 993,
+        "writer": "cyber-01",
+        "ts_ms": 1787842018313.822
+      },
+      "ts": 1787842018.3225203
+    },
+    {
+      "event": "META_REGULATOR_TICK",
+      "node_id": "cyber-01",
+      "regulator_result": {
+        "name": "temperature",
+        "value_real": 0.816,
+        "version": 7,
+        "epoch": 999,
+        "writer": "cyber-01",
+        "ts_ms": 1787842018651.438
+      },
+      "ts": 1787842018.656918
+    },
+    {
+      "event": "META_REGULATOR_TICK",
+      "node_id": "cyber-01",
+      "regulator_result": {
+        "name": "temperature",
+        "value_real": 0.833,
+        "version": 9,
+        "epoch": 1005,
+        "writer": "cyber-01",
+        "ts_ms": 1787842018976.9492
+      },
+      "ts": 1787842018.9796386
+    },
+    {
+      "event": "META_REGULATOR_TICK",
+      "node_id": "cyber-01",
+      "regulator_result": {
+        "name": "temperature",
+        "value_real": 0.842,
+        "version": 11,
+        "epoch": 1011,
+        "writer": "cyber-01",
+        "ts_ms": 1787842019306.7302
+      },
+      "ts": 1787842019.3130167
+    },
+    {
+      "event": "META_REGULATOR_TICK",
+      "node_id": "cyber-01",
+      "regulator_result": {
+        "name": "temperature",
+        "value_real": 0.846,
+        "version": 13,
+        "epoch": 1017,
+        "writer": "cyber-01",
+        "ts_ms": 1787842019634.2173
+      },
+      "ts": 1787842019.6391575
+    },
+    {
+      "event": "META_REGULATOR_TICK",
+      "node_id": "cyber-01",
+      "regulator_result": {
+        "name": "temperature",
+        "value_real": 0.848,
+        "version": 15,
+        "epoch": 1023,
+        "writer": "cyber-01",
+        "ts_ms": 1787842019962.114
+      },
+      "ts": 1787842019.9666533
+    },
+    {
+      "event": "META_REGULATOR_TICK",
+      "node_id": "cyber-01",
+      "regulator_result": {
+        "name": "temperature",
+        "value_real": 0.849,
+        "version": 17,
+        "epoch": 1029,
+        "writer": "cyber-01",
+        "ts_ms": 1787842020345.413
+      },
+      "ts": 1787842020.365553
+    },
+    {
+      "event": "META_REGULATOR_TICK",
+      "node_id": "cyber-01",
+      "regulator_result": {
+        "name": "temperature",
+        "value_real": 0.849,
+        "version": 19,
+        "epoch": 1035,
+        "writer": "cyber-01",
+        "ts_ms": 1787842020787.3208
+      },
+      "ts": 1787842020.7985837
+    },
+    {
+      "event": "META_REGULATOR_TICK",
+      "node_id": "cyber-01",
+      "regulator_result": {
+        "name": "temperature",
+        "value_real": 0.849,
+        "version": 21,
+        "epoch": 1041,
+        "writer": "cyber-01",
+        "ts_ms": 1787842021143.5002
+      },
+      "ts": 1787842021.1580846
+    },
+    {
+      "event": "META_REGULATOR_TICK",
+      "node_id": "cyber-01",
+      "regulator_result": {
+        "name": "temperature",
+        "value_real": 0.849,
+        "version": 23,
+        "epoch": 1047,
+        "writer": "cyber-01",
+        "ts_ms": 1787842021543.91
+      },
+      "ts": 1787842021.5550458
+    },
+    {
+      "event": "META_REGULATOR_TICK",
+      "node_id": "cyber-01",
+      "regulator_result": {
+        "name": "temperature",
+        "value_real": 0.849,
+        "version": 25,
+        "epoch": 1053,
+        "writer": "cyber-01",
+        "ts_ms": 1787842021954.4675
+      },
+      "ts": 1787842021.9945645
+    },
+    {
+      "event": "META_REGULATOR_TICK",
+      "node_id": "cyber-01",
+      "regulator_result": {
+        "name": "temperature",
+        "value_real": 0.849,
+        "version": 27,
+        "epoch": 1065,
+        "writer": "cyber-01",
+        "ts_ms": 1787842022438.9255
+      },
+      "ts": 1787842022.4572048
+    },
+    {
+      "event": "META_REGULATOR_TICK",
+      "node_id": "cyber-01",
+      "regulator_result": {
+        "name": "temperature",
+        "value_real": 0.849,
+        "version": 30,
+        "epoch": 1083,
+        "writer": "cyber-01",
+        "ts_ms": 1787842022887.9375
+      },
+      "ts": 1787842022.8955133
+    },
+    {
+      "event": "META_REGULATOR_TICK",
+      "node_id": "cyber-01",
+      "regulator_result": {
+        "name": "temperature",
+        "value_real": 0.849,
+        "version": 33,
+        "epoch": 1097,
+        "writer": "cyber-01",
+        "ts_ms": 1787842023233.4563
+      },
+      "ts": 1787842023.2390594
+    },
+    {
+      "event": "META_REGULATOR_TICK",
+      "node_id": "cyber-01",
+      "regulator_result": {
+        "name": "temperature",
+        "value_real": 0.849,
+        "version": 36,
+        "epoch": 1110,
+        "writer": "cyber-01",
+        "ts_ms": 1787842023562.0742
+      },
+      "ts": 1787842023.5624735
+    },
+    {
+      "event": "META_REGULATOR_TICK",
+      "node_id": "cyber-01",
+      "regulator_result": {
+        "name": "temperature",
+        "value_real": 0.849,
+        "version": 39,
+        "epoch": 1123,
+        "writer": "cyber-01",
+        "ts_ms": 1787842023883.8403
+      },
+      "ts": 1787842023.8900933
+    },
+    {
+      "event": "META_REGULATOR_TICK",
+      "node_id": "cyber-01",
+      "regulator_result": {
+        "name": "temperature",
+        "value_real": 0.849,
+        "version": 42,
+        "epoch": 1136,
+        "writer": "cyber-01",
+        "ts_ms": 1787842024222.598
+      },
+      "ts": 1787842024.2267275
+    },
+    {
+      "event": "META_REGULATOR_TICK",
+      "node_id": "cyber-01",
+      "regulator_result": {
+        "name": "temperature",
+        "value_real": 0.849,
+        "version": 45,
+        "epoch": 1149,
+        "writer": "cyber-01",
+        "ts_ms": 1787842024554.5605
+      },
+      "ts": 1787842024.5568569
+    },
+    {
+      "event": "META_REGULATOR_TICK",
+      "node_id": "cyber-01",
+      "regulator_result": {
+        "name": "temperature",
+        "value_real": 0.849,
+        "version": 48,
+        "epoch": 1162,
+        "writer": "cyber-01",
+        "ts_ms": 1787842024882.6516
+      },
+      "ts": 1787842024.8864543
+    },
+    {
+      "event": "META_REGULATOR_TICK",
+      "node_id": "cyber-01",
+      "regulator_result": {
+        "name": "temperature",
+        "value_real": 0.849,
+        "version": 51,
+        "epoch": 1175,
+        "writer": "cyber-01",
+        "ts_ms": 1787842025220.7202
+      },
+      "ts": 1787842025.2287962
+    },
+    {
+      "event": "META_REGULATOR_TICK",
+      "node_id": "cyber-01",
+      "regulator_result": {
+        "name": "temperature",
+        "value_real": 0.849,
+        "version": 54,
+        "epoch": 1188,
+        "writer": "cyber-01",
+        "ts_ms": 1787842025550.26
+      },
+      "ts": 1787842025.558584
+    },
+    {
+      "event": "META_REGULATOR_TICK",
+      "node_id": "cyber-01",
+      "regulator_result": {
+        "name": "temperature",
+        "value_real": 0.849,
+        "version": 57,
+        "epoch": 1201,
+        "writer": "cyber-01",
+        "ts_ms": 1787842025879.7864
+      },
+      "ts": 1787842025.885
+    },
+    {
+      "event": "META_REGULATOR_TICK",
+      "node_id": "cyber-01",
+      "regulator_result": {
+        "name": "temperature",
+        "value_real": 0.849,
+        "version": 60,
+        "epoch": 1211,
+        "writer": "cyber-01",
+        "ts_ms": 1787842026211.1895
+      },
+      "ts": 1787842026.2187054
+    },
+    {
+      "event": "META_REGULATOR_TICK",
+      "node_id": "cyber-01",
+      "regulator_result": {
+        "name": "temperature",
+        "value_real": 0.849,
+        "version": 63,
+        "epoch": 1220,
+        "writer": "cyber-01",
+        "ts_ms": 1787842026541.726
+      },
+      "ts": 1787842026.5469067
+    },
+    {
+      "event": "META_REGULATOR_TICK",
+      "node_id": "cyber-01",
+      "regulator_result": {
+        "name": "temperature",
+        "value_real": 0.849,
+        "version": 66,
+        "epoch": 1229,
+        "writer": "cyber-01",
+        "ts_ms": 1787842026864.3816
+      },
+      "ts": 1787842026.8669498
+    },
+    {
+      "event": "META_REGULATOR_TICK",
+      "node_id": "cyber-01",
+      "regulator_result": {
+        "name": "temperature",
+        "value_real": 0.849,
+        "version": 69,
+        "epoch": 1238,
+        "writer": "cyber-01",
+        "ts_ms": 1787842027196.2017
+      },
+      "ts": 1787842027.204068
+    },
+    {
+      "event": "META_REGULATOR_TICK",
+      "node_id": "cyber-01",
+      "regulator_result": {
+        "name": "temperature",
+        "value_real": 0.849,
+        "version": 72,
+        "epoch": 1247,
+        "writer": "cyber-01",
+        "ts_ms": 1787842027528.7236
+      },
+      "ts": 1787842027.5317717
+    }
+  ],
+  "lease_expiry_self_renewals": 1,
+  "stale_task_reclaims": 3,
+  "final_regulator_temperature": {
+    "name": "temperature",
+    "value_real": 0.849,
+    "version": 118,
+    "epoch": 1384,
+    "writer": "cyber-02",
+    "ts_ms": 1787842035013.1401
+  },
+  "final_epoch": 1386
+}

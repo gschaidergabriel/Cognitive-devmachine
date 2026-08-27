@@ -12,34 +12,13 @@
   "current_provider_authority": "9.13_FREE_ONLY_HARD_OFF_ALL_PROVIDER_ROUTES_FALSE_TOGETHER_FORBIDDEN_NO_PAID_FALLBACK",
   "material_finding": "The real external freepool fallback path remains executable after 9.13L HARD_OFF and has now produced multiple fresh provider-backed commits on main, including Mistral and NVIDIA/Aider writes and later free-pool-generated GRID10 concept commits. This is no longer a single historical fallback event: it is a repeated executable caller-boundary bypass with repository write effect. RESEARCH_ACTOR_REGISTRY still describes automatic fallback activation when the ChatGPT bridge is unavailable; that prose is descriptive provenance only and is stale as execution permission under current canonical HARD_OFF. main is currently unprotected, so provider-backed identities with push capability can directly mutate canonical history. Defense-in-depth branch protection/rulesets are relevant but do not substitute for closing the pre-secret/pre-network caller gate. New GRID10 crash/lease/negotiation findings remain useful diagnostic component evidence, but provider-authored core changes after HARD_OFF must be independently reviewed and re-executed on a clean current non-provider surface before any retained runtime credit or promotion.",
   "fresh_evidence": [
-    {
-      "commit": "9f11130df7efa4c97a27f44966c9c13d79dd598f",
-      "finding": "Mistral/Aider committed a fallback confirmation file after HARD_OFF"
-    },
-    {
-      "commit": "30dd95a119bf2974dca923498c024166c8d24f52",
-      "finding": "NVIDIA Nemotron/Aider committed a fallback confirmation file after HARD_OFF"
-    },
-    {
-      "commit": "11e8d9b06ff60f4d1320f3eba99aaecc1a3c2c3b",
-      "finding": "NVIDIA fallback provenance records an actual provider-backed final end-to-end fallback test"
-    },
-    {
-      "commit": "c1c9d99f3adc5ebe3c8fccd361515fbb4a130170",
-      "finding": "current main head is itself a free-pool-generated GRID10 dynamic-scaling concept because the ChatGPT bridge was unavailable"
-    },
-    {
-      "commit": "90971ad30f35fc61c3a94050a90bd6823d0f6e51",
-      "finding": "diagnostic GRID10 task-claim reclaim experiment exposed recovery-thrashing tradeoff; clean non-provider re-execution required for retained runtime credit"
-    },
-    {
-      "commit": "6ee75b4e9440d29fd9ee8beca4efcae779dfc4bf",
-      "finding": "diagnostic GRID10 dead-coordinator TTL re-election gap and fix; provider-authored under HARD_OFF, so clean non-provider re-execution required"
-    },
-    {
-      "commit": "b74dfd546d39e5466ad26a69160fd1fbc17d177b",
-      "finding": "specialized negotiation experiment yielded only one of three usable rounds and no observed strategic role differentiation"
-    }
+    {"commit":"9f11130df7efa4c97a27f44966c9c13d79dd598f","finding":"Mistral/Aider committed a fallback confirmation file after HARD_OFF"},
+    {"commit":"30dd95a119bf2974dca923498c024166c8d24f52","finding":"NVIDIA Nemotron/Aider committed a fallback confirmation file after HARD_OFF"},
+    {"commit":"11e8d9b06ff60f4d1320f3eba99aaecc1a3c2c3b","finding":"NVIDIA fallback provenance records an actual provider-backed final end-to-end fallback test"},
+    {"commit":"c1c9d99f3adc5ebe3c8fccd361515fbb4a130170","finding":"a free-pool-generated GRID10 dynamic-scaling concept landed because the ChatGPT bridge was unavailable"},
+    {"commit":"90971ad30f35fc61c3a94050a90bd6823d0f6e51","finding":"diagnostic GRID10 task-claim reclaim experiment exposed recovery-thrashing tradeoff; clean non-provider re-execution required"},
+    {"commit":"6ee75b4e9440d29fd9ee8beca4efcae779dfc4bf","finding":"diagnostic GRID10 dead-coordinator TTL re-election gap and fix; provider-authored under HARD_OFF, clean non-provider re-execution required"},
+    {"commit":"b74dfd546d39e5466ad26a69160fd1fbc17d177b","finding":"specialized negotiation experiment yielded only one of three usable rounds and no observed strategic role differentiation"}
   ],
   "evidence_law_additions": [
     "REPEATED_POST_HARD_OFF_PROVIDER_BACKED_COMMITS_PROVE_REAL_CALLER_BOUNDARY_BYPASS_NOT_JUST_STALE_PROSE",
@@ -63,22 +42,6 @@
     "P1_REPLACE_FIXED_SLEEP_ROUND_ADVANCE_WITH_CONFIRM_BEFORE_ADVANCE_BEFORE_REUSING_NEGOTIATION_RESULTS_AND_REQUIRE_ROLE_DIFFERENTIATION_METRIC_BEFORE_STRATEGIC_SIMULATION_CREDIT",
     "P1_CONSIDER_GITHUB_MAIN_BRANCH_PROTECTION_OR_RULESET_REQUIRING_REVIEW_AND_AUTHORITY_CHECK_AS_DEFENSE_IN_DEPTH_IF_ACCOUNT_CAPABILITY_ALLOWS_IT_DO_NOT_TREAT_THIS_AS_PROVIDER_GATE_CLOSURE"
   ],
-  "credit_effect": {
-    "provider_path_runtime_pass": false,
-    "runtime_control_transport_pass": false,
-    "runtime_quiescence_pass": false,
-    "grid10_new_diagnostic_component_evidence": true,
-    "physical_grid10_runtime_credit_added": 0,
-    "hcu_full_runtime_credit_added": 0,
-    "training_credit_added": 0,
-    "base_credit_added": 0,
-    "canonical_semantics_credit_added": 0
-  },
-  "free_only": {
-    "enabled": true,
-    "no_paid_fallback": true,
-    "together_forbidden": true,
-    "provider_routes_admitted": false,
-    "owner_emergency_stop": true
-  }
+  "credit_effect": {"provider_path_runtime_pass":false,"runtime_control_transport_pass":false,"runtime_quiescence_pass":false,"grid10_new_diagnostic_component_evidence":true,"physical_grid10_runtime_credit_added":0,"hcu_full_runtime_credit_added":0,"training_credit_added":0,"base_credit_added":0,"canonical_semantics_credit_added":0},
+  "free_only": {"enabled":true,"no_paid_fallback":true,"together_forbidden":true,"provider_routes_admitted":false,"owner_emergency_stop":true}
 }

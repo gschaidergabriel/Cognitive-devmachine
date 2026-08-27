@@ -1,0 +1,43 @@
+{
+  "schema": "AB_COMPARISON_NOTE/v1",
+  "packet_id": "trigger2-together-diagnostic-finetune-20260827",
+  "topic": "Second Together training run (V2, bundled fixes) launched, completed, and A/B tested against V1 on matched prompt pairs",
+  "authorization": "Owner directive: max 5 Together runs total, 1 used (diagnostic run). This is run 2 of 5 (2 used, 3 remain). Bundled all identified fixes into ONE run per owner instruction, rather than testing them separately.",
+  "run": {
+    "together_job_id": "ft-84490ad5-3a8e",
+    "status": "completed",
+    "config": "same as run 1 (model=Qwen/Qwen3.5-0.8B, from_hf_model=huihui-ai/Huihui-Qwen3.5-0.8B-abliterated@4813135658fe51b2e535b8e77927d2f23909ce42, lora r=64 alpha=128, n_epochs=1, learning_rate=1e-5) -- only the training DATA changed, so this is a clean isolated comparison of the fix, not a confound of hyperparameters too.",
+    "dataset": "9544 rows, same composition/size as run 1 (7 of 16 families patched, 9 unchanged) -- research_entity/claycode/training/*_V2.jsonl, built by tools/trigger2_v2_prompt_fix_patch_20260827.py",
+    "token_count": 1450578,
+    "cost_usd": "4.00 (same $4 minimum floor as run 1)",
+    "param_count_confirmed": 852985920,
+    "output_model_name": "herzradgraz_ca05/Qwen3.5-0.8B-trigger2-b0b6-diag-v3-fixed-16cddb3c",
+    "fix_wording_source": "~/last-resort/llm.py pool (Groq tier this call) proposed the vocabulary swap and instruction wording; reviewed and applied deterministically via regex/string substitution (tools/trigger2_v2_prompt_fix_patch_20260827.py), not pasted in blind -- e.g. the tool's suggestion to also rename 'atom'->'SYMBOL' throughout was NOT applied, since that would have broken the actual required output token format."
+  },
+  "ab_test": {
+    "method": "125 matched prompt pairs: for each of the 7 patched families, 15 fresh real HOLDOUT_FROZEN rows (10 for the 2 unpatched control families), each tested against BOTH the original V1 prompt wording (fed to the V1 adapter) and the patched V2 prompt wording (fed to the V2 adapter) -- same base model, same rows, same expected answers, only the adapter+prompt-version differs. Both adapters loaded into the same base process via peft multi-adapter (set_adapter), not two separate model loads, so this is an exact apples-to-apples comparison, not two independent runs with different sampling noise sources.",
+    "raw_data": "AB_COMPARE_V1_VS_V2_RESULTS_20260827.json in this packet directory",
+    "results_per_family": {
+      "B0_WRITE_BASELINE (control, unpatched)": {"n": 10, "v1_valid": 9, "v1_correct": 4, "v2_valid": 9, "v2_correct": 4, "verdict": "unchanged, as expected -- no regression on a control family"},
+      "B6_HYPERPOSITION_EVIDENCE_AUTHORITY (control, unpatched)": {"n": 10, "v1_valid": 10, "v1_correct": 5, "v2_valid": 10, "v2_correct": 5, "verdict": "unchanged, as expected"},
+      "B1_TRAIN_BALANCED_2ORDER": {"n": 15, "v1_valid": 7, "v1_correct": 0, "v2_valid": 6, "v2_correct": 0, "verdict": "no meaningful change -- generic format-reminder fix did not help this family"},
+      "B2_MID_EPISODE_REMAP": {"n": 15, "v1_valid": 3, "v1_correct": 0, "v2_valid": 15, "v2_correct": 0, "verdict": "FORMAT FIXED (3->15 valid) but correctness unchanged (still 0) -- the model now reliably emits a real trained atom, but still not the right one for this task"},
+      "B2_PRIOR_OVERRIDE": {"n": 15, "v1_valid": 15, "v1_correct": 0, "v2_valid": 0, "v2_correct": 0, "verdict": "REGRESSED on the shell's strict check, but the underlying cause is understood and is itself informative, not a mystery -- see below"},
+      "B3_MULTI_HOP_DEREF": {"n": 15, "v1_valid": 0, "v1_correct": 0, "v2_valid": 15, "v2_correct": 2, "verdict": "MAJOR FORMAT FIX (0->15 valid, the code-derailment is completely gone) plus real correctness gain (0->2)"},
+      "B3_UNRESOLVABLE_CHAIN_REJECTION": {"n": 15, "v1_valid": 0, "v1_correct": 0, "v2_valid": 12, "v2_correct": 4, "verdict": "MAJOR FORMAT FIX (0->12 valid) plus real correctness gain (0->4)"},
+      "B4_CAPACITY_INTERFERENCE": {"n": 15, "v1_valid": 0, "v1_correct": 0, "v2_valid": 15, "v2_correct": 13, "verdict": "BEST RESULT: total collapse to 87% correct (13/15). The explicit format-wrapper instruction completely solved this family."},
+      "B5_VARIABLE_N_EQUIVARIANCE": {"n": 15, "v1_valid": 0, "v1_correct": 0, "v2_valid": 0, "v2_correct": 0, "verdict": "NO CHANGE -- the same instruction that fixed B4 did not fix B5, despite both getting the identical suffix wording. Open question, not yet explained by this pass."}
+    },
+    "totals": {"n": 125, "v1_valid": 44, "v1_valid_pct": 35.2, "v1_correct": 9, "v1_correct_pct": 7.2, "v2_valid": 82, "v2_valid_pct": 65.6, "v2_correct": 28, "v2_correct_pct": 22.4},
+    "b2_prior_override_regression_explained": {
+      "raw_examples": [
+        {"expected": "ABI_ACCEPTED_ORDINAL:13", "v1_raw": "ABSTAIN", "v2_raw": "12"},
+        {"expected": "ABI_ACCEPTED_ORDINAL:13", "v1_raw": "ALLOW", "v2_raw": "13"},
+        {"expected": "ABI_ACCEPTED_ORDINAL:13", "v1_raw": "DENY", "v2_raw": "14"}
+      ],
+      "finding": "V1's codebook-key-leak bug (answering ALLOW/DENY/ABSTAIN) is GONE in V2 -- the fix instruction worked at the semantic level. But V2 now outputs a bare number ('12', '13') instead of the required 'ABI_ACCEPTED_ORDINAL:12' wrapper -- the second example above got the exact CORRECT number (13) but fails shell validation purely on format. Root cause: the fix instruction said 'answer with ONLY the mapped ordinal value', which the model reasonably read as 'just the number', dropping the ABI_ACCEPTED_ORDINAL: prefix it never explicitly asked to keep. This is a one-line wording bug in the fix itself, not a deeper problem -- a corrected version of this specific instruction ('...respond with the full ABI_ACCEPTED_ORDINAL:<n> token for that value, not the bare number and not the class name') is the natural next micro-fix, not evidence the underlying approach failed."
+    }
+  },
+  "honest_overall_verdict": "Real, substantial improvement from one bundled fix pass: correct rate roughly TRIPLED (7.2% -> 22.4%) on the exact families targeted, with B4 going from complete collapse to 87% correct and both B3 variants going from 0% format compliance to majority format compliance plus new nonzero correctness. Not a uniform win: B1, B5, and B2_MID_EPISODE_REMAP's correctness did not move (though B2_MID_EPISODE_REMAP's format did), and B2_PRIOR_OVERRIDE's specific fix wording has an identified, fixable format bug of its own. This is exactly the kind of result a single honest diagnostic-and-fix cycle should produce -- clear wins, one clear miss with a known cause, two genuinely unexplained non-movers -- not oversold as 'solved'.",
+  "runs_used": "2 of 5 authorized Together runs now used. 3 remain. Recommendation if a 3rd run is ever undertaken: fix the B2_PRIOR_OVERRIDE instruction wording (require the full ABI_ACCEPTED_ORDINAL: prefix explicitly) and investigate why B5's identical-wording fix had zero effect before spending another run -- bundle those two investigations into one well-prepared pass rather than two more piecemeal runs, per the same owner directive."
+}

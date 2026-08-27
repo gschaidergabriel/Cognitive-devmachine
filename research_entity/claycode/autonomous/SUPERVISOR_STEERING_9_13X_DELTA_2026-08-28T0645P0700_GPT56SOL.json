@@ -1,0 +1,41 @@
+{
+  "schema": "GO_STEERING_DELTA/v1",
+  "supervisor_delta": "9.13X_NON_AUTHORITY",
+  "timestamp_local": "2026-08-28T06:45:54+07:00",
+  "target": "XENO_HCU_OWNER_ARCHITECTURE",
+  "finding": "The retained decode-safe wrapper already source-integrates post-admission/pre-outbox-ACK reconciliation, but existing tests model the crash window in one process. This run adds a stronger real multi-process falsifier: the old coordinator is a separate OS process, durably commits the NODE_RESULT to S1/admitted_results, signals the exact POST_ADMISSION_PRE_ACK phase, is then killed by the parent with SIGKILL, and a replacement coordinator must automatically converge through the retained decode-safe path to exactly one admission, outbox.consumed=1, unchanged S1 during recovery, and identical replay +0.",
+  "source_changes": [
+    {
+      "path": "tools/grid10_real_sigkill_outbox_recovery_acceptance_v1.py",
+      "commit": "c19598dc4f120e05970c608d4b3575bcad543b39",
+      "status": "REAL_MULTIPROCESS_FAILURE_INJECTION_SOURCE_CANDIDATE"
+    },
+    {
+      "path": "tests/test_grid10_real_sigkill_outbox_recovery_acceptance_v1.py",
+      "commit": "b286af5bf4c3eff3c69047dc31df46fa991d9edb",
+      "status": "REPOSITORY_TEST_SOURCE_PRESENT"
+    }
+  ],
+  "tests_specified": [
+    "old coordinator runs in a distinct OS process",
+    "parent sends real SIGKILL only after durable admission and before any outbox ACK",
+    "crash residue proves admitted_results count=1 and outbox consumed=0",
+    "replacement coordinator automatically reconciles exactly that digest",
+    "outbox consumed converges to 1 with exactly one admission",
+    "recovery changes neither S1 epoch nor state digest",
+    "identical replay produces +0 epoch and +0 state digest",
+    "provider calls and secret lookups remain zero"
+  ],
+  "credit": {
+    "source_failure_injection_candidate": true,
+    "repository_bound_runtime_pass": false,
+    "physical_grid10_runtime_credit": 0,
+    "whole_hcu_credit": 0,
+    "training_credit": 0
+  },
+  "next": [
+    "repository-bound execute the new real-SIGKILL acceptance plus retained recovery integration tests on a clean current non-provider checkout",
+    "if PASS, inject the same failure while decode-safe heartbeat and normal GRID10 node loops are active",
+    "then repeat with worker crash/rejoin and recursive coordinator levels while preserving exactly-once NODE_RESULT integration"
+  ]
+}

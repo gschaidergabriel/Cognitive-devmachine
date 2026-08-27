@@ -10,7 +10,7 @@ Safety model
 * Existing files may only be changed through exact SEARCH -> REPLACE spans.
 * Every SEARCH must occur exactly once in the *original* file.
 * Multiple spans in one file must not overlap.
-* The total original text replaced in one file is bounded by policy (50% by
+* The total original text replaced in one file is bounded by policy (25% by
   default), so a helper cannot silently rewrite most of a large file.
 * Full-file replacement is rejected by the default policy.
 * Before writing, the on-disk SHA-256 must still match the planned preimage.
@@ -65,7 +65,7 @@ class NewFileBlock:
 
 @dataclass(frozen=True)
 class SafeEditPolicy:
-    max_replaced_fraction: float = 0.50
+    max_replaced_fraction: float = 0.25
     max_files: int = 16
     max_edit_blocks: int = 64
     max_new_files: int = 16

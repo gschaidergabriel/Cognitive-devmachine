@@ -22,6 +22,7 @@ MARKERS = ("research_entity", "the artefact", "AI_START_HERE_DO_NOT_SCAN_REPO")
 AUTHORITY_FILES = (
     "CLAY_EXECUTION_AUTHORITY.md",
     "research_entity/continuity/BOOTSTRAP_MINIMAL.json",
+    "research_entity/rooms/PROGRAM_STATE.json",
     "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
 )
 INBOX_RELATIVE_PATH = "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json"
@@ -233,7 +234,7 @@ def main() -> int:
     free_only = free_only if isinstance(free_only, dict) else {}
 
     result: dict[str, Any] = {
-        "schema": "FRANKENSTEIN_HOST_PREFLIGHT/v2",
+        "schema": "FRANKENSTEIN_HOST_PREFLIGHT/v3",
         "mode": "READ_ONLY_NO_NETWORK_NO_SECRETS_NO_WRITES_NO_EFFECTS",
         "root": str(root) if root else None,
         "markers": {m: bool(root and (root / m).exists()) for m in MARKERS},

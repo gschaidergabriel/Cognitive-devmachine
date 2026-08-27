@@ -1,8 +1,8 @@
 # DEV_SOURCE_RESEARCH — progressive technical index
 
-This directory is the technical/research route for Project Frankenstein → EntityOS + HCU. It is an **index over evidence**, not a replacement truth store and not a second authority.
+This directory is the technical/research route for Project Frankenstein → EntityOS. Current program surfaces use **HCU** as the integrated cognition/compute architecture label; the latest explicit owner correction defines the finished runtime more concretely as **VARIABLE COGNITIVE GRID + PERSISTENT DATABASE + CLAUDE CODE**. This is an **index over evidence**, not a replacement truth store and not a second authority.
 
-Re-resolve `main` and current authority before live execution decisions. During the 2026-08-27 Trigger-3 pass, the admitted supervisor semantics were **9.13 HARD_OFF**; `main` moved repeatedly as parallel organs fused source, research-history and curation deltas.
+Re-resolve `main`, newest explicit owner authority, and current supervisor-selected authority before live execution decisions. During the 2026-08-27 Trigger-3 pass, the admitted supervisor semantics were **9.13 HARD_OFF**; `main` moved repeatedly as parallel organs fused source, research-history and curation deltas.
 
 ## 0. Authority first
 
@@ -11,10 +11,13 @@ Read before present-tense/runtime claims:
 1. [`../CLAY_EXECUTION_AUTHORITY.md`](../CLAY_EXECUTION_AUTHORITY.md)
 2. [`../research_entity/claycode/autonomous/SUPERVISOR_INBOX.json`](../research_entity/claycode/autonomous/SUPERVISOR_INBOX.json)
 3. steering selected by that inbox
-4. [`../research_entity/continuity/BOOTSTRAP_MINIMAL.json`](../research_entity/continuity/BOOTSTRAP_MINIMAL.json) and [`../research_entity/rooms/PROGRAM_STATE.json`](../research_entity/rooms/PROGRAM_STATE.json)
-5. exact source/tests/receipts for the exact claim
+4. newest explicit owner authority, currently including [`../research_entity/global/OWNER_CORRECTION_ZERO_ENTITYOS_COGNITIVE_GRID_DB_CLAUDECODE_GLOBAL_JSPACE_2026-08-25.md`](../research_entity/global/OWNER_CORRECTION_ZERO_ENTITYOS_COGNITIVE_GRID_DB_CLAUDECODE_GLOBAL_JSPACE_2026-08-25.md)
+5. [`../research_entity/continuity/BOOTSTRAP_MINIMAL.json`](../research_entity/continuity/BOOTSTRAP_MINIMAL.json) and [`../research_entity/rooms/PROGRAM_STATE.json`](../research_entity/rooms/PROGRAM_STATE.json)
+6. exact source/tests/receipts for the exact claim
 
 Do not average authority disagreements. Current Trigger-3 evidence records a real stale-island conflict: `PROGRAM_STATE.json` remains on an older 8.78 provider epoch while the inbox is 9.13 HARD_OFF. See [`AUTHORITY_DRIFT_20260827.md`](AUTHORITY_DRIFT_20260827.md).
+
+Where older fixed-GRID/HCU wording conflicts with the explicit owner correction, the owner correction wins.
 
 ## 1. Evidence vocabulary
 
@@ -29,6 +32,50 @@ Do not average authority disagreements. Current Trigger-3 evidence records a rea
 Lifecycle qualifiers: `attempted`, `source-ready`, `measured`, `reproduced`, `contradicted`, `blocked`, `prepared-not-run`, `adopted`, `retired`.
 
 `SOURCE_READY != RUNTIME_VERIFIED`. Component PASS never implies whole-product PASS. Model output does not create world facts.
+
+## 1A. Current owner target — architecture correction
+
+**CURRENT_SOURCE / HIGHEST PRECEDENCE WHERE CONFLICTING**
+
+The finished runtime target is not a fixed GRID10 machine. The current owner correction says:
+
+```text
+VARIABLE COGNITIVE GRID + PERSISTENT DATABASE + CLAUDE CODE
+```
+
+with the functional rule:
+
+```text
+SIMULATE COGNITION; STORE DURABLE DATA.
+```
+
+Implications:
+
+- `N` is a runtime parameter; 10, 20 or another useful count is configuration/capacity, not architecture identity.
+- GRID10 remains a benchmark/configuration and donor implementation surface.
+- the small-model grid distributes/simulates cognitive processes historically implemented across Zero/EntityOS modules: interpretation, relevance selection, planning/replanning, alternatives, uncertainty, memory proposals, recovery, workspace competition/broadcast/re-entry and related functions;
+- exact durable facts/state belong in the persistent database when deterministic storage is better than repeated inference;
+- Claude Code remains the strong model/tool/code partner; the ~0.8B grid is not intended to replace it;
+- the Global Workspace ↔ Claude Code bridge should use the strongest exposed typed/state/vector/text interface that can be causally evidenced;
+- no activation-level Claude Code / Global J-Space access may be claimed if only text/tool/session interfaces are exposed.
+
+Current owner-target runtime:
+
+```mermaid
+flowchart TD
+    ENTRY[Typed input / perception\nidentity + provenance] --> GRID[Variable cognitive grid N\ndistributed cognition]
+    DB[(Persistent database\ncanonical durable state/evidence)] <--> GRID
+    GRID <--> GWT[Global workspace / J-Space bridge\ncausal interface hypothesis]
+    GWT <--> CLAUDE[Claude Code\nstrong model/tool/code partner]
+    GRID --> CAND[ActionCandidate]
+    CAND --> EG[Deterministic effect authority]
+    EG --> TOOLS[Tools / environment]
+    TOOLS --> OBS[verified outcome / receipt]
+    OBS --> DB
+    OBS --> GRID
+```
+
+HCU remains useful as the program's integrated cognition/compute architecture label and donor framework, but fixed logical cell counts must not overwrite the owner-specified variable-grid finished runtime.
 
 ## 2. Current Frankenstein control boundary
 
@@ -112,12 +159,14 @@ Detailed chronicle: [`repository/FRANKENSTEIN_RESEARCH_CHRONICLE.md`](repository
 
 ## 5. Architecture dependency graph
 
+The owner-target graph in §1A is the current finished-runtime target. The graph below shows reusable EntityOS/HCU program primitives and authority boundaries; it must not be read as fixing a final logical module count:
+
 ```mermaid
 flowchart TD
     ENTRY[Typed Entry Fabric\nidentity + provenance + generation] --> CTRL[Deterministic control plane]
     UDB[UnifiedDB / canonical state\nevidence + journals] <--> CTRL
-    CTRL --> HCU[HCU\nshared-weight/vector/inference/J-Space]
-    HCU --> GWT[Global J-Space / GWT trace\nempirical causal hypothesis]
+    CTRL --> GRID[HCU / variable cognitive-grid compute\nshared-weight/vector/inference candidates]
+    GRID --> GWT[Global J-Space / GWT trace\nempirical causal hypothesis]
     GWT --> HP[Hyperposition\npreserve unresolved candidates]
     HP --> CAND[ActionCandidate]
     CAND --> EG[EffectGate]
@@ -160,12 +209,13 @@ Hardware coherence != SQLite transaction semantics != evidence authority.
 
 ## 8. GRF / Hyperposition / GWT / Global J-Space
 
-Current cache: [`../research_entity/00_CURRENT/latest/hyperposition-gwt-grf.md`](../research_entity/00_CURRENT/latest/hyperposition-gwt-grf.md) is `PARTIAL_COMPONENT_EVIDENCE`; physical-grid re-entry remains blocked pending true GRID10 runtime acceptance.
+Current cache: [`../research_entity/00_CURRENT/latest/hyperposition-gwt-grf.md`](../research_entity/00_CURRENT/latest/hyperposition-gwt-grf.md) is `PARTIAL_COMPONENT_EVIDENCE`; physical-grid re-entry remains blocked pending true runtime acceptance at the claimed scope.
 
 - **Hyperposition:** preserve unresolved alternatives; majority cannot mint truth.
 - **GWT/workspace:** engineering coordination donor/hypothesis, not consciousness evidence.
 - **GRF:** keep tied to exact mathematics/prototypes/receipts, not vague “emergence.”
 - **Global J-Space:** empirical causal interface hypothesis requiring model-specific intervention evidence.
+- **Claude Code side of Global J-Space:** use only exposed text/tool/session/typed-state surfaces unless deeper access is actually exposed and causally evidenced.
 
 External conceptual donor: https://pmc.ncbi.nlm.nih.gov/articles/PMC8770991/
 
@@ -204,6 +254,7 @@ They are relevant analogies/research context, not Project-Frankenstein runtime p
 | helper-model invented architecture | source-grounding before adoption |
 | coherence mistaken for hidden-state causality | causal intervention controls for J-Space/GWT |
 | more threads presumed faster | topology-specific matched measurement |
+| fixed GRID10 interpretation | current owner correction: `N` runtime-variable; GRID10 benchmark only |
 | provider caller crossed authority boundary | gate before capability boundary + quarantined provenance |
 | stale Together allowance contradicted zero | current authority wins; stale plan cannot spend |
 | Distillery zero-yield | no training credit from raw token volume |
@@ -214,9 +265,11 @@ They are relevant analogies/research context, not Project-Frankenstein runtime p
 
 Historical LoRA/IAPT/SOMA and later ClayCode/J-Space/vector-binding work are separate evidence families. Training completion alone is not PASS.
 
+The current owner target for the small reusable cognitive module is Qwen3.5-0.8B-class, trained for the real Zero/EntityOS cognitive-process workload and variable-`N` coordination rather than generic chatbot quality or fixed personalities. Low-refusal/abliterated behavior is itself an evaluation target, not a label-based acceptance claim.
+
 Promotion requires exact checkpoint/tokenizer/runtime identity, frozen baseline, leak-resistant family splits, deterministic hard negatives, intended-behavior gain and appropriate regression/fail-closed tests.
 
-At the observed 9.13 frontier, whole EntityOS/HCU, full HCU, Physical GRID10, canonical semantics and training promotion remain zero/unpromoted unless newer exact executable evidence says otherwise.
+At the observed 9.13 frontier, whole EntityOS/HCU, full HCU, Physical GRID10, canonical semantics, provider runtime and training promotion remain zero/unpromoted unless newer exact executable evidence says otherwise.
 
 ## 12. Repository curation
 
@@ -244,9 +297,11 @@ Root `README.md` remains deliberately unchanged.
 1. synchronize stale current-facing provider-authority surfaces successor-dynamically;
 2. obtain a complete non-truncated root inventory and reference audit before moving canonical paths;
 3. bind exact SQLite runtime/journal/concurrency identity before UnifiedDB WAL durability claims;
-4. run label-free causal J-Space lesion/shuffle/rescue at exact model identity when authority permits;
-5. continue recursive Project-Frankenstein path inventory against exact root-tree anchor;
-6. verify every AI installer host route as `NATIVE`, `ADAPTED`, `DEGRADED` or `BLOCKED` using observed lifecycle/state/effect receipts.
+4. replace fixed-GRID acceptance language with variable-`N` resize/restart tests where final-runtime identity is claimed;
+5. run label-free causal J-Space lesion/shuffle/rescue at exact model identity when authority permits;
+6. prove grid ↔ Claude Code handoff/re-entry is measurably useful at the strongest actually exposed interface;
+7. continue recursive Project-Frankenstein path inventory against exact root-tree anchor;
+8. verify every AI installer host route as `NATIVE`, `ADAPTED`, `DEGRADED` or `BLOCKED` using observed lifecycle/state/effect receipts.
 
 Machine-readable index: [`repository/FRANKENSTEIN_SOURCE_INDEX.json`](repository/FRANKENSTEIN_SOURCE_INDEX.json).
 

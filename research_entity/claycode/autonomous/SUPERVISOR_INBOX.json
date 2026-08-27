@@ -1,22 +1,24 @@
 {
   "schema_version": "9.13",
-  "supervisor_delta": "9.13I_NON_AUTHORITY",
-  "latest_cycle": "vps-control-bootstrap-source-closure-plus-lineage-bounded-hrr-measurement",
+  "supervisor_delta": "9.13J_NON_AUTHORITY",
+  "latest_cycle": "vps-bootstrap-v2-output-containment-plus-stale-owning-vps-authority",
   "needs_review": true,
   "active_program": "ENTITYOS_HCU",
   "product": "EntityOS",
   "integrated_cognition_compute_architecture": "HCU",
-  "material_finding": "9.13G is stale. Commits 09e0685/3345587/8789de1/d21beaf/14436f3 add adversarial VPS refresh tests, fail-closed remote-main-race handling, and a read-only stale-checkout bootstrap capsule. These close the previously named SOURCE gaps but there is still no repository-bound test PASS, BOOTSTRAP_CAPSULE_PASS_NO_APPLY_AUTHORITY, or CONTROL_SYNC_REFRESH_PASS. Separately, commit 402a653 contains a real Huihui Qwen3.5-0.8B layer-23 HRR activation measurement: single-binding cosine about 0.65-0.72, materially below the prior near-perfect cycle-error narrative, with monotonic degradation as K grows. This is Huihui-lineage diagnostic evidence only; n=46 in hidden_dim=1024 makes the centered empirical covariance rank <=45 before ridge, so whitening/reference-population effects are confounded. Commit b7c8ede binds Huihui checkpoint/tokenizer/config bytes, but its description of Huihui plus paid Together run-3 adapter as the production model is non-canonical under current FREE_ONLY/HARD_OFF and retained-Josiefied ancestry. No BASE, training, canonical-semantics, HCU-full, or Physical-GRID10 promotion follows.",
+  "material_finding": "9.13I is stale. VPS bootstrap v1 had a real no-mutation soundness gap: caller-selected receipt/capsule outputs could mutate the owning checkout around its invariance check. Commits 163e0ed/3a33fb1/88067c1 add bootstrap v2 and adversarial containment tests, but the committed receipt still reports INFRASTRUCTURE_CLIENT_ERROR_BEFORE_TEST_EXECUTION, so repository-bound and runtime control-transport credit remain zero. Latest clay-direct-dev telemetry at 2026-08-27T12:53:37Z shows workspace HEAD 7e00fa0, main behind origin/main by 53 commits, dirty state, and active local run4_fixed_holdout_eval.py/run4_fixed_novel_test.py processes. Those names do not prove a Together/provider call, but this is not a clean current execution-authority surface. The bridge still carries the SSH-port-22 control-sync error and no current CONTROL_SYNC_REFRESH_PASS. Commit 6689e24 calls a future Together run 4 authorized, but canonical 9.13 authority remains FREE_ONLY/HARD_OFF, Together forbidden, remaining paid allowance zero; no run 4 or run 5 is authorized. Fresh distillery metrics remain 0/88774 accepted dataset tokens and 0.000 percent Source-to-GO. No BASE, training, canonical-semantics, HCU-full or Physical-GRID10 promotion follows.",
   "current_frontier": {
-    "runtime_control_transport": "P0_SOURCE_GAPS_CLOSED_RUNTIME_UNVERIFIED_REPOSITORY_TEST_AND_OWNING_VPS_BOOTSTRAP_PASS_REQUIRED",
-    "runtime_control_refresh_source": "SOURCE_CLOSED_ADVERSARIAL_TESTS_REMOTE_RACE_FAIL_CLOSED_BOOTSTRAP_CAPSULE_PRESENT_NO_RUNTIME_CREDIT",
-    "runtime_quiescence": "P0_OPEN_RESTART_AUTHORITY_V4_READONLY_ONLY_AFTER_CONTROL_SYNC_REFRESH_PASS_THEN_ZERO_SURVIVORS_DESCENDANTS_RESTARTS_90S_REQUIRED",
+    "runtime_control_transport": "P0_BOOTSTRAP_V1_UNSOUND_DIAGNOSTIC_ONLY_BOOTSTRAP_V2_SOURCE_HARDENED_REPOSITORY_TEST_AND_OWNING_VPS_PASS_REQUIRED",
+    "runtime_control_refresh_source": "SOURCE_CLOSED_ADVERSARIAL_REFRESH_TESTS_REMOTE_RACE_FAIL_CLOSED_BOOTSTRAP_V2_OUTPUT_CONTAINMENT_PRESENT_NO_RUNTIME_CREDIT",
+    "owning_vps_execution_surface": "STALE_DIRTY_HEAD_7E00FA0_BEHIND_ORIGIN_MAIN_53_ACTIVE_LOCAL_RUN4_FIXED_EVALS_NO_CURRENT_EXECUTION_AUTHORITY",
+    "runtime_quiescence": "P0_OPEN_ONLY_AFTER_CONTROL_SYNC_REFRESH_PASS_RESTART_AUTHORITY_V4_READONLY_THEN_ZERO_SURVIVORS_DESCENDANTS_RESTARTS_90S_REQUIRED",
     "runtime_provider_authority": "CURRENT_EXPLICIT_HARD_OFF_9_13_ALL_PROVIDERS_FALSE_TOGETHER_FORBIDDEN_NO_PAID_FALLBACK",
     "monitoring_truth": "V6_PUBLICATION_PLUS_CURRENT_POINTER_READER_SOURCE_CLOSED_RUNTIME_UNVERIFIED_RETAINED_V3_MIRROR_NOT_CANONICAL_AUTHORITY",
     "base_claycode_release": "WP01_WP02_PASS_WP03_TO_WP14_OPEN_GENERAL_PURPOSE_AND_RELEASE_GATES_NOT_PASS",
     "trigger2_paid_together_run1": "QUARANTINED_HISTORICAL_DIAGNOSTIC_NON_OPERATIVE_ZERO_CREDIT",
     "trigger2_paid_together_run2": "AUTHORITY_VIOLATING_HISTORICAL_DIAGNOSTIC_NON_OPERATIVE_ZERO_CREDIT",
     "trigger2_paid_together_run3": "AUTHORITY_VIOLATING_HISTORICAL_DIAGNOSTIC_NON_OPERATIVE_ZERO_CREDIT_NO_RUN4_OR_RUN5_AUTHORITY",
+    "trigger2_run4_preparation": "STALE_NON_AUTHORITY_DATASET_PREPARATION_ONLY_NO_PAID_EXECUTION_AUTHORITY",
     "trigger2_model_family_checkpoint_ancestry": "HUIHUI_PAID_SUBSTITUTE_AND_RETAINED_JOSIEFIED_CHECKPOINT_MUST_REMAIN_EXPLICITLY_DISTINCT",
     "huihui_checkpoint_identity": "REAL_MODEL_TOKENIZER_CONFIG_CHAT_TEMPLATE_COMPONENT_IDENTITY_BOUND_DIAGNOSTIC_LINEAGE_ONLY_NOT_CANONICAL_PRODUCTION_AUTHORITY",
     "huihui_hrr_measurement": "REAL_LAYER23_ACTIVATION_COMPONENT_MEASUREMENT_SINGLE_BINDING_COSINE_APPROX_0_65_TO_0_72_PRIOR_NEAR_PERFECT_NARRATIVE_NOT_REPRODUCED_WHITENING_REFERENCE_POPULATION_CONFOUNDED",
@@ -48,6 +50,8 @@
     "NO_CANONICAL_SEMANTICS_PROMOTION_WITHOUT_EXECUTABLE_COUNTEREVIDENCE_AND_REVIEW",
     "SOURCE_OR_MODEL_DESIGN_NOTES_WITHOUT_EXECUTION_ARE_NOT_RUNTIME_PASS",
     "BOOTSTRAP_SOURCE_AND_TEST_SOURCE_DO_NOT_MINT_CONTROL_TRANSPORT_CREDIT_WITHOUT_REPOSITORY_BOUND_EXECUTION",
+    "BOOTSTRAP_V1_MUST_NOT_MINT_NO_MUTATION_CREDIT_AFTER_OUTPUT_CONTAINMENT_COUNTEREXAMPLE",
+    "LOCAL_PROCESS_NAMES_DO_NOT_PROVE_PROVIDER_CALLS_WITHOUT_PROVIDER_BOUNDARY_EVIDENCE",
     "HUIHUI_ACTIVATION_OR_ABI_EVIDENCE_CANNOT_BE_TRANSPLANTED_TO_RETAINED_JOSIEFIED_LINEAGE",
     "PAID_TOGETHER_ADAPTER_IS_HISTORICAL_DIAGNOSTIC_NON_OPERATIVE_UNDER_CURRENT_FREE_ONLY_AUTHORITY",
     "GOODMAN_COLLAPSE_SHARED_MODEL_FAMILY_PIPELINE_ORCHESTRATION_AND_REPACKAGED_HISTORY",
@@ -58,12 +62,13 @@
     "DO_NOT_MODIFY_FRANK_HARNESS"
   ],
   "next_focus": [
-    "P0_EXECUTE_TESTS_TEST_VPS_CONTROL_SYNC_REFRESH_V1_REPOSITORY_BOUND_ON_CLEAN_CURRENT_NON_PROVIDER_CHECKOUT_BIND_HEAD_TREE_SOURCE_HASHES_DIRTY_FALSE_STDOUT_STDERR",
-    "P0_DELIVER_SEPARATELY_PINNED_CURRENT_CONTROL_PLANE_COPY_OF_VPS_CONTROL_SYNC_BOOTSTRAP_V1_TO_OWNING_VPS_RUN_WITH_RUN_TESTS_REQUIRE_BOOTSTRAP_CAPSULE_PASS_NO_APPLY_AUTHORITY_AND_UNCHANGED_OWNING_HEAD_TREE_STATUS",
-    "P0_ONLY_AFTER_BOOTSTRAP_PASS_RUN_EXTRACTED_CURRENT_REFRESH_WITHOUT_APPLY_REQUIRE_STABLE_REMOTE_MAIN_AND_COHERENT_9_13_HARD_OFF",
+    "P0_EXECUTE_TESTS_TEST_VPS_CONTROL_SYNC_BOOTSTRAP_V2_AND_TEST_VPS_CONTROL_SYNC_REFRESH_V1_REPOSITORY_BOUND_ON_CLEAN_CURRENT_NON_PROVIDER_CHECKOUT_BIND_HEAD_TREE_SOURCE_HASHES_DIRTY_FALSE_STDOUT_STDERR",
+    "P0_NEVER_USE_BOOTSTRAP_V1_FOR_NO_MUTATION_OR_CONTROL_TRANSPORT_CREDIT",
+    "P0_ONLY_AFTER_REPOSITORY_TEST_PASS_DELIVER_SEPARATELY_SHA_PINNED_CURRENT_BOOTSTRAP_V2_OUTSIDE_OWNING_CHECKOUT_TO_OWNING_VPS_RUN_WITH_RUN_TESTS_REQUIRE_BOOTSTRAP_CAPSULE_PASS_NO_APPLY_AUTHORITY_AND_UNCHANGED_OWNING_HEAD_TREE_STATUS",
+    "P0_ONLY_AFTER_BOOTSTRAP_V2_PASS_RUN_EXTRACTED_CURRENT_REFRESH_WITHOUT_APPLY_REQUIRE_STABLE_REMOTE_MAIN_AND_COHERENT_9_13_HARD_OFF",
     "P0_ONLY_AFTER_STALE_CLEAN_FAST_FORWARDABLE_RESULT_SEPARATELY_ADMIT_APPLY_AND_REQUIRE_CONTROL_SYNC_REFRESH_PASS",
     "P0_AFTER_CONTROL_SYNC_REFRESH_PASS_EXECUTE_RESTART_AUTHORITY_V4_READONLY_THEN_EXACT_ROOT_OWNERSHIP_THEN_LEAST_PRIVILEGE_DISABLE_AND_PROVE_ZERO_SURVIVORS_DESCENDANTS_RESTARTS_AT_LEAST_90_SECONDS",
-    "P0_NO_RUN4_NO_RUN5_NO_PAID_TRAINING",
+    "P0_NO_RUN4_NO_RUN5_NO_PAID_TRAINING_AND_DO_NOT_INFER_PROVIDER_EXECUTION_FROM_RUN4_NAMED_LOCAL_EVAL_PROCESSES",
     "P1_PREREGISTER_HRR_WHITENING_REFERENCE_POPULATION_AND_METRICS_THEN_REPEAT_REAL_ACTIVATION_HRR_MEASUREMENT_ON_EXACT_RETAINED_JOSIEFIED_CHECKPOINT_WITH_TOKENIZER_RENDERER_ATOMS_INDEX_AND_LINEAGE_BINDING",
     "P1_DO_NOT_USE_HUIHUI_HRR_RESULT_OR_PAID_ADAPTER_AS_RETAINED_CHECKPOINT_SELECTION_OR_CANONICAL_PRODUCTION_CREDIT",
     "P2_ONLY_AFTER_PROVENANCE_GOODMAN_ANCESTRY_ABI_AND_ADMISSION_GATES_PASS_RUN_FREE_ONLY_NON_PROVIDER_8_TO_16_ROW_CANONICAL_ADMISSION_MICROPILOT_WITH_ACCEPTED_ROW_RECEIPTS_AND_IDENTICAL_REPLAY_PLUS_ZERO"
@@ -71,6 +76,8 @@
   "promotion_state": {
     "runtime_control_transport_pass": false,
     "runtime_control_refresh_source_progress": true,
+    "bootstrap_v2_source_progress": true,
+    "bootstrap_v2_repository_test_pass": false,
     "runtime_control_refresh_runtime_pass": false,
     "runtime_quiescence_pass": false,
     "provider_path_runtime_pass": false,
@@ -87,5 +94,5 @@
     "canonical_semantics_promotion": false,
     "training_credit": 0
   },
-  "steering": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_9_13I_DELTA_2026-08-27T1852P0700_GPT56SOL.json"
+  "steering": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_9_13J_DELTA_2026-08-27T1953P0700_GPT56SOL.json"
 }

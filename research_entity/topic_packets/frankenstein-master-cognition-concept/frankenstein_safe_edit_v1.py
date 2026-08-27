@@ -1,12 +1,12 @@
 """Deterministic existing-file preservation primitive for Project Frankenstein.
 
-This module is intentionally provider-free.  It does not dispatch models, inspect
+This module is intentionally provider-free. It does not dispatch models, inspect
 secrets, use the network, run Aider, or mint runtime/product credit.
 
 It exists because the first live Frankenstein direct-dispatch on 2026-08-28
-produced a destructive whole-file rewrite (reported 672 lines -> 87 lines).  The
+produced a destructive whole-file rewrite (reported 672 lines -> 87 lines). The
 first mitigation injected current file contents and rejected very large shrinkage,
-but independent review found two additional fail-closed requirements:
+but independent review found additional fail-closed requirements:
 
 * every proposed path must be resolved inside the repository BEFORE any proposed
   path is read or written;
@@ -18,7 +18,7 @@ but independent review found two additional fail-closed requirements:
   shrink threshold.
 
 The primitive is source-ready only until it is explicitly integrated and executed
-at an admitted exact-source scope.  Successful use of this module still does not
+at an admitted exact-source scope. Successful use of this module still does not
 prove semantic correctness of an edit.
 """
 from __future__ import annotations
@@ -177,9 +177,8 @@ def validate_preservation(
 ) -> None:
     """Validate exact preimages plus conservative content-preservation invariants.
 
-    The Python-symbol invariant is deliberately conservative: if the old Python
-    file parses, the proposed file must also parse and must retain every old
-    top-level function/class unless the caller explicitly names that symbol in
+    If an old Python file parses, the proposal must also parse and retain every
+    old top-level function/class unless the caller explicitly names that symbol in
     ``allowed_removed_symbols`` for that exact path.
     """
     paths = validate_block_paths(repo_root, blocks)
@@ -220,9 +219,9 @@ def validate_preservation(
 class SafeEditTransaction:
     """Rollback-on-failure multi-file edit bound to exact captured preimages.
 
-    This is not a claim of crash-atomic multi-file filesystem transactions.  It
+    This is not a claim of crash-atomic multi-file filesystem transactions. It
     provides deterministic pre-write validation and best-effort rollback for
-    Python-level write/verification failure.  A future Git-patch integration may
+    Python-level write/verification failure. A future Git-patch integration may
     provide a stronger mutation surface.
     """
 
@@ -243,6 +242,7 @@ class SafeEditTransaction:
         self._applied = False
         self._committed = False
         self._postimages: dict[str, Postimage] = {}
+        self._attempted_paths: list[str] = []
 
     def apply(self) -> dict[str, Postimage]:
         if self._applied:
@@ -254,12 +254,12 @@ class SafeEditTransaction:
             allowed_removed_symbols=self.allowed_removed_symbols,
         )
 
-        attempted: list[str] = []
+        self._attempted_paths = []
         try:
             for rel_path, proposed in self.blocks.items():
                 full = self.paths[rel_path]
                 full.parent.mkdir(parents=True, exist_ok=True)
-                attempted.append(rel_path)
+                self._attempted_paths.append(rel_path)
                 self._writer(full, proposed.encode("utf-8"))
             self._postimages = {
                 rel: Postimage(rel, sha256_bytes(self.paths[rel].read_bytes()))
@@ -268,11 +268,11 @@ class SafeEditTransaction:
             self._applied = True
             return dict(self._postimages)
         except Exception as exc:
-            self._restore(attempted)
+            self._restore()
             raise PartialWriteError(f"edit application failed and was rolled back: {exc}") from exc
 
     def _restore(self, rel_paths: list[str] | None = None) -> None:
-        rel_paths = list(rel_paths if rel_paths is not None else self.preimages.keys())
+        rel_paths = list(rel_paths if rel_paths is not None else self._attempted_paths)
         restore_errors: list[str] = []
         for rel_path in reversed(rel_paths):
             snapshot = self.preimages[rel_path]
@@ -289,6 +289,7 @@ class SafeEditTransaction:
                         restore_errors.append(f"non-file appeared at new target: {rel_path}")
             except OSError as exc:
                 restore_errors.append(f"{rel_path}: {exc}")
+        self._attempted_paths = []
         self._applied = False
         self._postimages = {}
         if restore_errors:
@@ -320,6 +321,6 @@ class SafeEditTransaction:
         return self
 
     def __exit__(self, exc_type, exc, tb) -> bool:
-        if not self._committed:
+        if not self._committed and self._attempted_paths:
             self._restore()
         return False

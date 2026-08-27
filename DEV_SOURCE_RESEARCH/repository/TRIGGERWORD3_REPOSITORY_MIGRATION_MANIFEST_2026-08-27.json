@@ -1,0 +1,168 @@
+{
+  "schema": "TRIGGERWORD3_REPOSITORY_MIGRATION_MANIFEST/v1",
+  "date": "2026-08-27",
+  "trigger": "triggerword 3",
+  "canonical_repository": "gschaidergabriel/clay-global-research-entity",
+  "canonical_branch": "main",
+  "main_sha_at_trigger_start": "854f6bc87780f4a5242489a6c807d186b16a8c3d",
+  "curation_branch": "triggerword3-frankenstein-curation-20260827",
+  "authority": {
+    "supervisor_inbox": "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
+    "selected_at_start": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_9_13O_DELTA_2026-08-27T2341P0700_GPT56SOL.json",
+    "provider_state": "9.13_HARD_OFF_ALL_EXTERNAL_PROVIDER_ROUTES",
+    "together": "FORBIDDEN_ZERO_AUTHORIZED_RUNS",
+    "owner_target": "VARIABLE_COGNITIVE_GRID_PLUS_PERSISTENT_DATABASE_PLUS_CLAUDE_CODE"
+  },
+  "desired_public_root": [
+    "README.md",
+    "HUMAN_READ_THIS/",
+    "DEV_SOURCE_RESEARCH/",
+    "AI_START_HERE_DO_NOT_SCAN_REPO/"
+  ],
+  "do_not_rewrite_root_readme_without_explicit_user_request": true,
+  "current_root_target_status": "INCOMPLETE",
+  "reason_not_mass_moved_in_this_pass": "Current root contains authority, agent, workflow, boot, compatibility and legacy paths whose consumers have not yet been exhaustively audited. Blind moves could break workflows, tooling, external automation, historical reproducibility or evidence links. Triggerword-3 prefers an indexed migration plan over cosmetic breakage.",
+  "created_navigation_layers": [
+    {
+      "path": "HUMAN_READ_THIS/README.md",
+      "status": "CREATED",
+      "role": "human cumulative explanation"
+    },
+    {
+      "path": "DEV_SOURCE_RESEARCH/README.md",
+      "status": "CREATED",
+      "role": "technical chronicle and evidence graph"
+    },
+    {
+      "path": "AI_START_HERE_DO_NOT_SCAN_REPO/README.md",
+      "status": "CREATED",
+      "role": "minimal fail-closed AI installer/adaptation entry"
+    },
+    {
+      "path": "research_entity/topic_packets/frankenstein-master-cognition-concept/CURRENT_AUTHORITY_OVERRIDE_20260827.md",
+      "status": "PLANNED_IN_THIS_BRANCH",
+      "role": "current authority sidecar for quarantined 72h orchestration"
+    }
+  ],
+  "migration_classes": {
+    "KEEP_PUBLIC_ROOT": "files explicitly intended for the final human-facing root",
+    "MOVE_AFTER_CONSUMER_AUDIT": "technical root file likely movable after exact path-consumer audit",
+    "KEEP_PATH_FOR_COMPATIBILITY": "path likely part of boot/tool/agent compatibility; do not move without migration adapter",
+    "HISTORICAL_PRESERVE": "historical artifact/receipt whose path is evidence provenance",
+    "UNKNOWN_REQUIRES_AUDIT": "no safe disposition yet"
+  },
+  "root_migration_policy": [
+    "Never rewrite historical receipts to update paths or authority wording.",
+    "Never move an authority/bootstrap file until every known reader and workflow reference is either migrated or given a compatibility shim.",
+    "Never move executable/source files solely to make the root prettier without byte/path/consumer evidence.",
+    "Prefer git mv after consumer audit so lineage remains visible.",
+    "For externally consumed paths, prefer staged compatibility links/adapters where the host supports them and prove actual resolution before deleting the old path.",
+    "Do not create duplicate authority files with divergent semantics.",
+    "Root README is out of scope for this trigger unless the user explicitly asks to rewrite it."
+  ],
+  "protected_or_high_risk_path_families": [
+    {
+      "pattern": ".github/**",
+      "class": "KEEP_PATH_FOR_COMPATIBILITY",
+      "reason": "workflow and repository automation paths"
+    },
+    {
+      "pattern": ".claude/**",
+      "class": "KEEP_PATH_FOR_COMPATIBILITY",
+      "reason": "Claude project/agent configuration may be path-sensitive"
+    },
+    {
+      "pattern": "AGENTS.md",
+      "class": "KEEP_PATH_FOR_COMPATIBILITY",
+      "reason": "agent instruction discovery can be location-sensitive"
+    },
+    {
+      "pattern": "CLAUDE.md",
+      "class": "KEEP_PATH_FOR_COMPATIBILITY",
+      "reason": "Claude Code discovery convention may be location-sensitive"
+    },
+    {
+      "pattern": "research_entity/claycode/autonomous/**",
+      "class": "KEEP_PATH_FOR_COMPATIBILITY",
+      "reason": "current authority and supervisor readers"
+    },
+    {
+      "pattern": "research_entity/continuity/**",
+      "class": "HISTORICAL_PRESERVE",
+      "reason": "canonical continuity contracts and receipts"
+    },
+    {
+      "pattern": "research_entity/archive_assimilation/**",
+      "class": "HISTORICAL_PRESERVE",
+      "reason": "evidence archive / assimilation provenance"
+    },
+    {
+      "pattern": "research_entity/trigger_runs/**",
+      "class": "HISTORICAL_PRESERVE",
+      "reason": "trigger execution/research lineage"
+    },
+    {
+      "pattern": "the artefact/**",
+      "class": "KEEP_PATH_FOR_COMPATIBILITY",
+      "reason": "canonical workspace/artifact consumers may bind exact paths"
+    },
+    {
+      "pattern": "tools/**",
+      "class": "KEEP_PATH_FOR_COMPATIBILITY",
+      "reason": "source/test imports and scripts"
+    },
+    {
+      "pattern": "tests/**",
+      "class": "KEEP_PATH_FOR_COMPATIBILITY",
+      "reason": "test imports/workflow commands"
+    }
+  ],
+  "known_root_examples_requiring_consumer_audit_before_move": [
+    {
+      "path": "000_CLAY_CURRENT.md",
+      "proposed_class": "MOVE_AFTER_CONSUMER_AUDIT"
+    },
+    {
+      "path": "000_FRANK_GLOBAL_RESEARCH_ENTITY_AUTOBOOT.txt",
+      "proposed_class": "KEEP_PATH_FOR_COMPATIBILITY"
+    },
+    {
+      "path": "000_FREE_SWARM_LIVE_DASHBOARD.md",
+      "proposed_class": "MOVE_AFTER_CONSUMER_AUDIT"
+    },
+    {
+      "path": "AUTHORITATIVE_STATE_RESOLUTION.md",
+      "proposed_class": "KEEP_PATH_FOR_COMPATIBILITY"
+    },
+    {
+      "path": "CLAUDE_CODE_INTRODUCTION.md",
+      "proposed_class": "MOVE_AFTER_CONSUMER_AUDIT"
+    },
+    {
+      "path": "CLAYCODE_GENERAL_PURPOSE_COMPILER_MANIFEST.json",
+      "proposed_class": "MOVE_AFTER_CONSUMER_AUDIT"
+    },
+    {
+      "path": "CLAYVERSE_CANONICAL_DIRECTIVE.md",
+      "proposed_class": "HISTORICAL_PRESERVE"
+    }
+  ],
+  "next_repository_topology_gate": {
+    "status": "PREPARED_NOT_RUN",
+    "action": "Build an exact path-consumer index for every non-target root entry using code search, workflow references, scripts, agent conventions and external-install assumptions; classify each path; only then perform git mv batches with compatibility guards and post-move verification.",
+    "acceptance": [
+      "no unresolved consumer for a moved path",
+      "authority resolution still succeeds",
+      "agent discovery still succeeds where location-sensitive",
+      "workflow/static path checks pass",
+      "historical evidence links remain resolvable or carry explicit compatibility mapping",
+      "root contains only the target public entries after the final audited batch"
+    ]
+  },
+  "credit": {
+    "repository_navigation_delta": "SOURCE_COMMITTED_ON_CURATION_BRANCH",
+    "full_root_migration": "NOT_RUN",
+    "runtime_credit": 0,
+    "training_credit": 0
+  }
+}

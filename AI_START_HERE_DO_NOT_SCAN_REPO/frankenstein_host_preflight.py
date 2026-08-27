@@ -130,13 +130,18 @@ def classify(
 ) -> str:
     """Classify only what this read-only preflight can actually establish.
 
-    NATIVE and ADAPTED are intentionally unreachable here. Even a repository
-    with current authority and verified Git identity remains DEGRADED until a
-    host-specific lifecycle/state/effect witness is independently verified.
+    Missing repository/current-authority identity is BLOCKED. NATIVE and ADAPTED
+    are intentionally unreachable here. Even a repository with current authority
+    and verified Git identity remains DEGRADED until a host-specific
+    lifecycle/state/effect witness is independently verified.
     """
     if root is None:
         return "BLOCKED"
-    if all(authority_present.values()) and steering_verified and git_ok:
+    if not all(authority_present.values()):
+        return "BLOCKED"
+    if not steering_verified:
+        return "BLOCKED"
+    if not git_ok:
         return "DEGRADED"
     return "DEGRADED"
 

@@ -1,5 +1,6 @@
 import importlib.util
 from pathlib import Path
+import sys
 
 import pytest
 
@@ -14,6 +15,7 @@ MODULE_PATH = (
 spec = importlib.util.spec_from_file_location("frankenstein_safe_edit_v1", MODULE_PATH)
 assert spec is not None and spec.loader is not None
 safe_edit = importlib.util.module_from_spec(spec)
+sys.modules[spec.name] = safe_edit
 spec.loader.exec_module(safe_edit)
 
 

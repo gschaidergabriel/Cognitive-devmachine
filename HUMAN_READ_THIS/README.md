@@ -65,9 +65,9 @@ GRF and Hyperposition belong to the research lineage for representing competing 
 
 ## What is real today, and what is not
 
-The repository contains real GRID10/Fabric code, SQLite/WAL coordination, task/lease/regulator machinery, tests, runtime diagnostics, Frankenstein package/orchestrator/bugfix source, and a substantial evidence archive. The latest Frankenstein master concept itself explicitly distinguishes built mechanisms from aspirational additions such as permanent boot-time operation, physical sensors, and a web UI.
+The repository contains real GRID10/Fabric code, SQLite/WAL coordination, task/lease/regulator machinery, tests, runtime diagnostics, Frankenstein package/orchestrator/bugfix source, and a substantial evidence archive. The latest Frankenstein master concept explicitly distinguishes built mechanisms from aspirational additions such as permanent boot-time operation, physical sensors, and a web UI.
 
-The newest supervisor state at the base commit of this curation (`854f6bc87780f4a5242489a6c807d186b16a8c3d`) also records a critical restriction: the current provider authority is **HARD_OFF**. The 72-hour Bauleiter/Bugfix orchestration is therefore **quarantined/non-operative** while it directly invokes NVIDIA/Groq/Mistral fallback routes or treats Together as available. Source existing and local tests passing do not grant execution authority.
+The current provider authority remains **9.13 HARD_OFF**. A later Trigger-3 closure on current `main` (`3c3dbe5020f57065f47bd4d0a2dce3c537128797`) changed the canonical Bauleiter/Bugfix entrypoints so they resolve current authority before provider import, secret lookup, network, Aider or fallback dispatch. The original provider-backed implementations and old plan are preserved as quarantined donor provenance. That closure reports 10/10 focused local tests, but it is still source/local-unit evidence only: it does not grant provider runtime, BASE, HCU, J-Space, training or whole-EntityOS credit.
 
 ## Why negative results stay visible
 

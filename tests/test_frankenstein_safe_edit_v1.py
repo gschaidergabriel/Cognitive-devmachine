@@ -2,10 +2,19 @@ from __future__ import annotations
 
 import hashlib
 from pathlib import Path
+import sys
 
 import pytest
 
-from research_entity.topic_packets.frankenstein_master_cognition_concept.frankenstein_safe_edit_v1 import (
+TOPIC_DIR = (
+    Path(__file__).resolve().parents[1]
+    / "research_entity"
+    / "topic_packets"
+    / "frankenstein-master-cognition-concept"
+)
+sys.path.insert(0, str(TOPIC_DIR))
+
+from frankenstein_safe_edit_v1 import (  # noqa: E402
     EditPolicy,
     PatchSyntaxError,
     PathViolation,

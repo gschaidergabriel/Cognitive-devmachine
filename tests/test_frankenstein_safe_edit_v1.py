@@ -82,6 +82,18 @@ def test_default_policy_rejects_rewriting_most_of_existing_file(tmp_path):
         safe.plan_safe_edits(repo, [safe.EditBlock("big.txt", "A" * 100 + "B" * 20, "tiny")])
 
 
+def test_default_policy_rejects_forty_percent_deletion_below_old_shrink_guard(tmp_path):
+    repo = tmp_path / "repo"
+    repo.mkdir()
+    original = "A" * 40 + "B" * 60
+    (repo / "forty.txt").write_text(original)
+    # Replacing exactly 40% of the original source would evade the old 50%
+    # whole-file shrink heuristic if enough other content remained. The new
+    # exact-edit default budget must fail closed before any task-local test.
+    with pytest.raises(safe.SafeEditError, match="budget exceeded"):
+        safe.plan_safe_edits(repo, [safe.EditBlock("forty.txt", "A" * 40, "")])
+
+
 def test_minimal_change_to_small_file_is_allowed(tmp_path):
     repo = tmp_path / "repo"
     repo.mkdir()

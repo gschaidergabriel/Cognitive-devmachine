@@ -1,0 +1,51 @@
+{
+  "schema": "SUPERVISOR_STEERING_DELTA/v1",
+  "authority": "NON_AUTHORITY_STEERING_ONLY",
+  "date": "2026-08-27T22:48:00+07:00",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "trigger": "go",
+  "program": "ENTITYOS_HCU",
+  "target": "autonomously self-organizing shared-state Xeno/HCU fabric",
+  "fresh_observation": {
+    "main_head_seen_before_write": "2dfaec80116c7bbe882564892dcbf60e9267edb9",
+    "canonical_supervisor_epoch_seen": "9.13",
+    "canonical_provider_state": "FREE_ONLY_HARD_OFF_ALL_PROVIDER_ROUTES_FALSE_TOGETHER_FORBIDDEN",
+    "post_hardoff_provider_backed_commits_still_observed": true,
+    "latest_architecture_measurement": {
+      "source_commit": "6996f12022f8541171f39a2ffac26792a1e66c75",
+      "finding": "single-cycle A/B RAM experiment reports about 97 MB lower Private_Dirty during idle and about 72 MB lower after resume in trimmed nodes, with overlapping next-generate latency distributions",
+      "provenance_warning": "retained mechanism was authored through post-HARD_OFF freepool fallback and therefore requires independent clean non-provider re-execution before runtime credit"
+    }
+  },
+  "work_done_this_go": {
+    "new_source": "tools/grid10_ram_release_repeated_acceptance_v2.py",
+    "commit": "ef1154518d720475caa124b52895d3b784428444",
+    "purpose": "independently falsify the RAM optimization across repeated idle-trim-resume cycles instead of relying on a single-cycle provider-authored result",
+    "design": "3 trimmed + 3 matched control real forked processes, >=5 repeated cycles by default, local-files-only model load, real /proc smaps_rollup Private_Dirty and real resume latency",
+    "preregistered_acceptance": [
+      "all children and cycles complete",
+      "malloc_trim invoked for every trimmed cycle",
+      "median idle Private_Dirty saving >=64 MB",
+      "median post-resume Private_Dirty saving >=32 MB",
+      "median resume latency overhead <=20 percent",
+      "no cumulative trimmed Private_Dirty growth >64 MB from first to final resume"
+    ],
+    "provider_calls": 0,
+    "runtime_execution_this_organ": false,
+    "source_credit_only": true
+  },
+  "credit_effect": {
+    "new_runtime_credit": 0,
+    "ram_efficiency_component_runtime_credit": 0,
+    "physical_grid10_credit": 0,
+    "hcu_credit": 0,
+    "training_credit": 0
+  },
+  "p0_unchanged": [
+    "close the actual external stern.py -> harness_aider.py -> last-resort/llm.py caller boundary before secret lookup/provider import/network/Aider under current HARD_OFF",
+    "restore and prove clean runtime control/quiescence before any provider-backed execution"
+  ],
+  "next_architecture_action_after_p0_or_on_clean_nonprovider_surface": "Execute grid10_ram_release_repeated_acceptance_v2.py repository-bound on a clean current local checkpoint, then combine only a passing repeated-cycle memory mechanism with the real 10-node elastic-poll fabric and measure CPU+RAM+claim latency together. Reject the optimization if repeated trimming accumulates latency or memory growth.",
+  "go_target_unchanged": true,
+  "note": "This steering delta does not authorize provider calls, paid training, process kills, runtime mutations or promotion. The new test is intentionally a falsifier for a provider-authored core change, not an endorsement of that change."
+}

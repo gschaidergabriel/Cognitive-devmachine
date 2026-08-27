@@ -1,0 +1,77 @@
+{
+  "schema": "TRIGGERWORD3_EXACT_PATCH_GUARD_RECEIPT/v1",
+  "classification": [
+    "SOURCE_CANDIDATE",
+    "LOCAL_COMPONENT_PRECURSOR_PASS",
+    "CI_ADMISSION_NEGATIVE_RESULT"
+  ],
+  "trigger": "triggerword 3",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "date_local": "2026-08-28",
+  "branch_base_at_creation": "3cf4a76b8ffa2e9bdedca3cbd2d49c5d81f1033a",
+  "canonical_main_after_reentry": "825512599077e166093a13f6f1a0d0bd6f9ecce4",
+  "pull_request": 2090,
+  "problem": {
+    "observed_counterexample": "Frankenstein direct-dispatch previously rewrote tools/grid10_fabric.py from 672 lines to 87 lines; local VPS commits were contained/reset before origin push.",
+    "remaining_gap": "Existing content injection plus a 50 percent shrink threshold does not reject every destructive whole-file rewrite; e.g. retaining 55 percent can still delete 45 percent of unrelated code.",
+    "current_supervisor_source": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_9_13Q_DELTA_2026-08-28T0146P0700_GPT56SOL.json"
+  },
+  "delta": {
+    "source": "tools/frankenstein_exact_patch_v1.py",
+    "source_blob_sha": "bcf6a222bf35f359e1dcd2149266619e2b728838",
+    "tests": "tests/test_frankenstein_exact_patch_v1.py",
+    "tests_blob_sha": "1cdcabd1d12facd2c744885813329b882aa4b1fb",
+    "schema": "FRANKENSTEIN_EXACT_PATCH/v1",
+    "invariants": [
+      "existing-file lane only",
+      "exact UTF-8 preimage SHA-256",
+      "unique non-empty exact find spans",
+      "non-overlapping declared edit spans",
+      "default touched-preimage fraction <= 0.35",
+      "undeclared regions preserved by deterministic splice construction",
+      "preimage rechecked immediately before write",
+      "same-directory atomic replacement",
+      "mode preserved",
+      "repo escape and symlink target fail closed"
+    ]
+  },
+  "local_precursor_evidence": {
+    "execution_class": "NON_PROVIDER_LOCAL_DEVELOPMENT_COMPONENT_ONLY",
+    "pytest": "9/9 PASS",
+    "py_compile": "PASS",
+    "published_head_exact_execution": false,
+    "reason_not_promoted": "The GitHub branch was emitted after the local precursor run; exact published branch execution was not observed."
+  },
+  "github_ci_observation": {
+    "head_sha_observed": "419aa21abf07f5a0266f79064ceefb0a31d605d8",
+    "research_entity_verify_run": 33109278532,
+    "research_entity_verify_conclusion": "failure",
+    "research_entity_verify_job": 98647465289,
+    "research_entity_verify_steps": null,
+    "identity_guard_run": 33109278535,
+    "identity_guard_conclusion": "failure",
+    "identity_guard_job": 98647464959,
+    "identity_guard_steps": null,
+    "classification": "RUNNER_OR_PRESTEP_ADMISSION_FAILURE_NOT_COMPONENT_TEST_FAILURE"
+  },
+  "nonclaims": [
+    "no provider calls",
+    "no secret lookups",
+    "no paid fallback",
+    "no Together use",
+    "no model training",
+    "no exact published-head runtime PASS",
+    "no Frankenstein release PASS",
+    "no canonical semantics promotion",
+    "no Physical GRID10 promotion",
+    "no full HCU runtime credit",
+    "no whole EntityOS runtime credit"
+  ],
+  "next_gate": [
+    "execute exact PR 2090 head focused tests on a clean admitted non-provider checkout",
+    "adversarially require rejection of a 55-percent-retained/45-percent-deleted candidate in the integrated route",
+    "wire existing-file direct-dispatch to exact-patch objects rather than whole-file replacements",
+    "rerun full Frankenstein orchestrator regressions and destructive-rewrite counterexamples",
+    "preserve provider-authored quarantined core as non-promoted until independent review/re-execution"
+  ]
+}

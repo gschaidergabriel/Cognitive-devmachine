@@ -132,6 +132,19 @@ These references are analogies or supporting engineering/science context. They d
 3. PyTorch, *Multiprocessing best practices* (current documentation, CPU oversubscription section). `EXTERNAL_PRIMARY` vendor documentation.
 4. SQLite, *Write-Ahead Logging*. `EXTERNAL_PRIMARY` implementation documentation.
 5. Shinn et al., *Reflexion: Language Agents with Verbal Reinforcement Learning*, arXiv:2303.11366. `EXTERNAL_PRIMARY` research reference for feedback + episodic reflection; it is not evidence that Frankenstein implements or reproduces Reflexion.
+6. NVIDIA, CUDA Programming Guide, *Unified Memory*. `EXTERNAL_PRIMARY` systems-design analogy only; hardware memory coherence is not database semantics.
+
+Current PyTorch guidance explicitly warns that multiprocessing can oversubscribe CPU resources and gives `floor(N/M)` threads per process as a maximum guideline in its example. Current NVIDIA CUDA documentation describes Unified Memory as CPU/GPU-accessible managed/system memory with platform-dependent coherence/migration behavior. These references support engineering analogies only; the project measurements remain the project evidence.
+
+## Research chronicle / hypothesis map
+
+See [`research/FRANKENSTEIN_EVIDENCE_MAP.md`](research/FRANKENSTEIN_EVIDENCE_MAP.md) for:
+
+- the failure -> engineering-move dependency graph;
+- explicit engineering confidence and falsifiers for open hypotheses;
+- first-verified-in-accessible-Git chronology for UnifiedDB and GRF/Hyperposition;
+- current negative-result chain;
+- reconstruction rules that prevent source/runtime/independence inflation.
 
 ## Repository topology target
 

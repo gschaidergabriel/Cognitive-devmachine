@@ -131,7 +131,29 @@ def node_loop(
                 drained = f.coordinator_drain_and_commit(coordinator_scope, coordinator_lease, coordinator_token)
                 for d in drained:
                     events.append({"event": "COORDINATOR_COMMIT", "node_id": node_id, **d, "ts": time.time()})
-                if scenario == "release_after_one_drain" and drained:
+                # LEASE RENEWAL FIX (found during the 2026-08-27 world-model operational run):
+                # coordinator_commit() enforces LEASE_TTL_SECONDS from the lease's ORIGINAL
+                # granted_ts with no renewal path -- a coordinator that keeps its lease past
+                # that TTL (normal for any run longer than ~8s) silently stops being able to
+                # commit ANYTHING further, forever, while still believing it holds a valid
+                # lease (the DB's valid=1 flag is untouched; only the runtime TTL check in
+                # coordinator_commit fails). Before this fix, a short one-shot acceptance test
+                # never ran long enough to hit this; a genuinely sustained multi-tick run does,
+                # and canonical S1 silently stopped updating after the first ~8s per scope.
+                # Fix: if we ever see COORDINATOR_LEASE_EXPIRED (or any other commit_error) on
+                # our own lease, explicitly revoke it and drop our local reference so the next
+                # loop iteration re-elects a fresh lease (possibly ourselves again) instead of
+                # continuing to hold a lease that can never successfully commit again.
+                if any(d.get("commit_error") for d in drained):
+                    try:
+                        f.revoke_lease(coordinator_lease["lease_id"])
+                    except FabricError:
+                        pass
+                    events.append({"event": "COORDINATOR_LEASE_SELF_RENEW_AFTER_EXPIRY", "node_id": node_id, "scope": coordinator_scope, "old_lease_id": coordinator_lease["lease_id"], "errors": [d.get("commit_error") for d in drained if d.get("commit_error")], "ts": time.time()})
+                    coordinator_lease = None
+                    coordinator_token = None
+                    coordinator_scope = None
+                if scenario == "release_after_one_drain" and drained and coordinator_lease is not None:
                     f.revoke_lease(coordinator_lease["lease_id"])
                     events.append({"event": "COORDINATOR_SELF_RELEASE", "node_id": node_id, "lease_id": coordinator_lease["lease_id"], "ts": time.time()})
                     coordinator_lease = None

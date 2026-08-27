@@ -1,10 +1,12 @@
 import importlib.util
+import sys
 from pathlib import Path
 
 MODULE = Path(__file__).resolve().parents[1] / "tools" / "preimage_bound_edit_guard_v1.py"
 spec = importlib.util.spec_from_file_location("edit_guard", MODULE)
 edit_guard = importlib.util.module_from_spec(spec)
 assert spec and spec.loader
+sys.modules[spec.name] = edit_guard
 spec.loader.exec_module(edit_guard)
 
 

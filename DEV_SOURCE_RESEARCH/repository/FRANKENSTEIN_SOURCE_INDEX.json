@@ -16,19 +16,30 @@
   "trigger3_reentry": {
     "initial_main_seen": "854f6bc87780f4a5242489a6c807d186b16a8c3d",
     "hardoff_closure_main_seen": "3c3dbe5020f57065f47bd4d0a2dce3c537128797",
-    "note": "main moved during the trigger; later commits add only curation/navigation layers and must be re-read dynamically"
+    "source_identity_history_anchor_main_seen": "ed70385760c03a30dea7b6ecf8f6b78cbbaa584a",
+    "note": "main moved during the trigger; curation/navigation and source-evidence commits were re-entered dynamically"
   },
   "historical_project_frankenstein": {
     "archive_manifest": "research_entity/archive_assimilation/manifests/PROJECT_FRANKENSTEIN_MANIFEST.json",
+    "source_identity_history_anchor": "research_entity/archive_assimilation/manifests/PROJECT_FRANKENSTEIN_SOURCE_IDENTITY_HISTORY_ANCHOR_20260827.json",
     "manifest_status": "PARTIAL_NOT_FROZEN",
     "historical_snapshot_head": "abba90a5767d85abc8a1ac340bae92842dab35c1",
+    "root_tree_merkle_anchor": "ec21e66c4672fde1f0a5d948ebc51457b69b620a",
+    "default_branch_reachable_commit_count": 545,
+    "default_branch_reachable_history_denominator_frozen": true,
     "exact_tree_enumerated": false,
     "exact_history_enumerated": false,
     "denominator_frozen": false,
     "exact_repository_completeness_credit": 0,
+    "denominator_note": "The default-branch reachable history count is exactly 545 at the frozen source snapshot, proven by per_page=1 page 545 non-empty and page 546 empty. Overall repository denominator remains unfrozen because a complete recursive path inventory and all-ref/unreachable-history coverage are not claimed.",
     "chronology_rule": "Use first verified in accessible Git unless creation date is independently evidenced."
   },
   "chronology_anchors": [
+    {
+      "commit": "e1a8812767668091d146ee958bbc2ebb2743031c",
+      "classification": "HISTORICAL_SOURCE",
+      "meaning": "oldest commit reachable from the frozen Project-Frankenstein default branch through the observed GitHub REST listing; committed 2026-02-14T17:05:27Z; not proof of pre-Git project creation date"
+    },
     {
       "commit": "96623ef096ba189b771ca10835cd5a20499c1da9",
       "classification": "HISTORICAL_SOURCE",
@@ -105,7 +116,7 @@
     "helper model invented architecture not present in real GRID10 source",
     "thread-count A/B falsified two-threads-is-faster on measured 4-process/4-vCPU topology",
     "Distillery last-confirmed accepted dataset tokens remained zero",
-    "Project-Frankenstein archive denominator remains incomplete",
+    "Project-Frankenstein recursive path/topology denominator remains incomplete even though the default-branch reachable history denominator is now exactly 545",
     "component/source PASS must not be promoted to whole-product runtime PASS"
   ],
   "open_hypotheses": [

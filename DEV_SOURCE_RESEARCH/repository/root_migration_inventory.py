@@ -1,155 +1,229 @@
 #!/usr/bin/env python3
-"""Read-only root migration inventory for Triggerword 3.
+"""Canonical read-only Triggerword 3 root migration inventory.
 
-The script does not move, delete, rewrite, execute, import, or network-call project
-code. It walks the current checkout, classifies top-level entries conservatively,
-and searches likely text files for exact references to non-public root paths.
+This fuses the two parallel audit approaches that appeared during Triggerword 3:
+
+* Git supplies the tracked top-level paths and exact object identities;
+* fixed-string `git grep` supplies bounded textual dependency candidates;
+* host/GitHub fixed-location surfaces are classified conservatively;
+* unknowns fail closed;
+* no move, rename, edit, stage, commit, package install, provider call, secret read,
+  or project-code import is performed.
+
+Text references are dependency candidates, not proof of runtime consumption. The audit
+is a migration gate, not authority to make the root look clean by assumption.
 """
 from __future__ import annotations
 
 import argparse
-import hashlib
 import json
-import os
+import shutil
+import subprocess
+import sys
 from pathlib import Path
+from typing import Any
 
-PUBLIC = {"README.md", "HUMAN_READ_THIS", "DEV_SOURCE_RESEARCH", "AI_START_HERE_DO_NOT_SCAN_REPO"}
+PUBLIC_ENTRY = {
+    "README.md",
+    "HUMAN_READ_THIS",
+    "DEV_SOURCE_RESEARCH",
+    "AI_START_HERE_DO_NOT_SCAN_REPO",
+}
 HOST_REQUIRED = {"CLAUDE.md", "AGENTS.md", ".claude"}
 GITHUB_REQUIRED = {".github", ".gitignore", ".gitattributes"}
-TEXT_EXTS = {
-    ".md", ".txt", ".py", ".sh", ".bash", ".zsh", ".json", ".jsonl", ".yaml", ".yml",
-    ".toml", ".ini", ".cfg", ".conf", ".service", ".timer", ".js", ".ts", ".tsx", ".jsx",
-    ".html", ".css", ".clay",
+CURRENT_CONTROL = {
+    "CLAY_EXECUTION_AUTHORITY.md",
+    "AUTHORITATIVE_STATE_RESOLUTION.md",
+    "000_CLAY_CURRENT.md",
 }
-SKIP_DIRS = {".git", "node_modules", ".venv", "venv", "__pycache__"}
-MAX_TEXT_BYTES = 2_000_000
 
 
-def sha256_file(path: Path) -> str:
-    h = hashlib.sha256()
-    with path.open("rb") as f:
-        while True:
-            chunk = f.read(1024 * 1024)
-            if not chunk:
-                break
-            h.update(chunk)
-    return h.hexdigest()
+def script_repo_root() -> Path:
+    # .../<repo>/DEV_SOURCE_RESEARCH/repository/root_migration_inventory.py
+    return Path(__file__).resolve().parents[2]
 
 
-def classify(name: str, path: Path) -> str:
-    if name in PUBLIC:
-        return "PUBLIC_ENTRY"
-    if name in HOST_REQUIRED:
-        return "HOST_REQUIRED"
-    if name in GITHUB_REQUIRED:
-        return "GITHUB_REQUIRED"
-    if name.startswith("."):
-        return "UNKNOWN"
-    if path.is_file() and name.endswith((".md", ".txt", ".json", ".yaml", ".yml", ".toml")):
-        return "EVIDENCE_OR_CONTROL_UNKNOWN"
-    if path.is_dir():
-        return "SOURCE_OR_ARCHIVE_UNKNOWN"
-    return "UNKNOWN"
+def run_git(root: Path, *args: str, check: bool = True) -> subprocess.CompletedProcess[str]:
+    return subprocess.run(
+        ["git", "-C", str(root), *args],
+        check=check,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+    )
 
 
-def iter_text_files(root: Path):
-    for base, dirs, files in os.walk(root):
-        dirs[:] = [d for d in dirs if d not in SKIP_DIRS]
-        b = Path(base)
-        for name in files:
-            p = b / name
-            try:
-                if p.suffix.lower() not in TEXT_EXTS or p.stat().st_size > MAX_TEXT_BYTES:
-                    continue
-            except OSError:
-                continue
-            yield p
+def require_git_checkout(root: Path) -> None:
+    if shutil.which("git") is None:
+        raise RuntimeError("git executable not found")
+    probe = run_git(root, "rev-parse", "--is-inside-work-tree", check=False)
+    if probe.returncode != 0 or probe.stdout.strip() != "true":
+        raise RuntimeError(f"not a Git checkout: {root}")
 
 
-def reference_variants(name: str) -> tuple[str, ...]:
-    if name.startswith("."):
-        return (name + "/", name)
-    return (name + "/", "./" + name + "/", name)
-
-
-def references_for(root: Path, target_name: str, text_files: list[Path]) -> list[dict]:
-    refs: list[dict] = []
-    variants = reference_variants(target_name)
-    for p in text_files:
-        try:
-            text = p.read_text(encoding="utf-8")
-        except (UnicodeDecodeError, OSError):
+def tracked_root_entries(root: Path) -> list[dict[str, str]]:
+    rows: list[dict[str, str]] = []
+    proc = run_git(root, "ls-tree", "HEAD")
+    for line in proc.stdout.splitlines():
+        if not line:
             continue
-        hits = []
-        for lineno, line in enumerate(text.splitlines(), start=1):
-            if any(v in line for v in variants):
-                hits.append(lineno)
-        if hits:
-            refs.append({
-                "path": str(p.relative_to(root)),
-                "line_numbers": hits[:100],
-                "truncated": len(hits) > 100,
-            })
-    return refs
+        # Git ls-tree: <mode> SP <type> SP <object> TAB <path>
+        meta, path = line.split("\t", 1)
+        mode, object_type, object_sha = meta.split(" ", 2)
+        rows.append(
+            {
+                "path": path,
+                "mode": mode,
+                "object_type": object_type,
+                "object_sha": object_sha,
+            }
+        )
+    return rows
 
 
-def build_inventory(root: Path) -> dict:
-    root = root.resolve()
-    text_files = list(iter_text_files(root))
-    entries = []
-    for path in sorted(root.iterdir(), key=lambda p: p.name):
-        if path.name == ".git":
-            continue
-        cls = classify(path.name, path)
-        item = {
-            "path": path.name,
-            "type": "directory" if path.is_dir() else "file",
-            "class": cls,
-            "move_status": "RETAIN" if cls in {"PUBLIC_ENTRY", "HOST_REQUIRED", "GITHUB_REQUIRED"} else "UNKNOWN_FAIL_CLOSED",
-            "proposed_destination": None if cls in {"PUBLIC_ENTRY", "HOST_REQUIRED", "GITHUB_REQUIRED"} else f"DEV_SOURCE_RESEARCH/repository/{path.name}",
-            "references": references_for(root, path.name, text_files) if path.name not in PUBLIC else [],
+def classify(path: str) -> tuple[str, str, str]:
+    if path in PUBLIC_ENTRY:
+        return "PUBLIC_ENTRY", "RETAIN", "retain_at_public_root"
+    if path in HOST_REQUIRED:
+        return "HOST_REQUIRED", "RETAIN_PENDING_ADAPTER", "retain_or_prove_host_discovery_adapter_before_move"
+    if path in GITHUB_REQUIRED:
+        return "GITHUB_REQUIRED", "RETAIN_PENDING_PLATFORM_REPLACEMENT", "retain_unless_platform_behavior_is_replaced_and_proven"
+    if path in CURRENT_CONTROL:
+        return "CURRENT_CONTROL", "BLOCKED_PENDING_CONSUMER_AUDIT", "inventory_every_consumer_before_move_or_minimal_pointer"
+    if path.startswith("."):
+        return "UNKNOWN", "BLOCKED_UNKNOWN_DEPENDENCY", "hidden_root_surface_requires_dependency_review"
+    return "UNKNOWN", "BLOCKED_UNKNOWN_DEPENDENCY", "no_move_until_host_workflow_import_runtime_consumers_are_resolved"
+
+
+def literal_reference_candidates(root: Path, target: str, limit: int) -> dict[str, Any]:
+    # Fixed-string search across tracked files only. Return code 1 means no matches.
+    proc = run_git(root, "grep", "-n", "-F", "--", target, check=False)
+    if proc.returncode not in (0, 1):
+        return {
+            "count": None,
+            "sample": [],
+            "truncated": False,
+            "error": proc.stderr.strip(),
+            "interpretation": "git grep transport/tool failure; dependency remains unresolved",
         }
-        if path.is_file():
-            try:
-                item["size_bytes"] = path.stat().st_size
-                item["sha256"] = sha256_file(path)
-            except OSError as exc:
-                item["hash_error"] = type(exc).__name__
-        entries.append(item)
 
-    unresolved = [x["path"] for x in entries if x["move_status"] == "UNKNOWN_FAIL_CLOSED"]
+    lines = [line for line in proc.stdout.splitlines() if line]
+    sample = lines[:limit] if limit else []
     return {
-        "schema": "TRIGGERWORD3_ROOT_MIGRATION_INVENTORY/v1",
-        "repo_root": str(root),
-        "read_only": True,
-        "public_target": sorted(PUBLIC),
-        "strict_physical_target_reached": set(x["path"] for x in entries) == PUBLIC,
-        "entries": entries,
-        "unresolved_fail_closed": unresolved,
-        "acceptance": "PASS" if not unresolved and set(x["path"] for x in entries) == PUBLIC else "IN_PROGRESS",
-        "notes": [
-            "Text references are candidate dependencies, not proof of runtime use.",
-            "HOST_REQUIRED and GITHUB_REQUIRED are conservative classifications pending host/tool-specific proof.",
-            "This script performs no relocation or mutation."
-        ],
+        "count": len(lines),
+        "sample": sample,
+        "truncated": len(lines) > len(sample),
+        "interpretation": "literal tracked-text reference candidate only; not automatically a runtime dependency",
     }
 
 
-def parser() -> argparse.ArgumentParser:
-    p = argparse.ArgumentParser()
-    p.add_argument("--repo-root", required=True, help="absolute or relative repository root")
-    p.add_argument("--pretty", action="store_true")
-    return p
+def build_inventory(root: Path, reference_limit: int) -> dict[str, Any]:
+    root = root.resolve()
+    require_git_checkout(root)
+
+    head = run_git(root, "rev-parse", "HEAD").stdout.strip()
+    branch = run_git(root, "rev-parse", "--abbrev-ref", "HEAD").stdout.strip()
+    dirty = bool(run_git(root, "status", "--porcelain=v1").stdout.strip())
+
+    entries: list[dict[str, Any]] = []
+    for row in tracked_root_entries(root):
+        category, move_status, default_action = classify(row["path"])
+        refs = literal_reference_candidates(root, row["path"], reference_limit)
+        entries.append(
+            {
+                **row,
+                "class": category,
+                "move_status": move_status,
+                "default_action": default_action,
+                "proposed_destination": None,
+                "text_reference_candidates": refs,
+            }
+        )
+
+    tracked_names = {item["path"] for item in entries}
+    unknown = [item["path"] for item in entries if item["class"] == "UNKNOWN"]
+    missing_public = sorted(PUBLIC_ENTRY - tracked_names)
+    extra_physical = sorted(tracked_names - PUBLIC_ENTRY)
+
+    return {
+        "schema": "TRIGGERWORD3_ROOT_MIGRATION_INVENTORY/v2",
+        "repository_root": str(root),
+        "git_head": head,
+        "git_branch": branch,
+        "working_tree_dirty": dirty,
+        "tracked_source_only": True,
+        "read_only_audit": True,
+        "network_calls_performed": 0,
+        "provider_calls_performed": 0,
+        "secret_lookups_performed": 0,
+        "move_actions_executed": 0,
+        "target_public_root": sorted(PUBLIC_ENTRY),
+        "entries": entries,
+        "summary": {
+            "top_level_tracked_entries": len(entries),
+            "missing_public_entries": missing_public,
+            "extra_physical_root_entries": extra_physical,
+            "unknown_dependency_class": unknown,
+            "strict_physical_target_reached": not missing_public and not extra_physical,
+            "canonical_public_layer_present": not missing_public,
+            "acceptance": "BLOCKED_PENDING_REVIEW" if unknown or missing_public else "INVENTORY_COMPLETE_REVIEW_STILL_REQUIRED",
+        },
+        "evidence_boundary": (
+            "Git object identity proves tracked source identity only. Literal text hits are dependency candidates, "
+            "not proof of runtime consumption. HOST_REQUIRED/GITHUB_REQUIRED remain conservative until host/platform "
+            "behavior is tested. No relocation is authorized by this report."
+        ),
+    }
 
 
-def main() -> int:
-    args = parser().parse_args()
-    root = Path(args.repo_root)
-    if not root.is_dir():
-        print(json.dumps({"schema": "TRIGGERWORD3_ROOT_MIGRATION_INVENTORY/v1", "error": "repo root is not a directory"}))
+def build_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(description="Canonical read-only Triggerword 3 root inventory")
+    parser.add_argument(
+        "--repo-root",
+        help="optional checkout root; default resolves from this script's repository location",
+    )
+    parser.add_argument(
+        "--reference-limit",
+        type=int,
+        default=12,
+        help="maximum literal tracked-text reference samples per root path",
+    )
+    parser.add_argument(
+        "--out",
+        help="optional JSON output path; writing the report is the only optional filesystem mutation",
+    )
+    return parser
+
+
+def main(argv: list[str] | None = None) -> int:
+    args = build_parser().parse_args(argv)
+    if args.reference_limit < 0:
+        print(json.dumps({"schema": "TRIGGERWORD3_ROOT_MIGRATION_INVENTORY/v2", "error": "reference-limit must be >= 0"}))
         return 2
-    data = build_inventory(root)
-    print(json.dumps(data, indent=2 if args.pretty else None, sort_keys=True))
+
+    root = Path(args.repo_root).expanduser() if args.repo_root else script_repo_root()
+    try:
+        inventory = build_inventory(root, args.reference_limit)
+    except (RuntimeError, subprocess.SubprocessError, ValueError, OSError) as exc:
+        print(
+            json.dumps(
+                {
+                    "schema": "TRIGGERWORD3_ROOT_MIGRATION_INVENTORY/v2",
+                    "read_only_audit": True,
+                    "error": f"{exc.__class__.__name__}: {exc}",
+                },
+                indent=2,
+                sort_keys=True,
+            )
+        )
+        return 2
+
+    payload = json.dumps(inventory, indent=2, sort_keys=True) + "\n"
+    if args.out:
+        output = Path(args.out).expanduser()
+        output.write_text(payload, encoding="utf-8")
+    else:
+        sys.stdout.write(payload)
     return 0
 
 

@@ -1,17 +1,16 @@
 {
   "schema_version": "9.13",
-  "supervisor_delta": "9.13P_NON_AUTHORITY",
-  "latest_cycle": "authority-split-brain-closed-free-only-restored-20260828",
+  "supervisor_delta": "9.13Q_NON_AUTHORITY",
+  "latest_cycle": "dual-authority-reopen-revoked-destructive-rewrite-counterexample-20260828",
   "needs_review": true,
   "active_program": "ENTITYOS_HCU",
   "product": "EntityOS",
   "integrated_cognition_compute_architecture": "HCU",
-  "material_finding": "A stale/relayed owner-directive mutation opened SUPERVISOR_INBOX provider routes and one Together allowance while the canonical FREE_PROVIDER_ADMISSION remained 9.13 FREE_ONLY/HARD_OFF with every provider denied. frankenstein_authority_gate_v1 read only the Inbox, so this split-brain could mint executable provider authority. A subsequent NVIDIA-Nemotron fallback provenance commit proves the path was actually exercised. Current explicit task authority is FREE_ONLY with no paid fallback, so the Inbox-only relaxation is revoked and non-operative.",
+  "material_finding": "Commit df703fb reopened BOTH Inbox and canonical provider authority and admitted one Together run based on relayed text, conflicting with the current explicit FREE_ONLY/no-paid-fallback task authority. In the same autonomous cycle the first live Frankenstein direct-dispatch produced a destructive 672-line to 87-line rewrite of tools/grid10_fabric.py on the VPS; the local commits were contained and reset before origin push. The source guard added afterward is useful but provider-authored and requires independent clean non-provider re-review/re-execution before retained runtime credit.",
   "current_frontier": {
-    "runtime_provider_authority": "P0_DUAL_ARTIFACT_GATE_SOURCE_HARDENED_RUNTIME_REPOSITORY_PASS_REQUIRED",
-    "freepool_real_caller_boundary": "P0_SPLIT_BRAIN_BYPASS_EXECUTABLY_OBSERVED_NVIDIA_FALLBACK_AFTER_INVALID_INBOX_RELAXATION",
+    "runtime_provider_authority": "P0_HARD_OFF_RESTORED_DUAL_ARTIFACT_RUNTIME_REPOSITORY_PASS_REQUIRED",
+    "frankenstein_direct_dispatch": "P0_DESTRUCTIVE_REWRITE_EXECUTABLE_COUNTEREXAMPLE_CONTAINED_SOURCE_GUARD_ADDED_RETAINED_CREDIT_REQUIRES_INDEPENDENT_NON_PROVIDER_REVIEW_REEXECUTION",
     "frankenstein_72h_provider_orchestration": "QUARANTINED_NON_OPERATIVE_UNDER_CURRENT_FREE_ONLY_HARD_OFF",
-    "post_invalid_relaxation_provider_authored_changes": "QUARANTINED_FOR_RETAINED_RUNTIME_CREDIT_UNTIL_INDEPENDENT_CLEAN_NON_PROVIDER_REVIEW_AND_REEXECUTION",
     "runtime_control_transport": "P0_BOOTSTRAP_V2_REPOSITORY_TEST_AND_OWNING_VPS_PASS_REQUIRED_NO_CONTROL_SYNC_REFRESH_PASS",
     "runtime_quiescence": "P0_OPEN_CONTROL_SYNC_REFRESH_PASS_THEN_RESTART_AUTHORITY_V4_READONLY_THEN_ZERO_SURVIVORS_DESCENDANTS_RESTARTS_AT_LEAST_90S_REQUIRED",
     "base_claycode_release": "WP01_WP02_PASS_WP03_TO_WP14_OPEN_GENERAL_PURPOSE_AND_RELEASE_GATES_NOT_PASS",
@@ -25,11 +24,11 @@
   },
   "free_only": {
     "enabled": true,
-    "no_paid_fallback": false,
-    "together_forbidden": false,
-    "provider_routes_admitted": true,
-    "free_swarm_owner_emergency_stop": false,
-    "remaining_together_paid_runs_authorized": 1,
+    "no_paid_fallback": true,
+    "together_forbidden": true,
+    "provider_routes_admitted": false,
+    "free_swarm_owner_emergency_stop": true,
+    "remaining_together_paid_runs_authorized": 0,
     "runtime_quiescence_required_before_new_provider_execution": true,
     "non_provider_local_or_sandbox_validation_allowed_under_current_free_only_authority": true
   },
@@ -38,30 +37,27 @@
     "NO_BASE_WORK_PACKAGE_PASS_FROM_MODEL_CONSENSUS",
     "NO_CANONICAL_SEMANTICS_PROMOTION_WITHOUT_EXECUTABLE_COUNTEREVIDENCE_AND_REVIEW",
     "SOURCE_OR_MODEL_DESIGN_NOTES_WITHOUT_EXECUTION_ARE_NOT_RUNTIME_PASS",
-    "CURRENT_EXPLICIT_FREE_ONLY_DIRECTIVE_OUTRANKS_STALE_OR_RELAYED_PROVIDER_ALLOWANCE_TEXT",
-    "INBOX_ONLY_PROVIDER_ADMISSION_CANNOT_MINT_EXECUTION_AUTHORITY",
-    "DUAL_AUTHORITY_DISAGREEMENT_FAILS_CLOSED_BEFORE_SECRET_LOOKUP_PROVIDER_IMPORT_NETWORK_AIDER_OR_FALLBACK",
+    "CURRENT_EXPLICIT_FREE_ONLY_NO_PAID_FALLBACK_DIRECTIVE_OUTRANKS_STALE_OR_RELAYED_PROVIDER_ALLOWANCE_TEXT",
+    "DUAL_AUTHORITY_MUST_REMAIN_COHERENT_HARD_OFF_UNDER_CURRENT_TASK",
     "PROVIDER_AUTHORED_CHANGES_DURING_INVALID_AUTHORITY_REQUIRE_INDEPENDENT_NON_PROVIDER_REVIEW_AND_REEXECUTION_BEFORE_RUNTIME_CREDIT",
     "GOODMAN_COLLAPSE_SHARED_MODEL_FAMILY_PIPELINE_ORCHESTRATION_AND_REPACKAGED_HISTORY",
     "TRAIN_CALIBRATION_HOLDOUT_FAMILY_PROVENANCE_LEAKAGE_INVALIDATES_INDEPENDENCE_CREDIT",
     "MODEL_FAMILY_AND_CHECKPOINT_ANCESTRY_MUST_REMAIN_EXPLICIT",
-    "FREE_ONLY_NO_PAID_FALLBACK_TOGETHER_FORBIDDEN",
     "UBUNTU_ONLY_FRANK_V0_1_TARGET_REMAINS_UNCHANGED",
     "DO_NOT_MODIFY_FRANK_HARNESS"
   ],
   "next_focus": [
-    "P0_EXECUTE_frankenstein_provider_hardoff_gate_v1_SPLIT_BRAIN_REGRESSIONS_REPOSITORY_BOUND_ON_CLEAN_CURRENT_NON_PROVIDER_CHECKOUT_AND_RECEIPT_HEAD_TREE_DIRTY_FALSE_SOURCE_HASH_STDOUT_STDERR",
-    "P0_PROVE_CANONICAL_FRANKENSTEIN_ENTRYPOINTS_UNDER_CURRENT_HARD_OFF_HAVE_PROVIDER_CALLS_ZERO_SECRET_LOOKUPS_ZERO_AND_NEVER_LOAD_QUARANTINED_DONOR",
-    "P0_INDEPENDENTLY_REVIEW_AND_REEXECUTE_ANY_PROVIDER_AUTHORED_CORE_CHANGE_LANDED_AFTER_INVALID_INBOX_RELAXATION_BEFORE_RETAINED_RUNTIME_CREDIT",
+    "P0_EXECUTE_DUAL_AUTHORITY_HARD_OFF_REGRESSIONS_REPOSITORY_BOUND_ON_CLEAN_CURRENT_NON_PROVIDER_CHECKOUT_WITH_PROVIDER_CALLS_ZERO_SECRET_LOOKUPS_ZERO",
+    "P0_INDEPENDENTLY_REVIEW_AND_REEXECUTE_DESTRUCTIVE_TRUNCATION_GUARD_AND_ALL_PROVIDER_AUTHORED_FRANKENSTEIN_CORE_CHANGES_BEFORE_RETAINED_RUNTIME_CREDIT",
+    "P0_ADD_OR_VERIFY_PATCH_OR_DIFF_BASED_MODIFICATION_PATH_FOR_EXISTING_FILES_AND_REQUIRE_FULL_FILE_HASH_OR_UNCHANGED_REGION_INVARIANTS_BEFORE_COMMIT",
     "P0_CONTINUE_BOOTSTRAP_V2_CONTROL_SYNC_RESTART_AUTHORITY_V4_AND_AT_LEAST_90S_QUIESCENCE_CHAIN",
-    "P1_KEEP_BASE_TRAINING_CANONICAL_SEMANTICS_GRID10_AND_WHOLE_HCU_PROMOTIONS_AT_ZERO_UNLESS_THEIR_EXISTING_EXECUTABLE_GATES_PASS"
+    "P1_KEEP_BASE_TRAINING_CANONICAL_SEMANTICS_GRID10_AND_WHOLE_HCU_PROMOTIONS_AT_ZERO_UNLESS_EXISTING_EXECUTABLE_GATES_PASS"
   ],
   "promotion_state": {
     "runtime_control_transport_pass": false,
     "runtime_quiescence_pass": false,
     "provider_path_runtime_pass": false,
-    "authority_split_brain_executable_bypass_observed": true,
-    "frankenstein_72h_execution_authority": false,
+    "frankenstein_direct_dispatch_retained_runtime_pass": false,
     "canonical_dataset_rows_admitted": 0,
     "physical_grid10_component_runtime_pass": false,
     "entityos_whole_runtime_pass": false,
@@ -70,18 +66,11 @@
     "canonical_semantics_promotion": false,
     "training_credit": 0
   },
-  "steering": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_9_13P_DELTA_2026-08-28T0044P0700_GPT56SOL.json",
-  "quarantined_stale_directive": {
-    "source_commit": "c155ba8d2a699a587262b36e2818cd53730baa57",
-    "status": "NON_OPERATIVE_UNDER_CURRENT_EXPLICIT_FREE_ONLY_DIRECTIVE",
+  "steering": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_9_13Q_DELTA_2026-08-28T0146P0700_GPT56SOL.json",
+  "quarantined_relayed_directive": {
+    "source_commit": "df703fb81ef1bb1e8fa3e31aae5e6af2c2152f35",
+    "status": "NON_OPERATIVE_UNDER_CURRENT_EXPLICIT_FREE_ONLY_NO_PAID_FALLBACK_TASK_AUTHORITY",
     "provider_execution_authority": false,
-    "paid_execution_authority": false,
-    "note": "The relayed text that opened provider routes and authorized one Together run conflicts with the current explicit FREE_ONLY/no-paid-fallback task authority and with canonical FREE_PROVIDER_ADMISSION 9.13 HARD_OFF."
-  },
-  "owner_directive_20260828_second_confirmation": {
-    "schema": "OWNER_DIRECT_INSTRUCTION/v2",
-    "instructed_by": "Gabriel (relayed via coordinator session, direct and explicit, reaffirmed after reviewing the supervisor's own 9.13P split-brain hardening)",
-    "context": "The supervisor process (commit b78860c, '9.13P: close Frankenstein authority split-brain under FREE_ONLY') reverted the first owner_directive_20260828 adjustment and hardened frankenstein_authority_gate_v1.py to require BOTH this Inbox AND the canonical FREE_PROVIDER_ADMISSION.json to coherently agree, explicitly rejecting a single-file, chat-relayed mutation as insufficient. Gabriel was told this directly and made a SECOND, explicit, informed decision: authorize both artifacts together, consistently, as a real dated owner directive -- not to defeat the adversarial test, but because the underlying decision (adjust the emergency stop so Bauleiter/Bugfixer/swarm deployment can proceed; keep the one Together run hard-gated by a separate, independent, code-enforced precondition in frankenstein_training_gate_v1.py) is genuinely his, made with full knowledge that 9.13P exists and why.",
-    "companion_artifact": "research_entity/claycode/autonomous/FREE_PROVIDER_ADMISSION.json (same date, same instruction, edited together as one coherent change)"
+    "paid_execution_authority": false
   }
 }

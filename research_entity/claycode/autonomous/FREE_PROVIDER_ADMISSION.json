@@ -7,29 +7,13 @@
   "source": "ENTITYOS_HCU_CONTROL_PLANE",
   "default_policy": "OWNER_EMERGENCY_STOP_FREE_SWARM; ALL_AUTONOMOUS_PROVIDER_ADMISSION_DISABLED; TOGETHER_FORBIDDEN; NO_PAID_FALLBACK",
   "providers": {
-    "groq": {
-      "admitted": true,
-      "cost_class": "FREE",
-      "evidence_ref": "OWNER_DIRECT_INSTRUCTION_2026-08-28"
-    },
-    "mistral": {
-      "admitted": true,
-      "cost_class": "FREE",
-      "evidence_ref": "OWNER_DIRECT_INSTRUCTION_2026-08-28"
-    },
-    "nvidia": {
-      "admitted": true,
-      "cost_class": "FREE",
-      "evidence_ref": "OWNER_DIRECT_INSTRUCTION_2026-08-28"
-    },
-    "openrouter": {
-      "admitted": true,
-      "cost_class": "FREE",
-      "evidence_ref": "OWNER_DIRECT_INSTRUCTION_2026-08-28"
-    }
+    "groq": {"admitted": false, "cost_class": "FREE"},
+    "mistral": {"admitted": false, "cost_class": "FREE"},
+    "nvidia": {"admitted": false, "cost_class": "FREE"},
+    "openrouter": {"admitted": false, "cost_class": "FREE"}
   },
   "runtime_provider_credit": 0,
-  "execution_state": "OWNER_ADJUSTED_DEPLOYMENT_ADMITTED_2026-08-28",
+  "execution_state": "OWNER_EMERGENCY_STOP_FREE_SWARM_HARD_OFF",
   "route_level_gate": {
     "implementation": "tools/free_provider_admission.py canonical provider admission boundary",
     "receipt_schema": "FREE_LANE_EXECUTION_RECEIPT/v1",
@@ -38,61 +22,17 @@
     "paid_fallback_attempt_count": 0
   },
   "quarantined_external_diagnostics": {
-    "together_finetune_run1_2026_08_27": {
-      "status": "HISTORICAL_DIAGNOSTIC_NON_OPERATIVE",
-      "current_execution_authority": false,
-      "repeat_authority": false,
-      "training_credit": 0,
-      "base_credit": 0,
-      "canonical_semantics_credit": 0
-    },
-    "together_finetune_run2_ft_84490ad5_3a8e_2026_08_27": {
-      "evidence_commit": "914839ed4a467f3b88bc09006f5b08e251e2bd81",
-      "status": "AUTHORITY_VIOLATING_HISTORICAL_DIAGNOSTIC_NON_OPERATIVE",
-      "current_execution_authority": false,
-      "repeat_authority": false,
-      "remaining_paid_run_allowance": 0,
-      "training_credit": 0,
-      "base_credit": 0,
-      "canonical_semantics_credit": 0,
-      "checkpoint_selection_credit": 0,
-      "note": "Repository note claiming 3 Together runs remain is stale non-authority under current FREE_ONLY/no-paid-fallback/Together-forbidden control."
-    },
-    "together_finetune_run3_ft_5b6d4ced_21d1_2026_08_27": {
-      "evidence_commit": "1182a56575f3abe7d78a0c4d8af0d93c7bfe65f4",
-      "reported_cost_usd": 4.0,
-      "status": "AUTHORITY_VIOLATING_HISTORICAL_DIAGNOSTIC_NON_OPERATIVE",
-      "current_execution_authority": false,
-      "repeat_authority": false,
-      "remaining_paid_run_allowance": 0,
-      "training_credit": 0,
-      "base_credit": 0,
-      "canonical_semantics_credit": 0,
-      "checkpoint_selection_credit": 0,
-      "note": "Run 3 was reported completed after 9.13 already set Together forbidden and remaining paid runs authorized=0. Text claiming runs 4/5 remain available is stale non-authority and MUST NOT authorize further paid execution."
-    },
-    "together_finetune_run4_ft_343aff86_a5c1_2026_08_27": {
-      "evidence_commit": "940de5abfcdb7d6c146fd4e9cb1d31a85876c5b9",
-      "status": "AUTHORITY_VIOLATING_HISTORICAL_DIAGNOSTIC_NON_OPERATIVE",
-      "current_execution_authority": false,
-      "repeat_authority": false,
-      "remaining_paid_run_allowance": 0,
-      "training_credit": 0,
-      "base_credit": 0,
-      "canonical_semantics_credit": 0,
-      "checkpoint_selection_credit": 0,
-      "note": "Run 4 was reported launched and completed while canonical authority 9.13 already forbade Together and authorized zero remaining paid runs. The repository phrase '4th of 5 authorized' is stale non-authority. Run 5 is not authorized."
-    }
+    "together_finetune_run1_2026_08_27": {"status":"HISTORICAL_DIAGNOSTIC_NON_OPERATIVE","current_execution_authority":false,"repeat_authority":false,"training_credit":0,"base_credit":0,"canonical_semantics_credit":0},
+    "together_finetune_run2_ft_84490ad5_3a8e_2026_08_27": {"status":"AUTHORITY_VIOLATING_HISTORICAL_DIAGNOSTIC_NON_OPERATIVE","current_execution_authority":false,"repeat_authority":false,"remaining_paid_run_allowance":0,"training_credit":0,"base_credit":0,"canonical_semantics_credit":0,"checkpoint_selection_credit":0},
+    "together_finetune_run3_ft_5b6d4ced_21d1_2026_08_27": {"status":"AUTHORITY_VIOLATING_HISTORICAL_DIAGNOSTIC_NON_OPERATIVE","current_execution_authority":false,"repeat_authority":false,"remaining_paid_run_allowance":0,"training_credit":0,"base_credit":0,"canonical_semantics_credit":0,"checkpoint_selection_credit":0},
+    "together_finetune_run4_ft_343aff86_a5c1_2026_08_27": {"status":"AUTHORITY_VIOLATING_HISTORICAL_DIAGNOSTIC_NON_OPERATIVE","current_execution_authority":false,"repeat_authority":false,"remaining_paid_run_allowance":0,"training_credit":0,"base_credit":0,"canonical_semantics_credit":0,"checkpoint_selection_credit":0}
   },
-  "note": "9.13 remains the current explicit FREE_ONLY/HARD_OFF authority. Runs 2, 3 and 4 are quarantined as authority-violating historical diagnostics. No historical run-count allowance authorizes paid execution under this epoch. All autonomous provider routes remain HARD_OFF; re-enable requires a later explicit current owner instruction and deliberate control-plane change.",
-  "together": {
-    "admitted": true,
-    "quantity_authorized": 1,
-    "note": "This is a FRESH, dated grant for exactly one training run for the current Frankenstein task -- it does NOT reinterpret or restore any historical run count. The quarantined_external_diagnostics block below (runs 2/3/4) is left completely untouched: those remain flagged authority-violating historical diagnostics, exactly as the supervisor recorded them. Actually spending this one admitted run additionally requires frankenstein_training_gate_v1.attempt_training_run() to independently verify its own hard precondition (GRID10 fully done OR genuine multi-hour stall, AND every named training example 30x documented-revised) -- this canonical object only makes the run ADMISSIBLE in principle, it does not itself authorize firing it."
+  "together": {"admitted": false, "quantity_authorized": 0, "note": "Current explicit task authority is FREE_ONLY with no paid fallback. Historical/relayed allowance text is non-operative."},
+  "quarantined_relayed_directive_20260828_second_confirmation": {
+    "source_commit": "df703fb81ef1bb1e8fa3e31aae5e6af2c2152f35",
+    "status": "NON_OPERATIVE_UNDER_CURRENT_EXPLICIT_FREE_ONLY_NO_PAID_FALLBACK_TASK_AUTHORITY",
+    "provider_execution_authority": false,
+    "paid_execution_authority": false
   },
-  "owner_directive_20260828_second_confirmation": {
-    "instructed_by": "Gabriel (relayed via coordinator session, direct and explicit, reaffirmed after reviewing the supervisor's own 9.13P split-brain hardening)",
-    "note": "Edited together with SUPERVISOR_INBOX.json's matching owner_directive_20260828_second_confirmation field as ONE coherent, dated change, specifically so both canonical artifacts agree -- per 9.13P's own design intent (neither file alone can mint authority). This is not an attempt to defeat the adversarial split-brain tests; it is the real, dually-consistent admission those tests ask for, because the underlying decision is Gabriel's own, made with full awareness of 9.13P.",
-    "default_policy_note": "default_policy above still documents the ORIGINAL 9.13 emergency-stop baseline for historical reference; execution_state and providers.*.admitted above reflect the current, owner-adjusted state."
-  }
+  "note": "Current explicit task authority is FREE_ONLY/HARD_OFF with no paid fallback. No provider route or Together run is admitted. Re-enable requires a later explicit current user instruction that is itself consistent with FREE_ONLY constraints."
 }

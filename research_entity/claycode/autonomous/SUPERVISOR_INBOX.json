@@ -1,18 +1,18 @@
 {
-  "schema_version": "9.10",
-  "latest_cycle": "monitoring-v6-source-closed-runtime-frontier-still-open",
+  "schema_version": "9.11",
+  "latest_cycle": "provider-control-plane-rebound-monitoring-v6-reader-enforcement-open",
   "needs_review": true,
   "active_program": "ENTITYOS_HCU",
   "product": "EntityOS",
   "integrated_cognition_compute_architecture": "HCU",
-  "material_finding": "Monitoring publication-set coherence is source-closed by update_system_analysis_v6 plus adversarial publication-generation tests. v6 introduces a generation root, manifest digests and one atomic CURRENT pointer, so mixed-generation readers cannot mint authority. Runtime P0 remains open because restart-authority v4 and monitoring v4/v5/v6 still lack one clean repository-bound execution receipt and the retained live publisher is not yet proven to consume v6. No runtime quiescence, Physical GRID10, Whole-HCU, canonical semantics, BASE or training promotion.",
+  "material_finding": "Supervisor 9.10 was fail-closed but not coherently resolvable by the canonical provider-admission boundary: FREE_PROVIDER_ADMISSION remained at 9.09 and the 9.10 steering omitted integrated_cognition_compute_architecture required by tools/free_provider_admission.py. 9.11 restores one explicit current HARD_OFF authority with all providers false. Monitoring v6 source-closes publication-generation switching, but production reader enforcement remains open: repository search found SYSTEM_ANALYSIS_CURRENT.json only in the v6 publisher, its receipt and tests, so authority/runtime-credit consumers are not yet proven to resolve CURRENT and verify manifest/per-file hashes. Runtime P0 remains open; no runtime quiescence, Physical GRID10, Whole-HCU, canonical semantics, BASE or training promotion.",
   "current_frontier": {
     "runtime_quiescence": "P0_OPEN_RESTART_AUTHORITY_V4_REPOSITORY_TEST_AND_LIVE_HOST_ATTRIBUTION_REQUIRED_BEFORE_ANY_KILL",
-    "runtime_provider_authority": "CURRENT_EXPLICIT_HARD_OFF_9_09_ALL_PROVIDERS_FALSE",
-    "current_free_provider_admission": "9.09_ALL_PROVIDERS_FALSE_OWNER_EMERGENCY_STOP",
-    "control_plane_coherence": "9_10_STEERING_REFRESH_PROVIDER_EPOCH_UNCHANGED",
+    "runtime_provider_authority": "CURRENT_EXPLICIT_HARD_OFF_9_11_ALL_PROVIDERS_FALSE",
+    "current_free_provider_admission": "9.11_ALL_PROVIDERS_FALSE_OWNER_EMERGENCY_STOP",
+    "control_plane_coherence": "9_11_REBOUND_STEERING_INBOX_PROVIDER_ADMISSION_ALIGNED_SOURCE_LEVEL_RUNTIME_RESOLUTION_TEST_PENDING",
     "restart_authority_attribution_v4": "SOURCE_CANDIDATE_HARDENED_RUNTIME_UNVERIFIED_REPOSITORY_BOUND_TESTS_REQUIRED",
-    "monitoring_truth": "P0_SOURCE_CANDIDATE_V6_ATOMIC_PUBLICATION_GENERATION_ROOT_RUNTIME_UNVERIFIED_RETAINED_LIVE_PUBLISHER_BINDING_OPEN",
+    "monitoring_truth": "P0_SOURCE_CANDIDATE_V6_ATOMIC_PUBLICATION_GENERATION_ROOT_RUNTIME_UNVERIFIED_PRODUCTION_CURRENT_POINTER_READER_ENFORCEMENT_OPEN",
     "base_claycode_release": "WP01_WP02_PASS_WP03_TO_WP14_OPEN_GENERAL_PURPOSE_AND_RELEASE_GATES_NOT_PASS",
     "go_grid10_coordination_metrics": "SOURCE_MEASUREMENT_COMPONENT_RUNTIME_TRACE_PENDING",
     "go_recursive_physical_scaling_bridge_v2": "SOURCE_EXISTS_RUNTIME_PENDING",
@@ -57,15 +57,18 @@
     "RESTART_AUTHORITY_MUST_BE_UNAMBIGUOUS_ROOT_SPECIFIC_AND_EXACT_COMMAND_PATH_BOUND_BEFORE_ANY_QUIESCENCE_KILL",
     "NO_CROSS_ROOT_OR_SAME_BASENAME_CROSS_PATH_RESTART_AUTHORITY_TRANSPLANT",
     "PUBLICATION_SET_GENERATION_MUST_FAIL_CLOSED_ON_MIXED_AUTHORITY_RUNTIME_PROVENANCE",
+    "AUTHORITY_RUNTIME_CREDIT_CONSUMERS_MUST_RESOLVE_SYSTEM_ANALYSIS_CURRENT_AND_VERIFY_MANIFEST_AND_PER_FILE_HASHES",
     "ORDINARY_XENO_S1_READ_ONLY_COORDINATOR_LEASE_REQUIRED_FOR_S1_WRITE",
     "DO_NOT_MODIFY_FRANK_HARNESS"
   ],
   "next_focus": [
+    "P0_EXECUTE_CANONICAL_PROVIDER_ADMISSION_RESOLVER_AGAINST_9_11_ON_CLEAN_CURRENT_NON_PROVIDER_CHECKOUT_AND_RECEIPT_EXPLICIT_HARD_OFF_ALL_PROVIDERS_FALSE_ZERO_SECRET_LOOKUPS_ZERO_PROVIDER_CALLS",
     "P0_EXECUTE_COMMITTED_RESTART_AUTHORITY_V3_V4_AND_MONITORING_V4_V5_V6_TESTS_ON_ONE_CLEAN_CURRENT_NON_PROVIDER_CHECKOUT_AND_RECEIPT_HEAD_TREE_SOURCE_HASHES_DIRTY_FALSE_STDOUT_STDERR",
+    "P0_IMPLEMENT_PRODUCTION_FAIL_CLOSED_CURRENT_POINTER_READER_VERIFY_MANIFEST_GENERATION_AND_PER_FILE_HASHES_REJECT_PATH_ESCAPE_MISSING_TAMPER_AND_MIGRATE_AUTHORITY_RUNTIME_CREDIT_CONSUMERS_OFF_COMPATIBILITY_MIRRORS",
+    "P0_SWITCH_RETAINED_MONITORING_PUBLISHER_TO_V6_ONLY_AFTER_READER_ENFORCEMENT_AND_PROVE_CURRENT_POINTER_GENERATION_MANIFEST_PER_FILE_HASHES_AND_CONSUMER_READBACK_FROM_ONE_LIVE_PUBLICATION",
     "P0_ONLY_AFTER_REPOSITORY_BOUND_V4_TEST_PASS_RUN_V4_READ_ONLY_ON_LIVE_CLAY_HOST_FAIL_CLOSED_ON_ANY_ROOT_CGROUP_OWNER_OBJECT_COMMAND_PATH_AMBIGUITY",
-    "P0_SWITCH_RETAINED_MONITORING_PUBLISHER_TO_V6_AND_PROVE_CURRENT_POINTER_GENERATION_MANIFEST_AND_PER_FILE_HASHES_FROM_ONE_LIVE_PUBLICATION",
     "P0_ONLY_AFTER_LIVE_ATTRIBUTION_REVALIDATE_PID_CGROUP_OWNER_OBJECT_COMMAND_PATH_IMMEDIATELY_BEFORE_DISABLING_EXACT_RESTART_AUTHORITY_AND_TERMINATE_ONLY_BOUND_CLAY_DESCENDANTS",
-    "P0_REQUIRE_AT_LEAST_90_SECONDS_ZERO_SURVIVORS_DESCENDANTS_RESTARTS_THEN_RUN_DIRECT_AND_GUARDED_PROVIDER_GATES_WITH_ZERO_PROVIDER_CALLS_ZERO_SECRET_LOOKUPS",
+    "P0_REQUIRE_AT_LEAST_90_SECONDS_ZERO_SURVIVORS_DESCENDANTS_RESTARTS_BEFORE_ANY_NEW_PROVIDER_CAPABLE_RUNTIME_PATH",
     "P1_KEEP_B3_CLOSED_UNLESS_NEW_EXECUTABLE_COUNTEREVIDENCE_APPEARS",
     "P1_ADD_AND_EXECUTE_B2_NUISANCE_ONLY_AND_CONDITIONED_LEAKAGE_REGRESSION_FOR_EXPLICIT_1_OF_6_VS_5_OF_6_EXHAUSTIVE_PERMUTATION_DESIGN_BEFORE_ADMISSION",
     "P1_BIND_EXACT_RETAINED_QWEN35_08B_CHECKPOINT_REVISION_TOKENIZER_CONFIG_VOCAB_SPECIAL_TOKENS_RENDERER_ATOMS_INDEX_AND_MODEL_CHECKPOINT_ANCESTRY_HASHES",
@@ -77,6 +80,7 @@
     "runtime_quiescence_pass": false,
     "monitoring_truth_source_credit": "CANDIDATE_V6",
     "monitoring_truth_runtime_credit": 0,
+    "monitoring_production_reader_enforced": false,
     "restart_authority_attribution_v4_source_credit": true,
     "restart_authority_attribution_v4_repository_test_credit": 0,
     "restart_authority_attribution_v4_live_host_credit": 0,
@@ -94,5 +98,5 @@
     "canonical_semantics_promotion": false,
     "training_credit": 0
   },
-  "steering": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_9_10_DELTA_2026-08-27T0745P0700_GPT56SOL.json"
+  "steering": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_9_11_DELTA_2026-08-27T0750P0700_GPT56SOL.json"
 }

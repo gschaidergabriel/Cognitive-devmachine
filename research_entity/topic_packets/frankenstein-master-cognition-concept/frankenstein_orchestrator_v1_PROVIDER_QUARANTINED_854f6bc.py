@@ -56,6 +56,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from grid10_fabric import Fabric, FabricError, result_packet, summary_packet  # noqa: E402
 import frankenstein_packages_v1 as packages  # noqa: E402
+import frankenstein_training_gate_v1 as training_gate  # noqa: E402
 import llm as pool_llm  # noqa: E402
 
 import requests  # noqa: E402
@@ -292,11 +293,38 @@ def run_bauleiter_instance(continuation_context: str | None, fabric_path: str,
     start = time.time()
 
     training_marker = sandbox_dir / "TRAINING_RUN_READY_FOR_LAUNCH.json"
+    revision_db_path = sandbox_dir / "training_data_revisions.sqlite3"
+    example_ids_path = sandbox_dir / "TRAINING_EXAMPLE_IDS.json"
 
     packages.seed_all_packages(fabric, log_fn=lambda m: _log(log_path, m))
 
+    def _attempt_training_gate() -> None:
+        """Gabriel's 2026-08-28 hard precondition (frankenstein_training_gate_v1.py):
+        best-effort, non-blocking check every activation -- writing the marker
+        is the ONLY thing this can do, gated by real, code-enforced conditions
+        (GRID10 fully done OR genuine multi-hour stall, AND every named example
+        30x documented-revised). example_ids_path starts absent/empty by
+        construction (no fabricated examples), so the gate stays honestly
+        closed until real curation work populates it."""
+        if training_marker.exists() or not example_ids_path.is_file():
+            return
+        try:
+            example_ids = json.loads(example_ids_path.read_text())
+        except (OSError, json.JSONDecodeError):
+            return
+        try:
+            training_gate.attempt_training_run(fabric, revision_db_path, example_ids, training_marker,
+                                                log_fn=lambda m: _log(log_path, m))
+        except training_gate.TrainingRunBlocked as e:
+            _log(log_path, f"TRAINING_GATE_STILL_BLOCKED {e}")
+
     try:
         while real_actions_taken < max_actions and (time.time() - start) < max_seconds:
+            if training_marker.exists():
+                ended_reason = "training_marker_present"
+                break
+
+            _attempt_training_gate()
             if training_marker.exists():
                 ended_reason = "training_marker_present"
                 break

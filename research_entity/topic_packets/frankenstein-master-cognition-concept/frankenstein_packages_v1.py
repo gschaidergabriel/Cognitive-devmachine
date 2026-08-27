@@ -627,6 +627,16 @@ def mark_package_done(fabric: Fabric, package_id: str, ok: bool, node_id: str, l
     _with_retry(_write, max_retries=MAX_MARK_DONE_RETRIES,
                 retry_on=("REGULATOR_CAS_FAILED",), log_fn=log_fn)
 
+    if ok:
+        # Real progress signal for frankenstein_training_gate_v1's stall
+        # detection -- lazy import to avoid a circular import (the training
+        # gate module imports this module for grid10_fully_capable()).
+        try:
+            import frankenstein_training_gate_v1 as training_gate
+            training_gate.bump_progress_marker(fabric, node_id)
+        except Exception:  # noqa: BLE001 - this signal must never block real completion bookkeeping
+            pass
+
     try:
         fabric.runtime_join(node_id, "frankenstein-package-dispenser", 0)
         elected = fabric.elect_coordinator(PACKAGES_SCOPE, candidate_node_ids=[node_id])

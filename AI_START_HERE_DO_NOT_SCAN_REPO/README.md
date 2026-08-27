@@ -2,6 +2,11 @@
 
 Small steps. No guessing.
 
+Machine-readable contract: `AI_START_HERE_DO_NOT_SCAN_REPO/INSTALL_CONTRACT.json`.  
+Read-only discovery helper: `AI_START_HERE_DO_NOT_SCAN_REPO/detect_install_mode.sh`.
+
+The helper is **discovery only**. It deliberately leaves lifecycle hook, durable state and effect receipt `UNVERIFIED`; it cannot mint an installation PASS by itself.
+
 ## 1. Find the repo you actually have
 
 Do **not** assume Downloads. Do **not** assume home. Do **not** assume current directory.
@@ -27,6 +32,7 @@ If it prints nothing: you do not have a verified checkout yet. Use your host's r
 From the verified repo root:
 
 ```text
+AI_START_HERE_DO_NOT_SCAN_REPO/INSTALL_CONTRACT.json
 CLAY_EXECUTION_AUTHORITY.md
 research_entity/claycode/autonomous/SUPERVISOR_INBOX.json
 research_entity/continuity/BOOTSTRAP_MINIMAL.json
@@ -62,10 +68,19 @@ That is correct behavior, not installation failure.
 
 Check capabilities. Do not infer them from product name.
 
+If a shell is available, the bounded helper can collect only local discovery facts:
+
+```bash
+bash "$REPO/AI_START_HERE_DO_NOT_SCAN_REPO/detect_install_mode.sh" "$REPO"
+```
+
+It performs no provider test, network test or secret lookup and does not itself classify the installation.
+
+Required capability questions:
+
 ```text
 filesystem read?       yes/no
 filesystem write?      yes/no
-shell?                  yes/no
 git read?               yes/no
 git write?              yes/no
 python?                 yes/no
@@ -85,7 +100,7 @@ Every installation/integration route ends with exactly one of these meanings:
 - `DEGRADED` — useful subset works; missing capabilities are named.
 - `BLOCKED` — required capability/authority is absent or explicitly denied.
 
-Never write `NATIVE` because a config file exists. Verify real firing/state/effect receipts.
+Never write `NATIVE` because a config file exists, a model says so, or a boolean flag says a hook was observed. Verify real firing/state/effect receipts produced or independently verified by the claimed mechanism.
 
 ## 6. Claude Code route
 
@@ -186,7 +201,7 @@ D. Does current authority admit the requested action?
    no  -> BLOCKED for that action
    yes -> execute the smallest exact test
 
-E. Did a real hook/state/effect receipt appear?
+E. Did a real hook/state/effect receipt appear from or get independently verified against the claimed mechanism?
    no  -> do not claim native lifecycle integration
    yes -> NATIVE or ADAPTED, depending on mechanism
 ```
@@ -220,7 +235,7 @@ For any future host integration claiming “automatic start”, “hook”, “m
 6. for effects, verify actual result/outcome re-entry;
 7. delete disposable test state if appropriate.
 
-No receipt = no lifecycle credit.
+A manually asserted boolean or model claim is not a receipt. No mechanism-produced or independently verified receipt = no native lifecycle credit.
 
 ## 15. Do not scan the whole repository unless the task requires it
 

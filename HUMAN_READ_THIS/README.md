@@ -83,28 +83,43 @@ The research archive includes LoRA/IAPT/SOMA work, before/after probes, feedback
 
 At the current authority frontier, whole-product, full-HCU, J-Space-model, and training credit remain unpromoted.
 
-## The current system identity
+## The current system identity and finished-runtime target
 
-The persistent research entity is **Clay**. The current product/system is **EntityOS**. The integrated cognition/compute architecture is **HCU**. Frankenstein, Frank, Xeno, and other names survive where they are useful as historical or compatibility lineage, not as competing truth authorities.
+The persistent research entity is **Clay**. The current product/system is **EntityOS**. Current program surfaces use **HCU** as the integrated cognition/compute architecture label.
+
+The newest explicit owner correction is more specific about what the finished runtime should actually look like:
+
+> **VARIABLE COGNITIVE GRID + PERSISTENT DATABASE + CLAUDE CODE**
+
+This matters. **GRID10 is a benchmark/configuration, not the final architecture identity.** The useful module count `N` is a runtime parameter. The small-model grid is meant to distribute/simulate cognitive processes that historically lived across Zero/EntityOS machinery; durable exact data belongs in the persistent database; Claude Code remains the strong model/tool/code partner rather than being replaced by 0.8B modules.
+
+The concise owner rule is:
+
+> **SIMULATE COGNITION; STORE DURABLE DATA.**
 
 ```mermaid
 flowchart TD
-    I[Typed Entry<br/>new evidence enters with identity + provenance] --> C[Deterministic control]
-    C --> H[HCU<br/>shared-weight / vector / inference / J-Space candidate computation]
-    H --> W[Workspace / Hyperposition<br/>alternatives may remain unresolved]
-    W --> A[ActionCandidate]
-    A --> G[EffectGate + EffectJournal]
-    G --> O[Observed outcome]
-    O --> I
-    U[UnifiedDB<br/>canonical durable state/evidence] <--> C
+    I[Typed input / perception<br/>identity + provenance] --> G[Variable cognitive grid N<br/>distributed cognitive processes]
+    U[Persistent database<br/>canonical durable state/evidence] <--> G
+    G <--> W[Global workspace / J-Space bridge<br/>only as deep as evidence permits]
+    W <--> C[Claude Code<br/>strong model/tool/code partner]
+    G --> A[ActionCandidate]
+    A --> E[Deterministic effect authority]
+    E --> T[Tools / environment]
+    T --> O[Observed outcome / receipt]
+    O --> U
+    O --> G
 ```
 
-The model plane can propose, simulate, rank, or measure. It does not mint canonical truth.
+The model/grid plane can propose, simulate, rank, compress, broadcast, or measure. It does not mint canonical truth. Global J-Space is an empirical interface hypothesis; no hidden-state access to Claude Code may be claimed unless the exposed interface and causal evidence actually support it.
+
+Frankenstein, Frank, Xeno, GRID10, and other names survive where useful as historical, compatibility, or benchmark lineage — not as competing product/state authorities.
 
 ## Where to go next
 
 - Technical/research readers: [`../DEV_SOURCE_RESEARCH/README.md`](../DEV_SOURCE_RESEARCH/README.md)
 - AI/tool installer entry: [`../AI_START_HERE_DO_NOT_SCAN_REPO/README.md`](../AI_START_HERE_DO_NOT_SCAN_REPO/README.md)
+- Current owner target: [`../research_entity/global/OWNER_CORRECTION_ZERO_ENTITYOS_COGNITIVE_GRID_DB_CLAUDECODE_GLOBAL_JSPACE_2026-08-25.md`](../research_entity/global/OWNER_CORRECTION_ZERO_ENTITYOS_COGNITIVE_GRID_DB_CLAUDECODE_GLOBAL_JSPACE_2026-08-25.md)
 - Current Frankenstein concept packet: [`../research_entity/topic_packets/frankenstein-master-cognition-concept/`](../research_entity/topic_packets/frankenstein-master-cognition-concept/)
 - Historical archaeology manifest: [`../research_entity/archive_assimilation/manifests/PROJECT_FRANKENSTEIN_MANIFEST.json`](../research_entity/archive_assimilation/manifests/PROJECT_FRANKENSTEIN_MANIFEST.json)
 

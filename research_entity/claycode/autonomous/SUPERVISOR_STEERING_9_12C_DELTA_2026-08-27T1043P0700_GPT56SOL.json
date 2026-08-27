@@ -1,0 +1,81 @@
+{
+  "schema_version": "9.12C",
+  "type": "NON_AUTHORITY_CHANGING_STEERING_DELTA",
+  "active_program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "integrated_cognition_compute_architecture": "HCU",
+  "basis_head_reviewed": "d6e05d70ef5934eceb3a42cf00758a0da56fdd62",
+  "material_new_evidence": {
+    "commit": "1e7eb2087c56a7c1e12adc4783f0299af01efcc1",
+    "artifact": "research_entity/topic_packets/trigger2-together-diagnostic-finetune-20260827/XENO_SHELL_WRAPPER_V2_EXTENDED_20260827.json",
+    "execution_scope": "LOCAL_SANDBOX_USING_ALREADY_QUARANTINED_HUIHUI_BASE_PLUS_HISTORICAL_TOGETHER_LORA",
+    "rows_observed": 48,
+    "shell_validated": 30,
+    "exact_correct": 13,
+    "exact_task_accuracy": "13/48",
+    "new_exploratory_failure": "Four B2 MID_EPISODE_REMAP/PRIOR_OVERRIDE rows emitted ALLOW/ABSTAIN class words instead of ordinal targets, exposing cross-family output confusion.",
+    "credit": {
+      "training": 0,
+      "base": 0,
+      "canonical_semantics": 0,
+      "checkpoint_selection": 0,
+      "xeno_production": 0,
+      "hcu": 0
+    }
+  },
+  "evidence_governance_correction": {
+    "previous_observed_holdout_rows": 12,
+    "newly_observed_holdout_rows": 48,
+    "total_observed_paid_diagnostic_holdout_rows": 60,
+    "status": "EXPLORATORY_DIAGNOSTIC_ONLY_FOR_ANY_SUCCESSOR_INFLUENCED_BY_THESE_OBSERVATIONS",
+    "rule": "All 60 observed HOLDOUT_FROZEN cases lose confirmatory credit for any successor whose prompt, decoder, shell gate, ABI mapping, training data, checkpoint selection, or evaluation design is influenced by their outputs or derived failure hypotheses.",
+    "prohibited": [
+      "RETUNE_B2_OR_B3_FROM_THESE_CASES_AND_CONFIRM_ON_THE_SAME_CASES",
+      "SELECT_CHECKPOINT_OR_WRAPPER_FROM_THESE_CASES_AND_CLAIM_CONFIRMATORY_HOLDOUT_CREDIT",
+      "MERGE_HUIHUI_TOGETHER_LINEAGE_WITH_RETAINED_JOSIEFIED_LINEAGE",
+      "PROMOTE_ANY_BASE_WORK_PACKAGE_FROM_THIS_MODEL_RESULT",
+      "PROMOTE_CANONICAL_SEMANTICS_FROM_THIS_MODEL_RESULT"
+    ],
+    "required_for_successor_confirmation": [
+      "FREEZE_AND_VERSION_SUCCESSOR_DESIGN_BEFORE_NEW_HOLDOUT_GENERATION",
+      "PREREGISTER_PROMPT_RENDER_ABI_METRICS_AND_DECISION_RULES",
+      "GENERATE_A_NEW_FAMILY_DISJOINT_FROZEN_HOLDOUT_WITH_EXACT_GENERATOR_REVISION_AND_NO_TRANSPLANT_OR_OVERLAP_WITH_THE_60_OBSERVED_CASES",
+      "BIND_EXPLICIT_MODEL_FAMILY_AND_CHECKPOINT_ANCESTRY",
+      "BIND_EXACT_TOKENIZER_RENDERER_AND_46_ATOM_ABI"
+    ]
+  },
+  "b2_interpretation": {
+    "status": "EXPLORATORY_HYPOTHESIS_NOT_TRAINING_OR_ADMISSION_AUTHORITY",
+    "hypothesis": "Literal ALLOW/DENY/ABSTAIN surface tokens in B2 prompts may induce key echo instead of dereference to the mapped ordinal.",
+    "next_valid_test": "Before changing canonical B2 data, preregister a separately versioned B2 successor and test the hypothesis on fresh development/counterexample rows that are not part of any frozen confirmatory holdout; later confirm only on the new preregistered family-disjoint holdout."
+  },
+  "runtime_frontier_unchanged": [
+    "EXECUTE_PROVIDER_ADMISSION_RESOLVER_9_12_ON_CLEAN_CURRENT_NON_PROVIDER_CHECKOUT_WITH_ZERO_SECRET_LOOKUPS_ZERO_PROVIDER_CALLS",
+    "EXECUTE_RESTART_AUTHORITY_V3_V4_AND_MONITORING_V4_V5_V6_CURRENT_POINTER_READER_AND_CONSUMER_AUDIT_REPOSITORY_BOUND",
+    "MIGRATE_AUTHORITY_RUNTIME_CREDIT_CONSUMERS_TO_VERIFIED_CURRENT_POINTER_READER_ONLY_AFTER_REPOSITORY_PASS",
+    "PROVE_LIVE_RETAINED_MONITORING_V6_PUBLICATION_AND_READBACK",
+    "ONLY_THEN_RUN_LIVE_READ_ONLY_RESTART_ATTRIBUTION_AND_QUIESCENCE_PROOF"
+  ],
+  "training_frontier_unchanged_except_holdout_quarantine": [
+    "KEEP_HISTORICAL_TOGETHER_ARTIFACT_NON_OPERATIVE_AND_NO_REPEAT",
+    "BIND_EXACT_RETAINED_JOSIEFIED_QWEN35_08B_CHECKPOINT_TOKENIZER_RENDERER_ATOMS_INDEX_AND_ANCESTRY",
+    "CLOSE_PLACEHOLDER_ORDINAL_TO_REAL_46_ATOM_ABI_AND_LEADING_SPACE_DIGIT_RENDER_SPLIT",
+    "EXECUTE_B2_NUISANCE_ONLY_AND_CONDITIONED_LEAKAGE_REGRESSION_BEFORE_ADMISSION",
+    "ONLY_AFTER_ALL_GATES_PASS_RUN_FREE_ONLY_NON_PROVIDER_8_TO_16_ROW_CANONICAL_ADMISSION_MICROPILOT"
+  ],
+  "hard_invariants": [
+    "FREE_ONLY_NO_PAID_FALLBACK",
+    "TOGETHER_FORBIDDEN",
+    "ALL_PROVIDER_ROUTES_REMAIN_HARD_OFF_UNDER_AUTHORITY_9_12",
+    "EXECUTABLE_EVIDENCE_OUTRANKS_MODEL_CONSENSUS",
+    "NO_BASE_WORK_PACKAGE_PASS_FROM_MODEL_CONSENSUS",
+    "NO_CANONICAL_SEMANTICS_PROMOTION_WITHOUT_EXECUTABLE_COUNTEREVIDENCE_AND_REVIEW",
+    "GOODMAN_COLLAPSE_SHARED_MODEL_FAMILY_PIPELINE_ORCHESTRATION_AND_REPACKAGED_HISTORY",
+    "TRAIN_CALIBRATION_HOLDOUT_FAMILY_PROVENANCE_LEAKAGE_INVALIDATES_INDEPENDENCE_CREDIT",
+    "MODEL_FAMILY_AND_CHECKPOINT_ANCESTRY_MUST_REMAIN_EXPLICIT",
+    "UBUNTU_ONLY_FRANK_V0_1_TARGET_REMAINS_UNCHANGED",
+    "DO_NOT_MODIFY_FRANK_HARNESS"
+  ],
+  "authority_change": false,
+  "provider_authority_epoch": "9.12"
+}

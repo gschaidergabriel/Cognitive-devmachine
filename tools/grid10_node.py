@@ -27,7 +27,6 @@ from grid10_fabric import Fabric, FabricError, result_packet, summary_packet, dg
 MODEL = None
 TOK = None
 
-
 def load_model_once(model_path: str):
     global MODEL, TOK
     import torch
@@ -37,7 +36,6 @@ def load_model_once(model_path: str):
     TOK = AutoTokenizer.from_pretrained(model_path)
     MODEL = AutoModelForCausalLM.from_pretrained(model_path, dtype=torch.bfloat16, low_cpu_mem_usage=True)
     MODEL.eval()
-
 
 def cognitive_answer(prompt: str, max_new_tokens: int = 6, *, temperature: float | None = None, top_p: float | None = None) -> str:
     """Real model call. Default behavior UNCHANGED from before (greedy, do_sample=False,
@@ -65,6 +63,39 @@ def cognitive_answer(prompt: str, max_new_tokens: int = 6, *, temperature: float
         out = MODEL.generate(**inputs, **gen_kwargs)
     return TOK.decode(out[0][inputs["input_ids"].shape[1]:], skip_special_tokens=True).strip()
 
+def release_idle_memory() -> dict:
+    """Real RAM-reduction mechanism (2026-08-27, GRID10 RAM-efficiency concept):
+    measured that a process's Private_Dirty memory (~379MB per node, PyTorch's CPU
+    caching allocator holding freed activation/KV-cache buffers) stays fully
+    allocated during real idle time between generate() calls -- it is never
+    released back to the OS on its own. This explicitly triggers a release: garbage
+    collect any dead Python objects, then call glibc's malloc_trim(0) via ctypes to
+    hand unused heap pages back to the OS. Cheap (microseconds) to call -- the real
+    cost is the page-fault on the NEXT touch, which this function does not measure
+    (that happens naturally on the next real generate() call by the caller).
+    Returns a small dict for logging: whether malloc_trim ran and via which path."""
+    import ctypes
+    import gc
+
+    gc.collect()
+    result = {"gc_collected": True, "malloc_trim_called": False, "malloc_trim_method": None}
+    try:
+        import torch
+        if hasattr(torch._C, "_malloc_trim"):
+            torch._C._malloc_trim()
+            result["malloc_trim_called"] = True
+            result["malloc_trim_method"] = "torch._C._malloc_trim"
+            return result
+    except Exception:
+        pass
+    try:
+        libc = ctypes.CDLL("libc.so.6")
+        libc.malloc_trim(0)
+        result["malloc_trim_called"] = True
+        result["malloc_trim_method"] = "ctypes_libc"
+    except Exception as exc:
+        result["malloc_trim_error"] = repr(exc)
+    return result
 
 def meta_regulator_tick(node_id: str, f: "Fabric", *, human_pin_cooldown_s: float = 3.0) -> dict | None:
     """Real, simple homeostatic controller (2026-08-27, GRID10 cybernetic-cognition
@@ -128,7 +159,6 @@ def meta_regulator_tick(node_id: str, f: "Fabric", *, human_pin_cooldown_s: floa
         return f.set_regulator("temperature", new_temp, writer=node_id, expected_version=current["version"])
     except FabricError:
         return None  # lost the CAS race to a concurrent writer -- fine, try again next tick
-
 
 def node_loop(
     node_id: str,
@@ -202,6 +232,9 @@ def node_loop(
                 if new_poll_sleep != current_poll_sleep:
                     events.append({"event": "ELASTIC_POLL_RATE_CHANGED", "node_id": node_id, "old_poll_sleep": current_poll_sleep, "new_poll_sleep": new_poll_sleep, "intensity": intensity_reg["value_real"], "ts": time.time()})
                 current_poll_sleep = new_poll_sleep
+                if intensity_reg["value_real"] < 1.0:
+                    release_result = release_idle_memory()
+                    events.append({"event": "IDLE_MEMORY_RELEASED", "node_id": node_id, "release_result": release_result, "ts": time.time()})
 
             snap = f.snapshot()
 

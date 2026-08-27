@@ -7,7 +7,6 @@ from pathlib import Path
 
 import pytest
 
-
 REPO_ROOT = Path(__file__).resolve().parents[1]
 GUARD_PATH = (
     REPO_ROOT
@@ -40,18 +39,18 @@ def _track(repo: Path, rel: str, content: str) -> str:
     return guard.sha256_file(p)
 
 
+def _head(repo: Path) -> str:
+    return subprocess.run(
+        ["git", "rev-parse", "HEAD"], cwd=repo, check=True, capture_output=True, text=True
+    ).stdout.strip()
+
+
 def _patch(rel: str, old: str, new: str) -> str:
     import difflib
-
-    body = "".join(
-        difflib.unified_diff(
-            old.splitlines(True),
-            new.splitlines(True),
-            fromfile=f"a/{rel}",
-            tofile=f"b/{rel}",
-            n=3,
-        )
-    )
+    body = "".join(difflib.unified_diff(
+        old.splitlines(True), new.splitlines(True),
+        fromfile=f"a/{rel}", tofile=f"b/{rel}", n=3,
+    ))
     return f"diff --git a/{rel} b/{rel}\n" + body
 
 
@@ -61,9 +60,9 @@ def test_small_exact_base_patch_applies_and_receipts_hashes(tmp_path):
     new = "def f():\n    return 2\n\ndef g():\n    return 3\n"
     base = _track(repo, "tools/x.py", old)
     receipt = guard.apply_guarded_patch(
-        repo,
-        _patch("tools/x.py", old, new),
+        repo, _patch("tools/x.py", old, new),
         expected_base_sha256={"tools/x.py": base},
+        expected_head_sha=_head(repo),
         allowed_paths=["tools/x.py"],
     )
     assert (repo / "tools/x.py").read_text() == new
@@ -79,9 +78,25 @@ def test_stale_base_hash_fails_before_mutation(tmp_path):
     _track(repo, "x.py", old)
     with pytest.raises(guard.EditGuardError, match="stale base hash"):
         guard.apply_guarded_patch(
+            repo, _patch("x.py", old, new),
+            expected_base_sha256={"x.py": "0" * 64},
+            expected_head_sha=_head(repo),
+            allowed_paths=["x.py"],
+        )
+    assert (repo / "x.py").read_text() == old
+
+
+def test_stale_repository_head_fails_before_mutation(tmp_path):
+    repo = _repo(tmp_path)
+    old = "x = 1\n"
+    new = "x = 2\n"
+    base = _track(repo, "x.py", old)
+    with pytest.raises(guard.EditGuardError, match="stale repository HEAD"):
+        guard.apply_guarded_patch(
             repo,
             _patch("x.py", old, new),
-            expected_base_sha256={"x.py": "0" * 64},
+            expected_base_sha256={"x.py": base},
+            expected_head_sha="0" * 40,
             allowed_paths=["x.py"],
         )
     assert (repo / "x.py").read_text() == old
@@ -94,9 +109,9 @@ def test_unallowed_file_fails_closed(tmp_path):
     base = _track(repo, "x.py", old)
     with pytest.raises(guard.EditGuardError, match="outside allowlist"):
         guard.apply_guarded_patch(
-            repo,
-            _patch("x.py", old, new),
+            repo, _patch("x.py", old, new),
             expected_base_sha256={"x.py": base},
+            expected_head_sha=_head(repo),
             allowed_paths=["other.py"],
         )
     assert (repo / "x.py").read_text() == old
@@ -106,6 +121,7 @@ def test_traversal_patch_rejected(tmp_path):
     repo = _repo(tmp_path)
     outside = tmp_path / "outside.py"
     outside.write_text("secret = 1\n")
+    _track(repo, "seed.txt", "seed\n")
     patch = (
         "diff --git a/../outside.py b/../outside.py\n"
         "--- a/../outside.py\n+++ b/../outside.py\n"
@@ -113,9 +129,9 @@ def test_traversal_patch_rejected(tmp_path):
     )
     with pytest.raises(guard.EditGuardError, match="unsafe path"):
         guard.apply_guarded_patch(
-            repo,
-            patch,
+            repo, patch,
             expected_base_sha256={"outside.py": "0" * 64},
+            expected_head_sha=_head(repo),
             allowed_paths=["outside.py"],
         )
     assert outside.read_text() == "secret = 1\n"
@@ -125,6 +141,7 @@ def test_symlink_edit_rejected_before_read_or_write(tmp_path):
     repo = _repo(tmp_path)
     outside = tmp_path / "outside.py"
     outside.write_text("secret = 1\n")
+    _track(repo, "seed.txt", "seed\n")
     (repo / "link.py").symlink_to(outside)
     patch = (
         "diff --git a/link.py b/link.py\n--- a/link.py\n+++ b/link.py\n"
@@ -132,24 +149,24 @@ def test_symlink_edit_rejected_before_read_or_write(tmp_path):
     )
     with pytest.raises(guard.EditGuardError, match="symlink edits are forbidden"):
         guard.apply_guarded_patch(
-            repo,
-            patch,
+            repo, patch,
             expected_base_sha256={"link.py": guard.sha256_file(outside)},
+            expected_head_sha=_head(repo),
             allowed_paths=["link.py"],
         )
     assert outside.read_text() == "secret = 1\n"
 
 
-def test_large_semantic_replacement_same_size_is_rejected_by_deletion_budget(tmp_path):
+def test_large_semantic_replacement_same_size_is_rejected_by_deletion_fraction(tmp_path):
     repo = _repo(tmp_path)
     old = "".join(f"old_{i} = {i}\n" for i in range(100))
     new = "".join(f"new_{i} = {i}\n" for i in range(100))
     base = _track(repo, "big.py", old)
     with pytest.raises(guard.EditGuardError, match="too many deleted lines|deletion fraction too large"):
         guard.apply_guarded_patch(
-            repo,
-            _patch("big.py", old, new),
+            repo, _patch("big.py", old, new),
             expected_base_sha256={"big.py": base},
+            expected_head_sha=_head(repo),
             allowed_paths=["big.py"],
         )
     assert (repo / "big.py").read_text() == old
@@ -166,9 +183,9 @@ def test_rename_mode_and_new_file_operations_rejected(tmp_path):
     for patch in patches:
         with pytest.raises(guard.EditGuardError):
             guard.apply_guarded_patch(
-                repo,
-                patch,
+                repo, patch,
                 expected_base_sha256={"x.py": base},
+                expected_head_sha=_head(repo),
                 allowed_paths=["x.py"],
             )
 
@@ -181,9 +198,9 @@ def test_verification_failure_restores_exact_bytes_and_unrelated_dirty_file(tmp_
     (repo / "unrelated.txt").write_text("dirty and must remain\n")
     with pytest.raises(guard.EditGuardError, match="verification failed"):
         guard.apply_and_verify_guarded_patch(
-            repo,
-            _patch("x.py", old, new),
+            repo, _patch("x.py", old, new),
             expected_base_sha256={"x.py": base},
+            expected_head_sha=_head(repo),
             allowed_paths=["x.py"],
             verification_argv=[sys.executable, "-c", "raise SystemExit(7)"],
         )
@@ -198,15 +215,11 @@ def test_verification_success_keeps_patch_and_uses_argv_not_shell(tmp_path):
     new = "x = 2\n"
     base = _track(repo, "x.py", old)
     receipt = guard.apply_and_verify_guarded_patch(
-        repo,
-        _patch("x.py", old, new),
+        repo, _patch("x.py", old, new),
         expected_base_sha256={"x.py": base},
+        expected_head_sha=_head(repo),
         allowed_paths=["x.py"],
-        verification_argv=[
-            sys.executable,
-            "-c",
-            "from pathlib import Path; assert Path('x.py').read_text() == 'x = 2\\n'",
-        ],
+        verification_argv=[sys.executable, "-c", "from pathlib import Path; assert Path('x.py').read_text() == 'x = 2\\n'"],
     )
     assert receipt["status"] == "APPLIED_AND_VERIFIED"
     assert receipt["verification"]["returncode"] == 0

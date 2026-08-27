@@ -1,0 +1,28 @@
+{
+  "schema": "TRIGGERWORD3_EDIT_INTEGRITY_HARDENING/v1",
+  "trigger": "triggerwort 3",
+  "branch": "trigger3-edit-integrity-gpt56sol-20260828",
+  "finding": "Independent source review found that checking only a final Path.is_symlink() would not reject a symlink ancestor that resolves a lexically repo-relative path outside the Git worktree.",
+  "fix": "Reject every symlink path component and require strict resolved regular-file identity below the exact Git worktree root before preimage read and after patch apply.",
+  "final_source": {
+    "path": "tools/frankenstein_edit_integrity_gate_v1.py",
+    "git_blob_sha1": "ec75084df34256f2a8c9a5954956c353be5a7477",
+    "sha256": "9111d44a7d4019202b0086740681c22f354c6654704964d558573a4063208455"
+  },
+  "final_tests": {
+    "path": "tests/test_frankenstein_edit_integrity_gate_v1.py",
+    "git_blob_sha1": "b61ce0360761f69fe253afe79354f59ed30d6f58",
+    "sha256": "d49fd6d0a4961a8b6aac7025362d3f2f79ed4ea5b0c85fd70d224af688900456",
+    "isolated_local_result": "11/11 PASS",
+    "includes_symlink_parent_escape_regression": true,
+    "includes_672_line_preservation_regression": true
+  },
+  "evidence_scope": "EXISTING_FILE_PATCH_INTEGRITY_COMPONENT_ONLY",
+  "provider_calls": 0,
+  "secret_lookups": 0,
+  "network_model_calls": 0,
+  "paid_execution": 0,
+  "runtime_credit": 0,
+  "note": "The earlier 10/10 receipt remains historical evidence for the pre-hardening branch state. This receipt is the current source/test identity for PR 2104.",
+  "next_exact_gate": "Clean exact-head non-provider repository execution, then explicit integration into existing-file direct-dispatch without weakening the patch/preimage invariants."
+}

@@ -8,9 +8,9 @@ provider import, key lookup, network call, Aider dispatch, or fallback dispatch.
 A second, source-identity gate is intentionally independent of provider authority:
 even if a later authority re-opens provider routes, the quarantined donor remains
 blocked until its existing-file mutation path has been integrated with the
-current preimage/patch guards, independently reviewed, and bound here by exact
-SHA-256 identities. Authority admission alone must never resurrect the unsafe
-whole-file rewrite lineage exposed by the 2026-08-28 destructive counterexample.
+current preimage-bound edit contract, independently reviewed, and bound here by
+exact SHA-256 identities. Authority admission alone must never resurrect the
+unsafe whole-file rewrite lineage exposed by the 2026-08-28 counterexample.
 """
 from __future__ import annotations
 
@@ -26,17 +26,15 @@ REPO_ROOT = Path(__file__).resolve().parents[3]
 QUARANTINED_IMPLEMENTATION = Path(__file__).with_name(
     "frankenstein_orchestrator_v1_PROVIDER_QUARANTINED_854f6bc.py"
 )
-PATCH_GUARD = Path(__file__).with_name("frankenstein_patch_guard_v1.py")
-PREIMAGE_EDIT_GUARD = REPO_ROOT / "tools" / "preimage_bound_edit_guard_v1.py"
+MUTATION_CONTRACT = Path(__file__).with_name("frankenstein_edit_contract_v1.py")
 MUTATION_AUDIT_SCHEMA = "FRANKENSTEIN_MUTATION_AUDIT_GATE/v1"
 
-# Fail closed by construction. These values may be populated only after the
-# *integrated* donor is independently reviewed at exact source identity. Merely
-# adding guard modules, passing their component tests, or re-opening provider
-# authority does not establish integration and must not make this gate pass.
+# Fail closed by construction. Populate these values only after the *integrated*
+# donor is independently reviewed at exact source identity. Merely adding the
+# contract, passing its component tests, or re-opening provider authority does
+# not establish integration and must not make this gate pass.
 AUDITED_DONOR_SHA256: str | None = None
-AUDITED_PATCH_GUARD_SHA256: str | None = None
-AUDITED_PREIMAGE_EDIT_GUARD_SHA256: str | None = None
+AUDITED_MUTATION_CONTRACT_SHA256: str | None = None
 
 
 class UnsafeMutationDonorBlocked(RuntimeError):
@@ -54,8 +52,7 @@ def _sha256_file(path: Path) -> str:
 def mutation_audit_state() -> dict:
     paths = {
         "donor": QUARANTINED_IMPLEMENTATION,
-        "patch_guard": PATCH_GUARD,
-        "preimage_edit_guard": PREIMAGE_EDIT_GUARD,
+        "mutation_contract": MUTATION_CONTRACT,
     }
     observed = {
         name: _sha256_file(path) if path.is_file() else None
@@ -63,8 +60,7 @@ def mutation_audit_state() -> dict:
     }
     audited = {
         "donor": AUDITED_DONOR_SHA256,
-        "patch_guard": AUDITED_PATCH_GUARD_SHA256,
-        "preimage_edit_guard": AUDITED_PREIMAGE_EDIT_GUARD_SHA256,
+        "mutation_contract": AUDITED_MUTATION_CONTRACT_SHA256,
     }
     admitted = all(
         observed[name] is not None
@@ -88,7 +84,7 @@ def require_mutation_audited_donor() -> dict:
     if not state["mutation_audit_admitted"]:
         raise UnsafeMutationDonorBlocked(
             "Frankenstein quarantined donor is not bound to an independently "
-            "audited donor+patch-guard+preimage-guard source identity; direct "
+            "audited donor+preimage-edit-contract source identity; direct "
             "provider-backed execution remains blocked"
         )
     return state

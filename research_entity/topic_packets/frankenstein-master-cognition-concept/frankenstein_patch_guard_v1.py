@@ -62,7 +62,13 @@ def _sha256(path: Path) -> str:
 
 
 def _normalize_policy_path(raw: str) -> str:
-    if not raw or "\x00" in raw or "\\" in raw:
+    if (
+        not raw
+        or raw != raw.strip()
+        or "\x00" in raw
+        or "\\" in raw
+        or any(ord(ch) < 32 or ord(ch) == 127 for ch in raw)
+    ):
         raise PatchGuardError(f"unsafe path spelling: {raw!r}")
     path = PurePosixPath(raw)
     if path.is_absolute() or any(part in {"", ".", ".."} for part in path.parts):
@@ -104,6 +110,11 @@ def _reject_unsupported_patch_features(patch_text: str, policy: PatchPolicy) -> 
                 raise PatchGuardError("rename/copy patches are forbidden")
     if not policy.allow_file_deletes and "deleted file mode " in patch_text:
         raise PatchGuardError("file deletion patches are forbidden")
+    if "old mode " in patch_text or "new mode " in patch_text:
+        raise PatchGuardError("existing-file mode changes are forbidden")
+    for line in patch_text.splitlines():
+        if line.startswith("new file mode ") and line != "new file mode 100644":
+            raise PatchGuardError("new files must be regular non-executable mode 100644")
 
 
 def _numstat(repo_root: Path, patch: bytes) -> list[tuple[int, int, str]]:

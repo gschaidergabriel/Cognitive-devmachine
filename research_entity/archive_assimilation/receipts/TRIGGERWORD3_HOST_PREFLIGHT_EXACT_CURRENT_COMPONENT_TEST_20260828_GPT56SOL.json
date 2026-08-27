@@ -2,32 +2,37 @@
   "schema": "TRIGGERWORD3_EXACT_CURRENT_COMPONENT_TEST_RECEIPT/v1",
   "trigger": "triggerwort 3",
   "organ": "GPT-5.6 Sol",
-  "canonical_main": "de397c71db9f87b2d6d234af60096b0dac4d6813",
-  "source_introduced_by": "3cf4a76b8ffa2e9bdedca3cbd2d49c5d81f1033a",
-  "source_unchanged_from_introduction_to_tested_main": true,
+  "canonical_main": "63dc45e09dac9930dd4bf7ca169cf693190b2c71",
+  "source_lineage": {
+    "promotion_fence_merge": "3cf4a76b8ffa2e9bdedca3cbd2d49c5d81f1033a",
+    "tested_v3_authority_surface_revision": "63dc45e09dac9930dd4bf7ca169cf693190b2c71"
+  },
   "tested_files": {
     "AI_START_HERE_DO_NOT_SCAN_REPO/frankenstein_host_preflight.py": {
-      "git_blob_sha": "35934129dbd917237ba8a35e7ba10f2ebf59ea14"
+      "git_blob_sha": "84d16b19a3f961606b141427be2d5f27d0b9d6ec",
+      "schema": "FRANKENSTEIN_HOST_PREFLIGHT/v3"
     },
     "tests/test_triggerword3_host_preflight.py": {
-      "git_blob_sha": "5fd91305bf3f644aa575ba97285115d31a95342f"
+      "git_blob_sha": "5b6025634d2fdc91785c9ba8121bc3837eb6abb4"
     }
   },
   "identity_verification": {
     "method": "git hash-object on exact reconstructed file bytes",
-    "preflight_hash": "35934129dbd917237ba8a35e7ba10f2ebf59ea14",
-    "test_hash": "5fd91305bf3f644aa575ba97285115d31a95342f",
+    "preflight_hash": "84d16b19a3f961606b141427be2d5f27d0b9d6ec",
+    "test_hash": "5b6025634d2fdc91785c9ba8121bc3837eb6abb4",
     "matches_github_blob_ids": true
   },
   "execution": {
     "surface": "LOCAL_ISOLATED_CONTAINER_NON_PROVIDER",
     "command": "python -m pytest -q tests/test_triggerword3_host_preflight.py",
-    "result": "7 passed in 0.06s",
+    "result": "8 passed in 0.06s",
     "scope": "HOST_PREFLIGHT_COMPONENT_REGRESSION_ONLY"
   },
   "verified_behaviors": [
     "read-only preflight cannot self-promote repository integration to NATIVE or ADAPTED",
     "missing repository or required authority fails closed",
+    "authority surface explicitly includes CLAY_EXECUTION_AUTHORITY, BOOTSTRAP_MINIMAL, PROGRAM_STATE and SUPERVISOR_INBOX",
+    "preflight schema is v3 and final_native_or_adapted_claim_allowed remains false",
     "inbox-selected steering must resolve inside the repository and rejects escape or malformed JSON",
     "current HARD_OFF provider authority shape classifies provider orchestration BLOCKED",
     "a hypothetical source-level provider-open shape remains DEGRADED because execution was not probed",
@@ -62,6 +67,7 @@
   "coordination": {
     "merged_implementation_pr": 2073,
     "discarded_duplicate_pr": 2082,
-    "duplicate_resolution": "PR 2082 closed after re-entry because PR 2073 landed an equal-or-stronger implementation; only the new exact-current component evidence is retained here."
+    "receipt_pr": 2095,
+    "duplicate_resolution": "PR 2082 was closed after re-entry because PR 2073 landed an equal-or-stronger implementation. The only retained delta here is exact-current component evidence against the later v3 source identity."
   }
 }

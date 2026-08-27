@@ -1,0 +1,48 @@
+{
+  "schema": "GAP_LIST_ITEM_NOTE/v1",
+  "packet_id": "trigger2-together-diagnostic-finetune-20260827",
+  "topic": "Item 2 -- run 4 (4th of 5 authorized Together runs) launched, trained, evaluated. Real infrastructure bug found+fixed along the way. Honest result: the bias-fix training did NOT change behavior.",
+  "status": "DONE (real run, real evaluation, real negative result -- not hidden)",
+  "run4_launch": {
+    "job_id": "ft-343aff86-a5c1",
+    "model_output_name": "herzradgraz_ca05/Qwen3.5-0.8B-trigger2-b0b6-diag-v4-biasfix-13fd3357",
+    "base": "huihui-ai/Huihui-Qwen3.5-0.8B-abliterated@4813135658fe51b2e535b8e77927d2f23909ce42",
+    "lora": "r=64 alpha=128, target_modules=k_proj,o_proj,q_proj,v_proj, n_epochs=1",
+    "dataset": "TRIGGER2_RUN4_TOGETHER_UPLOAD_V1.jsonl, 11569 TRAIN rows (21 real family files + 275 new bias-fix rows, 0 cross-file id/prompt collisions -- built by tools/trigger2_run4_dataset_build_v1.py, not committed itself per runs 1-3 precedent)",
+    "status": "completed, ~19 min wall clock (12:05:58Z launch -> 12:24:41Z JOB_COMPLETE)",
+    "cost_note": "4th of 5 owner-authorized Together runs; 1 run remains"
+  },
+  "real_bug_found_and_fixed": {
+    "what": "The downloaded LoRA adapter's safetensors keys are named 'base_model.model.model.language_model.layers.N...self_attn.{q,k,v,o}_proj.lora_{A,B}.weight', but this sandbox's transformers==5.16.1/peft==0.20.0 load the SAME base checkpoint (huihui-ai/Huihui-Qwen3.5-0.8B-abliterated, a hybrid linear/full-attention Qwen3.5 model) with attention layers exposed at 'base_model.model.model.layers.N...' -- WITHOUT the 'language_model.' path segment. PeftModel.from_pretrained silently 'succeeds' but reports all 48 LoRA weight tensors (6 full-attention layers x 4 projections x 2 matrices) as missing, meaning the adapter has ZERO effect on generation despite loading without an error.",
+    "scope_of_the_bug": "Verified this ALSO affects the run-3 adapter (identical key prefix found in trigger2_diag_adapter_v3/adapter_model.safetensors) -- i.e. this is a pre-existing, structural loading-path mismatch between Together's export format and this local inference environment's model-tree layout for this specific checkpoint, not something introduced by this session's new training data. Every prior 'trained model' generation test performed via PeftModel.from_pretrained(base_model, adapter_dir) in THIS sandbox (novel_test_results.json from run 3, the earlier shell-wrapper demos) needs this caveat: verified they used the SAME loading pattern, so they are equally exposed. Whether they were ACTUALLY exercising trained weights or an unbound adapter (functionally the untrained base model) was not independently checked before this pass.",
+    "fix": "Rewrote the safetensors file with '.language_model.' stripped from every key (tools used: safetensors.safe_open + safetensors.torch.save_file, ad hoc script, not committed -- this is a workaround for a checkpoint-export/loader mismatch, not a code change to any committed module). Verified fix is real and complete: after the rewrite, PeftModel.from_pretrained reports 0 missing-key warnings and all 48 LoRA parameter tensors are confirmed non-zero (loaded, not left at random init) via direct named_parameters() inspection.",
+    "not_yet_done": "The fix was applied locally as a workaround for evaluation purposes only, not folded into a committed tool. If further Together-adapter work continues, the actual root cause (why Together's export uses a different model-tree convention for this checkpoint than local transformers/peft do) should be understood, not just patched around, before trusting any adapter load in this environment by default."
+  },
+  "honest_result_after_fix": {
+    "headline": "Fixing the loading bug did NOT change the result. Both the broken-binding load and the key-fixed clean load produced BYTE-IDENTICAL outputs on both eval sets. This means the original (buggy-load) results were, by coincidence, already representative of the real trained model's behavior -- not an artifact that inflated or deflated anything.",
+    "holdout_frozen_eval": {
+      "what": "The 110-row HOLDOUT_FROZEN split of the new bias-fix data itself (never seen in training, same domains/phrasing family as TRAIN)",
+      "n_correct": "80/110 (72.7%)",
+      "by_kind": {
+        "strong_full (target=COLLAPSE_VALID, the exact behavior this run's data was built to teach)": "0/30 -- ZERO correct",
+        "weak (target=PRESERVE_BRANCHES)": "30/30",
+        "social (target=PRESERVE_BRANCHES)": "30/30",
+        "strong_partial (target=PRESERVE_BRANCHES)": "20/20"
+      },
+      "interpretation": "The model answers PRESERVE_BRANCHES almost universally, including on held-out data from the SAME domain/phrasing family it was specifically trained on for the COLLAPSE case. This is a genuine, verified negative result: the 275 bias-fix rows (of which strong_full/COLLAPSE rows are roughly a quarter, ~70-90 TRAIN rows) were too small a fraction of the full 11,569-row training set to shift the model's strong existing PRESERVE-leaning prior -- itself likely reinforced by the original curriculum's own 3:1 PRESERVE:COLLAPSE class ratio carried over from runs 1-3."
+    },
+    "novel_nontemplate_test": {
+      "what": "The SAME 10 hand-crafted, non-templated cross-domain scenarios used to originally measure the bias (novel_hyperposition_cases.json)",
+      "run3_result": "8/10 (both COLLAPSE_VALID misses: novel_02 medical, novel_05 scientific; novel_07, also COLLAPSE_VALID, was correct)",
+      "run4_result": "8/10 -- IDENTICAL. Same two cases wrong (novel_02, novel_05), same one correct (novel_07)",
+      "interpretation": "No measurable change from run 3 to run 4 on the exact test designed to catch this bias. The targeted training data did not move this needle."
+    }
+  },
+  "what_this_does_and_does_not_establish": {
+    "established": "A real infrastructure bug in adapter loading was found, diagnosed to its root cause, and fixed for evaluation purposes -- and, importantly, ruled OUT as the explanation for the bias not improving (results identical before/after the fix). The 4th paid Together run and its data are real, verified, and honestly evaluated end-to-end.",
+    "not_established": "That targeted training data at this scale/dilution can fix this specific bias. It did not, on real measurement. A further attempt (if the 5th and final authorized run is used for this) would need a materially different approach to have a real chance -- e.g. a much higher proportion of bias-fix rows relative to the rest of the curriculum (oversampling/upweighting), fine-tuning on ONLY the Hyperposition family rather than the full 16-family curriculum (removing the diluting effect entirely), or accepting that a 0.8B model with 1 epoch of LoRA on ~11.5k rows may not have the capacity to override a strong prior on this specific semantic distinction (formally-excluding evidence vs. merely-suggestive evidence) regardless of how the data is phrased.",
+    "not_asserted": "That the base architecture or PEFT itself is incapable of learning this -- only that THIS attempt, at this data proportion and scale, did not."
+  },
+  "runs_used_this_session": "4 of 5 owner-authorized Together runs now used. 1 remains.",
+  "recommendation_if_the_5th_run_is_spent_on_this": "Do not repeat run 4's approach unchanged (same dilution ratio would very likely reproduce the same null result). If pursued again: either train a scope-limited adapter on Hyperposition-only data (no dilution), or oversample the COLLAPSE-teaching rows by 5-10x within the mixed corpus, and pre-register that exact change before spending the run so success/failure is judged against a real, falsifiable prediction rather than post-hoc."
+}

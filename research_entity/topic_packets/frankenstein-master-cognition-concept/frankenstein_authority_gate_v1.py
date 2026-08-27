@@ -1,8 +1,9 @@
-"""Fail-closed runtime authority gate for Frankenstein provider orchestration.
+"""Fail-closed Frankenstein provider authority gate.
 
-This module is deliberately stdlib-only. It must be evaluated before importing
-provider clients, reading provider key material, invoking Aider, or executing a
-quarantined provider-backed Frankenstein implementation.
+Provider-backed Frankenstein code is allowed to load only when BOTH current
+control artifacts agree that provider execution is admitted.  The gate is
+stdlib-only and must run before provider imports, secret lookup, network, Aider,
+or fallback dispatch.
 """
 from __future__ import annotations
 
@@ -10,80 +11,126 @@ import json
 from pathlib import Path
 
 INBOX_RELATIVE_PATH = Path("research_entity/claycode/autonomous/SUPERVISOR_INBOX.json")
+PROVIDER_ADMISSION_RELATIVE_PATH = Path("research_entity/claycode/autonomous/FREE_PROVIDER_ADMISSION.json")
 
 
 class ProviderAuthorityBlocked(RuntimeError):
-    """Raised before any external provider boundary when authority is closed."""
+    pass
 
 
-def _repo_root() -> Path:
-    return Path(__file__).resolve().parents[3]
-
-
-def provider_authority_state(repo_root: Path | None = None) -> dict:
-    root = Path(repo_root) if repo_root is not None else _repo_root()
-    inbox_path = root / INBOX_RELATIVE_PATH
+def _read_json(path: Path) -> dict | None:
     try:
-        inbox = json.loads(inbox_path.read_text())
-    except (OSError, json.JSONDecodeError) as exc:
+        data = json.loads(path.read_text())
+    except (OSError, UnicodeError, json.JSONDecodeError):
+        return None
+    return data if isinstance(data, dict) else None
+
+
+def provider_authority_state(repo_root: Path) -> dict:
+    """Resolve split-brain-safe provider authority from both canonical artifacts.
+
+    Any missing/malformed artifact, HARD_OFF state, contradictory admission, or
+    lack of an explicit canonical provider admission fails closed.  Historical
+    prose and an Inbox-only mutation can never mint provider execution authority.
+    """
+    inbox = _read_json(repo_root / INBOX_RELATIVE_PATH)
+    canonical = _read_json(repo_root / PROVIDER_ADMISSION_RELATIVE_PATH)
+    if inbox is None or canonical is None:
         return {
-            "authority_source": str(inbox_path),
             "authority_readable": False,
+            "authority_coherent": False,
             "provider_routes_admitted": False,
             "together_admitted": False,
-            "reason": f"FAIL_CLOSED_AUTHORITY_UNREADABLE:{type(exc).__name__}",
+            "admitted_provider_names": [],
+            "reason": "MISSING_OR_MALFORMED_DUAL_AUTHORITY",
         }
 
     free_only = inbox.get("free_only")
-    if not isinstance(free_only, dict):
+    providers = canonical.get("providers")
+    if not isinstance(free_only, dict) or not isinstance(providers, dict):
         return {
-            "authority_source": str(inbox_path),
             "authority_readable": True,
+            "authority_coherent": False,
             "provider_routes_admitted": False,
             "together_admitted": False,
-            "reason": "FAIL_CLOSED_FREE_ONLY_BLOCK_MISSING",
-            "schema_version": inbox.get("schema_version"),
+            "admitted_provider_names": [],
+            "reason": "MALFORMED_AUTHORITY_SHAPE",
         }
 
-    enabled = free_only.get("enabled") is True
-    explicit_provider_admission = free_only.get("provider_routes_admitted") is True
-    emergency_stop = free_only.get("free_swarm_owner_emergency_stop") is True
-    provider_routes_admitted = enabled and explicit_provider_admission and not emergency_stop
+    inbox_enabled = free_only.get("enabled") is True
+    inbox_routes = free_only.get("provider_routes_admitted") is True
+    emergency_stop = free_only.get("free_swarm_owner_emergency_stop") is not False
+    no_paid_fallback = free_only.get("no_paid_fallback") is not False
+
+    canonical_mode = canonical.get("mode")
+    canonical_state = canonical.get("execution_state")
+    canonical_hard_off = canonical_state == "OWNER_EMERGENCY_STOP_FREE_SWARM_HARD_OFF"
+    admitted_provider_names = sorted(
+        name for name, spec in providers.items()
+        if isinstance(spec, dict) and spec.get("admitted") is True
+    )
+    # The provider-backed donor contains a fallback cascade, so generic dispatch
+    # is safe only when the canonical authority has no denied named provider.
+    canonical_all_named_admitted = bool(providers) and all(
+        isinstance(spec, dict) and spec.get("admitted") is True
+        for spec in providers.values()
+    )
+
+    coherent = not (
+        (inbox_routes and canonical_hard_off)
+        or (inbox_routes and not canonical_all_named_admitted)
+        or ((not emergency_stop) and canonical_hard_off)
+    )
+    provider_routes_admitted = bool(
+        coherent
+        and inbox_enabled
+        and inbox_routes
+        and not emergency_stop
+        and canonical_mode == "FREE_ONLY"
+        and not canonical_hard_off
+        and canonical_all_named_admitted
+    )
 
     together_forbidden = free_only.get("together_forbidden") is not False
-    remaining_paid_runs = free_only.get("remaining_together_paid_runs_authorized", 0)
-    try:
-        remaining_paid_runs = int(remaining_paid_runs)
-    except (TypeError, ValueError):
-        remaining_paid_runs = 0
-    together_admitted = provider_routes_admitted and not together_forbidden and remaining_paid_runs > 0
+    remaining_paid = free_only.get("remaining_together_paid_runs_authorized")
+    if not isinstance(remaining_paid, int) or isinstance(remaining_paid, bool):
+        remaining_paid = 0
+    # Paid execution requires an explicit canonical object as well as Inbox
+    # admission.  FREE_PROVIDER_ADMISSION/v1 currently contains no such object,
+    # therefore Together remains fail-closed even if stale Inbox prose says yes.
+    canonical_together = canonical.get("together")
+    canonical_together_admitted = (
+        isinstance(canonical_together, dict)
+        and canonical_together.get("admitted") is True
+    )
+    together_admitted = bool(
+        provider_routes_admitted
+        and not no_paid_fallback
+        and not together_forbidden
+        and remaining_paid > 0
+        and canonical_together_admitted
+    )
 
-    if provider_routes_admitted:
-        reason = "EXPLICIT_PROVIDER_ROUTE_ADMISSION_PRESENT"
-    elif emergency_stop:
-        reason = "FREE_SWARM_OWNER_EMERGENCY_STOP"
-    elif not explicit_provider_admission:
-        reason = "PROVIDER_ROUTES_NOT_EXPLICITLY_ADMITTED"
-    else:
-        reason = "FREE_ONLY_NOT_ENABLED_FAIL_CLOSED"
-
+    reason = "ADMITTED" if provider_routes_admitted else (
+        "AUTHORITY_SPLIT_BRAIN_FAIL_CLOSED" if not coherent else "PROVIDER_ROUTES_NOT_DUALLY_ADMITTED"
+    )
     return {
-        "authority_source": str(inbox_path),
         "authority_readable": True,
-        "schema_version": inbox.get("schema_version"),
+        "authority_coherent": coherent,
         "provider_routes_admitted": provider_routes_admitted,
         "together_admitted": together_admitted,
-        "free_swarm_owner_emergency_stop": emergency_stop,
-        "remaining_together_paid_runs_authorized": remaining_paid_runs,
+        "admitted_provider_names": admitted_provider_names,
+        "canonical_authority_epoch": canonical.get("authority_epoch"),
+        "canonical_execution_state": canonical_state,
         "reason": reason,
     }
 
 
-def require_provider_routes(caller: str, repo_root: Path | None = None) -> dict:
+def require_provider_routes(caller: str, repo_root: Path) -> dict:
     state = provider_authority_state(repo_root)
     if not state["provider_routes_admitted"]:
         raise ProviderAuthorityBlocked(
-            f"{caller}: external provider orchestration blocked before provider import/secret lookup/network; "
-            f"reason={state['reason']} authority={state['authority_source']}"
+            f"{caller}: blocked before provider import/secret lookup/network; "
+            f"reason={state.get('reason')}"
         )
     return state

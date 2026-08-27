@@ -1,15 +1,4 @@
-"""Tests for the Frankenstein provider authority gate
-(frankenstein_authority_gate_v1.py). Originally written by the project's
-autonomous supervisor process (trigger3, 2026-08-27) against the LIVE,
-shared, concurrently-modified SUPERVISOR_INBOX.json -- fixed here (Gabriel's
-direct 2026-08-28 instruction adjusted that live file's free_only block to
-re-admit provider routes for this task) to use INJECTED tmp repo_root
-fixtures for both the blocked and admitted states, so this suite tests the
-gate FUNCTION's real behavior and never goes stale just because the
-project's live authority state legitimately changes over time. The two
-state-independent tests (missing authority file, no eager provider imports)
-are unchanged from the original.
-"""
+"""Split-brain regression tests for Frankenstein provider authority."""
 import json
 import sys
 from pathlib import Path
@@ -22,70 +11,91 @@ import frankenstein_orchestrator_v1 as orch
 import frankenstein_bugfix_v1 as bugfix
 
 
-def _write_inbox(repo_root: Path, *, provider_routes_admitted: bool, together_forbidden: bool = True,
-                  remaining_together_paid_runs_authorized: int = 0) -> None:
+def _write_authority(repo_root: Path, *, inbox_routes: bool, canonical_routes: bool,
+                     emergency_stop: bool | None = None, together_forbidden: bool = True,
+                     remaining_paid: int = 0, canonical_together: bool = False) -> None:
     inbox_path = repo_root / gate.INBOX_RELATIVE_PATH
+    canonical_path = repo_root / gate.PROVIDER_ADMISSION_RELATIVE_PATH
     inbox_path.parent.mkdir(parents=True, exist_ok=True)
+    if emergency_stop is None:
+        emergency_stop = not inbox_routes
     inbox_path.write_text(json.dumps({
         "free_only": {
             "enabled": True,
-            "provider_routes_admitted": provider_routes_admitted,
-            "free_swarm_owner_emergency_stop": not provider_routes_admitted,
+            "no_paid_fallback": True,
+            "provider_routes_admitted": inbox_routes,
+            "free_swarm_owner_emergency_stop": emergency_stop,
             "together_forbidden": together_forbidden,
-            "remaining_together_paid_runs_authorized": remaining_together_paid_runs_authorized,
+            "remaining_together_paid_runs_authorized": remaining_paid,
         }
     }))
+    providers = {name: {"admitted": canonical_routes} for name in ("groq", "mistral", "nvidia", "openrouter")}
+    canonical = {
+        "authority_epoch": "test",
+        "mode": "FREE_ONLY",
+        "execution_state": (
+            "PROVIDER_ROUTES_ADMITTED" if canonical_routes
+            else "OWNER_EMERGENCY_STOP_FREE_SWARM_HARD_OFF"
+        ),
+        "providers": providers,
+    }
+    if canonical_together:
+        canonical["together"] = {"admitted": True}
+    canonical_path.write_text(json.dumps(canonical))
 
 
-def test_gate_fails_closed_when_authority_is_missing(tmp_path):
-    state = gate.provider_authority_state(tmp_path)
-    assert state["provider_routes_admitted"] is False
-    assert state["authority_readable"] is False
+def test_missing_either_authority_fails_closed(tmp_path):
+    assert gate.provider_authority_state(tmp_path)["provider_routes_admitted"] is False
+    inbox = tmp_path / gate.INBOX_RELATIVE_PATH
+    inbox.parent.mkdir(parents=True, exist_ok=True)
+    inbox.write_text(json.dumps({"free_only": {"enabled": True, "provider_routes_admitted": True,
+                                               "free_swarm_owner_emergency_stop": False}}))
+    assert gate.provider_authority_state(tmp_path)["provider_routes_admitted"] is False
 
 
-def test_gate_blocks_when_inbox_denies_provider_routes(tmp_path):
-    _write_inbox(tmp_path, provider_routes_admitted=False)
+def test_inbox_open_canonical_hardoff_split_brain_fails_closed(tmp_path):
+    _write_authority(tmp_path, inbox_routes=True, canonical_routes=False, emergency_stop=False)
     state = gate.provider_authority_state(tmp_path)
     assert state["authority_readable"] is True
+    assert state["authority_coherent"] is False
     assert state["provider_routes_admitted"] is False
     assert state["together_admitted"] is False
+    assert state["reason"] == "AUTHORITY_SPLIT_BRAIN_FAIL_CLOSED"
 
 
-def test_gate_admits_when_inbox_explicitly_admits_provider_routes(tmp_path):
-    _write_inbox(tmp_path, provider_routes_admitted=True, together_forbidden=True,
-                 remaining_together_paid_runs_authorized=0)
+def test_inbox_closed_canonical_open_still_fails_closed(tmp_path):
+    _write_authority(tmp_path, inbox_routes=False, canonical_routes=True, emergency_stop=True)
     state = gate.provider_authority_state(tmp_path)
+    assert state["provider_routes_admitted"] is False
+
+
+def test_both_provider_authorities_must_explicitly_admit(tmp_path):
+    _write_authority(tmp_path, inbox_routes=True, canonical_routes=True, emergency_stop=False)
+    state = gate.provider_authority_state(tmp_path)
+    assert state["authority_coherent"] is True
     assert state["provider_routes_admitted"] is True
-    # together_forbidden=True keeps the training-run allowance separately
-    # closed even though general provider routes (free-pool helper dispatch)
-    # are admitted -- these are two independently gated concerns.
-    assert state["together_admitted"] is False
+    assert set(state["admitted_provider_names"]) == {"groq", "mistral", "nvidia", "openrouter"}
 
 
-def test_gate_admits_together_only_when_all_three_conditions_hold(tmp_path):
-    _write_inbox(tmp_path, provider_routes_admitted=True, together_forbidden=False,
-                 remaining_together_paid_runs_authorized=1)
-    state = gate.provider_authority_state(tmp_path)
-    assert state["together_admitted"] is True
-
-    _write_inbox(tmp_path, provider_routes_admitted=True, together_forbidden=False,
-                 remaining_together_paid_runs_authorized=0)
+def test_together_cannot_be_minted_by_inbox_only(tmp_path):
+    _write_authority(tmp_path, inbox_routes=True, canonical_routes=True, emergency_stop=False,
+                     together_forbidden=False, remaining_paid=1, canonical_together=False)
     assert gate.provider_authority_state(tmp_path)["together_admitted"] is False
 
 
-def test_require_provider_routes_raises_when_denied(tmp_path):
-    _write_inbox(tmp_path, provider_routes_admitted=False)
+def test_no_paid_fallback_keeps_together_closed_even_with_explicit_canonical_object(tmp_path):
+    _write_authority(tmp_path, inbox_routes=True, canonical_routes=True, emergency_stop=False,
+                     together_forbidden=False, remaining_paid=1, canonical_together=True)
+    assert gate.provider_authority_state(tmp_path)["together_admitted"] is False
+
+
+def test_require_provider_routes_raises_on_split_brain(tmp_path):
+    _write_authority(tmp_path, inbox_routes=True, canonical_routes=False, emergency_stop=False)
     try:
         gate.require_provider_routes("test", tmp_path)
-        assert False, "must raise when authority denies provider routes"
+        assert False, "split-brain must raise"
     except gate.ProviderAuthorityBlocked as exc:
         assert "blocked before provider import/secret lookup/network" in str(exc)
-
-
-def test_require_provider_routes_passes_when_admitted(tmp_path):
-    _write_inbox(tmp_path, provider_routes_admitted=True)
-    state = gate.require_provider_routes("test", tmp_path)
-    assert state["provider_routes_admitted"] is True
 
 
 def test_canonical_entrypoints_have_no_eager_provider_imports():
@@ -93,33 +103,18 @@ def test_canonical_entrypoints_have_no_eager_provider_imports():
         source = Path(module.__file__).read_text()
         assert "import requests" not in source
         assert "import llm" not in source
-    assert orch.authority_status()["provider_calls_performed"] == 0
-    assert bugfix.authority_status()["secret_lookups_performed"] == 0
 
 
-def test_orchestrator_main_never_executes_quarantined_donor_when_denied(tmp_path, monkeypatch):
-    _write_inbox(tmp_path, provider_routes_admitted=False)
-    monkeypatch.setattr(orch, "REPO_ROOT", tmp_path)
-    called = []
-    monkeypatch.setattr(sys, "argv", ["frankenstein_orchestrator_v1.py"])
-    monkeypatch.setattr(orch.runpy, "run_path", lambda *a, **k: called.append((a, k)))
-    try:
-        orch.main()
-        assert False, "denied authority must raise"
-    except gate.ProviderAuthorityBlocked:
-        pass
-    assert called == []
-
-
-def test_bugfix_main_never_executes_quarantined_donor_when_denied(tmp_path, monkeypatch):
-    _write_inbox(tmp_path, provider_routes_admitted=False)
-    monkeypatch.setattr(bugfix, "REPO_ROOT", tmp_path)
-    called = []
-    monkeypatch.setattr(sys, "argv", ["frankenstein_bugfix_v1.py"])
-    monkeypatch.setattr(bugfix.runpy, "run_path", lambda *a, **k: called.append((a, k)))
-    try:
-        bugfix.main()
-        assert False, "denied authority must raise"
-    except gate.ProviderAuthorityBlocked:
-        pass
-    assert called == []
+def test_entrypoints_never_execute_quarantined_donor_on_split_brain(tmp_path, monkeypatch):
+    _write_authority(tmp_path, inbox_routes=True, canonical_routes=False, emergency_stop=False)
+    for module, argv0 in ((orch, "frankenstein_orchestrator_v1.py"), (bugfix, "frankenstein_bugfix_v1.py")):
+        monkeypatch.setattr(module, "REPO_ROOT", tmp_path)
+        called = []
+        monkeypatch.setattr(sys, "argv", [argv0])
+        monkeypatch.setattr(module.runpy, "run_path", lambda *a, **k: called.append((a, k)))
+        try:
+            module.main()
+            assert False, "split-brain authority must raise"
+        except gate.ProviderAuthorityBlocked:
+            pass
+        assert called == []

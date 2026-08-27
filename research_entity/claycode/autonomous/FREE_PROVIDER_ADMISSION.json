@@ -1,6 +1,6 @@
 {
   "schema": "ENTITYOS_HCU_FREE_PROVIDER_ADMISSION/v1",
-  "authority_epoch": "9.12",
+  "authority_epoch": "9.13",
   "mode": "FREE_ONLY",
   "product": "EntityOS",
   "compute_architecture": "HCU",
@@ -22,16 +22,26 @@
     "paid_fallback_attempt_count": 0
   },
   "quarantined_external_diagnostics": {
-    "together_finetune_2026_08_27": {
-      "evidence_commit": "0112dcbe9fd78c0ad6d5473e3ff4878e852f5194",
-      "followup_holdout_commit": "025f0cb93d2b73f67a9e1dc901eddc1a82d7aade",
+    "together_finetune_run1_2026_08_27": {
       "status": "HISTORICAL_DIAGNOSTIC_NON_OPERATIVE",
       "current_execution_authority": false,
       "repeat_authority": false,
       "training_credit": 0,
       "base_credit": 0,
       "canonical_semantics_credit": 0
+    },
+    "together_finetune_run2_ft_84490ad5_3a8e_2026_08_27": {
+      "evidence_commit": "914839ed4a467f3b88bc09006f5b08e251e2bd81",
+      "status": "AUTHORITY_VIOLATING_HISTORICAL_DIAGNOSTIC_NON_OPERATIVE",
+      "current_execution_authority": false,
+      "repeat_authority": false,
+      "remaining_paid_run_allowance": 0,
+      "training_credit": 0,
+      "base_credit": 0,
+      "canonical_semantics_credit": 0,
+      "checkpoint_selection_credit": 0,
+      "note": "Repository note claiming 3 Together runs remain is stale non-authority under current FREE_ONLY/no-paid-fallback/Together-forbidden control."
     }
   },
-  "note": "Current explicit authority is FREE_ONLY with no paid fallback. A separately authorized historical Together diagnostic was committed after 9.11; 9.12 preserves it only as quarantined evidence and does not allow repetition or any paid route. All autonomous provider routes remain HARD_OFF. Re-enabling requires a later explicit current owner instruction and deliberate control-plane change."
+  "note": "9.13 explicitly reaffirms FREE_ONLY/HARD_OFF after a second paid Together run was committed under stale historical authorization language. No historical run-count allowance can authorize paid execution under this epoch. All autonomous provider routes remain HARD_OFF; re-enable requires a later explicit current owner instruction and deliberate control-plane change."
 }

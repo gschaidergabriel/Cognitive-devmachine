@@ -1,0 +1,86 @@
+{
+  "schema": "TRIGGERWORD3_CURATION_RECEIPT/v1",
+  "status": "SOURCE_PLUS_LOCAL_COMPONENT_REGRESSION_ONLY",
+  "trigger": "triggerwort 3",
+  "organ": "GPT-5.6 Sol",
+  "base_main_at_branch_creation": "93131364d63162df8ca3172a16df062842586f14",
+  "authority_observed": {
+    "supervisor_inbox_schema": "9.13",
+    "supervisor_delta": "9.13Q_NON_AUTHORITY",
+    "free_only": true,
+    "no_paid_fallback": true,
+    "together_forbidden": true,
+    "provider_routes_admitted": false,
+    "whole_entityos_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "canonical_semantics_credit": 0,
+    "training_credit": 0
+  },
+  "observed_problem": {
+    "class": "INSTALLER_PROMOTION_OVERCLAIM",
+    "current_main_preflight_schema": "FRANKENSTEIN_HOST_PREFLIGHT/v2",
+    "finding": "The read-only host preflight could classify repository plus authority plus Git presence as ADAPTED despite explicitly not observing lifecycle hook firing, cross-session durable state, or effect/result receipts.",
+    "test_drift": "The current main regression test still expected NATIVE for the fully-readable case while the current implementation returned ADAPTED, so test and implementation were mutually inconsistent."
+  },
+  "delta": {
+    "AI_START_HERE_DO_NOT_SCAN_REPO/frankenstein_host_preflight.py": {
+      "schema": "FRANKENSTEIN_HOST_PREFLIGHT/v3",
+      "git_blob_sha": "a10e68b981650b87e54e96f0c7c512e910faf080",
+      "behavior": "READ_ONLY_PREFLIGHT_CAN_RETURN_ONLY_DEGRADED_OR_BLOCKED; ADAPTED_AND_NATIVE_REQUIRE_HOST_SPECIFIC_LIFECYCLE_STATE_EFFECT_WITNESS"
+    },
+    "tests/test_triggerword3_host_preflight.py": {
+      "git_blob_sha": "58cade119121948fe7165a9d618a8d4781f03de4",
+      "behavior": "REGRESSES_NO_ADAPTED_OR_NATIVE_PROMOTION; MISSING_ROOT_OR_CURRENT_AUTHORITY_BLOCKS; STEERING_PATH_FAILS_CLOSED"
+    }
+  },
+  "local_component_evidence": {
+    "command": "python -m pytest -q tests/test_triggerword3_host_preflight.py",
+    "result": "6 passed in 0.07s",
+    "source_identity_check": {
+      "preflight_git_hash_object": "a10e68b981650b87e54e96f0c7c512e910faf080",
+      "tests_git_hash_object": "58cade119121948fe7165a9d618a8d4781f03de4",
+      "matches_branch_blob_identities": true
+    },
+    "scope": "LOCAL_COMPONENT_REGRESSION_ONLY",
+    "not_claimed": [
+      "host lifecycle integration",
+      "provider runtime",
+      "VPS runtime",
+      "EntityOS whole runtime",
+      "HCU full runtime",
+      "physical GRID10 runtime",
+      "Global J-Space model runtime",
+      "training"
+    ]
+  },
+  "root_topology": {
+    "current_public_root_target": [
+      "README.md",
+      "HUMAN_READ_THIS/",
+      "DEV_SOURCE_RESEARCH/",
+      "AI_START_HERE_DO_NOT_SCAN_REPO/"
+    ],
+    "observed_current_root": "STILL_NOT_HUMAN_LEGIBLE",
+    "action_this_cycle": "NO_DESTRUCTIVE_OR_MASS_MOVE",
+    "reason": "Existing migration manifest correctly marks active authority, host-discovery, entrypoint, test-discovery, writer and evidence paths as blockers; byte-identical relocation is not semantic equivalence while those references remain unresolved.",
+    "next_gate": "Refresh exact root enumeration and repository-wide reference counts on latest main, then migrate only entries whose host/path/writer/test/evidence compatibility contract is closed."
+  },
+  "research_chronicle": {
+    "existing_open_pr": 2071,
+    "status": "USEFUL_NON_AUTHORITY_DONOR_NOT_DUPLICATED_THIS_CYCLE",
+    "reason": "The Git-backed Frankenstein chronicle remains a valuable curation artifact, but its branch is stale/non-mergeable against fast-moving main; this cycle does not create a competing duplicate chronology."
+  },
+  "provider_actions": 0,
+  "secret_lookups": 0,
+  "paid_actions": 0,
+  "unusual_experiments": 0,
+  "promotion": {
+    "entityos_whole": 0,
+    "hcu_full": 0,
+    "physical_grid10": 0,
+    "canonical_semantics": 0,
+    "jspace_model": 0,
+    "training": 0
+  }
+}

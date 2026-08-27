@@ -480,8 +480,17 @@ def _contains_unicode_control_character(value: str) -> bool:
     )
 
 
+def _is_unicode_noncharacter(character: str) -> bool:
+    """Recognize the 66 code points permanently reserved for internal use."""
+    codepoint = ord(character)
+    return 0xFDD0 <= codepoint <= 0xFDEF or (codepoint & 0xFFFF) in {
+        0xFFFE,
+        0xFFFF,
+    }
+
+
 def _has_semantic_text(value: str) -> bool:
-    """Require content beyond whitespace, controls, formats and bare marks."""
+    """Require content beyond whitespace and non-semantic Unicode classes."""
     return any(
         not character.isspace()
         and not (
@@ -489,6 +498,7 @@ def _has_semantic_text(value: str) -> bool:
         )
         and unicodedata.category(character) != "Cf"
         and unicodedata.category(character) not in {"Mn", "Mc", "Me"}
+        and not _is_unicode_noncharacter(character)
         for character in value
     )
 

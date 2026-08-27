@@ -635,7 +635,7 @@ def _retry_after_seconds(headers, received_at: float, default: int = 60) -> int:
 
 
 def _validate_text_chat_request(messages, model) -> None:
-    if type(model) is not str or not model.strip():
+    if type(model) is not str or not _has_semantic_text(model):
         raise ValueError("model_must_be_nonempty_string")
     if not _is_unicode_scalar_text(model):
         raise ValueError("model_must_be_unicode_scalar_string")

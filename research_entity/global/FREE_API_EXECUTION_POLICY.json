@@ -598,9 +598,6 @@
       "https://docs.python.org/3/library/json.html#json.loads"
     ],
     "executable_evidence": "test_non_utf8_network_json_cannot_reach_verified_state",
-Warning: truncated output (original token count: 16441)
-Total output lines: 529
-
     "counterhypothesis": "Passing response bytes directly to Python json.loads enforces the network JSON encoding contract; falsified because the decoder automatically recognized UTF-16 and UTF-32 bodies and both reached success, VERIFIED and DONE."
   },
   "strict_json_numbers": {
@@ -855,7 +852,24 @@ Total output lines: 529
     "checked_at": "2026-08-25",
     "claim": "Every non-streaming provider success response must contain a top-level model field that is an exact built-in string equal to the requested model before content can reach VERIFIED or DONE.",
     "sources": [
-      "https://docs.nvidia.com/nim/large-language-models/2.0.10/reference/api-referenc…441 tokens truncated…"https://docs.nvidia.com/nim/large-language-models/2.0.0/get-started/quickstart.html",
+      "https://docs.nvidia.com/nim/large-language-models/2.0.10/reference/api-reference.html",
+      "https://docs.vllm.ai/en/v0.16.0/api/vllm/entrypoints/openai/chat_completion/protocol/"
+    ],
+    "external_evidence": "NVIDIA documents that its OpenAI-compatible inference endpoints are provided by the vLLM backend and directs full schema questions to vLLM. The official vLLM ChatCompletionResponse declares model as a required string while object has the fixed chat.completion discriminator.",
+    "internal_measurement": "Both a status-200 response explicitly naming other-model and a response omitting model entirely previously returned success and reached VERIFIED and DONE while the receipt represented the requested model as verified provenance.",
+    "executable_evidence": [
+      "test_response_model_mismatch_cannot_reach_verified_state",
+      "test_missing_response_model_cannot_reach_verified_state"
+    ],
+    "counterhypothesis": "Endpoint binding or a Chat-shaped choice is sufficient to infer response model identity; falsified because the adapter promoted an unasserted model name into a VERIFIED receipt despite the backend schema requiring the field.",
+    "uncertainty": "No Ubuntu NVIDIA live receipt is available on this host; compatibility is supported by the official NVIDIA backend contract and executable local boundary tests rather than a live provider measurement."
+  },
+  "response_object_provenance": {
+    "checked_at": "2026-08-25",
+    "claim": "Every non-streaming provider success response must contain the exact built-in top-level discriminator object=chat.completion before content can reach VERIFIED or DONE. Explicit error discriminators remain separately classified as provider_error.",
+    "sources": [
+      "https://docs.nvidia.com/nim/large-language-models/2.0.10/reference/api-reference.html",
+      "https://docs.nvidia.com/nim/large-language-models/2.0.0/get-started/quickstart.html",
       "https://docs.vllm.ai/en/v0.16.0/api/vllm/entrypoints/openai/chat_completion/protocol/"
     ],
     "external_evidence": "NVIDIA documents Chat Completions, text Completions and Responses as distinct vLLM-backed API surfaces and directs full response-schema questions to vLLM. The official vLLM ChatCompletionResponse defines object as the fixed Literal chat.completion with that serialized default.",

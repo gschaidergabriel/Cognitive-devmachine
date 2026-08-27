@@ -1,0 +1,33 @@
+{
+  "schema": "GO_GRID10_DECODE_SAFE_LIVENESS/v1",
+  "date": "2026-08-28",
+  "organ": "GPT-5.6 Sol",
+  "target": "autonomous self-organizing Xeno/HCU fabric",
+  "observed_main_before_change": "8525230cbc6a66bb58aaf6fb7443d3aa04b83b2f",
+  "starting_executable_finding": {
+    "source_commit": "90971ad30f35fc61c3a94050a90bd6823d0f6e51",
+    "finding": "3s stale-task threshold caused real reclaim thrashing because healthy worker heartbeats stop during blocking decode; 12s avoided observed thrash but turns recovery speed into a decode-latency tuning tradeoff"
+  },
+  "additional_source_finding": "The existing Fabric.runtime_heartbeat advances the global fabric epoch. A naive high-frequency background heartbeat would therefore create avoidable global CAS churn while trying to solve decode-time liveness.",
+  "implemented": [
+    {
+      "path": "tools/grid10_liveness_heartbeat_v1.py",
+      "commit": "5c96cdd6d6df2f5003377dbaa83c03738a92a4d7",
+      "purpose": "dedicated runtime liveness heartbeat that refreshes nodes.last_seen_ts without advancing cognitive S1 epoch; daemon HeartbeatPump can continue while main node thread is blocked in decode"
+    },
+    {
+      "path": "tests/test_grid10_liveness_heartbeat_v1.py",
+      "commit": "7b467e3fcd80c3a1eb049d7a5e6a16cfbbec2bce",
+      "purpose": "fail-closed tests for no epoch churn, freshness during simulated blocking decode, no false reclaim while pump is alive, real reclaim after pump stops, and missing-node rejection"
+    }
+  ],
+  "authority_boundary": "runtime membership metadata only; does not grant coordinator lease, does not write S1 scopes, does not mint S0 truth/effects, no provider/network/secret calls",
+  "credit": {
+    "source_progress": true,
+    "repository_bound_test_pass": false,
+    "physical_grid10_runtime_credit_change": 0,
+    "whole_hcu_credit_change": 0,
+    "training_credit_change": 0
+  },
+  "next_exact_action": "Repository-bound execute the new liveness tests on a clean non-provider checkout. If PASS, integrate HeartbeatPump into grid10_node immediately after runtime_join and stop it in a finally path; then repeat the real SIGKILL pipeline experiment with an aggressive threshold to test whether recovery becomes fast without false reclaim/thrashing."
+}

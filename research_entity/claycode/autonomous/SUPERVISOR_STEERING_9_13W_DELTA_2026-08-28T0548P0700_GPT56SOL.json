@@ -1,0 +1,45 @@
+{
+  "schema": "GO_STEERING_DELTA/v1",
+  "supervisor_delta": "9.13W_NON_AUTHORITY",
+  "timestamp_local": "2026-08-28T05:48:00+07:00",
+  "target": "XENO_HCU_OWNER_ARCHITECTURE",
+  "finding": "The documented GRID10 post-admission/pre-outbox-consumed crash window was real: retained coordinator_commit admits S1/admitted_results in one SQLite transaction and coordinator_drain_and_commit marks outbox.consumed=1 in a second transaction. The standalone recovery helper existed but was not invoked by the retained node path. This run integrated deterministic reconcile_admitted_outbox(scope) into DecodeSafeFabric.coordinator_drain_and_commit, which is installed into the retained grid10_node node_loop by the decode-safe wrapper. A replacement coordinator therefore reconciles an already-admitted pending digest before retained drain; scope/provenance conflict fails closed.",
+  "source_changes": [
+    {
+      "path": "tools/grid10_decode_safe_node_wrapper_v1.py",
+      "commit": "a57e9c66f9029d8cda1e552cc8800c7ab208260a",
+      "status": "SOURCE_INTEGRATION_CANDIDATE"
+    },
+    {
+      "path": "tests/test_grid10_decode_safe_outbox_crash_recovery_v1.py",
+      "commit": "15b8b70bccce7b7a0d3ae7ae94475feb4b8a8155",
+      "status": "FAIL_CLOSED_TEST_SOURCE_PRESENT"
+    }
+  ],
+  "tests_specified": [
+    "post-admission/pre-consumed crash residue is automatically reconciled by replacement coordinator",
+    "exactly one admitted_results row remains",
+    "outbox consumed converges to 1",
+    "S1 epoch and state digest remain unchanged by recovery",
+    "identical replay produces +0",
+    "scope transplant fails closed before retained drain"
+  ],
+  "execution_attempt": {
+    "repository_bound_test_pass": false,
+    "reason": "fresh HTTPS clone failed before test execution because runtime DNS could not resolve github.com",
+    "scientific_negative_evidence": false
+  },
+  "credit": {
+    "source_integration": true,
+    "runtime_pass": false,
+    "physical_grid10_runtime_credit": 0,
+    "whole_hcu_credit": 0,
+    "training_credit": 0
+  },
+  "next": [
+    "repository-bound execute existing recovery tests plus new retained-wrapper integration tests on clean current non-provider checkout",
+    "inject hard coordinator death exactly after admission and before outbox consumed ack in real multi-process GRID10",
+    "prove replacement coordinator automatically converges to consumed=1, exactly one admission, unchanged S1 after recovery, replay +0",
+    "then repeat with decode-safe heartbeat, worker crash/rejoin and recursive coordinator levels"
+  ]
+}

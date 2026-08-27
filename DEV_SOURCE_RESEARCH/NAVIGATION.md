@@ -8,6 +8,8 @@ Use this page when you need a specific evidence layer without scanning the repos
 | Git-supported Frankenstein chronology | [`FRANKENSTEIN_GIT_CHRONOLOGY.md`](FRANKENSTEIN_GIT_CHRONOLOGY.md) |
 | External primary literature and transfer boundaries | [`EXTERNAL_PRIMARY_CONTEXT.md`](EXTERNAL_PRIMARY_CONTEXT.md) |
 | Unsupported labels, conflicts, and unresolved claims | [`GAPS_CONTRADICTIONS_AND_UNSUPPORTED_LABELS.md`](GAPS_CONTRADICTIONS_AND_UNSUPPORTED_LABELS.md) |
+| Machine-readable historical/current failure constraints | [`../research_entity/architecture_archaeology/FAILURE_ATLAS.json`](../research_entity/architecture_archaeology/FAILURE_ATLAS.json) |
+| Machine-readable surviving/reusable success patterns | [`../research_entity/architecture_archaeology/SUCCESS_PATTERN_ATLAS.json`](../research_entity/architecture_archaeology/SUCCESS_PATTERN_ATLAS.json) |
 | Machine-readable Triggerword 3 evidence ledger | [`repository/TRIGGERWORD3_EVIDENCE_LEDGER_20260827.json`](repository/TRIGGERWORD3_EVIDENCE_LEDGER_20260827.json) |
 | Root cleanup/migration protocol | [`repository/ROOT_MIGRATION_PLAN.md`](repository/ROOT_MIGRATION_PLAN.md) |
 | Read-only root inventory tool | [`repository/trigger3_root_inventory.py`](repository/trigger3_root_inventory.py) |

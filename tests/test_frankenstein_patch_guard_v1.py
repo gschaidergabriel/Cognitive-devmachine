@@ -194,3 +194,42 @@ rename to tools/grid10_fabric_renamed.py
 """
     with pytest.raises(PatchGuardError, match="rename/copy"):
         preflight_patch(repo, patch, policy(repo))
+
+
+def test_existing_file_mode_change_is_forbidden(tmp_path):
+    repo = make_repo(tmp_path)
+    patch = """diff --git a/tools/grid10_fabric.py b/tools/grid10_fabric.py
+old mode 100644
+new mode 100755
+"""
+    with pytest.raises(PatchGuardError, match="mode changes"):
+        preflight_patch(repo, patch, policy(repo))
+
+
+def test_new_symlink_mode_is_forbidden(tmp_path):
+    repo = make_repo(tmp_path)
+    patch = """diff --git a/tools/new_link b/tools/new_link
+new file mode 120000
+--- /dev/null
++++ b/tools/new_link
+@@ -0,0 +1 @@
++../outside
+"""
+    p = policy(
+        repo,
+        allowed=("tools/new_link",),
+        base={"tools/new_link": None},
+    )
+    with pytest.raises(PatchGuardError, match="regular non-executable"):
+        preflight_patch(repo, patch, p)
+
+
+def test_control_character_policy_path_is_forbidden(tmp_path):
+    repo = make_repo(tmp_path)
+    p = PatchPolicy(
+        expected_head=git(repo, "rev-parse", "HEAD"),
+        allowed_paths=("tools/bad\nname.py",),
+        expected_base_sha256={"tools/bad\nname.py": None},
+    )
+    with pytest.raises(PatchGuardError, match="unsafe path spelling"):
+        preflight_patch(repo, "not parsed yet", p)

@@ -1,0 +1,39 @@
+{
+  "schema": "TRIGGERWORD3_ARCHIVE_INDEX_COMPONENT_TEST_RECEIPT/v1",
+  "evidence_class": "PROJECT_MEASUREMENT",
+  "observed_local_date": "2026-08-28",
+  "component": "DEV_SOURCE_RESEARCH/repository/tools/build_archive_index.py",
+  "source_blob_sha": "9b1ffc15b79349463e5a90d0c94bcb4488c02f29",
+  "test": "tests/test_triggerword3_archive_index.py",
+  "test_blob_sha": "4b7868a3039dfb7c889a14cd3e9c6d7c8f8cb0cc",
+  "execution_surface": "ChatGPT local isolated container",
+  "command_semantics": "python -m pytest tests/test_triggerword3_archive_index.py -q against byte-equivalent isolated copies of the two exact Git blobs",
+  "result": {
+    "passed": 4,
+    "failed": 0,
+    "reported_duration_seconds": 0.06
+  },
+  "validated_properties": [
+    "deterministic output independent of requested-root ordering",
+    "stable path sorting and basic label classification",
+    "missing roots remain explicit without failure",
+    "oversize files can skip hashing explicitly",
+    "atomic JSON writer leaves no temporary file after replacement"
+  ],
+  "scope": "ARCHIVE_INDEX_COMPONENT_ONLY",
+  "not_claimed": [
+    "full repository archive enumeration",
+    "Project-Frankenstein recursive topology completeness",
+    "EntityOS runtime acceptance",
+    "HCU runtime acceptance",
+    "canonical semantics",
+    "training readiness or training credit"
+  ],
+  "credits": {
+    "entityos_whole_runtime": 0,
+    "hcu_full_runtime": 0,
+    "physical_grid10_runtime": 0,
+    "canonical_semantics": 0,
+    "training": 0
+  }
+}

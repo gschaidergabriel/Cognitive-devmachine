@@ -29,7 +29,7 @@ Then read only task-relevant source/tests/receipts.
 
 ## 3. Current hard stop
 
-At the Trigger-3 baseline `main@854f6bc87780f4a5242489a6c807d186b16a8c3d`, provider epoch `9.13` is hard-off:
+Trigger-3 re-entered current main at `3c3dbe5020f57065f47bd4d0a2dce3c537128797`. Provider epoch `9.13` remains hard-off:
 
 ```text
 external provider routes: OFF
@@ -37,9 +37,11 @@ Together: FORBIDDEN
 paid fallback: FORBIDDEN
 ```
 
-Do not call NVIDIA, Groq, Mistral, OpenRouter, Together or another model provider merely because old files contain keys/routes/plans. Re-resolve current authority first.
+Do not call NVIDIA, Groq, Mistral, OpenRouter, Together or another model provider merely because old/quarantined files contain routes/plans. Re-resolve current authority first.
 
-The current Frankenstein 72-hour Bauleiter/Bugfixer provider-calling source is **quarantined/non-operative** under that baseline authority.
+Current canonical Frankenstein Bauleiter/Bugfix entrypoints now contain a source/local-unit hard-off gate before provider import, secret lookup, network, Aider or external fallback. The old provider-backed implementations are preserved as `*_PROVIDER_QUARANTINED_854f6bc.py` donors. **Do not execute those donors directly.** Their existence is provenance, not authority.
+
+The current focused gate result is source/local-unit evidence only. It is not provider runtime or 72-hour deployment acceptance.
 
 ## 4. Detect what the host can really do
 

@@ -16,13 +16,16 @@ This is the low-token installation / re-entry contract for AI hosts.
 
 If any current-facing file conflicts with the newer inbox-selected authority, keep the conflict visible and follow the newer admitted authority. Do not average versions.
 
-## Current safety fact at this curation base
+## Current safety fact
 
-Base commit: `854f6bc87780f4a5242489a6c807d186b16a8c3d`.
+Initial curation base: `854f6bc87780f4a5242489a6c807d186b16a8c3d`.
+Refreshed through main change: `3c3dbe5020f57065f47bd4d0a2dce3c537128797`.
 
-The inbox-selected 9.13O steering preserves **HARD_OFF** for external provider routes: provider routes are not admitted, Together is forbidden, and paid fallback is forbidden. The current Frankenstein Bauleiter/Bugfix provider loops are source material, not executable authority.
+The inbox-selected 9.13 steering preserves **HARD_OFF** for external provider routes: provider routes are not admitted, Together is forbidden, and paid fallback is forbidden.
 
-Do not look up provider secrets, import provider clients for execution, make provider network calls, launch Aider fallback, or treat an old plan as permission when current authority says HARD_OFF.
+As of `3c3dbe5…`, the canonical Frankenstein Bauleiter/Bugfix entrypoints resolve the current authority before provider import, secret lookup, network, Aider or fallback dispatch. The original provider-backed implementations and old provider/Together plan are preserved under explicit quarantine filenames for donor/provenance use. They are not current executable authority.
+
+Do not look up provider secrets, make provider network calls, launch quarantined provider fallbacks, or treat an old plan as permission while current authority says HARD_OFF.
 
 ## Capability detection before installation
 
@@ -138,4 +141,5 @@ Under current HARD_OFF, a provider-boundary safety probe must remain non-provide
 - Human overview: [`../HUMAN_READ_THIS/README.md`](../HUMAN_READ_THIS/README.md)
 - Technical map: [`../DEV_SOURCE_RESEARCH/README.md`](../DEV_SOURCE_RESEARCH/README.md)
 - Evidence map: [`../DEV_SOURCE_RESEARCH/research/FRANKENSTEIN_EVIDENCE_MAP.md`](../DEV_SOURCE_RESEARCH/research/FRANKENSTEIN_EVIDENCE_MAP.md)
+- Archive index: [`../DEV_SOURCE_RESEARCH/research/ARCHIVE_INDEX.json`](../DEV_SOURCE_RESEARCH/research/ARCHIVE_INDEX.json)
 - Root migration manifest: [`../DEV_SOURCE_RESEARCH/repository/ROOT_MIGRATION_MANIFEST.md`](../DEV_SOURCE_RESEARCH/repository/ROOT_MIGRATION_MANIFEST.md)

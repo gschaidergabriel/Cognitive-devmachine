@@ -2,6 +2,7 @@
   "schema": "FRANKENSTEIN_CURATED_EVIDENCE_INDEX/v1",
   "authority": "NON_AUTHORITY_DISCOVERY_INDEX_ONLY",
   "created_from_main": "854f6bc87780f4a5242489a6c807d186b16a8c3d",
+  "latest_main_observed_during_curation": "551ed48f9ebf8c610311c98ccaf84cdca3f487a7",
   "created_date": "2026-08-27",
   "authority_resolution": [
     "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
@@ -11,7 +12,7 @@
     "research_entity/rooms/PROGRAM_STATE.json",
     "exact current source/tests/receipts"
   ],
-  "snapshot_warning": "At curation time SUPERVISOR_INBOX selected 9.13O/non-authority steering while BOOTSTRAP_MINIMAL and PROGRAM_STATE still exposed 8.78 pointers. Never use this index or those caches alone for current authority.",
+  "snapshot_warning": "At curation time SUPERVISOR_INBOX selected 9.13O/non-authority steering while BOOTSTRAP_MINIMAL and PROGRAM_STATE still exposed 8.78 pointers. main then advanced by a metrics/dashboard refresh to 551ed48f without changing the observed 9.13 provider HARD_OFF finding. Never use this index or lower caches alone for current authority.",
   "identity": {
     "persistent_research_entity": "Clay",
     "product": "EntityOS",
@@ -34,6 +35,7 @@
     "provider_state": "FREE_ONLY_HARD_OFF_ALL_PROVIDER_ROUTES_FALSE_TOGETHER_FORBIDDEN_NO_PAID_FALLBACK",
     "entityos_whole_runtime_credit": 0,
     "hcu_full_runtime_credit": 0,
+    "physical_grid10_runtime_credit": 0,
     "canonical_semantics_credit": 0,
     "training_credit": 0,
     "distillery_accepted_dataset_tokens": 0,
@@ -64,10 +66,8 @@
         "research_entity/harness/reference/unifieddb_claygraph_assembly.py",
         "research_entity/runtime/UNIFIEDDB_V16_SEGMENTED_PULSE_MAINTENANCE.md"
       ],
-      "git_landmarks": [
-        "08793cdecdd8a54df06daedd206ff55688c24381"
-      ],
-      "note": "One canonical state/evidence substrate direction; exact implementation/runtime scope must be verified separately."
+      "git_landmarks": ["08793cdecdd8a54df06daedd206ff55688c24381"],
+      "note": "One canonical state/evidence substrate direction; exact implementation/runtime scope must be verified separately. Emergent Retrieval composes stored evidence dimensions and cannot invent missing facts."
     },
     {
       "id": "gwt_workspace",
@@ -126,9 +126,11 @@
         "research_entity/topic_packets/frankenstein-master-cognition-concept/frankenstein_packages_v1.py",
         "research_entity/topic_packets/frankenstein-master-cognition-concept/frankenstein_orchestrator_v1.py",
         "research_entity/topic_packets/frankenstein-master-cognition-concept/frankenstein_bugfix_v1.py",
+        "research_entity/topic_packets/frankenstein-master-cognition-concept/frankenstein_authority_launcher_v1.py",
         "tests/test_frankenstein_packages_v1.py",
         "tests/test_frankenstein_orchestrator_v1.py",
-        "tests/test_frankenstein_bugfix_v1.py"
+        "tests/test_frankenstein_bugfix_v1.py",
+        "tests/test_frankenstein_authority_launcher_v1.py"
       ],
       "git_landmarks": [
         "ab15b482caff1fa5e446d7795cea8df81bc41b97",
@@ -139,7 +141,8 @@
         "Post-HARD_OFF NVIDIA/Mistral fallback provenance demonstrated real external caller bypass.",
         "Together allowance in orchestration plan is stale non-authority under 9.13.",
         "Current provider-calling long-running loop must not be deployed unchanged."
-      ]
+      ],
+      "launcher_boundary": "The new authority launcher is a fail-closed safe entry candidate that gates before target import. It is source-ready only until its tests are observed on an admitted non-provider surface; direct legacy entry paths remain quarantined until all callers are proven to route through the gate."
     },
     {
       "id": "grid10_thread_count",
@@ -153,16 +156,48 @@
       "note": "Supports default=1 only for measured topology; no Physical-GRID10/HCU/release promotion."
     },
     {
+      "id": "global_jspace",
+      "status": "MEASUREMENT_REPAIR_REQUIRED",
+      "paths": [
+        "research_entity/00_CURRENT/latest/jspace.md",
+        "research_entity/global/j-space/README.md"
+      ],
+      "note": "Small-scope behavioral steering evidence exists; historical representation-divergence instrumentation has zero representation-level credit until repaired and controlled."
+    },
+    {
       "id": "distillery_training_yield",
       "status": "NEGATIVE_RESULT",
       "accepted_dataset_tokens": 0,
       "note": "Raw source/swarm token volume is not accepted training yield; training credit remains zero."
     }
   ],
+  "archive_roots": [
+    {"path": "research_entity/trigger_runs/", "role": "append-only trigger/run evidence"},
+    {"path": "research_entity/topic_packets/", "role": "topic-focused source/research packets"},
+    {"path": "research_entity/knowledge_micro_packets/", "role": "small reusable evidence/method packets"},
+    {"path": "research_entity/global/", "role": "cross-project contracts and J-Space research"},
+    {"path": "research_entity/runtime/", "role": "runtime/maintenance research"},
+    {"path": "research_entity/00_CURRENT/", "role": "generated fast-current cache, not authority by itself"},
+    {"path": "the artefact/", "role": "product/release artifact workspace"},
+    {"path": "agentZero/", "role": "historical/transitional donor implementation"},
+    {"path": "frank_reference/", "role": "historical Frank donor/reference material"}
+  ],
   "curated_entrypoints": [
     "HUMAN_READ_THIS/README.md",
     "DEV_SOURCE_RESEARCH/README.md",
     "DEV_SOURCE_RESEARCH/FRANKENSTEIN_RESEARCH_CHRONICLE.md",
+    "DEV_SOURCE_RESEARCH/EXTERNAL_PRIMARY_NOTES.md",
+    "DEV_SOURCE_RESEARCH/ROOT_MIGRATION_MANIFEST.json",
     "AI_START_HERE_DO_NOT_SCAN_REPO/README.md"
+  ],
+  "promotion_law": [
+    "request != effect",
+    "model output != world fact",
+    "method exists != result exists",
+    "memory != observation",
+    "source-ready != runtime-observed",
+    "component PASS != whole-product PASS",
+    "same-pipeline repetition != independent evidence",
+    "logical cell count != physical decode concurrency"
   ]
 }

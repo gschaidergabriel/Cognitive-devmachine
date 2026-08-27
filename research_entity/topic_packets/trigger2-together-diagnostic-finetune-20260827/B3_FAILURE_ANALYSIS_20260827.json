@@ -1,0 +1,50 @@
+{
+  "schema": "OWN_ANALYSIS_NOTE/v1",
+  "packet_id": "trigger2-together-diagnostic-finetune-20260827",
+  "arbeitspaket": "paket-1787794793671-59bc07",
+  "topic": "B3 multi-hop-dereference failure mode -- own analysis, grounded in the actual holdout test data, no ChatGPT used",
+  "raw_evidence": [
+    {
+      "source_file": "TRIGGER2_B3_MULTI_HOP_DEREF_CANDIDATE_V1.jsonl",
+      "prompt": "CODEBOOK (entry points): ALLOW=>PTR_T12_C0_H1 | DENY=>ABI_ACCEPTED_ORDINAL:14 | ABSTAIN=>PTR_T12_C2_H1\nCHAIN (pointer definitions): PTR_T12_C0_H1 => PTR_T12_C0_H2 | PTR_T12_C0_H2 => ABI_ACCEPTED_ORDINAL:12 | PTR_T12_C2_H1 => ABI_ACCEPTED_ORDINAL:13\nSTATE: the current class is DENY, given directly.\nDereference the full chain and return exactly the FINAL resolved symbol atom -- never an intermediate pointer token.",
+      "expected": "ABI_ACCEPTED_ORDINAL:14",
+      "got": "```cpp\\n#include <string>\\n#include <vector>\\n#include <map>\\n#include <set>\\n#include"
+    },
+    {
+      "source_file": "TRIGGER2_B3_UNRESOLVABLE_CHAIN_REJECTION_CANDIDATE_V1.jsonl",
+      "prompt": "CODEBOOK (entry points): ALLOW=>ABI_ACCEPTED_ORDINAL:13 | DENY=>PTR_T12_C1_H1 | ABSTAIN=>PTR_T12_C2_H1\nCHAIN (pointer definitions): PTR_T12_C1_H1 => ABI_ACCEPTED_ORDINAL:12 | PTR_T12_C2_H1 => PTR_T12_C2_H2 | PTR_T12_C2_H2 => UNDEFINED_PTR_T12_C2_H3\nSTATE: the current class is ALLOW, given directly.\nDereference the full chain and return exactly the FINAL resolved symbol atom, or the token UNRESOLVABLE if the chain does not terminate in a defined symbol atom.",
+      "expected": "ABI_ACCEPTED_ORDINAL:13",
+      "got": "```python\\nfrom typing import Optional, Union\\n\\n# Define the entry points\\nALLOW = \"ALLOW\"\\nDENY"
+    }
+  ],
+  "row_count_control_evidence": {
+    "note": "Directly checks the two most plausible explanations against the actual holdout results across all 12 tested families -- not the only two rows above, the full set.",
+    "B3_multi_hop_deref_TRAIN_rows": 432,
+    "families_with_FEWER_train_rows_that_still_kept_correct_format": {
+      "B2_STALE_BINDING_REJECTION": {"train_rows": 144, "holdout_output": "STALE_REJECTED (real trained class word, right family, wrong specific answer -- but a well-formed atom)"},
+      "B6_GWT_UPTAKE": {"train_rows": 216, "holdout_output": "alpha (real trained class word, wrong specific answer, well-formed)"}
+    },
+    "conclusion_from_this_control": "Row count is not the primary driver. B2_STALE (144 rows, 3x fewer than B3's 432) and B6_GWT_UPTAKE (216 rows, half of B3's 432) both stayed inside the trained vocabulary on their holdout row; B3, with MORE rows than either, completely abandoned the task format and wrote generic programming-language boilerplate instead. If exposure count were the dominant factor, B3 should have been at least as well-behaved as B2_STALE/B6_GWT_UPTAKE, not dramatically worse."
+  },
+  "surface_structure_evidence": {
+    "note": "What is actually different about the B3 prompts compared to every other family in the same holdout batch.",
+    "b0_read_format": "EVIDENCE: ... / QUERY: ... / Respond with exactly one word: ALLOW, DENY, or ABSTAIN.  <- explicit output-format constraint, single flat statement, no nested structure.",
+    "b4_b5_format": "CODEBOOK: entity=>atom | entity=>atom / QUERY: Which atom is bound to X?  <- single flat lookup table, one hop.",
+    "b3_format": "CODEBOOK (entry points): CLASS=>PTR_id | CLASS=>ordinal | ... / CHAIN (pointer definitions): PTR_id => PTR_id | PTR_id => ordinal | ... / STATE: ... / 'Dereference the full chain and return exactly the FINAL resolved symbol atom -- never an intermediate pointer token.'",
+    "vocabulary_flagged": ["pointer", "dereference", "CHAIN (pointer definitions)", "PTR_ identifiers chained through multiple hops (PTR_T12_C0_H1 => PTR_T12_C0_H2 => ordinal)"],
+    "why_this_matters": "The words 'pointer' and 'dereference', plus a literal 'PTR_' naming convention and a multi-step link-following structure, are exactly the vocabulary and shape of a classic C/C++ pointer-chasing or linked-list-traversal exercise -- one of the most heavily represented patterns in any base LLM's pretraining corpus (textbooks, interview-prep sites, Stack Overflow). This diagnostic model is a general-purpose Qwen3.5-0.8B checkpoint that received exactly one epoch over 9544 rows; a strong, deeply pretrained completion prior for 'pointer' + 'dereference' + 'chain' is very plausible to survive that light a fine-tune, especially on the single longest/most structurally nested prompt family in the whole curriculum. The generated output is not gibberish -- it is textbook-quality C++ header includes and Python type-hint boilerplate, i.e. exactly what a strong code-completion prior produces when triggered, not a confused/random failure."
+  },
+  "format_constraint_evidence": {
+    "note": "A second, compounding, checkable difference: explicitness of the negative constraint.",
+    "b0_read_instruction": "'Respond with exactly one word: ALLOW, DENY, or ABSTAIN.' -- names the closed output set directly in the instruction, on every single row.",
+    "b3_instruction": "'Dereference the full chain and return exactly the FINAL resolved symbol atom -- never an intermediate pointer token.' -- constrains WHICH atom (final, not intermediate) but never says 'no explanation', 'no code', or restates the closed output alphabet the way B0 does.",
+    "conclusion": "B3's instruction guards against one specific mistake (returning an intermediate pointer) but does not explicitly forbid free-form/code output the way B0's phrasing implicitly does by naming the exact 3-word output set. This is a second, independent, concrete reason B3 had more room to drift into an unconstrained completion than B0 did."
+  },
+  "recommendation_for_next_training_round": [
+    "Rewrite B3 prompt vocabulary to remove programming-coded terms: replace 'pointer definitions'/'Dereference the full chain'/'PTR_' with domain-neutral wording (e.g. 'CHAIN (links)', 'Follow the full chain and return...', identifiers like 'LINK_T12_A' instead of 'PTR_T12_C0_H1'). This directly targets the surface-trigger hypothesis, which has stronger support here than the row-count hypothesis.",
+    "Add an explicit closed-format constraint to the B3 instruction line, matching B0's pattern: e.g. append 'Respond with only the atom token -- no explanation, no code.' to every B3 prompt.",
+    "Secondary, lower-priority lever: oversampling B3 rows in the next curriculum mix is still plausible cheap insurance, but should not be treated as the primary fix given the row-count control evidence above.",
+    "Suggest adding a small number of explicit hard-negative training rows for this specific family that show a CHAIN/pointer-shaped prompt paired with a correct short-atom answer immediately followed (in a held-out eval, not training leakage) by a near-identical prompt testing that the model does not degrade into code -- i.e. treat this as its own regression check going forward, not just a one-off finding."
+  ],
+  "explicitly_not_claimed": "This is a single-example-per-cause analysis grounded in exactly the evidence available (2 real B3 failures + a same-batch 12-row cross-family comparison). It is not a controlled ablation (no retraining was done to confirm the vocabulary-swap fix actually works) -- that would be the natural next real experiment, not asserted as already proven here."
+}

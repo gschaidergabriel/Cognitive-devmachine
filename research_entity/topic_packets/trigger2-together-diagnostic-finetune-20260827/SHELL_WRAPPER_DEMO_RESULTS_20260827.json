@@ -1,0 +1,254 @@
+[
+  {
+    "source_file": "TRIGGER2_B0_READ_BASELINE_CANDIDATE_V1.jsonl",
+    "expected_target": "ABSTAIN",
+    "packet": {
+      "schema": "COGNITIVE_RESULT_PACKET/v1",
+      "body": {
+        "result_class": "CANDIDATE",
+        "producer": "MODEL",
+        "source_work_digest_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+        "payload": {
+          "raw_output": "DENY",
+          "validated": true,
+          "atom": "DENY",
+          "rejection_reason": null,
+          "wrapper_schema": "XENO_DIAGNOSTIC_SPECIALIST_WRAPPER/v1"
+        },
+        "unresolved_alternatives": []
+      },
+      "packet_digest_sha256": "e45bdf12dd04e0037c073d26978c6f9233d705bb11d9bbc2ab53bf285aa82ae3"
+    }
+  },
+  {
+    "source_file": "TRIGGER2_B0_WRITE_BASELINE_CANDIDATE_V1.jsonl",
+    "expected_target": "ABI_ACCEPTED_ORDINAL:14",
+    "packet": {
+      "schema": "COGNITIVE_RESULT_PACKET/v1",
+      "body": {
+        "result_class": "CANDIDATE",
+        "producer": "MODEL",
+        "source_work_digest_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+        "payload": {
+          "raw_output": "ABI_ACCEPTED_ORDINAL:14",
+          "validated": true,
+          "atom": "ABI_ACCEPTED_ORDINAL:14",
+          "rejection_reason": null,
+          "wrapper_schema": "XENO_DIAGNOSTIC_SPECIALIST_WRAPPER/v1"
+        },
+        "unresolved_alternatives": []
+      },
+      "packet_digest_sha256": "fba6d1c15bba53fe572a08b80b81b30d3d32fb873ef1a912c96a2e443b5c6693"
+    }
+  },
+  {
+    "source_file": "TRIGGER2_B1_TRAIN_BALANCED_2ORDER_V1.jsonl",
+    "expected_target": "ABI_ACCEPTED_ORDINAL:12",
+    "packet": {
+      "schema": "COGNITIVE_RESULT_PACKET/v1",
+      "body": {
+        "result_class": "CANDIDATE",
+        "producer": "MODEL",
+        "source_work_digest_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+        "payload": {
+          "raw_output": "E",
+          "validated": false,
+          "atom": null,
+          "rejection_reason": "NOT_IN_TRAINED_VOCABULARY",
+          "wrapper_schema": "XENO_DIAGNOSTIC_SPECIALIST_WRAPPER/v1"
+        },
+        "unresolved_alternatives": []
+      },
+      "packet_digest_sha256": "15d3dde00c15d472a22100ec51a38ad47fdc7ed66b1b3b4430875952c86e86e7"
+    }
+  },
+  {
+    "source_file": "TRIGGER2_B2_PRIOR_OVERRIDE_CANDIDATE_V1.jsonl",
+    "expected_target": "ABI_ACCEPTED_ORDINAL:14",
+    "packet": {
+      "schema": "COGNITIVE_RESULT_PACKET/v1",
+      "body": {
+        "result_class": "CANDIDATE",
+        "producer": "MODEL",
+        "source_work_digest_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+        "payload": {
+          "raw_output": "ALLOW",
+          "validated": true,
+          "atom": "ALLOW",
+          "rejection_reason": null,
+          "wrapper_schema": "XENO_DIAGNOSTIC_SPECIALIST_WRAPPER/v1"
+        },
+        "unresolved_alternatives": []
+      },
+      "packet_digest_sha256": "f9787cae198c32b828090f9bd5d175019804ff043b12762711915da1ae32d95b"
+    }
+  },
+  {
+    "source_file": "TRIGGER2_B2_STALE_BINDING_REJECTION_CANDIDATE_V1.jsonl",
+    "expected_target": "ABI_ACCEPTED_ORDINAL:14",
+    "packet": {
+      "schema": "COGNITIVE_RESULT_PACKET/v1",
+      "body": {
+        "result_class": "CANDIDATE",
+        "producer": "MODEL",
+        "source_work_digest_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+        "payload": {
+          "raw_output": "STALE_REJECTED",
+          "validated": true,
+          "atom": "STALE_REJECTED",
+          "rejection_reason": null,
+          "wrapper_schema": "XENO_DIAGNOSTIC_SPECIALIST_WRAPPER/v1"
+        },
+        "unresolved_alternatives": []
+      },
+      "packet_digest_sha256": "c48e799cc4a6059b7e6ad05e56218b30000a7144de472f25b3bfe56169e941d7"
+    }
+  },
+  {
+    "source_file": "TRIGGER2_B3_MULTI_HOP_DEREF_CANDIDATE_V1.jsonl",
+    "expected_target": "ABI_ACCEPTED_ORDINAL:14",
+    "packet": {
+      "schema": "COGNITIVE_RESULT_PACKET/v1",
+      "body": {
+        "result_class": "CANDIDATE",
+        "producer": "MODEL",
+        "source_work_digest_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+        "payload": {
+          "raw_output": "```cpp\n#include <string>\n#include <vector>\n#include <map>\n#include <set>\n#include",
+          "validated": false,
+          "atom": null,
+          "rejection_reason": "CODE_BLOCK_DERAILMENT",
+          "wrapper_schema": "XENO_DIAGNOSTIC_SPECIALIST_WRAPPER/v1"
+        },
+        "unresolved_alternatives": []
+      },
+      "packet_digest_sha256": "43819e0304a668e6a7c198d5e86cbdfc456bbff3979310440ac5cbbeb0028dbb"
+    }
+  },
+  {
+    "source_file": "TRIGGER2_B3_UNRESOLVABLE_CHAIN_REJECTION_CANDIDATE_V1.jsonl",
+    "expected_target": "ABI_ACCEPTED_ORDINAL:13",
+    "packet": {
+      "schema": "COGNITIVE_RESULT_PACKET/v1",
+      "body": {
+        "result_class": "CANDIDATE",
+        "producer": "MODEL",
+        "source_work_digest_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+        "payload": {
+          "raw_output": "```python\nfrom typing import Optional, Union\n\n# Define the entry points\nALLOW = \"ALLOW\"\nDENY",
+          "validated": false,
+          "atom": null,
+          "rejection_reason": "CODE_BLOCK_DERAILMENT",
+          "wrapper_schema": "XENO_DIAGNOSTIC_SPECIALIST_WRAPPER/v1"
+        },
+        "unresolved_alternatives": []
+      },
+      "packet_digest_sha256": "f07a25c6d830a7c6bd91e64354b00af14c0a44c155ce7a8ea98376461b89b001"
+    }
+  },
+  {
+    "source_file": "TRIGGER2_B4_CAPACITY_INTERFERENCE_CANDIDATE_V1.jsonl",
+    "expected_target": "ABI_ACCEPTED_ORDINAL:65",
+    "packet": {
+      "schema": "COGNITIVE_RESULT_PACKET/v1",
+      "body": {
+        "result_class": "CANDIDATE",
+        "producer": "MODEL",
+        "source_work_digest_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+        "payload": {
+          "raw_output": "cell_16",
+          "validated": false,
+          "atom": null,
+          "rejection_reason": "NOT_IN_TRAINED_VOCABULARY",
+          "wrapper_schema": "XENO_DIAGNOSTIC_SPECIALIST_WRAPPER/v1"
+        },
+        "unresolved_alternatives": []
+      },
+      "packet_digest_sha256": "2956326a45f4ac9722fa0c2450b6294e74aa274303dfcac8af9156d371e5b23c"
+    }
+  },
+  {
+    "source_file": "TRIGGER2_B5_VARIABLE_N_EQUIVARIANCE_CANDIDATE_V1.jsonl",
+    "expected_target": "ABI_ACCEPTED_ORDINAL:293",
+    "packet": {
+      "schema": "COGNITIVE_RESULT_PACKET/v1",
+      "body": {
+        "result_class": "CANDIDATE",
+        "producer": "MODEL",
+        "source_work_digest_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+        "payload": {
+          "raw_output": "C",
+          "validated": false,
+          "atom": null,
+          "rejection_reason": "NOT_IN_TRAINED_VOCABULARY",
+          "wrapper_schema": "XENO_DIAGNOSTIC_SPECIALIST_WRAPPER/v1"
+        },
+        "unresolved_alternatives": []
+      },
+      "packet_digest_sha256": "6121a848dd7543d1ab7d8a32424c9ec80e8a85b6e75669e05b012957a840a4a3"
+    }
+  },
+  {
+    "source_file": "TRIGGER2_B6_DB_VS_SIM_CANDIDATE_V1.jsonl",
+    "expected_target": "STALE_REBASE_REQUIRED",
+    "packet": {
+      "schema": "COGNITIVE_RESULT_PACKET/v1",
+      "body": {
+        "result_class": "CANDIDATE",
+        "producer": "MODEL",
+        "source_work_digest_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+        "payload": {
+          "raw_output": "SIMULATED_HYPOTHESIS",
+          "validated": true,
+          "atom": "SIMULATED_HYPOTHESIS",
+          "rejection_reason": null,
+          "wrapper_schema": "XENO_DIAGNOSTIC_SPECIALIST_WRAPPER/v1"
+        },
+        "unresolved_alternatives": []
+      },
+      "packet_digest_sha256": "3b424ed0362a049ee94045c0b87ac050faf9ee2005f07be13b350d367d23b7f0"
+    }
+  },
+  {
+    "source_file": "TRIGGER2_B6_GWT_UPTAKE_CANDIDATE_V1.jsonl",
+    "expected_target": "gamma",
+    "packet": {
+      "schema": "COGNITIVE_RESULT_PACKET/v1",
+      "body": {
+        "result_class": "CANDIDATE",
+        "producer": "MODEL",
+        "source_work_digest_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+        "payload": {
+          "raw_output": "alpha",
+          "validated": true,
+          "atom": "alpha",
+          "rejection_reason": null,
+          "wrapper_schema": "XENO_DIAGNOSTIC_SPECIALIST_WRAPPER/v1"
+        },
+        "unresolved_alternatives": []
+      },
+      "packet_digest_sha256": "ba9bfd4991a0c4915b70f4d48879ee6820bbd1fd2e04477531ac832e3160f4c3"
+    }
+  },
+  {
+    "source_file": "TRIGGER2_B6_HYPERPOSITION_EVIDENCE_AUTHORITY_CANDIDATE_V1.jsonl",
+    "expected_target": "PRESERVE_BRANCHES",
+    "packet": {
+      "schema": "COGNITIVE_RESULT_PACKET/v1",
+      "body": {
+        "result_class": "CANDIDATE",
+        "producer": "MODEL",
+        "source_work_digest_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+        "payload": {
+          "raw_output": "PRESERVE_BRANCHES",
+          "validated": true,
+          "atom": "PRESERVE_BRANCHES",
+          "rejection_reason": null,
+          "wrapper_schema": "XENO_DIAGNOSTIC_SPECIALIST_WRAPPER/v1"
+        },
+        "unresolved_alternatives": []
+      },
+      "packet_digest_sha256": "95fd99d2d640a72a147d48a3023511e07fba2138d6ff0e6cbabbf2134bd0fe0a"
+    }
+  }
+]

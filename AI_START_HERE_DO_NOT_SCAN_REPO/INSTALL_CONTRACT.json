@@ -1,0 +1,72 @@
+{
+  "schema": "FRANKENSTEIN_AI_INSTALL_CONTRACT/v1",
+  "purpose": "host-neutral scan-free project integration contract",
+  "path_law": {
+    "assume_downloads": false,
+    "assume_home": false,
+    "assume_clone_name": false,
+    "assume_cwd": false,
+    "require_dynamic_or_host_metadata_resolution": true
+  },
+  "minimum_read_set": [
+    "CLAY_EXECUTION_AUTHORITY.md",
+    "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
+    "research_entity/continuity/BOOTSTRAP_MINIMAL.json",
+    "HUMAN_READ_THIS/README.md",
+    "DEV_SOURCE_RESEARCH/README.md",
+    "AI_START_HERE_DO_NOT_SCAN_REPO/README.md"
+  ],
+  "capability_probe": [
+    "read_project_files",
+    "write_project_files",
+    "execute_local_shell",
+    "git_read",
+    "git_write",
+    "session_or_task_lifecycle_hooks",
+    "durable_local_state",
+    "tool_or_connector_calls",
+    "effect_result_receipts",
+    "pre_effect_authority_gate"
+  ],
+  "host_routes": {
+    "claude_code": "DETECT_THEN_MAP",
+    "codex_cli": "DETECT_THEN_MAP",
+    "hermes_agent": "DETECT_THEN_MAP",
+    "chatgpt_web": "CONNECTED_SURFACES_ONLY",
+    "claude_web": "CONNECTED_SURFACES_ONLY",
+    "grok_web": "CONNECTED_SURFACES_ONLY",
+    "generic": "MINIMUM_CONTEXT_AND_PROPOSED_DELTA_ONLY"
+  },
+  "required_proofs": [
+    "PATH_RESOLUTION",
+    "INSTRUCTION_LOAD",
+    "CLAIMED_LIFECYCLE_HOOK_FIRES",
+    "DURABLE_STATE_WRITE_READBACK_WHERE_SUPPORTED",
+    "EFFECT_OR_TOOL_RESULT_RECEIPT_WHERE_SUPPORTED",
+    "RESULT_REENTRY",
+    "FAILURE_IS_DETECTABLE",
+    "CURRENT_AUTHORITY_RESOLVED_BEFORE_EXTERNAL_EFFECT"
+  ],
+  "result_enum": [
+    "NATIVE",
+    "ADAPTED",
+    "DEGRADED",
+    "BLOCKED"
+  ],
+  "forbidden_claims": [
+    "hard-coded path presented as dynamic",
+    "unsupported lifecycle hook presented as installed",
+    "conversation memory presented as canonical state",
+    "model output presented as verified effect",
+    "provider key presence presented as provider authority",
+    "missing proof presented as success"
+  ],
+  "current_snapshot_note": {
+    "date": "2026-08-27",
+    "provider_authority_epoch": "9.13",
+    "provider_state": "HARD_OFF_ALL_AUTONOMOUS_PROVIDER_ADMISSION_FALSE",
+    "together": "FORBIDDEN",
+    "paid_fallback": "FORBIDDEN",
+    "snapshot_is_not_future_authority": true
+  }
+}

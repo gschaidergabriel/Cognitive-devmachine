@@ -161,3 +161,27 @@ def test_672_line_file_small_patch_preserves_all_unrelated_lines(tmp_path):
     assert result[335] == "line-335"
     assert result[336] == "line-336-CHANGED"
     assert result[337] == "line-337"
+
+
+def test_symlink_parent_escape_is_rejected_before_mutation(tmp_path):
+    root = _repo(tmp_path)
+    outside = tmp_path / "outside"
+    outside.mkdir()
+    victim = outside / "victim.txt"
+    victim.write_text("outside-data\n")
+    (root / "linked").symlink_to(outside, target_is_directory=True)
+
+    # The declaration is lexically repo-relative but resolves through a
+    # symlink parent outside the worktree. It must never be admitted.
+    patch = (
+        b"diff --git a/linked/victim.txt b/linked/victim.txt\n"
+        b"--- a/linked/victim.txt\n"
+        b"+++ b/linked/victim.txt\n"
+        b"@@ -1 +1 @@\n"
+        b"-outside-data\n"
+        b"+tampered\n"
+    )
+    before = hashlib.sha256(victim.read_bytes()).hexdigest()
+    with pytest.raises(EditIntegrityError, match="symlink path component forbidden"):
+        apply_existing_file_patch(root, patch, {"linked/victim.txt": before})
+    assert victim.read_text() == "outside-data\n"

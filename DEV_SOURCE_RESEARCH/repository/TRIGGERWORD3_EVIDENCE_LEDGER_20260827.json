@@ -1,0 +1,204 @@
+{
+  "schema": "TRIGGERWORD3_EVIDENCE_LEDGER/v1",
+  "created_at": "2026-08-27T23:50:00+07:00",
+  "trigger": "triggerwort 3",
+  "repository": "gschaidergabriel/clay-global-research-entity",
+  "branch_base_main_sha": "854f6bc87780f4a5242489a6c807d186b16a8c3d",
+  "curation_branch": "trigger3/frankenstein-synthesis-20260827-gpt56sol",
+  "root_readme_modified": false,
+  "authority": {
+    "source": "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
+    "schema_version": "9.13",
+    "delta": "9.13O_NON_AUTHORITY",
+    "runtime_provider_authority": "HARD_OFF",
+    "provider_routes_admitted": false,
+    "together_forbidden": true,
+    "remaining_together_paid_runs_authorized": 0,
+    "whole_entityos_hcu_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "canonical_semantics_credit": 0,
+    "training_credit": 0
+  },
+  "status_taxonomy": [
+    "attempted",
+    "source-ready",
+    "measured",
+    "reproduced",
+    "contradicted",
+    "blocked",
+    "prepared-not-run",
+    "adopted",
+    "retired"
+  ],
+  "claims": [
+    {
+      "id": "pf-history-scope-545",
+      "claim": "Accessible Level-0 Project-Frankenstein Git-history scope is explicitly bounded to 545 commit obligations from e1a881 inclusive through abba90 inclusive.",
+      "evidence_class": "PROJECT_MEASUREMENT",
+      "status": "adopted",
+      "source": "research_entity/archive_assimilation/manifests/PROJECT_FRANKENSTEIN_LEVEL0_SCOPE_LAW.json",
+      "scope": "HISTORICAL_RECONSTRUCTION_DENOMINATOR_ONLY",
+      "does_not_imply": ["full semantic reconstruction", "whole historical runtime pass"]
+    },
+    {
+      "id": "pf-manifest-partial",
+      "claim": "Project-Frankenstein archive assimilation remains partial and the exact whole-tree/history denominator is not fully frozen by the broader manifest.",
+      "evidence_class": "CURRENT_SOURCE",
+      "status": "blocked",
+      "source": "research_entity/archive_assimilation/manifests/PROJECT_FRANKENSTEIN_MANIFEST.json",
+      "scope": "ARCHIVE_ASSIMILATION_COMPLETENESS"
+    },
+    {
+      "id": "entityos-hcu-current-identity",
+      "claim": "EntityOS is the current product identity and HCU is the current integrated cognition/compute architecture.",
+      "evidence_class": "CURRENT_SOURCE",
+      "status": "adopted",
+      "source": "research_entity/continuity/BOOTSTRAP_MINIMAL.json",
+      "authority_note": "Bootstrap is subordinate to newer supervisor/owner authority but identity is not contradicted by 9.13 inbox."
+    },
+    {
+      "id": "provider-hardoff-913",
+      "claim": "Current external provider execution authority is HARD_OFF; provider routes are not admitted and Together is forbidden.",
+      "evidence_class": "CURRENT_SOURCE",
+      "status": "adopted",
+      "source": "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
+      "scope": "CURRENT_EXECUTION_AUTHORITY"
+    },
+    {
+      "id": "frankenstein-72h-provider-orchestration",
+      "claim": "Fresh Frankenstein Bauleiter/Bugfixer provider-loop source exists but is quarantined and non-operative under current HARD_OFF authority.",
+      "evidence_class": "NEGATIVE_RESULT",
+      "status": "blocked",
+      "sources": [
+        "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
+        "commit:854f6bc87780f4a5242489a6c807d186b16a8c3d"
+      ],
+      "scope": "NO_RUNTIME_AUTHORIZATION_NO_RUNTIME_CREDIT"
+    },
+    {
+      "id": "grid10-thread-ab-4proc-4vcpu",
+      "claim": "On the measured 4-process/4-vCPU topology, 1 torch thread/process outperformed 2 threads/process; 4 threads/process completed zero samples within timeouts.",
+      "evidence_class": "PROJECT_MEASUREMENT",
+      "status": "contradicted",
+      "contradicts": "external recommendation that 2 threads/process would improve latency on this topology",
+      "measurements": {
+        "1_thread_seconds_per_call_mean": 8.3197,
+        "2_threads_seconds_per_call_mean": 23.1806,
+        "4_threads_completed_samples": 0
+      },
+      "source": "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
+      "scope": "DIAGNOSTIC_TOPOLOGY_SPECIFIC_NO_RELEASE_PROMOTION"
+    },
+    {
+      "id": "unifieddb-emergent-retrieval",
+      "claim": "Project contains source/research surfaces for multi-dimensional UnifiedDB emergent retrieval/cascade/assembly.",
+      "evidence_class": "CURRENT_SOURCE",
+      "status": "source-ready",
+      "sources": [
+        "research_entity/harness/reference/unifieddb_emergent_cascade.py",
+        "research_entity/harness/reference/benchmark_unifieddb_emergent_cascade.py",
+        "research_entity/harness/reference/benchmark_unifieddb_emergent_assembly.py"
+      ],
+      "open_hypothesis": "Multi-dimensional overlap improves decision-relevant retrieval over semantic-only retrieval under leakage-controlled matched evaluation.",
+      "engineering_confidence": 0.66,
+      "falsifier": "No improvement in preregistered relevance/downstream success after accounting for latency and complexity."
+    },
+    {
+      "id": "reflection-rich-substrate",
+      "claim": "Useful reflective agency may require external state, memory, perception, arbitration, effect receipts and verified outcome re-entry.",
+      "evidence_class": "OPEN_HYPOTHESIS",
+      "status": "attempted",
+      "engineering_confidence": 0.59,
+      "counterhypothesis": "Retrieval plus deterministic control plus improved prompting explains the benefit without a unique reflection subsystem.",
+      "falsifier": "Lesioning explicit reflection under matched retrieval/token/action budgets produces no degradation."
+    },
+    {
+      "id": "jspace-causal-control",
+      "claim": "A shared J-Space/vector signal may causally coordinate bounded HCU functions and alter target-model behavior beyond lexical/prompt leakage.",
+      "evidence_class": "OPEN_HYPOTHESIS",
+      "status": "source-ready",
+      "sources": [
+        "research_entity/claycode/HCU_JSPACE_MODEL_INPUT_CONTROL_CAUSALITY_GATE_V1.md",
+        "research_entity/claycode/HCU_JSPACE_OBSERVE_CONTROL_TRANSLATE_ARCHITECTURE_V1.md",
+        "research_entity/global/j-space/"
+      ],
+      "engineering_confidence": 0.44,
+      "counterhypotheses": ["prompt recurrence", "schema recurrence", "lexical leakage", "shared preprocessing"],
+      "falsifier": "Label-free counterbalanced disjoint interventions with shuffle/lesion/rescue controls fail to show stable vector-channel effect.",
+      "runtime_credit": 0
+    },
+    {
+      "id": "hyperposition-alternative-preservation",
+      "claim": "Preserving unresolved structured alternatives until an evidence-bearing discriminator may reduce premature hypothesis collapse.",
+      "evidence_class": "OPEN_HYPOTHESIS",
+      "status": "attempted",
+      "sources": [
+        "research_entity/00_CURRENT/latest/hyperposition-gwt-grf.md",
+        "research_entity/trigger_runs/hyperposition/"
+      ],
+      "engineering_confidence": 0.62,
+      "falsifier": "Matched evaluations show no calibration/accuracy gain and only increased compute/latency."
+    },
+    {
+      "id": "claycode-release",
+      "claim": "ClayCode general-purpose BASE/release is not fully promoted; current supervisor records WP01/WP02 pass and WP03-WP14/open release gates.",
+      "evidence_class": "CURRENT_SOURCE",
+      "status": "blocked",
+      "sources": [
+        "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
+        "CLAYCODE_GENERAL_PURPOSE_COMPILER_MANIFEST.json",
+        "research_entity/global/CLAYCODE_GENERAL_PURPOSE_COMPILER_ACCEPTANCE_CONTRACT.md"
+      ]
+    },
+    {
+      "id": "training-credit-zero",
+      "claim": "Current training credit is zero despite historical and source-ready training research.",
+      "evidence_class": "NEGATIVE_RESULT",
+      "status": "blocked",
+      "source": "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
+      "related_sources": [
+        "research_entity/global/j-space/research/2026-08-25_FORSCHUNGSRUN_2_QWEN35_08B_ENTITYOS_HCU_TRAINING_CURRICULUM_GPT56SOL.json",
+        "historical:services/soma/micro_trainer.py",
+        "historical:papers/IAPT_METHOD.md"
+      ],
+      "training_credit": 0
+    },
+    {
+      "id": "sqlite-wal-reset-risk",
+      "claim": "SQLite official documentation reports a rare WAL-reset race fixed in 3.51.3; exact runtime SQLite version should be bound before release-grade concurrent WAL claims.",
+      "evidence_class": "EXTERNAL_PRIMARY",
+      "status": "adopted",
+      "source": "https://www.sqlite.org/wal.html",
+      "scope": "EXTERNAL_RISK_CONTEXT_NOT_PROJECT_BUG_OBSERVATION"
+    }
+  ],
+  "external_primary": [
+    {
+      "topic": "global workspace",
+      "citation": "Bernard J. Baars, Prog Brain Res. 2005;150:45-53, DOI 10.1016/S0079-6123(05)50004-9",
+      "use": "background/analogy only"
+    },
+    {
+      "topic": "SQLite WAL",
+      "url": "https://www.sqlite.org/wal.html",
+      "use": "storage/concurrency semantics and current WAL-reset risk"
+    },
+    {
+      "topic": "NVIDIA CUDA Unified Memory",
+      "url": "https://docs.nvidia.com/cuda/cuda-programming-guide/04-special-topics/unified-memory.html",
+      "use": "systems-design analogy only; not database semantics"
+    }
+  ],
+  "topology": {
+    "target_public_root": [
+      "README.md",
+      "HUMAN_READ_THIS/",
+      "DEV_SOURCE_RESEARCH/",
+      "AI_START_HERE_DO_NOT_SCAN_REPO/"
+    ],
+    "target_reached": false,
+    "reason_not_moved_in_this_delta": "Current root has many live/legacy technical paths. Blind relocation could break imports, workflows, relative links and reproducibility. Public layers are created first; migration requires dependency inventory and path-preserving plan.",
+    "next_gate": "execute ROOT_MIGRATION_PLAN dependency inventory, generate old->new mapping, validate all code/workflow/link references, then perform relocation in a dedicated mechanically verified commit"
+  }
+}

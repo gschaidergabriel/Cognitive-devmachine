@@ -1,0 +1,162 @@
+{
+  "schema": "FRANKENSTEIN_EVIDENCE_INDEX/v1",
+  "generated_for_trigger": "triggerword 3",
+  "date": "2026-08-27",
+  "canonical_main_reentered": "3c3dbe5020f57065f47bd4d0a2dce3c537128797",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "persistent_research_entity": "Clay",
+  "evidence_classes": [
+    "CURRENT_SOURCE",
+    "HISTORICAL_SOURCE",
+    "PROJECT_MEASUREMENT",
+    "EXTERNAL_PRIMARY",
+    "INFERENCE",
+    "OPEN_HYPOTHESIS",
+    "NEGATIVE_RESULT"
+  ],
+  "current_authority": {
+    "owner_pointer": "CLAY_EXECUTION_AUTHORITY.md",
+    "supervisor_inbox": "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
+    "provider_admission": "research_entity/claycode/autonomous/FREE_PROVIDER_ADMISSION.json",
+    "provider_state_at_index_creation": "HARD_OFF",
+    "together_state_at_index_creation": "FORBIDDEN",
+    "note": "Re-read current authority before execution; this index does not grant authority."
+  },
+  "frankenstein_current": [
+    {
+      "path": "research_entity/topic_packets/frankenstein-master-cognition-concept/frankenstein_authority_gate_v1.py",
+      "classification": ["CURRENT_SOURCE"],
+      "status": "ADOPTED",
+      "claim_scope": "fail-closed provider orchestration authority gate"
+    },
+    {
+      "path": "research_entity/topic_packets/frankenstein-master-cognition-concept/frankenstein_orchestrator_v1.py",
+      "classification": ["CURRENT_SOURCE"],
+      "status": "ADOPTED",
+      "claim_scope": "canonical Bauleiter entrypoint; donor loading gated before provider boundary"
+    },
+    {
+      "path": "research_entity/topic_packets/frankenstein-master-cognition-concept/frankenstein_bugfix_v1.py",
+      "classification": ["CURRENT_SOURCE"],
+      "status": "ADOPTED",
+      "claim_scope": "canonical Bugfix entrypoint; donor loading gated before provider boundary"
+    },
+    {
+      "path": "research_entity/topic_packets/frankenstein-master-cognition-concept/BUILD_ORCHESTRATION_PLAN_20260827.json",
+      "classification": ["CURRENT_SOURCE"],
+      "status": "ADOPTED_QUARANTINE_PLAN",
+      "claim_scope": "current non-operative HARD_OFF orchestration plan"
+    },
+    {
+      "path": "tests/test_frankenstein_provider_hardoff_gate_v1.py",
+      "classification": ["CURRENT_SOURCE", "PROJECT_MEASUREMENT"],
+      "status": "REPRODUCED_LOCALLY_BY_CANONICAL_COMMIT_REPORT",
+      "claim_scope": "source/local-unit only; included in commit-reported focused 10/10 PASS",
+      "runtime_promotion": false
+    }
+  ],
+  "historical_donors": [
+    {
+      "pattern": "research_entity/topic_packets/frankenstein-master-cognition-concept/*_PROVIDER_QUARANTINED_854f6bc.*",
+      "classification": ["HISTORICAL_SOURCE"],
+      "status": "RETIRED_FROM_CURRENT_EXECUTION_PRESERVED_AS_DONOR",
+      "note": "Historical provider-backed implementations and plan are provenance, never current authority."
+    }
+  ],
+  "negative_results": [
+    {
+      "id": "FRANKENSTEIN_PROVIDER_AUTHORITY_LAG",
+      "classification": "NEGATIVE_RESULT",
+      "status": "ADOPTED_REPAIR",
+      "finding": "Provider-capable orchestration and stale Together allowance outlived the authority epoch that admitted their design.",
+      "engineering_move": "Canonical stdlib-only authority wrapper before provider import, secret lookup, network, Aider or donor execution; preserve donor bytes."
+    },
+    {
+      "id": "GRID10_THREAD_OVERSUBSCRIPTION_4PROC_4VCPU",
+      "classification": ["NEGATIVE_RESULT", "PROJECT_MEASUREMENT"],
+      "status": "MEASURED_DIAGNOSTIC",
+      "finding": "1 thread/process mean 8.3197 s/call; 2 threads/process mean 23.1806 s/call; 4 threads/process zero completed samples within timeouts.",
+      "boundary": "Measured topology only; no Physical-GRID10/HCU/BASE promotion."
+    },
+    {
+      "id": "DISTILLERY_ZERO_YIELD",
+      "classification": ["NEGATIVE_RESULT", "CURRENT_SOURCE"],
+      "status": "OPEN",
+      "finding": "Canonical dataset/training promotion remains zero in current supervisor state.",
+      "engineering_move": "Require evidence-qualified persistent source-to-dataset closure before training promotion."
+    }
+  ],
+  "research_hypotheses": [
+    {
+      "id": "GLOBAL_JSPACE_CAUSAL_COORDINATION",
+      "classification": "OPEN_HYPOTHESIS",
+      "engineering_confidence": 0.55,
+      "falsifier": "Model-specific shuffle/lesion/rescue/vector intervention fails to alter downstream behavior beyond prompt/schema confounds."
+    },
+    {
+      "id": "REFLECTION_EXTERNAL_SUBSTRATE",
+      "classification": "OPEN_HYPOTHESIS",
+      "engineering_confidence": 0.65,
+      "falsifier": "Equal-budget matched tasks show no improvement in success/error recovery or show only increased latency/rumination."
+    },
+    {
+      "id": "HYPERPOSITION_PRESERVES_USEFUL_ALTERNATIVES",
+      "classification": "OPEN_HYPOTHESIS",
+      "engineering_confidence": 0.6,
+      "falsifier": "Matched incomplete-evidence tasks show no calibrated error/uncertainty/recovery gain relative to simpler collapse."
+    }
+  ],
+  "external_primary_anchors": [
+    {
+      "topic": "Global Neuronal Workspace",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8770991/",
+      "use": "external computational/research analogy, not project evidence"
+    },
+    {
+      "topic": "Global workspace neuronal model",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC24407/",
+      "use": "external primary lineage"
+    },
+    {
+      "topic": "Reflexion",
+      "url": "https://arxiv.org/abs/2303.11366",
+      "use": "external agent reflection comparison"
+    },
+    {
+      "topic": "PyTorch multiprocessing / CPU oversubscription",
+      "url": "https://docs.pytorch.org/docs/stable/notes/multiprocessing.html",
+      "use": "external systems constraint"
+    },
+    {
+      "topic": "SQLite WAL",
+      "url": "https://www.sqlite.org/wal.html",
+      "use": "external storage/runtime constraint"
+    },
+    {
+      "topic": "CUDA Unified Memory",
+      "url": "https://docs.nvidia.com/cuda/cuda-programming-guide/",
+      "use": "systems-design analogy only"
+    }
+  ],
+  "topology": {
+    "human_entry": "HUMAN_READ_THIS/README.md",
+    "developer_research_entry": "DEV_SOURCE_RESEARCH/README.md",
+    "ai_entry": "AI_START_HERE_DO_NOT_SCAN_REPO/README.md",
+    "root_readme_modified_by_this_trigger": false,
+    "mass_root_move_performed": false,
+    "future_target": [
+      "README.md",
+      "HUMAN_READ_THIS/",
+      "DEV_SOURCE_RESEARCH/",
+      "AI_START_HERE_DO_NOT_SCAN_REPO/"
+    ]
+  },
+  "promotion_boundary": {
+    "entityos_whole": 0,
+    "hcu_full": 0,
+    "jspace_model": 0,
+    "training": 0,
+    "note": "Indexing, source curation, and local-unit tests cannot promote broader runtime scope."
+  }
+}

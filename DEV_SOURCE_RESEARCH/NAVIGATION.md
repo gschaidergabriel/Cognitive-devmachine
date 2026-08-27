@@ -10,7 +10,7 @@ Use this page when you need a specific evidence layer without scanning the repos
 | Unsupported labels, conflicts, and unresolved claims | [`GAPS_CONTRADICTIONS_AND_UNSUPPORTED_LABELS.md`](GAPS_CONTRADICTIONS_AND_UNSUPPORTED_LABELS.md) |
 | Machine-readable Triggerword 3 evidence ledger | [`repository/TRIGGERWORD3_EVIDENCE_LEDGER_20260827.json`](repository/TRIGGERWORD3_EVIDENCE_LEDGER_20260827.json) |
 | Root cleanup/migration protocol | [`repository/ROOT_MIGRATION_PLAN.md`](repository/ROOT_MIGRATION_PLAN.md) |
-| Read-only root inventory tool | [`repository/trigger3_root_inventory.py`](repository/trigger3_root_inventory.py) |
+| Canonical read-only root inventory tool | [`repository/root_migration_inventory.py`](repository/root_migration_inventory.py) |
 | AI installer contract | [`../AI_START_HERE_DO_NOT_SCAN_REPO/INSTALL_CONTRACT.json`](../AI_START_HERE_DO_NOT_SCAN_REPO/INSTALL_CONTRACT.json) |
 
 ## Authority re-entry

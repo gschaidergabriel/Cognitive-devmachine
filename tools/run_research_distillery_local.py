@@ -10,6 +10,7 @@ Distillery startup can enter the noncanonical research lane without a process re
 """
 from __future__ import annotations
 
+import ipaddress
 import json
 import os
 import sqlite3
@@ -17,6 +18,7 @@ import statistics
 import sys
 from pathlib import Path
 import urllib.error
+import urllib.parse
 import urllib.request
 
 TOOLS=Path(__file__).resolve().parent
@@ -24,7 +26,56 @@ if str(TOOLS) not in sys.path:sys.path.insert(0,str(TOOLS))
 import run_research_distillery as d
 import run_research_distillery_entry as e  # installs canonical external-provider gates first
 
-LOCAL_BASE=os.getenv("CLAY_LOCAL_RESEARCH_BASE","http://127.0.0.1:8088")
+
+def _validated_loopback_base(raw:str)->str:
+    """Return one unambiguous HTTP loopback origin or fail closed.
+
+    The local lane is intentionally narrower than a generic OpenAI-compatible URL:
+    it accepts only literal loopback IPs, so DNS, LAN/private hosts, userinfo tricks,
+    paths, query strings and fragments cannot turn a local fallback into an external
+    network/provider path.
+    """
+    value=str(raw or "").strip()
+    try:
+        parts=urllib.parse.urlsplit(value)
+        port=parts.port  # force malformed-port validation now, before network I/O
+    except (TypeError,ValueError) as ex:
+        raise RuntimeError("CLAY_LOCAL_RESEARCH_BASE must be a valid HTTP loopback IP origin") from ex
+    if parts.scheme.lower()!="http" or not parts.hostname:
+        raise RuntimeError("CLAY_LOCAL_RESEARCH_BASE must use http:// with a loopback IP literal")
+    if parts.username is not None or parts.password is not None:
+        raise RuntimeError("CLAY_LOCAL_RESEARCH_BASE must not contain userinfo")
+    if parts.path not in ("","/") or parts.query or parts.fragment:
+        raise RuntimeError("CLAY_LOCAL_RESEARCH_BASE must be an origin without path, query, or fragment")
+    if "%" in parts.hostname:
+        raise RuntimeError("CLAY_LOCAL_RESEARCH_BASE must not use a scoped/zone-qualified address")
+    try:
+        addr=ipaddress.ip_address(parts.hostname)
+    except ValueError as ex:
+        raise RuntimeError("CLAY_LOCAL_RESEARCH_BASE hostname must be a literal loopback IP") from ex
+    if not addr.is_loopback:
+        raise RuntimeError("CLAY_LOCAL_RESEARCH_BASE must stay on the loopback interface")
+    _=port
+    return value.rstrip("/")
+
+
+class _NoLocalRedirect(urllib.request.HTTPRedirectHandler):
+    """Never follow redirects: a loopback response must not redirect externally."""
+    def redirect_request(self,req,fp,code,msg,headers,newurl):
+        return None
+
+
+# Ignore HTTP(S)_PROXY environment variables and reject redirects before a second socket
+# can be opened. Combined with an IP-literal loopback base, this keeps the local lane
+# local at the transport boundary rather than relying on provider-layer intent.
+_LOCAL_OPENER=urllib.request.build_opener(urllib.request.ProxyHandler({}),_NoLocalRedirect())
+
+
+def _local_urlopen(req,timeout:float):
+    return _LOCAL_OPENER.open(req,timeout=timeout)
+
+
+LOCAL_BASE=_validated_loopback_base(os.getenv("CLAY_LOCAL_RESEARCH_BASE","http://127.0.0.1:8088"))
 LOCAL_LOGICAL_ID="local/Qwen3-4B-GGUF-Q4_K_M"
 LOCAL_REVIEWERS=(
     ("local_reviewer_logic","local",LOCAL_LOGICAL_ID),
@@ -45,13 +96,13 @@ os.environ.setdefault("CLAY_FREE_ONLY_ATTESTED","1")
 
 def local_health()->bool:
     try:
-        with urllib.request.urlopen(LOCAL_BASE+"/health",timeout=1.5) as r:return 200<=int(r.status)<300
+        with _local_urlopen(LOCAL_BASE+"/health",timeout=1.5) as r:return 200<=int(r.status)<300
     except Exception:return False
 
 
 def server_model_id()->str:
     try:
-        with urllib.request.urlopen(LOCAL_BASE+"/v1/models",timeout=2) as r:
+        with _local_urlopen(LOCAL_BASE+"/v1/models",timeout=2) as r:
             obj=json.loads(r.read().decode("utf-8",errors="replace"))
         data=obj.get("data") if isinstance(obj,dict) else None
         if isinstance(data,list) and data and isinstance(data[0],dict) and data[0].get("id"):return str(data[0]["id"])
@@ -66,7 +117,7 @@ def local_chat(model:str,prompt:str,max_tokens:int=700,temperature:float=0.3):
     payload={"model":server_model_id(),"messages":[{"role":"user","content":prompt}],"temperature":temperature,"max_tokens":max_tokens,"stream":False}
     req=urllib.request.Request(LOCAL_BASE+"/v1/chat/completions",data=json.dumps(payload).encode(),method="POST",headers={"Content-Type":"application/json","User-Agent":"clay-local-distillery/1"})
     try:
-        with urllib.request.urlopen(req,timeout=240) as r:
+        with _local_urlopen(req,timeout=240) as r:
             obj=json.loads(r.read().decode("utf-8",errors="replace"));status=int(r.status)
     except urllib.error.HTTPError as ex:return False,"",{},f"LOCAL_HTTP_{ex.code}"
     except Exception as ex:return False,"",{},f"LOCAL_{type(ex).__name__}"

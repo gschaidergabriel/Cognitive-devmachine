@@ -1,0 +1,86 @@
+{
+  "schema": "XENO_HRR_MEASUREMENT/v1",
+  "base_model": "huihui-ai/Huihui-Qwen3.5-0.8B-abliterated",
+  "base_model_revision": "4813135658fe51b2e535b8e77927d2f23909ce42",
+  "layer_measured": 23,
+  "hidden_dim": 1024,
+  "n_roles": 64,
+  "role_seed": 20260825,
+  "codec_ridge": 0.001,
+  "n_atoms_measured": 46,
+  "single_binding_roundtrip": [
+    {
+      "atom": "A",
+      "role_idx": 0,
+      "cosine_sim_original_vs_recovered": 0.6933072225948345,
+      "relative_l2_error": 0.987712160443703
+    },
+    {
+      "atom": "Z",
+      "role_idx": 5,
+      "cosine_sim_original_vs_recovered": 0.7114727877585888,
+      "relative_l2_error": 0.929086748115721
+    },
+    {
+      "atom": "7",
+      "role_idx": 12,
+      "cosine_sim_original_vs_recovered": 0.7143382848861174,
+      "relative_l2_error": 0.916379997757203
+    },
+    {
+      "atom": "yes",
+      "role_idx": 30,
+      "cosine_sim_original_vs_recovered": 0.7028923178112375,
+      "relative_l2_error": 1.030761797611094
+    },
+    {
+      "atom": "not",
+      "role_idx": 63,
+      "cosine_sim_original_vs_recovered": 0.6997702565575021,
+      "relative_l2_error": 1.0585452092055556
+    },
+    {
+      "atom": "Q",
+      "role_idx": 45,
+      "cosine_sim_original_vs_recovered": 0.7246164184854076,
+      "relative_l2_error": 0.9651706514459306
+    }
+  ],
+  "capacity_sweep": [
+    {
+      "K_simultaneous_bindings": 1,
+      "mean_cosine_sim": 0.6547676595735892,
+      "min_cosine_sim": 0.6547676595735892
+    },
+    {
+      "K_simultaneous_bindings": 2,
+      "mean_cosine_sim": 0.5629943759909308,
+      "min_cosine_sim": 0.5417807114766456
+    },
+    {
+      "K_simultaneous_bindings": 4,
+      "mean_cosine_sim": 0.434468146630277,
+      "min_cosine_sim": 0.3948330799095868
+    },
+    {
+      "K_simultaneous_bindings": 8,
+      "mean_cosine_sim": 0.33476335686643066,
+      "min_cosine_sim": 0.2884142099134542
+    },
+    {
+      "K_simultaneous_bindings": 12,
+      "mean_cosine_sim": 0.27497720204990256,
+      "min_cosine_sim": 0.2407643222750828
+    },
+    {
+      "K_simultaneous_bindings": 16,
+      "mean_cosine_sim": 0.2424821972333162,
+      "min_cosine_sim": 0.18369871935461585
+    },
+    {
+      "K_simultaneous_bindings": 20,
+      "mean_cosine_sim": 0.20768945363147862,
+      "min_cosine_sim": 0.15157896112919322
+    }
+  ]
+}

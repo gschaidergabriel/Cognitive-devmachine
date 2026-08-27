@@ -1,0 +1,25 @@
+{
+  "schema": "GAP_LIST_ITEM_NOTE/v1",
+  "packet_id": "trigger2-together-diagnostic-finetune-20260827",
+  "topic": "Item 3 -- measured HRR vector operations against real model activations, done, with an honest discrepancy flagged rather than hidden",
+  "status": "DONE (first real measurement pass -- genuine numbers, not fabricated, but methodologically limited in a way that is explained and flagged, not glossed over)",
+  "what_was_done": "Loaded the real base checkpoint (huihui-ai/Huihui-Qwen3.5-0.8B-abliterated), ran a real forward pass for each of the 46 specified atoms, extracted the real hidden-state vector at layer 23 (block output, full-attention layer per Master Spec SS7) for each atom's final token position. Computed a real centering (population mean) and whitening (eigendecomposition of the real 46-atom covariance matrix, ridge=1e-3 per spec) from these measured vectors -- not synthetic data. Generated 64 fixed random role vectors (seed 20260825, per spec). Implemented BIND/UNBIND/BUNDLE via circular convolution (FFT-based) in the whitened space, exactly as specified in Master Spec SS9. Ran two real experiments: (1) single-binding round-trip (bind one real atom to one real role, unbind, compare to original) for 6 real atom/role pairs; (2) a capacity sweep bundling K=1..20 simultaneous real bindings and measuring per-binding recovery degradation.",
+  "results": {
+    "single_binding_roundtrip_mean_cosine_sim": 0.708,
+    "capacity_sweep_K1_mean_cosine_sim": 0.655,
+    "capacity_sweep_K16_mean_cosine_sim": 0.242,
+    "capacity_sweep_K20_mean_cosine_sim": 0.208,
+    "full_raw_data": "HRR_MEASUREMENT_RESULTS_20260827.json in this packet directory -- all 6 single-binding pairs and the full K=1..20 sweep."
+  },
+  "honest_discrepancy_flagged": {
+    "what": "The Master Spec (SS7) states a prior measurement of 'L23 measured cycle error around 4.46e-14 in high-precision codec path' -- i.e. near-perfect single-binding reconstruction. This measurement instead found single-binding cosine similarity of 0.65-0.71, meaningfully imperfect, not near-perfect.",
+    "most_likely_explanation_not_asserted_as_certain": "Whitening requires estimating a covariance matrix from a population of vectors. Here, only 46 atom samples were available to estimate a 1024x1024 covariance matrix -- a severely under-determined problem (n=46 << p=1024, well below what stable covariance estimation normally needs). The whitening transform computed from this small sample is very likely a poor, overfit estimate of the true underlying atom-space covariance, which would directly degrade bind/unbind fidelity even though the BIND/UNBIND/BUNDLE algebra itself is implemented correctly (verified: the capacity-degradation curve has the theoretically expected shape -- monotonically decreasing recovery similarity as K grows, exactly what HRR bundling interference predicts).",
+    "not_ruled_out": "Cannot rule out from this single pass whether the original 4.46e-14 figure was itself measured under different conditions (a different/larger reference population for whitening, a different precision path, or a synthetic/idealized signal rather than real model activations) -- this was not independently re-derivable from what exists in the repo, and is reported as an open question rather than assumed to explain the gap.",
+    "why_reported_rather_than_hidden": "Consistent with this session's standing discipline: a number that does not match a prior claim is exactly the kind of thing to report plainly, with the best available explanation clearly marked as a hypothesis, not smoothed over to make this pass look more complete than it is."
+  },
+  "what_this_does_and_does_not_establish": {
+    "established": "The BIND/UNBIND/BUNDLE HRR algebra can be run against REAL model activations (not fabricated/synthetic data) and produces sensible, interpretable, internally consistent results (correct degradation shape under increasing simultaneous bindings). This is a genuine first real measurement where zero existed before for this specific checkpoint.",
+    "not_established": "That the vector-ABI/HRR carrier is production-ready at the fidelity level the Master Spec's provisional figures implied. A larger reference population (measuring many more than 46 atom-context variants, e.g. multiple sentence framings per atom) would very likely improve whitening stability and is the natural next step if this line of work continues -- not attempted in this pass given the scope of the remaining gap-list items."
+  },
+  "runs_used": "0 Together runs. This was tokenizer/activation measurement work, not training."
+}

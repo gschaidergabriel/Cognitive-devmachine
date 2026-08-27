@@ -1,0 +1,210 @@
+{
+  "schema": "FRANKENSTEIN_ROOT_MIGRATION_MANIFEST/v1",
+  "status": "PREPARED_NOT_RUN",
+  "authority": "NON_AUTHORITY_MIGRATION_PLAN_ONLY",
+  "observed_main": "551ed48f9ebf8c610311c98ccaf84cdca3f487a7",
+  "observed_root_tree": "a4e15029a92e63fb008c162fb357f4f4a50a7686",
+  "target_public_navigation": [
+    "README.md",
+    "HUMAN_READ_THIS/",
+    "DEV_SOURCE_RESEARCH/",
+    "AI_START_HERE_DO_NOT_SCAN_REPO/"
+  ],
+  "why_not_executed_now": [
+    "main has active autonomous writers and advanced during this trigger",
+    "many root paths are referenced by scripts, host discovery conventions, automation or historical receipts",
+    "GitHub/agent configuration files may require repository-root placement to function",
+    "a move without reference-count and writer-path audit could create a cleaner tree while breaking the product/research system",
+    "Triggerword 3 requires evidence preservation; temporary clutter is preferable to silent lineage or compatibility loss"
+  ],
+  "move_invariants": [
+    "destination bytes must be byte-identical unless an intentional content edit is separately evidenced",
+    "record pre-move blob SHA and post-move blob SHA",
+    "update deterministic references in the same bounded migration when safe",
+    "preserve historical paths in receipts/commit prose rather than rewriting history",
+    "do not move an actively written/generated file until its writer is migrated or a compatibility path is provided",
+    "do not move files whose host/tool discovery semantics require root placement without a tested adapter",
+    "root README is not rewritten by this trigger"
+  ],
+  "root_compatibility_exceptions": [
+    {
+      "path": "README.md",
+      "blob_sha": "4d39dbfaeace5843d4bfc6901e3ea3d8b566ec84",
+      "decision": "KEEP_ROOT",
+      "reason": "explicit Triggerword 3 rule plus public repository entrypoint"
+    },
+    {
+      "path": ".gitignore",
+      "blob_sha": "5bca2e8cff217eda443b9a753d79e3a173a1d030",
+      "decision": "KEEP_ROOT_COMPATIBILITY",
+      "reason": "Git repository semantics"
+    },
+    {
+      "path": ".github/",
+      "tree_sha": "91e59fd7f4078675288b430e1a4829aefe81533a",
+      "decision": "KEEP_ROOT_COMPATIBILITY",
+      "reason": "GitHub workflow/config discovery semantics"
+    },
+    {
+      "path": ".claude/",
+      "tree_sha": "7890caac0300e4f2e8154b2adda82230b310ada8",
+      "decision": "KEEP_ROOT_UNTIL_HOST_ADAPTER_TESTED",
+      "reason": "potential Claude host discovery/lifecycle semantics"
+    },
+    {
+      "path": "AGENTS.md",
+      "blob_sha": "872b1d7bc4ade211dd519379a9e3f4a566582107",
+      "decision": "KEEP_ROOT_UNTIL_HOST_ADAPTER_TESTED",
+      "reason": "agent instruction discovery may depend on path"
+    },
+    {
+      "path": "CLAUDE.md",
+      "blob_sha": "673d4ed3a86aaba4ee7fdb1ee303325bac995071",
+      "decision": "KEEP_ROOT_UNTIL_HOST_ADAPTER_TESTED",
+      "reason": "Claude Code instruction discovery may depend on root placement"
+    },
+    {
+      "path": "CLAY_EXECUTION_AUTHORITY.md",
+      "blob_sha": "b850dbdf0ec5b4c04aa0c7f6e6a98a07f6f9d2f9",
+      "decision": "KEEP_ROOT_UNTIL_AUTHORITY_REFERENCE_AUDIT",
+      "reason": "authority-related compatibility surface; do not create a stale island by moving blindly"
+    }
+  ],
+  "candidate_moves": [
+    {
+      "source": "000_CLAY_CURRENT.md",
+      "blob_sha": "9e56e5645d891e62390af1932ed0dde927b0a737",
+      "proposed_target": "DEV_SOURCE_RESEARCH/repository/legacy_root/000_CLAY_CURRENT.md",
+      "status": "NEEDS_REFERENCE_AUDIT"
+    },
+    {
+      "source": "000_FRANK_GLOBAL_RESEARCH_ENTITY_AUTOBOOT.txt",
+      "blob_sha": "8e410008101df606f43980171323120604212995",
+      "proposed_target": "DEV_SOURCE_RESEARCH/repository/legacy_root/000_FRANK_GLOBAL_RESEARCH_ENTITY_AUTOBOOT.txt",
+      "status": "NEEDS_REFERENCE_AUDIT"
+    },
+    {
+      "source": "000_FREE_SWARM_LIVE_DASHBOARD.md",
+      "blob_sha": "4912d4f4bf31ec724e473c523496e3dbe62a56a3",
+      "proposed_target": "DEV_SOURCE_RESEARCH/repository/operations/000_FREE_SWARM_LIVE_DASHBOARD.md",
+      "status": "BLOCKED_ACTIVE_WRITER_PATH",
+      "reason": "main advanced during this trigger through an autonomous metrics/dashboard refresh; migrate writer before file"
+    },
+    {
+      "source": "AUTHORITATIVE_STATE_RESOLUTION.md",
+      "blob_sha": "250519e571ac51de55ac2d90e230c8ef2262c5a3",
+      "proposed_target": "DEV_SOURCE_RESEARCH/repository/governance/AUTHORITATIVE_STATE_RESOLUTION.md",
+      "status": "NEEDS_AUTHORITY_REFERENCE_AUDIT"
+    },
+    {
+      "source": "CLAUDE_CODE_INTRODUCTION.md",
+      "blob_sha": "61ccccb65d3ccd723d546f56ab62de0a90e236ee",
+      "proposed_target": "DEV_SOURCE_RESEARCH/repository/host_guides/CLAUDE_CODE_INTRODUCTION.md",
+      "status": "NEEDS_REFERENCE_AUDIT"
+    },
+    {
+      "source": "CLAYCODE_GENERAL_PURPOSE_COMPILER_MANIFEST.json",
+      "blob_sha": "3515b0a98a22f06509f7a3aa1e3d7b08f68ba962",
+      "proposed_target": "DEV_SOURCE_RESEARCH/repository/manifests/CLAYCODE_GENERAL_PURPOSE_COMPILER_MANIFEST.json",
+      "status": "NEEDS_COMPILER_PATH_AUDIT"
+    },
+    {
+      "source": "CLAYVERSE_CANONICAL_DIRECTIVE.md",
+      "blob_sha": "d43564747872b305d5073aa72f99ff5d52473b13",
+      "proposed_target": "DEV_SOURCE_RESEARCH/repository/historical_authority/CLAYVERSE_CANONICAL_DIRECTIVE.md",
+      "status": "HISTORICAL_SOURCE_NEEDS_REFERENCE_AUDIT"
+    },
+    {
+      "source": "JOIN_RAE_CLAUDE_CODE.txt",
+      "blob_sha": "2cd0fc1f6049a069282808ca9b47a1c67ace6e48",
+      "proposed_target": "DEV_SOURCE_RESEARCH/repository/host_guides/JOIN_RAE_CLAUDE_CODE.txt",
+      "status": "NEEDS_HOST_DISCOVERY_AUDIT"
+    },
+    {
+      "source": "PROJECT_AUTO_BOOT_KERNEL_FINAL.txt",
+      "blob_sha": "09d9a5f9903dbfafb8614a10a4464b2846d768b6",
+      "proposed_target": "DEV_SOURCE_RESEARCH/repository/legacy_root/PROJECT_AUTO_BOOT_KERNEL_FINAL.txt",
+      "status": "NEEDS_REFERENCE_AUDIT"
+    },
+    {
+      "source": "PROJECT_SOURCE_SINGLE_BOOTSTRAP.txt",
+      "blob_sha": "2a64bd2dc8aa84e2fdc7a1e77fdf587aa216bccd",
+      "proposed_target": "DEV_SOURCE_RESEARCH/repository/legacy_root/PROJECT_SOURCE_SINGLE_BOOTSTRAP.txt",
+      "status": "NEEDS_REFERENCE_AUDIT"
+    },
+    {
+      "source": "PROJECT_SOURCE_SINGLE_BOOTSTRAP_V2.txt",
+      "blob_sha": "f201f1b2c573b1ff98369f0918584744bc7941bb",
+      "proposed_target": "DEV_SOURCE_RESEARCH/repository/legacy_root/PROJECT_SOURCE_SINGLE_BOOTSTRAP_V2.txt",
+      "status": "NEEDS_REFERENCE_AUDIT"
+    },
+    {
+      "source": "RAE_VNEXT_RUNTIME.md",
+      "blob_sha": "2530568588f5096d5de1032dfff79a2c2c2e71d7",
+      "proposed_target": "DEV_SOURCE_RESEARCH/repository/legacy_root/RAE_VNEXT_RUNTIME.md",
+      "status": "NEEDS_REFERENCE_AUDIT"
+    },
+    {
+      "source": "ZZZ_FREE_SWARM_RESULTS.md",
+      "blob_sha": "285c5a723c10b121c4fe6149ee286c65f3006c14",
+      "proposed_target": "DEV_SOURCE_RESEARCH/repository/operations/ZZZ_FREE_SWARM_RESULTS.md",
+      "status": "NEEDS_WRITER_AND_REFERENCE_AUDIT"
+    },
+    {
+      "source": "gemeinsamer State)",
+      "blob_sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "proposed_target": "DEV_SOURCE_RESEARCH/repository/root_debris/gemeinsamer State)",
+      "status": "CANDIDATE_AFTER_REFERENCE_AUDIT",
+      "note": "zero-byte root artifact; preserve rather than delete until provenance/reference check"
+    },
+    {
+      "source": "libc.malloc_trim(0)",
+      "blob_sha": "56449f7a37c0593798d05e67687af3ed244ef058",
+      "proposed_target": "DEV_SOURCE_RESEARCH/repository/root_debris/libc.malloc_trim(0)",
+      "status": "CANDIDATE_AFTER_REFERENCE_AUDIT"
+    },
+    {
+      "source": "madvise(ptr, length, MADV_FREE);",
+      "blob_sha": "d4b4da997a55a9567842f2a182f7cc6046b708d8",
+      "proposed_target": "DEV_SOURCE_RESEARCH/repository/root_debris/madvise(ptr, length, MADV_FREE);",
+      "status": "CANDIDATE_AFTER_REFERENCE_AUDIT"
+    },
+    {
+      "source": "rae.py",
+      "blob_sha": "e911bc9cf3253c08fb82194053920568bd82a456",
+      "proposed_target": "DEV_SOURCE_RESEARCH/repository/legacy_runtime/rae.py",
+      "status": "NEEDS_IMPORT_ENTRYPOINT_AUDIT"
+    }
+  ],
+  "directory_migration_groups": [
+    {
+      "paths": ["agentZero/", "agentzeroforschung/", "frank_reference/"],
+      "proposed_target_root": "DEV_SOURCE_RESEARCH/repository/historical_donors/",
+      "status": "BLOCKED_UNTIL_PATH_GRAPH_AND_BYTE_MANIFEST",
+      "reason": "large historical donor trees with likely deep links/import/path references"
+    },
+    {
+      "paths": ["free swarm/", "benchmarks/", "runtime_checks/", "receipts/", "research_sources/"],
+      "proposed_target_root": "DEV_SOURCE_RESEARCH/repository/",
+      "status": "BLOCKED_UNTIL_ACTIVE_WRITER_AND_PATH_GRAPH_AUDIT"
+    },
+    {
+      "paths": ["research_entity/", "the artefact/", "tools/", "tests/", "schemas/", "governance/"],
+      "status": "KEEP_CURRENT_PATH_UNTIL_PRODUCT_WIDE_MIGRATION_PROVEN",
+      "reason": "current code/authority/product paths are widely addressable; cosmetic relocation must not outrank executable compatibility"
+    }
+  ],
+  "next_exact_gate": {
+    "name": "ROOT_REFERENCE_GRAPH_V1",
+    "required_outputs": [
+      "complete top-level path inventory at one exact main tree",
+      "path -> Git blob/tree SHA",
+      "path -> repository reference count and referring files",
+      "path -> active writer/generator identification",
+      "path -> host discovery/import/runtime compatibility class",
+      "deterministic move batch with before/after blob equality",
+      "reference rewrite diff and negative tests"
+    ],
+    "promotion_condition": "Only execute a move batch when no current authority/tool/import/writer path is left ambiguous."
+  }
+}

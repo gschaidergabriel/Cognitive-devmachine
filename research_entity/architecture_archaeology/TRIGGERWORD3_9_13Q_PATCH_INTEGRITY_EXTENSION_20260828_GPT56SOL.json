@@ -1,0 +1,84 @@
+{
+  "schema": "TRIGGERWORD3_9_13Q_PATCH_INTEGRITY_EXTENSION/v1",
+  "status": "CURRENT_SOURCE_CURATION_NON_AUTHORITY",
+  "generated_against_main": "3cf4a76b8ffa2e9bdedca3cbd2d49c5d81f1033a",
+  "trigger": "triggerword 3",
+  "purpose": "Nonduplicate successor to the already-fused destructive whole-file rewrite negative result. Tighten the proposed PREIMAGE_BOUND_EDIT_PRESERVATION_CONTRACT into a deterministic patch-application acceptance shape without claiming runtime pass.",
+  "already_fused_current_evidence": {
+    "failure_atlas": "research_entity/architecture_archaeology/FAILURE_ATLAS.json",
+    "source_index_delta": "DEV_SOURCE_RESEARCH/repository/FRANKENSTEIN_SOURCE_INDEX_DELTA_20260828_DIRECT_DISPATCH.json",
+    "negative_result_note": "DEV_SOURCE_RESEARCH/research/FRANKENSTEIN_DIRECT_DISPATCH_NEGATIVE_RESULT_2026-08-28.md",
+    "incident": "tools/grid10_fabric.py 672-line preimage -> 87-line fabricated whole-file rewrite; contained before origin push",
+    "current_credit": 0,
+    "reason_for_extension": "Current main already says prefer patch/diff and verify preimage/unchanged regions, but does not yet make patch target equality, deterministic applicability, full pre/post hashes, and post-apply collateral-change proof explicit in one acceptance contract."
+  },
+  "patch_integrity_contract": {
+    "name": "EXACT_PREIMAGE_PATCH_INTEGRITY/v1",
+    "status": "PROPOSED_SOURCE_CONTRACT_NOT_RUNTIME_PASS",
+    "preconditions": [
+      "bind exact repository commit and tree identity",
+      "for every existing target bind path, committed blob identity, byte length, and full pre-edit SHA-256",
+      "reject dirty or otherwise ambiguous target preimages unless the dirty bytes are themselves explicitly admitted and hash-bound",
+      "require declared target-file set == parsed patch target-file set",
+      "reject absolute paths, traversal, undeclared targets, duplicate target aliases, and ambiguous renames"
+    ],
+    "applicability": [
+      "represent ordinary existing-file modifications as unified diff or an equivalently bounded structured edit rather than unconstrained whole-file regeneration",
+      "run git apply --check or a deterministic equivalent against the same exact bound preimage before mutation",
+      "reject fuzzy, stale, offset-ambiguous, or otherwise non-exact application when exact identity cannot be preserved",
+      "a coarse shrink threshold is defense in depth only and can never substitute for patch integrity"
+    ],
+    "post_apply_integrity": [
+      "record full post-edit SHA-256 and byte length for every touched file",
+      "prove every file outside the declared target set is byte-identical to its pre-edit identity",
+      "for each touched existing file, prove bytes outside declared patch hunks are unchanged, or bind an equivalent deterministic structural preservation proof",
+      "make deletion intent explicit; unexpected file deletion or unexpected large-region deletion fails closed",
+      "require actual changed-file set == declared target-file set after apply",
+      "run requested positive tests and destructive/collateral negative regressions only after edit-integrity checks pass"
+    ],
+    "rollback": [
+      "on any integrity or semantic verification failure restore exact pre-edit bytes before commit authority",
+      "verify rollback hashes equal the bound pre-edit hashes",
+      "unknown rollback outcome blocks commit/push rather than triggering blind replay"
+    ],
+    "whole_file_replacement_exception": "Full replacement is a separate explicit operation class. It requires declared full-replacement intent plus bound pre/post identities and intended deletion scope; it must not be inferred from a normal modification request.",
+    "acceptance_rule": "PATCH_APPLICABILITY_PASS + PREIMAGE_IDENTITY_PASS + TARGET_SET_PASS + COLLATERAL_PRESERVATION_PASS + POSTIMAGE_IDENTITY_PASS + ROLLBACK_CAPABLE + SEMANTIC_REGRESSIONS_PASS; otherwise FAIL_CLOSED"
+  },
+  "donor_reuse": {
+    "source": "open PR #1542 tools/forge_source_rehydration.py concept",
+    "classification": "DONOR_PATTERN_ONLY",
+    "reused_principle": "exact commit/tree/blob source rehydration before patch synthesis and application checking",
+    "not_claimed": [
+      "PR #1542 runtime pass",
+      "automatic merge suitability",
+      "whole EntityOS/HCU acceptance"
+    ]
+  },
+  "hypothesis": {
+    "classification": "OPEN_HYPOTHESIS",
+    "engineering_confidence": 0.95,
+    "statement": "Exact-preimage patch application plus target-set and collateral-preservation invariants will materially reduce silent destructive edits compared with complete-file regeneration plus a 50 percent shrink heuristic.",
+    "counterhypothesis": "Supplying complete current source plus task-specific tests and the shrink heuristic already catches nearly all relevant damage, so the stricter contract mainly adds false rejects and latency.",
+    "falsifier": "On a matched adversarial corpus of narrow existing-file edits, the simpler whole-file path has equal or lower false-accept collateral damage, rollback failure, and unintended-diff rate at comparable successful-task rate and cost."
+  },
+  "current_trigger3_no_change_boundaries": {
+    "root_mass_move": "NO_CHANGE_WITH_REASON: current root inventory still blocks host/platform/canonical/unknown dependency moves; no cosmetic relocation performed",
+    "root_readme": "NOT_MODIFIED",
+    "provider_execution": "HARD_OFF; NONE_PERFORMED",
+    "together": "FORBIDDEN; NONE_PERFORMED",
+    "vps_execution": "NONE_PERFORMED_BY_THIS_TRIGGER3_DELTA",
+    "unusual_experiment": "NONE_PERFORMED",
+    "training": "NO_CHANGE; CREDIT_ZERO"
+  },
+  "next_exact_gate": "Implement or identify one canonical existing-file mutation path that satisfies EXACT_PREIMAGE_PATCH_INTEGRITY/v1, then independently execute its focused regressions on a clean current non-provider checkout before granting retained runtime credit.",
+  "credits": {
+    "provider_runtime": 0,
+    "entityos_whole_runtime": 0,
+    "hcu_full_runtime": 0,
+    "physical_grid10_runtime": 0,
+    "canonical_semantics": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  }
+}

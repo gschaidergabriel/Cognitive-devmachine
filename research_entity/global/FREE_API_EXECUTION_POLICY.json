@@ -1,3 +1,6 @@
+Warning: truncated output (original token count: 30545)
+Total output lines: 1130
+
 {
   "schema_version": "1.0",
   "status": "IMPLEMENTED_CANDIDATE",
@@ -360,8 +363,8 @@
     "uncertainty": "Rejecting all C0/C1 controls is local FRANK safety and canonicalization policy, not an NVIDIA or vLLM identifier guarantee. Printable Unicode identifiers remain permitted because NIM_SERVED_MODEL_NAME is configurable."
   },
   "semantic_text_presence_boundary": {
-    "checked_at": "2026-08-27",
-    "claim": "Plain-text request content, verified response content and exposed reasoning each require at least one Unicode-scalar character that is neither Unicode whitespace, a C0/C1 transport control nor a Unicode General_Category=Cf format control. Controls, format characters and whitespace remain permitted around or within real text, but cannot alone satisfy the adapter's semantic-content requirement.",
+    "checked_at": "2026-08-28",
+    "claim": "Plain-text request content, verified response content and exposed reasoning each require at least one Unicode-scalar character that is neither Unicode whitespace, a C0/C1 transport control, a Unicode General_Category=Cf format control nor a Unicode Mark (Mn, Mc or Me). Controls, format characters, combining marks and whitespace remain permitted around or within real text, but cannot alone satisfy the adapter's semantic-content requirement.",
     "sources": [
       "https://docs.python.org/3/library/stdtypes.html#str.strip",
       "https://docs.python.org/3/library/unicodedata.html#unicodedata.category",
@@ -369,17 +372,18 @@
       "https://www.rfc-editor.org/rfc/rfc8259.html#section-7",
       "https://docs.nvidia.com/nim/large-language-models/3.0.0/get-started/quickstart.html"
     ],
-    "external_evidence": "Python defines str.strip without an explicit character set as removal of str.isspace characters, so NUL and U+200B survive; unicodedata.category exposes the Unicode general category. Unicode Standard Annex #44 classifies Cf as Format and specifically records U+200B ZERO WIDTH SPACE as a format control rather than a space character. RFC 8259 permits U+0000 through U+001F inside JSON strings when escaped, which proves transport validity but not semantic text. NVIDIA's current Chat Completions examples use natural-language message content; they do not specify that a control-only or format-only scalar is a meaningful prompt or final answer.",
-    "internal_measurement": "A user message containing only U+0000 passed the former strip predicate and reached the authenticated opener. Canonical status-200 responses whose visible content or parsed reasoning contained only escaped U+0000 each reached success, VERIFIED and DONE; the reasoning case also produced digest and character-count provenance. After closing C0/C1, U+200B reproduced the same three failures: authenticated request opening, verified visible content and verified reasoning. The repaired shared predicate rejects all six paths, while ordinary text with line breaks and embedded format characters remains allowed.",
+    "external_evidence": "Python defines str.strip without an explicit character set as removal of str.isspace characters, so NUL, U+200B and U+0301 survive; unicodedata.category exposes the Unicode general category. Unicode Standard Annex #44 classifies Cf as Format, Mn as Nonspacing_Mark with zero advance width and M as the union of Mn, Mc and Me. RFC 8259 permits U+0000 through U+001F inside JSON strings when escaped, which proves transport validity but not semantic text. NVIDIA's current Chat Completions examples use natural-language message content; they do not specify that a control-only, format-only or mark-only scalar is a meaningful prompt or final answer.",
+    "internal_measurement": "A user message containing only U+0000 passed the former strip predicate and reached the authenticated opener. Canonical status-200 responses whose visible content or parsed reasoning contained only escaped U+0000 each reached success, VERIFIED and DONE; the reasoning case also produced digest and character-count provenance. After closing C0/C1, U+200B and then U+0301 independently reproduced the same three failures: authenticated request opening, verified visible content and verified reasoning. The repaired shared predicate rejects all nine paths, while ordinary text with line breaks, embedded format characters and e followed by U+0301 remains allowed.",
     "executable_evidence": [
       "test_control_only_text_cannot_cross_semantic_text_boundaries",
       "test_format_only_text_cannot_cross_semantic_text_boundaries",
+      "test_combining_mark_only_text_cannot_cross_semantic_boundaries",
       "test_blank_text_message_is_blocked_before_network",
       "test_documented_nvidia_reasoning_message_remains_compatible",
       "test_del_escape_overflow_is_rejected_before_json_materialization"
     ],
-    "counterhypothesis": "Successful JSON decoding plus value.strip() and a C0/C1 exclusion are sufficient proof of nonblank text; falsified because U+200B is neither Python whitespace nor C0/C1 and crossed all three semantic boundaries without carrying visible or reasoned content.",
-    "uncertainty": "This is an explicit local FRANK text-adapter policy, not a claim that every control or format character is invalid model output. Cf characters remain permitted when another semantic witness is present. Tool, binary, multimodal and protocol-specific payloads require separate typed adapters. Other invisible categories, including combining marks, remain deliberately unclassified pending a falsifier and compatibility evidence."
+    "counterhypothesis": "Successful JSON decoding plus exclusion of whitespace, C0/C1 and Cf is sufficient proof of nonblank text; falsified because standalone U+0301 is Mn, crossed all three semantic boundaries and supplied no base character to modify.",
+    "uncertainty": "This is an explicit local FRANK text-adapter policy, not a claim that every control, format character or mark is invalid model output. Cf and M characters remain permitted when another semantic witness is present. Tool, binary, multimodal and protocol-specific payloads require separate typed adapters. Modifier symbols, private-use and unassigned code points remain deliberately unclassified pending falsifiers and compatibility evidence."
   },
   "canonical_blob_write_boundary": {
     "checked_at": "2026-08-27",
@@ -390,7 +394,7 @@
       "https://git-scm.com/docs/gitformat-loose"
     ],
     "external_evidence": "GitHub's Contents API returns the resulting content object's sha separately from the commit SHA. Git documents git hash-object as computing the blob object ID from a file's contents and defines a blob object ID over its type, byte size and bytes.",
-    "internal_measurement": "A whole-file connector write reported success but its returned blob SHA 932f845e did not match the intended local blob e2b8e662. Remote line-range inspection showed the committed test file ended at line 4098 while the intended suite had 5104 lines: the intermediate command output had been truncated before the write. A first chunk repair was deliberately rejected because redundant join newlines produced cc94fcca. Concatenating bounded chunks without modification produced the exact expected remote blob e2b8e662.",
+    "internal_measurement": "A whole-file connector write reported success but its returned blob SHA 932f845e did not match the intended local blob e2b8e662. Remote line-range inspection showed the committed test file ended at line 4098 while the intended suite had 5104 lines: the intermediate command output had been truncated before the write. A first chunk repair was deliberately rejected because redundant join newlines produced cc94fcca. Concatenating bounded chunks without modification produced the exact expected remote blob e2b8e662. A later hard-coded 5201-line transfer of a 5202-line combining-mark falsifier similarly produced 9d170896 and was rejected; the complete rerun produced the intended b0ca233e.",
     "executable_evidence": [
       "git hash-object tests/test_free_api_provider_runtime.py",
       "GitHub Contents API response content.sha",
@@ -647,32 +651,7 @@
     "checked_at": "2026-08-13",
     "claim": "The plain-text adapter accepts exactly role and content in each message; tool_calls, tool_call_id, name, reasoning_content and future extension fields require an explicitly typed adapter.",
     "sources": [
-      "https://docs.api.nvidia.com/nim/reference/moonshotai-kimi-k2-6-infer",
-      "https://docs.nvidia.com/nim/large-language-models/latest/advanced-use-cases/tool-calling-and-mcp.html"
-    ],
-    "executable_evidence": "test_extra_message_fields_are_blocked_before_network",
-    "counterhypothesis": "Validating role and content is enough for a text-only adapter; falsified because an assistant message carrying tool_calls passed unchanged to the authenticated network opener."
-  },
-  "nonempty_text_conversation": {
-    "checked_at": "2026-08-13",
-    "claim": "NVIDIA Chat Completions requires messages to contain at least one item; an empty conversation is rejected before credential use or network access.",
-    "source": "https://docs.api.nvidia.com/nim/reference/moonshotai-kimi-k2-6-infer",
-    "executable_evidence": "test_empty_message_list_is_blocked_before_network",
-    "counterhypothesis": "Provider-side validation is sufficient; falsified because an empty messages list reached the authenticated opener and caused an avoidable network attempt."
-  },
-  "nonblank_text_message_content": {
-    "checked_at": "2026-08-14",
-    "claim": "Every role/content message handled by this plain-text adapter requires nonblank scalar text before credential use or network access. This is a fail-closed adapter rule, not an additional NVIDIA schema claim: empty content can have meaning only in typed tool or multimodal paths, which this adapter rejects separately.",
-    "sources": [
-      "https://docs.nvidia.com/nim/large-language-models/latest/get-started/advanced/get-started-nemotron-3.5-lightning.html",
-      "https://docs.nvidia.com/nim/large-language-models/latest/advanced-use-cases/tool-calling-and-mcp.html"
-    ],
-    "executable_evidence": "test_blank_text_message_is_blocked_before_network",
-    "counterhypothesis": "Provider-side validation or an empty text message is sufficient for this adapter; falsified locally because empty and whitespace-only user content both reached the authenticated opener despite carrying no typed tool or multimodal payload."
-  },
-  "text_conversation_sequence": {
-    "checked_at": "2026-08-13",
-    "claim": "NVIDIA Chat Completions requires user and assistant messages to alternate, the final input message to have role user, and an optional system message to be first; invalid sequences are rejected before credential use or network access.",
+      "https:/…545 tokens truncated…s user and assistant messages to alternate, the final input message to have role user, and an optional system message to be first; invalid sequences are rejected before credential use or network access.",
     "source": "https://docs.api.nvidia.com/nim/reference/meta-llama-3_1-70b-infer",
     "executable_evidence": "test_invalid_conversation_sequence_is_blocked_before_network",
     "counterhypothesis": "Validating each role independently is sufficient; falsified because assistant-ended, consecutive-user and late-system conversations all reached the authenticated opener despite violating the documented conversation grammar."

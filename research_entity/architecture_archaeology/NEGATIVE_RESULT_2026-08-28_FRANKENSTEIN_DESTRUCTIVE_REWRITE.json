@@ -1,0 +1,82 @@
+{
+  "schema_version": "TRIGGERWORD3_ARCHAEOLOGY_NEGATIVE_RESULT/v1",
+  "status": "CURRENT_NEGATIVE_RESULT_NON_AUTHORITY",
+  "trigger": "triggerwort 3",
+  "purpose": "Preserve the 2026-08-28 Frankenstein destructive-rewrite counterexample and the engineering constraint it forces. Current authority and exact executable evidence outrank this synthesis record.",
+  "authority_observed": {
+    "supervisor_inbox_schema": "9.13",
+    "supervisor_delta": "9.13Q_NON_AUTHORITY",
+    "steering": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_9_13Q_DELTA_2026-08-28T0146P0700_GPT56SOL.json",
+    "mode": "FREE_ONLY_HARD_OFF_EXTERNAL_PROVIDERS",
+    "together_forbidden": true,
+    "paid_fallback_forbidden": true
+  },
+  "evidence_class": [
+    "CURRENT_SOURCE",
+    "NEGATIVE_RESULT",
+    "EXECUTABLE_COUNTEREVIDENCE"
+  ],
+  "source_refs": [
+    "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
+    "research_entity/claycode/autonomous/SUPERVISOR_STEERING_9_13Q_DELTA_2026-08-28T0146P0700_GPT56SOL.json"
+  ],
+  "observed_counterexample": {
+    "event": "FRANKENSTEIN_DIRECT_DISPATCH_DESTRUCTIVE_WHOLE_FILE_REWRITE",
+    "target": "tools/grid10_fabric.py",
+    "before_lines_reported": 672,
+    "after_lines_reported": 87,
+    "result": "FABRICATED_TRUNCATED_STUB",
+    "origin_push": false,
+    "containment": "LOCAL_COMMITS_RESET_BEFORE_ORIGIN_PUSH",
+    "claim_boundary": "This is counterevidence against unconstrained whole-file model rewrite safety. It is not evidence that every patch-based edit is safe."
+  },
+  "related_authority_failure": {
+    "commit": "df703fb81ef1bb1e8fa3e31aae5e6af2c2152f35",
+    "observed_signal": "A relayed-text change reopened both inbox/provider authority and admitted one Together run despite the current explicit FREE_ONLY/no-paid-fallback task authority.",
+    "current_disposition": "REVOKED_NON_OPERATIVE_UNDER_9_13Q"
+  },
+  "partial_mitigation_reported": {
+    "mechanism": "Current-file injection plus rejection of rewrites below 50 percent of prior size",
+    "reported_local_tests": "76/76",
+    "credit": "ZERO_RETAINED_RUNTIME_CREDIT_UNTIL_INDEPENDENT_CLEAN_NON_PROVIDER_REVIEW_AND_REEXECUTION",
+    "limitation": "A size floor can miss semantically destructive edits that retain most bytes. File length is not a semantic preservation proof."
+  },
+  "hypothesis": {
+    "statement": "Existing-file modification is safer when the accepted mutation is bound to an exact preimage and a bounded patch/diff, with unchanged-region or whole-file postimage invariants checked before commit.",
+    "engineering_confidence": 0.9
+  },
+  "counterhypothesis": {
+    "statement": "A small or hash-bound patch can still introduce severe semantic damage inside the touched region, so patch bounding alone is insufficient without tests and task-specific invariants.",
+    "engineering_confidence": 0.9
+  },
+  "successor_constraint": [
+    "Prefer patch/diff-based modification of existing files over free-form whole-file replacement.",
+    "Bind the exact pre-edit file identity before mutation.",
+    "Reject source drift between planning, patch construction and commit.",
+    "When whole-file replacement is unavoidable, require an exact preimage plus explicit unchanged-region or equivalent structural invariants; a simple shrink threshold is insufficient.",
+    "Run focused semantic regressions for the changed behavior and preservation regressions for critical unaffected behavior before promotion.",
+    "Keep provider-authored changes from invalid authority lineage quarantined until independent clean non-provider review/re-execution.",
+    "Never promote source-guard presence or reported local test counts into Frankenstein/GRID10/HCU/EntityOS runtime credit."
+  ],
+  "falsifiers": [
+    "A controlled destructive edit that preserves more than 50 percent of the old file must demonstrate that a size-only guard is insufficient.",
+    "A stale-preimage patch must be rejected before commit.",
+    "A patch that mutates an out-of-scope protected region must be rejected even if the resulting file is large and syntactically valid.",
+    "A clean current non-provider execution of the preservation guard must bind exact source identity and produce zero provider calls and zero secret lookups before retained component credit is considered."
+  ],
+  "next_exact_gate": "On a clean current non-provider checkout, independently review and execute the destructive-truncation/preservation regressions, including a >50%-size semantic-corruption negative control and stale-preimage/out-of-scope mutation controls; bind exact source identity and prove provider_calls=0 and secret_lookups=0.",
+  "credits": {
+    "frankenstein_direct_dispatch_retained_runtime": 0,
+    "physical_grid10": 0,
+    "canonical_semantics": 0,
+    "hcu_full": 0,
+    "entityos_whole": 0,
+    "training": 0
+  },
+  "integration": {
+    "parent_atlas": "research_entity/architecture_archaeology/FAILURE_ATLAS.json",
+    "rollup_state": "CURRENT_ADDENDUM_PENDING_FUTURE_ATLAS_ROLLUP",
+    "root_readme_modified": false,
+    "frank_harness_modified": false
+  }
+}

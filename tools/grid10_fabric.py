@@ -407,16 +407,37 @@ class Fabric:
 
     def elect_coordinator(self, scope: str, candidate_node_ids: list[str]) -> tuple[dict[str, Any], str] | None:
         """Deterministic election among candidates; returns None if scope already has a
-        valid lease (caller should treat that as 'someone else is coordinator, back off')."""
+        valid, non-expired lease (caller should treat that as 'someone else is
+        coordinator, back off').
+
+        Real gap found+fixed 2026-08-27 (GRID10 use-case-2 edge-resilience
+        experiment): this method previously only checked `valid=1`, never whether an
+        existing lease had actually expired via LEASE_TTL_SECONDS. coordinator_commit()
+        already enforces the TTL for COMMITS, and grid10_node.py's own coordinator
+        self-detects and revokes its OWN expired lease on a failed commit -- but neither
+        of those helps when the coordinator process is outright KILLED (not just left
+        idle past its TTL while still alive): a dead coordinator's lease stayed
+        `valid=1` in the DB forever, and this method's old check meant NO OTHER node
+        could ever be elected for that scope again. Confirmed empirically: a mass
+        SIGKILL that happened to include an active coordinator left that scope's
+        remaining tasks permanently stuck past a 40s recovery bound. Fix: treat a
+        TTL-expired lease as equivalent to invalid for election purposes too, and
+        explicitly revoke it here before proceeding (symmetric with the commit-time
+        check, same LEASE_TTL_SECONDS constant, same race-safety since this all runs
+        inside the same BEGIN IMMEDIATE transaction as the rest of this method)."""
         con = connect(self.path)
         try:
             con.execute("BEGIN IMMEDIATE")
             old = con.execute(
-                "SELECT lease_id FROM leases WHERE scope=? AND valid=1", (scope,)
+                "SELECT lease_id, granted_ts FROM leases WHERE scope=? AND valid=1", (scope,)
             ).fetchone()
             if old is not None:
-                con.execute("ROLLBACK")
-                return None
+                if (time.time() - float(old["granted_ts"])) > LEASE_TTL_SECONDS:
+                    con.execute("UPDATE leases SET valid=0 WHERE lease_id=?", (old["lease_id"],))
+                    old = None
+                else:
+                    con.execute("ROLLBACK")
+                    return None
             epoch = self._int(con, "epoch")
             generation = self._int(con, "generation")
             healthy_rows = con.execute(

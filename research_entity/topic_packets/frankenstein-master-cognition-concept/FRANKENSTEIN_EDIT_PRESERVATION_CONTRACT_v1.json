@@ -1,0 +1,85 @@
+{
+  "schema": "FRANKENSTEIN_EDIT_PRESERVATION_CONTRACT/v1",
+  "status": "SOURCE_READY_COMPONENT_EXACT_BRANCH_BLOBS_LOCALLY_TESTED_NONPROMOTING",
+  "trigger": "triggerword 3",
+  "authority_snapshot": {
+    "canonical_main_observed_before_design": "5845112dd9fd0394ca8ef2685f62c79243532fac",
+    "supervisor_inbox_schema": "9.13",
+    "selected_steering": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_9_13Q_DELTA_2026-08-28T0146P0700_GPT56SOL.json",
+    "execution": "FREE_ONLY_HARD_OFF_NO_PAID_FALLBACK",
+    "together": "FORBIDDEN"
+  },
+  "problem": {
+    "counterexample": "The first live Frankenstein direct-dispatch rewrote tools/grid10_fabric.py from 672 lines to an 87-line fabricated stub; containment occurred before origin push.",
+    "current_guard_limitation": "A simple shrink-percentage threshold is defense in depth but is neither necessary nor sufficient proof that unrelated regions were preserved.",
+    "required_move": "Bind existing-file edits to exact preimage identity and declared change scope before commit."
+  },
+  "invariants": [
+    "MODEL_OUTPUT_IS_CANDIDATE_NOT_REPOSITORY_TRUTH",
+    "EXACT_PREIMAGE_SHA256_REQUIRED",
+    "REPOSITORY_RELATIVE_NORMALIZED_PATH_REQUIRED",
+    "PATH_TRAVERSAL_AND_ABSOLUTE_PATHS_FORBIDDEN",
+    "DECLARED_CHANGED_FILE_SET_MUST_EQUAL_OBSERVED_CHANGED_FILE_SET",
+    "UNDECLARED_PREIMAGE_REGION_CHANGE_FAILS_CLOSED",
+    "TASK_LOCAL_TEST_PASS_CANNOT_OVERRIDE_PRESERVATION_FAILURE",
+    "DELETION_BUDGET_IS_DEFENSE_IN_DEPTH_NOT_PRESERVATION_PROOF",
+    "FULL_FILE_REPLACEMENT_REQUIRES_EXPLICIT_SEPARATE_AUTHORIZATION_AND_REASON",
+    "POSTIMAGE_HASH_IS_RECORDED_FOR_REPRODUCIBILITY",
+    "NO_PROVIDER_OR_SECRET_LOOKUP_REQUIRED_FOR_THIS_COMPONENT"
+  ],
+  "recommended_edit_forms": [
+    {
+      "form": "unified_diff",
+      "external_primary": "https://git-scm.com/docs/git-apply",
+      "project_rule": "Use context-bearing patches against an exact preimage; git apply --check is a useful applicability discriminator but does not by itself establish semantic non-regression."
+    },
+    {
+      "form": "json_patch",
+      "external_primary": "RFC 6902",
+      "project_rule": "Structured operations and test preconditions are useful for JSON-like state; RFC compliance does not by itself establish project authorization or semantic preservation."
+    },
+    {
+      "form": "structured_edit_operation",
+      "project_rule": "Any custom edit form must preserve exact preimage identity, declared touched regions, changed-file-set closure, and deterministic postimage verification."
+    }
+  ],
+  "component_source": "research_entity/topic_packets/frankenstein-master-cognition-concept/frankenstein_edit_preservation_v1.py",
+  "component_tests": "tests/test_frankenstein_edit_preservation_v1.py",
+  "acceptance_cases": [
+    "narrow declared edit passes",
+    "stale preimage fails closed",
+    "large undeclared deletion fails even when requested feature is present",
+    "below-50-percent deletion outside declared scope fails",
+    "task-local success cannot override preservation failure",
+    "large deletion budget cannot substitute for declared scope",
+    "full-file replacement requires explicit reason",
+    "changed-file set must match declared scope exactly",
+    "absolute/traversal/backslash paths fail closed"
+  ],
+  "local_component_result": {
+    "runner": "python -m pytest -q tests/test_frankenstein_edit_preservation_v1.py",
+    "source_git_blob_sha": "49403ff73ac38e4ff6d7458b949f16f04f1833be",
+    "test_git_blob_sha": "3e136ba911e1027a9dd3858288e6a37e8f24a5f8",
+    "identity_verification": "local git hash-object matched GitHub branch blob IDs before execution",
+    "tests": 9,
+    "passed": 9,
+    "failed": 0,
+    "runtime_seconds_reported": 0.04,
+    "environment_scope": "Exact branch blob bytes reconstructed and executed in ChatGPT local isolated container; not a clean full canonical repository checkout and not retained Frankenstein core runtime acceptance"
+  },
+  "open_hypothesis": {
+    "statement": "Preimage-bound, region-declared editing materially reduces destructive whole-file reconstruction failures compared with unconstrained complete-file generation.",
+    "engineering_confidence": 0.9,
+    "counterhypothesis": "A patch or structured edit can still be destructive through broad authorized hunks, stale preimages, incorrect scope declarations, fuzzy application, or weak semantic regression tests.",
+    "falsifier": "A clean exact-current non-provider mutation harness fails to reject unauthorized deletion, stale-preimage edits, scope expansion, or changed-file-set drift, or shows no safety gain against matched whole-file-rewrite tasks."
+  },
+  "promotion_boundary": {
+    "provider_runtime_credit": 0,
+    "frankenstein_direct_dispatch_retained_runtime_pass": false,
+    "entityos_whole_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "canonical_semantics_credit": 0,
+    "training_credit": 0
+  }
+}

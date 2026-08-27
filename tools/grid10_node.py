@@ -144,6 +144,8 @@ def node_loop(
     task_reclaim_stale_after_seconds: float = 20.0,
     meta_evaluator: bool = False,
     regulator_tick_every: int = 5,
+    elastic_poll: bool = False,
+    elastic_poll_check_every: int = 3,
 ):
     """Entry point run inside a forked child. Everything here is genuinely executing
     as an independent OS process (own PID, own address space except COW-shared model
@@ -163,6 +165,21 @@ def node_loop(
     coordinator_lease = None
     coordinator_token = None
     coordinator_scope = None
+    # Real, adapted alternative to the dynamic-scaling concept's SIGSTOP/CONT
+    # warm-standby idea (2026-08-27): rather than suspending the OS process
+    # (which the concept's own adversarial review flagged as a real,
+    # still-unfixed race -- a process frozen mid-SQLite-transaction), a node
+    # opted into elastic_poll reads a shared "poll_intensity" regulator
+    # (reusing the same CAS-safe regulators table built for the cybernetic-
+    # cognition experiment) and scales its OWN poll_sleep by 1/intensity:
+    # intensity=1.0 -> normal cadence, intensity=0.1 -> ~10x slower polling
+    # (much less CPU while "on standby"), intensity>1.0 -> faster than normal
+    # (a scale-out boost). The process itself never stops, so it can never
+    # freeze mid-transaction -- the tradeoff is real: standby nodes still
+    # exist and still hold their allocated (COW-shared) memory, unlike a
+    # concept where 7 of 10 processes' memory could in principle be paged
+    # out entirely under real memory pressure (not attempted here).
+    current_poll_sleep = poll_sleep
 
     for i in range(max_iters):
         try:
@@ -178,6 +195,13 @@ def node_loop(
             reclaimed = f.runtime_reclaim_stale_claims(node_id, stale_after_seconds=task_reclaim_stale_after_seconds)
             for tid in reclaimed:
                 events.append({"event": "STALE_TASK_RECLAIMED", "node_id": node_id, "task_id": tid, "ts": time.time()})
+
+            if elastic_poll and (i % elastic_poll_check_every == 0):
+                intensity_reg = f.get_regulator("poll_intensity", default=1.0)
+                new_poll_sleep = poll_sleep / max(0.01, intensity_reg["value_real"])
+                if new_poll_sleep != current_poll_sleep:
+                    events.append({"event": "ELASTIC_POLL_RATE_CHANGED", "node_id": node_id, "old_poll_sleep": current_poll_sleep, "new_poll_sleep": new_poll_sleep, "intensity": intensity_reg["value_real"], "ts": time.time()})
+                current_poll_sleep = new_poll_sleep
 
             snap = f.snapshot()
 
@@ -292,6 +316,6 @@ def node_loop(
 
         except Exception as exc:  # noqa: BLE001 - node loop must never crash silently
             events.append({"event": "NODE_LOOP_ERROR", "node_id": node_id, "error": repr(exc), "ts": time.time()})
-        time.sleep(poll_sleep)
+        time.sleep(current_poll_sleep if elastic_poll else poll_sleep)
 
     Path(out_evidence).write_text(json.dumps({"node_id": node_id, "pid": pid, "events": events}, indent=2))

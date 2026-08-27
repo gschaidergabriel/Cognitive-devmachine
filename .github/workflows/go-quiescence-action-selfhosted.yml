@@ -1,10 +1,11 @@
-name: EntityOS GO fail-closed legacy quiescence action
+name: EntityOS GO fail-closed legacy quiescence attribution
 
 on:
   push:
     branches: [main]
     paths:
       - 'tools/free_swarm_quiescence_action_v1.py'
+      - 'tools/free_swarm_restart_authority_attribution_v4.py'
       - '.github/workflows/go-quiescence-action-selfhosted.yml'
   workflow_dispatch:
 
@@ -12,11 +13,11 @@ permissions:
   contents: read
 
 concurrency:
-  group: entityos-go-quiescence-action
+  group: entityos-go-quiescence-attribution
   cancel-in-progress: false
 
 jobs:
-  quiesce-clay-legacy:
+  attribute-clay-legacy:
     if: github.actor == 'gschaidergabriel'
     runs-on: self-hosted
     timeout-minutes: 8
@@ -34,7 +35,10 @@ jobs:
           rm -rf "$OUT"; mkdir -p "$OUT"
           test -z "$(git status --porcelain=v1)"
           printf 'HEAD=%s\nTREE=%s\n' "$(git rev-parse HEAD)" "$(git rev-parse 'HEAD^{tree}')" > "$OUT/source.txt"
-          sha256sum tools/free_swarm_quiescence_action_v1.py tools/free_provider_admission.py > "$OUT/source.sha256"
+          sha256sum \
+            tools/free_swarm_quiescence_action_v1.py \
+            tools/free_swarm_restart_authority_attribution_v4.py \
+            tools/free_provider_admission.py > "$OUT/source.sha256"
 
       - name: Require current HARD_OFF authority
         shell: bash
@@ -52,7 +56,34 @@ jobs:
           print('PASS_HARD_OFF',x.get('authority_epoch'))
           PY
 
-      - name: Dry-run exact Clay legacy matches
+      - name: Read-only root-specific restart-authority attribution v4
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          OUT=/tmp/entityos-go-quiescence
+          set +e
+          python3 tools/free_swarm_restart_authority_attribution_v4.py --output "$OUT/restart-authority-v4.json"
+          RC=$?
+          set -e
+          cat "$OUT/restart-authority-v4.json" || true
+          python3 - "$RC" <<'PY'
+          import json,sys
+          rc=int(sys.argv[1])
+          p='/tmp/entityos-go-quiescence/restart-authority-v4.json'
+          x=json.load(open(p))
+          # v4 is deliberately read-only and never itself authorizes a kill.
+          assert x.get('safe_to_kill_from_this_receipt') is False, x
+          assert x.get('network_or_provider_calls_performed') is False, x
+          assert x.get('secret_values_exposed') is False, x
+          if int(x.get('matched_count') or 0) == 0:
+              print('ALREADY_NO_MATCHED_LEGACY_ROOTS')
+              raise SystemExit(0)
+          if rc != 0 or not x.get('all_matched_roots_actionable'):
+              raise SystemExit('FAIL_CLOSED: restart authority is not uniquely root-bound')
+          print('ATTRIBUTION_COMPLETE_BUT_MUTATION_NOT_AUTHORIZED')
+          PY
+
+      - name: Dry-run exact Clay legacy process matches only
         shell: bash
         run: |
           set -Eeuo pipefail
@@ -60,34 +91,43 @@ jobs:
           python3 tools/free_swarm_quiescence_action_v1.py --window-seconds 2 --output "$OUT/dry-run.json"
           cat "$OUT/dry-run.json"
 
-      - name: Apply Clay-only quiescence and prove 90s no restart
+      - name: Enforce no mutation from attribution-only evidence
         shell: bash
         run: |
           set -Eeuo pipefail
           OUT=/tmp/entityos-go-quiescence
-          python3 tools/free_swarm_quiescence_action_v1.py --apply --window-seconds 90 --output "$OUT/apply.json"
           python3 - <<'PY'
-          import json
-          x=json.load(open('/tmp/entityos-go-quiescence/apply.json'))
-          assert x['state']=='PASS_QUIESCENT',x
-          assert x['after_matched_count']==0,x
-          assert x['restart_observed'] is False,x
-          assert x['provider_calls']==0,x
-          assert x['secret_values_read'] is False,x
-          assert x['unrelated_processes_targeted']==0,x
-          print('PASS_QUIESCENT')
+          import json, pathlib
+          attr=json.load(open('/tmp/entityos-go-quiescence/restart-authority-v4.json'))
+          dry=json.load(open('/tmp/entityos-go-quiescence/dry-run.json'))
+          result={
+            'schema':'GO_QUIESCENCE_ATTRIBUTION_GATE/v1',
+            'restart_authority_decision':attr.get('decision'),
+            'matched_roots':attr.get('matched_count'),
+            'dry_run_matches':dry.get('before_matched_count'),
+            'mutation_performed':False,
+            'provider_calls':0,
+            'secret_values_read':False,
+            'next_required_evidence':'EXECUTABLY_DISABLE_EXACT_ROOT_SPECIFIC_RESTART_AUTHORITY_THEN_REVALIDATE_IMMEDIATELY_BEFORE_KILL',
+          }
+          pathlib.Path('/tmp/entityos-go-quiescence/gate.json').write_text(json.dumps(result,sort_keys=True,indent=2)+'\n')
+          print(json.dumps(result,sort_keys=True))
+          # Presence of legacy roots is a current quiescence failure, not permission to kill.
+          if int(dry.get('before_matched_count') or 0) > 0:
+              raise SystemExit(2)
           PY
 
       - name: Upload sanitized evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: entityos-go-quiescence-action
+          name: entityos-go-quiescence-attribution
           path: |
             /tmp/entityos-go-quiescence/source.txt
             /tmp/entityos-go-quiescence/source.sha256
             /tmp/entityos-go-quiescence/provider-admission.json
+            /tmp/entityos-go-quiescence/restart-authority-v4.json
             /tmp/entityos-go-quiescence/dry-run.json
-            /tmp/entityos-go-quiescence/apply.json
+            /tmp/entityos-go-quiescence/gate.json
           if-no-files-found: warn
           retention-days: 7

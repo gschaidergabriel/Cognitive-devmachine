@@ -1,0 +1,88 @@
+{
+  "schema": "SUPERVISOR_STEERING_DELTA/v1",
+  "authority": "NON_AUTHORITY_STEERING_ONLY",
+  "date": "2026-08-27T22:52:50+07:00",
+  "organ": "GPT-5.6 Sol / ChatGPT supervisor",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "integrated_cognition_compute_architecture": "HCU",
+  "provider_authority_epoch": "9.13_UNCHANGED",
+  "canonical_provider_state": "FREE_ONLY_HARD_OFF_ALL_PROVIDER_ROUTES_FALSE_TOGETHER_FORBIDDEN_NO_PAID_FALLBACK",
+  "main_head_seen_before_write": "934f46b861893d123a43fd0c92bd4b9550ddf9c8",
+  "material_findings": {
+    "freepool_caller_boundary": {
+      "status": "EXECUTABLE_REPEATED_HARD_OFF_BYPASS_STILL_ACTIVE",
+      "evidence": [
+        "b960db549538d17c9060cb5f085d9f57da597965 documents a fresh GRID10 latency concept created after ChatGPT bridge failure using free-pool fallback",
+        "e7cbc6322617d57d0d836107d6b32c442ce7ea92 records fresh NVIDIA-Nemotron freepool-fallback provenance",
+        "934f46b861893d123a43fd0c92bd4b9550ddf9c8 records fresh Mistral freepool-fallback provenance"
+      ],
+      "interpretation": "The actual external stern.py -> harness_aider.py -> last-resort/llm.py boundary remains capable of provider-backed execution after canonical 9.13 HARD_OFF. Standalone repo gates do not close this caller boundary.",
+      "credit": 0
+    },
+    "grid10_ram_release": {
+      "status": "EXECUTABLE_DIAGNOSTIC_COMPONENT_EVIDENCE_ONLY_NO_PHYSICAL_RAM_CREDIT",
+      "source_result_commit": "6996f12022f8541171f39a2ffac26792a1e66c75",
+      "positive_signal": "The A/B run reports materially lower Private_Dirty for malloc_trim treatment with no obvious single-cycle resume-latency catastrophe.",
+      "soundness_gap": "Private_Dirty alone is insufficient to establish lower physical memory consumption or preserved sharing. At least one treated process showed a large Shared_Clean accounting collapse while RSS remained high, so the memory moved across accounting classes and the physical effect is not identified by the current acceptance metric.",
+      "required_measurements": [
+        "Rss",
+        "Pss",
+        "Pss_Dirty where available",
+        "Shared_Clean",
+        "Shared_Dirty",
+        "Private_Clean",
+        "Private_Dirty",
+        "Swap and SwapPss where available",
+        "host-level memory delta across matched treatment/control cohorts"
+      ],
+      "existing_falsifier_source": "tools/grid10_ram_release_repeated_acceptance_v2.py",
+      "existing_falsifier_commit": "ef1154518d720475caa124b52895d3b784428444",
+      "existing_falsifier_credit": "SOURCE_ONLY_RUNTIME_UNVERIFIED",
+      "credit": 0
+    },
+    "post_hardoff_provider_authored_grid10_changes": {
+      "status": "QUARANTINE_FOR_RETAINED_RUNTIME_CREDIT",
+      "rule": "Any provider-authored GRID10/core change after 9.13 HARD_OFF requires independent clean current non-provider review plus repository-bound re-execution before retained runtime credit. Provider consensus or successful-looking local output is insufficient."
+    },
+    "base_release": {
+      "status": "UNCHANGED_FAIL_CLOSED",
+      "wp_pass": ["WP-01", "WP-02"],
+      "wp_open": ["WP-03", "WP-04", "WP-05", "WP-06", "WP-07", "WP-08", "WP-09", "WP-10", "WP-11", "WP-12", "WP-13", "WP-14"],
+      "general_purpose_gate": "NOT_PASS",
+      "release_gate": "NOT_PASS"
+    }
+  },
+  "steering": {
+    "P0": [
+      "Close the actual external freepool caller before secret lookup, provider import, network, or Aider. Under canonical 9.13 HARD_OFF, execute an adversarial caller-boundary receipt proving provider_calls=0 and secret_lookups=0.",
+      "Disable or quarantine automatic freepool fallback activation at the actual external caller surface; repo prose and standalone gates are not sufficient.",
+      "Continue bootstrap-v2/control-sync recovery and quiescence sequence from 9.13M without allowing stale VPS or provider-backed execution to mint authority."
+    ],
+    "P1": [
+      "Independently review all post-9.13M provider-authored GRID10/core changes on a clean current non-provider checkout and re-execute only the relevant regressions with HEAD/tree/dirty=false/source hashes/stdout/stderr binding.",
+      "Strengthen grid10_ram_release_repeated_acceptance_v2 before RAM promotion: preregister repeated matched treatment/control cohorts and acceptance on PSS plus the full smaps_rollup accounting vector, not Private_Dirty alone. Reject if treatment merely shifts pages from Private_Dirty into other resident classes or degrades aggregate PSS/sharing beyond preregistered tolerance.",
+      "Keep the existing single-cycle malloc_trim result as diagnostic evidence only until the strengthened repeated falsifier passes repository-bound on a clean non-provider surface."
+    ]
+  },
+  "promotion_state": {
+    "new_base_credit": 0,
+    "new_training_credit": 0,
+    "new_canonical_semantics_credit": 0,
+    "new_physical_grid10_credit": 0,
+    "new_hcu_full_credit": 0,
+    "grid10_ram_efficiency_runtime_credit": 0,
+    "provider_path_runtime_credit": 0
+  },
+  "hard_invariants": [
+    "FREE_ONLY_NO_PAID_FALLBACK_TOGETHER_FORBIDDEN",
+    "EXECUTABLE_EVIDENCE_OUTRANKS_MODEL_CONSENSUS",
+    "NO_BASE_WORK_PACKAGE_PASS_FROM_MODEL_CONSENSUS",
+    "NO_CANONICAL_SEMANTICS_PROMOTION_WITHOUT_EXECUTABLE_COUNTEREVIDENCE_AND_REVIEW",
+    "GOODMAN_COLLAPSE_SHARED_MODEL_FAMILY_PIPELINE_ORCHESTRATION_AND_REPACKAGED_HISTORY",
+    "TRAIN_CALIBRATION_HOLDOUT_FAMILY_PROVENANCE_MUST_REMAIN_EXPLICIT",
+    "MODEL_FAMILY_AND_CHECKPOINT_ANCESTRY_MUST_REMAIN_EXPLICIT",
+    "UBUNTU_ONLY_FRANK_V0_1_TARGET_REMAINS_UNCHANGED",
+    "DO_NOT_MODIFY_FRANK_HARNESS"
+  ]
+}

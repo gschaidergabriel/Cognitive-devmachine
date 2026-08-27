@@ -1,0 +1,112 @@
+{
+  "schema": "TRIGGERWORD3_FRANKENSTEIN_EDIT_SAFETY_EVIDENCE/v1",
+  "status": "SOURCE_REVIEWED_RUNTIME_UNPROMOTED",
+  "base_main_observed": "e697e13578aaeccedfa162e93b24690f73cb3ea1",
+  "evidence_classes": [
+    "CURRENT_SOURCE",
+    "NEGATIVE_RESULT",
+    "PROJECT_RUNTIME_HISTORY_REPORTED_BY_CURRENT_SUPERVISOR",
+    "EXTERNAL_PRIMARY",
+    "OPEN_HYPOTHESIS"
+  ],
+  "incident": {
+    "date_local": "2026-08-28",
+    "path": "tools/grid10_fabric.py",
+    "pre_lines_reported": 672,
+    "bad_rewrite_lines_reported": 87,
+    "origin_push_occurred": false,
+    "containment": "LOCAL_VPS_COMMITS_RESET_BEFORE_ORIGIN_PUSH",
+    "source_of_current_claim": [
+      "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
+      "research_entity/claycode/autonomous/SUPERVISOR_STEERING_9_13Q_DELTA_2026-08-28T0146P0700_GPT56SOL.json"
+    ]
+  },
+  "current_source_defenses": {
+    "orchestrator": "research_entity/topic_packets/frankenstein-master-cognition-concept/frankenstein_orchestrator_v1_PROVIDER_QUARANTINED_854f6bc.py",
+    "tests": "tests/test_frankenstein_orchestrator_v1.py",
+    "observed_functions": [
+      "extract_referenced_existing_files",
+      "_looks_like_destructive_truncation",
+      "dispatch_helper_task_direct"
+    ],
+    "observed_guard": "reject existing-file rewrite below 0.5 of previous character length for sufficiently large files",
+    "credit": "SOURCE_PRESENT_ONLY_RETAINED_RUNTIME_PASS_FALSE"
+  },
+  "failure_mechanism": "NARROW_SEMANTIC_CHANGE_ROUTED_THROUGH_WHOLE_FILE_RECONSTRUCTION_WITH_INCOMPLETE_PREIMAGE",
+  "hypothesis": {
+    "id": "H1_PATCH_FIRST_SOURCE_BOUND_EDITING",
+    "claim": "For narrow modifications to tracked existing text files, bounded patch/diff editing against exact preimage identity reduces accidental unrelated deletion versus unconstrained whole-file regeneration.",
+    "engineering_confidence": 0.9,
+    "promotion": "OPEN_HYPOTHESIS_NOT_RUNTIME_CREDIT"
+  },
+  "counterhypotheses": [
+    {
+      "id": "C1_PATCH_CAN_DELETE_UNRELATED_CODE",
+      "claim": "Patch syntax alone does not prevent broad deletion; a narrow acceptance test can still pass."
+    },
+    {
+      "id": "C2_SIZE_THRESHOLD_IS_NONSEMANTIC",
+      "claim": "A 50 percent shrink threshold can miss harmful smaller deletions and can reject legitimate explicit refactors."
+    }
+  ],
+  "proposed_edit_contract": [
+    "resolve exact repository root and path",
+    "capture exact preimage commit/blob/content identity",
+    "default to bounded unified diff for existing tracked text files",
+    "reject path escape",
+    "git apply --check against expected source",
+    "apply atomically",
+    "inspect resulting diff and changed path set",
+    "enforce declared deletion/rewrite/preservation rights",
+    "run claim-matching acceptance tests",
+    "commit only after all gates pass",
+    "restore exact preimage on any failure"
+  ],
+  "adversarial_discriminator": {
+    "fixture": "large file with unrelated functions A/B/C; request only D; target acceptance checks only D",
+    "candidates": [
+      "additive patch preserving A/B/C",
+      "patch deleting B/C while adding D",
+      "whole-file replacement retaining more than 50 percent length but deleting one critical unrelated function",
+      "stale-base patch against wrong blob",
+      "explicitly authorized broad refactor"
+    ],
+    "expected": [
+      "ADMIT",
+      "REJECT_SCOPE_PRESERVATION",
+      "REJECT_SCOPE_PRESERVATION",
+      "REJECT_PREIMAGE_MISMATCH",
+      "ADMIT_ONLY_WITH_EXPLICIT_REWRITE_RIGHTS_AND_BROADER_VERIFICATION"
+    ]
+  },
+  "external_primary": [
+    {
+      "url": "https://git-scm.com/docs/git-apply",
+      "relevance": "git apply --check and context-sensitive atomic patch application behavior"
+    },
+    {
+      "url": "https://git-scm.com/docs/git-diff",
+      "relevance": "diff inspection, --check, full-index object identity surface"
+    },
+    {
+      "url": "https://git-scm.com/docs/git-hash-object",
+      "relevance": "content object identity"
+    }
+  ],
+  "independent_execution_this_run": {
+    "attempted": true,
+    "result": "BLOCKED_INFRASTRUCTURE_DNS",
+    "detail": "isolated container could not resolve github.com while attempting a clean clone",
+    "project_test_failure": false,
+    "repository_bound_reexecution_credit": false
+  },
+  "current_credit_boundary": {
+    "frankenstein_direct_dispatch_retained_runtime_pass": false,
+    "entityos_whole_runtime": 0,
+    "hcu_full_runtime": 0,
+    "physical_grid10_runtime": 0,
+    "canonical_semantics": 0,
+    "training": 0
+  },
+  "next_exact_gate": "independent clean non-provider checkout: implement or review source-bound patch/scope invariant; run destructive-truncation plus adversarial stale-base/unrelated-deletion regressions and existing Frankenstein suite; retain credit only at measured scope"
+}

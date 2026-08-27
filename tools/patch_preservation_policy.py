@@ -31,26 +31,34 @@ class PreservationError(ValueError):
 @dataclass(frozen=True)
 class Policy:
     max_deleted_fraction: float = 0.25
-    deleted_lines_floor: int = 5
+    deleted_lines_floor: int = 0
+    max_added_fraction: float = 1.00
+    added_lines_floor: int = 0
     max_net_shrink_fraction: float = 0.20
-    net_shrink_lines_floor: int = 5
+    net_shrink_lines_floor: int = 0
     max_old_changed_fraction: float = 0.30
-    old_changed_chars_floor: int = 200
+    old_changed_chars_floor: int = 0
+    max_postimage_growth_fraction: float = 1.00
+    postimage_growth_chars_floor: int = 0
     max_analyzed_chars: int = MAX_ANALYZED_CHARS
 
     def validate(self) -> None:
         for name in (
             "max_deleted_fraction",
+            "max_added_fraction",
             "max_net_shrink_fraction",
             "max_old_changed_fraction",
+            "max_postimage_growth_fraction",
         ):
             value = getattr(self, name)
             if not isinstance(value, (int, float)) or isinstance(value, bool) or not 0 <= float(value) <= 1:
                 raise PreservationError(f"{name} must be within [0, 1]")
         for name in (
             "deleted_lines_floor",
+            "added_lines_floor",
             "net_shrink_lines_floor",
             "old_changed_chars_floor",
+            "postimage_growth_chars_floor",
             "max_analyzed_chars",
         ):
             value = getattr(self, name)
@@ -150,6 +158,13 @@ def evaluate_worktree(
     if head.strip() != source_head:
         raise PreservationError(f"SOURCE_HEAD_MISMATCH:{head.strip()}")
 
+    rc, untracked_text, err = _git(repo, "ls-files", "--others", "-z", "--")
+    if rc != 0:
+        raise PreservationError(f"UNTRACKED_PATHS_FAILED:{err[-500:]}")
+    untracked = sorted({item for item in untracked_text.split("\x00") if item})
+    if untracked:
+        raise PreservationError(f"UNTRACKED_PATHS_PRESENT:{untracked}")
+
     rc, changed_text, err = _git(repo, "diff", "--name-only", "--no-renames", "HEAD", "--")
     if rc != 0:
         raise PreservationError(f"CHANGED_PATHS_FAILED:{err[-500:]}")
@@ -167,6 +182,10 @@ def evaluate_worktree(
         if rc != 0:
             raise PreservationError(f"SOURCE_TARGET_UNAVAILABLE:{target}:{err[-300:]}")
         path = repo / target
+        if path.is_symlink():
+            violations.append({"path": target, "reason": "TARGET_SYMLINK_REQUIRES_SEPARATE_AUTHORITY"})
+            files.append({"path": target, "symlink_target": True})
+            continue
         if not path.is_file():
             violations.append({"path": target, "reason": "FILE_DELETION_REQUIRES_SEPARATE_AUTHORITY"})
             files.append({"path": target, "deleted_file": True})
@@ -183,10 +202,13 @@ def evaluate_worktree(
         after_lines = _line_count(after)
         denominator_lines = max(before_lines, 1)
         deleted_fraction = deleted_lines / denominator_lines
+        added_fraction = added_lines / denominator_lines
         net_shrink_lines = max(0, before_lines - after_lines)
         net_shrink_fraction = net_shrink_lines / denominator_lines
         old_changed_chars = _changed_old_chars(before, after)
         old_changed_fraction = old_changed_chars / max(len(before), 1)
+        postimage_growth_chars = max(0, len(after) - len(before))
+        postimage_growth_fraction = postimage_growth_chars / max(len(before), 1)
 
         row = {
             "path": target,
@@ -195,19 +217,33 @@ def evaluate_worktree(
             "added_lines": added_lines,
             "deleted_lines": deleted_lines,
             "deleted_fraction": deleted_fraction,
+            "added_fraction": added_fraction,
             "net_shrink_lines": net_shrink_lines,
             "net_shrink_fraction": net_shrink_fraction,
             "old_changed_chars": old_changed_chars,
             "old_changed_fraction": old_changed_fraction,
+            "postimage_growth_chars": postimage_growth_chars,
+            "postimage_growth_fraction": postimage_growth_fraction,
         }
         files.append(row)
 
         if deleted_lines > policy.deleted_lines_floor and deleted_fraction > policy.max_deleted_fraction:
             violations.append({"path": target, "reason": "DELETION_FRACTION_EXCEEDED", "observed": deleted_fraction})
+        if added_lines > policy.added_lines_floor and added_fraction > policy.max_added_fraction:
+            violations.append({"path": target, "reason": "ADDITION_FRACTION_EXCEEDED", "observed": added_fraction})
         if net_shrink_lines > policy.net_shrink_lines_floor and net_shrink_fraction > policy.max_net_shrink_fraction:
             violations.append({"path": target, "reason": "NET_SHRINK_FRACTION_EXCEEDED", "observed": net_shrink_fraction})
         if old_changed_chars > policy.old_changed_chars_floor and old_changed_fraction > policy.max_old_changed_fraction:
             violations.append({"path": target, "reason": "OLD_CONTENT_CHANGE_FRACTION_EXCEEDED", "observed": old_changed_fraction})
+        if (
+            postimage_growth_chars > policy.postimage_growth_chars_floor
+            and postimage_growth_fraction > policy.max_postimage_growth_fraction
+        ):
+            violations.append({
+                "path": target,
+                "reason": "POSTIMAGE_GROWTH_FRACTION_EXCEEDED",
+                "observed": postimage_growth_fraction,
+            })
 
     return {
         "schema": "PATCH_PRESERVATION_POLICY_RECEIPT/v1",

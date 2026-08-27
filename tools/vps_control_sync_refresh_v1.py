@@ -9,15 +9,16 @@ It never starts/stops runtime processes, reads provider secrets, or invokes prov
 Algorithm:
 1. Require existing git checkout and clean worktree.
 2. Resolve remote main over explicit HTTPS.
-3. If already current: validate current FREE_ONLY/HARD_OFF authority and exit PASS.
+3. If already current: validate current FREE_ONLY/HARD_OFF authority.
 4. If stale: require local HEAD is ancestor of remote main (no divergence).
 5. Fetch remote main into a temporary namespaced ref.
 6. Read SUPERVISOR_INBOX + FREE_PROVIDER_ADMISSION directly from fetched commit BEFORE checkout.
 7. Require coherent FREE_ONLY/HARD_OFF, all providers false, Together forbidden.
 8. Fast-forward checkout with `git reset --hard <remote_sha>` only after all checks pass.
 9. Re-validate clean HEAD/tree/authority and critical source hashes.
+10. Resolve remote main again and require it is unchanged from the initially bound SHA.
 
-Any ambiguity yields NO_EXECUTION_AUTHORITY and no runtime mutation.
+Any ambiguity yields NO_EXECUTION_AUTHORITY and no runtime/process/provider mutation.
 """
 from __future__ import annotations
 
@@ -155,21 +156,16 @@ def main(argv: list[str] | None = None) -> int:
             raise RuntimeError("working_tree_dirty")
 
         rsha = remote_sha(ns.remote)
-        receipt["remote_main_head"] = rsha
+        receipt["remote_main_head_initial"] = rsha
         if head != rsha:
             anc = git(repo, "merge-base", "--is-ancestor", head, rsha, check=False)
             if anc.returncode != 0:
-                # Remote object may not exist locally yet. Fetch only into namespaced ref, then retry ancestry.
                 git(repo, "fetch", "--no-tags", ns.remote, f"refs/heads/main:{FETCH_REF}")
                 anc = git(repo, "merge-base", "--is-ancestor", head, rsha, check=False)
             else:
-                # Still fetch so remote authority is read from the exact remote object, not a stale local object.
                 git(repo, "fetch", "--no-tags", ns.remote, f"refs/heads/main:{FETCH_REF}")
             if anc.returncode != 0:
                 raise RuntimeError("local_head_not_ancestor_of_remote_main")
-        else:
-            # Ensure validation reads the exact current commit; no fetch needed.
-            pass
 
         authority, hashes, errors = validate_commit(repo, rsha)
         receipt["authority_epoch_remote"] = str(authority["admission"].get("authority_epoch", ""))
@@ -198,6 +194,12 @@ def main(argv: list[str] | None = None) -> int:
         authority2, hashes2, errors2 = validate_commit(repo, head2)
         if head2 != rsha or dirty2 or errors2 or hashes2 != hashes:
             raise RuntimeError("post_refresh_validation_failed")
+
+        rsha_after = remote_sha(ns.remote)
+        receipt["remote_main_head_final"] = rsha_after
+        if rsha_after != rsha:
+            raise RuntimeError(f"remote_main_moved_during_refresh:{rsha}->{rsha_after}")
+
         receipt.update(
             pass=True,
             execution_authority="CONTROL_SYNC_REFRESH_PASS",
@@ -214,7 +216,9 @@ def main(argv: list[str] | None = None) -> int:
     encoded = json.dumps(receipt, sort_keys=True, indent=2) + "\n"
     sys.stdout.write(encoded)
     if ns.receipt:
-        out = Path(ns.receipt); out.parent.mkdir(parents=True, exist_ok=True); out.write_text(encoded, encoding="utf-8")
+        out = Path(ns.receipt)
+        out.parent.mkdir(parents=True, exist_ok=True)
+        out.write_text(encoded, encoding="utf-8")
     return 0 if receipt.get("pass") is True else 77
 
 

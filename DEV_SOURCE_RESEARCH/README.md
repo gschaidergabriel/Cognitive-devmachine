@@ -5,12 +5,13 @@ This directory is the progressive-disclosure entry for Project Frankenstein engi
 ## Current re-entry identity
 
 - Repository: `gschaidergabriel/clay-global-research-entity`
-- Trigger-3 baseline inspected: `main@854f6bc87780f4a5242489a6c807d186b16a8c3d`
+- Trigger-3 initial baseline inspected: `main@854f6bc87780f4a5242489a6c807d186b16a8c3d`
+- Trigger-3 re-entry head after parallel convergence: `main@3c3dbe5020f57065f47bd4d0a2dce3c537128797`
 - Persistent research entity: `Clay`
 - Product: `EntityOS`
 - Integrated cognition/compute architecture: `HCU`
 - Current supervisor inbox observed: `9.13O_NON_AUTHORITY`, selecting provider epoch `9.13`
-- Provider state at that baseline: `FREE_ONLY_HARD_OFF_ALL_PROVIDER_ROUTES_FALSE_TOGETHER_FORBIDDEN_NO_PAID_FALLBACK`
+- Provider state: `FREE_ONLY_HARD_OFF_ALL_PROVIDER_ROUTES_FALSE_TOGETHER_FORBIDDEN_NO_PAID_FALLBACK`
 - Whole EntityOS/HCU runtime credit: `0`
 - Full HCU runtime credit: `0`
 - Training credit: `0`
@@ -55,14 +56,23 @@ flowchart TD
 
 The diagram is architectural framing, not proof that every edge has full integrated runtime acceptance.
 
-## Trigger-3 current contradiction ledger
+## Trigger-3 provider-boundary finding and same-cycle closure
 
-The most important current contradiction is local and concrete:
+The initial Trigger-3 re-entry found a concrete contradiction:
 
-1. `CURRENT_SOURCE`: the latest Frankenstein Bauleiter/Bugfixer source exists and its commit reports 29 non-network/orchestration tests green.
-2. `CURRENT_SOURCE`: those scripts contain direct NVIDIA/Groq/Mistral caller paths and import/use the external free-pool surface.
-3. `CURRENT_SOURCE`: Supervisor 9.13O says all provider routes are hard-off, Together is forbidden, remaining paid runs are zero, and the 72-hour provider orchestration is quarantined/non-operative.
-4. `CONTRADICTED`: therefore “tests green” cannot be promoted to “safe/authorized 72-hour deployment”. The direct caller boundary remains P0.
+1. `CURRENT_SOURCE @ 854f6bc`: Bauleiter/Bugfix source existed and the commit reported 29 non-network/orchestration tests green.
+2. `CURRENT_SOURCE @ 854f6bc`: those canonical scripts still contained direct NVIDIA/Groq/Mistral/free-pool caller paths.
+3. `CURRENT_SOURCE`: Supervisor 9.13 says all provider routes are hard-off, Together is forbidden, remaining paid runs are zero, and the 72-hour provider orchestration is non-operative.
+
+During the same macrocycle, `main` advanced to `3c3dbe50...` and **closed the caller reachability gap at source/local-unit scope**:
+
+- canonical entrypoints now resolve `SUPERVISOR_INBOX` through `frankenstein_authority_gate_v1.py` before provider import, secret lookup, network, Aider or fallback;
+- the old provider-backed implementations are preserved under `*_PROVIDER_QUARANTINED_854f6bc.py` rather than silently erased;
+- the old orchestration plan is preserved as quarantined provenance while its active form carries zero Together allowance;
+- focused local validation is reported as 10/10 PASS;
+- provider runtime, 72-hour deployment, HCU/J-Space/training and whole-EntityOS credit remain zero.
+
+**Current remaining boundary:** obtain clean, exact-current non-provider review/re-execution at the declared scope; do not interpret the hard-off gate as permission to execute a provider route. A future provider-enabled path still requires a newer explicit authority and then-current admission/economic provenance checks.
 
 Exact current packet: `research_entity/topic_packets/frankenstein-master-cognition-concept/`.
 
@@ -85,6 +95,8 @@ Key lines to preserve and interconnect rather than flatten:
 - Claude Code bridge/interface evidence boundaries;
 - FreeSwarm / Forge / Distillery conversion funnel, including zero-yield periods;
 - exact receipts, negative evidence and authority transitions.
+
+A first Git-supported seed now exists at [`research/CHRONOLOGY_SEED_VERIFIED_GIT_2026-08-27.md`](research/CHRONOLOGY_SEED_VERIFIED_GIT_2026-08-27.md).
 
 ## UnifiedDB and Emergent Retrieval — engineering reading
 
@@ -119,13 +131,13 @@ Primary reference: NVIDIA CUDA Programming Guide, Unified Memory — https://doc
 
 ## What needs to be built in this documentation layer
 
-1. A Git-supported chronology with commit links and module evolution.
-2. A topic index that maps archive files to concepts without copying thousands of files into prose.
-3. Failure → engineering-response chains for rumination, context contamination, prompt/weight conflicts, latency/timeouts, dead modules and integration failures.
-4. Measurement tables that keep scope next to every number.
-5. Hypothesis cards with confidence, counterhypothesis and falsifier.
-6. Deep links from diagrams to source/tests/receipts.
-7. An installer matrix whose end state is always `NATIVE`, `ADAPTED`, `DEGRADED` or `BLOCKED`.
-8. A byte-preserving repository migration ledger toward the human-readable root topology.
+1. Expand the Git-supported chronology with opened source/receipts, not commit titles alone.
+2. Build a topic index that maps archive files to concepts without copying thousands of files into prose.
+3. Build failure → engineering-response chains for rumination, context contamination, prompt/weight conflicts, latency/timeouts, dead modules and integration failures.
+4. Keep measurement scope next to every number.
+5. Maintain hypothesis cards with confidence, counterhypothesis and falsifier.
+6. Deep-link diagrams to source/tests/receipts.
+7. Maintain an installer matrix whose end state is always `NATIVE`, `ADAPTED`, `DEGRADED` or `BLOCKED`.
+8. Execute the byte-preserving repository migration only after the reference graph gate.
 
 Start with [`repository/TRIGGER3_CURRENT_STATE_AND_MIGRATION_2026-08-27.md`](repository/TRIGGER3_CURRENT_STATE_AND_MIGRATION_2026-08-27.md).

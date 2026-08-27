@@ -1,0 +1,116 @@
+{
+  "schema": "ENTITYOS_HCU_GO_RECEIPT/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "authority_epoch_at_final_reentry": "8.71",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "reentry": {
+    "canonical_main_at_cycle_start": "84ef0b95143c0091ee8fd4665093ea95f9e2cc4c",
+    "canonical_main_midcycle": [
+      "b9e59c9dd3d65fd4c56d71978e5ac08d1d41ae16",
+      "51048477f0355e0feca243e1b2f668199a70545a"
+    ],
+    "canonical_main_final_observed": "95c6c3a82aef0ed8cf27ece429eaba9e5cf4ffd3",
+    "supervisor_inbox_schema": "8.71",
+    "supervisor": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_71.json",
+    "owner_authority": "governance/CLAY_FREE_SWARM_OWNER_ADMISSION_2026-08-24.md",
+    "retained_hcu_pr": "gschaidergabriel/clay-global-research-entity#1263",
+    "retained_hcu_head_final_observed": "e0b0315b3c062514db461de8bfb8bdbf806658d9"
+  },
+  "coordination": {
+    "upstream_shared_macrocycle_id": null,
+    "reproducible_atomic_unusual_experiment_identity": false,
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_experiments_run": 0,
+    "vps_bridge_exec_tool_exposed_to_this_organ": false,
+    "vps_health_claim": "UNOBSERVED_NOT_FAKED",
+    "parallel_deltas_adopted": [
+      "DISTILLERY_QUESTION_INSERT_REPAIR_MERGED_AS_PR_1484",
+      "XENO_V1_ACTIVE_BUILD_FUSED_TO_MAIN_WITH_SOURCE_CONTROL_PLANE_CREDIT_ONLY",
+      "SUPERVISOR_8_71_NVIDIA_CREDENTIAL_ENTITLEMENT_GATE"
+    ]
+  },
+  "observed": [
+    {
+      "class": "CURRENT_AUTHORITY_SUCCESSION",
+      "finding": "Authority advanced during this macrocycle from the stale bootstrap/cache through supervisor 8.70 to supervisor 8.71. The final observed main keeps EntityOS as product, HCU as integrated architecture, FREE_ONLY enabled, owner-authorized free contingents route/credential gated, and all provider/HCU/J-Space/training whole-scope runtime credits at zero."
+    },
+    {
+      "class": "TRACK_A_FREE_ONLY_ECONOMIC_ALIAS",
+      "finding": "Current main tools/free_lane_provenance.py still positively admits Groq economic provenance from same-credential/model rate-limit headers matching documented Free Plan numeric ceilings. Groq primary documentation permits project custom limits equal to or below organization limits, so a paid Developer/PAYG project can numerically alias the Free Plan table. Rate-header equality remains non-unique evidence of charge-incapability under supervisor 8.71.",
+      "current_source_blob": "7d47ab1871c742e8637025607f357bd668865d9e",
+      "durable_issue": 1480,
+      "external_primary_sources": [
+        "https://console.groq.com/docs/billing-faqs",
+        "https://console.groq.com/docs/rate-limits",
+        "https://console.groq.com/docs/projects"
+      ]
+    },
+    {
+      "class": "TRACK_B_C_JSPACE_INPUT_CONTENT_IDENTITY_GAP",
+      "finding": "At final observed retained PR #1263 head, the five-condition J-Space causal-family identity gate still represents consumed trial input only as a free nonempty input_variant_id string while strongly hashing checkpoint/tokenizer/runtime/loader/model-execution/InferenceReceipt/trace/output/activation/intervention identities. Input label echo does not prove consumed prompt/token content, so input drift can confound target-vs-sham/off-target effects.",
+      "retained_pr_head": "e0b0315b3c062514db461de8bfb8bdbf806658d9",
+      "durable_issue": 1485,
+      "required_direction": "Bind exact consumed model-input content identity, including rendered input/token tensor digest or current ModelExecution/model-input-control predecessor identity, and enforce declared clean/corrupted/control input topology."
+    },
+    {
+      "class": "PARALLEL_DISTILLERY_REPAIR",
+      "finding": "The direct Distillery add_question 9-column INSERT defect discovered earlier in the cycle was repaired concurrently and merged to main as PR #1484. Merge commit 51048477f0355e0feca243e1b2f668199a70545a records the cardinality repair plus a no-network seed/provenance regression. This is source/regression evidence only and is not inflated into whole supervisor or product runtime PASS.",
+      "merge_commit": "51048477f0355e0feca243e1b2f668199a70545a",
+      "merged_pr": 1484
+    },
+    {
+      "class": "PARALLEL_XENO_FUSION",
+      "finding": "Current main 95c6c3a82aef0ed8cf27ece429eaba9e5cf4ffd3 fused the single Xeno v1 active-build lane under FREE-lane gating. Its commit explicitly records CI failure before visible steps and grants source/control-plane progress only, not provider/HCU/J-Space/model/training/whole-product runtime credit."
+    }
+  ],
+  "hypotheses_and_counterhypotheses": [
+    {
+      "hypothesis": "Groq Free-table rate headers establish the concrete credential is Free-tier.",
+      "counterevidence": "Paid Developer projects can be configured with custom limits equal to the Free numerical ceilings, so the mapping is non-injective.",
+      "adjudication": "FAIL_CLOSED_WITHOUT_PROVIDER_SIDE_ACCOUNT_PROJECT_FREE_TIER_EVIDENCE"
+    },
+    {
+      "hypothesis": "A predeclared input_variant_id plus exact model/runtime identity sufficiently fixes the causal-family input.",
+      "counterevidence": "The retained boundary verifies the label but not the consumed prompt/token content. Exact intervention/output provenance does not prevent input mutation from creating the observed difference.",
+      "adjudication": "BIND_CONSUMED_MODEL_INPUT_CONTENT_IDENTITY_BEFORE_CAUSAL_PROMOTION"
+    }
+  ],
+  "tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED: durable issue #1480 identifies a current supervisor-8.71 FREE_ONLY economic-admission alias; parallel PR #1484 removed the direct Distillery SQL cardinality defect; current main also fused the single Xeno v1 source/control lane.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED: durable issue #1485 identifies the missing consumed model-input content identity in the retained typed causal family without creating another state/effect/wire authority.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "ADVANCED_AT_SOURCE_PROVENANCE_LEVEL: #1485 strengthens clean/corrupted/target/sham/off-target causal discrimination before any model-specific J-Space credit or training-trace promotion."
+  },
+  "credits": {
+    "provider_runtime_credit": 0,
+    "entityos_hcu_whole_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0,
+    "whole_product_pass": false
+  },
+  "writes": {
+    "issues_created": [1480, 1485],
+    "receipt_branch": "gpt56sol/go-870-economic-jspace-input-binding-20260824",
+    "receipt_pr": 1488,
+    "receipt_file": "research_entity/continuity/receipts/2026-08-24_GO_870_ECONOMIC_AND_JSPACE_INPUT_BINDING_GPT56SOL.json"
+  },
+  "nonclaims": [
+    "No VPS/local model execution was performed because no callable local/VPS bridge execution action was exposed to this organ in this session.",
+    "No provider credential was read and no provider request was made by this organ.",
+    "No paid, subscription, unknown-cost or Together execution was performed.",
+    "No unusual experiment was executed.",
+    "Source review, merged source regressions and durable issue creation do not constitute whole-product runtime acceptance."
+  ],
+  "next_exact_actions": [
+    "Repair Groq economic admission so Free-table rate headers are corroborating quota evidence only, never sole positive charge-incapability proof; add Developer-custom-limit alias regressions against current source.",
+    "Extend retained PR #1263 causal-family identity with exact consumed model-input content identity and control-topology regressions; then run the five-condition family only on an admitted zero-cost local/clay-direct-dev surface.",
+    "Execute current-source FREE-lane boundary tests with exact receipts after economic bindings are non-aliased; keep Mistral fail-closed until provider-side Free mode is bound and preserve the 8.71 NVIDIA exact-credential entitlement gate.",
+    "When a callable clay-direct-dev bridge is exposed, perform the mandatory health roundtrip and exact-source runtime acceptance rather than inferring health from repository state."
+  ],
+  "acceptance": "IN_PROGRESS"
+}

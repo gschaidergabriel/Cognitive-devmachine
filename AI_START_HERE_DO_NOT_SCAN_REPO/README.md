@@ -29,17 +29,24 @@ From the verified repo root:
 ```text
 CLAY_EXECUTION_AUTHORITY.md
 research_entity/claycode/autonomous/SUPERVISOR_INBOX.json
-research_entity/continuity/BOOTSTRAP_MINIMAL.json
+DEV_SOURCE_RESEARCH/repository/CURRENT_AUTHORITY_AND_EVIDENCE.md
+DEV_SOURCE_RESEARCH/repository/FRANKENSTEIN_SOURCE_INDEX.json
 AI_START_HERE_DO_NOT_SCAN_REPO/README.md
 ```
 
 Then read the steering file named by `SUPERVISOR_INBOX.json`.
 
-For Frankenstein work also read:
+For Frankenstein implementation work also read:
 
 ```text
 research_entity/topic_packets/frankenstein-master-cognition-concept/TRIGGERWORD3_HARD_OFF_CLOSURE_20260827_GPT56SOL.json
 research_entity/topic_packets/frankenstein-master-cognition-concept/CONCEPT.md
+```
+
+For history/research synthesis use:
+
+```text
+DEV_SOURCE_RESEARCH/research/FRANKENSTEIN_RESEARCH_CHRONICLE.md
 ```
 
 Do not treat old plan text as newer authority.
@@ -76,6 +83,30 @@ real effect execution?  yes/no/unknown
 
 Unknown means unknown.
 
+If Python + a checkout exist, use the fail-closed probe instead of hand-waving:
+
+```bash
+python3 "$REPO/AI_START_HERE_DO_NOT_SCAN_REPO/probe_host.py" \
+  --repo "$REPO" \
+  --host <claude-code|codex-cli|hermes-agent|chatgpt-web|claude-web|grok-web|generic> \
+  --state-dir <REAL_WRITABLE_STATE_DIR>
+```
+
+The probe performs **no network call, provider call, secret lookup, or repository-wide scan**. It does not treat an installed CLI binary as proof that hooks fired.
+
+For lifecycle/effect promotion, supply receipts created by the real host integration:
+
+```bash
+--hook-receipt <REAL_HOOK_RECEIPT.json> \
+--effect-receipt <REAL_EFFECT_RESULT_RECEIPT.json>
+```
+
+For a connected-tool adaptation also add:
+
+```bash
+--adapter
+```
+
 ## 5. Result words
 
 Every installation/integration route ends with exactly one of these meanings:
@@ -85,7 +116,7 @@ Every installation/integration route ends with exactly one of these meanings:
 - `DEGRADED` — useful subset works; missing capabilities are named.
 - `BLOCKED` — required capability/authority is absent or explicitly denied.
 
-Never write `NATIVE` because a config file exists. Verify real firing/state/effect receipts.
+Never write `NATIVE` because a config file or CLI binary exists. Verify real firing/state/effect receipts.
 
 ## 6. Claude Code route
 
@@ -93,11 +124,12 @@ If Claude Code has a real shell + repo checkout:
 
 1. locate repo dynamically with `git rev-parse --show-toplevel`;
 2. read authority files above;
-3. inspect current Frankenstein gate/entrypoint files;
-4. run only tests/actions allowed by current authority;
-5. if adding hooks, prove the hook actually fires with a disposable local receipt;
-6. prove a durable state write if persistence is claimed;
-7. prove an effect/result receipt if effects are claimed.
+3. run `probe_host.py --host claude-code`;
+4. inspect current Frankenstein gate/entrypoint files;
+5. run only tests/actions allowed by current authority;
+6. if adding hooks, prove the hook actually fires with a disposable local receipt;
+7. prove a durable state write if persistence is claimed;
+8. prove an effect/result receipt if effects are claimed.
 
 Under current HARD_OFF, provider-backed Frankenstein operation stays blocked even if Claude Code itself is installed.
 
@@ -109,22 +141,23 @@ Same rule as Claude Code:
 
 1. discover real repo root;
 2. read current authority;
-3. use exact source paths, not repo-wide scanning by default;
-4. run bounded non-provider tests only when admitted;
-5. verify any lifecycle integration by an observed receipt.
+3. run `probe_host.py --host codex-cli`;
+4. use exact source paths, not repo-wide scanning by default;
+5. run bounded non-provider tests only when admitted;
+6. verify any lifecycle integration by an observed receipt.
 
 Possible result: `NATIVE` for code/research work, `BLOCKED` for provider orchestration under HARD_OFF.
 
 ## 8. Hermes Agent route
 
-First detect whether Hermes really has:
+First detect whether Hermes really has local filesystem, shell/process, Git, persistent state and lifecycle hooks.
 
-- local filesystem access;
-- shell/process execution;
-- Git access;
-- persistent state/lifecycle hooks.
+Use:
 
-If yes, map the same authority-first steps.
+```bash
+python3 "$REPO/AI_START_HERE_DO_NOT_SCAN_REPO/probe_host.py" \
+  --repo "$REPO" --host hermes-agent --state-dir <REAL_WRITABLE_STATE_DIR>
+```
 
 If it only has messages/tools but no durable repo lifecycle, use `ADAPTED` or `DEGRADED`. Do not fake a native hook.
 
@@ -138,6 +171,8 @@ Use the connector to:
 2. read exact files;
 3. create/update bounded repo artifacts when authorized;
 4. keep runtime claims separate from source writes.
+
+If an external/local executor runs the probe for the web integration, classify the mapping with `--host chatgpt-web --adapter` and real receipts. A web chat message saying a hook fired is not a hook receipt.
 
 If no authorized runtime surface is attached, do not call source writes “runtime installation.”
 
@@ -191,6 +226,8 @@ E. Did a real hook/state/effect receipt appear?
    yes -> NATIVE or ADAPTED, depending on mechanism
 ```
 
+Use `probe_host.py --host generic` where a Python executor exists.
+
 ## 13. Frankenstein HARD_OFF check
 
 Current main contains authority-gated Frankenstein entrypoints and focused tests.
@@ -218,7 +255,8 @@ For any future host integration claiming “automatic start”, “hook”, “m
 4. restart/re-enter the host if persistence is claimed;
 5. verify the receipt/state survives;
 6. for effects, verify actual result/outcome re-entry;
-7. delete disposable test state if appropriate.
+7. feed the receipts to `probe_host.py` where possible;
+8. delete disposable test state if appropriate.
 
 No receipt = no lifecycle credit.
 
@@ -229,8 +267,10 @@ Use the curated routes:
 ```text
 HUMAN_READ_THIS/README.md
 DEV_SOURCE_RESEARCH/README.md
+DEV_SOURCE_RESEARCH/repository/CURRENT_AUTHORITY_AND_EVIDENCE.md
 DEV_SOURCE_RESEARCH/repository/FRANKENSTEIN_SOURCE_INDEX.json
-research_entity/archive_assimilation/manifests/PROJECT_FRANKENSTEIN_MANIFEST.json
+DEV_SOURCE_RESEARCH/research/FRANKENSTEIN_RESEARCH_CHRONICLE.md
+research_entity/archive_assimilation/manifests/PROJECT_FRANKENSTEIN_SOURCE_IDENTITY_HISTORY_ANCHOR_20260827.json
 ```
 
 Then follow deep links.

@@ -1,8 +1,9 @@
 # Frankenstein research chronology — Git-supported seed
 
-**Method:** repository commit search against `gschaidergabriel/clay-global-research-entity`, reconstructed during Trigger-3 from the exact current repository. This is deliberately phrased as **first verified in accessible Git via the searched term**, not “the idea was created on this date”. Earlier work may exist under different names or in sources whose commit message does not contain the search term.
+**Method:** repository commit search against `gschaidergabriel/clay-global-research-entity`, reconstructed during Trigger-3 from the exact repository. This is deliberately phrased as **first verified in accessible Git via the searched term**, not “the idea was created on this date”. Earlier work may exist under different names or in sources whose commit message does not contain the search term.
 
-**Trigger-3 baseline:** `main@854f6bc87780f4a5242489a6c807d186b16a8c3d`.
+**Trigger-3 initial baseline:** `main@854f6bc87780f4a5242489a6c807d186b16a8c3d`.  
+**Same-cycle re-entry head:** `main@3c3dbe5020f57065f47bd4d0a2dce3c537128797`.
 
 ## 2026-08-08 — early research mesh surfaces
 
@@ -131,11 +132,13 @@ A later host-local receipt commit:
 
 This is a model example of the evidence discipline Trigger-3 should preserve: a positive component result lives next to the unresolved counterevidence instead of erasing it.
 
-## 2026-08-27 — Frankenstein master-cognition orchestration source appears under hard-off
+## 2026-08-27 — Frankenstein orchestration source, contradiction, and same-cycle hard-off closure
 
-By Trigger-3 baseline, the topic packet contains a 72-hour orchestration plan and the latest main commit `854f6bc87780f4a5242489a6c807d186b16a8c3d` adds the first runnable Bauleiter/Bugfix/package-dispenser implementation with 29 reported tests.
+### Step A — implementation source appears at `854f6bc...`
 
-Current supervisor 9.13 simultaneously classifies the provider-calling orchestration as quarantined/non-operative. This creates a useful chronology boundary:
+The topic packet contains a 72-hour orchestration plan and commit `854f6bc87780f4a5242489a6c807d186b16a8c3d` adds runnable Bauleiter/Bugfix/package-dispenser source with 29 reported tests.
+
+Current supervisor 9.13 simultaneously has all provider routes hard-off. At this exact source, canonical Bauleiter/Bugfix paths still exposed direct provider/free-pool logic. This produced a real Trigger-3 contradiction:
 
 ```text
 implementation source maturity increased
@@ -143,7 +146,25 @@ implementation source maturity increased
 provider execution authority increased
 ```
 
-Trigger-3 records that contradiction explicitly in:
+### Step B — source/local-unit closure lands at `3c3dbe50...`
+
+Commit `3c3dbe5020f57065f47bd4d0a2dce3c537128797` — **trigger3: quarantine Frankenstein provider loops under 9.13 HARD_OFF** — restructured the lane:
+
+- adds stdlib-only `frankenstein_authority_gate_v1.py`;
+- canonical orchestrator/bugfix entrypoints resolve current authority before provider import, secret lookup, network, Aider or external fallback;
+- moves provider-backed donor implementations to explicit `*_PROVIDER_QUARANTINED_854f6bc.py` files;
+- preserves the old provider-oriented plan as quarantined provenance;
+- active plan carries zero Together allowance;
+- adds hard-off gate tests;
+- reports **10/10 focused local tests PASS**.
+
+https://github.com/gschaidergabriel/clay-global-research-entity/commit/3c3dbe5020f57065f47bd4d0a2dce3c537128797
+
+This is a good Trigger-3 failure→repair example because the negative state is not erased; it becomes named donor provenance.
+
+**Evidence boundary:** this closes source/local-unit reachability under current hard-off. It does not produce provider-runtime, 72-hour deployment, HCU/J-Space, training or whole EntityOS acceptance.
+
+Trigger-3 records this sequence explicitly in:
 
 - `research_entity/topic_packets/frankenstein-master-cognition-concept/CURRENT_AUTHORITY_STATUS_2026-08-27.md`
 - `DEV_SOURCE_RESEARCH/repository/TRIGGER3_CURRENT_STATE_AND_MIGRATION_2026-08-27.md`

@@ -1,0 +1,89 @@
+{
+  "schema": "TRIGGERWORD3_PREIMAGE_EDIT_CONTRACT_COMPONENT_TEST_RECEIPT/v1",
+  "trigger": "triggerwort 3",
+  "organ": "GPT-5.6 Sol",
+  "canonical_reentry_after_merge": "266b6d6300756b85dc86dd6c34e1ffdba3835f42",
+  "implementation_merge": "8fe06c7ccc7007cbfe68ca0b774627920e2182a3",
+  "source_lineage": {
+    "negative_result": "DEV_SOURCE_RESEARCH/research/FRANKENSTEIN_DIRECT_DISPATCH_NEGATIVE_RESULT_2026-08-28.md",
+    "external_primary_design_input": "DEV_SOURCE_RESEARCH/repository/FRANKENSTEIN_EDIT_PRESERVATION_EXTERNAL_PRIMARY_20260828.md",
+    "supervisor_frontier": "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json"
+  },
+  "tested_files": {
+    "research_entity/topic_packets/frankenstein-master-cognition-concept/frankenstein_edit_contract_v1.py": {
+      "git_blob_sha": "06136ac5340f63275e3bcd0e94b6e9c9e9ee4559",
+      "raw_sha256": "c0d3ea2ad8f251f4084c3859ac177f99da8ab2e38ccc0fe2f9297e78901ab905"
+    },
+    "tests/test_frankenstein_edit_contract_v1.py": {
+      "git_blob_sha": "74932d96f139cd468adf1af87c3bfe7426eeecd8",
+      "raw_sha256": "beceaa20c38b68f3c1192758ccb44b95ad034b297f8a5535d6a28ccae3cd181e"
+    }
+  },
+  "identity_verification": {
+    "method": "git hash-object and sha256sum on exact locally executed bytes, then GitHub blob-ID equality check",
+    "module_blob_matches_github": true,
+    "test_blob_matches_github": true,
+    "meaning": "the committed implementation/test bytes are exactly the bytes exercised by the isolated component test"
+  },
+  "execution": {
+    "surface": "LOCAL_ISOLATED_CONTAINER_NON_PROVIDER",
+    "repository_shape": "tests/ plus research_entity/topic_packets/frankenstein-master-cognition-concept/",
+    "command": "python -m pytest -q tests/test_frankenstein_edit_contract_v1.py",
+    "result": "9 passed in 0.23s",
+    "scope": "PREIMAGE_BOUND_EXISTING_FILE_EDIT_CONTRACT_COMPONENT_ONLY"
+  },
+  "verified_behaviors": [
+    "narrow additive contextual patch validates without mutating the repository and applies only after explicit apply",
+    "stale raw-byte SHA-256 preimage is rejected",
+    "patch targeting a path different from the declared contract path is rejected",
+    "repository path traversal is rejected",
+    "a 30-percent destructive deletion that would evade the historical 50-percent shrink heuristic is rejected when deletion budget is zero",
+    "an explicitly declared deletion budget can admit a bounded intentional refactor",
+    "dirty working-tree state for the target path fails closed",
+    "a clean but changed preimage after validation is rejected at final apply, covering TOCTOU",
+    "symlink escape outside the repository is rejected"
+  ],
+  "implementation_invariants": [
+    "single existing file only; multi-file/create/delete/rename patches fail closed",
+    "git apply --check --index --whitespace=error-all is required before mutation",
+    "line-addition and line-deletion budgets are explicit",
+    "postimage is first materialized in a temporary non-repository directory",
+    "final installation rechecks exact preimage identity and postimage hash",
+    "module itself performs no commit, stage, push, network call, provider call or secret lookup"
+  ],
+  "authority_observed": {
+    "supervisor_schema": "9.13",
+    "supervisor_delta": "9.13Q_NON_AUTHORITY",
+    "free_only": true,
+    "no_paid_fallback": true,
+    "together_forbidden": true,
+    "provider_routes_admitted": false,
+    "free_swarm_owner_emergency_stop": true,
+    "remaining_together_paid_runs_authorized": 0
+  },
+  "negative_evidence_and_boundaries": [
+    "The component test does not execute the quarantined provider-authored Frankenstein orchestrator donor.",
+    "The component test is not an independent re-execution of the original 672-line to 87-line VPS incident path.",
+    "The component test does not prove semantic preservation for arbitrary patches; it proves declared structural/preimage/budget invariants at this component scope.",
+    "No current-repository end-to-end dispatcher integration is promoted by this receipt.",
+    "No provider call, network call, secret lookup, Together call, paid execution, model run or training run occurred in this test.",
+    "Component PASS does not imply provider-runtime, EntityOS, HCU, GRID10, Global J-Space, canonical-semantics or training PASS."
+  ],
+  "promotion": {
+    "provider_runtime": 0,
+    "entityos_whole_runtime": 0,
+    "hcu_full_runtime": 0,
+    "physical_grid10_runtime": 0,
+    "jspace_model_runtime": 0,
+    "canonical_semantics": 0,
+    "training": 0
+  },
+  "coordination": {
+    "implementation_pr": 2105,
+    "overlapping_open_pr_found_before_implementation": false,
+    "root_readme_modified": false,
+    "provider_orchestrator_donor_modified": false,
+    "unusual_experiment": "NOT_USED_DETERMINISTIC_COMPONENT_WORK"
+  },
+  "next_exact_gate": "Wire the preimage-bound edit contract into the real non-provider Frankenstein modification path and independently re-execute the destructive-rewrite regression on a clean exact-current checkout while provider_calls=0 and secret_lookups=0; retain only the measured component/integration scope."
+}

@@ -1,10 +1,10 @@
 # Project Frankenstein — the human version
 
-Project Frankenstein is a long-running research and engineering project about a practical question:
+Project Frankenstein asks a practical question:
 
-> How much useful agency can a software system gain when **state, memory, perception, decisions, actions, and verified outcomes** are connected instead of living as isolated chat turns?
+> How much useful agency can software gain when **state, memory, perception, decisions, actions, and verified outcomes** are connected instead of living as isolated chat turns?
 
-It is research software, not a claim of consciousness or sentience. Old biologically inspired names are part of the historical lineage; the present engineering claims stand or fall on code, measurements, failure records, and reproducible evidence.
+It is research software, not a claim of consciousness or sentience. Historical biological names are lineage; present claims stand or fall on code, measurements, failures, and reproducible evidence.
 
 **Lead researcher/developer:** Gabriel Gschaider  
 **Institute director/developer:** Dr. Andreas Unterweger  
@@ -14,89 +14,84 @@ It is research software, not a claim of consciousness or sentience. Old biologic
 
 ```mermaid
 flowchart LR
-    S[State<br/>What is true now?] --> M[Memory<br/>What matters from before?]
-    M --> D[Decision<br/>What should happen next?]
-    D --> E[Effect request<br/>What may we try to change?]
-    E --> V[Verification<br/>What actually happened?]
+    P[Perception / new evidence] --> S[State]
+    S --> M[Memory / relevant prior evidence]
+    M --> D[Decision]
+    D --> C[ActionCandidate]
+    C --> G[Deterministic EffectGate]
+    G --> E[World effect]
+    E --> V[Verification / re-observation]
     V --> S
-    P[Perception<br/>New evidence] --> S
-    R[Reflection<br/>Mismatch → correction] --> D
-    V --> R
+    V --> R[Reflection: mismatch -> correction]
+    R --> D
 ```
 
-The important part is the last arrow: **the result comes back in**. A requested action is not treated as a successful action merely because a model said it happened.
+The important part is that **the result comes back in**. A requested action is not treated as a successful action merely because a model said it happened.
 
 ## What the project learned the hard way
 
-Frankenstein did not arrive as one clean architecture. It accumulated mechanisms, failed experiments, competing databases, model prompts, LoRAs, perception systems, goal systems, global-workspace ideas, reflection loops, and increasingly strict evidence rules.
+Several failures became architecture requirements:
 
-Several failures became design requirements:
-
-- **Fragmented state was expensive and contradictory.** This pushed the project toward a canonical SQLite authority substrate: UnifiedDB (or current compatibility forms where migration is incomplete).
+- **Fragmented state creates contradictions.** This pushed the project toward one canonical SQLite authority substrate, UnifiedDB, while allowing many typed tables and rebuildable projections.
 - **Reflection can become rumination.** Reflection is useful only if it terminates into `ACT`, `ASK`, `WAIT`, re-observation, or another measurable transition.
 - **Model output is persuasive but not authoritative.** Generated explanations, consensus, and self-reports cannot create world facts.
-- **Prompts and weights can fight each other.** Training, inference interfaces, and output protocols must be tested against exact checkpoint/tokenizer/runtime identity rather than inferred from fluent text.
-- **More parallelism is not automatically faster.** A current GRID10 diagnostic on four concurrent processes/four vCPUs measured about 8.32 s/call at one Torch thread per process and about 23.18 s/call at two; four threads produced no completed samples within the experiment timeout. That result is topology-specific, but it is a useful counterexample to “more threads = more speed.”
-- **External helpers can hallucinate architecture.** A recent Frankenstein concept pass explicitly rejected invented components from a helper model and retained only ideas that could be grounded in the real code.
-- **A working mechanism may still be non-operative.** The 2026-08-27 Bauleiter/Bugfix provider orchestration was quarantined when its caller boundary conflicted with current HARD_OFF authority. That negative result was preserved rather than hidden, and `main` now contains a fail-closed authority-gated form while retaining the original provider-backed implementation as donor provenance.
+- **Prompts and weights can fight each other.** Training and vector-control claims need exact checkpoint/tokenizer/runtime identity and causal tests, not fluent text.
+- **More parallelism is not automatically faster.** A current four-process/four-vCPU GRID10 diagnostic measured about 8.32 s/call with one Torch thread per process and about 23.18 s/call with two; four threads produced no completed samples within the experiment timeouts. This is topology-specific, but it falsified the local “more threads = faster” assumption.
+- **External helpers can invent architecture.** A recent concept pass explicitly rejected helper-model inventions not present in the real GRID10 code.
+- **Working code may still be non-operative.** The first 2026-08-27 Frankenstein Bauleiter/Bugfix provider loops conflicted with current `9.13 HARD_OFF`. `main` now preserves those bytes as quarantined donor provenance and has a stdlib-only fail-closed authority gate with `10/10` focused local tests reported PASS. That is **source/local-unit evidence only**: provider runtime credit remains zero and the supervisor inbox has not promoted the provider path.
 
-## UnifiedDB and “Emergent Retrieval”
+## UnifiedDB and Emergent Retrieval
 
-UnifiedDB is not a single giant file containing everything in one table. It means **one canonical authority substrate** can contain many typed tables, indexes, views, journals, writers, readers, and rebuildable projections without splitting truth across competing databases.
+UnifiedDB is not a “god file.” It means **one canonical durable authority substrate** can contain many typed tables, indexes, views, journals, writers, readers, and rebuildable projections without splitting truth across competing databases. High-rate transient sensor state can still live in RAM.
 
-`Emergent Retrieval` is the project term for relevance that appears when independently stored evidence dimensions overlap at query time — for example semantic similarity + time + causal lineage + current state + goals + perception + effect receipts + confidence + provenance.
+`Emergent Retrieval` is the project term for relevance that appears when independently stored evidence dimensions overlap at query time — semantics, time, causal lineage, current state, goals, perception, effect receipts, confidence, provenance, and similar measured context.
 
-Nothing appears from nowhere. Retrieval becomes useful because multiple measured dimensions meet.
+Nothing appears from nowhere. Current retrieval reference code is fail-closed on stale epoch, weak/invalid resolution, inconsistent identity, or missing binding to current UnifiedDB state; successful assemblies are marked derived and non-authoritative.
 
 ## Reflection, without mysticism
 
-Here, self-reflection is an engineering operation:
+Self-reflection here is an engineering operation:
 
-1. inspect current state and observed outcome;
+1. inspect state and observed outcome;
 2. detect a mismatch;
 3. generate a correction candidate;
-4. store/retrieve the correction;
+4. store/retrieve the correction with provenance;
 5. alter later behavior;
-6. **exit the reflection loop into a measurable next transition.**
+6. **exit into a measurable next transition.**
 
 A reflection loop that only produces more reflection is a bug, not deeper cognition.
 
-## Memory
+## Memory, perception, action
 
-Historical Frankenstein contained several memory mechanisms: vector retrieval, claims, graph relations, replay/consolidation, project/task memory, event learning, and world/body state. The present research direction treats these as donor mechanisms and evidence, not as automatically current truth.
+Historical Frankenstein contains vector retrieval, claims, graph relations, replay/consolidation, project/task memory, event learning, world/body state, adaptive vision, YOLO/OCR-era paths, FrankEye/Retina artifacts, and later native multimodal vision claims. They are donor lineage, not automatically current truth.
 
-The key distinction is simple:
+The two simplest rules are:
 
-> **memory is not observation.**
+> **memory is not observation**  
+> **request is not effect**
 
-A remembered statement can help decide what to check; it cannot prove that the world still matches it.
-
-## Perception and action
-
-The archive records multiple visual lineages: adaptive routing, YOLO/OCR-era pipelines, FrankEye/Retina artifacts, and a later native multimodal vision replacement claim. They are kept as lineage because different generations solved different parts of the problem and sometimes superseded one another.
-
-Actions are stricter: a requested effect is only a candidate until the deterministic effect authority admits it and the outcome is re-observed. Unknown outcomes stay unknown rather than being blindly replayed.
+A remembered statement can guide what to check; it cannot prove the world still matches it. An effect becomes evidence only through the deterministic effect authority and verified outcome re-entry. Unknown outcomes stay unknown rather than being blindly replayed.
 
 ## Training
 
-The research archive includes LoRA/IAPT/SOMA work, before/after probes, feedback weighting, and negative-result methodology. Current policy is much stricter than “training completed = success.” A training result only earns promotion if it improves the intended behavior under an exact model/runtime identity **without unacceptable regressions** and survives appropriate causal/fail-closed tests.
+The archive includes LoRA/IAPT/SOMA work, before/after probes, feedback weighting, ClayCode/J-Space/vector-binding research, and negative-result methodology. Current policy is stricter than “training completed = success.” Promotion requires exact model/runtime identity, leak-resistant evaluation, intended behavior gain, and appropriate causal/fail-closed controls without unacceptable regressions.
 
-At the current authority frontier, whole-product, full-HCU, J-Space-model, and training credit remain unpromoted.
+At the current Trigger-3 frontier, whole EntityOS/HCU, full HCU, Physical-GRID10, J-Space-model, and training promotion remain unearned unless newer exact executable evidence says otherwise.
 
 ## The current system identity
 
-The persistent research entity is **Clay**. The current product/system is **EntityOS**. The integrated cognition/compute architecture is **HCU**. Frankenstein, Frank, Xeno, and other names survive where they are useful as historical or compatibility lineage, not as competing truth authorities.
+The persistent research entity is **Clay**. The current product is **EntityOS**. The integrated cognition/compute architecture is **HCU**. Frankenstein, Frank, Xeno, XCU, Mini Entity, and related names survive as historical or compatibility lineage where useful; they do not become competing truth authorities.
 
 ```mermaid
 flowchart TD
-    I[Typed Entry<br/>new evidence enters with identity + provenance] --> C[Deterministic control]
-    C --> H[HCU<br/>shared-weight / vector / inference / J-Space candidate computation]
-    H --> W[Workspace / Hyperposition<br/>alternatives may remain unresolved]
+    I[Typed Entry\nidentity + provenance + generation] --> C[Deterministic control]
+    U[UnifiedDB\ncanonical durable state/evidence] <--> C
+    C --> H[HCU\nvector / inference / J-Space candidate computation]
+    H --> W[Workspace / Hyperposition\nunresolved alternatives]
     W --> A[ActionCandidate]
     A --> G[EffectGate + EffectJournal]
     G --> O[Observed outcome]
     O --> I
-    U[UnifiedDB<br/>canonical durable state/evidence] <--> C
 ```
 
 The model plane can propose, simulate, rank, or measure. It does not mint canonical truth.
@@ -104,8 +99,9 @@ The model plane can propose, simulate, rank, or measure. It does not mint canoni
 ## Where to go next
 
 - Technical/research readers: [`../DEV_SOURCE_RESEARCH/README.md`](../DEV_SOURCE_RESEARCH/README.md)
+- Evidence/falsifier matrix: [`../DEV_SOURCE_RESEARCH/EVIDENCE_LEDGER.md`](../DEV_SOURCE_RESEARCH/EVIDENCE_LEDGER.md)
+- Research chronology: [`../DEV_SOURCE_RESEARCH/RESEARCH_CHRONICLE.md`](../DEV_SOURCE_RESEARCH/RESEARCH_CHRONICLE.md)
 - AI/tool installer entry: [`../AI_START_HERE_DO_NOT_SCAN_REPO/README.md`](../AI_START_HERE_DO_NOT_SCAN_REPO/README.md)
-- Current Frankenstein concept packet: [`../research_entity/topic_packets/frankenstein-master-cognition-concept/`](../research_entity/topic_packets/frankenstein-master-cognition-concept/)
-- Historical archaeology manifest: [`../research_entity/archive_assimilation/manifests/PROJECT_FRANKENSTEIN_MANIFEST.json`](../research_entity/archive_assimilation/manifests/PROJECT_FRANKENSTEIN_MANIFEST.json)
+- Current technical source archive: [`../DEV_SOURCE_RESEARCH/repository/`](../DEV_SOURCE_RESEARCH/repository/)
 
-The project is large. The useful story is not “everything worked.” The useful story is **which failure forced which architecture change, what was measured, and what still remains unproven.**
+The useful story is not “everything worked.” It is **which failure forced which engineering move, what was measured, and what remains unproven.**

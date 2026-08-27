@@ -1,0 +1,132 @@
+{
+  "schema": "FRANKENSTEIN_SAFE_EXISTING_FILE_EDIT_PIPELINE/v1",
+  "status": "SOURCE_CONVERGENCE_WITH_COMPONENT_EVIDENCE_INTEGRATION_BLOCKED",
+  "purpose": "Define one non-competing existing-file edit path after the 672-to-87 destructive whole-file rewrite counterexample. This file is coordination/research synthesis, not execution authority and not runtime credit.",
+  "authority_boundary": {
+    "current_selected_authority_surface": "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
+    "latest_compatible_non_authority_steering_observed": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_9_13R_DELTA_2026-08-28T0242P0700_GPT56SOL.json",
+    "free_only": true,
+    "provider_routes_hard_off": true,
+    "together_forbidden": true,
+    "paid_fallback_forbidden": true,
+    "provider_execution_required_for_this_pipeline": false,
+    "rule": "No model/provider output mints repository truth. Every existing-file mutation must pass all admitted deterministic stages below before commit."
+  },
+  "observed_counterexample": {
+    "classification": ["NEGATIVE_RESULT", "PROJECT_EXECUTABLE_COUNTEREXAMPLE"],
+    "source": "DEV_SOURCE_RESEARCH/research/FRANKENSTEIN_DIRECT_DISPATCH_NEGATIVE_RESULT_2026-08-28.md",
+    "requested_scope": "narrow modification to tools/grid10_fabric.py",
+    "observed_before_lines": 672,
+    "observed_proposed_lines": 87,
+    "origin_damage": "CONTAINED_BEFORE_PUSH",
+    "retained_direct_dispatch_runtime_credit": 0
+  },
+  "pipeline": [
+    {
+      "stage": 0,
+      "id": "CURRENT_AUTHORITY_AND_EFFECT_FENCE",
+      "role": "Resolve current authority before any model/provider/secret/network/effect path. Under the currently selected FREE_ONLY authority, provider routes remain HARD_OFF.",
+      "status": "MANDATORY_FAIL_CLOSED_GATE",
+      "source": "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json"
+    },
+    {
+      "stage": 1,
+      "id": "DECLARED_INTENT_SCOPE_GUARD",
+      "role": "Compare preimage and proposed existing-file text, bind exact preimage hash, require explicitly declared old-line edit ranges, reject changed regions outside declared task scope, and require explicit authorization for broad deletion.",
+      "canonical_source_candidate": "tools/preimage_bound_edit_guard_v1.py",
+      "tests": "tests/test_preimage_bound_edit_guard_v1.py",
+      "evidence": {
+        "source_present": true,
+        "repository_bound_exact_current_test_pass": false,
+        "latest_recorded_reason": "available execution surface failed before test execution with infrastructure client error",
+        "scope": "INTENT_AND_CHANGED_REGION_PROPOSAL_GUARD_ONLY"
+      },
+      "why_not_duplicate_stage_2": "This stage constrains semantic/task-local changed regions in full preimage/proposed text. It does not bind a Git patch to exact repository HEAD/index/mode/binary/path-set transport invariants."
+    },
+    {
+      "stage": 2,
+      "id": "EXACT_REPOSITORY_PATCH_PREFLIGHT",
+      "role": "Validate the emitted unified Git patch without applying it: exact Git HEAD, exact per-file SHA-256 preimages, explicit path allowlist, patch/file/add/delete/change budgets, path/mode/binary/delete/rename/copy fences, and git apply --check --index.",
+      "canonical_source": "research_entity/topic_packets/frankenstein-master-cognition-concept/frankenstein_patch_guard_v1.py",
+      "tests": "tests/test_frankenstein_patch_guard_v1.py",
+      "git_blob_identity": {
+        "source": "8ef5b878e29c1e3be732bd991675367ac289fb2e",
+        "tests": "95488b202e63cbe953da21d7ed9adaa3b8b4fd9a"
+      },
+      "evidence": {
+        "exact_component_bytes_match_locally_exercised_donor": true,
+        "local_provider_independent_tests": "12 passed in 0.22s",
+        "guard_mutates_repository": false,
+        "guard_report_applied": false,
+        "scope": "WRITE_FREE_PATCH_PREFLIGHT_COMPONENT_ONLY",
+        "runtime_product_promotion": 0
+      },
+      "why_not_duplicate_stage_1": "This stage proves repository/patch transport identity and bounded applicability. It does not decide whether every changed hunk belongs to the semantic task intent."
+    },
+    {
+      "stage": 3,
+      "id": "TRANSACTIONAL_EXISTING_FILE_APPLY_DONOR",
+      "role": "Apply only after stages 1 and 2 pass; re-check path components, exact preimages and deletion budgets; reject structural patch operations; perform postimage/diff/reverse-apply checks; restore exact preimage bytes on post-apply invariant failure.",
+      "retained_single_donor_pr": 2104,
+      "donor_head_observed": "6d889c2d7ec7e22f7384de597abfa616551f831b",
+      "donor_source": "tools/frankenstein_edit_integrity_gate_v1.py",
+      "donor_source_blob_observed": "ec75084df34256f2a8c9a5954956c353be5a7477",
+      "evidence": {
+        "provider_independent_local_tests_reported": "11/11 PASS after symlink-ancestor counterexample and repair",
+        "symlink_ancestor_regression_present": true,
+        "clean_exact_current_repository_head_execution": false,
+        "wired_into_canonical_direct_dispatch": false,
+        "scope": "APPLY_DONOR_COMPONENT_CANDIDATE_ONLY",
+        "runtime_product_promotion": 0
+      },
+      "integration_rule": "Do not integrate this donor standalone. It is the APPLY stage downstream of both deterministic prechecks and upstream of stage-4 post-validation."
+    },
+    {
+      "stage": 4,
+      "id": "POST_APPLY_SCOPE_AND_VERIFICATION",
+      "role": "Require actual changed paths/types/modes to match declared scope, postimage hashes and diff invariants to be recorded, task-local plus relevant regression/destructive-delta tests to pass, and rollback on any failure.",
+      "status": "INTEGRATION_REQUIRED",
+      "minimum_invariants": [
+        "actual changed path set matches declared allowed set/subset contract",
+        "no unexpected file creation/deletion/rename/mode/type mutation",
+        "postimage hashes recorded",
+        "git diff --check passes",
+        "reverse-apply or equivalent rollback evidence passes",
+        "requested-feature tests cannot override preservation failure",
+        "destructive rewrite above and below the old 50-percent shrink heuristic is rejected when undeclared"
+      ]
+    },
+    {
+      "stage": 5,
+      "id": "COMMIT_AND_EVIDENCE_RECEIPT",
+      "role": "Commit only if the exact preimage/source generation still matches and all prior stages pass; receipt binds authority identity, HEAD/preimage, patch, postimage, verification, changed paths, provider/secret counts and exact evidence scope.",
+      "status": "BLOCKED_UNTIL_INTEGRATED_PIPELINE_PASSES"
+    }
+  ],
+  "superseded_parallel_authority_rule": {
+    "closed_competing_apply_or_patch_prs": [2090, 2102, 2103],
+    "closed_preflight_donor_after_exact_byte_port": 2097,
+    "retained_apply_donor": 2104,
+    "rule": "Closed lanes remain donor provenance/tests. They must not become competing current edit authorities merely because their local tests were green."
+  },
+  "acceptance_for_retained_direct_dispatch_credit": [
+    "stage-1 exact-current non-provider test pass",
+    "stage-2 exact byte identity remains bound and component tests remain passing",
+    "stage-3 clean exact-head non-provider test pass",
+    "canonical direct-dispatch existing-file path invokes the composite pipeline and no longer accepts unconstrained whole-file reconstruction",
+    "destructive 672-to-87 family and a harmful rewrite that stays above the old 50-percent size threshold are both rejected before commit",
+    "full relevant non-network Frankenstein regression suite passes",
+    "independent non-provider review/re-execution requirement from current supervisor is satisfied",
+    "receipt preserves provider_calls=0 and secret_lookups=0 under current HARD_OFF"
+  ],
+  "non_promotion": {
+    "frankenstein_direct_dispatch_retained_runtime_pass": false,
+    "provider_runtime_credit": 0,
+    "entityos_whole_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "canonical_semantics_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0
+  }
+}

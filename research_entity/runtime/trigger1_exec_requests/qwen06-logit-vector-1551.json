@@ -1,0 +1,13 @@
+{
+  "schema": "CLAY_TRIGGER1_EXEC_REQUEST/v1",
+  "request_id": "trigger1-qwen06-logit-vector-1551",
+  "experiment": "OPENROUTER_QWEN3_06B_OUTPUT_LOGIT_VECTOR_CONTROL",
+  "model": "qwen/qwen3-0.6b-04-28:free",
+  "free_only": true,
+  "network_call_budget": 18,
+  "controls": ["BASELINE", "+VECTOR", "SIGN_FLIP", "NULL_VECTOR", "ORTHOGONAL_SAME_NORM", "PERMUTED_SAME_NORM"],
+  "calibration_holdout_separated": true,
+  "paid_fallback": false,
+  "together": false,
+  "transport_retry": "SAME_EXPERIMENT_SELF_HOSTED_AFTER_GITHUB_HOSTED_ZERO_STEP_FAILURE"
+}

@@ -1,0 +1,35 @@
+{
+  "schema": "GRID10_PIPELINE_RESILIENCE_EXPERIMENT/v1",
+  "use_case": "autonomous_task_processing_pipelines",
+  "claim_under_test": "on agent crash mid-task, the lease/CAS logic preserves data state and remaining nodes continue without data loss",
+  "prior_finding_this_fixes": "before 2026-08-27, this was FALSE for ordinary (non-coordinator) task claims -- verified empirically that a claimed-but-uncompleted task from a dead node was stuck forever with no reclaim path",
+  "model_load_time_s": 6.76,
+  "victim_pid_killed": 749654,
+  "victim_kill_ts": 1787839250.5824077,
+  "review1_status_immediately_after_kill": {
+    "task_id": "review-1",
+    "scope": "pipeline:review",
+    "priority": 90,
+    "capability": "reason",
+    "status": "CLAIMED",
+    "claimed_by": "victim-node",
+    "payload_json": "{\"prompt\":\"Code diff adds a null check before dereferencing a pointer. Is this a reasonable safety fix? Answer YES or NO.\"}"
+  },
+  "review1_status_after_recovery_window": {
+    "task_id": "review-1",
+    "scope": "pipeline:review",
+    "priority": 90,
+    "capability": "reason",
+    "status": "CLAIMED",
+    "claimed_by": "survivor-A",
+    "payload_json": "{\"prompt\":\"Code diff adds a null check before dereferencing a pointer. Is this a reasonable safety fix? Answer YES or NO.\"}"
+  },
+  "stale_task_reclaimed_events": [],
+  "review1_completed_by_a_different_node_after_reclaim": [],
+  "committed_task_ids_seen_in_final_scope_summary_chain": [
+    "review-1",
+    "review-2",
+    "review-3"
+  ],
+  "pass": false
+}

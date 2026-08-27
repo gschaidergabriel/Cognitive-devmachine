@@ -62,6 +62,7 @@ def node_loop(
     become_coordinator_candidate: bool = True,
     self_pause_after_join: float = 0.0,
     scenario: str = "default",
+    task_reclaim_stale_after_seconds: float = 20.0,
 ):
     """Entry point run inside a forked child. Everything here is genuinely executing
     as an independent OS process (own PID, own address space except COW-shared model
@@ -85,6 +86,18 @@ def node_loop(
     for i in range(max_iters):
         try:
             f.runtime_heartbeat(node_id, True)
+
+            # Reclaim any tasks stuck CLAIMED by a node that has since died or stalled
+            # (found empirically 2026-08-27, GRID10 use-case-1 research: without this,
+            # a claimed-but-never-completed task from a crashed node was stuck forever
+            # -- the "a dead node never causes lost/stuck pipeline work" property only
+            # held for coordinator leases, not for ordinary task claims, until now).
+            # Every healthy node participates in the scan; the fabric's own CAS-safe
+            # transaction makes concurrent scans from multiple nodes race-safe.
+            reclaimed = f.runtime_reclaim_stale_claims(node_id, stale_after_seconds=task_reclaim_stale_after_seconds)
+            for tid in reclaimed:
+                events.append({"event": "STALE_TASK_RECLAIMED", "node_id": node_id, "task_id": tid, "ts": time.time()})
+
             snap = f.snapshot()
 
             # try to claim an open task matching our capability (claim-awareness: we only

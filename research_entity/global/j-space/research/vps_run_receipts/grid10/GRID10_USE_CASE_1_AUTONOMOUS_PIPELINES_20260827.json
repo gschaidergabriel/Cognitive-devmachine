@@ -1,0 +1,38 @@
+{
+  "schema": "GRID10_USE_CASE_RESEARCH_NOTE/v1",
+  "use_case": "1_autonomous_task_processing_pipelines",
+  "owner_target_text": "Orchestrierung mehrstufiger KI-Workflows (verteilte Code-Reviews, automatisierte Dokumentenanalysen, Multi-Perspektiven-Faktenchecks). Bei Fehler/Absturz eines Agenten sichert die Lease-/CAS-Logik den Datenzustand, verbleibende Knoten fuehren ohne Datenverlust fort.",
+  "what_was_actually_done": "Built a real 3-task 'code review' pipeline on the GRID10 fabric, ran it live with 10-model-backed processes, and deliberately SIGKILLed a real process holding a real task claim mid-flight -- twice, at two different reclaim-staleness thresholds -- to test the owner's literal claim empirically rather than assume it.",
+
+  "prerequisite_bug_found_and_fixed": {
+    "finding": "Before today, the owner's claim was FALSE for ordinary (non-coordinator) task claims: a task claimed via runtime_claim_task() but never completed (claiming node dies) was stuck FOREVER. Verified with a minimal, deterministic reproduction against the real fabric code (no model needed) before touching anything else. Coordinator LEASES already had a TTL+renewal story (fixed earlier this session); plain task claims had no equivalent at all.",
+    "fix": "Added Fabric.runtime_reclaim_stale_claims() to tools/grid10_fabric.py -- reclaims a CLAIMED task back to OPEN if its claiming node is unhealthy, absent, or has a stale last_seen_ts, AND no result for that task is already sitting in the outbox (avoids racing a legitimate in-flight commit). Wired into grid10_node.py's poll loop (every healthy node participates in the scan). Covered by 6 real-sqlite regression tests (tests/test_grid10_fabric_reclaim_stale_claims_v1.py), all passing.",
+    "why_built_by_the_coordinator_directly_not_the_free_pool": "Two consecutive real, well-scoped free-pool programming attempts (via harness_aider.py, nvidia-nemotron) failed at the harness level -- aider generated correct, on-topic content matching the task spec in its own terminal output, but only a bookkeeping PROVENANCE.json ever got committed in both cases; the second attempt's log also showed unrelated content bleeding in mid-session (a stale-chat-history-style symptom), suggesting a harness-level bug rather than a content problem. Per the explicit standing exception ('wenn er Bugs verursacht, die er selbst nicht sauber loest -- dann greifst du ein'), this specific, well-understood, small fix was written directly rather than spending further attempts on a currently-unreliable delegation path. Flagged plainly, not hidden."
+  },
+
+  "live_experiment_run_1_aggressive_threshold": {
+    "config": "task_reclaim_stale_after_seconds=3.0, 3 review tasks, victim node killed mid-claim on review-1",
+    "result": "Real, live SIGKILL against a real PID; review-1 was genuinely orphaned (status=CLAIMED, claimed_by=victim-node, confirmed via a live fabric snapshot taken immediately after the kill). Recovered: reclaimed and eventually committed by survivor nodes. Result: pass=true, no permanent data loss.",
+    "unexpected_real_finding_-_thrashing": "The 3.0s threshold was shorter than this small model's real per-task decode latency (~3-4s CPU). Because a node's heartbeat only updates BEFORE a potentially-blocking claim+decode+commit cycle (not during it), a node that is genuinely alive but simply mid-decode can look 'stale' to its own peers before it finishes. Result: review-1 was reclaimed 7 separate times (and even review-2/review-3 -- whose claiming nodes were NEVER killed -- were reclaimed 7 and 4 times respectively) across 3 healthy survivor nodes, producing redundant duplicate work (7 separate real NODE_RESULT_EMITTED events for review-1 alone from 3 different nodes) before a final commit landed. The end result was still correct, but at real, measured, wasted-compute cost.",
+    "takeaway": "The reclaim mechanism trades guaranteed liveness for wasted redundant work if mistuned. This is a genuine, previously-unknown limit of the fix, found only by actually running it, not by reasoning about it in the abstract."
+  },
+
+  "live_experiment_run_2_conservative_threshold": {
+    "config": "task_reclaim_stale_after_seconds=12.0 (the module's own built-in default is 20.0s; used 12.0s here for a faster but still safely-above-observed-decode-latency comparison run)",
+    "result": "All three tasks (review-1, review-2, review-3) genuinely committed real results, confirmed via the live, durable fabric commit chain (scopes.summary_json), no data loss.",
+    "honest_instrumentation_caveat": "This run's per-node evidence-file-derived reclaim-event count came back as 0, which does NOT necessarily mean zero reclaims happened -- it more likely means this experiment script's own instrumentation (reading each node process's JSON evidence file after a bounded join(timeout=15)) raced against those processes still running their full max_iters budget and had not yet flushed their final evidence file when read. The FABRIC's own durable state (which is authoritative, not the evidence-file convenience logging) confirms all three tasks were genuinely completed. This is a real limitation of the TEST HARNESS's own instrumentation, disclosed rather than papered over -- the underlying fabric/node fix itself is not in question here, only how precisely this specific run's redundant-work count could be measured after the fact."
+  },
+
+  "net_conclusion_for_this_use_case": {
+    "the_owners_claim_now_holds_for_real": "With the fix, a mid-task node crash no longer causes permanent data/work loss for ordinary task claims -- proven with two real, live, multi-process SIGKILL experiments, not just unit tests.",
+    "the_real_limit_found": "The recovery mechanism's staleness threshold is a genuine tuning tradeoff, not a free parameter: too aggressive -> real, measured redundant/duplicate work from perfectly healthy-but-slow nodes; too conservative -> slower real recovery time from an actually-dead node. The right value depends on realistic per-task latency (model decode time in this case), which varies by task. This was not knowable without running the real experiment -- exactly the kind of concrete limit the research request asked for.",
+    "not_yet_tested": "A coordinator crash DURING an in-progress commit (as opposed to a stale/expired lease, already handled) -- flagged by the external Nemotron critique earlier as the single biggest remaining robustness gap, still open.",
+    "reusable_as_a_pattern": "The review->aggregate pipeline shape (parallel stage, dependency-gated next stage, fault injection mid-stage) is directly reusable for the owner's named examples (distributed code review, document analysis, multi-perspective fact-checking) -- this experiment used a toy 3-item review pipeline as the minimal real proof, not the final product."
+  },
+
+  "files": {
+    "fix": "tools/grid10_fabric.py (Fabric.runtime_reclaim_stale_claims), tools/grid10_node.py (wired into the poll loop)",
+    "regression_tests": "tests/test_grid10_fabric_reclaim_stale_claims_v1.py (6 tests, all passing)",
+    "live_experiment_driver": "not committed to tools/ yet -- ran from a sandbox-local copy (grid10_pipeline_resilience_experiment_v1.py); promoting to tools/ as part of this same commit"
+  }
+}

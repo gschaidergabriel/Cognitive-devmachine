@@ -256,6 +256,84 @@ class Fabric:
         finally:
             con.close()
 
+    def runtime_reclaim_stale_claims(self, reclaiming_node_id: str, *, stale_after_seconds: float = 15.0) -> list[str]:
+        """Found empirically 2026-08-27 (GRID10 use-case-1 research): a task claimed
+        via runtime_claim_task() but never completed (the claiming node died or
+        stalled before ever calling emit_node_result()) is stuck FOREVER -- no code
+        path anywhere previously reset status='CLAIMED' back to 'OPEN'. This directly
+        contradicts the assumed 'a crashed node never causes lost/stuck work' property
+        for ordinary (non-coordinator) task claims -- coordinator LEASES already had a
+        TTL+renewal story (see grid10_node.py's COORDINATOR_LEASE_SELF_RENEW_AFTER_EXPIRY
+        fix), but plain task claims had no equivalent at all until this method.
+
+        A task is eligible for reclaim only if BOTH:
+        (a) its status is 'CLAIMED' AND its claiming node is either not present in the
+            `nodes` table at all, OR present with healthy=0, OR present with
+            healthy=1 but a last_seen_ts older than `stale_after_seconds` -- a hard
+            SIGKILL never gets a chance to call runtime_heartbeat(healthy=False), so a
+            stale last_seen_ts on an otherwise 'healthy=1' row is the ONLY real signal
+            for that specific, realistic failure mode.
+        (b) no packet in `outbox` currently references this task_id in its decoded
+            payload (payload.task_id) -- if a result was already emitted and is only
+            waiting for a coordinator to drain it, reclaiming would be wrong (duplicate
+            work, and a race against the coordinator committing the real result).
+
+        Runs as a single connect()+BEGIN IMMEDIATE transaction (read tasks+nodes+
+        outbox, decide, write) so this is race-safe against another node running the
+        same reclaim scan concurrently, matching every other mutating method here.
+        Returns the list of task_ids that were reclaimed (empty list if none)."""
+        con = connect(self.path)
+        try:
+            con.execute("BEGIN IMMEDIATE")
+            now = time.time()
+            claimed_rows = con.execute(
+                "SELECT task_id, claimed_by FROM tasks WHERE status='CLAIMED' AND claimed_by IS NOT NULL"
+            ).fetchall()
+            if not claimed_rows:
+                con.execute("COMMIT")
+                return []
+
+            node_status: dict[str, sqlite3.Row] = {
+                r["node_id"]: r for r in con.execute("SELECT node_id, healthy, last_seen_ts FROM nodes")
+            }
+            pending_task_ids: set[str] = set()
+            for r in con.execute("SELECT packet_json FROM outbox WHERE consumed=0"):
+                try:
+                    payload = json.loads(r["packet_json"]).get("payload") or {}
+                    tid = payload.get("task_id")
+                    if tid:
+                        pending_task_ids.add(tid)
+                except (ValueError, TypeError):
+                    continue
+
+            reclaimed: list[str] = []
+            for row in claimed_rows:
+                task_id, claimer = row["task_id"], row["claimed_by"]
+                if task_id in pending_task_ids:
+                    continue  # result already in flight -- do not race the coordinator
+                node = node_status.get(claimer)
+                is_stale = (
+                    node is None
+                    or int(node["healthy"]) == 0
+                    or (now - float(node["last_seen_ts"])) > stale_after_seconds
+                )
+                if is_stale:
+                    reclaimed.append(task_id)
+
+            if reclaimed:
+                con.executemany(
+                    "UPDATE tasks SET status='OPEN', claimed_by=NULL WHERE task_id=?",
+                    [(tid,) for tid in reclaimed],
+                )
+                self._bump(con)
+            con.execute("COMMIT")
+        except Exception:
+            con.execute("ROLLBACK")
+            raise
+        finally:
+            con.close()
+        return reclaimed
+
     # ---- Result Channel: ordinary nodes may ALWAYS write here (this is the explicit
     # "NODE_RESULT to Result-Channel" path, distinct from S1 canonical `scopes` state,
     # which stays commit-gated to a leased coordinator below). ----

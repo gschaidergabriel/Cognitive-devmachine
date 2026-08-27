@@ -1,0 +1,213 @@
+{
+  "schema": "GRID10_PIPELINE_RESILIENCE_EXPERIMENT/v1",
+  "use_case": "autonomous_task_processing_pipelines",
+  "claim_under_test": "on agent crash mid-task, the lease/CAS logic preserves data state and remaining nodes continue without data loss",
+  "prior_finding_this_fixes": "before 2026-08-27, this was FALSE for ordinary (non-coordinator) task claims -- verified empirically that a claimed-but-uncompleted task from a dead node was stuck forever with no reclaim path",
+  "model_load_time_s": 7.36,
+  "victim_pid_killed": 749589,
+  "victim_kill_ts": 1787839081.7160716,
+  "review1_status_immediately_after_kill": {
+    "task_id": "review-1",
+    "scope": "pipeline:review",
+    "priority": 90,
+    "capability": "reason",
+    "status": "CLAIMED",
+    "claimed_by": "victim-node",
+    "payload_json": "{\"prompt\":\"Code diff adds a null check before dereferencing a pointer. Is this a reasonable safety fix? Answer YES or NO.\"}"
+  },
+  "review1_status_after_recovery_window": {
+    "task_id": "review-1",
+    "scope": "pipeline:review",
+    "priority": 90,
+    "capability": "reason",
+    "status": "CLAIMED",
+    "claimed_by": "rescuer-C",
+    "payload_json": "{\"prompt\":\"Code diff adds a null check before dereferencing a pointer. Is this a reasonable safety fix? Answer YES or NO.\"}"
+  },
+  "stale_task_reclaimed_events": [
+    {
+      "event": "STALE_TASK_RECLAIMED",
+      "node_id": "survivor-A",
+      "task_id": "review-1",
+      "ts": 1787839084.684672
+    },
+    {
+      "event": "STALE_TASK_RECLAIMED",
+      "node_id": "survivor-A",
+      "task_id": "review-3",
+      "ts": 1787839096.7965195
+    },
+    {
+      "event": "STALE_TASK_RECLAIMED",
+      "node_id": "survivor-A",
+      "task_id": "review-1",
+      "ts": 1787839100.5059848
+    },
+    {
+      "event": "STALE_TASK_RECLAIMED",
+      "node_id": "survivor-A",
+      "task_id": "review-2",
+      "ts": 1787839104.125672
+    },
+    {
+      "event": "STALE_TASK_RECLAIMED",
+      "node_id": "survivor-B",
+      "task_id": "review-1",
+      "ts": 1787839090.6972575
+    },
+    {
+      "event": "STALE_TASK_RECLAIMED",
+      "node_id": "survivor-B",
+      "task_id": "review-2",
+      "ts": 1787839090.697262
+    },
+    {
+      "event": "STALE_TASK_RECLAIMED",
+      "node_id": "survivor-B",
+      "task_id": "review-2",
+      "ts": 1787839094.3654454
+    },
+    {
+      "event": "STALE_TASK_RECLAIMED",
+      "node_id": "survivor-B",
+      "task_id": "review-3",
+      "ts": 1787839103.5319755
+    },
+    {
+      "event": "STALE_TASK_RECLAIMED",
+      "node_id": "survivor-B",
+      "task_id": "review-1",
+      "ts": 1787839107.1942503
+    },
+    {
+      "event": "STALE_TASK_RECLAIMED",
+      "node_id": "survivor-B",
+      "task_id": "review-2",
+      "ts": 1787839111.5331872
+    },
+    {
+      "event": "STALE_TASK_RECLAIMED",
+      "node_id": "rescuer-C",
+      "task_id": "review-1",
+      "ts": 1787839087.6772926
+    },
+    {
+      "event": "STALE_TASK_RECLAIMED",
+      "node_id": "rescuer-C",
+      "task_id": "review-3",
+      "ts": 1787839093.7774048
+    },
+    {
+      "event": "STALE_TASK_RECLAIMED",
+      "node_id": "rescuer-C",
+      "task_id": "review-1",
+      "ts": 1787839097.4331875
+    },
+    {
+      "event": "STALE_TASK_RECLAIMED",
+      "node_id": "rescuer-C",
+      "task_id": "review-2",
+      "ts": 1787839097.4331903
+    },
+    {
+      "event": "STALE_TASK_RECLAIMED",
+      "node_id": "rescuer-C",
+      "task_id": "review-2",
+      "ts": 1787839100.8549166
+    },
+    {
+      "event": "STALE_TASK_RECLAIMED",
+      "node_id": "rescuer-C",
+      "task_id": "review-3",
+      "ts": 1787839106.6422834
+    },
+    {
+      "event": "STALE_TASK_RECLAIMED",
+      "node_id": "rescuer-C",
+      "task_id": "review-1",
+      "ts": 1787839110.1984758
+    },
+    {
+      "event": "STALE_TASK_RECLAIMED",
+      "node_id": "rescuer-C",
+      "task_id": "review-2",
+      "ts": 1787839114.5685048
+    }
+  ],
+  "review1_completed_by_a_different_node_after_reclaim": [
+    {
+      "event": "NODE_RESULT_EMITTED",
+      "node_id": "survivor-A",
+      "task_id": "review-1",
+      "answer": "**YES**\n\n###",
+      "packet_digest": "f116fd03af196bc42ae0fa39ce10b01e6cfa956c5ee30486f07cb0ce03abeac9",
+      "ts": 1787839088.3363998
+    },
+    {
+      "event": "NODE_RESULT_EMITTED",
+      "node_id": "survivor-A",
+      "task_id": "review-1",
+      "answer": "**YES**\n\n###",
+      "packet_digest": "0ec7e389551f37ce833465e6fe6058cff8adffd4eeb4d5dca7a9cde41668bec9",
+      "ts": 1787839103.7349987
+    },
+    {
+      "event": "NODE_RESULT_EMITTED",
+      "node_id": "survivor-B",
+      "task_id": "review-1",
+      "answer": "**YES**\n\n###",
+      "packet_digest": "d8944eeba506496c8154a5c7f651d09843ea347d660904199cd000204da6797c",
+      "ts": 1787839094.0132089
+    },
+    {
+      "event": "NODE_RESULT_EMITTED",
+      "node_id": "survivor-B",
+      "task_id": "review-1",
+      "answer": "**YES**\n\n###",
+      "packet_digest": "31fed9202de6d53ba35b91f33f289f47c2cd3175ab9456a4f2f398a6245cee16",
+      "ts": 1787839110.4076583
+    },
+    {
+      "event": "NODE_RESULT_EMITTED",
+      "node_id": "rescuer-C",
+      "task_id": "review-1",
+      "answer": "**YES**\n\n###",
+      "packet_digest": "425dfadeb53de04b4fa8d179832b29e851e3714b0ffff3e0c1e1e5cc8c3302de",
+      "ts": 1787839091.1888094
+    },
+    {
+      "event": "NODE_RESULT_EMITTED",
+      "node_id": "rescuer-C",
+      "task_id": "review-1",
+      "answer": "**YES**\n\n###",
+      "packet_digest": "e8e1b7c37250d132722b176f7008bd674408c5e2dcd80ac26870008098a7db03",
+      "ts": 1787839100.6854572
+    },
+    {
+      "event": "NODE_RESULT_EMITTED",
+      "node_id": "rescuer-C",
+      "task_id": "review-1",
+      "answer": "**YES**\n\n###",
+      "packet_digest": "0e2973046c367904ae12345d08d62aa5b9dca80f10ed44c3a1df419d510601f3",
+      "ts": 1787839113.4594514
+    }
+  ],
+  "committed_task_ids_seen_in_final_scope_summary_chain": [
+    "review-2",
+    "review-3",
+    "review-2",
+    "review-1",
+    "review-2",
+    "review-1",
+    "review-3",
+    "review-2",
+    "review-3",
+    "review-1",
+    "review-2",
+    "review-1",
+    "review-1",
+    "review-2",
+    "review-3"
+  ],
+  "pass": true
+}

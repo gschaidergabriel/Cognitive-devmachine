@@ -1,0 +1,68 @@
+{
+  "schema": "FRANKENSTEIN_SOURCE_INDEX_DELTA/v1",
+  "generated_by": "GPT-5.6 Sol triggerword-3 curation organ",
+  "generated_date": "2026-08-28",
+  "purpose": "Append-only delta for FRANKENSTEIN_SOURCE_INDEX/v1. Not canonical truth and not a second authority.",
+  "reentry": {
+    "main_before_delta": "e697e13578aaeccedfa162e93b24690f73cb3ea1",
+    "authority_surface": "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
+    "selected_supervisor_observed": "9.13Q_NON_AUTHORITY",
+    "execution_state_observed": "FREE_ONLY_HARD_OFF",
+    "provider_routes_admitted_observed": false,
+    "together_authorized_runs_observed": 0
+  },
+  "new_negative_result": {
+    "id": "FAIL-DIRECT-DISPATCH-DESTRUCTIVE-WHOLE-FILE-REWRITE",
+    "evidence_class": [
+      "NEGATIVE_RESULT",
+      "PROJECT_EXECUTABLE_COUNTEREXAMPLE",
+      "CURRENT_SOURCE_REPAIR_PRESENT"
+    ],
+    "incident_date": "2026-08-28",
+    "evidence_commit": "a624461e4745870f918dfee2c541ef046cc93f97",
+    "supervisor_quarantine_commit": "94ba128cbd95a3999ccac45421a325ea86570eb8",
+    "target_path": "tools/grid10_fabric.py",
+    "observed_before_lines": 672,
+    "observed_rewrite_lines": 87,
+    "origin_damage": "CONTAINED_BEFORE_PUSH_REPORTED",
+    "mechanism": "direct dispatcher requested complete file content from a model without supplying the actual current file content, allowing a plausible but incomplete whole-file reconstruction",
+    "critical_failure": "task-local acceptance can pass while unrelated existing code is deleted",
+    "source_repair": [
+      "inject current content of referenced existing files",
+      "reject suspicious destructive truncation before task-local verification"
+    ],
+    "source_repair_test_report": "76/76 Frankenstein tests reported green by evidence commit",
+    "retained_runtime_credit": 0,
+    "retained_runtime_credit_reason": "Supervisor 9.13Q requires independent clean non-provider review and re-execution of provider-authored Frankenstein core changes before retained runtime credit",
+    "curation_note": "DEV_SOURCE_RESEARCH/research/FRANKENSTEIN_DIRECT_DISPATCH_NEGATIVE_RESULT_2026-08-28.md"
+  },
+  "successor_constraint": {
+    "name": "PREIMAGE_BOUND_EDIT_PRESERVATION_CONTRACT",
+    "status": "PROPOSED_DISCRIMINATOR_NOT_RUNTIME_PASS",
+    "requirements": [
+      "bind exact pre-edit path, source generation/commit and content hash",
+      "prefer patch/diff or structured edit operations for existing-file modification",
+      "declare touched regions and deletion intent/budget",
+      "verify unchanged-region identity or explicit semantic preservation invariants",
+      "reject stale preimage before apply/commit",
+      "require requested-feature tests plus regression/destructive-delta checks",
+      "require resulting changed-file set to match declared scope",
+      "never let task-local acceptance override preservation failure"
+    ]
+  },
+  "hypothesis": {
+    "statement": "Patch/diff-based, preimage-bound editing materially reduces destructive whole-file hallucination relative to generated complete-file replacement.",
+    "classification": "OPEN_HYPOTHESIS",
+    "engineering_confidence": 0.88,
+    "counterhypothesis": "Patch editing can still be destructive through broad hunks, stale preimages, fuzzy application, incorrect context or explicit deletion; patch format alone is insufficient.",
+    "falsifier": "A clean non-provider mutation harness fails to reject unauthorized deletion, stale-preimage edits or unrelated-region corruption, or shows no meaningful safety advantage over whole-file replacement under matched tasks."
+  },
+  "credit_boundary": {
+    "entityos_whole_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "canonical_semantics_credit": 0,
+    "provider_runtime_credit": 0,
+    "training_credit": 0
+  }
+}

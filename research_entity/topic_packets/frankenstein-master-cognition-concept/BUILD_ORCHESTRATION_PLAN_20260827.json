@@ -1,49 +1,33 @@
 {
-  "schema": "FRANKENSTEIN_BUILD_ORCHESTRATION_PLAN/v1",
-  "topic": "72h autonomous VPS build plan for the Frankenstein master cognition concept -- ownership split between what I (coordinator) keep personal control of vs. what runs autonomously.",
-  "authored_by": "coordinator directly, not delegated -- this is a safety/sequencing plan, not application code, and covers the two steps I am keeping personal oversight of regardless of the 'do nothing yourself' instruction: the backup, and the Together-run gate.",
-
-  "step_0_backup_MANDATORY_FIRST_STEP": {
-    "status": "IN PROGRESS at time of writing this plan, launched before anything else on the VPS",
-    "method": "Real, full tar stream: ssh root@72.61.19.188 'tar czf - / (with standard exclusions: /proc /sys /dev /run /tmp /var/tmp /lost+found)' piped directly through this local machine to ssh gabriel@100.92.234.52 (andreas-MACO, verified reachable, 471GB free) -> ~/vps-backups-72.61.19.188/full-backup-2026-08-27.tar.gz. No local disk staging (streamed).",
-    "verification_plan": "After the pipe completes: check exit code of BOTH ssh legs (not just the local pipe's own exit code, which only reflects the LAST command in the pipeline by default -- must check PIPESTATUS or equivalent), compare resulting file size against real `du -sh /` minus exclusions on the VPS (~59GB used at measurement time), and do a real spot-check extraction of a few known files (e.g. tools/grid10_fabric.py from within the claylab checkout, and a SeiMensch site file) to confirm the archive is not corrupt.",
-    "why_this_gate_is_personal_not_delegated": "This is the single explicitly-mandated safety precondition for the entire 72h operation. Verifying it actually completed and is restorable, before anything else touches the VPS, is exactly the kind of irreversible-if-skipped check that stays under direct control rather than being handed to an autonomous script."
-  },
-
-  "step_1_bauleiter_continuity_design": {
-    "requirement_from_owner": "Bauleiter (the foreman/clone agent driving the 72h build) must always run the strongest available model, with persistent state+memory across respawns (crash/quota/timeout), and the respawn must feel like continuous work to the instance itself -- not a reset.",
-    "model_choice": "Strongest model reachable from the VPS/claylab sandbox: NVIDIA Nemotron-3-super-120b-a12b via the free-pool cascade (the strongest tier in ~/last-resort/llm.py's own cascade, explicitly documented there as 'the stronger reasoner for hard problems'). Real Claude API access from the VPS was NOT verified as available in this session (no ANTHROPIC_API_KEY located in the claylab sandbox's vault/secrets during this session) -- using Nemotron-3-super as the strongest VERIFIED option rather than assuming Claude API access exists there. If a real Claude API key is later made available on the VPS, this is a one-line model-selection change, not a redesign.",
-    "seamless_respawn_mechanism": "Directly modeled on how THIS session itself was continued after a prior context ran out (I was literally handed a detailed continuation summary at the start of this conversation and picked up as if there had been no gap -- that lived experience is the design template, not an abstraction): before a Bauleiter instance ends (whether gracefully at a natural checkpoint, or is about to be killed for quota/timeout), it writes a rich CONTINUATION_SUMMARY.md to persistent disk (not just structured state data -- an actual narrative summary: what was being worked on, what was just decided, what's mid-flight, what to do next, in the same style as a session handoff). The respawn wrapper's very first action for the new instance is to read that file and open with it verbatim as the instance's own context, framed as 'you are continuing your own prior work' -- not 'here is a summary of what a previous agent did'. On an UNGRACEFUL death (hard crash, no chance to write a clean summary), the wrapper falls back to the most recent periodic checkpoint (written every N minutes regardless of graceful/ungraceful exit) rather than losing all continuity.",
-    "state_vs_memory_split": "State (structural, machine-readable: current build phase, which subtasks are done/in-progress/blocked, resource counters like the training-run gate status) lives in the SAME SQLite/WAL fabric pattern already proven today (a dedicated scope, e.g. 'frankenstein:build_state', using the real get/set_regulator + task/scope machinery, not a new bespoke store). Memory (narrative, human-readable: the CONTINUATION_SUMMARY.md above) lives as a plain file, versioned/timestamped, so a human (or a fresh Bauleiter) can always read the CURRENT one directly without needing to parse SQL.",
-    "helper_models_stay_interchangeable": "Only the Bauleiter itself gets this continuity treatment. Helper coding models (used for individual subtasks -- writing a specific module, running a specific test) remain stateless/interchangeable free-pool calls per task, exactly like today's harness_aider.py pattern -- no continuity requirement for them, per the owner's explicit instruction."
-  },
-
-  "step_1b_bugfix_frankenstein_third_role": {
-    "requirement_from_owner": "A THIRD, clearly separate role alongside Bauleiter (leadership/decisions/coordination) and helper models (free-pool, interchangeable): 'Bugfix-Frankenstein' -- a separate, independent watchdog+fixer instance. Spawned, always present, waits passively until the running script hangs or hits an error, then fixes it. Coordinates with the Bauleiter (not silent, not unilateral). Gets the SAME strongest-model + persistent-state + seamless-respawn treatment as the Bauleiter (both are Frankenstein instances), but runs as its own extra, extremely robust, standalone script -- NOT the same instance/code-path as the Bauleiter.",
-    "two_staggered_fallbacks": "Bugfix-Frankenstein specifically needs TWO fallback tiers (not one): if its primary strongest-model call fails/rate-limits, fall back to a second tier; if THAT also fails, a third. Concretely: tier 1 = NVIDIA Nemotron-3-super (same as Bauleiter's primary), tier 2 = Groq (the cascade's own documented fast/reliable default), tier 3 = Mistral. This is a real, already-available 3-tier structure in ~/last-resort/llm.py's own cascade -- Bugfix-Frankenstein deliberately walks further down that SAME cascade than the Bauleiter normally would, rather than needing a separate fallback system invented from scratch.",
-    "rate_limits_must_never_stop_it": "On a rate-limit response from every tier simultaneously (the genuinely rare worst case), Bugfix-Frankenstein WAITS (real backoff sleep, bounded but non-zero) and retries -- it must never simply give up/exit on a rate-limit, since its entire purpose is to be the thing that is still there when everything else has stalled.",
-    "self_versioning_and_rollback": "Bugfix-Frankenstein maintains its OWN lightweight version history of any file it modifies (a real, local git repo scoped to the sandbox/build directory it operates in is the natural, already-proven-safe mechanism -- git commit before and after each of its own fixes, with a clear commit message per fix) so that if one of ITS OWN changes causes a crash, it can `git revert`/`git reset` its own prior commit specifically, distinct from the Bauleiter's or helpers' own commit history -- this needs its own git identity/branch or clearly-tagged commits so its rollbacks never touch work that was not its own.",
-    "two_tier_baseline_and_checkpoint_precision": "Two distinct rollback levels, not one. (a) A fixed, immutable UR-BASELINE tag (a real git tag, e.g. `frankenstein-ur-baseline`, set ONCE at the very start and NEVER moved/overwritten) marking a state already known to work -- the absolute last-resort rollback target regardless of how many later checkpoints exist or fail. (b) A CURRENT WORKING CHECKPOINT (a moving tag, e.g. `frankenstein-checkpoint-current`) that only ever advances when a candidate change is verified strictly better with ZERO regressions anywhere (the owner's own 'niemals nirgends eine Verschlechterung' rule from the original task) -- verification means re-running the same real measurement suite already built today (GRID10 acceptance test 17/17, the regulator/reclaim/lease regression tests, and the real before/after latency/RAM/CPU numbers from today's four concept experiments) and comparing every single metric against the PRIOR checkpoint's own recorded numbers, not just a subjective 'looks fine'. Only if ALL metrics are equal-or-better does the checkpoint tag move forward; otherwise the candidate change is reverted and the current checkpoint tag stays where it was. Recursive self-improvement is safe specifically because every forward step requires this proof, and there are always two ways back (to the last good checkpoint, or all the way to the immutable Ur-Baseline).",
-    "coordination_with_bauleiter": "Not a silent parallel process -- writes its findings/fixes into the SAME 'frankenstein:build_state' fabric scope the Bauleiter reads, so the Bauleiter sees what was fixed and why, and Bugfix-Frankenstein reads the Bauleiter's current task/priority state before deciding what 'perfect' looks like for a given fix (per the owner's framing: it 'knows how it should be' -- that knowledge comes from reading the Bauleiter's own stated intent/spec in the fabric, not from independently guessing)."
-  },
-
-  "step_2_helper_pool_and_parallelism": {
-    "mechanism": "Reuses harness_aider.py's fallback-start pattern (already proven working today for real tasks, e.g. paket-1787844621706-e2ac30) -- the Bauleiter dispatches well-scoped, single-file tasks to the free-pool cascade (Groq/Nemotron/Mistral), same allowlist-scoped sandbox-path constraint already in place, same real-diff-review-before-promotion discipline already established today.",
-    "parallelism_bound": "Rate-limit-aware, not a fixed hardcoded concurrency number -- the Bauleiter tracks real 429/rate-limit responses from each provider (already visible in today's harness logs, e.g. the Mistral RateLimitError seen during the release_idle_memory task) and backs off per-provider rather than assuming a static safe concurrency level.",
-    "honest_uncertainty": "The exact maximum safe parallelism on this specific VPS/claylab sandbox (4 vCPUs, 15GB RAM) for MANY concurrent aider/harness sessions was not measured before this plan -- the Bauleiter's first real subtask should be establishing this empirically (spawn 2, then 4, then 8 concurrent harness calls, measure real success/failure/rate-limit rates) rather than the plan asserting a number that was not tested."
-  },
-
-  "step_3_ubuntu_sandbox_and_final_artifacts": {
-    "sandbox_requirement": "A real Ubuntu sandbox matching Gabriel's own system as closely as possible, built inside the claylab container (rootless Podman, already the established, authorized sandbox boundary -- research_entity/global/RESEARCH_ACTOR_REGISTRY.json and the documented VPS sandbox authority both scope work to this container, not the wider VPS/SeiMensch tenant).",
-    "final_deliverable": "A ZIP with all data/artifacts/results copied to THIS machine's ~/Desktop/ (not the VPS) at the end -- matching the exact pattern already used twice today (Xeno_Shell and GRID10_Fabric ZIPs already on ~/Desktop/)."
-  },
-
-  "step_4_training_run_gate_KEPT_PERSONAL": {
-    "the_gate": "Exactly ONE Together training run is authorized for this entire operation (1 of the 2 remaining owner-authorized runs total). The Bauleiter and its helpers may do UNLIMITED research/data-preparation work toward this, but the actual paid API call that starts the training job requires a real, explicit confirmation step that is NOT automated away -- the orchestration script writes a clear 'TRAINING_RUN_READY_FOR_LAUNCH' marker with the full proposed run configuration (dataset, hyperparameters, cost estimate) and STOPS there, waiting for the coordinator (me) to review and explicitly trigger it, rather than firing autonomously.",
-    "why_this_specific_step_is_not_delegated": "Every Together run this entire session has been treated as a scarce, individually-authorized, carefully-reviewed resource (5 runs total, now 1 of 2 remaining after today) -- letting an autonomous 72h process spend the second-to-last one without a final human-reviewed checkpoint would be inconsistent with how every single one of the prior 4 runs was actually handled, and is the one action in this whole plan that is both expensive and irreversible."
-  },
-
-  "step_5_reporting": {
-    "cadence": "Proactive check-ins at meaningful milestones (real commits/artifacts), not just 'still running' -- matching the owner's explicit instruction. Given a 72h runtime spans well beyond a single conversation turn, monitoring happens via periodic re-connection to the VPS to check real state (git log, build-state scope contents, CONTINUATION_SUMMARY.md timestamps) rather than a synchronous wait."
-  }
+  "schema": "FRANKENSTEIN_BUILD_ORCHESTRATION_PLAN/v2",
+  "date": "2026-08-27",
+  "status": "QUARANTINED_NON_OPERATIVE_UNDER_CURRENT_PROVIDER_HARD_OFF",
+  "authority_source": "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
+  "authority_observed_schema": "9.13",
+  "provider_routes_admitted": false,
+  "free_swarm_owner_emergency_stop": true,
+  "together_forbidden": true,
+  "remaining_together_paid_runs_authorized": 0,
+  "legacy_plan_preserved_byte_identical_at": "research_entity/topic_packets/frankenstein-master-cognition-concept/BUILD_ORCHESTRATION_PLAN_20260827_PROVIDER_QUARANTINED_854f6bc.json",
+  "canonical_runtime_entrypoints": [
+    "research_entity/topic_packets/frankenstein-master-cognition-concept/frankenstein_orchestrator_v1.py",
+    "research_entity/topic_packets/frankenstein-master-cognition-concept/frankenstein_bugfix_v1.py"
+  ],
+  "allowed_now": [
+    "non-provider local source review",
+    "non-provider deterministic tests",
+    "package graph and curation work that does not dispatch external helpers",
+    "documentation and research synthesis",
+    "authority-status inspection"
+  ],
+  "forbidden_now": [
+    "Nemotron/Groq/Mistral/OpenRouter provider dispatch",
+    "free-pool fallback dispatch",
+    "harness_aider fallback-start from Frankenstein orchestration",
+    "provider secret lookup before explicit current admission",
+    "Together inference or training",
+    "interpreting this plan or its preserved legacy donor as execution authority"
+  ],
+  "reactivation_gate": "A later explicit canonical authority must set provider_routes_admitted=true, clear the emergency stop, and satisfy all then-current provider/economic provenance gates before either canonical entrypoint may load its preserved provider-backed donor. Together additionally requires together_forbidden=false and remaining_together_paid_runs_authorized>0. Historical plan text never grants authority.",
+  "evidence_boundary": "This plan change and the entrypoint gate are source/unit-test closure only. They do not mint provider runtime, HCU, J-Space, training, BASE, or whole EntityOS credit."
 }

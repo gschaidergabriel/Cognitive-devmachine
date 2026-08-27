@@ -65,6 +65,21 @@ But convention-bound files stay where their host requires them. Examples may inc
 
 If an exact host requirement conflicts with the aesthetic target, correctness wins and the exception is documented.
 
+### External-primary platform constraint: GitHub Actions
+
+**EXTERNAL_PRIMARY (verified 2026-08-27):** GitHub's current documentation says workflow files are defined in `.github/workflows`, and that GitHub searches the `.github/workflows` directory in the root of the repository when matching repository events to workflows.
+
+Primary sources:
+
+- https://docs.github.com/en/actions/concepts/workflows-and-actions/workflows
+- https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax
+
+Therefore `.github/workflows` is a concrete `PLATFORM_REQUIRED` root exception while native GitHub Actions is retained. Moving it beneath `DEV_SOURCE_RESEARCH/repository/` merely to satisfy a literal four-entry filesystem aesthetic would break normal workflow discovery. The Triggerword-3 four-entry rule is consequently admitted as a **public-navigation invariant**, not as an unconditional physical-filesystem invariant.
+
+This does not prove every root dotfile or host surface must remain permanently. Each one still needs its own discovery/reference contract. It proves that a cosmetic mass move is not an acceptable default and that at least one root exception is externally required.
+
+Falsifier: newer GitHub primary documentation, or exact admitted GitHub execution, demonstrates that the repository's workflows are discovered from the proposed non-root replacement path without a root `.github/workflows` surface.
+
 ## Staged procedure
 
 ### Stage A — additive navigation

@@ -1,0 +1,77 @@
+{
+  "schema": "TRIGGER3_SAFE_EDIT_GUARD_RECEIPT/v1",
+  "trigger": "triggerwort 3",
+  "timestamp_local": "2026-08-28T02:29:00+07:00",
+  "organ": "GPT-5.6-Sol",
+  "base_main": "63dc45e09dac9930dd4bf7ca169cf693190b2c71",
+  "branch": "trigger3/exact-edit-guard-main-20260828-gpt56sol",
+  "authority_observed": {
+    "supervisor_inbox_schema": "9.13",
+    "delta": "9.13Q_NON_AUTHORITY",
+    "free_only": true,
+    "no_paid_fallback": true,
+    "together_forbidden": true,
+    "provider_routes_admitted": false,
+    "remaining_together_paid_runs_authorized": 0
+  },
+  "negative_evidence_addressed": {
+    "incident": "first live Frankenstein direct-dispatch destructively rewrote tools/grid10_fabric.py from 672 lines to an 87-line fabricated stub on the VPS; local commits were contained and reset before origin push",
+    "current_donor_gap": "the quarantined donor still uses whole-file FILE blocks with current-content injection plus a 50 percent shrink heuristic; this does not prove unchanged-region preservation and can miss destructive edits above that threshold",
+    "promotion": "NONE"
+  },
+  "delta": [
+    "added provider-agnostic exact SEARCH/REPLACE editing for existing UTF-8 text files",
+    "requires every SEARCH preimage to occur exactly once in the original file and rejects overlapping declared spans",
+    "default cumulative replaced-source budget is 25 percent, including a regression that rejects a 40 percent deletion which can evade the old 50 percent whole-file shrink heuristic",
+    "separated explicit NEW_FILE admission from existing-file mutation",
+    "rejects path traversal and symlink escape outside repo_root",
+    "rechecks exact SHA-256 preimages immediately before write and fails closed on stale source",
+    "emits exact local transform receipts with original/result SHA-256, declared span digests and unchanged-character count",
+    "changed the canonical Frankenstein entrypoint so a future provider-authority reopening still cannot load the quarantined donor unless an independently audited exact donor SHA-256 is explicitly bound",
+    "left SAFE_EDIT_AUDITED_DONOR_SHA256 intentionally null because the current donor is not yet integrated with the new edit primitive and has not received the required independent audit"
+  ],
+  "local_nonprovider_validation": {
+    "command": "python -m pytest -q tests/test_frankenstein_safe_edit_v1.py tests/test_frankenstein_safe_edit_entrypoint_gate_v1.py",
+    "result": "19 passed in 0.06s",
+    "py_compile": "PASS",
+    "explicit_dependency": "research_entity/topic_packets/frankenstein-master-cognition-concept/frankenstein_authority_gate_v1.py from base_main",
+    "scope": "ISOLATED_LOCAL_COMPONENT_UNIT_ONLY",
+    "exact_file_sha256": {
+      "research_entity/topic_packets/frankenstein-master-cognition-concept/frankenstein_safe_edit_v1.py": "9e2a42ac984dafcc25d22d1f8a5124e6a9b3021cc422ea14c08d2a291dfd17d3",
+      "research_entity/topic_packets/frankenstein-master-cognition-concept/frankenstein_orchestrator_v1.py": "0a88e2214412b7a39085116ed1fdd97219cf6dcf9cb24e337f77c2a46e414d7b",
+      "tests/test_frankenstein_safe_edit_v1.py": "d1597593d7c84a91313347b352a72979bdc277fcbe38de437b8e95d9fc9da2d3",
+      "tests/test_frankenstein_safe_edit_entrypoint_gate_v1.py": "b699ab894be07bef39ba40ed124a0d6cf62387376248812a7ac0a881986039ef"
+    },
+    "git_blob_sha1": {
+      "research_entity/topic_packets/frankenstein-master-cognition-concept/frankenstein_safe_edit_v1.py": "4dc8e07fb1690e3b31e8214355e318732eeeb7d1",
+      "research_entity/topic_packets/frankenstein-master-cognition-concept/frankenstein_orchestrator_v1.py": "dc223951eb1765851c121dc8a94f0e517a83365c",
+      "tests/test_frankenstein_safe_edit_v1.py": "661de13825ccf400826a80c5ca75b193bcfc086d",
+      "tests/test_frankenstein_safe_edit_entrypoint_gate_v1.py": "5bd1f049b9a94b205e0b33bb88dd77b618a4501b"
+    }
+  },
+  "execution_boundary": {
+    "provider_calls": 0,
+    "network_provider_calls": 0,
+    "secret_lookups": 0,
+    "paid_execution": 0,
+    "together_calls": 0,
+    "vps_execution": 0,
+    "unusual_experiments": 0
+  },
+  "credits": {
+    "whole_entityos_hcu": 0,
+    "hcu_full": 0,
+    "physical_grid10": 0,
+    "jspace_model": 0,
+    "canonical_semantics": 0,
+    "training": 0,
+    "frankenstein_direct_dispatch_retained_runtime": 0
+  },
+  "unresolved": [
+    "wire frankenstein_safe_edit_v1 into the quarantined donor direct-dispatch path so existing files are no longer proposed or applied as whole-file replacements",
+    "independently review the resulting exact donor source and set SAFE_EDIT_AUDITED_DONOR_SHA256 only after that review",
+    "run the full repository-bound clean non-provider regression suite at the exact integrated source identity before retained Frankenstein runtime credit",
+    "keep all external provider execution hard-off unless a newer explicit current authority admits it and every independent gate passes"
+  ],
+  "classification": "SOURCE_READY_WITH_ISOLATED_LOCAL_UNIT_EVIDENCE_NOT_RUNTIME_PASS"
+}

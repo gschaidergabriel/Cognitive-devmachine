@@ -1,0 +1,37 @@
+{
+  "schema": "GRID10_CONCEPT_CRITICAL_REVIEW/v1",
+  "concept_source": "research_entity/topic_packets/grid10-dynamic-scaling-concept/CONCEPT.md",
+  "concept_status_acknowledged": "The document itself is explicitly marked 'ERSTE FASSUNG / DISKUSSIONSGRUNDLAGE' and its own 'Offene Punkte' section lists 'echte Implementierungsdetails von Strang A fehlen noch' as item 1 -- this review is exactly that grounding pass, requested by the document itself, not an unprompted critique.",
+
+  "real_mismatches_with_the_actual_grid10_implementation": [
+    {
+      "concept_assumption": "Node processes are long-lived daemons with SIGUSR1/SIGUSR2/SIGCONT/SIGSTOP signal handlers for warm-standby scale-out/in.",
+      "reality": "tools/grid10_node.py's node_loop() is a plain Python function running inside a multiprocessing.Process spawned via mp.get_context('fork').Process(target=node_loop, ...) -- there is no custom signal-handling layer at all today. Adding one is possible in principle (Python's signal.signal()) but is a substantial new subsystem, not a small addition, and the concept's own Round-2 review (point 2) already flags a real, still-unfixed race: SIGSTOP mid-transaction can freeze a process while it holds a SQLite write lock, which the proposed 'graceful drain hook' would need to prevent perfectly to avoid deadlocking the whole fabric -- a genuinely hard correctness requirement, not addressed with real code here."
+    },
+    {
+      "concept_assumption": "A single global coordinator lease (lease_id=1), elected via Bully algorithm among all live nodes.",
+      "reality": "The real leases table is scope-keyed (grid10_fabric.py: leases.scope, no single global lease_id), and MULTIPLE CONCURRENT per-scope coordinators are a real, already-proven capability (acceptance test criterion 'two_concurrent_scoped_coordinators', verified live 2026-08-27, plus every one of today's 4 use-case experiments relied on independent per-scope coordinators running simultaneously). Implementing the concept's single-global-coordinator model as specified would be a functional regression from what already works and is tested."
+    },
+    {
+      "concept_assumption": "Scaling reaction time target <=30ms, latency overhead target <=5%/10ms.",
+      "reality": "Measured real numbers from today's actual runs: model decode ~2-6s CPU per short task (established across all 4 use cases); under concurrent write load (this session's cybernetic-regulator experiment, same day), real commit latency degraded to multiple SECONDS of burst-delay under contention. The concept's own Round-2 review partially caught the fsync-cost issue (point 3) but its proposed fix (PRAGMA synchronous=NORMAL) is ALREADY the case in the real connect() function in grid10_fabric.py today -- so that specific fix is redundant, not new, and does not touch the actual gap: the target is roughly 100-1000x smaller than what this system's real workload (LLM decode, not lightweight message-passing) can achieve."
+    },
+    {
+      "concept_assumption": "Model weights live in an explicit /dev/shm shared-memory segment, mmap'd, remapped read-only via mprotect(PROT_READ) after fork() to prevent COW divergence.",
+      "reality": "Weights are loaded via transformers.AutoModelForCausalLM.from_pretrained() as ordinary PyTorch tensor allocations in the parent process's heap, shared across children purely through the OS's automatic fork()-time copy-on-write of the whole process address space (empirically measured this session: ~1.48GB Shared_Clean per child out of ~2.06GB RSS). There is no deliberately-managed shared-memory segment to mprotect -- the concept's specific mitigation for weight-write divergence does not apply to how sharing actually happens here (no node in the current design ever writes to its own weight copy in the first place, so the divergence scenario the fix addresses does not arise the way described)."
+    },
+    {
+      "concept_assumption": "Deployment via podman-compose with a Dockerfile per-node service, privileged:true containers, cgroup v2 CPU-quota steering.",
+      "reality": "The actual, already-running deployment is a single rootless Podman container (clay-direct-dev) inside which Python's multiprocessing spawns the 10 node processes directly -- not one container per node, not privileged, no cgroup-quota layer built or in use today. This whole 'Bauanleitung' section describes a materially different deployment topology than what exists and has been used for every experiment this session."
+    }
+  ],
+
+  "what_is_genuinely_salvageable": {
+    "the_goal_is_sound": "Running fewer active nodes when load is low and scaling up under real demand is a reasonable, valuable goal, independent of the specific (mismatched) mechanism proposed.",
+    "the_metric_based_trigger_idea_is_reusable": "queue depth / CPU load / latency percentile / active-lease-count as scaling signals is architecture-agnostic and could genuinely inform a real trigger, adapted to real data sources (this session's fabric already exposes tasks.status counts, leases.valid counts, and now also the regulators table built for the cybernetic-cognition experiment).",
+    "reusing_todays_regulator_mechanism": "Rather than inventing a new SIGSTOP/shared-memory subsystem, a genuinely buildable adaptation reuses the CAS-safe regulators table (tools/grid10_fabric.py::get_regulator/set_regulator, built earlier today for the cybernetic-cognition experiment) as the live, shared scaling-target signal -- consistent with, not a competing system alongside, today's other real work."
+  },
+
+  "decision": "Rather than attempt the concept's full SIGSTOP/shared-memory/Bully-election edifice (a substantial rebuild of process management, with at least one still-unfixed correctness race flagged in the concept's own adversarial review), built and ran a smaller, real, honestly-scoped adaptation: an elastic POLL-RATE mechanism (not a full process-suspend mechanism) driven by the same regulator table, measuring real CPU-time savings and real responsiveness cost. See EXPERIMENT_RESULTS_20260827.json in this same directory for the live run and measured numbers.",
+  "not_attempted": "Full node process suspension (SIGSTOP/CONT), shared-memory weight remapping, Bully-algorithm global coordinator election, containerized per-node deployment, sub-30ms reaction time -- all flagged above as either mismatched with the real architecture or requiring a much larger, separate undertaking than this session's remaining scope."
+}

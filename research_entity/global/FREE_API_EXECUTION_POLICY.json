@@ -1,6 +1,3 @@
-Warning: truncated output (original token count: 30545)
-Total output lines: 1130
-
 {
   "schema_version": "1.0",
   "status": "IMPLEMENTED_CANDIDATE",
@@ -651,7 +648,32 @@ Total output lines: 1130
     "checked_at": "2026-08-13",
     "claim": "The plain-text adapter accepts exactly role and content in each message; tool_calls, tool_call_id, name, reasoning_content and future extension fields require an explicitly typed adapter.",
     "sources": [
-      "https:/…545 tokens truncated…s user and assistant messages to alternate, the final input message to have role user, and an optional system message to be first; invalid sequences are rejected before credential use or network access.",
+      "https://docs.api.nvidia.com/nim/reference/moonshotai-kimi-k2-6-infer",
+      "https://docs.nvidia.com/nim/large-language-models/latest/advanced-use-cases/tool-calling-and-mcp.html"
+    ],
+    "executable_evidence": "test_extra_message_fields_are_blocked_before_network",
+    "counterhypothesis": "Validating role and content is enough for a text-only adapter; falsified because an assistant message carrying tool_calls passed unchanged to the authenticated network opener."
+  },
+  "nonempty_text_conversation": {
+    "checked_at": "2026-08-13",
+    "claim": "NVIDIA Chat Completions requires messages to contain at least one item; an empty conversation is rejected before credential use or network access.",
+    "source": "https://docs.api.nvidia.com/nim/reference/moonshotai-kimi-k2-6-infer",
+    "executable_evidence": "test_empty_message_list_is_blocked_before_network",
+    "counterhypothesis": "Provider-side validation is sufficient; falsified because an empty messages list reached the authenticated opener and caused an avoidable network attempt."
+  },
+  "nonblank_text_message_content": {
+    "checked_at": "2026-08-14",
+    "claim": "Every role/content message handled by this plain-text adapter requires nonblank scalar text before credential use or network access. This is a fail-closed adapter rule, not an additional NVIDIA schema claim: empty content can have meaning only in typed tool or multimodal paths, which this adapter rejects separately.",
+    "sources": [
+      "https://docs.nvidia.com/nim/large-language-models/latest/get-started/advanced/get-started-nemotron-3.5-lightning.html",
+      "https://docs.nvidia.com/nim/large-language-models/latest/advanced-use-cases/tool-calling-and-mcp.html"
+    ],
+    "executable_evidence": "test_blank_text_message_is_blocked_before_network",
+    "counterhypothesis": "Provider-side validation or an empty text message is sufficient for this adapter; falsified locally because empty and whitespace-only user content both reached the authenticated opener despite carrying no typed tool or multimodal payload."
+  },
+  "text_conversation_sequence": {
+    "checked_at": "2026-08-13",
+    "claim": "NVIDIA Chat Completions requires user and assistant messages to alternate, the final input message to have role user, and an optional system message to be first; invalid sequences are rejected before credential use or network access.",
     "source": "https://docs.api.nvidia.com/nim/reference/meta-llama-3_1-70b-infer",
     "executable_evidence": "test_invalid_conversation_sequence_is_blocked_before_network",
     "counterhypothesis": "Validating each role independently is sufficient; falsified because assistant-ended, consecutive-user and late-system conversations all reached the authenticated opener despite violating the documented conversation grammar."

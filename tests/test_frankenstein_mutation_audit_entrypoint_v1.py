@@ -24,64 +24,59 @@ def digest(path: Path) -> str:
 
 def make_sources(tmp_path: Path):
     donor = tmp_path / "donor.py"
-    patch_guard = tmp_path / "patch_guard.py"
-    preimage_guard = tmp_path / "preimage_guard.py"
+    contract = tmp_path / "frankenstein_edit_contract_v1.py"
     donor.write_text("DONOR = 'integrated fixture'\n")
-    patch_guard.write_text("PATCH_GUARD = True\n")
-    preimage_guard.write_text("PREIMAGE_GUARD = True\n")
-    return donor, patch_guard, preimage_guard
+    contract.write_text("EDIT_CONTRACT = True\n")
+    return donor, contract
 
 
-def bind_paths(monkeypatch, donor, patch_guard, preimage_guard):
+def bind_paths(monkeypatch, donor, contract):
     monkeypatch.setattr(entry, "QUARANTINED_IMPLEMENTATION", donor)
-    monkeypatch.setattr(entry, "PATCH_GUARD", patch_guard)
-    monkeypatch.setattr(entry, "PREIMAGE_EDIT_GUARD", preimage_guard)
+    monkeypatch.setattr(entry, "MUTATION_CONTRACT", contract)
 
 
-def bind_hashes(monkeypatch, donor, patch_guard, preimage_guard):
+def bind_hashes(monkeypatch, donor, contract):
     monkeypatch.setattr(entry, "AUDITED_DONOR_SHA256", digest(donor))
-    monkeypatch.setattr(entry, "AUDITED_PATCH_GUARD_SHA256", digest(patch_guard))
-    monkeypatch.setattr(entry, "AUDITED_PREIMAGE_EDIT_GUARD_SHA256", digest(preimage_guard))
+    monkeypatch.setattr(entry, "AUDITED_MUTATION_CONTRACT_SHA256", digest(contract))
 
 
 def test_current_source_fails_closed_with_no_audited_identities():
     state = entry.mutation_audit_state()
     assert entry.AUDITED_DONOR_SHA256 is None
-    assert entry.AUDITED_PATCH_GUARD_SHA256 is None
-    assert entry.AUDITED_PREIMAGE_EDIT_GUARD_SHA256 is None
+    assert entry.AUDITED_MUTATION_CONTRACT_SHA256 is None
     assert state["mutation_audit_admitted"] is False
     assert state["runtime_promotion"] == "NONE"
     with pytest.raises(entry.UnsafeMutationDonorBlocked):
         entry.require_mutation_audited_donor()
 
 
-def test_exact_triplet_admits_only_matching_sources(tmp_path, monkeypatch):
-    donor, patch_guard, preimage_guard = make_sources(tmp_path)
-    bind_paths(monkeypatch, donor, patch_guard, preimage_guard)
-    bind_hashes(monkeypatch, donor, patch_guard, preimage_guard)
+def test_exact_pair_admits_only_matching_sources(tmp_path, monkeypatch):
+    donor, contract = make_sources(tmp_path)
+    bind_paths(monkeypatch, donor, contract)
+    bind_hashes(monkeypatch, donor, contract)
     state = entry.require_mutation_audited_donor()
     assert state["mutation_audit_admitted"] is True
     assert state["all_required_sources_present"] is True
 
 
-@pytest.mark.parametrize("changed", ["donor", "patch_guard", "preimage_guard"])
+@pytest.mark.parametrize("changed", ["donor", "mutation_contract"])
 def test_any_post_audit_source_change_fails_closed(tmp_path, monkeypatch, changed):
-    donor, patch_guard, preimage_guard = make_sources(tmp_path)
-    bind_paths(monkeypatch, donor, patch_guard, preimage_guard)
-    bind_hashes(monkeypatch, donor, patch_guard, preimage_guard)
-    target = {"donor": donor, "patch_guard": patch_guard, "preimage_guard": preimage_guard}[changed]
+    donor, contract = make_sources(tmp_path)
+    bind_paths(monkeypatch, donor, contract)
+    bind_hashes(monkeypatch, donor, contract)
+    target = {"donor": donor, "mutation_contract": contract}[changed]
     target.write_text(target.read_text() + "# changed after audit\n")
     assert entry.mutation_audit_state()["mutation_audit_admitted"] is False
     with pytest.raises(entry.UnsafeMutationDonorBlocked):
         entry.require_mutation_audited_donor()
 
 
-@pytest.mark.parametrize("missing", ["donor", "patch_guard", "preimage_guard"])
+@pytest.mark.parametrize("missing", ["donor", "mutation_contract"])
 def test_any_missing_required_source_fails_closed(tmp_path, monkeypatch, missing):
-    donor, patch_guard, preimage_guard = make_sources(tmp_path)
-    bind_paths(monkeypatch, donor, patch_guard, preimage_guard)
-    bind_hashes(monkeypatch, donor, patch_guard, preimage_guard)
-    target = {"donor": donor, "patch_guard": patch_guard, "preimage_guard": preimage_guard}[missing]
+    donor, contract = make_sources(tmp_path)
+    bind_paths(monkeypatch, donor, contract)
+    bind_hashes(monkeypatch, donor, contract)
+    target = {"donor": donor, "mutation_contract": contract}[missing]
     target.unlink()
     state = entry.mutation_audit_state()
     assert state["all_required_sources_present"] is False

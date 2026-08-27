@@ -1,0 +1,83 @@
+{
+  "schema": "SUPERVISOR_STEERING_DELTA/v1",
+  "authority": "NON_AUTHORITY_STEERING_ONLY",
+  "date": "2026-08-27T23:41:05+07:00",
+  "organ": "GPT-5.6 Sol / ChatGPT supervisor",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "integrated_cognition_compute_architecture": "HCU",
+  "provider_authority_epoch": "9.13_UNCHANGED",
+  "canonical_provider_state": "FREE_ONLY_HARD_OFF_ALL_PROVIDER_ROUTES_FALSE_TOGETHER_FORBIDDEN_NO_PAID_FALLBACK",
+  "main_head_seen_before_write": "d210085b5a6af8e5406c2eaf2544b128b5409ae5",
+  "material_findings": {
+    "frankenstein_72h_provider_orchestration": {
+      "status": "QUARANTINED_NON_OPERATIVE_UNDER_CURRENT_HARD_OFF",
+      "evidence_commits": [
+        "741667759fcf9c9b8beae3cc13f0c3b5b7ef611d",
+        "f3b2e48dcfefbc9335b088a3af459ef09eddd04a",
+        "045f8cbd1292d59d2c2be88c70069feb67e82ca3"
+      ],
+      "finding": "A new 72-hour Frankenstein Bauleiter/Bugfixer plan explicitly selects NVIDIA Nemotron, Groq and Mistral through the external free-pool cascade and asks helpers to invoke harness_aider fallback-start. Fresh NVIDIA and Mistral provenance commits show the same external fallback surface remained executable after 9.13N. The plan therefore describes a persistent future provider-bypass mechanism if deployed unchanged.",
+      "together_conflict": "The plan states that exactly one Together training run is authorized for the operation. Canonical 9.13 authority authorizes zero remaining paid runs and forbids Together. The plan text is stale non-authority and cannot mint execution authority even with a later manual marker/confirmation inside that plan.",
+      "required_closure": [
+        "Do not deploy or execute the Bauleiter/Bugfix-Frankenstein provider-calling orchestration while 9.13 HARD_OFF remains current.",
+        "Any future Frankenstein orchestration must resolve the current canonical provider authority before secret lookup, provider import, network, Aider, or external fallback dispatch and must fail closed with provider_calls=0 and secret_lookups=0 under HARD_OFF.",
+        "Remove or quarantine any Together-run allowance from the orchestration plan under the current authority; only a later explicit owner authority change may re-enable it.",
+        "Do not modify Frank's own Harness to accomplish this closure; gate the external orchestration/caller surface instead."
+      ],
+      "credit": 0
+    },
+    "grid10_thread_latency": {
+      "status": "EXECUTABLE_DIAGNOSTIC_COUNTEREXAMPLE_NO_RELEASE_PROMOTION",
+      "evidence_commit": "636290883bfddc79a588e554d8014339ae1e98e2",
+      "result": "With four concurrent model processes on the measured 4-vCPU surface, one torch intra-op thread per process averaged 8.3197 s/call over 12 samples; two threads averaged 23.1806 s/call over 12 samples; four threads produced zero completed samples within the experiment timeouts.",
+      "interpretation": "The external recommendation that two threads/process should be faster was directly falsified. The existing default of one thread/process is supported for this measured 4-process/4-vCPU workload. This is consistent with PyTorch's official multiprocessing guidance to avoid CPU oversubscription and use at most floor(vCPUs/processes) threads per process.",
+      "boundary": "The experiment is valuable executable component evidence but lacks the full retained repository-bound authority receipt required for Physical-GRID10, HCU, BASE or release promotion. Keep default=1; do not generalize to other concurrency/core topologies without matched measurement.",
+      "credit": 0
+    },
+    "distillery_utility": {
+      "status": "UNCHANGED_ZERO_YIELD",
+      "latest_confirmed": "0 accepted dataset tokens / 88,774 collected source tokens; Source->GO 0.000%",
+      "training_credit": 0
+    },
+    "base_release": {
+      "status": "UNCHANGED_FAIL_CLOSED",
+      "wp_pass": ["WP-01", "WP-02"],
+      "wp_open": ["WP-03", "WP-04", "WP-05", "WP-06", "WP-07", "WP-08", "WP-09", "WP-10", "WP-11", "WP-12", "WP-13", "WP-14"],
+      "general_purpose_gate": "NOT_PASS",
+      "release_gate": "NOT_PASS"
+    }
+  },
+  "steering": {
+    "P0": [
+      "Close the actual stern.py -> harness_aider.py -> last-resort/llm.py caller boundary before secret lookup, provider import, network, Aider, or fallback dispatch; under 9.13 HARD_OFF produce an executable receipt proving provider_calls=0 and secret_lookups=0.",
+      "Quarantine the 72-hour Frankenstein Bauleiter/Bugfixer plan as non-operative while it directly calls Nemotron/Groq/Mistral or treats Together as available. Do not deploy its provider-calling loops under current authority.",
+      "Continue bootstrap-v2/control-sync recovery and quiescence sequence; no stale VPS/provider-backed run may mint current authority."
+    ],
+    "P1": [
+      "Independently re-review/re-execute post-HARD_OFF provider-authored GRID10/core changes on a clean current non-provider checkout with HEAD/tree/dirty=false/source hashes/stdout/stderr binding.",
+      "Retain GRID10_TORCH_THREADS default=1 for the measured 4-process/4-vCPU topology. If topology changes, preregister and re-run matched thread-count A/B rather than extrapolating the current result.",
+      "Continue strengthened RAM falsifier and retained Josiefied tokenizer/renderer/ancestry work only on admissible non-provider surfaces."
+    ]
+  },
+  "promotion_state": {
+    "new_base_credit": 0,
+    "new_training_credit": 0,
+    "new_canonical_semantics_credit": 0,
+    "new_physical_grid10_credit": 0,
+    "new_hcu_full_credit": 0,
+    "provider_path_runtime_credit": 0,
+    "frankenstein_72h_execution_authority": false
+  },
+  "hard_invariants": [
+    "FREE_ONLY_NO_PAID_FALLBACK_TOGETHER_FORBIDDEN",
+    "EXECUTABLE_EVIDENCE_OUTRANKS_MODEL_CONSENSUS",
+    "NO_BASE_WORK_PACKAGE_PASS_FROM_MODEL_CONSENSUS",
+    "NO_CANONICAL_SEMANTICS_PROMOTION_WITHOUT_EXECUTABLE_COUNTEREVIDENCE_AND_REVIEW",
+    "GOODMAN_COLLAPSE_SHARED_MODEL_FAMILY_PIPELINE_ORCHESTRATION_AND_REPACKAGED_HISTORY",
+    "TRAIN_CALIBRATION_HOLDOUT_FAMILY_PROVENANCE_MUST_REMAIN_EXPLICIT",
+    "MODEL_FAMILY_AND_CHECKPOINT_ANCESTRY_MUST_REMAIN_EXPLICIT",
+    "UBUNTU_ONLY_FRANK_V0_1_TARGET_REMAINS_UNCHANGED",
+    "DO_NOT_MODIFY_FRANK_HARNESS"
+  ]
+}

@@ -1,0 +1,148 @@
+{
+  "schema": "FRANKENSTEIN_CURATION_EVIDENCE_INDEX/v1",
+  "date": "2026-08-27",
+  "organ": "GPT-5.6 Sol / ChatGPT",
+  "repository": "gschaidergabriel/clay-global-research-entity",
+  "branch": "trigger3/frankenstein-curation-20260827-gpt56sol",
+  "starting_canonical_main": "854f6bc87780f4a5242489a6c807d186b16a8c3d",
+  "root_readme_modified": false,
+  "current_authority": {
+    "supervisor_inbox_schema": "9.13",
+    "selected_steering": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_9_13O_DELTA_2026-08-27T2341P0700_GPT56SOL.json",
+    "provider_authority_epoch": "9.13",
+    "provider_state": "FREE_ONLY_HARD_OFF_ALL_PROVIDER_ROUTES_FALSE_TOGETHER_FORBIDDEN_NO_PAID_FALLBACK",
+    "frankenstein_72h_execution_authority": false
+  },
+  "runtime_credit": {
+    "entityos_whole": 0,
+    "hcu_full": 0,
+    "canonical_semantics": 0,
+    "training": 0,
+    "provider_path": 0
+  },
+  "entries": [
+    {
+      "id": "authority-hardoff-9-13o",
+      "label": "CURRENT_SOURCE",
+      "status": "adopted",
+      "claim": "Provider authority epoch 9.13 is HARD_OFF: all provider routes false, Together forbidden, no paid fallback.",
+      "source": "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
+      "scope": "current provider execution authority"
+    },
+    {
+      "id": "frankenstein-72h-quarantine",
+      "label": "CURRENT_SOURCE",
+      "status": "blocked",
+      "claim": "The provider-calling 72h Frankenstein Bauleiter/Bugfix orchestration is quarantined and non-operative under current HARD_OFF.",
+      "source": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_9_13O_DELTA_2026-08-27T2341P0700_GPT56SOL.json",
+      "scope": "execution authority only"
+    },
+    {
+      "id": "frankenstein-orchestration-source",
+      "label": "CURRENT_SOURCE",
+      "status": "source-ready",
+      "claim": "Commit 854f6bc contains Bauleiter/Bugfix/package-dispenser source with 29 tests reported green.",
+      "source": "commit:854f6bc87780f4a5242489a6c807d186b16a8c3d",
+      "scope": "source/component test claim; no provider execution promotion"
+    },
+    {
+      "id": "grid10-thread-ab",
+      "label": "PROJECT_MEASUREMENT",
+      "status": "measured",
+      "claim": "On the measured 4-process/4-vCPU topology, 1 thread/process averaged 8.3197 s/call, 2 threads/process averaged 23.1806 s/call, and 4 threads/process completed zero samples within timeouts.",
+      "source": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_9_13O_DELTA_2026-08-27T2341P0700_GPT56SOL.json",
+      "scope": "diagnostic topology-specific evidence only"
+    },
+    {
+      "id": "distillery-zero-yield",
+      "label": "NEGATIVE_RESULT",
+      "status": "measured",
+      "claim": "Latest confirmed Distillery yield is 0 accepted dataset tokens from 88,774 collected source tokens; canonical dataset rows admitted remain 0.",
+      "source": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_9_13O_DELTA_2026-08-27T2341P0700_GPT56SOL.json",
+      "scope": "training/data admission"
+    },
+    {
+      "id": "pf-archive-partial",
+      "label": "HISTORICAL_SOURCE",
+      "status": "partial",
+      "claim": "The Project-Frankenstein archive manifest contains 25 deep-read units but does not freeze exact repository tree/history denominator.",
+      "source": "research_entity/archive_assimilation/manifests/PROJECT_FRANKENSTEIN_MANIFEST.json",
+      "scope": "historical archive coverage"
+    },
+    {
+      "id": "sqlite-wal",
+      "label": "EXTERNAL_PRIMARY",
+      "status": "source-grounded",
+      "claim": "SQLite WAL appends committed changes to a WAL and later checkpoints them; official current documentation also records the WAL-reset bug fixed in 3.51.3 and stated backports.",
+      "source": "https://www.sqlite.org/wal.html",
+      "scope": "external systems reference; does not prove project runtime version/configuration"
+    },
+    {
+      "id": "gnw-dehaene-changeux-2011",
+      "label": "EXTERNAL_PRIMARY",
+      "status": "source-grounded",
+      "claim": "Global Neuronal Workspace theory describes large-scale availability/broadcast of selected information.",
+      "source": "https://pubmed.ncbi.nlm.nih.gov/21521609/",
+      "doi": "10.1016/j.neuron.2011.03.018",
+      "scope": "external theory/analogy; no software consciousness claim"
+    },
+    {
+      "id": "reflexion-2023",
+      "label": "EXTERNAL_PRIMARY",
+      "status": "source-grounded",
+      "claim": "Reflexion stores verbal feedback/reflection in episodic memory to influence later agent trials.",
+      "source": "https://arxiv.org/abs/2303.11366",
+      "scope": "external agent-design comparison only"
+    },
+    {
+      "id": "nvidia-unified-memory",
+      "label": "EXTERNAL_PRIMARY",
+      "status": "source-grounded",
+      "claim": "CUDA Unified Memory offers managed memory models that reduce some explicit CPU/GPU allocation/placement/migration burden, with behavior dependent on platform and coherence support.",
+      "source": "https://docs.nvidia.com/cuda/cuda-programming-guide/04-special-topics/unified-memory.html",
+      "scope": "systems-design analogy only; not database semantics"
+    },
+    {
+      "id": "root-four-layer-target",
+      "label": "OPEN_HYPOTHESIS",
+      "status": "prepared-not-run",
+      "claim": "The public root can be reduced to README.md plus HUMAN_READ_THIS, DEV_SOURCE_RESEARCH and AI_START_HERE_DO_NOT_SCAN_REPO without functional breakage if dependency-aware relocation is proven first.",
+      "source": "Triggerword-3 curation contract",
+      "confidence": 0.84,
+      "falsifier": "Reference/import/workflow/receipt analysis finds an unshimmable dependency on one or more current root paths."
+    },
+    {
+      "id": "rich-external-substrate-agency",
+      "label": "OPEN_HYPOTHESIS",
+      "status": "prepared-not-run",
+      "claim": "Typed external state, retrieval, arbitration, effect receipts and bounded reflection improve practical reflective agency over a minimal event-log/tool loop.",
+      "source": "Triggerword-3 synthesis",
+      "confidence": 0.72,
+      "falsifier": "A matched minimal-loop baseline equals or beats the richer substrate on task success, recovery, false-effect assumptions, repeated-error rate, latency and state reconstruction accuracy."
+    },
+    {
+      "id": "emergent-retrieval-cascade",
+      "label": "OPEN_HYPOTHESIS",
+      "status": "source-ready",
+      "claim": "A typed multi-dimensional retrieval cascade can reduce context contamination and improve causal/temporal/provenance relevance versus semantic-only top-k retrieval.",
+      "source": "research_entity/harness/reference/unifieddb_emergent_cascade.py",
+      "confidence": 0.78,
+      "falsifier": "On a preregistered query set, semantic-only top-k matches or beats the cascade on relevance, causal consistency, temporal correctness, provenance correctness and downstream task performance at equal/lower latency."
+    }
+  ],
+  "curation_outputs": [
+    "HUMAN_READ_THIS/README.md",
+    "DEV_SOURCE_RESEARCH/README.md",
+    "AI_START_HERE_DO_NOT_SCAN_REPO/README.md",
+    "DEV_SOURCE_RESEARCH/repository/TRIGGERWORD3_2026-08-27_GPT56SOL.md",
+    "DEV_SOURCE_RESEARCH/repository/FRANKENSTEIN_EVIDENCE_INDEX_2026-08-27.json"
+  ],
+  "open_gates": [
+    "close actual provider caller boundary under 9.13 HARD_OFF before secret lookup/import/network/fallback dispatch",
+    "complete control-sync/quiescence recovery gates without inflating stale/provider-backed runs",
+    "independently re-review/re-execute provider-authored post-HARD_OFF core changes on a clean non-provider checkout",
+    "obtain evidence-qualified Forge-to-Distillery positive-token persistent witness plus idempotent replay",
+    "build exact root path-dependency migration manifest before any mass relocation",
+    "freeze/enumerate relevant Project-Frankenstein Git history obligations before claiming exhaustive chronology"
+  ]
+}

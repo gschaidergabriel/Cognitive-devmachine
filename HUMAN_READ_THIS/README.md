@@ -57,12 +57,22 @@ A negative result is not embarrassing debris. It is often the shortest path to t
 
 ## What is real right now — and what is not
 
-At the Trigger-3 re-entry baseline (`main@854f6bc87780f4a5242489a6c807d186b16a8c3d`), current supervisor state is `9.13` with all external provider routes hard-off, Together forbidden and no paid fallback. A newly committed 72-hour Frankenstein Bauleiter/Bugfixer implementation has non-network orchestration tests, but its direct NVIDIA/Groq/Mistral caller paths conflict with that current provider authority and are therefore **quarantined/non-operative as a deployed system** until the caller boundary is repaired and independently re-executed under current authority.
+Trigger-3 initially re-entered at `main@854f6bc87780f4a5242489a6c807d186b16a8c3d` and found a newly committed Bauleiter/Bugfixer implementation whose direct NVIDIA/Groq/Mistral donor paths conflicted with current supervisor `9.13` hard-off authority.
+
+While the same Trigger-3 macrocycle was running, `main` advanced to **`3c3dbe5020f57065f47bd4d0a2dce3c537128797`** and closed that source boundary: the provider-backed implementations were preserved as quarantined donor files, while the canonical Bauleiter/Bugfix entrypoints now resolve current supervisor authority through a stdlib-only gate **before** provider import, secret lookup, network, Aider or fallback dispatch. Focused local/source tests report **10/10 PASS** for that hard-off gate.
+
+That is real progress, but its scope matters:
+
+- the current canonical entrypoints are **source/local-unit gated under HARD_OFF**;
+- the preserved provider-backed donor implementations remain **quarantined/non-operative** while provider routes are off;
+- Together remains forbidden and paid fallback remains forbidden;
+- the 10/10 result is not provider-runtime execution and not 72-hour deployment acceptance;
+- whole EntityOS/HCU runtime credit, full HCU credit and training credit remain zero at the current supervisor scope.
 
 So:
 
 - **SOURCE PRESENT** is not the same as **AUTHORIZED TO RUN**.
-- **29 unit/orchestration tests green** is not the same as provider-path runtime acceptance.
+- **source/unit hard-off PASS** is not the same as provider-path runtime acceptance.
 - a model output is not a world fact;
 - a request is not an effect;
 - a component pass is not whole EntityOS/HCU acceptance;

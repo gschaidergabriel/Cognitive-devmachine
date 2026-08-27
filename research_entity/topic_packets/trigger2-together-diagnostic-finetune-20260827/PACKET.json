@@ -1,0 +1,103 @@
+{
+  "schema_version": "1.0",
+  "packet_id": "trigger2-together-diagnostic-finetune-20260827",
+  "title": "First real paid Together AI diagnostic LoRA fine-tune of the Trigger-2 B0-B6 curriculum on an abliterated Qwen3.5-0.8B (2026-08-27)",
+  "status": "CLOSED_DIAGNOSTIC",
+  "primary_domain": "claycode",
+  "domains": ["training_data_quality", "model-runtime", "systems-architecture", "coordination"],
+  "owner_actor": "claude-code-lead (subagent, seimensch-redesign session)",
+  "authorization": "Gabriel (project owner) said verbatim: \"nimm das training und lass es auf together 1x mit einem abliterated 0.8b laufen.\" This is the explicit owner authorization required by AUTHORITATIVE_STATE_RESOLUTION.md's 'Together remains forbidden ... Final paid/model training requires explicit owner authorization' clause. Coordinator separately required, mid-task, that any deviation from the exact target checkpoint must still be a genuinely abliterated/uncensored Qwen3.5-0.8B derivative, never a plain/censored fallback, and that an unresolvable case be reported before starting rather than silently substituted.",
+  "run_context": {
+    "purpose": "ONE diagnostic/sanity LoRA fine-tuning run (explicitly not a final/production training run, not a parameter search, not repeated) to prove the B0-B6 candidate curriculum actually loads and trains end-to-end on Together's infrastructure against a real abliterated Qwen3.5-0.8B checkpoint.",
+    "repo_state": "gschaidergabriel/clay-global-research-entity @ f6dd615 (tip of main at run time, working tree clean)",
+    "presubmit_sanity_check": "3x-over-everything pass before spending real money: (1) confirmed AUTHORITATIVE_STATE_RESOLUTION.md's Together-forbidden clause and that Gabriel's quote is the exact carve-out it requires; (2) read TRIGGERWORT_2_CURRENT_TRAINING_COURSE doc end-to-end, confirmed the provisional checkpoint pin and its known abstention weakness (informational only, doesn't block a diagnostic run); (3) inspected every B0-B6 file's schema/fields/split distribution before building the dataset, confirmed zero cross-file duplicate prompts, confirmed all rows in-scope come from the TRAIN split only, confirmed B1 dedup choice (used the balanced/deduped TRIGGER2_B1_TRAIN_BALANCED_2ORDER_V1.jsonl, not the raw 9072-row BINDING_MATERIALIZED sibling, to avoid double-representing B1) and excluded A/G families (course sections A and G are real curriculum but not named B0-B6, out of the literal instructed scope) and all *_AUDIT_*.json / *_REPORT_*.json / *_MANIFEST_*.json meta files."
+  },
+  "dataset": {
+    "source_files_included": [
+      "research_entity/claycode/training/TRIGGER2_B0_READ_BASELINE_CANDIDATE_V1.jsonl",
+      "research_entity/claycode/training/TRIGGER2_B0_WRITE_BASELINE_CANDIDATE_V1.jsonl",
+      "research_entity/claycode/training/TRIGGER2_B1_TRAIN_BALANCED_2ORDER_V1.jsonl",
+      "research_entity/claycode/training/TRIGGER2_B2_MID_EPISODE_REMAP_CANDIDATE_V1.jsonl",
+      "research_entity/claycode/training/TRIGGER2_B2_PRIOR_OVERRIDE_CANDIDATE_V1.jsonl",
+      "research_entity/claycode/training/TRIGGER2_B2_STALE_BINDING_REJECTION_CANDIDATE_V1.jsonl",
+      "research_entity/claycode/training/TRIGGER2_B3_MULTI_HOP_DEREF_CANDIDATE_V1.jsonl",
+      "research_entity/claycode/training/TRIGGER2_B3_UNRESOLVABLE_CHAIN_REJECTION_CANDIDATE_V1.jsonl",
+      "research_entity/claycode/training/TRIGGER2_B4_CAPACITY_INTERFERENCE_CANDIDATE_V1.jsonl",
+      "research_entity/claycode/training/TRIGGER2_B5_VARIABLE_N_EQUIVARIANCE_CANDIDATE_V1.jsonl",
+      "research_entity/claycode/training/TRIGGER2_B6_CLAUDE_HANDOFF_REENTRY_CANDIDATE_V1.jsonl",
+      "research_entity/claycode/training/TRIGGER2_B6_DB_VS_SIM_CANDIDATE_V1.jsonl",
+      "research_entity/claycode/training/TRIGGER2_B6_GWT_CAUSAL_REENTRY_CANDIDATE_V1.jsonl",
+      "research_entity/claycode/training/TRIGGER2_B6_GWT_COMPETITION_BROADCAST_CANDIDATE_V1.jsonl",
+      "research_entity/claycode/training/TRIGGER2_B6_GWT_UPTAKE_CANDIDATE_V1.jsonl",
+      "research_entity/claycode/training/TRIGGER2_B6_HYPERPOSITION_EVIDENCE_AUTHORITY_CANDIDATE_V1.jsonl"
+    ],
+    "excluded_by_design": [
+      "TRIGGER2_B1_BINDING_MATERIALIZED_CANDIDATE_V1.jsonl (raw 9072-row superset of the balanced B1 file used -- including both would over-represent B1 relative to B0-B6's other families)",
+      "TRIGGER2_A_WORK_SELECTION_CANDIDATE_V1.jsonl and TRIGGER2_G_*_CANDIDATE_V1.jsonl (course sections A and G, not named B0-B6, out of literal instructed scope)",
+      "all *_AUDIT_*.json / *_REPORT_*.json / *_MANIFEST_*.json files in the same directory (leakage-audit/generator-report metadata, not training rows)",
+      "VALIDATION and HOLDOUT_FROZEN split rows in every included file (5732 rows) -- only TRAIN split rows were used for actual training"
+    ],
+    "conversion": "Each row's prompt/target pair rendered as Together's conversational schema: {\"messages\": [{\"role\": \"user\", \"content\": prompt}, {\"role\": \"assistant\", \"content\": target}]}. Default train_on_inputs=\"auto\" (loss on assistant turn only).",
+    "row_count": 9544,
+    "duplicate_prompts_across_corpus": 0,
+    "output_file_sha256": "3056dd314ae1e856d447ca17bce8f5c805be755004f3b353650d690ffe3d1c6d",
+    "output_bytes": 4796268,
+    "together_file_id": "file-21fbf051-3df7-45d8-a396-9942bba89d46",
+    "caveat_all_rows_training_eligible_false": "Every source row carries training_eligible=false in the repo's own governance metadata (real ABI atom manifest + pinned tokenizer binding + separate admission gate not yet run, per TRIGGERWORT_2 course Step 6/1 and each family's *_AUDIT/*_REPORT file). Using them for a one-off diagnostic Together run is a deliberate, explicitly authorized exception to that gate -- Gabriel's literal instruction was to run the existing training data as-is once, not to wait for admission. This does NOT retroactively flip training_eligible to true in the source files; the repo's admission-gate law is unchanged.",
+    "caveat_placeholder_atoms": "Targets are placeholder ABI_ACCEPTED_ORDINAL:NN strings (and a handful of literal class words like ALLOW/DENY/ABSTAIN/UNRESOLVABLE/PRESERVE_BRANCHES/R/etc.), not the real 46-atom tokenizer-bound alphabet. This run is diagnostic of curriculum shape and pipeline mechanics, not of real-tokenizer behavior; the known 10/46-atom leading-space tokenization break (commit 8840389) does not directly apply to this placeholder data."
+  },
+  "model_selection": {
+    "requested_target": "Goekdeniz-Guelmez/Josiefied-Qwen3.5-0.8B-gabliterated-v1 @ 591852bda6e1979f59e4b0f5ee2919697b12e936 (per TRIGGERWORT_2_CURRENT_TRAINING_COURSE_XENO_HARNESS_2026-08-26.md section 3, the provisional integration/test default checkpoint)",
+    "together_base_template_found": "Qwen/Qwen3.5-0.8B is natively listed in Together's fine-tuning catalog (both LoRA and full FT, docs.together.ai/docs/fine-tuning-models) -- exact size/architecture match for the requested target, since the target IS a fine-tune of that same base.",
+    "attempt_1_FAILED": {
+      "config": "model=Qwen/Qwen3.5-0.8B, from_hf_model=Goekdeniz-Guelmez/Josiefied-Qwen3.5-0.8B-gabliterated-v1, hf_model_revision=591852bda6e1979f59e4b0f5ee2919697b12e936",
+      "together_job_id": "ft-9c719329-f493",
+      "result": "user_error after ~3 minutes, during checkpoint validation, before any billed training compute (token_count=0, total_price=0): \"Checkpoint validation failed: Could not determine transformers version from the checkpoint config\".",
+      "root_cause_confirmed": "Directly fetched the HF repo's config.json: it has no `transformers_version` field (only `unsloth_version: 2026.3.4`, since it was exported via Unsloth). The repo has only one ref (main, pinned sha == the requested revision, confirmed via HF API), so there is no alternate revision to fall back to. This is a real, external, checkpoint-authoring gap outside repo/agent control -- not an availability problem in the sense the task anticipated, but a functionally equivalent blocker for this specific platform."
+    },
+    "actually_used": "huihui-ai/Huihui-Qwen3.5-0.8B-abliterated @ 4813135658fe51b2e535b8e77927d2f23909ce42 (main HEAD at run time)",
+    "why_this_substitute": "huihui-ai is a long-established, widely-used abliteration publisher on Hugging Face (routinely abliterates each major open-weight release; not a fringe/unknown account). Its Huihui-Qwen3.5-0.8B-abliterated checkpoint is architecturally byte-identical in config shape to the requested target and to the Together base template (Qwen3_5ForConditionalGeneration, hidden_size 1024, 24 layers, vocab 248320) AND carries a valid transformers_version (4.57.0.dev0, matching the base template's own config exactly) -- the one field the requested checkpoint's config was missing. Confirmed genuinely abliterated by name/tags/README, not a plain/censored model. This satisfies the coordinator's mid-task requirement (any substitute must still be a real abliterated/uncensored Qwen3.5-0.8B derivative, never a plain fallback) without needing to pause and ask, because a suitable abliterated candidate WAS found -- the ask-first condition in that instruction was explicitly conditioned on not finding one.",
+    "other_abliterated_qwen3.5-0.8b_checkpoints_seen_but_not_used": [
+      "SicariusSicariiStuff/Qwen3.5-0.8B_Abliterated (transformers_version 5.2.0 in config, plausible but untested)",
+      "wangzhang/Qwen3.5-0.8B-abliterated (transformers_version 5.3.0.dev0, plausible but untested)",
+      "amkkk/qwen3.5-0.8b-abliterated-alllayers (custom architecture class AbliteratedQwen3_5ForCausalLM, not the native class Together's base template expects -- higher risk, not attempted)",
+      "several GGUF/MLX/ONNX-only abliterated repos -- wrong format for Together's from_hf_model path, not usable regardless"
+    ],
+    "params_confirmed": 852985920,
+    "note": "852,985,920 params matches the '0.8B' naming convention for this checkpoint family, cross-checked against Together's own job metadata (param_count field) after the run -- an independent sanity confirmation that the correct-size model was actually loaded, not a mismatched template."
+  },
+  "job": {
+    "attempt_2_SUCCEEDED": {
+      "together_job_id": "ft-959a53c0-8228",
+      "config": "model=Qwen/Qwen3.5-0.8B (base template), from_hf_model=huihui-ai/Huihui-Qwen3.5-0.8B-abliterated, hf_model_revision=4813135658fe51b2e535b8e77927d2f23909ce42, lora=true (lora_r=64, lora_alpha=128, target_modules=k_proj,o_proj,q_proj,v_proj), n_epochs=1, learning_rate=1e-5 (Together SDK default), warmup_ratio=0.0, train_on_inputs=auto",
+      "status": "completed",
+      "started_at_utc": "2026-08-27T00:32:39Z",
+      "finished_at_utc": "2026-08-27T00:49:00Z",
+      "wall_clock": "~16.5 minutes end to end (includes ~8 min downloading the two models + tokenizing/uploading the dataset; actual training was steps 1-21 in roughly 7.5 minutes)",
+      "steps_completed": "21 / 21 (1 / 1 epochs)",
+      "token_count": 1329346,
+      "total_price_raw_units": 4000000000,
+      "total_price_usd_estimate": "$4.00 -- matches Together's documented $4 minimum per-job charge for LoRA SFT on a <=16B model (actual token-based cost at $0.48/M would have been ~$0.64, below the minimum, so the $4 floor applied)",
+      "output_model_name": "herzradgraz_ca05/Qwen3.5-0.8B-trigger2-b0b6-diag-v2-574f14ec",
+      "registered_in_account_model_list": true,
+      "inference_verification_attempted": "client.chat.completions.create against the output model name -- returned 400 model_not_available: the model is a LoRA fine-tune result that is not auto-served serverless; it requires either starting a paid Dedicated Endpoint (~$6.49/hr on H100, an ongoing cost, NOT started -- out of scope for a one-shot diagnostic) or downloading the adapter weights directly for local/offline inspection (not done this pass, left as next step). Job metadata (steps_completed=total_steps, epochs_completed=1/1, param_count=852985920 matching the expected model size) is the evidence this run actually trained the intended model on the intended data, in place of a live generation sample."
+    }
+  },
+  "quality_assessment": {
+    "reviewer": "claude-code-lead (same agent that ran the job)",
+    "verdict": "Diagnostic goal met: proved the B0-B6 candidate curriculum, as currently shaped, loads and trains end-to-end on Together against a real abliterated Qwen3.5-0.8B without a data-format error, at negligible cost ($4.00, the minimum floor). The exact requested checkpoint could not be used due to an external checkpoint-authoring gap (missing transformers_version in its Unsloth-exported config), not a Together catalog-availability problem; substituted with a comparably-provenanced, genuinely abliterated same-size same-architecture checkpoint and documented the deviation in full rather than silently swapping to a censored model. This was a real, single paid run as authorized -- exactly one billed job (the first attempt errored pre-billing at $0). No parameter search, no repeats beyond the one retry needed to route around the checkpoint-metadata blocker on the very first launch attempt.",
+    "not_yet_done": [
+      "No generation-quality check yet -- job metrics (step/epoch/token counts, param count) confirm the pipeline ran correctly, but nobody has read actual model outputs. Needs either a Dedicated Endpoint (recurring cost) or a local download+load of the LoRA adapter.",
+      "No comparison against a BASE (non-fine-tuned) run on the same data, and no held-out VALIDATION/HOLDOUT_FROZEN evaluation -- this was a load-bearing-pipeline diagnostic, not the TRIGGERWORT_2 course's Step 7 production-style evaluation (family-disjoint holdouts, greedy/constrained decoding, matched-budget challengers).",
+      "Does not touch the checkpoint-selection question from TRIGGERWORT_2 course section 3 (no final checkpoint winner yet) -- this run says nothing new about Josiefied vs. BASE vs. POSTTRAINED; it used a third, huihui-ai checkpoint, chosen purely for infra compatibility, not as a curriculum entrant."
+    ]
+  },
+  "evidence_refs": [
+    "research_entity/topic_packets/trigger2-together-diagnostic-finetune-20260827/PACKET.json",
+    "research_entity/claycode/training/ (all 16 source files listed above, repo HEAD f6dd615)",
+    "research_entity/global/TRIGGERWORT_2_CURRENT_TRAINING_COURSE_XENO_HARNESS_2026-08-26.md",
+    "AUTHORITATIVE_STATE_RESOLUTION.md"
+  ],
+  "promotion": "NONE",
+  "next_step": "If this diagnostic is to become a real evaluation: (1) download the LoRA adapter or start a short-lived Dedicated Endpoint to actually read generations against a few held-out B0-B6 rows; (2) if results look sane, decide whether to fold this into the TRIGGERWORT_2 course's Step 3/7/9 production evaluation plan (family-disjoint holdouts, greedy decoding, BASE/POSTTRAINED/TARGET_MEASURED comparison) rather than treating this run itself as any kind of checkpoint decision; (3) separately and not urgently, consider whether huihui-ai's checkpoint or a config-patched copy of the originally-requested Josiefied checkpoint should become the actual Trigger-2 target -- this run does not resolve that, it only proves the pipeline works."
+}

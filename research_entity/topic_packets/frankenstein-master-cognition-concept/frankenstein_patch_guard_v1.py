@@ -34,6 +34,7 @@ class PatchPolicy:
     max_added_lines: int = 300
     max_deleted_lines: int = 80
     max_total_changed_lines: int = 360
+    max_deleted_fraction: float = 0.25
     allow_new_files: bool = True
     allow_file_deletes: bool = False
     allow_renames_or_copies: bool = False
@@ -165,6 +166,8 @@ def preflight_patch(repo_root: str | os.PathLike[str], patch_text: str, policy: 
     base_map = {_normalize_policy_path(path): digest for path, digest in policy.expected_base_sha256.items()}
     if set(base_map) != allowed:
         raise PatchGuardError("expected_base_sha256 keys must exactly equal allowed_paths")
+    if not 0.0 <= policy.max_deleted_fraction <= 1.0:
+        raise PatchGuardError("max_deleted_fraction must be between 0.0 and 1.0")
 
     _reject_unsupported_patch_features(patch_text, policy)
     records = _numstat(repo, patch)
@@ -176,6 +179,7 @@ def preflight_patch(repo_root: str | os.PathLike[str], patch_text: str, policy: 
     unauthorized = sorted(set(touched) - allowed)
     if unauthorized:
         raise PatchGuardError(f"patch touches unauthorized paths: {unauthorized}")
+    stats_by_path = {path: (added, deleted) for added, deleted, path in records}
 
     added_total = sum(added for added, _, _ in records)
     deleted_total = sum(deleted for _, deleted, _ in records)
@@ -205,7 +209,21 @@ def preflight_patch(repo_root: str | os.PathLike[str], patch_text: str, policy: 
             actual_digest = _sha256(target)
             if actual_digest != expected:
                 raise PatchGuardError(f"base SHA-256 mismatch for {rel}: expected {expected}, got {actual_digest}")
-            base_evidence[rel] = {"exists": True, "sha256": actual_digest}
+            base_line_count = sum(1 for _ in target.open("rb"))
+            deleted_for_path = stats_by_path.get(rel, (0, 0))[1]
+            deleted_fraction = (deleted_for_path / base_line_count) if base_line_count else 0.0
+            if deleted_fraction > policy.max_deleted_fraction:
+                raise PatchGuardError(
+                    f"relative deletion budget exceeded for {rel}: "
+                    f"{deleted_for_path}/{base_line_count} = {deleted_fraction:.3f} > "
+                    f"{policy.max_deleted_fraction:.3f}"
+                )
+            base_evidence[rel] = {
+                "exists": True,
+                "sha256": actual_digest,
+                "line_count": base_line_count,
+                "deleted_fraction": deleted_fraction,
+            }
 
     # `--index` requires the index and working-tree copies for touched tracked
     # paths to agree. This catches a second class of lost-update/dirty-tree

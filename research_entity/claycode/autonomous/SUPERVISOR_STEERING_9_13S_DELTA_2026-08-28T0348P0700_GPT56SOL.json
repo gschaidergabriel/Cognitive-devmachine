@@ -1,0 +1,22 @@
+{
+  "schema": "CLAY_SUPERVISOR_STEERING_DELTA/v1",
+  "supervisor_delta": "9.13S_NON_AUTHORITY",
+  "date": "2026-08-28",
+  "program": "ENTITYOS_HCU",
+  "trigger": "go",
+  "finding": "The existing runtime-quiescence v1 observer can sample forbidden processes/counters/leases, but by itself it cannot mint the currently required proof because it does not bind current remote main plus dual authority before and after the >=90s observation. A v2 wrapper and fail-closed tests now bind those dimensions.",
+  "source_progress": {
+    "free_swarm_runtime_quiescence_probe_v2": "782446ec93b5cf12a038d97c4ab67d739f2c9632",
+    "v2_fail_closed_tests": "3867c05cdeac1d7cdd9a2ec2d629e168abdd106e",
+    "execution_request": "30561eb1c91703d4f2de866cb6a58bad61b73e1a"
+  },
+  "credit_change": {
+    "runtime_quiescence": 0,
+    "physical_grid10": 0,
+    "hcu": 0,
+    "training": 0
+  },
+  "next_exact_action": "First make the owning VPS checkout current/clean through the already-scoped bootstrap-v2/control-sync path. Then repository-bound execute the v2 tests and a >=90s v2 observation. Only a PASS with stable pre/post remote-main, HEAD/tree, dirty=false, dual-authority epoch/hashes, zero live forbidden roots, stable provider counters and zero leases closes scoped runtime quiescence.",
+  "after_pass": "Run the provider guards with zero calls/zero secret lookups, then return immediately to the owner target architecture: physical GRID10, recursive coordinator bridge, real fan-in/compression/latency/contention, coordinator crash/replacement and worker rejoin.",
+  "authority_boundary": "This steering delta grants no provider, paid, process-mutation, GRID10, HCU or training authority."
+}

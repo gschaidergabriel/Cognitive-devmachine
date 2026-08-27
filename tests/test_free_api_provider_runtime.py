@@ -2688,7 +2688,12 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             "FRANK_PROVIDER_BASE_URL": "http://localhost:8765/v1",
             "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
         }
-        for fingerprint in (b'"   "', b'"vllm\\u000aforged"'):
+        for fingerprint in (
+            b'"   "',
+            b'"vllm\\u000aforged"',
+            b'"\\u200b"',
+            b'"\\ue000"',
+        ):
             with self.subTest(fingerprint=fingerprint):
                 result = MOD.execute_chat(
                     VALID_MESSAGES,

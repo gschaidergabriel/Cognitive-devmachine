@@ -1,0 +1,87 @@
+{
+  "schema": "FRANKENSTEIN_AI_INSTALL_CONTRACT/v1",
+  "purpose": "Host-neutral capability and evidence contract. Presence of a config file or chat response is never sufficient for NATIVE status.",
+  "repo_root_resolution": {
+    "preferred_shell_rule": "git rev-parse --show-toplevel",
+    "file_relative_fallback": "REPO_ROOT = parent(parent(absolute_path_of_this_file))",
+    "forbidden_assumptions": [
+      "Downloads directory",
+      "home directory",
+      "clone name",
+      "current working directory",
+      "attachment mount path"
+    ]
+  },
+  "minimal_read_set": [
+    "CLAY_EXECUTION_AUTHORITY.md",
+    "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
+    "research_entity/continuity/BOOTSTRAP_MINIMAL.json",
+    "AI_START_HERE_DO_NOT_SCAN_REPO/README.md",
+    "DEV_SOURCE_RESEARCH/repository/FRANKENSTEIN_SOURCE_INDEX.json"
+  ],
+  "do_not_scan_repo_by_default": true,
+  "result_enum": ["NATIVE", "ADAPTED", "DEGRADED", "BLOCKED"],
+  "capability_inventory": [
+    "filesystem_read",
+    "filesystem_write",
+    "shell_or_process_execution",
+    "git_read",
+    "git_write",
+    "python",
+    "persistent_state",
+    "lifecycle_hooks",
+    "real_effect_execution",
+    "effect_result_receipts"
+  ],
+  "host_routes": {
+    "claude-code": {
+      "native_instruction_surface": "CLAUDE.md",
+      "executable_candidates": ["claude"],
+      "rule": "Verify actual host capabilities and any claimed lifecycle hook by a disposable receipt. Current provider HARD_OFF remains separate from host installation status."
+    },
+    "codex-cli": {
+      "native_instruction_surface": "AGENTS.md",
+      "executable_candidates": ["codex"],
+      "rule": "Verify actual host capabilities and any claimed lifecycle hook by a disposable receipt. Current provider HARD_OFF remains separate from host installation status."
+    },
+    "hermes-agent": {
+      "native_instruction_surface": null,
+      "executable_candidates": ["hermes"],
+      "rule": "Discover real lifecycle/tool/state capabilities; never invent hook names or native discovery semantics."
+    },
+    "chatgpt-web": {
+      "native_instruction_surface": null,
+      "rule": "Use connected capabilities actually present in the session. Repository connector access can be ADAPTED without implying local runtime hooks."
+    },
+    "claude-web": {
+      "native_instruction_surface": null,
+      "rule": "Read/analyze context if available; do not claim hooks/state/effects without observed execution receipts."
+    },
+    "grok-web": {
+      "native_instruction_surface": null,
+      "rule": "Read/analyze context if available; do not claim hooks/state/effects without observed execution receipts."
+    },
+    "generic": {
+      "native_instruction_surface": null,
+      "rule": "Inventory capabilities first and map only what exists."
+    }
+  },
+  "proof_obligations": [
+    "repository_resolved_dynamically",
+    "current_authority_read",
+    "capabilities_detected_not_guessed",
+    "real_hook_firing_verified_if_hook_claimed",
+    "durable_state_write_and_readback_verified_if_persistence_claimed",
+    "request_distinguished_from_effect",
+    "effect_or_result_receipt_verified_if_effect_path_claimed",
+    "current_forbidden_provider_paths_not_activated"
+  ],
+  "current_authority_snapshot_at_creation": {
+    "supervisor_schema": "9.13",
+    "external_provider_authority": "HARD_OFF",
+    "provider_routes_admitted": false,
+    "together_forbidden": true,
+    "remaining_together_paid_runs_authorized": 0,
+    "note": "Creation snapshot only. Always re-read current authority before acting."
+  }
+}

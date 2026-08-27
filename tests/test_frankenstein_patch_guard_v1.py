@@ -68,6 +68,9 @@ def test_valid_small_patch_passes_without_applying(tmp_path):
     assert report["applied"] is False
     assert report["git_apply_check_index"] == "PASS"
     assert report["totals"]["deleted_lines"] == 0
+    assert report["files"][0]["base"]["git_index"]["mode"] == "100644"
+    assert report["files"][0]["base"]["git_index"]["stage"] == 0
+    assert report["files"][0]["base"]["git_index"]["oid"] == git(repo, "rev-parse", "HEAD:tools/grid10_fabric.py")
     assert (repo / "tools" / "grid10_fabric.py").read_text() == original
 
 
@@ -166,6 +169,7 @@ new file mode 100644
     )
     report = preflight_patch(repo, patch, p)
     assert report["files"][0]["base"]["exists"] is False
+    assert report["files"][0]["base"]["git_index"] is None
     assert not (repo / "tools" / "new_helper.py").exists()
 
 
@@ -233,3 +237,39 @@ def test_control_character_policy_path_is_forbidden(tmp_path):
     )
     with pytest.raises(PatchGuardError, match="unsafe path spelling"):
         preflight_patch(repo, "not parsed yet", p)
+
+
+def test_untracked_existing_file_cannot_be_used_as_preimage(tmp_path):
+    repo = make_repo(tmp_path)
+    path = repo / "tools" / "untracked.py"
+    path.write_text("x = 1\n")
+    patch = """diff --git a/tools/untracked.py b/tools/untracked.py
+--- a/tools/untracked.py
++++ b/tools/untracked.py
+@@ -1 +1 @@
+-x = 1
++x = 2
+"""
+    p = policy(
+        repo,
+        allowed=("tools/untracked.py",),
+        base={"tools/untracked.py": sha256(path)},
+    )
+    with pytest.raises(PatchGuardError, match="not tracked in Git index"):
+        preflight_patch(repo, patch, p)
+
+
+def test_tracked_executable_base_is_rejected(tmp_path):
+    repo = make_repo(tmp_path)
+    git(repo, "update-index", "--chmod=+x", "tools/grid10_fabric.py")
+    git(repo, "commit", "-qm", "mark executable")
+    patch = """diff --git a/tools/grid10_fabric.py b/tools/grid10_fabric.py
+--- a/tools/grid10_fabric.py
++++ b/tools/grid10_fabric.py
+@@ -1,2 +1,2 @@
+ def keep_a():
+-    return 'a'
++    return 'A'
+"""
+    with pytest.raises(PatchGuardError, match="regular non-executable mode 100644"):
+        preflight_patch(repo, patch, policy(repo))

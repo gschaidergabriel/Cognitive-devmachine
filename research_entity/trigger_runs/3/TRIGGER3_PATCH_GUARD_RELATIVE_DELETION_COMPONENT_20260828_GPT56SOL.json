@@ -1,0 +1,114 @@
+{
+  "schema": "TRIGGERWORD3_PATCH_GUARD_RELATIVE_DELETION_RECEIPT/v1",
+  "trigger": "triggerword 3",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "persistent_entity": "Clay",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "classification": [
+    "NEGATIVE_RESULT",
+    "EXACT_COMPONENT_BLOB_REGRESSION",
+    "NON_PROVIDER",
+    "NON_PROMOTING"
+  ],
+  "authority": {
+    "schema_version": "9.13",
+    "supervisor_delta": "9.13R_NON_AUTHORITY",
+    "free_only": true,
+    "provider_routes_admitted": false,
+    "together_forbidden": true,
+    "paid_fallback_forbidden": true,
+    "remaining_together_paid_runs_authorized": 0
+  },
+  "reentry": {
+    "main_before_fix_branch": "07b854e3a9f1e38dd7734c06d02cb50faf8ab76c",
+    "latest_main_checked_before_receipt": "6c5625eceec14a17b2ef7158d37615dca1121b5f",
+    "canonical_guard_source_still_unfixed_on_latest_main": true,
+    "canonical_guard_source_blob_on_latest_main": "8ef5b878e29c1e3be732bd991675367ac289fb2e"
+  },
+  "counterexample": {
+    "source_blob": "8ef5b878e29c1e3be732bd991675367ac289fb2e",
+    "source_identity_verification": "git hash-object of reconstructed exact GitHub blob bytes matched source_blob",
+    "default_policy": {
+      "max_deleted_lines": 80,
+      "max_total_changed_lines": 360
+    },
+    "observed_cases": [
+      {
+        "case": "complete content replacement of a 10-line existing file with another 10-line file",
+        "result_before_fix": "PASS_UNEXPECTED",
+        "numstat": "10 added / 10 deleted",
+        "meaning": "Absolute deletion budgets can admit a complete small-file semantic replacement."
+      },
+      {
+        "case": "delete 9 of 10 lines from an existing file",
+        "result_before_fix": "PASS_UNEXPECTED",
+        "numstat": "0 added / 9 deleted",
+        "meaning": "A 90 percent destructive deletion is below the absolute 80-line default budget."
+      },
+      {
+        "case": "same complete replacement with max_deleted_lines explicitly set to 0",
+        "result_before_fix": "REJECT_EXPECTED",
+        "meaning": "The existing absolute budget machinery works when a caller supplies a sufficiently strict task-specific value; the gap is the non-scale-aware default policy."
+      }
+    ]
+  },
+  "bounded_fix": {
+    "branch": "trigger3/patch-guard-relative-deletion-20260828-gpt56sol",
+    "source_blob": "44f28f419ed5229e5ec2bc871c196a01024e28ff",
+    "test_blob": "d25109263c4ffd74ceb4e2327db7671394ad3a4e",
+    "mechanism": [
+      "add PatchPolicy.max_deleted_fraction with conservative default 0.25",
+      "validate max_deleted_fraction is within 0.0 through 1.0",
+      "for every existing allowed file compute deleted_lines divided by exact preimage line count",
+      "reject when per-file relative deletion exceeds the declared fraction",
+      "retain all existing absolute file/add/delete/total-change budgets and exact HEAD/SHA/index checks",
+      "record exact preimage line count and observed deleted_fraction in the write-free evidence report",
+      "permit intentionally broad refactors only when the caller explicitly raises the relative deletion budget while still satisfying all other guards"
+    ],
+    "reason_for_default": "The current Triggerword-3 donor matrix requires about 40 percent undeclared deletion to be rejected unless policy explicitly permits it. A 0.25 default is a conservative fail-closed policy budget, not a claim that percentage alone proves semantic preservation."
+  },
+  "exact_component_execution": {
+    "surface": "LOCAL_ISOLATED_CONTAINER_NON_PROVIDER_EXACT_BRANCH_BLOBS",
+    "identity_verification": "git hash-object matched both branch blob IDs before pytest",
+    "command": "python -m pytest -q tests/test_frankenstein_patch_guard_v1.py",
+    "result": "17 passed in 0.29s",
+    "new_regressions": [
+      "complete small-file replacement rejected by default relative deletion budget",
+      "90 percent small-file deletion rejected by default",
+      "40 percent small-file deletion rejected by default",
+      "explicit max_deleted_fraction=1.0 can authorize a broad refactor while remaining write-free",
+      "invalid relative deletion fraction fails closed"
+    ],
+    "provider_calls": 0,
+    "secret_lookups": 0,
+    "network_calls_by_component": 0
+  },
+  "counterhypothesis": {
+    "statement": "A conservative relative deletion default can reject legitimate edits to small files and can still miss semantically destructive changes that delete few lines.",
+    "response": "Treat the fraction as an explicit policy budget layered on exact preimage identity, path scope, absolute budgets, git applicability and downstream regression/preservation evidence. Permit deliberate broad refactors only by explicit policy widening; do not interpret this component as semantic proof.",
+    "next_falsifier": "Exercise the canonical patch guard from the real Frankenstein/free-swarm patch integration on a clean exact-current repository and verify that caller policy cannot silently widen the fraction, that final apply/commit rebinds exact source identity, and that feature tests cannot override preservation failure."
+  },
+  "promotion_boundary": {
+    "patch_guard_component_only": true,
+    "frankenstein_direct_dispatch_retained_runtime_pass": false,
+    "provider_runtime_credit": 0,
+    "entityos_whole_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "canonical_semantics_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0
+  },
+  "non_actions": [
+    "no provider/model inference",
+    "no secret lookup",
+    "no Together call",
+    "no paid fallback",
+    "no VPS or production mutation",
+    "no unusual experiment",
+    "no Frank Harness modification",
+    "no root README modification"
+  ],
+  "next_exact_gate": "Fuse this delta only if current main still lacks an equal-or-stronger relative preservation bound; then execute the canonical integrated patch path on a clean exact-current non-provider repository checkout with provider_calls=0 and secret_lookups=0."
+}

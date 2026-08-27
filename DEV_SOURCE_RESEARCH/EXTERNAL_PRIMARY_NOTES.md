@@ -55,6 +55,82 @@ These works are useful external comparison points for interleaving reasoning/act
 
 Evidence label: `EXTERNAL_PRIMARY` for the papers; `INFERENCE/ANALOGY` for project transfer.
 
+## Safe repository editing — Git patch semantics
+
+Primary vendor documentation:
+
+- https://git-scm.com/docs/git-apply
+
+Git documents `git apply` as failing the whole patch without touching the working tree when some hunks do not apply, unless partial application is explicitly requested with `--reject`. The `-C<n>` option can require surrounding context lines to match around each change.
+
+Transfer into Triggerword-3 repository curation:
+
+```text
+structural similarity
+  patch is applied against a concrete preimage with contextual anchors
+
+structural difference
+  Git hunk applicability is textual; it does not prove semantic correctness
+
+assumption that transfers
+  stale or mismatched context should fail closed rather than silently reconstruct a whole file
+
+assumption that does not transfer
+  successful patch application != behavior preserved
+
+cheapest project-side falsifier
+  stale-preimage, out-of-scope-region and >50%-size semantic-corruption negative controls
+```
+
+This supports preimage-bound patch/diff mutation as a safer primitive than unconstrained whole-file regeneration after the 2026-08-28 destructive-rewrite counterexample. It does **not** establish that every applicable patch is correct.
+
+Evidence label: `EXTERNAL_PRIMARY` for Git behavior; `INFERENCE/ENGINEERING_TRANSFER` for the project editing contract.
+
+## SWE-agent — Agent-Computer Interface as an engineering variable
+
+Primary research and project documentation:
+
+- Yang et al., *SWE-agent: Agent-Computer Interfaces Enable Automated Software Engineering*, arXiv `2405.15793`.
+- https://github.com/SWE-agent/SWE-agent/blob/main/docs/background/aci.md
+
+SWE-agent treats the agent-computer interface itself as an experimental design variable. Its paper reports large performance differences from a custom ACI, while the project documentation describes bounded file viewing/editing and syntax validation at edit time.
+
+Transfer boundary for Frankenstein:
+
+```text
+external result
+  interface design changes software-engineering-agent behavior/performance
+
+project use
+  prefer explicit inspect -> bounded edit -> validate interfaces over opaque whole-file reconstruction
+
+non-transfer
+  SWE-agent benchmark gains do not prove Frankenstein correctness, safety or repository acceptance
+
+project falsifier
+  compare bounded/preimage-bound editing against unconstrained reconstruction on fixed edit families,
+  including preservation failures and stale-source controls
+```
+
+Evidence label: `EXTERNAL_PRIMARY` for the paper/project docs; `OPEN_HYPOTHESIS` for performance/safety transfer into Project Frankenstein.
+
+## 2026 code-edit interface research — inspection/edit context separation
+
+Current primary research note, checked 2026-08-28:
+
+- Zhang et al., *SWE-Edit: Rethinking Code Editing for Efficient SWE-Agent*, arXiv `2604.26102`.
+
+SWE-Edit identifies context coupling between inspection, modification planning and edit execution as a software-engineering-agent failure mode and evaluates a Viewer/Editor decomposition. The reported benchmark gains are external and model/system-specific.
+
+This is relevant to two Project Frankenstein hypotheses:
+
+1. large mixed contexts can contaminate or dilute edit execution;
+2. a narrower edit executor operating from an explicit plan and exact source slice may reduce accidental reconstruction damage.
+
+Counterhypothesis: decomposition can hide important global dependencies or transfer planning errors into a clean editing context. Therefore separation itself is not a safety proof; cross-file dependency and preservation tests remain necessary.
+
+Evidence label: `EXTERNAL_PRIMARY` for the paper; `OPEN_HYPOTHESIS` for transfer into Frankenstein editing architecture.
+
 ## Transfer rule
 
 For every external analogy, record:

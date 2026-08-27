@@ -1300,6 +1300,104 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
         self.assertIn("VERIFIED", compatible["receipt"]["lifecycle"])
         self.assertIn("DONE", compatible["receipt"]["lifecycle"])
 
+    def test_combining_mark_only_text_cannot_cross_semantic_boundaries(self):
+        env = {
+            "NVIDIA_API_KEY": "secret",
+            "FRANK_PROVIDER_BASE_URL": "http://localhost:8765/v1",
+            "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
+        }
+
+        class Response:
+            status = 200
+
+            def __init__(self, message):
+                self.message = message
+
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *args):
+                return False
+
+            def read(self, limit):
+                return (
+                    b'{"object":"chat.completion","id":"chatcmpl-test",'
+                    b'"created":1,"model":"mock","usage":{'
+                    b'"prompt_tokens":1,"completion_tokens":2,'
+                    b'"total_tokens":3,"completion_tokens_details":{'
+                    b'"reasoning_tokens":1}},"choices":[{"index":0,'
+                    b'"finish_reason":"stop","message":'
+                    + self.message
+                    + b'}]}'
+                )
+
+        with self.subTest(boundary="request_content"):
+            called = False
+
+            def opener(*args, **kwargs):
+                nonlocal called
+                called = True
+                return Response(
+                    b'{"role":"assistant","content":"ok",'
+                    b'"reasoning":"thought"}'
+                )
+
+            with self.assertRaisesRegex(
+                ValueError, "message_content_must_be_nonempty_string"
+            ):
+                MOD.execute_chat(
+                    [{"role": "user", "content": "\u0301"}],
+                    model="mock",
+                    environ=env,
+                    opener=opener,
+                    now=iter((50.41, 50.42)).__next__,
+                )
+            self.assertFalse(called)
+
+        responses = (
+            (
+                "response_content",
+                b'{"role":"assistant","content":"\\u0301"}',
+            ),
+            (
+                "response_reasoning",
+                b'{"role":"assistant","content":"visible-ok",'
+                b'"reasoning":"\\u0301"}',
+            ),
+        )
+        for boundary, message in responses:
+            with self.subTest(boundary=boundary):
+                result = MOD.execute_chat(
+                    VALID_MESSAGES,
+                    model="mock",
+                    environ=env,
+                    opener=lambda *args, message=message, **kwargs: Response(
+                        message
+                    ),
+                    now=iter((50.43, 50.44)).__next__,
+                )
+                self.assertEqual(
+                    result["receipt"]["outcome"],
+                    "invalid_provider_response",
+                )
+                self.assertNotIn("VERIFIED", result["receipt"]["lifecycle"])
+                self.assertNotIn("DONE", result["receipt"]["lifecycle"])
+                self.assertIsNone(result["content"])
+
+        compatible = MOD.execute_chat(
+            [{"role": "user", "content": "e\u0301"}],
+            model="mock",
+            environ=env,
+            opener=lambda *args, **kwargs: Response(
+                b'{"role":"assistant","content":"e\\u0301",'
+                b'"reasoning":"trace\\u0301"}'
+            ),
+            now=iter((50.45, 50.46)).__next__,
+        )
+        self.assertEqual(compatible["receipt"]["outcome"], "success")
+        self.assertIn("VERIFIED", compatible["receipt"]["lifecycle"])
+        self.assertIn("DONE", compatible["receipt"]["lifecycle"])
+
     def test_invalid_conversation_sequence_is_blocked_before_network(self):
         called = False
 
@@ -5101,4 +5199,3 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    unittest.main()

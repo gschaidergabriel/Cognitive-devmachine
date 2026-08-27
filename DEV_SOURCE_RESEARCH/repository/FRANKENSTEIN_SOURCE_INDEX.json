@@ -17,11 +17,13 @@
     "initial_main_seen": "854f6bc87780f4a5242489a6c807d186b16a8c3d",
     "hardoff_closure_main_seen": "3c3dbe5020f57065f47bd4d0a2dce3c537128797",
     "source_identity_history_anchor_main_seen": "ed70385760c03a30dea7b6ecf8f6b78cbbaa584a",
+    "version_evidence_main_write": "4e2adb9719256d67a4685de13dc92484a794abfc",
     "note": "main moved during the trigger; curation/navigation and source-evidence commits were re-entered dynamically"
   },
   "historical_project_frankenstein": {
     "archive_manifest": "research_entity/archive_assimilation/manifests/PROJECT_FRANKENSTEIN_MANIFEST.json",
     "source_identity_history_anchor": "research_entity/archive_assimilation/manifests/PROJECT_FRANKENSTEIN_SOURCE_IDENTITY_HISTORY_ANCHOR_20260827.json",
+    "version_evidence": "DEV_SOURCE_RESEARCH/repository/PROJECT_FRANKENSTEIN_VERSION_EVIDENCE_20260827.json",
     "manifest_status": "PARTIAL_NOT_FROZEN",
     "historical_snapshot_head": "abba90a5767d85abc8a1ac340bae92842dab35c1",
     "root_tree_merkle_anchor": "ec21e66c4672fde1f0a5d948ebc51457b69b620a",
@@ -32,6 +34,16 @@
     "denominator_frozen": false,
     "exact_repository_completeness_credit": 0,
     "denominator_note": "The default-branch reachable history count is exactly 545 at the frozen source snapshot, proven by per_page=1 page 545 non-empty and page 546 empty. Overall repository denominator remains unfrozen because a complete recursive path inventory and all-ref/unreachable-history coverage are not claimed.",
+    "verified_release_version": {
+      "requested_trigger_label": "current Frankenstein v0.7",
+      "resolution": "CONTRADICTED_AS_CURRENT_VERSION_REQUIREMENT",
+      "v0_7_tag_observed": false,
+      "latest_verified_release_tag_observed": "v0.8.0",
+      "latest_verified_release_name_observed": "F.R.A.N.K. v0.8.0",
+      "published_at": "2026-03-11T22:41:25Z",
+      "tag_commit": "cd61158937004df6660ee8dafb2e195062b72bd7",
+      "boundary": "Historical Project-Frankenstein release evidence only. It is not the current EntityOS/HCU product version and does not version every later historical commit."
+    },
     "chronology_rule": "Use first verified in accessible Git unless creation date is independently evidenced."
   },
   "chronology_anchors": [
@@ -44,6 +56,11 @@
       "commit": "96623ef096ba189b771ca10835cd5a20499c1da9",
       "classification": "HISTORICAL_SOURCE",
       "meaning": "first Project-Frankenstein archaeology-workspace commit returned by accessible current Git search in this trigger; not project creation date"
+    },
+    {
+      "commit": "cd61158937004df6660ee8dafb2e195062b72bd7",
+      "classification": "HISTORICAL_RELEASE_TAG_ANCHOR",
+      "meaning": "commit targeted by the verified Project-Frankenstein v0.8.0 tag; release metadata names F.R.A.N.K. v0.8.0, published 2026-03-11T22:41:25Z"
     },
     {
       "commit": "ab15b482caff1fa5e446d7795cea8df81bc41b97",
@@ -113,6 +130,7 @@
   "negative_results_to_preserve": [
     "provider-capable Frankenstein caller crossed current authority boundary before closure",
     "stale Together allowance contradicted current zero-run authority",
+    "requested 'current Frankenstein v0.7' label contradicted by verified historical source-repository tag/release evidence supporting v0.8.0 instead",
     "helper model invented architecture not present in real GRID10 source",
     "thread-count A/B falsified two-threads-is-faster on measured 4-process/4-vCPU topology",
     "Distillery last-confirmed accepted dataset tokens remained zero",

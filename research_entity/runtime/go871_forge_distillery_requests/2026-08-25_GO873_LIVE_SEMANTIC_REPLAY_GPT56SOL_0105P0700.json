@@ -1,0 +1,34 @@
+{
+  "schema": "CLAY_FORGE_DISTILLERY_RUNTIME_REQUEST/v1",
+  "authority_epoch": "8.73",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "execution_mode": "FREE_ONLY",
+  "canonical_main_at_request": "83a120454107b57aee4813559a6f6961ec477213",
+  "purpose": "Trigger the existing exact-current self-hosted Forge-to-Distillery runtime gate against canonical main selected at runner checkout time after semantic replay identity closure.",
+  "required_terminal_evidence": [
+    "exact current source head/tree bound by workflow",
+    "promotion source guards PASS",
+    "evidence-qualified Forge runtime gate PASS",
+    "first live promotion creates exactly one packet and positive accepted_dataset_tokens delta",
+    "delta_id + evaluated_at + candidate narration semantic replay adds zero packets and zero tokens after DB reopen",
+    "same stable execution replay identity with changed measured evidence rejects REPLAY_IDENTITY_CONFLICT with zero token delta",
+    "restart/retry remains idempotent by stable execution replay identity"
+  ],
+  "credit_boundary": {
+    "whole_entityos_hcu": 0,
+    "hcu_full": 0,
+    "provider_runtime": 0,
+    "jspace_model": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "coordination": {
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_experiment_requested": false,
+    "classification": "ORDINARY_EXACT_CURRENT_DETERMINISTIC_RUNTIME_ACCEPTANCE_REQUEST"
+  },
+  "provider_network_calls_requested": 0,
+  "paid_fallback_requested": false,
+  "together_requested": false
+}

@@ -188,6 +188,8 @@ def _plan_one_existing_file(
     if total_added > policy.max_total_added_chars:
         raise SafeEditError(f"added-text budget exceeded for {path}")
 
+    # Apply from the end so original offsets remain valid.  This construction
+    # proves every byte/character outside the declared original spans survives.
     result = original
     receipt_spans: list[dict] = []
     for start, end, block in reversed(span_rows):
@@ -292,7 +294,12 @@ def _write_text_via_sibling_temp(target: Path, text: str) -> None:
 
 
 def apply_safe_edit_plan(plan: SafeEditPlan) -> dict:
-    """Apply a validated plan after re-checking exact preimages."""
+    """Apply a validated plan after re-checking exact preimages.
+
+    All validation and stale-preimage checks occur before the first write.
+    A best-effort rollback restores touched existing files and removes newly
+    created targets if a write fails mid-apply.
+    """
     for edit in plan.edits:
         try:
             current = edit.resolved_path.read_text(encoding="utf-8")

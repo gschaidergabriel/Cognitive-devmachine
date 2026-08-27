@@ -3,7 +3,7 @@
   "trigger": "triggerwort 3",
   "organ": "GPT-5.6 Sol",
   "initial_base_main_sha": "5845112dd9fd0394ca8ef2685f62c79243532fac",
-  "reentered_main_sha": "fabbaae73fec9a393680e527e7cfc81ef65b6350",
+  "reentered_main_sha": "9af8690a79b5b770ab496560adf2ff12acb16303",
   "branch": "trigger3/frankenstein-guarded-patch-v2-20260828-gpt56sol",
   "authority_observed": {
     "supervisor_inbox_schema": "9.13",
@@ -40,12 +40,12 @@
   ],
   "delta": {
     "primitive": "research_entity/topic_packets/frankenstein-master-cognition-concept/frankenstein_edit_guard_v2.py",
-    "primitive_git_blob": "9bef251f1b0c0da441610f8abb53fda37e1c5332",
+    "primitive_git_blob": "0fd54414175b8c4e375f327f81c799cfa1b1a331",
     "tests": "tests/test_frankenstein_edit_guard_v2.py",
-    "tests_git_blob": "45fba4e2e1d85fb4047bb98bef113516d00c6e4b",
+    "tests_git_blob": "9204dda507177dd987541197d572096b1cfa9083",
     "properties": [
       "existing-file edits only through bounded unified diff",
-      "exact SHA-256 base binding for every touched file",
+      "exact repository HEAD plus exact SHA-256 file-preimage binding",
       "explicit path allowlist",
       "path traversal and symlink rejection before file-content snapshot",
       "rename/copy/delete/mode/binary patch operations fail closed",
@@ -53,18 +53,27 @@
       "git apply --check before mutation",
       "argv-only verification with shell=false",
       "byte-exact rollback of touched files on failed verification",
-      "before/after hash and policy-bound receipt"
+      "verification stdout/stderr content excluded from receipt/error text; only digests and byte lengths retained",
+      "before/after hash and repository-head/patch/policy-bound receipt"
     ]
   },
   "local_deterministic_evidence": {
     "guard_prototype_git_blob_matches_candidate": true,
-    "prototype_semantic_suite": "10/10 PASS",
+    "prototype_semantic_suite": "11/11 PASS",
     "prototype_py_compile": "PASS",
     "exact_branch_test_file_executed_in_branch_checkout": false,
     "provider_calls": 0,
     "secret_lookups": 0,
     "network_model_calls": 0,
     "scope": "LOCAL_DETERMINISTIC_PROTOTYPE_COMPONENT_ONLY"
+  },
+  "github_ci_observation": {
+    "prior_candidate_head": "202d0ce29cc80f425e0c73878533e11c2d4e1e83",
+    "workflow": "Research Entity Identity Guard",
+    "conclusion": "failure",
+    "steps_executed": 0,
+    "classification": "PRE_STEP_RUNNER_OR_WORKFLOW_INFRASTRUCTURE_FAILURE_NOT_PRODUCT_TEST_FAILURE",
+    "runtime_credit": 0
   },
   "credit_boundary": {
     "integrated_into_active_direct_dispatch": false,

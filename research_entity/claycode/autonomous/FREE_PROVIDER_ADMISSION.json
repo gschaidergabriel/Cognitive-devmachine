@@ -1,11 +1,11 @@
 {
   "schema": "ENTITYOS_HCU_FREE_PROVIDER_ADMISSION/v1",
-  "authority_epoch": "9.11",
+  "authority_epoch": "9.12",
   "mode": "FREE_ONLY",
   "product": "EntityOS",
   "compute_architecture": "HCU",
   "source": "ENTITYOS_HCU_CONTROL_PLANE",
-  "default_policy": "OWNER_EMERGENCY_STOP_FREE_SWARM; ALL_AUTONOMOUS_PROVIDER_ADMISSION_DISABLED; NO_PAID_FALLBACK",
+  "default_policy": "OWNER_EMERGENCY_STOP_FREE_SWARM; ALL_AUTONOMOUS_PROVIDER_ADMISSION_DISABLED; TOGETHER_FORBIDDEN; NO_PAID_FALLBACK",
   "providers": {
     "groq": {"admitted": false, "cost_class": "FREE", "evidence_ref": "OWNER_EMERGENCY_STOP_2026-08-26"},
     "mistral": {"admitted": false, "cost_class": "FREE", "evidence_ref": "OWNER_EMERGENCY_STOP_2026-08-26"},
@@ -21,5 +21,17 @@
     "unknown_or_unbound_route": "FAIL_CLOSED",
     "paid_fallback_attempt_count": 0
   },
-  "note": "Owner emergency stop remains in force. Authority epoch is coherently rebound to supervisor 9.11 while every provider remains admitted=false. Monitoring v6 is source-only/runtime-unverified and its authoritative CURRENT-pointer reader is not yet enforced across production consumers. Re-enabling requires a later explicit owner instruction and deliberate control-plane change."
+  "quarantined_external_diagnostics": {
+    "together_finetune_2026_08_27": {
+      "evidence_commit": "0112dcbe9fd78c0ad6d5473e3ff4878e852f5194",
+      "followup_holdout_commit": "025f0cb93d2b73f67a9e1dc901eddc1a82d7aade",
+      "status": "HISTORICAL_DIAGNOSTIC_NON_OPERATIVE",
+      "current_execution_authority": false,
+      "repeat_authority": false,
+      "training_credit": 0,
+      "base_credit": 0,
+      "canonical_semantics_credit": 0
+    }
+  },
+  "note": "Current explicit authority is FREE_ONLY with no paid fallback. A separately authorized historical Together diagnostic was committed after 9.11; 9.12 preserves it only as quarantined evidence and does not allow repetition or any paid route. All autonomous provider routes remain HARD_OFF. Re-enabling requires a later explicit current owner instruction and deliberate control-plane change."
 }

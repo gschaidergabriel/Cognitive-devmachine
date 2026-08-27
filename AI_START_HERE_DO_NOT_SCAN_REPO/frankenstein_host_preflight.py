@@ -1,13 +1,10 @@
 #!/usr/bin/env python3
 """Read-only Triggerword-3 host/repository capability preflight.
 
-No network calls. No provider calls. No secret lookup. No repository writes.
-
-This preflight can establish a repository/authority *adapter* surface. It cannot
-establish NATIVE lifecycle integration because it deliberately does not trigger
-or verify lifecycle hooks, cross-session durable state, or effect/result
-receipts. Those boundaries require a host-specific witness produced or
-independently verified by the claimed mechanism.
+This tool deliberately performs no network/provider calls, secret lookup,
+repository mutation, lifecycle-hook firing, persistent-state write, or real
+effect. It can therefore establish only a bounded repository/authority
+preflight. It must never mint NATIVE or ADAPTED installation status by itself.
 """
 from __future__ import annotations
 
@@ -20,17 +17,14 @@ import subprocess
 import sys
 from typing import Any
 
-MARKERS = ("research_entity", "the artefact")
+MARKERS = ("research_entity", "the artefact", "AI_START_HERE_DO_NOT_SCAN_REPO")
 AUTHORITY_FILES = (
+    "CLAY_EXECUTION_AUTHORITY.md",
     "research_entity/continuity/BOOTSTRAP_MINIMAL.json",
     "research_entity/rooms/PROGRAM_STATE.json",
     "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
 )
 INBOX_RELATIVE_PATH = "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json"
-
-# These are intentionally not probed by this read-only preflight. Their absence
-# from the probe is itself a promotion fence: no caller may upgrade ADAPTED to
-# NATIVE from repo/authority/Git presence alone.
 NATIVE_BOUNDARIES = (
     "real_lifecycle_hook_firing",
     "cross_session_durable_state_when_claimed",
@@ -70,7 +64,7 @@ def run_git(root: Path, *args: str) -> tuple[bool, str]:
 
 
 def resolve_dynamic_steering(root: Path) -> dict[str, Any]:
-    """Resolve the steering path selected by the current inbox, fail-closed."""
+    """Resolve the inbox-selected steering file without allowing path escape."""
     repo_root = root.resolve()
     inbox_path = repo_root / INBOX_RELATIVE_PATH
     try:
@@ -81,6 +75,7 @@ def resolve_dynamic_steering(root: Path) -> dict[str, Any]:
             "pointer": None,
             "resolved_path": None,
             "reason": f"INBOX_UNREADABLE:{type(exc).__name__}",
+            "inbox": None,
         }
 
     pointer = inbox.get("steering")
@@ -90,6 +85,7 @@ def resolve_dynamic_steering(root: Path) -> dict[str, Any]:
             "pointer": pointer,
             "resolved_path": None,
             "reason": "STEERING_POINTER_MISSING_OR_INVALID",
+            "inbox": inbox,
         }
 
     pointer_path = Path(pointer)
@@ -99,6 +95,7 @@ def resolve_dynamic_steering(root: Path) -> dict[str, Any]:
             "pointer": pointer,
             "resolved_path": None,
             "reason": "STEERING_POINTER_ABSOLUTE_REJECTED",
+            "inbox": inbox,
         }
 
     resolved = (repo_root / pointer_path).resolve()
@@ -110,6 +107,7 @@ def resolve_dynamic_steering(root: Path) -> dict[str, Any]:
             "pointer": pointer,
             "resolved_path": str(resolved),
             "reason": "STEERING_POINTER_ESCAPES_REPOSITORY",
+            "inbox": inbox,
         }
 
     present = resolved.is_file()
@@ -118,7 +116,22 @@ def resolve_dynamic_steering(root: Path) -> dict[str, Any]:
         "pointer": pointer,
         "resolved_path": str(resolved),
         "reason": "OK" if present else "STEERING_TARGET_MISSING",
+        "inbox": inbox,
     }
+
+
+def provider_action_class(inbox: dict[str, Any] | None) -> tuple[str, str]:
+    """Classify provider orchestration from explicit current inbox fields only."""
+    if not isinstance(inbox, dict):
+        return "BLOCKED", "CURRENT_AUTHORITY_UNRESOLVED"
+    free_only = inbox.get("free_only")
+    if not isinstance(free_only, dict):
+        return "BLOCKED", "FREE_ONLY_AUTHORITY_BLOCK_MISSING"
+    if free_only.get("free_swarm_owner_emergency_stop") is True:
+        return "BLOCKED", "FREE_SWARM_OWNER_EMERGENCY_STOP"
+    if free_only.get("provider_routes_admitted") is not True:
+        return "BLOCKED", "PROVIDER_ROUTES_NOT_EXPLICITLY_ADMITTED"
+    return "DEGRADED", "SOURCE_AUTHORITY_APPEARS_OPEN_BUT_EXECUTION_NOT_PROBED"
 
 
 def classify(
@@ -127,25 +140,21 @@ def classify(
     git_ok: bool,
     steering_verified: bool,
 ) -> str:
-    """Classify only what this read-only preflight can actually establish.
-
-    NATIVE is intentionally unreachable here. A repository with current
-    authority and Git identity is an ADAPTED source/research integration until
-    a host-specific lifecycle/state/effect witness is independently verified.
-    """
+    """Compatibility classifier: read-only preflight returns only BLOCKED/DEGRADED."""
     if root is None:
         return "BLOCKED"
-    if all(authority_present.values()) and steering_verified and git_ok:
-        return "ADAPTED"
+    if not all(authority_present.values()) or not steering_verified:
+        return "BLOCKED"
+    # Even a clean, readable Git repository does not prove hook/state/effect lifecycle.
     return "DEGRADED"
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "--root",
         type=Path,
-        help="Known repository root; otherwise search from cwd upward",
+        help="Known repository root; otherwise search from cwd upward; no guessed home/Downloads path.",
     )
     args = parser.parse_args()
 
@@ -164,82 +173,124 @@ def main() -> int:
             "pointer": None,
             "resolved_path": None,
             "reason": "REPOSITORY_ROOT_UNRESOLVED",
+            "inbox": None,
         }
     )
 
-    git_ok = False
+    git_root_ok = False
+    git_head_ok = False
+    git_status_ok = False
     git_head = None
     git_dirty = None
+    git_error = None
     if root is not None:
-        ok, value = run_git(root, "rev-parse", "HEAD")
-        git_ok = ok
-        git_head = value if ok else None
+        ok, value = run_git(root, "rev-parse", "--show-toplevel")
         if ok:
-            status_ok, status_value = run_git(root, "status", "--porcelain")
-            git_dirty = bool(status_value) if status_ok else None
+            try:
+                git_root_ok = Path(value).resolve() == root.resolve()
+            except OSError:
+                git_root_ok = False
+        else:
+            git_error = value
 
-    authority_ready = all(authority_present.values()) and bool(steering["verified"])
+        ok, value = run_git(root, "rev-parse", "HEAD")
+        git_head_ok = ok
+        if ok:
+            git_head = value
+        elif git_error is None:
+            git_error = value
+
+        ok, value = run_git(root, "status", "--porcelain")
+        git_status_ok = ok
+        if ok:
+            git_dirty = bool(value)
+        elif git_error is None:
+            git_error = value
+
+    git_ok = bool(git_root_ok and git_head_ok and git_status_ok)
     installation_class = classify(
         root, authority_present, git_ok, bool(steering["verified"])
     )
+    provider_class, provider_reason = provider_action_class(steering.get("inbox"))
+
+    inbox = steering.get("inbox") if isinstance(steering.get("inbox"), dict) else {}
+    free_only = inbox.get("free_only") if isinstance(inbox, dict) else None
+    free_only = free_only if isinstance(free_only, dict) else {}
 
     if root is None:
-        next_action = "Resolve the repository root before any execution claim."
-    elif not authority_ready:
-        next_action = (
-            "Resolve missing/current authority surfaces, including the "
-            "inbox-selected steering file."
-        )
+        next_action = "Resolve the actual repository root before any installation claim."
+    elif not all(authority_present.values()) or not steering["verified"]:
+        next_action = "Resolve all required current authority surfaces and inbox-selected steering."
     elif not git_ok:
-        next_action = (
-            "Verify the current Git repository/head; remain DEGRADED until that succeeds."
-        )
+        next_action = "Verify exact Git root, HEAD, and status; remain DEGRADED."
     else:
         next_action = (
-            "Repository/authority adapter preflight is satisfied. If NATIVE is claimed, "
-            "run a host-specific witness for real lifecycle hook firing, required "
-            "cross-session durable state, and claimed effect/result receipts."
+            "Run a separate host-specific witness for real lifecycle hook firing, durable state "
+            "when claimed, and effect/result re-entry before NATIVE or ADAPTED classification."
         )
 
     result: dict[str, Any] = {
-        "schema": "FRANKENSTEIN_HOST_PREFLIGHT/v2",
-        "mode": "READ_ONLY_NO_NETWORK_NO_SECRETS_NO_WRITES",
+        "schema": "FRANKENSTEIN_HOST_PREFLIGHT/v3",
+        "mode": "READ_ONLY_NO_NETWORK_NO_SECRETS_NO_WRITES_NO_EFFECTS",
         "root": str(root) if root else None,
         "markers": {m: bool(root and (root / m).exists()) for m in MARKERS},
         "authority_files": authority_present,
-        "dynamic_steering": steering,
-        "capabilities": {
-            "can_read_files": bool(root and os.access(root, os.R_OK)),
-            "repo_path_writable_by_os": bool(root and os.access(root, os.W_OK)),
-            "repo_write_was_tested": False,
-            "can_run_local_commands": True,
-            "git_binary_present": shutil.which("git") is not None,
-            "git_repo_verified": git_ok,
-            "can_access_github": "NOT_PROBED",
-            "cross_session_durable_state": "NOT_PROBED",
-            "external_network": "NOT_PROBED",
-            "package_installation": "NOT_PROBED",
-            "lifecycle_hook_firing": "NOT_PROBED",
-            "effect_or_result_receipt": "NOT_PROBED",
+        "dynamic_steering": {
+            key: steering.get(key)
+            for key in ("verified", "pointer", "resolved_path", "reason")
         },
-        "git": {"head": git_head, "dirty": git_dirty},
+        "authority_snapshot": {
+            "schema_version": inbox.get("schema_version") if isinstance(inbox, dict) else None,
+            "supervisor_delta": inbox.get("supervisor_delta") if isinstance(inbox, dict) else None,
+        },
+        "git": {
+            "binary_present": shutil.which("git") is not None,
+            "root_verified": git_root_ok,
+            "head_verified": git_head_ok,
+            "status_verified": git_status_ok,
+            "verified": git_ok,
+            "head": git_head,
+            "dirty": git_dirty,
+            "error": git_error,
+        },
+        "observed_capabilities": {
+            "filesystem_readable": bool(root and os.access(root, os.R_OK)),
+            "filesystem_write_permission_hint": bool(root and os.access(root, os.W_OK)),
+            "python_executable": sys.executable,
+            "python_version": sys.version.split()[0],
+            "lifecycle_hooks_verified": False,
+            "durable_cross_session_state_verified": False,
+            "effect_result_reentry_verified": False,
+            "external_network_probed": False,
+            "secret_lookup_performed": False,
+            "repository_write_tested": False,
+        },
         "installation_class": installation_class,
-        "native_possible_from_this_preflight": False,
+        "native_or_adapted_claim_allowed": False,
         "native_boundaries_unverified": list(NATIVE_BOUNDARIES),
+        "provider_orchestration": {
+            "classification": provider_class,
+            "reason": provider_reason,
+            "provider_routes_admitted": free_only.get("provider_routes_admitted"),
+            "together_forbidden": free_only.get("together_forbidden"),
+            "free_swarm_owner_emergency_stop": free_only.get("free_swarm_owner_emergency_stop"),
+            "remaining_together_paid_runs_authorized": free_only.get(
+                "remaining_together_paid_runs_authorized"
+            ),
+        },
         "promotion_fence": (
-            "Repo/authority/Git presence can establish at most ADAPTED here. "
-            "A boolean flag, model self-report, source/config presence, or manually "
-            "asserted observation cannot establish NATIVE lifecycle integration."
+            "Read-only source/repository evidence cannot mint NATIVE or ADAPTED lifecycle status; "
+            "source/config/model self-report cannot substitute for observed hook/state/effect receipts."
         ),
         "credit_boundary": (
-            "This preflight grants zero provider-runtime, whole EntityOS/HCU, full HCU, "
-            "GRID10, Global J-Space, model, or training credit."
+            "Zero provider-runtime, whole EntityOS/HCU, full HCU, Physical GRID10, Global J-Space, "
+            "model, canonical-semantics, or training credit is granted."
         ),
         "next": next_action,
     }
     print(json.dumps(result, indent=2, sort_keys=True))
-    return 0 if installation_class != "BLOCKED" else 2
+    return 2 if installation_class == "BLOCKED" else 0
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    raise SystemExit(main())

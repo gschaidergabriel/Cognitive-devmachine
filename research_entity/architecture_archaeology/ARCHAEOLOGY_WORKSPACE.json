@@ -1,7 +1,7 @@
 {
   "schema_version": "1.1",
   "workspace_id": "frank-architecture-archaeology",
-  "status": "ACTIVE_INCOMPLETE",
+  "status": "ACTIVE_INCOMPLETE_REQUIRED_OUTPUTS_PRESENT",
   "source_repository": "gschaidergabriel/Project-Frankenstein",
   "analysis_lenses": [
     "research_entity/global/FRANK_ARCHITECTURE_ARCHAEOLOGY_PROTOCOL.md",
@@ -24,16 +24,16 @@
   ],
   "current_inventory_snapshot": {
     "evidence_class": "CURRENT_SOURCE_FILE_PRESENCE_ONLY",
-    "canonical_main_observed": "bd162008d8d8268aed90fb0070a2750dfd2ee33c",
+    "canonical_main_observed": "b237dc3cb915b49d30386a8a57ca9d887f75488e",
     "observed_date": "2026-08-28",
-    "present_required_outputs": 9,
-    "missing_required_outputs": 2,
+    "present_required_outputs": 11,
+    "missing_required_outputs": 0,
     "completion_credit_from_presence": false,
-    "note": "File presence proves only that an output artifact exists. It does not prove exhaustive archaeology, runtime behavior, causal support, originality, or completion of the corresponding work package."
+    "note": "All eleven named required output artifacts are present. Presence proves only that an output artifact exists. It does not prove exhaustive archaeology, runtime behavior, causal support, originality, prior-art exhaustion, or completion of the corresponding work package."
   },
   "required_output_status": {
     "MECHANISM_INDEX.json": "PRESENT_PARTIAL_OPEN_COMPLETION",
-    "EMERGENT_COUPLING_GRAPH.json": "MISSING_REQUIRED_OUTPUT",
+    "EMERGENT_COUPLING_GRAPH.json": "PRESENT_GROUNDED_PARTIAL_OPEN_COMPLETION",
     "FAILURE_ATLAS.json": "PRESENT_GROUNDED_PARTIAL_OPEN_COMPLETION",
     "SUCCESS_PATTERN_ATLAS.json": "PRESENT_GROUNDED_PARTIAL_OPEN_COMPLETION",
     "BOOT_ORDER_AND_STATE_HISTORY.json": "PRESENT_GROUNDED_PARTIAL_OPEN_COMPLETION",
@@ -41,7 +41,7 @@
     "GWT_HISTORY.json": "PRESENT_GROUNDED_PARTIAL_OPEN_COMPLETION",
     "MEMORY_HISTORY.json": "PRESENT_GROUNDED_PARTIAL_OPEN_COMPLETION",
     "PERSONALITY_SELF_HISTORY.json": "PRESENT_GROUNDED_PARTIAL_OPEN_COMPLETION",
-    "ORIGINALITY_PRIOR_ART_QUEUE.json": "MISSING_REQUIRED_OUTPUT",
+    "ORIGINALITY_PRIOR_ART_QUEUE.json": "PRESENT_QUEUE_ONLY_OPEN_RESEARCH",
     "CURRENT_ARCHITECTURE_INHERITANCE_MATRIX.json": "PRESENT_GROUNDED_PARTIAL_OPEN_COMPLETION"
   },
   "work_packages": {
@@ -54,7 +54,7 @@
       "goal": "Enumerate all material modules/mechanisms/aliases and first known versions."
     },
     "A-03-COUPLING-GRAPH": {
-      "status": "OPEN_REQUIRED_OUTPUT_MISSING",
+      "status": "PARTIAL_OUTPUT_PRESENT_OPEN_COMPLETION",
       "goal": "Reconstruct cross-module recurrent coupling graph with timescales and state variables."
     },
     "A-04-FAILURE-ATLAS": {
@@ -90,7 +90,7 @@
       "goal": "Read and connect all papers/research notes to implemented mechanisms and evidence."
     },
     "A-12-ORIGINALITY": {
-      "status": "OPEN_REQUIRED_OUTPUT_MISSING",
+      "status": "QUEUE_PRESENT_OPEN_RESEARCH_NO_NOVELTY_FINDING",
       "goal": "Prior-art queue and careful originality classification after native mechanism reconstruction."
     },
     "A-13-CURRENT-INHERITANCE": {
@@ -100,19 +100,26 @@
   },
   "live_claims": [
     {
-      "claim": "Nine of eleven required archaeology output files are present at the observed canonical snapshot; two remain absent from the canonical architecture_archaeology directory.",
+      "claim": "All eleven named required archaeology output files are present at the observed canonical snapshot.",
       "evidence_class": "CURRENT_SOURCE_FILE_PRESENCE_ONLY",
       "scope": "REQUIRED_OUTPUT_INVENTORY_ONLY",
-      "promotion_boundary": "No work-package completion, runtime, causal, originality, or whole-product credit."
+      "promotion_boundary": "No work-package completion, runtime, causal, originality, prior-art exhaustion, model, training or whole-product credit."
+    },
+    {
+      "claim": "ORIGINALITY_PRIOR_ART_QUEUE.json contains a conservative search/claim-chart queue and explicitly records zero novelty, patentability, independent-invention and world-first findings.",
+      "evidence_class": "CURRENT_SOURCE",
+      "scope": "PRIOR_ART_RESEARCH_QUEUE_ONLY",
+      "promotion_boundary": "Queue presence is not a novelty determination."
     }
   ],
   "completed_receipts": [],
   "next_high_information_actions": [
-    "Build EMERGENT_COUPLING_GRAPH.json only from native mechanism/state/timing evidence; do not normalize biological labels before functional extraction.",
-    "Populate ORIGINALITY_PRIOR_ART_QUEUE.json only after native mechanisms are reconstructed; no world-first or patent-novelty promotion from absence of a found analogue.",
+    "Reconstruct first verified accessible Git appearance and removal/supersession windows for every material mechanism family before calling the historical timeline exhaustive.",
+    "Deepen EMERGENT_COUPLING_GRAPH.json into commit/time-window-qualified coexistence topology and distinguish source wiring from measured causal use edge by edge.",
     "Extend BOOT_ORDER_AND_STATE_HISTORY.json backward and forward in Git chronology and derive the exact service/dependency/persistence-lifetime graph before marking A-10 complete.",
     "Deepen GWT_HISTORY.json, MEMORY_HISTORY.json, LORA_HISTORY.json and PERSONALITY_SELF_HISTORY.json from grounded partials toward exhaustive lineage while preserving exact family/provenance and negative-evidence boundaries.",
-    "Reconcile all partial outputs into the current inheritance matrix only after cross-output source conflicts and chronology gaps are explicit."
+    "Execute element-by-element prior-art claim charts only after each native mechanism is reconstructed; preserve broad prior art and near-misses rather than optimizing toward novelty.",
+    "Reconcile source conflicts across all partial outputs into CURRENT_ARCHITECTURE_INHERITANCE_MATRIX.json without promoting component/source/history evidence into current runtime acceptance."
   ],
   "last_updated": "2026-08-28"
 }

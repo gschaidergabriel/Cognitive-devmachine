@@ -1,0 +1,114 @@
+{
+  "schema": "CLAY_GO_RECEIPT/v1",
+  "observed_local_turn": "2026-08-24T20:37+07:00",
+  "trigger": "go",
+  "macrocycle_id": "MACROCYCLE_ID_UNRESOLVED",
+  "persistent_research_entity": "Clay",
+  "organ": "GPT-5.6 Sol ChatGPT organ",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "canonical_main_at_successor_reentry": "95c6c3a82aef0ed8cf27ece429eaba9e5cf4ffd3",
+  "predecessor_base_observed": "84ef0b95143c0091ee8fd4665093ea95f9e2cc4c",
+  "authority": {
+    "newest_supervisor_observed": "8.70",
+    "supervisor_inbox": "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
+    "supervisor": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_8_70.json",
+    "owner_free_swarm_directive": "governance/CLAY_FREE_SWARM_OWNER_ADMISSION_2026-08-24.md",
+    "execution_mode": "FREE_ONLY"
+  },
+  "coordination": {
+    "upstream_macrocycle_id_exposed": false,
+    "user_message_timestamp_precision": "MINUTE_ONLY",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_experiment_count": 0,
+    "reason": "No upstream shared immutable request/macrocycle id is exposed and minute-only timestamp cannot satisfy the canonical fallback key contract."
+  },
+  "parallel_reentry": {
+    "main_advanced_during_work": true,
+    "new_main_change": "Xeno v1 active-build lane fused under supervisor 8.70 FREE lane gating with source/control-plane credit only.",
+    "overlap_check": "Current main still retains v1 GO aggregate worker-sum behavior and no exact --macrocycle-id scope; this metrics delta remains nonduplicate.",
+    "branch_rebased_by_successor_reconstruction": true
+  },
+  "problem_observed": {
+    "class": "ANTI_GOODHART_METRICS_CAUSAL_IDENTITY_GAP",
+    "source": "free swarm/go_collective_metrics.py",
+    "finding": "The v1 collector loads explicit worker records and available Free Swarm rows without exact macrocycle filtering, then aggregates worker-level verified utility/CQS/VIS without aggregate-level evidence-lineage collapse. Correlated fanout or stale history can therefore affect a current GO optimization surface despite the owner protocol requiring exact-macrocycle collection and Goodman/lineage collapse.",
+    "counterhypothesis": "The v1 output may be intended as an all-history descriptive dashboard. That does not satisfy the separate owner requirement for a per-go exact-macrocycle optimization table, so v2 is a shadow successor guard rather than a rewrite of historical v1 output."
+  },
+  "delta": {
+    "branch": "gpt56sol/go-metrics-macrocycle-lineage-870",
+    "successor_commits_before_receipt": [
+      "f5939c60f3d858d6cd995d463dd6464374ed3e21",
+      "2c6f149deb6021ac33b6a3938ba076ec536a5fcc"
+    ],
+    "files": [
+      "free swarm/go_collective_metrics_v2.py",
+      "tests/test_go_collective_metrics_v2.py"
+    ],
+    "mechanisms": [
+      "Require exact reproducible --macrocycle-id; unresolved identity fails closed.",
+      "Exclude unresolved and different macrocycles from the derived aggregate.",
+      "Collapse verified utility within an evidence lineage by max before summing independent lineages.",
+      "Collapse CQS/VIS by median within lineage then mean across lineages.",
+      "Retain every known worker token in the TQE denominator so redundant correlated work is penalized rather than erased.",
+      "Collapse missing lineage to UNRESOLVED_LINEAGE instead of inventing independence.",
+      "Keep v1 as compatibility/raw substrate and write separate v2 shadow outputs by default."
+    ]
+  },
+  "evidence": {
+    "class": "NONCANONICAL_ISOLATED_MECHANISM_AND_SOURCE_EVIDENCE_ONLY",
+    "isolated_unit_tests": "6/6 PASS",
+    "python_compile": "PASS",
+    "canonical_checkout_runtime": "NOT_OBSERVED_NO_LOCAL_OR_VPS_BRIDGE_TOOL_EXPOSED_TO_THIS_ORGAN",
+    "provider_network_execution": false,
+    "provider_secret_lookup": false,
+    "paid_execution": false,
+    "together_execution": false,
+    "model_execution": false,
+    "jspace_intervention": false
+  },
+  "go_tracks": {
+    "track_a": {
+      "status": "ADVANCED",
+      "name": "ENTITYOS_EXECUTABLE_CONVERGENCE",
+      "delta": "Strengthened the mandatory end-of-go empirical controller so cross-macrocycle history and correlated fanout cannot masquerade as current executable progress."
+    },
+    "track_b": {
+      "status": "HCU_NO_CHANGE_WITH_REASON",
+      "reason": "Retained HCU donor #1263 already owns Typed Entry/VerifiedEngineAdmission/InferenceReceipt causal closure; duplicating it is lower-value. Current exact blocker remains loader-side re-verification plus admitted execution of donor rejection boundaries."
+    },
+    "track_c": {
+      "status": "TRAINING_READINESS_NO_CHANGE_WITH_REASON",
+      "reason": "Existing J-Space/Xeno lanes own local activation/intervention acceptance; no local/clay-direct-dev bridge and no valid unusual-experiment lease are exposed to this organ. Next promotion-bearing discriminator remains real local model execution plus clean/corrupted/target/sham/off-target controls with exact identity binding."
+    }
+  },
+  "collective_metrics_for_this_trigger": {
+    "canonical_macrocycle_aggregate": "UNKNOWN",
+    "reason": "No upstream exact macrocycle_id is available; active protocol forbids silently grouping workers into this go.",
+    "tqe": "UNKNOWN",
+    "cqs": "UNKNOWN",
+    "vis": "UNKNOWN",
+    "cilr": "UNKNOWN",
+    "haac": "UNKNOWN_FOR_THIS_MACROCYCLE",
+    "persisted_baseline_context": {
+      "source": "free swarm/GO_COLLECTIVE_METRICS.json",
+      "generation_class": "BOOTSTRAP_BASELINE_SOURCE_DERIVED_NOT_AGGREGATOR_RUNTIME",
+      "tqe": 0.0,
+      "cqs": null,
+      "vis": null,
+      "cilr": null,
+      "hcu_target_100_go_forecast_probability": 0.4305,
+      "hcu_forecast_classification": "UNCALIBRATED_MODEL_FORECAST_NOT_FACT"
+    }
+  },
+  "credits": {
+    "provider_runtime": 0,
+    "whole_entityos_hcu_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_action": "Run this exact successor branch regression on an exposed authorized zero-cost local normal-user or clay-direct-dev checkout; propagate one upstream macrocycle_id at the trigger/orchestration boundary; shadow-run v2 for the metric-transition window; compare lineage-collapsed output against v1 without rewriting raw history."
+}

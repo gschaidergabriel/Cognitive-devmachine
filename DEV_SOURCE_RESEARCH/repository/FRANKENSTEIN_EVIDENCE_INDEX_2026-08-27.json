@@ -1,0 +1,173 @@
+{
+  "schema": "FRANKENSTEIN_TRIGGER3_EVIDENCE_INDEX/v1",
+  "generated_from_main": "854f6bc87780f4a5242489a6c807d186b16a8c3d",
+  "generated_date": "2026-08-27",
+  "purpose": "Navigation and evidence-scope index only; not a competing authority surface.",
+  "authority": {
+    "persistent_entity": "Clay",
+    "product": "EntityOS",
+    "compute_architecture": "HCU",
+    "current_supervisor_inbox": "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
+    "current_steering": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_9_13O_DELTA_2026-08-27T2341P0700_GPT56SOL.json",
+    "provider_state": "FREE_ONLY_HARD_OFF_ALL_PROVIDER_ROUTES_FALSE_TOGETHER_FORBIDDEN_NO_PAID_FALLBACK",
+    "whole_entityos_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "training_credit": 0
+  },
+  "evidence_labels": [
+    "CURRENT_SOURCE",
+    "HISTORICAL_SOURCE",
+    "PROJECT_MEASUREMENT",
+    "EXTERNAL_PRIMARY",
+    "INFERENCE",
+    "OPEN_HYPOTHESIS",
+    "NEGATIVE_RESULT"
+  ],
+  "lifecycle_states": [
+    "attempted",
+    "source-ready",
+    "measured",
+    "reproduced",
+    "contradicted",
+    "blocked",
+    "prepared-not-run",
+    "adopted",
+    "retired"
+  ],
+  "records": [
+    {
+      "id": "authority-9.13o",
+      "topic": "current authority",
+      "path": "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
+      "labels": ["CURRENT_SOURCE"],
+      "status": "adopted",
+      "claim_scope": "Current inbox-selected steering says all provider routes are false, Together is forbidden, no paid fallback, and runtime quiescence/control closure is required before new provider execution.",
+      "falsifier": "A newer explicit owner authority or inbox-selected supervisor authority supersedes 9.13O."
+    },
+    {
+      "id": "frankenstein-master-concept",
+      "topic": "master cognition concept",
+      "path": "research_entity/topic_packets/frankenstein-master-cognition-concept/CONCEPT.md",
+      "labels": ["HISTORICAL_SOURCE", "OPEN_HYPOTHESIS"],
+      "status": "source-ready",
+      "claim_scope": "Architecture/design synthesis grounded in existing GRID10 fabric mechanisms plus explicitly aspirational additions.",
+      "falsifier": "Exact current source inspection or execution shows named mechanisms absent or behavior contradicts the design."
+    },
+    {
+      "id": "frankenstein-build-plan",
+      "topic": "72h build orchestration",
+      "path": "research_entity/topic_packets/frankenstein-master-cognition-concept/BUILD_ORCHESTRATION_PLAN_20260827.json",
+      "labels": ["HISTORICAL_SOURCE", "NEGATIVE_RESULT"],
+      "status": "blocked",
+      "claim_scope": "Plan contains direct Nemotron/Groq/Mistral fallback use and a Together training allowance that conflict with current 9.13 HARD_OFF authority.",
+      "falsifier": "A newer explicit authority re-enables the exact routes and the orchestration is revised to resolve authority before any provider boundary."
+    },
+    {
+      "id": "frankenstein-package-dispenser",
+      "topic": "bounded task decomposition",
+      "path": "research_entity/topic_packets/frankenstein-master-cognition-concept/frankenstein_packages_v1.py",
+      "labels": ["CURRENT_SOURCE"],
+      "status": "source-ready",
+      "claim_scope": "Implements package/phase decomposition and claim coordination; latest implementation commit reports 12 local tests for this component.",
+      "falsifier": "Independent clean current checkout tests fail or source identity changes."
+    },
+    {
+      "id": "frankenstein-orchestrator",
+      "topic": "Bauleiter continuity",
+      "path": "research_entity/topic_packets/frankenstein-master-cognition-concept/frankenstein_orchestrator_v1.py",
+      "labels": ["CURRENT_SOURCE", "NEGATIVE_RESULT"],
+      "status": "blocked",
+      "claim_scope": "Source exists and latest implementation commit reports local tests, but provider-calling execution path is non-operative under 9.13 HARD_OFF.",
+      "falsifier": "Authority-compliant caller gating is implemented and independently verified before secret lookup/import/network/fallback."
+    },
+    {
+      "id": "frankenstein-bugfix",
+      "topic": "independent watchdog/fixer",
+      "path": "research_entity/topic_packets/frankenstein-master-cognition-concept/frankenstein_bugfix_v1.py",
+      "labels": ["CURRENT_SOURCE", "NEGATIVE_RESULT"],
+      "status": "blocked",
+      "claim_scope": "Standalone fixer/rollback design exists and latest implementation commit reports local tests, but its direct provider fallback loop is prohibited by current authority.",
+      "falsifier": "Authority-compliant caller gating is added outside Frank Harness and exact non-provider validation passes."
+    },
+    {
+      "id": "grid10-thread-ab",
+      "topic": "GRID10 CPU thread topology",
+      "commit": "636290883bfddc79a588e554d8014339ae1e98e2",
+      "labels": ["PROJECT_MEASUREMENT", "NEGATIVE_RESULT"],
+      "status": "measured",
+      "claim_scope": "On four concurrent model processes over four vCPUs: 1 thread/process averaged 8.3197 s/call over 12 samples; 2 threads averaged 23.1806 s/call over 12 samples; 4 threads completed zero samples within experiment timeouts.",
+      "inference": "Existing default=1 is supported for this measured topology; do not generalize to other core/process ratios.",
+      "falsifier": "Matched preregistered rerun on the same topology produces a materially different result."
+    },
+    {
+      "id": "free-swarm-distillery-zero-yield",
+      "topic": "training-data conversion funnel",
+      "labels": ["PROJECT_MEASUREMENT", "NEGATIVE_RESULT"],
+      "status": "measured",
+      "claim_scope": "9.13O steering retains zero accepted Distillery dataset tokens and zero training credit despite large historical raw token volume.",
+      "falsifier": "Exact-current admitted Distillery evidence shows accepted_dataset_tokens > 0 with replay-idempotent provenance."
+    },
+    {
+      "id": "unifieddb",
+      "topic": "canonical state substrate",
+      "labels": ["HISTORICAL_SOURCE", "INFERENCE"],
+      "status": "adopted",
+      "claim_scope": "Project lineage converged from fragmented stores toward one canonical SQLite-style authority substrate while allowing typed tables, journals, views and rebuildable projections.",
+      "falsifier": "Current authority admits a different canonical truth substrate or proves multiple independent truth stores are intentionally authoritative."
+    },
+    {
+      "id": "emergent-retrieval",
+      "topic": "memory retrieval",
+      "labels": ["OPEN_HYPOTHESIS"],
+      "status": "source-ready",
+      "claim_scope": "Project term for relevance emerging from intersections among independently stored semantic, temporal, causal, state, goal, effect, confidence and provenance dimensions.",
+      "falsifier": "Matched retrieval benchmarks show the combined dimensions do not improve useful recall/precision over simpler baselines."
+    },
+    {
+      "id": "global-jspace-gwt",
+      "topic": "workspace / vector coordination",
+      "labels": ["OPEN_HYPOTHESIS"],
+      "status": "prepared-not-run",
+      "claim_scope": "Global J-Space/GWT remains an empirical causal coordination/interface hypothesis; recurrence, consensus and self-report do not prove model-internal causality.",
+      "falsifier": "Model-specific intervention/lesion/shuffle/rescue controls fail to produce the preregistered causal effects while prompt/task factors are held stable."
+    }
+  ],
+  "external_primary_references": [
+    {
+      "topic": "Global Workspace Theory",
+      "citation": "Baars BJ. Global workspace theory of consciousness: toward a cognitive neuroscience of human experience. Prog Brain Res. 2005;150:45-53. doi:10.1016/S0079-6123(05)50004-9",
+      "scope": "External architectural/scientific context only; not project runtime evidence."
+    },
+    {
+      "topic": "GWT / IDA architecture",
+      "citation": "Baars BJ, Franklin S. An architectural model of conscious and unconscious brain functions: Global Workspace Theory and IDA. Neural Netw. 2007;20(9):955-961. doi:10.1016/j.neunet.2007.09.013",
+      "scope": "External architecture reference only."
+    },
+    {
+      "topic": "CPU oversubscription",
+      "citation": "PyTorch documentation: Multiprocessing best practices, CPU oversubscription section, updated 2026-05-07.",
+      "scope": "Supports the engineering interpretation of the measured thread-count counterexample; does not replace project measurement."
+    },
+    {
+      "topic": "SQLite WAL",
+      "citation": "SQLite official documentation: Write-Ahead Logging.",
+      "scope": "Database systems reference; not evidence that a particular project path uses WAL correctly."
+    },
+    {
+      "topic": "reflection with feedback memory",
+      "citation": "Shinn N et al. Reflexion: Language Agents with Verbal Reinforcement Learning. arXiv:2303.11366.",
+      "scope": "External comparison point for reflective feedback + episodic memory; not a claim of implementation equivalence."
+    }
+  ],
+  "topology": {
+    "target_public_root": [
+      "README.md",
+      "HUMAN_READ_THIS/",
+      "DEV_SOURCE_RESEARCH/",
+      "AI_START_HERE_DO_NOT_SCAN_REPO/"
+    ],
+    "current_status": "PARTIAL_TARGET_LAYER_CREATED_ROOT_MIGRATION_NOT_COMPLETE",
+    "root_readme_modified": false,
+    "migration_rule": "Do not move or delete existing paths until runtime references and evidence links are classified; preserve bytes and lineage when reorganizing."
+  }
+}

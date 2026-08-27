@@ -481,13 +481,14 @@ def _contains_unicode_control_character(value: str) -> bool:
 
 
 def _has_semantic_text(value: str) -> bool:
-    """Require content beyond whitespace, controls and format characters."""
+    """Require content beyond whitespace, controls, formats and bare marks."""
     return any(
         not character.isspace()
         and not (
             ord(character) <= 0x1F or 0x7F <= ord(character) <= 0x9F
         )
         and unicodedata.category(character) != "Cf"
+        and unicodedata.category(character) not in {"Mn", "Mc", "Me"}
         for character in value
     )
 
@@ -1496,4 +1497,3 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()

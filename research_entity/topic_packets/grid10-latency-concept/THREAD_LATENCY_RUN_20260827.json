@@ -1,0 +1,57 @@
+{
+  "schema": "GRID10_THREAD_LATENCY_EXPERIMENT/v1",
+  "n_concurrent_processes_per_group": 4,
+  "n_calls_per_process": 3,
+  "results_by_thread_count": [
+    {
+      "thread_count": 1,
+      "n_concurrent_processes": 4,
+      "group_wallclock_s": 32.47,
+      "all_per_call_latencies_s": [
+        8.5977,
+        8.3905,
+        8.2605,
+        8.3594,
+        8.5303,
+        7.582,
+        8.25,
+        8.5192,
+        8.3661,
+        8.6,
+        8.6229,
+        7.7583
+      ],
+      "avg_per_call_latency_s": 8.3197,
+      "n_samples": 12
+    },
+    {
+      "thread_count": 2,
+      "n_concurrent_processes": 4,
+      "group_wallclock_s": 79.23,
+      "all_per_call_latencies_s": [
+        21.0196,
+        21.3972,
+        29.1981,
+        21.7855,
+        26.5667,
+        22.6357,
+        19.1198,
+        28.0587,
+        23.2603,
+        23.719,
+        20.4637,
+        20.9432
+      ],
+      "avg_per_call_latency_s": 23.1806,
+      "n_samples": 12
+    },
+    {
+      "thread_count": 4,
+      "n_concurrent_processes": 4,
+      "group_wallclock_s": 360.38,
+      "all_per_call_latencies_s": [],
+      "avg_per_call_latency_s": null,
+      "n_samples": 0
+    }
+  ]
+}

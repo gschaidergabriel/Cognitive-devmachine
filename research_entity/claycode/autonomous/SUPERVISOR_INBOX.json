@@ -1,21 +1,22 @@
 {
   "schema_version": "9.13",
-  "supervisor_delta": "9.13R_NON_AUTHORITY",
-  "latest_cycle": "fresh-zombie-only-vps-telemetry-host-preflight-component-pass-20260828",
+  "supervisor_delta": "9.13T_NON_AUTHORITY",
+  "latest_cycle": "quiescence-v2-current-binding-safe-edit-component-pass-20260828",
   "needs_review": true,
   "active_program": "ENTITYOS_HCU",
   "product": "EntityOS",
   "integrated_cognition_compute_architecture": "HCU",
-  "material_finding": "Fresh clay-direct-dev telemetry at 2026-08-27T19:42:45Z shows no visible live Clay worker roots; the prior GRID10-era processes are Z/ZN defunct. This narrows earlier non-quiescence evidence but does not establish the required >=90s repository/host-bound zero-survivor/zero-descendant/zero-restart proof because the owning checkout remains stale/dirty. Separately, the exact-current Triggerword-3 host-preflight v3 component regression executed 8/8 PASS in a local isolated non-provider surface with zero provider calls and zero secret lookups; scope remains component-only.",
+  "material_finding": "Quiescence v2 now fail-closed binds current remote main, clean local HEAD/tree, dual authority epoch/source hashes and a >=90s v1 observation, but no PASS_SCOPED_RUNTIME_QUIESCENCE receipt exists. The latest main-head BASE audit again failed before any workflow step (steps=[], runner_id=0), which is infrastructure evidence only. Separately, the provider-free preimage-bound Frankenstein safe-edit primitive reports exact-branch isolated 11/11 component tests covering path confinement, stale-preimage rejection, rollback and Python-symbol preservation; it is not yet retained direct-dispatch runtime evidence.",
   "current_frontier": {
     "runtime_provider_authority": "P0_HARD_OFF_RESTORED_DUAL_ARTIFACT_RUNTIME_REPOSITORY_PASS_REQUIRED",
-    "frankenstein_direct_dispatch": "P0_DESTRUCTIVE_REWRITE_EXECUTABLE_COUNTEREXAMPLE_CONTAINED_PATCH_OR_PREIMAGE_BOUND_EDIT_AND_INDEPENDENT_NON_PROVIDER_REVIEW_REQUIRED",
+    "frankenstein_direct_dispatch": "P0_PREIMAGE_BOUND_SAFE_EDIT_COMPONENT_PASS_11_OF_11_LOCAL_ISOLATED_BUT_INTEGRATION_AND_INDEPENDENT_NON_PROVIDER_REEXECUTION_REQUIRED",
     "frankenstein_72h_provider_orchestration": "QUARANTINED_NON_OPERATIVE_UNDER_CURRENT_FREE_ONLY_HARD_OFF",
     "runtime_control_transport": "P0_BOOTSTRAP_V2_REPOSITORY_TEST_AND_OWNING_VPS_PASS_REQUIRED_NO_CONTROL_SYNC_REFRESH_PASS",
-    "runtime_quiescence": "P0_LATEST_TELEMETRY_HAS_NO_VISIBLE_LIVE_CLAY_ROOTS_BUT_STALE_DIRTY_CHECKOUT_NO_90S_BOUND_PASS; CONTROL_SYNC_THEN_READONLY_90S_OBSERVATION_REQUIRED_BEFORE_ANY_RESTART_AUTHORITY_MUTATION",
+    "runtime_quiescence": "P0_V2_SOURCE_AND_FAIL_CLOSED_TESTS_PRESENT_RUNTIME_UNVERIFIED; CONTROL_SYNC_THEN_REPOSITORY_BOUND_V2_TESTS_AND_READONLY_GE90S_OBSERVATION_REQUIRED",
+    "github_actions": "LATEST_BASE_AUDIT_FAILED_PRE_STEP_STEPS_EMPTY_RUNNER_ID_ZERO_INFRASTRUCTURE_ONLY",
     "host_preflight_v3": "COMPONENT_REGRESSION_PASS_8_OF_8_LOCAL_ISOLATED_NON_PROVIDER_ZERO_PROVIDER_CALLS_ZERO_SECRET_LOOKUPS_NO_RUNTIME_PROMOTION",
     "base_claycode_release": "WP01_WP02_PASS_WP03_TO_WP14_OPEN_GENERAL_PURPOSE_AND_RELEASE_GATES_NOT_PASS",
-    "distillery_utility": "ZERO_ACCEPTED_DATASET_TOKENS_LAST_CONFIRMED_0_OF_88774_NO_TRAINING_CREDIT",
+    "distillery_utility": "ZERO_ACCEPTED_DATASET_TOKENS_0_OF_88774_ZERO_ACCEPTED_PACKETS_NO_TRAINING_CREDIT",
     "canonical_dataset_rows_admitted": 0,
     "entityos_whole_runtime_credit": 0,
     "hcu_full_runtime_credit": 0,
@@ -51,9 +52,8 @@
   "next_focus": [
     "P0_EXECUTE_DUAL_AUTHORITY_HARD_OFF_REGRESSIONS_REPOSITORY_BOUND_ON_CLEAN_CURRENT_NON_PROVIDER_CHECKOUT_WITH_PROVIDER_CALLS_ZERO_SECRET_LOOKUPS_ZERO",
     "P0_COMPLETE_BOOTSTRAP_V2_CONTROL_SYNC_SO_OWNING_VPS_IS_CURRENT_CLEAN_AND_AUTHORITY_BOUND",
-    "P0_AFTER_CONTROL_SYNC_RUN_READONLY_LIVE_PROCESS_AND_RESTART_OBSERVATION_FOR_AT_LEAST_90S; IF_ZERO_LIVE_ROOTS_DESCENDANTS_RESTARTS_PERSIST_RECORD_SCOPED_QUIESCENCE_RECEIPT; IF_A_LIVE_ROOT_REAPPEARS_ONLY_THEN_REENTER_RESTART_AUTHORITY_V4_BEFORE_MUTATION",
-    "P0_INDEPENDENTLY_REVIEW_AND_REEXECUTE_DESTRUCTIVE_TRUNCATION_GUARD_AND_ALL_PROVIDER_AUTHORED_FRANKENSTEIN_CORE_CHANGES_BEFORE_RETAINED_RUNTIME_CREDIT",
-    "P0_REQUIRE_PATCH_DIFF_OR_PREIMAGE_BOUND_MODIFICATION_FOR_EXISTING_FILES_WITH_FULL_FILE_HASH_OR_UNCHANGED_REGION_INVARIANTS_BEFORE_COMMIT",
+    "P0_REPOSITORY_BOUND_EXECUTE_QUIESCENCE_V2_TESTS_THEN_GE90S_READONLY_OBSERVATION; REQUIRE_STABLE_PRE_POST_CURRENT_MAIN_HEAD_TREE_DIRTY_FALSE_AUTHORITY_SOURCE_HASHES_ZERO_LIVE_FORBIDDEN_ROOTS_ZERO_ACTIVE_PROVIDER_LEASES_AND_ZERO_RELEVANT_COUNTER_MOVEMENT",
+    "P0_INDEPENDENTLY_INTEGRATE_REVIEW_AND_REEXECUTE_PREIMAGE_BOUND_SAFE_EDIT_ON_CURRENT_CLEAN_NON_PROVIDER_CHECKOUT_BEFORE_RETAINED_FRANKENSTEIN_EXISTING_FILE_MUTATION_CREDIT",
     "P1_KEEP_BASE_TRAINING_CANONICAL_SEMANTICS_GRID10_AND_WHOLE_HCU_PROMOTIONS_AT_ZERO_UNLESS_EXISTING_EXECUTABLE_GATES_PASS"
   ],
   "promotion_state": {
@@ -61,6 +61,7 @@
     "runtime_quiescence_pass": false,
     "provider_path_runtime_pass": false,
     "frankenstein_direct_dispatch_retained_runtime_pass": false,
+    "frankenstein_safe_edit_component_regression_pass": true,
     "host_preflight_v3_component_regression_pass": true,
     "canonical_dataset_rows_admitted": 0,
     "physical_grid10_component_runtime_pass": false,
@@ -70,9 +71,9 @@
     "canonical_semantics_promotion": false,
     "training_credit": 0
   },
-  "steering": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_9_13R_DELTA_2026-08-28T0242P0700_GPT56SOL.json",
+  "steering": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_9_13T_DELTA_2026-08-28T0351P0700_GPT56SOL.json",
   "quarantined_relayed_directive": {
-    "source_commit": "df703fb81ef1bb1e8fa3e31aae5e6af2c2152f35",
+    "source_commit": "df703fb81ef1bb1e8fa310888973f007d94c3189",
     "status": "NON_OPERATIVE_UNDER_CURRENT_EXPLICIT_FREE_ONLY_NO_PAID_FALLBACK_TASK_AUTHORITY",
     "provider_execution_authority": false,
     "paid_execution_authority": false

@@ -3,9 +3,11 @@
 
 This tool never moves, deletes, rewrites, commits, pushes, imports provider SDKs,
 reads secrets, or performs network I/O. It classifies tracked root entries and,
-when requested, reports literal Git-grep reference candidates. Literal references
-are dependency candidates only; zero literal references is not proof that a path
-is safe to move.
+when requested, reports literal Git-grep reference candidates from the exact
+committed HEAD named in the report.
+
+Literal references are dependency candidates only; zero literal references is
+not proof that a path is safe to move.
 """
 
 from __future__ import annotations
@@ -42,6 +44,8 @@ BOOT_AUTHORITY_HINTS = (
     "RAE_",
 )
 
+REFERENCE_TREE = "HEAD"
+
 
 class InventoryError(RuntimeError):
     """Inventory could not be resolved without guessing."""
@@ -69,8 +73,12 @@ def repository_root(start: Path) -> Path:
     return root
 
 
+def current_head(repo: Path) -> str:
+    return git(repo, "rev-parse", REFERENCE_TREE).decode("utf-8").strip()
+
+
 def tracked_root_entries(repo: Path) -> list[str]:
-    raw = git(repo, "ls-tree", "-z", "--name-only", "HEAD")
+    raw = git(repo, "ls-tree", "-z", "--name-only", REFERENCE_TREE)
     return sorted(
         part.decode("utf-8", errors="surrogateescape")
         for part in raw.split(b"\0")
@@ -78,20 +86,35 @@ def tracked_root_entries(repo: Path) -> list[str]:
     )
 
 
-def literal_reference_files(repo: Path, root_entry: str) -> list[str]:
-    # Read-only heuristic. It intentionally does not claim runtime consumption.
+def _strip_tree_prefix(value: str, treeish: str) -> str:
+    prefix = f"{treeish}:"
+    return value[len(prefix):] if value.startswith(prefix) else value
+
+
+def literal_reference_files(
+    repo: Path,
+    root_entry: str,
+    *,
+    treeish: str = REFERENCE_TREE,
+) -> list[str]:
+    """Search the exact committed tree, never staged/unstaged working-tree text."""
     raw = git(
         repo,
         "grep",
         "-l",
         "-z",
         "-F",
-        "--",
+        "-e",
         root_entry,
+        treeish,
+        "--",
         allow_nomatch=True,
     )
     return sorted(
-        part.decode("utf-8", errors="surrogateescape")
+        _strip_tree_prefix(
+            part.decode("utf-8", errors="surrogateescape"),
+            treeish,
+        )
         for part in raw.split(b"\0")
         if part
     )
@@ -117,7 +140,7 @@ def build_inventory(
     scan_references: bool,
     max_reference_files: int = 25,
 ) -> dict[str, Any]:
-    head = git(repo, "rev-parse", "HEAD").decode("utf-8").strip()
+    head = current_head(repo)
     entries = tracked_root_entries(repo)
     rows: list[dict[str, Any]] = []
 
@@ -143,15 +166,20 @@ def build_inventory(
         categories[row["classification"]] = categories.get(row["classification"], 0) + 1
 
     return {
-        "schema": "TRIGGER3_ROOT_INVENTORY/v1",
+        "schema": "TRIGGER3_ROOT_INVENTORY/v2",
         "read_only": True,
         "repository": str(repo),
         "head": head,
+        "reference_tree": REFERENCE_TREE,
+        "reference_scope": "TRACKED_COMMITTED_HEAD_ONLY",
+        "working_tree_affects_reference_scan": False,
         "target_public_surface": sorted(TARGET_SURFACE),
         "reference_scan_enabled": scan_references,
         "warning": (
             "Literal Git references are dependency candidates, not runtime-consumption proof. "
-            "Zero literal references does not authorize a move."
+            "Zero literal references does not authorize a move. "
+            "The scan is bound to the exact committed HEAD reported above; staged, unstaged, "
+            "untracked, external-host, generated, and binary-only references remain outside scope."
         ),
         "root_entry_count": len(rows),
         "category_counts": dict(sorted(categories.items())),
@@ -169,7 +197,7 @@ def main() -> int:
     parser.add_argument(
         "--references",
         action="store_true",
-        help="Also run read-only git grep for literal dependency candidates.",
+        help="Also run read-only git grep on the exact committed HEAD for literal dependency candidates.",
     )
     parser.add_argument(
         "--max-reference-files",
@@ -192,7 +220,7 @@ def main() -> int:
             max_reference_files=args.max_reference_files,
         )
     except InventoryError as exc:
-        print(json.dumps({"schema": "TRIGGER3_ROOT_INVENTORY/v1", "error": str(exc)}))
+        print(json.dumps({"schema": "TRIGGER3_ROOT_INVENTORY/v2", "error": str(exc)}))
         return 2
 
     print(

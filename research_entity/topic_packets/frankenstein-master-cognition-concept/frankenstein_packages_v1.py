@@ -94,7 +94,7 @@ PHASES: list[dict[str, Any]] = [
                     "`python3 -m pytest tests/test_grid10_fabric_alignment_targets_v1.py -q` "
                     "exits 0."
                 ),
-                "acceptance_criteria": "pytest tests/test_grid10_fabric_alignment_targets_v1.py -q exits 0",
+                "acceptance_criteria": "python3 -m pytest tests/test_grid10_fabric_alignment_targets_v1.py -q",
             },
             {
                 "package_id": "A2_compute_alignment_delta",
@@ -116,7 +116,7 @@ PHASES: list[dict[str, Any]] = [
                     "`python3 -m pytest tests/test_grid10_alignment_delta_v1.py -q` "
                     "exits 0."
                 ),
-                "acceptance_criteria": "pytest tests/test_grid10_alignment_delta_v1.py -q exits 0",
+                "acceptance_criteria": "python3 -m pytest tests/test_grid10_alignment_delta_v1.py -q",
             },
             {
                 "package_id": "A3_damped_correction",
@@ -138,7 +138,7 @@ PHASES: list[dict[str, Any]] = [
                     "`python3 -m pytest tests/test_grid10_alignment_damped_correction_v1.py -q` "
                     "exits 0."
                 ),
-                "acceptance_criteria": "pytest tests/test_grid10_alignment_damped_correction_v1.py -q exits 0",
+                "acceptance_criteria": "python3 -m pytest tests/test_grid10_alignment_damped_correction_v1.py -q",
             },
             {
                 "package_id": "A4_alignment_tick_integration",
@@ -176,7 +176,7 @@ PHASES: list[dict[str, Any]] = [
                     "`python3 -m pytest tests/test_grid10_alignment_tick_v1.py -q` "
                     "exits 0."
                 ),
-                "acceptance_criteria": "pytest tests/test_grid10_alignment_tick_v1.py -q exits 0",
+                "acceptance_criteria": "python3 -m pytest tests/test_grid10_alignment_tick_v1.py -q",
             },
         ],
     },
@@ -208,7 +208,7 @@ PHASES: list[dict[str, Any]] = [
                     "`python3 -m pytest tests/test_grid10_reflex_fabric_reachable_v1.py -q` "
                     "exits 0."
                 ),
-                "acceptance_criteria": "pytest tests/test_grid10_reflex_fabric_reachable_v1.py -q exits 0",
+                "acceptance_criteria": "python3 -m pytest tests/test_grid10_reflex_fabric_reachable_v1.py -q",
             },
             {
                 "package_id": "B2_reflex_free_memory",
@@ -235,7 +235,7 @@ PHASES: list[dict[str, Any]] = [
                     "`python3 -m pytest tests/test_grid10_reflex_free_memory_v1.py -q` "
                     "exits 0."
                 ),
-                "acceptance_criteria": "pytest tests/test_grid10_reflex_free_memory_v1.py -q exits 0",
+                "acceptance_criteria": "python3 -m pytest tests/test_grid10_reflex_free_memory_v1.py -q",
             },
             {
                 "package_id": "B3_reflex_stale_heartbeat",
@@ -262,7 +262,7 @@ PHASES: list[dict[str, Any]] = [
                     "`python3 -m pytest tests/test_grid10_reflex_stale_heartbeat_v1.py -q` "
                     "exits 0."
                 ),
-                "acceptance_criteria": "pytest tests/test_grid10_reflex_stale_heartbeat_v1.py -q exits 0",
+                "acceptance_criteria": "python3 -m pytest tests/test_grid10_reflex_stale_heartbeat_v1.py -q",
             },
             {
                 "package_id": "B4_reflex_tick_aggregate",
@@ -284,7 +284,7 @@ PHASES: list[dict[str, Any]] = [
                     "`python3 -m pytest tests/test_grid10_reflex_tick_v1.py -q` "
                     "exits 0."
                 ),
-                "acceptance_criteria": "pytest tests/test_grid10_reflex_tick_v1.py -q exits 0",
+                "acceptance_criteria": "python3 -m pytest tests/test_grid10_reflex_tick_v1.py -q",
             },
         ],
     },
@@ -315,7 +315,7 @@ PHASES: list[dict[str, Any]] = [
                     "`python3 -m pytest tests/test_grid10_fabric_bridge_requests_v1.py -q` "
                     "exits 0."
                 ),
-                "acceptance_criteria": "pytest tests/test_grid10_fabric_bridge_requests_v1.py -q exits 0",
+                "acceptance_criteria": "python3 -m pytest tests/test_grid10_fabric_bridge_requests_v1.py -q",
             },
             {
                 "package_id": "C2_bridge_opt_in_caller",
@@ -339,7 +339,7 @@ PHASES: list[dict[str, Any]] = [
                     "`python3 -m pytest tests/test_grid10_claude_bridge_v1.py -q` "
                     "exits 0."
                 ),
-                "acceptance_criteria": "pytest tests/test_grid10_claude_bridge_v1.py -q exits 0",
+                "acceptance_criteria": "python3 -m pytest tests/test_grid10_claude_bridge_v1.py -q",
             },
         ],
     },
@@ -371,7 +371,7 @@ PHASES: list[dict[str, Any]] = [
                     "`python3 -m pytest tests/test_grid10_web_ui_v1.py -q` "
                     "exits 0."
                 ),
-                "acceptance_criteria": "pytest tests/test_grid10_web_ui_v1.py -q exits 0",
+                "acceptance_criteria": "python3 -m pytest tests/test_grid10_web_ui_v1.py -q",
             },
             {
                 "package_id": "D2_regulator_profiles",
@@ -397,7 +397,7 @@ PHASES: list[dict[str, Any]] = [
                     "`python3 -m pytest tests/test_grid10_fabric_regulator_profiles_v1.py tests/test_grid10_web_ui_v1.py -q` "
                     "exits 0."
                 ),
-                "acceptance_criteria": "pytest tests/test_grid10_fabric_regulator_profiles_v1.py tests/test_grid10_web_ui_v1.py -q exits 0",
+                "acceptance_criteria": "python3 -m pytest tests/test_grid10_fabric_regulator_profiles_v1.py tests/test_grid10_web_ui_v1.py -q",
             },
             {
                 "package_id": "D3_live_state_view",
@@ -419,7 +419,7 @@ PHASES: list[dict[str, Any]] = [
                     "`python3 -m pytest tests/test_grid10_web_ui_state_v1.py -q` "
                     "exits 0."
                 ),
-                "acceptance_criteria": "pytest tests/test_grid10_web_ui_state_v1.py -q exits 0",
+                "acceptance_criteria": "python3 -m pytest tests/test_grid10_web_ui_state_v1.py -q",
             },
         ],
     },
@@ -457,7 +457,7 @@ PHASES: list[dict[str, Any]] = [
                     "`python3 -m pytest tests/test_grid10_reflex_daemon_v1.py -q` "
                     "exits 0."
                 ),
-                "acceptance_criteria": "pytest tests/test_grid10_reflex_daemon_v1.py -q exits 0",
+                "acceptance_criteria": "python3 -m pytest tests/test_grid10_reflex_daemon_v1.py -q",
             },
         ],
     },

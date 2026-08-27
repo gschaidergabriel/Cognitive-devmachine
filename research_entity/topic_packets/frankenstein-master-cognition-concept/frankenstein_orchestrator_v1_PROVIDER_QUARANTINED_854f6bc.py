@@ -217,7 +217,17 @@ def dispatch_helper_task_direct(task_description: str, acceptance_criteria: str,
         except ValueError as e:
             _log(log_path, f"DIRECT_DISPATCH_REJECTED_UNSAFE_PATH attempt={attempt} {e}")
             continue
-        verify = subprocess.run(acceptance_criteria, shell=True, cwd=str(repo_root),
+        # Real gap found 2026-08-28 on first live VPS run: acceptance_criteria
+        # commands like "python3 -m pytest ..." resolved to the SYSTEM python3
+        # (no pytest installed) rather than whichever interpreter this whole
+        # process is actually running under (e.g. a dedicated venv on a fresh
+        # deployment) -- shell=True inherits the ambient PATH, not sys.executable.
+        # Fix: prepend sys.executable's own directory to PATH for the verify
+        # subprocess only, so "python3"/"pytest" resolve to the SAME
+        # environment this orchestrator itself is running in.
+        verify_env = dict(os.environ)
+        verify_env["PATH"] = os.path.dirname(sys.executable) + os.pathsep + verify_env.get("PATH", "")
+        verify = subprocess.run(acceptance_criteria, shell=True, cwd=str(repo_root), env=verify_env,
                                  capture_output=True, text=True, timeout=300)
         if verify.returncode == 0:
             subprocess.run(["git", "-C", str(repo_root), "add", *blocks.keys()], check=False)

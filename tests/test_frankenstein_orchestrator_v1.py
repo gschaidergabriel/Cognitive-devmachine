@@ -301,6 +301,39 @@ def test_dispatch_helper_task_direct_commits_on_successful_verification(tmp_path
     assert "direct-dispatch" in log
 
 
+def test_dispatch_helper_task_direct_verify_uses_same_interpreter_as_orchestrator(tmp_path, monkeypatch):
+    """Real 2026-08-28 VPS finding: acceptance_criteria's bare 'python3 -m
+    pytest ...' resolved to the SYSTEM python3 (no pytest installed) rather
+    than the venv this whole process runs under, since shell=True inherits
+    ambient PATH, not sys.executable. This asserts the fix: the verify
+    subprocess's PATH is prefixed with sys.executable's own directory."""
+    repo_root = tmp_path / "repo"
+    repo_root.mkdir()
+
+    def fake_call(tier, messages, **kwargs):
+        return "FILE: check.py\n```python\nimport shutil, sys, json\nprint(json.dumps({'which': shutil.which('python3'), 'argv0dir': __import__('os').path.dirname(sys.executable)}))\n```"
+
+    monkeypatch.setattr(orch, "call_specific_tier", fake_call)
+    log_path = tmp_path / "log.txt"
+
+    # acceptance_criteria itself both runs the generated file AND asserts,
+    # via its own exit code, that the resolved python3 lives in the same
+    # directory as sys.executable (proving the PATH fix actually took effect,
+    # not just that "python3" resolved to SOME interpreter).
+    acceptance_criteria = (
+        f'"{sys.executable}" -c "'
+        "import shutil, os; "
+        f"expected = os.path.dirname({sys.executable!r}); "
+        "resolved = shutil.which('python3'); "
+        "assert resolved is not None and os.path.dirname(resolved) == expected, "
+        "(resolved, expected)"
+        '"'
+    )
+    result = orch.dispatch_helper_task_direct("write a diagnostic module", acceptance_criteria,
+                                                repo_root, log_path)
+    assert result["ok"] is True
+
+
 def test_dispatch_helper_task_direct_reverts_on_failed_verification(tmp_path, monkeypatch):
     repo_root = tmp_path / "repo"
     repo_root.mkdir()

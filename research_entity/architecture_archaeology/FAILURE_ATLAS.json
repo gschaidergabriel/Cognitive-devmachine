@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "status": "TRIGGERWORD3_SYNTHESIS_GROUNDED_PARTIAL",
   "purpose": "Machine-readable failure knowledge. Raw source, current authority and exact executable receipts outrank this atlas.",
   "historical_source_head": "abba90a5767d85abc8a1ac340bae92842dab35c1",
@@ -10,7 +10,8 @@
     "method_present != result_present",
     "historical_source != current_runtime_pass",
     "component_pass != whole_product_pass",
-    "consensus_or_repetition != independent_evidence"
+    "consensus_or_repetition != independent_evidence",
+    "moving authority pointers are not substitutes for stable measurement receipts"
   ],
   "failures": [
     {
@@ -83,33 +84,42 @@
     {
       "id": "FAIL-PROVIDER-HARDOFF-BYPASS",
       "evidence_class": ["CURRENT_SOURCE", "NEGATIVE_RESULT", "AUTHORITY_CONTRADICTION"],
-      "source_refs": ["research_entity/claycode/autonomous/SUPERVISOR_INBOX.json", "research_entity/claycode/autonomous/SUPERVISOR_STEERING_9_13O_DELTA_2026-08-27T2341P0700_GPT56SOL.json"],
-      "observed_signal": "Current 9.13 authority keeps all provider routes HARD_OFF and quarantines the 72h Frankenstein external-provider orchestration as non-operative.",
-      "successor_constraint": "Resolve authority before secret lookup, provider import, network, Aider or fallback dispatch.",
-      "current_status": "QUARANTINED_NON_OPERATIVE",
-      "next_discriminator": "Exact HARD_OFF execution proving provider_calls=0 and secret_lookups=0 at the real caller boundary."
+      "source_refs": ["research_entity/claycode/autonomous/SUPERVISOR_INBOX.json", "research_entity/claycode/autonomous/SUPERVISOR_STEERING_9_13Q_DELTA_2026-08-28T0146P0700_GPT56SOL.json"],
+      "observed_signal": "Commit df703fb reopened both Inbox and canonical provider authority and admitted one Together run from relayed text; current explicit FREE_ONLY/no-paid-fallback task authority revoked that path and restored provider HARD_OFF.",
+      "successor_constraint": "Resolve current authority before secret lookup, provider import, network, Aider or fallback dispatch; stale or relayed plan text cannot mint provider authority.",
+      "current_status": "P0_HARD_OFF_RESTORED",
+      "next_discriminator": "Repository-bound HARD_OFF regression on a clean non-provider checkout proving provider_calls=0 and secret_lookups=0 at the real caller boundary."
     },
     {
       "id": "FAIL-TOGETHER-PLAN-CONTRADICTION",
       "evidence_class": ["CURRENT_SOURCE", "AUTHORITY_CONTRADICTION"],
-      "source_refs": ["research_entity/claycode/autonomous/SUPERVISOR_INBOX.json"],
-      "observed_signal": "The orchestration plan treated Together as available while canonical 9.13 records zero authorized paid Together runs.",
-      "successor_constraint": "Plan text, environment keys and prior authority cannot mint current authorization.",
+      "source_refs": ["research_entity/claycode/autonomous/SUPERVISOR_INBOX.json", "research_entity/claycode/autonomous/SUPERVISOR_STEERING_9_13Q_DELTA_2026-08-28T0146P0700_GPT56SOL.json"],
+      "observed_signal": "A relayed orchestration path treated Together as available while the current explicit FREE_ONLY/no-paid-fallback authority keeps Together forbidden and zero paid fallback authority.",
+      "successor_constraint": "Plan text, environment keys, prior authority and relayed directives cannot mint current execution authorization.",
       "current_status": "BLOCKED"
+    },
+    {
+      "id": "FAIL-DESTRUCTIVE-WHOLE-FILE-MODEL-REWRITE",
+      "evidence_class": ["PROJECT_MEASUREMENT", "NEGATIVE_RESULT", "EXECUTABLE_COUNTEREXAMPLE"],
+      "source_refs": ["research_entity/claycode/autonomous/SUPERVISOR_INBOX.json", "research_entity/claycode/autonomous/SUPERVISOR_STEERING_9_13Q_DELTA_2026-08-28T0146P0700_GPT56SOL.json"],
+      "observed_signal": "The first live Frankenstein direct-dispatch on the VPS rewrote tools/grid10_fabric.py from 672 lines into an 87-line fabricated stub. The local commits were contained, never pushed to origin, and reset.",
+      "successor_constraint": "Prefer patch/diff-based modification for existing files or prove full-file-hash/unchanged-region invariants before commit. A simple 50 percent shrink threshold is not sufficient safety for arbitrary edits.",
+      "current_status": "COUNTEREXAMPLE_CONTAINED_RETAINED_RUNTIME_CREDIT_ZERO",
+      "next_discriminator": "Independent clean non-provider review and re-execution of the truncation regression and all provider-authored Frankenstein core changes before any retained runtime credit."
     },
     {
       "id": "FAIL-THREAD-COUNT-INTUITION",
       "evidence_class": ["PROJECT_MEASUREMENT", "NEGATIVE_RESULT"],
-      "source_refs": ["research_entity/claycode/autonomous/SUPERVISOR_INBOX.json"],
+      "source_refs": ["research_entity/topic_packets/grid10-latency-concept/THREAD_LATENCY_RUN_20260827.json", "research_entity/topic_packets/grid10-latency-concept/EXPERIMENT_RESULTS_20260827.json"],
       "observed_signal": "On the measured 4-process/4-vCPU topology: 1 thread/process averaged 8.3197 s/call, 2 threads averaged 23.1806 s/call, and 4 threads completed zero samples within experiment timeouts.",
-      "successor_constraint": "Concurrency recommendations are topology-specific and must be measured.",
+      "successor_constraint": "Concurrency recommendations are topology-specific and must be measured against stable exact experiment receipts rather than a moving supervisor pointer.",
       "current_status": "DEFAULT_1_SUPPORTED_FOR_MEASURED_TOPOLOGY_ONLY"
     },
     {
       "id": "FAIL-FREESWARM-ZERO-CONVERSION",
       "evidence_class": ["NEGATIVE_RESULT", "PROJECT_MEASUREMENT_HISTORY"],
-      "source_refs": ["research_entity/claycode/autonomous/SUPERVISOR_INBOX.json"],
-      "observed_signal": "Current supervisor keeps accepted Distillery dataset tokens at zero; raw generation volume receives no training-utility credit without admitted conversion.",
+      "source_refs": ["research_entity/claycode/autonomous/SUPERVISOR_INBOX.json", "research_entity/claycode/autonomous/SUPERVISOR_STEERING_9_13Q_DELTA_2026-08-28T0146P0700_GPT56SOL.json"],
+      "observed_signal": "Current supervisor keeps accepted Distillery dataset tokens at zero; latest 9.13Q reports 0 accepted tokens out of 88774, so raw generation volume receives no training-utility credit without admitted conversion.",
       "successor_constraint": "Optimize evidence-qualified conversion rather than generated-token volume.",
       "current_status": "BLOCKED_ZERO_ACCEPTED_TOKENS",
       "next_discriminator": "One exact accepted packet -> nonzero accepted_dataset_tokens -> identical semantic replay adds zero."

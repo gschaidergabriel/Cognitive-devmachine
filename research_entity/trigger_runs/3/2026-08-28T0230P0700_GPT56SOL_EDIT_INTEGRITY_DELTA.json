@@ -1,0 +1,67 @@
+{
+  "schema": "TRIGGERWORD3_EDIT_INTEGRITY_DELTA/v1",
+  "trigger": "triggerwort 3",
+  "timestamp_local": "2026-08-28T02:30:00+07:00",
+  "organ": "GPT-5.6 Sol",
+  "base_main": "63dc45e09dac9930dd4bf7ca169cf693190b2c71",
+  "branch": "trigger3-edit-integrity-gpt56sol-20260828",
+  "authority": {
+    "supervisor_inbox_schema": "9.13",
+    "supervisor_delta": "9.13Q_NON_AUTHORITY",
+    "mode": "FREE_ONLY",
+    "provider_routes_admitted": false,
+    "together_forbidden": true,
+    "paid_fallback": false
+  },
+  "observed_negative_result": {
+    "class": "PROJECT_MEASUREMENT_NEGATIVE_RESULT_FROM_CURRENT_SUPERVISOR",
+    "summary": "First live Frankenstein direct-dispatch rewrote tools/grid10_fabric.py from 672 lines to an 87-line fabricated stub; local VPS commits were contained/reset before origin push.",
+    "credit": "NEGATIVE_RESULT_ONLY"
+  },
+  "delta": {
+    "source": "tools/frankenstein_edit_integrity_gate_v1.py",
+    "source_git_blob_sha1": "55dca8940fa225b7b02510fc0f64d658092c033a",
+    "source_sha256": "29838b6f2a9b97bfd50e064565190140f8c75f8c370750f28a0b8fa0e33698af",
+    "tests": "tests/test_frankenstein_edit_integrity_gate_v1.py",
+    "tests_git_blob_sha1": "c48ca7f920fca975fce29730308f0cb2aa0d4d7d",
+    "tests_sha256": "0a122f5047b0d2ff9ab79a1e0b9bb898c9d2657f9f378532901d819197e1e931",
+    "properties": [
+      "existing files only",
+      "exact SHA-256 preimage required for every touched path",
+      "patch touched paths must exactly equal declarations",
+      "create/delete/rename/mode/binary patches rejected",
+      "git apply --check --whitespace=error-all required before mutation",
+      "bounded deletion policy",
+      "git diff --check required after mutation",
+      "reverse git apply --check required after mutation",
+      "post-apply failure restores exact preimage bytes",
+      "receipt binds preimage, postimage, and patch SHA-256"
+    ]
+  },
+  "validation": {
+    "surface": "isolated local non-provider Python + git temporary repositories",
+    "tests": "10/10 PASS",
+    "scope": "EXISTING_FILE_PATCH_INTEGRITY_COMPONENT_ONLY",
+    "includes_672_line_regression": true,
+    "provider_calls": 0,
+    "secret_lookups": 0,
+    "network_model_calls": 0,
+    "paid_execution": 0,
+    "unusual_experiment": false
+  },
+  "limits": [
+    "Gate is not yet wired into canonical Frankenstein direct-dispatch runtime.",
+    "No repository-bound clean-checkout execution on this branch has been observed yet.",
+    "Passing edit integrity does not establish semantic correctness of an edit.",
+    "No provider/runtime/HCU/J-Space/training/whole-product credit is minted."
+  ],
+  "next_exact_gate": "Run the focused test file on a clean exact-branch checkout, then wire existing-file direct-dispatch through this patch gate (or an equivalent stronger invariant-preserving adapter) before any future provider-backed Frankenstein execution can receive retained runtime credit.",
+  "credits": {
+    "frankenstein_direct_dispatch_retained_runtime": 0,
+    "provider_runtime": 0,
+    "entityos_whole_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0
+  }
+}

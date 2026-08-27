@@ -3,11 +3,12 @@
 
 No network calls. No provider calls. No secret lookup. No repository writes.
 
-This preflight can establish a repository/authority *adapter* surface. It cannot
-establish NATIVE lifecycle integration because it deliberately does not trigger
-or verify lifecycle hooks, cross-session durable state, or effect/result
-receipts. Those boundaries require a host-specific witness produced or
-independently verified by the claimed mechanism.
+This preflight can establish that repository, current-authority and Git source
+surfaces are readable. It cannot establish NATIVE or ADAPTED lifecycle
+integration because it deliberately does not trigger or verify lifecycle hooks,
+cross-session durable state, or effect/result receipts. Those boundaries require
+a host-specific witness produced or independently verified by the claimed
+mechanism.
 """
 from __future__ import annotations
 
@@ -29,8 +30,8 @@ AUTHORITY_FILES = (
 INBOX_RELATIVE_PATH = "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json"
 
 # These are intentionally not probed by this read-only preflight. Their absence
-# from the probe is itself a promotion fence: no caller may upgrade ADAPTED to
-# NATIVE from repo/authority/Git presence alone.
+# from the probe is itself a promotion fence: no caller may upgrade DEGRADED to
+# ADAPTED or NATIVE from repo/authority/Git presence alone.
 NATIVE_BOUNDARIES = (
     "real_lifecycle_hook_firing",
     "cross_session_durable_state_when_claimed",
@@ -129,14 +130,14 @@ def classify(
 ) -> str:
     """Classify only what this read-only preflight can actually establish.
 
-    NATIVE is intentionally unreachable here. A repository with current
-    authority and Git identity is an ADAPTED source/research integration until
-    a host-specific lifecycle/state/effect witness is independently verified.
+    NATIVE and ADAPTED are intentionally unreachable here. Even a repository
+    with current authority and verified Git identity remains DEGRADED until a
+    host-specific lifecycle/state/effect witness is independently verified.
     """
     if root is None:
         return "BLOCKED"
     if all(authority_present.values()) and steering_verified and git_ok:
-        return "ADAPTED"
+        return "DEGRADED"
     return "DEGRADED"
 
 
@@ -196,7 +197,7 @@ def main() -> int:
         )
     else:
         next_action = (
-            "Repository/authority adapter preflight is satisfied. If NATIVE is claimed, "
+            "Repository/authority source preflight is readable. To claim ADAPTED or NATIVE, "
             "run a host-specific witness for real lifecycle hook firing, required "
             "cross-session durable state, and claimed effect/result receipts."
         )
@@ -224,12 +225,13 @@ def main() -> int:
         },
         "git": {"head": git_head, "dirty": git_dirty},
         "installation_class": installation_class,
+        "adapted_possible_from_this_preflight": False,
         "native_possible_from_this_preflight": False,
         "native_boundaries_unverified": list(NATIVE_BOUNDARIES),
         "promotion_fence": (
-            "Repo/authority/Git presence can establish at most ADAPTED here. "
+            "Repo/authority/Git presence can establish at most DEGRADED here. "
             "A boolean flag, model self-report, source/config presence, or manually "
-            "asserted observation cannot establish NATIVE lifecycle integration."
+            "asserted observation cannot establish ADAPTED or NATIVE lifecycle integration."
         ),
         "credit_boundary": (
             "This preflight grants zero provider-runtime, whole EntityOS/HCU, full HCU, "

@@ -15,18 +15,32 @@ def _make_repo_root(tmp_path: Path) -> Path:
     (root / "research_entity" / "rooms").mkdir(parents=True)
     (root / "research_entity" / "claycode" / "autonomous").mkdir(parents=True)
     (root / "the artefact").mkdir()
+    (root / "CLAY_EXECUTION_AUTHORITY.md").write_text("authority")
     (root / "research_entity" / "continuity" / "BOOTSTRAP_MINIMAL.json").write_text("{}")
     (root / "research_entity" / "rooms" / "PROGRAM_STATE.json").write_text("{}")
     return root
 
 
-def test_classification_fails_degraded_when_git_is_not_verified(tmp_path):
+def _present() -> dict[str, bool]:
+    return {path: True for path in preflight.AUTHORITY_FILES}
+
+
+def test_read_only_preflight_never_mints_adapted_or_native(tmp_path):
     root = _make_repo_root(tmp_path)
-    present = {path: True for path in preflight.AUTHORITY_FILES}
+    present = _present()
     assert preflight.classify(root, present, False, True) == "DEGRADED"
-    assert preflight.classify(root, present, True, False) == "DEGRADED"
-    assert preflight.classify(root, present, True, True) == "NATIVE"
+    assert preflight.classify(root, present, True, True) == "DEGRADED"
+    assert preflight.classify(root, present, True, True) not in {"ADAPTED", "NATIVE"}
+
+
+def test_missing_root_or_current_authority_blocks(tmp_path):
+    root = _make_repo_root(tmp_path)
+    present = _present()
     assert preflight.classify(None, present, True, True) == "BLOCKED"
+    missing = dict(present)
+    missing[preflight.AUTHORITY_FILES[0]] = False
+    assert preflight.classify(root, missing, True, True) == "BLOCKED"
+    assert preflight.classify(root, present, True, False) == "BLOCKED"
 
 
 def test_dynamic_steering_must_exist_inside_repository(tmp_path):
@@ -66,3 +80,14 @@ def test_dynamic_steering_fails_closed_on_unreadable_inbox(tmp_path):
     state = preflight.resolve_dynamic_steering(root)
     assert state["verified"] is False
     assert state["reason"].startswith("INBOX_UNREADABLE:")
+
+
+def test_contract_declares_unprobed_lifecycle_boundaries():
+    assert set(preflight.LIFECYCLE_BOUNDARIES) == {
+        "real_lifecycle_hook_firing",
+        "cross_session_durable_state_when_claimed",
+        "effect_or_result_receipt_when_claimed",
+    }
+    source = PREFLIGHT_PATH.read_text()
+    assert '"FRANKENSTEIN_HOST_PREFLIGHT/v3"' in source
+    assert '"adapted_or_native_possible_from_this_preflight": False' in source

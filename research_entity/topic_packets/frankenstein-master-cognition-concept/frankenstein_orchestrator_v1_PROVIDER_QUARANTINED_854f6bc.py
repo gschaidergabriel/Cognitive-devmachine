@@ -181,6 +181,51 @@ def apply_file_blocks(repo_root: Path, blocks: dict[str, str]) -> list[Path]:
     return written
 
 
+FILE_PATH_TOKEN_RE = None  # set lazily in extract_referenced_existing_files()
+
+
+def extract_referenced_existing_files(task_description: str, repo_root: Path) -> dict[str, str]:
+    """Scans task_description for repo-relative file-path-looking tokens
+    (e.g. 'tools/grid10_fabric.py', 'tests/test_x.py') and returns the
+    CURRENT content of every one that actually exists under repo_root. This
+    exists specifically to fix a real, serious bug found 2026-08-28 on the
+    first live VPS run: asking a model for 'the complete content' of a file
+    it is meant to MODIFY, without ever showing it the file's actual current
+    content, predictably produces a plausible-looking but destructively
+    incomplete rewrite -- tools/grid10_fabric.py went from 672 real lines to
+    an 87-line fabrication in the first live attempt (contained: those
+    commits were local-only on the VPS clone, never pushed, reverted via
+    `git reset --hard origin/main` before any damage reached origin).
+    Whatever this function finds gets included verbatim in the prompt so a
+    'complete file' response is genuinely complete, not invented."""
+    import re
+    tokens = set(re.findall(r"\b[\w./-]+/[\w./-]+\.[a-zA-Z0-9]+\b", task_description))
+    found: dict[str, str] = {}
+    for tok in tokens:
+        candidate = (repo_root / tok).resolve()
+        try:
+            if repo_root.resolve() in candidate.parents and candidate.is_file():
+                found[tok] = candidate.read_text()
+        except (OSError, ValueError):
+            continue
+    return found
+
+
+def _looks_like_destructive_truncation(old_content: str, new_content: str,
+                                        min_old_len: int = 200, max_shrink_ratio: float = 0.5) -> bool:
+    """Defense-in-depth guardrail, independent of the context-injection fix
+    above (must still hold even if that fix has a gap): a REAL existing file
+    whose new content is suspiciously much shorter than the old content is
+    far more likely a hallucinated partial rewrite than a legitimate edit --
+    real single-package edits (add one table, one function) should not
+    shrink an existing file to half its size or less. Small/short files are
+    exempt (min_old_len) since a small file legitimately CAN be replaced
+    wholesale."""
+    if len(old_content) < min_old_len:
+        return False
+    return len(new_content) < len(old_content) * max_shrink_ratio
+
+
 def dispatch_helper_task_direct(task_description: str, acceptance_criteria: str, repo_root: Path,
                                  log_path: Path, tier: str = PRIMARY_TIER, max_retries: int = 2) -> dict:
     """Portable fallback used when harness_aider.py (a coordinator-local
@@ -190,15 +235,41 @@ def dispatch_helper_task_direct(task_description: str, acceptance_criteria: str,
     runs the package's own acceptance_criteria command as a real
     verify-before-commit gate, and reverts cleanly (restores prior file
     content, or deletes newly-created files) if verification fails -- never
-    leaves a broken, half-applied state committed."""
+    leaves a broken, half-applied state committed.
+
+    Two independent safeguards against destructively rewriting an existing
+    file (real bug found 2026-08-28, see extract_referenced_existing_files()
+    docstring): (1) the prompt includes the CURRENT content of every
+    existing file the task references, so the model has the real content to
+    extend rather than invent from scratch; (2) even so, any existing file
+    whose proposed new content looks like a destructive truncation
+    (_looks_like_destructive_truncation()) is rejected and the whole
+    attempt reverted, regardless of what acceptance_criteria says -- a
+    package must never be allowed to pass verification by deleting
+    unrelated existing code that its own tests happen not to cover."""
+    existing_files = extract_referenced_existing_files(task_description, repo_root)
+    context_block = ""
+    if existing_files:
+        parts = [
+            f"CURRENT CONTENT of {path} (you MUST preserve everything here that "
+            f"your task does not explicitly ask you to change -- your FILE: block "
+            f"for this path must be the FULL existing file plus your addition, "
+            f"never a shorter rewrite):\n```\n{content}\n```"
+            for path, content in existing_files.items()
+        ]
+        context_block = "\n\n".join(parts) + "\n\n"
+
     prompt = (
         "You are a focused coding helper working on ONE small, self-contained "
         "task. Implement EXACTLY this, nothing more:\n\n" + task_description +
-        "\n\nRespond with one or more blocks, one per file you create or "
+        "\n\n" + context_block +
+        "Respond with one or more blocks, one per file you create or "
         "modify, in EXACTLY this format (paths relative to the repository "
         "root):\n\nFILE: path/to/file.py\n```python\n<complete file content>\n```"
-        "\n\nWrite the COMPLETE content of each file (not a diff/patch). No "
-        "prose outside the FILE blocks."
+        "\n\nWrite the COMPLETE content of each file (not a diff/patch). If a "
+        "file's current content was shown above, your version must contain "
+        "ALL of that content plus your addition -- never omit existing code. "
+        "No prose outside the FILE blocks."
     )
     for attempt in range(1, max_retries + 1):
         try:
@@ -212,6 +283,13 @@ def dispatch_helper_task_direct(task_description: str, acceptance_criteria: str,
             continue
         touched = {rel: ((repo_root / rel).read_text() if (repo_root / rel).exists() else None)
                    for rel in blocks}
+
+        destructive = [rel for rel, old in touched.items()
+                       if old is not None and _looks_like_destructive_truncation(old, blocks[rel])]
+        if destructive:
+            _log(log_path, f"DIRECT_DISPATCH_REJECTED_DESTRUCTIVE_TRUNCATION attempt={attempt} files={destructive}")
+            continue
+
         try:
             apply_file_blocks(repo_root, blocks)
         except ValueError as e:

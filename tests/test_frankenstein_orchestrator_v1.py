@@ -370,3 +370,107 @@ def test_dispatch_helper_task_reports_honestly_when_harness_missing_and_no_fallb
     monkeypatch.setattr(orch, "HARNESS_PATH", str(tmp_path / "does-not-exist.py"))
     result = orch.dispatch_helper_task("do the thing", "reason", tmp_path / "log.txt")
     assert result["ok"] is False
+
+
+# ---- 2026-08-28 destructive-truncation fix: real bug found on the first live VPS
+# run -- tools/grid10_fabric.py went from 672 real lines to an 87-line fabrication
+# because the model was asked for "complete file content" without ever being shown
+# the file's actual current content. Contained (local-only VPS commits, reverted
+# before reaching origin), but must never be possible again. ----
+
+def test_extract_referenced_existing_files_finds_paths_mentioned_in_task(tmp_path):
+    repo_root = tmp_path / "repo"
+    (repo_root / "tools").mkdir(parents=True)
+    (repo_root / "tools" / "grid10_fabric.py").write_text("class Fabric:\n    pass\n")
+
+    task = "In tools/grid10_fabric.py, add a new method to the Fabric class."
+    found = orch.extract_referenced_existing_files(task, repo_root)
+    assert found == {"tools/grid10_fabric.py": "class Fabric:\n    pass\n"}
+
+
+def test_extract_referenced_existing_files_ignores_paths_that_do_not_exist(tmp_path):
+    repo_root = tmp_path / "repo"
+    repo_root.mkdir()
+    task = "Create tools/brand_new_module.py with a function foo()."
+    found = orch.extract_referenced_existing_files(task, repo_root)
+    assert found == {}
+
+
+def test_extract_referenced_existing_files_refuses_paths_outside_repo_root(tmp_path):
+    outside = tmp_path / "outside.py"
+    outside.write_text("secret = 1\n")
+    repo_root = tmp_path / "repo"
+    repo_root.mkdir()
+    task = "Edit ../outside.py to add a function."
+    found = orch.extract_referenced_existing_files(task, repo_root)
+    assert found == {}
+
+
+def test_looks_like_destructive_truncation_flags_large_shrink():
+    old = "x = 1\n" * 100  # 600 chars, well above min_old_len
+    new = "x = 1\n" * 10   # much shorter
+    assert orch._looks_like_destructive_truncation(old, new) is True
+
+
+def test_looks_like_destructive_truncation_allows_normal_addition():
+    old = "x = 1\n" * 100
+    new = old + "y = 2\n"  # grew, not shrank
+    assert orch._looks_like_destructive_truncation(old, new) is False
+
+
+def test_looks_like_destructive_truncation_exempts_small_files():
+    old = "x = 1\n"  # tiny, legitimately replaceable wholesale
+    new = "y = 2\n"
+    assert orch._looks_like_destructive_truncation(old, new) is False
+
+
+def test_dispatch_helper_task_direct_includes_existing_content_in_prompt(tmp_path, monkeypatch):
+    repo_root = tmp_path / "repo"
+    (repo_root / "tools").mkdir(parents=True)
+    original = "class Fabric:\n    def existing_method(self):\n        return 1\n"
+    (repo_root / "tools" / "grid10_fabric.py").write_text(original)
+
+    seen_prompts = []
+
+    def fake_call(tier, messages, **kwargs):
+        seen_prompts.append(messages[0]["content"])
+        return "FILE: tools/grid10_fabric.py\n```python\n" + original + \
+               "\n    def new_method(self):\n        return 2\n```"
+
+    monkeypatch.setattr(orch, "call_specific_tier", fake_call)
+    log_path = tmp_path / "log.txt"
+
+    result = orch.dispatch_helper_task_direct(
+        "In tools/grid10_fabric.py, add a new_method to the Fabric class.",
+        "true", repo_root, log_path,
+    )
+    assert result["ok"] is True
+    assert original in seen_prompts[0], "prompt must include the real existing file content"
+    assert "existing_method" in (repo_root / "tools" / "grid10_fabric.py").read_text()
+
+
+def test_dispatch_helper_task_direct_rejects_destructive_rewrite_even_if_verification_would_pass(tmp_path, monkeypatch):
+    """The critical regression test: even if acceptance_criteria's own check
+    would pass (e.g. it only tests the NEW function, not the rest of the
+    file), a proposed rewrite that drops most of an existing file's content
+    must be rejected and reverted -- exactly the real 2026-08-28 VPS bug."""
+    repo_root = tmp_path / "repo"
+    (repo_root / "tools").mkdir(parents=True)
+    original = "def real_existing_function():\n    return 42\n" * 30  # long, real content
+    (repo_root / "tools" / "grid10_fabric.py").write_text(original)
+
+    def fake_call(tier, messages, **kwargs):
+        # Hallucinated short rewrite that drops almost everything -- but its
+        # OWN acceptance check (below) would trivially pass.
+        return "FILE: tools/grid10_fabric.py\n```python\nx = 1\n```"
+
+    monkeypatch.setattr(orch, "call_specific_tier", fake_call)
+    log_path = tmp_path / "log.txt"
+
+    result = orch.dispatch_helper_task_direct(
+        "In tools/grid10_fabric.py, add a trivial new top-level constant.",
+        "true", repo_root, log_path, max_retries=1,
+    )
+    assert result["ok"] is False
+    assert (repo_root / "tools" / "grid10_fabric.py").read_text() == original, \
+        "existing file content must be completely unchanged after a rejected destructive rewrite"

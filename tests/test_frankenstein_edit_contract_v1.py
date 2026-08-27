@@ -21,6 +21,7 @@ spec.loader.exec_module(edit_contract)
 
 EditContract = edit_contract.EditContract
 EditContractError = edit_contract.EditContractError
+ValidatedEdit = edit_contract.ValidatedEdit
 apply_validated_edit = edit_contract.apply_validated_edit
 validate_edit_contract = edit_contract.validate_edit_contract
 
@@ -68,7 +69,7 @@ def _patch(old: str, new: str, path: str = "sample.txt") -> str:
     return f"diff --git a/{path} b/{path}\n" + body
 
 
-def test_narrow_additive_patch_validates_and_applies(tmp_path):
+def test_narrow_additive_patch_validates_without_mutating(tmp_path):
     old = "alpha\nbeta\ngamma\ndelta\n"
     new = "alpha\nbeta\ninserted\ngamma\ndelta\n"
     root, target = _repo(tmp_path, old)
@@ -83,11 +84,52 @@ def test_narrow_additive_patch_validates_and_applies(tmp_path):
     validated = validate_edit_contract(root, contract)
     assert validated.added_lines == 1
     assert validated.deleted_lines == 0
-    assert target.read_text() == old  # validation is non-mutating
+    assert validated.postimage == new.encode("utf-8")
+    assert target.read_text() == old
+    assert _git(root, "diff", "--name-only") == ""
 
-    apply_validated_edit(root, validated)
-    assert target.read_text() == new
-    assert _git(root, "diff", "--name-only") == "sample.txt"
+
+def test_validated_edit_is_evidence_not_direct_mutation_capability(tmp_path):
+    old = "alpha\nbeta\ngamma\ndelta\n"
+    new = "alpha\nbeta\ninserted\ngamma\ndelta\n"
+    root, target = _repo(tmp_path, old)
+    validated = validate_edit_contract(
+        root,
+        EditContract(
+            path="sample.txt",
+            preimage_sha256=_sha(target),
+            patch=_patch(old, new),
+            max_deleted_lines=0,
+            max_added_lines=1,
+        ),
+    )
+
+    with pytest.raises(EditContractError) as exc:
+        apply_validated_edit(root, validated)
+    assert exc.value.code == "DIRECT_VALIDATED_EDIT_MUTATION_FORBIDDEN"
+    assert target.read_text() == old
+    assert _git(root, "diff", "--name-only") == ""
+
+
+def test_forged_validated_edit_cannot_bypass_patch_or_deletion_policy(tmp_path):
+    old = "alpha\nbeta\ngamma\ndelta\n"
+    root, target = _repo(tmp_path, old)
+    destructive = b"fabricated total replacement\n"
+    forged = ValidatedEdit(
+        path="sample.txt",
+        preimage_sha256=_sha(target),
+        postimage_sha256=hashlib.sha256(destructive).hexdigest(),
+        patch_sha256="0" * 64,
+        added_lines=1,
+        deleted_lines=9999,
+        postimage=destructive,
+    )
+
+    with pytest.raises(EditContractError) as exc:
+        apply_validated_edit(root, forged)
+    assert exc.value.code == "DIRECT_VALIDATED_EDIT_MUTATION_FORBIDDEN"
+    assert target.read_text() == old
+    assert _git(root, "diff", "--name-only") == ""
 
 
 def test_stale_preimage_hash_rejected(tmp_path):
@@ -139,7 +181,7 @@ def test_path_traversal_rejected(tmp_path):
 
 def test_deletion_below_old_50_percent_guard_still_requires_declared_budget(tmp_path):
     old = "a\nb\nc\nd\ne\nf\ng\nh\ni\nj\n"
-    new = "a\nb\nc\nd\ne\nf\ng\n"  # 30% deletion: would evade a 50%-shrink heuristic
+    new = "a\nb\nc\nd\ne\nf\ng\n"
     root, target = _repo(tmp_path, old)
     contract = EditContract(
         path="sample.txt",
@@ -152,7 +194,7 @@ def test_deletion_below_old_50_percent_guard_still_requires_declared_budget(tmp_
     assert exc.value.code == "DELETION_BUDGET_EXCEEDED"
 
 
-def test_explicit_deletion_budget_allows_declared_refactor(tmp_path):
+def test_explicit_deletion_budget_allows_declared_validation(tmp_path):
     old = "a\nb\nc\nd\ne\nf\ng\nh\ni\nj\n"
     new = "a\nb\nc\nd\ne\nf\ng\n"
     root, target = _repo(tmp_path, old)
@@ -168,6 +210,7 @@ def test_explicit_deletion_budget_allows_declared_refactor(tmp_path):
     )
     assert validated.deleted_lines == 3
     assert validated.added_lines == 0
+    assert target.read_text() == old
 
 
 def test_dirty_worktree_path_rejected_before_patch_check(tmp_path):
@@ -183,30 +226,6 @@ def test_dirty_worktree_path_rejected_before_patch_check(tmp_path):
     with pytest.raises(EditContractError) as exc:
         validate_edit_contract(root, contract)
     assert exc.value.code == "WORKTREE_PATH_DIRTY"
-
-
-def test_toctou_change_after_validation_rejected(tmp_path):
-    old = "alpha\nbeta\ngamma\ndelta\n"
-    new = "alpha\nbeta\ninserted\ngamma\ndelta\n"
-    root, target = _repo(tmp_path, old)
-    validated = validate_edit_contract(
-        root,
-        EditContract(
-            path="sample.txt",
-            preimage_sha256=_sha(target),
-            patch=_patch(old, new),
-            max_added_lines=1,
-        ),
-    )
-
-    # Simulate a concurrent canonical change, then commit it so the path is clean but preimage differs.
-    target.write_text("concurrent\n" + old, encoding="utf-8")
-    _git(root, "add", "sample.txt")
-    _git(root, "commit", "-qm", "concurrent")
-
-    with pytest.raises(EditContractError) as exc:
-        apply_validated_edit(root, validated)
-    assert exc.value.code == "PREIMAGE_CHANGED_AFTER_VALIDATION"
 
 
 def test_symlink_escape_rejected(tmp_path):

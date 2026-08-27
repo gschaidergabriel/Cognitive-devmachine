@@ -32,7 +32,13 @@ def load_model_once(model_path: str):
     import torch
     from transformers import AutoModelForCausalLM, AutoTokenizer
 
-    torch.set_num_threads(1)
+    # 2026-08-27 GRID10 latency concept: was hardcoded to 1 thread for every node,
+    # never tested against alternatives despite 4 real vCPUs being available and
+    # typically only 3-5 of 10 nodes being active-in-decode at once per tick. Now
+    # env-var-driven for a real A/B measurement; default UNCHANGED (still 1) so
+    # every existing caller (every experiment before today) is unaffected.
+    torch_threads = int(os.environ.get("GRID10_TORCH_THREADS", "1"))
+    torch.set_num_threads(torch_threads)
     TOK = AutoTokenizer.from_pretrained(model_path)
     MODEL = AutoModelForCausalLM.from_pretrained(model_path, dtype=torch.bfloat16, low_cpu_mem_usage=True)
     MODEL.eval()

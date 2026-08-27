@@ -18,6 +18,7 @@ import re
 from typing import Optional
 
 from xeno_text_marker_resolver_v1 import resolve_db_vs_sim, resolve_claude_handoff  # noqa: F401
+from xeno_hyperposition_resolver_v1 import resolve_hyperposition  # noqa: F401
 
 CODEBOOK_LINE = re.compile(r"^(?:CODEBOOK|LEXICON)[^:]*:\s*(.+)$", re.MULTILINE)
 KV_PAIR = re.compile(r"(\w+)\s*=>\s*(\S+?)(?:\s*\||\s*$)")
@@ -292,4 +293,5 @@ FAMILY_RESOLVERS = {
     "B6_GWT_UPTAKE": resolve_gwt_uptake,
     "B6_DB_VS_SIM": resolve_db_vs_sim,
     "B6_CLAUDE_HANDOFF_REENTRY": resolve_claude_handoff,
+    "B6_HYPERPOSITION_EVIDENCE_AUTHORITY": resolve_hyperposition,
 }

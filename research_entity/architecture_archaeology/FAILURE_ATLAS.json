@@ -1,18 +1,43 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "status": "TRIGGERWORD3_SYNTHESIS_GROUNDED_PARTIAL",
   "purpose": "Machine-readable failure knowledge. Raw source, current authority and exact executable receipts outrank this atlas.",
   "historical_source_head": "abba90a5767d85abc8a1ac340bae92842dab35c1",
-  "trigger3_branch_base": "37b1de3fd438e52bb46c35963119967307f5cd1b",
+  "trigger3_branch_base": "97aaddd0b3feaa23b1f6655e00e7e8568cab5132",
+  "current_authority_observed": {
+    "inbox": "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
+    "selected_steering": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_9_13Q_DELTA_2026-08-28T0146P0700_GPT56SOL.json",
+    "classification": "FREE_ONLY_HARD_OFF",
+    "provider_routes_admitted": false,
+    "together_authorized_runs": 0
+  },
   "evidence_law": [
     "request != effect",
     "model_output != world_fact",
     "method_present != result_present",
     "historical_source != current_runtime_pass",
     "component_pass != whole_product_pass",
-    "consensus_or_repetition != independent_evidence"
+    "consensus_or_repetition != independent_evidence",
+    "task_local_acceptance != preservation_acceptance"
   ],
   "failures": [
+    {
+      "id": "FAIL-DIRECT-DISPATCH-DESTRUCTIVE-WHOLE-FILE-REWRITE",
+      "evidence_class": ["NEGATIVE_RESULT", "PROJECT_EXECUTABLE_COUNTEREXAMPLE", "CURRENT_SOURCE_REPAIR_PRESENT"],
+      "source_refs": ["DEV_SOURCE_RESEARCH/repository/FRANKENSTEIN_SOURCE_INDEX_DELTA_20260828_DIRECT_DISPATCH.json", "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json"],
+      "observed_signal": "The first live Frankenstein direct-dispatch rewrote tools/grid10_fabric.py from 672 lines to an 87-line plausible but incomplete stub; damage was reported contained before origin push.",
+      "successor_constraint": "Bind exact preimage identity; prefer patch/diff or structured edits; verify unchanged-region or semantic-preservation invariants; reject stale preimages and undeclared destructive deltas.",
+      "current_status": "COUNTEREXAMPLE_CONTAINED_RETAINED_RUNTIME_CREDIT_ZERO",
+      "next_discriminator": "Clean non-provider mutation harness comparing preimage-bound patch edits with whole-file replacement under unauthorized-deletion, stale-preimage and unrelated-region corruption cases."
+    },
+    {
+      "id": "FAIL-AUTHORITY-STALE-MIRROR",
+      "evidence_class": ["CURRENT_SOURCE_CONFLICT", "STALE_MIRROR", "NEGATIVE_RESULT"],
+      "source_refs": ["research_entity/claycode/autonomous/SUPERVISOR_INBOX.json", "DEV_SOURCE_RESEARCH/repository/FRANKENSTEIN_SOURCE_INDEX_DELTA_20260828_DIRECT_DISPATCH.json", "research_entity/continuity/BOOTSTRAP_MINIMAL.json", "research_entity/rooms/PROGRAM_STATE.json"],
+      "observed_signal": "The inbox selects 9.13Q FREE_ONLY/HARD_OFF while lower-precedence mirrors still retain 8.78-era authority fields.",
+      "successor_constraint": "Do not average authority surfaces; resolve the newest inbox-selected steering and make lower mirrors successor-dynamic before present-tense execution claims.",
+      "current_status": "OPEN_CURRENT_SOURCE_CONFLICT"
+    },
     {
       "id": "FAIL-PROMPT-WEIGHT-OVERRIDE",
       "evidence_class": ["HISTORICAL_SOURCE", "NEGATIVE_RESULT"],
@@ -26,7 +51,7 @@
       "id": "FAIL-RETRIEVAL-CONTAMINATION",
       "evidence_class": ["HISTORICAL_SOURCE", "NEGATIVE_RESULT"],
       "source_refs": ["research_entity/global/FRANK_ARCHITECTURE_ARCHAEOLOGY_PROTOCOL.md", "research_entity/harness/reference/unifieddb_emergent_cascade.py"],
-      "observed_signal": "Historical memory retrieval contamination and graph-expansion regressions are explicitly retained as failure knowledge.",
+      "observed_signal": "Historical memory-retrieval contamination and graph-expansion regressions remain explicit failure knowledge.",
       "successor_constraint": "Retrieval expansion must be bounded, provenance/epoch aware and fail closed on ambiguous or unbound resolution.",
       "current_status": "SUCCESSOR_SOURCE_READY",
       "next_discriminator": "Compare bounded cascade with semantic-only and unconstrained-expansion baselines on fixed query families."
@@ -35,7 +60,7 @@
       "id": "FAIL-CONTEXT-FIXATION",
       "evidence_class": ["HISTORICAL_SOURCE", "NEGATIVE_RESULT"],
       "source_refs": ["research_entity/architecture_archaeology/MECHANISM_INDEX.json"],
-      "observed_signal": "Rich ambient room prose was removed because it biased/fixated LLM thought generation.",
+      "observed_signal": "Rich ambient room prose was removed because it biased or fixated generated thought.",
       "successor_constraint": "Canonical state and model-facing projection remain separable and projection effects measurable.",
       "current_status": "ADOPTED_CONSTRAINT",
       "next_discriminator": "Truthful-minimal vs truthful-rich vs shuffled-context matched A/B."
@@ -44,7 +69,7 @@
       "id": "FAIL-COLD-START-LEARNED-MODULES",
       "evidence_class": ["HISTORICAL_SOURCE", "NEGATIVE_RESULT"],
       "source_refs": ["research_entity/global/FRANK_ARCHITECTURE_ARCHAEOLOGY_PROTOCOL.md"],
-      "observed_signal": "Cold-start learned modules degrading quality is listed as a known historical failure.",
+      "observed_signal": "Cold-start learned modules degrading quality is retained as a historical failure class.",
       "successor_constraint": "Learned components need cold/warm/rejoin baselines and disable controls before promotion.",
       "current_status": "RETEST_REQUIRED"
     },
@@ -52,15 +77,15 @@
       "id": "FAIL-SPARSE-REWARD-OVERSIZED-POLICY",
       "evidence_class": ["HISTORICAL_SOURCE", "NEGATIVE_RESULT"],
       "source_refs": ["research_entity/architecture_archaeology/MECHANISM_INDEX.json"],
-      "observed_signal": "Historical subconscious policy records an approximately 3.1M-parameter policy being reduced to approximately 19K because reward-signal volume was limited.",
-      "successor_constraint": "Capacity must follow measured signal/task complexity rather than parameter-count intuition.",
+      "observed_signal": "Historical subconscious-policy notes record an approximately 3.1M-parameter policy being reduced to approximately 19K because reward-signal volume was too small.",
+      "successor_constraint": "Capacity should follow measured signal/task complexity rather than parameter-count intuition.",
       "current_status": "RETEST_ROLE"
     },
     {
       "id": "FAIL-PARSER-INVISIBLE-COAUTHOR",
       "evidence_class": ["HISTORICAL_SOURCE", "NEGATIVE_RESULT"],
       "source_refs": ["research_entity/architecture_archaeology/MECHANISM_INDEX.json"],
-      "observed_signal": "Historical IAPT notes regex/output parsers could act as invisible co-authors and distort learned behavior.",
+      "observed_signal": "Historical IAPT notes warn that regex/output parsers can become invisible co-authors and distort learned behavior.",
       "successor_constraint": "Training lineage must include raw-to-final transformation code and provenance.",
       "current_status": "ADOPTED_TRAINING_CONSTRAINT"
     },
@@ -68,7 +93,7 @@
       "id": "FAIL-IMPORT-RESTART-TOCTOU",
       "evidence_class": ["HISTORICAL_SOURCE", "NEGATIVE_RESULT"],
       "source_refs": ["research_entity/global/FRANK_ARCHITECTURE_ARCHAEOLOGY_PROTOCOL.md", "research_entity/architecture_archaeology/MECHANISM_INDEX.json"],
-      "observed_signal": "Package/path shadowing, stale runtime configuration, resource TOCTOU and service restart races are retained historical failures.",
+      "observed_signal": "Package/path shadowing, stale runtime configuration, resource TOCTOU and restart races are retained historical failures.",
       "successor_constraint": "Executable identity must bind source/generation/import-loader/recovery/effect ownership.",
       "current_status": "ADOPTED_FAIL_CLOSED_CONSTRAINT"
     },
@@ -83,24 +108,24 @@
     {
       "id": "FAIL-PROVIDER-HARDOFF-BYPASS",
       "evidence_class": ["CURRENT_SOURCE", "NEGATIVE_RESULT", "AUTHORITY_CONTRADICTION"],
-      "source_refs": ["research_entity/claycode/autonomous/SUPERVISOR_INBOX.json", "research_entity/claycode/autonomous/SUPERVISOR_STEERING_9_13O_DELTA_2026-08-27T2341P0700_GPT56SOL.json"],
-      "observed_signal": "Current 9.13 authority keeps all provider routes HARD_OFF and quarantines the 72h Frankenstein external-provider orchestration as non-operative.",
+      "source_refs": ["research_entity/claycode/autonomous/SUPERVISOR_INBOX.json", "research_entity/claycode/autonomous/SUPERVISOR_STEERING_9_13Q_DELTA_2026-08-28T0146P0700_GPT56SOL.json"],
+      "observed_signal": "9.13Q restores current explicit FREE_ONLY/no-paid-fallback HARD_OFF after a relayed provider-allowance lineage reopened provider authority.",
       "successor_constraint": "Resolve authority before secret lookup, provider import, network, Aider or fallback dispatch.",
-      "current_status": "QUARANTINED_NON_OPERATIVE",
-      "next_discriminator": "Exact HARD_OFF execution proving provider_calls=0 and secret_lookups=0 at the real caller boundary."
+      "current_status": "HARD_OFF_RESTORED_RUNTIME_REPOSITORY_PASS_REQUIRED",
+      "next_discriminator": "Repository-bound dual-authority HARD_OFF regression proving provider_calls=0 and secret_lookups=0."
     },
     {
       "id": "FAIL-TOGETHER-PLAN-CONTRADICTION",
       "evidence_class": ["CURRENT_SOURCE", "AUTHORITY_CONTRADICTION"],
       "source_refs": ["research_entity/claycode/autonomous/SUPERVISOR_INBOX.json"],
-      "observed_signal": "The orchestration plan treated Together as available while canonical 9.13 records zero authorized paid Together runs.",
+      "observed_signal": "Relayed orchestration text reopened Together while current explicit 9.13Q state records Together forbidden and zero authorized paid runs.",
       "successor_constraint": "Plan text, environment keys and prior authority cannot mint current authorization.",
       "current_status": "BLOCKED"
     },
     {
       "id": "FAIL-THREAD-COUNT-INTUITION",
       "evidence_class": ["PROJECT_MEASUREMENT", "NEGATIVE_RESULT"],
-      "source_refs": ["research_entity/claycode/autonomous/SUPERVISOR_INBOX.json"],
+      "source_refs": ["research_entity/topic_packets/grid10-latency-concept/EXPERIMENT_RESULTS_20260827.json", "research_entity/topic_packets/grid10-latency-concept/THREAD_LATENCY_RUN_20260827.json"],
       "observed_signal": "On the measured 4-process/4-vCPU topology: 1 thread/process averaged 8.3197 s/call, 2 threads averaged 23.1806 s/call, and 4 threads completed zero samples within experiment timeouts.",
       "successor_constraint": "Concurrency recommendations are topology-specific and must be measured.",
       "current_status": "DEFAULT_1_SUPPORTED_FOR_MEASURED_TOPOLOGY_ONLY"
@@ -109,10 +134,10 @@
       "id": "FAIL-FREESWARM-ZERO-CONVERSION",
       "evidence_class": ["NEGATIVE_RESULT", "PROJECT_MEASUREMENT_HISTORY"],
       "source_refs": ["research_entity/claycode/autonomous/SUPERVISOR_INBOX.json"],
-      "observed_signal": "Current supervisor keeps accepted Distillery dataset tokens at zero; raw generation volume receives no training-utility credit without admitted conversion.",
+      "observed_signal": "Current supervisor state keeps canonical Distillery dataset rows/tokens at zero; raw generation volume receives no training-utility credit without admitted conversion.",
       "successor_constraint": "Optimize evidence-qualified conversion rather than generated-token volume.",
-      "current_status": "BLOCKED_ZERO_ACCEPTED_TOKENS",
-      "next_discriminator": "One exact accepted packet -> nonzero accepted_dataset_tokens -> identical semantic replay adds zero."
+      "current_status": "BLOCKED_ZERO_ACCEPTED_DATASET_ROWS",
+      "next_discriminator": "One exact accepted packet -> nonzero admitted dataset row/token count -> identical semantic replay adds zero."
     },
     {
       "id": "FAIL-CONSENSUS-NONINDEPENDENCE",

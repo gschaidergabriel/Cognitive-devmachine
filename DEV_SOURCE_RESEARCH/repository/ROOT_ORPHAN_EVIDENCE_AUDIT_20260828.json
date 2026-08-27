@@ -1,9 +1,9 @@
 {
-  "schema": "FRANKENSTEIN_ROOT_ORPHAN_EVIDENCE_AUDIT/v1",
-  "status": "SOURCE_AUDIT_COMPLETE_MOVE_NOT_EXECUTED",
+  "schema": "FRANKENSTEIN_ROOT_ORPHAN_EVIDENCE_AUDIT/v2",
+  "status": "ARCHIVED_BYTE_IDENTICAL_EPISTEMIC_AUDIT_CURRENT",
   "trigger": "triggerword 3",
   "repository": "gschaidergabriel/clay-global-research-entity",
-  "base_main": "e697e13578aaeccedfa162e93b24690f73cb3ea1",
+  "reentry_main": "4e32b57690764d57cb3762f1ca43b82fe6e46a47",
   "authority_snapshot": {
     "supervisor": "9.13Q_NON_AUTHORITY",
     "execution_mode": "FREE_ONLY_HARD_OFF",
@@ -11,174 +11,116 @@
     "together_forbidden": true,
     "paid_fallback": false
   },
-  "purpose": "Advance ROOT_MIGRATION_PRECHECK safe-next-action by auditing the three orphan-looking root blobs without moving, deleting, executing, or rewriting them. Preserve provenance and separate source fragments from measured runtime evidence.",
-  "evidence_classes_used": [
-    "CURRENT_SOURCE",
-    "HISTORICAL_SOURCE",
-    "PROJECT_MEASUREMENT",
-    "EXTERNAL_PRIMARY",
-    "INFERENCE",
-    "NEGATIVE_RESULT",
-    "UNKNOWN"
-  ],
-  "method": {
-    "steps": [
-      "Fetch each exact root path at base_main and bind its Git blob SHA.",
-      "Resolve path-specific Git commit history through GitHub commits?path=... rather than infer creation from timestamps.",
-      "Inspect the introducing commit when available.",
-      "Compare technical claims against the current project measurement receipt for GRID10 idle-memory release.",
-      "Compare malloc_trim/MADV_FREE semantics against current Linux man-pages primary documentation.",
-      "Do not claim zero incoming path references from token/semantic code search; exact repository-wide path-literal reference count remains an open gate."
-    ],
-    "non_actions": [
-      "No root file moved or deleted.",
-      "No executable/provider/model/network experiment run.",
-      "No secret lookup.",
-      "No whole EntityOS/HCU/GRID10/training credit promoted."
-    ]
+  "purpose": "Add the epistemic/provenance layer that the bounded byte-identical root migration receipt intentionally does not provide: classify how the two archived RAM prose fragments were created, compare their claims with later controlled project measurement and Linux primary documentation, and preserve them as negative/historical evidence rather than current technical truth.",
+  "migration_observed": {
+    "commit": "4e32b57690764d57cb3762f1ca43b82fe6e46a47",
+    "receipt": "research_entity/archive_assimilation/receipts/TRIGGER3_ROOT_ORPHAN_MIGRATION_20260828_GPT56SOL.json",
+    "result": "THREE_LOW_RISK_ROOT_ARTIFACTS_ARCHIVED_BYTE_IDENTICAL",
+    "root_entries_removed": 3,
+    "readme_modified": false,
+    "public_root_target_reached": false,
+    "runtime_or_training_credit": 0,
+    "boundary": "This audit does not reopen or broaden the move. It evaluates the archived content's evidence status."
   },
   "artifacts": [
     {
-      "path": "gemeinsamer State)",
+      "historical_path": "gemeinsamer State)",
+      "current_archive_path": "DEV_SOURCE_RESEARCH/repository/archive/root_artifacts/gemeinsamer State)",
       "blob_sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
       "size_bytes": 0,
-      "content_state": "EMPTY_BLOB",
       "creation_provenance": {
-        "commit": "ab15b482caff1fa5e446d7795cea8df81bc41b97",
+        "first_verified_commit": "ab15b482caff1fa5e446d7795cea8df81bc41b97",
         "commit_message": "Frankenstein master cognition concept: grounded, honest first draft",
-        "committer_lineage": "harness-nvidia-nemotron",
-        "classification": "HISTORICAL_SOURCE"
+        "committer_lineage": "harness-nvidia-nemotron"
       },
-      "audit_result": {
-        "classification": "ORPHAN_ROOT_CANDIDATE_EMPTY_HARNESS_SPILLOVER",
-        "evidence_basis": "Exact current content is empty; path first appears in a harness-authored Frankenstein concept commit rather than as a declared canonical interface.",
-        "incoming_exact_path_reference_count": "UNKNOWN",
-        "move_or_delete_authority": "NOT_YET_GRANTED",
-        "recommended_next_state": "ARCHIVE_OR_DELETE_CANDIDATE_AFTER_EXACT_PATH_LITERAL_REFERENCE_SCAN",
-        "confidence": 0.94,
-        "falsifier": "An exact current consumer, workflow, installer, authority resolver, test, or external compatibility contract is found to require this literal root path."
-      }
+      "classification": "HISTORICAL_EMPTY_HARNESS_SPILLOVER_ARCHIVED",
+      "runtime_credit": 0
     },
     {
-      "path": "libc.malloc_trim(0)",
+      "historical_path": "libc.malloc_trim(0)",
+      "current_archive_path": "DEV_SOURCE_RESEARCH/repository/archive/root_artifacts/libc.malloc_trim(0)",
       "blob_sha": "56449f7a37c0593798d05e67687af3ed244ef058",
       "size_bytes": 1637,
       "creation_provenance": {
-        "commit": "16b5f9a4f619c80c1efc8576204a9fe2a3e60e7c",
+        "first_verified_commit": "16b5f9a4f619c80c1efc8576204a9fe2a3e60e7c",
         "commit_message": "docs: add answer file for GRID10 RAM efficiency concept",
         "committer_lineage": "harness-nvidia-nemotron / aider nvidia_nim/nvidia/nemotron-3-super-120b-a12b",
-        "introducing_commit_shape": "The commit created three files; two root filenames are executable-looking fragments while the intended answer begins under research_entity/topic_packets/fallback-runs/.../ANTWORT.md.",
-        "classification": "HISTORICAL_SOURCE"
+        "introducing_commit_shape": "The same commit created both executable-looking root-name fragments plus research_entity/topic_packets/fallback-runs/paket-1787844213500-ea6d28/ANTWORT.md; the fragments are portions of the answer text, not verified runtime receipts."
       },
-      "claims_in_fragment": [
-        "malloc_trim after each generate returns approximately 379 MB.",
-        "malloc_trim is an O(1) free-list pass typically below 0.1 ms.",
-        "wake-up after trimming is 2-8 ms.",
-        "Shared_Clean model-weight pages can be returned with MADV_FREE or MADV_DONTNEED and simply faulted back without correctness impact."
+      "fragment_claims": [
+        "malloc_trim after each generate returns approximately 379 MB",
+        "malloc_trim is O(1) and typically below 0.1 ms",
+        "wake-up after trimming is 2-8 ms",
+        "Shared_Clean model-weight pages can be returned with MADV_FREE or MADV_DONTNEED and faulted back unchanged"
       ],
       "project_measurement_comparison": {
         "source": "research_entity/topic_packets/grid10-ram-efficiency-concept/EXPERIMENT_RESULTS_20260827.json",
-        "classification": "PROJECT_MEASUREMENT",
-        "observed": {
-          "private_dirty_before": "~378.8 MB/process",
-          "after_idle_malloc_trim": "~279.2 MB/process",
-          "measured_reduction": "~97.4 MB/process (~26%)",
-          "control_after_idle": "~378.84 MB/process",
-          "second_generate_latency_trimmed_mean": "3.4248 s",
-          "second_generate_latency_control_mean": "3.3583 s",
-          "measured_mean_difference": "~66 ms with overlapping individual ranges",
-          "scope": "single idle-window/resume cycle, 3 trimmed + 3 control processes; not full coordinated 10-node fabric"
-        },
-        "comparison_result": "PARTIALLY_CONTRADICTED_BY_LATER_MEASUREMENT",
-        "reason": "The measured trim effect is substantial but approximately 97 MB, not a demonstrated ~379 MB return; the project measurement also does not establish the fragment's sub-millisecond trim/wake constants."
+        "evidence_class": "PROJECT_MEASUREMENT",
+        "observed_private_dirty_before": "~378.8 MB/process",
+        "observed_after_idle_malloc_trim": "~279.2 MB/process",
+        "observed_reduction": "~97.4 MB/process (~26%)",
+        "control_after_idle": "~378.84 MB/process",
+        "second_generate_latency_trimmed_mean": "3.4248 s",
+        "second_generate_latency_control_mean": "3.3583 s",
+        "scope": "single idle-window/resume cycle, 3 trimmed + 3 control processes; not full coordinated 10-node fabric",
+        "result": "PARTIALLY_CONTRADICTED_BY_LATER_CONTROLLED_MEASUREMENT",
+        "reason": "The observed trim effect is substantial but approximately 97 MB, not a demonstrated approximately-379-MB return; the controlled receipt does not establish the fragment's sub-millisecond trim/wake constants."
       },
       "external_primary_comparison": {
         "malloc_trim": {
-          "url": "https://man7.org/linux/man-pages/man3/malloc_trim.3.html",
-          "classification": "EXTERNAL_PRIMARY",
-          "supported": "malloc_trim attempts to release free heap memory; return value reports whether memory was actually released.",
-          "not_supported_by_primary_doc": [
-            "O(1) complexity guarantee",
-            "typical <0.1 ms latency guarantee",
-            "fixed approximately-379-MB release guarantee"
-          ]
+          "source": "https://man7.org/linux/man-pages/man3/malloc_trim.3.html",
+          "evidence_class": "EXTERNAL_PRIMARY",
+          "supported": "malloc_trim attempts to release free heap memory and reports whether memory was actually released",
+          "not_established_by_primary_doc": ["O(1) complexity guarantee", "typical <0.1 ms guarantee", "fixed approximately-379-MB release guarantee"]
         },
         "madvise": {
-          "url": "https://man7.org/linux/man-pages/man2/madvise.2.html",
-          "classification": "EXTERNAL_PRIMARY",
-          "supported": "MADV_FREE exists on Linux and marks eligible pages as no longer required.",
-          "critical_constraint": "MADV_FREE applies only to private anonymous pages; after pages are actually freed, later references observe zero-fill-on-demand pages.",
-          "implication": "The fragment's broad claim that Shared_Clean model-weight pages can be MADV_FREE'd and transparently faulted back as unchanged weights is not established and is structurally incompatible with MADV_FREE's documented mapping/contents semantics unless a different eligible anonymous-memory design is proven."
+          "source": "https://man7.org/linux/man-pages/man2/madvise.2.html",
+          "evidence_class": "EXTERNAL_PRIMARY",
+          "documented_constraint": "MADV_FREE applies to private anonymous pages; once reclaimed, later references observe zero-fill-on-demand pages",
+          "implication": "The fragment does not establish that Shared_Clean/file-backed model-weight pages can be MADV_FREE'd and transparently restored unchanged. A different eligible anonymous-memory design would need exact evidence."
         }
       },
-      "audit_result": {
-        "classification": "NEGATIVE_RESULT_STALE_TECHNICAL_FRAGMENT_WITH_PARTIALLY_CONTRADICTED_PERFORMANCE_CLAIMS",
-        "canonical_runtime_credit": 0,
-        "incoming_exact_path_reference_count": "UNKNOWN",
-        "recommended_next_state": "PRESERVE_AS_HISTORICAL_NEGATIVE_EVIDENCE_THEN_MOVE_ONLY_AFTER_EXACT_PATH_REFERENCE_SCAN",
-        "confidence": 0.98,
-        "falsifier": "Exact admitted runtime evidence at current source identity reproduces the fragment's approximately-379-MB release, sub-0.1-ms trim, 2-8-ms wake, and safe model-weight MADV_FREE behavior under the claimed mapping type."
-      }
+      "classification": "NEGATIVE_RESULT_ARCHIVED_TECHNICAL_FRAGMENT_PARTIALLY_CONTRADICTED",
+      "runtime_credit": 0,
+      "falsifier": "Exact source/runtime-bound evidence reproduces the claimed approximately-379-MB release, sub-0.1-ms trim, 2-8-ms wake, and safe unchanged-weight MADV_FREE behavior under an eligible mapping design."
     },
     {
-      "path": "madvise(ptr, length, MADV_FREE);",
+      "historical_path": "madvise(ptr, length, MADV_FREE);",
+      "current_archive_path": "DEV_SOURCE_RESEARCH/repository/archive/root_artifacts/madvise(ptr, length, MADV_FREE);",
       "blob_sha": "d4b4da997a55a9567842f2a182f7cc6046b708d8",
       "size_bytes": 469,
       "creation_provenance": {
-        "commit": "16b5f9a4f619c80c1efc8576204a9fe2a3e60e7c",
-        "commit_message": "docs: add answer file for GRID10 RAM efficiency concept",
-        "committer_lineage": "harness-nvidia-nemotron / aider nvidia_nim/nvidia/nemotron-3-super-120b-a12b",
-        "classification": "HISTORICAL_SOURCE"
+        "first_verified_commit": "16b5f9a4f619c80c1efc8576204a9fe2a3e60e7c",
+        "committer_lineage": "harness-nvidia-nemotron / aider nvidia_nim/nvidia/nemotron-3-super-120b-a12b"
       },
-      "claims_in_fragment": [
-        "Initial tests reduced Private_Dirty from ~379 MB to <50 MB/process.",
-        "Reallocation cost stayed in single-digit milliseconds.",
-        "Ten parallel GRID10 processes could fall from ~21 GB to under ~3 GB without functional loss."
+      "fragment_claims": [
+        "Private_Dirty fell from approximately 379 MB to below 50 MB/process",
+        "reallocation stayed in single-digit milliseconds",
+        "ten GRID10 processes could fall from approximately 21 GB to below 3 GB without functional loss"
       ],
-      "project_evidence_state": {
-        "classification": "NEGATIVE_RESULT",
-        "finding": "Current repository search found a controlled malloc_trim A/B receipt, but no exact MADV_FREE experiment receipt supporting the <50 MB/process, <3 GB GRID10, or single-digit-ms claims.",
-        "known_controlled_measurement": "malloc_trim-only measurement reached ~279.2 MB/process after idle, not <50 MB/process.",
-        "whole_grid10_scope": "NOT_MEASURED_BY_THE_CONTROLLED_RAM_RELEASE_RECEIPT"
+      "current_evidence_state": {
+        "controlled_malloc_trim_result": "~279.2 MB/process after idle, not <50 MB/process",
+        "exact_madv_free_receipt_supporting_under_50_mb": "NOT_FOUND_IN_CURRENT_REPOSITORY_SEARCH",
+        "exact_full_grid10_under_3_gb_receipt": "NOT_FOUND_IN_CURRENT_REPOSITORY_SEARCH",
+        "full_grid10_scope_in_controlled_ram_receipt": "NOT_MEASURED"
       },
-      "external_primary_comparison": {
-        "url": "https://man7.org/linux/man-pages/man2/madvise.2.html",
-        "classification": "EXTERNAL_PRIMARY",
-        "constraint": "MADV_FREE is limited to private anonymous mappings and can discard stale data; once freed, subsequent reads see zero-filled pages until rewritten."
-      },
-      "audit_result": {
-        "classification": "NEGATIVE_RESULT_UNVERIFIED_PERFORMANCE_FRAGMENT",
-        "canonical_runtime_credit": 0,
-        "incoming_exact_path_reference_count": "UNKNOWN",
-        "recommended_next_state": "PRESERVE_AS_HISTORICAL_NEGATIVE_EVIDENCE_THEN_MOVE_ONLY_AFTER_EXACT_PATH_REFERENCE_SCAN",
-        "confidence": 0.99,
-        "falsifier": "A source/hash-bound experiment demonstrates the claimed MADV_FREE memory floor, latency and full ten-process GRID10 correctness under an eligible mapping design."
-      }
+      "external_primary_constraint": "Linux MADV_FREE is restricted to private anonymous mappings and can discard stale data; after reclaim, reads see zero-fill-on-demand until rewritten.",
+      "classification": "NEGATIVE_RESULT_ARCHIVED_UNVERIFIED_PERFORMANCE_FRAGMENT",
+      "runtime_credit": 0,
+      "falsifier": "A source/hash-bound experiment demonstrates the claimed MADV_FREE memory floor, latency, and ten-process GRID10 correctness under an eligible mapping design."
     }
   ],
   "cross_artifact_finding": {
-    "classification": "INFERENCE",
-    "finding": "The two executable-looking root filenames were not deliberately named project interfaces; Git provenance shows they were emitted as split fragments in the same harness commit whose intended documentation target was a topic-packet answer file. This is a concrete repository-hygiene failure mode: model/tool output boundaries can become filenames and create misleading root artifacts.",
-    "engineering_consequence": "Future AI/harness file writers should validate destination paths against an allowlisted task manifest or explicit requested path set, and treat code-like/generated-text filenames as suspicious unless explicitly requested.",
-    "confidence": 0.99,
-    "falsifier": "A contemporaneous task contract or consumer proves these exact root filenames were intentional durable interfaces."
+    "evidence_class": "INFERENCE",
+    "finding": "Git provenance shows the two executable-looking filenames were emitted as split answer fragments by one harness/aider documentation commit. This is a concrete file-output hygiene failure mode: model/tool output boundaries can become repository filenames.",
+    "engineering_consequence": "AI/harness writers should bind writes to an explicit allowed path set and flag generated code-like filenames unless explicitly requested. Existing-file edits should additionally follow the current preimage-bound patch/scope-preservation contract.",
+    "engineering_confidence": 0.99,
+    "falsifier": "A contemporaneous task contract or functional consumer proves those exact odd root filenames were intentional durable interfaces."
   },
-  "root_migration_gate_update": {
-    "previous_safe_next_action": "build incoming-reference counts for the three orphan-looking root blobs first",
-    "advanced": true,
-    "closed_subgates": [
-      "EXACT_CURRENT_BLOB_IDENTITY_FOR_THREE_ORPHAN_LOOKING_ROOT_PATHS",
-      "PATH_SPECIFIC_CREATION_PROVENANCE_FOR_THREE_PATHS",
-      "EVIDENCE_CLASSIFICATION_FOR_TECHNICAL_CLAIMS_IN_TWO_NONEMPTY_FRAGMENTS"
-    ],
-    "still_open": [
-      "EXACT_REPOSITORY_WIDE_LITERAL_PATH_REFERENCE_COUNT_FOR_EACH_CANDIDATE",
-      "ACTIVE_BRANCH_PR_PATH_TOUCH_RECHECK_IMMEDIATELY_BEFORE_ANY_MOVE",
-      "BYTE_IDENTICAL_ARCHIVE_DESTINATION_AND_REFERENCE_REWRITE_PLAN",
-      "POST_MOVE_LINK_IMPORT_INSTALLER_REGRESSION"
-    ],
-    "move_decision": "BLOCKED_PENDING_EXACT_PATH_REFERENCE_SCAN",
-    "deletion_decision": "BLOCKED; preserve negative evidence and provenance"
+  "coordination": {
+    "parallel_reference_audit_now_on_main": "DEV_SOURCE_RESEARCH/repository/ROOT_ORPHAN_REFERENCE_AUDIT_20260828.json",
+    "parallel_migration_receipt_now_on_main": "research_entity/archive_assimilation/receipts/TRIGGER3_ROOT_ORPHAN_MIGRATION_20260828_GPT56SOL.json",
+    "nonduplication": "Those artifacts establish path/reference/move scope. This v2 contributes provenance plus claim-vs-measurement/primary-source epistemic classification and does not duplicate the move authority."
   },
   "credits": {
     "whole_entityos_hcu_runtime": 0,

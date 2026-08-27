@@ -1,0 +1,99 @@
+{
+  "schema": "ENTITYOS_HCU_GO_RECEIPT/v1",
+  "date": "2026-08-24",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "authority_epoch": "8.68",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "compute_architecture": "HCU",
+  "mode": "FREE_ONLY",
+  "reentry": {
+    "canonical_main_before_initial_fusion": "989e1d712d4aee4d6c1722c55923ca0c4093575f",
+    "canonical_main_first_reentered_and_merged": "0eee4cef05ea011d1f23b50f735067bef2b4bee2",
+    "canonical_main_latest_reentered_and_merged": "f2a776bffe74ebc3899f1554e10d4e8a8853fff7",
+    "branch": "gpt56sol/go-868-local-model-identity-fusion-20260824",
+    "first_main_merge_commit": "8d96544577a34a8cc55f1c7e4b1a06d734cb4696",
+    "latest_main_merge_commit": "2d02765ad7259eaffcaf61ed308644c507cfd49c",
+    "parallel_main_postload_receipt": "research_entity/continuity/receipts/2026-08-24_GO_LOCAL_MODEL_POSTLOAD_IDENTITY_GPT56SOL.json",
+    "parallel_main_postload_commit": "966ba598cdbba1642ab005ef3343b294cde2a8c7",
+    "superseded_own_pr": "gschaidergabriel/clay-global-research-entity#1432",
+    "successor_pr": "gschaidergabriel/clay-global-research-entity#1451"
+  },
+  "coordination": {
+    "upstream_shared_macrocycle_id": null,
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_experiments_run": 0,
+    "ordinary_work_class": "SUCCESSOR_CURRENT_SOURCE_FUSION_AND_DETERMINISTIC_REGRESSION"
+  },
+  "observed_gap_after_reentry": "Parallel main work added useful post-load llama-server /props, process executable hashing and model-path hashing plus later normal-user XDG state defaults and J-Space control separation, but the local model executable path still shallow-cloned moving llama.cpp HEAD, resolved a mutable Hugging Face selector via -hf, and allowed an already-running healthy server to short-circuit exact invocation identity. The earlier GPT-5.6 Sol pre-load-only PR therefore became incomplete and was closed; this successor preserves the newer main work and fuses the missing exact-byte boundary.",
+  "fusion": {
+    "preserved_from_parallel_main": [
+      "normal-user XDG cache/state defaults",
+      "started-process PID binding",
+      "/proc/<pid>/exe path and hash observation",
+      "llama-server /props model_path observation",
+      "post-load model-path SHA-256",
+      "explicit loader_consumption_attestation=false boundary",
+      "all unrelated current J-Space and provider-admission commits through main@f2a776bffe74ebc3899f1554e10d4e8a8853fff7"
+    ],
+    "added": [
+      "pre-existing local llama-server binary required",
+      "pre-existing local GGUF required",
+      "explicit pre-load SHA-256 admission for runtime and GGUF",
+      "no clone/build/Hugging Face model resolution in execution path",
+      "no unauthenticated reuse of a pre-existing loopback server",
+      "post-load runtime executable path/hash must equal the pre-admitted runtime",
+      "server-reported model path and post-load path hash must equal the pre-admitted GGUF",
+      "identity mismatch after readiness stops the server and exits fail-closed"
+    ],
+    "state_schema": "CLAY_LOCAL_RESEARCH_MODEL/v3",
+    "identity_evidence_scope": "PRELOAD_EXACT_HASH_PLUS_POSTLOAD_PROCESS_AND_SERVER_REPORTED_PATH_CROSSCHECK",
+    "loader_consumption_attestation": false
+  },
+  "hypothesis": "Cross-binding exact pre-load runtime/GGUF identities with the actual started process and post-load server-reported model path eliminates moving-selector ambiguity and catches wrong-process/wrong-path substitutions while still correctly leaving exact loader-consumed-byte proof unresolved.",
+  "counterhypothesis": "The parallel post-load-only receipt is already sufficient because /props plus a file hash identifies the model after readiness.",
+  "counterhypothesis_adjudication": "Post-load observation is valuable but does not prevent mutable remote materialization from choosing different bytes before the process starts, and a healthy pre-existing process cannot be attributed to this invocation. The fused boundary therefore requires both pre-admission and post-load cross-check; loader consumption remains UNKNOWN rather than promoted.",
+  "deterministic_evidence": {
+    "surface": "LOCAL_NONCANONICAL_CONTAINER_COMPONENT_TEST",
+    "command": "python3 -m unittest -v tests/test_local_research_model_identity_gate_868.py",
+    "result": "5/5 PASS",
+    "bash_n": "PASS",
+    "python_compile": "PASS",
+    "external_provider_network_performed": false,
+    "provider_secret_lookup_performed": false,
+    "test_runtime": "compiled loopback-only fake llama-server with /health and /props",
+    "positive_control": "exact pre-admitted fake runtime + GGUF reaches READY_IDENTITY_OBSERVED with runtime executable hash and post-load model-path hash equal to expected identities; loader_consumption_attestation remains false",
+    "negative_controls": [
+      "wrong pre-load GGUF hash rejects before runtime",
+      "wrong pre-load runtime hash rejects before runtime",
+      "wrong server-reported post-load model path reaches READY_IDENTITY_REJECTED, server is stopped and launcher exits 65",
+      "source regression rejects remote materialization/model-selector execution paths"
+    ],
+    "authored_source_sha256": {
+      "tools/local_research_model_server.sh": "63666de7bda390f40fd076b92728c0526085efbb2e0340f9a4abd770a4b0d778",
+      "tests/test_local_research_model_identity_gate_868.py": "6b7a335dcb0c7c40b02cdcb330b83198ce07b062937e1062825bd11219ac6447"
+    },
+    "github_blob_identity_after_final_write": {
+      "tools/local_research_model_server.sh": "e0f7071170c3b012f34265b91a10d14bf0c555a3",
+      "tests/test_local_research_model_identity_gate_868.py": "62a5695ead501c829a1ac571b20631f5b07178e7"
+    },
+    "evidence_scope": "SOURCE_PLUS_DETERMINISTIC_IDENTITY_BOUNDARY_COMPONENT_ONLY_NOT_REAL_QWEN_RUNTIME"
+  },
+  "tracks": {
+    "A_ENTITYOS_EXECUTABLE_CONVERGENCE": "ADVANCED: fused current main post-load identity and normal-user runtime path with fail-closed exact local artifact admission, removing moving remote materialization from the zero-cost local execution path.",
+    "B_HCU_AND_TYPED_ENTRY_FABRIC_CO_DEVELOPMENT": "ADVANCED: HCU now has a reusable pre-invocation plus post-load runtime/model identity primitive suitable for later VerifiedEngineAdmission -> ModelExecution -> InferenceReceipt binding without creating another truth/effect authority.",
+    "C_GLOBAL_JSPACE_GWT_PROTOTYPE_AND_TRAINING_READINESS_FREE_ONLY": "ADVANCED: future local J-Space traces can bind to a reproducible runtime/GGUF prerequisite identity, while current main's diagnostic-readout-versus-causal-control separation and later probe hardening are preserved. This is not model-specific J-Space causal evidence, loader-consumption proof or training credit."
+  },
+  "credits": {
+    "external_provider_runtime": 0,
+    "real_local_qwen_runtime": 0,
+    "whole_entityos_hcu_runtime": 0,
+    "hcu_full_runtime": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "On an exposed authorized zero-cost local normal-user or clay-direct-dev surface, provision exact llama-server and GGUF bytes outside the execution path, run this exact fused source until CLAY_LOCAL_RESEARCH_MODEL/v3 reaches READY_IDENTITY_OBSERVED, bind the observed pre/post identities into ModelExecution -> InferenceReceipt/v4, then separately close loader-consumed-byte attestation before model/J-Space runtime promotion. External LLM-provider traffic remains separately quarantined until typed FREE admission executable PASS.",
+  "acceptance": "IN_PROGRESS"
+}

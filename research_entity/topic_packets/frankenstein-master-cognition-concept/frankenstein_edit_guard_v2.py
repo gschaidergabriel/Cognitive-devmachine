@@ -26,7 +26,7 @@ class EditPolicy:
     max_deleted_lines: int = 80
     max_changed_lines_per_file: int = 240
     max_deleted_fraction_large_file: float = 0.25
-    large_file_line_floor: int = 40
+    large_file_line_floor: int = 20
 
 
 @dataclass(frozen=True)
@@ -159,10 +159,13 @@ def _policy_digest(policy: EditPolicy) -> str:
     return sha256_bytes(json.dumps(asdict(policy), sort_keys=True, separators=(",", ":")).encode())
 
 
-def _transaction_id(patch_text: str, expected_base_sha256: Mapping[str, str], policy: EditPolicy) -> str:
+def _transaction_id(
+    patch_text: str, expected_base_sha256: Mapping[str, str], expected_head_sha: str, policy: EditPolicy
+) -> str:
     payload = {
         "patch_sha256": sha256_bytes(patch_text.encode("utf-8")),
         "expected_base_sha256": dict(sorted(expected_base_sha256.items())),
+        "expected_head_sha": expected_head_sha,
         "policy_sha256": _policy_digest(policy),
     }
     return sha256_bytes(json.dumps(payload, sort_keys=True, separators=(",", ":")).encode())
@@ -173,6 +176,7 @@ def apply_guarded_patch(
     patch_text: str,
     *,
     expected_base_sha256: Mapping[str, str],
+    expected_head_sha: str,
     allowed_paths: Sequence[str],
     policy: EditPolicy = EditPolicy(),
 ) -> dict:
@@ -189,6 +193,15 @@ def apply_guarded_patch(
     root = repo_root.resolve()
     if not (root / ".git").exists():
         raise EditGuardError("repo_root must be a Git working tree root")
+    head_proc = subprocess.run(
+        ["git", "-C", str(root), "rev-parse", "HEAD"], capture_output=True, text=True
+    )
+    if head_proc.returncode != 0:
+        raise EditGuardError("cannot resolve repository HEAD")
+    actual_head_sha = head_proc.stdout.strip().lower()
+    expected_head_sha = expected_head_sha.strip().lower()
+    if actual_head_sha != expected_head_sha:
+        raise EditGuardError(f"stale repository HEAD: expected {expected_head_sha}, got {actual_head_sha}")
 
     plans = _parse_patch_plan(patch_text, policy)
     touched = {p.path for p in plans}
@@ -261,7 +274,8 @@ def apply_guarded_patch(
     return {
         "schema_version": RECEIPT_SCHEMA,
         "status": "APPLIED_NOT_YET_VERIFIED",
-        "transaction_id": _transaction_id(patch_text, normalized_expected, policy),
+        "transaction_id": _transaction_id(patch_text, normalized_expected, expected_head_sha, policy),
+        "git_head_sha": actual_head_sha,
         "patch_sha256": sha256_bytes(patch_text.encode("utf-8")),
         "policy_sha256": _policy_digest(policy),
         "files": [asdict(r) for r in file_receipts],
@@ -274,6 +288,7 @@ def apply_and_verify_guarded_patch(
     patch_text: str,
     *,
     expected_base_sha256: Mapping[str, str],
+    expected_head_sha: str,
     allowed_paths: Sequence[str],
     verification_argv: Sequence[str],
     policy: EditPolicy = EditPolicy(),
@@ -286,6 +301,7 @@ def apply_and_verify_guarded_patch(
         repo_root,
         patch_text,
         expected_base_sha256=expected_base_sha256,
+        expected_head_sha=expected_head_sha,
         allowed_paths=allowed_paths,
         policy=policy,
     )
@@ -311,13 +327,17 @@ def apply_and_verify_guarded_patch(
         for rel, data in snapshots.items():
             _resolve_existing_regular(root, rel).write_bytes(data)
         raise EditGuardError(
-            f"verification failed rc={proc.returncode}: {(proc.stderr or proc.stdout).strip()[-500:]}"
+            "verification failed "
+            f"rc={proc.returncode} stdout_sha256={sha256_bytes(proc.stdout.encode())} "
+            f"stderr_sha256={sha256_bytes(proc.stderr.encode())}"
         )
     receipt["status"] = "APPLIED_AND_VERIFIED"
     receipt["verification"] = {
         "argv": list(verification_argv),
         "returncode": proc.returncode,
-        "stdout_tail": proc.stdout[-500:],
-        "stderr_tail": proc.stderr[-500:],
+        "stdout_sha256": sha256_bytes(proc.stdout.encode()),
+        "stderr_sha256": sha256_bytes(proc.stderr.encode()),
+        "stdout_bytes": len(proc.stdout.encode()),
+        "stderr_bytes": len(proc.stderr.encode()),
     }
     return receipt

@@ -17,11 +17,6 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Callable, Protocol, TypeVar
 
-try:
-    from .frankenstein2_execution_receipt_atomicity_v1 import record_execution_bundle_atomic
-except ImportError:
-    from frankenstein2_execution_receipt_atomicity_v1 import record_execution_bundle_atomic
-
 SCHEMA = "FRANKENSTEIN2_EFFECT_DISPATCH_BOUNDARY/v1"
 
 
@@ -71,6 +66,21 @@ class EffectLifecyclePort(Protocol):
     ) -> None: ...
 
     def mark_submitted(self, invocation_id: str, *, now_ts: float | None = None) -> None: ...
+
+    def record_execution_bundle(
+        self,
+        invocation_id: str,
+        *,
+        executable_id: str,
+        command_digest: str,
+        environment_id: str,
+        exit_code: int,
+        result_digest: str,
+        source_digest: str,
+        duplicate_state: str,
+        status: str,
+        now_ts: float | None = None,
+    ) -> None: ...
 
 
 TStore = TypeVar("TStore", bound=EffectLifecyclePort)
@@ -143,8 +153,7 @@ def guarded_dispatch(
         if status == "SUCCEEDED" and observation.exit_code != 0:
             raise EffectDispatchBoundaryError("SUCCEEDED_STATUS_CONTRADICTS_NONZERO_EXIT")
 
-        record_execution_bundle_atomic(
-            store,
+        store.record_execution_bundle(
             invocation_id,
             executable_id=observation.executable_id,
             command_digest=observation.command_digest,

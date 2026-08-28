@@ -1,0 +1,359 @@
+{
+  "schema": "GRID10_COGNITIVE_SIGNAL_REGULATOR_MAP/v1",
+  "status": "RESEARCH_CANDIDATE_UNCALIBRATED",
+  "control_write_law": {
+    "measurement": "MANY_READERS_ALLOWED",
+    "control_decision": "ONE_DETERMINISTIC_AGGREGATED_DECISION_PER_CONTROL_CYCLE",
+    "actuator_write": "SINGLE_POLICY_GATED_CONTROL_WRITER_PER_CONTROL_EPOCH",
+    "reason": "Existing 2026-08-27 GRID10 cybernetic experiment demonstrated severe SQLite/WAL contention when four meta-evaluators raced frequent regulator writes.",
+    "control_cycle_decoupled_from_node_poll": true,
+    "batch_write_candidate": true,
+    "visual_twin_writes_to_hot_control_db": false
+  },
+  "physical_compatibility_bindings": {
+    "cog.temperature": "temperature",
+    "cog.top_p": "top_p",
+    "cog.poll_intensity": "poll_intensity"
+  },
+  "axes": {
+    "authority_integrity": {
+      "signals": [
+        "goal_authority_chain_valid",
+        "work_spec_revision_current",
+        "effect_path_is_effectgate",
+        "capability_scope_not_self_granted",
+        "canonical_state_authority_unique"
+      ],
+      "projection": "PESSIMISTIC_MIN",
+      "actuators": [],
+      "hard_response": "HOLD",
+      "note": "Not softened by task success or model confidence."
+    },
+    "goal_lineage_alignment": {
+      "signals": [
+        "parent_constraint_satisfaction",
+        "root_constraint_satisfaction",
+        "goal_semantic_distance_from_parent",
+        "effect_scope_inheritance_valid",
+        "resource_scope_inheritance_valid"
+      ],
+      "projection": "PESSIMISTIC_MIN",
+      "actuators": [
+        "goal.adoption_threshold",
+        "goal.max_drift_per_tick",
+        "goal.initiative_ceiling",
+        "contain.external_action_concurrency",
+        "cog.counterhypothesis_pressure"
+      ],
+      "soft_response": "CAUTION",
+      "hard_response": "CONTAINED_OR_HOLD"
+    },
+    "goal_drift_rate": {
+      "signals": [
+        "semantic_goal_delta_per_revision",
+        "immutable_constraint_delta",
+        "allowed_mutation_dimension_delta",
+        "effect_scope_delta",
+        "goal_revision_frequency"
+      ],
+      "projection": "PESSIMISTIC_MAX",
+      "actuators": [
+        "goal.max_drift_per_tick",
+        "goal.adoption_threshold",
+        "goal.concurrent_active_limit",
+        "exec.max_parallel_work"
+      ],
+      "soft_response": "REQUIRE_PARENT_RECHECK",
+      "hard_response": "FREEZE_GOAL_MUTATION"
+    },
+    "containment_margin": {
+      "signals": [
+        "effect_risk_vs_allowed_ceiling",
+        "reversibility_margin",
+        "tool_scope_margin",
+        "external_action_concurrency_margin",
+        "unknown_effect_fraction",
+        "rollback_readiness"
+      ],
+      "projection": "PESSIMISTIC_MIN",
+      "actuators": [
+        "contain.external_action_concurrency",
+        "contain.effect_risk_ceiling",
+        "contain.required_margin",
+        "cog.max_reflection_rounds"
+      ],
+      "soft_response": "REDUCE_EFFECT_PRESSURE_AND_INCREASE_OBSERVATION",
+      "hard_response": "CONTAINED_READ_ONLY_OR_HOLD"
+    },
+    "epistemic_grounding": {
+      "signals": [
+        "material_claims_with_admitted_evidence_fraction",
+        "decisions_with_source_or_execution_receipts_fraction",
+        "counterevidence_considered_fraction",
+        "unknowns_preserved_fraction",
+        "provenance_complete_fraction"
+      ],
+      "projection": "LOW_CONFIDENCE_BOUND",
+      "actuators": [
+        "memory.counterevidence_quota",
+        "memory.causal_depth",
+        "memory.semantic_threshold",
+        "goal.progress_evidence_min",
+        "exec.completion_metric_threshold",
+        "cog.counterhypothesis_pressure"
+      ],
+      "soft_response": "RAISE_EVIDENCE_DEMAND",
+      "hard_response": "NO_MATERIAL_PROMOTION_UNTIL_GROUNDING_RECOVERS"
+    },
+    "self_reinforcement_ratio": {
+      "signals": [
+        "internal_generated_items_reused_as_evidence_fraction",
+        "self_reports_used_as_measurement_fraction",
+        "self_generated_activity_used_as_reward_fraction",
+        "internal_replay_without_new_evidence_fraction"
+      ],
+      "projection": "PESSIMISTIC_MAX",
+      "actuators": [
+        "cog.counterhypothesis_pressure",
+        "memory.counterevidence_quota",
+        "goal.progress_evidence_min"
+      ],
+      "soft_response": "DOWNWEIGHT_INTERNAL_REPLAY",
+      "hard_response": "BLOCK_TRUTH_REWARD_AND_GOAL_PROGRESS_PROMOTION"
+    },
+    "autonomy_intensity": {
+      "signals": [
+        "autonomous_actions_per_budget_window",
+        "self_generated_goal_adoptions_per_window",
+        "initiative_pulse_integral",
+        "active_goal_count",
+        "external_action_rate"
+      ],
+      "projection": "EXPECTED",
+      "actuators": [
+        "goal.initiative_ceiling",
+        "goal.concurrent_active_limit",
+        "exec.max_parallel_work",
+        "cog.poll_intensity"
+      ],
+      "soft_response": "MOVE_TOWARD_OPERATOR_SETPOINT"
+    },
+    "exploration_pressure": {
+      "signals": [
+        "route_diversity",
+        "new_hypothesis_rate",
+        "counterhypothesis_rate",
+        "novel_memory_retrieval_fraction",
+        "hyperposition_branch_creation_rate"
+      ],
+      "projection": "EXPECTED",
+      "actuators": [
+        "cog.temperature",
+        "cog.top_p",
+        "cog.route_diversity_target",
+        "cog.counterhypothesis_pressure",
+        "hyper.max_branches_per_variable"
+      ],
+      "soft_response": "HOMEOSTATIC_SETPOINT_CONTROL"
+    },
+    "convergence_pressure": {
+      "signals": [
+        "branch_collapse_rate",
+        "action_readiness",
+        "workspace_winner_dominance",
+        "marginal_value_more_thought",
+        "deadline_or_urgency_pressure"
+      ],
+      "projection": "EXPECTED",
+      "actuators": [
+        "hyper.collapse_confidence_min",
+        "cog.workspace_ignition_threshold",
+        "cog.max_reflection_rounds"
+      ],
+      "soft_response": "BALANCE_AGAINST_UNCERTAINTY_AND_CONTAINMENT"
+    },
+    "uncertainty_load": {
+      "signals": [
+        "unknown_material_variable_fraction",
+        "hyperposition_entropy",
+        "confidence_interval_width",
+        "unresolved_goal_metric_fraction",
+        "contradictory_evidence_fraction"
+      ],
+      "projection": "EXPECTED",
+      "actuators": [
+        "memory.counterevidence_quota",
+        "memory.unresolved_branch_quota",
+        "hyper.max_branches_per_variable",
+        "hyper.collapse_confidence_min",
+        "cog.counterhypothesis_pressure"
+      ],
+      "soft_response": "OBSERVE_SEARCH_OR_SIMULATE_BEFORE_ACT"
+    },
+    "hyperposition_width": {
+      "signals": [
+        "branches_per_variable",
+        "active_unresolved_variables",
+        "branch_memory_cost",
+        "branch_survival_ticks"
+      ],
+      "projection": "PESSIMISTIC_MAX_FOR_RESOURCE_EXPECTED_FOR_COGNITION",
+      "actuators": [
+        "hyper.max_branches_per_variable",
+        "hyper.branch_persistence_ticks",
+        "hyper.collapse_confidence_min"
+      ],
+      "soft_response": "PRUNE_REDUNDANT_NOT_UNRESOLVED_EVIDENCE_BEARING_BRANCHES"
+    },
+    "cognitive_diversity": {
+      "signals": [
+        "independent_hypothesis_count",
+        "route_entropy",
+        "cell_role_diversity",
+        "repeated_answer_similarity",
+        "counterhypothesis_coverage"
+      ],
+      "projection": "EXPECTED",
+      "actuators": [
+        "cog.route_diversity_target",
+        "cog.counterhypothesis_pressure",
+        "cog.temperature",
+        "hyper.max_branches_per_variable"
+      ],
+      "soft_response": "AVOID_MONOCULTURE_WITHOUT_RANDOM_NOISE"
+    },
+    "reflection_depth": {
+      "signals": [
+        "reasoning_rounds_since_state_delta",
+        "repeated_workspace_reentry_count",
+        "time_since_action_readiness_stabilized",
+        "marginal_information_gain_per_round"
+      ],
+      "projection": "PESSIMISTIC_MAX",
+      "actuators": [
+        "cog.max_reflection_rounds",
+        "cog.workspace_ignition_threshold",
+        "exec.continuation_bias"
+      ],
+      "soft_response": "ACT_OBSERVE_ASK_OR_WAIT_INSTEAD_OF_RECURSING"
+    },
+    "stagnation_pressure": {
+      "signals": [
+        "unresolved_pressure",
+        "progress_rate_inverse",
+        "route_diversity_inverse",
+        "duplicate_plan_ratio",
+        "replan_without_new_evidence_count"
+      ],
+      "projection": "PESSIMISTIC_MAX",
+      "actuators": [
+        "cog.route_diversity_target",
+        "cog.counterhypothesis_pressure",
+        "exec.max_replan_without_new_evidence",
+        "exec.continuation_bias"
+      ],
+      "soft_response": "CHANGE_ROUTE_NOT_REWARD_BUSYWORK"
+    },
+    "retrieval_load": {
+      "signals": [
+        "context_tokens_over_budget",
+        "retrieved_item_count_over_limit",
+        "duplicate_context_fraction",
+        "irrelevant_context_fraction"
+      ],
+      "projection": "PESSIMISTIC_MAX",
+      "actuators": [
+        "memory.context_token_budget",
+        "memory.max_items",
+        "memory.semantic_threshold",
+        "memory.dedupe_similarity_ceiling"
+      ],
+      "soft_response": "COMPILE_SMALLER_CONTEXT_CAPSULE"
+    },
+    "retrieval_relevance": {
+      "signals": [
+        "retrieved_items_used_by_executor_fraction",
+        "context_to_progress_gain",
+        "missing_needed_context_inverse",
+        "stale_context_inverse"
+      ],
+      "projection": "LOW_CONFIDENCE_BOUND",
+      "actuators": [
+        "memory.semantic_threshold",
+        "memory.causal_depth",
+        "memory.counterevidence_quota",
+        "memory.unresolved_branch_quota"
+      ],
+      "soft_response": "RECOMPILE_CONTEXT_BY_CURRENT_DELTA"
+    },
+    "execution_pressure": {
+      "signals": [
+        "action_candidate_rate",
+        "tool_call_rate",
+        "external_effect_candidate_rate",
+        "marginal_value_action_vs_more_thought",
+        "goal_urgency"
+      ],
+      "projection": "PESSIMISTIC_MAX_WHEN_CONTAINMENT_LOW_OTHERWISE_EXPECTED",
+      "actuators": [
+        "exec.max_parallel_work",
+        "contain.external_action_concurrency",
+        "cog.max_reflection_rounds"
+      ],
+      "soft_response": "BALANCE_PROGRESS_WITH_EVIDENCE_AND_RISK"
+    },
+    "completion_confidence": {
+      "signals": [
+        "mandatory_metric_pass_fraction",
+        "mandatory_metric_evidence_fraction",
+        "integration_receipt_present",
+        "target_runtime_receipt_present",
+        "open_critical_deficit_fraction"
+      ],
+      "projection": "PESSIMISTIC_MIN",
+      "actuators": [
+        "exec.completion_metric_threshold",
+        "goal.progress_evidence_min"
+      ],
+      "soft_response": "EMIT_EXACT_DELTA_WORK_DIRECTIVE",
+      "hard_response": "NEVER_MARK_VERIFIED_COMPLETE"
+    },
+    "resource_pressure": {
+      "signals": [
+        "cpu_pressure",
+        "ram_pressure",
+        "sqlite_writer_contention",
+        "decode_queue_latency",
+        "token_budget_pressure",
+        "control_write_rate"
+      ],
+      "projection": "PESSIMISTIC_MAX",
+      "actuators": [
+        "cog.poll_intensity",
+        "exec.max_parallel_work",
+        "goal.concurrent_active_limit",
+        "hyper.max_branches_per_variable",
+        "memory.context_token_budget"
+      ],
+      "soft_response": "BACKOFF_AND_BATCH_CONTROL_WRITES",
+      "hard_response": "DEGRADED_OR_RECOVERY_MODE"
+    },
+    "recovery_margin": {
+      "signals": [
+        "active_goal_checkpoint_freshness",
+        "work_revision_replayability",
+        "node_replacement_readiness",
+        "unconsumed_result_recoverability",
+        "effect_unknown_outcome_count_inverse"
+      ],
+      "projection": "PESSIMISTIC_MIN",
+      "actuators": [
+        "exec.max_parallel_work",
+        "goal.concurrent_active_limit",
+        "cog.poll_intensity"
+      ],
+      "soft_response": "CHECKPOINT_AND_REDUCE_NEW_WORK",
+      "hard_response": "RECOVERY_OR_HOLD"
+    }
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "schema":"FRANKENSTEIN_2_ARCHITECTURE_DELTA/v1",
+  "delta_id":"TW5_20260828_EFFECT_AUTHORITY_ENFORCEMENT_SUCCESSOR",
+  "recorded_at":"2026-08-28T14:24:07+07:00",
+  "trigger":"triggerwort 5",
+  "donor":{"repo":"gschaidergabriel/frankenstein","commit":"5641dc6b2df6ebed1df246ee7533134324f6c427"},
+  "evidence_scope":"SOURCE_FORENSICS_ONLY_NO_RUNTIME_PROMOTION",
+  "supersession_note":"Refines, but does not delete, earlier D005 'Stern/EffectGate-style' wording. The donor has a useful request/outcome journal shape, but exact source does not establish normal PreToolUse rejection as the actual execution gate.",
+  "findings":[
+    {
+      "id":"TW5-EAD-001",
+      "classification":"CURRENT_SOURCE_ENFORCEMENT",
+      "finding":"zulassen() computes and journals admission-like checks, but the normal PreToolUse live branch intentionally emits no deny/block response after zulassen().",
+      "target_2_0_action":"REPAIR"
+    },
+    {
+      "id":"TW5-EAD-002",
+      "classification":"CURRENT_SOURCE_ENFORCEMENT",
+      "finding":"merken() can create VERIFIED after successful PostToolUse even when no PreToolUse row exists; VERIFIED therefore cannot be treated as proof of admitted execution.",
+      "target_2_0_action":"REPAIR"
+    },
+    {
+      "id":"TW5-EAD-003",
+      "classification":"CURRENT_SOURCE_ENFORCEMENT",
+      "finding":"gw_absicht later uses effects.status=VERIFIED as aussenwirkung, so the donor currently overloads one status across observed-success and admitted-then-verified semantics.",
+      "target_2_0_action":"REPAIR"
+    }
+  ],
+  "triggerword4_required_design_delta":[
+    "Use an explicit AdmissionDecision {ALLOW,DENY,UNKNOWN} bound to effect_id/causal_id/generation and produced before real execution by deterministic control-plane authority.",
+    "Use a distinct ObservedOutcome {SUCCEEDED,FAILED,UNKNOWN} with evidence/provenance after execution; outcome observation never retroactively mints admission.",
+    "Use a distinct ReentryStatus/receipt for observed post-effect state; causal_episodes credit or reentered flags cannot be inferred from request or tool return alone.",
+    "If admission is missing/UNKNOWN, preserve the observed outcome but grant zero admitted-effect credit.",
+    "If external effect outcome is transport-ambiguous, retain UNKNOWN and never blindly replay.",
+    "Bind each effect to a per-call identity rather than relying only on one session-level active_turns.effect_id pointer unless serialization is formally proven.",
+    "Keep lifecycle hooks as adapters/audit surfaces if useful, but place the actual EffectGate at the executor/host boundary that can deterministically prevent execution.",
+    "Audit all downstream consumers of effects.status before schema migration so VERIFIED semantic overload cannot survive into EntityOS/HCU."
+  ],
+  "counterhypothesis":"A host permission layer outside stern.py may be the real execution authority. If proven, adapt that host gate into the successor rather than forcing stern.py to become a blocker; the invariant is one deterministic effect authority, not preservation of a specific file/function.",
+  "falsifier":"Show exact current host/executor code and runtime receipt proving every state-changing tool is denied before execution whenever zulassen records ABGELEHNT/WIEDERHOLUNG/unknown admission, including timeout/error cases, with exact effect identity carried through PostToolUse and re-entry.",
+  "credits":{"source_forensics":"ADVANCED","runtime_causal":0,"physical_grid10":0,"hcu_runtime":0,"whole_entityos_hcu":0,"training":0},
+  "next_exact_gate":"Trace current realtime_gespraech Function-Calling/tool execution path and host permission boundary, then recover Git chronology for zulassen/merken fallback semantics."
+}

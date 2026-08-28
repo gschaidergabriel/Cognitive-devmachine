@@ -6,6 +6,7 @@ Applies with:
 - `TRIGGERWORD_4_GRID10_COGNITIVE_RUNTIME_DIRECTIVE.md`
 - `TRIGGERWORD_4_FRANKENSTEIN_2_VPS_ASSEMBLY_AND_CORTEX_DIRECTIVE.md`
 - `TRIGGERWORD_4_FRANKENSTEIN_2_MASTER_ARCHITECTURE_AND_ASSEMBLY_WORKFLOW.md`
+- `TRIGGERWORD_4_DEFERRED_CAUSAL_RETURN_RETRIEVAL_VOICE_FUSION_ADDENDUM.md`
 
 ## 1. Owner decision
 
@@ -160,3 +161,41 @@ Stage 7 Voice is allowed to reach `ACCEPTED_AT_SCOPE` on VPS when the text/event
 This allows Triggerword 4 to continue into executor/effect/full-system assembly without waiting for physical audio hardware.
 
 A later suitable host can add `VOICE_AUDIO_HARDWARE_PASS` without reopening the already-proven control-plane architecture unless audio testing reveals a real architectural defect.
+
+## 8. Successor causal-return binding from latest Triggerword-5 forensics
+
+The latest exact-donor source cross-check found that reactive activation and later asynchronous Voice/tool completion can lose replay-stable causal identity even though immediate tool output retains its original `call_id`.
+
+Therefore this Voice acceptance addendum now requires the companion:
+
+`TRIGGERWORD_4_DEFERRED_CAUSAL_RETURN_RETRIEVAL_VOICE_FUSION_ADDENDUM.md`
+
+and adds these acceptance laws:
+
+```text
+SESSION_ID != ACTIVATION_EVENT_ID
+SESSION_ID != ASYNC_TASK_CAUSAL_JOIN
+TIMESTAMP_OR_QUEUE_ORDER != CAUSAL_JOIN
+TRANSPORT_ROLE != ORIGIN_PROVENANCE
+RETRY_OR_REPLACEMENT_REQUIRES_EXPLICIT_GENERATION
+```
+
+### VTX-13 — Activation identity / replay
+
+Two distinct non-empty reactive `speech_end` inputs in the same enabled Voice session must create two distinct activation identities/generations and must not collapse merely because the session is shared.
+
+Record audio/transcript identity or immutable digest where present, Realtime invocation identity and activation policy generation.
+
+### VTX-14 — Async reverse-order return
+
+Start two overlapping background Voice/tool tasks and complete them in reverse order. Each result must preserve its original protocol `call_id`, task/auftrag identity, task generation, completion receipt and reentry identity. No result may attach by chronology/newest-open-row/session proximity.
+
+### VTX-15 — Transport-role provenance
+
+If the provider protocol requires an internal asynchronous result to be transported as a `role=user` conversation item, the canonical provenance must remain system/internal result. It may not be classified as human-originated speech merely because of transport representation.
+
+### VTX-16 — Deferred-return abstraction ablation
+
+Compare one generalized `DeferredCausalReturnEnvelope` against specialized `RetrievalRelevanceCandidate`, `VoiceActivationBinding` and `VoiceAsyncReturnBinding`. Retain the generalized envelope only if it measurably reduces duplicated identity/reentry defects or implementation cost without adding attribution error, latency or lost subsystem semantics.
+
+No source/docs evidence alone earns Voice runtime credit.

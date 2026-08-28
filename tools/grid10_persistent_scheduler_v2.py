@@ -11,6 +11,12 @@ V4 remains the sole wake/Agency transition owner inside V6. The scheduler only d
 whether there is active work or a due wake worth entering that controller. No provider is
 implicit: without an explicitly supplied admitted ``inference_fn`` V6 records zero model
 calls and the scheduler still advances the durable heartbeat/checkpoint path.
+
+A candidate-cognition exception that occurs after V4 commits must not kill the persistent
+service. V6 first writes a sanitized failed closure and forbids same-tick retry; scheduler v2
+then reconstructs only that exact durable closure into a ``HEARTBEAT_COGNITION_FAILED`` row.
+The next service iteration therefore waits for the already-committed next-tick schedule and
+may recover on a later tick without replaying the failed causal identity.
 """
 from __future__ import annotations
 
@@ -18,12 +24,16 @@ from dataclasses import asdict
 import argparse
 import json
 from pathlib import Path
+import sqlite3
 import time
 from typing import Callable, Iterable, Mapping, Any
 
 from grid10_cognitive_heartbeat_v1 import _trusted_normal_axes, append_frame_jsonl
 from grid10_cognitive_unified_runtime_v4 import RuntimeCycleNotDue, _atomic_commit_idle_hold
-from grid10_cognitive_unified_runtime_v6 import build_unified_cognitive_runtime_v6
+from grid10_cognitive_unified_runtime_v6 import (
+    CognitiveCycleExecutionError,
+    build_unified_cognitive_runtime_v6,
+)
 from grid10_glm_cognitive_cycle_v1 import CognitiveCycleConfig
 from grid10_glm_inference_provider_v1 import GLMInferenceResult
 from grid10_persistent_agency_v1 import GoalState
@@ -91,6 +101,54 @@ class PersistentCognitiveSchedulerV2:
             cognitive_action=None,
             next_tick_not_before=snapshot.next_tick_not_before,
             agency_state_epoch=snapshot.state_epoch,
+            unified_db_realpath=self.fingerprint.realpath,
+        )
+
+    def _closed_cognition_failure_result(
+        self,
+        *,
+        cycle_id: str,
+        tick_id: str,
+    ) -> SchedulerCycleResult:
+        """Return one exact V6 failure closure without retrying or hiding the failure.
+
+        ``CognitiveCycleExecutionError`` is raised only after V6 has committed its sanitized
+        closure. Re-read that closure from UnifiedDB rather than reconstructing causal fields
+        from transient exception state. Missing/mismatched closure is itself a hard integrity
+        failure and is deliberately not converted into a recoverable scheduler row.
+        """
+        con = sqlite3.connect(str(self.unified_db))
+        try:
+            row = con.execute(
+                "SELECT receipt_json FROM grid10_v6_control_bound_receipts WHERE tick_id=?",
+                (tick_id,),
+            ).fetchone()
+        finally:
+            con.close()
+        if row is None:
+            raise RuntimeError(f"MISSING_V6_FAILURE_CLOSURE:{tick_id}")
+
+        receipt = json.loads(row[0])
+        if (
+            receipt.get("schema") != "GRID10_V6_CONTROL_BOUND_RECEIPT/v1"
+            or receipt.get("tick_id") != tick_id
+            or receipt.get("cognitive_cycle_status") != "FAILED"
+            or receipt.get("post_v4_commit_failure") is not True
+            or receipt.get("same_tick_retry_authorized") is not False
+        ):
+            raise RuntimeError(f"INVALID_V6_FAILURE_CLOSURE:{tick_id}")
+
+        active_after = self._active_goal_ids()
+        return SchedulerCycleResult(
+            cycle_id=cycle_id,
+            status="HEARTBEAT_COGNITION_FAILED",
+            awakened_goal_ids=tuple(str(x) for x in receipt.get("woken_goal_ids", ())),
+            active_goal_ids=active_after,
+            heartbeat_tick_id=tick_id,
+            assurance_mode=str(receipt["assurance_mode"]),
+            cognitive_action=str(receipt["next_action"]),
+            next_tick_not_before=float(receipt["next_tick_not_before"]),
+            agency_state_epoch=int(receipt["agency_epoch_after"]),
             unified_db_realpath=self.fingerprint.realpath,
         )
 
@@ -170,6 +228,14 @@ class PersistentCognitiveSchedulerV2:
                 cycle_id=cycle_id,
                 snapshot=current,
                 active_goal_ids=self._active_goal_ids(),
+            )
+        except CognitiveCycleExecutionError:
+            # V4 has already committed the tick and V6 has already persisted an exact FAILED
+            # closure. Preserve liveness without replay: expose that durable failure as the
+            # cycle result, then let run_forever honor the committed next_tick_not_before.
+            return self._closed_cognition_failure_result(
+                cycle_id=cycle_id,
+                tick_id=tick_id,
             )
 
         append_frame_jsonl(self.frames_jsonl, cycle.heartbeat_result.frame_json)

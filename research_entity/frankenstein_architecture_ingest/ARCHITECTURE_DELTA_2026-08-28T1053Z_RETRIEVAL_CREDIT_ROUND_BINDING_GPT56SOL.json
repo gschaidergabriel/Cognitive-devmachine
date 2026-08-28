@@ -1,0 +1,141 @@
+{
+  "schema_version": "TRIGGERWORD5_ARCHITECTURE_DELTA/v2",
+  "created_at": "2026-08-28T10:53:40Z",
+  "worker_id": "GPT-5.6-Sol/triggerwort5/retrieval-credit-round-binding",
+  "trigger": "triggerwort 5",
+  "delta_class": "RETRIEVAL_CREDIT_ROUND_IDENTITY_AND_CROSS_TURN_CONTAMINATION",
+  "donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "commit_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+    "blob_sha": "8b413ed8b55de67b1c9450a4149951ec7676a947"
+  },
+  "authority_binding": {
+    "canonical_main_observed": "b3f236d4c5169169d3e63d455145ba310e14474d",
+    "design_head_observed_pre_write": "4ebdcbffff35e85d9d09e9fa92f0de2c15d8402c",
+    "supervisor_epoch": "9.13",
+    "supervisor_delta": "9.13AC_NON_AUTHORITY",
+    "mode": "FREE_ONLY",
+    "provider_routes_admitted": false,
+    "together_forbidden": true,
+    "runtime_credit": 0
+  },
+  "ingest_context": {
+    "new_unconsumed_inbox_packets_after_2026-08-28T10:48:00Z": 0,
+    "previous_delta": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T1048Z_STOP_HOOK_LLM_BOUNDARY_GPT56SOL.json",
+    "relation_to_previous_delta": "SUCCESSOR_SOURCE_FORENSIC_REFINEMENT_OF_RETRIEVAL_IDENTITY_DISCRIMINATOR",
+    "packet_consumption": false
+  },
+  "atoms": [
+    {
+      "atom_id": "mc-round-identity-001",
+      "source_kind": "ENFORCEMENT_CODE",
+      "span": "stern.py:4180-4335,4710-4788",
+      "what_it_does": "MicroClay.retrieve persists retrieval_id, turn_id, episode_id, causal_id and generation. _microclay_schatten deliberately creates a fresh causal_id and fresh synthetic turn_id/episode_id for each UserPromptSubmit after an earlier session-scoped identity bug silently killed second-and-later retrieval rounds.",
+      "authority_class": "ROUND_IDENTITY_PRESENT_BUT_NOT_END_TO_END_BOUND",
+      "target_2_0_action": "KEEP_AND_STRENGTHEN",
+      "confidence": 1.0
+    },
+    {
+      "atom_id": "mc-mechanical-credit-002",
+      "source_kind": "ENFORCEMENT_CODE",
+      "span": "stern.py:4445-4525",
+      "what_it_does": "kreditsignal_mechanisch selects up to 20 retrieval_episodes by session_id that have no retrieval_feedback at all, ordered newest-first. It does not receive or require the retrieval_id/turn_id/episode_id of the Stop event being evaluated.",
+      "authority_class": "SESSION_HEURISTIC_CREDIT_TARGET_SELECTION",
+      "failure_mode": "If an older retrieval remains feedback-open because of fail-silent error, timeout, ordering or partial completion, a later Stop can evaluate and mutate that older retrieval row.",
+      "target_2_0_action": "REPAIR",
+      "confidence": 1.0
+    },
+    {
+      "atom_id": "mc-assistant-evidence-003",
+      "source_kind": "ENFORCEMENT_CODE",
+      "span": "stern.py:4660-4715",
+      "what_it_does": "_transcript_assistenttext_lesen scans every assistant record in the transcript, concatenates all assistant text and returns the last approximately 20k characters. Its docstring says it provides the answer text of this round, but the implementation has no turn boundary.",
+      "authority_class": "DECLARED_ROUND_SCOPE_VS_SESSION_TRANSCRIPT_ENFORCEMENT_CONTRADICTION",
+      "failure_mode": "A selected memory from retrieval round A can be marked as carried because its id or subject token appears only in later assistant text from round B or later.",
+      "target_2_0_action": "REPAIR",
+      "confidence": 1.0
+    },
+    {
+      "atom_id": "mc-effect-evidence-004",
+      "source_kind": "ENFORCEMENT_CODE",
+      "span": "stern.py:4445-4525",
+      "what_it_does": "For every open retrieval row r, mechanical credit reads one session-scoped active_turns.episode_id and gathers effects in that episode from r.ts through now. The retrieval row's own round-scoped episode_id is not used for the effect query.",
+      "authority_class": "SESSION_EPISODE_EFFECT_WINDOW_NOT_RETRIEVAL_ROUND_BOUND",
+      "failure_mode": "Later effects in the same session-level active episode can contribute evidence to an older retrieval round.",
+      "target_2_0_action": "REPAIR",
+      "confidence": 0.99
+    },
+    {
+      "atom_id": "mc-model-credit-005",
+      "source_kind": "ENFORCEMENT_CODE",
+      "span": "stern.py:4920-5065",
+      "what_it_does": "_kognition_richten_hook chooses the newest retrieval row for the session lacking modell:relevanz feedback, then pairs it with the last user message parsed from the current transcript. It does not consume an immutable retrieval work-item identity emitted by the originating UserPromptSubmit.",
+      "authority_class": "NEWEST_SESSION_ROW_MODEL_CREDIT_HEURISTIC",
+      "failure_mode": "Reordered/interleaved same-session Stop handling can pair a user message/model judgment with the wrong retrieval row; reachability is source-plausible but not runtime-measured here.",
+      "target_2_0_action": "REPAIR",
+      "confidence": 0.99
+    },
+    {
+      "atom_id": "mc-credit-receipt-006",
+      "source_kind": "ENFORCEMENT_CODE",
+      "span": "stern.py:4320-4450",
+      "what_it_does": "Once a retrieval row has been chosen, MicroClay._apply_credit derives its receipt identity from retrieval_id, causal_id, generation, signal_class and credit value and writes those identities into retrieval_feedback.",
+      "authority_class": "STRONG_POST_SELECTION_RECEIPT_IDENTITY",
+      "failure_mode": "Receipt identity proves which row was mutated, not that the evidence and row selection came from the same originating round.",
+      "target_2_0_action": "KEEP_AND_EXTEND_WITH_EVIDENCE_BINDING",
+      "confidence": 1.0
+    }
+  ],
+  "contradictions_preserved": [
+    "The mechanical-credit doc/comment language says assistant evidence is from 'this round', while the implementation concatenates assistant text across the session tail.",
+    "Retrieval rows carry round-scoped turn_id/episode_id/causal_id, but mechanical effect evidence is queried through the session-scoped active_turns episode instead of the retrieval row's episode_id.",
+    "The reducer's final receipt is identity-rich, but upstream target selection remains session/newest/open heuristics, so post-selection provenance cannot prove correct pre-selection causal binding.",
+    "The donor explicitly documents a prior session-vs-round identity failure and fixed retrieval creation by adding round-scoped synthetic IDs, yet Stop-side credit attribution still retains session-scoped heuristics."
+  ],
+  "architecture_effect": {
+    "mechanism": "RoundBoundRetrievalCredit/v1",
+    "rule": "Every mechanical, model-derived or later HCU retrieval-credit signal must be admitted against an immutable originating retrieval work identity before evaluation: retrieval_id + turn_id + episode_id + causal_id + generation. Evidence must be bounded to that same round or carry explicit causal references; session-newest/open-row inference is not sufficient authority for credit mutation.",
+    "preserve_from_donor": [
+      "fresh round-scoped retrieval_id/turn_id/episode_id/causal_id creation",
+      "retrieval_feedback append-only receipt identity",
+      "model/mechanical signals remain non-human and cannot independently authorize SHADOW-to-ACTIVE promotion",
+      "fail-closed absence of model judgment creates no fabricated model relevance record"
+    ],
+    "repair_for_frankenstein_2": [
+      "emit a typed RetrievalCreditContext or successor work item at retrieval creation containing immutable retrieval identity plus bounded evidence references",
+      "bind Stop/mechanical credit to the exact retrieval_id of the completed round instead of querying up to 20 session-open rows",
+      "bind assistant evidence to an exact assistant turn/message span or digest rather than the transcript's accumulated 20k-character tail",
+      "bind effect evidence to exact effect receipt IDs causally owned by that retrieval/turn, not one session active episode over r.ts..now",
+      "reuse the same immutable identity envelope for deferred RetrievalRelevanceCandidate model work from HookCognitionBoundary/v1",
+      "extend the deterministic reducer receipt with evidence_ref/evidence_digest or equivalent so the receipt proves both target identity and evaluated evidence identity",
+      "preserve UNKNOWN/NO_CREDIT when exact round evidence cannot be reconstructed; do not fall back to session-nearest heuristics"
+    ],
+    "target_2_0_action": "ADAPT_TO_GRID_AND_TYPED_ENTRY"
+  },
+  "counterhypotheses": [
+    "Claude Code hook delivery may be effectively sequential per session and normally execute one Stop immediately after its corresponding UserPromptSubmit, making misbinding rare in steady-state operation.",
+    "Short sessions may leave only current-round assistant text inside the final 20k-character tail, reducing practical contamination even though no source-level boundary exists."
+  ],
+  "falsifiers_and_tests_for_triggerword_4": [
+    "Create two same-session retrieval rounds A and B with distinct retrieval_id/turn_id/episode_id and a subject token unique to A that appears only in B's assistant response; leave A mechanically open, then process Stop B. Current donor source predicts A can receive mechanisch:erwaehnt from B evidence.",
+    "Create effects unique to B after A.ts in the session-scoped active episode while A remains open; verify whether A's mechanical haystack includes B effects.",
+    "Reverse/interleave model-relevance completion for A and B and prove the successor attaches each judgment only to its immutable retrieval_id, never ORDER BY ts DESC LIMIT 1.",
+    "Verify successor receipts carry both mutated retrieval identity and exact assistant/effect/model evidence digests/refs."
+  ],
+  "evidence_boundary": {
+    "source_forensics": "PASS_AT_EXACT_DONOR_SHA",
+    "runtime_reachability_of_cross_turn_false_credit": "NOT_TESTED",
+    "installed_runtime": 0,
+    "concurrency_acceptance": 0,
+    "whole_entityos_hcu": 0,
+    "training": 0
+  },
+  "feeds_triggerword_4": {
+    "do_not_build_in_trigger5": true,
+    "required_action": "Implement RoundBoundRetrievalCredit/v1 together with HookCognitionBoundary/v1, then run the two-round contamination and reordered-completion discriminators under exact source/build identity before runtime promotion."
+  },
+  "provider_execution": false,
+  "vps_execution": false,
+  "unusual_experiment": false
+}

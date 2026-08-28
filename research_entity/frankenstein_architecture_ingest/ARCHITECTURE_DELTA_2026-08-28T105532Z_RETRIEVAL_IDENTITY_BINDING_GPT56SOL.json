@@ -1,0 +1,86 @@
+{
+  "schema_version": "TRIGGERWORD5_ARCHITECTURE_DELTA/v1",
+  "delta_id": "TW5-DELTA-20260828T105532Z-RETRIEVAL-IDENTITY-BINDING-GPT56SOL",
+  "created_at": "2026-08-28T10:55:32Z",
+  "trigger": "triggerwort 5",
+  "worker": "GPT-5.6-Sol/triggerwort5/retrieval-identity-binding",
+  "authority": {
+    "canonical_main_observed": "b3f236de5fb44438367987997eea6eb6cf53665f",
+    "supervisor_epoch": "9.13",
+    "mode": "FREE_ONLY",
+    "donor_repo": "gschaidergabriel/frankenstein",
+    "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "donor_blob": "8b413ed8b55de67b1c9450a4149951ec7676a947",
+    "design_head_before_packet": "4ebdcbffff35e85d9d09e9fa92f0de2c15d8402c",
+    "packet_commit": "c06aab6bae35f1282487d92820dba37448687474",
+    "runtime_credit": 0
+  },
+  "source_packet": "research_entity/frankenstein_architecture_ingest/inbox/PACKET_20260828T105532Z_5641dc6_GPT56SOL_RETRIEVAL_IDENTITY_BINDING.json",
+  "classification": "CURRENT_SOURCE_CAUSAL_IDENTITY_BINDING_GAP",
+  "architecture_change": {
+    "subsystem": "RetrievalJudgementIdentityBinding/v1",
+    "previous_model": "Stop-hook relevance feedback was known to need an interleaving test and exact retrieval/turn binding, but it was not yet established whether Frankenstein 2.0 needed a new identity substrate to support that repair.",
+    "new_model": "The donor already persists retrieval_id, turn_id, episode_id, causal_id and generation on each retrieval episode. The causal weakness is downstream: Stop chooses the newest unjudged row by session/time and recovers the query from the transcript's latest user message before applying otherwise deterministic credit. Frankenstein 2.0 can therefore reuse the existing tuple and move exact binding ahead of cognition/reduction rather than inventing a second identity system.",
+    "status": "REPAIR_BY_EXISTING_IDENTITY_PROPAGATION",
+    "preserve": [
+      "Existing retrieval/turn/episode/causal/generation tuple as the donor identity substrate.",
+      "Model relevance remains candidate/measurement evidence, never canonical truth.",
+      "Deterministic duplicate-suppressed credit receipts after correct target selection.",
+      "Fail-closed behavior when cognition yields no judgment."
+    ],
+    "repair": [
+      "Define a typed RetrievalJudgementWorkItem carrying retrieval_id, turn_id, episode_id, causal_id, generation, exact query identity or immutable query-text reference, and candidate IDs.",
+      "Have GRID/local cognition return the same identity tuple with its judgment; reject stale/mismatched tuple before any reducer write.",
+      "Reduce modell:relevanz feedback only onto the exact retrieval row named by the work item, never by newest-session-row selection.",
+      "Treat transcript-last-user-message reconstruction as DEGRADED_COMPATIBILITY_ONLY unless independently bound to the same turn/retrieval identity."
+    ]
+  },
+  "source_atoms": [
+    {
+      "kind": "LIVE_CODE",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "lines": "4261-4280",
+      "finding": "retrieval_episodes persistence already stores retrieval_id, turn_id, episode_id, causal_id, session_id and generation together."
+    },
+    {
+      "kind": "LIVE_CODE",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "lines": "4940-4970",
+      "finding": "_transcript_nutzertext_lesen returns the latest user message from the transcript rather than a query loaded by exact retrieval identity."
+    },
+    {
+      "kind": "ENFORCEMENT_CODE",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "lines": "4995-5021",
+      "finding": "_kognition_richten_hook selects the target by session_id plus ORDER BY ts DESC LIMIT 1 and then applies model-derived credit to that selected row."
+    },
+    {
+      "kind": "ENFORCEMENT_CODE",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "lines": "4374-4398",
+      "finding": "_apply_credit hashes retrieval_id, causal_id, generation, signal class and value for deterministic duplicate suppression after row selection."
+    }
+  ],
+  "hypothesis": "Propagating the donor's existing exact retrieval identity tuple through a typed GRID cognition work item will eliminate the session-newest ambiguity without requiring a second identity schema and while preserving current deterministic feedback idempotency.",
+  "counterhypothesis": "Stop processing may be strictly ordered enough in the installed runtime that session-newest selection never misattaches in practice; source structure alone does not prove an observed misattachment.",
+  "triggerword4_discriminators": [
+    {
+      "name": "SameSessionRetrievalCreditBinding/v1",
+      "type": "DETERMINISTIC_NON_PROVIDER_CAUSAL_TEST",
+      "procedure": "Construct two same-session retrieval episodes with distinct retrieval_id/turn_id/episode_id/causal_id/generation tuples, reorder or interleave judgment processing, and prove feedback can only commit to the exact work-item tuple. The legacy session-newest selector is the negative control."
+    },
+    {
+      "name": "RetrievalJudgementGenerationFence/v1",
+      "type": "DETERMINISTIC_FAIL_CLOSED_TEST",
+      "procedure": "Present a judgment carrying the correct retrieval_id but stale or mismatched generation/turn/episode/causal identity and require zero feedback/policy writes plus an explicit rejection receipt."
+    }
+  ],
+  "credits": {
+    "source_forensics": "PASS_AT_EXACT_DONOR_SOURCE_SCOPE",
+    "runtime": 0,
+    "provider_execution": 0,
+    "full_frankenstein2": 0,
+    "whole_entityos_hcu": 0,
+    "training": 0
+  }
+}

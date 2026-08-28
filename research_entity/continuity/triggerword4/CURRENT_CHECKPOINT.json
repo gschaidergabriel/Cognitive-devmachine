@@ -5,7 +5,7 @@
   "trigger": "triggerwort 4",
   "routing_self_test": "PASS",
   "router_schema_version": "2.2",
-  "master_version": "2026-08-28 fused master + one-command driver + Agent-Zero/Project-Frankenstein/GRID10 fusion + functional-core-first/security-deferred law",
+  "master_version": "2026-08-28 fused master + one-command driver + Agent-Zero/Project-Frankenstein/GRID10 fusion + functional-core-first/security-deferred law + single-basis Dynamic Frame Pulse/GRID fusion",
   "product": "EntityOS",
   "compute_architecture": "HCU",
   "execution_mode": "FREE_ONLY",
@@ -16,22 +16,24 @@
     "preserve_as_baseline": true
   },
   "research_repository": "gschaidergabriel/clay-global-research-entity",
-  "canonical_main_observed": "5a953ebf824bbdc17091a638eb2b4a376aa8567e",
+  "canonical_main_observed": "779e0420dc04035034700c49dea215e927a8925a",
   "continuation_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
-  "continuation_head_observed_before_update": "6c8a15066e15ca3a4e1a5926649f92d80534d13f",
+  "continuation_head_observed_before_update": "9a22664ff1f6ff5a8306f20f83d19959dfa6652b",
   "current_stage": "FRANKENSTEIN2_FUNCTIONAL_CORE_ASSEMBLY",
-  "current_gate_id": "GRID10_SIGKILL_INDEPENDENT_REPLACEMENT_V3_REPOSITORY_BOUND_EXECUTION",
-  "current_gate_status": "READY",
+  "current_gate_id": "GRID10_V5_SINGLE_CONTROL_BASIS_DETERMINISTIC_EXECUTION",
+  "current_gate_status": "SOURCE_READY_EXECUTION_EVIDENCE_BLOCKED_CI_ZERO_STEP",
   "current_organ_execution_surface": "SELF_ROUTING_REQUIRED_NOT_EXTERNAL_BLOCKER",
-  "blocked_gate_policy": "BLOCKED_GATE != BLOCKED_PROJECT. Missing direct shell is not an external blocker. Continue through the VPS self-routing ladder and continue all independent cognitive/core assembly in parallel.",
+  "blocked_gate_policy": "BLOCKED_GATE != BLOCKED_PROJECT. Missing direct shell is not an external blocker. Continue through the self-routing execution ladder and continue all independent cognitive/core assembly in parallel. Never convert a zero-step CI infrastructure failure into product PASS or product FAIL.",
   "priority_policy": "FUNCTIONAL_COGNITIVE_CORE_FIRST. Dedicated security hardening is deferred until the Frankenstein-2.0 functional architecture and actual effect/attack surfaces are known.",
   "parallel_frontier": {
     "gate_id": "FRANKENSTEIN2_PULSE_GRID_WORLD_MEMORY_NATIVE_CHILD_INTEGRATION",
-    "status": "READY_FOR_IMPLEMENTATION_AND_COMPONENT_TESTS",
+    "status": "PULSE_GRID_SOURCE_FUSED_EXECUTION_EVIDENCE_PENDING",
     "scope": [
       "persistent pulse / StateFingerprint",
-      "GRID10 bounded cognitive burst",
-      "Agency/HOLD-WAKE continuity",
+      "single immutable ControlSnapshot basis per cognitive tick",
+      "Agency/HOLD-WAKE continuity with v4 sole wake_due ownership",
+      "GRID10 bounded cognitive burst with live COMPUTE_OFF/OUTPUT_OFF/MEMORY_OFF/gain semantics",
+      "GWT/memory feed bound to the same control epoch/digest as Pulse",
       "TITAN-style activation degradation and memory evolution",
       "sparse multi-projection world substrate",
       "Cognitive Micro-Lab + NeRD Physics need routing",
@@ -57,6 +59,13 @@
       "status": "ACCEPTED_AT_SCOPE",
       "scope": "OWNER_ARCHITECTURE_PRIORITY",
       "evidence": "research_entity/global/TRIGGERWORD_4_ONE_COMMAND_AUTONOMOUS_GATE_DRIVER.md commit 6c8a15066e15ca3a4e1a5926649f92d80534d13f"
+    },
+    {
+      "gate_id": "DYNAMIC_FRAME_PULSE_GRID_SINGLE_BASIS_SOURCE_FUSION",
+      "status": "ACCEPTED_AT_SCOPE",
+      "scope": "SOURCE_AND_TEST_DEFINITION_ONLY",
+      "evidence": "research_entity/continuity/receipts/2026-08-28_TRIGGERWORD4_DYNAMIC_FRAME_PULSE_GRID_FUSION_GPT56SOL.json commit 9a22664ff1f6ff5a8306f20f83d19959dfa6652b",
+      "runtime_credit": 0
     }
   ],
   "reopened_gates": [],
@@ -66,10 +75,29 @@
     "tools/grid10_persistent_agency_v1.py",
     "tools/grid10_cognitive_unified_runtime_v2.py",
     "tools/grid10_cognitive_unified_runtime_v4.py",
+    "tools/grid10_cognitive_unified_runtime_v5.py",
+    "tools/grid10_cognitive_controlled_runtime_v1.py",
+    "tools/grid10_live_control_binding_v1.py",
+    "tools/frankenstein2_cognitive_control_plane_v1.py",
     "tools/grid10_persistent_scheduler_v1.py",
-    "tools/grid10_cognitive_agency_loop_v1.py"
+    "tools/grid10_cognitive_agency_loop_v1.py",
+    "tools/test_grid10_cognitive_unified_runtime_v4.py",
+    "tools/test_grid10_cognitive_unified_runtime_v5.py",
+    "tools/test_grid10_cognitive_controlled_runtime_v1.py",
+    "tools/test_grid10_live_control_binding_v1.py",
+    "tools/test_grid10_persistent_scheduler_v1.py"
   ],
   "open_critical_defects": [
+    {
+      "id": "GRID10_V5_DETERMINISTIC_EXECUTION_EVIDENCE_MISSING",
+      "class": "EVIDENCE_GAP",
+      "effect": "The single-basis V4/V5/LiveControlBinding source fusion has not yet produced an observed Python compile/test receipt on an admitted execution surface. GitHub Hosted Actions attempted the exact CI but failed before any step began."
+    },
+    {
+      "id": "GRID10_HOSTED_ACTIONS_ZERO_STEP_INFRA_FAILURE",
+      "class": "EXECUTION_INFRASTRUCTURE_GAP",
+      "effect": "Workflow runs 33168398680 and 33168944183 failed with zero/no exposed steps, so they provide neither PASS nor product-logic FAIL evidence."
+    },
     {
       "id": "GRID10_V3_RUNTIME_EVIDENCE_MISSING",
       "class": "EVIDENCE_GAP",
@@ -170,6 +198,11 @@
     "OwnerAuthorizationForSensitiveEffects"
   ],
   "current_required_discriminators": [
+    "one immutable ControlSnapshot digest/epoch is shared by V4 Pulse checkpoint and V5/LiveControlBinding GRID burst",
+    "V4 performs zero second control-plane snapshot reads when a caller supplies the latched basis",
+    "gain=0 remains distinct from COMPUTE_OFF and cannot silently redefine compute authority",
+    "COMPUTE_OFF prevents specialist computation; OUTPUT_OFF prevents GWT emission; MEMORY_OFF prevents ordinary memory feed",
+    "no explicit inference_fn means zero provider calls and no implicit model route",
     "parallel/reversed tool completion preserves exact per-call identity",
     "stale prior invocation/effect pointer cannot satisfy a new call",
     "unbound textual test success cannot close completion",
@@ -182,13 +215,14 @@
     "multi-projection world-model disagreement produces an information-seeking discriminator rather than forced consensus"
   ],
   "last_discriminator": {
-    "type": "OWNER_PRIORITY_RESCOPE_PLUS_TRIGGER5_RECLASSIFICATION",
-    "result": "PASS_AT_CONTROL_POLICY_SCOPE",
+    "type": "DYNAMIC_FRAME_SINGLE_BASIS_SOURCE_FUSION_PLUS_HOSTED_CI_ATTEMPT",
+    "result": "SOURCE_FUSION_ACCEPTED_AT_SCOPE; EXECUTION_UNRESOLVED_CI_ZERO_STEP",
     "runtime_credit": 0
   },
   "last_receipt": {
-    "type": "TRIGGERWORD4_FUNCTIONAL_CORE_FIRST_POLICY_BINDING",
-    "commit": "6c8a15066e15ca3a4e1a5926649f92d80534d13f"
+    "type": "TRIGGERWORD4_DYNAMIC_FRAME_PULSE_GRID_FUSION_RECEIPT/v1",
+    "path": "research_entity/continuity/receipts/2026-08-28_TRIGGERWORD4_DYNAMIC_FRAME_PULSE_GRID_FUSION_GPT56SOL.json",
+    "commit": "9a22664ff1f6ff5a8306f20f83d19959dfa6652b"
   },
   "credits": {
     "physical_grid10": 0,
@@ -197,7 +231,7 @@
     "jspace_model": 0,
     "training": 0
   },
-  "next_exact_action": "Continue the exact GRID10 v3 repository-bound runtime discriminator through the self-routing VPS ladder without owner confirmation. In parallel build the Frankenstein-2.0 functional cognitive core: Persistent Pulse/StateFingerprint -> Agency/HOLD-WAKE -> GRID10/GWT burst -> TITAN-style memory activation degradation and compression -> sparse multi-projection WorldSlice -> Cognitive Micro-Lab/NeRD when PhysicsNeed or consistency gain is positive -> native child WorkExecutionBinding -> Voice/Retina causal context re-entry. Ingest new Triggerword-5 evidence automatically; route Wache/Schranke/security-only findings to DEFERRED_SECURITY_REFERENCE unless they reveal a present functional-correctness defect. Do not reconstruct historical security machinery as a prerequisite. After functional architecture freeze, enumerate actual effect/privacy/tool/network/filesystem/update surfaces and then begin dedicated security hardening.",
+  "next_exact_action": "Execute the exact current branch deterministic compile/tests on an admitted non-provider execution surface, including V4, V5, ControlledRuntime, LiveControlBinding and PersistentScheduler. If green, bind the persistent service scheduler to the V5/controlled GRID burst without duplicating wake or Dynamic Frame authority; then continue the Frankenstein-2.0 functional core into TITAN-style memory activation degradation/compression -> sparse multi-projection WorldSlice -> Cognitive Micro-Lab/NeRD when PhysicsNeed or consistency gain is positive -> native child WorkExecutionBinding -> Voice/Retina causal context re-entry. In parallel continue the exact GRID10 v3 repository-bound runtime discriminator through the self-routing ladder. Keep provider routes HARD-OFF under current 9.13 authority and do not mint runtime credit from source or zero-step CI.",
   "rollback_point": "6c8a15066e15ca3a4e1a5926649f92d80534d13f",
-  "work_generation": "triggerwort4-20260828-functional-core-first-security-deferred-1"
+  "work_generation": "triggerwort4-20260828-pulse-grid-single-basis-fusion-1"
 }

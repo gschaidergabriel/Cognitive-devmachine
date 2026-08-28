@@ -1,28 +1,18 @@
 #!/usr/bin/env python3
 """GRID10 unified cognitive runtime v4: causal heartbeat <-> persistent-agency coupling.
 
-v3 proved that Fabric, heartbeat telemetry and PersistentAgencyStore can share one physical
-SQLite authority. v4 closes the next bounded Triggerword-4 gap by coupling the deterministic
-runtime cycle to the durable AgencyState scheduler:
+v4 owns wake_due, the persistent heartbeat/checkpoint transition, and the pulse cadence.
+Exactly one immutable ControlSnapshot is the basis of a cognitive tick. A direct caller lets
+v4 latch it; an enclosing controlled GRID runtime may pass an already-latched snapshot so the
+same exact epoch/digest conditions both the pulse and downstream cell/GWT/memory consumers.
 
-    due/wake -> live ControlSnapshot -> heartbeat -> GRID action gate
-    -> continuation checkpoint -> next-tick schedule
+GRID cell COMPUTE_OFF/OUTPUT_OFF/MEMORY_OFF/gain semantics do NOT live here. They are owned by
+the existing controlled-runtime/live-binding layer, avoiding two competing interpretations of
+the same Dynamic Frame. This module never executes external effects or promotes model output to
+canonical truth. EffectGate/EffectJournal remain the real-effect authority.
 
-The ControlSnapshot is latched exactly once at the cognitive pulse boundary. Pulse cadence
-uses the live control plane unless an explicit compatibility/test override is supplied.
-Material action paths consume the corresponding GRID cell mode/gain controls before the
-runtime publishes its next-action candidate. Control writes remain owner-mediated and apply
-to later ticks; this module never mutates controls during a tick.
-
-The cycle commit is generation-like CAS guarded by the AgencyState epoch and lands in the
-same SQLite/WAL file. This module never grants canonical truth or external-effect authority.
-GRID/model output remains candidate cognition; EffectGate/EffectJournal remain authoritative
-for real effects outside this runtime.
-
-Wake ownership law: this shared runtime owns ``wake_due`` for every cognitive tick. A caller
-may supply observed events, but may not supply already-woken goal IDs as causal provenance.
-That prevents a wrapper from forcing an early heartbeat or minting false wake lineage merely
-by passing a non-empty iterable.
+Wake ownership law: this shared runtime owns wake_due for every cognitive tick. A caller may
+supply observed events, but may not supply already-woken goal IDs as causal provenance.
 """
 from __future__ import annotations
 
@@ -34,11 +24,7 @@ import sqlite3
 import time
 from typing import Any, Iterable, Mapping
 
-from frankenstein2_cognitive_control_plane_v1 import (
-    CognitiveControlPlane,
-    ControlMode,
-    ControlSnapshot,
-)
+from frankenstein2_cognitive_control_plane_v1 import CognitiveControlPlane, ControlSnapshot
 from grid10_cognitive_heartbeat_v1 import _trusted_normal_axes, append_frame_jsonl
 from grid10_cognitive_unified_runtime_v3 import (
     build_unified_agency_runtime,
@@ -49,13 +35,6 @@ from grid10_persistent_agency_v1 import PersistentAgencyStore
 SCHEMA = "GRID10_UNIFIED_COGNITIVE_RUNTIME/v4"
 CHECKPOINT_SCHEMA = "GRID10_COGNITIVE_CYCLE_CHECKPOINT/v1"
 IDLE_CHECKPOINT_SCHEMA = "GRID10_IDLE_HOLD_CHECKPOINT/v1"
-
-ACTION_GRID_CELLS: Mapping[str, tuple[str, ...]] = {
-    "OBSERVE": ("orientation",),
-    "SEARCH": ("epistemic", "retrieval"),
-    "SIMULATE": ("hypothesis", "world"),
-    "ACT_CANDIDATE": ("planning", "critic"),
-}
 
 
 class RuntimeCycleError(RuntimeError):
@@ -115,56 +94,6 @@ def _init_cycle_schema(path: Path) -> None:
         con.close()
 
 
-def _grid_control_view(snapshot: ControlSnapshot, action: str) -> tuple[Mapping[str, Any], ...]:
-    rows: list[Mapping[str, Any]] = []
-    for cell in ACTION_GRID_CELLS.get(action, ()):
-        mode = snapshot.mode(f"grid.{cell}.mode")
-        gain = snapshot.float(f"grid.{cell}.gain")
-        rows.append(
-            {
-                "cell": cell,
-                "mode": mode.value,
-                "gain": gain,
-                "compute_enabled": mode != ControlMode.COMPUTE_OFF and gain > 0.0,
-                "output_enabled": mode not in {ControlMode.COMPUTE_OFF, ControlMode.OUTPUT_OFF} and gain > 0.0,
-                "memory_enabled": mode != ControlMode.MEMORY_OFF,
-            }
-        )
-    return tuple(rows)
-
-
-def _apply_grid_action_controls(
-    snapshot: ControlSnapshot,
-    raw_action: str,
-) -> tuple[str, tuple[str, ...], tuple[Mapping[str, Any], ...]]:
-    """Consume live GRID modes/gains before publishing a cognitive action candidate."""
-    cells = _grid_control_view(snapshot, raw_action)
-    if not cells or raw_action == "HOLD":
-        return raw_action, (), cells
-
-    reasons: list[str] = []
-    blocked = [r["cell"] for r in cells if not r["compute_enabled"] or not r["output_enabled"]]
-    threshold = snapshot.float("pulse.salience_threshold")
-    min_gain = min(float(r["gain"]) for r in cells)
-    if blocked:
-        reasons.append("GRID_MODE_BLOCK:" + ",".join(str(x) for x in blocked))
-    if min_gain < threshold:
-        reasons.append(f"GRID_GAIN_BELOW_SALIENCE:{min_gain:.6f}<{threshold:.6f}")
-
-    if not reasons:
-        return raw_action, (), cells
-
-    orientation = _grid_control_view(snapshot, "OBSERVE")
-    orientation_ok = bool(orientation) and all(
-        bool(r["compute_enabled"])
-        and bool(r["output_enabled"])
-        and float(r["gain"]) >= threshold
-        for r in orientation
-    )
-    fallback = "OBSERVE" if raw_action != "OBSERVE" and orientation_ok else "HOLD"
-    return fallback, tuple(reasons), cells
-
-
 def _atomic_commit_cycle(
     agency: PersistentAgencyStore,
     *,
@@ -211,7 +140,7 @@ def _atomic_commit_cycle(
             raise RuntimeCycleConflict("AGENCY_CYCLE_CAS_FAILED")
         try:
             con.execute(
-                """INSERT INTO grid10_cognitive_cycles VALUES(?,?,?,?,?,?,?,?,?,?)""",
+                "INSERT INTO grid10_cognitive_cycles VALUES(?,?,?,?,?,?,?,?,?,?)",
                 (
                     tick_id,
                     observed_epoch,
@@ -370,6 +299,7 @@ class UnifiedCognitiveRuntimeV4:
         now_ts: float | None = None,
         observed_events: Iterable[str] = (),
         prewoken_goal_ids: Iterable[str] | None = None,
+        control_snapshot: ControlSnapshot | None = None,
         trusted_axes: Mapping[str, Any] | None = None,
         extra_variables: Mapping[str, Any] | None = None,
     ) -> UnifiedCycleResult:
@@ -390,20 +320,17 @@ class UnifiedCognitiveRuntimeV4:
                 f"NEXT_TICK_NOT_DUE:{before.next_tick_not_before}"
             )
 
-        control = self.control_plane.snapshot()
+        externally_latched = control_snapshot is not None
+        control = control_snapshot if control_snapshot is not None else self.control_plane.snapshot()
         heartbeat = self.heartbeat_runtime.tick_once(
             tick_id=tick_id,
             trusted_axes=trusted_axes,
             extra_variables=extra_variables,
         )
         assurance_mode = getattr(heartbeat.assurance_mode, "value", str(heartbeat.assurance_mode))
-        raw_next_action = str(heartbeat.next_action)
-        next_action, control_reasons, grid_controls = _apply_grid_action_controls(
-            control,
-            raw_next_action,
-        )
+        next_action = str(heartbeat.next_action)
 
-        if raw_next_action == "HOLD":
+        if next_action == "HOLD":
             selected_interval = (
                 float(hold_interval)
                 if hold_interval is not None
@@ -421,7 +348,6 @@ class UnifiedCognitiveRuntimeV4:
             "tick_id": tick_id,
             "source_state_epoch": int(heartbeat.state_epoch),
             "assurance_mode": assurance_mode,
-            "raw_next_action": raw_next_action,
             "next_action": next_action,
             "woken_goal_ids": list(woken),
             "heartbeat_reasons": list(getattr(heartbeat, "reasons", ())),
@@ -430,9 +356,8 @@ class UnifiedCognitiveRuntimeV4:
                 "control_epoch": int(control.control_epoch),
                 "snapshot_digest": control.snapshot_digest,
             },
+            "control_snapshot_source": "provided" if externally_latched else "latched_here",
             "pulse_interval_seconds_consumed": float(selected_interval),
-            "grid_controls_consumed": list(grid_controls),
-            "control_reasons": list(control_reasons),
         }
         after_epoch = _atomic_commit_cycle(
             self.agency,
@@ -512,6 +437,7 @@ def run_bounded(
             "woken_goal_ids": list(cycle.woken_goal_ids),
             "next_tick_not_before": cycle.next_tick_not_before,
             "control_snapshot": cycle.checkpoint.get("control_snapshot"),
+            "control_snapshot_source": cycle.checkpoint.get("control_snapshot_source"),
             "pulse_interval_seconds_consumed": cycle.checkpoint.get("pulse_interval_seconds_consumed"),
         }
         rows.append(row)

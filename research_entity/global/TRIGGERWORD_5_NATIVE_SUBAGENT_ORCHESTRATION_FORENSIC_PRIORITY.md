@@ -208,6 +208,7 @@ REVEALS_USEFUL_NATIVE_CAPABILITY
 REVEALS_CONTEXT_POLLUTION_BENEFIT
 REQUIRES_CUSTOM_GRID_WRAPPER
 CONTRADICTS_CURRENT_TRIGGER4_ASSUMPTION
+DEFERRED_SECURITY_REFERENCE
 ```
 
 Triggerword 4 must ingest these automatically and adjust the native-subagent execution contract before Frankenstein 2.0 freezes its worker interface.
@@ -227,3 +228,42 @@ Now known from the owner-original plus donor source:
 - parallel fixer agents were used in practice.
 
 The remaining high-value gap is the exact **current host/native Claude spawn mechanism and lifecycle ABI**, plus a runtime measurement of the claimed coordinator-context advantage.
+
+## 12. Functional-core-first forensic priority / security deferral
+
+Owner decision, 2026-08-28:
+
+Dedicated Frankenstein-2.0 security systems are designed and built **after** the functional architecture is sufficiently complete to reveal its actual effect, privacy, process, network, filesystem, model/provider and update surfaces.
+
+During the current Triggerword-5 phase:
+
+```text
+SCHRANKE
+WACHE_KOENIG
+WACHE_V2_OWNER_ADMISSION
+legacy path-local security blockers
+historical hard permission systems
+```
+
+are not standalone high-priority forensic frontiers.
+
+If encountered while examining another architecture-bearing path, record exact provenance and any reusable mechanism, then classify the security-only part as:
+
+`DEFERRED_SECURITY_REFERENCE`
+
+Do not spawn additional work solely to reconstruct, prove or polish these historical guards unless the same source span reveals a present **functional** defect in state identity, causal lineage, completion truth, concurrency, persistence, cognition or runtime reachability.
+
+Current high-value Triggerword-5 priorities are instead:
+
+1. native child spawn/task/lifecycle ABI and WorkExecutionBinding;
+2. Agent-Zero-derived local monologue/subagent/task mechanisms that remain useful under GRID regulation;
+3. Project-Frankenstein Consciousness/Pulse mechanisms and their exact state flow;
+4. TITAN memory evolution, activation decay, consolidation, compression and retrieval weighting;
+5. old/new world-model lineage, WorldExperience, QUBO/constraint views and multi-projection fusion;
+6. Experiment Lab / Hypothesis Engine / NeRD Physics mechanisms for the Cognitive Micro-Lab;
+7. Retina/Presence/Voice causal conditioning and outcome re-entry;
+8. UnifiedDB coordination/identity/provenance defects that can corrupt functional evidence;
+9. existing GWT/workspace/retrieval/method-memory mechanisms that GRID10 should preserve, replace or generalize;
+10. tests/receipts that can discriminate whether these mechanisms actually improve held-out unknown-interactive cognition.
+
+Security history remains preserved for the later threat-model phase; it is not allowed to consume the present functional-core research budget by default.

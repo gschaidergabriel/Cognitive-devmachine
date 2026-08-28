@@ -26,7 +26,7 @@ from urllib.parse import urlparse
 
 DENIED_PROVIDERS = frozenset({"together"})
 ZERO_COST_ONLY = True
-CAPABILITY_RECEIPT_SCHEMA_VERSION = "1.2"
+CAPABILITY_RECEIPT_SCHEMA_VERSION = "1.3"
 EXECUTION_RECEIPT_SCHEMA_VERSION = "1.2"
 UNICODE_DATABASE_VERSION = unicodedata.unidata_version
 PAYMENT_REQUIRED_STATUS = 402
@@ -376,6 +376,9 @@ def inventory(
                 "secret_exposed": False,
                 "zero_cost_assured": zero_cost_evidence is not None,
                 "zero_cost_evidence": zero_cost_evidence,
+                # Provider endpoint eligibility does not prove that an
+                # arbitrary requested model is currently deployed there.
+                "model_availability_verified": False,
                 "budget_epoch_id": _budget_epoch_id(env),
                 "payment_blocked_current_budget_epoch": payment_blocked,
                 "payment_latch_capacity_exhausted": (
@@ -457,6 +460,7 @@ def receipt() -> dict:
             "paid_calls_forbidden": True,
             "together_access_forbidden": True,
             "payment_required_is_hard_stop": True,
+            "model_availability_inferred_without_probe": False,
             "network_probe_performed": False,
         },
     }

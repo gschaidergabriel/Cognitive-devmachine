@@ -1,0 +1,173 @@
+{
+  "schema_version": "1.0",
+  "trigger": "triggerwort 5",
+  "run_id": "triggerwort5-20260828T1412p0700-gpt56sol-voice-visual-lineage",
+  "status": "GIT_CHRONOLOGY_GROUNDED_PARTIAL",
+  "purpose": "Recover the order in which current voice/GWT/perception coupling was introduced and repaired, so current Frankenstein source is not misread as a single monolithic design event.",
+  "source_repository": "gschaidergabriel/frankenstein",
+  "current_source_commit": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+  "evidence_boundary": "Git commit content/messages establish source chronology and developer-reported tests/results; they are not independent reexecution in this Triggerwort-5 run.",
+  "chronology": [
+    {
+      "commit": "0f79abd05cffee61375db693f063ee807249159b",
+      "time": "2026-08-26T23:12:46+07:00",
+      "event": "VOICE_LOOP_CORE introduced with Realtime pivot",
+      "mechanisms": ["GWT speech-act arbitration", "calibratable speak-drive weights", "AusdrucksVektor", "chatter_debt", "2.5s reopen window", "local Qwen-0.5B fail-open appraisal", "conversation interruption/truncate"],
+      "evidence_class": "GIT_COMMIT_SOURCE_PLUS_REPORTED_REAL_TESTS",
+      "forensic_interpretation": "First verified accessible current-repo appearance of the voice cognitive loop found by this run."
+    },
+    {
+      "commit": "86c80c36329f46bfaa7f5218da8031a099f683be",
+      "time": "2026-08-26T23:27:14+07:00",
+      "event": "Arbitration formula replaced by authoritative Phase-43 reference and Shadow Mode added",
+      "mechanisms": ["hard gates user_present/self_resolvable before scoring", "initiative_episode logging", "Shadow Mode prevents unsolicited speech despite scoring"],
+      "evidence_class": "GIT_COMMIT_SOURCE_PLUS_REPORTED_REAL_TESTS",
+      "failure_pressure": "self-derived scoring needed alignment with external authoritative reference; initiative needed safe calibration mode"
+    },
+    {
+      "commit": "6951b00e07b5f0b9dcbc6ffe44c65448062c88c9",
+      "time": "2026-08-27T00:11:27+07:00",
+      "event": "Realtime-to-stern subprocess path replaced with in-process dispatch",
+      "mechanisms": ["in-process stern dispatch while audio stream active"],
+      "evidence_class": "GIT_COMMIT_SOURCE_PLUS_REPORTED_REAL_TESTS",
+      "failure_pressure": "fork+exec from process with live PortAudio background thread intermittently hung for 15-20+ seconds",
+      "reusable_rule": "Avoid fork/subprocess control-plane calls from latency-sensitive processes that own live audio threads when an in-process deterministic dispatch exists."
+    },
+    {
+      "commit": "24d8e91b61fae452a4a609f6bf6ed1b3bf2efd95",
+      "time": "2026-08-27T00:27:38+07:00",
+      "event": "Stale calibration reference threshold corrected from 0.58 to 0.86",
+      "mechanisms": ["single authoritative initiative threshold"],
+      "evidence_class": "GIT_COMMIT_SOURCE_PLUS_TEST_REPORT",
+      "failure_pressure": "reference/config drift could cause future ports to reintroduce a known production threshold bug",
+      "reusable_rule": "Reference fixtures and live configuration must not encode conflicting policy constants."
+    },
+    {
+      "commit": "431a5b8a23aed63ef14ba508141280313349ff58",
+      "time": "2026-08-27T00:30:06+07:00",
+      "event": "WAIT telemetry corrected to record strongest real candidate score instead of constant threshold",
+      "mechanisms": ["calibratable WAIT margin/near-miss telemetry"],
+      "evidence_class": "GIT_COMMIT_SOURCE_PLUS_REPRODUCTION_REPORT",
+      "failure_pressure": "constant WAIT score erased the distribution needed for threshold calibration",
+      "reusable_rule": "A reject/WAIT outcome must preserve decision margin/evidence, not only the threshold that rejected it."
+    },
+    {
+      "commit": "67a52db3669949e7edcc306be4a2d68571afcdb8",
+      "time": "2026-08-27T03:47:40+07:00",
+      "event": "Visual Cortex spec pre-registered before implementation landed",
+      "mechanisms": ["memory-coupled visual perception target", "shared voice-loop GWT precedent", "low-light rescue sequence"],
+      "evidence_class": "GIT_COMMIT_DOCUMENTATION_AND_REPORTED_CAMERA_MEASUREMENT",
+      "forensic_interpretation": "Useful temporal boundary: some intended architecture is documented before code and must not be back-promoted to implemented status at this commit."
+    },
+    {
+      "commit": "ac2aece51dad7ffe65067666bb191b351eaa0c8d",
+      "time": "2026-08-27T03:53:34+07:00",
+      "event": "visual_cortex.py introduced",
+      "mechanisms": ["real unified.db visual memory retrieval", "reuse of voice_loop_core arbitration", "visual_event/presence_episode/initiative_episode writes", "low-light capture fallback"],
+      "evidence_class": "GIT_COMMIT_SOURCE_PLUS_REPORTED_END_TO_END_TEST",
+      "failure_pressure": ["WAIT winner was incorrectly conflated with unknown visual content", "substring person matching failed negation and matched man inside woman"],
+      "reusable_rule": "Separate content interpretation from interruption/arbitration decision; semantic keyword detectors require explicit negation and token-boundary handling."
+    },
+    {
+      "commit": "687d335bff912a15dd4d993c7696783a8e341a6c",
+      "time": "2026-08-27T03:54:18+07:00",
+      "event": "Implementation/spec gap explicitly documented",
+      "mechanisms": ["USER_BUSY category exists but no generator at that point", "person presence still caption keyword based"],
+      "evidence_class": "GIT_COMMIT_DOCUMENTED_NEGATIVE_SCOPE",
+      "reusable_rule": "Defined enum/category is not evidence that its producer or causal path exists."
+    },
+    {
+      "commit": "598a2aa1dd209988fe2efaddcbe3abab8024ea5f",
+      "time": "2026-08-27T11:34:50+07:00",
+      "event": "Temporal L1 cortex/local presence/USER_BUSY fusion introduced; voice user_present became overridable but live call-site remained unwired",
+      "mechanisms": ["RAM-only TrackStore", "local person presence head", "busy_fusion", "independent presence versus busy signals", "voice candidates accept user_present"],
+      "evidence_class": "GIT_COMMIT_SOURCE_PLUS_REPORTED_REAL_ACCEPTANCE",
+      "reported_measurement": "forced-divergence test reported presence/busy disagreement on 20/32 ticks",
+      "forensic_interpretation": "This is a source-ready intermediate state, not yet the live voice coupling."
+    },
+    {
+      "commit": "d51fd9527e295d1d64efa0b5fdfcc213a8ffae11",
+      "time": "2026-08-27T11:51:37+07:00",
+      "event": "Presence/interruptibility wired into the actual realtime voice call-site",
+      "mechanisms": ["PresenceBridge session ownership", "user_present/interruptibility/causal_event_id into arbitration", "initiative_episode causal_event_id"],
+      "evidence_class": "GIT_COMMIT_SOURCE_PLUS_REPORTED_REAL_CAMERA_AND_INPUT_TESTS",
+      "reported_behavior": ["empty room forced WAIT despite high-scored candidate", "busy signal raised interruption cost and flipped SPEAK to WAIT", "presence return caused re-evaluation instead of permanent freeze"],
+      "reusable_rule": "A control variable only earns integration credit when the live decision call-site consumes it and downstream behavior changes."
+    },
+    {
+      "commit": "0147d988db2eea8322e908f7b8b88ec8f73943aa",
+      "time": "2026-08-27T12:11:27+07:00",
+      "event": "Typed PerceptualField + GWT causal boundary introduced",
+      "mechanisms": ["ObservedEvidence/InferredHypothesis/RetrievalPrior separation", "salience gate before GWT candidate", "top-down VisualNeed routing"],
+      "evidence_class": "GIT_COMMIT_SOURCE_PLUS_REPORTED_REAL_LESION_TEST",
+      "reported_measurements": ["GWT ignition 3/75 samples = 0.04", "correct VisualNeed route ~0.03ms versus baseline ~14.6s and shuffled ~14.7s"],
+      "failure_pressure": "question-text fallback initially defeated the shuffled-control condition, so target_heads became authoritative when supplied",
+      "reusable_rule": "A causal control must be unable to recover treatment identity through an uncontrolled correlated feature."
+    },
+    {
+      "commit": "4af1df340c85a7a9b67eade0412acbfd29dc1954",
+      "time": "2026-08-27T13:26:46+07:00",
+      "event": "Previously built visual stack connected to a persistent live cortex loop",
+      "mechanisms": ["shared CaptureWorker broker", "L0 motion-gated escalation", "cortex loop embedded in existing approved conversation daemon", "rate-limited escalation"],
+      "evidence_class": "GIT_COMMIT_SOURCE_PLUS_REPORTED_LIVE_HOST_MEASUREMENT",
+      "reported_measurements": ["~32% of one core at 1Hz versus ~58% at 2Hz", "~185MB RSS over voice baseline"],
+      "failure_pressure": "P0-P5 components existed and tested but were idle outside CLI/manual invocation; separate process would collide with camera ownership",
+      "reusable_rule": "Source-ready component trees do not earn system-function credit until an actual scheduler/live caller reaches them; shared resource ownership can constrain process topology."
+    },
+    {
+      "commit": "2b85d80a7e26e66cfb9b5251301f792de437f92a",
+      "time": "2026-08-27T13:54:12+07:00",
+      "event": "VoiceSessionCapsule added as compact in-memory session projection",
+      "mechanisms": ["live PresenceBridge snapshot", "current visual state", "expression vector", "winning intent", "memory refs/goals/effects by ID", "tool permissions", "privacy policy"],
+      "evidence_class": "GIT_COMMIT_SOURCE",
+      "reusable_rule": "Dense live-session projections may be useful, but must refresh from canonical sources and must not become a second durable voice-memory authority."
+    }
+  ],
+  "derived_architecture_lineage": {
+    "classification": "INFERENCE_FROM_GIT_CHRONOLOGY",
+    "sequence": [
+      "voice arbitration primitive",
+      "authoritative score + safe shadow calibration",
+      "latency/deadlock repair",
+      "telemetry calibration repair",
+      "visual reuse of same arbitration",
+      "temporal/local presence and busy state",
+      "live call-site presence/interruptibility causal wiring",
+      "typed perceptual evidence + salience/top-down routing",
+      "persistent L0->L2 cortex scheduler",
+      "compact refreshed voice-session projection"
+    ],
+    "main_conclusion": "The current architecture is best understood as an error-driven coupling sequence: isolated useful mechanisms repeatedly became system mechanisms only after explicit live wiring, resource ownership, telemetry and causal-control bugs were discovered and repaired."
+  },
+  "grid10_frankenstein2_implications": [
+    {
+      "rule": "Do not give a GRID10 function credit merely because a cell/module implementation exists.",
+      "required_receipt": "scheduler/caller -> input state -> cell uptake -> downstream decision/state change -> outcome/re-entry"
+    },
+    {
+      "rule": "Keep a single shared competition/arbitration ABI where modalities compete under comparable gates; modality-specific features may differ but duplicate policy formulas should require evidence."
+    },
+    {
+      "rule": "Presence, busy/interruptibility and identity are distinct variables. Presence can be known while identity remains UNKNOWN; busy must not be a renamed motion/presence signal."
+    },
+    {
+      "rule": "Causal tests must defeat side channels: a shuffled/lesioned treatment cannot retain identifying text/metadata that lets routing reconstruct the original condition."
+    },
+    {
+      "rule": "Permanent loops need explicit resource ownership and scheduler evidence; component unit tests alone are insufficient."
+    },
+    {
+      "rule": "WAIT/reject telemetry must record distance/margin from decision boundary to remain calibratable."
+    }
+  ],
+  "credits": {
+    "git_chronology_reconstruction": "PARTIAL_PRESENT",
+    "independent_runtime_reexecution_this_run": 0,
+    "current_runtime_causal_credit": 0,
+    "physical_grid10_credit": 0,
+    "hcu_runtime_credit": 0,
+    "entityos_hcu_whole_product_credit": 0,
+    "training_credit": 0
+  },
+  "next_exact_gate": "Resolve equivalent chronology for stern.py consolidation/effect path and historical Project-Frankenstein predecessors, then merge only edge metadata whose first/last commit windows are source-supported."
+}

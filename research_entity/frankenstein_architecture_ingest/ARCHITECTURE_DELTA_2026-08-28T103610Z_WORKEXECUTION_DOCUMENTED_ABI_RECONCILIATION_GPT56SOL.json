@@ -1,0 +1,103 @@
+{
+  "schema_version": "TRIGGERWORD5_ARCHITECTURE_DELTA/v1",
+  "delta_id": "TW5-DELTA-20260828T103610Z-WORKEXECUTION-DOCUMENTED-ABI-RECONCILIATION-GPT56SOL",
+  "created_at": "2026-08-28T10:36:10Z",
+  "trigger": "triggerwort 5",
+  "lane": "FRANKENSTEIN_ARCHITECTURE_FORENSICS_LIVE_INGEST",
+  "organ": "GPT-5.6-Sol/triggerwort5/documented-abi-reconciliation",
+  "canonical_main_observed": "24389f873a775fd3af5fc3c896a58836d09a3bff",
+  "design_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+  "design_head_observed_before_write": "a859b3bf959969fb96090d2bfce9c19cd8595681",
+  "donor_repo": "gschaidergabriel/frankenstein",
+  "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+  "authority": {
+    "supervisor_epoch": "9.13",
+    "mode": "FREE_ONLY",
+    "provider_routes_admitted": false,
+    "provider_execution_state": "OWNER_EMERGENCY_STOP_FREE_SWARM_HARD_OFF",
+    "runtime_credit_delta": 0
+  },
+  "reason_for_reconciliation": {
+    "finding": "Parallel Triggerword-5 deltas disagree about what current official Claude Code documentation establishes for the parent Agent tool invocation to native child identity bridge.",
+    "more_conservative_artifacts": [
+      "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T1036Z_NATIVE_SUBAGENT_WORKEXECUTION_BINDING_PACKET_QUARANTINE_GPT56SOL.json",
+      "research_entity/frankenstein_architecture_ingest/receipts/INGEST_RECEIPT_2026-08-28T1031Z_WORKEXECUTION_BINDING_SCHEMA_REBIND_GPT56SOL.json"
+    ],
+    "documented_candidate_artifacts": [
+      "research_entity/frankenstein_architecture_ingest/model/FRANKENSTEIN_2_WORK_EXECUTION_BINDING_DELTA_2026-08-28T103357Z_GPT56SOL.json",
+      "research_entity/frankenstein_architecture_ingest/receipts/INGEST_RECEIPT_2026-08-28T1031Z_WORKEXECUTION_BINDING_SUCCESSOR_CORRECTION_GPT56SOL.json"
+    ]
+  },
+  "external_primary_crosscheck": [
+    {
+      "source": "https://code.claude.com/docs/en/hooks",
+      "classification": "EXTERNAL_PRIMARY",
+      "observed": "2026-08-28",
+      "finding": "PostToolUse exposes tool_use_id and tool_response in the same hook event; SubagentStart exposes unique agent_id; TaskCreated exposes a separate task_id; hooks inside a subagent carry agent_id and agent_type.",
+      "scope": "DOCUMENTED_CAPABILITY_AND_EVENT_ABI_NOT_INSTALLED_TARGET_RUNTIME"
+    },
+    {
+      "source": "https://code.claude.com/docs/en/agent-sdk/typescript",
+      "classification": "EXTERNAL_PRIMARY",
+      "observed": "2026-08-28",
+      "finding": "The documented Agent tool output schema AgentOutput contains agentId for completed and async_launched Agent results.",
+      "scope": "DOCUMENTED_TOOL_OUTPUT_ABI_NOT_INSTALLED_TARGET_RUNTIME"
+    },
+    {
+      "source": "current official Claude Code hooks reference localized pages indexed 2026-08-28",
+      "classification": "EXTERNAL_PRIMARY",
+      "observed": "2026-08-28",
+      "finding": "The hooks reference explicitly describes completed Agent PostToolUse tool_response as carrying status, agentId, content and usage telemetry.",
+      "scope": "DOCUMENTED_POSTTOOLUSE_AGENT_RESPONSE_SHAPE_NOT_INSTALLED_TARGET_RUNTIME"
+    }
+  ],
+  "resolution": {
+    "documentation_level": "DOCUMENTED_ABI_JOIN_CANDIDATE_PRESENT",
+    "installed_runtime_level": "UNVERIFIED",
+    "field_level_candidate": "parent PostToolUse event: tool_use_id + tool_response.agentId",
+    "lifecycle_crosscheck": "SubagentStart/SubagentStop agent_id should match the Agent tool_response.agentId when the exact installed target build is measured.",
+    "task_identity": "task_id remains a separate optional task-system identity and MUST NOT be assumed equal to agent_id.",
+    "prohibited_promotion": "Documentation does not establish target-host firing, plugin loading, exact installed version behavior, runtime causal closure or Frankenstein-2.0 runtime PASS."
+  },
+  "packet_disposition": {
+    "packet_id": "TW5-PACKET-20260828T101200Z-NATIVE-SUBAGENT-WORKEXECUTION-BINDING-SUCCESSOR-GPT56SOL",
+    "wholesale_consumption": false,
+    "reason": "The immutable packet still violates INGEST_PACKET_SCHEMA.json via target_2_0_action=RESEARCH and carries a wrong architekt_governance.md source span plus stale canonical_main identity.",
+    "semantic_atom_005_correction": "Replace the stronger claim that the join is undocumented with: a parent Agent tool_use_id -> tool_response.agentId bridge is documented as an ABI candidate; exact installed-runtime emission and lifecycle equality remain unverified.",
+    "target_2_0_action_for_corrected_atom": "UNDECIDED"
+  },
+  "frankenstein_2_architecture_effect": {
+    "component": "WorkExecutionBinding/v1",
+    "identity_domains": [
+      "durable_workpackage_id",
+      "generation",
+      "parent_agent_tool_use_id",
+      "child_agent_id",
+      "optional_task_id",
+      "child_tool_use_id"
+    ],
+    "candidate_binding_flow": [
+      "Persist durable workpackage_id and generation at handoff.",
+      "Capture the parent Agent invocation tool_use_id.",
+      "At parent Agent PostToolUse, read documented tool_response.agentId and bind it to that same event's tool_use_id as DOCUMENTED_ABI_CANDIDATE evidence.",
+      "Cross-check child_agent_id against SubagentStart/SubagentStop lifecycle events on the exact installed runtime.",
+      "Persist task_id only if TaskCreated/TaskCompleted actually participates; otherwise preserve UNKNOWN/NOT_APPLICABLE.",
+      "Never join children by timestamps, event ordering, session_id or model narration."
+    ],
+    "promotion_gate": "One harmless authorized non-provider installed-host capture showing PreToolUse/PostToolUse for Agent plus SubagentStart/SubagentStop with exact payload identities; then a two-concurrent-child anti-crosswire test before runtime credit."
+  },
+  "contradictions_preserved": [
+    "Source/config still proves the donor handoff is durable intent bookkeeping rather than native spawn execution.",
+    "The donor plugin config still omits dedicated child/task lifecycle hooks even though the platform supports them.",
+    "Documentation now supports a stronger ABI candidate than the quarantined packet stated, but installed-target runtime evidence remains absent.",
+    "The malformed incoming packet remains unconsumed; this delta corrects architecture interpretation without rewriting packet history."
+  ],
+  "credits": {
+    "runtime": 0,
+    "provider": 0,
+    "physical_grid10": 0,
+    "whole_entityos_hcu": 0,
+    "training": 0
+  },
+  "next_exact_gate": "Capture one harmless Agent invocation on an authorized non-provider local/sandbox target with exact PreToolUse, PostToolUse, SubagentStart and SubagentStop payloads; verify parent tool_use_id + PostToolUse.tool_response.agentId and equality to lifecycle agent_id without timing/order heuristics."
+}

@@ -1,0 +1,92 @@
+{
+  "schema_version": "TRIGGERWORD5_INGEST_CHECKPOINT/v1",
+  "checkpoint_id": "INGEST_CHECKPOINT_20260828T101600Z_GPT56SOL_WORLD_EXPERIENCE_QUBO_FUSION",
+  "created_at": "2026-08-28T10:16:00Z",
+  "routing": {"trigger": "triggerwort 5", "status": "VERIFIED", "organ": "GPT-5.6-Sol/triggerwort5/world-experience-qubo-fusion"},
+  "authority": {
+    "canonical_main_sha": "24389f873a775fd3af5fc3c896a58836d09a3bff",
+    "supervisor_epoch": "9.13",
+    "execution_mode": "FREE_ONLY",
+    "runtime_credit": 0,
+    "design_head_observed_pre_create": "cf5bba17568453fcd2a00842550f759e43110511"
+  },
+  "pins": {
+    "current_frankenstein_donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "project_frankenstein_main_sha": "39c5423e0bfae54b971aab0be82f225f7a5890b8",
+    "world_experience_source": "tools/world_experience_daemon.py",
+    "qubo_source": "services/quantum_reflector/qubo_builder.py"
+  },
+  "semantic_atoms": [
+    {
+      "classification": "LIVE_CODE",
+      "source_span": "tools/world_experience_daemon.py :: data classes + ExperienceDB schema",
+      "observed": "WorldExperience maintains entities, typed CausalLinks, high-fidelity Fingerprints, telemetry and anatomy-version metadata in world_experience.db. CausalLink carries relation_type, Bayesian-style confidence, weight, observation_count, timestamps, anatomy_hash and status.",
+      "evidence_scope": "Project-Frankenstein source at pinned main"
+    },
+    {
+      "classification": "ENFORCEMENT_CODE",
+      "source_span": "tools/world_experience_daemon.py :: erosion/quantization path",
+      "observed": "Fingerprint retention is tiered: recent raw vectors, older dense 4-bit quantized vectors, then sparse records with vectors stripped; capacity pressure can trigger purge. The mechanism is explicitly lossy and storage-oriented.",
+      "evidence_scope": "Project-Frankenstein source at pinned main"
+    },
+    {
+      "classification": "LIVE_CODE",
+      "source_span": "services/quantum_reflector/qubo_builder.py :: FrankState/QUBOBuilder",
+      "observed": "The QUBO layer maps Frank state into a fixed 39-variable schema with one-hot groups and hand-coded logical couplings, then adds state-dependent terms. FrankState contains E-PQ, phase/mode/intent, mood, goals, surprise, confidence and reflector/AURA fields.",
+      "evidence_scope": "Project-Frankenstein source at pinned main"
+    },
+    {
+      "classification": "NEGATIVE_RESULT",
+      "source_span": "services/quantum_reflector/qubo_builder.py :: read_frank_state",
+      "observed": "The inspected builder reads latest rows from separate historical databases such as world_experience.db and consciousness.db in separate operations. No single atomic causal frame, generation binding or shared admission identity is established by those reads.",
+      "evidence_scope": "source forensics; no runtime claim"
+    },
+    {
+      "classification": "NEGATIVE_RESULT",
+      "source_span": "WorldExperience CausalLink semantics",
+      "observed": "A stored relation named triggers/inhibits/modulates/correlates plus Bayesian-style confidence does not establish intervention-level causality by itself. Observation repetition can strengthen a candidate link but cannot promote it to canonical world fact without effect/outcome evidence.",
+      "evidence_scope": "current epistemic-law compatibility analysis"
+    }
+  ],
+  "architecture_delta_for_frankenstein_2": {
+    "component": "CausalWorldModelFrame/v1",
+    "decision": "FUSE_WORLD_EXPERIENCE_AND_QUBO_AS_NONCANONICAL_CAUSAL_MODEL_OVER_TYPED_FRAMES",
+    "preserve": [
+      "typed causal-hypothesis graph",
+      "observation count and confidence update history",
+      "anatomy/source-version binding",
+      "multi-fidelity fingerprint retention",
+      "bounded state-coherence optimization",
+      "explicit state-variable schema and constraints"
+    ],
+    "change": [
+      "Move observations, causal hypotheses and evidence references into UnifiedDB typed canonical tables; world_experience.db must not survive as a second truth authority.",
+      "Build each world-model/QUBO input from one immutable CausalWorkspaceFrame with frame_id, generation, causal_event_ids, admission_ids and source digests instead of cross-database latest-row reads.",
+      "Classify CausalLinks as hypotheses with evidence level OBSERVATIONAL or INTERVENTIONAL. Only admitted EffectJournal outcome re-entry can supply intervention evidence.",
+      "QUBO/annealing/coherence results are WorldModelCandidate projections. They may rank or propose state interpretations but never mint facts, capabilities, effects or completion.",
+      "Lossy raw->dense->sparse erosion may apply only after durable source/digest/provenance retention and policy eligibility. Protected negative results, causal receipts, authority history and effect evidence are non-erodible.",
+      "Bind every derived sparse fingerprint to its preserved source-set digest so reduced storage cannot sever reproducibility."
+    ],
+    "recommended_flow": "Typed Entry -> CausalWorkspaceFrame -> WorldExperience observational hypotheses -> bounded WorldModel/QUBO candidate fusion -> GRID/GWT deliberation -> ActionCandidate -> EffectGate -> EffectJournal -> verified outcome re-entry -> optional causal-hypothesis update",
+    "truth_law": "WORLD_MODEL_SCORE_OR_QUBO_OPTIMUM_IS_PROJECTION_NOT_FACT",
+    "causality_law": "OBSERVATION_OR_REPETITION_NEQ_INTERVENTIONAL_CAUSAL_PROOF"
+  },
+  "hypotheses_and_falsifiers": [
+    {
+      "hypothesis": "Replacing multi-DB latest reads with immutable frame-bound fusion will improve deterministic replay and eliminate impossible mixed-time QUBO states.",
+      "confidence": 0.97,
+      "falsifier": "A concurrency stress test proves the current separate latest-row reads always correspond to one shared causal generation under writer races."
+    },
+    {
+      "hypothesis": "WorldExperience's fidelity tiers are reusable only if evidence identity survives the lossy transform.",
+      "confidence": 0.96,
+      "falsifier": "Exact reconstruction tests show sparse historical records without preserved source digests still reproduce all architecture-relevant causal claims and contradictions."
+    }
+  ],
+  "triggerword4_handoff": {
+    "status": "READY_AS_ARCHITECTURE_INPUT",
+    "instruction": "Feed GRID10 a frame-bound world-model projection, not live reads from several mutable DBs. Preserve WorldExperience causal hypotheses and QUBO constraint machinery as candidate cognition; bind intervention updates to EffectJournal outcome evidence."
+  },
+  "credits": {"whole_entityos_hcu_runtime": 0, "hcu_full_runtime": 0, "jspace_model_runtime": 0, "training": 0},
+  "next_frontier": "Experiment Lab / Hypothesis Engine / NeRD Physics Cognitive Micro-Lab, then Retina/Presence/Voice causal conditioning, unless concurrent checkpoints already cover them."
+}

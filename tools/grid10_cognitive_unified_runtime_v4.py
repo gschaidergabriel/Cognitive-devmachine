@@ -11,6 +11,11 @@ The cycle commit is generation-like CAS guarded by the AgencyState epoch and lan
 same SQLite/WAL file. This module never grants canonical truth or external-effect authority.
 GRID/model output remains candidate cognition; EffectGate/EffectJournal remain authoritative
 for real effects outside this runtime.
+
+Triggerword-4 convergence note: persistent service wrappers may pre-evaluate wake conditions
+only when they pass the exact awakened goal IDs back into ``tick_once``. That keeps one v4
+state-transition core instead of allowing a scheduler adapter to retain its own heartbeat /
+checkpoint / schedule write semantics.
 """
 from __future__ import annotations
 
@@ -31,6 +36,7 @@ from grid10_persistent_agency_v1 import PersistentAgencyStore
 
 SCHEMA = "GRID10_UNIFIED_COGNITIVE_RUNTIME/v4"
 CHECKPOINT_SCHEMA = "GRID10_COGNITIVE_CYCLE_CHECKPOINT/v1"
+IDLE_CHECKPOINT_SCHEMA = "GRID10_IDLE_HOLD_CHECKPOINT/v1"
 
 
 class RuntimeCycleError(RuntimeError):
@@ -194,6 +200,98 @@ def _atomic_commit_cycle(
         con.close()
 
 
+def _atomic_commit_idle_hold(
+    agency: PersistentAgencyStore,
+    *,
+    expected_agency_epoch: int,
+    cycle_id: str,
+    awakened_goal_ids: tuple[str, ...],
+    next_tick_not_before: float,
+    now_ts: float,
+    reason: str = "NO_ACTIVE_OR_TRIAL_GOAL",
+) -> tuple[int, Mapping[str, Any]]:
+    """Persist an idle/HOLD scheduler decision with one AgencyState CAS transaction.
+
+    No heartbeat/model cycle ran, so this deliberately does *not* mint a row in
+    ``grid10_cognitive_cycles``. It only advances the durable AgencyState schedule/checkpoint
+    and appends a typed agency event. This replaces the older scheduler adapter's two separate
+    ``set_continuation_checkpoint`` + ``schedule_next_tick`` writes.
+    """
+    checkpoint: Mapping[str, Any] = {
+        "schema": IDLE_CHECKPOINT_SCHEMA,
+        "cycle_id": cycle_id,
+        "mode": "HOLD",
+        "reason": reason,
+        "awakened_goal_ids": list(awakened_goal_ids),
+        "next_tick_not_before": float(next_tick_not_before),
+        "external_effect_executed": False,
+    }
+    encoded_checkpoint = json.dumps(checkpoint, sort_keys=True, separators=(",", ":"))
+    event_id = f"cognitive-idle:{cycle_id}"
+    con = _connect(Path(agency.path))
+    try:
+        con.execute("BEGIN IMMEDIATE")
+        row = con.execute(
+            "SELECT state_epoch FROM agency_meta WHERE singleton=1"
+        ).fetchone()
+        if row is None:
+            raise RuntimeCycleConflict("MISSING_AGENCY_META")
+        observed_epoch = int(row["state_epoch"])
+        if observed_epoch != int(expected_agency_epoch):
+            raise RuntimeCycleConflict(
+                f"STALE_AGENCY_EPOCH:{expected_agency_epoch}!={observed_epoch}"
+            )
+        new_epoch = observed_epoch + 1
+        changed = con.execute(
+            """UPDATE agency_meta
+               SET state_epoch=?,mode='HOLD',next_tick_not_before=?,continuation_checkpoint=?,updated_ts=?
+               WHERE singleton=1 AND state_epoch=?""",
+            (
+                new_epoch,
+                float(next_tick_not_before),
+                encoded_checkpoint,
+                float(now_ts),
+                observed_epoch,
+            ),
+        ).rowcount
+        if changed != 1:
+            raise RuntimeCycleConflict("AGENCY_IDLE_CAS_FAILED")
+        try:
+            con.execute(
+                """INSERT INTO agency_events(
+                     event_id,event_type,goal_id,intent_id,state_epoch,generation,payload_json,created_ts
+                   ) VALUES(?,?,NULL,NULL,?,NULL,?,?)""",
+                (
+                    event_id,
+                    "COGNITIVE_IDLE_HOLD_COMMITTED",
+                    new_epoch,
+                    json.dumps(
+                        {
+                            "cycle_id": cycle_id,
+                            "reason": reason,
+                            "awakened_goal_ids": list(awakened_goal_ids),
+                            "next_tick_not_before": float(next_tick_not_before),
+                        },
+                        sort_keys=True,
+                        separators=(",", ":"),
+                    ),
+                    float(now_ts),
+                ),
+            )
+        except sqlite3.IntegrityError as exc:
+            raise RuntimeCycleConflict(f"DUPLICATE_OR_CONFLICTING_IDLE:{cycle_id}") from exc
+        con.execute("COMMIT")
+        return new_epoch, checkpoint
+    except Exception:
+        try:
+            con.execute("ROLLBACK")
+        except sqlite3.Error:
+            pass
+        raise
+    finally:
+        con.close()
+
+
 class UnifiedCognitiveRuntimeV4:
     """One-cycle deterministic bridge between PersistentAgencyStore and the v3 heartbeat."""
 
@@ -207,17 +305,26 @@ class UnifiedCognitiveRuntimeV4:
         *,
         tick_id: str,
         interval: float = 1.0,
+        hold_interval: float | None = None,
         now_ts: float | None = None,
         observed_events: Iterable[str] = (),
+        prewoken_goal_ids: Iterable[str] | None = None,
         trusted_axes: Mapping[str, Any] | None = None,
         extra_variables: Mapping[str, Any] | None = None,
     ) -> UnifiedCycleResult:
         now = time.time() if now_ts is None else float(now_ts)
-        woken = self.agency.wake_due(
-            now_ts=now,
-            observed_events=tuple(observed_events),
-            event_id_prefix=f"{tick_id}:wake",
-        )
+        if prewoken_goal_ids is not None:
+            if tuple(observed_events):
+                raise RuntimeCycleError(
+                    "AMBIGUOUS_WAKE_INPUT:prewoken_goal_ids_and_observed_events"
+                )
+            woken = tuple(str(goal_id) for goal_id in prewoken_goal_ids)
+        else:
+            woken = self.agency.wake_due(
+                now_ts=now,
+                observed_events=tuple(observed_events),
+                event_id_prefix=f"{tick_id}:wake",
+            )
         before = self.agency.snapshot()
         if not woken and not self.agency.due_for_tick(now_ts=now):
             raise RuntimeCycleNotDue(
@@ -231,7 +338,12 @@ class UnifiedCognitiveRuntimeV4:
         )
         assurance_mode = getattr(heartbeat.assurance_mode, "value", str(heartbeat.assurance_mode))
         next_action = str(heartbeat.next_action)
-        next_tick_not_before = now + max(0.05, float(interval))
+        selected_interval = (
+            float(hold_interval)
+            if next_action == "HOLD" and hold_interval is not None
+            else float(interval)
+        )
+        next_tick_not_before = now + max(0.05, selected_interval)
         checkpoint = {
             "schema": CHECKPOINT_SCHEMA,
             "tick_id": tick_id,

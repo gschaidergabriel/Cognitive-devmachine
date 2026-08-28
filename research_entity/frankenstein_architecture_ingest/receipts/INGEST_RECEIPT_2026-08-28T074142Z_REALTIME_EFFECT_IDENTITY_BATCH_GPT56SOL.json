@@ -1,0 +1,116 @@
+{
+  "schema": "TRIGGERWORD5_INGEST_RECEIPT/v1",
+  "receipt_id": "TW5-INGEST-RECEIPT-20260828T074142Z-REALTIME-EFFECT-IDENTITY-BATCH-GPT56SOL",
+  "trigger": "triggerwort 5",
+  "recorded_at": "2026-08-28T14:41:42+07:00",
+  "status": "INGESTED_SOURCE_FORENSICS_ONLY_NO_RUNTIME_PROMOTION",
+  "authority_binding": {
+    "authority_epoch": "9.13",
+    "canonical_main_observed": "de3a572ec8c4877026ec02a03ae19ed9fe2eab3a",
+    "supervisor_selection_commit": "eeb860a728b1e9b89d96abd6e41350c58126c5ce",
+    "supervisor_inbox": {
+      "path": "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
+      "git_blob": "de2ba445a3e3896426957e6b3a37be047462d58c"
+    },
+    "selected_steering": {
+      "path": "research_entity/claycode/autonomous/SUPERVISOR_STEERING_9_13AB_DELTA_2026-08-28T1435P0700_GPT56SOL.json",
+      "git_blob": "bce15276cb4a1c3cd7b7eb9cda2d1bb2995b5c4c"
+    },
+    "free_only": true,
+    "provider_execution": "HARD_OFF",
+    "together": "FORBIDDEN"
+  },
+  "design_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+  "design_sha_observed_before_delta": "26ebf78c1d9a17dcf53f47a63dfcf4580307d02f",
+  "donor_repo": "gschaidergabriel/frankenstein",
+  "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+  "architecture_delta": {
+    "path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T074142Z_REALTIME_EFFECT_IDENTITY_BATCH_GPT56SOL.json",
+    "commit": "a4a11dbafbc126c0490feda04d0423789fe3902b"
+  },
+  "packet_results": [
+    {
+      "packet_id": "TW5-PACKET-20260828T073413Z-5641dc6-GPT56SOL-EFFECT-GIT-AND-DONOR-CLOSURE",
+      "packet_blob": "873504f8f1bf7bb59f5ec1931db40221db275d4c",
+      "result": "CONSUMED_CROSSCHECKED",
+      "scope": "accessible-Git EffectGate shipping boundary plus archived-wegehierarchie/live-import closure refinement"
+    },
+    {
+      "packet_id": "TW5-PACKET-20260828T073507Z-5641dc6-GPT56SOL-REALTIME-EFFECT-BOUNDARY",
+      "packet_blob": "bb746d92351f02d6e5e38aa01c0f72dc392b6c81",
+      "result": "CONSUMED_CROSSCHECKED",
+      "scope": "Realtime direct memory write, two-step task confirmation, delegated Claude execution and split effect-authority topology"
+    },
+    {
+      "packet_id": "TW5-PACKET-20260828T073512Z-5641dc6-GPT56SOL-REALTIME-MUTATION-INTENT-BOUNDARY",
+      "packet_blob": "7ffa1d3db4f4ae817dca6fb8a30885e7f07921cf",
+      "result": "CONSUMED_CROSSCHECKED",
+      "scope": "call_id lifecycle, cancelled pending-call discard, memory mutation policy, Presence/VoiceSessionCapsule contradictions"
+    },
+    {
+      "packet_id": "TW5-PACKET-20260828T073606Z-HISTORICAL-WACHE-KOENIG-SOURCE-VALIDATED-GPT56SOL",
+      "packet_blob": "78e94c8d4c10427e6acac7c5a72dd342d77a4a96",
+      "result": "CONSUMED_AS_SCHEMA_VALID_SOURCE_SUCCESSOR",
+      "scope": "historical Bash-only blocking gate and one-shot human-minted command ticket; no scheduler/current-runtime credit",
+      "supersedes_packet_id": "TW5-PACKET-20260828T072938Z-HISTORICAL-WACHE-KOENIG-GPT56SOL"
+    },
+    {
+      "packet_id": "TW5-PACKET-20260828T073652Z-REALTIME-MEMORY-TASK-AUTHORITY-GPT56SOL",
+      "packet_blob": "e13afbdc4332217ce525a6b6f0fca35d36b6ce80",
+      "result": "CONSUMED_CROSSCHECKED",
+      "scope": "MemoryCandidate/MemoryAdmission vs TaskAdmission vs EffectDecision separation"
+    }
+  ],
+  "direct_source_crosschecks": [
+    {
+      "repo": "gschaidergabriel/frankenstein",
+      "path": "DEV_SOURCE_RESEARCH/repository/hooks/hooks.json",
+      "blob": "c483bc81cbae080a8175f7ce694ef657484614b5",
+      "finding": "all current plugin hooks route through stern.py hook; Pre/Post tool hook matchers cover all tool names"
+    },
+    {
+      "repo": "gschaidergabriel/frankenstein",
+      "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+      "blob": "8b413ed8b55de67b1c9450a4149951ec7676a947",
+      "finding": "zulassen is explicitly nonblocking; active_turns.effect_id is one mutable session-level pointer; merken resolves that pointer by session and may create post-hoc VERIFIED/FEHLGESCHLAGEN fallback when pre-admission bookkeeping is absent"
+    }
+  ],
+  "accepted_design_delta": [
+    "Invocation identity is call-scoped and immutable; session_id is context only.",
+    "HumanIntentDecision/TaskAdmission is separate from MemoryAdmission and from per-effect EffectDecision.",
+    "Realtime call_id is retained as a donor primitive but must remain bound across the full causal/effect chain.",
+    "Conversation-memory persistence defaults to typed remembered evidence/candidate rather than world fact.",
+    "Historical Wache-Koenig contributes one-shot capability-lease semantics only; no current runtime authority is credited.",
+    "Nonblocking donor EffectGate is bookkeeping, not containment; Frankenstein 2.0 requires executable pre-side-effect denial and bound receipts.",
+    "Pre-dispatch cancellation does not imply post-submission cancellation; unknown submitted outcomes stay UNKNOWN."
+  ],
+  "contradictions_preserved": [
+    "TW5-CONTRADICTION-INGEST-PATH-001",
+    "TW5-CONTRADICTION-PARALLEL-EFFECT-CORRELATION-003",
+    "TW5-CONTRADICTION-REALTIME-EFFECT-AUTHORITY-007",
+    "TW5-CONTRADICTION-REALTIME-MUTATION-INTENT-008",
+    "TW5-CONTRADICTION-REALTIME-MEMORY-AUTHORITY-008",
+    "TW5-CONTRADICTION-TASK-VS-EFFECT-AUTHORITY-009",
+    "TW5-CONTRADICTION-MULTISPEAKER-CONFIRMATION-010",
+    "TW5-CONTRADICTION-UNKNOWN-PRESENCE-003",
+    "TW5-CONTRADICTION-VOICE-CAPSULE-CONDITIONING-003",
+    "TW5-CONTRADICTION-DONOR-SOURCE-CLOSURE-004",
+    "TW5-CONTRADICTION-WACHE-REACHABILITY-008"
+  ],
+  "state_checkpoint": {
+    "packet_consumption_recorded_here": true,
+    "ingest_state_reconciliation": "RECHECK_AFTER_COMMIT_BECAUSE_BRANCH_IS_HIGHLY_CONCURRENT",
+    "no_provenance_deleted": true
+  },
+  "evidence_credit": {
+    "source_forensics": "ADVANCED",
+    "runtime_execution": 0,
+    "effect_invocation_runtime_pass": false,
+    "effect_enforcement_runtime_pass": false,
+    "entityos_whole_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "jspace_model_runtime_credit": 0,
+    "training_credit": 0
+  },
+  "next_exact_gate": "Repository-bind and execute the same-session A/B state-changing-call interleaving falsifier with immutable invocation/tool_use identity and effect_id, then harden the Triggerword-4 effect ABI and completion receipts; separately audit gespraechsmodus.claude_frage and every Realtime mutating tool class."
+}

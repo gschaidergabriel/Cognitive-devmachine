@@ -1,13 +1,13 @@
 {
   "schema": "ARCHITECT_STATE/v1",
   "architect_id": "federated-development-architect",
-  "generation": 2,
+  "generation": 3,
   "status": "ACTIVE",
   "federation_mode": "SEPARATE_STATE_SHARED_DIRECTION",
   "active_project_binding_id": "frankenstein-2.0",
   "active_owner_intent_epoch_id": null,
   "active_owner_direction_summary": "Resume Frankenstein 2.0 as the active primary project; no owner project pivot was expressed by this Architect trigger.",
-  "current_focus": "Reconcile the live Frankenstein 2.0 Phase-2 persistent-agency frontier, preserve granular evidence over stale aggregate caches, and route the smallest dependency-correct mutation through existing workpackage authority.",
+  "current_focus": "Reconcile the moving Frankenstein 2.0 Phase-2 persistent-agency frontier, preserve granular evidence over stale aggregate caches, and route the smallest dependency-correct mutation through existing workpackage authority.",
   "active_goal_ids": [
     "GOAL-F2-ARCHITECTURE-ASSEMBLY",
     "GOAL-F2-EVIDENCE-SPINE",
@@ -24,26 +24,30 @@
     "project": "Frankenstein 2.0",
     "phase": 2,
     "phase_name": "persistent agency substrate",
-    "accepted_at_scope": [
-      "F2-WP-202 PredictionContract/residual",
-      "F2-WP-203 AgencyState/interests/open loops",
-      "F2-WP-204 Goal lifecycle via granular reconciliation; aggregate cache stale",
-      "F2-WP-205 Wake/WAIT/HOLD via granular reconciliation; aggregate cache stale"
+    "granular_accepted_at_scope": [
+      "F2-WP-202 PredictionContract/residual generation 1",
+      "F2-WP-203 AgencyState generation 2 item-type repair at AGENCY_STATE_G2_ITEM_TYPE_REPAIR_REPOSITORY_HOSTED_CI_ONLY",
+      "F2-WP-204 Goal lifecycle generation 1 at GOAL_LIFECYCLE_REPOSITORY_HOSTED_CI_ONLY",
+      "F2-WP-205 Wake/WAIT/HOLD generation 2 tri-state repair at WAKE_HOLD_TRISTATE_REPOSITORY_HOSTED_CI_ONLY"
     ],
-    "open": [
+    "open_or_reconciliation_required": [
       "F2-WP-200 Persistent Pulse terminal reconciliation after fused repository-hosted CI evidence",
-      "F2-WP-201 StateFingerprint source/test/CI plus identity-vs-projection semantic discriminator"
+      "F2-WP-201 StateFingerprint source/test/CI plus identity-vs-projection semantic discriminator",
+      "F2-WP-203 aggregate cache/pointer reconciliation to generation-2 accepted evidence",
+      "F2-WP-204 aggregate cache/pointer reconciliation to generation-1 accepted evidence",
+      "F2-WP-205 aggregate cache/pointer terminalization to generation-2 accepted evidence"
     ],
     "credit_boundary": "Repository-hosted component CI does not imply target runtime, VPS, physical GRID10, whole Frankenstein 2.0, EntityOS or HCU acceptance."
   },
   "unresolved_contradictions": [
-    "F2 aggregate workpackages/STATE.json says F2-WP-204 IN_PROGRESS while exact reconciliation says ACCEPTED at GOAL_LIFECYCLE_REPOSITORY_HOSTED_CI_ONLY.",
-    "F2 aggregate workpackages/STATE.json says F2-WP-205 IN_PROGRESS while exact reconciliation says ACCEPTED at WAKE_HOLD_REPOSITORY_HOSTED_CI_ONLY.",
+    "F2 aggregate workpackages/STATE.json generation 11 says F2-WP-203 IN_PROGRESS while its generation-2 active pointer records ACCEPTED with a bounded repository-hosted-CI terminal scope.",
+    "F2 aggregate workpackages/STATE.json says F2-WP-204 IN_PROGRESS while exact generation-1 reconciliation says ACCEPTED at GOAL_LIFECYCLE_REPOSITORY_HOSTED_CI_ONLY.",
+    "F2 aggregate workpackages/STATE.json says F2-WP-205 IN_PROGRESS while exact generation-2 reconciliation says ACCEPTED at WAKE_HOLD_TRISTATE_REPOSITORY_HOSTED_CI_ONLY.",
     "Research Entity PROGRAM_STATE.json retains 8.78-era supervisor fields while current SUPERVISOR_INBOX selects supervisor epoch 9.13 FREE_ONLY.",
     "F2-WP-201 active claim describes typed projection change detection while the reviewed donor digest is generation-sensitive; consumers could confuse identity change with projection-content change unless the contract is explicit."
   ],
   "worker_frontier": {
-    "triggerword4": "Continue existing F2-WP-201 generation-1 mutation authority; do not open a duplicate lane. Separately terminalize/reconcile F2-WP-200 and repair stale F2-WP-204/F2-WP-205 aggregate state at already-earned CI-only scope.",
+    "triggerword4": "Preserve existing mutation authorities. Do not duplicate accepted WP-203/WP-205 repair lanes. Continue WP-201 generation-1 semantic discriminator and WP-200 terminal reconciliation; repair aggregate/pointer lag for WP-203/WP-204/WP-205 at already-earned scopes.",
     "triggerword5": "Donor forensics/live ingest remains an evidence input; no new donor-forensics blocker is required for the immediate WP-201 discriminator."
   },
   "test_frontier": {
@@ -52,8 +56,8 @@
   },
   "current_blockers": [
     "F2-WP-201 has no exact-current fused source/test/CI acceptance and its identity-vs-projection change semantics remain unresolved.",
-    "F2-WP-200 has fused source/CI evidence but lacks terminal reconciliation at the observed head.",
-    "F2-WP-204/F2-WP-205 aggregate state lags their accepted reconciliation records.",
+    "F2-WP-200 has fused source/CI evidence but lacks terminal reconciliation at the latest observed head.",
+    "F2-WP-203/F2-WP-204/F2-WP-205 aggregate state lags granular accepted evidence.",
     "Research Entity aggregate program authority surface lags current supervisor 9.13."
   ],
   "current_uncertainty": [
@@ -61,22 +65,22 @@
     "No whole persistent-loop/runtime implication is established by the current Phase-2 component CI evidence."
   ],
   "last_ingested_heads": {
-    "frankenstein_2_main": "04e35e228ff858512b561a3ada770d00a3b96b58",
+    "frankenstein_2_main": "e022dcbc9fd01c99f567dc0860c34ca15d5b4885",
     "research_entity_main": "d81d31b34d2abb98bf2f0bc80c46decbfd23c8b0",
-    "architect_branch_before_generation_2": "1936503b4e30dc43d0ac0352c0ac6fdb4a170a7b"
+    "architect_branch_before_generation_3": "9e946a822de5eea0cd7c45f9d799d0ad384cb479"
   },
   "direction_binding_summary": {
     "project_binding": "Frankenstein 2.0 remains ACTIVE_PRIMARY.",
     "owner_delta": "NO_PROJECT_PIVOT_DETECTED",
     "evidence_precedence": "granular claim/reconciliation/receipt and current supervisor inbox outrank stale aggregate state",
-    "duplicate_work_rule": "active F2-WP-201 generation-1 ownership is preserved"
+    "duplicate_work_rule": "existing workpackage generation ownership is preserved; Architect routes rather than steals build authority"
   },
   "current_processing_mode": "ARCHITECT_SYNTHESIS_PRIORITIZATION_AND_ROUTING",
   "current_context_budget_policy": "Compile the smallest sufficient context from current owner direction, changed heads, active claims, granular receipts/reconciliations, open contradictions and relevant methods; do not replay full history by default.",
   "next_exact_actions": [
-    "Route the next Phase-2 mutation through the existing F2-WP-201 generation-1 authority: explicitly distinguish or reject identity_changed versus projection_changed semantics and bind deterministic tests plus repository CI.",
+    "Route the next unresolved Phase-2 semantic mutation through the existing F2-WP-201 generation-1 authority: explicitly distinguish or reject identity_changed versus projection_changed semantics and bind deterministic tests plus repository CI.",
     "Terminalize/reconcile F2-WP-200 after exact-current verification, preserving PERSISTENT_PULSE_REPOSITORY_HOSTED_CI_ONLY scope.",
-    "Repair F2-WP-204/F2-WP-205 aggregate state to their granular accepted scopes without reopening them.",
+    "Repair F2-WP-203/F2-WP-204/F2-WP-205 aggregate/pointer state to granular accepted scopes without reopening completed mutation work.",
     "Reconcile Research Entity aggregate authority surfaces to supervisor 9.13 FREE_ONLY while preserving historical 8.78 records.",
     "Continue Architect UnifiedDB/bootstrap materialization without creating project truth authority."
   ],
@@ -87,5 +91,5 @@
     "F2-WP-200 terminal reconciliation appears",
     "owner pivots or completes the active project"
   ],
-  "last_checkpoint": "research_entity/architect/checkpoints/ARCHITECT_CHECKPOINT_G2_20260829T0557P0700.json"
+  "last_checkpoint": "research_entity/architect/checkpoints/ARCHITECT_REENTRY_DELTA_G3_20260829T0602P0700.json"
 }

@@ -7,6 +7,7 @@ on:
       - 'tools/grid10_cognitive_*'
       - 'tools/grid10_assurance_*'
       - 'tools/grid10_executor_*'
+      - 'tools/grid10_glm_*'
       - 'research_entity/topic_packets/grid10-cognitive-envelope-control-v1/**'
       - '.github/workflows/grid10-cognitive-envelope-ci.yml'
   workflow_dispatch:
@@ -33,12 +34,14 @@ jobs:
             tools/grid10_cognitive_heartbeat_v1.py \
             tools/grid10_cognitive_twin_server_v1.py \
             tools/grid10_assurance_monitors_v1.py \
-            tools/grid10_executor_governor_v1.py
+            tools/grid10_executor_governor_v1.py \
+            tools/grid10_glm_inference_provider_v1.py
       - name: Unit and integration tests
         working-directory: tools
         run: |
           python test_grid10_cognitive_envelope_control_v1.py -v
           python test_grid10_cognitive_runtime_v1.py -v
+          python test_grid10_glm_inference_provider_v1.py -v
       - name: Bounded heartbeat CLI smoke
         env:
           PYTHONPATH: tools

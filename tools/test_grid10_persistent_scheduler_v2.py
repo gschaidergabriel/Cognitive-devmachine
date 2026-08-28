@@ -65,6 +65,15 @@ class FakeInference:
         )
 
 
+class ExplodingInference:
+    def __init__(self):
+        self.calls = 0
+
+    def __call__(self, messages, *, config):
+        self.calls += 1
+        raise RuntimeError("SCHEDULER_TEST_COGNITION_FAILURE")
+
+
 class PersistentSchedulerV2Tests(unittest.TestCase):
     def setUp(self):
         self.td = tempfile.TemporaryDirectory()
@@ -208,6 +217,65 @@ class PersistentSchedulerV2Tests(unittest.TestCase):
             {x["status"] for x in controlled["cell_execution"]},
             {"IGNITION_BELOW_THRESHOLD"},
         )
+
+    def test_post_commit_cognition_failure_does_not_kill_scheduler_or_retry_same_tick(self):
+        exploding = ExplodingInference()
+        s = self.scheduler(fake=exploding)
+        self.seed_active(s)
+
+        failed = s.cycle_once(
+            cycle_id="sched-v2-failure",
+            now_ts=110.0,
+            cognitive_context={"goal": "g1"},
+        )
+        self.assertEqual(exploding.calls, 1)
+        self.assertEqual(failed.status, "HEARTBEAT_COGNITION_FAILED")
+        self.assertEqual(failed.heartbeat_tick_id, "sched-v2-failure:heartbeat")
+        self.assertEqual(failed.next_tick_not_before, 115.0)
+        self.assertIn("g1", failed.active_goal_ids)
+
+        con = sqlite3.connect(str(self.db))
+        try:
+            v4_count = con.execute(
+                "SELECT COUNT(*) FROM grid10_cognitive_cycles WHERE tick_id=?",
+                (failed.heartbeat_tick_id,),
+            ).fetchone()[0]
+            v6_rows = con.execute(
+                "SELECT receipt_json FROM grid10_v6_control_bound_receipts WHERE tick_id=?",
+                (failed.heartbeat_tick_id,),
+            ).fetchall()
+        finally:
+            con.close()
+        self.assertEqual(v4_count, 1)
+        self.assertEqual(len(v6_rows), 1)
+        closure = json.loads(v6_rows[0][0])
+        self.assertEqual(closure["cognitive_cycle_status"], "FAILED")
+        self.assertTrue(closure["post_v4_commit_failure"])
+        self.assertFalse(closure["same_tick_retry_authorized"])
+
+        # Recovery occurs only on the already-scheduled later tick, never by replaying the
+        # committed failed tick identity.
+        healthy = FakeInference()
+        s.runtime.inference_fn = healthy
+        recovered = s.cycle_once(
+            cycle_id="sched-v2-recovery",
+            now_ts=115.0,
+            cognitive_context={"goal": "g1"},
+        )
+        self.assertEqual(recovered.status, "HEARTBEAT_RAN")
+        self.assertEqual(recovered.heartbeat_tick_id, "sched-v2-recovery:heartbeat")
+        self.assertEqual(recovered.next_tick_not_before, 120.0)
+        self.assertEqual(len(healthy.calls), 10)
+
+        con = sqlite3.connect(str(self.db))
+        try:
+            failed_tick_count = con.execute(
+                "SELECT COUNT(*) FROM grid10_v6_control_bound_receipts WHERE tick_id=?",
+                (failed.heartbeat_tick_id,),
+            ).fetchone()[0]
+        finally:
+            con.close()
+        self.assertEqual(failed_tick_count, 1)
 
     def test_no_inference_function_keeps_autonomous_heartbeat_but_zero_model_calls(self):
         s = self.scheduler(fake=None)

@@ -206,7 +206,7 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
     def test_capability_receipt_advertises_execution_schema_provenance(self):
         capability_receipt = MOD.receipt()
 
-        self.assertEqual(capability_receipt["schema_version"], "1.2")
+        self.assertEqual(capability_receipt["schema_version"], "1.3")
         self.assertEqual(
             capability_receipt["execution_receipt_schema_version"], "1.2"
         )
@@ -214,6 +214,15 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             capability_receipt["unicode_database_version"],
             MOD.unicodedata.unidata_version,
         )
+
+    def test_capability_receipt_does_not_infer_model_availability(self):
+        capability_receipt = MOD.receipt()
+
+        self.assertFalse(capability_receipt["invariants"][
+            "model_availability_inferred_without_probe"
+        ])
+        for provider in capability_receipt["inventory"]:
+            self.assertFalse(provider["model_availability_verified"])
 
     def test_execution_receipt_pins_unicode_database_version(self):
         class Response:

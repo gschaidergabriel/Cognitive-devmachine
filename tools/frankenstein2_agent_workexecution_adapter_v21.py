@@ -36,6 +36,7 @@ from frankenstein2_work_execution_binding_v1 import (
     _append_event,
     _connect,
 )
+from frankenstein2_work_execution_binding_v2 import init_hardened_schema
 
 SCHEMA = "FRANKENSTEIN2_AGENT_WORKEXECUTION_ADAPTER/v2.1"
 PRE_EVENT = "PreToolUse"
@@ -150,9 +151,9 @@ def init_agent_spawn_schema(db_path: Path) -> None:
 class AgentWorkExecutionAdapter:
     def __init__(self, db_path: Path) -> None:
         self.db_path = Path(db_path)
-        # WorkExecutionLedger schema is created by its public constructor semantics.
-        from frankenstein2_work_execution_binding_v1 import init_schema
-        init_schema(self.db_path)
+        # Install the hardened v2 completion invariant on the same v1-compatible
+        # WorkExecution substrate before extending it with Agent spawn observations.
+        init_hardened_schema(self.db_path)
         init_agent_spawn_schema(self.db_path)
 
     def record_agent_pretool(

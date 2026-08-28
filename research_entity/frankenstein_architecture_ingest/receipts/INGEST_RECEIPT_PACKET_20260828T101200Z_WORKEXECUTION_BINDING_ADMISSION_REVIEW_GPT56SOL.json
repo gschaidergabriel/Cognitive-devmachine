@@ -1,56 +1,85 @@
 {
-  "schema": "TRIGGERWORD5_INGEST_RECEIPT/v1",
+  "schema": "TRIGGERWORD5_INGEST_RECEIPT/v2",
   "program": "TRIGGERWORD_5_FRANKENSTEIN_ARCHITECTURE_FORENSICS_AND_LIVE_INGEST",
   "worker": "GPT-5.6-Sol/triggerwort5/live-ingest",
   "trigger": "triggerwort 5",
-  "clay_supervisor_epoch": "8.78",
+  "authority": {
+    "epoch": "9.13",
+    "supervisor_inbox_blob_sha": "de2ba445a3e3896426957e6b3a37be047462d58c",
+    "selected_steering_blob_sha": "bce15276cb4a1c3cd7b7eb9cda2d1bb2995b5c4c",
+    "mode": "FREE_ONLY",
+    "provider_execution_state": "OWNER_EMERGENCY_STOP_FREE_SWARM_HARD_OFF",
+    "provider_routes_admitted": false,
+    "together": "FORBIDDEN"
+  },
   "canonical_main_sha_observed": "24389f873a775fd3af5fc3c896a58836d09a3bff",
   "design_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
-  "design_sha_observed_before_delta": "39b1ec3e15ff8b00ccbac764ae5b44ee72ca1d59",
+  "design_sha_initially_observed": "39b1ec3e15ff8b00ccbac764ae5b44ee72ca1d59",
+  "design_sha_after_parallel_reentry": "73d032a543020e236b083cdac46e5ace4cf69604",
   "donor_repo": "gschaidergabriel/frankenstein",
   "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
   "packet_id": "TW5-PACKET-20260828T101200Z-NATIVE-SUBAGENT-WORKEXECUTION-BINDING-SUCCESSOR-GPT56SOL",
   "packet_path": "research_entity/frankenstein_architecture_ingest/inbox/PACKET_20260828T101200Z_5641dc6_GPT56SOL_NATIVE_SUBAGENT_WORKEXECUTION_BINDING_SUCCESSOR.json",
   "packet_blob_sha": "d1a730170b602dd1135f9d2998772b2f5ce6ea44",
   "packet_schema_blob_sha": "8b2732394418e725067be52ee480ad1da649a9f7",
-  "packet_disposition": "REJECTED_NOT_CONSUMED_SOURCE_FINDINGS_DOWNGRADED_AND_PRESERVED",
-  "rejection_evidence": [
-    "Atom TW5-WORKEXEC-SUCC-005 uses target_2_0_action=RESEARCH, which is outside the current INGEST_PACKET_SCHEMA enum.",
-    "Atom TW5-WORKEXEC-SUCC-002 attributes the post-approval spawn specification to architekt_governance.md lines 1-7, but direct inspection of that span shows the Phase-17 cadence preamble; the spawn wording occurs later and therefore requires a corrected exact span."
+  "packet_disposition": "SCHEMA_QUARANTINED_NOT_MARKED_CONSUMED_SOURCE_FINDINGS_REVALIDATED_SEPARATELY",
+  "rejection_or_quarantine_evidence": [
+    "Atom TW5-WORKEXEC-SUCC-005 uses target_2_0_action=RESEARCH, outside the current schema enum.",
+    "Atom TW5-WORKEXEC-SUCC-002 binds the post-approval spawn claim to architekt_governance.md lines 1-7, but those lines contain the Phase-17 cadence preamble. Parallel current source review corrected the relevant specification span to lines 19-59.",
+    "The packet/current ingest surfaces contain stale main/authority labeling relative to current main and SUPERVISOR_INBOX-selected authority 9.13; current evidence was rebound before use."
   ],
-  "accepted_source_findings_only": [
-    "Pinned donor stern.py handoff() durably creates an entityos_arbeitspaket and deterministic capsule and explicitly states stern itself delegates/spawns nothing.",
-    "Pinned repository hooks.json inspected at lines 1-81 does not contain SubagentStart/SubagentStop entries.",
-    "A later architekt_governance.md paragraph semantically says the architect agent is spawned only after user approval, but the packet's exact line identity for that claim is wrong and was not admitted."
+  "source_findings_preserved": [
+    "stern.py handoff creates durable entityos_arbeitspaket state and a deterministic capsule but explicitly does not itself spawn/delegate the child.",
+    "Repository hooks.json has wildcard PreToolUse/PostToolUse but no dedicated SubagentStart/SubagentStop/TaskCreated/TaskCompleted entries in the inspected version.",
+    "architekt_governance semantically specifies post-approval architect spawn under corrected lines 19-59; the packet's original line identity is rejected.",
+    "Parallel refinement narrows the repair: existing wildcard tool hooks may preserve agent_id/agent_type on child tool calls if the installed target actually emits those documented optional fields."
   ],
   "architecture_delta": "research_entity/frankenstein_architecture_ingest/model/FRANKENSTEIN_2_WORKEXECUTION_BINDING_ADMISSION_REVIEW_PACKET_20260828T101200Z_GPT56SOL.json",
-  "architecture_delta_commit": "408ee81f5893e20afc77edbfdcb6425965ff690b",
-  "semantic_result": "WORKEXECUTION_BINDING_REQUIRED_AS_EXPLICIT_OBSERVED_CAUSAL_JOIN; HANDOFF_PERSISTENCE_IS_NOT_NATIVE_EXECUTION",
+  "architecture_delta_initial_commit": "408ee81f5893e20afc77edbfdcb6425965ff690b",
+  "architecture_delta_authority_rebind_commit": "e2d69ba82c66def074bf94928f91b2842575f8fa",
+  "parallel_primary_delta": {
+    "path": "research_entity/frankenstein_architecture_ingest/model/FRANKENSTEIN_2_WORKEXECUTION_BINDING_DELTA_2026-08-28T1031Z_GPT56SOL.json",
+    "commit_sha": "38dd0b0c10ece5f3f19275897fc2f877ff09cc15",
+    "role": "PRIMARY_WORKEXECUTION_BINDING_V1_DELTA"
+  },
+  "parallel_refinement": {
+    "path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T1038Z_SUBAGENT_TOOLHOOK_IDENTITY_REFINEMENT_GPT56SOL.json",
+    "commit_sha": "73d032a543020e236b083cdac46e5ace4cf69604",
+    "role": "CORROBORATING_REFINEMENT"
+  },
+  "semantic_result": "NO_SECOND_CONTRACT; WORKEXECUTION_BINDING_V1_REMAINS_PRIMARY; PACKET_ADMISSION_STAYS_QUARANTINED; HANDOFF_PERSISTENCE_IS_NOT_NATIVE_EXECUTION",
   "state_handling": {
     "ingest_state_updated": false,
-    "reason": "INGEST_STATE.json is stale relative to observed current main/design heads and omits later parallel architecture artifacts. Overwriting it from this stale snapshot could erase currentness/coordination information.",
+    "reason": "INGEST_STATE.json is stale relative to current main/design heads and does not yet reconcile later parallel architecture artifacts. Replacing it from the stale snapshot risks losing lineage/currentness information.",
     "state_design_sha_recorded": "38741e6ea28c746fd7faffa3e2aa095f5418119e",
     "state_main_sha_recorded": "5a953ebf824bbdc17091a638eb2b4a376aa8567e",
-    "observed_design_sha_before_write": "39b1ec3e15ff8b00ccbac764ae5b44ee72ca1d59",
+    "observed_design_sha_after_parallel_reentry": "73d032a543020e236b083cdac46e5ace4cf69604",
     "observed_main_sha": "24389f873a775fd3af5fc3c896a58836d09a3bff",
-    "required_repair": "Reconcile the state index against all later branch deltas/model artifacts before advancing the canonical consumption checkpoint."
+    "required_repair": "Reconcile state against all later deltas/model artifacts/receipts before advancing the packet-consumption checkpoint."
+  },
+  "local_correction": {
+    "initial_receipt_commit": "39f61895bde8a36e52b3f75823633acd730968b9",
+    "initial_error": "The first receipt labeled Clay supervisor epoch 8.78 from lower-priority stale BOOTSTRAP_MINIMAL/PROGRAM_STATE surfaces before SUPERVISOR_INBOX was read.",
+    "correction": "This v2 receipt binds current 9.13 authority and records the stale-surface contradiction instead of hiding it."
   },
   "trigger4_feed": {
-    "design_constraint": "WorkExecutionBinding/v1 must bind durable paket_id to actually observed native invocation/child/completion identities without conflating ID domains or inferring joins from timing/text.",
-    "acceptance_gate": "One paket_id -> one observed native invocation -> one observed child/task identity where emitted -> one completion/result, with fail-closed tests for missing, ambiguous, duplicate and stale-generation joins.",
-    "world_substrate_boundary": "Handoff-only records cannot train/assimilate an executed transition; world-substrate/Xeno updates require observed completion/outcome provenance."
+    "design_constraint": "WorkExecutionBinding/v1 binds durable workpackage identity to observed native invocation/child/completion identities without conflating workpackage_id, tool_use_id, agent_id, task_id, session_id or generation.",
+    "cheap_source_ready_refinement": "Preserve optional agent_id/agent_type on the existing wildcard tool-hook admission path where emitted; absence stays UNKNOWN.",
+    "runtime_gate": "Capture one non-mutating native child run on the authorized build lane and prove or falsify an immutable parent invocation -> child agent_id join. Do not infer by timestamp/session/event order.",
+    "world_substrate_boundary": "No handoff-only record may be learned as an executed transition; require observed completion/outcome provenance."
   },
   "runtime_boundary": {
     "provider_execution": false,
-    "vps_execution": false,
+    "vps_execution_this_trigger": false,
     "donor_runtime_execution": false,
     "native_subagent_runtime_execution": false,
     "unusual_experiment": false,
     "whole_entityos_runtime_credit": 0,
     "whole_hcu_runtime_credit": 0,
+    "physical_grid10_runtime_credit": 0,
     "jspace_model_runtime_credit": 0,
     "training_credit": 0
   },
-  "result": "PASS_FAIL_CLOSED_PACKET_REVIEW_WITH_DURABLE_ARCHITECTURE_DELTA",
-  "next_exact_gate": "Correct/reissue the invalid packet with schema-valid action and exact governance source span, then separately obtain installed-runtime lifecycle evidence before promoting any WorkExecutionBinding runtime claim. Reconcile INGEST_STATE currentness before marking that corrected packet consumed."
+  "result": "PASS_FAIL_CLOSED_CORROBORATING_PACKET_REVIEW_AUTHORITY_REBOUND",
+  "next_exact_gate": "Reconcile INGEST_STATE currentness; keep the invalid packet quarantined unless a corrected successor is issued; then let Triggerword 4 capture exact installed-runtime parent/child lifecycle evidence for WorkExecutionBinding/v1 without provider execution or inferred identity joins."
 }

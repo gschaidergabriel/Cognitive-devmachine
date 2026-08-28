@@ -1,0 +1,54 @@
+{
+  "schema": "TRIGGERWORD4_SOURCE_AUDIT_RECEIPT/v1",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "triggerwort 4",
+  "routing_self_test": "PASS",
+  "scope": "PERSISTENT_SCHEDULER_V2_CANDIDATE_COGNITION_FAILURE_SURVIVABILITY_SOURCE_AUDIT_ONLY",
+  "canonical_main_observed": "779e0420dc04035034700c49dea215e927a8925a",
+  "continuation_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+  "branch_head_observed": "8f6dcc295c71fd9385229d0b43de3f991a2a53ef",
+  "authority_observed": "SUPERVISOR_9.13AE_SINGLETON_GRID10_V3_G0000_IN_FLIGHT_FREE_ONLY_HARD_OFF",
+  "singleton_runtime_gate": {
+    "issue": 2121,
+    "workflow_run_id": 33168491753,
+    "status_observed": "queued",
+    "terminal_result_receipt_observed": false,
+    "duplicate_dispatch_created": false,
+    "generation_advanced": false
+  },
+  "source_observation": {
+    "runtime_file": "tools/grid10_cognitive_unified_runtime_v6.py",
+    "runtime_blob_sha": "426221ca1c3bb0e0a00bdb8b6c33521af446443b",
+    "scheduler_file": "tools/grid10_persistent_scheduler_v2.py",
+    "scheduler_blob_sha": "a11379878c0156e37a121632def2c394d096389a",
+    "scheduler_test_file": "tools/test_grid10_persistent_scheduler_v2.py",
+    "scheduler_test_blob_sha": "8d2e2a9d5288512d936ea51647cf6790c4458952",
+    "finding": "V6 intentionally persists a sanitized FAILED closure after the durable V4 Agency transition and then raises CognitiveCycleExecutionError. Persistent scheduler v2 catches RuntimeCycleNotDue only; it does not catch CognitiveCycleExecutionError. Therefore run_forever can terminate on a candidate-cognition exception even though the durable Agency transition and fail-closed v6 receipt already exist.",
+    "coverage_gap": "Current scheduler-v2 regressions cover default workspace ignition, subthreshold specialist computation without GWT ignition, and no-inference zero-model-call heartbeat, but do not cover candidate-cognition exception survivability or no-same-tick-retry at the persistent scheduler boundary."
+  },
+  "hypothesis": "A persistent scheduler boundary should treat a post-V4 candidate-cognition failure as a bounded failed cognition cycle, preserve the already-committed next-tick cadence, expose the exact failed v6 receipt, and continue only on a new due tick identity rather than killing the autonomous service or retrying the same tick.",
+  "counterhypothesis": "Fail-fast service termination may be intentional so every cognition exception requires an external supervisor restart; if so, that policy must be explicit and tested because it conflicts with the current persistent-scheduler description and leaves liveness dependent on an outer restart authority not evidenced by scheduler v2.",
+  "cheapest_discriminator": {
+    "source_delta": "Add a deterministic fake inference failure regression at scheduler-v2 boundary. Required acceptance: one V4 durable cycle, one FAILED v6 closure, zero same-tick retry, no raw exception text in receipt, and either an explicit fail-fast policy receipt or a bounded scheduler result that allows run_forever to survive until the next due tick.",
+    "runtime_requirement": "Repository-bound deterministic execution on an admitted non-provider surface at the exact resulting source identity before runtime credit.",
+    "provider_calls_required": 0,
+    "provider_secret_lookups_required": 0
+  },
+  "credit": {
+    "source_audit_delta": 1,
+    "deterministic_test_runtime": 0,
+    "physical_grid10_runtime": 0,
+    "whole_hcu_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "frankenstein2_runtime": 0
+  },
+  "execution_boundary": {
+    "provider_calls_performed": 0,
+    "provider_secret_lookups_performed": 0,
+    "together_used": false,
+    "paid_fallback_used": false,
+    "frank_harness_modified": false,
+    "vps_runtime_pass_claimed": false
+  },
+  "next_exact_gate": "Keep singleton #2121/g0000 unduplicated and inspect its terminal result. Independently close the scheduler-v2 candidate-cognition-failure liveness policy with a deterministic regression and exact repository-bound execution; do not promote Frankenstein-2 runtime until the prior GRID10 runtime gate closes."
+}

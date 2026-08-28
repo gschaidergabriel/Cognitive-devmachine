@@ -1,0 +1,49 @@
+{
+  "schema": "TRIGGERWORD5_INGEST_RECEIPT/v1",
+  "program": "TRIGGERWORD_5_FRANKENSTEIN_ARCHITECTURE_FORENSICS_AND_LIVE_INGEST",
+  "worker": "GPT-5.6-Sol/triggerwort5/live-ingest-refinement",
+  "created_at": "2026-08-28T10:39:00Z",
+  "trigger": "triggerwort 5",
+  "trigger_routing": "PASS",
+  "canonical_main_sha": "24389f873a775fd3af5fc3c896a58836d09a3bff",
+  "authority_epoch": "9.13",
+  "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+  "design_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+  "packet_id": "TW5-PACKET-20260828T101200Z-NATIVE-SUBAGENT-WORKEXECUTION-BINDING-SUCCESSOR-GPT56SOL",
+  "packet_blob_sha": "d1a730170b602dd1135f9d2998772b2f5ce6ea44",
+  "packet_disposition": "SCHEMA_QUARANTINED_NOT_MARKED_CONSUMED",
+  "packet_schema_error": "atoms[4].target_2_0_action=RESEARCH is not admitted by INGEST_PACKET_SCHEMA.json",
+  "prior_primary_delta": {
+    "path": "research_entity/frankenstein_architecture_ingest/model/FRANKENSTEIN_2_WORKEXECUTION_BINDING_DELTA_2026-08-28T1031Z_GPT56SOL.json",
+    "commit": "38dd0b0c10ece5f3f19275897fc2f877ff09cc15",
+    "role": "PRIMARY_WORKEXECUTION_BINDING_V1_DELTA"
+  },
+  "architecture_delta": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T1038Z_SUBAGENT_TOOLHOOK_IDENTITY_REFINEMENT_GPT56SOL.json",
+  "architecture_delta_commit": "73d032a543020e236b083cdac46e5ace4cf69604",
+  "semantic_result": "CORROBORATING_IMPLEMENTATION_SCOPE_REFINEMENT_NO_SECOND_CONTRACT",
+  "source_findings": [
+    "donor wildcard PreToolUse/PostToolUse hooks already exist",
+    "stern.py exact donor source contains no agent_id handling",
+    "current official Claude Code hook semantics state hooks running inside subagent tool calls carry agent_id and agent_type",
+    "therefore child tool identity capture can reuse the existing hook admission path when those fields are observed",
+    "durable workpackage -> parent Agent invocation -> child agent_id binding remains unproven and cannot be inferred by timing/order/session"
+  ],
+  "contradiction": {
+    "id": "TW5-CONTRADICTION-WORKPACKAGE-NATIVE-CHILD-BINDING-017",
+    "status": "OPEN_REFINED_NOT_RESOLVED"
+  },
+  "triggerword4_feed": {
+    "source_ready": "Preserve optional agent_id/agent_type/tool_use_id in the existing tool-hook admission path with UNKNOWN-preserving unit tests.",
+    "runtime_gate": "Only under an explicitly admitted target runtime lane, capture exact Agent parent and child payloads to establish or falsify an immutable parent invocation -> agent_id join."
+  },
+  "runtime_boundary": {
+    "provider_execution": false,
+    "vps_execution": false,
+    "donor_runtime_execution": false,
+    "unusual_experiment": false,
+    "runtime_credit": 0,
+    "training_credit": 0
+  },
+  "result": "PASS_SOURCE_REFINEMENT_ONLY",
+  "research_write": "COMMITTED"
+}

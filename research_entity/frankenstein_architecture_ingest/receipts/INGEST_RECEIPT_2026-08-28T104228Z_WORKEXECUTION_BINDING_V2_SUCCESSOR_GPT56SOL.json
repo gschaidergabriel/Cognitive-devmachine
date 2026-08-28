@@ -1,0 +1,47 @@
+{
+  "schema": "TRIGGERWORD5_INGEST_RECEIPT/v1",
+  "program": "TRIGGERWORD_5_FRANKENSTEIN_ARCHITECTURE_FORENSICS_AND_LIVE_INGEST",
+  "worker": "GPT-5.6-Sol/triggerwort5/live-ingest",
+  "created_at": "2026-08-28T10:42:28Z",
+  "trigger": "triggerwort 5",
+  "routing": "PASS",
+  "authority_epoch": "9.13",
+  "canonical_main_sha": "24389f873a775fd3af5fc3c896a58836d09a3bff",
+  "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+  "design_head_before_ingest": "4dc7eb2424c57d82375aac9ad08736c474a0b810",
+  "architecture_delta": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T104228Z_WORKEXECUTION_BINDING_V2_SUCCESSOR_GPT56SOL.json",
+  "architecture_delta_commit": "c8de05a10afd1b65c04e840e428e14bb285aa1c2",
+  "packets_consumed": [
+    {
+      "packet_id": "TW5-PACKET-20260828T103200Z-WORKEXECUTION-BINDING-SCHEMA-PROVENANCE-CORRECTION-GPT56SOL",
+      "disposition": "CONSUMED_AS_PROVENANCE_CORRECTION"
+    },
+    {
+      "packet_id": "TW5-PACKET-20260828T103555Z-NATIVE-SUBAGENT-WORKEXECUTION-BINDING-V2-GPT56SOL",
+      "disposition": "CONSUMED_AS_SUCCESSOR_WITH_DIRECT_SOURCE_AND_EXTERNAL_PRIMARY_CROSSCHECK"
+    }
+  ],
+  "source_crosscheck": {
+    "stern_handoff": "CONFIRMED_DURABLE_PACKAGE_AND_CAPSULE_NO_NATIVE_SPAWN",
+    "governance_span": "CONFIRMED_LINES_77_81_HANDOFF_THEN_SPAWN_THEN_RECONCILE",
+    "donor_hooks": "CONFIRMED_SEVEN_CONFIGURED_EVENTS_NO_EXPLICIT_SUBAGENT_OR_TASK_LIFECYCLE_EVENTS",
+    "current_official_claude_code_hooks": "CONFIRMED_POSTTOOLUSE_HAS_TOOL_USE_ID_AND_AGENT_TOOL_RESPONSE_HAS_AGENT_ID_AT_SPEC_LEVEL"
+  },
+  "semantic_result": "WORKEXECUTION_BINDING_V2_REBINDS_OPEN_GAP_TO_PAKET_ID_TO_AGENT_TOOL_USE_ID",
+  "supersession": {
+    "supersedes_narrow_claim": "PARENT_AGENT_TOOL_USE_ID_TO_AGENT_ID_UNDOCUMENTED",
+    "replacement": "CURRENT_PLATFORM_ABI_DOCUMENTS_AGENT_POSTTOOLUSE_TOOL_USE_ID_TO_TOOL_RESPONSE_AGENT_ID; INSTALLED_TARGET_RUNTIME_STILL_UNOBSERVED"
+  },
+  "runtime_boundary": {
+    "provider_execution": false,
+    "vps_execution": false,
+    "unusual_experiment": false,
+    "donor_runtime_execution": false,
+    "installed_host_hook_capture": false,
+    "runtime_credit": 0,
+    "training_credit": 0
+  },
+  "result": "PASS_SOURCE_INGEST_AND_CURRENT_EXTERNAL_PRIMARY_ABI_CROSSCHECK_ONLY",
+  "state_sync": "CHECKPOINT_RECEIPT_PERSISTED; INGEST_STATE_SYNC_ATTEMPT_FOLLOWS_ON_LATEST_HEAD",
+  "next_exact_gate": "Triggerword-4: bind paket_id/package_generation deterministically to exact Agent tool_use_id, capture target Agent PostToolUse tool_use_id + tool_response.agentId, cross-check child lifecycle identity, then run two overlapping Agent invocations before runtime credit."
+}

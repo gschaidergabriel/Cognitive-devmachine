@@ -1,0 +1,118 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:clay:entityos:hcu:grid10:cognitive-loop-frame:v1",
+  "title": "CognitiveLoopFrame/v1",
+  "description": "Read-only visual-twin frame derived from the same admitted signals/readouts used by the GRID10 cognitive envelope controller.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "frame_id",
+    "tick_id",
+    "state_epoch",
+    "timestamp",
+    "assurance_mode",
+    "loops",
+    "axes",
+    "regulators",
+    "hyperposition",
+    "work",
+    "source_event_refs",
+    "source_digest"
+  ],
+  "properties": {
+    "schema": {"const": "COGNITIVE_LOOP_FRAME/v1"},
+    "frame_id": {"type": "string", "minLength": 1},
+    "tick_id": {"type": "string", "minLength": 1},
+    "state_epoch": {"type": "integer", "minimum": 0},
+    "timestamp": {"type": "number"},
+    "assurance_mode": {
+      "enum": ["NORMAL", "CAUTION", "CONTAINED", "HOLD", "RECOVERY"]
+    },
+    "loops": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "loop_id",
+          "phase",
+          "activation",
+          "period_ms",
+          "phase_progress",
+          "stability",
+          "participating_cells",
+          "causal_edge_refs"
+        ],
+        "properties": {
+          "loop_id": {"type": "string", "minLength": 1},
+          "phase": {"type": "string", "minLength": 1},
+          "activation": {"type": "number", "minimum": 0.0, "maximum": 1.0},
+          "period_ms": {"type": ["number", "null"], "minimum": 0.0},
+          "phase_progress": {"type": ["number", "null"], "minimum": 0.0, "maximum": 1.0},
+          "stability": {"type": ["number", "null"], "minimum": 0.0, "maximum": 1.0},
+          "participating_cells": {"type": "array", "items": {"type": "string"}},
+          "causal_edge_refs": {"type": "array", "items": {"type": "string"}}
+        }
+      }
+    },
+    "axes": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": [
+          "alternatives",
+          "projected_value",
+          "uncertainty",
+          "projection_policy",
+          "status",
+          "derivative",
+          "controller_error",
+          "hard_margin",
+          "safety_relevant"
+        ],
+        "properties": {
+          "alternatives": {"type": "integer", "minimum": 0},
+          "projected_value": {"type": ["number", "null"]},
+          "uncertainty": {"type": "number", "minimum": 0.0},
+          "projection_policy": {"type": "string"},
+          "status": {
+            "enum": ["UNKNOWN", "TARGET", "SOFT_LOW", "SOFT_HIGH", "HARD_LOW", "HARD_HIGH"]
+          },
+          "derivative": {"type": ["number", "null"]},
+          "controller_error": {"type": ["number", "null"]},
+          "hard_margin": {"type": ["number", "null"]},
+          "safety_relevant": {"type": "boolean"}
+        }
+      }
+    },
+    "regulators": {
+      "type": "object",
+      "description": "Current versioned setpoints/actuators. Values are read-only in this frame; UI writes use cognition.regulator.command.",
+      "additionalProperties": {"type": "object"}
+    },
+    "hyperposition": {
+      "type": "object",
+      "properties": {
+        "branch_count": {"type": "integer", "minimum": 0},
+        "unresolved_variables": {"type": "integer", "minimum": 0},
+        "entropy": {"type": ["number", "null"]},
+        "recent_collapse_events": {"type": "array"}
+      },
+      "additionalProperties": true
+    },
+    "work": {
+      "type": "object",
+      "description": "Current goal/work/executor phase and completion deficits.",
+      "additionalProperties": true
+    },
+    "source_event_refs": {
+      "type": "array",
+      "items": {"type": "string"}
+    },
+    "source_digest": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    }
+  }
+}

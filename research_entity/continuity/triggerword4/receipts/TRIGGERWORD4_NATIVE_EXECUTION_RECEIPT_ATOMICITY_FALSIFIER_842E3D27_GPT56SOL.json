@@ -1,0 +1,51 @@
+{
+  "schema": "TRIGGERWORD4_NATIVE_EXECUTION_RECEIPT_ATOMICITY_FALSIFIER/v1",
+  "created_at": "2026-08-28T21:56:00+07:00",
+  "organ": "GPT-5.6 Sol Triggerword-4 continuation organ",
+  "trigger": "4",
+  "authority": {
+    "canonical_main_observed": "62486683ea4a8253f9028de0edb4988b6a99cc18",
+    "supervisor_inbox_schema": "9.13",
+    "supervisor_delta": "9.13AH_NON_AUTHORITY",
+    "execution_mode": "FREE_ONLY",
+    "provider_execution": "HARD_OFF"
+  },
+  "source_delta": {
+    "test_commit": "842e3d2736d2a266c2439658813a3cf1423c7428",
+    "test_path": "tools/test_frankenstein2_execution_receipt_native_atomicity_v1.py",
+    "target_production_writer": "EffectLifecycleStore.record_execution_bundle",
+    "target_store": "existing Frankenstein2 effect lifecycle SQLite store",
+    "second_store_created": false,
+    "effect_authority_created": false
+  },
+  "falsifiers": [
+    "SQLite BEFORE INSERT trigger aborts execution_v2_metadata, requiring rollback to leave neither execution_receipts nor execution_v2_metadata and no rolled-back EXECUTION_* events",
+    "success path requires one invocation/request/source/generation/status lineage across both rows",
+    "source digest drift must fail before either execution row exists",
+    "legacy base-only half-bundle must fail closed and must not silently synthesize missing v2 metadata"
+  ],
+  "coordination": {
+    "parallel_atomicity_helper_detected": true,
+    "duplicate_helper_created_then_removed": true,
+    "duplicate_authority_remaining_from_this_organ": false,
+    "hot_shared_test_file_force_overwrite": false
+  },
+  "execution_evidence": {
+    "repository_bound_test_executed": false,
+    "grid10_ci_execution_observed_for_test_commit": false,
+    "other_push_workflows_observed": true,
+    "semantic_test_credit": 0,
+    "runtime_credit": 0,
+    "reason": "No repository-bound execution of the new native-writer test was observed. Existing GRID10 Actions evidence in this macrocycle includes zero-step runner-unavailable transport failures and cannot mint semantic credit."
+  },
+  "promotion": {
+    "frankenstein_execution_receipt_atomicity_source_status": "SOURCE_FIX_PLUS_NATIVE_PRODUCTION_WRITER_FALSIFIER_PRESENT",
+    "frankenstein_execution_receipt_atomicity_runtime_pass": false,
+    "entityos_whole_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "physical_grid10_runtime_credit": 0,
+    "canonical_semantics_credit": 0,
+    "training_credit": 0
+  },
+  "next_exact_gate": "Execute tools/test_frankenstein2_execution_receipt_native_atomicity_v1.py from exact current repository source on an admitted non-provider execution surface; require the injected second-insert failure to leave neither execution record, then bind exact source SHA, command, environment and result before granting component test credit."
+}

@@ -1,0 +1,8 @@
+{
+  "schema": "CLAY_VPS_COMMAND/v4",
+  "command_id": "trigger4-f2-bootstrap-probe-20260828T1320Z",
+  "op": "exec",
+  "cwd": "/workspace/clay-global-research-entity",
+  "timeout_seconds": 120,
+  "command": "set -euo pipefail; if command -v gh >/dev/null 2>&1; then echo GH_BIN=yes; if gh auth status >/dev/null 2>&1; then echo GH_AUTH=yes; else echo GH_AUTH=no; fi; else echo GH_BIN=no; echo GH_AUTH=no; fi; if git ls-remote git@github.com:gschaidergabriel/clay-global-research-entity.git HEAD >/dev/null 2>&1; then echo GIT_SSH_EXISTING_REPO=yes; else echo GIT_SSH_EXISTING_REPO=no; fi; echo BRIDGE_SANDBOX=clay-direct-dev; echo PROBE_DONE=yes"
+}

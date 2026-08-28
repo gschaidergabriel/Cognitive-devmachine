@@ -2,11 +2,18 @@
   "schema": "FRANKENSTEIN_ARCHITECTURE_DELTA/v1",
   "delta_id": "TW5_2026-08-28T1441P0700_REALTIME_EFFECT_AUTHORITY_9_13_GPT56SOL",
   "recorded_at": "2026-08-28T14:40:03+07:00",
+  "corrected_at": "2026-08-28T14:44:25+07:00",
   "trigger": "triggerwort 5",
-  "status": "SOURCE_FORENSICS_INGESTED_RUNTIME_CREDIT_ZERO",
+  "status": "CORROBORATING_SOURCE_FORENSICS_RUNTIME_CREDIT_ZERO",
+  "correction": {
+    "reason": "A later owner-branch re-entry at 2634a67c019def810948d185ece3d0d5b542659a explicitly deduped 9.13 realtime ingest ownership. This artifact therefore preserves its source crosschecks and architecture deltas but claims no second packet-consumption or independent-replication credit.",
+    "branch_dedupe_commit": "2634a67c019def810948d185ece3d0d5b542659a",
+    "duplicate_credit": 0
+  },
   "authority_binding": {
     "authority_epoch": "9.13",
-    "canonical_main_observed": "eeb860a728b1e9b89d96abd6e41350c58126c5ce",
+    "authority_selection_main": "eeb860a728b1e9b89d96abd6e41350c58126c5ce",
+    "current_main_observed_after_selection": "de3a572ec8c4877026ec02a03ae19ed9fe2eab3a",
     "supervisor_inbox_blob": "de2ba445a3e3896426957e6b3a37be047462d58c",
     "selected_steering_blob": "bce15276cb4a1c3cd7b7eb9cda2d1bb2995b5c4c",
     "free_provider_admission_blob": "19e8efa229dc41abdb133458e7b326464d0afc21",
@@ -15,21 +22,25 @@
   },
   "source_identity": {
     "design_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
-    "design_head_observed_before_write": "5446a1ab56b53282006d6b388a63a310fe5d6a97",
+    "design_head_observed_before_initial_write": "5446a1ab56b53282006d6b388a63a310fe5d6a97",
+    "design_head_observed_at_dedupe": "2634a67c019def810948d185ece3d0d5b542659a",
     "donor_repo": "gschaidergabriel/frankenstein",
     "donor_sha": "5641dc6b2df6ebed1df246ee7533134324f6c427"
   },
   "packet_ingest": [
     {
       "packet_id": "TW5-PACKET-20260828T073507Z-5641dc6-GPT56SOL-REALTIME-EFFECT-BOUNDARY",
-      "result": "INGESTED_SOURCE_CROSSCHECKED",
-      "independent_runtime_replication_credit": false
+      "result": "CORROBORATED_SOURCE_CROSSCHECKED",
+      "ownership": "DEDUPED_TO_CURRENT_9_13_REALTIME_DELTA",
+      "independent_runtime_replication_credit": false,
+      "duplicate_credit": 0
     },
     {
       "packet_id": "TW5-PACKET-20260828T073606Z-HISTORICAL-WACHE-KOENIG-SOURCE-VALIDATED-GPT56SOL",
-      "result": "INGESTED_AS_SCHEMA_VALID_SOURCE_SUCCESSOR",
+      "result": "CORROBORATED_SCHEMA_VALID_SOURCE_SUCCESSOR",
       "supersedes_packet_id": "TW5-PACKET-20260828T072938Z-HISTORICAL-WACHE-KOENIG-GPT56SOL",
-      "independent_runtime_replication_credit": false
+      "independent_runtime_replication_credit": false,
+      "duplicate_credit": 0
     }
   ],
   "direct_crosschecks": [
@@ -55,17 +66,17 @@
   "architecture_deltas": [
     {
       "id": "F2_REALTIME_EFFECT_FRONTGATE_041",
-      "delta": "Retain the two-step voice confirmation as a modality front-gate, but compile it into a typed EffectRequest/EffectDecision bound to immutable Realtime call_id plus causal audio/transcript identity. Normalized text, counters and bestaetigt=true are not final execution authority.",
+      "delta": "Retain the two-step voice confirmation as a modality front-gate, but compile it into a typed HumanIntentDecision and EffectRequest lineage bound to immutable Realtime call_id plus causal audio/transcript identity. Normalized text, counters and bestaetigt=true are not final execution authority.",
       "feeds_triggerword4": true
     },
     {
       "id": "F2_SHARED_EXECUTOR_COMMIT_POINT_042",
-      "delta": "Require one deterministic executor commit point that atomically consumes a one-shot EffectDecision/CapabilityLease bound to invocation_id/tool_use_id, request_digest, session, generation, causal identity, policy version, capability/resource identity and exact executor identity. Historical names, caller-controlled bypasses and posthoc success cannot mint authority.",
+      "delta": "Require one deterministic executor commit point that atomically consumes a one-shot EffectDecision/CapabilityLease bound to invocation_id/tool_use_id, request_digest, session, generation, causal identity, policy version, capability/resource identity and exact executor identity. HumanIntentDecision is evidence/input to policy, not EffectDecision itself; historical names, caller-controlled bypasses and posthoc success cannot mint authority.",
       "feeds_triggerword4": true
     },
     {
       "id": "F2_MEMORY_WRITE_ADMISSION_043",
-      "delta": "Direct low-latency Realtime memory writes may remain in-process only as explicit MEMORY_WRITE_ADMISSION with causal/provenance binding and deterministic canonical-state admission. They are not WORLD_EFFECT execution and may not become a second truth/effect authority.",
+      "delta": "Direct low-latency Realtime memory writes may remain in-process only as explicit CANONICAL_INTERNAL_MUTATION/MEMORY_WRITE_ADMISSION with causal/provenance binding and deterministic canonical-state admission. They are not WORLD_EFFECT execution and may not become a second truth/effect authority.",
       "feeds_triggerword4": true
     },
     {
@@ -75,7 +86,7 @@
     },
     {
       "id": "F2_WACHE_SCHEMA_VALID_SUCCESSOR_045",
-      "delta": "Use the 073606 schema-valid packet as the current source projection for the exact historical wache/freigabe bytes and mark the original 072938 packet superseded for ingest semantics while preserving it as immutable provenance. Historical regex/Bash scope remains donor/test material only.",
+      "delta": "Use the 073606 schema-valid packet as the source-valid successor projection for the exact historical wache/freigabe bytes while preserving 072938 as immutable provenance. Historical regex/Bash scope remains donor/test material only and receives no runtime reachability credit.",
       "feeds_triggerword4": true
     }
   ],
@@ -83,7 +94,7 @@
     {
       "id": "TW5-CONTRADICTION-REALTIME-EFFECT-AUTHORITY-012",
       "status": "SOURCE_RESOLVED_SPLIT_AUTHORITY_REPAIR_OPEN",
-      "resolution": "Voice confirmation, direct memory write, nonblocking hook journaling and historical Bash blocker are distinct surfaces. Converge state-changing execution under one typed executor-bound EffectGate/EffectJournal contract without flattening modality-specific front-gates."
+      "resolution": "Voice HumanIntentDecision, direct memory mutation, nonblocking hook journaling and historical Bash blocker are distinct surfaces. Converge state-changing execution under one typed executor-bound EffectGate/EffectJournal contract without flattening modality-specific front-gates."
     },
     {
       "id": "TW5-CONTRADICTION-WACHE-REACHABILITY-008",
@@ -95,7 +106,8 @@
     }
   ],
   "credits": {
-    "source_forensics": "ADVANCED",
+    "source_forensics": "CORROBORATING_ADVANCE",
+    "duplicate_credit": 0,
     "new_runtime_execution": 0,
     "effect_enforcement_runtime": 0,
     "physical_grid10": 0,
@@ -105,5 +117,5 @@
     "training": 0,
     "whole_product_pass": false
   },
-  "next_exact_gate": "Recover exact hook scheduler registration/order and inspect gespraechsmodus.claude_frage spawned command/settings reachability; then hand Triggerword 4 an executor-bound regression bundle for one-shot decision consumption, wrong invocation/request digest/generation/resource, actual DENY non-execution, non-Bash coverage, CANCELLED_PRE_DISPATCH versus SUBMITTED_UNKNOWN, and typed MEMORY_WRITE_ADMISSION provenance."
+  "next_exact_gate": "Recover exact hook scheduler registration/order and inspect gespraechsmodus.claude_frage spawned command/settings reachability; then feed Triggerword 4 an executor-bound regression bundle for HumanIntentDecision classification/provenance, one-shot EffectDecision consumption, wrong invocation/request digest/generation/resource, actual DENY non-execution, non-Bash coverage, CANCELLED_PRE_DISPATCH versus SUBMITTED_UNKNOWN, and typed internal-memory mutation provenance."
 }

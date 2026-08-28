@@ -1,0 +1,81 @@
+{
+  "schema": "CLAY_FORSCHUNGSRUN_1_SEMANTIC_SUBSPACE_CONTROL/v1",
+  "date": "2026-08-25",
+  "organ": "GPT-5.6 Sol / ChatGPT organ",
+  "persistent_entity": "Clay",
+  "trigger": "forschungsrun 1",
+  "program": "ENTITYOS_HCU",
+  "product": "EntityOS",
+  "architecture": "HCU",
+  "authority_epoch_observed": "8.78",
+  "execution_mode": "FREE_ONLY",
+  "latest_main_observed_before_receipt": "cc2dd2d52c7fc41e5b25e5f54dfca57d2c8ccd19",
+  "owner_goal": "Use the authorized VPS to move Qwen3-0.6B toward full J-Space vector-based control.",
+  "observed_parallel_runtime_lane": {
+    "issue": 1935,
+    "workflow_run": 32808730830,
+    "workflow_name": "Forschungsrun1 dual Qwen0.6B J-Space search",
+    "source_head": "0eaecbc16bbaf52acc086ec7e9ece17a6a81cb6a",
+    "status_observed": "QUEUED",
+    "job_id": 97683863318,
+    "job_status_observed": "QUEUED",
+    "interpretation": "The owner-authorized clay-direct-dev experiment has been dispatched, but no completed VPS/native result is claimed by this receipt. Queue/transport state is not a model negative."
+  },
+  "implemented_source_delta": {
+    "rank_analyzer": "tools/trigger1_semantic_simplex_blocked_rank_v1.py",
+    "rank_tests": "tests/test_trigger1_semantic_simplex_blocked_rank_v1.py",
+    "coordinate_controller": "tools/trigger1_semantic_subspace_control_v1.py",
+    "coordinate_controller_tests": "tests/test_trigger1_semantic_subspace_control_v1.py",
+    "rank_hardening": [
+      "exact source checkpoint/tokenizer/runtime/site identity is mandatory",
+      "BASIS/CALIBRATION only and fresh HOLDOUT remains closed",
+      "model-facing label-free, lexically-disjoint, matched-triplet and output-code-independent design attestations are mandatory",
+      "semantic labels are permuted within scenario family only and one family is anchored to remove global-label symmetry",
+      "rank-1 is an equivalence-style claim with preregistered sigma2/sigma1 ceiling and leave-one-family-out stability",
+      "rank-2 requires independent second-component significance, preregistered effect floor, cross-family coherence and leave-one-family-out stability",
+      "intermediate secondary components remain UNRESOLVED rather than being forced into rank-1"
+    ],
+    "subspace_control": [
+      "only exact recomputation of a frozen one- or two-dimensional rank result can create a control candidate",
+      "h1/h2 basis vectors are reconstructed from the same matched calibration activations and verified by hash",
+      "rank-1 forbids a nonzero h2 coordinate",
+      "coordinates are bounded by a calibration-only frozen L2 and residual-norm-relative envelope",
+      "target runtime, GGUF, tokenizer, llama.cpp commit, layer mapping, mapping receipt and conversion receipt are mandatory",
+      "control bytes use the retained llama.cpp layer-major f32 layout for llama_set_adapter_cvec",
+      "only the attested layer range is populated; all other layers are zero",
+      "source-only construction cannot preclaim native runtime or semantic causality"
+    ]
+  },
+  "local_regression": {
+    "classification": "ALGORITHM_EQUIVALENT_LOCAL_NONCANONICAL_ONLY",
+    "rank_checks": "8_OF_8_PASS",
+    "controller_checks": "9_OF_9_PASS",
+    "total_checks": "17_OF_17_PASS",
+    "not_claimed": [
+      "byte-identical repository-branch test execution",
+      "VPS execution",
+      "native model execution",
+      "semantic causal effect",
+      "J-Space model runtime promotion",
+      "HCU runtime promotion",
+      "whole EntityOS runtime promotion",
+      "training credit"
+    ]
+  },
+  "scientific_hypothesis": "Qwen3-0.6B exposes a stable low-dimensional semantic control subspace that generalizes across matched scenario families and can be addressed by continuous coordinates rather than a fixed single steering vector.",
+  "counterhypotheses": [
+    "apparent semantic geometry is scenario/domain/style structure aliased with labels",
+    "a second semantic dimension is too weak or unstable and failure to reject rank-2 would falsely look like rank-1",
+    "PyTorch last-token geometry does not transfer to native llama.cpp all-prompt-token cvec semantics",
+    "cross-runtime dimension/layer agreement hides a conversion or mapping mismatch",
+    "large gains cause generic compliance/code bias rather than target-specific semantic steering"
+  ],
+  "credit_change": {
+    "jspace_model_runtime_credit": 0,
+    "hcu_full_runtime_credit": 0,
+    "whole_entityos_runtime_credit": 0,
+    "training_credit": 0,
+    "canonical_semantics_promotion": false
+  },
+  "next_exact_gate": "When the owner-authorized VPS run is actually scheduled, freeze matched label-free BASIS/CALIBRATION activations and the operating envelope, use the blocked rank discriminator to choose 1D/2D/UNRESOLVED, generate exact coordinate-addressed native cvec candidates, then evaluate unopened matched holdout families with class-direction x requested-target x output-code counterbalance plus sign/null/orthogonal/permuted/label-only-nuisance controls, residual-norm binding, explicit native token-scope classification and context-bound dual readout. Full J-Space control remains false until this native causal matrix passes."
+}

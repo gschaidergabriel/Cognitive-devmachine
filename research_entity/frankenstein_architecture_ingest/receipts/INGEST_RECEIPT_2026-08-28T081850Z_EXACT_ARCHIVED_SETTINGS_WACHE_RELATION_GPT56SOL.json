@@ -1,0 +1,72 @@
+{
+  "schema_version": "TRIGGERWORD5_INGEST_RECEIPT/v1",
+  "receipt_id": "TW5-INGEST-20260828T081850Z-EXACT-ARCHIVED-SETTINGS-WACHE-RELATION-GPT56SOL",
+  "created_at": "2026-08-28T08:18:50Z",
+  "trigger": "triggerwort 5",
+  "worker": "GPT-5.6-Sol/triggerwort5/archive-artifact-forensics",
+  "routing_result": "PASS",
+  "authority_epoch": "9.13",
+  "classification": "CORROBORATING_DIRECT_ARCHIVE_SOURCE_CROSSCHECK_NOT_RUNTIME",
+  "authority_binding": {
+    "canonical_main": "97b30a2b71230e4eaca5b6b47c2b00bab12cd1dc",
+    "design_branch_head_before_delta": "6e39734e07af16ad4832aef9c3c7421b89b83569",
+    "delta_commit": "e23afab5309ae3564c664919b687c95ab92fd7df",
+    "mode": "FREE_ONLY",
+    "provider_execution": "HARD_OFF",
+    "together": "FORBIDDEN"
+  },
+  "live_ingest": {
+    "packet_consumed": false,
+    "shared_ingest_state_modified": false,
+    "reason": "This checkpoint is a direct archive-source corroboration discovered during Triggerword-5 forensics. Parallel Triggerword-5 workers were moving INGEST_STATE, so no shared-state overwrite was attempted."
+  },
+  "architecture_delta": {
+    "path": "research_entity/frankenstein_architecture_ingest/ARCHITECTURE_DELTA_2026-08-28T081850Z_EXACT_ARCHIVED_SETTINGS_WACHE_RELATION_GPT56SOL.json",
+    "commit": "e23afab5309ae3564c664919b687c95ab92fd7df"
+  },
+  "source_artifacts": [
+    {
+      "path": ".claude/settings.json",
+      "drive_file_id": "1yAZ1EKocHJDiuIx3bzxSyrF4l56FJRpC",
+      "sha256": "5bec46ce922f0cc268188d3c91068e0922df4a5deb9f681dddea57f0f091c07a",
+      "size_bytes": 3337,
+      "modified_at": "2026-08-06T14:09:08Z",
+      "classification": "CONFIG_HISTORICAL_ONLY"
+    },
+    {
+      "path": ".claude/wache-befehl.py",
+      "drive_file_id": "1q0U8-ZJoYyrGZ91FutRUeINxCo91jX8C",
+      "sha256": "c4e4343aa78f73eb5bf27fdb2c99d81663190b7236b343e34c002eb14db4695b",
+      "size_bytes": 4317,
+      "modified_at": "2026-08-06T03:58:25Z",
+      "classification": "ENFORCEMENT_CODE_HISTORICAL_ONLY"
+    }
+  ],
+  "verified_findings": [
+    "Recovered archived settings registers one PreToolUse Bash matcher pointing to ~/synteq-umbau/.claude/wache-befehl.py.",
+    "Recovered wache-befehl.py dynamically imports ~/aicore/opt/aicore/tools/schranke/wache-koenig.py and reuses its decomposition/rule functions while adding helper-specific NUR_KOORD restrictions.",
+    "The archived relationship is therefore wrapper/extension/delegation, not independent duplicate implementation.",
+    "The exact recovered settings artifact establishes Bash-only scope for its own hook registration and does not establish non-Bash mutating-tool coverage.",
+    "Current Frankenstein donor hooks route through scripts/stern.py; archived wache reachability is not current donor reachability."
+  ],
+  "evidence_boundaries": [
+    "Exact archived artifact identity/path/hash/order is now source-grounded.",
+    "Exact byte identity at the specific historical measured launcher invocation remains UNKNOWN.",
+    "Current host/global reachability remains UNKNOWN.",
+    "Current donor wache reachability is NOT_ESTABLISHED.",
+    "No runtime, provider, VPS, production-host, physical GRID10, model or training credit is granted."
+  ],
+  "contradiction_status": {
+    "TW5-CONTRADICTION-WACHE-REACHABILITY-008": "NARROWED_NOT_RESOLVED",
+    "TW5-CONTRADICTION-WACHE-COVERAGE-009": "NARROWED_BASH_ONLY_FOR_EXACT_ARCHIVED_SETTINGS_ARTIFACT"
+  },
+  "credits": {
+    "whole_entityos_hcu": 0,
+    "hcu_full": 0,
+    "jspace_model": 0,
+    "physical_grid10": 0,
+    "runtime": 0,
+    "training": 0
+  },
+  "next_exact_gate": "Recover exact launcher/kern source or an invocation receipt resolving --settings schranke to a concrete settings artifact/hash at invocation time, then separately audit non-Bash mutating-tool coverage and current runtime reachability."
+}

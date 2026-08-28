@@ -11,6 +11,7 @@ from grid10_cognitive_heartbeat_v1 import _trusted_normal_axes
 from grid10_cognitive_unified_runtime_v5 import build_unified_cognitive_runtime_v5
 from grid10_glm_cognitive_cycle_v1 import CognitiveCycleConfig
 from grid10_glm_inference_provider_v1 import GLMInferenceReceipt, GLMInferenceResult
+from grid10_live_control_binding_v1 import ROLE_CONTROL_STEM
 
 
 class FakeInference:
@@ -113,6 +114,41 @@ class UnifiedRuntimeV5Tests(unittest.TestCase):
             con.close()
         self.assertEqual(row[0], snapshot.snapshot_digest)
         self.assertEqual(row[1], cycle.receipt_digest)
+
+    def test_same_latched_snapshot_drives_mechanical_gwt_ignition(self):
+        fake = FakeInference()
+        _, _, _, runtime, _ = build_unified_cognitive_runtime_v5(
+            self.db, inference_fn=fake,
+            cognitive_config=CognitiveCycleConfig(
+                max_parallel_specialists=1,
+                thinking_for_deep_roles=False,
+            ),
+        )
+        changes = {f"{stem}.gain": 0.1 for stem in ROLE_CONTROL_STEM.values()}
+        changes["grid.workspace_ignition_threshold"] = 0.5
+        snapshot = self._patch(runtime, "gwt-subthreshold", changes)
+        cycle = runtime.tick_once(
+            tick_id="v5-gwt-subthreshold", now_ts=100.0,
+            trusted_axes=_trusted_normal_axes(), cognitive_context={"goal": "g"},
+        )
+        controlled = cycle.controlled_cognitive_cycle
+        self.assertIsNotNone(controlled)
+        assert controlled is not None
+        self.assertEqual(controlled.control_snapshot_digest, snapshot.snapshot_digest)
+        self.assertEqual(controlled.workspace_ignition_threshold, 0.5)
+        self.assertFalse(controlled.workspace_ignited)
+        self.assertEqual(controlled.gwt_eligible_cell_ids, ())
+        self.assertNotIn(9, controlled.cycle.workspace.active_cells)
+        self.assertEqual(controlled.cycle.workspace.evidence_requests, ("GWT_NOT_IGNITED",))
+        self.assertEqual(len(fake.calls), 9)
+        self.assertFalse(any(
+            "ROLE=workspace/GWT fan-in" in messages[-1]["content"]
+            for messages, _ in fake.calls
+        ))
+        receipt = cycle.checkpoint["controlled_cognitive_cycle_receipt"]
+        self.assertFalse(receipt["workspace_ignited"])
+        self.assertEqual(receipt["workspace_ignition_threshold"], 0.5)
+        self.assertEqual(receipt["control_snapshot_digest"], snapshot.snapshot_digest)
 
     def test_zero_gain_is_not_compute_off_and_does_not_rewrite_v4_action(self):
         fake = FakeInference()

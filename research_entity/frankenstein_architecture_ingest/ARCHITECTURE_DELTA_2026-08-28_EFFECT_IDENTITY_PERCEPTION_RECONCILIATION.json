@@ -1,0 +1,166 @@
+{
+  "schema": "FRANKENSTEIN_ARCHITECTURE_DELTA/v1",
+  "delta_id": "T5_2026-08-28_EFFECT_IDENTITY_PERCEPTION_RECONCILIATION_5641dc6b",
+  "analysis_time_utc": "2026-08-28T07:29:31Z",
+  "trigger": "triggerwort 5",
+  "authority_epoch": "8.78",
+  "canonical_product": "EntityOS",
+  "canonical_compute_architecture": "HCU",
+  "evidence_scope": "SOURCE_FORENSICS_PLUS_EXTERNAL_PRIMARY_NO_NEW_RUNTIME_EXECUTION",
+  "donor": {
+    "repo": "gschaidergabriel/frankenstein",
+    "commit": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+    "tree": "9f529a1ea8896cf9988298ea58e827c241d6949f"
+  },
+  "design_lane": {
+    "repo": "gschaidergabriel/clay-global-research-entity",
+    "branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+    "observed_head_before_write": "ea0a1b95c973736fdf24d10bfaaec3474b4d8541",
+    "canonical_main_observed": "45f46138db94e0228240ea15b586bf8be622410b"
+  },
+  "packet_ingest": [
+    {
+      "packet_id": "TW5-PACKET-20260828T0724Z-5641dc6-GPT56SOL-EFFECT-PERCEPTION-VOICE-ENFORCEMENT",
+      "status": "INGESTED_DEDUPED_WITH_UNIQUE_DELTAS",
+      "overlap": [
+        "F2_STERN_EFFECT_ADMISSION_IS_NONBLOCKING_012",
+        "F2_VOICE_CAPSULE_NOT_PER_RESPONSE_CONDITIONED_013"
+      ],
+      "unique_delta": "exact Perception Control NOT_COMPUTED/taint enforcement plus Realtime cancelled-function-call discard are retained as migration invariants"
+    },
+    {
+      "packet_id": "TW5-PACKET-20260828T072407Z-5641dc6-GPT56SOL-EFFECT-AUTHORITY-ENFORCEMENT",
+      "status": "INGESTED_DEDUPED_WITH_UNIQUE_DELTAS",
+      "overlap": [
+        "F2_STERN_EFFECT_ADMISSION_IS_NONBLOCKING_012"
+      ],
+      "unique_delta": "PostToolUse fallback can mint VERIFIED without a pre-admission row and gw_absicht later treats VERIFIED as outside effect; observed-success and admitted-then-verified execution must therefore be structurally separated"
+    }
+  ],
+  "cross_lane_evidence": {
+    "canonical_main_run": "triggerwort5-20260828T1414p0700-gpt56sol-hook-invocation-identity",
+    "path": "research_entity/architecture_archaeology/triggerword5_runs/TRIGGERWORT5_HOOK_INVOCATION_IDENTITY_2026-08-28_GPT56SOL.json",
+    "status": "CROSS_CHECKED_NOT_RELABELED_AS_INBOX_PACKET",
+    "external_primary": "Anthropic Claude Code Hooks reference observed 2026-08-28: PreToolUse can block before execution; PreToolUse and PostToolUse carry tool_use_id; PostToolUse fires concurrently for parallel tool calls and PostToolBatch exposes the full batch.",
+    "migration_rule": "architecture_archaeology remains append-only provenance; owner-branch inbox remains the Triggerword-5 packet-ingest lane. Cross-lane evidence may be referenced/deduped but must not be silently copied or counted twice."
+  },
+  "semantic_atoms": [
+    {
+      "atom_id": "F2_EFFECT_VERIFIED_SEMANTIC_OVERLOAD_023",
+      "source": {
+        "repo": "gschaidergabriel/frankenstein",
+        "commit": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+        "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+        "line_start": 3400,
+        "line_end": 3655,
+        "source_kind": "ENFORCEMENT_CODE"
+      },
+      "claim": "merken() may create a fallback effects row as VERIFIED when no PreToolUse row exists; _gw_absicht_schreiben() later selects status='VERIFIED' as the outside-effect set. Therefore the current donor status field does not structurally distinguish observed successful execution from admitted-then-executed-and-verified execution.",
+      "confidence": 1.0,
+      "runtime_reachability": "POSTTOOLUSE_TO_STOP_HOOK_SOURCE_PATH",
+      "target_action": "REPAIR",
+      "grid10_adaptation": "Represent ADMISSION_DECISION, ENFORCEMENT_DECISION, EXECUTION_RECEIPT, WORLD_EFFECT_VERIFICATION, RESULT_REENTRY and COMPLETION_EVIDENCE as separate typed states keyed to one invocation identity. UNKNOWN outcome remains first-class and must not be blindly replayed.",
+      "counterevidence": "A separate host blocker could establish pre-execution authorization outside stern.py, but no such guarantee is encoded in the inspected status field and the unresolved host-only wache-koenig predecessor remains unproven."
+    },
+    {
+      "atom_id": "F2_EFFECT_INVOCATION_IDENTITY_024",
+      "source": {
+        "repo": "gschaidergabriel/frankenstein",
+        "commit": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+        "path": "DEV_SOURCE_RESEARCH/repository/scripts/stern.py",
+        "line_start": 3238,
+        "line_end": 3517,
+        "source_kind": "ENFORCEMENT_CODE"
+      },
+      "claim": "The donor correlates PreToolUse and PostToolUse by overwriting one active_turns.effect_id slot per session. Current Claude Code lifecycle inputs expose immutable tool_use_id at both PreToolUse and PostToolUse, and parallel tool batches are a supported lifecycle shape. The session-wide mutable slot is therefore not an acceptable Frankenstein-2.0 architecture contract even though an actual race has not been runtime-reproduced here.",
+      "confidence": 0.995,
+      "runtime_reachability": "CURRENT_HOOK_SOURCE; PARALLEL_RACE_NOT_REEXECUTED",
+      "target_action": "REPAIR",
+      "grid10_adaptation": "Use tool_use_id or an equally exact generated invocation_id as the primary effect correlation key. session_id remains context only. Every admission/enforcement/execution/verification/reentry/completion record must bind the same immutable invocation identity.",
+      "falsifier": "A source-bound concurrent two-call acceptance test must prove one-to-one PreToolUse->execution->PostToolUse/PostToolUseFailure correlation with no cross-assignment; serialization in one current host version may bound donor risk but does not justify discarding call identity in 2.0."
+    },
+    {
+      "atom_id": "F2_PERCEPTION_NOTCOMPUTED_TAINT_INVARIANT_025",
+      "source": {
+        "repo": "gschaidergabriel/frankenstein",
+        "commit": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+        "path": "DEV_SOURCE_RESEARCH/repository/scripts/perception_control.py",
+        "line_start": 420,
+        "line_end": 560,
+        "source_kind": "ENFORCEMENT_CODE"
+      },
+      "claim": "evaluate_head resolves dependencies from the central DAG and returns NOT_COMPUTED/value=None before compute_fn executes when the head is unknown, COMPUTE_OFF or taint-blocked by a disabled/unknown dependency. Missing computation is therefore explicitly distinct from negative evidence on the guarded path.",
+      "confidence": 0.99,
+      "runtime_reachability": "PERCEPTION_CALLERS_USING_EVALUATE_HEAD; RAW_BYPASS_REACHABILITY_REMAINS_OPEN",
+      "target_action": "ADAPT_TO_GRID",
+      "grid10_adaptation": "WorldNeed/WorldSlice, Hyperposition and GRID cells must preserve NOT_COMPUTED plus dependency taint. A disabled variable cannot be silently reconstructed downstream through another transform/operator."
+    },
+    {
+      "atom_id": "F2_REALTIME_CANCELLED_TOOL_DISCARD_026",
+      "source": {
+        "repo": "gschaidergabriel/frankenstein",
+        "commit": "5641dc6b2df6ebed1df246ee7533134324f6c427",
+        "path": "DEV_SOURCE_RESEARCH/repository/scripts/realtime_gespraech.py",
+        "line_start": 1300,
+        "line_end": 1408,
+        "source_kind": "ENFORCEMENT_CODE"
+      },
+      "claim": "Realtime stores emitted function calls temporarily, but clears them on barge-in and again when response.done.status is not completed; only completed responses execute the pending calls. This is a concrete donor invariant preventing a cancelled spoken thought from later producing a real tool action.",
+      "confidence": 1.0,
+      "runtime_reachability": "REALTIME_RESPONSE_EVENT_LOOP_SOURCE_PATH",
+      "target_action": "KEEP",
+      "grid10_adaptation": "Preserve cancellation lineage across Voice/GRID/effect translation: cancelled expression candidates must invalidate unexecuted effect candidates before EffectGate submission, keyed by the same response/candidate/invocation provenance."
+    }
+  ],
+  "architecture_deltas": [
+    {
+      "id": "TW5-EFFECT-TYPED-STATE-SPLIT-010",
+      "delta": "Split effect lifecycle into explicit typed states rather than overloading VERIFIED; bind every state to one immutable invocation identity.",
+      "feeds_triggerword4": true
+    },
+    {
+      "id": "TW5-HOOK-CALL-IDENTITY-011",
+      "delta": "Require tool_use_id/invocation_id correlation for parallel-safe PreToolUse->execution->PostToolUse/PostToolUseFailure mapping; never use session_id as the sole effect pointer.",
+      "feeds_triggerword4": true
+    },
+    {
+      "id": "TW5-WORLD-NOTCOMPUTED-TAINT-012",
+      "delta": "Port Perception Control's NOT_COMPUTED and dependency-taint invariant into sparse WorldNeed/WorldSlice materialization and GRID protected variables.",
+      "feeds_triggerword4": true
+    },
+    {
+      "id": "TW5-VOICE-CANCEL-EFFECT-013",
+      "delta": "Preserve Realtime cancelled-response tool-call discard as an end-to-end candidate-cancellation invariant before effect submission.",
+      "feeds_triggerword4": true
+    },
+    {
+      "id": "TW5-INGEST-NAMESPACE-014",
+      "delta": "Resolve live-ingest namespace drift by treating architecture_archaeology as append-only research provenance and frankenstein_architecture_ingest/inbox as the owner-directed packet consumption lane; cross-reference/dedupe without provenance deletion or double credit.",
+      "feeds_triggerword4": false
+    }
+  ],
+  "contradictions": [
+    {
+      "id": "TW5-CONTRADICTION-EFFECT-SEMANTICS-002",
+      "status": "SOURCE_RESOLVED_ARCHITECTURE_REPAIR_OPEN",
+      "resolution": "Normal stern PreToolUse bookkeeping is nonblocking; PostToolUse fallback can produce VERIFIED without a pre-row, so VERIFIED cannot serve as a single admission+execution+verification truth state."
+    },
+    {
+      "id": "TW5-CONTRADICTION-INGEST-PATH-001",
+      "status": "MIGRATION_RULE_DEFINED_PROVENANCE_REPAIR_OPEN",
+      "resolution": "Do not choose one namespace by deleting the other. architecture_archaeology remains historical/live research projection; owner-branch inbox is the active schema packet consumption lane. A future canonical reconciler may index both under dedupe keys without rewriting packet provenance."
+    }
+  ],
+  "credits": {
+    "source_forensics": "PRESENT",
+    "external_primary_crosscheck": "PRESENT",
+    "new_runtime_reexecution": 0,
+    "physical_grid10": 0,
+    "hcu_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "jspace_model": 0,
+    "training": 0,
+    "whole_product_pass": false
+  },
+  "next_exact_gate": "Map the actual host-only wache-koenig predecessor or permanently bound its provenance as unavailable; then add Triggerword-4 source-bound acceptance tests for invocation-id effect correlation, typed effect-state separation, UNKNOWN outcome handling, WorldSlice NOT_COMPUTED taint propagation and cancelled-voice candidate invalidation."
+}

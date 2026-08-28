@@ -208,7 +208,7 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
 
         self.assertEqual(capability_receipt["schema_version"], "1.3")
         self.assertEqual(
-            capability_receipt["execution_receipt_schema_version"], "1.2"
+            capability_receipt["execution_receipt_schema_version"], "1.3"
         )
         self.assertEqual(
             capability_receipt["unicode_database_version"],
@@ -257,11 +257,53 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             now=iter((1.0, 1.01)).__next__,
         )
 
-        self.assertEqual(result["receipt"]["schema_version"], "1.2")
+        self.assertEqual(result["receipt"]["schema_version"], "1.3")
         self.assertEqual(
             result["receipt"]["unicode_database_version"],
             MOD.unicodedata.unidata_version,
         )
+
+    def test_execution_receipt_scopes_model_availability_to_verified_success(self):
+        class Response:
+            headers = {}
+
+            def __init__(self, status):
+                self.status = status
+
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *args):
+                return False
+
+            def read(self, limit):
+                return (
+                    b'{"object":"chat.completion","id":"chatcmpl-test",'
+                    b'"created":1,"model":"mock","usage":{'
+                    b'"prompt_tokens":1,"completion_tokens":1,'
+                    b'"total_tokens":2},"choices":[{"index":0,'
+                    b'"finish_reason":"stop","message":{'
+                    b'"role":"assistant","content":"ok"}}]}'
+                )
+
+        env = {
+            "NVIDIA_API_KEY": "secret",
+            "FRANK_PROVIDER_BASE_URL": "http://localhost:8765/v1",
+            "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
+        }
+        success = MOD.execute_chat(
+            VALID_MESSAGES, model="mock", environ=env,
+            opener=lambda *args, **kwargs: Response(200),
+            now=iter((1.0, 1.01)).__next__,
+        )
+        failure = MOD.execute_chat(
+            VALID_MESSAGES, model="mock", environ=env,
+            opener=lambda *args, **kwargs: Response(500),
+            now=iter((2.0, 2.01)).__next__,
+        )
+
+        self.assertTrue(success["receipt"]["model_availability_verified"])
+        self.assertFalse(failure["receipt"]["model_availability_verified"])
 
     def test_text_request_rejects_active_string_subclasses(self):
         leaked_text = "request-string-method-must-not-run"

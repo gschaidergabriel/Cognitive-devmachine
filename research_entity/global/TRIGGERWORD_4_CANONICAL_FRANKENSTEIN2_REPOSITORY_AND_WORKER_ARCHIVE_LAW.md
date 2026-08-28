@@ -171,8 +171,63 @@ Dedicated security/hardening systems are deferred until Frankenstein 2.0 functio
 
 Engineering isolation, exact identity, provenance and reproducible measurement remain required because they are necessary for valid evidence, not because they are the final security architecture.
 
-## 13. Final law
+## 13. Full experimental data spine is mandatory
 
-`TRIGGERWORT_4 = BUILD + TEST + MEASURE + COMMIT + ARCHIVE + CHECK_OFF + CHECKPOINT + CONTINUE`
+Every Triggerword-4 worker must also obey these two current telemetry contracts before running or accepting material tests:
 
-A successful Triggerword-4 step is not finished until its durable artifacts are in `gschaidergabriel/frankenstein-2.0`.
+- `research_entity/global/TRIGGERWORD_4_EXPERIMENT_TELEMETRY_FORENSICS_AND_PERFORMANCE_DATA_LAW.md`
+- `research_entity/global/TRIGGERWORD_4_FULL_INTERNAL_LATENCY_TRACING_ADDENDUM.md`
+
+The canonical Frankenstein-2.0 repository must maintain project-level longitudinal SQLite stores under `data/` for at least:
+
+- `system_telemetry.sqlite`
+- `communications.sqlite`
+- `hypotheses.sqlite`
+- `bugs.sqlite`
+- `grid10_telemetry.sqlite`
+- `performance.sqlite`
+
+Every material test series must additionally archive a timestamped, independently analyzable run package containing the relevant run-local database snapshots/slices, source/environment identity, metrics, raw logs when material, artifact hashes and the exact test receipt.
+
+`ALL_LOGS` means every Frankenstein-2.0 component and every other process/system declared as participating in that test must have an instrumentation/collector record or an explicit `NOT_INSTRUMENTABLE` reason. A run with missing expected sources cannot claim `FULL_TELEMETRY`.
+
+### 13.1 Hypothesis and counterhypothesis queue
+
+Every material hypothesis/counterhypothesis that affects current engineering or cognition must enter the project hypothesis database with falsification criterion, priority, planned discriminator and evidence linkage. High-value unresolved opposing hypotheses are active test work, not chat notes.
+
+### 13.2 Root-cause bug ledger
+
+Every material defect enters the project bug database. `FIXED` means the root cause itself is confirmed, a fix commit/config identity exists and a regression test receipt proves the original failure path no longer reproduces at the declared scope.
+
+`SYMPTOM_GONE != FIXED`
+`WORKAROUND != ROOT_CAUSE_FIXED`
+
+Whole-system acceptance targets zero unresolved confirmed root causes at the declared acceptance scope.
+
+### 13.3 GRID10 telemetry
+
+When GRID participates in a test, structured GRID telemetry is mandatory: cycles, functions/slots, candidates, provenance, salience/confidence/utility/EIG/cost, Hyperposition branches, GWT winner/broadcast, consumer uptake and downstream effect, re-entry, world projections, projection disagreement, Micro-Lab calls, decisions, budgets and HOLD/reset/rumination behavior.
+
+### 13.4 Component and whole-system performance
+
+Every relevant component and the whole system must be measured across representative named operating states. Capture applicable CPU, memory, I/O, network, GPU/VRAM, model/token usage, queueing, DB time, spawn overhead, power/temperature and component-specific work units.
+
+Representative states include at minimum `IDLE_HOLD`, `PULSE_ONLY`, `RETINA_ACTIVE`, `GRID_BURST`, `WORLD_PROJECTION`, `MICROLAB`, `NERD_PHYSICS`, `RETRIEVAL`, `VOICE_SESSION`, `CHILD_BUILD`, `MULTI_CHILD`, `RECURSIVE_HARNESS`, `COMPLETION_REENTRY`, `RECOVERY_RESTART`, `WHOLE_LOOP` and intentional `STRESS/SATURATION` tests.
+
+### 13.5 All internal latencies
+
+All material internal boundaries must be latency-instrumented with causal traces/spans, not only one end-to-end stopwatch. Use `trace_id`, `span_id`, `parent_span_id`, UTC timestamps for correlation and monotonic nanosecond timestamps for local duration.
+
+Instrument applicable latency through perception, Retina, Pulse, SituationFrame, every GRID logical function, candidate arbitration, GWT broadcast/uptake, retrieval, context compilation, UnifiedDB/SQLite/lock waits, vector/QUBO/NeRD/Micro-Lab projections, model/provider TTFT and completion, recursive harnesses, workpackage/child spawn/ack/result, IPC/queues, effects, CompletionGate, ResultReentry, Voice/VAD/STT/TTS/barge-in and restart/HOLD-WAKE recovery.
+
+The run data must support critical-path analysis and decomposition into queue/compute/I/O/network/model/DB/child wait where those contributions are directly measurable. Unknown attribution remains `UNKNOWN`; it is not guessed.
+
+Store latency distributions, not just averages: count, min/max, p50/p90/p95/p99 and p99.9 where sample counts justify them, plus cold/warm and state/workload labels.
+
+`EVERY_END_TO_END_LATENCY -> INTERNAL_CRITICAL_PATH_BREAKDOWN`
+
+## 14. Final law
+
+`TRIGGERWORT_4 = BUILD + TEST + MEASURE + TRACE + COMMIT + ARCHIVE + CHECK_OFF + CHECKPOINT + CONTINUE`
+
+A successful Triggerword-4 step is not finished until its durable source, evidence, telemetry, performance/latency traces and required run artifacts are in `gschaidergabriel/frankenstein-2.0`.

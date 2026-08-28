@@ -1,0 +1,51 @@
+{
+  "schema": "TRIGGERWORD4_SOURCE_AUDIT_RECEIPT/v1",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "triggerwort 4",
+  "routing_self_test": "PASS",
+  "scope": "GRID10_UNIFIED_RUNTIME_V7_EXPECTED_NOT_DUE_CONTROL_FLOW_CLASSIFICATION_SOURCE_AUDIT_ONLY",
+  "canonical_main_observed": "779e0420dc04035034700c49dea215e927a8925a",
+  "continuation_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+  "branch_head_observed": "570ddf3624a5195c006376f8d55638a8144b3dfa",
+  "authority_observed": "SUPERVISOR_9.13AE_SINGLETON_GRID10_V3_G0000_IN_FLIGHT_FREE_ONLY_HARD_OFF",
+  "source_observation": {
+    "v7_file": "tools/grid10_cognitive_unified_runtime_v7.py",
+    "v7_blob_sha": "661d8ebd33b6f6ce86cb1e0d9761ba871a2339b1",
+    "v7_test_file": "tools/test_grid10_cognitive_unified_runtime_v7.py",
+    "finding": "V7 writes PREPARED before entering v6 and catches BaseException around the entire v6 tick. The forced reconciliation path classifies PREPARED+no-v4-row as RECOVERED_PRE_V4_CYCLE_COMMIT_UNKNOWN. RuntimeCycleNotDue is an expected scheduler/control-flow exit from the v4 path and can occur after V7 PREPARED but before any v4 cycle row. Therefore the current generic exception path can type an ordinary NOT_DUE outcome as a recovery UNKNOWN/crash-like closure.",
+    "coverage_gap": "Current v7 tests cover normal success, duplicate tick rejection, post-v4 missing-v6 recovery, existing-v6 closure recovery, synthetic pre-v4 crash and fresh-attempt staleness. No explicit RuntimeCycleNotDue classification regression was observed."
+  },
+  "hypothesis": "Expected RuntimeCycleNotDue must be closed as a distinct non-crash attempt state (for example CLOSED_NOT_DUE) or prepared only after the due gate, while preserving the original RuntimeCycleNotDue to scheduler policy. It must not mint RECOVERED_* UNKNOWN evidence.",
+  "counterhypothesis": "The design may intentionally classify every post-PREPARED non-success exit as UNKNOWN. If so, the recovery schema and dashboards must distinguish expected NOT_DUE from crash uncertainty; otherwise recovery telemetry conflates ordinary cadence with process failure and can Goodhart anomaly rates.",
+  "cheapest_discriminator": {
+    "test": "Create one active-goal V7 tick that first commits a scheduled next_tick_not_before, then invoke a fresh tick_id before due time. Assert RuntimeCycleNotDue is preserved, zero second v4 cycle row exists, and the v7 attempt closes under an explicit NOT_DUE/non-recovery classification with no recovery_receipt_json and no RECOVERED_* status.",
+    "provider_calls_required": 0,
+    "provider_secret_lookups_required": 0,
+    "runtime_promotion": false
+  },
+  "singleton_runtime_gate": {
+    "issue": 2121,
+    "workflow_run_id": 33168491753,
+    "last_observed_status": "queued",
+    "terminal_result_receipt_observed": false,
+    "duplicate_dispatch_created": false,
+    "generation_advanced": false
+  },
+  "execution_boundary": {
+    "provider_calls_performed": 0,
+    "provider_secret_lookups_performed": 0,
+    "together_used": false,
+    "paid_fallback_used": false,
+    "frank_harness_modified": false,
+    "vps_runtime_pass_claimed": false
+  },
+  "credit": {
+    "source_audit_delta": 1,
+    "deterministic_test_runtime": 0,
+    "physical_grid10_runtime": 0,
+    "whole_hcu_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "frankenstein2_runtime": 0
+  },
+  "next_exact_gate": "Close the expected RuntimeCycleNotDue classification at exact v7 source identity with a deterministic regression; keep #2121/g0000 unduplicated and continue to withhold physical GRID10 and Frankenstein-2 runtime credit until executable evidence closes the prior gate."
+}

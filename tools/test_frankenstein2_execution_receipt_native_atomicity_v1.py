@@ -16,6 +16,8 @@ from frankenstein2_effect_lifecycle_v1 import (
     AdmissionDecision,
     EffectLifecycleError,
     EffectLifecycleStore,
+    V2_COMPLETION_EVIDENCE_CLASS,
+    WorldOutcome,
 )
 
 
@@ -98,6 +100,7 @@ class NativeExecutionReceiptAtomicityTests(unittest.TestCase):
                 record_bundle(store)
 
             snapshot = store.snapshot("inv-native-atomic")
+            self.assertEqual(snapshot["request"]["pending_state"], "SUBMITTED")
             self.assertIsNone(snapshot["execution"])
             self.assertIsNone(snapshot["execution_v2"])
 
@@ -110,10 +113,34 @@ class NativeExecutionReceiptAtomicityTests(unittest.TestCase):
                         ("inv-native-atomic",),
                     )
                 }
+                con.execute("DROP TRIGGER inject_execution_v2_metadata_failure")
+                con.commit()
             finally:
                 con.close()
             self.assertNotIn("EXECUTION_RECORDED", event_types)
             self.assertNotIn("EXECUTION_V2_METADATA_RECORDED", event_types)
+
+            # Recovery must be able to retry the same canonical bundle and then close the
+            # normal typed Completion-v2 chain; rollback must not leave hidden poison state.
+            record_bundle(store)
+            store.verify_world_effect(
+                "inv-native-atomic",
+                WorldOutcome.SUCCEEDED,
+                evidence_digest="w" * 64,
+                now_ts=7.0,
+            )
+            store.reenter_result(
+                "inv-native-atomic",
+                result_digest="r" * 64,
+                now_ts=8.0,
+            )
+            receipt = store.issue_completion_evidence("inv-native-atomic", now_ts=9.0)
+            closed = store.snapshot("inv-native-atomic")
+            self.assertTrue(receipt)
+            self.assertIsNotNone(closed["execution"])
+            self.assertIsNotNone(closed["execution_v2"])
+            self.assertEqual(closed["completion"]["evidence_class"], V2_COMPLETION_EVIDENCE_CLASS)
+            self.assertEqual(closed["completion"]["receipt_digest"], receipt)
 
     def test_success_commits_both_rows_with_same_invocation_request_and_source_lineage(self) -> None:
         with tempfile.TemporaryDirectory() as td:

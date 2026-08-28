@@ -1,0 +1,83 @@
+{
+  "schema": "TRIGGERWORD4_SOURCE_CLOSURE_RECEIPT/v1",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "triggerwort 4",
+  "routing_self_test": "PASS",
+  "scope": "PERSISTENT_SCHEDULER_TO_UNIFIED_V6_GWT_GATE_SOURCE_CLOSURE_ONLY",
+  "continuation_branch": "chatgpt/grid10-cognitive-envelope-control-20260828",
+  "canonical_main_observed": "779e0420dc04035034700c49dea215e927a8925a",
+  "branch_head_before_receipt_observed": "c56ea169e7360fd6879173063c97f738974129f1",
+  "authority_observed": "SUPERVISOR_9.13AE_SINGLETON_GRID10_V3_G0000_IN_FLIGHT",
+  "source_delta": {
+    "unified_runtime_implementation_commit": "405676b34fde45bd295fb4f0c66ceb51bffbf741",
+    "unified_runtime_regression_commit": "e8fece9c54a4d5f519a8245ad03867c0a2b69265",
+    "unified_runtime_ci_commit": "47e2a5b8208eecc3306a41d54f597bbdc53cfdde",
+    "scheduler_v2_implementation_commit": "1f4d6a148a404607f662938a893f0547f18b89aa",
+    "scheduler_v2_regression_commit": "fa9ac7f5c6e32964408f7b01fca8473776872861",
+    "scheduler_v2_ci_commit": "8f4ab9bc4d9e7c6b1b0de1762837eecbbfb88602",
+    "files": [
+      "tools/grid10_cognitive_unified_runtime_v6.py",
+      "tools/test_grid10_cognitive_unified_runtime_v6.py",
+      "tools/grid10_persistent_scheduler_v2.py",
+      "tools/test_grid10_persistent_scheduler_v2.py",
+      ".github/workflows/grid10-cognitive-envelope-ci.yml"
+    ],
+    "finding": "grid10_live_control_binding_v2 made workspace ignition threshold mechanical, but unified runtime v5 still consumed live-control v1 and the persistent scheduler still entered v4 directly, so the autonomous service path could not exercise the new GWT ignition gate.",
+    "change": "v6 preserves the exact V4 per-tick ControlSnapshot through live-control v2 and persists bounded ignition receipts; scheduler v2 routes active/due-wake autonomous ticks through v6 without becoming a second wake or Agency authority.",
+    "regressions_added": [
+      "one immutable snapshot binds V4 pulse scheduling and v2 GWT gating",
+      "all visible specialists may compute below threshold while zero workspace inference calls occur",
+      "default gains ignite GWT and record the gate in the v6 receipt",
+      "persistent scheduler active cycle reaches v6 and records one V4 Agency cycle plus one v6 append-only cognition binding receipt",
+      "persistent scheduler subthreshold cycle performs specialist computation while GWT remains unignited",
+      "no explicit inference_fn preserves autonomous heartbeat scheduling with zero implicit model/provider calls"
+    ]
+  },
+  "parallel_fusion": {
+    "post_write_v6_failure_closure_commit_observed": "1e9a3e30bf4318e3eacf994eaa3d129a2fc50598",
+    "post_write_gwt_memory_reentry_receipt_commit_observed": "c56ea169e7360fd6879173063c97f738974129f1",
+    "v6_failure_closure_effect": "candidate cognition exceptions after V4 durable commit now produce sanitized FAILED v6 closure and prohibit same-tick retry before re-raising",
+    "memory_reentry_effect": "normal memory reentry eligibility is intersected with the same GWT eligibility set, preventing subthreshold private specialist results from being advertised through normal reentry",
+    "duplicate_lane_created": false,
+    "single_existing_pr": 2118
+  },
+  "runtime_evidence": {
+    "unified_v6_ci_run": 33169275146,
+    "unified_v6_ci_conclusion": "failure",
+    "unified_v6_job_steps_observed": [],
+    "scheduler_v2_ci_run": 33169615834,
+    "scheduler_v2_ci_conclusion": "failure",
+    "scheduler_v2_job_steps_observed": [],
+    "classification": "REPEATED_ZERO_STEP_GITHUB_HOSTED_INFRASTRUCTURE_FAILURE_NOT_CODE_TEST_RESULT",
+    "deterministic_tests_executed_by_these_runs": false,
+    "runtime_pass_claimed": false
+  },
+  "singleton_dispatch": {
+    "dispatch_key": "grid10-sigkill-independent-replacement-v3-g0000",
+    "issue": 2121,
+    "workflow_run_id": 33168491753,
+    "state_last_observed": "queued",
+    "terminal_result_receipt_observed": false,
+    "duplicate_dispatch_created": false,
+    "generation_advanced": false
+  },
+  "execution_boundary": {
+    "provider_calls_performed": 0,
+    "provider_secret_lookups_performed": 0,
+    "together_used": false,
+    "paid_fallback_used": false,
+    "frankenstein_harness_modified": false,
+    "vps_runtime_pass_claimed": false
+  },
+  "credit": {
+    "source_closure": 1,
+    "physical_grid10_runtime": 0,
+    "whole_hcu_runtime": 0,
+    "whole_entityos_hcu": 0,
+    "jspace_model_runtime": 0,
+    "training": 0,
+    "frankenstein2_runtime": 0
+  },
+  "blocked_promotion_reason": "Triggerword-4 persistent GRID/GWT runtime source is materially closer to closure, but exact deterministic execution remains unobserved because GitHub-hosted CI terminates before step execution and the canonical singleton clay-direct-dev v3 dispatch remains queued without a terminal result receipt.",
+  "next_exact_gate": "Inspect terminal state and canonical ordinary-dispatch result for singleton workflow 33168491753 / issue 2121 without creating another trigger or advancing generation. In parallel, accept deterministic compile/test evidence only from an admitted non-provider surface bound to the exact current Triggerword-4 source. Do not enter Frankenstein-2.0 VPS runtime PASS or sparse WorldSlice runtime promotion before that evidence gate closes."
+}

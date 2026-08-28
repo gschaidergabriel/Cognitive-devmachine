@@ -85,7 +85,7 @@ def install_reconciliation_schema(path: Path) -> None:
             CREATE TABLE IF NOT EXISTS {INTENT_TABLE}(
               tick_id TEXT PRIMARY KEY,
               schema TEXT NOT NULL,
-              expected_agency_epoch INTEGER NOT NULL,
+              agency_epoch_at_prepare INTEGER NOT NULL,
               control_epoch INTEGER NOT NULL,
               control_snapshot_digest TEXT NOT NULL,
               status TEXT NOT NULL,
@@ -105,7 +105,7 @@ def prepare_cycle_intent(
     path: Path,
     *,
     tick_id: str,
-    expected_agency_epoch: int,
+    agency_epoch_at_prepare: int,
     control_epoch: int,
     control_snapshot_digest: str,
     prepared_ts: float | None = None,
@@ -121,7 +121,7 @@ def prepare_cycle_intent(
                 (
                     tick_id,
                     SCHEMA,
-                    int(expected_agency_epoch),
+                    int(agency_epoch_at_prepare),
                     int(control_epoch),
                     str(control_snapshot_digest),
                     STATUS_PREPARED,
@@ -217,8 +217,30 @@ def classify_cycle_intent(path: Path, *, tick_id: str) -> CycleIntentClassificat
     v4 = base is not None
     v6 = closure is not None
     mismatches: list[str] = []
-    if base is not None and int(base["agency_epoch_before"]) != int(intent["expected_agency_epoch"]):
-        mismatches.append("V4_AGENCY_EPOCH_BEFORE_MISMATCH")
+    if base is not None:
+        prepared_epoch = int(intent["agency_epoch_at_prepare"])
+        base_before = int(base["agency_epoch_before"])
+        if base_before < prepared_epoch:
+            mismatches.append("V4_AGENCY_EPOCH_BEFORE_PREPARE_EPOCH")
+        elif base_before > prepared_epoch:
+            con_gap = _connect(Path(path))
+            try:
+                gap_events = con_gap.execute(
+                    "SELECT event_id,event_type,state_epoch FROM agency_events "
+                    "WHERE state_epoch>? AND state_epoch<=? ORDER BY state_epoch,event_seq",
+                    (prepared_epoch, base_before),
+                ).fetchall()
+            except sqlite3.OperationalError as exc:
+                gap_events = [] if "no such table" in str(exc).lower() else (_ for _ in ()).throw(exc)
+            finally:
+                con_gap.close()
+            expected_gap = base_before - prepared_epoch
+            if len(gap_events) != expected_gap:
+                mismatches.append("PRE_V4_EPOCH_GAP_NOT_FULLY_EVENT_ATTESTED")
+            for event in gap_events:
+                if event["event_type"] != "DEFERRED_INTENT_FIRED" or not str(event["event_id"]).startswith(f"{tick_id}:wake:"):
+                    mismatches.append("FOREIGN_PRE_V4_AGENCY_EVENT")
+                    break
     if closure is not None and base is not None and int(closure["agency_epoch_after"]) != int(base["agency_epoch_after"]):
         mismatches.append("V4_V6_AGENCY_EPOCH_AFTER_MISMATCH")
     if closure is not None and int(closure["control_epoch"]) != int(intent["control_epoch"]):
@@ -252,7 +274,7 @@ def classify_cycle_intent(path: Path, *, tick_id: str) -> CycleIntentClassificat
         "schema": SCHEMA,
         "tick_id": tick_id,
         "intent_status": intent["status"],
-        "expected_agency_epoch": int(intent["expected_agency_epoch"]),
+        "agency_epoch_at_prepare": int(intent["agency_epoch_at_prepare"]),
         "control_epoch": int(intent["control_epoch"]),
         "control_snapshot_digest": str(intent["control_snapshot_digest"]),
         "v4_cycle_present": v4,

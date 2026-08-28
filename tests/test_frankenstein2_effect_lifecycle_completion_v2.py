@@ -67,22 +67,18 @@ class EffectLifecycleCompletionV2IntegrationTests(unittest.TestCase):
             now_ts=4.0,
         )
         self.store.mark_submitted(invocation_id, now_ts=5.0)
-        self.store.record_execution(
-            invocation_id,
-            executable_id="tool-v1",
-            command_digest="cmd-A",
-            environment_id="sandbox-A",
-            exit_code=0,
-            result_digest="result-A",
-            now_ts=6.0,
-        )
         if execution_source is not None and duplicate_state is not None and execution_status is not None:
-            self.store.record_execution_v2_metadata(
+            self.store.record_execution_bundle(
                 invocation_id,
+                executable_id="tool-v1",
+                command_digest="cmd-A",
+                environment_id="sandbox-A",
+                exit_code=0,
+                result_digest="result-A",
                 source_digest=execution_source,
                 duplicate_state=duplicate_state,
                 status=execution_status,
-                now_ts=7.0,
+                now_ts=6.0,
             )
         self.store.verify_world_effect(
             invocation_id,
@@ -136,11 +132,13 @@ class EffectLifecycleCompletionV2IntegrationTests(unittest.TestCase):
         self.assertIsNone(snap["execution"])
         self.assertIsNone(snap["completion"])
 
-    def test_source_drift_between_pre_submission_binding_and_execution_is_rejected(self):
-        self._prepare_success_chain(expected_source="src-A", execution_source="src-B")
-        with self.assertRaisesRegex(EffectLifecycleError, "EXECUTION_SOURCE_DRIFT"):
-            self.store.issue_completion_evidence("call-A", now_ts=10.0)
-        self.assertIsNone(self.store.snapshot("call-A")["completion"])
+    def test_source_drift_between_pre_submission_binding_and_execution_is_rejected_at_atomic_writer(self):
+        with self.assertRaisesRegex(EffectLifecycleError, "EXECUTION_SOURCE_DIGEST_MISMATCH"):
+            self._prepare_success_chain(expected_source="src-A", execution_source="src-B")
+        snap = self.store.snapshot("call-A")
+        self.assertIsNone(snap["execution"])
+        self.assertIsNone(snap["execution_v2"])
+        self.assertIsNone(snap["completion"])
 
     def test_unresolved_duplicate_cannot_mint_completion(self):
         self._prepare_success_chain(duplicate_state="UNRESOLVED_DUPLICATE")
@@ -235,37 +233,29 @@ class EffectLifecycleCompletionV2IntegrationTests(unittest.TestCase):
         self.store.record_enforcement("tool-use-B", boundary_id="gate-B", dispatch_permitted=True, now_ts=4.1)
         self.store.mark_submitted("tool-use-B", now_ts=5.0)
         self.store.mark_submitted("tool-use-A", now_ts=5.1)
-        self.store.record_execution(
+        self.store.record_execution_bundle(
             "tool-use-B",
             executable_id="tool-v1",
             command_digest="cmd-B",
             environment_id="sandbox",
             exit_code=0,
             result_digest="result-B",
+            source_digest="src-B",
+            duplicate_state="UNIQUE",
+            status="SUCCEEDED",
             now_ts=6.0,
         )
-        self.store.record_execution(
+        self.store.record_execution_bundle(
             "tool-use-A",
             executable_id="tool-v1",
             command_digest="cmd-A",
             environment_id="sandbox",
             exit_code=0,
             result_digest="result-A",
-            now_ts=6.1,
-        )
-        self.store.record_execution_v2_metadata(
-            "tool-use-B",
-            source_digest="src-B",
-            duplicate_state="UNIQUE",
-            status="SUCCEEDED",
-            now_ts=7.0,
-        )
-        self.store.record_execution_v2_metadata(
-            "tool-use-A",
             source_digest="src-A",
             duplicate_state="UNIQUE",
             status="SUCCEEDED",
-            now_ts=7.1,
+            now_ts=6.1,
         )
         self.store.verify_world_effect(
             "tool-use-A", WorldOutcome.SUCCEEDED, evidence_digest="world-A", now_ts=8.0
